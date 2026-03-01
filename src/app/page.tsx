@@ -19,10 +19,9 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative h-[90vh] w-full overflow-hidden">
-        {/* PLACEHOLDER — Replace with real hero photography */}
         <Image
-          src="https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=1920&q=80"
-          alt="Fly fisher casting on a misty Montana river at dawn"
+          src="/images/madison-river-three-dollar-bridge.jpg"
+          alt="The Madison River flowing beneath Three Dollar Bridge in Montana, with mountains rising in the distance"
           fill
           className="object-cover"
           priority
