@@ -13,6 +13,7 @@ export const NAV_LINKS = [
       { label: "Colorado", href: "/destinations/colorado" },
       { label: "Idaho", href: "/destinations/idaho" },
       { label: "Alaska", href: "/destinations/alaska" },
+      { label: "New Zealand", href: "/destinations/new-zealand" },
       { label: "View All", href: "/destinations" },
     ],
   },
@@ -25,6 +26,17 @@ export const NAV_LINKS = [
       { label: "Gallatin River", href: "/rivers/gallatin-river" },
       { label: "Missouri River", href: "/rivers/missouri-river" },
       { label: "View All", href: "/rivers" },
+    ],
+  },
+  {
+    label: "Species",
+    href: "/species",
+    children: [
+      { label: "Trout", href: "/species?family=trout" },
+      { label: "Salmon", href: "/species?family=salmon" },
+      { label: "Saltwater", href: "/species?family=saltwater" },
+      { label: "Warmwater", href: "/species?family=warmwater" },
+      { label: "View All", href: "/species" },
     ],
   },
   {

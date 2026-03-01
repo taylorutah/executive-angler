@@ -17,6 +17,7 @@ const footerLinks = {
     { label: "All Rivers", href: "/rivers" },
   ],
   Resources: [
+    { label: "Species Guide", href: "/species" },
     { label: "Articles", href: "/articles" },
     { label: "Lodges", href: "/lodges" },
     { label: "Guides", href: "/guides" },

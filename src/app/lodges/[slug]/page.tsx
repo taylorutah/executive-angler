@@ -12,6 +12,9 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
+import GoogleReviews from "@/components/ui/GoogleReviews";
+import CommunityPhotos from "@/components/ui/CommunityPhotos";
+import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { lodges } from "@/data/lodges";
 import { rivers } from "@/data/rivers";
 import { destinations } from "@/data/destinations";
@@ -238,6 +241,18 @@ export default async function LodgePage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
+
+              {/* Google Reviews */}
+              <GoogleReviews
+                rating={lodge.googleRating}
+                reviewCount={lodge.googleReviewCount}
+                reviewsUrl={lodge.googleReviewsUrl}
+                reviews={lodge.featuredReviews}
+              />
+
+              {/* Community Photos */}
+              <CommunityPhotos entityType="lodge" entityId={lodge.id} />
+              <PhotoSubmissionForm entityType="lodge" entityId={lodge.id} entityName={lodge.name} />
             </div>
 
             {/* Sidebar */}

@@ -11,6 +11,8 @@ import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
+import CommunityPhotos from "@/components/ui/CommunityPhotos";
+import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { rivers } from "@/data/rivers";
 import { lodges } from "@/data/lodges";
 import { guides } from "@/data/guides";
@@ -285,6 +287,10 @@ export default async function RiverPage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
+
+              {/* Community Photos */}
+              <CommunityPhotos entityType="river" entityId={river.id} />
+              <PhotoSubmissionForm entityType="river" entityId={river.id} entityName={river.name} />
             </div>
 
             {/* Sidebar */}

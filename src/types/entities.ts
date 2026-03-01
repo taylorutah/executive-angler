@@ -93,6 +93,11 @@ export interface Lodge {
   nearbyRiverIds: string[];
   averageRating?: number;
   reviewCount: number;
+  googlePlaceId?: string;
+  googleRating?: number;
+  googleReviewCount?: number;
+  googleReviewsUrl?: string;
+  featuredReviews?: GoogleReview[];
   metaTitle?: string;
   metaDescription?: string;
   featured: boolean;
@@ -113,6 +118,11 @@ export interface Guide {
   licenseNumber?: string;
   riverIds: string[];
   dailyRate?: string;
+  googlePlaceId?: string;
+  googleRating?: number;
+  googleReviewCount?: number;
+  googleReviewsUrl?: string;
+  featuredReviews?: GoogleReview[];
   metaTitle?: string;
   metaDescription?: string;
 }
@@ -132,6 +142,11 @@ export interface FlyShop {
   hours?: Record<string, string>;
   services: string[];
   brandsCarried: string[];
+  googlePlaceId?: string;
+  googleRating?: number;
+  googleReviewCount?: number;
+  googleReviewsUrl?: string;
+  featuredReviews?: GoogleReview[];
   metaTitle?: string;
   metaDescription?: string;
 }
@@ -162,13 +177,66 @@ export interface Species {
   slug: string;
   commonName: string;
   scientificName?: string;
+  family?: "trout" | "salmon" | "char" | "grayling" | "saltwater" | "warmwater" | "pike";
   description?: string;
   imageUrl?: string;
+  illustrationUrl?: string;
   nativeRange?: string;
+  introducedRange?: string;
   averageSize?: string;
   recordSize?: string;
+  recordDetails?: string;
   preferredHabitat?: string;
   preferredFlies: string[];
+  taxonomy?: {
+    order: string;
+    family: string;
+    genus: string;
+    species: string;
+  };
+  conservationStatus?: string;
+  diet?: string;
+  spawningInfo?: string;
+  spawningMonths?: string[];
+  spawningTempF?: string;
+  lifespan?: string;
+  waterTemperatureRange?: string;
+  flyFishingTips?: string;
+  tackleRecommendations?: string;
+  funFacts?: string[];
+  relatedDestinationIds: string[];
+  relatedRiverIds: string[];
+  distributionCoordinates?: { name: string; latitude: number; longitude: number }[];
+  metaTitle?: string;
+  metaDescription?: string;
+  featured: boolean;
+}
+
+export interface GoogleReview {
+  authorName: string;
+  rating: number;
+  text: string;
+  relativeTimeDescription: string;
+  profilePhotoUrl?: string;
+  time: number;
+}
+
+export interface PhotoSubmission {
+  id: string;
+  entityType: "destination" | "river" | "lodge" | "guide" | "fly-shop" | "species";
+  entityId: string;
+  submitterName: string;
+  submitterEmail: string;
+  photoUrl: string;
+  caption?: string;
+  cameraBody?: string;
+  lens?: string;
+  aperture?: string;
+  shutterSpeed?: string;
+  iso?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedAt: string;
+  approvedAt?: string;
 }
 
 export interface Review {

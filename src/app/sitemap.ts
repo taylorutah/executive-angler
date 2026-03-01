@@ -5,6 +5,7 @@ import { lodges } from "@/data/lodges";
 import { articles } from "@/data/articles";
 import { guides } from "@/data/guides";
 import { flyShops } from "@/data/fly-shops";
+import { species } from "@/data/species";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
 
@@ -13,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE_URL, lastModified: new Date(), priority: 1 },
     { url: `${SITE_URL}/destinations`, lastModified: new Date(), priority: 0.9 },
     { url: `${SITE_URL}/rivers`, lastModified: new Date(), priority: 0.9 },
+    { url: `${SITE_URL}/species`, lastModified: new Date(), priority: 0.9 },
     { url: `${SITE_URL}/lodges`, lastModified: new Date(), priority: 0.9 },
     { url: `${SITE_URL}/articles`, lastModified: new Date(), priority: 0.9 },
     { url: `${SITE_URL}/guides`, lastModified: new Date(), priority: 0.8 },
@@ -31,6 +33,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}/rivers/${r.slug}`,
     lastModified: new Date(),
     priority: 0.8,
+  }));
+
+  const speciesPages = species.map((s) => ({
+    url: `${SITE_URL}/species/${s.slug}`,
+    lastModified: new Date(),
+    priority: 0.7,
   }));
 
   const lodgePages = lodges.map((l) => ({
@@ -61,6 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticPages,
     ...destinationPages,
     ...riverPages,
+    ...speciesPages,
     ...lodgePages,
     ...articlePages,
     ...guidePages,

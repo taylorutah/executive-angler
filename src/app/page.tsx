@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, BookOpen, Mountain } from "lucide-react";
+import { ArrowRight, MapPin, BookOpen, Mountain, Fish } from "lucide-react";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import RatingStars from "@/components/ui/RatingStars";
@@ -9,6 +9,7 @@ import { destinations } from "@/data/destinations";
 import { lodges } from "@/data/lodges";
 import { articles } from "@/data/articles";
 import { rivers } from "@/data/rivers";
+import { species } from "@/data/species";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -40,6 +41,7 @@ export default function HomePage() {
   const featuredLodges = lodges.filter((l) => l.featured).slice(0, 3);
   const featuredArticles = articles.filter((a) => a.featured).slice(0, 3);
   const featuredRivers = rivers.filter((r) => r.featured).slice(0, 4);
+  const featuredSpecies = species.filter((s) => s.featured).slice(0, 6);
 
   return (
     <>
@@ -183,8 +185,76 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Popular Species */}
+      {featuredSpecies.length > 0 && (
+        <section className="py-20 sm:py-24 bg-cream">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ScrollAnimation>
+              <div className="flex items-end justify-between mb-12">
+                <div>
+                  <p className="text-forest font-medium text-sm uppercase tracking-[0.15em] mb-2">
+                    Know Your Quarry
+                  </p>
+                  <h2 className="text-forest-dark">Popular Species</h2>
+                </div>
+                <Link
+                  href="/species"
+                  className="hidden sm:inline-flex items-center gap-2 text-forest font-medium hover:text-forest-dark transition-colors"
+                >
+                  View All <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </ScrollAnimation>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {featuredSpecies.map((sp, i) => (
+                <ScrollAnimation key={sp.id} delay={i * 0.08}>
+                  <Link
+                    href={`/species/${sp.slug}`}
+                    className="group block rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="relative aspect-square overflow-hidden">
+                      <Image
+                        src={sp.imageUrl || "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80"}
+                        alt={sp.commonName}
+                        fill
+                        className="object-cover card-image-zoom"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                      />
+                      {sp.family && (
+                        <div className="absolute top-2 right-2 px-2 py-0.5 bg-forest/80 text-white text-[10px] font-medium rounded-full uppercase backdrop-blur-sm">
+                          {sp.family}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 text-center">
+                      <h3 className="font-heading text-sm font-semibold text-forest-dark group-hover:text-forest transition-colors">
+                        {sp.commonName}
+                      </h3>
+                      {sp.scientificName && (
+                        <p className="text-[11px] text-slate-400 italic mt-0.5 truncate">
+                          {sp.scientificName}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                </ScrollAnimation>
+              ))}
+            </div>
+
+            <Link
+              href="/species"
+              className="sm:hidden mt-8 inline-flex items-center gap-2 text-forest font-medium hover:text-forest-dark transition-colors"
+            >
+              <Fish className="h-4 w-4" />
+              View All Species <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* Featured Lodges */}
-      <section className="py-20 sm:py-24 bg-cream">
+      <section className="py-20 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
             <div className="flex items-end justify-between mb-12">
@@ -258,7 +328,7 @@ export default function HomePage() {
       </section>
 
       {/* Latest Articles */}
-      <section className="py-20 sm:py-24 bg-white">
+      <section className="py-20 sm:py-24 bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
             <div className="flex items-end justify-between mb-12">

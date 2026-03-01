@@ -9,6 +9,9 @@ import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
+import GoogleReviews from "@/components/ui/GoogleReviews";
+import CommunityPhotos from "@/components/ui/CommunityPhotos";
+import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { guides } from "@/data/guides";
 import { rivers } from "@/data/rivers";
 import { destinations } from "@/data/destinations";
@@ -146,6 +149,18 @@ export default async function GuidePage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
+
+              {/* Google Reviews */}
+              <GoogleReviews
+                rating={guide.googleRating}
+                reviewCount={guide.googleReviewCount}
+                reviewsUrl={guide.googleReviewsUrl}
+                reviews={guide.featuredReviews}
+              />
+
+              {/* Community Photos */}
+              <CommunityPhotos entityType="guide" entityId={guide.id} />
+              <PhotoSubmissionForm entityType="guide" entityId={guide.id} entityName={guide.name} />
             </div>
 
             <div className="space-y-6">

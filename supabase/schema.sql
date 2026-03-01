@@ -86,6 +86,11 @@ create table if not exists lodges (
   nearby_river_ids uuid[],
   average_rating numeric,
   review_count integer default 0,
+  google_place_id text,
+  google_rating numeric,
+  google_review_count integer,
+  google_reviews_url text,
+  featured_reviews jsonb,
   meta_title text,
   meta_description text,
   featured boolean default false,
@@ -108,6 +113,11 @@ create table if not exists guides (
   license_number text,
   river_ids uuid[],
   daily_rate text,
+  google_place_id text,
+  google_rating numeric,
+  google_review_count integer,
+  google_reviews_url text,
+  featured_reviews jsonb,
   meta_title text,
   meta_description text,
   created_at timestamptz default now(),
@@ -129,6 +139,11 @@ create table if not exists fly_shops (
   hours jsonb,
   services text[],
   brands_carried text[],
+  google_place_id text,
+  google_rating numeric,
+  google_review_count integer,
+  google_reviews_url text,
+  featured_reviews jsonb,
   meta_title text,
   meta_description text,
   created_at timestamptz default now(),
@@ -163,14 +178,36 @@ create table if not exists species (
   slug text unique not null,
   common_name text not null,
   scientific_name text,
+  family text,
   description text,
   image_url text,
+  illustration_url text,
   native_range text,
+  introduced_range text,
   average_size text,
   record_size text,
+  record_details text,
   preferred_habitat text,
   preferred_flies text[],
-  created_at timestamptz default now()
+  taxonomy jsonb,
+  conservation_status text,
+  diet text,
+  spawning_info text,
+  spawning_months text[],
+  spawning_temp_f text,
+  lifespan text,
+  water_temperature_range text,
+  fly_fishing_tips text,
+  tackle_recommendations text,
+  fun_facts text[],
+  related_destination_ids text[],
+  related_river_ids text[],
+  distribution_coordinates jsonb,
+  meta_title text,
+  meta_description text,
+  featured boolean default false,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
 );
 
 -- =============================================
@@ -295,3 +332,44 @@ create trigger update_user_profiles_updated_at before update on user_profiles
   for each row execute function update_updated_at_column();
 create trigger update_reviews_updated_at before update on reviews
   for each row execute function update_updated_at_column();
+create trigger update_species_updated_at before update on species
+  for each row execute function update_updated_at_column();
+
+-- =============================================
+-- PHOTO SUBMISSIONS (Phase 2)
+-- =============================================
+
+create table if not exists photo_submissions (
+  id uuid primary key default uuid_generate_v4(),
+  entity_type text not null,
+  entity_id text not null,
+  submitter_name text not null,
+  submitter_email text not null,
+  photo_url text not null,
+  caption text,
+  camera_body text,
+  lens text,
+  aperture text,
+  shutter_speed text,
+  iso text,
+  status text default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  submitted_at timestamptz default now(),
+  approved_at timestamptz,
+  user_id uuid references auth.users(id) on delete set null
+);
+
+create index idx_photos_entity on photo_submissions(entity_type, entity_id);
+create index idx_photos_status on photo_submissions(status);
+create index idx_photos_user on photo_submissions(user_id);
+
+alter table photo_submissions enable row level security;
+create policy "Public read approved photos" on photo_submissions for select using (status = 'approved');
+create policy "Users can view own submissions" on photo_submissions for select using (auth.uid() = user_id);
+create policy "Authenticated users can submit photos" on photo_submissions for insert with check (auth.uid() = user_id);
+
+-- Storage bucket: photo-submissions
+-- Create via Supabase dashboard:
+--   Bucket name: photo-submissions
+--   Public: true (for serving approved photos)
+--   File size limit: 10MB
+--   Allowed MIME types: image/jpeg, image/png, image/webp

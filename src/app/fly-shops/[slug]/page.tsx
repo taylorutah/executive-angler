@@ -9,6 +9,9 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
+import GoogleReviews from "@/components/ui/GoogleReviews";
+import CommunityPhotos from "@/components/ui/CommunityPhotos";
+import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
 import { destinations } from "@/data/destinations";
 
@@ -149,6 +152,18 @@ export default async function FlyShopPage({ params }: Props) {
                   className="h-[300px] w-full rounded-xl overflow-hidden shadow-md"
                 />
               </ScrollAnimation>
+
+              {/* Google Reviews */}
+              <GoogleReviews
+                rating={shop.googleRating}
+                reviewCount={shop.googleReviewCount}
+                reviewsUrl={shop.googleReviewsUrl}
+                reviews={shop.featuredReviews}
+              />
+
+              {/* Community Photos */}
+              <CommunityPhotos entityType="fly-shop" entityId={shop.id} />
+              <PhotoSubmissionForm entityType="fly-shop" entityId={shop.id} entityName={shop.name} />
             </div>
 
             <div className="space-y-6">
