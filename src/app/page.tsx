@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin, BookOpen, Mountain } from "lucide-react";
@@ -8,6 +9,31 @@ import { destinations } from "@/data/destinations";
 import { lodges } from "@/data/lodges";
 import { articles } from "@/data/articles";
 import { rivers } from "@/data/rivers";
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: `${SITE_NAME} — Premium Fly Fishing Resource`,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: `${SITE_NAME} — Premium Fly Fishing Resource`,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    images: [
+      {
+        url: "/images/madison-river-three-dollar-bridge.jpg",
+        width: 2400,
+        height: 1800,
+        alt: "The Madison River in Montana with the Madison Range rising in the distance under a blue sky",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Premium Fly Fishing Resource`,
+    description: SITE_DESCRIPTION,
+    images: ["/images/madison-river-three-dollar-bridge.jpg"],
+  },
+};
 
 export default function HomePage() {
   const featuredDestinations = destinations.filter((d) => d.featured).slice(0, 6);
@@ -21,7 +47,7 @@ export default function HomePage() {
       <section className="relative h-[90vh] w-full overflow-hidden">
         <Image
           src="/images/madison-river-three-dollar-bridge.jpg"
-          alt="The Madison River flowing beneath Three Dollar Bridge in Montana, with mountains rising in the distance"
+          alt="The Madison River in Montana with the Madison Range rising in the distance under a blue sky"
           fill
           className="object-cover"
           priority
