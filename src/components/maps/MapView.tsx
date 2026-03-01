@@ -60,10 +60,10 @@ export default function MapView({
         .addTo(map.current!);
     });
 
-    // Fit bounds if provided
+    // Fit bounds if provided (bounds data is [lat, lng], Mapbox needs [lng, lat])
     if (bounds) {
       map.current.fitBounds(
-        [bounds.sw, bounds.ne],
+        [[bounds.sw[1], bounds.sw[0]], [bounds.ne[1], bounds.ne[0]]],
         { padding: 50, maxZoom: 12 }
       );
     } else if (markers.length > 1) {

@@ -35,133 +35,166 @@
   --color-slate-100: #F8FAFC;
 }
 
-:root {
-  --background: #FEFCE8;
-  --foreground: #1E293B;
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Source Sans 3', system-ui, sans-serif;
-}
-
 /* =============================================
-   BASE STYLES
+   BASE LAYER — overridable by Tailwind utilities
    ============================================= */
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    --background: #FEFCE8;
+    --foreground: #1E293B;
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body: 'Source Sans 3', system-ui, sans-serif;
+  }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  * {
+    box-sizing: border-box;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body);
-  line-height: 1.7;
-  min-height: 100vh;
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Typography defaults — Tailwind classes override these */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); }
+  h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); }
+  h3 { font-size: clamp(1.375rem, 2.5vw, 2rem); }
+  h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  p {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  ::selection {
+    background: var(--color-forest);
+    color: var(--color-cream);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-forest);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-forest-light);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
 /* =============================================
-   TYPOGRAPHY
+   COMPONENT STYLES
    ============================================= */
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
+@layer components {
+  .hero-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(15, 43, 31, 0.3) 0%,
+      rgba(15, 43, 31, 0.5) 40%,
+      rgba(15, 43, 31, 0.8) 100%
+    );
+  }
 
-h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); }
-h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); }
-h3 { font-size: clamp(1.375rem, 2.5vw, 2rem); }
-h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
+  .hero-overlay-light {
+    background: linear-gradient(
+      to bottom,
+      rgba(15, 43, 31, 0.1) 0%,
+      rgba(15, 43, 31, 0.4) 60%,
+      rgba(15, 43, 31, 0.7) 100%
+    );
+  }
 
-p {
-  font-size: 1.0625rem;
-  line-height: 1.8;
-}
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
 
-/* =============================================
-   SELECTION
-   ============================================= */
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  }
 
-::selection {
-  background: var(--color-forest);
-  color: var(--color-cream);
-}
+  .card-image-zoom {
+    transition: transform 0.5s ease;
+  }
 
-/* =============================================
-   SCROLLBAR
-   ============================================= */
+  .card-hover:hover .card-image-zoom {
+    transform: scale(1.05);
+  }
 
-::-webkit-scrollbar {
-  width: 8px;
-}
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease forwards;
+  }
 
-::-webkit-scrollbar-track {
-  background: var(--color-cream);
-}
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-forest);
-  border-radius: 4px;
-}
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-6 { animation-delay: 0.6s; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-forest-light);
-}
+  /* Mapbox overrides */
+  .mapboxgl-popup-content {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 
-/* =============================================
-   HERO SECTION
-   ============================================= */
+  .mapboxgl-popup-close-button {
+    font-size: 1.125rem;
+    padding: 4px 8px;
+    color: var(--color-slate-600);
+  }
 
-.hero-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(15, 43, 31, 0.3) 0%,
-    rgba(15, 43, 31, 0.5) 40%,
-    rgba(15, 43, 31, 0.8) 100%
-  );
-}
-
-.hero-overlay-light {
-  background: linear-gradient(
-    to bottom,
-    rgba(15, 43, 31, 0.1) 0%,
-    rgba(15, 43, 31, 0.4) 60%,
-    rgba(15, 43, 31, 0.7) 100%
-  );
-}
-
-/* =============================================
-   CARD STYLES
-   ============================================= */
-
-.card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
-}
-
-.card-image-zoom {
-  transition: transform 0.5s ease;
-}
-
-.card-hover:hover .card-image-zoom {
-  transform: scale(1.05);
+  .mapboxgl-ctrl-logo {
+    display: none !important;
+  }
 }
 
 /* =============================================
-   ANIMATIONS
+   KEYFRAMES (outside layers — always available)
    ============================================= */
 
 @keyframes fadeIn {
@@ -189,55 +222,4 @@ p {
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-.stagger-6 { animation-delay: 0.6s; }
-
-/* =============================================
-   FOCUS STYLES
-   ============================================= */
-
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--color-forest);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* =============================================
-   MAPBOX OVERRIDES
-   ============================================= */
-
-.mapboxgl-popup-content {
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.mapboxgl-popup-close-button {
-  font-size: 1.125rem;
-  padding: 4px 8px;
-  color: var(--color-slate-600);
-}
-
-.mapboxgl-ctrl-logo {
-  display: none !important;
 }
