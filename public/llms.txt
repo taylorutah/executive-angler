@@ -1,0 +1,65 @@
+# Executive Angler
+
+> The definitive fly fishing resource — destinations, rivers, lodges, guides, and expert instruction from around the world.
+
+## About
+
+Executive Angler is a comprehensive fly fishing resource website designed to be the single authoritative source for anglers worldwide. We cover every major fly fishing destination, river, lodge, guide service, and fly shop on earth. Our editorial content includes in-depth technique articles, species guides, gear reviews, and conservation coverage.
+
+We do not sell gear or operate as a booking agent. We connect anglers directly with lodges and guides — no middleman.
+
+## Content Types
+
+### Destinations
+Geographic regions organized by continent, country, and state/province. Each destination page includes an overview, best fishing months, target species, available waters, nearby lodges and guides, and interactive maps.
+
+Current destinations include: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, Patagonia (Argentina), British Columbia (Canada), Bahamas, Iceland.
+
+### Rivers & Waters
+Individual fly fishing waters with detailed information including species present, best months, flow type (freestone/tailwater/spring creek), access points with GPS coordinates, regulations, hatch charts, and interactive Mapbox maps.
+
+Featured rivers: Madison River, Gallatin River, Yellowstone River, Missouri River, Big Hole River.
+
+### Lodges
+Fly fishing lodges and outfitters worldwide. Each listing includes location, pricing, season dates, capacity, amenities, photo galleries, and direct booking links to the lodge's official website.
+
+Featured lodges: Firehole Ranch (West Yellowstone, MT), Lone Mountain Ranch (Big Sky, MT).
+
+### Guides
+Professional fly fishing guide services. Profiles include specialties, years of experience, daily rates, rivers covered, and direct contact information.
+
+### Fly Shops
+Local fly shops with services, hours, brands carried, and contact information. Shops are linked to their local waters and destinations.
+
+### Articles
+Long-form editorial content organized by category:
+- Techniques (Euro nymphing, dry fly, streamer, fly tying)
+- Destination guides
+- Gear reviews and recommendations
+- Conservation and stewardship
+- Species guides
+
+## Key Pages
+
+- / — Homepage with featured destinations, lodges, rivers, and articles
+- /destinations — Browse all fly fishing destinations
+- /destinations/montana — Montana fly fishing guide (showcase destination)
+- /rivers — Browse all rivers and waters
+- /rivers/madison-river — Madison River complete guide with map and hatch chart
+- /lodges — Browse fly fishing lodges
+- /articles — Read expert articles and instruction
+- /articles/introduction-to-euro-nymphing — Comprehensive euro nymphing guide
+- /guides — Find fly fishing guides
+- /fly-shops — Find local fly shops
+
+## Technical Details
+
+- Built with Next.js, hosted on Vercel
+- Interactive maps powered by Mapbox GL JS
+- Database: Supabase (PostgreSQL)
+- Schema.org structured data on all entity pages
+- Dynamic sitemap at /sitemap.xml
+
+## Contact
+
+Website: https://executiveangler.com

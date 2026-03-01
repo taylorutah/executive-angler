@@ -1,0 +1,199 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ExternalLink, Phone, Mail, Award, MapPin } from "lucide-react";
+import HeroSection from "@/components/ui/HeroSection";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import QuickFacts from "@/components/ui/QuickFacts";
+import Badge from "@/components/ui/Badge";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import FavoriteButton from "@/components/ui/FavoriteButton";
+import JsonLd from "@/components/seo/JsonLd";
+import { guides } from "@/data/guides";
+import { rivers } from "@/data/rivers";
+import { destinations } from "@/data/destinations";
+
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const guide = guides.find((g) => g.slug === slug);
+  if (!guide) return { title: "Guide Not Found" };
+
+  return {
+    title: `${guide.name} — Fly Fishing Guide`,
+    description:
+      guide.metaDescription ||
+      `${guide.name} — professional fly fishing guide. Specialties: ${guide.specialties.join(", ")}.`,
+  };
+}
+
+export function generateStaticParams() {
+  return guides.map((g) => ({ slug: g.slug }));
+}
+
+export default async function GuidePage({ params }: Props) {
+  const { slug } = await params;
+  const guide = guides.find((g) => g.slug === slug);
+  if (!guide) notFound();
+
+  const dest = destinations.find((d) => d.id === guide.destinationId);
+  const guideRivers = rivers.filter((r) => guide.riverIds.includes(r.id));
+
+  const quickFacts = [
+    ...(dest ? [{ label: "Location", value: dest.name }] : []),
+    ...(guide.yearsExperience
+      ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
+      : []),
+    ...(guide.dailyRate ? [{ label: "Daily Rate", value: guide.dailyRate }] : []),
+    {
+      label: "Specialties",
+      value: guide.specialties.join(", "),
+    },
+  ];
+
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": ["LocalBusiness", "Person"],
+          name: guide.name,
+          description: guide.bio,
+          url: guide.websiteUrl,
+        }}
+      />
+
+      <HeroSection
+        imageUrl={
+          guide.photoUrl ||
+          "https://images.unsplash.com/photo-1545816250-e12bedba42ba?w=1920&q=80"
+        }
+        imageAlt={`${guide.name} — fly fishing guide`}
+        title={guide.name}
+        subtitle={`Fly Fishing Guide${dest ? ` — ${dest.name}` : ""}`}
+        height="h-[50vh]"
+      />
+
+      <div className="bg-cream">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-between">
+            <Breadcrumbs
+              items={[
+                { label: "Guides", href: "/guides" },
+                { label: guide.name },
+              ]}
+            />
+            <FavoriteButton entityType="guide" entityId={guide.id} />
+          </div>
+        </div>
+      </div>
+
+      <section className="bg-cream pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="lg:col-span-2 space-y-10">
+              <ScrollAnimation>
+                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  About
+                </h2>
+                {guide.bio.split("\n\n").map((p, i) => (
+                  <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                    {p}
+                  </p>
+                ))}
+              </ScrollAnimation>
+
+              <ScrollAnimation>
+                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  Specialties
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {guide.specialties.map((s) => (
+                    <Badge key={s} variant="forest" size="md">
+                      <Award className="h-3.5 w-3.5 mr-1.5" />
+                      {s}
+                    </Badge>
+                  ))}
+                </div>
+              </ScrollAnimation>
+
+              {guideRivers.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                    Rivers & Waters
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {guideRivers.map((river) => (
+                      <Link
+                        key={river.id}
+                        href={`/rivers/${river.slug}`}
+                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <MapPin className="h-5 w-5 text-river shrink-0" />
+                        <div>
+                          <h3 className="font-medium text-forest-dark">
+                            {river.name}
+                          </h3>
+                          <p className="text-xs text-slate-500">
+                            {river.primarySpecies.join(", ")}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+            </div>
+
+            <div className="space-y-6">
+              <QuickFacts facts={quickFacts} />
+
+              <div className="bg-forest rounded-xl p-6 text-white shadow-lg">
+                <h3 className="font-heading text-xl font-bold mb-3">
+                  Book a Trip
+                </h3>
+                <p className="text-sm text-white/80 mb-6">
+                  Contact {guide.name} directly to book your guided trip.
+                </p>
+                {guide.websiteUrl && (
+                  <a
+                    href={guide.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-white text-forest-dark font-semibold rounded-lg hover:bg-cream transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Visit Website
+                  </a>
+                )}
+                <div className="mt-4 space-y-2 text-sm">
+                  {guide.phone && (
+                    <a
+                      href={`tel:${guide.phone}`}
+                      className="flex items-center gap-2 text-white/80 hover:text-white"
+                    >
+                      <Phone className="h-4 w-4" />
+                      {guide.phone}
+                    </a>
+                  )}
+                  {guide.email && (
+                    <a
+                      href={`mailto:${guide.email}`}
+                      className="flex items-center gap-2 text-white/80 hover:text-white"
+                    >
+                      <Mail className="h-4 w-4" />
+                      {guide.email}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

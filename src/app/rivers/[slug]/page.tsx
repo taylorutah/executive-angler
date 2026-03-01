@@ -1,0 +1,358 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
+import HeroSection from "@/components/ui/HeroSection";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import QuickFacts from "@/components/ui/QuickFacts";
+import EntityCard from "@/components/ui/EntityCard";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import Badge from "@/components/ui/Badge";
+import FavoriteButton from "@/components/ui/FavoriteButton";
+import JsonLd from "@/components/seo/JsonLd";
+import MapView from "@/components/maps/DynamicMapView";
+import { rivers } from "@/data/rivers";
+import { lodges } from "@/data/lodges";
+import { guides } from "@/data/guides";
+import { destinations } from "@/data/destinations";
+
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const river = rivers.find((r) => r.slug === slug);
+  if (!river) return { title: "River Not Found" };
+
+  return {
+    title: `${river.name} — Fly Fishing Guide`,
+    description:
+      river.metaDescription ||
+      `Complete fly fishing guide to ${river.name}. Species: ${river.primarySpecies.join(", ")}. ${river.flowType} river.`,
+    openGraph: {
+      title: `${river.name} Fly Fishing Guide`,
+      description: river.metaDescription || river.description.substring(0, 160),
+      images: [river.heroImageUrl],
+    },
+  };
+}
+
+export function generateStaticParams() {
+  return rivers.map((r) => ({ slug: r.slug }));
+}
+
+export default async function RiverPage({ params }: Props) {
+  const { slug } = await params;
+  const river = rivers.find((r) => r.slug === slug);
+  if (!river) notFound();
+
+  const dest = destinations.find((d) => d.id === river.destinationId);
+  const nearbyLodges = lodges.filter((l) => l.destinationId === river.destinationId);
+  const nearbyGuides = guides.filter((g) => g.riverIds.includes(river.id));
+
+  const mapMarkers = [
+    ...river.accessPoints.map((ap) => ({
+      latitude: ap.latitude,
+      longitude: ap.longitude,
+      title: ap.name,
+      description: ap.description || (ap.parking ? "Parking available" : ""),
+      color: "#1B4332",
+    })),
+  ];
+
+  const quickFacts = [
+    ...(dest ? [{ label: "Destination", value: dest.name }] : []),
+    ...(river.lengthMiles
+      ? [{ label: "Length", value: `${river.lengthMiles} miles` }]
+      : []),
+    { label: "Type", value: river.flowType },
+    { label: "Difficulty", value: river.difficulty },
+    { label: "Wading", value: river.wadingType },
+    { label: "Best Months", value: river.bestMonths.join(", ") },
+    { label: "Species", value: river.primarySpecies.join(", ") },
+  ];
+
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Place",
+          name: river.name,
+          description: river.description,
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: river.latitude,
+            longitude: river.longitude,
+          },
+          image: river.heroImageUrl,
+        }}
+      />
+
+      <HeroSection
+        imageUrl={river.heroImageUrl}
+        imageAlt={`${river.name} fly fishing`}
+        title={river.name}
+        subtitle={`${river.flowType} · ${river.primarySpecies.join(", ")}`}
+        height="h-[60vh]"
+      />
+
+      <div className="bg-cream">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-between">
+            <Breadcrumbs
+              items={[
+                { label: "Rivers", href: "/rivers" },
+                { label: river.name },
+              ]}
+            />
+            <FavoriteButton entityType="river" entityId={river.id} />
+          </div>
+        </div>
+      </div>
+
+      <section className="bg-cream pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-12">
+              {/* Overview */}
+              <ScrollAnimation>
+                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  Overview
+                </h2>
+                {river.description.split("\n\n").map((p, i) => (
+                  <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                    {p}
+                  </p>
+                ))}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {river.primarySpecies.map((species) => (
+                    <Badge key={species} variant="river" size="md">
+                      <Fish className="h-3.5 w-3.5 mr-1.5" />
+                      {species}
+                    </Badge>
+                  ))}
+                </div>
+              </ScrollAnimation>
+
+              {/* Regulations */}
+              {river.regulations && (
+                <ScrollAnimation>
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-heading text-lg font-semibold text-amber-900 mb-2">
+                          Regulations
+                        </h3>
+                        <p className="text-sm text-amber-800 leading-relaxed">
+                          {river.regulations}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Interactive Map */}
+              <ScrollAnimation>
+                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  Access Points & Map
+                </h2>
+                <MapView
+                  latitude={river.latitude}
+                  longitude={river.longitude}
+                  zoom={9}
+                  markers={mapMarkers}
+                  bounds={river.mapBounds}
+                  className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
+                />
+                {/* Access Point List */}
+                <div className="mt-6 space-y-3">
+                  {river.accessPoints.map((ap, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-3 p-4 bg-white rounded-xl shadow-sm"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-forest text-white flex items-center justify-center text-sm font-bold shrink-0">
+                        {i + 1}
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-forest-dark">
+                          {ap.name}
+                        </h4>
+                        {ap.description && (
+                          <p className="text-sm text-slate-600 mt-0.5">
+                            {ap.description}
+                          </p>
+                        )}
+                        <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-500">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
+                          </span>
+                          {ap.parking && (
+                            <span className="text-forest font-medium">
+                              Parking available
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollAnimation>
+
+              {/* Hatch Chart */}
+              {river.hatchChart && river.hatchChart.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                    Hatch Chart
+                  </h2>
+                  <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="bg-forest text-white">
+                            <th className="px-4 py-3 text-left font-semibold">
+                              Month
+                            </th>
+                            <th className="px-4 py-3 text-left font-semibold">
+                              Insect
+                            </th>
+                            <th className="px-4 py-3 text-left font-semibold">
+                              Size
+                            </th>
+                            <th className="px-4 py-3 text-left font-semibold">
+                              Pattern
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {river.hatchChart.map((month) =>
+                            month.hatches.map((hatch, hi) => (
+                              <tr
+                                key={`${month.month}-${hi}`}
+                                className="border-b border-slate-100 hover:bg-cream/50"
+                              >
+                                {hi === 0 && (
+                                  <td
+                                    className="px-4 py-3 font-medium text-forest-dark align-top"
+                                    rowSpan={month.hatches.length}
+                                  >
+                                    {month.month}
+                                  </td>
+                                )}
+                                <td className="px-4 py-3 text-slate-700">
+                                  {hatch.insect}
+                                </td>
+                                <td className="px-4 py-3 text-slate-600">
+                                  {hatch.size}
+                                </td>
+                                <td className="px-4 py-3 text-slate-600">
+                                  {hatch.pattern}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Nearby Lodges */}
+              {nearbyLodges.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Nearby Lodges
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {nearbyLodges.map((lodge) => (
+                      <EntityCard
+                        key={lodge.id}
+                        href={`/lodges/${lodge.slug}`}
+                        imageUrl={lodge.heroImageUrl}
+                        imageAlt={lodge.name}
+                        title={lodge.name}
+                        subtitle={lodge.priceRange}
+                        meta={`${lodge.seasonStart}–${lodge.seasonEnd}`}
+                      />
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <QuickFacts facts={quickFacts} />
+
+              {/* Season Calendar */}
+              <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                  Season
+                </h3>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {[
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                  ].map((month) => {
+                    const fullMonth = [
+                      "January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December",
+                    ][[
+                      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                    ].indexOf(month)];
+                    const isGood = river.bestMonths.includes(fullMonth);
+                    return (
+                      <div
+                        key={month}
+                        className={`text-center py-2 rounded text-xs font-medium ${
+                          isGood
+                            ? "bg-river text-white"
+                            : "bg-slate-100 text-slate-400"
+                        }`}
+                      >
+                        {month}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Nearby Guides */}
+              {nearbyGuides.length > 0 && (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                    Guides on This River
+                  </h3>
+                  <div className="space-y-3">
+                    {nearbyGuides.map((guide) => (
+                      <Link
+                        key={guide.id}
+                        href={`/guides/${guide.slug}`}
+                        className="block p-3 rounded-lg hover:bg-cream transition-colors"
+                      >
+                        <p className="text-sm font-medium text-forest-dark">
+                          {guide.name}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {guide.dailyRate}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
