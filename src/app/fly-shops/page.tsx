@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { MapPin, Clock } from "lucide-react";
+import { Suspense } from "react";
 import HeroSection from "@/components/ui/HeroSection";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import EntityListView from "@/components/ui/EntityListView";
 import { getAllFlyShops, getAllDestinations } from "@/lib/db";
+import { flyShopListConfig } from "@/lib/list-configs";
+import type { CardData, EntityListConfig } from "@/types/list-config";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Shops",
-  description: "Find the best fly shops near your fishing destination. Local knowledge, gear, guided trips, and fly tying supplies.",
+  description:
+    "Find the best fly shops near your fishing destination. Local knowledge, gear, guided trips, and fly tying supplies.",
 };
 
 export default async function FlyShopsPage() {
@@ -17,6 +19,57 @@ export default async function FlyShopsPage() {
     getAllFlyShops(),
     getAllDestinations(),
   ]);
+
+  // Build destination filter options dynamically
+  const destCounts = new Map<string, { name: string; count: number }>();
+  flyShops.forEach((shop) => {
+    const dest = destinations.find((d) => d.id === shop.destinationId);
+    if (dest) {
+      const existing = destCounts.get(shop.destinationId);
+      if (existing) {
+        existing.count++;
+      } else {
+        destCounts.set(shop.destinationId, { name: dest.name, count: 1 });
+      }
+    }
+  });
+
+  const destOptions = Array.from(destCounts.entries())
+    .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
+    .map(([id, { name }]) => ({
+      value: id,
+      label: name,
+    }));
+
+  const config: EntityListConfig = {
+    ...flyShopListConfig,
+    filters: [
+      {
+        ...flyShopListConfig.filters[0],
+        options: destOptions,
+      },
+    ],
+  };
+
+  const items: (CardData & { _filterValues: Record<string, string> })[] = flyShops.map(
+    (shop) => {
+      const dest = destinations.find((d) => d.id === shop.destinationId);
+      return {
+        href: `/fly-shops/${shop.slug}`,
+        imageUrl: shop.heroImageUrl || undefined,
+        imageAlt: shop.name,
+        title: shop.name,
+        subtitle: dest?.name,
+        description: shop.description.substring(0, 120),
+        tags: shop.services.slice(0, 3),
+        featured: false,
+        iconOnly: !shop.heroImageUrl,
+        _filterValues: {
+          destination: shop.destinationId,
+        },
+      };
+    }
+  );
 
   return (
     <>
@@ -29,42 +82,13 @@ export default async function FlyShopsPage() {
 
       <section className="py-16 sm:py-20 bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {flyShops.map((shop, i) => {
-              const dest = destinations.find((d) => d.id === shop.destinationId);
-              return (
-                <ScrollAnimation key={shop.id} delay={i * 0.05}>
-                  <Link
-                    href={`/fly-shops/${shop.slug}`}
-                    className="group block card-hover rounded-xl overflow-hidden bg-white shadow-md p-6"
-                  >
-                    <h3 className="font-heading text-lg font-semibold text-forest-dark group-hover:text-forest transition-colors">
-                      {shop.name}
-                    </h3>
-                    {dest && (
-                      <p className="text-sm text-slate-500 mt-1 flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
-                        {dest.name}
-                      </p>
-                    )}
-                    <p className="mt-3 text-sm text-slate-600 line-clamp-2">
-                      {shop.description.substring(0, 120)}...
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {shop.services.slice(0, 3).map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-0.5 text-xs bg-cream text-forest-dark rounded-full"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
+          <Suspense>
+            <EntityListView
+              items={items}
+              config={config}
+              storageKey="fly-shops"
+            />
+          </Suspense>
         </div>
       </section>
     </>

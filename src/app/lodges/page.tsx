@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import EntityCard from "@/components/ui/EntityCard";
+import { Suspense } from "react";
 import HeroSection from "@/components/ui/HeroSection";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import EntityListView from "@/components/ui/EntityListView";
 import { getAllLodges } from "@/lib/db";
+import { lodgeListConfig } from "@/lib/list-configs";
+import type { CardData } from "@/types/list-config";
 
 export const revalidate = 3600;
 
@@ -15,6 +17,25 @@ export const metadata: Metadata = {
 export default async function LodgesPage() {
   const lodges = await getAllLodges();
 
+  const items: (CardData & { _filterValues: Record<string, string | number> })[] = lodges.map(
+    (lodge) => ({
+      href: `/lodges/${lodge.slug}`,
+      imageUrl: lodge.heroImageUrl,
+      imageAlt: lodge.name,
+      title: lodge.name,
+      subtitle: lodge.priceRange,
+      meta: lodge.seasonStart && lodge.seasonEnd
+        ? `${lodge.seasonStart}–${lodge.seasonEnd}`
+        : undefined,
+      badges: lodge.amenities.slice(0, 2),
+      featured: lodge.featured,
+      description: lodge.description?.substring(0, 150),
+      _filterValues: {
+        price: String(lodge.priceTier),
+      },
+    })
+  );
+
   return (
     <>
       <HeroSection
@@ -26,21 +47,13 @@ export default async function LodgesPage() {
 
       <section className="py-16 sm:py-20 bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {lodges.map((lodge, i) => (
-              <ScrollAnimation key={lodge.id} delay={i * 0.05}>
-                <EntityCard
-                  href={`/lodges/${lodge.slug}`}
-                  imageUrl={lodge.heroImageUrl}
-                  imageAlt={lodge.name}
-                  title={lodge.name}
-                  subtitle={lodge.priceRange}
-                  meta={`${lodge.seasonStart}–${lodge.seasonEnd}`}
-                  badges={lodge.amenities.slice(0, 2)}
-                />
-              </ScrollAnimation>
-            ))}
-          </div>
+          <Suspense>
+            <EntityListView
+              items={items}
+              config={lodgeListConfig}
+              storageKey="lodges"
+            />
+          </Suspense>
         </div>
       </section>
     </>

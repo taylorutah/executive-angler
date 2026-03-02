@@ -191,6 +191,15 @@
   .mapboxgl-ctrl-logo {
     display: none !important;
   }
+
+  /* Hide scrollbar on filter pill rows */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* =============================================

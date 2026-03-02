@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { Suspense } from "react";
 import HeroSection from "@/components/ui/HeroSection";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import EntityListView from "@/components/ui/EntityListView";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
+import { guideListConfig } from "@/lib/list-configs";
+import type { CardData, EntityListConfig } from "@/types/list-config";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Guides",
-  description: "Find expert fly fishing guides worldwide. Profiles, specialties, rates, and direct booking links.",
+  description:
+    "Find expert fly fishing guides worldwide. Profiles, specialties, rates, and direct booking links.",
 };
 
 export default async function GuidesPage() {
@@ -17,6 +19,50 @@ export default async function GuidesPage() {
     getAllGuides(),
     getAllDestinations(),
   ]);
+
+  // Build destination filter options dynamically
+  const destCounts = new Map<string, { name: string; count: number }>();
+  guides.forEach((g) => {
+    const dest = destinations.find((d) => d.id === g.destinationId);
+    if (dest) {
+      const existing = destCounts.get(g.destinationId);
+      if (existing) {
+        existing.count++;
+      } else {
+        destCounts.set(g.destinationId, { name: dest.name, count: 1 });
+      }
+    }
+  });
+
+  const destOptions = Array.from(destCounts.entries())
+    .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
+    .map(([id, { name }]) => ({ value: id, label: name }));
+
+  const config: EntityListConfig = {
+    ...guideListConfig,
+    filters: [{ ...guideListConfig.filters[0], options: destOptions }],
+  };
+
+  const items: (CardData & { _filterValues: Record<string, string | number> })[] = guides.map(
+    (guide) => {
+      const dest = destinations.find((d) => d.id === guide.destinationId);
+      return {
+        href: `/guides/${guide.slug}`,
+        imageAlt: guide.name,
+        title: guide.name,
+        subtitle: dest?.name,
+        description: guide.bio.substring(0, 120),
+        tags: guide.specialties.slice(0, 3),
+        accent: guide.dailyRate || undefined,
+        featured: false,
+        iconOnly: true,
+        _filterValues: {
+          destination: guide.destinationId,
+          experience: guide.yearsExperience ?? 0,
+        },
+      };
+    }
+  );
 
   return (
     <>
@@ -29,51 +75,9 @@ export default async function GuidesPage() {
 
       <section className="py-16 sm:py-20 bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {guides.map((guide, i) => {
-              const dest = destinations.find((d) => d.id === guide.destinationId);
-              return (
-                <ScrollAnimation key={guide.id} delay={i * 0.05}>
-                  <Link
-                    href={`/guides/${guide.slug}`}
-                    className="group block card-hover rounded-xl overflow-hidden bg-white shadow-md p-6"
-                  >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-full bg-forest/10 flex items-center justify-center shrink-0">
-                        <MapPin className="h-6 w-6 text-forest" />
-                      </div>
-                      <div>
-                        <h3 className="font-heading text-lg font-semibold text-forest-dark group-hover:text-forest transition-colors">
-                          {guide.name}
-                        </h3>
-                        {dest && (
-                          <p className="text-sm text-slate-500">{dest.name}</p>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-sm text-slate-600 line-clamp-2 mb-3">
-                      {guide.bio.substring(0, 120)}...
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {guide.specialties.slice(0, 3).map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-0.5 text-xs bg-cream text-forest-dark rounded-full"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                    {guide.dailyRate && (
-                      <p className="text-sm font-semibold text-forest">
-                        {guide.dailyRate}
-                      </p>
-                    )}
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
+          <Suspense>
+            <EntityListView items={items} config={config} storageKey="guides" />
+          </Suspense>
         </div>
       </section>
     </>

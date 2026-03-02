@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import EntityCard from "@/components/ui/EntityCard";
+import { Suspense } from "react";
 import HeroSection from "@/components/ui/HeroSection";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import EntityListView from "@/components/ui/EntityListView";
 import { getAllRivers } from "@/lib/db";
+import { riverListConfig } from "@/lib/list-configs";
+import type { CardData } from "@/types/list-config";
 
 export const revalidate = 3600;
 
@@ -15,6 +17,24 @@ export const metadata: Metadata = {
 export default async function RiversPage() {
   const rivers = await getAllRivers();
 
+  const items: (CardData & { _filterValues: Record<string, string> })[] = rivers.map(
+    (river) => ({
+      href: `/rivers/${river.slug}`,
+      imageUrl: river.heroImageUrl,
+      imageAlt: `${river.name} fly fishing`,
+      title: river.name,
+      subtitle: river.primarySpecies.join(", "),
+      meta: `${river.flowType} · ${river.difficulty}`,
+      badges: [river.wadingType],
+      featured: river.featured,
+      description: river.description?.substring(0, 150),
+      _filterValues: {
+        difficulty: river.difficulty,
+        wading: river.wadingType,
+      },
+    })
+  );
+
   return (
     <>
       <HeroSection
@@ -26,21 +46,13 @@ export default async function RiversPage() {
 
       <section className="py-16 sm:py-20 bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rivers.map((river, i) => (
-              <ScrollAnimation key={river.id} delay={i * 0.05}>
-                <EntityCard
-                  href={`/rivers/${river.slug}`}
-                  imageUrl={river.heroImageUrl}
-                  imageAlt={`${river.name} fly fishing`}
-                  title={river.name}
-                  subtitle={river.primarySpecies.join(", ")}
-                  meta={`${river.flowType} · ${river.difficulty}`}
-                  badges={[river.wadingType]}
-                />
-              </ScrollAnimation>
-            ))}
-          </div>
+          <Suspense>
+            <EntityListView
+              items={items}
+              config={riverListConfig}
+              storageKey="rivers"
+            />
+          </Suspense>
         </div>
       </section>
     </>
