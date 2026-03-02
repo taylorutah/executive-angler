@@ -23,7 +23,7 @@ export default function ScrollAnimation({
       initial={{ opacity: 0, x: initialX, y: initialY }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       transition={{ duration: 0.6, delay, ease: "easeOut" }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "0px" }}
       className={className}
     >
       {children}
