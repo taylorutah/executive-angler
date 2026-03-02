@@ -13,7 +13,9 @@ export const species: Species[] = [
     description:
       "The rainbow trout is one of the most widely distributed and sought-after game fish in the world. Named for the distinctive pink-to-red lateral band that runs along its side, the rainbow is renowned for its acrobatic fighting ability and willingness to take a fly. Native to the cold-water tributaries of the Pacific Ocean in Asia and North America, rainbow trout have been introduced to suitable waters on every continent except Antarctica. They thrive in clean, cold, well-oxygenated streams, rivers, and lakes, with an ideal temperature range of 50 to 60 degrees Fahrenheit. Rainbows are opportunistic feeders, readily taking nymphs, dry flies, and streamers, making them a favorite target for fly anglers of all experience levels. Their adaptability and willingness to feed throughout the water column mean that nearly every fly fishing technique can be employed when targeting them.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/b/b6/Oncorhynchus_mykiss.jpg", // Wikimedia Commons — public domain USFWS
+      "https://upload.wikimedia.org/wikipedia/commons/f/f4/FMIB_43023_Rainbow_Trout_%28Salmo_irideus%29.jpeg", // FMIB 1896 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/f/f4/FMIB_43023_Rainbow_Trout_%28Salmo_irideus%29.jpeg",
     nativeRange: "Pacific drainages of North America and Asia, from Mexico to Alaska and across to Kamchatka",
     introducedRange: "Every continent except Antarctica, including Europe, South America, Africa, Oceania, and additional Asian drainages",
     averageSize: "12-20 inches, 1-5 lbs",
@@ -77,7 +79,9 @@ export const species: Species[] = [
     description:
       "The brown trout is the thinking angler's quarry. Originally native to Europe and western Asia, brown trout were first introduced to North American waters in 1883 and have since established thriving populations across the continent. Distinguished by their golden-brown coloring adorned with black and red spots often encircled by pale halos, brown trout are widely regarded as the most difficult trout species to fool with a fly. They are exceptionally wary, frequently nocturnal feeders, and grow larger than most other stream-dwelling trout. Brown trout tolerate warmer water temperatures than their salmonid cousins, allowing them to thrive in waters where other trout species struggle. Trophy brown trout are often caught on streamers fished during low-light conditions, though large specimens also fall to well-presented dry flies during prolific hatches.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/c/c2/Salmo_trutta_Lac%C3%A9p%C3%A8de.jpg", // Wikimedia Commons — Lacépède illustration, public domain
+      "https://upload.wikimedia.org/wikipedia/commons/4/45/Brown_trout_FWS_white_background.jpg", // USFWS illustration — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/45/Brown_trout_FWS_white_background.jpg",
     nativeRange: "Europe, western Asia, and North Africa, from Iceland and Scandinavia south to the Atlas Mountains",
     introducedRange: "North America, South America, Australasia, East Africa, and southern Asia",
     averageSize: "14-22 inches, 2-8 lbs",
@@ -141,7 +145,9 @@ export const species: Species[] = [
     description:
       "The cutthroat trout holds a special place in the hearts of western anglers as the native trout of the American West. Named for the distinctive red-orange slash marks beneath the lower jaw, cutthroat trout encompass numerous subspecies adapted to the diverse watersheds of western North America, from the Yellowstone cutthroat of the Greater Yellowstone Ecosystem to the westslope cutthroat of the northern Rockies and the coastal cutthroat of Pacific Northwest streams. Cutthroat trout are generally more willing to take a dry fly than brown trout, making them a delight for surface-oriented anglers. Many subspecies face conservation challenges from habitat loss and hybridization with non-native rainbow trout, making catch-and-release practices especially important when targeting these beautiful native fish.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/8/83/Oncorhynchus_clarkii_henshawi.jpg", // Wikimedia Commons — USFWS public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/d4/FMIB_35754_Cut-Throat%2C_or_Waha_Lake_Trout_%28Salmo_clarkii_bouvieri%29.jpeg", // FMIB 1924 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/d4/FMIB_35754_Cut-Throat%2C_or_Waha_Lake_Trout_%28Salmo_clarkii_bouvieri%29.jpeg",
     nativeRange: "Western North America, from Alaska south to New Mexico, with distinct subspecies in the Yellowstone, Columbia, Colorado, and Lahontan basins",
     introducedRange: "Limited introductions within western North America to restore native populations in historic habitat",
     averageSize: "10-18 inches, 0.5-3 lbs",
@@ -204,7 +210,9 @@ export const species: Species[] = [
     description:
       "Steelhead are the anadromous form of rainbow trout, spending their juvenile years in freshwater rivers before migrating to the ocean where they grow rapidly and develop their characteristic chrome-bright coloring. Returning to their natal rivers to spawn, steelhead are prized as one of the most challenging and rewarding fly rod quarries in North America. Unlike Pacific salmon, steelhead are iteroparous, meaning they can survive spawning and return to the ocean to repeat the cycle multiple times. Fly fishing for steelhead demands patience, persistence, and refined technique, as these powerful fish can go hours or even days between takes. The classic approach uses a two-handed spey rod to swing wet flies through long runs and tailouts, though nymphing and indicator techniques are also highly effective. Landing a wild steelhead on a swung fly is considered by many to be the pinnacle of freshwater fly fishing achievement.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/1/12/Steelhead_jump.jpg", // Wikimedia Commons — USFWS public domain
+      "https://upload.wikimedia.org/wikipedia/commons/a/a1/FMIB_43026_Steel-Head_Trout_%28Salmo_gairdneri%29_Adult.jpeg", // FMIB 1896 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/a/a1/FMIB_43026_Steel-Head_Trout_%28Salmo_gairdneri%29_Adult.jpeg",
     nativeRange: "Pacific Coast drainages from Southern California north to the Kamchatka Peninsula in Russia",
     introducedRange: "Great Lakes tributaries, select rivers in the eastern United States, Chile, and Argentina",
     averageSize: "24-32 inches, 6-12 lbs",
@@ -267,7 +275,9 @@ export const species: Species[] = [
     description:
       "The bull trout is a large, predatory char native to the cold, pristine headwaters of the Pacific Northwest and northern Rocky Mountains. Despite its common name, the bull trout is technically a member of the char genus Salvelinus, closely related to brook trout, Dolly Varden, and Arctic char. Bull trout require the coldest and cleanest water of any salmonid in the lower 48 states, with water temperatures rarely exceeding 59 degrees Fahrenheit, making them a sensitive indicator species for watershed health. They are powerful, aggressive predators that can grow to impressive sizes, with fish over 20 pounds taken in some river systems. Bull trout exhibit diverse life history strategies including resident stream, fluvial, and adfluvial forms. Due to significant population declines from habitat degradation, dam construction, and competition with non-native species, bull trout are listed as Threatened under the Endangered Species Act, and many fisheries are catch-and-release only.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/6c/Salvelinus_confluentus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/0/07/FMIB_34459_Dolly_Varden_or_Bull_Trout.jpeg", // FMIB 1913 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/07/FMIB_34459_Dolly_Varden_or_Bull_Trout.jpeg",
     nativeRange: "Pacific Northwest and northern Rocky Mountains, from northern Nevada and Oregon north through British Columbia and Alberta",
     introducedRange: "No significant introductions outside native range",
     averageSize: "14-24 inches, 2-6 lbs",
@@ -330,7 +340,9 @@ export const species: Species[] = [
     description:
       "The lake trout is the largest char species in North America and the apex predator of deep, cold northern lakes. Known regionally as mackinaw, lakers, or grey trout, these fish inhabit the deepest waters of glacially carved lakes across Canada and the northern United States, from the Great Lakes to the isolated mountain lakes of the Rocky Mountains. Lake trout are built for life in deep, cold water, with a deeply forked tail and a metabolism adapted to near-freezing temperatures. While lake trout are commonly associated with trolling and deep-water jigging, they offer outstanding fly fishing opportunities during spring and fall when they move into shallow water to feed and spawn. During ice-out and again in autumn, lake trout can be found cruising shallow shorelines and rocky points, making them vulnerable to streamers and large wet flies cast from shore or a boat.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/d/d5/Salvelinus_namaycush.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/8/88/FMIB_35062_Lake_Trout%3B_Mackinaw_Trout.jpeg", // FMIB 1922 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/8/88/FMIB_35062_Lake_Trout%3B_Mackinaw_Trout.jpeg",
     nativeRange: "Northern North America, from Alaska and Canada south through the Great Lakes and into parts of New England",
     introducedRange: "Western mountain lakes in Montana, Idaho, Wyoming, and Colorado; several European lakes and South American waters",
     averageSize: "18-30 inches, 3-10 lbs",
@@ -393,7 +405,9 @@ export const species: Species[] = [
     description:
       "The golden trout is widely considered the most beautiful freshwater fish in North America. Endemic to a handful of high-elevation streams in the southern Sierra Nevada of California, the golden trout displays a stunning combination of brilliant golden-yellow flanks, vivid red-orange belly and gill plates, olive-green back, and parr marks that persist throughout adulthood. These fish evolved in isolated alpine streams above 8,000 feet in elevation, and their restricted native range makes them one of the rarest and most sought-after trout species on the continent. Backpacking into the high Sierra to catch a wild golden trout in its native habitat is a bucket-list experience for many fly anglers. Though small in size, golden trout feed eagerly on dry flies and offer a fishing experience framed by some of the most spectacular mountain scenery anywhere in the world.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/69/Oncorhynchus_aguabonita.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/9/9f/FMIB_39582_Golden_Trout_of_Volcano_Creek%2C_Salmo_roosevelti_Evermann.jpeg", // FMIB 1906 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9f/FMIB_39582_Golden_Trout_of_Volcano_Creek%2C_Salmo_roosevelti_Evermann.jpeg",
     nativeRange: "Kern River drainage in the southern Sierra Nevada of California, above 8,000 feet elevation",
     introducedRange: "High-elevation lakes and streams throughout the western United States, including Wyoming, Montana, Idaho, and Colorado",
     averageSize: "6-12 inches, 0.25-1 lb",
@@ -456,7 +470,9 @@ export const species: Species[] = [
     description:
       "The marble trout is one of the rarest and most distinctive trout species on earth, found only in the river systems draining into the Adriatic Sea from the Julian Alps of Slovenia and northeastern Italy. Named for the intricate marbled pattern that covers its body in swirling olive, cream, and brown tones rather than the spots typical of other trout, the marble trout grows to enormous sizes in its native limestone rivers. Fish exceeding 30 pounds have been documented, making it the largest trout species in Europe by a considerable margin. The emerald-green waters of the Soca River and its tributaries in Slovenia are the epicenter of marble trout fly fishing, where strict catch-and-release regulations and habitat restoration programs have helped stabilize populations. Fly fishing for marble trout is a destination experience that combines technical challenge with extraordinary scenery and European fly fishing culture.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/0/09/Salmo_marmoratus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Salmo_marmoratus.jpg", // Wikimedia Commons — best available (no vintage illustration exists)
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Salmo_marmoratus.jpg",
     nativeRange: "Adriatic basin rivers of Slovenia and northeastern Italy, concentrated in the Soca, Idrijca, and tributaries of the Po River system",
     introducedRange: "No significant introductions outside native range; conservation stocking within historic habitat only",
     averageSize: "16-26 inches, 2-8 lbs",
@@ -521,7 +537,9 @@ export const species: Species[] = [
     description:
       "The Chinook salmon, also known as the king salmon, is the largest of all Pacific salmon species and one of the most powerful fish an angler can hook on a fly rod. Native to the Pacific coast from California to Alaska and across to Siberia, Chinook salmon can exceed 50 pounds and are capable of sustained, drag-screaming runs that test both angler and equipment. Their life cycle is one of nature's great dramas, as adults return from the ocean to their natal rivers, often traveling hundreds of miles upstream, to spawn and die. Fly fishing for Chinook salmon on their spawning runs offers an extraordinary combination of raw power and scenic beauty, whether swinging flies on Alaskan rivers or drifting beads and egg patterns in Pacific Northwest tributaries. King salmon hold deep cultural and ecological significance throughout their range.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/1/14/Oncorhynchus_tshawytscha.jpg", // Wikimedia Commons — NOAA public domain
+      "https://upload.wikimedia.org/wikipedia/commons/0/01/FMIB_41470_Chinook_Salmon_%28Oncorhynchus_tschawytscha%29.jpeg", // FMIB 1898 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/01/FMIB_41470_Chinook_Salmon_%28Oncorhynchus_tschawytscha%29.jpeg",
     nativeRange: "Pacific Ocean and associated river systems from central California north to the Yukon River in Alaska and across to Kamchatka, Russia",
     introducedRange: "Great Lakes of North America, Patagonia (Argentina and Chile), and New Zealand",
     averageSize: "24-36 inches, 10-30 lbs",
@@ -585,7 +603,9 @@ export const species: Species[] = [
     description:
       "The coho salmon, known as the silver salmon for its brilliant chrome coloring when fresh from the sea, is arguably the best Pacific salmon species for fly anglers. Coho combine aggressive fly-taking behavior with acrobatic fights and a willingness to chase down swung flies and stripped streamers that makes them the most consistently cooperative salmon on a fly rod. Averaging 8 to 12 pounds, coho provide outstanding sport on medium-weight fly tackle without requiring the heavy gear needed for Chinook. Fresh coho in their ocean-bright phase are stunning fish with metallic silver sides and dark blue-green backs. As they progress upriver, males develop hooked jaws (kypes) and dark red coloring. Alaska offers the finest coho fishing in the world, with rivers like the Kanektok, Karluk, and countless Bristol Bay tributaries providing reliable runs from July through October.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/0/03/Oncorhynchus_kisutch.jpg", // Wikimedia Commons — NOAA public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/d2/FMIB_51072_Kisutch_or_Silver_Salmon.jpeg", // FMIB 1884 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/d2/FMIB_51072_Kisutch_or_Silver_Salmon.jpeg",
     nativeRange: "Pacific Rim from central California to Point Hope, Alaska, and across to Kamchatka, Russia, and northern Japan",
     introducedRange: "Great Lakes of North America, Chile, Argentina, and scattered introductions in other regions",
     averageSize: "20-28 inches, 6-12 lbs",
@@ -648,7 +668,9 @@ export const species: Species[] = [
     description:
       "The sockeye salmon is the most commercially valuable Pacific salmon species and undergoes one of the most dramatic physical transformations in the natural world. In the ocean, sockeye are sleek, silver, blue-backed fish that feed primarily on zooplankton using specialized gill rakers. Upon entering freshwater for their spawning migration, they transform into a vivid crimson red with olive-green heads, giving them the alternate name red salmon. Sockeye are unique among Pacific salmon in that most populations require a lake in their life history, rearing as juveniles in freshwater lakes for one to three years before migrating to sea. Fly fishing for sockeye presents unique challenges, as they are plankton feeders that do not actively feed in freshwater. However, the sheer density of fish in rivers like Alaska's Kenai and the Bristol Bay drainages creates outstanding opportunities for anglers using small, bright flies drifted through concentrated schools.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/63/Oncorhynchus_nerka.jpg", // Wikimedia Commons — USFWS public domain
+      "https://upload.wikimedia.org/wikipedia/commons/4/4f/FMIB_41472_Blueback_Salmon_%28Oncorhynchus_nerka%29.jpeg", // FMIB 1898 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/4f/FMIB_41472_Blueback_Salmon_%28Oncorhynchus_nerka%29.jpeg",
     nativeRange: "North Pacific from the Columbia River north through Alaska, across to Kamchatka, Russia, and south to northern Japan",
     introducedRange: "Limited introductions in the Great Lakes and select New England waters; generally not widely stocked outside native range",
     averageSize: "20-26 inches, 5-8 lbs",
@@ -711,7 +733,9 @@ export const species: Species[] = [
     description:
       "The pink salmon is the smallest and most abundant of the five Pacific salmon species, returning to spawn on a rigid two-year cycle that produces massive runs in odd-numbered years throughout much of Alaska and British Columbia. Known locally as humpback salmon or humpies for the pronounced dorsal hump that males develop during spawning, pink salmon are often overlooked by fly anglers focused on larger species. However, fresh pink salmon in the tidewater and lower river reaches are spirited fighters on light tackle and will readily take small bright flies. Their sheer abundance means that when the run is on, anglers can experience nonstop action with aggressive fish willing to strike on nearly every cast. Pink salmon provide an excellent entry point for anglers new to salmon fly fishing and offer a high-energy alternative when rivers are between peak runs of larger species.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/8/80/Oncorhynchus_gorbuscha.jpg", // Wikimedia Commons — NOAA public domain
+      "https://upload.wikimedia.org/wikipedia/commons/b/b9/FMIB_39953_Oncorhynchus_gorbuscha_%28Walbaum%29_Humpback_Salmon_Drawn_from_a_specimen_collected_in_Cook%27s_Inlet%2C_Alaska.jpeg", // FMIB — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/b/b9/FMIB_39953_Oncorhynchus_gorbuscha_%28Walbaum%29_Humpback_Salmon_Drawn_from_a_specimen_collected_in_Cook%27s_Inlet%2C_Alaska.jpeg",
     nativeRange: "North Pacific Ocean from Sacramento, California north through Alaska, across to Korea, Japan, and Arctic Russia",
     introducedRange: "Great Lakes (self-sustaining populations established), scattered Atlantic coast rivers in Maine and Maritime Canada",
     averageSize: "18-24 inches, 3-5 lbs",
@@ -774,7 +798,9 @@ export const species: Species[] = [
     description:
       "The chum salmon is one of the most underappreciated game fish in the Pacific salmon family, yet it offers some of the hardest-fighting action available to fly anglers in Alaska and the Pacific Northwest. Known as dog salmon for the large canine-like teeth that males develop during spawning, chum salmon are the second-largest Pacific salmon species, averaging 8 to 15 pounds and occasionally exceeding 30 pounds. Fresh from the ocean, chum salmon are bright chrome with subtle purple and green vertical bars that intensify dramatically as fish enter spawning condition. Chum salmon have gained increasing popularity among fly anglers who appreciate their aggressive strikes, powerful runs, and availability in large numbers across a wide geographic range. Late-season chum runs in October and November extend the salmon fishing calendar well after other species have finished spawning.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/b/bf/Oncorhynchus_keta.jpg", // Wikimedia Commons — NOAA public domain
+      "https://upload.wikimedia.org/wikipedia/commons/0/07/FMIB_39935_Oncorhynchus_keta_%28Walbaum%29_Dog_salmon_Drawn_from_a_specimen_collected_at_Fort_Alexander%2C_Cook%27s_Inlet%2C_Alaska.jpeg", // FMIB — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/07/FMIB_39935_Oncorhynchus_keta_%28Walbaum%29_Dog_salmon_Drawn_from_a_specimen_collected_at_Fort_Alexander%2C_Cook%27s_Inlet%2C_Alaska.jpeg",
     nativeRange: "Widest geographic range of any Pacific salmon, from San Francisco Bay north through Alaska and across to Korea, Japan, and Arctic Russia",
     introducedRange: "No significant introductions outside native range; occasional stray fish appear in non-native waters",
     averageSize: "22-30 inches, 8-15 lbs",
@@ -837,7 +863,9 @@ export const species: Species[] = [
     description:
       "The Atlantic salmon is the original salmon of the fly fishing world and has been pursued with flies for centuries in the rivers of the British Isles, Scandinavia, and eastern North America. Often called the king of fish, the Atlantic salmon is a supremely powerful and acrobatic game fish that can exceed 40 pounds in the largest river systems. Unlike Pacific salmon, Atlantic salmon are iteroparous and can survive spawning to return to the ocean and spawn again in subsequent years. Fly fishing for Atlantic salmon is steeped in tradition and pageantry, with classic wet fly patterns like the Jock Scott, Thunder and Lightning, and Green Highlander still in use today alongside modern tube flies and bombers. The rivers of Iceland, Scotland, Norway, Russia's Kola Peninsula, and eastern Canada's Maritime provinces offer the finest Atlantic salmon fly fishing in the world, each with distinct character and fishing culture.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/0/03/Oncorhynchus_kisutch.jpg", // Wikimedia Commons — NOAA public domain
+      "https://upload.wikimedia.org/wikipedia/commons/4/44/FMIB_51065_Atlantic_Salmon.jpeg", // FMIB — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/44/FMIB_51065_Atlantic_Salmon.jpeg",
     nativeRange: "North Atlantic Ocean and its tributary rivers, from Connecticut and Quebec south of Greenland, across to Iceland, the British Isles, Scandinavia, and the Baltic",
     introducedRange: "Patagonia (Argentina and Chile), New Zealand, and various Pacific coast rivers (mostly unsuccessful establishment)",
     averageSize: "24-34 inches, 8-16 lbs",
@@ -904,7 +932,9 @@ export const species: Species[] = [
     description:
       "Despite its common name, the brook trout is technically a char, closely related to Arctic char and lake trout rather than true trout. Native to eastern North America, brook trout are arguably the most beautiful freshwater fish on the continent, with a dark olive-green body covered in vermiculated patterns on the back and dorsal fin, pale spots and vivid red spots with blue halos along the flanks, and brilliant orange-red fins edged in white and black during spawning season. Brook trout require the coldest and cleanest water of any trout species, making them excellent indicators of watershed health. While brook trout in their native eastern streams rarely exceed 10 inches, populations in larger rivers, lakes, and the sea-run variety known as salters can grow substantially larger. Their eagerness to take a well-presented dry fly makes them a perennial favorite among fly anglers.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salvelinus_fontinalis.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/dd/Brook_trout_freshwater_fish.jpg", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/dd/Brook_trout_freshwater_fish.jpg",
     nativeRange: "Eastern North America, from Georgia and the Appalachian Mountains north to the Arctic Circle, including the Great Lakes basin and Hudson Bay drainages",
     introducedRange: "Western North America, Europe, South America, and Australasia; widely stocked for recreational fishing",
     averageSize: "6-12 inches, 0.25-1.5 lbs",
@@ -968,7 +998,9 @@ export const species: Species[] = [
     description:
       "The Arctic char is the northernmost freshwater fish species on Earth and one of the most strikingly colored salmonids in existence. Found in lakes, rivers, and coastal waters across the circumpolar Arctic, Arctic char exhibit extraordinary variation in form, color, and life history. During spawning season, male char develop brilliant orange to deep crimson bellies, white-tipped fins, and an overall appearance that rivals any tropical fish for sheer visual impact. Arctic char are supremely adapted to cold, nutrient-poor waters where other fish species cannot survive, and they are often the only fish species present in high-Arctic lakes. Both landlocked and anadromous (sea-run) forms exist, with anadromous char migrating to coastal waters in summer to feed before returning to freshwater in fall. Fly fishing for Arctic char is a wilderness experience that takes anglers to some of the most remote and pristine landscapes remaining on the planet.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Salvelinus_alpinus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/1/17/FMIB_46339_Alpine_Char.jpeg", // FMIB 1877 Jonathan Couch — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/1/17/FMIB_46339_Alpine_Char.jpeg",
     nativeRange: "Circumpolar Arctic, including northern Canada, Alaska, Greenland, Iceland, Scandinavia, and Arctic Russia; relic populations in alpine lakes of Scotland, Ireland, and the Alps",
     introducedRange: "Limited introductions in mountain lakes of the western United States and southern hemisphere cold-water lakes",
     averageSize: "14-24 inches, 2-6 lbs",
@@ -1034,7 +1066,9 @@ export const species: Species[] = [
     description:
       "The Arctic grayling is one of the most visually striking freshwater fish in North America, instantly recognizable by its enormous, sail-like dorsal fin adorned with iridescent spots of blue, purple, and pink. Once widespread across the northern half of the continent, Arctic grayling have been reduced to a fraction of their historical range in the lower 48 states, with Montana's Big Hole River supporting the last self-sustaining fluvial population in the contiguous United States. In Alaska, British Columbia, and the Canadian Arctic, grayling remain abundant and provide outstanding fly fishing opportunities. They are enthusiastic surface feeders, making them a dream species for dry fly purists, and they are found in some of the most remote and scenic waters on the planet. Their willingness to rise to a well-presented dry fly and the spectacular beauty of their dorsal fin make every grayling a memorable catch.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/9/9c/Thymallus_arcticus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/de/FMIB_51081_Alaska_Grayling.jpeg", // FMIB — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/de/FMIB_51081_Alaska_Grayling.jpeg",
     nativeRange: "Northern North America from Alaska through Canada; relic populations in Montana and historically Michigan; also found across Siberia and into Mongolia",
     introducedRange: "Limited stocking efforts in mountain lakes of the western United States to supplement declining populations",
     averageSize: "10-15 inches, 0.5-1.5 lbs",
@@ -1100,7 +1134,9 @@ export const species: Species[] = [
     description:
       "The bonefish is the undisputed king of the saltwater flats and the species that launched the entire saltwater fly fishing revolution. Found on shallow tropical flats throughout the Caribbean, Bahamas, and Indo-Pacific, bonefish are often called the grey ghost for their silvery, torpedo-shaped bodies that seem to materialize out of nowhere on the white sand flats. Sight fishing for bonefish on the flats is considered by many to be the most exciting and visually engaging form of fly fishing, requiring accurate casting, careful wading, and a deep understanding of tidal movements and flat ecology. When hooked, bonefish are famous for their blistering initial run, often peeling off a hundred yards of backing in seconds. The challenge of spotting a tailing or cruising fish, making a precise cast, and then holding on during that first explosive run makes bonefishing an addiction that draws anglers back to the flats year after year.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/d/d2/Albula_vulpes.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/9/99/FMIB_42368_Albula_vulpes_%28Linnaeus%29.jpeg", // FMIB Jordan & Evermann 1905 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/99/FMIB_42368_Albula_vulpes_%28Linnaeus%29.jpeg",
     nativeRange: "Tropical and subtropical flats worldwide; Caribbean, Bahamas, Florida Keys, Hawaii, and Indo-Pacific from East Africa to French Polynesia",
     introducedRange: "No introductions; natural distribution throughout tropical and subtropical coastal waters",
     averageSize: "18-26 inches, 3-8 lbs",
@@ -1164,7 +1200,9 @@ export const species: Species[] = [
     description:
       "The permit is widely considered the most difficult fish to catch on a fly in the world, and landing one on the flats is a defining achievement in any fly angler's career. Found on the same tropical flats as bonefish and tarpon, the permit is a large, powerful member of the jack family distinguished by its deep, compressed body, sickle-shaped tail, and dark dorsal and anal fins. Permit feed primarily on crabs and other crustaceans found on sandy and rocky flats, and their wariness and selectivity are legendary among fly anglers. A typical permit fishing day might involve dozens of shots at fish that refuse, spook, or simply ignore the fly entirely. But when everything comes together and a permit tips down on your crab pattern, the ensuing fight is a powerful, drag-testing battle that cements the permit's reputation as the ultimate flats challenge.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/69/Trachinotus_falcatus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/0/0d/FMIB_33896_Trachinotus_Falcatus_%28Linnaeus%29.jpeg", // FMIB Jordan & Evermann — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/0d/FMIB_33896_Trachinotus_Falcatus_%28Linnaeus%29.jpeg",
     nativeRange: "Western Atlantic from Massachusetts south through the Caribbean, Gulf of Mexico, and along the coast of Brazil; also found in Bermuda",
     introducedRange: "No introductions; entirely natural distribution in the western Atlantic and Caribbean basin",
     averageSize: "20-30 inches, 10-25 lbs",
@@ -1227,7 +1265,9 @@ export const species: Species[] = [
     description:
       "The tarpon is the undisputed heavyweight champion of saltwater fly fishing and arguably the most spectacular game fish in the world. Known as the silver king for its enormous, mirror-like scales and brilliant silver coloring, tarpon can exceed 200 pounds and are capable of explosive, repeated jumps that leave even experienced anglers in awe. Found throughout the tropical and subtropical Atlantic, from the coast of West Africa to the eastern seaboard of the Americas, tarpon congregate in remarkable numbers in the Florida Keys each spring during their annual migration. Hooking a tarpon on a fly rod is a violent, heart-stopping experience as the fish engulfs the fly, turns away, and erupts from the water in a shower of spray. The ensuing battle can last from minutes to hours and tests every aspect of an angler's skill, equipment, and physical endurance. Landing a tarpon over 100 pounds on a fly rod is one of the great achievements in sport fishing.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/3/3b/Megalops_atlanticus.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/c/c2/FMIB_51739_Tarpon_or_Grande_Ecaille_Tarpon_atlanticus_Cuv_%26_Val_Florida.jpeg", // FMIB 1907 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c2/FMIB_51739_Tarpon_or_Grande_Ecaille_Tarpon_atlanticus_Cuv_%26_Val_Florida.jpeg",
     nativeRange: "Tropical and subtropical western Atlantic from Virginia south through the Caribbean, Gulf of Mexico, and along the coast of Brazil; also West Africa from Senegal to Angola",
     introducedRange: "Pacific coast of Panama and Costa Rica via the Panama Canal; scattered sightings in other non-native waters",
     averageSize: "40-70 inches, 40-100 lbs",
@@ -1291,7 +1331,9 @@ export const species: Species[] = [
     description:
       "The redfish, also known as the red drum, is one of the most popular inshore saltwater game fish in the southeastern United States and Gulf Coast. Named for their copper-bronze coloring and the distinctive black spot or spots near the base of the tail, redfish inhabit shallow coastal waters from Massachusetts south through the Gulf of Mexico. They are powerful, tenacious fighters that make long, drag-pulling runs when hooked on a fly rod. Sight fishing for tailing redfish on shallow grass flats and oyster bars is a quintessentially southern saltwater experience that rivals bonefishing for visual excitement and technical challenge. Redfish are remarkably adaptable, tolerating a wide range of salinities from nearly fresh to full ocean water, and they can be found in coastal marshes, tidal creeks, oyster reefs, and sandy flats throughout their range. Their accessibility and willingness to take a well-presented fly make them an ideal entry point for anglers transitioning from freshwater to saltwater fly fishing.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/67/Sciaenops_ocellatus.jpg", // Wikimedia Commons — Redfish public domain
+      "https://upload.wikimedia.org/wikipedia/commons/7/7b/FMIB_33320_Sciaenops_Ocellatus_%28Linnaeus%29.jpeg", // FMIB Jordan & Evermann — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/7/7b/FMIB_33320_Sciaenops_Ocellatus_%28Linnaeus%29.jpeg",
     nativeRange: "Western Atlantic coast from Massachusetts south through the Gulf of Mexico to northern Mexico, with the highest concentrations along the Gulf states",
     introducedRange: "No significant introductions; some experimental stocking in Texas and other Gulf states to supplement natural populations",
     averageSize: "18-30 inches, 3-12 lbs",
@@ -1354,7 +1396,9 @@ export const species: Species[] = [
     description:
       "The striped bass is the premier game fish of the Atlantic coast, drawing millions of anglers from Maine to the Carolinas each year. Known colloquially as stripers, linesiders, or rockfish, striped bass are large, powerful predators distinguished by their silver bodies marked with seven to eight dark horizontal stripes running from gill to tail. Striped bass undertake one of the most impressive migrations on the eastern seaboard, traveling from their Chesapeake Bay and Hudson River spawning grounds north to New England and back each year. Fly fishing for striped bass has exploded in popularity, with anglers targeting fish from the surf, on shallow flats, around rocky structure, and in tidal rivers and estuaries. The species offers remarkable versatility, as stripers can be caught on topwater poppers, swung deceiver patterns, and deep-drifted weighted flies throughout the season. Their availability, fighting power, and the variety of environments they inhabit make them one of the most complete fly rod game fish available.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/5/57/Morone_saxatilis.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/e/ef/Striped_bass_morone_saxatilis_fish_%28white_background%29.jpg", // Scientific illustration — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/e/ef/Striped_bass_morone_saxatilis_fish_%28white_background%29.jpg",
     nativeRange: "Atlantic coast of North America from the St. Lawrence River south to the St. Johns River in Florida, with major spawning populations in the Chesapeake Bay and Hudson River",
     introducedRange: "Pacific coast of North America from British Columbia to Baja California; also landlocked reservoir populations throughout the United States",
     averageSize: "20-32 inches, 5-15 lbs",
@@ -1417,7 +1461,9 @@ export const species: Species[] = [
     description:
       "The giant trevally, universally known as the GT, is the apex predator of tropical Indo-Pacific flats and reefs, and hooking one on a fly rod is among the most adrenaline-charged experiences in all of fly fishing. GTs are massively built fish with broad, powerful bodies, steep head profiles, and oversized forked tails that generate enormous thrust. They are aggressive, territorial hunters that will charge across a flat at full speed to engulf a popper or streamer in an explosion of white water. Found from the east coast of Africa through the Indian Ocean to Hawaii and beyond, GTs are the marquee species at legendary remote destinations like Christmas Island, the Seychelles, and the atolls of French Polynesia. Fly fishing for GTs demands heavy tackle, accurate casting, and the physical stamina to survive brutal, reel-testing fights. The experience of sight-casting to a GT cruising a coral flat and watching it accelerate toward the fly is an incomparable rush.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/e/ed/Caranx_ignobilis.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/4/47/Caranx_sausun_Ford_50.jpg", // G.H. Ford "Fishes of India" — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/47/Caranx_sausun_Ford_50.jpg",
     nativeRange: "Indo-Pacific region from East Africa and the Red Sea through the Indian Ocean to Hawaii, Australia, and Japan",
     introducedRange: "No introductions; natural distribution throughout the tropical and subtropical Indo-Pacific",
     averageSize: "24-40 inches, 15-40 lbs",
@@ -1480,7 +1526,9 @@ export const species: Species[] = [
     description:
       "The snook is the quintessential inshore game fish of tropical and subtropical Florida and the Caribbean, prized for its explosive strikes, powerful fights, and challenging behavior. Identified by a prominent black lateral line running from gill plate to tail, snook are ambush predators that lurk around mangrove roots, dock pilings, bridge shadows, and beach structure, using shade and current to ambush passing baitfish and shrimp. Snook are highly sensitive to cold water and are restricted to the warmest parts of their range during winter months, with mass die-offs occurring during unusual cold snaps in Florida. Fly fishing for snook combines the sight fishing excitement of flats species with the structure-oriented challenge of bass fishing, as anglers must deliver accurate casts tight to cover and then fight powerful fish away from line-cutting structure. Night fishing under lighted docks and bridges with streamers is a particularly exciting pursuit.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/f/fc/Centropomus_undecimalis.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/4/43/FMIB_33893_Centropomus_Undecimalis_%28Bloch%29.jpeg", // FMIB Jordan & Evermann — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/4/43/FMIB_33893_Centropomus_Undecimalis_%28Bloch%29.jpeg",
     nativeRange: "Western Atlantic from central Florida south through the Caribbean, Gulf of Mexico, and along the coast of Brazil to Rio de Janeiro",
     introducedRange: "No significant introductions; natural range restricted by cold temperature intolerance",
     averageSize: "20-32 inches, 5-12 lbs",
@@ -1543,7 +1591,9 @@ export const species: Species[] = [
     description:
       "The roosterfish is one of the most visually spectacular game fish in the world, instantly recognizable by its extraordinary dorsal fin composed of seven elongated spines that resemble a rooster's comb. Found exclusively along the Pacific coast of the Americas from Baja California to Peru, roosterfish are powerful inshore predators that patrol sandy beaches, rocky points, and river mouths in the warm waters of the eastern Pacific. Sight fishing for roosterfish from the beach is a unique and thrilling experience, as anglers spot the distinctive dorsal comb cutting through the surface of the surf zone before making a carefully timed cast. Roosterfish are explosive fighters that make powerful runs along the beach, testing drag systems and line capacity. The combination of their striking appearance, challenging behavior, and the dramatic coastal settings where they are found makes roosterfish one of the most coveted species among traveling fly anglers.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/c/c9/Nematistius_pectoralis.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/5/53/The_fishes_of_North_and_Middle_America_%28Pl._CXXXVIII%29_%287983374653%29.jpg", // Jordan & Evermann plate CXXXVIII — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/53/The_fishes_of_North_and_Middle_America_%28Pl._CXXXVIII%29_%287983374653%29.jpg",
     nativeRange: "Eastern Pacific coast from Baja California Sur, Mexico, south through Central America to northern Peru, including offshore islands",
     introducedRange: "No introductions; endemic to the eastern Pacific",
     averageSize: "24-36 inches, 10-30 lbs",
@@ -1606,7 +1656,9 @@ export const species: Species[] = [
     description:
       "The great barracuda is one of the fastest and most explosive predators in tropical waters, capable of bursting from a standstill to over 35 miles per hour in a fraction of a second to slash through schools of baitfish. With their elongated, torpedo-shaped bodies, prominent underbite filled with razor-sharp teeth, and fierce predatory behavior, barracuda have a fearsome reputation that belies their outstanding qualities as a fly rod game fish. Found throughout the tropical and subtropical Atlantic and Indo-Pacific, barracuda are commonly encountered on the same flats and reefs where anglers target bonefish, permit, and tarpon. While often dismissed as a bycatch species, sight fishing for large barracuda on shallow flats with long, slender needlefish patterns and a high-speed retrieve is a genuinely thrilling pursuit. The explosive strike and initial run of a big barracuda are among the most violent in saltwater fly fishing.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/64/Sphyraena_barracuda.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/d3/Great_barracuda_%28Duane_Raver%29.png", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/d3/Great_barracuda_%28Duane_Raver%29.png",
     nativeRange: "Circumtropical distribution in the Atlantic, Indian, and Pacific Oceans; abundant throughout the Caribbean, Bahamas, and Florida Keys",
     introducedRange: "No introductions; naturally distributed throughout tropical and subtropical marine waters worldwide",
     averageSize: "24-40 inches, 5-15 lbs",
@@ -1669,7 +1721,9 @@ export const species: Species[] = [
     description:
       "The peacock bass is the most aggressive freshwater game fish in the tropics, delivering explosive topwater strikes and brutal, drag-testing fights that have made it a bucket-list species for traveling fly anglers. Native to the Amazon and Orinoco river basins of South America, peacock bass are actually members of the cichlid family rather than true bass, but their predatory behavior and powerful build have earned them the bass comparison. The speckled peacock bass is the largest of approximately 15 recognized species, with fish exceeding 25 pounds regularly caught in remote Amazonian blackwater rivers. Their namesake eyespot on the tail, brilliant green and gold coloring, and three distinctive vertical bars make them among the most visually striking freshwater fish in the world. Fly fishing for peacock bass is a tropical adventure that takes anglers deep into the Amazon basin aboard floating motherships.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/4/41/Cichla_temensis.jpg", // Wikimedia Commons — Peacock Bass public domain
+      "https://upload.wikimedia.org/wikipedia/commons/5/5f/FMIB_38650_Cychla_trifasciata.jpeg", // FMIB Schomburgk — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/5f/FMIB_38650_Cychla_trifasciata.jpeg",
     nativeRange: "Amazon, Orinoco, and other river basins in tropical South America, from Venezuela and Colombia south through Brazil and Peru",
     introducedRange: "South Florida canals, Hawaii, Puerto Rico, Panama Canal Zone, and various tropical regions where they have been stocked as game fish",
     averageSize: "16-24 inches, 4-10 lbs",
@@ -1735,7 +1789,9 @@ export const species: Species[] = [
     description:
       "The largemouth bass is the most popular freshwater game fish in North America and has built an enormous following among both conventional and fly anglers. Named for its large mouth that extends past the eye when closed, the largemouth bass is an apex predator in warm-water ecosystems, feeding on everything from insects and crayfish to frogs, mice, and smaller fish. While traditionally associated with spinning and baitcasting gear, fly fishing for largemouth bass has surged in popularity, offering explosive topwater takes on poppers and gurgler patterns that rival any trout rise for excitement. Largemouth bass are found in ponds, lakes, reservoirs, and slow-moving rivers across the United States, making them one of the most accessible game fish for fly anglers. Their aggressive strikes, powerful fights, and tolerance of warm water make them an ideal species for anglers extending their fly fishing beyond cold-water trout streams.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e4/Micropterus_salmoides.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/1/1a/Largemouth_bass_-_DPLA_-_%28white_background%29.jpg", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/1/1a/Largemouth_bass_-_DPLA_-_%28white_background%29.jpg",
     nativeRange: "Eastern and central North America from the Great Lakes south to the Gulf of Mexico and from the Atlantic coast west to Texas",
     introducedRange: "Every US state, southern Canada, Mexico, Central America, Europe, Africa, Asia, and Australasia; one of the most widely distributed freshwater fish on Earth",
     averageSize: "12-20 inches, 1-5 lbs",
@@ -1798,7 +1854,9 @@ export const species: Species[] = [
     description:
       "The smallmouth bass is widely regarded as the finest freshwater game fish in North America on a pound-for-pound basis, combining explosive strikes, acrobatic leaps, and dogged fighting ability that surpasses even the most celebrated trout species. Distinguished from its largemouth cousin by a smaller mouth that does not extend past the eye, bronze-brown coloring, and dark vertical bars on the flanks, the smallmouth bass thrives in clear, cool rivers and rocky lakes across the northern and eastern United States and southern Canada. Smallmouth bass on a fly rod provide action that many experienced anglers compare favorably to steelhead and Atlantic salmon. They are particularly responsive to topwater flies, crashing poppers and crayfish patterns with a ferocity that generates addictive surface explosions. The smallmouth's preference for clear, moving water and rocky habitat makes it an ideal species for wade fishing with a fly rod.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/6/62/Micropterus_dolomieu.jpg", // Wikimedia Commons — Smallmouth Bass public domain
+      "https://upload.wikimedia.org/wikipedia/commons/b/b7/Smallmouth_bass.jpg", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/b/b7/Smallmouth_bass.jpg",
     nativeRange: "Great Lakes basin, upper Mississippi, Ohio, and Tennessee River drainages; Saint Lawrence River and associated waterways in the northeastern United States and southeastern Canada",
     introducedRange: "Nearly every US state and southern Canada; also Europe, Africa, Asia, and South America, though less widely than largemouth bass",
     averageSize: "12-18 inches, 1-4 lbs",
@@ -1861,7 +1919,9 @@ export const species: Species[] = [
     description:
       "The common carp has undergone a remarkable transformation in the fly fishing world, evolving from a derided rough fish to one of the most challenging and rewarding freshwater species available to fly anglers. Originally native to Asia and eastern Europe, carp have been introduced to waters on every continent except Antarctica and are now the most widely distributed freshwater fish on Earth. Carp are large, powerful, and incredibly wary fish that present a sight fishing challenge comparable to bonefishing on tropical flats. Stalking tailing carp in shallow water with weighted nymphs and crayfish patterns demands stealth, precise casting, and a patient approach that has earned carp the nickname freshwater bonefish among devoted practitioners. When hooked, carp make sustained, drag-testing runs that can strip a hundred yards of backing from the reel, humbling anglers accustomed to the comparatively modest fights of trout.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/3/36/Cyprinus_carpio.jpg", // Wikimedia Commons — Carp public domain
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Common_carp_%28white_background%29.jpg", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Common_carp_%28white_background%29.jpg",
     nativeRange: "Central Asia and eastern Europe, from the Danube River basin east through the Caspian and Aral Sea drainages to China and Japan",
     introducedRange: "Virtually every continent except Antarctica; established in North America since the 1830s, now found in every US state except Alaska",
     averageSize: "18-28 inches, 5-15 lbs",
@@ -1924,7 +1984,9 @@ export const species: Species[] = [
     description:
       "The mountain whitefish is the unsung hero of western trout streams. Often overlooked or even disparaged by trout-focused anglers, mountain whitefish are native to the cold rivers and lakes of western North America and frequently outnumber trout in many premier fisheries. They are a member of the salmonid family, characterized by their silvery body, small mouth, and forked tail. Mountain whitefish feed primarily on aquatic invertebrates along the river bottom, making them excellent targets for nymph fishers, and they can provide fast-paced action during winter months when trout fishing slows. Increasingly, fly anglers are recognizing mountain whitefish as worthy quarry in their own right, appreciating their strong fights and the skill required to effectively target them with small nymphs and midges. Their importance as a native species in western river ecosystems adds conservation value to their pursuit.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/a/ae/Prosopium_williamsoni.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/d/d2/FMIB_51755_Rocky_Mountain_Whitefish%2C_Coregonus_williamsoni_Girard.jpeg", // FMIB Jordan 1907 — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/d/d2/FMIB_51755_Rocky_Mountain_Whitefish%2C_Coregonus_williamsoni_Girard.jpeg",
     nativeRange: "Western North America, from the Rocky Mountains to the Pacific Coast, from British Columbia south to Nevada and Utah",
     introducedRange: "No significant introductions outside native range; natural distribution throughout cold western rivers",
     averageSize: "10-16 inches, 0.5-2 lbs",
@@ -1990,7 +2052,9 @@ export const species: Species[] = [
     description:
       "The northern pike is the apex freshwater predator of the northern hemisphere, an ambush specialist with a torpedo-shaped body, a flat, duck-billed snout filled with hundreds of razor-sharp teeth, and an explosive strike that can generate the most violent topwater takes in freshwater fly fishing. Found across the circumpolar north in lakes, rivers, and marshes from Europe through Siberia and across North America, northern pike are among the most widely distributed freshwater fish on Earth. They are powerful, aggressive fish that readily strike large streamers and topwater patterns, making them outstanding fly rod targets for anglers seeking raw, adrenaline-fueled action. Pike fly fishing is at its best in spring and early summer when large fish move into shallow bays and backwaters to feed after the spawn, providing sight fishing opportunities for fish that can exceed 40 inches in length. The visual thrill of watching a pike follow and attack a streamer is an unforgettable experience.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/c/c5/Esox_lucius1.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/c/c5/Esox_lucius1.jpg", // Timothy Knepp USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c5/Esox_lucius1.jpg",
     nativeRange: "Circumpolar distribution across the entire northern hemisphere: North America from Alaska to the eastern seaboard, Europe, and Asia through Siberia",
     introducedRange: "Southern United States, Spain, Turkey, and various other regions outside the native range; widely distributed through stocking programs",
     averageSize: "24-36 inches, 4-12 lbs",
@@ -2053,7 +2117,9 @@ export const species: Species[] = [
     description:
       "The muskellunge, commonly known as musky, is the largest member of the pike family and one of the most elusive and coveted freshwater game fish in North America. Known as the fish of 10,000 casts for the extreme difficulty involved in hooking one, musky grow to enormous proportions, with fish exceeding 50 inches and 40 pounds present in the best fisheries. Musky are apex predators that have no natural enemies in their habitats, sitting atop the food chain in the clear, cool lakes and rivers of the upper Midwest and northeastern United States and southeastern Canada. Fly fishing for musky is an extreme discipline that demands oversized tackle, enormous flies, and an extraordinary level of patience and persistence. When a musky finally commits to the fly, the experience is unforgettable, as these massive fish deliver crushing strikes and bulldog-like fights that test the limits of fly tackle. Dedicated musky fly anglers consider the hours of fruitless casting a worthy investment for moments of peak intensity.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/b/b3/Esox_masquinongy.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/2/21/Muskellunge_%28Duane_Raver%29.png", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/2/21/Muskellunge_%28Duane_Raver%29.png",
     nativeRange: "Great Lakes basin, upper Mississippi and Ohio River drainages, St. Lawrence River system, and Lake of the Woods watershed in the northern United States and southeastern Canada",
     introducedRange: "Expanded stocking throughout the northeastern and midwestern United States and southeastern Canada in suitable cool, clear waters",
     averageSize: "30-42 inches, 8-20 lbs",
@@ -2116,7 +2182,9 @@ export const species: Species[] = [
     description:
       "The chain pickerel is the smallest commonly targeted member of the pike family in North America, but what it lacks in size it more than compensates for with aggressive strikes and willingness to attack flies throughout the year. Named for the distinctive dark chain-link pattern that covers its bright green flanks, the chain pickerel is native to the Atlantic seaboard from Maine to Florida and is the dominant pike-family predator in waters too warm for northern pike and muskellunge. Chain pickerel are ambush predators that lurk among lily pads, submerged vegetation, and fallen timber, striking with remarkable speed and violence. They are an outstanding fly rod species that provides reliable action on days when other species are inactive, particularly during the cooler months of fall, winter, and early spring when chain pickerel continue to feed aggressively. Their accessibility in ponds and small streams near population centers makes them an ideal target for quick fly fishing outings.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/5/58/Esox_niger.jpg", // Wikimedia Commons — public domain
+      "https://upload.wikimedia.org/wikipedia/commons/3/38/Chain_pickerel_%28Duane_Raver%29.png", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/3/38/Chain_pickerel_%28Duane_Raver%29.png",
     nativeRange: "Atlantic coast of North America from Nova Scotia south to Florida, and west through the Gulf Coast states to the Mississippi drainage",
     introducedRange: "Limited introductions in Maine and other northeastern states where they coexist with northern pike in some waters",
     averageSize: "14-22 inches, 1-3 lbs",
@@ -2179,7 +2247,9 @@ export const species: Species[] = [
     description:
       "The tiger musky is a striking hybrid between the muskellunge and the northern pike, combining the impressive size potential of the musky with the more aggressive feeding behavior of pike. Named for the distinctive dark vertical bars and wavy tiger-stripe markings on their flanks, tiger musky are produced both naturally in waters where musky and pike coexist and through deliberate hatchery programs designed to create a high-quality sport fish. Tiger musky are generally sterile, which makes them ideal for fisheries management, as they grow quickly, feed aggressively, and do not reproduce to upset the ecological balance of stocked waters. They are more willing to strike a fly than pure muskellunge, making them a relatively accessible entry point into the world of big-game pike-family fly fishing. Tiger musky can exceed 50 inches and 30 pounds in productive waters, offering the same heart-stopping strikes and powerful fights as their parent species.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/b/b3/Esox_masquinongy.jpg", // Wikimedia Commons — tiger musky hybrid, using musky illustration
+      "https://upload.wikimedia.org/wikipedia/commons/5/59/Tiger_muskellunge_%28Duane_Raver%29.png", // Duane Raver USFWS — public domain
+    illustrationUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/59/Tiger_muskellunge_%28Duane_Raver%29.png",
     nativeRange: "Occurs naturally in a few lakes where muskellunge and northern pike ranges overlap, primarily in the upper Great Lakes region and southern Canada",
     introducedRange: "Widely stocked for sport fishing in lakes and reservoirs across the northern and midwestern United States, from Vermont to Washington state",
     averageSize: "28-38 inches, 6-15 lbs",
