@@ -301,7 +301,7 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 5. **Pages read from TypeScript files, not Supabase** — the seed script exists but pages are not wired to query the database; migrating to Supabase reads is a future task
 6. **No admin content management** — all content changes require editing `src/data/*.ts` files and redeploying
 7. **Resend sender domain not verified** — photo notification emails will fail until configured in Resend dashboard
-8. **Google Places API key not set** — `GoogleReviews` component shows empty state on all entities
+8. **Google Reviews data** — `GoogleReviews` component built; no API needed. Data hardcoded per location via browser scrape → Supabase upsert. ~30/49 fly shops populated; lodges/guides not yet populated.
 9. **`PHOTO_REVIEW_SECRET` not set** — photo approval HMAC links will not generate correctly without it
 10. **No user review submission UI** — database table and RLS exist but no form/page to write reviews
 
@@ -314,3 +314,11 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
+
+### 2026-03-02 (Sage)
+- Added `GoogleReviews.tsx` component — gold star rating, 3 reviewer cards, Google Business link
+- Wired GoogleReviews into lodge/guide/fly-shop detail pages
+- Added Utah destination (dest-utah), Provo River, Green River (Flaming Gorge) to Supabase
+- Added 22 new fly shops: Idaho/Henry's Fork (5), Montana/Madison (5), Wyoming/Jackson Hole (6), Utah/Provo (5), Utah/Green River (2)
+- Established Google Reviews data strategy: browser scrape → Supabase upsert, no API needed
+- Updated Known Issues: removed GOOGLE_PLACES_API_KEY dependency (no longer needed)
