@@ -16,107 +16,189 @@ export const articles: Article[] = [
       "Euro nymphing has revolutionized how anglers approach subsurface fishing. Learn the techniques, gear, and tactics that competitive fly fishers have used to dominate rivers worldwide.",
     content: `<h2>What Is Euro Nymphing?</h2>
 
-<p>Euro nymphing is a collection of tight-line nymphing techniques that originated in the competitive fly fishing circuits of Europe during the 1980s and 1990s. The method goes by many names — Czech nymphing, French nymphing, Spanish nymphing, and the broader umbrella term tight-line nymphing — but at its core, the approach shares a single revolutionary idea: by eliminating the fly line from the water and maintaining direct contact with the flies through a long, thin leader, an angler can achieve a level of depth control, strike detection, and drag-free drift that is simply impossible with traditional indicator nymphing setups.</p>
+<p>Euro nymphing is a family of tight-line nymphing techniques developed in European competitive fly fishing circuits during the 1980s and 90s. The core idea: eliminate fly line from the water and maintain direct contact with your flies through a long, thin leader. The result is strike detection, depth control, and drag-free drifts that traditional indicator setups simply cannot match.</p>
 
-<p>The technique emerged out of necessity. International competitive fly fishing events, governed by FIPS-Mouche rules, prohibit the use of split shot and strike indicators, forcing competitors to develop alternative methods for fishing subsurface flies effectively. Czech anglers were among the first to formalize a short-line, heavy-fly approach that kept the angler in direct contact with weighted nymphs rolling along the bottom. French competitors refined the technique with longer rods, lighter tippet, and a more upstream casting angle that allowed for longer, more delicate drifts. Spanish anglers contributed their own variations, emphasizing lighter flies and a more elevated rod position. Over time, these national styles merged and evolved into the versatile system that we now broadly refer to as euro nymphing.</p>
+<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-forest-dark mb-1">Why It Works</p>
+  <p class="text-slate-600 text-sm">Trout can inhale and reject a nymph in as little as a quarter second. Direct contact gives you a fighting chance of detecting takes that are invisible with an indicator.</p>
+</div>
 
-<p>What brought euro nymphing from the competitive arena to the mainstream was its undeniable effectiveness. Anglers who adopted the technique found themselves catching significantly more fish in a wider range of water conditions than they had with traditional methods. Word spread through fly fishing media, online forums, and guide circles, and by the mid-2010s euro nymphing had become one of the most discussed and rapidly adopted developments in the history of American fly fishing.</p>
+<p>The technique has roots in Czech, French, and Spanish competition teams, each contributing distinct refinements. By the mid-2010s it had become one of the fastest-adopted techniques in American fly fishing history.</p>
 
-<h2>Why Euro Nymphing Is So Effective</h2>
+<h2>The 3 Core Advantages</h2>
 
-<p>The effectiveness of euro nymphing comes down to three fundamental advantages over traditional indicator nymphing: direct contact with the flies, elimination of indicator drag, and precise depth control. Understanding these advantages is key to appreciating why the technique works so well and how to apply it effectively on the water.</p>
+<ul>
+  <li><strong>Direct contact</strong> — No fly line on the water between you and the flies. The sighter acts as a visual strike indicator with zero lag.</li>
+  <li><strong>No indicator drag</strong> — Your flies drift at the actual speed of the current they're in, not at the speed of the surface current your indicator is riding.</li>
+  <li><strong>Precise depth control</strong> — Adjust fly weight, tippet length, rod angle, and casting position to cover the entire water column quickly and methodically.</li>
+</ul>
 
-<p>Direct contact means that the angler maintains a taut connection from the rod tip through the leader and tippet to the flies throughout the entire drift. In a traditional indicator rig, the fly line sits on the water between the angler and the indicator, and the indicator sits on the water between the angler and the flies. Every subtle take, every tick of a fly against a rock, every change in current speed must travel through multiple points of slack and surface tension before the angler has any chance of detecting it. With euro nymphing, the sighter material in the leader acts as a direct visual indicator of what is happening at the fly, and the angler can feel takes through the rod that would be completely invisible with an indicator. Studies have suggested that trout can inhale and reject a nymph in as little as a quarter of a second, and the direct-contact advantage of euro nymphing gives anglers a fighting chance of detecting and responding to these lightning-fast takes.</p>
+<h2>Gear Overview</h2>
 
-<p>Indicator drag is a problem that most nymph fishers never fully appreciate. A strike indicator floating on the surface is subject to the speed of the surface current, but the flies hanging below it may be in a completely different current speed near the bottom. This mismatch creates drag on the flies that causes them to move at unnatural speeds or swing unnaturally through the drift. Euro nymphing eliminates this problem entirely because there is no indicator on the water and no fly line on the water. The flies are free to drift at the actual speed of the current they are in, resulting in a far more natural presentation.</p>
+<h3>The Rod</h3>
+<p>Euro rods are longer and lighter than standard nymphing rods. Key specs:</p>
+<ul>
+  <li><strong>Length:</strong> 10–11 feet</li>
+  <li><strong>Line weight:</strong> 2–4 weight</li>
+  <li><strong>Action:</strong> Sensitive tip with progressive mid-section</li>
+</ul>
+<p>The extra length extends your drift and keeps leader off the water. The lighter weight transmits subtle takes directly to your hand.</p>
 
-<p>Depth control with euro nymphing is achieved by adjusting the weight of the flies, the length of the tippet, the casting angle, and the height of the rod tip during the drift. An experienced euro nympher can fish a run at multiple depths in quick succession, methodically covering the water column from top to bottom until the productive zone is found. With indicator nymphing, changing depth requires sliding the indicator up or down the leader, adding or removing split shot, and making other time-consuming adjustments. The speed with which euro nymphers can adapt to changing conditions is a significant tactical advantage.</p>
+<h3>The Line</h3>
+<p>Most euro nymphers use a thin, nearly level competition-style line — minimal mass, virtually no sag. It functions as a running line connecting reel to leader, not as a casting weight.</p>
 
-<h2>Equipment for Euro Nymphing</h2>
+<h3>The Leader System</h3>
+<p>This is where euro nymphing gets specific. A complete leader has four components:</p>
 
-<p>While it is possible to practice euro nymphing techniques with standard fly fishing equipment, dedicated euro nymphing gear dramatically improves the experience and effectiveness of the method. The most important piece of equipment is the rod. Euro nymphing rods are typically 10 to 11 feet long in line weights of 2 to 4, significantly longer and lighter than traditional nymphing rods. The extra length serves two critical functions: it allows the angler to extend the drift by reaching further downstream with the rod tip, and it keeps more of the leader off the water, reducing drag and improving contact with the flies. The lighter line weight provides a more sensitive tip section that transmits subtle takes directly to the angler's hand.</p>
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-forest text-white">
+        <th class="text-left p-3">Section</th>
+        <th class="text-left p-3">Material</th>
+        <th class="text-left p-3">Length</th>
+        <th class="text-left p-3">Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b border-slate-100">
+        <td class="p-3 font-medium">Butt</td>
+        <td class="p-3">20–25lb stiff mono (Maxima)</td>
+        <td class="p-3">4–5 ft</td>
+        <td class="p-3">Transfers casting energy</td>
+      </tr>
+      <tr class="border-b border-slate-100 bg-slate-50">
+        <td class="p-3 font-medium">Sighter</td>
+        <td class="p-3">Bi-color mono (red/chartreuse)</td>
+        <td class="p-3">18–24 in</td>
+        <td class="p-3">Visual strike detection</td>
+      </tr>
+      <tr class="border-b border-slate-100">
+        <td class="p-3 font-medium">Tippet ring</td>
+        <td class="p-3">2mm metal ring</td>
+        <td class="p-3">—</td>
+        <td class="p-3">Connection point, saves sighter</td>
+      </tr>
+      <tr class="bg-slate-50">
+        <td class="p-3 font-medium">Tippet</td>
+        <td class="p-3">5X–6X fluorocarbon</td>
+        <td class="p-3">4–6 ft</td>
+        <td class="p-3">To the fly/flies</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<p>Euro-specific fly lines differ significantly from standard weight-forward lines. Many euro nymphers use a very thin, level competition-style line that has minimal mass and virtually no sag, acting essentially as a thin running line that connects the reel to the leader. Some manufacturers produce euro-specific lines with a thin, level front section and a slightly thicker running line behind it for easier handling. The key principle is that the line should be as thin and light as possible so that it does not interfere with the leader's ability to maintain direct contact with the flies.</p>
+<p><strong>Two-fly rig tip:</strong> Tie a dropper tag 18–24 inches above the point fly using a surgeon's knot, with 4–6 inches of tippet to the upper fly.</p>
 
-<p>The leader system is where euro nymphing gets truly specialized. A complete euro leader typically consists of a butt section of stiff, thick monofilament (typically 20-25 pound test, 4-5 feet long) that transfers energy from the line during the cast; a sighter section of brightly colored monofilament (typically 18-24 inches) that serves as the angler's visual indicator of strikes and drift speed; a tippet ring that provides a convenient connection point between the sighter and the tippet; and finally the tippet itself, which runs from the tippet ring down to the fly or flies (typically 4-6 feet of 5X or 6X fluorocarbon). When fishing two flies, a dropper tag is tied into the tippet 18-24 inches above the point fly using a simple surgeon's knot or blood knot, with 4-6 inches of tippet extending to the upper fly.</p>
+<h2>Essential Fly Patterns</h2>
 
-<h2>The Euro Nymphing Leader System in Detail</h2>
+<h3>Perdigon</h3>
+<p>The quintessential euro fly. Tungsten bead, thin thread or tinsel body coated with UV resin, no hackle. Sinks like a dart. Tied in olive, brown, black, and hot-spotted variations from size 10–18.</p>
 
-<p>Getting the leader system right is arguably the most important technical aspect of euro nymphing, and it is worth examining each component carefully. The butt section should be stiff enough to turn over the leader during the cast but thin enough to cut through the air without excessive wind resistance. Many anglers use Maxima Chameleon or similar stiff monofilament in 20-25 pound test. The butt connects to the fly line with a nail knot or loop-to-loop connection.</p>
+<h3>Czech Nymph</h3>
+<p>The original. Curved scud-hook shape, tungsten bead, dubbed body with a shellback. Imitates caddis larvae and scuds. Typically sizes 8–14. Usually the heavier point fly in a two-fly rig.</p>
 
-<p>The sighter section is the heart of the euro nymphing leader. Made from brightly colored monofilament in alternating colors — commonly red and chartreuse, or orange and white — the sighter allows the angler to detect strikes visually. When a trout takes the fly, the sighter will pause, dip, jump forward, or move laterally, depending on the direction of the take. Learning to read the sighter is one of the most important skills in euro nymphing, and it develops with practice on the water. The sighter material should be approximately the same diameter as the tippet used, typically in the 4X to 5X range, so that it does not create a hinge point in the leader.</p>
+<h3>French Nymph</h3>
+<p>Middle ground between perdigon and Czech. Slender body with sparse soft hackle or CDC. Imitates mayfly and caddis nymphs. Versatile in all water types.</p>
 
-<p>The tippet ring is a small metal ring, typically 2mm in diameter, tied to the end of the sighter with a clinch knot. It serves as a convenient connection point that allows the angler to change tippet length and diameter without cutting into the sighter material. Tippet rings also create a slight hinge point in the leader that some anglers believe improves the natural drift of the flies. The tippet below the ring is usually 5X or 6X fluorocarbon, with the length adjusted based on the depth of the water being fished. A general starting point is to use tippet that is approximately 1.5 times the depth of the water.</p>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-amber-800 mb-1">Fly Box Essentials</p>
+  <ul class="text-amber-700 text-sm space-y-1">
+    <li>Perdigons in olive, brown, black (sizes 14–18)</li>
+    <li>Czech nymphs in tan and olive (sizes 10–14)</li>
+    <li>Jig-hook pheasant tails (sizes 14–18)</li>
+    <li>Green caddis larva (sizes 14–16)</li>
+    <li>Midge larva/pupa in red and black (sizes 18–22)</li>
+  </ul>
+</div>
 
-<h2>Fly Selection for Euro Nymphing</h2>
+<h2>The Technique: Four Phases</h2>
 
-<p>Euro nymphing flies are designed around one central requirement: they must be heavy enough to sink quickly to the bottom without the aid of split shot. This has led to a distinct family of fly patterns characterized by the use of slotted tungsten beads, thin profiles, and materials that absorb minimal water. The flies are typically tied on jig-style hooks, which ride point-up to reduce snagging on the bottom and provide a more natural drifting posture.</p>
+<h3>1. The Cast</h3>
+<p>Forget your traditional false casting. Euro nymphing uses a smooth, single-stroke lob upstream. The fly weight loads the rod — you are essentially pitching the flies to their target. Accurate casts of 15–25 feet are the goal.</p>
 
-<p>Perdigon nymphs are the quintessential euro nymphing fly. Originating with Spanish competition anglers, perdigons feature a tungsten bead, a thin thread or tinsel body coated with UV resin for a smooth, hydrodynamic profile, and minimal or no hackle or legs. The slick, dense body sinks rapidly and cuts through the water column like a tiny weighted dart. Perdigons are tied in a wide range of colors and sizes, with olive, brown, black, and hot-spotted variations being among the most popular. Despite their simple appearance, perdigons are devastatingly effective, consistently outfishing more elaborately tied patterns in many water conditions.</p>
+<h3>2. The Entry</h3>
+<p>As the flies land and sink, raise the rod tip smoothly and eliminate slack until the sighter is visible and under slight tension. Miss this window and you'll miss the first — often best — moments of the drift.</p>
 
-<p>Czech nymphs are the original euro nymphing pattern, typically tied in a curved scud-hook shape with a tungsten bead, dubbed body, and a shellback of thin skin or latex. They are designed to imitate caddis larvae, scuds, and other bottom-dwelling invertebrates, and their curved profile gives them a natural tumbling action as they drift along the substrate. Czech nymphs are usually tied in larger sizes, from 8 to 14, and are often fished as the heavier point fly in a two-fly rig.</p>
+<h3>3. The Drift</h3>
+<p>Lead the flies downstream with your rod tip, tracking at current speed. The sighter should hold a gentle curve just at or above the water surface. If the sighter straightens: you're leading too fast. If it piles up: too much slack.</p>
 
-<p>French nymphs occupy a middle ground between the ultra-slim perdigon and the bulkier Czech nymph. They typically feature a tungsten bead, a slender dubbed or thread body, and sparse soft hackle or CDC fibers that add subtle movement without significantly slowing the sink rate. French nymphs are versatile patterns that can imitate a range of mayfly and caddis nymphs, and they are effective in both fast pocket water and slower pools.</p>
+<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-forest-dark mb-2">Reading the Sighter</p>
+  <ul class="text-slate-600 text-sm space-y-1">
+    <li><strong>Pause or hesitation</strong> → Set immediately</li>
+    <li><strong>Jump forward</strong> → Set immediately</li>
+    <li><strong>Sideways slide</strong> → Set immediately</li>
+    <li><strong>Sudden straightening</strong> → Set immediately</li>
+    <li>When in doubt, set the hook</li>
+  </ul>
+</div>
 
-<p>Beyond these core categories, euro nymphers should carry a selection of patterns that can match specific insect life in the waters they fish. Pheasant tail nymphs tied with tungsten beads on jig hooks are excellent mayfly imitations. Caddis larva patterns in green and tan cover the abundant caddis populations found in most trout streams. Worm and midge patterns in smaller sizes round out a comprehensive euro nymphing fly box.</p>
+<h3>4. The Set</h3>
+<p>A quick, firm upstream lift — not a sweeping sidearm motion. You need very little force because you're in direct contact with the fly. Set the hook on anything that looks unusual.</p>
 
-<h2>The Technique: How to Fish a Euro Nymph Rig</h2>
+<h2>Where to Fish</h2>
 
-<p>The basic euro nymphing technique can be broken down into four phases: the cast, the entry, the drift, and the set. Mastering each phase and connecting them into a smooth, repeatable sequence is the key to consistent success.</p>
+<p>Euro nymphing is most effective in water 1–5 feet deep with moderate current. Target these features:</p>
 
-<p>The cast in euro nymphing is fundamentally different from a traditional fly cast. Because the leader system is long and the flies are heavy, the angler uses a smooth, lobbing motion to project the rig upstream and slightly across the current. There is no false casting. The rod is loaded by the weight of the flies, and the cast is delivered with a single, fluid stroke that sends the flies in a slight upward arc before they land softly on the water above the target zone. The casting motion is more akin to a gentle pitch or toss than the back-and-forth casting strokes of traditional fly fishing. With practice, accurate casts of 15 to 30 feet are easily achievable, which covers the majority of productive euro nymphing water.</p>
+<ul>
+  <li><strong>Seams</strong> — Where fast current meets slow. Position so flies tumble from fast into slow water. That transition zone is where strikes happen.</li>
+  <li><strong>Pocket water</strong> — Behind and beside boulders. Short, controlled drifts are perfect for these tight windows. Work methodically upstream.</li>
+  <li><strong>Runs</strong> — Classic mid-depth water with steady current. Lengthen tippet as depth increases. Cover the water column top to bottom.</li>
+  <li><strong>Tailouts</strong> — Often overlooked. Current funnels food through here. Use lighter flies, shorter tippet, and watch the sighter carefully.</li>
+</ul>
 
-<p>The entry phase begins the moment the flies hit the water. As the flies sink, the angler must smoothly raise the rod tip and take in any slack so that the sighter is visible and under slight tension by the time the flies reach the fishing depth. This transition from cast to drift is critical: too much slack and the angler misses the first moments of the drift, when fish often strike; too much tension and the flies are pulled out of their natural sinking trajectory.</p>
+<h2>Common Mistakes</h2>
 
-<p>The drift is where euro nymphing truly shines. The angler leads the flies downstream with the rod tip, maintaining the sighter at a consistent height above the water — ideally with the lower portion of the sighter just touching or barely above the water's surface. The rod tip tracks downstream at the same speed as the current, keeping the sighter in a slight curve that indicates proper contact with the flies. If the sighter straightens and lifts, the angler is leading too fast and the flies are being dragged off the bottom. If the sighter sags heavily and piles on the water, there is too much slack and strike detection is compromised. The sweet spot is a gentle, consistent curve in the sighter that tells the angler the flies are ticking along the bottom at the natural speed of the current.</p>
-
-<p>The set should happen at any unexpected movement of the sighter. Euro nymphing is a game of setting the hook on anything that looks unusual — a hesitation, a jump, a sideways slide, or a sudden straightening of the sighter. The hook set is a quick, firm lift of the rod in an upstream direction, not a violent strip-set or a sweeping sidearm motion. Because the angler is in direct contact with the flies, very little force is needed to drive the hook home. One of the most common pieces of advice given to beginning euro nymphers is to set the hook more often than feels comfortable. Many of those seemingly phantom strikes turn out to be fish.</p>
-
-<h2>Reading Water for Euro Nymphing</h2>
-
-<p>Euro nymphing is most effective in water that is between one and five feet deep with a moderate current speed — the classic riffle, run, and pocket water that makes up the majority of most trout streams. Learning to read this type of water and identify the most productive holding lies is essential for consistent success.</p>
-
-<p>Seams are the boundary lines where fast current meets slow current, and they are among the most productive features to target with euro nymphing. Trout hold in the slower water along seams and dart into the faster current to intercept food items as they drift past. Position yourself so that you can drift your flies right along the seam line, allowing them to tumble from the fast water into the slow water naturally. The transition zone where the flies cross the seam is often where strikes occur.</p>
-
-<p>Pocket water — the turbulent sections of river where current breaks around boulders, creating small pockets of calmer water behind and beside each rock — is ideally suited for euro nymphing. The short, controlled drifts of the technique are perfectly matched to the brief windows of fishable water between rocks. Work upstream through pocket water methodically, making two or three drifts through each pocket before moving to the next. Trout in pocket water must make fast feeding decisions, and they tend to strike aggressively.</p>
-
-<p>Deeper runs and pools require adjustments to the standard technique. Lengthen the tippet below the tippet ring to get the flies down to the bottom, and consider using heavier flies or adding a heavier point fly to the rig. In deeper water, the rod must be held higher to keep the fly line and upper leader off the water, and the drift will be longer as the flies take more time to sink to the productive zone. Be patient on the first few drifts as you calibrate the correct depth and drift speed.</p>
-
-<p>Tailouts — the shallow, accelerating water at the downstream end of a pool — are often overlooked by nymph fishers but can be extremely productive with euro nymphing techniques. Trout feed actively in tailouts because the funneling current concentrates food items into a narrower band. Use lighter flies and shorter tippet in these shallower sections, and pay close attention to the sighter, as takes in tailouts are often very subtle.</p>
-
-<h2>Common Mistakes and How to Fix Them</h2>
-
-<p>The most common mistake made by anglers new to euro nymphing is fishing with too much slack in the system. If the sighter is piled on the water or hanging in a deep sag, there is no way to detect strikes. The fix is to raise the rod tip higher and take in more leader until the sighter is under slight tension with a gentle curve. It takes practice to find the balance between too much tension (which lifts the flies off the bottom) and too much slack (which eliminates strike detection), but this balance is the single most important skill in euro nymphing.</p>
-
-<p>Another frequent error is setting the hook downstream or with a sweeping sideways motion. Because the angler is positioned downstream of the flies during the drift, a downstream set pulls the fly away from the fish rather than into its mouth. Always set upstream with a quick lift of the rod. This drives the hook into the corner of the fish's jaw and positions the rod for a good fighting angle.</p>
-
-<p>Many beginners struggle with getting their flies deep enough in faster or deeper water. The solution is usually a combination of heavier flies, longer tippet, and casting further upstream to give the flies more time to sink before they enter the target zone. If you are not occasionally ticking the bottom, you are probably not deep enough. The goal is to feel intermittent contact with the substrate — not constant dragging, which indicates you are too heavy, but periodic taps that confirm your flies are in the strike zone.</p>
-
-<p>Casting distance is another area where beginners often go wrong, trying to fish at distances of 40 or 50 feet, where maintaining contact with the flies is nearly impossible. Euro nymphing is a close-range game. The most effective fishing distance is typically 15 to 25 feet, and rarely more than 30 feet. If you cannot reach the water you want to fish, wade closer rather than casting further. The precision and control that define euro nymphing only work at distances where the angler can read the sighter clearly and maintain direct contact with the flies.</p>
-
-<p>Finally, many anglers new to the technique fish too fast, rushing through a run without thoroughly covering the water. Slow down. Make multiple drifts through each productive-looking lane, adjusting depth and speed with each pass. Euro nymphing rewards patience and systematic water coverage far more than it rewards covering large amounts of water quickly.</p>
+<div class="space-y-4 my-6">
+  <div class="flex gap-4">
+    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
+    <div><p class="font-semibold text-slate-800">Too much slack</p><p class="text-slate-600 text-sm">Sighter piled on water = zero strike detection. Raise rod tip until there's a gentle tension curve.</p></div>
+  </div>
+  <div class="flex gap-4">
+    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
+    <div><p class="font-semibold text-slate-800">Setting downstream</p><p class="text-slate-600 text-sm">Pulls the fly away from the fish. Always set upstream with a rod lift.</p></div>
+  </div>
+  <div class="flex gap-4">
+    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
+    <div><p class="font-semibold text-slate-800">Flies not deep enough</p><p class="text-slate-600 text-sm">Cast further upstream, lengthen tippet, or use heavier flies. You should occasionally tick the bottom.</p></div>
+  </div>
+  <div class="flex gap-4">
+    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
+    <div><p class="font-semibold text-slate-800">Casting too far</p><p class="text-slate-600 text-sm">50 feet is unreachable. Fish at 15–25 feet. Wade closer instead of casting further.</p></div>
+  </div>
+  <div class="flex gap-4">
+    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
+    <div><p class="font-semibold text-slate-800">Moving too fast</p><p class="text-slate-600 text-sm">Make multiple drifts through each lane before moving. Slow, methodical coverage beats covering water quickly.</p></div>
+  </div>
+</div>
 
 <h2>When NOT to Euro Nymph</h2>
 
-<p>As effective as euro nymphing is, it is not the right technique for every situation. Understanding when to put the euro rig away and switch to other methods is a mark of a well-rounded angler.</p>
+<ul>
+  <li><strong>Rising fish</strong> — Switch to dries. Don't nymph through a hatch.</li>
+  <li><strong>Deep water (6+ feet)</strong> — Use an indicator rig or sinking line instead.</li>
+  <li><strong>Predatory trout on baitfish</strong> — Strip or swing streamers on a heavier rod.</li>
+  <li><strong>Near-still water</strong> — The technique needs current to work. Try a light indicator or dry fly in slow pools.</li>
+</ul>
 
-<p>When trout are actively rising to surface insects, dry fly fishing is not only more effective but also more enjoyable. Euro nymphing during a hatch when fish are clearly feeding on top is a missed opportunity. Carry a dry fly setup or a second rod rigged with dries so you can switch quickly when surface activity begins.</p>
+<h2>Beginner Setup</h2>
 
-<p>In very deep water — lakes, reservoirs, or river pools deeper than six or seven feet — euro nymphing becomes impractical because the angler cannot maintain contact with flies at those depths using a standard leader system. Traditional indicator rigs, sinking lines, or streamer setups are better suited for deep-water situations.</p>
+<div class="bg-slate-50 rounded-xl p-6 my-6">
+  <p class="font-semibold text-forest-dark mb-3">Recommended First Setup</p>
+  <ul class="space-y-2 text-sm text-slate-700">
+    <li><strong>Rod:</strong> 10 ft, 3-weight euro rod ($200–400)</li>
+    <li><strong>Reel:</strong> Lightweight click-and-pawl or disc drag</li>
+    <li><strong>Line:</strong> Euro-specific level or competition line</li>
+    <li><strong>Leader:</strong> 4 ft 20lb butt → 20 in sighter → tippet ring → 5 ft 5X fluoro</li>
+    <li><strong>Flies:</strong> Size 12 Czech nymph (point) + size 16 perdigon (dropper)</li>
+  </ul>
+</div>
 
-<p>Streamer fishing is a fundamentally different approach that euro nymphing cannot replicate. When targeting large predatory trout that are feeding on baitfish, crayfish, or leeches, stripping or swinging streamer patterns on a heavier rod and sinking line is far more effective. Fall brown trout fishing, early spring pre-runoff fishing, and high-water conditions often call for streamers rather than nymphs.</p>
+<p>Find water that's 1–4 feet deep with moderate current. Cast no more than 15–20 feet upstream. Focus entirely on maintaining sighter contact throughout the drift. Set the hook on every unusual movement.</p>
 
-<p>Very still water, including spring creek pools with almost no current, can be challenging for euro nymphing because the technique relies on current to carry the flies through the drift. In these calm-water situations, a delicate dry fly or a traditional nymph rig with a very light indicator may provide a more natural presentation.</p>
-
-<h2>Getting Started: A Recommended Beginner Setup</h2>
-
-<p>For anglers ready to try euro nymphing, here is a practical beginner setup that will perform well on a wide range of trout water without requiring a massive investment. Start with a 10-foot, 3-weight euro nymphing rod from a reputable manufacturer. Several companies now offer excellent euro rods in the $200-400 range that perform admirably. Pair it with a lightweight click-and-pawl or disc-drag reel loaded with a euro-specific fly line or a thin competition-style level line.</p>
-
-<p>Build or purchase a euro leader with the following specifications: 4 feet of 20-pound stiff monofilament for the butt section, 20 inches of bi-color sighter material, a 2mm tippet ring, and 4 to 5 feet of 5X fluorocarbon tippet. Tie a size 12 jig-hook Czech nymph or heavy perdigon to the point, and add a dropper tag 20 inches up with a size 16 perdigon or pheasant tail jig nymph.</p>
-
-<p>Take this setup to a river section with moderate current, riffles, and pocket water in the 1-to-4-foot depth range. Start close, casting no more than 15 to 20 feet upstream, and focus entirely on maintaining sighter contact throughout the drift. Do not worry about covering a lot of water on your first outing. Instead, find a productive-looking run and make dozens of drifts through it, experimenting with rod height, casting angle, and drift speed until you develop a feel for the technique. Set the hook on every unusual movement of the sighter. Within an hour or two of focused practice, most anglers begin to feel the rhythm of euro nymphing and start connecting with fish they would never have detected with traditional methods.</p>
-
-<p>Euro nymphing is not a replacement for the full range of fly fishing techniques — it is an addition to your toolkit that dramatically expands your ability to catch fish in the subsurface zone where trout do the vast majority of their feeding. Combined with strong dry fly and streamer skills, a command of euro nymphing makes an angler effective in virtually any trout fishing situation the river presents. The learning curve is real but manageable, and the rewards in terms of both fish caught and technical skill gained are well worth the investment of time on the water.</p>`,
+<p>Within an hour of focused practice, most anglers feel the rhythm and start connecting with fish they never would have detected before.</p>`,
     readingTimeMinutes: 12,
     tags: [
       "euro nymphing",
