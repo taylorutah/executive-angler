@@ -314,7 +314,7 @@ export default async function DestinationPage({ params }: Props) {
                       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
                     ].indexOf(month)];
-                    const isGood = dest.bestMonths.includes(fullMonth);
+                    const isGood = (dest.bestMonths || []).includes(fullMonth);
                     return (
                       <div
                         key={month}

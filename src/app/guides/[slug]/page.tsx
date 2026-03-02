@@ -14,6 +14,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { guides } from "@/data/guides";
 import {
+  getAllGuides,
   getGuideBySlug,
   getDestinationById,
   getRiversByIds,
@@ -34,12 +35,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${guide.name} — Fly Fishing Guide`,
     description:
       guide.metaDescription ||
-      `${guide.name} — professional fly fishing guide. Specialties: ${guide.specialties.join(", ")}.`,
+      `${guide.name} — professional fly fishing guide. Specialties: ${(guide.specialties || []).join(", ")}.`,
   };
 }
 
-export function generateStaticParams() {
-  return guides.map((g) => ({ slug: g.slug }));
+export async function generateStaticParams() {
+  try {
+    const allGuides = await getAllGuides();
+    return allGuides.map((g) => ({ slug: g.slug }));
+  } catch {
+    return guides.map((g) => ({ slug: g.slug }));
+  }
 }
 
 export default async function GuidePage({ params }: Props) {
@@ -49,7 +55,7 @@ export default async function GuidePage({ params }: Props) {
 
   const [dest, guideRivers] = await Promise.all([
     guide.destinationId ? getDestinationById(guide.destinationId) : undefined,
-    guide.riverIds.length > 0 ? getRiversByIds(guide.riverIds) : Promise.resolve([]),
+    (guide.riverIds || []).length > 0 ? getRiversByIds(guide.riverIds) : Promise.resolve([]),
   ]);
 
   const quickFacts = [
@@ -60,7 +66,7 @@ export default async function GuidePage({ params }: Props) {
     ...(guide.dailyRate ? [{ label: "Daily Rate", value: guide.dailyRate }] : []),
     {
       label: "Specialties",
-      value: guide.specialties.join(", "),
+      value: (guide.specialties || []).join(", "),
     },
   ];
 
@@ -121,7 +127,7 @@ export default async function GuidePage({ params }: Props) {
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {guide.specialties.map((s) => (
+                  {(guide.specialties || []).map((s) => (
                     <Badge key={s} variant="forest" size="md">
                       <Award className="h-3.5 w-3.5 mr-1.5" />
                       {s}
@@ -148,7 +154,7 @@ export default async function GuidePage({ params }: Props) {
                             {river.name}
                           </h3>
                           <p className="text-xs text-slate-500">
-                            {river.primarySpecies.join(", ")}
+                            {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
                       </Link>

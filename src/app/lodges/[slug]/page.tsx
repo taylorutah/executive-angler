@@ -17,6 +17,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { lodges } from "@/data/lodges";
 import {
+  getAllLodges,
   getLodgeBySlug,
   getDestinationById,
   getRiversByDestination,
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${lodge.name} — Fly Fishing Lodge`,
     description:
       lodge.metaDescription ||
-      `${lodge.name} — ${lodge.priceRange}. ${lodge.amenities.slice(0, 4).join(", ")}.`,
+      `${lodge.name} — ${lodge.priceRange}. ${(lodge.amenities || []).slice(0, 4).join(", ")}.`,
     openGraph: {
       title: lodge.name,
       description: lodge.metaDescription || lodge.description.substring(0, 160),
@@ -46,8 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return lodges.map((l) => ({ slug: l.slug }));
+export async function generateStaticParams() {
+  try {
+    const allLodges = await getAllLodges();
+    return allLodges.map((l) => ({ slug: l.slug }));
+  } catch {
+    return lodges.map((l) => ({ slug: l.slug }));
+  }
 }
 
 export default async function LodgePage({ params }: Props) {
@@ -155,7 +161,7 @@ export default async function LodgePage({ params }: Props) {
                   Amenities & Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {lodge.amenities.map((amenity) => (
+                  {(lodge.amenities || []).map((amenity) => (
                     <Badge key={amenity} variant="forest" size="md">
                       {amenity}
                     </Badge>
@@ -164,13 +170,13 @@ export default async function LodgePage({ params }: Props) {
               </ScrollAnimation>
 
               {/* Photo Gallery */}
-              {lodge.galleryUrls.length > 0 && (
+              {(lodge.galleryUrls || []).length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
                     Photos
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {lodge.galleryUrls.map((url, i) => (
+                    {(lodge.galleryUrls || []).map((url, i) => (
                       <div
                         key={i}
                         className="relative h-48 rounded-xl overflow-hidden"
@@ -238,7 +244,7 @@ export default async function LodgePage({ params }: Props) {
                             {river.name}
                           </h3>
                           <p className="text-sm text-slate-500 mt-0.5">
-                            {river.primarySpecies.join(", ")}
+                            {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
                       </Link>
