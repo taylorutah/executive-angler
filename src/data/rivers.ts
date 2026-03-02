@@ -743,9 +743,9 @@ export const rivers: River[] = [
     description:
       "The Snake River in Wyoming is one of the most visually spectacular fly fishing destinations in the American West, flowing through Grand Teton National Park with the jagged Teton Range rising dramatically above its braided channels. The river's upper section between Jackson Lake Dam and the town of Wilson offers outstanding float fishing for fine-spotted Snake River cutthroat trout, a unique subspecies found only in this drainage. These beautifully marked fish are aggressive surface feeders, and during the prolific summer hatches of pale morning duns, green drakes, and caddis, the Snake provides dry fly fishing that is as good as anything in the Rocky Mountain West.\n\nThe Snake River's braided, multi-channel character creates an ever-shifting mosaic of side channels, gravel bars, and deep pools that provide habitat diversity few rivers can match. Float trips are the primary method of fishing the Snake, as the braided channels make wading difficult and the best water changes with each spring's runoff. The river's flow is heavily influenced by Jackson Lake Dam releases, with the most fishable conditions typically arriving in late June or early July after the spring runoff subsides. From that point through October, anglers enjoy exceptional fishing with the added bonus of encountering moose, bald eagles, osprey, and the occasional grizzly bear along the riverbanks. The Snake's combination of native cutthroat trout, world-class scenery, and abundant wildlife makes it one of the most memorable fly fishing experiences in the entire country.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1565439043458-63c2e6e5c54a?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1565439043458-63c2e6e5c54a?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
     lengthMiles: 60,
     flowType: "freestone",
     difficulty: "intermediate",
@@ -865,9 +865,9 @@ export const rivers: River[] = [
     description:
       "The North Platte River in Wyoming offers some of the finest tailwater trout fishing between the Rockies and the Mississippi, with the Miracle Mile and Grey Reef sections producing trophy rainbow and brown trout that rival any tailwater in the West. The Miracle Mile, a 5.5-mile stretch between Seminoe and Pathfinder reservoirs, earned its name from the remarkable number of large trout it produces, with fish averaging 16 to 20 inches and occasional specimens exceeding ten pounds. The cold, nutrient-rich water released from the dams supports an extraordinary biomass of aquatic insects, scuds, and leeches that fuel rapid trout growth in this high-desert setting.\n\nFurther downstream, the Grey Reef section below Alcova Reservoir is equally impressive, offering slightly more technical fishing in a canyon setting where the river alternates between deep pools, gravel riffles, and long tailouts that hold pods of rising trout during prolific midge and baetis hatches. The Grey Reef trout are famously selective, and anglers accustomed to less pressured water will find themselves challenged by fish that have seen every fly pattern in the catalog. Wind is a constant companion on the North Platte, as the high plains geography funnels gusts through the river corridor, making casting technique as important as fly selection. Despite these challenges, the sheer quality of the fish and the uncrowded feel of this remote Wyoming landscape make the North Platte a destination that serious trout anglers return to year after year.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1468956398224-6d6f66e22c35?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1468956398224-6d6f66e22c35?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", // PLACEHOLDER
     lengthMiles: 30,
     flowType: "tailwater",
     difficulty: "advanced",
@@ -1098,9 +1098,9 @@ export const rivers: River[] = [
     description:
       "The South Platte River system is Colorado's most celebrated trout fishery, with several Gold Medal sections that produce exceptional numbers of large, well-conditioned trout in dramatic Front Range canyon settings. The most famous stretch is Cheesman Canyon, a rugged, hike-in section between Cheesman Dam and the town of Deckers where crystal-clear tailwater flows support a remarkable density of rainbow and brown trout in the 14- to 22-inch range. The canyon's restricted access and catch-and-release regulations have created a population of heavily educated fish that demand the finest leaders, smallest flies, and most careful presentations a trout angler can muster.\n\nBelow Deckers, the river flows through a broader canyon with easier access and somewhat less technical fishing, though the trout remain large and plentiful. The Eleven Mile Canyon section above Spinney Mountain Reservoir offers a different experience entirely, with freestone characteristics and a mix of browns, rainbows, and the occasional cutthroat trout in a setting that feels more like a mountain stream than a Front Range tailwater. What makes the South Platte exceptional is its proximity to Denver and Colorado Springs, providing world-class trout fishing within an hour of the state's major population centers. The river's midge hatches are legendary, with winter dry fly fishing on tiny Griffith's Gnats and RS2 patterns that would seem absurd on any other river but produce consistent action on the South Platte even in January. For anglers willing to embrace technical challenges and fine tippets, the South Platte rewards with some of the most satisfying dry fly fishing in the American West.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1548777123-e216912df7d8?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1548777123-e216912df7d8?w=400&q=80", // PLACEHOLDER
     lengthMiles: 50,
     flowType: "tailwater",
     difficulty: "advanced",
@@ -1213,9 +1213,9 @@ export const rivers: River[] = [
     description:
       "The Arkansas River in Colorado is one of the longest stretches of Gold Medal trout water in the state, flowing through the dramatic Arkansas River Valley from its headwaters near Leadville down through the Royal Gorge and into the high plains below Canon City. The river's upper reaches above Buena Vista offer outstanding freestone fishing for brown and rainbow trout in a classic mountain valley setting, with the Collegiate Peaks providing a stunning backdrop to every cast. Below the confluence with Lake Creek near Twin Lakes, the river gains volume and power, creating the kind of big-water runs and deep pools that hold genuinely large trout.\n\nThe Arkansas undergoes a remarkable transformation as it passes through the towns of Salida, Howard, and into the Royal Gorge. The canyon sections offer fewer but larger fish, with brown trout exceeding 20 inches a realistic possibility for anglers willing to work deep nymphs through the heavy water. The river's stonefly hatches are excellent, with salmonflies and golden stoneflies drawing fish to the surface in June, followed by prolific caddis activity through the summer. The Arkansas is also one of the premier whitewater rafting rivers in the country, which means fly anglers share the water with commercial raft traffic during peak summer months. Early morning fishing before the rafts launch, or targeting the quieter stretches between popular whitewater runs, are effective strategies for avoiding the crowds while still enjoying outstanding trout fishing in one of Colorado's most scenic river corridors.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1504700610630-fed1e0556fea?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1504700610630-fed1e0556fea?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=80", // PLACEHOLDER
     lengthMiles: 102,
     flowType: "freestone",
     difficulty: "intermediate",
