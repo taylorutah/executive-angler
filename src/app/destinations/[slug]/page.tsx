@@ -16,6 +16,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { destinations } from "@/data/destinations";
 import {
+  getAllDestinations,
   getDestinationBySlug,
   getRiversByDestination,
   getLodgesByDestination,
@@ -45,8 +46,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return destinations.map((d) => ({ slug: d.slug }));
+export async function generateStaticParams() {
+  try {
+    const allDests = await getAllDestinations();
+    return allDests.map((d) => ({ slug: d.slug }));
+  } catch {
+    return destinations.map((d) => ({ slug: d.slug }));
+  }
 }
 
 export const revalidate = 3600;
@@ -68,7 +74,7 @@ export default async function DestinationPage({ params }: Props) {
       latitude: r.latitude,
       longitude: r.longitude,
       title: r.name,
-      description: `${r.flowType} · ${r.primarySpecies.join(", ")}`,
+      description: `${r.flowType} · ${(r.primarySpecies || []).join(", ")}`,
       color: "#2563EB",
     })),
     ...destLodges.map((l) => ({
@@ -82,8 +88,8 @@ export default async function DestinationPage({ params }: Props) {
 
   const quickFacts = [
     { label: "Region", value: dest.region },
-    { label: "Best Months", value: dest.bestMonths.join(", ") },
-    { label: "Primary Species", value: dest.primarySpecies.join(", ") },
+    { label: "Best Months", value: (dest.bestMonths || []).join(", ") },
+    { label: "Primary Species", value: (dest.primarySpecies || []).join(", ") },
     ...(dest.elevationRange
       ? [{ label: "Elevation", value: dest.elevationRange }]
       : []),
@@ -153,7 +159,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Species */}
               <ScrollAnimation>
                 <div className="flex flex-wrap gap-2">
-                  {dest.primarySpecies.map((species) => (
+                  {(dest.primarySpecies || []).map((species) => (
                     <Badge key={species} variant="forest" size="md">
                       <Fish className="h-3.5 w-3.5 mr-1.5" />
                       {species}
@@ -208,7 +214,7 @@ export default async function DestinationPage({ params }: Props) {
                         imageUrl={river.heroImageUrl}
                         imageAlt={river.name}
                         title={river.name}
-                        subtitle={river.primarySpecies.join(", ")}
+                        subtitle={(river.primarySpecies || []).join(", ")}
                         meta={`${river.flowType} · ${river.difficulty}`}
                         badges={[river.wadingType]}
                       />
@@ -268,7 +274,7 @@ export default async function DestinationPage({ params }: Props) {
                             {guide.name}
                           </h3>
                           <p className="text-sm text-slate-500 mt-0.5">
-                            {guide.specialties.slice(0, 3).join(", ")}
+                            {(guide.specialties || []).slice(0, 3).join(", ")}
                           </p>
                           {guide.dailyRate && (
                             <p className="text-sm font-medium text-forest mt-1">

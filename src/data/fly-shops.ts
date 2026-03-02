@@ -50,6 +50,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Blue Ribbon Flies | West Yellowstone Fly Shop",
     metaDescription:
       "Blue Ribbon Flies in West Yellowstone, Montana. Iconic fly shop offering guided trips, expert advice, fly tying supplies, and daily fishing reports since 1982.",
+    googleRating: 4.9,
+    googleReviewCount: 122,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Blue+Ribbon+Flies/@44.6642332,-111.1019869,17z/data=!3m1!4b1!4m6!3m5!1s0x5351b9c79d23b873:0x8c95fc0bab2e3fdf!8m2!3d44.6642332!4d-111.099412!16s%2Fg%2F1t_kg5lr',
+    featuredReviews: [
+      {
+        authorName: 'John p.',
+        rating: 5,
+        text: 'Patrick Daigle is an awesome guide. My wife is new to fly fishing and he did a great job working with her, getting her on fish and he was super kind the entire day. Fun conversation, good education wading the Madison behind the Campfire Lodge. It was an epic day. Thank you Patrick!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482579,
+      },
+      {
+        authorName: 'Brenna p.',
+        rating: 5,
+        text: 'We\'ve done 4 or 5 guided trips over the last few years with Blue Ribbon, and every guide has been great, but this year we worked with a guide named Patrick who is really phenomenal. He taught us so much and we really grew our skills over the two days we worked with him. He has a fantastic attitude, is super knowledgable, and takes real joy in watching his clients land big fish & enjoy themselves. From now on we will be booking our trips through Blue Ribbon based on Patrick\'s availability. We really look forward to coming back next year and getting back out there with Patrick. A quality I really appreciate about him is his passion for conservation and fishing with an awareness of how to protect the fish & the longevity of the sport in the area.\n\nIn June we fished in Yellowstone & Patrick took us to some of his favorite spots off the beaten path, which we were able to return to on our own in the following days and catch fish. (this is especially valuable because the park can be hard to navigate if you aren\'t familiar with it & some of the features that can be dangerous to walk on). In July we fished the Madison with Patrick and I landed the biggest rainbow I\'ve ever caught. He coached me through landing it, and now I feel much more confident in landing one like this when I\'m out there on my own. He also really helped my boyfriend learn a lot about the terrain and how to watch for fish, and he landed a huge brown at the end of the day as Patrick coached him. It was so gratifying for all 3 of us to end the day on a high like that! THANK YOU PATRICK!!',
+        relativeTimeDescription: '3 years ago',
+        time: 1772482579,
+      },
+      {
+        authorName: 'Alice p.',
+        rating: 5,
+        text: 'What an amazing experience from reserving, picking up equipment in the friendly shop to catching Rainbow trout! All the people we dealt with were nice, helpful and knowledgeable. Our guide Scott was exceptional! Alice and Rene',
+        relativeTimeDescription: '4 months ago',
+        time: 1772482579,
+      },
+    ],
   },
   {
     id: "shop-montana-troutfitters",
@@ -96,6 +122,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Montana Troutfitters Fly Shop | Bozeman, Montana",
     metaDescription:
       "Montana Troutfitters fly shop in Bozeman, MT. Full-service shop with guided trips, gear, flies, and expert advice for fishing the Gallatin, Yellowstone, and Madison rivers.",
+    googleRating: 4.7,
+    googleReviewCount: 144,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Montana+Troutfitters/@45.6788308,-111.0606438,17z/data=!3m1!4b1!4m6!3m5!1s0x534545b1e9034e13:0xb6022c9414566bcc!8m2!3d45.6788308!4d-111.0606438!16s%2Fg%2F1tdx_k76',
+    featuredReviews: [
+      {
+        authorName: 'Marmotte p.',
+        rating: 5,
+        text: 'Wally the guide put my son and me on 26 fish and 5 species during a half day trip today on the 4th of July.  This is our first time fly fishing and I couldn\'t be more satisfied.  Wally was extremely patient and perfectly understands how to communicate with kids.  Absolutely recommend and would give 6 stars if I could.',
+        relativeTimeDescription: 'Edited 4 months ago',
+        time: 1772482596,
+      },
+      {
+        authorName: 'Thomas p.',
+        rating: 5,
+        text: 'Amazing guided float trip down the Yellowstone River. Our guide Burt was amazing. He worked so hard to get us in the right spots for fish, and taught us a ton about fly fishing, the river, and the area. 10/10 would recommend, caught some amazing trout, and tons of whitefish. These guides know what is biting. The complete experience was very smooth from booking to drop off after the trip. Thanks so much for a memorable trip!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482596,
+      },
+      {
+        authorName: 'Bridgett r.',
+        rating: 5,
+        text: 'Thank you, Troutfitters!  Five stars!! Wally guided me and my beloved uncle on a spectacular day on the Madison.  We caught five species of beautiful fish, learned so much about the history of the River, and grew in skills with a great teacher who knows and loves the River.  Wally’s superb knowledge with practical application made our day easy and joyful.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482596,
+      },
+    ],
   },
   {
     id: "shop-orvis-bozeman",
@@ -144,6 +196,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Orvis Bozeman Fly Shop | Downtown Bozeman, Montana",
     metaDescription:
       "Orvis Bozeman fly shop in downtown Bozeman, MT. Full Orvis product line, guided trips, casting clinics, and expert local advice for Montana's premier trout rivers.",
+    googleRating: 4.9,
+    googleReviewCount: 430,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Montana+Angler/@45.6799238,-111.0506293,14z/data=!4m10!1m2!2m1!1sOrvis+Bozeman+Montana!3m6!1s0x534550011102a8f1:0xdd9ce45b9e6ce718!8m2!3d45.6795614!4d-111.030969!15sChVPcnZpcyBCb3plbWFuIE1vbnRhbmEiA4gBAVoXIhVvcnZpcyBib3plbWFuIG1vbnRhbmGSAQ9maXNoaW5nX2NoYXJ0ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTkVNVWwxUVZsM0VBReABAPoBBAgrEC4!16s%2Fg%2F1tjfghs4',
+    featuredReviews: [
+      {
+        authorName: 'Paul p.',
+        rating: 5,
+        text: 'Brian is a superb host. We’ve had the most incredible trip to the Lower Onon River in Mongolia. I’ve taken a lot of fishing trips all over the world from Greenland to far southern Argentina and Montana Angler has outdone them all with a superb Mongolia program. The quality of fishing as well as the level of service have been exceptional. Brian of Montana Angler was very helpful and patient with the trip plans which we booked 2 years in advance because of the scarcity of spots. Very grateful for a trip vastly beyond what was hoped in my 2 years of dreaming about it.',
+        relativeTimeDescription: 'Edited 5 months ago',
+        time: 1772482617,
+      },
+      {
+        authorName: 'Steve p.',
+        rating: 5,
+        text: '3 great days on the Madison! The Madison Lodge offered impeccable service and Chef RJ made truly excellent meals which General Manager Jay paired with perfect wines. Guides Billie, Owen and Mike were each top-notch professionals. Highly recommended, and I will be going back!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482617,
+      },
+      {
+        authorName: 'Andy p.',
+        rating: 5,
+        text: 'Montana Angler has put together the most incredible program on the Lower Onon River in Mongolia. The quality of the fishing was exceptional, and the level of service was second to none. Every detail was handled seamlessly, from planning to time on the water.\n\nThis experience far exceeded what I had hoped for. I’m deeply grateful for the Montana Angler team for delivering a fishing adventure that was not only world-class but truly unforgettable.\n\nHighly recommend to anyone considering an international fly fishing experience.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482617,
+      },
+    ],
   },
   {
     id: "shop-jack-dennis-outdoor-shop",
@@ -194,6 +272,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Jack Dennis Outdoor Shop | Jackson Hole Fly Fishing",
     metaDescription:
       "Jack Dennis Outdoor Shop on the Jackson Town Square. Wyoming's premier fly shop with guided Snake River trips, expert advice, and five decades of fly fishing heritage.",
+    googleRating: 4.4,
+    googleReviewCount: 306,
+    googleReviewsUrl: 'https://www.google.com/maps/place/JD+High+Country+Outfitters/@43.479233,-110.7647153,17z/data=!3m1!4b1!4m6!3m5!1s0x53531a42b7e2f0e1:0x7cef4b314af53fe4!8m2!3d43.479233!4d-110.7647153!16s%2Fg%2F1tlwf9kc',
+    featuredReviews: [
+      {
+        authorName: 'Ryan p.',
+        rating: 5,
+        text: 'Great selection of a little bit of everything for the outdoors. Staff all seem very knowledgeable and friendly. They have deals going on for different items that cut down the price a lot on certain things!',
+        relativeTimeDescription: '3 years ago',
+        time: 1772482635,
+      },
+      {
+        authorName: 'David p.',
+        rating: 5,
+        text: 'Excellent experience with the staff and fishing team here! A great inventory of well made outfitting items and clothing.  The real winner is the fishing guide, Wes!  Wes provided the float trip of a lifetime on the Snake River. We caught and released about 40 Cutthroat Trout on the fly!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482635,
+      },
+      {
+        authorName: 'Douglas r.',
+        rating: 1,
+        text: 'Save time and Go to another shop or REI down the road. This place has poor customer service! Went inside to buy a couple of pair of boots for my wife and goggles for my kid and the guys at the front did not care to acknowledged or assist us. They much rather talk about their taste in music than to make a sale. Great job at providing poor service, You’re better off shopping online. I literally got 100% better service at REI.',
+        relativeTimeDescription: '11 months ago',
+        time: 1772482635,
+      },
+    ],
   },
   {
     id: "shop-world-cast-anglers",
@@ -243,6 +347,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "World Cast Anglers | Victor, Idaho — Teton Region Fly Fishing",
     metaDescription:
       "World Cast Anglers in Victor, ID. Expert guided trips on the South Fork, Henry's Fork, and Teton River. Full fly shop with gear, flies, and daily fishing reports.",
+    googleRating: 4.9,
+    googleReviewCount: 175,
+    googleReviewsUrl: 'https://www.google.com/maps/place/WorldCast+Anglers/@43.6022401,-111.112342,17z/data=!3m1!4b1!4m6!3m5!1s0x5353755217bfd5c3:0xa9710990a045cf05!8m2!3d43.6022401!4d-111.112342!16s%2Fg%2F1hc1wklp5',
+    featuredReviews: [
+      {
+        authorName: 'David p.',
+        rating: 5,
+        text: 'My nephew and I did a one day fly fishing trip on the South Fork with WorldCast Anglers. We had a fantastic experience. The fishing was good. Our guide (Brenda) was amazing. She was such a good teacher and knew exactly what to do to ensure we caught lots of fish and had a great time doing so.  Lunch was also very good. Strong recommend.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482652,
+      },
+      {
+        authorName: 'Maegan p.',
+        rating: 5,
+        text: 'My husband and I came in August and the weather was beautiful, we saw eagles, moose, ducks and caught lots of fish with our awesome guide Ryan Christensen! We fly fished on the snake river in section 1 & 3 and caught multiple  rainbow, sucker fish, white and brown fish.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482652,
+      },
+      {
+        authorName: 'Greg r.',
+        rating: 5,
+        text: 'Our company did our annual fishing trip with Worldcast this last Friday and Saturday.  Just as in years past (even before you were Worldcast), your guides were great with each of my employees.  I have always appreciated the guides with Worldcast for their professionalism, patience, and their interaction with each of us on their boats, and of course, their ability to get us into some great fish.  We had a good weather day and a not-so-good weather day that didn\'t change their efforts to get each of us into those fantastic South Fork of the Snake River trout.\n\nRespectfully\nGreg Hansen',
+        relativeTimeDescription: '4 months ago',
+        time: 1772482652,
+      },
+    ],
   },
   {
     id: "shop-minturn-anglers",
@@ -292,6 +422,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Minturn Anglers | Vail Valley Fly Shop — Minturn, Colorado",
     metaDescription:
       "Minturn Anglers fly shop in Minturn, CO. Guided trips on the Eagle River, Gore Creek, and Colorado River. Expert local advice and gear in the heart of the Vail Valley.",
+    googleRating: 4.9,
+    googleReviewCount: 229,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Minturn+Anglers/@39.58927,-106.4315134,17z/data=!3m1!4b1!4m6!3m5!1s0x876a7a257db668d1:0x2299d233a994e848!8m2!3d39.58927!4d-106.4315134!16s%2Fg%2F1td5rrzj',
+    featuredReviews: [
+      {
+        authorName: 'Suzanne p.',
+        rating: 5,
+        text: 'Unforgettable Colorado River Float with Minturn Anglers and Guide Tim McAdow\n\nWe had an incredible experience with Minturn Anglers out of Minturn, CO on a Colorado River float trip that far exceeded our expectations. From start to finish, everything was seamless, professional, and above all—unforgettable.\nOur guide, Tim, was nothing short of phenomenal. His knowledge of the river, fly patterns, and trout behavior was impressive, but what really stood out was his patience, passion, and easygoing nature. Whether you\'re a seasoned angler or brand new to the sport, Tim makes you feel confident and completely taken care of.\nThe scenery along the Colorado River was breathtaking—towering canyon walls, crystal-clear water, and wildlife all around. But the real thrill was the fishing. We hooked into some big, beautiful trout throughout the float, each one putting up a strong fight and reminding us why Colorado is a fly fishing paradise.\nTim put us on fish all day, adjusting tactics and reading the water like a pro. He made the day not only successful in terms of catches, but also relaxing and fun. His enthusiasm was infectious and his respect for the river and its ecosystem added a meaningful layer to the day.\nIf you\'re considering a guided fly fishing trip in Colorado, don’t hesitate—book with Minturn Anglers and ask for Tim. It was truly a top-tier experience we’ll be talking about for years to come.\n\nSue and Jack',
+        relativeTimeDescription: '8 months ago',
+        time: 1772482671,
+      },
+      {
+        authorName: 'Scott p.',
+        rating: 5,
+        text: 'I am visiting from TN.   I came in and spoke to Caleb.  He gave me great tips and local knowledge.   I bought some fly patterns, a hat, t shirt and sticker.  I brought my own gear but   I love supporting local fly shops when I travel.',
+        relativeTimeDescription: '4 months ago',
+        time: 1772482671,
+      },
+      {
+        authorName: 'Chris p.',
+        rating: 5,
+        text: 'My wife and I spent the day on our first float trip and we extremely  pleased. I had wanted to give then a try since we\'ve fished with  Gore creek fly fishing and Vail Valley Anglers before and always had great experiences.  Minturn  anglers is at the top  of their game as well.  Our guide Tony Clapp was extremely  accommodating and informative and gave us an incredible day on the river.    Stopped by the store after the trip and had a great talk with Ian as well.  Great outfit and will book again soon to hone my skills and catch more fish.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772482671,
+      },
+    ],
   },
   {
     id: "shop-south-platte-fly-shop",
@@ -341,6 +497,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "South Platte Fly Shop | Deckers & Cheesman Canyon Fly Fishing",
     metaDescription:
       "South Platte Fly Shop near Deckers, CO. Specialist fly shop for the South Platte tailwater with guided trips, technical fly selection, and daily river conditions.",
+    googleRating: 4.9,
+    googleReviewCount: 187,
+    googleReviewsUrl: 'https://www.google.com/maps/place/South+Platte+Fly+Shop/@38.9910661,-105.0479332,17z/data=!3m1!4b1!4m6!3m5!1s0x8714aab0930f7ae3:0x2772a61c62616d1d!8m2!3d38.9910661!4d-105.0479332!16s%2Fg%2F11cn3pt3h7',
+    featuredReviews: [
+      {
+        authorName: 'ky p.',
+        rating: 4,
+        text: 'Friendly, knowledgable. Clean and very organized. Treated me with interest and appreciation. Really like going into this shop to get supplies and conversation concerning fly fishing. Lots to choose from with very reasonable pricing. Lots of new items to enhance my fly fishing experience. They also have experienced guide services to gold metal waters and private waters serving the niche fly fisher no matter what starting  to experienced level!',
+        relativeTimeDescription: '3 months ago',
+        time: 1772482687,
+      },
+      {
+        authorName: 'Sara p.',
+        rating: 5,
+        text: 'My nephew had a great time learning how to fly fish with Kyle. He was a really patient and enthusiastic guide!  It was a great experience. Aeden talked about this experience the rest of his visit here in Colorado!',
+        relativeTimeDescription: '7 months ago',
+        time: 1772482687,
+      },
+      {
+        authorName: 'Diana r.',
+        rating: 5,
+        text: 'Highly recommend the into to fly fishing with Rodney. He was friendly, patient and made the experience memorable. Made sure we had the good fishing spots and took great pictures. 10/10',
+        relativeTimeDescription: 'a month ago',
+        time: 1772482687,
+      },
+    ],
   },
   {
     id: "shop-silver-creek-outfitters",
@@ -391,6 +573,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Silver Creek Outfitters | Ketchum, Idaho Fly Shop",
     metaDescription:
       "Silver Creek Outfitters in Ketchum, ID. Premier Sun Valley fly shop with guided trips on Silver Creek, Big Wood River, and beyond. Expert advice since the 1970s.",
+    googleRating: 4.7,
+    googleReviewCount: 123,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Silver+Creek+Outfitters/@43.6819802,-114.3657764,17z/data=!3m1!4b1!4m6!3m5!1s0x54a982b7521d964f:0x11b81b4f45612ce6!8m2!3d43.6819802!4d-114.3657764!16s%2Fg%2F1v2kx4n5',
+    featuredReviews: [
+      {
+        authorName: 'Katarina p.',
+        rating: 5,
+        text: 'Top notch fly fishing experience with our new friend, Aaron Tate! This was my first experience on the river with a guide, and Aaron made it an epic adventure. My husband is a seasoned fly fisherman and Aaron was able to balance both of our experiences ensuring an incredibly joyful day with lasting memories. We will not come to SV without spending a day with him and just feel so grateful to have been given this day! Book early - we hit the jackpot catching him on a cancellation and had he been available, would have booked him for 1-2 more days.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482705,
+      },
+      {
+        authorName: 'Ruben r.',
+        rating: 5,
+        text: 'Silver Creek Outfitters is hands down the best fly shop and guiding service in Idaho. From the moment I walked in, I was blown away by the selection of gear, the local knowledge, and especially the warm welcome. But the real reason this place stands out is Stod.\n\nStod knows these waters better than anyone. He doesn’t just point you to the right flies—he explains the why, teaches you subtle techniques, and makes the whole experience unforgettable. I’ve fished with guides all over the West, but Stod is in a class of his own. His enthusiasm is contagious, his patience is endless, and his sense of humor makes even a slow bite day a great time.\n\nWhether you’re a seasoned angler or brand new, ask for Stod. He’s the kind of guide who can turn a good trip into a once-in-a-lifetime memory. Silver Creek Outfitters has built a world-class reputation, and it’s no surprise with people like Stod leading the way.\n\nIf you’re anywhere near Ketchum, don’t miss this shop—and definitely book a trip with Stod. You’ll leave with fish stories, new skills, and a smile on your face.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482705,
+      },
+      {
+        authorName: 'Corry r.',
+        rating: 5,
+        text: 'We have used Silver Creek\'s guide services for years and have always received the utmost professional care and attention.  Our normal guide was unavailable so we were paired with Guy R.  he was outstanding!  Very knowledgeable and accommodating.  Thanks Guy!',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482705,
+      },
+    ],
   },
   {
     id: "shop-rising-fish-fly-shop",
@@ -439,6 +647,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Rising Fish Fly Shop | Victor, Idaho — Teton Valley Fly Fishing",
     metaDescription:
       "Rising Fish Fly Shop in Victor, ID. Guided trips on the Teton River, South Fork Snake, and Henry's Fork. Local expertise and gear for Teton Valley fly fishing.",
+    googleRating: 4.9,
+    googleReviewCount: 175,
+    googleReviewsUrl: 'https://www.google.com/maps/place/WorldCast+Anglers/@43.6022401,-111.1885597,13z/data=!4m10!1m2!2m1!1sRising+Fish+Fly+Shop+Victor+Idaho!3m6!1s0x5353755217bfd5c3:0xa9710990a045cf05!8m2!3d43.6022401!4d-111.112342!15sCiFSaXNpbmcgRmlzaCBGbHkgU2hvcCBWaWN0b3IgSWRhaG9aIyIhcmlzaW5nIGZpc2ggZmx5IHNob3AgdmljdG9yIGlkYWhvkgENZmlzaGluZ19zdG9yZZoBJENoZERTVWhOTUc5blMwVkpRMEZuU1VObGFUVk1OV2RuUlJBQuABAPoBBAghEDk!16s%2Fg%2F1hc1wklp5',
+    featuredReviews: [
+      {
+        authorName: 'David p.',
+        rating: 5,
+        text: 'My nephew and I did a one day fly fishing trip on the South Fork with WorldCast Anglers. We had a fantastic experience. The fishing was good. Our guide (Brenda) was amazing. She was such a good teacher and knew exactly what to do to ensure we caught lots of fish and had a great time doing so.  Lunch was also very good. Strong recommend.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482726,
+      },
+      {
+        authorName: 'Maegan p.',
+        rating: 5,
+        text: 'My husband and I came in August and the weather was beautiful, we saw eagles, moose, ducks and caught lots of fish with our awesome guide Ryan Christensen! We fly fished on the snake river in section 1 & 3 and caught multiple  rainbow, sucker fish, white and brown fish.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482726,
+      },
+      {
+        authorName: 'Greg r.',
+        rating: 5,
+        text: 'Our company did our annual fishing trip with Worldcast this last Friday and Saturday.  Just as in years past (even before you were Worldcast), your guides were great with each of my employees.  I have always appreciated the guides with Worldcast for their professionalism, patience, and their interaction with each of us on their boats, and of course, their ability to get us into some great fish.  We had a good weather day and a not-so-good weather day that didn\'t change their efforts to get each of us into those fantastic South Fork of the Snake River trout.\n\nRespectfully\nGreg Hansen',
+        relativeTimeDescription: '4 months ago',
+        time: 1772482726,
+      },
+    ],
   },
   {
     id: "shop-alaska-fly-fishing-goods",
@@ -488,6 +722,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Alaska Fly Fishing Goods | Anchorage Fly Shop",
     metaDescription:
       "Alaska Fly Fishing Goods in Anchorage, AK. Specialized gear, salmon and trout flies, and expert trip planning for Alaska's world-class fly fishing destinations.",
+    googleRating: 5,
+    googleReviewCount: 44,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Alaska+Fly+Fishing+Goods/@59.7526629,-142.2331757,6z/data=!4m10!1m2!2m1!1sAlaska+Fly+Fishing+Goods+Anchorage+Alaska!3m6!1s0x5400df82ddef82c9:0xcf0f3f78f3df429a!8m2!3d58.3618468!4d-134.5722925!15sCilBbGFza2EgRmx5IEZpc2hpbmcgR29vZHMgQW5jaG9yYWdlIEFsYXNrYVorIilhbGFza2EgZmx5IGZpc2hpbmcgZ29vZHMgYW5jaG9yYWdlIGFsYXNrYZIBDWZpc2hpbmdfc3RvcmWaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTk1laTFRWjFKM0VBReABAPoBBAgAEBU!16s%2Fg%2F1tdlbd8n',
+    featuredReviews: [
+      {
+        authorName: 'Al r.',
+        rating: 5,
+        text: 'Great place. The staff is friendly, knowledgeable and always willing to help with questions. Brad is a great guy and always has answers to all your questions, whether it is about fishing local, gear, flies or excursions. Highly recommend!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482749,
+      },
+      {
+        authorName: 'Randy p.',
+        rating: 5,
+        text: 'Josh set me up. Great service. I am in Pa and my grandson is in Denali . He needed some fly equipment and local flys. Josh took the time to pick out a good assortment and recommended some streams to check out for him. Made me a cart and all I did was check out and all the goodie’s are on the way to my grandson. Better service than that you won’t find anywhere!!! Thanks so much!!!\nRandy Hentz',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482749,
+      },
+      {
+        authorName: 'Marcus p.',
+        rating: 5,
+        text: 'Was in Juneau for a cruise and had very limited time to fish.  Brad helped out with recommendations for flies and my family had an absolutely epic day.  I can’t thank Brad enough for his help.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482749,
+      },
+    ],
   },
   {
     id: "shop-kachemak-bay-fly-shop",
@@ -536,6 +796,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Kachemak Bay Fly Shop | Homer, Alaska Fly Fishing",
     metaDescription:
       "Kachemak Bay Fly Shop in Homer, AK. Guided salmon and trout trips, fly-out fishing, Alaska-specific gear, and expert advice on the Kenai Peninsula's best waters.",
+    googleRating: 4.9,
+    googleReviewCount: 73,
+    googleReviewsUrl: 'https://www.google.com/maps/place/The+Lodge+at+Otter+Cove,+Inc/@59.519994,-152.0588972,10z/data=!4m12!1m2!2m1!1sKachemak+Bay+Fly+Shop+Homer+Alaska!3m8!1s0x56c12965a628735b:0x608c30da68e878c6!5m2!4m1!1i2!8m2!3d59.5199936!4d-151.4491557!16s%2Fg%2F11q42jrrry',
+    featuredReviews: [
+      {
+        authorName: 'Zach r.',
+        rating: 5,
+        text: 'I had the absolute pleasure of attending a wedding at Otter Cove Lodge, and it was nothing short of spectacular. Nestled in a breathtaking coastal setting, the lodge provided a perfect blend of rustic charm and natural beauty, making it an unforgettable venue for such a special occasion.\n\nFrom start to finish, Joe and Jonna, the incredible hosts, went above and beyond to ensure every detail was flawless. Their warmth and genuine hospitality made everyone feel like family.\n\nThe views of the ocean and surrounding wilderness created a magical backdrop for the ceremony, and the cozy, well-appointed cabins provided a comfortable retreat for guests. The food was exceptional, with fresh, locally sourced ingredients that elevated the wedding feast into something truly memorable.\n\nJoe and Jonna’s passion for what they do shines through in every interaction. They were not only professional but also incredibly kind and approachable, making the entire experience feel personal and heartfelt. The couple and their guests couldn’t stop raving about how perfect everything was, and much of that credit goes to the dynamic duo running the show.\n\nIf you’re considering Otter Cove Lodge for a wedding or any special event, I can’t recommend it enough. Joe and Jonna will make your vision come to life in a way that exceeds all expectations. It was an amazing experience, and I’m already looking forward to any excuse to return!',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772482771,
+      },
+      {
+        authorName: 'Jim p.',
+        rating: 5,
+        text: 'Wow....just wow!  Couldn\'t have had a better experience at The Lodge at Otter Cove.  The owners, Joe and Jonna, do a GREAT job making sure that your stay is everything you\'d expect and more. The whole facility is fantastic, and Joe (whose background is as a chef) and his team prepare breakfast each morning and dinner each night.  For some of your excursions, they are your personal guides.  For others, they have contracted relationships with the best that Homer has to offer.  We stayed for 4 nights and it couldn\'t have been a better experience.  Great for fishing, hiking, relaxing, and experiencing Alaska!',
+        relativeTimeDescription: '5 months ago on Google',
+        time: 1772482771,
+      },
+      {
+        authorName: 'N0rthGa',
+        rating: 5,
+        text: 'Otter Cove is a small fishing/adventure lodge a boat ride from Homer in one of the most pristine, beautiful places anywhere.  If you want to get away and enjoy this part of Alaska, I highly recommend it.  The lodge and accommodations are …',
+        relativeTimeDescription: '6 months ago on Tripadvisor',
+        time: 1772482771,
+      },
+    ],
   },
   {
     id: "shop-the-fly-shop-bend",
@@ -586,6 +872,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "The Fly Shop | Bend, Oregon — Deschutes River Fly Fishing",
     metaDescription:
       "The Fly Shop in Bend, OR. Central Oregon's premier fly shop with guided Deschutes steelhead trips, trout outfitting, casting schools, and expert local advice.",
+    googleRating: 4.9,
+    googleReviewCount: 179,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Fly+%26+Field+Outfitters+-+Bend/@44.050602,-121.3512574,15z/data=!4m10!1m2!2m1!1sThe+Fly+Shop+Bend+Oregon+fly+fishing!3m6!1s0x54b8c7d671c93cfb:0x5d9b287dc8ec41dd!8m2!3d44.0506025!4d-121.3322026!15sCiRUaGUgRmx5IFNob3AgQmVuZCBPcmVnb24gZmx5IGZpc2hpbmdaJiIkdGhlIGZseSBzaG9wIGJlbmQgb3JlZ29uIGZseSBmaXNoaW5nkgENZmlzaGluZ19zdG9yZZoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VOd2VXUmlXR1pCRUFF4AEA-gEECH0QNw!16s%2Fg%2F1tfpzknd',
+    featuredReviews: [
+      {
+        authorName: 'North p.',
+        rating: 5,
+        text: 'Stopped by the shop right at the end of the day.  The two guys at the shop helped us with some diy spots, and fixed my buddy’s BOA in his Korkers. We also had a trip a few days later and had a great day trip on the Lower Deschutes.  Thad was our guide for the day, he was knowledgeable, helpful, friendly and put us on some nice fish.  Highly recommend the shop as well as their trips.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482794,
+      },
+      {
+        authorName: 'Barry p.',
+        rating: 5,
+        text: 'I had a great experience with Fly & Field Outfitters.  Adam, my guide, was extremely helpful with lots of tips and advice, especially for a complete novice like me.  It was so much fun and I caught my share of rainbows.  Plus,  the scenery of the Crooked River and the surrounding canyon was amazing.  I would highly recommend them!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482794,
+      },
+      {
+        authorName: 'Ben p.',
+        rating: 5,
+        text: 'I went on a boys trip out to Bend, Oregon, and we had the absolute pleasure of going on a guided fly fishing trip with Wyatt. I can’t recommend the experience highly enough. From the moment we met, it was clear that Wyatt is not only a skilled angler, but also an incredible guide—patient, knowledgeable, and genuinely passionate about the sport and the outdoors.\n\nWe spent the day targeting trout and mountain whitefish, and thanks to Wyatt’s expert instruction and deep understanding of the local waters, we stayed on the fish throughout the day. He gave great casting tips, explained the reasoning behind every fly choice, and adjusted our strategy as conditions changed. Me and the homies walked away with great memories and an addiction for fly fishing (we live in Arizona and we just bought fly rods).\n\nThe scenery was stunning—peaceful, wild, and exactly the kind of reset we needed. Wyatt also emphasized ethical fishing practices and handled everything with a deep respect for the river and its fish.\n\nWhether you\'re new to fly fishing or have years under your belt, a day on the water with Wyatt is time well spent. Hope to reconnect with him in the future!',
+        relativeTimeDescription: '8 months ago',
+        time: 1772482794,
+      },
+    ],
   },
   {
     id: "shop-fly-and-field-outfitters",
@@ -635,6 +947,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Fly & Field Outfitters | Bend, Oregon Fly Shop & Outdoor Store",
     metaDescription:
       "Fly & Field Outfitters in Bend, OR. Full-service fly shop with guided trips on the Deschutes, Crooked, and Metolius rivers. Gear, flies, events, and local expertise.",
+    googleRating: 4.9,
+    googleReviewCount: 179,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Fly+%26+Field+Outfitters+-+Bend/@44.0506025,-121.3322026,17z/data=!3m1!4b1!4m6!3m5!1s0x54b8c7d671c93cfb:0x5d9b287dc8ec41dd!8m2!3d44.0506025!4d-121.3322026!16s%2Fg%2F1tfpzknd',
+    featuredReviews: [
+      {
+        authorName: 'North p.',
+        rating: 5,
+        text: 'Stopped by the shop right at the end of the day.  The two guys at the shop helped us with some diy spots, and fixed my buddy’s BOA in his Korkers. We also had a trip a few days later and had a great day trip on the Lower Deschutes.  Thad was our guide for the day, he was knowledgeable, helpful, friendly and put us on some nice fish.  Highly recommend the shop as well as their trips.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482811,
+      },
+      {
+        authorName: 'Barry p.',
+        rating: 5,
+        text: 'I had a great experience with Fly & Field Outfitters.  Adam, my guide, was extremely helpful with lots of tips and advice, especially for a complete novice like me.  It was so much fun and I caught my share of rainbows.  Plus,  the scenery of the Crooked River and the surrounding canyon was amazing.  I would highly recommend them!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482811,
+      },
+      {
+        authorName: 'Ben p.',
+        rating: 5,
+        text: 'I went on a boys trip out to Bend, Oregon, and we had the absolute pleasure of going on a guided fly fishing trip with Wyatt. I can’t recommend the experience highly enough. From the moment we met, it was clear that Wyatt is not only a skilled angler, but also an incredible guide—patient, knowledgeable, and genuinely passionate about the sport and the outdoors.\n\nWe spent the day targeting trout and mountain whitefish, and thanks to Wyatt’s expert instruction and deep understanding of the local waters, we stayed on the fish throughout the day. He gave great casting tips, explained the reasoning behind every fly choice, and adjusted our strategy as conditions changed. Me and the homies walked away with great memories and an addiction for fly fishing (we live in Arizona and we just bought fly rods).\n\nThe scenery was stunning—peaceful, wild, and exactly the kind of reset we needed. Wyatt also emphasized ethical fishing practices and handled everything with a deep respect for the river and its fish.\n\nWhether you\'re new to fly fishing or have years under your belt, a day on the water with Wyatt is time well spent. Hope to reconnect with him in the future!',
+        relativeTimeDescription: '8 months ago',
+        time: 1772482811,
+      },
+    ],
   },
   {
     id: "shop-tco-fly-shop",
@@ -685,6 +1023,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "TCO Fly Shop | State College, PA — Limestone Creek Fly Fishing",
     metaDescription:
       "TCO Fly Shop in State College, PA. Expert outfitter for Pennsylvania limestone spring creeks. Guided trips, specialty flies, tying materials, and daily fishing reports.",
+    googleRating: 4.7,
+    googleReviewCount: 132,
+    googleReviewsUrl: 'https://www.google.com/maps/place/TCO+Fly+Shop+-+State+College/@40.8188932,-77.8172638,17z/data=!3m1!4b1!4m6!3m5!1s0x89cea5c13a550973:0xed217fe68138ae58!8m2!3d40.8188932!4d-77.8172638!16s%2Fg%2F1tdnxwvv',
+    featuredReviews: [
+      {
+        authorName: 'JC p.',
+        rating: 5,
+        text: 'I wanted to learn how to euro-nymph, so I got in touch with TCO.  They helped me book an all day trip on Spring Creek with Dave Bowers, which turned out to be one of the best fishing experiences I’ve ever had.\n\nDave is an incredible instructor who explained how to handle the line and make different types of cast.  He was consistently positive, providing encouragement and guidance.\n\nOnce we were fishing, he worked with me to become proficient in the technique and to correct several bad habits I’d developed in hook setting and landing a fish.\nAs the day went on, Dave made adjustments which improved my success.\n\nOn top of everything else, I found Dave to be the epitome of fishing etiquette; making sure that we didn’t interfere with anyone else’s enjoyment of the day.\n\nA five star review for TCO and Dave isn’t nearly positive enough!',
+        relativeTimeDescription: '9 months ago',
+        time: 1772482829,
+      },
+      {
+        authorName: 'alan p.',
+        rating: 1,
+        text: 'I tried commenting g and got CUT OFF! Suffice it to say, I’m DONE with MULTI LOCATION SHOPS who have to “SPLIT ORDERS”! Part of which STILL HASN’T arrived! This is why I’ve always dealt with SINGLE LOCATION shops trying to “eek out” their living, Apparently NOT YOU! This “SPLIT” has really set me back, not that you CARE, or know what the “RIGHT HAND IS DOING, my FIRST AND LAST ORDER or in this case TWO order.\nA. Gelman\nMontana\nSiri your response is exactly what I expected it to be a repeat of already I knew with no solutions involved. This order I believe was originally placed on the 14th. I could be mistaken but around the 14th if not the 14th today’s the 21st that’s a week one week and the latest update. I have still from the United States parcel service is that it’s somewhere between Chicago Illinois, and Montana which means they expected delivery today certainly ain’t happening. I don’t know why you bothered to give a response that actually has nothing to do except to state your policy, which says I believe your business policy is to do this and do that by having multiple stores when in reality it’s exactly what caused the problem and one more reason why you’ll never hear from me again after and if this order gets delivered, believe me, sir I know bullshit when I hear it',
+        relativeTimeDescription: 'a month ago',
+        time: 1772482829,
+      },
+      {
+        authorName: 'Brandon p.',
+        rating: 5,
+        text: 'Online order for a fly pole.  Ordered on Sunday afternoon, standard free shipping.  Got a shipment notification Sunday night, the pole delivered on Wednesday.  Fantastic turnaround!',
+        relativeTimeDescription: '4 months ago',
+        time: 1772482829,
+      },
+    ],
   },
   {
     id: "shop-gates-au-sable-lodge",
@@ -733,6 +1097,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Gates Au Sable Lodge | Grayling, MI — Au Sable River Fly Fishing",
     metaDescription:
       "Gates Au Sable Lodge in Grayling, MI. Historic riverside lodge and fly shop on the Au Sable's Holy Water. Guided trips, riverboat rentals, and Michigan's finest trout fishing.",
+    googleRating: 4.9,
+    googleReviewCount: 424,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Gates+Au+Sable+Lodge/@44.6791785,-84.5766146,17z/data=!4m9!3m8!1s0x88206ce4f49d8695:0x8c2bbf776d126853!5m2!4m1!1i2!8m2!3d44.6791785!4d-84.5766146!16s%2Fg%2F1v_w2zkq',
+    featuredReviews: [
+      {
+        authorName: 'David r.',
+        rating: 5,
+        text: 'I cannot say enough about Josh and his staff. Denny and Matt were always eager and helpful. Josh  had a plan for us every day that we fished. We booked a float trip. Our guide was Jordan. He did a fantastic job. The restaurant was excellent. The fly shop well stocked. I cannot wait to book for next year.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772482848,
+      },
+      {
+        authorName: 'Diane p.',
+        rating: 5,
+        text: 'With a cabin in the area, we enjoy Gate\'s small, intimate restaurant - It is excellent. A great, varied menu. And right on the Au Sable river - a beautiful walk after dinner. We try to make a reservation here every time we come up north. Hope to have family members enjoy the #1 fly-fishing at Gates in the future - My husband loves the fly shop.',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772482848,
+      },
+      {
+        authorName: 'J189VLsusanp',
+        rating: 5,
+        text: 'Highly recommended. What began as a planned father- son weekend turned into a surprise husband- wife get away, due to a son’s covid. The Lodge, staff and guide were so flexible and accommodating in helping us pivot  from the planned weekend …',
+        relativeTimeDescription: '6 months ago on Tripadvisor',
+        time: 1772482848,
+      },
+    ],
   },
   {
     id: "shop-sweetwater-fly-shop",
@@ -781,6 +1171,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Sweetwater Fly Shop | Interlochen, MI — Northern Michigan Fly Fishing",
     metaDescription:
       "Sweetwater Fly Shop in Interlochen, MI. Guided trout and steelhead trips on northern Michigan rivers. Full fly shop with gear, flies, and daily stream reports.",
+    googleRating: 4.9,
+    googleReviewCount: 82,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Sweetwater+Fly+Shop/@45.6117701,-130.0887139,5z/data=!4m10!1m2!2m1!1sSweetwater+Fly+Shop+Interlochen+Michigan!3m6!1s0x53457bc11b201737:0x185fd40c5f3426c8!8m2!3d45.6117701!4d-110.5769951!15sCihTd2VldHdhdGVyIEZseSBTaG9wIEludGVybG9jaGVuIE1pY2hpZ2FuWioiKHN3ZWV0d2F0ZXIgZmx5IHNob3AgaW50ZXJsb2NoZW4gbWljaGlnYW6SAQ1maXNoaW5nX3N0b3JlmgEgQ2hSRFNVaE5NRzluUzBWSlEwRm5TVU5sTlZsTmRCQULgAQD6AQQINRBH!16s%2Fg%2F1tjg_0c7',
+    featuredReviews: [
+      {
+        authorName: 'Tracy p.',
+        rating: 5,
+        text: 'Cannot recommend Sweetwater enough for anyone who wants to spend a day on the water. We had a group of 4, with 3 beginners. We had two boats with Shaun and Matt as our guides. Shaun was patient and encouraging and spent time pointing out cool rock structures and eagles along with leading that boat to land 15 fish! Matt, whose boat I was in, was also amazing to spend the day with. He was our fishing “coach” who knew every spot and had us casting and setting almost immediately. Our boat also landed 15 fish, including a big brown trout, which made our day! We also learned all about the river, area, and types of eagles! Both boats had a fantastic time on the water. I wouldn’t hesitate to recommend this shop and these guides for a day on the Yellowstone.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482871,
+      },
+      {
+        authorName: 'Angela p.',
+        rating: 5,
+        text: 'I needed to be outfitted for fishing the Yellowstone River and found Sweetwater Fly Shop close by.  My dog was with me as usual and was welcomed in the shop.  Mollie was great at giving me all sorts of options AND booking me guides for fishing the Yellowstone. She really went above and beyond making sure I had the best experience by choosing ones that had patience and welcomed by pup on their boats.  Matt Locke gave me a quick refresher before we put in at Pine Creek and I caught 12-15 fish that day.  We even had a great lunch on an island; complete with tablecloth!  Two days later I got to go with Mike Simonetti from Mayors to Pig Point.  The Rainbows came out to play in force!  It was another 12-15 fish day with a mixed bag of Rainbows and Whitefish. I will sing Sweetwater and Mollie’s praises whenever I’m asked about fishing the Yellowstone.  My fishing trips through them were epic for me and I can hardly wait to do it again next year!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482871,
+      },
+      {
+        authorName: 'Marlene r.',
+        rating: 5,
+        text: 'We had a wonderful time with our guides from Sweetwater Fly Shop, fly fishing on the Yellowstone River.  Our family had not  been fly fishing before and our guides did an excellent job of working with  us and making us feel comfortable. They were also very personable and we enjoyed learning about the area. We will definitely recommend the Sweetwater guides!',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482871,
+      },
+    ],
   },
   {
     id: "shop-blue-ribbon-fly-shop-arkansas",
@@ -830,6 +1246,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Blue Ribbon Fly Shop | Mountain Home, AR — White River Fly Fishing",
     metaDescription:
       "Blue Ribbon Fly Shop in Mountain Home, AR. Guided drift boat trips on the White and Norfork rivers. Tailwater fly selection, gear, and daily generation reports.",
+    googleRating: 5,
+    googleReviewCount: 4,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Blue+Ribbon+Flies+Shop/@36.3329419,-92.3594772,17z/data=!3m1!4b1!4m6!3m5!1s0x87d1dbf36834b707:0x1d375a41d36f7fb5!8m2!3d36.3329419!4d-92.3594772!16s%2Fg%2F1vg_dd3p',
+    featuredReviews: [
+      {
+        authorName: 'Mary r.',
+        rating: 5,
+        text: 'Just to let everyone know, Blue Ribbon Fly Shop and Anglers Coffee have reopened with extensive remodeling.  Check them out!',
+        relativeTimeDescription: 'Edited 10 years ago',
+        time: 1772482888,
+      },
+      {
+        authorName: 'Jaime r.',
+        rating: 5,
+        text: 'Bob and the guides at Blue Ribbon Fly Shop are amazing!  Definitely recommend utilizing their services.',
+        relativeTimeDescription: '11 years ago',
+        time: 1772482888,
+      },
+      {
+        authorName: 'Allan r.',
+        rating: 5,
+        text: 'Very friendly and very helpful ! Highly recommended !!!',
+        relativeTimeDescription: '9 years ago',
+        time: 1772482888,
+      },
+    ],
   },
   {
     id: "shop-anglers-choice",
@@ -878,6 +1320,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Anglers Choice | Cotter, AR — White River Guided Fly Fishing",
     metaDescription:
       "Anglers Choice in Cotter, AR. Guided drift boat trips on the White River tailwater. Fly shop with tailwater patterns, gear rentals, and daily river conditions.",
+    googleRating: 4.9,
+    googleReviewCount: 60,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Natural+State+Fly+Shop/@36.2671138,-92.6928317,12z/data=!4m10!1m2!2m1!1sAnglers+Choice+Fly+Shop+Cotter+Arkansas!3m6!1s0x87ce2227821e1407:0x3057f1584bd681ef!8m2!3d36.2671138!4d-92.5403964!15sCidBbmdsZXJzIENob2ljZSBGbHkgU2hvcCBDb3R0ZXIgQXJrYW5zYXNaKSInYW5nbGVycyBjaG9pY2UgZmx5IHNob3AgY290dGVyIGFya2Fuc2FzkgENZmlzaGluZ19zdG9yZZoBRENpOURRVWxSUVVOdlpFTm9kSGxqUmpsdlQydzRNV1JWVVROVFIydzJaRVp2TVUxdGFEQldWVTVRWW0xS1JsVXpZeEFC4AEA-gEFCNsBEEA!16s%2Fg%2F11bysjtp3x',
+    featuredReviews: [
+      {
+        authorName: 'Terri p.',
+        rating: 5,
+        text: '❤️🎣🌟🌟🌟🌟🌟 five stars always and a wonderful work crew owners and customers just a good place for all your gear & lessons & trips\nStop by.…. You\'ll come back agsin and again so much to do! …',
+        relativeTimeDescription: 'Edited a month ago',
+        time: 1772482910,
+      },
+      {
+        authorName: 'Hilary p.',
+        rating: 5,
+        text: 'A must stop shop for all your fly fishing needs! We enjoyed watching Henry tie flies and greatly appreciated the local fishing recommendations from the shop owner. We has no clue there was a trout hatchery in the area! Being able to catch big trout was a dream come true for our son!',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482910,
+      },
+      {
+        authorName: 'Neil p.',
+        rating: 5,
+        text: 'Courtney was super helpful! She got me exactly what I wanted, was very knowledgeable, and you guys had great prices',
+        relativeTimeDescription: '2 weeks ago',
+        time: 1772482910,
+      },
+    ],
   },
   {
     id: "shop-florida-keys-outfitters",
@@ -928,6 +1396,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Florida Keys Outfitters | Islamorada Saltwater Fly Shop",
     metaDescription:
       "Sandy Moret's Florida Keys Outfitters in Islamorada, FL. Premier saltwater fly shop with guide referrals, casting schools, and expert gear for bonefish, tarpon, and permit.",
+    googleRating: 4.7,
+    googleReviewCount: 50,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Florida+Keys+Outfitters+Fly+Shop+%26+Guide+Service/@24.9124509,-80.6413195,17z/data=!3m1!4b1!4m6!3m5!1s0x88d7375c83dab871:0x9505f1fce0f2cefd!8m2!3d24.9124509!4d-80.6413195!16s%2Fg%2F1tlbpynr',
+    featuredReviews: [
+      {
+        authorName: 'Justin p.',
+        rating: 5,
+        text: 'I always love stopping in to this shop and checking out the clothing or gear. They have a good selection of flies and tying material, as well as rods and lines and bags.',
+        relativeTimeDescription: '3 months ago',
+        time: 1772482928,
+      },
+      {
+        authorName: 'Scott p.',
+        rating: 5,
+        text: 'Having owned a specialist outfitter store ourselves in Australia - I can say this is a true fly fishers store founded by a legend of our sport - Sandy Moet 🙌 I was after a new travel back pack and David and Zana were so helpful and I now have a new Simms GTS tri-carry Duffle! Thanks guys - your store should be a “ must visit” for any fly anglers visiting the birthplace of Saltwater Flyfishing 🙌🤟😎🇺🇸 Thanks Scott & Katrina from Down Under',
+        relativeTimeDescription: '2 years ago',
+        time: 1772482928,
+      },
+      {
+        authorName: 'Giselle p.',
+        rating: 5,
+        text: 'Amazing experience first time at the store. Answered all my questions and helped me get started in 15 min. Fantastic service and knowledge base .',
+        relativeTimeDescription: '3 months ago',
+        time: 1772482928,
+      },
+    ],
   },
   {
     id: "shop-pacific-fly-fishers",
@@ -978,6 +1472,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Pacific Fly Fishers | Vancouver, BC — British Columbia Fly Fishing",
     metaDescription:
       "Pacific Fly Fishers in Vancouver, BC. Full-service fly shop for steelhead, stillwater, and salmon fishing across British Columbia. Spey gear, guides, and expert advice.",
+    googleRating: 4.7,
+    googleReviewCount: 349,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Pacific+Angler/@49.2628161,-123.103478,17z/data=!3m1!4b1!4m6!3m5!1s0x548673e74e5d2d8d:0x7c80be7ec428d40c!8m2!3d49.2628161!4d-123.103478!16s%2Fg%2F1tf9myq_',
+    featuredReviews: [
+      {
+        authorName: 'Alyssa p.',
+        rating: 5,
+        text: 'We had the BEST time fishing with Nate from Pacific Angler! From start to finish, the experience was smooth, exciting, and full of laughs. Our guide Nate was absolutely fantastic, knowledgeable, patient and made the trip feel like a day out with friends. He knew exactly where to take us, helped us net fish safely and release the wild coho salmon professionally and made sure we were having fun the entire time. We even got a hatchery coho which we cooked on the bbq last night.\nI can’t recommend Pacific Angler enough and if you’re lucky, you’ll get Nate as your guide!\n\n-Alyssa, Alex, Leah, Jean',
+        relativeTimeDescription: '7 months ago',
+        time: 1772482945,
+      },
+      {
+        authorName: 'Alykhan p.',
+        rating: 5,
+        text: 'I am new to fishing and had an awesome experience at Pacific Angler.  I was going on a fishing trip with friends and needed waterproof gear and some other things.  I bought everything online on the website (which is very well organized and easy to use).  When I went in to pick up (very easy to park on broadway right out front), the team was very helpful in advising on what I really needed.  I ended up not needing several items but needing others.  This is like going to a ski shop where everyone who works there loves skiing - except here it is fishing.   10/10 would recommend.  Thank you for all the help!!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772482945,
+      },
+      {
+        authorName: 'Wilson r.',
+        rating: 5,
+        text: 'As novice anglers, we didn\'t know much about fishing. We showed up with a couple unsetup fishing rods, hoping for the best. Jacob expertly set us upwith everything we needed, from fishing lines to bobbers to tackle box! He even gave us some information on when the best times to fish are. Could not recommend this place more, come here for all your fishing needs!',
+        relativeTimeDescription: 'a month ago',
+        time: 1772482945,
+      },
+    ],
   },
   {
     id: "shop-fips-mouche-pro-shop",
@@ -1027,6 +1547,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Fips-Mouche Pro Shop | Reykjavik, Iceland — Atlantic Salmon Fly Fishing",
     metaDescription:
       "Fips-Mouche Pro Shop in Reykjavik, Iceland. Premier Icelandic fly shop for Atlantic salmon and brown trout. Spey gear, Icelandic flies, river permits, and trip planning.",
+    googleRating: 4.8,
+    googleReviewCount: 32,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Vei%C3%B0if%C3%A9lagi%C3%B0/@64.142631,-21.9787382,13z/data=!4m10!1m2!2m1!1sFips+Mouche+Pro+Shop+Reykjavik+Iceland!3m6!1s0x48d67371dff0f88d:0x711eea8f7e3363b0!8m2!3d64.142631!4d-21.9025205!15sCiZGaXBzIE1vdWNoZSBQcm8gU2hvcCBSZXlramF2aWsgSWNlbGFuZFooIiZmaXBzIG1vdWNoZSBwcm8gc2hvcCByZXlramF2aWsgaWNlbGFuZJIBGWh1bnRpbmdfYW5kX2Zpc2hpbmdfc3RvcmWaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUmlNVXBmVFhSQlJSQULgAQD6AQQISRAh!16s%2Fg%2F11g3zkg6f8',
+    featuredReviews: [
+      {
+        authorName: 'mark p.',
+        rating: 3,
+        text: 'Came from out of town. Website, google and on door says opens at 10:00. Came at 10:15 closed, came back 11:15 closed. Luckily there is another fishing store just down the street with a very large selection of flies and gear.',
+        relativeTimeDescription: '7 months ago',
+        time: 1772482965,
+      },
+      {
+        authorName: 'Brad p.',
+        rating: 5,
+        text: 'Just picked up some gear to do shore-fishing with my son. Helpful staff. Good selection of lures and rods. Knowledgeable and friendly people.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482965,
+      },
+      {
+        authorName: 'John r.',
+        rating: 5,
+        text: 'The best Fishing gear store in Reykjavik, great service and helpful staff. Highly Recommended',
+        relativeTimeDescription: '6 years ago',
+        time: 1772482965,
+      },
+    ],
   },
   {
     id: "shop-the-fly-fisher-scotland",
@@ -1076,6 +1622,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "The Fly Fisher | Melrose, Scotland — River Tweed Fly Fishing",
     metaDescription:
       "The Fly Fisher in Melrose, Scotland. Specialist fly shop for the River Tweed and Scottish Borders. Salmon and trout outfitting, guided days, Spey gear, and local expertise.",
+    googleRating: 4.6,
+    googleReviewCount: 18,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Watch+Fly+Reservoir/@55.8032807,-12.2968883,6z/data=!4m10!1m2!2m1!1sThe+Fly+Fisher+Melrose+Scotland!3m6!1s0x488772b9af217acb:0x195271f3f7f464f8!8m2!3d55.8032807!4d-2.5410289!15sCh9UaGUgRmx5IEZpc2hlciBNZWxyb3NlIFNjb3RsYW5kWiEiH3RoZSBmbHkgZmlzaGVyIG1lbHJvc2Ugc2NvdGxhbmSSAQ9maXNoaW5nX2NoYXJ0ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTnVhbVJVVlZaM0VBReABAPoBBAhAEDY!16s%2Fg%2F1wz528tr',
+    featuredReviews: [
+      {
+        authorName: 'GEORGE p.',
+        rating: 5,
+        text: 'Returned to fishing here at the watch after many years absence. Fished here way back when Bill Renton ran the fishery. The lodge was put up under his domain, before that there was an old caravan. Many happy memories. Fished every Friday for the last 3 months. I won\'t tell any lies a lot of the time it\'s been a hard slog, which I suppose it makes it worthwhile when you do catch fish. The Resevoir at the moment is low the water is warm, I think the rainbow trout are off in the deep water sulking. That is my excuse for finding it difficult, as are many others, better anglers than me. Slow time fishing, watch and listen to the birds, or the shepherd and his dogs working the sheep. As always up in the hills you get all the season\'s weather in one day or the wind can change direction two or three times. I think\nI\'ve gone through all the excuses for finding it difficult to catch fish, maybe that\'s why it\'s called fishing. Tight Lines.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772482987,
+      },
+      {
+        authorName: 'Martin p.',
+        rating: 5,
+        text: 'Amazing place, if struggling to get here, put Longformacus village hall in and follow the signs',
+        relativeTimeDescription: '6 months ago',
+        time: 1772482987,
+      },
+      {
+        authorName: 'Steve p.',
+        rating: 4,
+        text: 'Lovely\nManaged a wild camp',
+        relativeTimeDescription: '3 years ago',
+        time: 1772482987,
+      },
+    ],
   },
   {
     id: "shop-nervous-waters-fly-shop",
@@ -1124,6 +1696,25 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Nervous Waters Fly Shop | Junin de los Andes, Patagonia",
     metaDescription:
       "Nervous Waters Fly Shop in Junin de los Andes, Argentina. Patagonia's premier fly shop with guided river trips, specialty flies, and expert outfitting for trophy trout.",
+    googleRating: 5,
+    googleReviewCount: 2,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Patagonian+Fly+Fishing-+Salidas+de+pesca+y+servicio+de+gu%C3%ADas/@-39.9529685,-71.0748073,17z/data=!3m1!4b1!4m6!3m5!1s0x961199000aaa0d73:0x57b3eb14aff67a62!8m2!3d-39.9529685!4d-71.0748073!16s%2Fg%2F11vs2gm6xh',
+    featuredReviews: [
+      {
+        authorName: 'Gerardo p.',
+        rating: 5,
+        text: 'The best fly fishing experience of my life. 100% service, the fishing was fantastic, and the equipment and boat were top-quality. Best of all, the service from Carlos Trisciuzzi and his family. Looking forward to another year to repeat this fishing trip with a professional, "The ONE."',
+        relativeTimeDescription: '10 months ago',
+        time: 1772483004,
+      },
+      {
+        authorName: 'Sofia p.',
+        rating: 5,
+        text: 'It\'s always a pleasure to fish with Patagonian Fly Fishing! Excellent service and friendly staff! True fishing professionals.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772483004,
+      },
+    ],
   },
   {
     id: "shop-frontiers-travel",
@@ -1172,6 +1763,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Frontiers Travel | Bahamas Fly Fishing & Worldwide Destinations",
     metaDescription:
       "Frontiers Travel — premier fly fishing travel company specializing in Bahamas bonefishing. Lodge bookings, guided trips, tackle advice, and curated fishing expeditions worldwide.",
+    googleRating: 4.4,
+    googleReviewCount: 8,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Frontiers+International+Travel/@40.667635,-80.023057,17z/data=!3m1!4b1!4m6!3m5!1s0x883488b80cc37c1d:0x6d8938bcaa5c9f06!8m2!3d40.667635!4d-80.023057!16s%2Fg%2F1q5btlcmg',
+    featuredReviews: [
+      {
+        authorName: 'AnnaLocal p.',
+        rating: 1,
+        text: 'I have not used this agency and perhaps they are good at what they do...BUT, they offer big game hunting in Africa, etc.  Lion hunting included according to their website.',
+        relativeTimeDescription: '2 months ago',
+        time: 1772483020,
+      },
+      {
+        authorName: 'Frank p.',
+        rating: 4,
+        text: 'Very kind people.',
+        relativeTimeDescription: '5 years ago',
+        time: 1772483020,
+      },
+      {
+        authorName: 'Brandon p.',
+        rating: 5,
+        text: 'Kinda exspensive',
+        relativeTimeDescription: '7 years ago',
+        time: 1772483020,
+      },
+    ],
   },
   {
     id: "shop-belize-river-lodge-shop",
@@ -1220,6 +1837,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Belize River Lodge Shop | Belize Saltwater Fly Fishing",
     metaDescription:
       "Belize River Lodge Shop near Belize City. Saltwater fly fishing outfitter with guided trips for bonefish, tarpon, and permit. Tropical flies, gear, and lodge packages.",
+    googleRating: 4.9,
+    googleReviewCount: 14,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Belize+River+Lodge/@17.5359227,-88.2906898,17z/data=!4m9!3m8!1s0x8f5c5b0ec74d03df:0xb70709c2a3c72d09!5m2!4m1!1i2!8m2!3d17.5359227!4d-88.2906898!16s%2Fg%2F11fxx3sdrd',
+    featuredReviews: [
+      {
+        authorName: 'Shawn p.',
+        rating: 5,
+        text: 'This place is absolutely incredible. My buddy and I came for a 3-day fishing trip, and it exceeded every expectation. From the warm, family-style home-cooked meals to the world-class fishing, every detail was perfect. The hospitality and service are second to none—Ernest Hemingway himself would have loved it here.\n\nI’ll definitely be back. Truly unforgettable and I highly recommend it to anyone looking for an authentic fishing adventure.\n\nOh, and on my very first fly cast, I landed a 40-pound tarpon on an 8 wt Sage—an experience I’ll never forget!',
+        relativeTimeDescription: '5 months ago on Google',
+        time: 1772483039,
+      },
+      {
+        authorName: 'Carmen p.',
+        rating: 5,
+        text: 'This was combo fishing trip/Eco adventure vacation and this was the perfect place to be. The lodge is rich with history and charm.  We enjoyed the sun porch to connect with other guests, Will, and the owners Mike and Marguerite both  in the morning and again to share fishing stories in the evening before dinner.  We fished with 2 guides - Mike and John, both providing us with excellent opportunities to catch tarpon, snook, bonefish, crevalle, snapper and cuda.  It was successful fishing and fun days on the water. The lodges\' location is central to river, backcountry and flats fishing.  You can catch multiple species of fish on any given day.  Breakfast and dinner are served family style on a gorgeous mahogany table and the meals are always top notch.  I could go on forever about the breads and desserts. BRL set up Eco-tours for us to visit the Howler Monkey sanctuary, Crooked Tree Wildlife sanctuary, and 2 Archeological Sites - Altun Ha and Lamanai,  They were wonderful tours only made better by the guide Erolyn, whom BRL had set up for us.  Belize River Lodge is rich in history, and the people you encounter while staying there are welcoming, charming, knowledgeable and entertaining.  We will definitely return.',
+        relativeTimeDescription: '4 months ago',
+        time: 1772483039,
+      },
+      {
+        authorName: 'carmenmA9893ZP',
+        rating: 5,
+        text: 'This was a combo fishing trip/Eco-tour trip, and Belize River Lodge was the perfect spot to be. The lodge is rich in history and charm, having kept its classic style with beautiful mahogany furnishings. The sun porch is a great gathering …',
+        relativeTimeDescription: '',
+        time: 1772483039,
+      },
+    ],
   },
   {
     id: "shop-fish-on-nz",
@@ -1268,6 +1911,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Fish On NZ | Taupo, New Zealand — Tongariro River Fly Fishing",
     metaDescription:
       "Fish On NZ in Taupo, New Zealand. Fly shop and guide service for the Tongariro River and Lake Taupo region. Gear, flies, licenses, and guided trips for trophy trout.",
+    googleRating: 4.4,
+    googleReviewCount: 488,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Hunting+%26+Fishing+Taupo+(Fly+%26+Gun)/@-38.6848426,175.9957765,13z/data=!4m10!1m2!2m1!1sFish+On+NZ+Taupo+New+Zealand!3m6!1s0x6d6bf0c71297f983:0xa986e60ee5c0334f!8m2!3d-38.6848426!4d176.0719942!15sChxGaXNoIE9uIE5aIFRhdXBvIE5ldyBaZWFsYW5kWh4iHGZpc2ggb24gbnogdGF1cG8gbmV3IHplYWxhbmSSARlodW50aW5nX2FuZF9maXNoaW5nX3N0b3JlmgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVU16ZVVwcVJrWkJFQUXgAQD6AQQIQxBI!16s%2Fg%2F1yj4k36x4',
+    featuredReviews: [
+      {
+        authorName: 'Lily-anne p.',
+        rating: 5,
+        text: 'Always good when I come in to get something, a special thank you to a young lad Mathew for helping me find want I was after the other day he had super customer service',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483061,
+      },
+      {
+        authorName: 'Giavonna r.',
+        rating: 1,
+        text: 'Multiple workers told me I’d be able to return the product for my money back at a different location. I made sure to absolutely confirm this with them all, not just the cashier, before I even purchased the product and paid. I went out of my way to go to show up to a Hunting and Fishing location so I can return the product because it was not adequate, and the other location said its not possible. I called this store in Taupo to figure it out with them and they just admitted they gave me wrong information and there’s nothing they can do. The other location I’m at even offered to take the product for me and ship it to the taupo location if the taupo store processes me the return on my card. Taupo location did not agree to this… for why? Very upset and wasted my money with these people.\n\nEdit in response to owner’s comment: I was on the phone with your store while at the north shore location and was told this. A worker from your location even called me back on the north shore location’s phone. The north shore location even offered to take the product for me and ship it to you guys as long as you guys gave me the processed return to my card. I just tried to call you in store but you are now closed. I’m leaving tomorrow so there’s nothing I can do.',
+        relativeTimeDescription: '2 months ago',
+        time: 1772483061,
+      },
+      {
+        authorName: 'mike p.',
+        rating: 5,
+        text: 'Always good in there,thanks to Josh duin up my drone rod it works mean brother chur',
+        relativeTimeDescription: '2 months ago',
+        time: 1772483061,
+      },
+    ],
   },
   {
     id: "shop-la-ribera-lodge-pro-shop",

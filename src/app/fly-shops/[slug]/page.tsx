@@ -13,7 +13,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
-import { getFlyShopBySlug, getDestinationById } from "@/lib/db";
+import { getAllFlyShops, getFlyShopBySlug, getDestinationById } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -28,12 +28,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${shop.name} — Fly Shop`,
-    description: shop.metaDescription || `${shop.name} — ${shop.address}. ${shop.services.join(", ")}.`,
+    description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
   };
 }
 
-export function generateStaticParams() {
-  return flyShops.map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  try {
+    const shops = await getAllFlyShops();
+    return shops.map((s) => ({ slug: s.slug }));
+  } catch {
+    return flyShops.map((s) => ({ slug: s.slug }));
+  }
 }
 
 export default async function FlyShopPage({ params }: Props) {
@@ -112,7 +117,7 @@ export default async function FlyShopPage({ params }: Props) {
                   Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {shop.services.map((s) => (
+                  {(shop.services || []).map((s) => (
                     <Badge key={s} variant="forest" size="md">
                       {s}
                     </Badge>
@@ -120,13 +125,13 @@ export default async function FlyShopPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
-              {shop.brandsCarried.length > 0 && (
+              {(shop.brandsCarried || []).length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
                     Brands Carried
                   </h2>
                   <div className="flex flex-wrap gap-2">
-                    {shop.brandsCarried.map((b) => (
+                    {(shop.brandsCarried || []).map((b) => (
                       <Badge key={b} variant="outline" size="md">
                         {b}
                       </Badge>
@@ -185,7 +190,7 @@ export default async function FlyShopPage({ params }: Props) {
                     Hours
                   </h3>
                   <dl className="space-y-2">
-                    {Object.entries(shop.hours).map(([day, hours]) => (
+                    {Object.entries(shop.hours || {}).map(([day, hours]) => (
                       <div key={day} className="flex justify-between text-sm">
                         <dt className="text-slate-500 capitalize">{day}</dt>
                         <dd className="font-medium text-slate-700">{hours}</dd>

@@ -89,6 +89,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Lone Mountain Ranch in Big Sky, Montana offers guided fly fishing, horseback riding, and luxury accommodations in the heart of the Greater Yellowstone Ecosystem.",
     featured: true,
+    googleRating: 4.6,
+    googleReviewCount: 352,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Lone+Mountain+Ranch/@45.2769833,-111.3246731,17z/data=!3m1!5s0x53500fccb30d28b3:0x6a6ebb788788fb6!4m9!3m8!1s0x53500fcd27de4ead:0xcce11ce5411414ec!5m2!4m1!1i2!8m2!3d45.2769833!4d-111.3246731!16s%2Fg%2F1hc2l47js',
+    featuredReviews: [
+      {
+        authorName: 'Angela p.',
+        rating: 5,
+        text: 'We did not stay in the rooms here but we did enjoy a fabulous sleigh ride with Tom and Duke. The landscape and weather made the ride magical with snow flurries yet temperatures in the 30s and snow covered tree! The ride was like a fairytale dream! When we arrived, there was a cozy cabin with a warm fire to gather around while waiting for our shuttle. The staff was friendly and helpful. The lodge that we gathered at had an outdoor campfire and cozy lounge to sit and relax to enjoy cocktails and conversation prior to our departure on the sleigh ride. Introductions, safety instructions and greetings we delivered with warmth by staff. The ride was a nostalgic western experience to remember! The cabin we stopped at for dinner was romantic with dim lighting and artistically touched with a talented musician who entertained us while the food was being served. The culinary dishes were excellent.  The flavoring was a bit dull but the presentation and array of dishes were superb. The potato soup was paired well with French bread and a honey butter.  I felt that the prime rib could have used more seasoning and wasn\'t warm. The au jus sauce was a bit bland too. However, the chicken pot pie was like fireworks in my mouth with the flakiness of the crust colliding with the tender vegetables and gravy. I did request decaffeinated coffee to be served with my dessert but the server never returned with it after pouring those who chose regular cup of Joe. This experience is one to remember and encouraged to put on your bucket list! What a wonderful evening ✨️',
+        relativeTimeDescription: '2 months ago on Google',
+        time: 1772483100,
+      },
+      {
+        authorName: 'dlpogge',
+        rating: 5,
+        text: 'The setting is beautiful.  The accommodations are first class.  The only imperfections are three:  First, there is only one place to eat if you do not have a car and cannot drive into town.  The food there is very good and the services is …',
+        relativeTimeDescription: '3 months ago on Tripadvisor',
+        time: 1772483100,
+      },
+      {
+        authorName: 'daniellesS5927CV',
+        rating: 5,
+        text: 'We had a great experience overall at Lone Mountain Ranch. The views were immaculate, the cabin was wonderful. The staff was so friendly, kind, and helpful. The only downside that I wasn\'t aware of before our arrival, was that our cabin was …',
+        relativeTimeDescription: '2 months ago on Tripadvisor',
+        time: 1772483100,
+      },
+    ],
   },
   {
     id: "lodge-craig-montana-lodge",
@@ -125,6 +151,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Angler-focused lodging in Craig, Montana, steps from the legendary Missouri River tailwater. Comfortable rooms and easy access to world-class trout fishing.",
     featured: false,
+    googleRating: 5,
+    googleReviewCount: 11,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Channel+%26+Brown+Outfitting+Company+----Orvis+Endorsed+Fly-Fishing+Guides/@47.2681569,-111.7794821,13z/data=!4m9!1m2!2m1!1sCraig+Montana+fishing+lodge!3m5!1s0x5343010ddd0c465b:0x759f842d20c08ee5!8m2!3d47.2681569!4d-111.7032644!16s%2Fg%2F11q3m0cpvw',
+    featuredReviews: [
+      {
+        authorName: 'Kevin p.',
+        rating: 5,
+        text: 'Great outfitter providing excellent experience.  We enjoyed a great day of fly fishing then 3 spectacular days of bird hunting. The guides were all very professional and quite knowledgeable. They went out of their way to ensure our group enjoyed themselves. Highly recommend!!!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483121,
+      },
+      {
+        authorName: 'Kurt r.',
+        rating: 5,
+        text: 'I just fished the Missouri river with Channel and Brown.  I have previously hunted with Dave Brown in Saskatchewan.  His partner, Lindsey Channel, guided for us and was excellent.  The trip was great with big fish and the service was as good as it gets.  I have fished for almost 25 yrs with multiple guides on multiple rivers.  They really don\'t get better than Lindsey.  Very knowledgeable, helpful, and a great teacher.  We really enjoyed fishing with him and will definitely try to schedule another trip with Lindsey and Dave.  Highly recommend these guys.',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483121,
+      },
+      {
+        authorName: 'John r.',
+        rating: 5,
+        text: 'Fished the Missouri River in Montana last week with Dave Brown and his two guides. Trip was great from accommodations, picnic lunch to catching lots of fish each day. Guides are fun, patient and very experienced. Equipment first class. You will be a better fly fisherman after a few days with these guys. Highly recommend Channel & Brown Outfitting.',
+        relativeTimeDescription: '3 years ago',
+        time: 1772483121,
+      },
+    ],
   },
   // ─── WYOMING ───────────────────────────────────────────────────────
   {
@@ -169,6 +221,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Exclusive fly fishing lodge in Jackson Hole, Wyoming with private Snake River access, luxury cabins, and guided trips amid the Teton Range.",
     featured: true,
+    googleRating: 4.4,
+    googleReviewCount: 46,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Snake+River+Sporting+Club/@43.2663,-110.7770001,17z/data=!4m9!3m8!1s0x5353390fae0e5bab:0xcba7bc405c026e9e!5m2!4m1!1i2!8m2!3d43.2663!4d-110.7770001!16s%2Fg%2F1q62jz4g6',
+    featuredReviews: [
+      {
+        authorName: 'Noah r.',
+        rating: 5,
+        text: 'I find it hard to agree with any of the negative reviews here, this place is incredible. I surprised my fiance with a stay at The Sylvan Lodge at Snake River Sporting Club on January 10th, and got engaged near the clubhouse! I truly cannot say enough wonderful things about this property and the exceptional staff who made our stay unforgettable.\nFrom the moment we arrived, every single team member went above and beyond to ensure our experience was perfect. Diana in concierge was absolutely incredible—her attention to detail and genuine care made all the difference in bringing this moment to life. From her initial response to my email a week prior, I had a great feeling this location was going to be the best choice. Will graciously gave me a comprehensive site tour without hesitation a few days prior, helping me select the perfect location. Jessica and Charlotte helped coordinate our proposal evening and support it perfectly, while also managing other large events that same day, making me feel like we were still a major priority. And Matt, the thoughtful gift he left for us after our proposal was such a touching gesture that we\'ll always remember.\nThe level of service here goes beyond professional; they treat guests with care on a personal level. Every staff member we encountered seemed genuinely invested in making our stay extraordinary, and they succeeded beyond our wildest expectations. The Sporting Club provided the perfect backdrop for one of the most important moments of our lives, and we couldn\'t be happier with the entire experience.\nIf you\'re considering this property for a special occasion or just a memorable getaway, don\'t hesitate. This place, and the people, are truly something special I cannot find an equal comparison for with many of the other top tier resorts I have stayed at.',
+        relativeTimeDescription: '',
+        time: 1772483140,
+      },
+      {
+        authorName: 'Ashley r.',
+        rating: 5,
+        text: 'As someone who cares about how people are treated, especially during a time as meaningful and emotional as planning a wedding, I feel compelled to share our experience so other couples do not go through the same frustration.\n\nMy fiancé and I had a wonderful initial tour with Sebastian who was warm and welcoming. Unfortunately every interaction that followed with the events & lodge team was the opposite. Communication was delayed, abrupt, and at times shockingly rude. Even simple questions were treated like inconveniences, which was disheartening.\n\nOn top of that, pricing changed without any proactive communication and only surfaced when we pushed for clarity. The overall tone and approach made us feel unwelcome and unvalued, which is something no couple should ever feel when choosing a venue for such an important milestone.\n\nI am sharing this out of compassion for anyone considering this property. If you value kindness, transparency, and a team that treats you with basic respect, I strongly encourage you to look elsewhere. There are many incredible venues where couples are supported from the very first conversation. Unfortunately this was not our experience here.',
+        relativeTimeDescription: '3 months ago on Google',
+        time: 1772483140,
+      },
+      {
+        authorName: 'Tara p.',
+        rating: 5,
+        text: 'Everything was perfect. We stayed in a cabin, and it was beautifully appointed and comfortable for our 5-night stay. The entire staff worked hard to make sure everything was perfect for us. They escorted us around the property without hesitation, never had their hand out for a tip, and were very kind and attentive. I had a massage at the spa that was heavenly and the relaxation room with hot tub and water feature was the best way to spend an afternoon. On the way in, we spotted a heard of Elk and on the way out we saw 2 baby Moose! We can\'t wait to be back!',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772483140,
+      },
+    ],
   },
   // ─── COLORADO ──────────────────────────────────────────────────────
   {
@@ -211,6 +289,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Intimate fly fishing lodge near Basalt, Colorado with expert-guided trips on the Frying Pan, South Platte, and Arkansas rivers. All-inclusive angler-focused experience.",
     featured: true,
+    googleRating: 4.8,
+    googleReviewCount: 46,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Taylor+Creek+Cabins/@39.3727878,-106.9877295,13z/data=!4m10!1m2!2m1!1sTaylor+Creek+Lodge+Basalt+Colorado+fly+fishing!3m6!1s0x87404acea457bc29:0x41d56fe25dc05de9!8m2!3d39.3774744!4d-106.9427148!15sCi5UYXlsb3IgQ3JlZWsgTG9kZ2UgQmFzYWx0IENvbG9yYWRvIGZseSBmaXNoaW5nWjAiLnRheWxvciBjcmVlayBsb2RnZSBiYXNhbHQgY29sb3JhZG8gZmx5IGZpc2hpbmeSARNjYWJpbl9yZW50YWxfYWdlbmN5mgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVU5QYlU1TFVVVjNFQUXgAQD6AQQIKBAy!16s%2Fg%2F11cm4hwx_0',
+    featuredReviews: [
+      {
+        authorName: 'Marlin p.',
+        rating: 5,
+        text: 'I can\'t begin to thank Robyn enough for all of her time and effort she put forth to assist me with arrangements for myself and 15 close friends. I took point for the first time for an annual weekend trip that has spanned over the last several years and Robyn made it ever so simple. The cabins are perfect for a guys\' trip occupying all 4 cabins, or one cabin for a family getaway. The cabins are well maintained, sleeps 4 comfortably, full bathroom, kitchen with full-size fridge, oven/stove, microwave, coffee maker and fully stocked with pots, pans, plates, bowls, silverware, etc. Each cabin has their own gas grill, firepit, firewood and cart wagons to easily move gear from your vehicle to the cabins - truly all the comforts of home. I\'ve already booked again for another year as Robyn and Taylor Creek Cabins have my highest recommendation for lodging when you\'re in or around Basalt. Robyn, you\'re an absolute joy to work with - Thank you from Charles and the crew!',
+        relativeTimeDescription: '9 months ago',
+        time: 1772483164,
+      },
+      {
+        authorName: 'Cindi p.',
+        rating: 5,
+        text: 'We had the most fabulous time at the cabins. To start with, Robyn was a joy to work with! The cabins were beautiful, easily accessible, near some incredible private water, and close to town. The wi-fi was awesome, they had dish TV so we could watch movies at night, and we caught some huge fish during the day. I highly recommend this place.  We can\'t wait to come back.',
+        relativeTimeDescription: 'Edited 4 years ago',
+        time: 1772483164,
+      },
+      {
+        authorName: 'Jared p.',
+        rating: 5,
+        text: 'A Perfect Mountain Getaway at Taylor Creek Cabins!Our stay at Taylor Creek Cabins in Basalt, CO, was nothing short of spectacular! From the moment we arrived, we were blown away by the sheer perfection of the cabin. It was impeccably clean, cozy, and equipped with everything we needed for a comfortable and memorable stay. Every detail was thoughtfully designed, making it feel like a true home away from home.The host, Robyn,  was absolutely amazing—warm, welcoming, and incredibly friendly. She went above and beyond to ensure our stay was flawless, offering local tips and checking in with genuine care. Their hospitality truly elevated the experience.And the views? Breathtaking doesn’t even do them justice! Waking up to the stunning vistas of the surrounding mountains and serene Taylor Creek was pure magic. The location is a dream for nature lovers, offering peace and tranquility while still being close to the charm of Basalt.We can’t recommend Taylor Creek Cabins enough! It’s the perfect spot for anyone looking to escape into the beauty of Colorado with hosts who make you feel like family. We’re already counting down the days until we can return!',
+        relativeTimeDescription: '7 months ago',
+        time: 1772483164,
+      },
+    ],
   },
   // ─── IDAHO ─────────────────────────────────────────────────────────
   {
@@ -253,6 +357,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Iconic fly fishing lodge on the Henry's Fork in Island Park, Idaho. Technical dry-fly fishing for trophy rainbows, expert guides, and all-inclusive riverside accommodations.",
     featured: true,
+    googleRating: 4.8,
+    googleReviewCount: 69,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Henry\'s+Fork+Lodge+%26+Restaurant/@44.2874764,-111.4567696,17z/data=!4m9!3m8!1s0x5351655d0b566991:0x3e1b513d7ff1fba7!5m2!4m1!1i2!8m2!3d44.2874764!4d-111.4567696!16s%2Fg%2F1td3r4t8',
+    featuredReviews: [
+      {
+        authorName: 'Diana p.',
+        rating: 5,
+        text: 'The location right on the river is breathtaking. We didn\'t realize we needed reservations to dine here, but someone had cancelled their reservation so the chef allowed us to enjoy a meal. If we go again, we will definitely make reservations and request to sit outside where we can enjoy the view.\n\nThe food was nothing less than spectacular. Everything was perfectly prepared and presented. Our server was delightful and we thoroughly enjoyed our impromptu dinner experience at Henry\'s Fork Lodge. Thanks for a great evening!',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772483182,
+      },
+      {
+        authorName: 'DriesLocal r.',
+        rating: 5,
+        text: 'Last-minute reservation.  We had a 3-course menu which 3 options per course.  This seems to change very regularly.  Food was excellent and service pristine.  One of our best dinner experiences on our US trip and for sure the best one we had in Island Park.  We did not stay in the lodge,  only had dinner.',
+        relativeTimeDescription: '7 months ago on Google',
+        time: 1772483182,
+      },
+      {
+        authorName: 'Ainsley r.',
+        rating: 5,
+        text: 'The lodge was able to host my very small and intimate wedding dinner on short notice they Very luckily we’re able to squeeze us in. The food was so amazing and the atmosphere was stunning.',
+        relativeTimeDescription: '5 months ago on Google',
+        time: 1772483182,
+      },
+    ],
   },
   // ─── ALASKA ────────────────────────────────────────────────────────
   {
@@ -296,6 +426,9 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Remote fly fishing lodge on Lake Iliamna, Alaska. Floatplane access to pristine Bristol Bay rivers for salmon, rainbow trout, and Arctic char. All-inclusive wilderness experience.",
     featured: true,
+    googleRating: 4,
+    googleReviewCount: 2,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Bristol+Bay+Sportfishing+Lodge/@59.7499998,-154.8140263,17z/data=!3m1!4b1!4m6!3m5!1s0x56c3194c409a5063:0x33dcd6836d696d46!8m2!3d59.7499998!4d-154.8140263!16s%2Fg%2F11rc776jmh',
   },
   // ─── OREGON ────────────────────────────────────────────────────────
   {
@@ -338,6 +471,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Historic fly fishing lodge on the North Umpqua River in Oregon. Streamside cabins, legendary steelhead water, and the celebrated Fisherman's Dinner tradition since the 1930s.",
     featured: true,
+    googleRating: 4.6,
+    googleReviewCount: 408,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Steamboat+Inn/@43.3407745,-122.743515,17z/data=!4m9!3m8!1s0x54c69310f2f94db3:0x579cfbe1520b069a!5m2!4m1!1i2!8m2!3d43.3407745!4d-122.743515!16s%2Fg%2F1w111xyt',
+    featuredReviews: [
+      {
+        authorName: 'O8651VIdebb',
+        rating: 5,
+        text: 'We had  an incredible time at the Steamboat Inn over the Thanksgiving weekend.  This is an alternate year for our  grown children so, since we were going to be basically alone, my sister, her husband, daughter, and my husband and I met up …',
+        relativeTimeDescription: '3 months ago on Tripadvisor',
+        time: 1772483212,
+      },
+      {
+        authorName: 'David p.',
+        rating: 5,
+        text: 'My wife and I truly enjoyed our stay. We stayed in one of the cottages about 1/4 of a mile away, tucked into the woods with a short walk to the river. The cottages have a cabin feel to them, which we loved.\n\nThe location is amazing - sitting on the beautiful Umpqua river, miles away from the closest town or structures of any kind. Hiking, fishing, waterfalls and a hot springs, all within a 30 minute drive. Crater Lake National park is only an hour away.\n\nFood at the Inn was excellent. We had dinner two nights and breakfast one day. The dinner menu is understandably limited due to the remote location but the ingredients were fresh and cooked to perfection.\n\nWe will definitely be back!.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483212,
+      },
+      {
+        authorName: 'tedl668',
+        rating: 5,
+        text: 'We had promised ourselves a visit having heard from friends of its specialness. Finally...Thanksgiving weekend for two  along the Umpqua River. |Dinner in the restauarant is everything we had heard...interesting menu and great meal.  The …',
+        relativeTimeDescription: '2 months ago on Tripadvisor',
+        time: 1772483212,
+      },
+    ],
   },
   // ─── PENNSYLVANIA ──────────────────────────────────────────────────
   {
@@ -379,6 +538,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Colonial fieldstone inn in the Cumberland Valley near Letort Spring Run, Big Spring, and Penns Creek. The ideal base for Pennsylvania's legendary limestone creek fly fishing.",
     featured: false,
+    googleRating: 4.8,
+    googleReviewCount: 12,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Limestone+Inn+Bed+%26+Breakfast/@40.741632,-77.875598,17z/data=!4m9!3m8!1s0x89cea90ca290f00d:0xb6823969058e7ff8!5m2!4m1!1i2!8m2!3d40.741632!4d-77.875598!16zL20vMGQ3Y194',
+    featuredReviews: [
+      {
+        authorName: 'Kimserena',
+        rating: 5,
+        text: 'How terrible am I that I almost didn\'t want to leave a review out of fear that I would never be able to stay here again once I tell everyone what a wonderful stay we had here!!! But that wouldn\'t be fair to the owners who went out of their …',
+        relativeTimeDescription: '2 years ago on Tripadvisor',
+        time: 1772483231,
+      },
+      {
+        authorName: 'Jeanette p.',
+        rating: 5,
+        text: 'I recently had the pleasure of staying at the Limestone Inn in State College, PA and I couldn\'t be more pleased with my experience. The grounds were absolutely beautiful and well maintained, creating a peaceful and relaxing environment. The decor inside was also stunning and tastefully done, adding to the overall ambiance of the Inn. The rooms were immaculately clean and well stocked with everything I needed for a comfortable stay. The homemade food was absolutely delicious and a real treat. But what really set the Limestone Inn apart was the wonderful hosts. They were incredibly accommodating and made me feel right at home. I would highly recommend the Limestone Inn to anyone looking for a peaceful and luxurious getaway in State College. So many personal touches like the welcome sign on your room and the breakfast menu all written out by hand that made me smile.',
+        relativeTimeDescription: '2 years ago on Google',
+        time: 1772483231,
+      },
+      {
+        authorName: 'AM r.',
+        rating: 5,
+        text: 'We’ve stayed at the Limestone Inn B&B two times, and each time was outstanding. Rick and Denise are wonderful hosts! They are so pleasant to visit with and offer excellent guidance on sights in the area. The room was spacious, comfortable, and cozy. Breakfast was excellent. We went to the Sight and Sound Theatre, so the location was ideal. We definitely recommend the Limestone Inn B&B for a wonderful stay in Strasburg.',
+        relativeTimeDescription: '',
+        time: 1772483231,
+      },
+    ],
   },
   // ─── MICHIGAN ──────────────────────────────────────────────────────
   {
@@ -420,6 +605,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Year-round fly fishing lodge on Michigan's Pere Marquette River. Guided float trips for trout, steelhead, and salmon in the Huron-Manistee National Forest.",
     featured: false,
+    googleRating: 4.5,
+    googleReviewCount: 218,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Pere+Marquette+River+Lodge/@43.859921,-85.852092,17z/data=!4m9!3m8!1s0x881ec8b5763191dd:0x5ad08ca0b4125f5e!5m2!4m1!1i2!8m2!3d43.859921!4d-85.852092!16s%2Fg%2F1vp74d20',
+    featuredReviews: [
+      {
+        authorName: 'markkG8464OI',
+        rating: 5,
+        text: 'I would not recommend this establishment.   Cabins were okay; a little dirty but adequate.    Office staff could use customer service training.   Representative at desk acted as if we were an inconvenience.     We hoped to obtain local …',
+        relativeTimeDescription: '3 months ago on Tripadvisor',
+        time: 1772483248,
+      },
+      {
+        authorName: 'OnAir51384139242',
+        rating: 5,
+        text: 'I have been a loyal customer, fishing and lodging with the PERE MARQUETTE RIVER LODGE for the past 10-12 years, referring many friends and associates. I wrote a 5 star review 4 years ago.  This year the experience was much different. I …',
+        relativeTimeDescription: '4 months ago on Tripadvisor',
+        time: 1772483248,
+      },
+      {
+        authorName: 'Mark r.',
+        rating: 5,
+        text: 'I do not recommend this place.   Rooms are a little dirty but adequate.   Staff is unfriendly and not interested in answering questions.      Guide service was not a good fishing experience.   Guide offers bait casting bobbers or Spey casting.   Would not allow us to string our fly rods.  Very obstinate and inflexible.    Clients wishes not relevant.  Surprised this place is Orvis endorsed.',
+        relativeTimeDescription: '3 months ago on Google',
+        time: 1772483248,
+      },
+    ],
   },
   // ─── ARKANSAS ──────────────────────────────────────────────────────
   {
@@ -461,6 +672,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Year-round fly fishing lodge on the White River near Cotter, Arkansas. Guided drift boat trips for trophy trout on two world-class tailwater fisheries.",
     featured: false,
+    googleRating: 5,
+    googleReviewCount: 44,
+    googleReviewsUrl: 'https://www.google.com/maps/place/White+River+Trout+Club/@36.3346238,-92.5513427,17z/data=!4m12!1m2!2m1!1sWhite+River+Trout+Lodge+Cotter+Arkansas!3m8!1s0x87ce257e15fe74f9:0x75df99de6261cb97!5m2!4m1!1i2!8m2!3d36.3346238!4d-92.5465791!16s%2Fg%2F11t6_rnj9b',
+    featuredReviews: [
+      {
+        authorName: 'Ashley p.',
+        rating: 5,
+        text: 'Perfect Getaway on the White River – Clean Cabins, Great Fishing & Amazing Staff!\n\nMy partner and I spent an unforgettable weekend at the White River Trout Club. While he had stayed several times before, this was my first visit—and it blew me away.\n\nThe location is right on the river, making fishing super convenient and scenic. The cabins are clean, cozy, and fully renovated, equipped with everything you need to relax and feel at home. The entire property is now under new management, and it really shows—from the stylish upgrades to the thoughtful details in every cabin.\n\nWhat really made the trip outstanding was William, who works there. We accidentally locked ourselves out at 12:30 a.m., and he showed up immediately, smiling and helpful. When we ran out of gas on the river, William rescued us with fuel and even towed us in. He brought us a grill and charcoal when we decided to cook out—just always polite, upbeat, and ready to help. He’s truly an asset to this place.\n\nBetween the fishing, the peaceful surroundings, and the exceptional hospitality, I couldn’t have asked for a better first-time experience on the White River. We’re already planning our next visit!',
+        relativeTimeDescription: '3 months ago on Google',
+        time: 1772483272,
+      },
+      {
+        authorName: 'D5786RVrobina',
+        rating: 5,
+        text: 'When went over with two other members of our Middle TN Fly Fisher\'s group.  We had a fabulous 4 days at the WRTC.  The accommodations are either motel style rooms (which are actually suites with a kitchen separate from the bedroom) or a …',
+        relativeTimeDescription: '4 months ago on Tripadvisor',
+        time: 1772483272,
+      },
+      {
+        authorName: 'Colt p.',
+        rating: 5,
+        text: 'I had a great time here. I stayed for 2 nights in a studio cabin and went on a 6hr guided fly fishing trip. Everything is updated, clean and well maintained. The clubhouse/pavilion area is a great place to relax and hang out with friends. They have a pool, fly shop, dock and also a bar that is open in the afternoons. My guide picked me up right from the dock on the property and went right to fishing! After seeing the other fishing lodge properties from the river while fishing, I would definitely stay here again over any of the others. I highly recommend this place if you are considering a fishing trip on the White River!',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772483272,
+      },
+    ],
   },
   // ─── FLORIDA KEYS ──────────────────────────────────────────────────
   {
@@ -504,6 +741,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Dedicated saltwater fly fishing lodge in Islamorada, Florida Keys. Expert guides for bonefish, permit, and tarpon on the legendary Keys flats year-round.",
     featured: true,
+    googleRating: 4.4,
+    googleReviewCount: 2561,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Cheeca+Lodge+%26+Spa/@24.8721456,-80.7304113,12z/data=!4m13!1m2!2m1!1sIslamorada+fishing+lodge+Florida+Keys!3m9!1s0x88d7375f8b536103:0xdd5ddc918e7887e8!5m2!4m1!1i2!8m2!3d24.916591!4d-80.6338821!15sCiVJc2xhbW9yYWRhIGZpc2hpbmcgbG9kZ2UgRmxvcmlkYSBLZXlzWiciJWlzbGFtb3JhZGEgZmlzaGluZyBsb2RnZSBmbG9yaWRhIGtleXOSAQxyZXNvcnRfaG90ZWzgAQA!16s%2Fg%2F1tm8fsch',
+    featuredReviews: [
+      {
+        authorName: 'Traci p.',
+        rating: 5,
+        text: 'The best place in the Keys! Great location Great attention to details and customer service!! Our room was fabulous and we were about as far from the shore as you could get but that was about a 2 minute, lovely walk. Room was quiet with a wonderful screened in porch that was perfect for enjoying the sounds of the nearby waterfall. Just a wonderful place! Oh, and Jessica Wood took fabulous care of us!!!',
+        relativeTimeDescription: '',
+        time: 1772483293,
+      },
+      {
+        authorName: 'Jess r.',
+        rating: 5,
+        text: 'My husband and I recently spent three nights at Cheeca Resort in Isla Morada, and overall, it was a beautiful and relaxing stay.\n\nCheck-in was smooth, and the receptionist was incredibly friendly and welcoming. Our room was spotless, the bed was very comfortable, and the oceanfront view was absolutely gorgeous. We paid to upgrade to an ocean view with a private jacuzzi tub, and we’re so glad we did—it truly elevated the experience.\n\nThe water sports staff were fantastic and very helpful, providing paddleboards so we could explore and enjoy the stunning property from the water. We also dined at all of the restaurants on-site. While the food was decent overall, it lacked flavor in some dishes—the pasta, in particular, was quite bland. That said, the service at every restaurant was exceptional. The staff consistently went out of their way to make us feel welcome and taken care of, which made a big difference.\n\nUnfortunately, our only negative experience was with a manager on duty. On our second day, I asked her where the hammocks on the property were located so I could relax and read. She quietly laughed at me and said, “I have been managing here for ten years and we do not have any hammocks.” I was confused, as there are multiple photos of hammocks on both the resort’s website and current Instagram page. When I tried to show her the photos, she turned away and brushed me off. The interaction made me feel dismissed and as though I wasn’t valued as a guest.\n\nIt’s a shame, because aside from this interaction, the resort staff truly made the stay enjoyable. Cheeca is a beautiful property with many wonderful employees, and with a bit more consistency in guest service at the management level, it could be an exceptional experience.',
+        relativeTimeDescription: '2 months ago on Google',
+        time: 1772483293,
+      },
+      {
+        authorName: 'Diana p.',
+        rating: 5,
+        text: 'Infested with roaches and management did not seem to care. I asked about their protocol since they were small roaches and I thought they might be bed bugs. (In the end, I don’t think they were bedbugs because the roaches were numerous and small but bigger than bedbugs so probably a different type of cockroach). They said we’ll move you to another room and have our pest control check after the room is vacant. Several roaches got INTO THE BACKPACK and there was a roach on the wall waiting in the new room. Nightmare fuel.  I guess they didn’t even bother to check the new room. This was for a business trip after working 12+ hour days. Moved to a third room. Had to ask for them to wash the backpack and clothes to hopefully not bring them home. No proactive measures or solutions, I had to come up with that remedy. Absolute nightmare. I would be understanding if they handled things better. A hotel with a restaurant on the water is going to have pests. But moving to 3 rooms, having roaches in your bag and on your clothes, and having to ask for the bare minimum of washing the stuff that had roaches crawling on it because they weren’t going to do anything about it is just unacceptable. Otherwise it’s a nice property with lots to do that we wanted to return to as a family but how can you rest when there are roaches in the room and your concerns over a health hazard are not properly addressed? I’m writing this review to warn anyone staying there to thoroughly check the room before you settle in.',
+        relativeTimeDescription: '',
+        time: 1772483293,
+      },
+    ],
   },
   // ─── NEW ZEALAND ───────────────────────────────────────────────────
   {
@@ -546,6 +809,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Premier fly fishing lodge on the Tongariro River, New Zealand. Trophy rainbow and brown trout, helicopter backcountry trips, and volcanic landscapes in the central North Island.",
     featured: true,
+    googleRating: 4.5,
+    googleReviewCount: 413,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tongariro+Lodge/@-38.9754642,175.8189826,17z/data=!4m9!3m8!1s0x6d6bbc42a87b3a95:0xd5ba618e72cd0c89!5m2!4m1!1i2!8m2!3d-38.9754642!4d175.8189826!16s%2Fg%2F1ptz2crj4',
+    featuredReviews: [
+      {
+        authorName: 'Hassall r.',
+        rating: 5,
+        text: 'Tongariro lodge is in a great location a short drive from the town centre and good staging point for activities like the Tongariro crossing.  We stayed in Villa 6.  On the plus side the villa is quite spacious and has 3 bathrooms, which was great for our family.  Overall the Villa is probably getting a bit dated and could do with a revamp (things like the blinds didn\'t all work properly).  While the main areas (floors/bathroom) were clean, it could do with a deep clean.  My impression is that the Villas may be privately owned so the experience may not be uniform across Villas. The staff that we interacted with were very friendly and helpful.',
+        relativeTimeDescription: '4 days ago',
+        time: 1772483311,
+      },
+      {
+        authorName: 'Craig r.',
+        rating: 5,
+        text: 'My wife and I stayed just 2 nights and did one day of fly fishing on the Tongariro River. The lodge and the grounds were in a beautiful green secluded setting close to the river. Our villa was completely equipped and very spacious, and Guido and the entire staff made us feel very welcome. Overall, a wonderful place and stay.',
+        relativeTimeDescription: '2 weeks ago on Google',
+        time: 1772483311,
+      },
+      {
+        authorName: 'TillyS',
+        rating: 5,
+        text: 'We used the lodge as our accommodation for two nights whilst walking in the Tongariro National Park. The grounds were beautiful and the chalet was pristine and very comfortable. The staff were all really nice and helpful and we loved the …',
+        relativeTimeDescription: '2 months ago on Tripadvisor',
+        time: 1772483311,
+      },
+    ],
   },
   // ─── PATAGONIA ─────────────────────────────────────────────────────
   {
@@ -588,6 +877,9 @@ export const lodges: Lodge[] = [
     metaDescription:
       "World-class fly fishing lodge on the Rio Grande in Patagonia, Argentina. Trophy sea-run brown trout, Spey casting, and authentic estancia hospitality in the Argentine steppe.",
     featured: true,
+    googleRating: 4.6,
+    googleReviewCount: 4168,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Estancia+Jos%C3%A9+Men%C3%A9ndez,+Tierra+del+Fuego+Province,+Argentina/@-53.8666665,-67.783333,15z/data=!3m1!4b1!4m6!3m5!1s0xbc4b1367b13dd06b:0xd07b75fdf41cdee7!8m2!3d-53.866667!4d-67.783333!16s%2Fg%2F1tfv_d9q',
   },
   // ─── BRITISH COLUMBIA ──────────────────────────────────────────────
   {
@@ -629,6 +921,9 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Exclusive helicopter-access steelhead lodge on British Columbia's Dean River. Trophy wild steelhead in the Great Bear Rainforest. Limited availability.",
     featured: true,
+    googleRating: 5,
+    googleReviewCount: 1,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Dean+River+Camp/@52.8151484,-126.8995572,17z/data=!3m1!4b1!4m6!3m5!1s0x5470c0689e75e2f5:0x941995fa66d5e37d!8m2!3d52.8151484!4d-126.8995572!16s%2Fg%2F12ll1yhk3',
   },
   // ─── BAHAMAS ───────────────────────────────────────────────────────
   {
@@ -670,6 +965,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Remote bonefish lodge on southern Andros Island, Bahamas. World-class flats fishing with experienced Bahamian guides on pristine, lightly pressured waters.",
     featured: true,
+    googleRating: 4.6,
+    googleReviewCount: 17,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Andros+South+Lodge/@24.006145,-77.528577,17z/data=!3m1!4b1!4m6!3m5!1s0x892e95321c05ffc7:0x760959fc37465056!8m2!3d24.006145!4d-77.528577!16s%2Fg%2F11clyttygw',
+    featuredReviews: [
+      {
+        authorName: 'Tyler r.',
+        rating: 5,
+        text: 'I’ve been here seven times. The staff is amazing, great food and the best guides in the Bahamas.',
+        relativeTimeDescription: '3 months ago',
+        time: 1772483354,
+      },
+      {
+        authorName: 'Florida p.',
+        rating: 5,
+        text: 'I have used this lodge about 5 times.  The service is fantastic and the guides are second to none.  This has been my go-to spot for bonefishing in the Bahamas.  I have fished other places but, I end up going back there.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483354,
+      },
+      {
+        authorName: 'Patrick r.',
+        rating: 5,
+        text: 'Absolutely the best place and people if you enjoy bonefish fishing, snorkeling, people meeting and just hanghing out. The staff are professional, low key and extremely accommodating.  Great place for special friends and family.',
+        relativeTimeDescription: '7 years ago',
+        time: 1772483354,
+      },
+    ],
   },
   // ─── ICELAND ───────────────────────────────────────────────────────
   {
@@ -711,6 +1032,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Premier Icelandic fly fishing lodge on the Laxa i Myvatn. Atlantic salmon, trophy brown trout, midnight sun fishing, and Nordic luxury in a volcanic landscape.",
     featured: true,
+    googleRating: 4.5,
+    googleReviewCount: 964,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Lax%C3%A1+H%C3%B3tel/@65.5734189,-17.0915277,17z/data=!4m9!3m8!1s0x48cd9e6128745d77:0x63633d092b145e0!5m2!4m1!1i2!8m2!3d65.5734189!4d-17.0915277!16s%2Fg%2F11b61qx5fd',
+    featuredReviews: [
+      {
+        authorName: 'TravellingTeacherL',
+        rating: 5,
+        text: 'We stayed here as part of our Ring Road tour. This is an excellent location for Northern Lights viewing with the whole hotel design based on capturing the Northern Lights and amazing scenery. There are large picturesque windows in all …',
+        relativeTimeDescription: '4 months ago on Tripadvisor',
+        time: 1772483373,
+      },
+      {
+        authorName: 'AlbusD',
+        rating: 5,
+        text: 'Spent a night in this hotel as part of the tour.|It is a relatively new and modern hotel. Check-in and out were simple and easy.|Room was of good size with modern decor and furnishing. |It is also cozy and comfortable.|Dinner and breakfast …',
+        relativeTimeDescription: '2 months ago on Tripadvisor',
+        time: 1772483373,
+      },
+      {
+        authorName: 'Nicole p.',
+        rating: 5,
+        text: 'Great location on a hill, so you have the perfect view for the northernlights. Nice spaceous room and bathroom, comfortable bed, very clean. Friendly staff. Northernlights were visible from the hotelroomwindow which was great. Food in their restaurant is (as everywhere in Iceland) expensive but very delicious. They have happy hour at the bar with also a nice view. Would go back there without hesitation.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483373,
+      },
+    ],
   },
   // ─── CHILE ─────────────────────────────────────────────────────────
   {
@@ -752,6 +1099,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Fly fishing lodge on the Rio Baker in Chilean Patagonia. Glacial rivers, trophy trout, and wilderness adventure on the Carretera Austral.",
     featured: true,
+    googleRating: 4.8,
+    googleReviewCount: 16,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Patagonia+Baker+Lodge/@-47.0392237,-72.8259465,17z/data=!4m13!1m2!2m1!1sBaker+Lodge+Patagonia+Chile!3m9!1s0xbdf2c4fb6499dd45:0xa1f633fa094c72b0!5m2!4m1!1i2!8m2!3d-47.0392237!4d-72.8211829!15sChtCYWtlciBMb2RnZSBQYXRhZ29uaWEgQ2hpbGWSAQVsb2RnZeABAA!16s%2Fg%2F1hff5mjfx',
+    featuredReviews: [
+      {
+        authorName: 'Daniel r.',
+        rating: 5,
+        text: 'Sister lodge to Magic Waters, it lies about a 4.5 hour drive south. Very beautiful, comfortable lodge with an unmatched setting on the bank of the mighty Baker River. Near by access to world class lakes, including the massive turquoise-colored Lago General Carerra and Lago Bertrand. Surrounded by towering peaks with glaciers on their flanks, the scenery is awe inspiring. Truly excellent food and wine, great guides, and a welcoming staff. This is the place where you have a shot at some of those Patagonian monster trout that anglers dream about!',
+        relativeTimeDescription: '',
+        time: 1772483395,
+      },
+      {
+        authorName: 'Francis r.',
+        rating: 5,
+        text: 'I was fortunate to be able to spend two nights here on the tail-end of six days at the River of Dreams Camp. This new lodge is spectacular. Just spectacular. Eduardo and Consuelo have done a wonderful job here. I loved it. The Baker is an incredible river. Big rainbows and browns, snow-capped mountains, glittering glaciers, excellent guides. So beautiful. It was hard to leave. It was hard to go home. I have visited all three of Eduardo\'s lodges. All offering different challenges. All featuring different types of water. All like magnets that draw me back. Three times to Patagonia. Each time telling myself that this was my last trip. There is no such thing as my last trip.',
+        relativeTimeDescription: '2 years ago on Google',
+        time: 1772483395,
+      },
+      {
+        authorName: 'EyeandFly',
+        rating: 5,
+        text: 'I recently visited this superb lodge with my wife and 3 adult children. Rafael and his team made us feel extremely welcome. We arrived on Christmas eve and exchanged presents. They made us feel a part of their family. The position of the …',
+        relativeTimeDescription: '8 years ago on Tripadvisor',
+        time: 1772483395,
+      },
+    ],
   },
   // ─── BELIZE ────────────────────────────────────────────────────────
   {
@@ -793,6 +1166,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Premier saltwater fly fishing resort on Turneffe Atoll, Belize. Grand slam opportunities for bonefish, permit, and tarpon with experienced Belizean guides.",
     featured: true,
+    googleRating: 4.7,
+    googleReviewCount: 72,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Turneffe+Flats/@17.4270501,-87.8112604,17z/data=!4m9!3m8!1s0x8f5cdcfc018816b5:0x7b960cfc74b364ec!5m2!4m1!1i2!8m2!3d17.4270501!4d-87.8112604!16s%2Fg%2F1pp2tzqcn',
+    featuredReviews: [
+      {
+        authorName: 'Mike p.',
+        rating: 5,
+        text: 'My wife and I had our honeymoon at Turneffe flats hoping for a vacation filled with world class fly fishing  and the opportunity to dive the Belize coral reefs.   Not only did this resort exceed our every expectation,  but we left with new friends and memories that will last a lifetime.\nI asked for a great guide that could help teach my wife and to create a fun atmosphere where she could learn.   We were lucky to fish with our guide,  John who was outstanding and made the experience truly memorable.   Despite windy conditions he was able to get us into fish and teach with great patience.   My biggest takeaway was that I had so much to learn.\n\nWe also went diving with captain George and dive master, Wasani!   The guys are legends and showed us some of the best dives of our lives.\n\nThe resort was beautiful,  the food was good and the staff was terrific.    It’s an amazing culture.   We loved every minute of our staff and we will be back…..   and Permit you can run but can’t hide!',
+        relativeTimeDescription: '10 months ago on Google',
+        time: 1772483413,
+      },
+      {
+        authorName: 'Kenneth p.',
+        rating: 5,
+        text: 'I made a 5-day solo dive trip to Turneffe before meeting my wife in San Pedro. I stayed in an ocean view room which was quite nice and provided spectacular views. The property was beautiful and well maintained. The food service was on point and the staff were warm and welcoming.\n\nCapt. George managed the dive boat and Wasani was our guide through the lively coral reefs and wall dives. The dives were top notch as was Capt. George and Wasani. Diving the Blue Hole was great, but was trumped by the dives at Half Moon Caye and Long Caye where we had four reef sharks running patrol around us for the entirety of the dive and crossed paths with a manta ray.',
+        relativeTimeDescription: '7 months ago on Google',
+        time: 1772483413,
+      },
+      {
+        authorName: 'josephbF6434OW',
+        rating: 5,
+        text: 'Spent a week at Turnefee Flats. I was diving.  My wife did the adventure package. We both had great experience. ||Abel (the adventure guide) was liked by all and showed everyone great critters above and below water. He took great pictures …',
+        relativeTimeDescription: '',
+        time: 1772483413,
+      },
+    ],
   },
   // ─── SCOTLAND ──────────────────────────────────────────────────────
   {
@@ -835,6 +1234,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Georgian fishing lodge on the River Spey in the Scottish Highlands. Traditional Atlantic salmon fishing with ghillies, Speyside whisky, and Highland hospitality.",
     featured: true,
+    googleRating: 4.5,
+    googleReviewCount: 853,
+    googleReviewsUrl: 'https://www.google.com/maps/place/The+Craigellachie+Hotel/@57.4892483,-3.1901631,17z/data=!4m9!3m8!1s0x4885a44a7b256b93:0x728539ebaea9073f!5m2!4m1!1i2!8m2!3d57.4892483!4d-3.1901631!16s%2Fg%2F1tgz9y34',
+    featuredReviews: [
+      {
+        authorName: 'jamesdR6177FA',
+        rating: 5,
+        text: 'We were doing The Macallum distillery and the Craigallachie was an ideal base 10 minutes drive away. Our room was comfortable and we had been given a free upgrade. The room had been changed and updated very recently. It was warm nicely …',
+        relativeTimeDescription: '2 months ago on Tripadvisor',
+        time: 1772483431,
+      },
+      {
+        authorName: 'Derek p.',
+        rating: 5,
+        text: 'We were in Room 17.\nIn general the hotel is welcoming and has great staff who make you feel at ease.\nDownside was the mattress was soft. I lifted the sheets to take a look. Wow, it was a health hazard covered in stains. I’ve honestly never seen that in a hotel and at over £300 per night I wouldn’t expect to have to sleep on that.\nThe food was good and portions big! The whisky bar had a great vibe with the quaich passed around after 9pm - a nice touch.\nBreakfast was everything you could ask for (well almost) but the hotel advertised fruit etc with porridge but didn’t have any.\nOur bathroom had a fabulous shower but the screen didn’t appear fitted properly which meant a sizeable puddle on the floor.\nWe fed back at check out but have had no feedback to date.\nUpdate:\nHad a lovely night here at the weekend with Mrs B. Tasting menu with paired wines. The chef, Pawel is creating a new experience using local ingredients cooked well to produce a taste of the Highlands which was delicious 👌\nAlongside a room upgrade, the dining experience we have to say please make the trip and try the tasting menu- you will not regret it. Wine pairing, whisky pairing, or non-alcoholic pairing available.',
+        relativeTimeDescription: 'Edited 3 months ago on Google',
+        time: 1772483431,
+      },
+      {
+        authorName: 'Paul p.',
+        rating: 5,
+        text: 'We have not been for 11 years under different owners the bones and location of the hotel still have a really nice feel . The lux room was large and comfortable , could still use a few shelves in the large bathroom. But overall very good . Nice touch with a couple of drams in the room . The Spey Inn restaurant looks and feels better but was a bit lacking veggie choice but the combinations we had made for a tasty and filling  meal . The whisky bar remains impressive. Breakfast had a wide choice and whet we had was great . Spent a little while in nearby Aberlour and it’s a pleasant place to spent time . Could just about walk along on a dry day.  I have no doubt we will be back .',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483431,
+      },
+    ],
   },
   // ─── SLOVENIA ──────────────────────────────────────────────────────
   {
@@ -876,6 +1301,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Boutique fly fishing lodge in Slovenia's Julian Alps. Guided sight-fishing for marble trout in the emerald Soca River. Alpine cuisine and stunning mountain scenery.",
     featured: false,
+    googleRating: 4.9,
+    googleReviewCount: 17,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Soca+Valley+Suites/@46.3316402,12.9302336,10z/data=!4m10!1m2!2m1!1sSoca+Valley+Lodge+Slovenia!3m6!1s0x477a69ba041e96bb:0x52ff568c6d47190b!8m2!3d46.3316402!4d13.5399748!15sChpTb2NhIFZhbGxleSBMb2RnZSBTbG92ZW5pYVocIhpzb2NhIHZhbGxleSBsb2RnZSBzbG92ZW5pYZIBGGhvbGlkYXlfYXBhcnRtZW50X3JlbnRhbJoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VOcWJrNWlOMGxSRUFF4AEA-gEFCMgBEDo!16s%2Fg%2F11vwsvmpwt',
+    featuredReviews: [
+      {
+        authorName: 'Juli p.',
+        rating: 5,
+        text: 'The best apartment stay I’ve ever had — truly unforgettable. Make sure to get a room with a view of the valley and mountains (even without, place is sooo good itself).\nEverything you could possibly need was there — nothing was missing. Pure joy from start to finish.',
+        relativeTimeDescription: '10 months ago',
+        time: 1772483452,
+      },
+      {
+        authorName: 'Špela r.',
+        rating: 5,
+        text: 'Our stay at Soca Valley Suites was nothing short of perfection! The apartment was beautifully designed with all the modern amenities we could ask for, and the views from the terrace were absolutely stunning. The location was ideal, just a short walk from the center of Bovec, yet peaceful and serene. The hosts were incredibly welcoming and attentive, making us feel right at home. We can\'t wait to return for another unforgettable stay!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483452,
+      },
+      {
+        authorName: 'Urban3 p.',
+        rating: 5,
+        text: 'We’ve stayed at Soca Valley Suits for 3 nights.\nAll I can say is wow.\nWe were very impressed about cleanliness, furniture and design of the apartment.\nThose views from terrace were also absolutely amazing.\nI could sit there all day 🙂\nWe will for sure come back again!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483452,
+      },
+    ],
   },
   // ─── JAPAN ─────────────────────────────────────────────────────────
   {
@@ -917,6 +1368,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Traditional Japanese ryokan on the Nagara River in Gifu. Guided tenkara and fly fishing, onsen baths, kaiseki cuisine, and centuries of Japanese fishing culture.",
     featured: false,
+    googleRating: 3.8,
+    googleReviewCount: 441,
+    googleReviewsUrl: 'https://www.google.com/maps/place/%E9%95%B7%E8%89%AF%E5%B7%9D%E6%B8%A9%E6%B3%89+%E7%9F%B3%E9%87%91/@35.4407675,136.6984109,13z/data=!4m13!1m2!2m1!1sNagara+River+Ryokan+Gifu+Japan!3m9!1s0x6003abd9a7dfeed9:0x8cc159abdbca5a6!5m2!4m1!1i2!8m2!3d35.4407675!4d136.7746286!15sCh5OYWdhcmEgUml2ZXIgUnlva2FuIEdpZnUgSmFwYW6SAQ1qYXBhbmVzZV9pbm5zqgFTEAEqCiIGcnlva2FuKAAyHxABIhsdSylTw4AI-9wZLCWEKZE62-zSPF6lCPWHdxgyIhACIh5uYWdhcmEgcml2ZXIgcnlva2FuIGdpZnUgamFwYW7gAQA!16s%2Fg%2F1tdq11_c',
+    featuredReviews: [
+      {
+        authorName: 'Sakshi p.',
+        rating: 5,
+        text: 'Visited for the onsen! Perfect Location, cosy hot spring, great facility and service! Will visit again for stay!',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483473,
+      },
+      {
+        authorName: 'Holly p.',
+        rating: 5,
+        text: 'We stayed for two nights in a small group from Australia. Lovely service, beautiful room and lovely quiet onsen. It was quiet when we visited and got to use the onsen by ourselves. We enjoyed watching the cormorant fishing with our lovely dinner and all the activities are very close nearby. Highly recommend staying.',
+        relativeTimeDescription: '',
+        time: 1772483473,
+      },
+      {
+        authorName: 'Carlos p.',
+        rating: 5,
+        text: 'One of the best experiences I have ever had while in Japan.\nI loved every detail about the Ryokan. Rhe two highlights I can tell are the breakfast which is traditional Japanese and the Onsen they have which there is one hot bath inside and one outside.',
+        relativeTimeDescription: '2 years ago on Google',
+        time: 1772483473,
+      },
+    ],
   },
   // ─── CHRISTMAS ISLAND ──────────────────────────────────────────────
   {
@@ -958,6 +1435,18 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Fly fishing lodge on Christmas Island (Kiritimati). World-class bonefishing, giant trevally, and remote Pacific atoll adventure on the largest coral atoll on Earth.",
     featured: false,
+    googleRating: 5,
+    googleReviewCount: 4,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Christmas+Island+Lodge/@2.0083125,-157.3960625,17z/data=!3m1!4b1!4m6!3m5!1s0x7a02a108e432858b:0x995f7fdc92daa713!8m2!3d2.0083125!4d-157.3960625!16s%2Fg%2F11t196xwfg',
+    featuredReviews: [
+      {
+        authorName: 'Peter p.',
+        rating: 5,
+        text: 'I would highly recommend Christmas Island Lodge when traveling to fish Christmas Island. Close to the airport, very close to the Lagoon, a lot closer than other places to Korean Wreck and Huff Dam. All situated on a postcard perfect tropical expanse of beach in a pretty isolated area. Private one bedroom air conditioned bungalows a stones throw to the surf. Good food and appetizers, great one on one guides. CSI is very accommodating to your particular needs and to the type of fishing you\'d like to do. There was no hidden costs, everything except hard liquor, getting there and tips was included. Staff was really friendly and bent over backwards to make your stay special. There was even a night of traditional dance and music performed by a local church youth group. I haven\'t even mentioned the fishing, This was my first time of fishing saltwater flats, there was tons of opportunities for fish of all species and sizes no matter your level of skill. I was completely satisfied with my catches, even catching some Peach Face Triggers that are considered hard to catch, and they are but so addicting to target.  My skills, knowledge and confidence grew during the course of the week. For being such an exotic place it\'s only a three hour flight from Honolulu, very easy to get to. Looking forward to a return trip.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772483491,
+      },
+    ],
   },
   // ─── SEYCHELLES ────────────────────────────────────────────────────
   {
@@ -1001,6 +1490,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Private island fly fishing lodge in the Seychelles Outer Islands. Giant trevally, bonefish, and milkfish on pristine Indian Ocean flats with five-star luxury.",
     featured: true,
+    googleRating: 4.5,
+    googleReviewCount: 31,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Alphonse+Island/@-7.003725,52.7281522,18z/data=!4m13!1m2!2m1!1sAlphonse+Island+Lodge+Seychelles!3m9!1s0x22fa75b97e6d49c3:0x3af183f3a4a78d89!5m2!4m1!1i2!8m2!3d-7.003725!4d52.730534!15sCiBBbHBob25zZSBJc2xhbmQgTG9kZ2UgU2V5Y2hlbGxlc1oiIiBhbHBob25zZSBpc2xhbmQgbG9kZ2Ugc2V5Y2hlbGxlc5IBDHJlc29ydF9ob3RlbJoBRENpOURRVWxSUVVOdlpFTm9kSGxqUmpsdlQydHNVVTFzVVRCbFZWWnBXVlZHVVdOSFdYbFVWRnA2V0RCa1RGVlZSUkFC4AEA-gEECAAQOw!16s%2Fg%2F11r935wr_',
+    featuredReviews: [
+      {
+        authorName: 'Ben p.',
+        rating: 5,
+        text: 'Top-notch service, great fishing, and beautiful facilities. Extremely well thought out and built resort. The staff went above and beyond to make us feel at home and relaxed with our 5 month old baby.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483513,
+      },
+      {
+        authorName: 'Kitty p.',
+        rating: 5,
+        text: 'An amazing experience. Just everything was perfect. Don’t know even know from where to start.\n\nFrom the moment the plane landed, you really felt coming to a paradise island. You were greeted by the friendliest personel.\n\nPublic areas were elegantly done. A get together evening at the bar with all the hotel quests before dinner was lovely. For the ones who didn’t go fishing, a day by the pool was great, byciclying, playing tennis or snorkeling with a marine biologist. On special nights all the guests gathered for sunset drinks or a beach party in the most wonderful spots on the island.\n\nThe bungalow was very cute, spacious, with a modern bathroom.\n\nThe food was excellent, prepared mostly from the product they cultivaye themselves on the island.\n\nA highly recommeded hideaway from the main islands in Seychelles.',
+        relativeTimeDescription: '2 years ago on Google',
+        time: 1772483513,
+      },
+      {
+        authorName: 'Miles p.',
+        rating: 5,
+        text: 'High-end luxury on a remote, almost unique atoll. Charming rooms, excellent service, and a very impressive commitment to real sustainability.',
+        relativeTimeDescription: '2 years ago on Google',
+        time: 1772483513,
+      },
+    ],
   },
   // ─── TASMANIA ──────────────────────────────────────────────────────
   {
@@ -1042,6 +1557,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Remote wilderness fly fishing lodge in Tasmania's Central Highlands. Sight-fishing for wild brown trout in glacial lakes surrounded by pristine Australian bush.",
     featured: false,
+    googleRating: 4.8,
+    googleReviewCount: 74,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Thousand+Lakes+Lodge/@-41.8436682,144.1354315,8z/data=!4m13!1m2!2m1!1sWestern+Lakes+Lodge+Tasmania+Australia!3m9!1s0xaa7077b3de574e79:0xf5196c8c561b3705!5m2!4m1!1i2!8m2!3d-41.8436682!4d146.5743963!15sCiZXZXN0ZXJuIExha2VzIExvZGdlIFRhc21hbmlhIEF1c3RyYWxpYVooIiZ3ZXN0ZXJuIGxha2VzIGxvZGdlIHRhc21hbmlhIGF1c3RyYWxpYZIBBWxvZGdlmgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVVJRTVhOMWVtZDNSUkFC4AEA-gEECAAQSg!16s%2Fg%2F11f15g2r3m',
+    featuredReviews: [
+      {
+        authorName: 'L1375VTmikeg',
+        rating: 5,
+        text: 'I recently returned home from a 4-night stay at Thousand Lakes Lodge in Tasmania\'s Central Plateau, and it was the trip of a lifetime! This remote lodge is a magical place highlighted by the incredible and professional staff and the amazing …',
+        relativeTimeDescription: '',
+        time: 1772483536,
+      },
+      {
+        authorName: 'Anne p.',
+        rating: 5,
+        text: 'Recently stayed at Thousand Lakes Lodge. While the location is unique, it was disheartening to be misled by inaccurate information about the room.\nI booked a room advertised as having a window. On arrival though, it only had a skylight. If you’re thinking of booking an \'Explorer Room\' and don’t want to feel like you\'re trapped in a windowless cell, I recommend clarifying whether you have a view or not.',
+        relativeTimeDescription: 'a week ago',
+        time: 1772483536,
+      },
+      {
+        authorName: 'suzannep560',
+        rating: 5,
+        text: 'Our stay at Thousand Lakes Lodge was nothing short of magical.  The lodge is situated in the heart of the Central Plateau.  Driving into the area is almost like entering another world and the further you venture, the more incredible it …',
+        relativeTimeDescription: '4 months ago on Tripadvisor',
+        time: 1772483536,
+      },
+    ],
   },
   // ─── KAMCHATKA ─────────────────────────────────────────────────────
   {
@@ -1084,6 +1625,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Helicopter-access fly fishing camp on the Zhupanova River in Kamchatka, Russia. Trophy rainbow trout, Pacific salmon, brown bears, and volcanic wilderness.",
     featured: true,
+    googleRating: 4.1,
+    googleReviewCount: 14,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tourist+base+%22Kamchatka%22/@55.4323481,156.9874953,8z/data=!4m10!1m2!2m1!1sKamchatka+River+Camp+Russia+fishing!3m6!1s0x591b4c6c9cb628b5:0x96c83ce58b9dc11f!8m2!3d55.4323481!4d159.4264601!15sCiNLYW1jaGF0a2EgUml2ZXIgQ2FtcCBSdXNzaWEgZmlzaGluZ5IBDGZpc2hpbmdfY2FtcOABAA!16s%2Fg%2F11c10021fj',
+    featuredReviews: [
+      {
+        authorName: 'Константин r.',
+        rating: 5,
+        text: 'Greetings everyone! We vacationed with our family in mid-September (my wife, two sons, and me).\nThe resort is absolutely top-notch; we fell in love with it right away. It\'s a cozy little village. Lena the maid charmed us with her care, and Dania the cook and his wife spoiled us with delicious food. Great guys 👍🏼\nThe fishing was excellent; we mostly caught coho salmon, and my wife also caught the local trout a few times.\nThe scenery is beautiful, of course, and the river is absolutely stunning!\nKamchatka is absolutely amazing!\nWe\'ll definitely be back!\nWe loved everything!!!\nShoutout to our ranger, Sasha.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483557,
+      },
+      {
+        authorName: 'AleksandraLocal p.',
+        rating: 1,
+        text: 'My family and I called this tourist resort, and the man who answered was rude and disrespectful. He refused to answer our questions and sent us to the website to study it. 😄 Moreover, he insulted our voice, calling it a moaning sound. We think the resort isn\'t worthy of our visit either. Judging by the ten reviews, the place isn\'t very popular. 😅',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483557,
+      },
+      {
+        authorName: 'Diego p.',
+        rating: 5,
+        text: 'We came from Kazakhstan, it was our first time, everything was great, the base is up to par!',
+        relativeTimeDescription: '6 years ago',
+        time: 1772483557,
+      },
+    ],
   },
   // ─── TIERRA DEL FUEGO ──────────────────────────────────────────────
   {
@@ -1126,6 +1693,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "World's premier sea-run brown trout lodge on the Rio Grande in Tierra del Fuego, Argentina. Trophy fish exceeding 20 pounds, Spey casting, and exclusive river access.",
     featured: true,
+    googleRating: 5,
+    googleReviewCount: 9,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Kau+Tapen+Lodge/@-53.8990358,-68.3686423,17z/data=!3m1!4b1!4m6!3m5!1s0xbc4c9fdf1a112863:0xce35a3b077915845!8m2!3d-53.8990358!4d-68.3686423!16s%2Fg%2F11cn5s1tll',
+    featuredReviews: [
+      {
+        authorName: 'James p.',
+        rating: 5,
+        text: 'I was a late add to a group of 7 Scandinavians who travel the world in search of trophy-class trout and salmon.  Kau Tapen Lodge is part of a larger parent company (Nervous Waters) that manages a dozen bespoke fishing and hunting lodges around the world.\n\nCurated and choreographed doesn\'t begin the describe the level of attention the lodge staff & fishing guides provide...the 10 guests are tended to by 5 guides (2 rods per guide) a chef, sous chef, cooking staff of 2, 2 servers, 2 housekeepers, 2 maintenance men,  and a representative from Nervous Waters.\n\nFrom the airport pickup to our daily fishing beats...the logistics were centrally coordinated with the lodge.  All guides share information about each angler, making sure that every guest has the best opportunity to land a trophy fish. Lessons are offered gratis...so are flies, rods, line, etc... I brought only waders and boots!.\n\nThe food was outstanding and many photos were taken every meal. The beds were comfy, bathrooms pristine, and the lodge room with fireplace very welcoming.  The staff met us after every excursion with a curated cocktail/mocktail; warm hand towels, and help taking off waders/boots.\n\nThis is not your grandfathers fish camp. It is the single best high-end fishing lodge I have ever stayed in, and the fishing was superb.\n\nI enjoyed my new Scandivavian friends and look forward to fishing with them in Russia and British Columbia!\n\nI manage a large portfolio of luxury rental villas in Grand Cayman and these professionals taught me plenty during our week!.',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483575,
+      },
+      {
+        authorName: 'Jorge p.',
+        rating: 5,
+        text: 'Luxury lodge of international standard. Book via website.',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483575,
+      },
+      {
+        authorName: 'Jorge p.',
+        rating: 5,
+        text: 'Everything was excellent. Top-notch.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483575,
+      },
+    ],
   },
   // ─── PHASE 3 ADDITIONS ──────────────────────────────────────────
   {
@@ -1171,6 +1764,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Ireland's premier salmon fishing estate on the River Moy. Private beats, experienced ghillies, and Georgian country house luxury in County Mayo.",
     featured: false,
+    googleRating: 4.6,
+    googleReviewCount: 563,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Mount+Falcon/@54.0565855,-9.1566114,17z/data=!4m9!3m8!1s0x485937f5d5f9025b:0x1dc0b1bd62ee913a!5m2!4m1!1i2!8m2!3d54.0565855!4d-9.1566114!16s%2Fg%2F1x6q14zc',
+    featuredReviews: [
+      {
+        authorName: 'JDPM',
+        rating: 5,
+        text: 'Another fantastic New Year in this wonderful Hotel. My family along with two other families arrived in Mount Falcon on Dec 30th to relax after Christmas and enjoy the New Years Ball. ||||From outset we felt extremely welcomed, well looked …',
+        relativeTimeDescription: '',
+        time: 1772483594,
+      },
+      {
+        authorName: 'CDNglobetraveller',
+        rating: 5,
+        text: 'We arrived today a our first  impression was Wow! |The check in process was quick and efficient. We decided to walk the grounds as bags were sorted and deliver to rooms. Trails could become more clearly marked but they were beautiful. |We …',
+        relativeTimeDescription: '5 months ago on Tripadvisor',
+        time: 1772483594,
+      },
+      {
+        authorName: 'Sarah p.',
+        rating: 5,
+        text: 'On approach the house looks a little disappointing as the formal frontage cannot be seen and instead you drive towards the modern rear extension which looms somewhat ahead. However, once out of the car and we did find the picturesque building promised in the advertising.\nThe staff were lovely, Catherine in the front desk could not have been warmer.\nOur room was huge although disappointingly it was in the modern extension that I had not wanted. The furniture gave the feel of an old building so not all was lost. Bathroom enormous and water pressure fantastic.\nThe bed was vast with nice bed linen, although pillows could have been softer. Tea, coffee and the most delicious homemade biscuits were also in the room.\nThe Spa was lovely. The young lady was friendly and helpful; even when we arrived 15 mins before closing to warm up after being out in the rain (thank you).\nBreakfast was amazing with the best granola I’ve ever eaten!  It looked so good I broke my never eat granola whilst staying in a hotel rule.  It was served in a lovely old restaurant in the hotel and was perfect.\nNow we come to the marquee for dinner. Sorry, Mount Falcon, but I just cannot get over this. I had my reservations while booking (excuse the pun) and I was not wrong.  It has to be said the marquee was beautiful and not cold despite the howling wind and rain outside, but it was still a marquee. Our stay was at the end of the season, the hotel was was quiet and the marquee even more so. The first evening we were probably one of 30 in a marquee that must hold around 150 people. On the second night we were alone!  There was live music but think more 1980s cabaret and less historic Ireland!  Needless to say the intimate, romantic weekend planned was replaced by an amusing, silly one.\nThe waiting staff was just the right degree of attentive, helpful, and lovely. The food was truly delicious. I found the lobster a little overpriced but not disappointing and the Château Brianne  couldn’t have been better. The vegetables were delicious and reasonable portions although I was rather surprised that the (out of place) garlic mushrooms came in a crispy crumb!\nSadly the marquee was a deal breaker and spoilt the intimate weekend away we sought. I would have been disappointed but the warn staff and excellent food did go along way to make up for it.',
+        relativeTimeDescription: '5 months ago on Google',
+        time: 1772483594,
+      },
+    ],
   },
   {
     id: "lodge-ponoi-river-camp",
@@ -1211,6 +1830,25 @@ export const lodges: Lodge[] = [
     metaDescription:
       "The world's most productive Atlantic salmon fishing. Exclusive helicopter-access camp on Russia's Ponoi River with record-breaking catches.",
     featured: false,
+    googleRating: 5,
+    googleReviewCount: 2,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Ponoi+River+fishing+lodge/@67.1588545,38.9015084,9z/data=!4m10!1m2!2m1!1sPonoi+River+Camp+Kola+Peninsula+Russia!3m6!1s0x443eab52b7ae92f7:0xb45132ab2e53bf79!8m2!3d67.129643!4d39.769804!15sCiZQb25vaSBSaXZlciBDYW1wIEtvbGEgUGVuaW5zdWxhIFJ1c3NpYZIBDGZpc2hpbmdfY2FtcOABAA!16s%2Fg%2F11q8ytp3qr',
+    featuredReviews: [
+      {
+        authorName: 'Linder r.',
+        rating: 5,
+        text: 'Does anyone travel that far? Seriously?)) Well, as far as I know, all sorts of rich people fly there by helicopter, I don\'t understand them at all, typical men, well, ok.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483615,
+      },
+      {
+        authorName: 'Srergey r.',
+        rating: 5,
+        text: 'BEAUTIFUL!!! And the fish are caught!',
+        relativeTimeDescription: '4 years ago',
+        time: 1772483615,
+      },
+    ],
   },
   {
     id: "lodge-sweetwater-travel",
@@ -1251,6 +1889,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Mongolia's premier taimen fishing operation. Conservation-focused camps on the Eg-Uur watershed for the world's largest salmonid.",
     featured: false,
+    googleRating: 4.5,
+    googleReviewCount: 8,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Sweetwater+Travel+Company/@45.6117199,-110.5769627,17z/data=!3m1!4b1!4m6!3m5!1s0x53457cdaaff50bad:0x37a9b86783045f25!8m2!3d45.6117199!4d-110.5769627!16s%2Fg%2F1hc74nc5p',
+    featuredReviews: [
+      {
+        authorName: '78 r.',
+        rating: 1,
+        text: 'Do not trust this company to give you accurate if any information on fishing conditions. Fish or no fish you are hooked once you send them your deposit. Salmon fishing has been bad and I had to cancel because of a medical condition. They will not refund your 50% deposit for any reason. Unethical and they just don\'t care. There are other Alaska outfitters that are honest, give up to date fishing reports, and will refund your deposit for medical reasons.',
+        relativeTimeDescription: '6 years ago',
+        time: 1772483633,
+      },
+      {
+        authorName: 'Rob p.',
+        rating: 5,
+        text: 'Great place to gain some knowledge of fly-fishing and learn to be a professional fly-fishing guide!  Staff is awesome!  Lodging is for the class is right on the river!  Had the a great time there and made some friends that I will never forget!',
+        relativeTimeDescription: '4 years ago',
+        time: 1772483633,
+      },
+      {
+        authorName: 'Brian p.',
+        rating: 5,
+        text: 'I went to their guide school and loved it. It’s all fishing all the time.',
+        relativeTimeDescription: '4 years ago',
+        time: 1772483633,
+      },
+    ],
   },
   {
     id: "lodge-avalon-cuba",
@@ -1291,6 +1955,32 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Cuba's premier saltwater fly fishing operation. Live-aboard motherships in the Jardines de la Reina for bonefish, permit, and tarpon.",
     featured: false,
+    googleRating: 4.9,
+    googleReviewCount: 22,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Jardines+de+la+Reina/@20.8333329,-78.9166667,15z/data=!3m1!4b1!4m6!3m5!1s0x8ed5dbe35ae7faef:0xcae46137c95d12b5!8m2!3d20.8333333!4d-78.9166667!16zL20vMGc1OTRz',
+    featuredReviews: [
+      {
+        authorName: 'kai r.',
+        rating: 5,
+        text: 'Beautiful place to scuba dive!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483652,
+      },
+      {
+        authorName: 'RobertLocal p.',
+        rating: 5,
+        text: 'Lovely place',
+        relativeTimeDescription: '6 years ago',
+        time: 1772483652,
+      },
+      {
+        authorName: 'Piyachat p.',
+        rating: 5,
+        text: 'Queen of islands',
+        relativeTimeDescription: '5 years ago',
+        time: 1772483652,
+      },
+    ],
   },
   {
     id: "lodge-maldives-gt",
@@ -1332,5 +2022,31 @@ export const lodges: Lodge[] = [
     metaDescription:
       "Purpose-built fly fishing live-aboard in the Maldives. Giant trevally, bonefish, and triggerfish on pristine Indian Ocean atolls.",
     featured: false,
+    googleRating: 5,
+    googleReviewCount: 23,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tide+Explorer+Fishing+Charter+Maldives/@4.1692002,63.754331,6z/data=!4m10!1m2!2m1!1sMaldives+Flyfish+Explorer+fishing!3m6!1s0x3b3f7f0077729585:0x23aa9ab31047ba69!8m2!3d4.1692002!4d73.5101904!15sCiFNYWxkaXZlcyBGbHlmaXNoIEV4cGxvcmVyIGZpc2hpbmdaIyIhbWFsZGl2ZXMgZmx5ZmlzaCBleHBsb3JlciBmaXNoaW5nkgEPZmlzaGluZ19jaGFydGVymgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDIxc1JsSXdSblJpYm5CYVdsZEthMXBXYkZaVmJFWkdUMVJhTlZWV1JSQULgAQD6AQQIABBF!16s%2Fg%2F11x927l3dr',
+    featuredReviews: [
+      {
+        authorName: 'Aveda p.',
+        rating: 5,
+        text: 'I went on a fishing and birthday trip to the Maldives with Lobster Tails together with three of my best friends, and it was an outstanding experience from start to finish. We felt very comfortable and in great hands with Said and Ali, whose professionalism and hospitality were exceptional.\n\nThe food was excellent, the house was beautiful, and everything was extremely clean and well organized. The boat was unbelievably comfortable and equipped with top-quality fishing gear, making every trip out to sea a real pleasure.\n\nThis experience exceeded all our expectations and created unforgettable memories. Highly recommended for anyone looking for a premium fishing experience in the Maldives. See attached pictures.',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483672,
+      },
+      {
+        authorName: 'Ben1 r.',
+        rating: 5,
+        text: 'Absolutely Top anglers, fantastic people, had a really good trip. Safety was superb. Fishing was amazing. Their knowledge is outstanding. Would definitely book aga, highly recommend anyone wanting to have a great day fishing to use these guys.',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483672,
+      },
+      {
+        authorName: 'Awwah r.',
+        rating: 5,
+        text: 'Simply the best charter for your fishing trips, casual or pros. They are well equipped and a well experienced crew.\nGreat boat, Great Crew, Great vibes. You can never go wrong with choosing tide explorer.',
+        relativeTimeDescription: '3 months ago',
+        time: 1772483672,
+      },
+    ],
   },
 ];

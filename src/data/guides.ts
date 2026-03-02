@@ -27,6 +27,32 @@ export const guides: Guide[] = [
     metaTitle: "Bud Lilly's Guide Service | West Yellowstone Fly Fishing Guides",
     metaDescription:
       "Book a guided fly fishing trip with the legendary Bud Lilly's Trout Shop in West Yellowstone, Montana. Over 70 years of guiding excellence on the Madison, Gallatin, and Yellowstone rivers.",
+    googleRating: 4.7,
+    googleReviewCount: 122,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Big+Sky+Anglers/@44.6607068,-111.1041678,17z/data=!4m10!1m2!2m1!1sBud+Lilly\'s+Trout+Shop+West+Yellowstone+Montana!3m6!1s0x5351b9ece366c2dd:0xe22088b9c1e93f5f!8m2!3d44.6607068!4d-111.0994042!15sCi9CdWQgTGlsbHkncyBUcm91dCBTaG9wIFdlc3QgWWVsbG93c3RvbmUgTW9udGFuYVoxIi9idWQgbGlsbHkncyB0cm91dCBzaG9wIHdlc3QgeWVsbG93c3RvbmUgbW9udGFuYZIBDWZpc2hpbmdfc3RvcmWaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUmlaMll6U0hablJSQULgAQD6AQUIuQEQRQ!16s%2Fg%2F1hdznxkxd',
+    featuredReviews: [
+      {
+        authorName: 'Shannon p.',
+        rating: 4,
+        text: 'We booked for early morning fly fishing Oct 15th. Mom and daughter fishing. No experience. Use caution on how you purchase your fishing license. I was not told to make sure I booked for a Yellowstone park specific fishing. Instead, I selected a one day Montana fishing license thinking that covers everything in the state. Wrong. What was most frustrating was that I was at the front desk in the store, physically showed the man behind the counter my license application on my phone, it was a license to fish in Montana and he said yep, looks good! A minute later he says, if you do Montana, you cannot fish in Yellowstone. That requires a park specific license. Holy cow!  We JUST drove two hours from south Fork in the early AM to fish in the park, and he says, well…. I didn’t know you wanted to fish in the park. Holy Passive aggressive. I was not spending $25 to fly fish, this was an expensive investment of our time. We should have been in the park, and it was raining and cold, PERFECT day, not a lot of people out, government shut down etc. He should have asked me that question or looked at my reservation notes before saying Yep! Looks good and I hit send…guy did not care at all, and that man was older than our guide. This man wasn’t busy, there were no other customers distracting him, and the dude just left it at that…he knew he’d just seriously disappointed a customer. His problem solving skills were negative ZERO ….good luck with that, byyyeeee kind of attitude, and left our younger guide in an awkward situation to take care of his lousy customer service. Our guide, River was a nice young man, basically thrown under a bus by the desk guy. Which also was a reflection of how that man treats his coworkers and has the potential to ruin their tips (we still tipped, but some people would say screw that over such a disappointment) Obviously, I was not thrilled with the location nor did we catch a single fish, but that wasn’t River’s fault. We still had a nice time. River made for a fun trip and he was a very good teacher. My daughter had a lot of fun. River had to problem solve, and find a location quickly which also took us down a road of pot holes and puddles to Madison River, but thankfully I had a rental car that could accommodate that, so be aware of that potential as well. I’m a mom, just wanted to take my teenage daughter fly fishing in Yellowstone which is like a stones throw from their store. It’s not rocket science for someone who does this for a living. Dude should have paid attention to my question about the fishing license - he negatively  affected our trip. I am responsible for choosing the wrong license, but he was no help at all. Just MAKE SURE you have a clear understanding and conversation about where you’d be going to fish and which license that requires when you’re dropping $500-600 for three hours of fishing. I hope the owner(s) recognize that River is a very good guide and he’s more like management material bc he’s a good problem solver and communicates well. That young man loves his job. His passion for fishing is contagious and he was a very friendly helpful person.',
+        relativeTimeDescription: '4 months ago',
+        time: 1772483694,
+      },
+      {
+        authorName: 'Ashley p.',
+        rating: 5,
+        text: 'If you are considering stopping in this shop, do it. Book a fly fishing trip. This spot has the most knowledgeable and kind people. We were privileged to have their best guide, Andy Vincent. Truly the kindest person we’ve ever had the pleasure of meeting. We booked back to back trips with him because one wasn’t enough. He knows amazing spots and is a great teacher! He is very patient and knowledgeable. He could tell you every bug nearby that the fish may be eating. He is a wealth of knowledge. You will leave knowing 100x more about fly fishing. We’ve learned so much and can’t wait to continue on the sport. There are a lot of fly fishing spots around here and while the gear and locations may be the same, the guides and people make all the difference. Stop in here and while you’re at it, ask for Andy, you won’t regret it.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483694,
+      },
+      {
+        authorName: 'Erin p.',
+        rating: 5,
+        text: 'Our family stopped in late one afternoon after dinner to inquire about trout fishing locally with a guide or on a boat. We were soon booked for a fishing clinic the very next day. Tristan, at the counter, was very kind and patient and extremely helpful to our entire family. Our guide, Patrick, was extremely informative and gave great instructions for two kids and my husband. He brought us to three separate spots within the park and was beyond kind. He helped my oldest son, catch his first brown trout and made his day. Even though, he lost his phone (first time in five years of doing these trips), he was still as patient and friendly as the moment we arrived. I can’t say enough about how above and beyond he went to make this such a great memory for our family.',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483694,
+      },
+    ],
   },
   {
     id: "guide-montana-troutfitters",
@@ -52,6 +78,32 @@ export const guides: Guide[] = [
     metaTitle: "Montana Troutfitters Guide Service | Bozeman Fly Fishing",
     metaDescription:
       "Guided fly fishing trips from Bozeman, Montana with Montana Troutfitters. Expert guides on the Gallatin, Yellowstone, and Madison rivers.",
+    googleRating: 4.7,
+    googleReviewCount: 144,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Montana+Troutfitters/@45.6788308,-111.0606438,17z/data=!3m1!4b1!4m6!3m5!1s0x534545b1e9034e13:0xb6022c9414566bcc!8m2!3d45.6788308!4d-111.0606438!16s%2Fg%2F1tdx_k76',
+    featuredReviews: [
+      {
+        authorName: 'Marmotte p.',
+        rating: 5,
+        text: 'Wally the guide put my son and me on 26 fish and 5 species during a half day trip today on the 4th of July.  This is our first time fly fishing and I couldn\'t be more satisfied.  Wally was extremely patient and perfectly understands how to communicate with kids.  Absolutely recommend and would give 6 stars if I could.',
+        relativeTimeDescription: 'Edited 4 months ago',
+        time: 1772483712,
+      },
+      {
+        authorName: 'Thomas p.',
+        rating: 5,
+        text: 'Amazing guided float trip down the Yellowstone River. Our guide Burt was amazing. He worked so hard to get us in the right spots for fish, and taught us a ton about fly fishing, the river, and the area. 10/10 would recommend, caught some amazing trout, and tons of whitefish. These guides know what is biting. The complete experience was very smooth from booking to drop off after the trip. Thanks so much for a memorable trip!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483712,
+      },
+      {
+        authorName: 'Bridgett r.',
+        rating: 5,
+        text: 'Thank you, Troutfitters!  Five stars!! Wally guided me and my beloved uncle on a spectacular day on the Madison.  We caught five species of beautiful fish, learned so much about the history of the River, and grew in skills with a great teacher who knows and loves the River.  Wally’s superb knowledge with practical application made our day easy and joyful.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483712,
+      },
+    ],
   },
   // ─── WYOMING ───────────────────────────────────────────────────────
   {
@@ -78,6 +130,32 @@ export const guides: Guide[] = [
     metaTitle: "Trent Kirkpatrick — Jackson Hole Fly Fishing Guide",
     metaDescription:
       "Expert fly fishing guide in Jackson Hole, Wyoming. Snake River float trips, backcountry wade fishing, and Spey casting instruction amid the Teton Range.",
+    googleRating: 5,
+    googleReviewCount: 163,
+    googleReviewsUrl: 'https://www.google.com/maps/place/JACKSON+HOLE+ANGLERS/@46.423669,152.0104164,3z/data=!4m10!1m2!2m1!1sJackson+Hole+Anglers+Wyoming+guide+service!3m6!1s0x53531094b9e24189:0xfdf47ae6bd2c5d75!8m2!3d46.423669!4d-129.9427086!15sCipKYWNrc29uIEhvbGUgQW5nbGVycyBXeW9taW5nIGd1aWRlIHNlcnZpY2VaLCIqamFja3NvbiBob2xlIGFuZ2xlcnMgd3lvbWluZyBndWlkZSBzZXJ2aWNlkgEPZmlzaGluZ19jaGFydGVymgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVVI0ZVhaUVgzZDNSUkFC4AEA-gEFCPsDEDk!16s%2Fg%2F1tgp0gfq',
+    featuredReviews: [
+      {
+        authorName: 'Kimberly p.',
+        rating: 5,
+        text: 'We had a great time. Jason was fantastic. I had never tried fly fishing. He had the patience of a saint and I actually caught fish. My husband had fly fished previously and caught several. The scenery was beautiful. I would love to book another trip if we are in the area.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483734,
+      },
+      {
+        authorName: 'Wendy p.',
+        rating: 5,
+        text: '🐟 Just had my first fly fishing experience and it was unforgettable! Our guide was incredibly knowledgeable and patient—even after I accidentally hooked him in the face (not my proudest moment 😅). The private lunch on the rocks overlooking the river was spectacular! Highly recommend! …',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483734,
+      },
+      {
+        authorName: 'Catherine p.',
+        rating: 5,
+        text: 'Ryan was amazing and we caught so many fish!  He is an excellent guide and educator. Can’t wait to go again!',
+        relativeTimeDescription: '6 months ago',
+        time: 1772483734,
+      },
+    ],
   },
   // ─── COLORADO ──────────────────────────────────────────────────────
   {
@@ -104,6 +182,32 @@ export const guides: Guide[] = [
     metaTitle: "Miguel Vasquez — Frying Pan River Fly Fishing Guide, Colorado",
     metaDescription:
       "Expert fly fishing guide on Colorado's Frying Pan River. Technical tailwater nymphing, dry-fly fishing, and entomology-driven guiding for trophy trout.",
+    googleRating: 4.8,
+    googleReviewCount: 108,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Frying+Pan+Anglers/@39.3691376,-107.0310624,17z/data=!3m1!4b1!4m6!3m5!1s0x87404ccb3c5f08f5:0x9afde9f5cd317a91!8m2!3d39.3691376!4d-107.0310624!16s%2Fg%2F1vg4k86r',
+    featuredReviews: [
+      {
+        authorName: 'Chris p.',
+        rating: 5,
+        text: 'I have been fly fishing out of Basalt for many years going back to when I was a student at CU.  A couple years ago I fell into water over my head on the Frying Pan, got out with the help of my son-in-law but realized that I could never fish alone anymore and needed to be careful.\n\nThis past September I booked a 3 day wade and float  trip and fished the Pan again along with the  Roaring Fork.  Taylor was most accommodating and I got to fish with Harry Portland who knows a lot of the history of the area and was absolutely excellent. I  caught more good sized trout than I ever have and learned a few new techniques.  Harry was very patient and watchful as vertigo got to me more than once.  I did not regret missing out on a dunking this trip!  I will be back!',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483753,
+      },
+      {
+        authorName: 'cfal8 p.',
+        rating: 5,
+        text: 'I recently had the pleasure of experiencing a half day guided wade with Harry. I was told he knows the water better than the fish do… and that turned out to be no exaggeration. Frying Pan Anglers is by far the most helpful and stocked fly shop in the area. Everyone is extremely pleasant to deal with, and their hat selection will have you wishing for more heads. If you’re in the area and considering a guide for the Frying Pan, you have to go to Frying Pan Anglers. I look forward to the day I can return. Cheers!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483753,
+      },
+      {
+        authorName: 'Kristin p.',
+        rating: 5,
+        text: 'We had the best time on our girls fly fishing trio! Our guide Nate was incredible. Keeping up with three gals for two full days is no easy task but he was so helpful, knowledgeable, and had us catching beautiful trout in no time. He was patient and kind and we will definitely be back to this shop. We are cheering on Taylor and her whole team!',
+        relativeTimeDescription: '7 months ago',
+        time: 1772483753,
+      },
+    ],
   },
   // ─── IDAHO ─────────────────────────────────────────────────────────
   {
@@ -130,6 +234,32 @@ export const guides: Guide[] = [
     metaTitle: "Dale Pearson — Henry's Fork Fly Fishing Guide, Idaho",
     metaDescription:
       "Thirty-year veteran fly fishing guide on Idaho's Henry's Fork. Technical dry-fly specialist for trophy rainbows on the Railroad Ranch, Silver Creek, and Yellowstone.",
+    googleRating: 4.6,
+    googleReviewCount: 163,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Henry\'s+Fork+Anglers+Llc/@44.3611398,-111.4033637,17z/data=!3m1!4b1!4m6!3m5!1s0x5353fa899928ef8d:0xe8f7d89450a12f24!8m2!3d44.3611398!4d-111.4033637!16s%2Fg%2F1thl0j4m',
+    featuredReviews: [
+      {
+        authorName: 'Shelli p.',
+        rating: 5,
+        text: 'We had a trip with two boats, two guides, Chris and Pierce, they were amazingly knowledgeable, patient and helpful. They worked SO HARD the entire 8 hour day to make our trip successful. These guys are hard core! We were all mostly beginners (I had never fly fished before) and we all caught trout! We stopped counting. They taught us new techniques all day long. They were personable and helped make our trip out west even better! I would give more than five stars if it were an option. They NEVER once got frustrated, even with my multitude of tangles, even snagging Chris more than once. So helpful. Don’t look any further, book your trip now!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483772,
+      },
+      {
+        authorName: 'GINA p.',
+        rating: 5,
+        text: 'My husband and I booked our two float trips a year in advance and looked so forward to our trip. Our Guide Pierce was honestly the best guide we’ve had over the years. He was personable, patient and extremely knowledgeable and passionate about fly fishing. We learned so much and caught some beautiful Browns and Rainbows on the two trips. We even got to see a moose with her two babies cross the river. On our second trip Pierce took us on a dry fly trip of a lifetime! We’ve already booked next year’s trip! Can’t wait!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483772,
+      },
+      {
+        authorName: 'Scott p.',
+        rating: 5,
+        text: 'I spent 4 days with 4 different guides on 2 rivers and never the same spot twice.\n2 days of dry dropper and nymphs and full day of dry flying and another full day streamer fishing.\nAll days were very productive thanks to the excellent guides.  I\'ve been on many guided trips and I have to say each guide was professional, knowledgeable, and very personable.\nThank you Jesse, Sam Miller, Jim Deitz and Will Scott, you all were excellent!\n\nI\'ll be back next year!',
+        relativeTimeDescription: '4 months ago',
+        time: 1772483772,
+      },
+    ],
   },
   // ─── ALASKA ────────────────────────────────────────────────────────
   {
@@ -156,6 +286,32 @@ export const guides: Guide[] = [
     metaTitle: "Nate Runyan — Bristol Bay Alaska Fly Fishing Guide",
     metaDescription:
       "Expert fly fishing guide in Bristol Bay, Alaska. Floatplane access to remote rivers for trophy rainbow trout and Pacific salmon in pristine wilderness.",
+    googleRating: 4.9,
+    googleReviewCount: 16,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Bristol+Bay+Lodge/@59.433674,123.009517,3z/data=!4m13!1m2!2m1!1sBristol+Bay+Fly+Fishing+guide+service+Alaska!3m9!1s0x56e0b1ff86d73d55:0x29fd19f8136c8b85!5m2!4m1!1i2!8m2!3d59.433674!4d-158.943608!15sCixCcmlzdG9sIEJheSBGbHkgRmlzaGluZyBndWlkZSBzZXJ2aWNlIEFsYXNrYVouIixicmlzdG9sIGJheSBmbHkgZmlzaGluZyBndWlkZSBzZXJ2aWNlIGFsYXNrYZIBDmluZG9vcl9sb2RnaW5nmgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJ0NFdrMUVTbUZVTVdSMFVtMXdTMUZWWnpCa2JuQnNUWHBzYkdKWVl4QULgAQD6AQQIABAy!16s%2Fg%2F11xc15n4g',
+    featuredReviews: [
+      {
+        authorName: '950victoriam',
+        rating: 5,
+        text: 'What can you say about a place that feels like home so far away from where you call home? The team of professional family at Bristol Bay Lodge was truly EXCEPTIONAL. From Tyler booking every adventure to Stephanie realizing your every wish, …',
+        relativeTimeDescription: '6 months ago on Tripadvisor',
+        time: 1772483794,
+      },
+      {
+        authorName: 'Steve p.',
+        rating: 5,
+        text: 'This was my first trip to Bristol Bay Lodge (BBL).  I did a week in September.  The fishing, the scenery, the lodge, the food, the staff . . . all amazing! I first met Brian Boe over at the Alaska Sportsman\'s Lodge and he is now the owner of BBL.  Brian\'s team is simply amazing, caring, dedicated, professional, and fun.  A few big shout outs to Tyler, Stephanie and her amazing team, guides Tom, Jack (Rainbo), Jack (Birch), Vito and Will, the fantastic chefs Dawson, Brother and Keith, and our pilots Steve.  I can\'t stress just how good this team is.\nFishing was fantastic with numbers approaching 50 per day.  We had excellent silver fishing at both Rainbo and Birch - make sure you ask Jack about top water fishing for silvers at Birch!  Back at the main lodge, I had great days on the Hop, Pak, and Wok with char starting to turn their spawning colors, beautiful rainbows, and even some grayling on a top water chubby compliments of Vito!\nThe lodge is extremely comfortable with bar, fireplace, wood-fired sauna, and hot tub.  And there is no better way to come off a big day of fishing, by stopping at the gazebo just off the dock for a cocktail from Lindsey.\nThe views are simply incredible and very diverse depending on what location you are in.  My favorite was fishing the Little Togiak for some of the best scenery in the state!\nBring plenty of layers as this is truly Alsakan wilderness and the weather can be anything from a gale coming off the Aleutians, to incredibly beautiful (think calendar beautiful). Plus we had some good bear viewing as well!\nIf you are looking for a true Alaskan fishing adventure with plenty of pampering when you are ready to put your fishing rods down, this is it!',
+        relativeTimeDescription: '5 months ago on Google',
+        time: 1772483794,
+      },
+      {
+        authorName: 'Q7150BPsarae',
+        rating: 5,
+        text: 'I\'ll start by saying that I was pretty scared to take this trip.  I am not an avid fisher-woman.  However, my boyfriend and his parents are, so I said yes to the trip.  I was seriously worried that 6 days of fishing would be way too much. …',
+        relativeTimeDescription: '5 months ago on Tripadvisor',
+        time: 1772483794,
+      },
+    ],
   },
   // ─── OREGON ────────────────────────────────────────────────────────
   {
@@ -182,6 +338,32 @@ export const guides: Guide[] = [
     metaTitle: "Sarah Whitfield — Deschutes River Fly Fishing Guide, Oregon",
     metaDescription:
       "Expert fly fishing guide on Oregon's Deschutes River. Steelhead swinging, redsides trout, Spey casting instruction, and multi-day float trips.",
+    googleRating: 5,
+    googleReviewCount: 386,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Deschutes+River+Adventures/@45.1749022,-121.0917783,16z/data=!4m10!1m2!2m1!1sDeschutes+River+Outfitters+Maupin+Oregon!3m6!1s0x54bdd8a496de6c65:0x6e6195a945e9a7df!8m2!3d45.1749022!4d-121.0822511!15sCihEZXNjaHV0ZXMgUml2ZXIgT3V0Zml0dGVycyBNYXVwaW4gT3JlZ29uWioiKGRlc2NodXRlcyByaXZlciBvdXRmaXR0ZXJzIG1hdXBpbiBvcmVnb26SARNyYWZ0X3RyaXBfb3V0Zml0dGVymgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDIwMVRtRkdVa3BUVjFwUVVrVkdXazVGVm05a2EwWkZVbFpKTlZwSVl4QULgAQD6AQQIfhBK!16s%2Fg%2F1thw1wmz',
+    featuredReviews: [
+      {
+        authorName: 'Stephen p.',
+        rating: 5,
+        text: 'What an amazing trip, Six ( Matt) was so cool and knowledgeable. He made the trip memorable for all of us, such river skills and background on basically anything outdoors in Oregon. Everything went better than I could have wished for and the photos are unreal.\nI will be recommending you to all of my friends and bar customers in Redmond. I have a feeling this will be an annual event!!\nThanks for everything.\n\nSIX IS THE MAN!!',
+        relativeTimeDescription: 'Edited 8 months ago',
+        time: 1772483817,
+      },
+      {
+        authorName: 'McKinley p.',
+        rating: 5,
+        text: 'I haven’t had that much fun in a long time! Went out for a day raft trip to celebrate our friend’s bachelorette party, and had the best time. Our guide Jody was patient, kept us safe and was so kind. I never had to worry, and was able to just enjoy the beautiful Deschutes, the company of my friends, and the little rush of adrenaline we got with each rapid.\n\nWe are already planning our next trip with DRA! 🤩',
+        relativeTimeDescription: '5 months ago',
+        time: 1772483817,
+      },
+      {
+        authorName: 'karen p.',
+        rating: 5,
+        text: 'We had such an amazing time. Our guide Zakk was fun and made sure we were safe and enjoyed ourselves. I highly recommend Deschutes river adventure over anyone else in the area. Highly trained and knowledgeable',
+        relativeTimeDescription: '6 months ago',
+        time: 1772483817,
+      },
+    ],
   },
   // ─── PENNSYLVANIA ──────────────────────────────────────────────────
   {
@@ -208,6 +390,32 @@ export const guides: Guide[] = [
     metaTitle: "Ed Shenk III — Pennsylvania Spring Creek Fly Fishing Guide",
     metaDescription:
       "Third-generation fly fishing guide on Pennsylvania's legendary limestone creeks. Technical dry-fly fishing on the Letort, Big Spring, and Penns Creek.",
+    googleRating: 3,
+    googleReviewCount: 8,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Cumberland+Valley+Aviation/@38.478707,-81.2753415,7z/data=!4m10!1m2!2m1!1sCumberland+Valley+Anglers+Carlisle+Pennsylvania!3m6!1s0x89c8e1b94369d3f7:0xb5b50944887ba61a!8m2!3d40.1881731!4d-77.1665821!15sCi9DdW1iZXJsYW5kIFZhbGxleSBBbmdsZXJzIENhcmxpc2xlIFBlbm5zeWx2YW5pYVoxIi9jdW1iZXJsYW5kIHZhbGxleSBhbmdsZXJzIGNhcmxpc2xlIHBlbm5zeWx2YW5pYZIBDWZsaWdodF9zY2hvb2yaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTXRhblZoUkZkUkVBReABAPoBBAhzEEE!16s%2Fg%2F11b71t975r',
+    featuredReviews: [
+      {
+        authorName: 'Mark r.',
+        rating: 5,
+        text: 'Former private pilot/Current IFR student - I\'ve worked with several instructors and the instructors at Cumberland Valley Aviation have been the best! Always professional and flexible to work with changing schedules to help me reach my goals/ratings in a timely fastion. They are able to take into account different learning styles to help progress through the complicated curriculum through a combination of ground school and hands on flying. They offer great airplanes to train in that are reguarlary maintained. I highly reccomend Cumbarland Valley Aviation!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483837,
+      },
+      {
+        authorName: 'Trish r.',
+        rating: 1,
+        text: '16 y/o son took approximately 10 lessons and loved it…next she completely ghosted him.if she was busy and couldn’t provide the services anymore we would understand. She pretended she didn’t know who he was when he called. Never returned parents calls. He’s devastated. Don’t bother with this place.',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483837,
+      },
+      {
+        authorName: 'Leslie r.',
+        rating: 5,
+        text: 'My daughter is enjoying her lessons and the instructor is very knowledgeable and takes her time explaining things. It is also wonderful to have a female pilot to teach my daughter.',
+        relativeTimeDescription: '3 years ago',
+        time: 1772483837,
+      },
+    ],
   },
   // ─── MICHIGAN ──────────────────────────────────────────────────────
   {
@@ -234,6 +442,32 @@ export const guides: Guide[] = [
     metaTitle: "Jim Navarre — Au Sable River Fly Fishing Guide, Michigan",
     metaDescription:
       "Experienced fly fishing guide on Michigan's Au Sable River. Traditional riverboat trips, Hex hatch fishing, and steelhead guiding on the Pere Marquette.",
+    googleRating: 4.9,
+    googleReviewCount: 424,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Gates+Au+Sable+Lodge/@44.6791785,-84.8814852,11z/data=!4m13!1m2!2m1!1sAu+Sable+River+Guides+Grayling+Michigan!3m9!1s0x88206ce4f49d8695:0x8c2bbf776d126853!5m2!4m1!1i2!8m2!3d44.6791785!4d-84.5766146!15sCidBdSBTYWJsZSBSaXZlciBHdWlkZXMgR3JheWxpbmcgTWljaGlnYW5aKSInYXUgc2FibGUgcml2ZXIgZ3VpZGVzIGdyYXlsaW5nIG1pY2hpZ2FukgEOaW5kb29yX2xvZGdpbmeaASRDaGREU1VoTk1HOW5TMFZNVEVrNU9WZGpNamxFV2pWM1JSQULgAQD6AQQIWhBD!16s%2Fg%2F1v_w2zkq',
+    featuredReviews: [
+      {
+        authorName: 'David r.',
+        rating: 5,
+        text: 'I cannot say enough about Josh and his staff. Denny and Matt were always eager and helpful. Josh  had a plan for us every day that we fished. We booked a float trip. Our guide was Jordan. He did a fantastic job. The restaurant was excellent. The fly shop well stocked. I cannot wait to book for next year.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483858,
+      },
+      {
+        authorName: 'Diane p.',
+        rating: 5,
+        text: 'With a cabin in the area, we enjoy Gate\'s small, intimate restaurant - It is excellent. A great, varied menu. And right on the Au Sable river - a beautiful walk after dinner. We try to make a reservation here every time we come up north. Hope to have family members enjoy the #1 fly-fishing at Gates in the future - My husband loves the fly shop.',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772483858,
+      },
+      {
+        authorName: 'J189VLsusanp',
+        rating: 5,
+        text: 'Highly recommended. What began as a planned father- son weekend turned into a surprise husband- wife get away, due to a son’s covid. The Lodge, staff and guide were so flexible and accommodating in helping us pivot  from the planned weekend …',
+        relativeTimeDescription: '6 months ago on Tripadvisor',
+        time: 1772483858,
+      },
+    ],
   },
   // ─── ARKANSAS ──────────────────────────────────────────────────────
   {
@@ -260,6 +494,32 @@ export const guides: Guide[] = [
     metaTitle: "Cody Lazenby — White River Arkansas Fly Fishing Guide",
     metaDescription:
       "Expert tailwater fly fishing guide on Arkansas's White and Norfork rivers. Year-round trophy trout fishing, drift boat trips, and generation schedule expertise.",
+    googleRating: 5,
+    googleReviewCount: 44,
+    googleReviewsUrl: 'https://www.google.com/maps/place/White+River+Trout+Club/@36.334624,-92.6227967,13z/data=!4m13!1m2!2m1!1sWhite+River+Fly+Fishing+Guide+Cotter+Arkansas!3m9!1s0x87ce257e15fe74f9:0x75df99de6261cb97!5m2!4m1!1i2!8m2!3d36.3346238!4d-92.5465791!15sCi1XaGl0ZSBSaXZlciBGbHkgRmlzaGluZyBHdWlkZSBDb3R0ZXIgQXJrYW5zYXNaLyItd2hpdGUgcml2ZXIgZmx5IGZpc2hpbmcgZ3VpZGUgY290dGVyIGFya2Fuc2FzkgEFbG9kZ2WaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVUm9kVFpsWVZOM0VBReABAPoBBAhPEDw!16s%2Fg%2F11t6_rnj9b',
+    featuredReviews: [
+      {
+        authorName: 'Ashley p.',
+        rating: 5,
+        text: 'Perfect Getaway on the White River – Clean Cabins, Great Fishing & Amazing Staff!\n\nMy partner and I spent an unforgettable weekend at the White River Trout Club. While he had stayed several times before, this was my first visit—and it blew me away.\n\nThe location is right on the river, making fishing super convenient and scenic. The cabins are clean, cozy, and fully renovated, equipped with everything you need to relax and feel at home. The entire property is now under new management, and it really shows—from the stylish upgrades to the thoughtful details in every cabin.\n\nWhat really made the trip outstanding was William, who works there. We accidentally locked ourselves out at 12:30 a.m., and he showed up immediately, smiling and helpful. When we ran out of gas on the river, William rescued us with fuel and even towed us in. He brought us a grill and charcoal when we decided to cook out—just always polite, upbeat, and ready to help. He’s truly an asset to this place.\n\nBetween the fishing, the peaceful surroundings, and the exceptional hospitality, I couldn’t have asked for a better first-time experience on the White River. We’re already planning our next visit!',
+        relativeTimeDescription: '3 months ago on Google',
+        time: 1772483880,
+      },
+      {
+        authorName: 'D5786RVrobina',
+        rating: 5,
+        text: 'When went over with two other members of our Middle TN Fly Fisher\'s group.  We had a fabulous 4 days at the WRTC.  The accommodations are either motel style rooms (which are actually suites with a kitchen separate from the bedroom) or a …',
+        relativeTimeDescription: '4 months ago on Tripadvisor',
+        time: 1772483880,
+      },
+      {
+        authorName: 'Colt p.',
+        rating: 5,
+        text: 'I had a great time here. I stayed for 2 nights in a studio cabin and went on a 6hr guided fly fishing trip. Everything is updated, clean and well maintained. The clubhouse/pavilion area is a great place to relax and hang out with friends. They have a pool, fly shop, dock and also a bar that is open in the afternoons. My guide picked me up right from the dock on the property and went right to fishing! After seeing the other fishing lodge properties from the river while fishing, I would definitely stay here again over any of the others. I highly recommend this place if you are considering a fishing trip on the White River!',
+        relativeTimeDescription: '6 months ago on Google',
+        time: 1772483880,
+      },
+    ],
   },
   // ─── FLORIDA KEYS ──────────────────────────────────────────────────
   {
@@ -286,6 +546,32 @@ export const guides: Guide[] = [
     metaTitle: "Captain Luis Cabrera — Islamorada Fly Fishing Guide, Florida Keys",
     metaDescription:
       "Top-rated Florida Keys fly fishing guide specializing in permit, bonefish, and tarpon. Grand slam expert operating from Islamorada on the Middle Keys flats.",
+    googleRating: 5,
+    googleReviewCount: 105,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Florida+Keys+Fun+Fishing/@24.9077488,-80.8018485,12z/data=!4m10!1m2!2m1!1sIslamorada+Flats+Fishing+Guide+Florida+Keys!3m6!1s0x88d73749198f5c77:0x6cd695ddd7078732!8m2!3d24.9077488!4d-80.6494132!15sCitJc2xhbW9yYWRhIEZsYXRzIEZpc2hpbmcgR3VpZGUgRmxvcmlkYSBLZXlzWi0iK2lzbGFtb3JhZGEgZmxhdHMgZmlzaGluZyBndWlkZSBmbG9yaWRhIGtleXOSAQ9maXNoaW5nX2NoYXJ0ZXKaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVTlBheTAzVlhOM1JSQULgAQD6AQQILBBC!16s%2Fg%2F1vf9d4ql',
+    featuredReviews: [
+      {
+        authorName: 'James p.',
+        rating: 5,
+        text: 'My son and I had a great experience over two trips…. caught a ton of fish.   Capt Ed was the best.  Highly recommend.',
+        relativeTimeDescription: 'a week ago',
+        time: 1772483903,
+      },
+      {
+        authorName: 'Matthew p.',
+        rating: 5,
+        text: 'My son and I fished with captain ed and captain david over two days. Everything was perfect. Both captains delivered, both were great with my son still learning to fish, and the Everglades park they fish in is unbelievable. Catching a 5 ft bull shark was the highlight of our entire trip to the keys. Thank you guys!',
+        relativeTimeDescription: '6 months ago',
+        time: 1772483903,
+      },
+      {
+        authorName: 'Staton p.',
+        rating: 5,
+        text: 'We had Capt Ed and he was excellent! This was my kids first experience fishing in salt water and they already want to go back. Capt was very professional, friendly and knowledgeable. He was so polite and helpful with our kids, answering all their questions. We caught multiple fish species, watched dolphins feed on bait fish, watched manatees and oh yeah caught a shark! Highly recommend to anyone looking for a fun family friendly experience! I’m sure all the captains are great but I’d ask for Ed.',
+        relativeTimeDescription: '10 months ago',
+        time: 1772483903,
+      },
+    ],
   },
   // ─── NEW ZEALAND ───────────────────────────────────────────────────
   {
@@ -312,6 +598,32 @@ export const guides: Guide[] = [
     metaTitle: "Hamish McLeod — New Zealand Backcountry Fly Fishing Guide",
     metaDescription:
       "Expert New Zealand fly fishing guide on the South Island. Sight-fishing for trophy brown trout, helicopter backcountry trips, and wilderness expeditions in Southland.",
+    googleRating: 5,
+    googleReviewCount: 141,
+    googleReviewsUrl: 'https://www.google.com/maps/place/The+New+Zealand+Flyfishing+Company/@-40.9248354,155.4921899,5z/data=!4m10!1m2!2m1!1sNZ+Backcountry+Fly+Fishing+guide+New+Zealand!3m6!1s0x6d6bf1271e3c1ca1:0xf15eb48563b432b3!8m2!3d-40.9248354!4d175.0039087!15sCixOWiBCYWNrY291bnRyeSBGbHkgRmlzaGluZyBndWlkZSBOZXcgWmVhbGFuZFouIixueiBiYWNrY291bnRyeSBmbHkgZmlzaGluZyBndWlkZSBuZXcgemVhbGFuZJIBD2Zpc2hpbmdfY2hhcnRlcpoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VOUU1VMVRlVVZuRUFF4AEA-gEECAAQSw!16s%2Fg%2F1tdkb7_q',
+    featuredReviews: [
+      {
+        authorName: 'ilma p.',
+        rating: 5,
+        text: 'What an incredible experience, Roy and his team were accessible, keen to provide results, provided us with all the necessary equipment and guides that made the three days we spent with the team in the North and South Island an absolute pleasure.\nsome words of customer caution however:\n1. the guides are often more enthusiastic than you are about your results and as such need a certain level of competence from you the angler. let the team know how proficient you are, can you drop a fly on a 30cm rock from 15m or not? they need to know because they have beats they can adjust to ensure your success.\n2. the north island is easier fishing, period. The South Island has bigger fish but fewer and need more skill to catch.\n3. listen to your guide, he knows what to do. I found the fishing we did at home similar but it\'s the subtle nuances provided by the guides that delivered success.\n4. lastly, be prepared to debrief are every day. Roy runs a very professional setup and wants to know exactly how you did.\n\nMy son and I highly recommend roy and his team and will definitely use them again. what an incredible team, bucket list stuff.',
+        relativeTimeDescription: 'Edited 2 months ago',
+        time: 1772483924,
+      },
+      {
+        authorName: 'Mac p.',
+        rating: 5,
+        text: 'I wanted the trip of a lifetime, fly fishing in New Zealand, and I got it. Read this before you book your fly fishing trip.\n\nI scheduled a New Zealand trip with my family on short notice (the airfare was right). This has been a bucket list item since I was 12. I reached out to The New Zealand Fly Fishing Company with my itinerary, and here’s how it went.\n\nRoy replied fast and didn’t just answer my inquiry. He clearly read my itinerary, found workable days despite a packed schedule, and built a plan around exactly what I wanted. He sent nearly two pages of helpful detail: travel advice, gear notes, river options, expectations, and more.\n\nBecause I had my family with me, I wanted an easy day on forgiving water. What I cared about most was my wife and son getting the chance to net fish in New Zealand. I also wanted one day on my own, and I told Roy I wanted a grinder day that would test me to my limits.\n\nFor my solo day, I didn’t want a typical guided experience. I don’t like being catered to on the water. I wanted to fish alongside someone who could teach by example, even if that meant the guide cast and caught while I walked away empty-handed (This is not typical, so I had to confirm this is what I wanted). Watching an expert read new water teaches me more than anything, and I wanted to learn from the best.\n\nRoy’s plan worked to perfection. My first day was North Island fly fishing with my family, and everyone caught fish with our guide, Hamish. My wife and I netted fish quickly, but it was a challenge for my 12-year-old son. Big fish, young kid. Hamish spent the afternoon focused on my son, patiently teaching him and even casting his own rod to increase our chances. I’ve been fly fishing for 30 years and found myself sitting back just to learn. My son hooked nearly a dozen fish and finally landed one. We worked for hours, and the excitement was through the roof after all the hookups.\n\nMy solo day will probably go down as the best fly fishing day of my life when I finally hang up my waders. I met Henare on the South Island. I knew I’d asked for a beast of a day, so I didn’t know what to expect. Henare mostly refused to fish, but his son was with us and was all in. Jazz is going to be one of the finest New Zealand fly fishing guides very soon. I did manage to get a rod into Henare’s hands at one point, and it was like going to fly fishing college; I was able to adjust my tactics on the spot. Watching Jazz hook and land a fish was one of my favorite parts of the trip. The kid is good.\n\nWe fished all day, hiked miles, hooked huge browns, and took breaks to take in the unreal scenery. Henare and Jazz taught me how to spot fish from a surprising distance, and it changed how I read water. It was exactly the New Zealand fly fishing trip I’d hoped for. I wasn’t a guided tourist being coddled along a river. It felt like fishing with old friends, working every inch of water through miles of backcountry.\n\nMy favorite moments weren’t even on the water. They were the backcountry-cooked meals and the stories, with only the mountains to hear us.\n\nNotes:\nThis wasn’t a cookie-cutter experience because I asked for something specific. These folks can tailor a New Zealand fly fishing trip to anything you want. If you want delicious meals and an easy day, they’ll do it. If you want the New Zealand brush to punish you while you put everything you have into a perfect cast, they’ll do that too.\n\nRemember your gear. I was prepared and had my bag, but I accidentally left it in our rental car.\n\nPractice your casting. Just a reminder: fly fishing in New Zealand often means long leaders.\n\nYou don’t know everything. Go in humbly, ready to listen and learn. New Zealand is different, and even if you’re experienced, every river is its own puzzle.\n\nTake in the scenery. This might be the most beautiful place on the planet.',
+        relativeTimeDescription: '2 weeks ago',
+        time: 1772483924,
+      },
+      {
+        authorName: 'Barney p.',
+        rating: 5,
+        text: 'Had a spectacular guided fishing trip with Graham and Hamish, organized through Roy at Fly Fishing NZ. We caught lots of big fish! The guides brought us to some nice spots but were also very knowledgeable and a pleasure to fish with. I highly recommend these guides and this organization.',
+        relativeTimeDescription: 'a month ago',
+        time: 1772483924,
+      },
+    ],
   },
   // ─── PATAGONIA ─────────────────────────────────────────────────────
   {
@@ -338,6 +650,32 @@ export const guides: Guide[] = [
     metaTitle: "Matias Orellana — Patagonia Argentina Fly Fishing Guide",
     metaDescription:
       "Expert fly fishing guide in northern Patagonia, Argentina. Trophy brown and rainbow trout on the Rio Malleo, Chimehuin, and Rio Grande with bilingual service.",
+    googleRating: 4.2,
+    googleReviewCount: 5,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Patagonia+Trout+Outfitters/@-42.9149551,-90.8683853,5z/data=!4m10!1m2!2m1!1sPatagonia+Trout+Adventures+Argentina+guide!3m6!1s0x961dade4415227d3:0x459948a64dfad806!8m2!3d-42.9149551!4d-71.3566666!15sCipQYXRhZ29uaWEgVHJvdXQgQWR2ZW50dXJlcyBBcmdlbnRpbmEgZ3VpZGVaLCIqcGF0YWdvbmlhIHRyb3V0IGFkdmVudHVyZXMgYXJnZW50aW5hIGd1aWRlkgEMZmlzaGluZ19jYW1wmgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVU5rY1hSMVRsOUJSUkFC4AEA-gEFCKcBEBI!16s%2Fg%2F11v168mmpr',
+    featuredReviews: [
+      {
+        authorName: 'Bill r.',
+        rating: 5,
+        text: 'Well organized, detail oriented, knowledgeable, courteous, competent leadership made for a perfect trip in Feb 2024. Thank you to the entire crew for a job well done. Worth every penny.',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483946,
+      },
+      {
+        authorName: 'Rafael p.',
+        rating: 1,
+        text: 'It\'s deplorable what they do; they say things they don\'t follow through on, their answers aren\'t logical, they didn\'t propose what they write, it\'s false',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483946,
+      },
+      {
+        authorName: 'Fran B.',
+        rating: 5,
+        text: 'Thank you!!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772483946,
+      },
+    ],
   },
   // ─── BRITISH COLUMBIA ──────────────────────────────────────────────
   {
@@ -364,6 +702,25 @@ export const guides: Guide[] = [
     metaTitle: "Owen Blackwater — Skeena Steelhead Fly Fishing Guide, BC",
     metaDescription:
       "Indigenous fly fishing guide on BC's Skeena River system. Wild steelhead swinging, Spey casting, and cultural connection to the greatest steelhead rivers on Earth.",
+    googleRating: 5,
+    googleReviewCount: 2,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Skeena+Adventure+Fishing/@54.5542615,-128.9532274,11z/data=!4m10!1m2!2m1!1sSkeena+Steelhead+Adventures+British+Columbia+Canada!3m6!1s0x5474992cd0d53609:0x8462e73d3441c124!8m2!3d54.5542615!4d-128.6483568!15sCjNTa2VlbmEgU3RlZWxoZWFkIEFkdmVudHVyZXMgQnJpdGlzaCBDb2x1bWJpYSBDYW5hZGFaNSIzc2tlZW5hIHN0ZWVsaGVhZCBhZHZlbnR1cmVzIGJyaXRpc2ggY29sdW1iaWEgY2FuYWRhkgEPZmlzaGluZ19jaGFydGVymgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJ0Uk1WcEhPVEpVVm1SSVZsaENlRlZXUW5OTlJrSjBWRlpvVFZwc1JSQULgAQD6AQUItQEQEw!16s%2Fg%2F11lv4pt4tk',
+    featuredReviews: [
+      {
+        authorName: 'Bruno r.',
+        rating: 5,
+        text: 'Amazing place, best smoked salmon you will ever have ! Incredible fishing, great tips and tricks to upgrade your level of fishing or simply to have a good fishing day on the water. Highly recommended.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772483967,
+      },
+      {
+        authorName: 'Sam r.',
+        rating: 5,
+        text: 'Great staff. Great accommodations. Fishing was amazing. And for the price you just can’t beat it. Highly recommend 👍 …',
+        relativeTimeDescription: 'a year ago',
+        time: 1772483967,
+      },
+    ],
   },
   // ─── BAHAMAS ───────────────────────────────────────────────────────
   {
@@ -390,6 +747,32 @@ export const guides: Guide[] = [
     metaTitle: "Prescott Rolle — Andros Island Bonefish Guide, Bahamas",
     metaDescription:
       "Expert Bahamian bonefish guide on Andros Island. Twenty-two years of experience on the world's best bonefish flats with custom-built skiff.",
+    googleRating: 4.7,
+    googleReviewCount: 52,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Andros+Island+Bonefish+Club/@24.4857035,-77.7212334,17z/data=!4m9!3m8!1s0x892f2672dc9e537b:0x70991bf99452e741!5m2!4m1!1i2!8m2!3d24.4857035!4d-77.7212334!16s%2Fg%2F1hc30tzzw',
+    featuredReviews: [
+      {
+        authorName: 'scott p.',
+        rating: 5,
+        text: 'This was my second trip to Andros and 1st Visit to the Andros Island Bonefish Club. I chose AIBC for this trip due to the long history they have flyfishing for Bonefish on Andros. I loved everything about my visit. The staff went above and beyond to make my stay enjoyable. This is truly a fisherman\'s lodge and I felt more like family here than a guest. AIBC isn\'t one of those posh resorts that seem to be popping up everywhere these days. It\'s the traditional fishing lodge where you feel as comfortable here as if it was your own. A special place where people who love to fish come and have as much fun hanging out and meeting other like minded people while sharing a drink at days end as they did landing bonefish. Great location, great guides, great hosts. The weather we got was far from ideal but the experienced guides put me on fish every day. I can\'t thank them enough for such a great experience. Will definitely be returning when the opportunity allows.',
+        relativeTimeDescription: '2 weeks ago on Google',
+        time: 1772483984,
+      },
+      {
+        authorName: 'ric21b',
+        rating: 5,
+        text: 'My son (who could guide) and I have fished all over the world and this is a must hit destination.   Juliette was amazing the guides were amazing the fishing amazing.   If you appreciate old school cool with top tier everything, this is the place.    Thanks for having us.',
+        relativeTimeDescription: '3 months ago on Tripadvisor',
+        time: 1772483984,
+      },
+      {
+        authorName: 'Robert r.',
+        rating: 5,
+        text: 'First time at the club Bone fishing . The staff was amazing. Pattie keeps you well fed, Juliet makes sure all your needs are met. We Had Danny as our guide and with his 30 plus years of experience he had us on the fish every day. I do not have allot of experience with a fly rod so Danny was very patient and his guidance above excellent. Everyone there goes above and beyond to make sure your stay enjoyable. I will be making this a yearly event. Thanks to all the staff.',
+        relativeTimeDescription: '4 months ago on Google',
+        time: 1772483984,
+      },
+    ],
   },
   // ─── ICELAND ───────────────────────────────────────────────────────
   {
@@ -416,6 +799,32 @@ export const guides: Guide[] = [
     metaTitle: "Gudmundur Sigurdsson — Iceland Atlantic Salmon Fly Fishing Guide",
     metaDescription:
       "Premier Icelandic fly fishing guide for Atlantic salmon and brown trout. Expert guiding on the Laxa i Myvatn and Midfjardara rivers under the midnight sun.",
+    googleRating: 4.6,
+    googleReviewCount: 41,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Iceland+Outfitters/@64.1095168,-24.3314327,8z/data=!4m10!1m2!2m1!1sIceland+Fly+Fishing+guide+Reykjavik!3m6!1s0x48d673536229afdd:0x253a474d42c090e0!8m2!3d64.1095168!4d-21.8924679!15sCiNJY2VsYW5kIEZseSBGaXNoaW5nIGd1aWRlIFJleWtqYXZpa1olIiNpY2VsYW5kIGZseSBmaXNoaW5nIGd1aWRlIHJleWtqYXZpa5IBDXRyYXZlbF9hZ2VuY3maASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUmlNa2xxYlRaUlJSQULgAQD6AQUIogEQTA!16s%2Fg%2F11c0y5ccvf',
+    featuredReviews: [
+      {
+        authorName: 'Miguel p.',
+        rating: 5,
+        text: 'We’ve just spent an unforgettable time this year at WRangá, with big salmons and the wonderful people in the Lodge (Maria, Nieves, Carmen, Lola, Kolla, Nestor…). Our chef was also amazing as well as Nico, our expertise and professional guide. It’s worth it, we’ll expect to repeat next year. Congrats!',
+        relativeTimeDescription: '5 months ago',
+        time: 1772484006,
+      },
+      {
+        authorName: 'Jim p.',
+        rating: 5,
+        text: 'Jon was my guide and was very professional and easy to get along with.  He showed up right on time at the Hotel and the rest of the day was based on what I wanted to do. He had good knowledge of the river and was always engaged. Lunch at the lodge was very good.  Now if he could only control the weather!\nHad a great time',
+        relativeTimeDescription: '5 months ago',
+        time: 1772484006,
+      },
+      {
+        authorName: 'Ethan r.',
+        rating: 5,
+        text: 'We had the most incredible experience with our Tour Guide, Johann. He drove the group to a great viewing spot, took as many photos as we wanted, and had fresh hot chocolate. He then relocated us to a new spot to get a new view. On our way home, he pulls over and tells everyone to get out and look at the sky. We did and it was the most amazing dancing northern lights you could imagine. He said it was in the top 5 he’s seen all season. I can’t recommend this tour enough!!\n\nJohann also went above and beyond to help us with our booking! Thanks again for the once in a lifetime experience!',
+        relativeTimeDescription: '3 weeks ago',
+        time: 1772484006,
+      },
+    ],
   },
   // ─── CHILE ─────────────────────────────────────────────────────────
   {
@@ -442,6 +851,32 @@ export const guides: Guide[] = [
     metaTitle: "Rodrigo Sandoval — Chilean Patagonia Fly Fishing Guide",
     metaDescription:
       "Expert fly fishing guide in Chilean Patagonia. Float trips on the Rio Baker and Simpson, backcountry spring creeks, and wilderness expeditions along the Carretera Austral.",
+    googleRating: 5,
+    googleReviewCount: 4,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Koon+Outfitters+%7C+Fly+Fishing+Patagonia/@-45.5656047,-91.5788278,5z/data=!4m10!1m2!2m1!1sPatagonia+Chile+Fly+Fishing+guide+Coyhaique!3m6!1s0xbdf2c4b9db162043:0x125aaa8b85fc8c9e!8m2!3d-45.5656047!4d-72.067109!15sCitQYXRhZ29uaWEgQ2hpbGUgRmx5IEZpc2hpbmcgZ3VpZGUgQ295aGFpcXVlWi0iK3BhdGFnb25pYSBjaGlsZSBmbHkgZmlzaGluZyBndWlkZSBjb3loYWlxdWWSAQ9maXNoaW5nX2NoYXJ0ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTjBkVTEyZDBWbkVBReABAPoBBQjDBRAR!16s%2Fg%2F11c52tfr5k',
+    featuredReviews: [
+      {
+        authorName: 'Kelly p.',
+        rating: 5,
+        text: 'Went on a day float trip with Samuel and wow, what a blast! It was only my second float trip either (and a much better experience than my first). We floated the Rio Manules and it was so pretty it wouldn\'t have mattered if I didn\'t catch a fish, I was just happy to be out on the water. Lunch was incredible, a bit of charcuterie to start, then tuna steaks, wine, salad, and a side.\n\nSamuel was really patient with me as I\'m still new to fishing and got myself caught more times than I\'d like to admit. 5 minutes before we pulled out, at Samuel and my partners coaching I was able to land a big (to me) fish despite my arm killing me after a full day. These guys cheered me on like it was a 30lb fish lol.\n\nHighly recommend!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772484027,
+      },
+      {
+        authorName: 'Ryan r.',
+        rating: 5,
+        text: 'Andres and his team are awesome. They were able to squeeze 2 float trips in for me during high season. The trips were awesome. Top notch gear, a gourmet lunch (tuna steak, wine, appetizers), and beer / drinks for the day. The guides, Samuel and Luciano were super friendly, gave great advice, and knew how to put you on a fish.\n\nBook with Andres and you won\'t regret it!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772484027,
+      },
+      {
+        authorName: 'Richie p.',
+        rating: 5,
+        text: 'I did 3 days with Koon in December and what a treat. I did one drift, one lake day and one walk and wade. We treated to all sorts of weather but the team worked so hard to get me on to fish. I cant recommend them enough. When its tough be prepared to fish hard and when its on you are sight fishing with the dry fly! But however you catch them the fish are a great reward!\nI have never been hosted as well by any guides. From meeting the day before to come up with the plan. Punctual arrival. Excellent kit provided to one of the highlights of the trip the lunches! I am happy with a sandwich but this just went above and beyond, book some days with them to find out!\nHopefully I will make it back to explore the endless water at their disposal!',
+        relativeTimeDescription: '2 years ago',
+        time: 1772484027,
+      },
+    ],
   },
   // ─── BELIZE ────────────────────────────────────────────────────────
   {
@@ -468,6 +903,32 @@ export const guides: Guide[] = [
     metaTitle: "Elton Garbutt — Belize Saltwater Fly Fishing Guide",
     metaDescription:
       "Expert Belizean fly fishing guide on the Turneffe Atoll. Permit, bonefish, tarpon, and snook on the Caribbean's most productive flats.",
+    googleRating: 5,
+    googleReviewCount: 30,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Charlie+Leslie+Fly+Fishing/@16.518769,-89.588583,9z/data=!4m10!1m2!2m1!1sBelize+Saltwater+Fly+Fishing+guide!3m6!1s0x8f67631d9fc9b52d:0xb094623d91bbef66!8m2!3d16.518769!4d-88.3691006!15sCiJCZWxpemUgU2FsdHdhdGVyIEZseSBGaXNoaW5nIGd1aWRlWiQiImJlbGl6ZSBzYWx0d2F0ZXIgZmx5IGZpc2hpbmcgZ3VpZGWSAQ9maXNoaW5nX2NoYXJ0ZXKaASNDaFpEU1VoTk1HOW5TMFZLTTBkZkxWOVpNblp1VlZKUkVBReABAPoBBAhOEEk!16s%2Fg%2F11qr9xrqx6',
+    featuredReviews: [
+      {
+        authorName: 'Nate p.',
+        rating: 5,
+        text: 'Charlie is the damn man. Humble and a great guy—not just a skilled guide and navigator, but the type of man a father prays to raise. He expanded my love from trout and smallmouth fly fishing to saltwater. I could not have had a more stoked time hunting those bones and poons with Chuck and Marlon.',
+        relativeTimeDescription: '2 months ago',
+        time: 1772484048,
+      },
+      {
+        authorName: 'Samuel p.',
+        rating: 5,
+        text: 'Charlie Leslie III is an outstanding guide and a blast to spend the day with! He created a fun, relaxed atmosphere while putting us on incredible fish. Thanks to him, I landed my first Permit on the fly — a dream come true! I highly  recommend him if you’re looking for a top-tier fly fishing experience in Belize.',
+        relativeTimeDescription: '9 months ago',
+        time: 1772484048,
+      },
+      {
+        authorName: 'Reed p.',
+        rating: 5,
+        text: 'This is the dream of what every fly fisherman wants in a guide. If you’re just getting into it or you’ve been fishing all your life, as I have. These are the type of people you want in your life, educated and on it. They make it fun, and put you on fish. Finished off my trip with a 30+ pound tarpon and big smile on my face. This family knows more about fly fishing in this region of the world, (Charles Sr. brought flyfishing to Placencia), then most fly fishermen think they do, but do it with a relaxed Carib attitude and the feel of fishing with friends. I Wish I had a few more days to fish with them. Will absolutely be back and have been telling everyone I know headed that way, if they want to fish, this is what you’re looking for. Loved Belize, but a big part of why I will go back is to fish with them. If you’re on the fence, go. Will make a memory worth more then any guide cost. 10 out of 10. Will be back.\n\nAlso looking forward to you rolling out to fish for big cutthroats when you come out to the states Charlie.',
+        relativeTimeDescription: '6 months ago',
+        time: 1772484048,
+      },
+    ],
   },
   // ─── SCOTLAND ──────────────────────────────────────────────────────
   {
@@ -494,6 +955,9 @@ export const guides: Guide[] = [
     metaTitle: "Alistair Grant — River Spey Ghillie & Salmon Fishing Guide, Scotland",
     metaDescription:
       "Third-generation ghillie on Scotland's River Spey. Atlantic salmon fishing, expert Spey casting instruction, and Highland tradition on the birthplace of Spey casting.",
+    googleRating: 4.8,
+    googleReviewCount: 86,
+    googleReviewsUrl: 'https://www.google.com/maps/place/(Fly+Fishing+Guide)+The+Wild+Rise+Company+(Spey+Salmon+Fishing+Scotland)/@57.402747,-3.451093,17z/data=!3m1!4b1!4m6!3m5!1s0x48859742989223ab:0x75c1fd3787cd6c7a!8m2!3d57.402747!4d-3.451093!16s%2Fg%2F11c6t8km6k',
   },
   // ─── SLOVENIA ──────────────────────────────────────────────────────
   {
@@ -520,6 +984,32 @@ export const guides: Guide[] = [
     metaTitle: "Luka Zupancic — Soca River Marble Trout Guide, Slovenia",
     metaDescription:
       "Specialist fly fishing guide for marble trout on Slovenia's Soca River. Sight-fishing in crystal-clear alpine water with expert local knowledge and permit assistance.",
+    googleRating: 5,
+    googleReviewCount: 61,
+    googleReviewsUrl: 'https://www.google.com/maps/place/So%C4%8Da+Trout+Guided+Fly+Fishing+and+Shop/@46.3383134,12.33453,9z/data=!4m10!1m2!2m1!1sSoca+Valley+Fly+Fishing+guide+Slovenia!3m6!1s0x477a69d575bba6b3:0x2fa463966f890322!8m2!3d46.3383134!4d13.5540124!15sCiZTb2NhIFZhbGxleSBGbHkgRmlzaGluZyBndWlkZSBTbG92ZW5pYVooIiZzb2NhIHZhbGxleSBmbHkgZmlzaGluZyBndWlkZSBzbG92ZW5pYZIBGm91dGRvb3JfYWN0aXZpdHlfb3JnYW5pemVymgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJwc05sbHVaM2xaYmtsM1ZUQlNhMW93Vm5sVmF6bG9UbFYwVUdSSFl4QULgAQD6AQQIABA3!16s%2Fg%2F11nfmrysc7',
+    featuredReviews: [
+      {
+        authorName: 'Sam p.',
+        rating: 5,
+        text: 'So happy I booked Soča Trout. We had a great two days fishing all over the system and caught fish throughout both days, despite me finding the fishing pretty tricky!\nBojan knows exactly how to find and catch these rainbows and marble trout. He can spot fish in the water and change fly faster then most humans blink and I’m very grateful 😊',
+        relativeTimeDescription: '5 months ago',
+        time: 1772484082,
+      },
+      {
+        authorName: 'Kevin p.',
+        rating: 5,
+        text: 'I\'ve been fly fishing for about 30 years, and I went with my wife who is new to the sport. Bojan created a perfectly tailored trip for us. He called in his wife, Ana, who worked with my wife and had her casting dry flies right to the target zone with dead drifts in no time.  We caught a lot of big healthy gorgeous rainbows on both dry flies and nymphs. The Soca river is one of the prettiest rivers I have ever fished with gin clear water and amazing scenery.  It was a fantastic trip.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772484082,
+      },
+      {
+        authorName: 'Paul p.',
+        rating: 5,
+        text: 'Bojan my guide for the day was simply excellent. This was my first trip to the Soca valley and I’m extremely pleased I chose Socatrout.\n\nHis patience and friendly advice from the start of the day, discussing what I wanted to know, what my level of experience was and what I wanted to achieve out of the day. As I was spending 4 days in total in the region, Bojan suggested we discover many different rivers and pools.\n\nWe travelled and fished 5 different rivers, (caught fish in every river). Bojan’s knowledge of all the access points, parking areas and best pools where trout could be found, set me up for the week ahead. As the following 3 days on my own, it was easy to go back, park my car, find the easy access to the same rivers and pools. Places I would NEVER of discovered on my own. Which resulted in me catching lots more trout on my 4 day trip.\n\nI guess spending over 9 hrs with a stranger can be a daunting thought, but Bojan was great to spend time with, while I fishing, and taking his friendly informative advice, or just chatting in the van while travelling to different locations. Even a trip to the tackle shop!\n\nBojan worked hard at finding fish, planning the next river, tying my flys on, suggesting we try different techniques and scooping up the fish I caught in his net. I felt really privileged to have that level of service.\n\nAlso the photos Bojan took were great, and captured the moment perfectly.\n\nAnyone considering a guide, I would 110% recommend contacting Socatrout.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772484082,
+      },
+    ],
   },
   // ─── JAPAN ─────────────────────────────────────────────────────────
   {
@@ -546,6 +1036,32 @@ export const guides: Guide[] = [
     metaTitle: "Takeshi Yamamoto — Japan Tenkara & Fly Fishing Guide",
     metaDescription:
       "Japanese tenkara master and fly fishing guide. Guided mountain stream fishing for amago and iwana in Gifu Prefecture with cultural immersion and bilingual service.",
+    googleRating: 4.9,
+    googleReviewCount: 8,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tenkara+Guides+LLC/@39.4996795,-111.5472285,7z/data=!3m1!4b1!4m6!3m5!1s0x8752f53431e8753f:0x23104629d02e14b7!8m2!3d39.4996794!4d-111.5472285!16s%2Fg%2F12lsx2nmb',
+    featuredReviews: [
+      {
+        authorName: 'Brianne r.',
+        rating: 5,
+        text: 'I was just looking for some advice on good tenkara streams close by, to learn and take my son, So I called and he was super friendly and gave me some really good advice. More than I even asked for. If I ever do take a guided tenkara trip, it will definitely be with them!',
+        relativeTimeDescription: '10 months ago',
+        time: 1772484099,
+      },
+      {
+        authorName: 'Eric p.',
+        rating: 5,
+        text: 'Fished with ERiK focusing on Czech nymphing with some long line thrown in. Absolutely the best guide experience I\'ve ever had. Unmatched knowledge of tenkara and their area. Got into fish within a few casts and kept going from there!',
+        relativeTimeDescription: '9 years ago',
+        time: 1772484099,
+      },
+      {
+        authorName: 'Tyson r.',
+        rating: 5,
+        text: 'Erik, John and Rob know their stuff. Not only are they Tenkara experts, they also know all the best places to go around Utah. If you want to learn or advance your skills in Tenkara this is the place to do it.',
+        relativeTimeDescription: '10 years ago',
+        time: 1772484099,
+      },
+    ],
   },
   // ─── CHRISTMAS ISLAND ──────────────────────────────────────────────
   {
@@ -572,6 +1088,18 @@ export const guides: Guide[] = [
     metaTitle: "Moamoa Teata — Christmas Island Bonefish & GT Guide",
     metaDescription:
       "Expert I-Kiribati fly fishing guide on Christmas Island. World-class bonefishing, giant trevally, and multi-species flats fishing on the world's largest coral atoll.",
+    googleRating: 5,
+    googleReviewCount: 4,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Christmas+Island+Lodge/@2.0083125,-157.3960625,17z/data=!3m1!4b1!4m6!3m5!1s0x7a02a108e432858b:0x995f7fdc92daa713!8m2!3d2.0083125!4d-157.3960625!16s%2Fg%2F11t196xwfg',
+    featuredReviews: [
+      {
+        authorName: 'Peter p.',
+        rating: 5,
+        text: 'I would highly recommend Christmas Island Lodge when traveling to fish Christmas Island. Close to the airport, very close to the Lagoon, a lot closer than other places to Korean Wreck and Huff Dam. All situated on a postcard perfect tropical expanse of beach in a pretty isolated area. Private one bedroom air conditioned bungalows a stones throw to the surf. Good food and appetizers, great one on one guides. CSI is very accommodating to your particular needs and to the type of fishing you\'d like to do. There was no hidden costs, everything except hard liquor, getting there and tips was included. Staff was really friendly and bent over backwards to make your stay special. There was even a night of traditional dance and music performed by a local church youth group. I haven\'t even mentioned the fishing, This was my first time of fishing saltwater flats, there was tons of opportunities for fish of all species and sizes no matter your level of skill. I was completely satisfied with my catches, even catching some Peach Face Triggers that are considered hard to catch, and they are but so addicting to target.  My skills, knowledge and confidence grew during the course of the week. For being such an exotic place it\'s only a three hour flight from Honolulu, very easy to get to. Looking forward to a return trip.',
+        relativeTimeDescription: '8 months ago',
+        time: 1772484118,
+      },
+    ],
   },
   // ─── SEYCHELLES ────────────────────────────────────────────────────
   {
@@ -598,6 +1126,32 @@ export const guides: Guide[] = [
     metaTitle: "Keith Rose-Innes — Seychelles GT & Flats Fishing Guide",
     metaDescription:
       "Expert saltwater fly fishing guide in the Seychelles Outer Islands. Giant trevally, bonefish, and Indo-Pacific permit on the pristine flats of Alphonse Atoll.",
+    googleRating: 4.5,
+    googleReviewCount: 13,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Alphonse+Fishing+Co+%C2%B7+Seychelles+%C2%B7/@-7.007327,52.731791,17z/data=!3m1!4b1!4m6!3m5!1s0x22fa75bbaa777bf1:0x3ba640ac0cb1ea0b!8m2!3d-7.007327!4d52.731791!16s%2Fg%2F11c1v26dp3',
+    featuredReviews: [
+      {
+        authorName: 'Cindy p.',
+        rating: 5,
+        text: 'Amazing place and photos don\'t do it justice. Customer service is first class. One of a kind destination for the island lover. Pristine diving locations and world class fishing.',
+        relativeTimeDescription: '2 years ago',
+        time: 1772484134,
+      },
+      {
+        authorName: 'Ron p.',
+        rating: 5,
+        text: 'Absolutely attentive to each guests individual needs. The program is second to none.',
+        relativeTimeDescription: '6 years ago',
+        time: 1772484134,
+      },
+      {
+        authorName: 'Md p.',
+        rating: 5,
+        text: 'Amazing..?',
+        relativeTimeDescription: '7 years ago',
+        time: 1772484134,
+      },
+    ],
   },
   // ─── TASMANIA ──────────────────────────────────────────────────────
   {
@@ -624,6 +1178,32 @@ export const guides: Guide[] = [
     metaTitle: "Daniel Hackett — Tasmania Highland Fly Fishing Guide",
     metaDescription:
       "Expert Tasmanian fly fishing guide specializing in sight-fishing for wild brown trout in the Western Lakes. Polaroiding, highland access, and wilderness guiding.",
+    googleRating: 5,
+    googleReviewCount: 87,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tasmania+Fly+Fishing/@-41.4196529,142.2309528,7z/data=!4m10!1m2!2m1!1sTasmania+Highland+Fly+Fishing+guide+Australia!3m6!1s0x6813a70fa4b9f167:0x748e441ec89dc6b0!8m2!3d-41.4196529!4d147.1088825!15sCi1UYXNtYW5pYSBIaWdobGFuZCBGbHkgRmlzaGluZyBndWlkZSBBdXN0cmFsaWFaLyItdGFzbWFuaWEgaGlnaGxhbmQgZmx5IGZpc2hpbmcgZ3VpZGUgYXVzdHJhbGlhkgEPZmlzaGluZ19jaGFydGVymgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVU51ZVMxMlFtVkJFQUXgAQD6AQUIlwEQPg!16s%2Fg%2F11rrmkyh6_',
+    featuredReviews: [
+      {
+        authorName: 'Francesco p.',
+        rating: 5,
+        text: 'My dad and I spent five incredible days fly fishing in Tasmania, and it was truly a trip of a lifetime. Scott, the owner and lead guide, made us feel at home from the very beginning. He took care of every detail — from driving arrangements to accommodation — ensuring everything was perfectly organised so we could focus entirely on the experience.\n\nWe fished a variety of waters, from rivers to alpine lakes, and enjoyed some fantastic catches. The learning curve was amazing as well: Scott dedicated so much time and energy to helping us improve our skills while making sure we had fun throughout. Scott wasn’t alone — the other guides, Jaydon, Peter, and Peter (yes, two Peters!) shared the same passion, professionalism, and enthusiasm. Their collective knowledge and support made the entire journey unforgettable.\n\nI highly recommend Tasmania Fly Fishing to anyone looking for a high-quality, personalised fly fishing experience. Scott and his team will make sure you have the best possible time on the water and you will catch some trouts, guaranteed!\n\nFrancesco & Filippo',
+        relativeTimeDescription: '3 months ago',
+        time: 1772484156,
+      },
+      {
+        authorName: 'Jamie p.',
+        rating: 5,
+        text: 'I am new to fly fishing and my casting definitely wasn’t perfect, but Scott was incredibly patient and clear with his guidance — he made everything feel relaxed and enjoyable.\n\nHe took us to a beautiful river spot, and managed to land four trout! It was the perfect mix of learning, improving, and actually catching fish. I can\'t recommend Scott more highly, thank you!',
+        relativeTimeDescription: '3 months ago',
+        time: 1772484156,
+      },
+      {
+        authorName: 'A r.',
+        rating: 5,
+        text: 'A fantastic day’s guided fishing day on the South Esk with Scott.\nExpert local knowledge of the river got me to the places holding fish and I had plenty of action, catching five beautiful browns on a mixture of dries and nymphs. Lost another fish close to the net and missed six or seven other takes.\nScott provided excellent tuition, teaching me tactics for covering the river and also advice on improving my casting technique. Some nail biting sight fishing produced the best brown of the day on my last cast as we finished a great session. Highly recommended!',
+        relativeTimeDescription: '2 months ago',
+        time: 1772484156,
+      },
+    ],
   },
   // ─── KAMCHATKA ─────────────────────────────────────────────────────
   {
@@ -650,6 +1230,32 @@ export const guides: Guide[] = [
     metaTitle: "Sergei Volkov — Kamchatka Russia Fly Fishing Guide",
     metaDescription:
       "Expert fly fishing guide on Russia's Kamchatka Peninsula. Helicopter access to trophy rainbow trout and Pacific salmon on the Zhupanova River and remote volcanic rivers.",
+    googleRating: 4.1,
+    googleReviewCount: 14,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Tourist+base+%22Kamchatka%22/@55.4323481,159.4264601,17z/data=!3m1!4b1!4m6!3m5!1s0x591b4c6c9cb628b5:0x96c83ce58b9dc11f!8m2!3d55.4323481!4d159.4264601!16s%2Fg%2F11c10021fj',
+    featuredReviews: [
+      {
+        authorName: 'Константин r.',
+        rating: 5,
+        text: 'Greetings everyone! We vacationed with our family in mid-September (my wife, two sons, and me).\nThe resort is absolutely top-notch; we fell in love with it right away. It\'s a cozy little village. Lena the maid charmed us with her care, and Dania the cook and his wife spoiled us with delicious food. Great guys 👍🏼\nThe fishing was excellent; we mostly caught coho salmon, and my wife also caught the local trout a few times.\nThe scenery is beautiful, of course, and the river is absolutely stunning!\nKamchatka is absolutely amazing!\nWe\'ll definitely be back!\nWe loved everything!!!\nShoutout to our ranger, Sasha.',
+        relativeTimeDescription: '5 months ago',
+        time: 1772484173,
+      },
+      {
+        authorName: 'AleksandraLocal p.',
+        rating: 1,
+        text: 'My family and I called this tourist resort, and the man who answered was rude and disrespectful. He refused to answer our questions and sent us to the website to study it. 😄 Moreover, he insulted our voice, calling it a moaning sound. We think the resort isn\'t worthy of our visit either. Judging by the ten reviews, the place isn\'t very popular. 😅',
+        relativeTimeDescription: 'a year ago',
+        time: 1772484173,
+      },
+      {
+        authorName: 'Diego p.',
+        rating: 5,
+        text: 'We came from Kazakhstan, it was our first time, everything was great, the base is up to par!',
+        relativeTimeDescription: '6 years ago',
+        time: 1772484173,
+      },
+    ],
   },
   // ─── TIERRA DEL FUEGO ──────────────────────────────────────────────
   {
@@ -676,6 +1282,25 @@ export const guides: Guide[] = [
     metaTitle: "Alejandro Fernandez — Tierra del Fuego Sea Trout Guide",
     metaDescription:
       "Expert fly fishing guide on the Rio Grande in Tierra del Fuego. Trophy sea-run brown trout, Spey casting instruction, and exclusive beat access on the world's premier sea-trout river.",
+    googleRating: 5,
+    googleReviewCount: 3,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Rio+Menendez/@-53.870704,-69.3667253,9z/data=!4m10!1m2!2m1!1sRio+Grande+Sea+Trout+guide+Tierra+del+Fuego+Argentina!3m6!1s0xbc4b67c8ae5b1251:0xa7fd05b6501634ff!8m2!3d-53.870704!4d-68.1472429!15sCjVSaW8gR3JhbmRlIFNlYSBUcm91dCBndWlkZSBUaWVycmEgZGVsIEZ1ZWdvIEFyZ2VudGluYZIBD2Zpc2hpbmdfY2hhcnRlcuABAA!16s%2Fg%2F11c48826x8',
+    featuredReviews: [
+      {
+        authorName: 'Luis p.',
+        rating: 5,
+        text: 'My favorite river',
+        relativeTimeDescription: '2 years ago',
+        time: 1772484194,
+      },
+      {
+        authorName: 'agustin p.',
+        rating: 5,
+        text: 'Menéndez is crazy',
+        relativeTimeDescription: '8 years ago',
+        time: 1772484194,
+      },
+    ],
   },
   // ─── PHASE 3 ADDITIONS ──────────────────────────────────────────
   {
@@ -702,6 +1327,32 @@ export const guides: Guide[] = [
     metaTitle: "Paddy McDonnell — River Moy Salmon Ghillie",
     metaDescription:
       "Third-generation ghillie on Ireland's River Moy. Atlantic salmon, wild brown trout, and traditional Irish fly fishing in County Mayo.",
+    googleRating: 4.6,
+    googleReviewCount: 181,
+    googleReviewsUrl: 'https://www.google.com/maps/place/River+Moy/@54.0388827,-8.9336848,11z/data=!3m1!4b1!4m6!3m5!1s0x48594d004626eea9:0xa67c360b45c56c!8m2!3d54.0076!4d-8.8887721!16zL20vMDU2OHY0',
+    featuredReviews: [
+      {
+        authorName: 'Alana p.',
+        rating: 5,
+        text: 'Stunning river full of salmon.. The River Moy is the most famous of Ireland’s many Salmon Rivers. Anglers come from all parts of the globe to fish this 60 mile plus, stretch of water. The River and its tributaries touch the Ox mountains in the East, Castlebar in the South and Nephin Beg range of mountains in North Mayo. The system also includes Lough Conn and Lough Cullin.\n\nThe lower and middle parts of the river are very wide (40 metres plus) and deep in some parts. The upper river has more spate-like qualities and looks more like some of the smaller Salmon Rivers in the country. The Upper River is especially good for the fly fisherman, but there is plenty of fly water throughout the course of the river.\nSpring fishing is said to start on the opening day, and indeed there have been plenty of February fish taken in Ballina (behind the fish traps) over the years, but the best of the spring fishing is over the course of March, April and May. The Grilse run starts early May and is prolific right through until the end of July. Autumn fishing is also good through August and September.\n\nThe Sea Trout fishing is best in the estuary, and runs from April right through until September. You can get Sea Trout throughout the river but the further up you go the later the run.',
+        relativeTimeDescription: 'Edited 7 years ago',
+        time: 1772484213,
+      },
+      {
+        authorName: 'Ruby p.',
+        rating: 5,
+        text: 'I go to various parts of the moy river, it\'s surrounded by beautiful countryside on both sides ,as it winds it\'s way out to see, the wildlife on display is bountiful,  you\'ll see otters , fish, all sorts of birds, and other wildlife. We\'ll worth a look and so peaceful and tranquil,  a great place to chill out, and watch the world go by.......enjoy........',
+        relativeTimeDescription: '3 years ago',
+        time: 1772484213,
+      },
+      {
+        authorName: 'Shashi p.',
+        rating: 4,
+        text: 'River Beside National Museum of Ireland.\nPicturesque and peaceful location.',
+        relativeTimeDescription: 'Edited 3 years ago',
+        time: 1772484213,
+      },
+    ],
   },
   {
     id: "guide-alexei-ponoi",
@@ -727,6 +1378,18 @@ export const guides: Guide[] = [
     metaTitle: "Alexei Volkov — Ponoi River Atlantic Salmon Guide",
     metaDescription:
       "Expert Atlantic salmon guide on Russia's Ponoi River. Over 20 seasons of Kola Peninsula experience with Spey casting instruction and conservation commitment.",
+    googleRating: 4.8,
+    googleReviewCount: 5,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Ryabaga-Ponoi+River+Company/@67.071801,40.0189975,11z/data=!4m10!1m2!2m1!1sPonoi+River+fishing+guide+Kola+Peninsula+Russia!3m6!1s0x443ea3ebdbe19267:0xa6da2def1bba073d!8m2!3d67.013959!4d40.2681909!15sCi9Qb25vaSBSaXZlciBmaXNoaW5nIGd1aWRlIEtvbGEgUGVuaW5zdWxhIFJ1c3NpYVoxIi9wb25vaSByaXZlciBmaXNoaW5nIGd1aWRlIGtvbGEgcGVuaW5zdWxhIHJ1c3NpYZIBDGZpc2hpbmdfY2x1YuABAA!16s%2Fg%2F11c1ttbh15',
+    featuredReviews: [
+      {
+        authorName: 'Tobias r.',
+        rating: 4,
+        text: 'Incredible place, easy access, very convenient, the only bad thing is that from time to time you see a Russian bear and it growls at you but it is quite polite',
+        relativeTimeDescription: '10 months ago',
+        time: 1772484235,
+      },
+    ],
   },
   {
     id: "guide-bold-mongolia",
@@ -753,6 +1416,32 @@ export const guides: Guide[] = [
     metaTitle: "Bold Batbayar — Mongolia Taimen Fishing Guide",
     metaDescription:
       "Mongolia's premier taimen guide. Eighteen years of experience on the Eg-Uur watershed pursuing the world's largest salmonid.",
+    googleRating: 5,
+    googleReviewCount: 21,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Taimen+Lodge+Mongolia/@51.4696654,99.0306987,17z/data=!3m1!4b1!4m6!3m5!1s0x5d11a7827dffa497:0xb0dedb7883e43703!8m2!3d51.4696654!4d99.0306987!16s%2Fg%2F11fj0gdkn7',
+    featuredReviews: [
+      {
+        authorName: 'Igor p.',
+        rating: 5,
+        text: 'One of the best fishing trips ever! Five stars turn key fishing was organized from A-Z by Taimen lodge. Staff is super qualified and friendly. Fishing lodge has everything to wind down after fishing day. Lodge offers new boats, powerful engines, great food, Starlink internet, sauna and many more Staff is always there to help you catch your dream trophy. As for the fishing it was far beyond our expectations, tons of fish, beautiful nature and cosy evenings by the fire. Highly recommended!! Thank you Taimen lodge staff for this Mongolian fishing experience!!!',
+        relativeTimeDescription: '4 months ago',
+        time: 1772484253,
+      },
+      {
+        authorName: 'Nick p.',
+        rating: 5,
+        text: 'The River at the End of the World — Taimen Lodge, Mongolia\n\nSomewhere north of the known world, the map dissolves into dust and rumor.\nThat’s where I went. Nine hours through the Mongolian steppe — nine hours of wind, ruts, and silence so complete it felt physical. The road wasn’t a road at all, just parallel scars etched into the earth by generations of drivers who trusted memory more than direction. Our driver danced between them with lunatic grace, the car floating through dirt, mud and rock one moment and clawing up rock the next.\n\nEvery few hours, a battered Prius would materialize from the haze — dented, half-held-together, eternal. “A very good car,” my companions would say, nodding solemnly. And somehow, in that place, it was.\n\nWe crossed bridges built by man, a single man — planks weathered by wind and willpower, each one laid across the river like a note in an unfinished song. And somewhere in the emptiness, a Mongolian woman waved us into her ger for lunch. Inside, the air was thick with warmth and wood smoke. She served hand-cut noodles and an unknown meat, hearty and perfect. No words, no ceremony — just quiet generosity that could melt the armor off a stranger.\n\nBy nightfall, we reached Taimen Lodge — part home, part dream, tucked against a river that looked older than language. The staff welcomed me as if I’d been gone too long: food, laughter, mugs of vodka strong enough to disinfect regret. That night, we told stories until the fire fell asleep.\n\nMorning came sharp and cold, like metal.\nThe guides moved through the water like they were born from it — because they were.  Reading every current, every swirl, every pocket of shadow. They didn’t need words; they understood the river the way some men understand prayer.\n\nFor two days, nothing. Cast after cast into the void. My hands burned, my optimism faded, and the river stayed silent. Then, without warning, it answered.\n\nA jolt. A pulse. A line gone tight.\nThe guide shouted, “Taimen!”\n\nWhen I pulled too hard, the fish breached, a flash of bronze erupting through light and spray — its gills flaring red like a flare in the cold air. It twisted violently, trying to shake the hook loose, and for a moment I thought I’d lose it. Every leap was a negotiation between panic and faith. Thirty minutes of tension, sweat, and surrender — until finally, impossibly, we landed it.\n\nThe taimen. Heavy, radiant, breathing like a furnace in the shallows. I felt the weight of it in my chest more than my hands.\nIt wasn’t conquest. It was recognition — a brief exchange between two creatures trying, in their own ways, to stay wild.\n\nTaimen Lodge isn’t luxury. It’s something far rarer: honest hospitality in a place untouched by pretense. The food is real, the laughter unfiltered, the water sacred.\n\nIf you’re the kind of person who chases wonder — the kind who prefers calluses to convenience — go. Go to Taimen Lodge.\n\nYou’ll find the river waiting, patient as time, ready to remind you how small and alive you really are.',
+        relativeTimeDescription: 'Edited 3 months ago',
+        time: 1772484253,
+      },
+      {
+        authorName: 'spike7 p.',
+        rating: 5,
+        text: 'My trip to Mongolia was absolutely extraordinary! The vast landscapes, pristine rivers, and incredible culture made it unforgettable. My fishing guide, Amarmend, was exceptional — knowledgeable, kind, and truly passionate about his country. Thanks to him, every moment was an adventure to remember',
+        relativeTimeDescription: '4 months ago',
+        time: 1772484253,
+      },
+    ],
   },
   {
     id: "guide-carlos-cuba",
@@ -779,6 +1468,18 @@ export const guides: Guide[] = [
     metaTitle: "Carlos Garcia — Cuba Saltwater Fly Fishing Guide",
     metaDescription:
       "Expert saltwater fly fishing guide in Cuba's Jardines de la Reina. Bonefish, permit, and tarpon on the Caribbean's most pristine flats.",
+    googleRating: 5,
+    googleReviewCount: 1,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Fly+Fishing+Los+Roques/@8.2265644,-66.5863525,6z/data=!3m1!4b1!4m6!3m5!1s0x47d39f675dc07303:0x60bf169abacbd497!8m2!3d8.2265644!4d-66.5863525!16s%2Fg%2F11qb3y5dky',
+    featuredReviews: [
+      {
+        authorName: 'Tim p.',
+        rating: 5,
+        text: 'I could not recommend FFLR any higher!! I went direct (as opposed to using an agency) and found the team very easy to communicate with- super professional and very helpful. The fishing is great value in comparison to other saltwater destinations.\n\nOnce at Los Roques the accommodation was excellent and all the staff very friendly and fun! The guides are first class and will take you to some amazing spots. There is so much great fishing to do and you never see another boat! You will not be disappointed!\n\nVenezuela and Los Roques are very safe to travel too- I had no issues!\n\nHighly recommend!',
+        relativeTimeDescription: 'a year ago',
+        time: 1772484271,
+      },
+    ],
   },
   {
     id: "guide-ibrahim-maldives",
@@ -805,5 +1506,31 @@ export const guides: Guide[] = [
     metaTitle: "Ibrahim Naseem — Maldives GT Fly Fishing Guide",
     metaDescription:
       "The Maldives' premier fly fishing guide. Giant trevally, bluefin trevally, and tropical species on pristine Indian Ocean atolls.",
+    googleRating: 5,
+    googleReviewCount: 7,
+    googleReviewsUrl: 'https://www.google.com/maps/place/Salt+Rigger+Fishing+Maldives/@4.1771391,68.6298272,7z/data=!4m10!1m2!2m1!1sMaldives+GT+fly+fishing+guide!3m6!1s0x3b3f7f4851f76817:0x8fdcd6e3043d39f8!8m2!3d4.1771391!4d73.5077569!15sCh1NYWxkaXZlcyBHVCBmbHkgZmlzaGluZyBndWlkZVofIh1tYWxkaXZlcyBndCBmbHkgZmlzaGluZyBndWlkZZIBD2Zpc2hpbmdfY2hhcnRlcpoBRENpOURRVWxSUVVOdlpFTm9kSGxqUmpsdlQyNUdNVlZJYUU1WmVsWmhZbGhrYjJGcVFqTmlSV2hUWkZoS1RsRXdSUkFC4AEA-gEFCLsBEEU!16s%2Fg%2F11ml9g71jd',
+    featuredReviews: [
+      {
+        authorName: 'sathiu p.',
+        rating: 5,
+        text: 'From start to finish, this charter exceeded all expectations. The boat itself was top-quality — clean, spacious, and well-equipped with everything we needed for a great day on the water. The crew were incredible: friendly, fun, and extremely knowledgeable. They made everyone feel comfortable and were always ready to help with tips, bait, and gear.\n\nWe visited several amazing fishing spots throughout the day, and the crew really knew where to find the fish — we caught plenty! Their experience and enthusiasm made the whole trip both successful and enjoyable.\n\nIf you’re looking for a professional, fun, and rewarding fishing experience, I can’t recommend this charter highly enough. I’ll definitely be booking again!',
+        relativeTimeDescription: '3 months ago',
+        time: 1772484292,
+      },
+      {
+        authorName: 'rayyan p.',
+        rating: 5,
+        text: 'We had an amazing time on this fishing launch in the maldives. The crew was friendly, knowledgeable, and made everyone feel welcome, whether you were beginner or an experienced angler. The boat was clean and well-equipped, and the spots we went to were incredibly.we caught more fish than we expected! The views, the service, and the overall experience were unforgettable. Highly recommend for anyone looking to enjoy a perfect day on the water in the Maldives.',
+        relativeTimeDescription: '3 months ago',
+        time: 1772484292,
+      },
+      {
+        authorName: 'Ahmed p.',
+        rating: 5,
+        text: 'An Incredible Day on the Water with Salt Rigger!\n\nHad an unforgettable fishing trip with Salt Rigger! From start to finish, the crew was friendly, professional, and deeply knowledgeable about the best spots and techniques. The boat was clean, comfortable, and well-equipped, making the whole experience smooth and enjoyable.\n\nWe were on the fish all day — landed some great catches and learned a lot along the way. The captain’s passion for fishing really showed, and he made sure everyone on board had a great time, whether experienced or new to fishing.\n\nIf you’re looking for an exciting, safe, and memorable fishing charter, Salt Rigger is absolutely the one to book. Highly recommended, and I’ll definitely be back! 🎣🌊',
+        relativeTimeDescription: '3 months ago',
+        time: 1772484292,
+      },
+    ],
   },
 ];

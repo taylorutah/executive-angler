@@ -15,6 +15,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { rivers } from "@/data/rivers";
 import {
+  getAllRivers,
   getRiverBySlug,
   getDestinationById,
   getLodgesByDestination,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${river.name} — Fly Fishing Guide`,
     description:
       river.metaDescription ||
-      `Complete fly fishing guide to ${river.name}. Species: ${river.primarySpecies.join(", ")}. ${river.flowType} river.`,
+      `Complete fly fishing guide to ${river.name}. Species: ${(river.primarySpecies || []).join(", ")}. ${river.flowType} river.`,
     openGraph: {
       title: `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
@@ -45,8 +46,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return rivers.map((r) => ({ slug: r.slug }));
+export async function generateStaticParams() {
+  try {
+    const allRivers = await getAllRivers();
+    return allRivers.map((r) => ({ slug: r.slug }));
+  } catch {
+    return rivers.map((r) => ({ slug: r.slug }));
+  }
 }
 
 export default async function RiverPage({ params }: Props) {
@@ -61,7 +67,7 @@ export default async function RiverPage({ params }: Props) {
   ]);
 
   const mapMarkers = [
-    ...river.accessPoints.map((ap) => ({
+    ...(river.accessPoints || []).map((ap) => ({
       latitude: ap.latitude,
       longitude: ap.longitude,
       title: ap.name,
@@ -78,8 +84,8 @@ export default async function RiverPage({ params }: Props) {
     { label: "Type", value: river.flowType },
     { label: "Difficulty", value: river.difficulty },
     { label: "Wading", value: river.wadingType },
-    { label: "Best Months", value: river.bestMonths.join(", ") },
-    { label: "Species", value: river.primarySpecies.join(", ") },
+    { label: "Best Months", value: (river.bestMonths || []).join(", ") },
+    { label: "Species", value: (river.primarySpecies || []).join(", ") },
   ];
 
   return (
@@ -103,7 +109,7 @@ export default async function RiverPage({ params }: Props) {
         imageUrl={river.heroImageUrl}
         imageAlt={`${river.name} fly fishing`}
         title={river.name}
-        subtitle={`${river.flowType} · ${river.primarySpecies.join(", ")}`}
+        subtitle={`${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
         height="h-[60vh]"
       />
 
@@ -137,7 +143,7 @@ export default async function RiverPage({ params }: Props) {
                   </p>
                 ))}
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {river.primarySpecies.map((species) => (
+                  {(river.primarySpecies || []).map((species) => (
                     <Badge key={species} variant="river" size="md">
                       <Fish className="h-3.5 w-3.5 mr-1.5" />
                       {species}
@@ -180,7 +186,7 @@ export default async function RiverPage({ params }: Props) {
                 />
                 {/* Access Point List */}
                 <div className="mt-6 space-y-3">
-                  {river.accessPoints.map((ap, i) => (
+                  {(river.accessPoints || []).map((ap, i) => (
                     <div
                       key={i}
                       className="flex items-start gap-3 p-4 bg-white rounded-xl shadow-sm"
@@ -321,7 +327,7 @@ export default async function RiverPage({ params }: Props) {
                       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
                     ].indexOf(month)];
-                    const isGood = river.bestMonths.includes(fullMonth);
+                    const isGood = (river.bestMonths || []).includes(fullMonth);
                     return (
                       <div
                         key={month}
