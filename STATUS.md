@@ -106,4 +106,8 @@
 |------|--------|-------------|
 | 2026-03-01 | Multiple | Phase 1-4 — MVP, Supabase data layer, ISR, 234 pages |
 | 2026-03-02 | `6915cac` | Phase 5 — Google Reviews component on lodge/guide/fly-shop pages |
-| 2026-03-02 | Supabase only | 22 new fly shops, Utah destination, Provo + Green Rivers added |
+| 2026-03-02 | `91f65eb` | fix: null safety on all iterable fields + async generateStaticParams |
+| 2026-03-02 | `4f1b6ba` | data: Google reviews populated for fly shops, lodges, guides |
+| 2026-03-02 | `0bf2ab3` | chore: ISR cache flush redeploy |
+| 2026-03-02 | Supabase only | 22 new fly shops, Utah destination, Provo + Green Rivers, all 38 rivers rewritten |
+| 2026-03-02 | In progress | Breadcrumb destination level (CC nova-cloud) |

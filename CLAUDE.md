@@ -315,10 +315,21 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
 
-### 2026-03-02 (Sage)
-- Added `GoogleReviews.tsx` component — gold star rating, 3 reviewer cards, Google Business link
-- Wired GoogleReviews into lodge/guide/fly-shop detail pages
-- Added Utah destination (dest-utah), Provo River, Green River (Flaming Gorge) to Supabase
-- Added 22 new fly shops: Idaho/Henry's Fork (5), Montana/Madison (5), Wyoming/Jackson Hole (6), Utah/Provo (5), Utah/Green River (2)
-- Established Google Reviews data strategy: browser scrape → Supabase upsert, no API needed
-- Updated Known Issues: removed GOOGLE_PLACES_API_KEY dependency (no longer needed)
+### 2026-03-02 (Sage + CC)
+**Code (CC):**
+- `feat: add Google Reviews section to lodge/guide/fly-shop pages` (6915cac)
+- `fix: null safety on iterable fields + async generateStaticParams` (91f65eb) — all .map()/.join()/Object.entries() calls now null-safe; generateStaticParams async on all 5 entity pages
+- `data: populate Google reviews for fly shops lodges guides` (4f1b6ba)
+- Breadcrumb destination level in progress (nova-cloud session)
+
+**Supabase data (Sage — no code deploy needed):**
+- New destination: Utah (dest-utah) with full metadata
+- New rivers: Provo River + Green River (Flaming Gorge) — full SEO content, access points, hatch charts
+- 22 new fly shops across Idaho/Henry's Fork, Montana/Madison, Wyoming/Jackson Hole, Utah/Provo, Utah/Green River
+- All 38 rivers rewritten to 300–600 word SEO descriptions (4-paragraph structure: origin → sections → hatches → seasonal guide)
+- All new fly shops patched: services=[], brands_carried=[], hours={} (prevent null iteration crashes)
+
+**Strategy decisions:**
+- Google Reviews: no API needed — hardcode rating/count/3 reviews per location via browser scrape → Supabase upsert
+- ISR cache flush: after bulk Supabase updates, always push empty commit to trigger redeploy
+- Null safety rule: array fields = [] not null; object fields = {} not null; heroImageUrl always needs placeholder
