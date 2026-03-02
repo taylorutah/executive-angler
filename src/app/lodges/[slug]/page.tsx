@@ -119,6 +119,7 @@ export default async function LodgePage({ params }: Props) {
             <Breadcrumbs
               items={[
                 { label: "Lodges", href: "/lodges" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
                 { label: lodge.name },
               ]}
             />

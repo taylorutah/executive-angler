@@ -99,6 +99,7 @@ export default async function GuidePage({ params }: Props) {
             <Breadcrumbs
               items={[
                 { label: "Guides", href: "/guides" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
                 { label: guide.name },
               ]}
             />

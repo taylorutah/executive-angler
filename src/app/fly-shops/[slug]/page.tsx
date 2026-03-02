@@ -89,6 +89,7 @@ export default async function FlyShopPage({ params }: Props) {
             <Breadcrumbs
               items={[
                 { label: "Fly Shops", href: "/fly-shops" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
                 { label: shop.name },
               ]}
             />

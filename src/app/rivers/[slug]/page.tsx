@@ -119,6 +119,7 @@ export default async function RiverPage({ params }: Props) {
             <Breadcrumbs
               items={[
                 { label: "Rivers", href: "/rivers" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
                 { label: river.name },
               ]}
             />
