@@ -35,8 +35,17 @@ export default function MapView({
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (!token) {
+      if (mapContainer.current) {
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f1f5f9;color:#64748b;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+      }
+      return;
+    }
 
+    mapboxgl.accessToken = token;
+
+    try {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v12",
@@ -70,6 +79,13 @@ export default function MapView({
       const markerBounds = new mapboxgl.LngLatBounds();
       markers.forEach((m) => markerBounds.extend([m.longitude, m.latitude]));
       map.current.fitBounds(markerBounds, { padding: 50, maxZoom: 12 });
+    }
+
+    } catch (e) {
+      console.error('Mapbox failed to initialize:', e);
+      if (mapContainer.current) {
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f1f5f9;color:#64748b;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+      }
     }
 
     return () => {
