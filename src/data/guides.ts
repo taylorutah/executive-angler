@@ -20,7 +20,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 70,
     photoUrl:
-      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1493787039806-2edcbe808750?w=400&q=80",
     websiteUrl: "https://www.budlillys.com",
     riverIds: ["river-madison", "river-gallatin", "river-yellowstone"],
     dailyRate: "$650/day (1-2 anglers)",
@@ -45,7 +45,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 40,
     photoUrl:
-      "https://images.unsplash.com/photo-1545062080-2167ac0c4d72?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1626640674019-ec2ed4e9506a?w=400&q=80",
     websiteUrl: "https://www.troutfitters.com",
     riverIds: ["river-gallatin", "river-yellowstone", "river-madison"],
     dailyRate: "$600/day (1-2 anglers)",
@@ -72,7 +72,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 22,
     photoUrl:
-      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1600544141525-047f56e42f79?w=400&q=80",
     riverIds: ["river-snake-river", "river-north-platte-wy", "river-firehole"],
     dailyRate: "$700/day (1-2 anglers)",
     metaTitle: "Trent Kirkpatrick — Jackson Hole Fly Fishing Guide",
@@ -98,7 +98,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 18,
     photoUrl:
-      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1566528226211-090651acf06c?w=400&q=80",
     riverIds: ["river-frying-pan", "river-south-platte", "river-arkansas-co"],
     dailyRate: "$600/day (1-2 anglers)",
     metaTitle: "Miguel Vasquez — Frying Pan River Fly Fishing Guide, Colorado",
@@ -124,7 +124,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 30,
     photoUrl:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1689709105115-e11810b6c425?w=400&q=80",
     riverIds: ["river-henry-s-fork", "river-silver-creek", "river-south-fork-boise"],
     dailyRate: "$650/day (1-2 anglers)",
     metaTitle: "Dale Pearson — Henry's Fork Fly Fishing Guide, Idaho",
@@ -150,7 +150,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 15,
     photoUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1663637157615-69759105d1fe?w=400&q=80",
     riverIds: ["river-bristol-bay", "river-kenai", "river-copper-river"],
     dailyRate: "$900/day (1-2 anglers, includes floatplane)",
     metaTitle: "Nate Runyan — Bristol Bay Alaska Fly Fishing Guide",
@@ -176,7 +176,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 16,
     photoUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1532015917327-c7c46aa1d930?w=400&q=80",
     riverIds: ["river-deschutes", "river-rogue", "river-mckenzie"],
     dailyRate: "$600/day (1-2 anglers)",
     metaTitle: "Sarah Whitfield — Deschutes River Fly Fishing Guide, Oregon",
@@ -202,7 +202,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 25,
     photoUrl:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1533060498584-2f538c6f84fc?w=400&q=80",
     riverIds: ["river-letort-spring-run", "river-big-spring", "river-penns-creek"],
     dailyRate: "$500/day (1-2 anglers)",
     metaTitle: "Ed Shenk III — Pennsylvania Spring Creek Fly Fishing Guide",
@@ -228,7 +228,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 20,
     photoUrl:
-      "https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1633966458715-9e3d7ce74b8f?w=400&q=80",
     riverIds: ["river-au-sable", "river-pere-marquette", "river-manistee"],
     dailyRate: "$550/day (1-2 anglers)",
     metaTitle: "Jim Navarre — Au Sable River Fly Fishing Guide, Michigan",
@@ -254,7 +254,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 14,
     photoUrl:
-      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1649260664200-d92b3ad50a49?w=400&q=80",
     riverIds: ["river-white-river-ar", "river-norfork", "river-little-red"],
     dailyRate: "$450/day (1-2 anglers)",
     metaTitle: "Cody Lazenby — White River Arkansas Fly Fishing Guide",
@@ -280,7 +280,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 18,
     photoUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1590003789453-9bec53d5d499?w=400&q=80",
     riverIds: ["river-florida-keys-flats"],
     dailyRate: "$800/day (1-2 anglers)",
     metaTitle: "Captain Luis Cabrera — Islamorada Fly Fishing Guide, Florida Keys",
@@ -306,7 +306,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 20,
     photoUrl:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1611954268683-6a7fab18afdf?w=400&q=80",
     riverIds: ["river-mataura", "river-oreti", "river-tongariro"],
     dailyRate: "$750 NZD/day (1-2 anglers)",
     metaTitle: "Hamish McLeod — New Zealand Backcountry Fly Fishing Guide",
@@ -332,7 +332,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 19,
     photoUrl:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1632862316541-0b75b0126544?w=400&q=80",
     riverIds: ["river-rio-grande-ar", "river-rio-malleo"],
     dailyRate: "$550/day (1-2 anglers)",
     metaTitle: "Matias Orellana — Patagonia Argentina Fly Fishing Guide",
@@ -358,7 +358,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 17,
     photoUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1452109436269-d410ed332571?w=400&q=80",
     riverIds: ["river-skeena", "river-dean", "river-elk-river-bc"],
     dailyRate: "$700 CAD/day (1-2 anglers)",
     metaTitle: "Owen Blackwater — Skeena Steelhead Fly Fishing Guide, BC",
@@ -384,7 +384,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 22,
     photoUrl:
-      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1610741620547-1191d693e43d?w=400&q=80",
     riverIds: ["river-andros-flats", "river-abaco-flats"],
     dailyRate: "$600/day (1-2 anglers)",
     metaTitle: "Prescott Rolle — Andros Island Bonefish Guide, Bahamas",
@@ -410,7 +410,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 24,
     photoUrl:
-      "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1672911794817-931f91cb5b98?w=400&q=80",
     riverIds: ["river-laxa-myvatn", "river-midfjardara"],
     dailyRate: "$1,200/day (includes beat rod fee)",
     metaTitle: "Gudmundur Sigurdsson — Iceland Atlantic Salmon Fly Fishing Guide",
@@ -436,7 +436,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 16,
     photoUrl:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1655313850070-ce53fbf44e41?w=400&q=80",
     riverIds: ["river-rio-baker", "river-rio-simpson"],
     dailyRate: "$500/day (1-2 anglers)",
     metaTitle: "Rodrigo Sandoval — Chilean Patagonia Fly Fishing Guide",
@@ -462,7 +462,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 15,
     photoUrl:
-      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1697091704524-607f589aafd3?w=400&q=80",
     riverIds: ["river-belize-flats"],
     dailyRate: "$550/day (1-2 anglers)",
     metaTitle: "Elton Garbutt — Belize Saltwater Fly Fishing Guide",
@@ -488,7 +488,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 28,
     photoUrl:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1612456534865-1be5c8d2f8f1?w=400&q=80",
     riverIds: ["river-river-spey", "river-river-tay"],
     dailyRate: "£450/day (1-2 rods, beat fee additional)",
     metaTitle: "Alistair Grant — River Spey Ghillie & Salmon Fishing Guide, Scotland",
@@ -514,7 +514,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 14,
     photoUrl:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1612456534843-0f299dd61684?w=400&q=80",
     riverIds: ["river-soca-river"],
     dailyRate: "€350/day (1-2 anglers, permits additional)",
     metaTitle: "Luka Zupancic — Soca River Marble Trout Guide, Slovenia",
@@ -540,7 +540,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 21,
     photoUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1707915357202-0f901a737cfb?w=400&q=80",
     riverIds: ["river-nagara-river"],
     dailyRate: "¥45,000/day (1-2 anglers)",
     metaTitle: "Takeshi Yamamoto — Japan Tenkara & Fly Fishing Guide",
@@ -566,7 +566,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 18,
     photoUrl:
-      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1570689300480-a5956076aeb6?w=400&q=80",
     riverIds: ["river-christmas-island-flats"],
     dailyRate: "$400/day (1-2 anglers)",
     metaTitle: "Moamoa Teata — Christmas Island Bonefish & GT Guide",
@@ -592,7 +592,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 12,
     photoUrl:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1632222521693-cebd8629b3d6?w=400&q=80",
     riverIds: ["river-alphonse-flats"],
     dailyRate: "Included in lodge package",
     metaTitle: "Keith Rose-Innes — Seychelles GT & Flats Fishing Guide",
@@ -618,7 +618,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 20,
     photoUrl:
-      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1680529642520-5897a7e9707b?w=400&q=80",
     riverIds: ["river-western-lakes-tas"],
     dailyRate: "$650 AUD/day (1-2 anglers)",
     metaTitle: "Daniel Hackett — Tasmania Highland Fly Fishing Guide",
@@ -644,7 +644,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 18,
     photoUrl:
-      "https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1762655641740-a3341a83e73a?w=400&q=80",
     riverIds: ["river-zhupanova"],
     dailyRate: "$1,200/day (includes helicopter, 1-2 anglers)",
     metaTitle: "Sergei Volkov — Kamchatka Russia Fly Fishing Guide",
@@ -670,7 +670,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 17,
     photoUrl:
-      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1545450660-3378a7f3a364?w=400&q=80",
     riverIds: ["river-rio-grande-tdf"],
     dailyRate: "$600/day (1-2 anglers)",
     metaTitle: "Alejandro Fernandez — Tierra del Fuego Sea Trout Guide",
@@ -696,7 +696,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 30,
     photoUrl:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=400&q=80",
     riverIds: ["river-moy"],
     dailyRate: "$300/day (1-2 anglers)",
     metaTitle: "Paddy McDonnell — River Moy Salmon Ghillie",
@@ -721,7 +721,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 22,
     photoUrl:
-      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1740766194743-1e7cde50b0c3?w=400&q=80",
     riverIds: ["river-ponoi"],
     dailyRate: "Included in camp package",
     metaTitle: "Alexei Volkov — Ponoi River Atlantic Salmon Guide",
@@ -747,7 +747,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 18,
     photoUrl:
-      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1573111651443-48d029001795?w=400&q=80",
     riverIds: ["river-eg-uur"],
     dailyRate: "Included in trip package",
     metaTitle: "Bold Batbayar — Mongolia Taimen Fishing Guide",
@@ -773,7 +773,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 20,
     photoUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1551722696-d20b4cb374e2?w=400&q=80",
     riverIds: ["river-jardines-de-la-reina"],
     dailyRate: "Included in trip package",
     metaTitle: "Carlos Garcia — Cuba Saltwater Fly Fishing Guide",
@@ -799,7 +799,7 @@ export const guides: Guide[] = [
     ],
     yearsExperience: 12,
     photoUrl:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1657071825728-390f4dad9b31?w=400&q=80",
     riverIds: ["river-north-male-atoll"],
     dailyRate: "Included in trip package",
     metaTitle: "Ibrahim Naseem — Maldives GT Fly Fishing Guide",
