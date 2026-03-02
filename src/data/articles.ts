@@ -228,9 +228,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "destination",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
     excerpt:
       "From the legendary Madison River to the technical tailwaters of the Missouri, explore the rivers and streams that have made Montana the fly fishing capital of the world.",
     content: `<h2>Why Montana Stands Alone</h2>

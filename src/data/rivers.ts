@@ -1913,9 +1913,9 @@ export const rivers: River[] = [
     description:
       "The Copper River is one of Alaska's great wilderness waterways, flowing nearly 300 miles from the Wrangell Mountains through the Chugach Range to the Gulf of Alaska near the town of Cordova. While the main stem Copper is a massive, glacially silted river too large and turbid for traditional fly fishing, its clear-water tributaries offer extraordinary fishing for all five species of Pacific salmon, Dolly Varden, and resident rainbow trout in a setting of unmatched wildness. The Gulkana River, Klutina River, and Tonsina River are among the most accessible of these tributaries, offering road-accessible fishing for king and sockeye salmon that run with the raw power that only Alaska's rivers can provide.\n\nThe Copper River system's remoteness and the sheer volume of returning salmon create fishing experiences that feel truly primordial. Anglers casting into the clear-water tributaries during the peak of the sockeye run in July find themselves surrounded by thousands of crimson fish pushing upstream, while Dolly Varden and rainbow trout trail behind, gorging on stray eggs. The king salmon runs in June draw anglers willing to swing large flies on heavy rods in heavy current, testing their tackle and their determination against fish that routinely exceed thirty pounds. The Copper River drainage remains one of the least-pressured major salmon systems in Alaska, offering a genuine wilderness fishing experience for anglers seeking something beyond the more established Bristol Bay and Kenai Peninsula fisheries.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80", // PLACEHOLDER
     lengthMiles: 290,
     flowType: "freestone",
     difficulty: "advanced",

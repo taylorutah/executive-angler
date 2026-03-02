@@ -14,8 +14,8 @@ export const lodges: Lodge[] = [
       "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80", // PLACEHOLDER
     ],
     websiteUrl: "https://www.fireholeranch.com",
@@ -98,9 +98,9 @@ export const lodges: Lodge[] = [
     description:
       "Craig Montana Lodge provides comfortable, angler-focused accommodations in the small town of Craig, the epicenter of Missouri River tailwater fly fishing. Positioned within walking distance of the river and local fly shops, the lodge caters specifically to fly fishers seeking proximity to one of the finest tailwater trout fisheries in the world. Simple, clean rooms and a communal atmosphere make it a popular base camp for guided float trips on the Missouri.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", // PLACEHOLDER
     ],
@@ -183,7 +183,7 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1470770841497-7b3200c60053?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", // PLACEHOLDER
     ],
@@ -221,12 +221,12 @@ export const lodges: Lodge[] = [
     description:
       "Henry's Fork Lodge is a revered name among serious fly fishers worldwide, positioned on the banks of the Henry's Fork of the Snake River in Island Park, Idaho. The lodge overlooks the famous Railroad Ranch section, a stretch of flat, glassy spring creek water that demands the highest level of technical fly fishing skill and rewards those who possess it with some of the largest and most selective rainbow trout in the Western United States. For decades, this lodge has served as a gathering place for the sport's most accomplished practitioners, drawn by the challenge of presenting tiny dry flies to sipping trout in impossibly clear water.\n\nThe lodge itself balances comfort with a focus that never strays far from the river. Spacious rooms look out over the Henry's Fork, and guests can observe rising trout from the dining room during the legendary evening hatches of June and July. The culinary program is refined without being fussy, emphasizing fresh ingredients and generous portions. A well-stocked fly shop on the premises carries the specialized leaders, tippet, and fly patterns that the Henry's Fork demands, and the guiding staff includes some of the most experienced technical dry-fly anglers in the profession.\n\nGuided trips extend beyond the Railroad Ranch to include the Box Canyon, Warm River, and upper stretches of the Henry's Fork, as well as excursions to nearby Silver Creek and the South Fork of the Snake. The lodge's season is deliberately short, running from mid-June through September, timed to coincide with the river's peak insect activity and the arrival of its most dedicated anglers.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 44.4219,
@@ -263,9 +263,9 @@ export const lodges: Lodge[] = [
     description:
       "Bristol Bay Sportfishing Lodge operates from a remote compound on the shores of Lake Iliamna in southwestern Alaska, placing guests at the epicenter of the most prolific wild salmon and trout fishery on the planet. The lodge is accessible only by floatplane from Anchorage, a journey that strips away the trappings of modern life and delivers anglers into a landscape of volcanic peaks, tundra meadows, and crystal rivers teeming with fish. From late June through September, the rivers surrounding Bristol Bay receive successive runs of all five Pacific salmon species, attracting enormous concentrations of rainbow trout, Dolly Varden, Arctic char, and Arctic grayling that feed aggressively on the salmon eggs and flesh drifting through the current.\n\nDaily fishing excursions launch by floatplane from the lodge's private dock, carrying small groups of anglers to a rotating selection of remote rivers and streams that may see only a handful of visiting fishers each season. Guides specialize in matching the day's destination to current run timing and weather conditions, ensuring clients experience the best available fishing each morning. Whether swinging mouse patterns for leopard rainbow trout on a nameless tundra creek or sight-casting to pods of fresh silver salmon in an estuary, the variety and quality of fishing available from Bristol Bay Lodge is virtually unmatched anywhere in the world.\n\nThe lodge accommodates twelve guests in comfortable cabins with modern amenities, and the dining program features Alaskan seafood, locally foraged ingredients, and hearty meals designed for anglers who have spent ten hours on the water. A sauna and outdoor hot tub provide welcome recovery after long days of wading cold rivers.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80", // PLACEHOLDER
@@ -434,7 +434,7 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 36.3076,
@@ -471,9 +471,9 @@ export const lodges: Lodge[] = [
     description:
       "Islamorada Flats Lodge is a purpose-built saltwater fly fishing operation located on the bay side of Islamorada, the self-proclaimed sportfishing capital of the world. The lodge caters exclusively to fly anglers pursuing the storied grand slam of the Florida Keys flats: bonefish, permit, and tarpon, three species that together represent the pinnacle of shallow-water fly fishing challenge. Each demands different tactics, different flies, and a different angling temperament, and the guides who operate from this lodge have devoted their careers to mastering the art of putting their clients within casting range of all three.\n\nThe lodge's fleet of technical poling skiffs launches each morning from a private dock into the vast network of turtle grass flats, mangrove shorelines, and tidal channels that make the Middle Keys one of the most productive saltwater fly fishing destinations on Earth. Spring brings massive schools of migrating tarpon that stage along the bridges and channels, providing shots at fish exceeding a hundred pounds. Summer and fall shift the focus to permit tailing on the oceanside flats and bonefish cruising the backcountry basins. The guides read tidal movements, wind patterns, and seasonal migrations with an intuition developed over decades on these waters.\n\nAccommodations are clean, comfortable, and entirely oriented toward the fishing lifestyle. A tackle room with rod storage, fly-tying benches, and a rigging station ensures that guests spend their evenings preparing for the next morning's pursuit rather than worrying about logistics.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80", // PLACEHOLDER
@@ -556,11 +556,11 @@ export const lodges: Lodge[] = [
     description:
       "Estancia Rio Grande is a working sheep ranch turned world-class fly fishing lodge on the banks of the Rio Grande in northern Patagonia, Argentina. The estancia controls private access to several kilometers of river that hold some of the largest sea-run brown trout found anywhere on Earth. Fish averaging eight to twelve pounds are commonplace, and each season produces specimens exceeding twenty pounds — migratory brown trout of a size that exists in the modern angling world only in the rivers of Patagonia and Tierra del Fuego. The fishing is conducted almost exclusively by Spey casting or two-handed rod techniques, swinging large wet flies through the river's broad pools and deep runs.\n\nThe lodge occupies the original estancia homestead, a whitewashed adobe structure surrounded by Lombardy poplars that provide welcome shelter from the Patagonian wind. The interior has been thoughtfully renovated to provide comfortable accommodations without sacrificing the building's authentic gaucho heritage. Thick walls, hardwood floors, and wood-burning stoves create a warm refuge after long days on the wind-swept river. The dining program is centered around the Argentine tradition of the asado, with whole lambs roasted over open coals accompanied by Malbec from the Mendoza region.\n\nThe lodge's guide team includes several former national casting champions who bring deep technical knowledge to the art of Spey casting in Patagonian conditions. Wind is a constant companion here, and guides work closely with clients to refine their casting mechanics and line management, ensuring that when a massive sea-run brown materializes in the current, the angler is prepared to deliver the fly.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80", // PLACEHOLDER
     ],
@@ -766,7 +766,7 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 17.3187,
@@ -850,7 +850,7 @@ export const lodges: Lodge[] = [
       "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 46.3300,
     longitude: 13.7350,
@@ -974,7 +974,7 @@ export const lodges: Lodge[] = [
     galleryUrls: [
       "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80", // PLACEHOLDER
     ],
     latitude: -7.0167,
     longitude: 52.7333,
@@ -1056,7 +1056,7 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 53.5885,
@@ -1098,7 +1098,7 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1470770841497-7b3200c60053?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80", // PLACEHOLDER
     ],
     latitude: -53.7870,
@@ -1140,9 +1140,9 @@ export const lodges: Lodge[] = [
     thumbnailUrl:
       "https://images.unsplash.com/photo-1586375300773-8384e3e4916f?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", // PLACEHOLDER
       "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=800&q=80", // PLACEHOLDER
     ],
     websiteUrl: "https://www.mountfalcon.com",
     latitude: 54.0833,
@@ -1265,7 +1265,7 @@ export const lodges: Lodge[] = [
       "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80", // PLACEHOLDER
     galleryUrls: [
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80", // PLACEHOLDER
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80", // PLACEHOLDER
     ],
     latitude: 21.0500,
     longitude: -79.5000,
