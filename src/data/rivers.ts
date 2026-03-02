@@ -1801,9 +1801,9 @@ export const rivers: River[] = [
     description:
       "The Kenai River on Alaska's Kenai Peninsula is one of the most prolific anadromous fish rivers in the world and arguably the finest all-around fly fishing destination in the state for visiting anglers. The river flows from Kenai Lake through a stunning glacial valley to Cook Inlet, passing through two distinct sections that offer radically different fishing experiences. The upper Kenai between Kenai Lake and Skilak Lake is a turquoise-tinted, gin-clear river where trophy-sized rainbow trout gorge on salmon eggs and flesh patterns from July through October, growing to legendary proportions on the protein windfall delivered by millions of spawning sockeye, king, and silver salmon.\n\nThe lower Kenai below Skilak Lake is a broader, more powerful river that hosts the main salmon runs and supports a world-renowned king salmon fishery that draws anglers from every corner of the globe. While conventional tackle dominates the king salmon fishery, fly anglers find outstanding opportunities for sockeye salmon on the Russian River confluence, silver salmon throughout the lower river in August and September, and the remarkable late-season rainbow trout fishing that follows the salmon spawn. The Kenai's accessibility from Anchorage, roughly three hours by road, makes it the most convenient major Alaskan fishery for visiting anglers, and the surrounding infrastructure of lodges, guides, and fly shops ensures that both first-time Alaska visitors and seasoned veterans can find the right level of support for their fishing ambitions.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1534534573898-db5148bc8b0c?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1531176175280-109da1a28f25?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1534534573898-db5148bc8b0c?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1531176175280-109da1a28f25?w=400&q=80", // PLACEHOLDER
     lengthMiles: 82,
     flowType: "freestone",
     difficulty: "intermediate",
@@ -1857,9 +1857,9 @@ export const rivers: River[] = [
     description:
       "The Bristol Bay region of southwestern Alaska is the holy grail of fly fishing, a vast, roadless wilderness where dozens of pristine rivers flow through tundra and boreal forest to the shores of Bristol Bay, supporting the largest wild sockeye salmon run on Earth and rainbow trout of almost mythical proportions. Rivers like the Alagnak, Naknek, Kvichak, Nushagak, and the small tributaries feeding Lake Iliamna offer a density and diversity of fly fishing opportunities that exist nowhere else. The rainbow trout here, commonly called leopard rainbows for their vivid spotting, feast on salmon eggs and flesh through the summer and fall, growing fat and powerful on a diet so rich that fish exceeding 28 inches are a genuine possibility on any given day.\n\nFishing Bristol Bay typically requires a fly-out lodge or float plane access, as the region has no road system and settlements are limited to a handful of small villages. This remoteness is central to the experience: anglers fish alongside brown bears, watch bald eagles patrol the riverbanks, and cast into water that may not have seen another fly angler all season. The fishing calendar begins with king salmon in late June, transitions to the sockeye and pink salmon runs of July, and reaches its zenith in August and September when rainbow trout stack up behind spawning salmon to feast on eggs drifting downstream. For the angler willing to invest the time and resources to reach Bristol Bay, the reward is the most abundant, unspoiled fly fishing experience remaining in North America.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1543168256-418811576931?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1543168256-418811576931?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=400&q=80", // PLACEHOLDER
     lengthMiles: undefined,
     flowType: "freestone",
     difficulty: "intermediate",
@@ -1913,9 +1913,9 @@ export const rivers: River[] = [
     description:
       "The Copper River is one of Alaska's great wilderness waterways, flowing nearly 300 miles from the Wrangell Mountains through the Chugach Range to the Gulf of Alaska near the town of Cordova. While the main stem Copper is a massive, glacially silted river too large and turbid for traditional fly fishing, its clear-water tributaries offer extraordinary fishing for all five species of Pacific salmon, Dolly Varden, and resident rainbow trout in a setting of unmatched wildness. The Gulkana River, Klutina River, and Tonsina River are among the most accessible of these tributaries, offering road-accessible fishing for king and sockeye salmon that run with the raw power that only Alaska's rivers can provide.\n\nThe Copper River system's remoteness and the sheer volume of returning salmon create fishing experiences that feel truly primordial. Anglers casting into the clear-water tributaries during the peak of the sockeye run in July find themselves surrounded by thousands of crimson fish pushing upstream, while Dolly Varden and rainbow trout trail behind, gorging on stray eggs. The king salmon runs in June draw anglers willing to swing large flies on heavy rods in heavy current, testing their tackle and their determination against fish that routinely exceed thirty pounds. The Copper River drainage remains one of the least-pressured major salmon systems in Alaska, offering a genuine wilderness fishing experience for anglers seeking something beyond the more established Bristol Bay and Kenai Peninsula fisheries.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1520690214124-2405c5217d87?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1520690214124-2405c5217d87?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80", // PLACEHOLDER
     lengthMiles: 290,
     flowType: "freestone",
     difficulty: "advanced",
@@ -1972,9 +1972,9 @@ export const rivers: River[] = [
     description:
       "The Deschutes River is Oregon's most iconic fly fishing destination, a powerful desert canyon river that carves through the basalt rimrock of central Oregon before joining the Columbia River near the town of Maupin. The lower Deschutes, from Pelton Dam downstream to the Columbia, is renowned for its wild redsides, a brilliantly colored strain of resident rainbow trout that are among the most athletic fish in the Pacific Northwest. These fish, typically ranging from 10 to 18 inches with occasional specimens exceeding 20, are muscular, acrobatic fighters that exploit the river's powerful current to test tackle and technique in equal measure.\n\nThe Deschutes is also one of the finest summer steelhead rivers accessible by road in the Northwest, with wild steelhead entering the river from July through November and providing outstanding opportunities for anglers willing to swing flies through the river's classic runs and tailouts. The dry fly fishing for steelhead on the Deschutes, using waking patterns skated across the surface, is one of the most exciting experiences in all of fly fishing. The river's canyon setting, with towering rimrock walls, golden grasslands, and surprisingly mild weather even in the shoulder seasons, creates an atmosphere that feels more like the American Southwest than the Pacific Northwest. Multi-day float trips through the canyon are a Deschutes tradition, combining outstanding fishing with camping on sandy beaches under star-filled skies.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1473172707857-f9e276582ab6?w=400&q=80", // PLACEHOLDER
     lengthMiles: 100,
     flowType: "tailwater",
     difficulty: "intermediate",
@@ -2087,9 +2087,9 @@ export const rivers: River[] = [
     description:
       "The Rogue River in southern Oregon is one of the original Wild and Scenic Rivers in the United States, a designation it earned through a combination of outstanding fisheries, dramatic canyon scenery, and a wilderness character that has attracted adventurers since Zane Grey made it famous in the early twentieth century. The Rogue supports robust runs of summer and winter steelhead, spring and fall Chinook salmon, and a resident population of half-pounder steelhead, young fish returning from their first ocean season that provide fast-paced action on light tackle and small flies throughout the fall months.\n\nThe Rogue's most celebrated section is the Wild and Scenic stretch between Grave Creek and Foster Bar, a 35-mile roadless canyon accessible only by boat or trail. Multi-day float trips through this section rank among the finest wilderness fishing experiences in the Pacific Northwest, with anglers camping on gravel bars, fishing pristine runs, and encountering black bears, river otters, and ospreys along the way. The upper Rogue near the town of Shady Cove offers more accessible fishing for trout and steelhead, with roadside access and a gentler gradient that allows comfortable wade fishing. The combination of wild steelhead, salmon, a half-pounder run unique to this region, and the legacy of one of America's first wild river protections makes the Rogue an essential destination for any angler exploring the Pacific Northwest.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1587502537745-84b7d66a8f97?w=400&q=80", // PLACEHOLDER
     lengthMiles: 215,
     flowType: "freestone",
     difficulty: "intermediate",
@@ -2143,9 +2143,9 @@ export const rivers: River[] = [
     description:
       "The McKenzie River in Oregon's Willamette Valley is the birthplace of the drift boat, a craft designed specifically for navigating this river's swift, clear waters and delivering anglers to the best fishing lanes with precision and grace. The river flows from Clear Lake in the high Cascades through a forested canyon of remarkable beauty, with old-growth Douglas fir and western red cedar shading the water and contributing to the cool temperatures that sustain outstanding populations of wild rainbow trout and hatchery spring Chinook salmon.\n\nThe McKenzie's wild rainbows are the river's primary attraction for fly anglers, with fish averaging 10 to 14 inches and aggressive surface-feeding behavior that makes them ideal dry fly targets. The river's prolific green drake hatch in late May and June is legendary among Oregon fly fishers, producing the kind of blanket emergence that brings every trout in the river to the surface. The McKenzie is also notable for its spring Chinook salmon run, one of the best in the Willamette system, which draws anglers from across the state each May and June. The combination of a scenic Cascade Mountain setting, the tradition of the McKenzie River drift boat, and consistent trout fishing that rewards both skilled and developing anglers makes this river one of Oregon's most cherished fly fishing destinations.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80", // PLACEHOLDER
     lengthMiles: 90,
     flowType: "freestone",
     difficulty: "beginner",
@@ -2261,9 +2261,9 @@ export const rivers: River[] = [
     description:
       "Letort Spring Run in the Cumberland Valley of south-central Pennsylvania is one of the most historically significant trout streams in American fly fishing, a tiny limestone spring creek that has influenced generations of anglers and fly tiers far beyond what its modest size would suggest. The Letort was home water for Charlie Fox, Vince Marinaro, and Ed Koch, pioneers whose observations of trout feeding behavior on this creek led to revolutionary developments in fly pattern design and presentation technique that transformed the sport. The creek's crystal-clear, alkaline water supports dense populations of brown trout, wild brook trout in its upper reaches, and a remarkable array of insect life that includes the terrestrial patterns for which the Letort is most famous.\n\nFishing the Letort today demands the same careful approach that Fox and Marinaro documented decades ago. The creek is narrow enough to cast across in most places, and its glassy surface reveals every imperfection in leader construction and drift. The brown trout, many of them large fish that have survived multiple seasons of angling pressure, feed selectively on tiny terrestrials, midges, and sulphur mayflies with a wariness that can reduce experienced anglers to frustrated observers. The Letort's terrestrial fishing in summer, when ants, beetles, and grasshoppers constitute the primary food source, remains the best way to experience the creek's unique challenge. Success here is not measured in numbers but in the satisfaction of fooling a single, difficult fish with the right fly, the right cast, and the patience to wait for the perfect moment.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1524338198850-8a2ff63f6884?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1524338198850-8a2ff63f6884?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1558770147-a0e2842c5ea1?w=400&q=80", // PLACEHOLDER
     lengthMiles: 7,
     flowType: "spring creek",
     difficulty: "advanced",
@@ -2368,9 +2368,9 @@ export const rivers: River[] = [
     description:
       "Big Spring Creek in Cumberland County, Pennsylvania, is one of the most productive limestone spring creeks in the eastern United States, flowing with remarkable clarity and consistency from a massive spring source that discharges millions of gallons of cold, mineral-rich water daily. The creek supports an extraordinary biomass of aquatic insects and crustaceans, including freshwater shrimp, cress bugs, and dense populations of mayflies and caddis that fuel the growth of brown trout reaching genuinely impressive sizes for a small limestone stream. Fish exceeding 20 inches are present throughout the regulated sections, though catching them consistently requires the same technical precision demanded by the finest spring creeks in the Rocky Mountain West.\n\nBig Spring's character is defined by its abundant aquatic vegetation, particularly watercress beds that create complex current patterns and provide cover for feeding trout. Anglers must learn to read the subtle current seams around these weed beds, identifying feeding lanes where trout position themselves to intercept drifting insects without expending unnecessary energy. The creek's trico spinner fall in July and August is one of the great small-stream spectacles in the East, with dense clouds of tiny spinners falling to the water and triggering sustained rising activity among even the largest fish. For anglers who appreciate the challenge and satisfaction of technical spring creek fishing within a few hours of Philadelphia, Baltimore, and Washington, Big Spring offers a world-class experience in an accessible, pastoral setting.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1549831243-a69a0b3d39e0?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1548777123-e216912df7d8?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1549831243-a69a0b3d39e0?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1548777123-e216912df7d8?w=400&q=80", // PLACEHOLDER
     lengthMiles: 5,
     flowType: "spring creek",
     difficulty: "advanced",
@@ -2475,9 +2475,9 @@ export const rivers: River[] = [
     description:
       "Penns Creek is the crown jewel of Pennsylvania trout fishing, a large limestone-influenced freestone stream that flows through a forested valley in the heart of the state, offering a combination of wild trout, prolific hatches, and scenic beauty that rivals many better-known western rivers. The creek's most celebrated stretch runs through a roadless, forested canyon between Coburn and the catch-and-release section near Poe Paddy State Park, where wild brown trout exceeding 20 inches patrol deep pools and undercut banks in water that is clear enough to sight-fish on bright days.\n\nPenns Creek's green drake hatch in late May and early June is the single most anticipated event on the Pennsylvania fly fishing calendar, drawing anglers from across the eastern seaboard to the stream's banks for the brief, intense emergence of these large mayflies. When conditions align, with overcast skies and warm temperatures triggering a heavy evening hatch, the fishing can be transcendent, with large brown trout abandoning their daytime caution to gorge on the massive insects. Beyond the green drakes, Penns Creek offers excellent fishing throughout the season with sulphur hatches in May, tricos and terrestrials in summer, and blue-winged olives in the fall. The creek's size allows comfortable wade fishing in most sections, and its status as one of the few eastern streams capable of supporting a self-sustaining wild brown trout population of this quality makes it a genuinely significant fishery.",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=1200&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80", // PLACEHOLDER
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=400&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80", // PLACEHOLDER
     lengthMiles: 55,
     flowType: "freestone",
     difficulty: "intermediate",
