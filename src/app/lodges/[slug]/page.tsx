@@ -12,7 +12,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
-import GoogleReviews from "@/components/ui/GoogleReviews";
+import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { lodges } from "@/data/lodges";
@@ -249,10 +249,16 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Google Reviews */}
               <GoogleReviews
-                rating={lodge.googleRating}
-                reviewCount={lodge.googleReviewCount}
-                reviewsUrl={lodge.googleReviewsUrl}
-                reviews={lodge.featuredReviews}
+                googleRating={lodge.googleRating ?? null}
+                googleReviewCount={lodge.googleReviewCount ?? null}
+                googleReviewsUrl={lodge.googleReviewsUrl ?? null}
+                featuredReviews={
+                  lodge.featuredReviews?.map((r) => ({
+                    reviewer_name: r.authorName,
+                    rating: r.rating,
+                    text: r.text,
+                  })) ?? null
+                }
               />
 
               {/* Community Photos */}

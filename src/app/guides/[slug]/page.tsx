@@ -9,7 +9,7 @@ import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import GoogleReviews from "@/components/ui/GoogleReviews";
+import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { guides } from "@/data/guides";
@@ -159,10 +159,16 @@ export default async function GuidePage({ params }: Props) {
 
               {/* Google Reviews */}
               <GoogleReviews
-                rating={guide.googleRating}
-                reviewCount={guide.googleReviewCount}
-                reviewsUrl={guide.googleReviewsUrl}
-                reviews={guide.featuredReviews}
+                googleRating={guide.googleRating ?? null}
+                googleReviewCount={guide.googleReviewCount ?? null}
+                googleReviewsUrl={guide.googleReviewsUrl ?? null}
+                featuredReviews={
+                  guide.featuredReviews?.map((r) => ({
+                    reviewer_name: r.authorName,
+                    rating: r.rating,
+                    text: r.text,
+                  })) ?? null
+                }
               />
 
               {/* Community Photos */}

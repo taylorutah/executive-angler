@@ -9,7 +9,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
-import GoogleReviews from "@/components/ui/GoogleReviews";
+import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
@@ -157,10 +157,16 @@ export default async function FlyShopPage({ params }: Props) {
 
               {/* Google Reviews */}
               <GoogleReviews
-                rating={shop.googleRating}
-                reviewCount={shop.googleReviewCount}
-                reviewsUrl={shop.googleReviewsUrl}
-                reviews={shop.featuredReviews}
+                googleRating={shop.googleRating ?? null}
+                googleReviewCount={shop.googleReviewCount ?? null}
+                googleReviewsUrl={shop.googleReviewsUrl ?? null}
+                featuredReviews={
+                  shop.featuredReviews?.map((r) => ({
+                    reviewer_name: r.authorName,
+                    rating: r.rating,
+                    text: r.text,
+                  })) ?? null
+                }
               />
 
               {/* Community Photos */}
