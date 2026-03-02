@@ -145,27 +145,7 @@ export default async function ArticlePage({ params }: Props) {
 
                   {/* Article Body */}
                   <div className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-forest-dark prose-a:text-forest prose-a:font-medium">
-                    {article.content.split("\n\n").map((paragraph, i) => {
-                      if (paragraph.startsWith("## ")) {
-                        return (
-                          <h2 key={i} className="text-2xl font-bold mt-10 mb-4">
-                            {paragraph.replace("## ", "")}
-                          </h2>
-                        );
-                      }
-                      if (paragraph.startsWith("### ")) {
-                        return (
-                          <h3 key={i} className="text-xl font-bold mt-8 mb-3">
-                            {paragraph.replace("### ", "")}
-                          </h3>
-                        );
-                      }
-                      return (
-                        <p key={i} className="text-slate-700 leading-relaxed mb-4">
-                          {paragraph}
-                        </p>
-                      );
-                    })}
+                    <div dangerouslySetInnerHTML={{ __html: article.content }} />
                   </div>
                 </div>
               </ScrollAnimation>
