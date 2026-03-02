@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { articles } from "@/data/articles";
+import { getAllArticles } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Articles & Instruction",
@@ -11,7 +13,8 @@ export const metadata: Metadata = {
     "Expert fly fishing articles — techniques, destinations, gear reviews, conservation, and more. Your comprehensive angling library.",
 };
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const articles = await getAllArticles();
   const featured = articles.find((a) => a.featured);
   const rest = articles.filter((a) => a.id !== featured?.id);
 

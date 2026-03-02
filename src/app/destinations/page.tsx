@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import EntityCard from "@/components/ui/EntityCard";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { destinations } from "@/data/destinations";
+import { getAllDestinations } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Destinations",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
     "Explore the world's finest fly fishing destinations — from the Rocky Mountain West to Patagonia, New Zealand, and beyond.",
 };
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const destinations = await getAllDestinations();
+
   return (
     <>
       <HeroSection

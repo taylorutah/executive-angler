@@ -14,16 +14,21 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { species } from "@/data/species";
-import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
+import {
+  getSpeciesBySlug,
+  getDestinationsByIds,
+  getRiversByIds,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const sp = species.find((s) => s.slug === slug);
+  const sp = await getSpeciesBySlug(slug);
   if (!sp) return { title: "Species Not Found" };
 
   return {
@@ -55,15 +60,13 @@ function getConservationColor(status: string): "forest" | "gold" | "river" {
 
 export default async function SpeciesDetailPage({ params }: Props) {
   const { slug } = await params;
-  const sp = species.find((s) => s.slug === slug);
+  const sp = await getSpeciesBySlug(slug);
   if (!sp) notFound();
 
-  const relatedDests = sp.relatedDestinationIds
-    ? destinations.filter((d) => sp.relatedDestinationIds.includes(d.id))
-    : [];
-  const relatedRivers = sp.relatedRiverIds
-    ? rivers.filter((r) => sp.relatedRiverIds.includes(r.id))
-    : [];
+  const [relatedDests, relatedRivers] = await Promise.all([
+    sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
+    sp.relatedRiverIds ? getRiversByIds(sp.relatedRiverIds) : Promise.resolve([]),
+  ]);
 
   const mapMarkers = sp.distributionCoordinates
     ? sp.distributionCoordinates.map((coord) => ({

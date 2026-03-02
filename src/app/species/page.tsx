@@ -3,7 +3,9 @@ import Link from "next/link";
 import HeroSection from "@/components/ui/HeroSection";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { species } from "@/data/species";
+import { getAllSpecies } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fish Species Guide",
@@ -28,11 +30,12 @@ interface Props {
 
 export default async function SpeciesListPage({ searchParams }: Props) {
   const { family } = await searchParams;
+  const allSpecies = await getAllSpecies();
 
   const filteredSpecies =
     family && family !== "all"
-      ? species.filter((s) => s.family === family)
-      : species;
+      ? allSpecies.filter((s) => s.family === family)
+      : allSpecies;
 
   return (
     <>

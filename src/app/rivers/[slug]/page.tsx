@@ -14,17 +14,22 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { rivers } from "@/data/rivers";
-import { lodges } from "@/data/lodges";
-import { guides } from "@/data/guides";
-import { destinations } from "@/data/destinations";
+import {
+  getRiverBySlug,
+  getDestinationById,
+  getLodgesByDestination,
+  getGuidesByRiver,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const river = rivers.find((r) => r.slug === slug);
+  const river = await getRiverBySlug(slug);
   if (!river) return { title: "River Not Found" };
 
   return {
@@ -46,12 +51,14 @@ export function generateStaticParams() {
 
 export default async function RiverPage({ params }: Props) {
   const { slug } = await params;
-  const river = rivers.find((r) => r.slug === slug);
+  const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const dest = destinations.find((d) => d.id === river.destinationId);
-  const nearbyLodges = lodges.filter((l) => l.destinationId === river.destinationId);
-  const nearbyGuides = guides.filter((g) => g.riverIds.includes(river.id));
+  const [dest, nearbyLodges, nearbyGuides] = await Promise.all([
+    river.destinationId ? getDestinationById(river.destinationId) : undefined,
+    river.destinationId ? getLodgesByDestination(river.destinationId) : Promise.resolve([]),
+    getGuidesByRiver(river.id),
+  ]);
 
   const mapMarkers = [
     ...river.accessPoints.map((ap) => ({

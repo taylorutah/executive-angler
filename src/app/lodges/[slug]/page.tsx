@@ -16,16 +16,21 @@ import GoogleReviews from "@/components/ui/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { lodges } from "@/data/lodges";
-import { rivers } from "@/data/rivers";
-import { destinations } from "@/data/destinations";
+import {
+  getLodgeBySlug,
+  getDestinationById,
+  getRiversByDestination,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const lodge = lodges.find((l) => l.slug === slug);
+  const lodge = await getLodgeBySlug(slug);
   if (!lodge) return { title: "Lodge Not Found" };
 
   return {
@@ -47,13 +52,13 @@ export function generateStaticParams() {
 
 export default async function LodgePage({ params }: Props) {
   const { slug } = await params;
-  const lodge = lodges.find((l) => l.slug === slug);
+  const lodge = await getLodgeBySlug(slug);
   if (!lodge) notFound();
 
-  const dest = destinations.find((d) => d.id === lodge.destinationId);
-  const nearbyRivers = rivers.filter(
-    (r) => r.destinationId === lodge.destinationId
-  );
+  const [dest, nearbyRivers] = await Promise.all([
+    lodge.destinationId ? getDestinationById(lodge.destinationId) : undefined,
+    lodge.destinationId ? getRiversByDestination(lodge.destinationId) : Promise.resolve([]),
+  ]);
 
   const quickFacts = [
     ...(dest ? [{ label: "Destination", value: dest.name }] : []),

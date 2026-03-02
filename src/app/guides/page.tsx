@@ -3,15 +3,21 @@ import Link from "next/link";
 import { MapPin } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { guides } from "@/data/guides";
-import { destinations } from "@/data/destinations";
+import { getAllGuides, getAllDestinations } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Guides",
   description: "Find expert fly fishing guides worldwide. Profiles, specialties, rates, and direct booking links.",
 };
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const [guides, destinations] = await Promise.all([
+    getAllGuides(),
+    getAllDestinations(),
+  ]);
+
   return (
     <>
       <HeroSection

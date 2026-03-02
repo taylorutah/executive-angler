@@ -3,15 +3,21 @@ import Link from "next/link";
 import { MapPin, Clock } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { flyShops } from "@/data/fly-shops";
-import { destinations } from "@/data/destinations";
+import { getAllFlyShops, getAllDestinations } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Shops",
   description: "Find the best fly shops near your fishing destination. Local knowledge, gear, guided trips, and fly tying supplies.",
 };
 
-export default function FlyShopsPage() {
+export default async function FlyShopsPage() {
+  const [flyShops, destinations] = await Promise.all([
+    getAllFlyShops(),
+    getAllDestinations(),
+  ]);
+
   return (
     <>
       <HeroSection

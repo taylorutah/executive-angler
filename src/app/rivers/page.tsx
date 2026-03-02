@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import EntityCard from "@/components/ui/EntityCard";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { rivers } from "@/data/rivers";
+import { getAllRivers } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Rivers & Waters",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
     "Explore the world's finest fly fishing rivers with detailed maps, hatch charts, access points, and regulations.",
 };
 
-export default function RiversPage() {
+export default async function RiversPage() {
+  const rivers = await getAllRivers();
+
   return (
     <>
       <HeroSection

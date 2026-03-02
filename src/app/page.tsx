@@ -5,11 +5,13 @@ import { ArrowRight, MapPin, BookOpen, Mountain, Fish } from "lucide-react";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import RatingStars from "@/components/ui/RatingStars";
-import { destinations } from "@/data/destinations";
-import { lodges } from "@/data/lodges";
-import { articles } from "@/data/articles";
-import { rivers } from "@/data/rivers";
-import { species } from "@/data/species";
+import {
+  getFeaturedDestinations,
+  getFeaturedRivers,
+  getFeaturedSpecies,
+  getFeaturedLodges,
+  getFeaturedArticles,
+} from "@/lib/db";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -36,12 +38,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  const featuredDestinations = destinations.filter((d) => d.featured).slice(0, 6);
-  const featuredLodges = lodges.filter((l) => l.featured).slice(0, 3);
-  const featuredArticles = articles.filter((a) => a.featured).slice(0, 3);
-  const featuredRivers = rivers.filter((r) => r.featured).slice(0, 4);
-  const featuredSpecies = species.filter((s) => s.featured).slice(0, 6);
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  const [
+    featuredDestinations,
+    featuredRivers,
+    featuredSpecies,
+    featuredLodges,
+    featuredArticles,
+  ] = await Promise.all([
+    getFeaturedDestinations().then((d) => d.slice(0, 6)),
+    getFeaturedRivers().then((r) => r.slice(0, 4)),
+    getFeaturedSpecies().then((s) => s.slice(0, 6)),
+    getFeaturedLodges().then((l) => l.slice(0, 3)),
+    getFeaturedArticles().then((a) => a.slice(0, 3)),
+  ]);
 
   return (
     <>

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import EntityCard from "@/components/ui/EntityCard";
 import HeroSection from "@/components/ui/HeroSection";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { lodges } from "@/data/lodges";
+import { getAllLodges } from "@/lib/db";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Fly Fishing Lodges",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
     "Find the world's best fly fishing lodges. Real reviews, pricing, and direct booking links.",
 };
 
-export default function LodgesPage() {
+export default async function LodgesPage() {
+  const lodges = await getAllLodges();
+
   return (
     <>
       <HeroSection

@@ -13,15 +13,17 @@ import GoogleReviews from "@/components/ui/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
-import { destinations } from "@/data/destinations";
+import { getFlyShopBySlug, getDestinationById } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const shop = flyShops.find((s) => s.slug === slug);
+  const shop = await getFlyShopBySlug(slug);
   if (!shop) return { title: "Fly Shop Not Found" };
 
   return {
@@ -36,10 +38,10 @@ export function generateStaticParams() {
 
 export default async function FlyShopPage({ params }: Props) {
   const { slug } = await params;
-  const shop = flyShops.find((s) => s.slug === slug);
+  const shop = await getFlyShopBySlug(slug);
   if (!shop) notFound();
 
-  const dest = destinations.find((d) => d.id === shop.destinationId);
+  const dest = shop.destinationId ? await getDestinationById(shop.destinationId) : undefined;
 
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),

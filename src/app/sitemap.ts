@@ -1,15 +1,29 @@
 import type { MetadataRoute } from "next";
-import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
-import { lodges } from "@/data/lodges";
-import { articles } from "@/data/articles";
-import { guides } from "@/data/guides";
-import { flyShops } from "@/data/fly-shops";
-import { species } from "@/data/species";
+import {
+  getAllDestinations,
+  getAllRivers,
+  getAllLodges,
+  getAllArticles,
+  getAllGuides,
+  getAllFlyShops,
+  getAllSpecies,
+} from "@/lib/db";
+
+export const revalidate = 86400;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [destinations, rivers, species, lodges, articles, guides, flyShops] =
+    await Promise.all([
+      getAllDestinations(),
+      getAllRivers(),
+      getAllSpecies(),
+      getAllLodges(),
+      getAllArticles(),
+      getAllGuides(),
+      getAllFlyShops(),
+    ]);
   const staticPages = [
     { url: SITE_URL, lastModified: new Date(), priority: 1 },
     { url: `${SITE_URL}/destinations`, lastModified: new Date(), priority: 0.9 },

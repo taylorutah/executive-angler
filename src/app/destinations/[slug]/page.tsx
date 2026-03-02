@@ -15,10 +15,13 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
-import { lodges } from "@/data/lodges";
-import { guides } from "@/data/guides";
-import { articles } from "@/data/articles";
+import {
+  getDestinationBySlug,
+  getRiversByDestination,
+  getLodgesByDestination,
+  getGuidesByDestination,
+  getArticlesByDestination,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -26,7 +29,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const dest = destinations.find((d) => d.slug === slug);
+  const dest = await getDestinationBySlug(slug);
   if (!dest) return { title: "Destination Not Found" };
 
   return {
@@ -46,17 +49,19 @@ export function generateStaticParams() {
   return destinations.map((d) => ({ slug: d.slug }));
 }
 
+export const revalidate = 3600;
+
 export default async function DestinationPage({ params }: Props) {
   const { slug } = await params;
-  const dest = destinations.find((d) => d.slug === slug);
+  const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  const destRivers = rivers.filter((r) => r.destinationId === dest.id);
-  const destLodges = lodges.filter((l) => l.destinationId === dest.id);
-  const destGuides = guides.filter((g) => g.destinationId === dest.id);
-  const destArticles = articles.filter((a) =>
-    a.relatedDestinationIds.includes(dest.id)
-  );
+  const [destRivers, destLodges, destGuides, destArticles] = await Promise.all([
+    getRiversByDestination(dest.id),
+    getLodgesByDestination(dest.id),
+    getGuidesByDestination(dest.id),
+    getArticlesByDestination(dest.id),
+  ]);
 
   const mapMarkers = [
     ...destRivers.map((r) => ({

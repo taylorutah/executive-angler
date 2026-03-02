@@ -13,16 +13,21 @@ import GoogleReviews from "@/components/ui/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { guides } from "@/data/guides";
-import { rivers } from "@/data/rivers";
-import { destinations } from "@/data/destinations";
+import {
+  getGuideBySlug,
+  getDestinationById,
+  getRiversByIds,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const guide = guides.find((g) => g.slug === slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide) return { title: "Guide Not Found" };
 
   return {
@@ -39,11 +44,13 @@ export function generateStaticParams() {
 
 export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
-  const guide = guides.find((g) => g.slug === slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
 
-  const dest = destinations.find((d) => d.id === guide.destinationId);
-  const guideRivers = rivers.filter((r) => guide.riverIds.includes(r.id));
+  const [dest, guideRivers] = await Promise.all([
+    guide.destinationId ? getDestinationById(guide.destinationId) : undefined,
+    guide.riverIds.length > 0 ? getRiversByIds(guide.riverIds) : Promise.resolve([]),
+  ]);
 
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),

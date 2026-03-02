@@ -9,16 +9,22 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import JsonLd from "@/components/seo/JsonLd";
 import { articles } from "@/data/articles";
-import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
+import {
+  getArticleBySlug,
+  getAllArticles,
+  getDestinationsByIds,
+  getRiversByIds,
+} from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
+  const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article Not Found" };
 
   return {
@@ -39,16 +45,15 @@ export function generateStaticParams() {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
+  const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
-  const relatedDests = destinations.filter((d) =>
-    article.relatedDestinationIds.includes(d.id)
-  );
-  const relatedRivers = rivers.filter((r) =>
-    article.relatedRiverIds.includes(r.id)
-  );
-  const otherArticles = articles.filter((a) => a.id !== article.id).slice(0, 3);
+  const [relatedDests, relatedRivers, allArticles] = await Promise.all([
+    getDestinationsByIds(article.relatedDestinationIds),
+    getRiversByIds(article.relatedRiverIds),
+    getAllArticles(),
+  ]);
+  const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
     <>
