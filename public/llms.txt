@@ -13,24 +13,24 @@ We do not sell gear or operate as a booking agent. We connect anglers directly w
 ### Destinations
 Geographic regions organized by continent, country, and state/province. Each destination page includes an overview, best fishing months, target species, available waters, nearby lodges and guides, and interactive maps.
 
-Current destinations span 25 locations worldwide including: Montana, Wyoming, Colorado, Idaho, Alaska, Oregon, Pennsylvania, Michigan, Arkansas, Florida Keys, New Zealand, Patagonia, British Columbia, Bahamas, Iceland, Chile, Belize, Scotland, Slovenia, Japan, Christmas Island, Seychelles, Tasmania, Kamchatka, Tierra del Fuego.
+Current destinations span 30 locations worldwide including: Montana, Wyoming, Colorado, Idaho, Alaska, Oregon, Pennsylvania, Michigan, Arkansas, Florida Keys, New Zealand, Patagonia, British Columbia, Bahamas, Iceland, Chile, Belize, Scotland, Slovenia, Japan, Christmas Island, Seychelles, Tasmania, Kamchatka, Tierra del Fuego, Ireland, Kola Peninsula (Russia), Mongolia, Cuba, Maldives.
 
 ### Rivers & Waters
-Individual fly fishing waters with detailed information including species present, best months, flow type (freestone/tailwater/spring creek/saltwater flat), access points with GPS coordinates, regulations, hatch charts, and interactive Mapbox maps. Over 55 rivers and waters worldwide.
+Individual fly fishing waters with detailed information including species present, best months, flow type (freestone/tailwater/spring creek/saltwater flat), access points with GPS coordinates, regulations, hatch charts, and interactive Mapbox maps. Over 60 rivers and waters worldwide.
 
-Featured rivers: Madison River, Gallatin River, Yellowstone River, Missouri River, Big Hole River, Deschutes River, Henry's Fork, Snake River, South Platte, White River, and many more.
+Featured rivers: Madison River, Gallatin River, Yellowstone River, Missouri River, Big Hole River, Deschutes River, Henry's Fork, Snake River, South Platte, White River, River Moy, Ponoi River, Eg-Uur River, Jardines de la Reina, North Malé Atoll, and many more.
 
 ### Lodges
-Fly fishing lodges and outfitters worldwide. Each listing includes location, pricing, season dates, capacity, amenities, photo galleries, community photos, and direct booking links to the lodge's official website. Over 25 lodges across all destinations.
+Fly fishing lodges and outfitters worldwide. Each listing includes location, pricing, season dates, capacity, amenities, photo galleries, community photos, and direct booking links to the lodge's official website. Over 30 lodges across all destinations.
 
 ### Guides
-Professional fly fishing guide services. Profiles include specialties, years of experience, daily rates, rivers covered, and direct contact information. Over 25 guide services worldwide.
+Professional fly fishing guide services. Profiles include specialties, years of experience, daily rates, rivers covered, and direct contact information. Over 30 guide services worldwide.
 
 ### Fly Shops
 Local fly shops with services, hours, brands carried, and contact information. Shops are linked to their local waters and destinations. Over 25 fly shops worldwide.
 
 ### Species
-Comprehensive fish species reference with 35+ species profiles. Each species page includes taxonomy, description, habitat, diet, spawning behavior, conservation status, distribution maps, recommended fly patterns, tackle recommendations, and fun facts. Species are categorized by family: Trout, Salmon, Char, Grayling, Saltwater, Warmwater, and Pike.
+Comprehensive fish species reference with 35+ species profiles. Each species page includes taxonomy, description, habitat, diet, spawning behavior, conservation status, distribution maps, recommended fly patterns, tackle recommendations, and fun facts. Species are categorized by family: Trout, Salmon, Char, Grayling, Saltwater, Warmwater, and Pike. Species images sourced from Wikimedia Commons and NOAA public domain scientific illustrations.
 
 ### Articles
 Long-form editorial content organized by category:
@@ -47,9 +47,9 @@ Users can submit their fishing photos to any destination, river, lodge, guide, f
 ## Key Pages
 
 - / — Homepage with featured destinations, lodges, rivers, species, and articles
-- /destinations — Browse all 25 fly fishing destinations
+- /destinations — Browse all 30 fly fishing destinations
 - /destinations/montana — Montana fly fishing guide (showcase destination)
-- /rivers — Browse all 55+ rivers and waters
+- /rivers — Browse all 60+ rivers and waters
 - /rivers/madison-river — Madison River complete guide with map and hatch chart
 - /lodges — Browse fly fishing lodges
 - /species — Browse all fish species with family filtering
@@ -58,6 +58,11 @@ Users can submit their fishing photos to any destination, river, lodge, guide, f
 - /articles/introduction-to-euro-nymphing — Comprehensive euro nymphing guide
 - /guides — Find fly fishing guides
 - /fly-shops — Find local fly shops
+- /search — Search across all content (destinations, rivers, species, lodges, guides, articles)
+- /about — About Executive Angler
+- /contact — Contact form
+- /privacy — Privacy policy
+- /terms — Terms of service
 
 ## Technical Details
 
@@ -69,6 +74,8 @@ Users can submit their fishing photos to any destination, river, lodge, guide, f
 - User authentication via Supabase Auth
 - Photo submissions with admin approval workflow
 - Google Reviews integration for lodges, guides, and fly shops
+- Full-text search across all content types
+- Species images from Wikimedia Commons and NOAA (public domain)
 
 ## Contact
 

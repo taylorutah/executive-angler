@@ -1,0 +1,179 @@
+import type { Metadata } from "next";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: `Privacy policy for ${SITE_NAME} — how we collect, use, and protect your information.`,
+};
+
+export default function PrivacyPage() {
+  return (
+    <div className="pt-28 pb-20">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <h1 className="font-heading text-4xl font-bold text-forest-dark mb-2">
+          Privacy Policy
+        </h1>
+        <p className="text-sm text-slate-500 mb-10">
+          Last updated: March 1, 2026
+        </p>
+
+        <div className="prose prose-lg max-w-none text-slate-700 space-y-6">
+          <p>
+            {SITE_NAME} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;)
+            operates the website at{" "}
+            <a href={SITE_URL} className="text-forest hover:text-forest-light">
+              {SITE_URL}
+            </a>
+            . This Privacy Policy explains how we collect, use, and protect your
+            information when you use our website.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Information We Collect
+          </h2>
+          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+            Account Information
+          </h3>
+          <p>
+            When you create an account, we collect your email address and password.
+            If you sign in with Google, we receive your name and email address from
+            Google. We use this information solely to manage your account and provide
+            features like saving favorites.
+          </p>
+
+          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+            Photo Submissions
+          </h3>
+          <p>
+            When you submit a photo, we collect your name, email address, the photo
+            file, and any optional caption or camera settings you provide. Photos
+            approved by our moderators are displayed publicly on the site. Your email
+            address is not displayed publicly.
+          </p>
+
+          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+            Contact Form
+          </h3>
+          <p>
+            When you use our contact form, we collect your name, email address, and
+            message content. This information is used solely to respond to your
+            inquiry.
+          </p>
+
+          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+            Analytics
+          </h3>
+          <p>
+            We use Vercel Analytics and Vercel Speed Insights to understand how
+            visitors use our site. These services collect anonymous usage data such
+            as page views, browser type, and device information. No personally
+            identifiable information is collected by our analytics tools.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            How We Use Your Information
+          </h2>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>To provide and maintain your account and saved favorites</li>
+            <li>To process and display community photo submissions</li>
+            <li>To respond to contact form inquiries</li>
+            <li>To improve our website and content</li>
+            <li>To send administrative communications about your account</li>
+          </ul>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Data Storage and Security
+          </h2>
+          <p>
+            Your account data is stored securely using Supabase, a hosted PostgreSQL
+            database service with encryption at rest. Photo submissions are stored in
+            secure cloud storage. We use industry-standard security measures to
+            protect your information, including HTTPS encryption for all data in
+            transit.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Third-Party Services
+          </h2>
+          <p>We use the following third-party services:</p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>
+              <strong>Supabase</strong> — Database and authentication
+            </li>
+            <li>
+              <strong>Vercel</strong> — Website hosting and analytics
+            </li>
+            <li>
+              <strong>Mapbox</strong> — Interactive maps on destination and river
+              pages
+            </li>
+            <li>
+              <strong>Google</strong> — OAuth sign-in and business reviews
+            </li>
+          </ul>
+          <p>
+            Each service has its own privacy policy governing how they handle data.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Cookies
+          </h2>
+          <p>
+            We use essential cookies to manage your authentication session. We do not
+            use advertising cookies or third-party tracking cookies.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Your Rights
+          </h2>
+          <p>You have the right to:</p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Access the personal information we hold about you</li>
+            <li>Request correction of inaccurate information</li>
+            <li>Request deletion of your account and associated data</li>
+            <li>Withdraw consent for photo submissions at any time</li>
+          </ul>
+          <p>
+            To exercise any of these rights, please contact us through our{" "}
+            <a href="/contact" className="text-forest hover:text-forest-light">
+              contact form
+            </a>
+            .
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Children&apos;s Privacy
+          </h2>
+          <p>
+            Our website is not directed at children under 13. We do not knowingly
+            collect personal information from children under 13. If you believe we
+            have collected information from a child under 13, please contact us
+            immediately.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Changes to This Policy
+          </h2>
+          <p>
+            We may update this Privacy Policy from time to time. We will notify
+            registered users of significant changes via email. The &quot;Last
+            updated&quot; date at the top of this page indicates when it was last
+            revised.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+            Contact
+          </h2>
+          <p>
+            If you have questions about this Privacy Policy, please reach out
+            through our{" "}
+            <a href="/contact" className="text-forest hover:text-forest-light">
+              contact form
+            </a>
+            .
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

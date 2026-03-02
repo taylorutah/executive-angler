@@ -1,7 +1,7 @@
 # Executive Angler — Project Status
 
 **Last updated:** 2026-03-01
-**Current state:** Phase 2 complete — full content expansion deployed
+**Current state:** Phase 3 complete — search, 404 fixes, expanded international content, species images
 
 ## Live URLs
 - **Production:** https://executiveangler.com (Vercel)
@@ -11,17 +11,22 @@
 
 ## What's Working
 
-### Pages (200+ static pages, all live)
+### Pages (250+ static pages, all live)
 | Route | Count | Status |
 |-------|-------|--------|
 | `/` | 1 | Homepage with 6 featured content sections |
-| `/destinations` | 1 list + 25 detail | All 25 destinations rendering with maps |
-| `/rivers` | 1 list + 31 detail | All 31 rivers with Mapbox maps, access points, hatch charts |
-| `/species` | 1 list + 35 detail | All 35 species with taxonomy, tips, related content |
-| `/lodges` | 1 list + 27 detail | All 27 lodges with galleries, amenities |
-| `/guides` | 1 list + 26 detail | All 26 guides with bios, specialties |
+| `/destinations` | 1 list + 30 detail | All 30 destinations rendering with maps |
+| `/rivers` | 1 list + 41 detail | All 41 rivers with Mapbox maps, access points, hatch charts |
+| `/species` | 1 list + 35 detail | All 35 species with Wikimedia Commons illustrations |
+| `/lodges` | 1 list + 32 detail | All 32 lodges with galleries, amenities |
+| `/guides` | 1 list + 31 detail | All 31 guides with bios, specialties |
 | `/fly-shops` | 1 list + 27 detail | All 27 shops with hours, services, brands |
 | `/articles` | 1 list + 16 detail | All 16 articles with full HTML content |
+| `/search` | 1 | Full-text search across all content types, Cmd+K shortcut |
+| `/about` | 1 | About page with mission, coverage, conservation |
+| `/contact` | 1 | Contact form (sends to taylor.warnick@gmail.com via FormSubmit.co) |
+| `/privacy` | 1 | Full privacy policy |
+| `/terms` | 1 | Terms of service |
 | `/login` | 1 | Email/password login form |
 | `/signup` | 1 | Registration form |
 | `/favorites` | 1 | Protected — requires auth |
@@ -33,8 +38,10 @@
 - [x] Mapbox interactive maps on river + destination pages
 - [x] Hatch charts on river detail pages
 - [x] Schema.org structured data on every entity page
-- [x] Dynamic sitemap with all 200+ URLs
+- [x] Dynamic sitemap with all 250+ URLs
 - [x] robots.txt and llms.txt
+- [x] Full-text search with Cmd+K shortcut
+- [x] About, contact, privacy, and terms pages
 - [x] Supabase Auth — email/password signup and login
 - [x] User favorites system (FavoriteButton + API route)
 - [x] Photo submission form on all entity pages (UI built, requires Storage bucket)
@@ -44,6 +51,7 @@
 - [x] Photo approval/rejection API with HMAC-signed URLs
 - [x] Framer Motion scroll animations throughout
 - [x] Breadcrumbs with JSON-LD on all detail pages
+- [x] Species images from Wikimedia Commons (public domain)
 
 ### API Routes (serverless)
 | Route | Method | Status |
@@ -63,9 +71,6 @@
 - [ ] **PHOTO_REVIEW_SECRET** — Set in Vercel env vars. Without this, HMAC-signed approval links won't validate.
 
 ### Not Built Yet
-- [ ] `/about` page — referenced in sitemap but doesn't exist
-- [ ] `/contact` page — referenced in sitemap but doesn't exist
-- [ ] Search functionality — no search page or API
 - [ ] User review submission UI — DB table + RLS exist, no form
 - [ ] Admin authentication — `/admin/photos` is publicly accessible
 - [ ] Admin content management — content changes require editing TypeScript files + redeploy
@@ -75,24 +80,34 @@
 - [ ] Trip planning / itinerary builder
 
 ### Known Issues
-1. All images (except homepage hero) are Unsplash placeholders — need real photography
-2. Sitemap references `/about` and `/contact` which return 404
-3. Admin photos dashboard has no auth gate
-4. `llms.txt` content may be stale after Phase 2 expansion
+1. All images (except homepage hero and species) are Unsplash placeholders — need real photography
+2. Admin photos dashboard has no auth gate
+3. Contact form uses FormSubmit.co which may require email confirmation on first use
 
 ## Content Inventory
 
-### Destinations (25)
-Montana, Wyoming, Colorado, Idaho, Alaska, Oregon, Washington, Utah, New Mexico, California, North Carolina, Michigan, Pennsylvania, Vermont, New York, Arkansas, British Columbia, Alberta, New Zealand, Iceland, Patagonia, Bahamas, Belize, Norway, Japan
+### Destinations (30)
+**US:** Montana, Wyoming, Colorado, Idaho, Alaska, Oregon, Pennsylvania, Michigan, Arkansas, Florida Keys
+**Canada:** British Columbia
+**Europe:** Iceland, Norway, Scotland, Slovenia, Ireland, Kola Peninsula (Russia)
+**Asia:** Japan, Mongolia
+**Oceania:** New Zealand, Tasmania
+**South America:** Patagonia, Chile, Tierra del Fuego
+**Caribbean/Central America:** Bahamas, Belize, Cuba
+**Indian Ocean:** Christmas Island, Seychelles, Maldives
+**Pacific:** Kamchatka
 
-### Rivers (31)
-Madison, Yellowstone, Gallatin, Missouri, Bighorn, Big Hole, Bitterroot, Ruby, Rock Creek, Boulder, Smith, Clark Fork, North Platte, Green, Snake, South Fork Snake, Henry's Fork, Silver Creek, Deschutes, Beaverhead, Kenai, Naknek, Copper, Delaware, Au Sable, South Holston, San Juan, Frying Pan, Tongariro, Rangitikei, Mataura
+### Rivers (41)
+US: Madison, Yellowstone, Gallatin, Missouri, Bighorn, Big Hole, Bitterroot, Ruby, Rock Creek, Boulder, Smith, Clark Fork, North Platte, Green, Snake, South Fork Snake, Henry's Fork, Silver Creek, Deschutes, Beaverhead, Kenai, Naknek, Copper, Delaware, Au Sable, South Holston, San Juan, Frying Pan, Florida Keys Flats
+New Zealand: Tongariro, Rangitikei, Mataura
+International: River Moy (Ireland), Ponoi River (Russia), Eg-Uur River (Mongolia), Jardines de la Reina (Cuba), North Malé Atoll (Maldives)
 
 ### Species (35)
 7 families — trout (10), salmon (5), char (5), grayling (2), saltwater (5), warmwater (5), pike (3)
+All species now have Wikimedia Commons public domain scientific illustrations.
 
-### Lodges (27), Guides (26), Fly Shops (27)
-Spread across 15+ destinations
+### Lodges (32), Guides (31), Fly Shops (27)
+Spread across 20+ destinations worldwide
 
 ### Articles (16)
 Categories: technique (6), destination (3), gear (2), conservation (2), culture (2), species (1)
@@ -113,3 +128,4 @@ Categories: technique (6), destination (3), gear (2), conservation (2), culture 
 |------|--------|-------------|
 | 2026-03-01 | Initial commits | Phase 1 — MVP scaffold, Montana content, auth, SEO |
 | 2026-03-01 | `7ecf507` | Phase 2 — 200+ pages, species system, photo system, full content expansion |
+| 2026-03-01 | Phase 3 | Search, 404 fixes, 5 new destinations, species images, 250+ pages |

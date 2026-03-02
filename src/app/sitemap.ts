@@ -21,6 +21,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/fly-shops`, lastModified: new Date(), priority: 0.8 },
     { url: `${SITE_URL}/about`, lastModified: new Date(), priority: 0.5 },
     { url: `${SITE_URL}/contact`, lastModified: new Date(), priority: 0.5 },
+    { url: `${SITE_URL}/search`, lastModified: new Date(), priority: 0.6 },
+    { url: `${SITE_URL}/privacy`, lastModified: new Date(), priority: 0.3 },
+    { url: `${SITE_URL}/terms`, lastModified: new Date(), priority: 0.3 },
   ];
 
   const destinationPages = destinations.map((d) => ({

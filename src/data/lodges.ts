@@ -1127,4 +1127,210 @@ export const lodges: Lodge[] = [
       "World's premier sea-run brown trout lodge on the Rio Grande in Tierra del Fuego, Argentina. Trophy fish exceeding 20 pounds, Spey casting, and exclusive river access.",
     featured: true,
   },
+  // ─── PHASE 3 ADDITIONS ──────────────────────────────────────────
+  {
+    id: "lodge-mount-falcon",
+    slug: "mount-falcon-estate",
+    name: "Mount Falcon Estate",
+    destinationId: "dest-ireland",
+    description:
+      "Mount Falcon Estate is one of Ireland's finest country house hotels with a dedicated salmon fishing program, set on a hundred-acre estate overlooking the River Moy in County Mayo. The estate holds private salmon fishing on both banks of the Moy, offering guests exclusive access to some of the river's most productive beats during the peak salmon season. The combination of a historic Georgian manor house, award-winning cuisine featuring locally sourced ingredients, and immediate access to Ireland's premier salmon river creates an experience that seamlessly blends sporting tradition with country house luxury.\n\nThe fishing at Mount Falcon is managed by an experienced team of ghillies who know the Moy intimately, from the lies where spring salmon hold in the deep pools to the gravel runs where grilse stack up in July and August. Guests fish with single-handed or double-handed rods depending on the beat and conditions, with wet fly, nymph, and dry fly methods all employed throughout the season. The estate also arranges fishing on nearby Lough Conn for wild brown trout, providing an alternative for days when the river is high or when guests want to experience the traditional Irish art of lough-style fishing from a drifting boat.\n\nBeyond fishing, Mount Falcon offers woodland walks, falconry experiences, an outdoor hot tub, and a Kitchen Garden restaurant that has earned a reputation as one of the finest dining experiences in the west of Ireland. The estate is family-friendly and accommodates non-fishing partners with activities and spa facilities.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1586375300773-8384e3e4916f?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1586375300773-8384e3e4916f?w=400&q=80", // PLACEHOLDER
+    galleryUrls: [
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80", // PLACEHOLDER
+    ],
+    websiteUrl: "https://www.mountfalcon.com",
+    latitude: 54.0833,
+    longitude: -9.2000,
+    priceRange: "$250-500/night",
+    priceTier: 3,
+    seasonStart: "March",
+    seasonEnd: "September",
+    capacity: 32,
+    amenities: [
+      "Private salmon beats",
+      "Experienced ghillies",
+      "Georgian manor accommodation",
+      "Award-winning restaurant",
+      "Lough Conn access",
+      "Falconry",
+      "Woodland walks",
+      "Outdoor hot tub",
+      "Family friendly",
+      "Non-fishing activities",
+    ],
+    nearbyRiverIds: ["river-moy"],
+    averageRating: 4.7,
+    reviewCount: 89,
+    metaTitle: "Mount Falcon Estate | Irish Salmon Fishing Lodge",
+    metaDescription:
+      "Ireland's premier salmon fishing estate on the River Moy. Private beats, experienced ghillies, and Georgian country house luxury in County Mayo.",
+    featured: false,
+  },
+  {
+    id: "lodge-ponoi-river-camp",
+    slug: "ponoi-river-camp",
+    name: "Ponoi River Camp",
+    destinationId: "dest-kola-peninsula",
+    description:
+      "Ponoi River Camp is the sole fishing operation on the world's most prolific Atlantic salmon river, offering an exclusive wilderness experience that combines record-breaking salmon fishing with comfortable camp accommodation on the Arctic tundra. Accessed only by helicopter from Murmansk, the camp sits on the banks of the lower Ponoi River amidst a landscape of tundra, birch groves, and crystal-clear pools teeming with Atlantic salmon. The operation has been running since the early 1990s and has refined its program to deliver consistently outstanding fishing while maintaining the catch-and-release conservation ethic that has kept the Ponoi's salmon runs healthy.\n\nThe camp accommodates a limited number of rods per week, rotating guests through over sixty miles of river on named beats that have been producing salmon for decades. Experienced guides pole boats to the best pools each day, where anglers Spey cast through holding water that may contain dozens of fresh-run salmon. The take rate on the Ponoi is legendary — double-digit days are common during peak weeks, and the quality of the fish is exceptional, with bright, ocean-fresh salmon averaging ten to fifteen pounds and multi-sea-winter fish exceeding thirty pounds taken regularly.\n\nAccommodation is in heated cabins and tents along the riverbank, with meals prepared by a dedicated camp chef using a combination of imported provisions and locally sourced ingredients. The atmosphere is relaxed and convivial, with anglers gathering in the communal dining cabin each evening to share tales of the day's fishing over dinner and drinks. The midnight sun provides endless casting light, and many anglers fish well past midnight during the peak of the Arctic summer.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80", // PLACEHOLDER
+    galleryUrls: [
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=800&q=80", // PLACEHOLDER
+    ],
+    latitude: 67.0667,
+    longitude: 41.1333,
+    priceRange: "$8,000-12,000/week",
+    priceTier: 5,
+    seasonStart: "June",
+    seasonEnd: "September",
+    capacity: 16,
+    amenities: [
+      "Helicopter transfer from Murmansk",
+      "Exclusive river access",
+      "Experienced salmon guides",
+      "All meals and drinks included",
+      "Spey casting instruction",
+      "Full tackle provision",
+      "Heated cabins",
+      "Midnight sun fishing",
+    ],
+    nearbyRiverIds: ["river-ponoi"],
+    averageRating: 4.9,
+    reviewCount: 23,
+    metaTitle: "Ponoi River Camp | Kola Peninsula Atlantic Salmon",
+    metaDescription:
+      "The world's most productive Atlantic salmon fishing. Exclusive helicopter-access camp on Russia's Ponoi River with record-breaking catches.",
+    featured: false,
+  },
+  {
+    id: "lodge-sweetwater-travel",
+    slug: "sweetwater-travel-mongolia",
+    name: "Sweetwater Travel Mongolia Camp",
+    destinationId: "dest-mongolia",
+    description:
+      "Sweetwater Travel operates the most established and conservation-focused taimen fishing camps in Mongolia, providing access to the Eg-Uur watershed and other pristine river systems in northern Mongolia where the world's largest salmonid still thrives. The operation is structured as a series of mobile ger camps and river camps that move with the fishing conditions, allowing anglers to cover extensive stretches of river in pursuit of taimen, lenok, and Siberian grayling in some of the most remote and beautiful wilderness remaining in Asia.\n\nThe camps are comfortable without being luxurious, reflecting the expedition nature of Mongolian taimen fishing. Traditional gers (the round felt tents of Mongolian nomads) provide warm, dry sleeping quarters, while communal dining tents serve hearty meals prepared by camp cooks. The guiding staff combines Mongolian river knowledge with Western fly fishing expertise, ensuring that anglers of all experience levels can effectively fish for taimen using the large streamers, mouse patterns, and articulated flies that these apex predators demand.\n\nSweetwater Travel has been at the forefront of taimen conservation in Mongolia, working with local communities and government agencies to protect critical taimen habitat and establish sustainable fishing practices. Their strict catch-and-release protocols, barbless hook requirements, and fish handling training have set the standard for responsible taimen fishing operations worldwide. A portion of each trip fee goes directly to habitat conservation and community development programs in the fishing areas.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80", // PLACEHOLDER
+    galleryUrls: [
+      "https://images.unsplash.com/photo-1537905569824-f89f14cceb68?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1478827536114-da961b7f86d2?w=800&q=80", // PLACEHOLDER
+    ],
+    latitude: 49.8500,
+    longitude: 100.5000,
+    priceRange: "$6,500-9,000/week",
+    priceTier: 5,
+    seasonStart: "June",
+    seasonEnd: "October",
+    capacity: 8,
+    amenities: [
+      "Experienced taimen guides",
+      "Traditional ger accommodation",
+      "All meals included",
+      "Full tackle provision",
+      "Conservation-focused operation",
+      "Overland transfers from Ulaanbaatar",
+      "Multi-day float trips available",
+      "Photography assistance",
+    ],
+    nearbyRiverIds: ["river-eg-uur"],
+    averageRating: 4.8,
+    reviewCount: 18,
+    metaTitle: "Sweetwater Travel Mongolia | Taimen Fishing Camps",
+    metaDescription:
+      "Mongolia's premier taimen fishing operation. Conservation-focused camps on the Eg-Uur watershed for the world's largest salmonid.",
+    featured: false,
+  },
+  {
+    id: "lodge-avalon-cuba",
+    slug: "avalon-jardines-de-la-reina",
+    name: "Avalon Fleet — Jardines de la Reina",
+    destinationId: "dest-cuba",
+    description:
+      "Avalon is the pioneering and most established fly fishing operation in Cuba's Jardines de la Reina, operating a fleet of live-aboard motherships that serve as floating lodges anchored in the protected channels of this pristine marine archipelago. Since the early 2000s, Avalon has provided international fly anglers with access to what many consider the finest remaining saltwater flats fishing in the Caribbean, with bonefish, permit, tarpon, and a host of reef species available within minutes of each mothership anchorage.\n\nThe motherships are comfortable floating hotels, each accommodating six to eight anglers in air-conditioned cabins with private bathrooms. Meals are prepared by onboard chefs and feature fresh seafood alongside Cuban and international cuisine. Each morning, anglers board poled skiffs with experienced Cuban guides to explore the flats, channels, and mangrove shorelines of the archipelago, returning to the mothership for lunch and again at the end of the fishing day. The flexibility of the mothership format allows the operation to relocate based on tides, weather, and fish activity, maximizing fishing productivity throughout each week.\n\nThe fishing from Avalon's operation is exceptional by any Caribbean standard. Bonefish numbers are staggering, with schools of fifty to several hundred fish encountered daily on the inside flats. Permit fishing rivals the best in Belize and Mexico, with fish cruising the flats in pods that offer multiple shots per encounter. Tarpon inhabit the deeper channels year-round, with fish from twenty to over one hundred pounds available depending on season and location.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80", // PLACEHOLDER
+    galleryUrls: [
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // PLACEHOLDER
+    ],
+    latitude: 21.0500,
+    longitude: -79.5000,
+    priceRange: "$5,500-7,500/week",
+    priceTier: 4,
+    seasonStart: "December",
+    seasonEnd: "August",
+    capacity: 8,
+    amenities: [
+      "Live-aboard mothership",
+      "Air-conditioned cabins",
+      "All meals and drinks included",
+      "Expert Cuban guides",
+      "Poled skiffs",
+      "Grand slam opportunities",
+      "Marine park access",
+      "Snorkeling available",
+    ],
+    nearbyRiverIds: ["river-jardines-de-la-reina"],
+    averageRating: 4.7,
+    reviewCount: 31,
+    metaTitle: "Avalon Fleet — Jardines de la Reina | Cuba Fly Fishing",
+    metaDescription:
+      "Cuba's premier saltwater fly fishing operation. Live-aboard motherships in the Jardines de la Reina for bonefish, permit, and tarpon.",
+    featured: false,
+  },
+  {
+    id: "lodge-maldives-gt",
+    slug: "maldives-flyfish-explorer",
+    name: "Maldives Flyfish Explorer",
+    destinationId: "dest-maldives",
+    description:
+      "Maldives Flyfish Explorer is a dedicated fly fishing live-aboard vessel that cruises the atolls of the Maldives in search of giant trevally, bluefin trevally, bonefish, triggerfish, and the extraordinary variety of tropical species that inhabit these pristine Indian Ocean waters. The vessel is purpose-built for fly fishing, with an open casting deck, rod storage, fly tying station, and a fleet of poling skiffs that deploy each day to work the channels, reef edges, and interior flats of whichever atoll offers the best fishing conditions.\n\nThe live-aboard format is ideally suited to the Maldives, where the best fishing is spread across multiple atolls and changes with tidal cycles, moon phases, and seasonal fish movements. The vessel moves between anchorages to follow the fishing, providing access to remote atolls and channel systems that land-based operations cannot reach. Giant trevally are the primary target, with fish prowling the channel mouths and reef edges where tidal flows concentrate bait. Sight-casting to cruising GTs on the flats is the pinnacle experience, but blind-casting poppers and large flies along reef structures produces consistent action as well.\n\nAccommodation aboard the Explorer is comfortable and well-appointed, with air-conditioned cabins, an open-air dining area, and a sun deck for relaxing between fishing sessions. Meals feature fresh seafood and Maldivian cuisine. The crew and guides are experienced local fishermen who have transitioned from commercial fishing to catch-and-release guiding, bringing an intimate knowledge of the atolls and fish behavior that comes only from a lifetime on these waters.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1540202404-a2f29016b523?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1540202404-a2f29016b523?w=400&q=80", // PLACEHOLDER
+    galleryUrls: [
+      "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=800&q=80", // PLACEHOLDER
+      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80", // PLACEHOLDER
+    ],
+    latitude: 4.3000,
+    longitude: 73.5000,
+    priceRange: "$7,000-10,000/week",
+    priceTier: 5,
+    seasonStart: "October",
+    seasonEnd: "May",
+    capacity: 6,
+    amenities: [
+      "Purpose-built fly fishing vessel",
+      "Air-conditioned cabins",
+      "All meals included",
+      "Poling skiffs",
+      "Expert local guides",
+      "GT and reef fishing",
+      "Multi-atoll itinerary",
+      "Fly tying station",
+      "Snorkeling and diving",
+    ],
+    nearbyRiverIds: ["river-north-male-atoll"],
+    averageRating: 4.8,
+    reviewCount: 14,
+    metaTitle: "Maldives Flyfish Explorer | Indian Ocean GT Fishing",
+    metaDescription:
+      "Purpose-built fly fishing live-aboard in the Maldives. Giant trevally, bonefish, and triggerfish on pristine Indian Ocean atolls.",
+    featured: false,
+  },
 ];

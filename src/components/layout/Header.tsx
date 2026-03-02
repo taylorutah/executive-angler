@@ -32,6 +32,18 @@ export default function Header() {
     });
   }, []);
 
+  // Cmd+K / Ctrl+K shortcut to navigate to search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        window.location.href = "/search";
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const isHomepage = pathname === "/";
   const headerBg = scrolled || !isHomepage
     ? "bg-white/95 backdrop-blur-md shadow-sm"
@@ -93,8 +105,9 @@ export default function Header() {
             {/* Right Actions */}
             <div className="flex items-center gap-2">
               <Link
-                href="/articles"
+                href="/search"
                 className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
+                title="Search (⌘K)"
               >
                 <Search className="h-4 w-4" />
               </Link>

@@ -3165,4 +3165,263 @@ export const rivers: River[] = [
       "Fly fishing the Florida Keys flats. The birthplace of saltwater fly fishing with bonefish, permit, and tarpon for the ultimate grand slam challenge.",
     featured: true,
   },
+  // ─── PHASE 3: IRELAND ──────────────────────────────────────────────
+  {
+    id: "river-moy",
+    slug: "river-moy",
+    name: "River Moy",
+    destinationId: "dest-ireland",
+    description:
+      "The River Moy in County Mayo is Ireland's most prolific Atlantic salmon river, consistently producing the highest rod catches of any river in the country. Rising in the Ox Mountains of County Sligo, the Moy flows westward through the town of Ballina before entering Killala Bay on the Atlantic coast. The river and its tributaries drain a vast limestone catchment that produces alkaline, nutrient-rich water ideal for both salmon and brown trout. In a typical season, the Moy system produces between seven and ten thousand salmon to the rod, a figure that dwarfs most other Atlantic salmon rivers in western Europe.\n\nThe Moy offers an accessible and remarkably affordable Atlantic salmon fishing experience. The Moy Fishery, managed by Inland Fisheries Ireland, provides day-ticket access to prime salmon beats in and around Ballina, putting world-class salmon fishing within reach of anglers who might otherwise be priced out of the sport. The river fishes well with both single-handed and double-handed rods, with wet fly, nymph, and dry fly methods all productive depending on conditions. Spring salmon arrive from March onward, building through May and June, while the main grilse run from late June through August provides the peak of the season with aggressive, fresh-run fish in the four-to-eight-pound class that fight far above their weight.\n\nBeyond salmon, the Moy system holds excellent brown trout, particularly in the tributaries and the upper river above Foxford. Lough Conn and Lough Cullin, connected to the Moy system, offer outstanding wild brown trout fishing from drifting boats, with the mayfly hatch in May and June drawing trout to the surface in numbers that thrill even experienced lough anglers. The combination of prolific salmon fishing, wild brown trout, and the legendary hospitality of the Ballina area makes the Moy the ideal introduction to Irish fly fishing.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?w=1200&q=80", // PLACEHOLDER
+    lengthMiles: 62,
+    flowType: "freestone",
+    difficulty: "beginner",
+    wadingType: "both",
+    primarySpecies: ["Atlantic Salmon", "Brown Trout", "Sea Trout"],
+    regulations:
+      "Salmon rod license required from Inland Fisheries Ireland. Catch-and-release mandatory before June 1 on most beats. Bag limits of 1 salmon per day during harvest season. Fly only on certain beats. Check current regulations with the Moy Fishery office in Ballina.",
+    accessPoints: [
+      {
+        name: "Ridge Pool, Ballina",
+        latitude: 54.1148,
+        longitude: -9.1552,
+        description: "The most famous salmon pool in Ireland. Day-ticket access through the Moy Fishery. Fly only, rotating beats.",
+        parking: true,
+      },
+      {
+        name: "Foxford Fishery",
+        latitude: 53.9819,
+        longitude: -9.1144,
+        description: "Excellent salmon and brown trout water upstream of Foxford. Multiple beats available on day tickets.",
+        parking: true,
+      },
+      {
+        name: "Ballylahan Bridge",
+        latitude: 53.9231,
+        longitude: -9.0833,
+        description: "Upper Moy access with good brown trout fishing and early-season salmon. Less crowded than the Ballina beats.",
+        parking: true,
+      },
+    ],
+    bestMonths: ["May", "June", "July", "August", "September"],
+    latitude: 54.1148,
+    longitude: -9.1552,
+    mapBounds: {
+      sw: [-9.5, 53.8],
+      ne: [-8.8, 54.3],
+    },
+    hatchChart: [
+      {
+        month: "March",
+        hatches: [
+          { insect: "Large Dark Olive", size: "#12-14", pattern: "March Brown, Dark Olive Emerger", timeOfDay: "midday", intensity: "moderate" },
+        ],
+      },
+      {
+        month: "May",
+        hatches: [
+          { insect: "Mayfly (Ephemera danica)", size: "#8-10", pattern: "Spent Gnat, Green Drake, Grey Wulff", timeOfDay: "afternoon to evening", intensity: "heavy" },
+          { insect: "Olive Dun", size: "#14-16", pattern: "Greenwell's Glory, Olive Quill", timeOfDay: "midday", intensity: "moderate" },
+        ],
+      },
+      {
+        month: "June",
+        hatches: [
+          { insect: "Mayfly (spent)", size: "#10-12", pattern: "Spent Gnat, Grey Wulff", timeOfDay: "evening", intensity: "moderate" },
+          { insect: "Sedge (Caddis)", size: "#12-14", pattern: "Murrough, Elk Hair Caddis", timeOfDay: "evening", intensity: "moderate" },
+        ],
+      },
+      {
+        month: "August",
+        hatches: [
+          { insect: "Sedge", size: "#12-14", pattern: "Murrough, Peter Ross", timeOfDay: "evening", intensity: "moderate" },
+          { insect: "Daddy Longlegs", size: "#10-12", pattern: "Daddy Longlegs, Crane Fly", timeOfDay: "afternoon", intensity: "sparse" },
+        ],
+      },
+    ],
+    metaTitle: "River Moy Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Ireland's premier Atlantic salmon river. Fish the legendary Ridge Pool and Moy Fishery beats in Ballina, County Mayo.",
+    featured: false,
+  },
+  // ─── PHASE 3: KOLA PENINSULA ──────────────────────────────────────
+  {
+    id: "river-ponoi",
+    slug: "ponoi-river",
+    name: "Ponoi River",
+    destinationId: "dest-kola-peninsula",
+    description:
+      "The Ponoi River is the most famous Atlantic salmon river in Russia and arguably the most productive salmon fishery remaining in the world. Flowing northeast across the Kola Peninsula for over 250 miles before emptying into the Barents Sea, the Ponoi drains a vast wilderness of tundra, birch forest, and moss-covered bogs that has never been subjected to logging, damming, or industrial development. The result is a river system of extraordinary ecological health, producing runs of Atlantic salmon that can exceed one hundred thousand fish in a single season — numbers that are almost inconceivable to anglers accustomed to the depleted salmon rivers of Scotland, Ireland, or eastern North America.\n\nThe fishing on the Ponoi is conducted from a single camp operated by Ponoi River Company, accessible only by helicopter from the regional capital of Murmansk. The camp controls over 60 miles of the lower river, offering access to dozens of named pools and runs that hold salmon from the first ice-out in early June through September. The standard technique is Spey casting with two-handed rods, swinging large flies on floating or intermediate lines through the broad, boulder-strewn pools. The salmon of the Ponoi are notably aggressive, often taking the fly with a confidence that reflects their lack of exposure to fishing pressure in the ocean approaches to the river.\n\nWhat distinguishes the Ponoi from other great salmon rivers is the consistency of its fishing. While all salmon rivers are subject to the vagaries of run timing, water conditions, and weather, the Ponoi's enormous run size means that fresh fish are entering the river continuously throughout the season, and the probability of encountering taking fish on any given day is remarkably high. Double-digit days — ten or more salmon landed per rod — are common during peak weeks, and fish average ten to fifteen pounds with specimens exceeding thirty pounds caught regularly. The experience of Spey casting through a crystal-clear pool on the Arctic tundra, with the midnight sun reflecting off the water and the next salmon strike always just a cast away, is one of the defining moments in the sport of fly fishing.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1478827536114-da961b7f86d2?w=1200&q=80", // PLACEHOLDER
+    lengthMiles: 260,
+    flowType: "freestone",
+    difficulty: "intermediate",
+    wadingType: "both",
+    primarySpecies: ["Atlantic Salmon", "Sea Trout", "Arctic Char", "Grayling"],
+    regulations:
+      "Strict catch-and-release for all Atlantic salmon. Single barbless hooks required. Fish handling protocols enforced by guides. All regulations managed by Ponoi River Company.",
+    accessPoints: [
+      {
+        name: "Ryabaga Camp",
+        latitude: 67.0667,
+        longitude: 41.1333,
+        description: "Main fishing camp on the lower Ponoi. Helicopter access only from Murmansk. All beats accessed by boat from camp.",
+        parking: false,
+      },
+      {
+        name: "Brevenny Pool",
+        latitude: 67.1000,
+        longitude: 40.9500,
+        description: "One of the most productive pools on the river. Deep holding water with consistent salmon throughout the season.",
+        parking: false,
+      },
+    ],
+    bestMonths: ["June", "July", "August", "September"],
+    latitude: 67.0667,
+    longitude: 41.1333,
+    mapBounds: {
+      sw: [39.5, 66.5],
+      ne: [42.0, 67.5],
+    },
+    metaTitle: "Ponoi River Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "The world's most prolific Atlantic salmon river. Fly fishing the Ponoi on Russia's Kola Peninsula for world-class salmon in pristine wilderness.",
+    featured: false,
+  },
+  // ─── PHASE 3: MONGOLIA ──────────────────────────────────────────
+  {
+    id: "river-eg-uur",
+    slug: "eg-uur-river",
+    name: "Eg-Uur River",
+    destinationId: "dest-mongolia",
+    description:
+      "The Eg-Uur watershed in northern Mongolia is the heartland of Siberian taimen fly fishing, a remote river system flowing through forested mountains and open steppe that holds one of the healthiest remaining populations of the world's largest salmonid. The Eg River and its major tributary, the Uur, converge in a landscape of stunning natural beauty where boreal forest gives way to grassland and the only signs of human habitation are the occasional ger camp of nomadic herders. For fly anglers, the Eg-Uur represents the pinnacle of taimen fishing — big, wild fish in pristine water, pursued with large streamers, articulated flies, and mouse patterns in a setting of genuine wilderness adventure.\n\nThe taimen of the Eg-Uur system are apex predators that occupy the same ecological niche as bull trout or pike in other waters, feeding on smaller fish, rodents, and even ducklings. Fish exceeding forty inches are encountered regularly, with the largest specimens approaching sixty inches and weights over fifty pounds. The fishing technique combines streamer fishing with surface presentations — large deer-hair mouse patterns skated across the surface at dawn and dusk can produce explosive strikes from taimen that charge the fly with breathtaking aggression. The visual, predatory nature of taimen fishing on the surface is the defining experience of a Mongolian fly fishing trip, a moment of raw wilderness drama that remains indelibly imprinted on every angler who witnesses it.\n\nThe Eg-Uur also offers excellent fishing for lenok, a beautiful salmonid native to central Asian rivers that eagerly takes dry flies and nymphs in the riffly water between deeper taimen pools. Siberian grayling, with their spectacular oversized dorsal fins, provide additional sport on lighter tackle. The multi-species fishing ensures that rods are bending throughout the day, even between the explosive but sometimes infrequent taimen encounters that anchor the trip. Conservation is central to every reputable Mongolian taimen operation, with strict catch-and-release, barbless hooks, and minimal handling requirements reflecting the vulnerability of this magnificent fish.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1602850930608-ea1d7e8bd2b9?w=1200&q=80", // PLACEHOLDER
+    lengthMiles: 190,
+    flowType: "freestone",
+    difficulty: "intermediate",
+    wadingType: "both",
+    primarySpecies: ["Siberian Taimen", "Lenok", "Siberian Grayling", "Amur Trout"],
+    regulations:
+      "Strict catch-and-release for all taimen. Single barbless hooks required. Fish must remain in the water at all times during handling. Photography kept brief. All regulations enforced by guide staff.",
+    accessPoints: [
+      {
+        name: "Eg-Uur Confluence",
+        latitude: 49.8500,
+        longitude: 100.5000,
+        description: "The confluence of the Eg and Uur rivers. Deep pools and logjams hold the largest taimen in the system.",
+        parking: false,
+      },
+      {
+        name: "Upper Eg Camp",
+        latitude: 50.0000,
+        longitude: 100.2000,
+        description: "Upstream camp with excellent wade fishing access. Lenok and grayling in the riffles, taimen in the deeper bends.",
+        parking: false,
+      },
+    ],
+    bestMonths: ["June", "July", "August", "September", "October"],
+    latitude: 49.8500,
+    longitude: 100.5000,
+    mapBounds: {
+      sw: [99.5, 49.3],
+      ne: [101.0, 50.5],
+    },
+    metaTitle: "Eg-Uur River Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Pursue Siberian taimen in Mongolia's Eg-Uur watershed. The world's largest salmonid in pristine wilderness rivers of northern Mongolia.",
+    featured: false,
+  },
+  // ─── PHASE 3: CUBA ──────────────────────────────────────────────
+  {
+    id: "river-jardines-de-la-reina",
+    slug: "jardines-de-la-reina",
+    name: "Jardines de la Reina",
+    destinationId: "dest-cuba",
+    description:
+      "Jardines de la Reina — the Gardens of the Queen — is a 150-mile archipelago of mangrove islands, white sand flats, and coral channels stretching along Cuba's southern coast, and it stands as one of the most pristine saltwater fly fishing environments remaining in the Caribbean. Designated a marine protected area, Jardines de la Reina has been closed to commercial fishing for decades, and the result is a saltwater ecosystem of breathtaking health where schools of bonefish number in the hundreds, permit cruise the flats with a confidence rarely seen on more pressured waters, and tarpon inhabit the mangrove channels in densities that rival the Florida Keys at their historical peak.\n\nThe flats of Jardines de la Reina offer a stunning diversity of saltwater fly fishing opportunities within a compact area. Inside the reef line, vast turtle grass flats and white sand pockets hold bonefish that average three to five pounds, with larger fish regularly encountered. The channels between mangrove islands concentrate bait and predators, creating natural ambush points where tarpon ranging from juvenile twenty-pounders to hundred-pound adults roll and feed. Permit are found throughout the system, cruising the flats in small groups, their dark tails tipping above the surface as they root for crabs and shrimp in the turtle grass.\n\nThe grand slam potential of Jardines de la Reina — bonefish, permit, and tarpon in a single day — is among the highest of any destination in the Caribbean. Multi-species days are the norm, with anglers often adding barracuda, jacks, and various snapper species to their tally. The fishing is conducted from poled skiffs with experienced Cuban guides who have spent their careers learning the intricacies of the archipelago's tides, channels, and flats. Most operations are based on live-aboard motherships that anchor in protected channels, providing comfortable accommodations and the flexibility to move with the fishing conditions.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&q=80", // PLACEHOLDER
+    flowType: "saltwater flat",
+    difficulty: "intermediate",
+    wadingType: "both",
+    primarySpecies: ["Bonefish", "Permit", "Tarpon", "Barracuda", "Jacks"],
+    regulations:
+      "Catch-and-release required for all species on most operations. Marine protected area rules enforced by Cuban park rangers. Barbless hooks required. No fishing in designated no-take zones.",
+    accessPoints: [
+      {
+        name: "Central Flats",
+        latitude: 21.0500,
+        longitude: -79.5000,
+        description: "The heart of the Jardines bonefish flats. Vast turtle grass flats with consistent bonefish and permit.",
+        parking: false,
+      },
+      {
+        name: "Mangrove Channels",
+        latitude: 20.9500,
+        longitude: -79.7000,
+        description: "Deep mangrove channels holding tarpon and snook. Best fished on incoming tides.",
+        parking: false,
+      },
+    ],
+    bestMonths: ["February", "March", "April", "May", "June"],
+    latitude: 21.0500,
+    longitude: -79.5000,
+    mapBounds: {
+      sw: [-80.5, 20.5],
+      ne: [-78.5, 21.5],
+    },
+    metaTitle: "Jardines de la Reina Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Cuba's premier saltwater fly fishing. Bonefish, permit, and tarpon on pristine flats in the Jardines de la Reina marine protected area.",
+    featured: false,
+  },
+  // ─── PHASE 3: MALDIVES ──────────────────────────────────────────
+  {
+    id: "river-north-male-atoll",
+    slug: "north-male-atoll",
+    name: "North Malé Atoll",
+    destinationId: "dest-maldives",
+    description:
+      "North Malé Atoll is the gateway to fly fishing in the Maldives, a ring of coral islands enclosing a turquoise lagoon where the Indian Ocean's most exciting game fish patrol channels, reef edges, and sand flats in extraordinary abundance. The atoll's structure — a perimeter of coral reef punctuated by deep channels connecting the inner lagoon to the open ocean — creates a natural concentration point for predatory species, with giant trevally, bluefin trevally, triggerfish, and bonefish all within reach of the fly angler working from a poled skiff or wading the atoll's interior flats.\n\nThe giant trevally fishing on North Malé Atoll is the headline attraction, drawing fly anglers from around the world for the chance to cast large poppers and streamers to one of the ocean's most powerful predators. GTs patrol the channel mouths and reef edges, ambushing baitfish on the tidal exchanges with explosive strikes that test the limits of twelve-weight tackle. Sight-casting to cruising GTs on the flats is the ultimate experience — spotting a dark shape moving across the white sand, leading the fish with a large fly, and waiting for the volcanic take that follows. Fish of fifty to eighty pounds are realistic targets, with specimens exceeding one hundred pounds a genuine possibility.\n\nInside the atoll, the flats hold bonefish, triggerfish, and a variety of reef species that provide excellent sight-fishing on lighter tackle between GT sessions. The triggerfish — particularly the giant triggerfish — have developed a cult following among visiting fly anglers, their selective feeding behavior and powerful fights making them a prized catch. Bonefish on Maldivian flats tend to be modest in size compared to Caribbean populations, but they are present in good numbers and provide fast action on seven- and eight-weight outfits. The visual clarity of the water, the diversity of species, and the sheer beauty of the atoll environment make North Malé Atoll a sensory overload for the saltwater fly angler.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=1200&q=80", // PLACEHOLDER
+    flowType: "saltwater flat",
+    difficulty: "advanced",
+    wadingType: "both",
+    primarySpecies: ["Giant Trevally", "Bluefin Trevally", "Bonefish", "Triggerfish"],
+    regulations:
+      "Catch-and-release practiced on all reputable operations. Fishing prohibited inside marine protected zones. Coral reef protection measures strictly enforced. Operators follow GT handling and release protocols.",
+    accessPoints: [
+      {
+        name: "Eastern Channel",
+        latitude: 4.3500,
+        longitude: 73.5500,
+        description: "Deep channel mouth where GTs ambush baitfish on tidal exchanges. Best on incoming tides.",
+        parking: false,
+      },
+      {
+        name: "Inner Lagoon Flats",
+        latitude: 4.3000,
+        longitude: 73.5000,
+        description: "White sand flats inside the atoll with bonefish, triggerfish, and juvenile GTs.",
+        parking: false,
+      },
+    ],
+    bestMonths: ["November", "December", "January", "February", "March", "April"],
+    latitude: 4.3000,
+    longitude: 73.5000,
+    mapBounds: {
+      sw: [73.2, 4.0],
+      ne: [73.8, 4.7],
+    },
+    metaTitle: "North Malé Atoll Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Giant trevally and tropical saltwater species on the Maldives' North Malé Atoll. Sight-casting to GTs on pristine Indian Ocean flats.",
+    featured: false,
+  },
 ];

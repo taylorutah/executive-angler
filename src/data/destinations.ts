@@ -897,4 +897,183 @@ export const destinations: Destination[] = [
     featured: false,
     sortOrder: 25,
   },
+  // ─── PHASE 3 ADDITIONS ──────────────────────────────────────────────
+  {
+    id: "dest-ireland",
+    slug: "ireland",
+    name: "Ireland",
+    region: "Western Europe",
+    country: "Ireland",
+    tagline: "Atlantic Salmon and Wild Brown Trout on the Emerald Isle",
+    description:
+      "Ireland has been a revered fly fishing destination for centuries, its rain-fed rivers and limestone loughs producing Atlantic salmon and wild brown trout of exceptional quality against a backdrop of rolling green countryside, ancient stone walls, and a cultural warmth that makes every visiting angler feel immediately at home. The west coast, from County Kerry north through Clare, Galway, Mayo, and Donegal, holds the greatest concentration of salmon rivers, while the limestone loughs of the midlands and west offer world-class wild brown trout fishing that peaks during the mayfly hatch in May and June when trout exceeding five pounds cruise the shallows sipping spent duns from the surface.\n\nThe Irish approach to fly fishing is steeped in tradition yet remarkably accessible. The Moy, Corrib, and Erriff are household names in the salmon fishing world, producing fresh-run fish from spring through autumn depending on water levels and rainfall. Irish salmon fishing ranges from the intimate setting of a small spate river swollen after overnight rain, where a single-handed rod and a size-12 wet fly are all that is needed, to the broad pools of the Moy where Spey casting with double-handed rods covers the wide holding water. Sea trout fishing adds another dimension, particularly on rivers like the Erriff and Costello-Fermoyle where nocturnal sea trout runs in June and July bring these powerful, silver fish within reach of the night angler.\n\nWhat sets Ireland apart from other European fly fishing destinations is the extraordinary quality of its wild brown trout fishing, particularly on the great western loughs. Lough Corrib, Lough Mask, and Lough Conn hold self-sustaining populations of wild brownies that feed heavily on a rich invertebrate fauna, growing fat and strong in the alkaline waters. Traditional lough-style fishing from a drifting boat using a team of wet flies on a short line is an art form refined over generations, and the annual mayfly hatch on Corrib draws anglers from across Europe for what many consider the finest wild trout dry fly fishing on the continent.\n\nThe fishing season in Ireland varies by species and water. Salmon rivers open between January and March depending on the catchment, with the prime months typically being June through September when grilse and summer salmon enter the rivers. Brown trout fishing on rivers and loughs runs from February through September, with the mayfly period in May and June representing the absolute peak. The climate is mild and wet, with temperatures rarely extreme in either direction but rain an ever-present companion that keeps the rivers charged and the landscape its famous shade of green.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=400&q=80", // PLACEHOLDER
+    latitude: 53.4129,
+    longitude: -8.2439,
+    bestMonths: ["April", "May", "June", "July", "August", "September"],
+    primarySpecies: [
+      "Atlantic Salmon",
+      "Brown Trout",
+      "Sea Trout",
+      "Pike",
+    ],
+    licenseInfo:
+      "An Irish state salmon and sea trout rod license is required and can be purchased online through Inland Fisheries Ireland. Brown trout fishing on most waters requires only a permit from the local fishery or club. Some waters are free to fish. Non-residents can purchase licenses at local tackle shops.",
+    elevationRange: "Sea level - 1,000 ft (typical fishing areas)",
+    climateNotes:
+      "Mild oceanic climate with frequent rain throughout the year. Summer highs of 55-68F. Rain gear is essential at all times. The west coast receives the most rainfall. Winds can be strong, especially on exposed loughs. Long summer daylight hours extend evening fishing opportunities well past 10pm in June.",
+    regulationsSummary:
+      "Catch-and-release is mandatory on many salmon rivers, especially early season. Bag limits apply where harvest is permitted. Barbless hooks are increasingly required. Brown trout regulations vary by water. Always check local regulations with Inland Fisheries Ireland before fishing.",
+    metaTitle: "Ireland Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Discover Ireland's Atlantic salmon rivers and wild brown trout loughs. From the River Moy to Lough Corrib, explore the Emerald Isle's finest fly fishing.",
+    featured: false,
+    sortOrder: 26,
+  },
+  {
+    id: "dest-kola-peninsula",
+    slug: "kola-peninsula",
+    name: "Kola Peninsula",
+    region: "Northwestern Russia",
+    country: "Russia",
+    tagline: "The World's Greatest Atlantic Salmon Rivers",
+    description:
+      "The Kola Peninsula in northwestern Russia is home to the most prolific Atlantic salmon rivers remaining on Earth, a vast wilderness of boreal forest and tundra where dozens of rivers flow north into the Barents Sea carrying runs of salmon that dwarf anything found in Scotland, Norway, or eastern Canada. Rivers like the Ponoi, Yokanga, Varzuga, and Kharlovka produce salmon in numbers and sizes that recall the legendary catches described in Victorian fishing journals, before commercial netting and habitat degradation reduced Atlantic salmon populations across the rest of their range. For the serious salmon angler, the Kola Peninsula represents the last frontier where the odds of encountering multiple fresh-run Atlantic salmon in a single day remain genuinely high.\n\nThe fishing on the Kola's premier rivers is conducted from remote wilderness camps accessible only by helicopter, a logistical challenge that has paradoxically served as the fishery's greatest protection. The rivers themselves are pristine, flowing through landscapes of birch forest, moss-covered tundra, and granite canyons untouched by development. The standard approach is Spey casting with double-handed rods, swinging large tube flies and Sunray Shadows through the pools and runs on floating or intermediate lines. The salmon here are aggressive and willing, often taking the fly with a violence that catches even experienced anglers off guard.\n\nWhat makes the Kola uniquely compelling is the sheer diversity of the salmon fishing on offer. The Ponoi, the most famous of the Kola rivers, can produce catches of ten or more salmon per rod per day during peak periods, with fish ranging from bright six-pound grilse to chrome sea-liced specimens exceeding thirty pounds. The Yokanga offers a more intimate, technical fishing experience on smaller water with exceptional numbers of large multi-sea-winter fish. The Varzuga, the southernmost of the major rivers, is renowned for its spring run that coincides with the ice breakup in late May, creating one of the most dramatic natural spectacles in the fishing world.\n\nThe season on the Kola runs from late May through September, with the peak salmon fishing typically occurring in June and early July when the first major runs of fish enter the rivers. Mid-season fishing in July and August can be excellent on rivers with strong summer runs, while September brings the autumn fish, often the largest of the season. Conditions are challenging — the weather is unpredictable, the terrain demanding, and the remoteness requires a degree of self-sufficiency. But for the angler willing to make the journey, the Kola Peninsula delivers Atlantic salmon fishing of a quality and abundance that exists nowhere else in the modern world.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&q=80", // PLACEHOLDER
+    latitude: 67.9222,
+    longitude: 33.0783,
+    bestMonths: ["June", "July", "August", "September"],
+    primarySpecies: [
+      "Atlantic Salmon",
+      "Sea Trout",
+      "Arctic Char",
+      "Brown Trout",
+      "Grayling",
+    ],
+    licenseInfo:
+      "All fishing permits and access are arranged through the outfitter as part of the expedition package. Individual anglers cannot arrange independent access to most Kola rivers. A valid Russian visa is required for all visitors. Outfitters handle all in-country logistics including helicopter transfers and camp permits.",
+    elevationRange: "Sea level - 1,500 ft (typical fishing areas)",
+    climateNotes:
+      "Subarctic climate with long, cold winters and cool summers. Summer highs of 50-65F with 24-hour daylight in June and July above the Arctic Circle. Rain, wind, and sudden temperature drops are common. Mosquitoes and blackflies can be intense in June and early July. Pack insect repellent and head nets.",
+    regulationsSummary:
+      "Strict catch-and-release on all reputable camps for Atlantic salmon. Single barbless hooks required. Fish handling protocols enforced by guides. All regulations are managed by the individual river operators. Follow guide instructions at all times.",
+    metaTitle: "Kola Peninsula Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "The world's greatest Atlantic salmon rivers. Explore the Kola Peninsula's Ponoi, Yokanga, and Varzuga rivers for unmatched salmon fishing.",
+    featured: false,
+    sortOrder: 27,
+  },
+  {
+    id: "dest-mongolia",
+    slug: "mongolia",
+    name: "Mongolia",
+    region: "Central Asia",
+    country: "Mongolia",
+    tagline: "Taimen — The World's Largest Salmonid in Pristine Wilderness",
+    description:
+      "Mongolia occupies a singular place in the fly fishing imagination as the home of the Siberian taimen, the world's largest salmonid and one of the most coveted freshwater game fish on Earth. In the remote river valleys of northern and western Mongolia, where the steppe gives way to forested mountains and rivers flow through landscapes that have changed little since the time of Genghis Khan, taimen exceeding four feet in length and fifty pounds in weight still patrol the deep pools and log-choked runs, feeding on smaller fish, rodents, and anything else that enters their domain. For the adventurous fly angler, pursuing taimen in Mongolia represents the ultimate wilderness fishing experience — a journey to the edge of the known angling world in pursuit of a fish that is part predator, part prehistoric relic, and entirely extraordinary.\n\nThe rivers of northern Mongolia, particularly those in the Eg-Uur, Onon, and Selenge watersheds, hold the healthiest remaining populations of taimen. The fishing is conducted from ger camps or floating tent camps along the river, with anglers covering miles of water each day casting large articulated streamers, mouse patterns, and surface flies to undercut banks, logjams, and the heads and tails of deep pools. The take of a big taimen is one of the most violent strikes in freshwater fly fishing — a savage, visible explosion as a fish that can weigh as much as a springer spaniel engulfs a fly on the surface. The fight that follows is a battle of attrition, the taimen using the river's current and its sheer mass to test tackle and angler alike.\n\nBeyond taimen, Mongolia's rivers hold Siberian grayling, lenok, and Amur trout, all of which provide excellent fly fishing between taimen encounters. The lenok, a close relative of the trout, is an eager dry fly feeder that provides fast action on lighter tackle, while Mongolian grayling with their oversized dorsal fins rise willingly to small dries and nymphs in the riffles and runs between the deeper taimen pools. The multi-species nature of Mongolian fly fishing ensures that even on days when the taimen prove elusive, there is always action to be had.\n\nThe season in Mongolia runs from June through October, with September and early October often producing the best taimen fishing as the fish feed aggressively before the onset of winter. Summer months bring warmer weather and longer days but can also bring high, off-color water from rainfall. The logistics of fishing in Mongolia are inherently complex, involving international flights, domestic transfers, and overland journeys to remote river camps, but the reward is access to one of the last truly wild fishing frontiers on the planet.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1508923567004-3a6b8004f3d7?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1508923567004-3a6b8004f3d7?w=400&q=80", // PLACEHOLDER
+    latitude: 49.2827,
+    longitude: 100.1537,
+    bestMonths: ["June", "July", "August", "September", "October"],
+    primarySpecies: [
+      "Siberian Taimen",
+      "Lenok",
+      "Siberian Grayling",
+      "Amur Trout",
+    ],
+    licenseInfo:
+      "Fishing permits are arranged by the outfitter as part of the trip package. A valid Mongolian visa or e-visa is required for most nationalities. Special permits may be required for fishing in protected areas or national parks. All logistics handled by the outfitter.",
+    elevationRange: "3,000 - 7,000 ft",
+    climateNotes:
+      "Extreme continental climate with large temperature swings. Summer highs of 65-85F with cool nights dropping to 35-45F. September and October can bring sub-freezing nights. Precipitation is modest but rivers can rise quickly after rain. UV intensity is high at altitude. Pack layered clothing for wide temperature ranges.",
+    regulationsSummary:
+      "Strict catch-and-release for all taimen on reputable operations. Single barbless hooks required. Fish must be kept in the water during unhooking and photography. Taimen are classified as vulnerable by the IUCN and conservation is paramount. Lenok and grayling may have different regulations depending on the watershed.",
+    metaTitle: "Mongolia Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Pursue the legendary Siberian taimen in Mongolia's pristine wilderness rivers. The world's largest salmonid awaits in the Eg-Uur and Onon watersheds.",
+    featured: false,
+    sortOrder: 28,
+  },
+  {
+    id: "dest-cuba",
+    slug: "cuba",
+    name: "Cuba",
+    region: "Caribbean",
+    country: "Cuba",
+    tagline: "Untouched Saltwater Flats in the Heart of the Caribbean",
+    description:
+      "Cuba has emerged as one of the most exciting saltwater fly fishing destinations in the world, its vast archipelago of pristine flats, mangrove-lined channels, and coral atolls holding populations of bonefish, permit, tarpon, and other game fish in numbers and sizes that recall the Florida Keys of fifty years ago. The Jardines de la Reina, a marine protected area stretching over 150 miles along Cuba's southern coast, is the crown jewel of Cuban fly fishing — an archipelago of mangrove islands and crystal-clear flats where commercial fishing has been banned for decades, creating a saltwater ecosystem of extraordinary health and abundance.\n\nThe bonefish on Cuban flats are remarkable for both their numbers and their naivety. Schools of tailing bonefish numbering in the hundreds are a common sight on the white sand and turtle grass flats, and while individual fish can be selective, the sheer volume of opportunities means that even anglers new to saltwater fly fishing will find success. Permit fishing in Cuba rivals the best in the world, with the Jardines de la Reina and Cayo Largo consistently producing fish that cruise the flats in singles, pairs, and small schools, willing to eat a well-presented crab fly with a confidence rarely seen on the pressured permit flats of Belize or the Yucatan.\n\nTarpon fishing adds another dimension to the Cuban saltwater experience. Both juvenile and adult tarpon inhabit the mangrove channels and deeper flats throughout the archipelago, with fish ranging from ten-pound juveniles that fight like demons on a seven-weight to hundred-pound adults that test the limits of a twelve-weight outfit. The possibility of a grand slam — bonefish, permit, and tarpon in a single day — is real on Cuban waters, and multi-species days are the norm rather than the exception.\n\nThe fishing season in Cuba runs from December through August, with the prime months being February through June when weather conditions are most stable and fish activity is highest. Most fishing operations are live-aboard motherships that cruise the Jardines de la Reina or land-based lodges on outlying cays. The logistics of fishing in Cuba require advance planning, particularly regarding travel regulations for U.S. citizens, but the payoff is access to some of the last truly wild saltwater flats in the Caribbean.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1500759285222-a95626b934cb?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1500759285222-a95626b934cb?w=400&q=80", // PLACEHOLDER
+    latitude: 21.4419,
+    longitude: -79.9572,
+    bestMonths: ["February", "March", "April", "May", "June"],
+    primarySpecies: [
+      "Bonefish",
+      "Permit",
+      "Tarpon",
+      "Barracuda",
+      "Jacks",
+    ],
+    licenseInfo:
+      "Fishing licenses are arranged by the outfitter as part of the trip package. U.S. citizens should consult current OFAC regulations regarding travel to Cuba. All arrangements must be made through a licensed operator. Non-U.S. nationals face fewer restrictions but should confirm visa requirements.",
+    elevationRange: "Sea level",
+    climateNotes:
+      "Tropical maritime climate with warm temperatures year-round. Winter highs of 75-82F, summer highs of 85-92F. Cold fronts from December through March can temporarily cool the flats and push bonefish to deeper water. Hurricane season runs June through November. Peak fishing conditions are February through May.",
+    regulationsSummary:
+      "Catch-and-release is standard on all reputable operations for bonefish, permit, and tarpon. The Jardines de la Reina is a marine protected area with strict conservation rules enforced by park rangers. Barracuda and some jack species may be harvested in limited numbers for shore lunch. Barbless hooks are required on most operations.",
+    metaTitle: "Cuba Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Explore Cuba's pristine saltwater flats in the Jardines de la Reina. World-class bonefish, permit, and tarpon fishing in the Caribbean's last frontier.",
+    featured: false,
+    sortOrder: 29,
+  },
+  {
+    id: "dest-maldives",
+    slug: "maldives",
+    name: "Maldives",
+    region: "Indian Ocean",
+    country: "Maldives",
+    tagline: "Giant Trevally and Tropical Species on Pristine Atolls",
+    description:
+      "The Maldives, an archipelago of 26 atolls stretching across the Indian Ocean southwest of India, has rapidly established itself as one of the premier tropical saltwater fly fishing destinations in the world. While best known for its luxury resorts and crystal-clear waters, the Maldives offers fly anglers something far more thrilling — the opportunity to sight-cast to giant trevally, bluefin trevally, bonefish, triggerfish, and a dazzling array of reef species on flats, channels, and drop-offs that see virtually no fishing pressure. The GT fishing in particular has drawn international attention, with fish exceeding one hundred pounds prowling the atoll edges and channel mouths, willing to eat large surface poppers and streamer patterns with explosive aggression.\n\nThe structure of the Maldivian atolls creates an ideal environment for diverse saltwater fly fishing. Each atoll is a ring of coral islands enclosing a shallow lagoon connected to the deep ocean by channels where tidal flows concentrate bait and predators. Inside the atolls, white sand flats and turtle grass beds hold bonefish and triggerfish, while the channel mouths and reef edges are the domain of giant trevally, bluefin trevally, and other pelagic species. The fishing is conducted from dedicated fly fishing boats that explore the atoll systems, with anglers wading the flats for bonefish and casting from the boat to cruising GTs and other predators.\n\nThe diversity of species available on a Maldives fly fishing trip is extraordinary. Beyond the headline GTs and bonefish, anglers regularly encounter milkfish, yellowfin tuna, wahoo, barracuda, Napoleon wrasse, and a stunning variety of reef fish that will eat a well-presented fly. The visual nature of the fishing — sight-casting in gin-clear water over white sand and coral — makes the Maldives one of the most aesthetically striking fishing destinations on Earth, with every cast framed by turquoise water, swaying palm trees, and the vast horizon of the Indian Ocean.\n\nThe fishing season in the Maldives runs year-round, with the best conditions typically occurring during the northeast monsoon from November through April when seas are calmer and visibility is highest. The southwest monsoon from May through October brings more wind and rain but also increased GT activity in some atolls. Most fly fishing operations are conducted from live-aboard vessels that move between atolls to follow fish activity and weather conditions, providing an expedition-style experience that combines world-class fishing with the unparalleled beauty of the Indian Ocean's most iconic island chain.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200&q=80", // PLACEHOLDER
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=80", // PLACEHOLDER
+    latitude: 3.2028,
+    longitude: 73.2207,
+    bestMonths: ["November", "December", "January", "February", "March", "April"],
+    primarySpecies: [
+      "Giant Trevally",
+      "Bluefin Trevally",
+      "Bonefish",
+      "Triggerfish",
+      "Milkfish",
+    ],
+    licenseInfo:
+      "No formal fishing license is required for recreational fly fishing in the Maldives. Fishing permits for specific atolls are arranged by the operator. Some atolls restrict fishing in marine protected zones. All arrangements are handled by the outfitter.",
+    elevationRange: "Sea level",
+    climateNotes:
+      "Tropical climate with temperatures of 80-90F year-round. Northeast monsoon (November-April) brings drier weather and calmer seas. Southwest monsoon (May-October) brings more rain and stronger winds. Humidity is consistently high. UV exposure is extreme — high-factor sun protection is essential.",
+    regulationsSummary:
+      "Catch-and-release is practiced on all reputable fly fishing operations. Fishing inside marine protected areas is prohibited. Coral reef damage from anchoring or wading is strictly controlled. Operators follow conservation protocols for GT handling and release. Spearfishing is illegal throughout the Maldives.",
+    metaTitle: "Maldives Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Giant trevally, bonefish, and tropical species on the Maldives' pristine atolls. Explore the Indian Ocean's premier saltwater fly fishing destination.",
+    featured: false,
+    sortOrder: 30,
+  },
 ];

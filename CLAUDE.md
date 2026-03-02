@@ -35,20 +35,25 @@ src/
     globals.css                 # Tailwind v4 @theme inline + custom CSS
     sitemap.ts                  # Dynamic sitemap (all entities)
     robots.ts                   # robots.txt generation
+    about/page.tsx              # About — mission, coverage, conservation
+    contact/page.tsx            # Contact form (FormSubmit.co → taylor.warnick@gmail.com)
+    privacy/page.tsx            # Privacy policy
+    terms/page.tsx              # Terms of service
+    search/page.tsx             # Full-text search across all content types, Cmd+K shortcut
     destinations/
-      page.tsx                  # List: 25 destinations, filterable
+      page.tsx                  # List: 30 destinations, filterable
       [slug]/page.tsx           # Detail: map, rivers, lodges, guides, photos
     rivers/
-      page.tsx                  # List: 31 rivers, filterable
+      page.tsx                  # List: 41 rivers, filterable
       [slug]/page.tsx           # Detail: Mapbox map, access points, hatch chart, photos
     species/
       page.tsx                  # List: 35 species, filterable by family
       [slug]/page.tsx           # Detail: taxonomy, conservation, tips, related content, photos
     lodges/
-      page.tsx                  # List: 27 lodges, filterable
+      page.tsx                  # List: 32 lodges, filterable
       [slug]/page.tsx           # Detail: gallery, amenities, Google Reviews, photos
     guides/
-      page.tsx                  # List: 26 guides
+      page.tsx                  # List: 31 guides
       [slug]/page.tsx           # Detail: bio, specialties, Google Reviews, photos
     fly-shops/
       page.tsx                  # List: 27 shops
@@ -98,13 +103,13 @@ src/
       server.ts                 # Server Supabase client (cookies-based)
       middleware.ts             # Session refresh helper
   data/                         # TypeScript seed data (primary content source)
-    destinations.ts             #  900 lines — 25 destinations
-    rivers.ts                   # 3168 lines — 31 rivers
-    species.ts                  # 2236 lines — 35 species
-    lodges.ts                   # 1130 lines — 27 lodges
-    guides.ts                   #  680 lines — 26 guides
-    fly-shops.ts                # 1320 lines — 27 fly shops
-    articles.ts                 # 1299 lines — 16 articles (full HTML content)
+    destinations.ts             # 30 destinations
+    rivers.ts                   # 41 rivers
+    species.ts                  # 35 species (Wikimedia Commons images)
+    lodges.ts                   # 32 lodges
+    guides.ts                   # 31 guides
+    fly-shops.ts                # 27 fly shops
+    articles.ts                 # 16 articles (full HTML content)
   types/
     entities.ts                 # All TypeScript interfaces
     mapbox-point-geometry.d.ts  # Mapbox type shim
@@ -190,11 +195,11 @@ All content lives as TypeScript constants in `src/data/`. Pages use `generateSta
 ### Content Counts
 | Entity | Count | Featured |
 |--------|-------|----------|
-| Destinations | 25 | 6 |
-| Rivers | 31 | 4 |
+| Destinations | 30 | 6 |
+| Rivers | 41 | 4 |
 | Species | 35 | 6 |
-| Lodges | 27 | 3 |
-| Guides | 26 | — |
+| Lodges | 32 | 3 |
+| Guides | 31 | — |
 | Fly Shops | 27 | — |
 | Articles | 16 | 3 |
 
@@ -240,10 +245,11 @@ PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejec
 - Custom fonts: `font-heading` (Playfair Display), `font-sans` (Source Sans 3)
 - If you need to add theme values, edit `@theme inline { }` in `globals.css`
 
-### Images — Almost All Placeholders
-- All entity images are Unsplash URL placeholders (comments in data files note this)
+### Images — Mostly Placeholders
+- Most entity images (destinations, rivers, lodges, guides, fly shops, articles) are Unsplash URL placeholders
+- **Species images** use Wikimedia Commons public domain scientific illustrations (`upload.wikimedia.org`)
 - `next/image` used everywhere with `sizes` attributes
-- `next.config.ts` remote patterns: `images.unsplash.com`, `plus.unsplash.com`, `qlasxtfbodyxbcuchvxz.supabase.co/storage/**`
+- `next.config.ts` remote patterns: `images.unsplash.com`, `plus.unsplash.com`, `upload.wikimedia.org`, `qlasxtfbodyxbcuchvxz.supabase.co/storage/**`
 - Only real local image: `/public/images/madison-river-three-dollar-bridge.jpg` (homepage hero)
 - Logo files: `logo.svg`, `logo-1200.png`, `logo-source.jpg` in `/public/images/`
 
@@ -271,7 +277,7 @@ PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejec
 
 ### Static Generation
 - All entity pages use `generateStaticParams()` reading from `src/data/*` TypeScript constants
-- Pages are pre-rendered at build time as static HTML (200+ pages)
+- Pages are pre-rendered at build time as static HTML (250+ pages)
 - API routes (`/api/*`) are serverless functions
 - **Pages do NOT query Supabase for content** — only for user data (favorites, photos, reviews)
 
@@ -288,23 +294,21 @@ PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejec
 Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View All) → Rivers (mega: Madison, Yellowstone, Gallatin, Missouri, View All) → Species (mega: Trout, Salmon, Saltwater, Warmwater, View All) → Lodges → Guides → Articles (mega: Techniques, Destinations, Gear, Conservation, View All) → Fly Shops
 
 ## Known Issues & Missing Pieces
-1. **All images except hero are Unsplash placeholders** — need real photography or licensed stock
+1. **All images except hero and species are Unsplash placeholders** — need real photography or licensed stock (species use Wikimedia Commons public domain illustrations)
 2. **Admin dashboard (`/admin/photos`) has NO authentication gate** — anyone with the URL can view pending photos
 3. **Supabase Storage bucket `photo-submissions` must be created manually** via Supabase dashboard (settings: public bucket, 10MB file size limit, allowed MIME: image/jpeg, image/png, image/webp)
 4. **Google OAuth not configured** — needs Google Cloud OAuth credentials added in Supabase Auth dashboard
 5. **Pages read from TypeScript files, not Supabase** — the seed script exists but pages are not wired to query the database; migrating to Supabase reads is a future task
-6. **No `/about` or `/contact` pages** — sitemap references them but they don't exist
-7. **No search functionality** — not implemented
-8. **No admin content management** — all content changes require editing `src/data/*.ts` files and redeploying
-9. **Resend sender domain not verified** — photo notification emails will fail until configured in Resend dashboard
-10. **Google Places API key not set** — `GoogleReviews` component shows empty state on all entities
-11. **`PHOTO_REVIEW_SECRET` not set** — photo approval HMAC links will not generate correctly without it
-12. **No user review submission UI** — database table and RLS exist but no form/page to write reviews
+6. **No admin content management** — all content changes require editing `src/data/*.ts` files and redeploying
+7. **Resend sender domain not verified** — photo notification emails will fail until configured in Resend dashboard
+8. **Google Places API key not set** — `GoogleReviews` component shows empty state on all entities
+9. **`PHOTO_REVIEW_SECRET` not set** — photo approval HMAC links will not generate correctly without it
+10. **No user review submission UI** — database table and RLS exist but no form/page to write reviews
 
 ## Deployment
 - Vercel auto-deploys on push to `main`
 - Build command: `next build` (Vercel default)
-- Output: ~200 static HTML pages + 4 serverless API routes
+- Output: ~250 static HTML pages + 4 serverless API routes
 - No special build-time env vars beyond the `NEXT_PUBLIC_*` ones
 - Serverless functions need `RESEND_API_KEY`, `GOOGLE_PLACES_API_KEY`, `PHOTO_REVIEW_SECRET` set in Vercel dashboard for full functionality
 

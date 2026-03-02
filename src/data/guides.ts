@@ -677,4 +677,133 @@ export const guides: Guide[] = [
     metaDescription:
       "Expert fly fishing guide on the Rio Grande in Tierra del Fuego. Trophy sea-run brown trout, Spey casting instruction, and exclusive beat access on the world's premier sea-trout river.",
   },
+  // ─── PHASE 3 ADDITIONS ──────────────────────────────────────────
+  {
+    id: "guide-paddy-moy",
+    slug: "paddy-mcdonnell-moy-ghillie",
+    name: "Paddy McDonnell — Moy Ghillie Service",
+    destinationId: "dest-ireland",
+    bio:
+      "Paddy McDonnell is a third-generation ghillie on the River Moy whose family has guided salmon anglers on the river since his grandfather first started poling boats on Lough Conn in the 1950s. Growing up on the banks of Ireland's most prolific salmon river, Paddy learned to read the water before he could read a book, and his instinctive understanding of how salmon behave in the Moy's pools and runs under different water conditions is the product of a lifetime spent observing these extraordinary fish.\n\nPaddy specializes in guiding visiting anglers on both the main river salmon beats and the wild brown trout waters of Loughs Conn and Cullin. His approach combines traditional Irish methods — wet fly teams, Spey casting, and classic salmon fly patterns — with modern nymphing and dry fly techniques that he has adapted for Irish conditions. He is a patient and encouraging teacher who takes genuine pleasure in helping clients catch their first Atlantic salmon, whether that means coaching a beginner through the basics of a roll cast or helping an experienced angler refine their presentation on a technical pool.\n\nDuring the mayfly season in May and June, Paddy offers guided days on Lough Conn in his traditional lake boat, drifting the shallows with teams of wet flies and dry mayfly imitations for wild brown trout that can exceed five pounds. His knowledge of the lough's drift lines, reef structures, and mayfly congregation areas has been accumulated over decades and represents an irreplaceable local expertise.",
+    specialties: [
+      "Atlantic salmon fishing",
+      "Wet fly and Spey casting",
+      "Wild brown trout on loughs",
+      "Mayfly season specialist",
+      "Traditional lough-style fishing",
+      "Beginner instruction",
+      "Single and double-handed rod",
+    ],
+    yearsExperience: 30,
+    photoUrl:
+      "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&q=80", // PLACEHOLDER
+    riverIds: ["river-moy"],
+    dailyRate: "$300/day (1-2 anglers)",
+    metaTitle: "Paddy McDonnell — River Moy Salmon Ghillie",
+    metaDescription:
+      "Third-generation ghillie on Ireland's River Moy. Atlantic salmon, wild brown trout, and traditional Irish fly fishing in County Mayo.",
+  },
+  {
+    id: "guide-alexei-ponoi",
+    slug: "alexei-volkov-ponoi-guide",
+    name: "Alexei Volkov — Ponoi River Guide",
+    destinationId: "dest-kola-peninsula",
+    bio:
+      "Alexei Volkov has guided Atlantic salmon anglers on the Ponoi River for over twenty seasons, making him one of the most experienced guides working on Russia's Kola Peninsula. Born in Murmansk and trained in fisheries biology at the Northern Arctic Federal University, Alexei combines rigorous scientific knowledge of salmon behavior with the practical river craft that can only be gained through thousands of days on the water. His understanding of the Ponoi's pool structures, current dynamics, and seasonal fish movements allows him to consistently position his clients on taking fish, even during periods when other boats are struggling.\n\nAlexei is a master of the two-handed rod and an exceptionally skilled Spey casting instructor. He can diagnose and correct casting faults quickly, helping clients develop the smooth, efficient stroke needed to cover the Ponoi's broad pools effectively throughout a long Arctic day of fishing. His fly selection draws on two decades of experimentation, and his own patterns — tied during the long Murmansk winters — have accounted for some of the largest salmon caught on the river in recent seasons.\n\nBeyond his guiding expertise, Alexei contributes to the Ponoi River Company's salmon monitoring program, recording catch data, tagging fish, and participating in population surveys that inform the conservation management of this irreplaceable fishery. His commitment to the long-term health of the Ponoi's salmon runs is evident in every interaction with his clients, from his meticulous fish handling to his passionate advocacy for catch-and-release.",
+    specialties: [
+      "Atlantic salmon specialist",
+      "Spey casting instruction",
+      "Two-handed rod techniques",
+      "Custom salmon fly patterns",
+      "Fisheries biology background",
+      "Salmon conservation",
+      "Arctic conditions expertise",
+    ],
+    yearsExperience: 22,
+    photoUrl:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80", // PLACEHOLDER
+    riverIds: ["river-ponoi"],
+    dailyRate: "Included in camp package",
+    metaTitle: "Alexei Volkov — Ponoi River Atlantic Salmon Guide",
+    metaDescription:
+      "Expert Atlantic salmon guide on Russia's Ponoi River. Over 20 seasons of Kola Peninsula experience with Spey casting instruction and conservation commitment.",
+  },
+  {
+    id: "guide-bold-mongolia",
+    slug: "bold-batbayar-mongolia-guide",
+    name: "Bold Batbayar — Mongolia Taimen Specialist",
+    destinationId: "dest-mongolia",
+    bio:
+      "Bold Batbayar is Mongolia's most experienced fly fishing guide, having spent eighteen years guiding international anglers on the remote rivers of northern Mongolia in pursuit of the legendary Siberian taimen. Born into a nomadic herding family in the Khentii Mountains, Bold grew up on the rivers where taimen have thrived for millennia, and his connection to the landscape and its wildlife runs deeper than any guidebook could convey. He transitioned from subsistence fishing to catch-and-release guiding in the mid-2000s and has since become a passionate advocate for taimen conservation, working with international organizations to protect the watersheds that sustain these magnificent fish.\n\nBold's river craft is extraordinary. He can read the water of a new stretch within minutes, identifying the logjams, undercut banks, and deep bends where taimen hold with an accuracy that borders on preternatural. His knowledge extends to every species in the system — he knows where the lenok pod up in the riffles, where the grayling feed in the glides, and where the largest taimen lurk in the deepest, most impenetrable pieces of structure. His casting instruction is patient and effective, helping anglers of all skill levels deliver the large, wind-resistant flies that taimen fishing demands.\n\nBold ties all of his own taimen flies, drawing on years of observation to create patterns that imitate the mice, marmots, and small fish that make up the taimen's diverse diet. His signature mouse pattern, tied with spun deer hair and trailing a rabbit strip tail, has accounted for dozens of taimen over forty inches and remains the most requested fly in his box.",
+    specialties: [
+      "Siberian taimen specialist",
+      "Mouse pattern fishing",
+      "Large streamer presentations",
+      "Multi-species Mongolian rivers",
+      "Wilderness navigation",
+      "Conservation guiding",
+      "Custom taimen fly patterns",
+      "Float trip logistics",
+    ],
+    yearsExperience: 18,
+    photoUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80", // PLACEHOLDER
+    riverIds: ["river-eg-uur"],
+    dailyRate: "Included in trip package",
+    metaTitle: "Bold Batbayar — Mongolia Taimen Fishing Guide",
+    metaDescription:
+      "Mongolia's premier taimen guide. Eighteen years of experience on the Eg-Uur watershed pursuing the world's largest salmonid.",
+  },
+  {
+    id: "guide-carlos-cuba",
+    slug: "carlos-garcia-cuba-guide",
+    name: "Carlos Garcia — Cuban Saltwater Specialist",
+    destinationId: "dest-cuba",
+    bio:
+      "Carlos Garcia is one of Cuba's most skilled and sought-after saltwater fly fishing guides, a native of the Jardines de la Reina region who grew up on the waters of the archipelago and knows its channels, flats, and mangrove systems with the intimacy of a lifetime spent reading tides, wind, and the behavior of its remarkable fish populations. Carlos was among the first generation of Cuban guides to transition from commercial fishing to catch-and-release fly fishing guiding when the Jardines de la Reina marine protected area was established, and his deep understanding of the ecosystem's rhythms — from the seasonal movements of tarpon through the channels to the tidal patterns that push bonefish onto the interior flats — has made him one of the most consistently productive guides in the Caribbean.\n\nCarlos is a poling artist, propelling his skiff across the flats with silent precision that allows his anglers to approach bonefish, permit, and tarpon without spooking them. His eyes are legendary among visiting anglers — he spots fish at distances that seem impossible, calling out tailing bonefish, nervous water from cruising permit, and the subtle wakes of rolling tarpon with an accuracy that transforms every day on the water into a masterclass in saltwater observation. His permit record is particularly impressive, with a success rate that places him among the top guides working the Caribbean flats.\n\nBeyond his technical skills, Carlos brings a warmth and enthusiasm to every day on the water that is infectious. His limited English is supplemented by an expressive gestural vocabulary that communicates everything an angler needs to know — strip speed, casting direction, and the urgency of the situation — with clarity that transcends language barriers.",
+    specialties: [
+      "Bonefish flats fishing",
+      "Permit specialist",
+      "Tarpon in mangrove channels",
+      "Grand slam pursuit",
+      "Sight-casting on flats",
+      "Skiff poling",
+      "Jardines de la Reina expert",
+      "Bilingual guiding (English/Spanish)",
+    ],
+    yearsExperience: 20,
+    photoUrl:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80", // PLACEHOLDER
+    riverIds: ["river-jardines-de-la-reina"],
+    dailyRate: "Included in trip package",
+    metaTitle: "Carlos Garcia — Cuba Saltwater Fly Fishing Guide",
+    metaDescription:
+      "Expert saltwater fly fishing guide in Cuba's Jardines de la Reina. Bonefish, permit, and tarpon on the Caribbean's most pristine flats.",
+  },
+  {
+    id: "guide-ibrahim-maldives",
+    slug: "ibrahim-naseem-maldives-guide",
+    name: "Ibrahim Naseem — Maldives GT Specialist",
+    destinationId: "dest-maldives",
+    bio:
+      "Ibrahim Naseem is the Maldives' leading fly fishing guide, a native of the atolls who grew up fishing the channels and reef edges of the Indian Ocean before discovering the world of catch-and-release fly fishing through visiting international anglers in the early 2010s. His transformation from a commercial fisherman to a conservation-minded fly fishing guide represents a broader shift in the Maldivian fishing community, and Ibrahim has become an ambassador for sustainable fishing practices throughout the archipelago.\n\nIbrahim's knowledge of the Maldivian atolls is encyclopedic. He understands the complex relationship between moon phases, tidal flows, seasonal currents, and the movements of giant trevally, bluefin trevally, and other predators through the atoll systems in a way that only a lifetime of observation can produce. His ability to predict where GTs will be feeding on any given day — based on the tide, the time of month, and subtle environmental cues that escape less experienced eyes — gives his clients a significant advantage in targeting these powerful, often elusive fish.\n\nIbrahim has developed fly patterns specifically for Maldivian GTs, incorporating bright flash materials and oversized profiles that trigger aggressive strikes in the turquoise waters of the atoll channels. He is also an accomplished bonefisher, guiding clients to the subtle white sand and seagrass flats inside the atolls where Maldivian bonefish, though smaller than their Caribbean counterparts, provide fast action and excellent sight-fishing opportunities.",
+    specialties: [
+      "Giant trevally specialist",
+      "Bluefin trevally fishing",
+      "Atoll channel fishing",
+      "Bonefish on tropical flats",
+      "Triggerfish targeting",
+      "Custom GT fly patterns",
+      "Tidal and moon phase knowledge",
+      "Catch-and-release advocacy",
+    ],
+    yearsExperience: 12,
+    photoUrl:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80", // PLACEHOLDER
+    riverIds: ["river-north-male-atoll"],
+    dailyRate: "Included in trip package",
+    metaTitle: "Ibrahim Naseem — Maldives GT Fly Fishing Guide",
+    metaDescription:
+      "The Maldives' premier fly fishing guide. Giant trevally, bluefin trevally, and tropical species on pristine Indian Ocean atolls.",
+  },
 ];
