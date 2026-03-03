@@ -38,8 +38,8 @@ export default async function RiversPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=80"
-        imageAlt="Crystal clear mountain river with rocks"
+        imageUrl="https://images.unsplash.com/photo-1764018873811-dbcf8cf18ffe?w=1920&q=80"
+        imageAlt="Turquoise river winding through forested mountains in autumn"
         title="Rivers & Waters"
         subtitle="Detailed guides to the world's finest fly fishing rivers — maps, hatches, access, and regulations."
       />

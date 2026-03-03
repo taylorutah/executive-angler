@@ -9,9 +9,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1493787039806-2edcbe808750?w=1200&q=80",
+      "https://images.unsplash.com/photo-1688227053742-75f61122ab13?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1493787039806-2edcbe808750?w=400&q=80",
+      "https://images.unsplash.com/photo-1688227053742-75f61122ab13?w=400&q=80",
     excerpt:
       "Euro nymphing has revolutionized how anglers approach subsurface fishing. Learn the techniques, gear, and tactics that competitive fly fishers have used to dominate rivers worldwide.",
     content: `<h2>What Is Euro Nymphing?</h2>
@@ -225,9 +225,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1625027589032-cc9955080931?w=1200&q=80",
+      "https://images.unsplash.com/photo-1634118908433-ee63c458516b?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1625027589032-cc9955080931?w=400&q=80",
+      "https://images.unsplash.com/photo-1634118908433-ee63c458516b?w=400&q=80",
     excerpt:
       "Understanding how to read a river is the single most important skill in fly fishing. Learn to identify the structures, currents, and features that hold trout and concentrate their food supply.",
     content: `<h2>Why Reading Water Matters</h2>
@@ -597,9 +597,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "destination",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1671391511358-226c1799e054?w=1200&q=80",
+      "https://images.unsplash.com/photo-1602211924438-355a26290b1c?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1671391511358-226c1799e054?w=400&q=80",
+      "https://images.unsplash.com/photo-1602211924438-355a26290b1c?w=400&q=80",
     excerpt:
       "From the legendary Madison River to the technical tailwaters of the Missouri, explore the rivers and streams that have made Montana the fly fishing capital of the world.",
     content: `<h2>Why Montana Stands Alone</h2>
@@ -979,9 +979,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1689709105115-e11810b6c425?w=1200&q=80",
+      "https://images.unsplash.com/photo-1756688691284-4f0184d399c8?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1689709105115-e11810b6c425?w=400&q=80",
+      "https://images.unsplash.com/photo-1756688691284-4f0184d399c8?w=400&q=80",
     excerpt:
       "Matching the hatch is the cornerstone of dry fly fishing. Learn to identify the major aquatic insect orders, understand their life cycles, and select the right fly patterns to fool even the most selective trout.",
     content: `<h2>The Foundation of Dry Fly Fishing</h2>
@@ -1320,9 +1320,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1696287417462-78351ca64d5d?w=1200&q=80",
+      "https://images.unsplash.com/photo-1714759951196-28b620e6b581?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1696287417462-78351ca64d5d?w=400&q=80",
+      "https://images.unsplash.com/photo-1714759951196-28b620e6b581?w=400&q=80",
     excerpt:
       "Tenkara is a centuries-old Japanese method of fly fishing that strips the sport to its purest essence: a long rod, a line, and a fly. Discover why this minimalist approach is captivating modern anglers worldwide.",
     content: `<h2>What Is Tenkara?</h2>
@@ -1629,9 +1629,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1532015917327-c7c46aa1d930?w=1200&q=80",
+      "https://images.unsplash.com/photo-1642556679871-40c97cb51645?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1532015917327-c7c46aa1d930?w=400&q=80",
+      "https://images.unsplash.com/photo-1642556679871-40c97cb51645?w=400&q=80",
     excerpt:
       "Streamer fishing is the pursuit of a river's largest and most predatory trout. Learn the retrieves, presentations, and fly selection strategies that turn trophy-class fish from fantasy into reality.",
     content: `<h2>Why Streamers Catch the Biggest Fish</h2>
@@ -1992,9 +1992,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "destination",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1672941375895-7d6c67f87091?w=1200&q=80",
+      "https://images.unsplash.com/photo-1603720491655-55aabfb19583?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1672941375895-7d6c67f87091?w=400&q=80",
+      "https://images.unsplash.com/photo-1603720491655-55aabfb19583?w=400&q=80",
     excerpt:
       "Patagonia offers some of the most spectacular trout fishing on earth, set against a backdrop of Andean peaks, ancient forests, and wild rivers. Here is everything you need to know to plan your first trip.",
     content: `<h2>The Allure of Patagonia</h2>
@@ -2316,9 +2316,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "gear",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1633966458715-9e3d7ce74b8f?w=1200&q=80",
+      "https://images.unsplash.com/photo-1725876349691-78926de02b28?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1633966458715-9e3d7ce74b8f?w=400&q=80",
+      "https://images.unsplash.com/photo-1725876349691-78926de02b28?w=400&q=80",
     excerpt:
       "With thousands of fly patterns available, building a fly box can be overwhelming. Here are the 20 essential patterns that experienced guides and anglers rely on season after season.",
     content: `<h2>Quality Over Quantity</h2>
@@ -2704,9 +2704,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "conservation",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1612552001322-30d755f0980e?w=1200&q=80",
+      "https://images.unsplash.com/photo-1748094924024-addbeff4f04a?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1612552001322-30d755f0980e?w=400&q=80",
+      "https://images.unsplash.com/photo-1748094924024-addbeff4f04a?w=400&q=80",
     excerpt:
       "Wild trout populations face mounting threats from climate change, habitat degradation, and competing water demands. Understanding these challenges — and what anglers can do about them — has never been more urgent.",
     content: `<h2>The State of Wild Trout</h2>
@@ -2904,9 +2904,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "culture",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1590003789453-9bec53d5d499?w=1200&q=80",
+      "https://images.unsplash.com/photo-1612456534865-1be5c8d2f8f1?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1590003789453-9bec53d5d499?w=400&q=80",
+      "https://images.unsplash.com/photo-1612456534865-1be5c8d2f8f1?w=400&q=80",
     excerpt:
       "Women are the fastest-growing demographic in fly fishing, bringing fresh perspectives, building new communities, and challenging a sport long dominated by male voices. Here is the story of a movement gaining unstoppable momentum.",
     content: `<h2>A Long-Overdue Reckoning</h2>
@@ -3099,9 +3099,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "culture",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1632862316541-0b75b0126544?w=1200&q=80",
+      "https://images.unsplash.com/photo-1623260859084-3d54f2690fe8?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1632862316541-0b75b0126544?w=400&q=80",
+      "https://images.unsplash.com/photo-1623260859084-3d54f2690fe8?w=400&q=80",
     excerpt:
       "Great fly fishing photography preserves memories, tells stories, and celebrates the beauty of the sport. Learn the techniques, gear, and creative approaches that transform snapshots into compelling images.",
     content: `<h2>Why Fishing Photography Matters</h2>
@@ -3307,9 +3307,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "technique",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1697091704524-607f589aafd3?w=1200&q=80",
+      "https://images.unsplash.com/photo-1762110807986-1f71d85df1bb?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1697091704524-607f589aafd3?w=400&q=80",
+      "https://images.unsplash.com/photo-1762110807986-1f71d85df1bb?w=400&q=80",
     excerpt:
       "The saltwater grand slam — bonefish, permit, and tarpon in a single day — is fly fishing's ultimate achievement. Learn the techniques, tackle, and tactics for pursuing these iconic flats species.",
     content: `<h2>The Ultimate Challenge</h2>
@@ -3532,9 +3532,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "destination",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1696831387582-89e93dcd53e5?w=1200&q=80",
+      "https://images.unsplash.com/photo-1771056511594-05e25e299812?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1696831387582-89e93dcd53e5?w=400&q=80",
+      "https://images.unsplash.com/photo-1771056511594-05e25e299812?w=400&q=80",
     excerpt:
       "Iceland offers some of the most pristine fly fishing on earth, with volcanic rivers full of Atlantic salmon and crystalline lakes holding wild Arctic char. Here is what makes this island nation a bucket-list destination.",
     content: `<h2>A Land Like No Other</h2>
@@ -3783,9 +3783,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "species",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1610741620547-1191d693e43d?w=1200&q=80",
+      "https://images.unsplash.com/photo-1753455078477-429cbb306cbc?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1610741620547-1191d693e43d?w=400&q=80",
+      "https://images.unsplash.com/photo-1753455078477-429cbb306cbc?w=400&q=80",
     excerpt:
       "Trout behavior changes dramatically with the seasons. Understanding how temperature, light, and food availability influence feeding patterns, movement, and aggression makes you a more effective angler year-round.",
     content: `<h2>The Seasonal Rhythm of Trout</h2>
@@ -4043,9 +4043,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "gear",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1655313850070-ce53fbf44e41?w=1200&q=80",
+      "https://images.unsplash.com/photo-1725404575980-89f286b426d7?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1655313850070-ce53fbf44e41?w=400&q=80",
+      "https://images.unsplash.com/photo-1725404575980-89f286b426d7?w=400&q=80",
     excerpt:
       "Choosing the right fly rod is the most important gear decision you will make. Understand line weights, rod lengths, action, and materials to find the perfect rod for your fishing style and target species.",
     content: `<h2>Why Rod Selection Matters</h2>
@@ -4228,9 +4228,9 @@ export const articles: Article[] = [
     author: "Executive Angler Staff",
     category: "conservation",
     heroImageUrl:
-      "https://images.unsplash.com/photo-1612456534865-1be5c8d2f8f1?w=1200&q=80",
+      "https://images.unsplash.com/photo-1573111651443-48d029001795?w=1200&q=80",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1612456534865-1be5c8d2f8f1?w=400&q=80",
+      "https://images.unsplash.com/photo-1573111651443-48d029001795?w=400&q=80",
     excerpt:
       "Catch and release is the foundation of sustainable sport fishing, but only when done correctly. Learn the techniques that maximize fish survival and protect the fisheries we all depend on.",
     content: `<h2>Why Catch and Release Matters</h2>

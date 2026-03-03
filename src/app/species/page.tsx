@@ -39,8 +39,8 @@ export default async function SpeciesListPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1545450660-3378a7f3a364?w=1920&q=80"
-        imageAlt="Wild trout in crystal clear water"
+        imageUrl="https://images.unsplash.com/photo-1573691256963-185431288431?w=1920&q=80"
+        imageAlt="Close-up of a freshwater fish with brown and blue tones"
         title="Fish Species Guide"
         subtitle="Detailed profiles of the world's most prized fly fishing species — habitat, behavior, fly patterns, and angling strategies."
       />

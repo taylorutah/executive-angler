@@ -39,8 +39,8 @@ export default async function LodgesPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1920&q=80"
-        imageAlt="Rustic fishing lodge in the mountains"
+        imageUrl="https://images.unsplash.com/photo-1758186377738-6ce0e52851b9?w=1920&q=80"
+        imageAlt="Log cabin with grass roof by a serene lake"
         title="Lodges"
         subtitle="Premier fly fishing lodges around the world — hand-picked for exceptional water access, guiding, and hospitality."
       />

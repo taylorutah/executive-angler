@@ -38,8 +38,8 @@ export default async function ArticlesPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=1920&q=80"
-        imageAlt="Fly fishing rod and reel close-up"
+        imageUrl="https://images.unsplash.com/photo-1768225601822-e6077c0cb086?w=1920&q=80"
+        imageAlt="Sunrise over a misty river with silhouetted trees"
         title="Articles"
         subtitle="Expert instruction, destination guides, technique deep-dives, and the stories behind the sport."
       />

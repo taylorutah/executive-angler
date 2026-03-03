@@ -44,8 +44,8 @@ export default async function DestinationsPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&q=80"
-        imageAlt="Mountain landscape with pristine river"
+        imageUrl="https://images.unsplash.com/photo-1770243173807-0cea8e5a893a?w=1920&q=80"
+        imageAlt="Wide river flowing through a lush mountain valley at twilight"
         title="Destinations"
         subtitle="The world's finest fly fishing waters, from Montana's legendary rivers to the remote streams of New Zealand."
       />

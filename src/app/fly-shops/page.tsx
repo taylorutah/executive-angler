@@ -74,8 +74,8 @@ export default async function FlyShopsPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=1920&q=80"
-        imageAlt="Fly fishing gear and flies"
+        imageUrl="https://images.unsplash.com/photo-1576725011562-7fe415bfbe31?w=1920&q=80"
+        imageAlt="Fishing rod and net on a boat at the water"
         title="Fly Shops"
         subtitle="Local fly shops with the gear, knowledge, and guides to put you on fish."
       />

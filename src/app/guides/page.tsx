@@ -67,8 +67,8 @@ export default async function GuidesPage() {
   return (
     <>
       <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1545816250-e12bedba42ba?w=1920&q=80"
-        imageAlt="Fishing guide helping an angler on the river"
+        imageUrl="https://images.unsplash.com/photo-1720465033515-3ff32449380f?w=1920&q=80"
+        imageAlt="Fly fishing angler standing in river with caught fish"
         title="Guides"
         subtitle="Expert fly fishing guides who know every riffle, run, and hatch on their home waters."
       />
