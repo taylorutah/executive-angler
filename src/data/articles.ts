@@ -1310,7 +1310,7 @@ export const articles: Article[] = [
       "Matching the Hatch: A Dry Fly Guide | Executive Angler",
     metaDescription:
       "Master the art of matching the hatch for dry fly fishing. Identify mayflies, caddis, stoneflies, and midges, and choose the right fly patterns for selective trout.",
-    featured: false,
+    featured: true,
   },
   {
     id: "article-intro-tenkara",
@@ -2306,7 +2306,7 @@ export const articles: Article[] = [
       "A First Timer's Guide to Patagonia Fly Fishing | Executive Angler",
     metaDescription:
       "Plan your first fly fishing trip to Patagonia. Comprehensive guide covering when to go, what to bring, choosing a region, guided vs. independent fishing, and conservation.",
-    featured: false,
+    featured: true,
   },
   {
     id: "article-essential-fly-box",
