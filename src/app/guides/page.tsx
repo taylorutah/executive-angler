@@ -1,24 +1,40 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import HeroSection from "@/components/ui/HeroSection";
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronRight, Star } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { guideListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 
 export const revalidate = 3600;
 
+const SPOTLIGHT_SLUGS = [
+  "bud-lillys-guide-service",
+  "jackson-hole-anglers",
+  "paddy-mcdonnell-moy-ghillie",
+] as const;
+
+const GUIDE_HEADLINES: Record<string, string> = {
+  "bud-lillys-guide-service": "Seven Decades on Montana's Blue-Ribbon Waters",
+  "jackson-hole-anglers": "Wild Cutthroats in the Shadow of the Tetons",
+  "paddy-mcdonnell-moy-ghillie": "Third-Generation Ghillie on Ireland's River Moy",
+};
+
 export const metadata: Metadata = {
   title: "Fly Fishing Guides",
   description:
-    "Find expert fly fishing guides worldwide. Profiles, specialties, rates, and direct booking links.",
+    "Expert fly fishing guides worldwide — profiles, specialties, daily rates, and direct booking links. Thirty-one certified professionals on the world's most storied waters.",
 };
 
 export default async function GuidesPage() {
-  const [guides, destinations] = await Promise.all([
-    getAllGuides(),
-    getAllDestinations(),
-  ]);
+  const [guides, destinations] = await Promise.all([getAllGuides(), getAllDestinations()]);
+
+  const spotlightGuides = SPOTLIGHT_SLUGS.map((s) =>
+    guides.find((g) => g.slug === s)
+  ).filter(Boolean);
 
   // Build destination filter options dynamically
   const destCounts = new Map<string, { name: string; count: number }>();
@@ -48,6 +64,7 @@ export default async function GuidesPage() {
       const dest = destinations.find((d) => d.id === guide.destinationId);
       return {
         href: `/guides/${guide.slug}`,
+        imageUrl: guide.photoUrl || undefined,
         imageAlt: guide.name,
         title: guide.name,
         subtitle: dest?.name,
@@ -55,7 +72,6 @@ export default async function GuidesPage() {
         tags: guide.specialties.slice(0, 3),
         accent: guide.dailyRate || undefined,
         featured: false,
-        iconOnly: true,
         _filterValues: {
           destination: guide.destinationId,
           experience: guide.yearsExperience ?? 0,
@@ -66,14 +82,117 @@ export default async function GuidesPage() {
 
   return (
     <>
-      <HeroSection
-        imageUrl="https://images.unsplash.com/photo-1720465033515-3ff32449380f?w=1920&q=80"
-        imageAlt="Fly fishing angler standing in river with caught fish"
-        title="Guides"
-        subtitle="Expert fly fishing guides who know every riffle, run, and hatch on their home waters."
-      />
+      {/* ── Editorial Header ─────────────────────────────────────────────── */}
+      <section className="bg-forest-dark pt-32 pb-16 sm:pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+            Expert Voices
+          </p>
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+            Your Guide Makes the Trip
+          </h1>
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
+            {guides.length} certified professionals with decades of experience on the
+            world&apos;s most storied waters.
+          </p>
+        </div>
+      </section>
 
-      <section className="py-16 sm:py-20 bg-cream">
+      {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
+      <section className="bg-cream py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-forest mb-8">
+            Featured Guides
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {spotlightGuides.map((guide, i) => {
+              if (!guide) return null;
+              const dest = destinations.find((d) => d.id === guide.destinationId);
+              return (
+                <ScrollAnimation key={guide.id} delay={i * 0.1}>
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="group block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                  >
+                    {guide.photoUrl && (
+                      <div className="relative h-56">
+                        <Image
+                          src={guide.photoUrl}
+                          alt={guide.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/10 to-transparent" />
+                        {guide.yearsExperience && (
+                          <div className="absolute bottom-4 left-4">
+                            <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-gold text-white">
+                              {guide.yearsExperience} years experience
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="p-5">
+                      <h3 className="font-heading text-xl font-bold text-forest-dark group-hover:text-forest transition-colors leading-tight">
+                        {guide.name}
+                      </h3>
+                      <p className="mt-0.5 text-sm font-medium text-gold">
+                        {GUIDE_HEADLINES[guide.slug]}
+                      </p>
+                      {dest && (
+                        <p className="mt-1 text-xs text-slate-400">{dest.name}</p>
+                      )}
+                      <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                        {guide.bio.substring(0, 120)}...
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {guide.specialties.slice(0, 2).map((sp) => (
+                          <span
+                            key={sp}
+                            className="px-2 py-0.5 bg-cream text-forest-dark text-[10px] font-medium rounded-full"
+                          >
+                            {sp}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-4 flex items-center justify-between">
+                        {guide.googleRating && (
+                          <div className="flex items-center gap-1">
+                            <Star className="h-3.5 w-3.5 fill-gold text-gold" />
+                            <span className="text-xs text-slate-500">
+                              {guide.googleRating} ({guide.googleReviewCount})
+                            </span>
+                          </div>
+                        )}
+                        {guide.dailyRate && (
+                          <span className="text-xs font-semibold text-forest">
+                            {guide.dailyRate}
+                          </span>
+                        )}
+                      </div>
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-forest group-hover:underline">
+                        View Profile <ChevronRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </Link>
+                </ScrollAnimation>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Full Catalog ──────────────────────────────────────────────────── */}
+      <div className="bg-white border-t border-slate-100">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h2 className="font-heading text-2xl font-bold text-forest-dark">All Guides</h2>
+          <p className="text-sm text-slate-500 mt-1">
+            {guides.length} guides — filterable by destination and experience
+          </p>
+        </div>
+      </div>
+      <section className="bg-white pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="guides" />
