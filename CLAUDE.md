@@ -1,7 +1,7 @@
 # Executive Angler — Project Documentation
 
 ## Quick Reference
-- **URL:** https://executiveangler.com (Vercel, auto-deploy from `main`)
+- **URL:** https://www.executiveangler.com (Vercel, auto-deploy from `main`)
 - **Repo:** github.com/taylorutah/executive-angler
 - **Supabase:** https://qlasxtfbodyxbcuchvxz.supabase.co
 - **Vercel Project:** `prj_rUGzaVkIpr6VrBQKW7Kyf7CInZZW` / team `team_ysAhFGCZzRV2KEBFc1choVyX`
@@ -314,6 +314,65 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
+
+### 2026-03-05 (Cowork)
+**GA4 + GSC setup (code changes + browser automation):**
+
+**Google Analytics:**
+- Created new GA4 property "Executive Angler" (account 59501266), Measurement ID: `G-RY19PKC2WQ`
+- Timezone: America/Denver, Industry: Travel
+- Added GA4 tracking to `src/app/layout.tsx` via `next/script` with `strategy="afterInteractive"`
+- Verified live: `window.gtag` function present, `page_view` beacon firing to `google-analytics.com/g/collect`
+
+**Google Search Console:**
+- Added `https://executiveangler.com` as URL-prefix property; verified via HTML tag method
+- Added `metadata.verification.google` to `layout.tsx` — injects meta tag natively in `<head>`
+- GSC verification token: `mVDklKxzTE-3CSW-4xSd_CCqwEPcrnVh6zTeWeJF3GA`
+- Submitted `sitemap.xml` to non-www property → **220 pages discovered**
+
+**www canonical fix:**
+- Discovered mismatch: site redirects non-www → www (Vercel), but `SITE_URL` was non-www
+- Updated `NEXT_PUBLIC_SITE_URL` Vercel env var to `https://www.executiveangler.com`
+- Updated fallback in `src/lib/constants.ts` to `https://www.executiveangler.com`
+- Added `https://www.executiveangler.com` as second GSC property → **auto-verified instantly**
+- Submitted `sitemap.xml` to www property — this is the **primary GSC property** going forward
+- Confirmed `og:url` now outputs `https://www.executiveangler.com` after fresh build
+
+**Key gotcha — Vercel env var + redeploy:**
+- Changing `NEXT_PUBLIC_*` env vars requires a **fresh build**, not a redeploy of existing artifacts
+- "Redeploy" in Vercel reuses cached build — the new env var won't bake in
+- Fix: push a new commit to trigger a real build, OR delete and recreate the env var (forces rebuild)
+
+**Commits this session:**
+- `feat: add Google Analytics GA4 tracking (G-RY19PKC2WQ)` (2ea0515)
+- `feat: add Google Search Console verification meta tag` (2d3ed83)
+- `fix: update SITE_URL default to www.executiveangler.com` (0914f29)
+
+**Active GSC properties:**
+- `https://executiveangler.com` — verified, sitemap submitted, 220 pages discovered (redirect property)
+- `https://www.executiveangler.com` — verified, sitemap submitted — **primary, use this one**
+
+**Next checkpoint:** GSC www property should show discovered pages within a few hours; first impressions/clicks will appear once Google indexes pages (typically 1–2 weeks for new sites).
+
+### 2026-03-03 (Cowork)
+**GSC & GA monitoring check (no code changes):**
+- Sitemap confirmed: `/sitemap.xml` submitted Mar 2, status Success, **246 pages discovered**
+- GSC indexing report still processing (expected ~24–48h after sitemap submission)
+- GSC performance: 0 clicks / 0 impressions — expected, site just launched; data lag typical for new properties
+- Core Web Vitals: no data yet (insufficient crawl volume)
+- HTTPS: 2 pages confirmed HTTPS, 0 non-HTTPS
+
+**Google Analytics (GA4 property 526595831, last 28 days Feb 3–Mar 2):**
+- Active users: 4 | New users: 3 | Avg engagement time: **2m 44s** (strong signal)
+- Active users in last 30 min at time of check: 2 (United States)
+- 83 page_views across 8 sessions; all traffic started Mar 1 (launch spike)
+- Top pages: Destinations (26), Homepage (13), Fly Shops (9), Rivers (8), Species (5), Articles (4), Guides (4)
+- Traffic sources: Direct (8 sessions), Unassigned (7) — no organic yet, pre-indexing
+- Countries: US (3), Iran (1), Iceland (1), Luxembourg (1)
+- Events: page_view 83, user_engagement 11, session_start 8, first_visit 3, form_start 3, scroll 3
+- Note: 3 `form_start` events — someone explored the contact form
+
+**Next checkpoint:** GSC indexing report should populate by ~Mar 4–5; watch for first impressions in performance tab.
 
 ### 2026-03-02 (Sage + CC)
 **Code (CC):**
