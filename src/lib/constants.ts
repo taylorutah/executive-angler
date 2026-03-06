@@ -13,6 +13,7 @@ export type NavLink = {
   label: string;
   href: string;
   children?: NavChild[];
+  rightAlign?: boolean; // anchor dropdown to the right edge of the trigger
 };
 
 export const NAV_LINKS: NavLink[] = [
@@ -62,6 +63,7 @@ export const NAV_LINKS: NavLink[] = [
   {
     label: "Resources",
     href: "/articles",
+    rightAlign: true,
     children: [
       { label: "Articles", href: "", isSection: true },
       { label: "Techniques", href: "/articles?category=technique" },

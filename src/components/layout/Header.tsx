@@ -142,9 +142,9 @@ export default function Header() {
                     {/* Dropdown panel */}
                     {"children" in link && activeDropdown === link.label && (
                       <div
-                        className={`absolute top-full left-0 mt-1 rounded-xl bg-white shadow-2xl border border-slate-100 overflow-hidden animate-fade-in ${
+                        className={`absolute top-full mt-1 rounded-xl bg-white shadow-2xl border border-slate-100 overflow-hidden animate-fade-in ${
                           featured ? "w-[480px]" : "w-56"
-                        }`}
+                        } ${link.rightAlign ? "right-0" : "left-0"}`}
                         style={{
                           opacity: 1,
                           transform: "translateY(0)",
