@@ -2036,6 +2036,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Henry's Fork Anglers | Island Park, Idaho Fly Shop",
     metaDescription:
       "Henry's Fork Anglers in Island Park, Idaho. Expert fly shop for the Henry's Fork River — guided trips, hatch-matched flies, and deep local knowledge of Railroad Ranch.",
+    googlePlaceId: "ChIJje8omYn6U1MRJC-hUJTY9-g",
+    googleRating: 4.6,
+    googleReviewCount: 163,
+    googleReviewsUrl: "https://maps.google.com/?cid=16787124267566313252&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Shelli Milling',
+        rating: 5,
+        text: 'We had a trip with two boats, two guides, Chris and Pierce, they were amazingly knowledgeable, patient and helpful. They worked SO HARD the entire 8 hour day to make our trip successful. These guys are hard core! We were all mostly beginners (I had never fly fished before) and we all caught trout! We stopped counting. They taught us new techniques all day long. They were personable and helped make our trip out west even better! I would give more than five stars if it were an option. They NEVER o',
+        relativeTimeDescription: '2 years ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'GINA ALVAREZ',
+        rating: 5,
+        text: 'My husband and I booked our two float trips a year in advance and looked so forward to our trip. Our Guide Pierce was honestly the best guide we’ve had over the years. He was personable, patient and extremely knowledgeable and passionate about fly fishing. We learned so much and caught some beautiful Browns and Rainbows on the two trips. We even got to see a moose with her two babies cross the river. On our second trip Pierce took us on a dry fly trip of a lifetime! We’ve already booked next yea',
+        relativeTimeDescription: 'a year ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Scott Price',
+        rating: 5,
+        text: 'I spent 4 days with 4 different guides on 2 rivers and never the same spot twice.\n2 days of dry dropper and nymphs and full day of dry flying and another full day streamer fishing.\nAll days were very productive thanks to the excellent guides.  I\'ve been on many guided trips and I have to say each guide was professional, knowledgeable, and very personable.\nThank you Jesse, Sam Miller, Jim Deitz and Will Scott, you all were excellent!\n\nI\'ll be back next year!',
+        relativeTimeDescription: '5 months ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-trouthunter",
@@ -2086,6 +2113,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "TroutHunter | Henry's Fork Fly Shop & Lodge, Island Park, Idaho",
     metaDescription:
       "TroutHunter in Island Park, Idaho. René Harrop's legendary fly shop and lodge on the Henry's Fork — guided trips, CDC patterns, and world-class spring creek expertise.",
+    googlePlaceId: "ChIJT_Z9hR5xUVMRDgnH_M27C4o",
+    googleRating: 4.2,
+    googleReviewCount: 12,
+    googleReviewsUrl: "https://maps.google.com/?cid=9947250695361464590&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'T Spencer',
+        rating: 5,
+        text: 'I visited this place after hours, at a Fire Fighter convention kind of thing. This is where they announce the awards participants have earned for things like "most fire calls taken," etc.. Their chief recently passed away, and it was also kind of a tribute for him. This restaurant is so cute, and it\'s pretty big inside. It seems like a very laid back place. It\'s locally owned, and a couple of the servers who normally work there during the day were there and were so sweet and inviting! We were on',
+        relativeTimeDescription: '2 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'John Sullivan',
+        rating: 1,
+        text: 'We’ve stayed at the Trouthunter Lodge 5-6 times over the years and used their fly fishing guides, but this past year the customer service, fly fishing trips, and guide booking at the fly shop has been terrible. When I booked 2 boats, 9 months in advance, they assured us we were prioritized for a specific section of the river that we requested, even assuring us the day before our actual trip. However, we arrived at the shop the morning of our trip and we were shut out of our section as another gu',
+        relativeTimeDescription: 'a month ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Nickey Franck',
+        rating: 5,
+        text: 'We were there for wild west winterfest and it was great. Nice people, cute building everyone was amazing. The live band was pretty good too. :) the firework show was great as well.',
+        relativeTimeDescription: 'a month ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-trr-outfitters-island-park",
@@ -2134,6 +2188,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "TRR Outfitters Island Park | Henry's Fork Fly Shop, Idaho",
     metaDescription:
       "TRR Outfitters Henry's Fork Fly Shop in Island Park, Idaho. Guided trips on the Henry's Fork, South Fork Snake, and Teton River. Full gear shop and fishing licenses.",
+    googlePlaceId: "ChIJ6XwpYBBxUVMRqZeCUDIJtSU",
+    googleRating: 4.8,
+    googleReviewCount: 20,
+    googleReviewsUrl: "https://maps.google.com/?cid=2717088061891712937&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Shawn Godfrey',
+        rating: 5,
+        text: 'I have to give this place 5 stars since my dad built this shop back in the 60\'s.',
+        relativeTimeDescription: '6 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Kristi Carpenter',
+        rating: 5,
+        text: 'I bought my husband an all day guided tour, he had a blast. Caught lots of fish, the guys in the shop were very friendly and helpful.',
+        relativeTimeDescription: '8 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Steven Prenger (Steve P)',
+        rating: 5,
+        text: 'Neither I nor anyone in my family know how to fly fish, nor were any of us interested in learning.  We stopped by this TRR Outfitters looking to learn what options are available for conventional fishing.  Although the store didn\'t stock any conventional rods, line or lures, the sales attendant was extremely helpful in identifying what options we had and gave us suggestions about where we could go to get what we were after.  It was a very pleasant, informative chat and we appreciate any business ',
+        relativeTimeDescription: '4 years ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-trr-outfitters-ashton",
@@ -2180,6 +2261,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "TRR Outfitters Ashton | South Fork Snake & Henry's Fork Fly Shop",
     metaDescription:
       "TRR Outfitters in Ashton, Idaho. Guided trips on the lower Henry's Fork canyon, South Fork Snake River, and Teton River. Fly shop, licenses, and local expertise.",
+    googlePlaceId: "ChIJkaNFIkLeU1MR5FWNMxXdjgw",
+    googleRating: 4.5,
+    googleReviewCount: 53,
+    googleReviewsUrl: "https://maps.google.com/?cid=904903658277000676&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'James Smith',
+        rating: 5,
+        text: 'Ryan and his team are amazing and extremely knowledgeable of the rivers and what flies to use and when.  Definitely recommend taking a float trip down Henry\'s!',
+        relativeTimeDescription: '4 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Jay Adams',
+        rating: 1,
+        text: 'Idk if the dude running the shop just got a divorce or was just having a bad year but wow. Never met someone who was less interested in helping out a customer before. Cannot recommend enough that you stay away from this shop.',
+        relativeTimeDescription: '7 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Drew Hill',
+        rating: 5,
+        text: 'Great place and great people that can hook ya up with all the good fly fishing gear you need ! Great guides and friendly service is all I\'ve ever experienced !',
+        relativeTimeDescription: '6 years ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-three-rivers-ranch-fly-shop",
@@ -2228,6 +2336,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Three Rivers Ranch Fly Shop | Ashton, Idaho Lodge & Outfitter",
     metaDescription:
       "Three Rivers Ranch Fly Shop in Ashton, Idaho. Full-service lodge and fly fishing outfitter on the Henry's Fork and South Fork Snake River. Guided trips and overnight packages.",
+    googlePlaceId: "ChIJIX4Jc5rZU1MRUPxlopXbbH8",
+    googleRating: 4.7,
+    googleReviewCount: 120,
+    googleReviewsUrl: "https://maps.google.com/?cid=9181955176022801488",
+    featuredReviews: [
+      {
+        authorName: 'James Smith',
+        rating: 5,
+        text: 'Sportsman dream! Staff is friendly, knowledgeable, and phenomenal to be around. Thank you again for hosting the Idaho2Fly October retreat! Looking forward to next year!!',
+        relativeTimeDescription: '4 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Jeffrey Wiener',
+        rating: 5,
+        text: 'We fished with Izik for 2 days! He is an absolute professional in every way. He knew every inch of both rivers we fished. He taught my son and me so much and he had amazing patience with us. Can\'t thank him enough for a fantastic time on Idaho\'s amazing trout rivers.',
+        relativeTimeDescription: '7 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'David Larson',
+        rating: 5,
+        text: 'Three Rivers Ranch provided guide services for our four guys. The booking was easy. The guides were experienced and great teachers. We absolutely loved our trip to the Teton Valley. Our group will book again with TRR.',
+        relativeTimeDescription: '8 months ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-drift-lodge-fly-shop",
@@ -2273,6 +2408,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Drift Lodge & Fly Shop | Island Park, Idaho",
     metaDescription:
       "Drift Lodge & Fly Shop in Island Park, Idaho. Lodge accommodations and guided fly fishing on the Henry's Fork River, including Box Canyon and Railroad Ranch.",
+    googlePlaceId: "ChIJAbcnakR0UVMRiTIHnPrnme4",
+    googleRating: 4,
+    googleReviewCount: 222,
+    googleReviewsUrl: "https://maps.google.com/?cid=17193028116009136777&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Ashley Keller',
+        rating: 5,
+        text: 'Excellent Service and Local Knowledge!\n\nI had a fantastic experience at the Fly Shop! As someone who’s still learning the ropes, I really appreciated how helpful and welcoming the staff were. They didn’t just sell me gear—they took the time to set up my rod, make sure I had the right equipment for the local area, and even shared some great fishing spot recommendations that really paid off.\n\nYou can tell they genuinely care about their customers and want you to have a great day on the water. Whet',
+        relativeTimeDescription: '7 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Mary McCloud',
+        rating: 5,
+        text: 'Basic cabin at affordable price. Had a great three night stay with no issues. Only 30 minutes from Yellowstone. Would recommend and stay again!',
+        relativeTimeDescription: '6 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Arjun Ahuja',
+        rating: 1,
+        text: 'Worst!!!!! Service ever, insects in the house, utensils not clean, coffee machine not clean. No one to attend when we tried to check in.\n\nLate check in charges were not informed before and on the day of the booking we got if you don’t call us by 7 pm you will be charged 45 dollars extra. We were in a no signal area in Yellowstone with no way to reply to email.\n\nWiFi - Advertised but not working. Management’s answer - everyone else is getting WiFi we can’t do anything else about it.\n\nOverall we t',
+        relativeTimeDescription: '8 months ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-yellowstone-fly-shop",
@@ -2408,6 +2570,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Arrick's Fly Shop | West Yellowstone, Montana",
     metaDescription:
       "Arrick's Fly Shop in West Yellowstone, Montana. Family-owned outfitter for the Madison River and Yellowstone National Park — guided trips, flies, and gear.",
+    googlePlaceId: "ChIJfyLP1L65UVMR5D1Lyfdb6Ns",
+    googleRating: 5,
+    googleReviewCount: 94,
+    googleReviewsUrl: "https://maps.google.com/?cid=15846016408695291364&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Kristen Miolene',
+        rating: 5,
+        text: 'What an absolutely amazing experience!\n\nWhen visiting Montana for the first time, my boyfriend was interested in learning how to fly fish. After researching, we found Arrick’s Fly Fishing. Words cannot describe how much fun we had and all of the scenery we were able to experience through the various fishing locations. In total, we caught about 24 fish (rainbow trout, Rocky Mountain White, and cut throat trout).\n\nIt was clear Arrick is passionate about what he does and he wants everyone to have a',
+        relativeTimeDescription: '6 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Nick Carlson',
+        rating: 5,
+        text: 'We booked with Arrick after seeing glowing reviews on Reddit—and he absolutely lived up to the hype. Our group had three fishermen: two adults and one enthusiastic 12-year-old. None of us had ever fly fished before.\n\nArrick gave us a quick 10-minute lesson on the shore, placed us all in close proximity, and had us fishing within 15 minutes. We were catching fish almost immediately. He coached us as we went, especially on the technique of fighting and landing fish—the most challenging and excitin',
+        relativeTimeDescription: '7 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Eileen Baglivio',
+        rating: 5,
+        text: 'Arrick’s Fly Shop was the highlight of our Yellowstone visit. There were many options of activities to choose from in which we were able to customize our experience. Everything is provided for. They were very responsive when selecting availability dates. The information packets forwarded were very helpful. We were taken to a beautiful area where Arrick gave us a wonderful tutorial in casting, mending, & how to hook a fish. He was very attentive in helping us fine tune the art of fly fishing. All',
+        relativeTimeDescription: '6 months ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-big-sky-anglers",
@@ -2457,6 +2646,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Big Sky Anglers | West Yellowstone Fly Shop & Guide Service",
     metaDescription:
       "Big Sky Anglers in West Yellowstone, Montana. Guided fly fishing on the Madison River and Yellowstone National Park. Full service fly shop, licenses, and expert local advice.",
+    googlePlaceId: "ChIJ3cJm4-y5UVMRXz_pwbmIIOI",
+    googleRating: 4.7,
+    googleReviewCount: 122,
+    googleReviewsUrl: "https://maps.google.com/?cid=16294173783230070623&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Shannon Marie Hedlund',
+        rating: 4,
+        text: 'We booked for early morning fly fishing Oct 15th. Mom and daughter fishing. No experience. Use caution on how you purchase your fishing license. I was not told to make sure I booked for a Yellowstone park specific fishing. Instead, I selected a one day Montana fishing license thinking that covers everything in the state. Wrong. What was most frustrating was that I was at the front desk in the store, physically showed the man behind the counter my license application on my phone, it was a license',
+        relativeTimeDescription: '4 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Ashley Jensen',
+        rating: 5,
+        text: 'If you are considering stopping in this shop, do it. Book a fly fishing trip. This spot has the most knowledgeable and kind people. We were privileged to have their best guide, Andy Vincent. Truly the kindest person we’ve ever had the pleasure of meeting. We booked back to back trips with him because one wasn’t enough. He knows amazing spots and is a great teacher! He is very patient and knowledgeable. He could tell you every bug nearby that the fish may be eating. He is a wealth of knowledge. Y',
+        relativeTimeDescription: 'a year ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Erin Ellis',
+        rating: 5,
+        text: 'Our family stopped in late one afternoon after dinner to inquire about trout fishing locally with a guide or on a boat. We were soon booked for a fishing clinic the very next day. Tristan, at the counter, was very kind and patient and extremely helpful to our entire family. Our guide, Patrick, was extremely informative and gave great instructions for two kids and my husband. He brought us to three separate spots within the park and was beyond kind. He helped my oldest son, catch his first brown ',
+        relativeTimeDescription: 'a year ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-jacklins-fly-shop",
@@ -2507,6 +2723,33 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Jacklin's Fly Shop | West Yellowstone, Montana — Bob Jacklin",
     metaDescription:
       "Jacklin's Fly Shop in West Yellowstone, Montana. Bob Jacklin's legendary fly shop since the 1960s — signature flies, guided trips on the Madison, Gallatin, and Yellowstone Park.",
+    googlePlaceId: "ChIJhWELJry5UVMR0vypkjcEnFQ",
+    googleRating: 4.6,
+    googleReviewCount: 52,
+    googleReviewsUrl: "https://maps.google.com/?cid=6096752632283135186&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Sherry',
+        rating: 5,
+        text: 'This is the best shop in town. The staff are incredibly friendly and the shop is still independently owned. I came in looking for a backup rod and ended up chatting with the staff for 20 minutes. If you want a friendly shop that is all about getting you the right gear to get on the water, you can’t beat Jacklin’s',
+        relativeTimeDescription: '5 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Tyler Knibbe',
+        rating: 5,
+        text: 'Came in looking for a tiny fly rod that my 5 year old could learn to fish with. The owner offered my son a chocolate coin they keep on the counter that he noticed. I mentioned it was his birthday so he could have the treat and went to the back where owner pointed out I might find something. We looked and didn’t find anything that would work and headed out. The guy at the counter mentioned another shop that might have what we were looking for. Then on the sidewalk outside the owner greeted us and',
+        relativeTimeDescription: '7 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Melanie Bixby',
+        rating: 5,
+        text: 'We walked in just before closing and they stayed open 30min longer for us. They loved to talk fishing with us. Allowed our two teenage boys to share stories and pictures of fish caught in Yellowstone.  They gave great advice about fishing in Lamar Valley area.\n\nFriendly, knowledgeable and helpful. Great selection of flies. Be sure to stop in when you are in the area.',
+        relativeTimeDescription: 'a year ago',
+        time: 1741305600,
+      }
+    ],
   },
   {
     id: "shop-madison-river-outfitters",
@@ -2554,5 +2797,32 @@ export const flyShops: FlyShop[] = [
     metaTitle: "Madison River Outfitters | West Yellowstone Fly Shop & Guide Service",
     metaDescription:
       "Madison River Outfitters in West Yellowstone, Montana. Guided float and wade trips on the Madison River, daily fishing reports, and full fly shop with online ordering.",
+    googlePlaceId: "ChIJZYVUKrm5UVMRdSzheh7ebZA",
+    googleRating: 4.5,
+    googleReviewCount: 87,
+    googleReviewsUrl: "https://maps.google.com/?cid=10407218536415046773&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+    featuredReviews: [
+      {
+        authorName: 'Wilderness 2326',
+        rating: 5,
+        text: 'What an awesome trip on the Madison. We got the best guide Mike, who taught us so much including one in our party how to fly fish for the first time. I was equally impressed with the shop. I’ve been in a lot of shops and this was the first place that cared about everyone who walks through the door no matter if they have a trip booked or just buying a couple flies. If there was 10 stars they would get all 10. Thanks MRO!',
+        relativeTimeDescription: 'a year ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'Alex Norwick',
+        rating: 5,
+        text: 'HIGHLY RECOMMEND!!\nStopped in to get fishing licenses(cash only for licenses) huge selection of items, staff was incredibly friendly and knowledgeable.\n\nAs a newer female angler to fly fishing it was refreshing to chat with Nina who helped bring clarity to the “hoot-owl” restrictions and where in the area we should be fishing. She was also incredibly kind and helpful with helping me pick out some flies. It was exciting to chat with her as she knew her flies and what was biting in what area.\n\nWe ',
+        relativeTimeDescription: '6 months ago',
+        time: 1741305600,
+      },
+      {
+        authorName: 'R Wiley',
+        rating: 5,
+        text: 'Nate has the best customer service that I have ever experienced!!! If my company was here, I’d steal him for sure. What an amazing business. We are planning a fly fishing trip in 2 days with them. If the guide is anything like Nate  is, then this business is where my money will be spent. Nate spoke very highly of the owner of this business as well which says it all to me. WE WILL BE BACK!',
+        relativeTimeDescription: '5 months ago',
+        time: 1741305600,
+      }
+    ],
   },
 ];
