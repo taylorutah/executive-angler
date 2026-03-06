@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, BookOpen, Mountain } from "lucide-react";
+import { ArrowRight, MapPin, BookOpen } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import RatingStars from "@/components/ui/RatingStars";
 import { getFeaturedArticles } from "@/lib/db";
@@ -510,10 +510,9 @@ export default async function HomePage() {
 
       {/* ── 6. CTA ────────────────────────────────────────────────────────── */}
       <section className="relative py-24 overflow-hidden">
-        {/* PLACEHOLDER — Replace with real photography */}
         <Image
-          src="https://images.unsplash.com/photo-1531299204812-e6d44d9a185c?w=1920&q=80"
-          alt="Scenic mountain river at golden hour"
+          src="https://www.wherewisemenfish.com/storage/images-processed/w-1980_h-auto_m-fit_s-down__iStock-677954816.jpg"
+          alt="Aerial view of a river winding through the Mongolian steppe"
           fill
           className="object-cover"
           sizes="100vw"
@@ -521,7 +520,13 @@ export default async function HomePage() {
         <div className="hero-overlay absolute inset-0" />
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <ScrollAnimation>
-            <Mountain className="h-10 w-10 text-gold mx-auto mb-6" />
+            <Image
+              src="/images/icon-gold.svg"
+              alt=""
+              width={48}
+              height={48}
+              className="mx-auto mb-6 h-10 w-auto"
+            />
             <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-heading font-bold">
               Plan Your Next Adventure
             </h2>

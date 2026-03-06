@@ -81,6 +81,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "alaskaflyfishinggoods.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.wherewisemenfish.com",
+      },
     ],
   },
 };
