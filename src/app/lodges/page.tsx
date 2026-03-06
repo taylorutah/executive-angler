@@ -5,9 +5,9 @@ import Image from "next/image";
 import { MapPin, ChevronRight, Star } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { getAllLodges } from "@/lib/db";
+import { getAllLodges, getAllDestinations, getAllRivers } from "@/lib/db";
 import { lodgeListConfig } from "@/lib/list-configs";
-import type { CardData } from "@/types/list-config";
+import type { CardData, EntityListConfig } from "@/types/list-config";
 
 export const revalidate = 3600;
 
@@ -21,11 +21,50 @@ export const metadata: Metadata = {
 };
 
 export default async function LodgesPage() {
-  const lodges = await getAllLodges();
+  const [lodges, destinations, rivers] = await Promise.all([
+    getAllLodges(),
+    getAllDestinations(),
+    getAllRivers(),
+  ]);
+
   const heroLodge = lodges.find((l) => l.slug === HERO_SLUG);
   const secondaryLodges = SECONDARY_SLUGS.map((slug) =>
     lodges.find((l) => l.slug === slug)
   ).filter(Boolean);
+
+  // Build destination filter options dynamically
+  const destCounts = new Map<string, { name: string; count: number }>();
+  lodges.forEach((lodge) => {
+    const dest = destinations.find((d) => d.id === lodge.destinationId);
+    if (dest) {
+      const existing = destCounts.get(lodge.destinationId);
+      if (existing) existing.count++;
+      else destCounts.set(lodge.destinationId, { name: dest.name, count: 1 });
+    }
+  });
+  const destOptions = Array.from(destCounts.entries())
+    .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
+    .map(([id, { name }]) => ({ value: id, label: name }));
+
+  // Build river filter options from lodges' nearbyRiverIds
+  const riverIdSet = new Set<string>();
+  lodges.forEach((l) => (l.nearbyRiverIds || []).forEach((r) => riverIdSet.add(r)));
+  const riverOptions = Array.from(riverIdSet)
+    .map((id) => {
+      const r = rivers.find((rv) => rv.id === id);
+      return r ? { value: id, label: r.name } : null;
+    })
+    .filter((r): r is { value: string; label: string } => r !== null)
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const config: EntityListConfig = {
+    ...lodgeListConfig,
+    filters: [
+      { ...lodgeListConfig.filters[0], options: destOptions },
+      { ...lodgeListConfig.filters[1], options: riverOptions },
+      lodgeListConfig.filters[2],
+    ],
+  };
 
   const items: (CardData & { _filterValues: Record<string, string | number> })[] = lodges.map(
     (lodge) => ({
@@ -42,6 +81,8 @@ export default async function LodgesPage() {
       featured: lodge.featured,
       description: lodge.description?.substring(0, 150),
       _filterValues: {
+        destination: lodge.destinationId,
+        river: lodge.nearbyRiverIds?.[0] ?? "",
         price: String(lodge.priceTier),
       },
     })
@@ -203,14 +244,14 @@ export default async function LodgesPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-forest-dark">All Lodges</h2>
           <p className="text-sm text-slate-500 mt-1">
-            {lodges.length} lodges — filterable by price tier
+            {lodges.length} world-class lodges — filter by destination, river &amp; price
           </p>
         </div>
       </div>
       <section className="bg-white pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
-            <EntityListView items={items} config={lodgeListConfig} storageKey="lodges" />
+            <EntityListView items={items} config={config} storageKey="lodges" />
           </Suspense>
         </div>
       </section>

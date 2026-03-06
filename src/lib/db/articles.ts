@@ -22,3 +22,9 @@ export async function getArticlesByDestination(
     a.relatedDestinationIds.includes(destinationId)
   );
 }
+
+export async function getArticlesByRiver(riverId: string): Promise<Article[]> {
+  return staticArticles.filter((a) =>
+    (a.relatedRiverIds || []).includes(riverId)
+  );
+}

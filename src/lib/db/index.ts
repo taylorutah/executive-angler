@@ -25,6 +25,7 @@ export {
   getLodgeBySlug,
   getFeaturedLodges,
   getLodgesByDestination,
+  getLodgesByRiver,
 } from "./lodges";
 
 export {
@@ -45,4 +46,5 @@ export {
   getArticleBySlug,
   getFeaturedArticles,
   getArticlesByDestination,
+  getArticlesByRiver,
 } from "./articles";

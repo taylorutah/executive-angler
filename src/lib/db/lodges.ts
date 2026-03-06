@@ -20,3 +20,9 @@ export async function getLodgesByDestination(
 ): Promise<Lodge[]> {
   return staticLodges.filter((l) => l.destinationId === destinationId);
 }
+
+export async function getLodgesByRiver(riverId: string): Promise<Lodge[]> {
+  return staticLodges.filter((l) =>
+    (l.nearbyRiverIds || []).includes(riverId)
+  );
+}

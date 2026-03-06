@@ -114,6 +114,16 @@ export const speciesListConfig: EntityListConfig = {
 export const lodgeListConfig: EntityListConfig = {
   filters: [
     {
+      key: "destination",
+      label: "Destination",
+      options: [], // populated dynamically
+    },
+    {
+      key: "river",
+      label: "River",
+      options: [], // populated dynamically
+    },
+    {
       key: "price",
       label: "Price",
       options: [

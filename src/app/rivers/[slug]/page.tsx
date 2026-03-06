@@ -18,8 +18,11 @@ import {
   getAllRivers,
   getRiverBySlug,
   getDestinationById,
+  getLodgesByRiver,
   getLodgesByDestination,
   getGuidesByRiver,
+  getFlyShopsByDestination,
+  getArticlesByRiver,
 } from "@/lib/db";
 
 interface Props {
@@ -60,11 +63,19 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, nearbyLodges, nearbyGuides] = await Promise.all([
-    river.destinationId ? getDestinationById(river.destinationId) : undefined,
+  const [dest, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles] = await Promise.all([
+    river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
+    getLodgesByRiver(river.id),
     river.destinationId ? getLodgesByDestination(river.destinationId) : Promise.resolve([]),
     getGuidesByRiver(river.id),
+    river.destinationId ? getFlyShopsByDestination(river.destinationId) : Promise.resolve([]),
+    getArticlesByRiver(river.id),
   ]);
+
+  const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
+  const lodgesHeading = riverLodges.length > 0
+    ? "Lodges on This River"
+    : `Lodges in ${dest?.name ?? "This Area"}`;
 
   const mapMarkers = [
     ...(river.accessPoints || []).map((ap) => ({
@@ -284,10 +295,10 @@ export default async function RiverPage({ params }: Props) {
               {nearbyLodges.length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
-                    Nearby Lodges
+                    {lodgesHeading}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {nearbyLodges.map((lodge) => (
+                    {nearbyLodges.slice(0, 6).map((lodge) => (
                       <EntityCard
                         key={lodge.id}
                         href={`/lodges/${lodge.slug}`}
@@ -295,8 +306,34 @@ export default async function RiverPage({ params }: Props) {
                         imageAlt={lodge.name}
                         title={lodge.name}
                         subtitle={lodge.priceRange}
-                        meta={`${lodge.seasonStart}–${lodge.seasonEnd}`}
+                        meta={lodge.seasonStart && lodge.seasonEnd ? `${lodge.seasonStart}–${lodge.seasonEnd}` : undefined}
                       />
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Fly Shops Nearby */}
+              {destFlyShops.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Fly Shops Nearby
+                  </h2>
+                  <div className="space-y-3">
+                    {destFlyShops.slice(0, 4).map((shop) => (
+                      <Link
+                        key={shop.id}
+                        href={`/fly-shops/${shop.slug}`}
+                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <Waves className="h-5 w-5 text-river shrink-0" />
+                        <div>
+                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                            {shop.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
+                        </div>
+                      </Link>
                     ))}
                   </div>
                 </ScrollAnimation>
@@ -363,6 +400,31 @@ export default async function RiverPage({ params }: Props) {
                         </p>
                         <p className="text-xs text-slate-500 mt-0.5">
                           {guide.dailyRate}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Related Articles */}
+              {riverArticles.length > 0 && (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                    Reading for This River
+                  </h3>
+                  <div className="space-y-3">
+                    {riverArticles.slice(0, 4).map((article) => (
+                      <Link
+                        key={article.id}
+                        href={`/articles/${article.slug}`}
+                        className="block p-3 rounded-lg hover:bg-cream transition-colors"
+                      >
+                        <p className="text-sm font-medium text-forest-dark">
+                          {article.title}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          {article.readingTimeMinutes} min read
                         </p>
                       </Link>
                     ))}

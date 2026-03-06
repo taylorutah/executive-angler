@@ -17,12 +17,16 @@ const footerLinks = {
     { label: "Missouri River", href: "/rivers/missouri-river" },
     { label: "All Rivers", href: "/rivers" },
   ],
-  Resources: [
-    { label: "Species Guide", href: "/species" },
-    { label: "Articles", href: "/articles" },
+  "Plan Your Trip": [
     { label: "Lodges", href: "/lodges" },
     { label: "Guides", href: "/guides" },
     { label: "Fly Shops", href: "/fly-shops" },
+  ],
+  Resources: [
+    { label: "Articles", href: "/articles" },
+    { label: "Species Guide", href: "/species" },
+    { label: "Techniques", href: "/articles?category=technique" },
+    { label: "Conservation", href: "/articles?category=conservation" },
   ],
   Company: [
     { label: "About", href: "/about" },
@@ -35,9 +39,9 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Brand Column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-4 lg:mb-0">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1 mb-4 lg:mb-0">
             <Link href="/" className="inline-block">
               <Image
                 src="/images/logo-horizontal-cream.svg"

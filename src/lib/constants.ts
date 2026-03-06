@@ -3,7 +3,19 @@ export const SITE_DESCRIPTION =
   "The definitive fly fishing resource — destinations, rivers, lodges, guides, and expert instruction from around the world.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
 
-export const NAV_LINKS = [
+export type NavChild = {
+  label: string;
+  href: string;
+  isSection?: boolean;
+};
+
+export type NavLink = {
+  label: string;
+  href: string;
+  children?: NavChild[];
+};
+
+export const NAV_LINKS: NavLink[] = [
   {
     label: "Destinations",
     href: "/destinations",
@@ -29,40 +41,44 @@ export const NAV_LINKS = [
     ],
   },
   {
-    label: "Species",
-    href: "/species",
-    children: [
-      { label: "Trout", href: "/species?family=trout" },
-      { label: "Salmon", href: "/species?family=salmon" },
-      { label: "Saltwater", href: "/species?family=saltwater" },
-      { label: "Warmwater", href: "/species?family=warmwater" },
-      { label: "View All", href: "/species" },
-    ],
-  },
-  {
     label: "Lodges",
     href: "/lodges",
-  },
-  {
-    label: "Guides",
-    href: "/guides",
-  },
-  {
-    label: "Articles",
-    href: "/articles",
     children: [
-      { label: "Techniques", href: "/articles?category=technique" },
-      { label: "Destinations", href: "/articles?category=destination" },
-      { label: "Gear", href: "/articles?category=gear" },
-      { label: "Conservation", href: "/articles?category=conservation" },
-      { label: "View All", href: "/articles" },
+      { label: "Firehole Ranch", href: "/lodges/firehole-ranch" },
+      { label: "Bristol Bay Sportfishing", href: "/lodges/bristol-bay-sportfishing" },
+      { label: "Dean River Lodge", href: "/lodges/dean-river-lodge" },
+      { label: "Snake River Sporting Club", href: "/lodges/snake-river-sporting-club" },
+      { label: "View All Lodges", href: "/lodges" },
     ],
   },
   {
     label: "Fly Shops",
     href: "/fly-shops",
   },
-] as const;
+  {
+    label: "Guides",
+    href: "/guides",
+  },
+  {
+    label: "Resources",
+    href: "/articles",
+    children: [
+      { label: "Articles", href: "", isSection: true },
+      { label: "Techniques", href: "/articles?category=technique" },
+      { label: "Gear", href: "/articles?category=gear" },
+      { label: "Conservation", href: "/articles?category=conservation" },
+      { label: "Destinations", href: "/articles?category=destination" },
+      { label: "Culture", href: "/articles?category=culture" },
+      { label: "All Articles", href: "/articles" },
+      { label: "Species Guide", href: "", isSection: true },
+      { label: "Trout", href: "/species?family=trout" },
+      { label: "Salmon", href: "/species?family=salmon" },
+      { label: "Saltwater", href: "/species?family=saltwater" },
+      { label: "Warmwater", href: "/species?family=warmwater" },
+      { label: "All Species", href: "/species" },
+    ],
+  },
+];
 
 export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/executiveangler",

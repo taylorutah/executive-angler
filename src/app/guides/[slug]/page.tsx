@@ -18,6 +18,8 @@ import {
   getGuideBySlug,
   getDestinationById,
   getRiversByIds,
+  getLodgesByDestination,
+  getFlyShopsByDestination,
 } from "@/lib/db";
 
 interface Props {
@@ -53,9 +55,11 @@ export default async function GuidePage({ params }: Props) {
   const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
 
-  const [dest, guideRivers] = await Promise.all([
-    guide.destinationId ? getDestinationById(guide.destinationId) : undefined,
+  const [dest, guideRivers, areaLodges, areaFlyShops] = await Promise.all([
+    guide.destinationId ? getDestinationById(guide.destinationId) : Promise.resolve(undefined),
     (guide.riverIds || []).length > 0 ? getRiversByIds(guide.riverIds) : Promise.resolve([]),
+    guide.destinationId ? getLodgesByDestination(guide.destinationId) : Promise.resolve([]),
+    guide.destinationId ? getFlyShopsByDestination(guide.destinationId) : Promise.resolve([]),
   ]);
 
   const quickFacts = [
@@ -157,6 +161,65 @@ export default async function GuidePage({ params }: Props) {
                           <p className="text-xs text-slate-500">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Lodges in This Area */}
+              {areaLodges.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Lodges in This Area
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {areaLodges.slice(0, 4).map((lodge) => (
+                      <Link
+                        key={lodge.id}
+                        href={`/lodges/${lodge.slug}`}
+                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <div className="w-12 h-12 rounded-lg bg-forest/10 flex items-center justify-center shrink-0 text-lg">
+                          🏕
+                        </div>
+                        <div>
+                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                            {lodge.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 mt-0.5">{lodge.priceRange}</p>
+                          {lodge.seasonStart && (
+                            <p className="text-xs text-slate-400 mt-0.5">
+                              {lodge.seasonStart}–{lodge.seasonEnd}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Fly Shops Nearby */}
+              {areaFlyShops.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Fly Shops Nearby
+                  </h2>
+                  <div className="space-y-3">
+                    {areaFlyShops.slice(0, 4).map((shop) => (
+                      <Link
+                        key={shop.id}
+                        href={`/fly-shops/${shop.slug}`}
+                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <MapPin className="h-5 w-5 text-forest shrink-0" />
+                        <div>
+                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                            {shop.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExternalLink, Phone, MapPin, Clock } from "lucide-react";
+import { ExternalLink, Phone, MapPin, Clock, Waves, User } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -13,7 +13,8 @@ import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
-import { getAllFlyShops, getFlyShopBySlug, getDestinationById } from "@/lib/db";
+import Link from "next/link";
+import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -46,7 +47,11 @@ export default async function FlyShopPage({ params }: Props) {
   const shop = await getFlyShopBySlug(slug);
   if (!shop) notFound();
 
-  const dest = shop.destinationId ? await getDestinationById(shop.destinationId) : undefined;
+  const [dest, nearbyRivers, areaGuides] = await Promise.all([
+    shop.destinationId ? getDestinationById(shop.destinationId) : Promise.resolve(undefined),
+    shop.destinationId ? getRiversByDestination(shop.destinationId) : Promise.resolve([]),
+    shop.destinationId ? getGuidesByDestination(shop.destinationId) : Promise.resolve([]),
+  ]);
 
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),
@@ -136,6 +141,67 @@ export default async function FlyShopPage({ params }: Props) {
                       <Badge key={b} variant="outline" size="md">
                         {b}
                       </Badge>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Waters We Know */}
+              {nearbyRivers.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Waters We Know
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {nearbyRivers.slice(0, 6).map((river) => (
+                      <Link
+                        key={river.id}
+                        href={`/rivers/${river.slug}`}
+                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <Waves className="h-5 w-5 text-river shrink-0" />
+                        <div>
+                          <h3 className="font-medium text-forest-dark">{river.name}</h3>
+                          <p className="text-xs text-slate-500">
+                            {(river.primarySpecies || []).slice(0, 3).join(", ")}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Guides in This Area */}
+              {areaGuides.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                    Guides in This Area
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {areaGuides.slice(0, 4).map((guide) => (
+                      <Link
+                        key={guide.id}
+                        href={`/guides/${guide.slug}`}
+                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center shrink-0">
+                          <User className="h-5 w-5 text-forest" />
+                        </div>
+                        <div>
+                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                            {guide.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 mt-0.5">
+                            {(guide.specialties || []).slice(0, 2).join(", ")}
+                          </p>
+                          {guide.dailyRate && (
+                            <p className="text-sm font-medium text-forest mt-0.5">
+                              {guide.dailyRate}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
                     ))}
                   </div>
                 </ScrollAnimation>

@@ -23,10 +23,15 @@ const MEGA_MENU_FEATURED: Record<
     alt: "The Madison River, Montana",
     caption: "41 legendary rivers, fully mapped",
   },
-  Articles: {
+  Lodges: {
+    src: "https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600&q=80",
+    alt: "Luxury fly fishing lodge on the river",
+    caption: "World-class lodges at the finest fisheries",
+  },
+  Resources: {
     src: "https://images.unsplash.com/photo-1612552001322-30d755f0980e?w=600&q=80",
     alt: "Fly fishing technique and instruction",
-    caption: "Expert techniques, destinations & gear",
+    caption: "Expert techniques, species guides & gear",
   },
 };
 
@@ -149,19 +154,30 @@ export default function Header() {
                         <div className="flex">
                           {/* Links column */}
                           <div className={`py-2 ${featured ? "flex-1" : "w-full"}`}>
-                            <p className="px-4 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-                              {link.label}
-                            </p>
-                            {link.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-cream hover:text-forest-dark transition-colors group/item"
-                              >
-                                <span>{child.label}</span>
-                                <ChevronRight className="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                              </Link>
-                            ))}
+                            {!link.children?.some((c) => c.isSection) && (
+                              <p className="px-4 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">
+                                {link.label}
+                              </p>
+                            )}
+                            {link.children?.map((child) =>
+                              child.isSection ? (
+                                <p
+                                  key={child.label}
+                                  className="px-4 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 border-t border-slate-100 first:border-t-0"
+                                >
+                                  {child.label}
+                                </p>
+                              ) : (
+                                <Link
+                                  key={child.label}
+                                  href={child.href}
+                                  className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-cream hover:text-forest-dark transition-colors group/item"
+                                >
+                                  <span>{child.label}</span>
+                                  <ChevronRight className="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                                </Link>
+                              )
+                            )}
                           </div>
 
                           {/* Featured image panel */}
@@ -296,10 +312,15 @@ export default function Header() {
                             All {link.label} →
                           </Link>
                           {link.children
-                            .filter((c) => !c.label.startsWith("View"))
+                            ?.filter(
+                              (c) =>
+                                !c.label.startsWith("View") &&
+                                !c.label.startsWith("All") &&
+                                !c.isSection
+                            )
                             .map((child) => (
                               <Link
-                                key={child.href}
+                                key={child.label}
                                 href={child.href}
                                 className="block px-4 py-2 text-sm text-slate-600 hover:text-forest-dark rounded-lg hover:bg-cream transition-colors"
                               >

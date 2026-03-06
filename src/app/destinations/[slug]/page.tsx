@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Calendar, Fish, ArrowRight } from "lucide-react";
+import { MapPin, Fish, ArrowRight, Star } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -22,6 +22,7 @@ import {
   getLodgesByDestination,
   getGuidesByDestination,
   getArticlesByDestination,
+  getFlyShopsByDestination,
 } from "@/lib/db";
 
 interface Props {
@@ -62,11 +63,12 @@ export default async function DestinationPage({ params }: Props) {
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  const [destRivers, destLodges, destGuides, destArticles] = await Promise.all([
+  const [destRivers, destLodges, destGuides, destArticles, destFlyShops] = await Promise.all([
     getRiversByDestination(dest.id),
     getLodgesByDestination(dest.id),
     getGuidesByDestination(dest.id),
     getArticlesByDestination(dest.id),
+    getFlyShopsByDestination(dest.id),
   ]);
 
   const mapMarkers = [
@@ -282,6 +284,52 @@ export default async function DestinationPage({ params }: Props) {
                             </p>
                           )}
                         </div>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Fly Shops */}
+              {destFlyShops.length > 0 && (
+                <ScrollAnimation>
+                  <div className="flex items-end justify-between mb-6">
+                    <h2 className="font-heading text-2xl font-bold text-forest-dark">
+                      Fly Shops
+                    </h2>
+                    <Link
+                      href="/fly-shops"
+                      className="text-sm text-forest font-medium hover:text-forest-dark inline-flex items-center gap-1"
+                    >
+                      View All <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                  <div className="space-y-3">
+                    {destFlyShops.slice(0, 6).map((shop) => (
+                      <Link
+                        key={shop.id}
+                        href={`/fly-shops/${shop.slug}`}
+                        className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm card-hover"
+                      >
+                        <div>
+                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                            {shop.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
+                          {(shop.services || []).length > 0 && (
+                            <p className="text-xs text-slate-400 mt-1">
+                              {(shop.services || []).slice(0, 3).join(" · ")}
+                            </p>
+                          )}
+                        </div>
+                        {shop.googleRating && (
+                          <div className="flex items-center gap-1 shrink-0 ml-4">
+                            <Star className="h-3.5 w-3.5 fill-gold text-gold" />
+                            <span className="text-sm font-medium text-slate-700">
+                              {shop.googleRating}
+                            </span>
+                          </div>
+                        )}
                       </Link>
                     ))}
                   </div>

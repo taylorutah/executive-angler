@@ -21,6 +21,7 @@ import {
   getLodgeBySlug,
   getDestinationById,
   getRiversByDestination,
+  getRiversByIds,
 } from "@/lib/db";
 
 interface Props {
@@ -62,8 +63,12 @@ export default async function LodgePage({ params }: Props) {
   if (!lodge) notFound();
 
   const [dest, nearbyRivers] = await Promise.all([
-    lodge.destinationId ? getDestinationById(lodge.destinationId) : undefined,
-    lodge.destinationId ? getRiversByDestination(lodge.destinationId) : Promise.resolve([]),
+    lodge.destinationId ? getDestinationById(lodge.destinationId) : Promise.resolve(undefined),
+    (lodge.nearbyRiverIds || []).length > 0
+      ? getRiversByIds(lodge.nearbyRiverIds!)
+      : lodge.destinationId
+        ? getRiversByDestination(lodge.destinationId)
+        : Promise.resolve([]),
   ]);
 
   const quickFacts = [
