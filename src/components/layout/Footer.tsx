@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants";
 
 const footerLinks = {
@@ -37,11 +38,14 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-4 lg:mb-0">
-            <Link
-              href="/"
-              className="font-heading text-xl font-bold text-white tracking-tight"
-            >
-              {SITE_NAME}
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/logo-horizontal-cream.svg"
+                alt="Executive Angler"
+                width={180}
+                height={44}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-xs">
               The definitive fly fishing resource. Destinations, rivers, lodges,

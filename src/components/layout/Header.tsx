@@ -75,7 +75,10 @@ export default function Header() {
       ? "bg-white/95 backdrop-blur-md shadow-sm"
       : "bg-transparent";
   const textColor = scrolled || !isHomepage ? "text-forest-dark" : "text-white";
-  const logoColor = scrolled || !isHomepage ? "text-forest-dark" : "text-white";
+  const logoSrc =
+    scrolled || !isHomepage
+      ? "/images/logo-horizontal-forest.svg"
+      : "/images/logo-horizontal-white.svg";
 
   const toggleMobileSection = (label: string) => {
     setMobileExpanded((prev) => (prev === label ? null : label));
@@ -89,11 +92,15 @@ export default function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
-            <Link
-              href="/"
-              className={`font-heading text-xl font-bold tracking-tight ${logoColor}`}
-            >
-              {SITE_NAME}
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src={logoSrc}
+                alt="Executive Angler"
+                width={180}
+                height={44}
+                className="h-9 w-auto"
+                priority
+              />
             </Link>
 
             {/* Desktop Navigation */}
