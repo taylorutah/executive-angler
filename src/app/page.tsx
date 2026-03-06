@@ -511,7 +511,7 @@ export default async function HomePage() {
       {/* ── 6. CTA ────────────────────────────────────────────────────────── */}
       <section className="relative py-24 overflow-hidden">
         <Image
-          src="https://www.wherewisemenfish.com/storage/images-processed/w-1980_h-auto_m-fit_s-down__iStock-677954816.jpg"
+          src="/images/mongolia-river-aerial.jpg"
           alt="Aerial view of a river winding through the Mongolian steppe"
           fill
           className="object-cover"
