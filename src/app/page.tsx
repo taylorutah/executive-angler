@@ -81,17 +81,17 @@ export default async function HomePage() {
         <div className="absolute inset-0 flex items-center justify-center text-center">
           <div className="max-w-4xl px-4">
             <ScrollAnimation>
-              <p className="text-gold font-medium text-sm sm:text-base uppercase tracking-[0.2em] mb-4">
+              <p className="text-gold font-medium text-sm sm:text-base uppercase tracking-[0.2em] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
                 The Definitive Fly Fishing Resource
               </p>
             </ScrollAnimation>
             <ScrollAnimation delay={0.1}>
-              <h1 className="text-white text-5xl sm:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[1.1]">
+              <h1 className="text-white text-5xl sm:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[1.1] drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
                 Executive Angler
               </h1>
             </ScrollAnimation>
             <ScrollAnimation delay={0.2}>
-              <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+              <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
                 World-class lodges, legendary rivers, and expert guides — from
                 Montana spring creeks to the wilds of Kamchatka.
               </p>
