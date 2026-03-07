@@ -3,7 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
-import { CalendarIcon, MapPinIcon, ThermometerIcon, CloudIcon, DropletIcon, ArrowLeftIcon } from "lucide-react";
+import { CalendarIcon, MapPinIcon, ThermometerIcon, CloudIcon, DropletIcon, ArrowLeftIcon, PencilIcon } from "lucide-react";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -65,13 +65,23 @@ export default async function SessionDetailPage({ params }: Props) {
       {/* Header */}
       <div className="bg-forest-dark text-white">
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-          <Link
-            href="/journal"
-            className="inline-flex items-center gap-2 text-sm text-cream hover:text-white"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            Back to Journal
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link
+              href="/journal"
+              className="inline-flex items-center gap-2 text-sm text-cream hover:text-white"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              Back to Journal
+            </Link>
+
+            <Link
+              href={`/journal/${sessionData.id}/edit`}
+              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white hover:bg-white/20"
+            >
+              <PencilIcon className="h-4 w-4" />
+              Edit Entry
+            </Link>
+          </div>
 
           <h1 className="mt-4 font-heading text-4xl font-bold">
             {sessionData.river_name || "Fishing Session"}
