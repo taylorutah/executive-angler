@@ -42,7 +42,7 @@ export default async function JournalPage() {
     <div className="min-h-screen bg-cream">
       {/* Header */}
       <div className="bg-forest-dark text-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
           <h1 className="font-heading text-5xl font-bold">My Fishing Journal</h1>
           <p className="mt-4 text-xl text-cream">
             Track your fishing sessions, catches, and river reports

@@ -6,7 +6,7 @@
 
 -- Add columns to rivers table if they don't exist
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS usgs_gauge_id text;
-ALTER TABLE rivers ADD COLUMN IF NOT EXISTS ea_destination_id uuid REFERENCES destinations(id);
+ALTER TABLE rivers ADD COLUMN IF NOT EXISTS ea_destination_id text REFERENCES destinations(id);
 
 -- =============================================
 -- Fly Patterns Table
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS fly_patterns (
 CREATE TABLE IF NOT EXISTS fishing_sessions (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  river_id uuid REFERENCES rivers(id),
+  river_id text REFERENCES rivers(id),
   river_name text,
   date date NOT NULL,
   weather text,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS catches (
 -- =============================================
 CREATE TABLE IF NOT EXISTS fishing_spots (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  river_id uuid REFERENCES rivers(id),
+  river_id text REFERENCES rivers(id),
   name text NOT NULL,
   latitude numeric,
   longitude numeric,
