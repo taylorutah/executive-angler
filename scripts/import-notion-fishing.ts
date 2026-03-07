@@ -1,13 +1,13 @@
 /**
  * Executive Angler — Notion Fishing Log Import
  *
- * Imports fishing data from Notion databases:
+ * Imports fishing data from Notion databases with image handling:
+ * - Fly Patterns (with images)
  * - Fishing Log (sessions)
- * - Fish Counts (catches)
- * - Fly Patterns
+ * - Fish Counts (catches with 3 image types)
  *
  * Usage:
- *   SUPABASE_SERVICE_ROLE_KEY=xxx npm run fishing:import
+ *   NEXT_PUBLIC_SUPABASE_URL=xxx SUPABASE_SERVICE_ROLE_KEY=xxx npx tsx scripts/import-notion-fishing.ts
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -20,9 +20,12 @@ const creds = JSON.parse(readFileSync(credPath, "utf-8"));
 const NOTION_TOKEN = creds.access_token;
 
 // Database IDs
+const DB_FLY_PATTERNS = "66026fbb-4bc0-478c-9964-51555c780b37";
 const DB_FISHING_LOG = "effe6383-3332-46bd-8e65-7feba8c74800";
 const DB_FISH_COUNTS = "e70a65c4-a8fd-44e4-a236-1b160d772850";
-const DB_FLY_PATTERNS = "66026fbb-4bc0-478c-9964-51555c780b37";
+
+// Taylor's user_id
+const TAYLOR_USER_ID = "e0cb4b66-74eb-4bb9-b793-0445dcf5ec2b";
 
 // Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -104,28 +107,75 @@ function getPropertyValue(property: any): any {
       if (property.rollup.type === "number") return property.rollup.number;
       if (property.rollup.type === "array") return property.rollup.array;
       return undefined;
+    case "url":
+      return property.url;
+    case "files":
+      return property.files;
     default:
       return undefined;
   }
 }
 
-// Parse river name from session title (format: "Date - River Name" or just "River Name")
-function parseRiverName(sessionName: string): string | undefined {
-  if (!sessionName) return undefined;
+// Image handling
+async function ensureBucket(bucketId: string): Promise<void> {
+  const { data: buckets } = await supabase.storage.listBuckets();
+  const exists = buckets?.some((b) => b.id === bucketId);
 
-  // Try to extract river name after " - "
-  const parts = sessionName.split(" - ");
-  if (parts.length > 1) {
-    return parts[1].trim();
+  if (!exists) {
+    console.log(`  📦 Creating bucket: ${bucketId}`);
+    const { error } = await supabase.storage.createBucket(bucketId, { public: true });
+    if (error) {
+      console.error(`  ⚠️  Error creating bucket ${bucketId}:`, error.message);
+    }
   }
+}
 
-  // If no separator, assume the whole name is the river (filter out dates)
-  const cleaned = sessionName.replace(/^\d{1,2}\/\d{1,2}\/\d{2,4}\s*-?\s*/, "").trim();
-  return cleaned || undefined;
+async function downloadAndUploadImage(
+  notionFileUrl: string,
+  bucket: string,
+  path: string
+): Promise<string | null> {
+  try {
+    // Download from Notion
+    const response = await fetch(notionFileUrl);
+    if (!response.ok) return null;
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Determine content type from URL
+    const ext = notionFileUrl.match(/\.(jpg|jpeg|png|webp)/i)?.[0] || ".jpg";
+    const contentType = ext === ".png" ? "image/png" : ext === ".webp" ? "image/webp" : "image/jpeg";
+
+    // Upload to Supabase Storage
+    const fullPath = path.endsWith(ext) ? path : `${path}${ext}`;
+    const { error } = await supabase.storage.from(bucket).upload(fullPath, buffer, {
+      contentType,
+      upsert: true,
+    });
+
+    if (error) {
+      console.error(`  ⚠️  Upload error for ${fullPath}:`, error.message);
+      return null;
+    }
+
+    // Return public URL
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fullPath);
+    return data.publicUrl;
+  } catch (err) {
+    console.error(`  ⚠️  Image processing error:`, err);
+    return null;
+  }
 }
 
 async function main() {
   console.log("🐟 Executive Angler — Importing from Notion\n");
+
+  // Ensure storage buckets exist
+  console.log("📦 Checking storage buckets...");
+  await ensureBucket("fish-images");
+  await ensureBucket("fly-pattern-images");
+  console.log("  ✅ Storage buckets ready\n");
 
   // Fetch all Notion data
   console.log("📥 Fetching Notion databases...");
@@ -139,208 +189,114 @@ async function main() {
   console.log(`  ✅ Fetched ${sessionPages.length} sessions`);
   console.log(`  ✅ Fetched ${catchPages.length} catches\n`);
 
-  // Get a default user_id (we'll need to create or use an existing user)
-  // For now, we'll create a placeholder user or use the first existing user
-  const { data: users } = await supabase.auth.admin.listUsers();
-  let defaultUserId = users?.users[0]?.id;
-
-  if (!defaultUserId) {
-    // Create a placeholder user for imported Notion data
-    const { data, error } = await supabase.auth.admin.createUser({
-      email: "notion-import@executiveangler.com",
-      email_confirm: true,
-      user_metadata: { display_name: "Notion Import User" },
-    });
-
-    if (error) {
-      console.error("❌ Failed to create default user:", error.message);
-      process.exit(1);
-    }
-
-    defaultUserId = data.user.id;
-    console.log(`  ✅ Created default user: ${defaultUserId}\n`);
-  } else {
-    console.log(`  ℹ️  Using existing user: ${defaultUserId}\n`);
-  }
-
   // 1. Import fly patterns
   console.log("🎣 Importing fly patterns...");
   const flyPatternMap = new Map<string, string>(); // Notion ID -> Supabase ID
 
-  const flyPatternsToInsert = flyPatternPages.map((page) => {
+  for (const page of flyPatternPages) {
     const props = page.properties;
-    return {
-      name: getPropertyValue(props.Name) || "Unnamed Pattern",
-      type: getPropertyValue(props.Type),
-      size: getPropertyValue(props.Size),
-      hook: getPropertyValue(props.Hook),
-      materials: getPropertyValue(props.Materials),
-      notes: getPropertyValue(props.Notes),
-      notion_id: page.id,
-    };
-  });
 
-  if (flyPatternsToInsert.length > 0) {
-    const { data: insertedPatterns, error } = await supabase
-      .from("fly_patterns")
-      .upsert(flyPatternsToInsert, { onConflict: "notion_id" })
-      .select("id, notion_id");
+    // Get multi_select arrays
+    const sizeArray = getPropertyValue(props.Size) || [];
+    const beadColorArray = getPropertyValue(props["Bead Color"]) || [];
+    const flyColorArray = getPropertyValue(props["Fly Color"]) || [];
+    const tagsArray = getPropertyValue(props.Tags) || [];
 
-    if (error) {
-      console.error("  ❌ Error inserting fly patterns:", error.message);
-    } else {
-      insertedPatterns?.forEach((p) => {
-        if (p.notion_id) flyPatternMap.set(p.notion_id, p.id);
-      });
-      console.log(`  ✅ Inserted ${insertedPatterns?.length || 0} fly patterns`);
-    }
-  }
-
-  // 2. Extract unique rivers and create them
-  console.log("\n🏞️  Creating rivers...");
-  const riverNamesSet = new Set<string>();
-
-  sessionPages.forEach((page) => {
-    const sessionName = getPropertyValue(page.properties.Name);
-    const riverName = parseRiverName(sessionName);
-    if (riverName) riverNamesSet.add(riverName);
-  });
-
-  const riverMap = new Map<string, string>(); // River name -> Supabase ID
-
-  for (const riverName of riverNamesSet) {
-    // Check if river already exists by name
-    const { data: existing } = await supabase
-      .from("rivers")
-      .select("id, name")
-      .ilike("name", riverName)
-      .single();
-
-    if (existing) {
-      riverMap.set(riverName, existing.id);
-    } else {
-      // Create new river
-      const slug = riverName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      const { data: newRiver, error } = await supabase
-        .from("rivers")
-        .insert({
-          name: riverName,
-          slug: `${slug}-${Date.now()}`, // Add timestamp to ensure uniqueness
-          description: `Imported from Notion fishing log.`,
-        })
-        .select("id")
-        .single();
-
-      if (error) {
-        console.error(`  ⚠️  Error creating river "${riverName}":`, error.message);
-      } else if (newRiver) {
-        riverMap.set(riverName, newRiver.id);
+    // Handle image
+    let imageUrl = null;
+    const files = getPropertyValue(props.Image);
+    if (files && files.length > 0) {
+      const notionUrl = files[0].file?.url || files[0].external?.url;
+      if (notionUrl) {
+        imageUrl = await downloadAndUploadImage(
+          notionUrl,
+          "fly-pattern-images",
+          `${TAYLOR_USER_ID}/flies/${page.id}`
+        );
       }
     }
-  }
 
-  console.log(`  ✅ Processed ${riverMap.size} rivers`);
-
-  // 3. Import fishing sessions
-  console.log("\n📝 Importing fishing sessions...");
-  const sessionMap = new Map<string, string>(); // Notion session ID -> Supabase session ID
-
-  const sessionsToInsert = sessionPages.map((page) => {
-    const props = page.properties;
-    const sessionName = getPropertyValue(props.Name);
-    const riverName = parseRiverName(sessionName);
-    const riverId = riverName ? riverMap.get(riverName) : undefined;
-
-    // Get fly positions for flies_notes
-    const flyPos = [
-      getPropertyValue(props["Fly - Position 1"]),
-      getPropertyValue(props["Fly - Position 2"]),
-      getPropertyValue(props["Fly - Position 3"]),
-    ].filter(Boolean);
-
-    return {
-      user_id: defaultUserId,
-      river_id: riverId,
-      river_name: riverName,
-      date: getPropertyValue(props.Date) || page.created_time.split("T")[0],
-      weather: getPropertyValue(props.Weather),
-      water_temp_f: getPropertyValue(props["Water Temp (F)"]),
-      water_clarity: getPropertyValue(props["Water Clarity"]),
-      total_fish: getPropertyValue(props["Total Fish Caught"]) || 0,
-      notes: getPropertyValue(props.Notes),
-      flies_notes: flyPos.join(", "),
-      tags: getPropertyValue(props.Tags) || [],
+    const record = {
+      user_id: TAYLOR_USER_ID,
+      name: getPropertyValue(props.Name) || "Unnamed Pattern",
+      type: getPropertyValue(props.Type),
+      size: sizeArray,
+      bead_size: getPropertyValue(props["Bead Size"]),
+      bead_color: beadColorArray,
+      fly_color: flyColorArray,
+      materials: getPropertyValue(props.Materials),
+      description: getPropertyValue(props["Description/Notes"]),
+      video_url: getPropertyValue(props["Video URL"]),
+      tags: tagsArray,
+      image_url: imageUrl,
       notion_id: page.id,
     };
-  });
 
-  if (sessionsToInsert.length > 0) {
-    const { data: insertedSessions, error } = await supabase
-      .from("fishing_sessions")
-      .upsert(sessionsToInsert, { onConflict: "notion_id" })
-      .select("id, notion_id");
+    const { data, error } = await supabase
+      .from("fly_patterns")
+      .upsert(record, { onConflict: "notion_id" })
+      .select("id, notion_id")
+      .single();
 
     if (error) {
-      console.error("  ❌ Error inserting sessions:", error.message);
-      console.error("     Details:", error.details);
-    } else {
-      insertedSessions?.forEach((s) => {
-        if (s.notion_id) sessionMap.set(s.notion_id, s.id);
-      });
-      console.log(`  ✅ Inserted ${insertedSessions?.length || 0} fishing sessions`);
+      console.error(`  ⚠️  Error upserting fly pattern ${page.id}:`, error.message);
+    } else if (data?.notion_id) {
+      flyPatternMap.set(data.notion_id, data.id);
     }
   }
 
-  // 4. Import session rigs (fly positions)
-  console.log("\n🎣 Importing session rigs...");
-  const rigsToInsert: any[] = [];
+  console.log(`  ✅ Imported ${flyPatternMap.size} fly patterns\n`);
 
-  sessionPages.forEach((page) => {
-    const sessionId = sessionMap.get(page.id);
-    if (!sessionId) return;
+  // 2. Import fishing sessions
+  console.log("📝 Importing fishing sessions...");
+  const sessionMap = new Map<string, string>(); // Notion session ID -> Supabase session ID
 
+  for (const page of sessionPages) {
     const props = page.properties;
-    const positions = [
-      { position: 1, prop: "Fly - Position 1" },
-      { position: 2, prop: "Fly - Position 2" },
-      { position: 3, prop: "Fly - Position 3" },
-    ];
 
-    positions.forEach(({ position, prop }) => {
-      const flyName = getPropertyValue(props[prop]);
-      if (!flyName) return;
+    // Get trip tags array
+    const tripTagsArray = getPropertyValue(props.Tags) || [];
 
-      // Try to find matching fly pattern
-      const flyPatternId = Array.from(flyPatternMap.entries()).find(
-        ([_, id]) => flyName.includes(id)
-      )?.[1];
+    // Parse water temperature as number
+    const waterTempRaw = getPropertyValue(props["Water Temperature"]);
+    const waterTempF = waterTempRaw ? parseFloat(waterTempRaw) : null;
 
-      rigsToInsert.push({
-        session_id: sessionId,
-        fly_pattern_id: flyPatternId,
-        fly_name: flyName,
-        position,
-        notion_id: `${page.id}-pos${position}`,
-      });
-    });
-  });
+    const record = {
+      user_id: TAYLOR_USER_ID,
+      title: getPropertyValue(props.Name),
+      date: getPropertyValue(props.Date) || page.created_time.split("T")[0],
+      river_name: getPropertyValue(props.River),
+      location: getPropertyValue(props.Location),
+      notes: getPropertyValue(props.Notes),
+      flies_notes: getPropertyValue(props["Flies Notes"]),
+      weather: getPropertyValue(props.Weather),
+      water_temp_f: waterTempF,
+      water_clarity: getPropertyValue(props["Water Clarity"]),
+      tags: tripTagsArray,
+      total_fish: getPropertyValue(props["Total Fish Caught"]) || 0,
+      notion_id: page.id,
+    };
 
-  if (rigsToInsert.length > 0) {
-    const { data: insertedRigs, error } = await supabase
-      .from("session_rigs")
-      .upsert(rigsToInsert, { onConflict: "notion_id" })
-      .select("id");
+    const { data, error } = await supabase
+      .from("fishing_sessions")
+      .upsert(record, { onConflict: "notion_id" })
+      .select("id, notion_id")
+      .single();
 
     if (error) {
-      console.error("  ❌ Error inserting rigs:", error.message);
-    } else {
-      console.log(`  ✅ Inserted ${insertedRigs?.length || 0} session rigs`);
+      console.error(`  ⚠️  Error upserting session ${page.id}:`, error.message);
+    } else if (data?.notion_id) {
+      sessionMap.set(data.notion_id, data.id);
     }
   }
 
-  // 5. Import catches
-  console.log("\n🐟 Importing catches...");
-  const catchesToInsert = catchPages.map((page) => {
+  console.log(`  ✅ Imported ${sessionMap.size} fishing sessions\n`);
+
+  // 3. Import catches
+  console.log("🐟 Importing catches...");
+  let catchCount = 0;
+
+  for (const page of catchPages) {
     const props = page.properties;
 
     // Get session relation
@@ -348,42 +304,99 @@ async function main() {
     const sessionNotionId = sessionRelations?.[0];
     const sessionId = sessionNotionId ? sessionMap.get(sessionNotionId) : undefined;
 
-    // Get fly relation
-    const flyRelations = getPropertyValue(props.Fly);
+    if (!sessionId) {
+      console.log(`  ⚠️  Skipping catch ${page.id} - no session link`);
+      continue;
+    }
+
+    // Get fly pattern relation
+    const flyRelations = getPropertyValue(props["Fly Pattern"]);
     const flyNotionId = flyRelations?.[0];
     const flyPatternId = flyNotionId ? flyPatternMap.get(flyNotionId) : undefined;
 
-    return {
+    // Get catch tags array
+    const catchTagsArray = getPropertyValue(props.Tags) || [];
+
+    // Parse length (strip quotes and "in")
+    const lengthRaw = getPropertyValue(props.Length);
+    const lengthInches = lengthRaw ? parseFloat(lengthRaw.replace(/["\s]|in/gi, "")) : null;
+
+    // Handle images
+    let fishImageUrl = null;
+    let fishLocationImageUrl = null;
+    let flyImageUrl = null;
+
+    const fishImageFiles = getPropertyValue(props["Fish Image"]);
+    if (fishImageFiles && fishImageFiles.length > 0) {
+      const notionUrl = fishImageFiles[0].file?.url || fishImageFiles[0].external?.url;
+      if (notionUrl) {
+        fishImageUrl = await downloadAndUploadImage(
+          notionUrl,
+          "fish-images",
+          `${TAYLOR_USER_ID}/catches/${page.id}/fish`
+        );
+      }
+    }
+
+    const fishLocationFiles = getPropertyValue(props["Fish Location"]);
+    if (fishLocationFiles && fishLocationFiles.length > 0) {
+      const notionUrl = fishLocationFiles[0].file?.url || fishLocationFiles[0].external?.url;
+      if (notionUrl) {
+        fishLocationImageUrl = await downloadAndUploadImage(
+          notionUrl,
+          "fish-images",
+          `${TAYLOR_USER_ID}/catches/${page.id}/location`
+        );
+      }
+    }
+
+    const flyImageFiles = getPropertyValue(props["Fly Image"]);
+    if (flyImageFiles && flyImageFiles.length > 0) {
+      const notionUrl = flyImageFiles[0].file?.url || flyImageFiles[0].external?.url;
+      if (notionUrl) {
+        flyImageUrl = await downloadAndUploadImage(
+          notionUrl,
+          "fish-images",
+          `${TAYLOR_USER_ID}/catches/${page.id}/fly`
+        );
+      }
+    }
+
+    const record = {
+      user_id: TAYLOR_USER_ID,
       session_id: sessionId,
-      species: getPropertyValue(props.Species),
-      length_inches: getPropertyValue(props["Length (inches)"]),
+      species: getPropertyValue(props["Fish Details"]),
+      length_inches: lengthInches,
+      quantities: getPropertyValue(props.Quantities) || 1,
       fly_pattern_id: flyPatternId,
-      fly_name: getPropertyValue(props.Fly),
-      time: getPropertyValue(props.Time),
-      notes: getPropertyValue(props.Notes),
+      fly_position: getPropertyValue(props["Fly Position"]),
+      fly_size: getPropertyValue(props["Fly Size"]),
+      bead_size: getPropertyValue(props["Bead Size"]),
+      time_caught: getPropertyValue(props["Time Caught"]),
+      catch_tags: catchTagsArray,
+      fish_image_url: fishImageUrl,
+      fish_location_image_url: fishLocationImageUrl,
+      fly_image_url: flyImageUrl,
       notion_id: page.id,
     };
-  }).filter((c) => c.session_id); // Only include catches with valid session
 
-  if (catchesToInsert.length > 0) {
-    const { data: insertedCatches, error } = await supabase
+    const { error } = await supabase
       .from("catches")
-      .upsert(catchesToInsert, { onConflict: "notion_id" })
-      .select("id");
+      .upsert(record, { onConflict: "notion_id" });
 
     if (error) {
-      console.error("  ❌ Error inserting catches:", error.message);
+      console.error(`  ⚠️  Error upserting catch ${page.id}:`, error.message);
     } else {
-      console.log(`  ✅ Inserted ${insertedCatches?.length || 0} catches`);
+      catchCount++;
     }
   }
 
-  console.log("\n🎣 Import complete!");
+  console.log(`  ✅ Imported ${catchCount} catches\n`);
+
+  console.log("🎣 Import complete!");
   console.log(`   Fly patterns: ${flyPatternMap.size}`);
-  console.log(`   Rivers: ${riverMap.size}`);
   console.log(`   Sessions: ${sessionMap.size}`);
-  console.log(`   Rigs: ${rigsToInsert.length}`);
-  console.log(`   Catches: ${catchesToInsert.filter((c) => c.session_id).length}`);
+  console.log(`   Catches: ${catchCount}`);
 }
 
 main().catch((err) => {
