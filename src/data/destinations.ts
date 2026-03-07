@@ -1076,4 +1076,34 @@ export const destinations: Destination[] = [
     featured: false,
     sortOrder: 30,
   },
+  {
+    id: "dest-new-jersey",
+    slug: "new-jersey",
+    name: "New Jersey",
+    region: "Mid-Atlantic",
+    country: "United States",
+    state: "New Jersey",
+    tagline: "Limestone Spring Creeks and Cold-Water Heritage in the Garden State",
+    description:
+      "New Jersey occupies an unlikely position in the American fly fishing landscape — a densely populated state wedged between New York City and Philadelphia that harbors a surprising network of cold, productive trout streams hidden in its wooded highlands and limestone valleys. The anglers who know these waters well understand that proximity to the urban corridor has, in some ways, preserved them: Trout Unlimited chapters in New Jersey are among the most active in the country, conservation advocacy is fierce, and the streams that have survived development tend to be managed with genuine care for wild trout populations.\n\nThe South Branch of the Raritan River is the flagship of New Jersey fly fishing, a free-flowing limestone-influenced stream that carves through Hunterdon and Somerset counties on its way to the main stem. The South Branch holds wild brown and rainbow trout in sections that reward careful wading and precise presentation, and its spring hatches — Hendricksons in early April, sulphurs in May, caddis and PMDs through June — mirror the hatch calendars of the great limestone streams to the west in Pennsylvania. The Ken Lockwood Gorge on the South Branch is one of the finest pieces of wild trout water in the region, its rocky hemlock-shaded canyon holding fish that rise selectively to dry flies in conditions that test the angler's reach and accuracy in equal measure.\n\nThe Musconetcong River in Warren and Hunterdon counties is New Jersey's premier limestone spring creek. Fed by springs that maintain water temperature through the warmest summer months, the Musky — as locals call it — supports wild brown trout in its cold upper reaches, with Trout Unlimited's Project Healing Waters program based on its banks as a reflection of its community significance. The Big Flatbrook in Sussex County near the Delaware Water Gap National Recreation Area is the state's largest wild trout stream, a freestone river with more character and volume than its surroundings might suggest, harboring native brook trout in its headwaters and wild browns throughout its length.\n\nFor the eastern angler who cannot justify a trip to Montana or Idaho but craves the experience of rising wild trout and specific hatch-matching, New Jersey's streams deliver something close to that experience within an hour of the city. The season opens with statewide stocking in April, but the serious fishing — on catch-and-release sections with fly-fishing-only regulations — extends through October on the best wild trout waters. Fall brings blue-winged olive hatches, dropping pressure, and the kind of solitude on beautiful water that most anglers assume requires a plane ticket.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+    latitude: 40.0583,
+    longitude: -74.4057,
+    bestMonths: ["April", "May", "June", "September", "October"],
+    primarySpecies: ["Brown Trout", "Rainbow Trout", "Brook Trout"],
+    licenseInfo:
+      "New Jersey fishing license required for all anglers 16 and older. A trout stamp is required in addition to the base license to fish trout streams. Available online through the NJ Division of Fish & Wildlife.",
+    elevationRange: "0 - 1,800 ft",
+    climateNotes:
+      "Humid continental climate with cold winters and warm summers. Spring trout season peaks April through June. Fall brings excellent dry fly fishing with blue-winged olives and October caddis on limestone-influenced waters.",
+    regulationsSummary:
+      "NJ DEP Division of Fish & Wildlife manages trout waters with a mix of stocked and wild trout sections. Many streams have special regulations including catch-and-release, fly fishing only, and delayed harvest sections. Ken Lockwood Gorge on the South Branch and the Musky's special regulation sections are the premier wild trout fisheries. Always consult the current NJ Division of Fish & Wildlife regulations.",
+    metaTitle: "New Jersey Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in New Jersey — the South Branch of the Raritan, Big Flatbrook, and Musconetcong River offer exceptional wild trout fishing within reach of New York City and Philadelphia.",
+    featured: false,
+  },
 ];
