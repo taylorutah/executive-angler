@@ -295,38 +295,39 @@ export default async function HomePage() {
           </ScrollAnimation>
         </div>
 
-        {/* 4 destination panels */}
-        <div className="grid grid-cols-2 lg:grid-cols-4" style={{ gridAutoRows: "clamp(320px, 55vw, 680px)" }}>
+        {/* 4 destination cards — image on top, text below */}
+        <div className="grid grid-cols-2 lg:grid-cols-4">
           {destinationPanels.map(({ dest, panelTagline }, i) => (
-            <ScrollAnimation key={dest.id} delay={i * 0.08} className="h-full">
+            <ScrollAnimation key={dest.id} delay={i * 0.08}>
               <Link
                 href={`/destinations/${dest.slug}`}
-                className="group relative block h-full overflow-hidden"
+                className="group block overflow-hidden"
               >
-                <Image
-                  src={dest.heroImageUrl.replace("w=1200", "w=800")}
-                  alt={`Fly fishing in ${dest.name}`}
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  sizes="(max-width: 1024px) 50vw, 25vw"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10 transition-opacity duration-300 group-hover:from-black/65" />
-                {/* Panel content */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                  <h3 className="font-heading text-white text-lg sm:text-2xl lg:text-3xl font-bold leading-tight">
+                {/* Image — no overlay, full brightness */}
+                <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
+                  <Image
+                    src={dest.heroImageUrl.replace("w=1200", "w=800").replace("q=80", "q=90")}
+                    alt={`Fly fishing in ${dest.name}`}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                  />
+                  {/* Subtle top vignette only — no bottom darkening */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-transparent" />
+                </div>
+                {/* Text panel below image */}
+                <div className="bg-forest-dark px-4 py-3 sm:px-5 sm:py-4">
+                  <h3 className="font-heading text-white text-base sm:text-lg lg:text-xl font-bold leading-tight">
                     {dest.name}
                   </h3>
-                  <p className="mt-1 text-white/65 text-xs sm:text-sm italic leading-snug">
+                  <p className="mt-0.5 text-white/60 text-xs sm:text-sm italic leading-snug">
                     {panelTagline}
                   </p>
-                  <div className="mt-2 flex items-center gap-1 text-white/50 text-xs font-medium opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  <div className="mt-2 flex items-center gap-1 text-amber-400/80 text-xs font-medium opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                     <span>Explore</span>
                     <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
-                {/* Thin right border between panels */}
-                <div className="absolute inset-y-0 right-0 w-px bg-white/10" />
               </Link>
             </ScrollAnimation>
           ))}
