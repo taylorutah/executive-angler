@@ -220,30 +220,42 @@ export default function Header() {
               </Link>
 
               {user ? (
-                <>
+                <div className="hidden sm:flex items-center gap-1">
                   <Link
                     href="/journal"
-                    className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
-                    title="My Journal"
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-forest/10 ${textColor}`}
                   >
                     <BookOpen className="h-4 w-4" />
+                    <span>Journal</span>
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      const supabase = (await import('@/lib/supabase/client')).createClient();
+                      await supabase.auth.signOut();
+                      window.location.href = '/';
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor} opacity-70`}
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    href="/login"
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-forest/10 ${textColor}`}
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Sign In</span>
                   </Link>
                   <Link
-                    href="/favorites"
-                    className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
-                    title="Favorites"
+                    href="/signup"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-forest text-white hover:bg-forest-light transition-colors"
                   >
-                    <Heart className="h-4 w-4" />
+                    <span>Join Free</span>
                   </Link>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-forest/10 ${textColor}`}
-                >
-                  <User className="h-4 w-4" />
-                  <span>Sign In</span>
-                </Link>
+                </div>
               )}
 
               {/* Mobile Menu Toggle */}
