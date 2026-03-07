@@ -1987,6 +1987,7 @@ export const flyShops: FlyShop[] = [
       "La Ribera Lodge Pro Shop in Chile's Aysen Region. Fly fishing outfitter for Chilean Patagonia with guided trips, lodge packages, specialty flies, and gear for trophy trout.",
   },
 
+
   // ── Island Park, Idaho ──────────────────────────────────────────────────
   {
     id: "shop-henrys-fork-anglers",
@@ -3334,5 +3335,56 @@ export const flyShops: FlyShop[] = [
     googleReviewCount: undefined,
     googleReviewsUrl: undefined,
     featuredReviews: [],
+  },
+  {
+    id: "shop-galloups-slide-inn",
+    slug: "galloups-slide-inn",
+    name: "Galloup's Slide Inn",
+    destinationId: "dest-montana",
+    description:
+      "Galloup's Slide Inn occupies a singular position in American fly fishing — part fly shop, part guide service, part riverside lodge, and entirely the domain of Kelly Galloup, one of the most influential streamer anglers of his generation. Situated on US Highway 287 in Cameron, Montana, the shop sits directly on 1,100 feet of prime Madison River frontage, placing anglers within casting distance of some of the finest brown trout water in the country the moment they step out the door.\n\nKelly Galloup has spent more than 40 years guiding on rivers across the West, with more than two decades focused on the Madison. He is the co-author of Modern Streamers for Trophy Trout, a book that fundamentally changed how fly fishers approach big-fish hunting with subsurface patterns. The shop reflects that obsession: Galloup's Slide Inn houses one of the largest and most specialized streamer selections in the country, with more than 375 dedicated streamer bins stocked with Galloup's own signature patterns — the Zoo Cougar, Triple Dungeon, Sex Dungeon — alongside the full range of classic and contemporary subsurface flies that are proven performers on the Madison.\n\nBeyond streamers, the shop is fully stocked for every style of Madison River fishing, from spring caddis hatches to the legendary Salmonfly emergence and the precise fall dry-fly season. The guide service offers full-day float and walk-wade trips on the Madison as well as expeditions to the Jefferson, Big Hole, Yellowstone, and surrounding rivers. Guided trips include all flies, rod and reel combos, lunch, and riverside instruction from guides trained in Galloup's exacting approach to reading water and presenting the fly.\n\nLodging on site includes river-front cabins in three classes and 23 full-hookup RV sites, making Galloup's Slide Inn a rare destination that handles every aspect of a Madison River trip under one roof. Open May through November, it is the essential stop for any serious angler targeting trophy trout on the upper Madison.",
+    heroImageUrl: "/images/galloups-slide-inn.jpg",
+    address: "150 US Hwy 287 S, Cameron, MT 59720",
+    latitude: 44.8265,
+    longitude: -111.4588,
+    phone: "(406) 682-4804",
+    websiteUrl: "https://www.slideinn.com",
+    hours: {
+      monday: "8:00 AM - 5:00 PM",
+      tuesday: "8:00 AM - 5:00 PM",
+      wednesday: "8:00 AM - 5:00 PM",
+      thursday: "8:00 AM - 5:00 PM",
+      friday: "8:00 AM - 5:00 PM",
+      saturday: "8:00 AM - 5:00 PM",
+      sunday: "8:00 AM - 5:00 PM",
+      notes: "Seasonal operation May through November. Call ahead for current hours.",
+    },
+    services: [
+      "Guided fly fishing trips",
+      "Full-day Madison River float trips",
+      "Walk-wade guided trips",
+      "Multi-river guided expeditions",
+      "Fly fishing gear and apparel",
+      "Streamer fly selection (375+ bins)",
+      "Fly tying supplies and materials",
+      "Fly fishing instruction",
+      "River-front cabin lodging",
+      "RV hookup sites",
+      "Daily fishing reports",
+    ],
+    brandsCarried: [
+      "Simms",
+      "Patagonia",
+      "St. Croix",
+      "Hatch",
+      "Lamson",
+      "Scientific Anglers",
+      "Umpqua",
+      "Fishpond",
+    ],
+    featuredReviews: [],
+    metaTitle: "Galloup's Slide Inn | Cameron, Montana — Madison River Fly Shop",
+    metaDescription:
+      "Galloup's Slide Inn in Cameron, Montana. Kelly Galloup's legendary Madison River fly shop, guide service, and riverside lodging. World-class streamer selection, guided trips, and 1,100 feet of prime river frontage.",
   },
 ];
