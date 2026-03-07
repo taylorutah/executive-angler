@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, ChevronRight, Search, User, Heart } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronRight, Search, User, Heart, BookOpen } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/client";
 
@@ -220,12 +220,22 @@ export default function Header() {
               </Link>
 
               {user ? (
-                <Link
-                  href="/favorites"
-                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
-                >
-                  <Heart className="h-4 w-4" />
-                </Link>
+                <>
+                  <Link
+                    href="/journal"
+                    className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
+                    title="My Journal"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/favorites"
+                    className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor}`}
+                    title="Favorites"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Link>
+                </>
               ) : (
                 <Link
                   href="/login"
@@ -336,13 +346,22 @@ export default function Header() {
 
               <div className="mt-8 pt-6 border-t border-slate-200 space-y-2">
                 {user ? (
-                  <Link
-                    href="/favorites"
-                    className="flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-700 rounded-lg hover:bg-cream"
-                  >
-                    <Heart className="h-5 w-5" />
-                    Favorites
-                  </Link>
+                  <>
+                    <Link
+                      href="/journal"
+                      className="flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-700 rounded-lg hover:bg-cream"
+                    >
+                      <BookOpen className="h-5 w-5" />
+                      My Journal
+                    </Link>
+                    <Link
+                      href="/favorites"
+                      className="flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-700 rounded-lg hover:bg-cream"
+                    >
+                      <Heart className="h-5 w-5" />
+                      Favorites
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link
