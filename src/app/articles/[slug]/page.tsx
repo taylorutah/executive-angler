@@ -12,8 +12,6 @@ import { articles } from "@/data/articles";
 import {
   getArticleBySlug,
   getAllArticles,
-  getDestinationsByIds,
-  getRiversByIds,
 } from "@/lib/db";
 
 interface Props {
@@ -48,11 +46,7 @@ export default async function ArticlePage({ params }: Props) {
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
-  const [relatedDests, relatedRivers, allArticles] = await Promise.all([
-    getDestinationsByIds(article.relatedDestinationIds),
-    getRiversByIds(article.relatedRiverIds),
-    getAllArticles(),
-  ]);
+  const allArticles = await getAllArticles();
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
@@ -134,13 +128,12 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* Article Content */}
       <article className="bg-cream pb-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-            <div className="lg:col-span-3">
-              <ScrollAnimation>
-                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-12">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div>
+            <ScrollAnimation>
+                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-10">
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-8">
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {article.tags.map((tag) => (
                       <Badge key={tag} variant="outline" size="sm">
                         {tag}
@@ -148,8 +141,17 @@ export default async function ArticlePage({ params }: Props) {
                     ))}
                   </div>
 
-                  {/* Article Body */}
-                  <div className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-forest-dark prose-a:text-forest prose-a:font-medium">
+                  {/* Article Body — tighter prose sizing */}
+                  <div className="prose prose-sm sm:prose-base max-w-none
+                    prose-headings:font-heading prose-headings:text-forest-dark
+                    prose-h2:text-xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-3
+                    prose-h3:text-base prose-h3:font-semibold prose-h3:mt-5 prose-h3:mb-2
+                    prose-h4:text-sm prose-h4:font-semibold prose-h4:mt-4 prose-h4:mb-1
+                    prose-p:text-slate-700 prose-p:leading-relaxed prose-p:my-3
+                    prose-a:text-forest prose-a:font-medium
+                    prose-strong:text-slate-900
+                    prose-li:text-slate-700 prose-li:my-1
+                    prose-ul:my-3 prose-ol:my-3">
                     <div dangerouslySetInnerHTML={{ __html: article.content }} />
                   </div>
                 </div>
@@ -158,7 +160,7 @@ export default async function ArticlePage({ params }: Props) {
               {/* Related Articles */}
               {otherArticles.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mt-12 mb-6">
+                  <h2 className="font-heading text-xl font-bold text-forest-dark mt-12 mb-5">
                     More Articles
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -182,43 +184,6 @@ export default async function ArticlePage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {relatedDests.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-base font-semibold text-forest-dark mb-3">
-                    Related Destinations
-                  </h3>
-                  {relatedDests.map((d) => (
-                    <Link
-                      key={d.id}
-                      href={`/destinations/${d.slug}`}
-                      className="block py-2 text-sm text-forest hover:text-forest-dark font-medium"
-                    >
-                      {d.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-              {relatedRivers.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-base font-semibold text-forest-dark mb-3">
-                    Related Rivers
-                  </h3>
-                  {relatedRivers.map((r) => (
-                    <Link
-                      key={r.id}
-                      href={`/rivers/${r.slug}`}
-                      className="block py-2 text-sm text-river hover:text-river-dark font-medium"
-                    >
-                      {r.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </article>
