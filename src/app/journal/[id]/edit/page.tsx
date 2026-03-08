@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, MapPin, X, Check } from "lucide-react";
 
 interface Catch {
   id?: string;
@@ -26,25 +26,82 @@ export default function EditSessionPage() {
   const params = useParams();
   const id = params.id as string;
 
+  interface Spot { id: string; name: string; latitude?: number; longitude?: number; description?: string; river_id?: string; }
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
   const [rivers, setRivers] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
+  const [spots, setSpots] = useState<Spot[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
+  // Location spot management
+  const [showSpotManager, setShowSpotManager] = useState(false);
+  const [spotForm, setSpotForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
+  const [editingSpotId, setEditingSpotId] = useState<string | null>(null);
+  const [spotSaving, setSpotSaving] = useState(false);
+  const locationInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     title: "", date: "", river_name: "", location: "",
     water_temp_f: "", water_clarity: "", weather: "",
     flies_notes: "", notes: "", trip_tags: "",
   });
 
+  async function loadSpots() {
+    const res = await fetch("/api/fishing/spots");
+    if (res.ok) setSpots(await res.json());
+  }
+
+  async function saveSpot() {
+    setSpotSaving(true);
+    const url = editingSpotId ? `/api/fishing/spots?id=${editingSpotId}` : "/api/fishing/spots";
+    const method = editingSpotId ? "PATCH" : "POST";
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: spotForm.name,
+        latitude: spotForm.latitude ? parseFloat(spotForm.latitude) : null,
+        longitude: spotForm.longitude ? parseFloat(spotForm.longitude) : null,
+        description: spotForm.description || null,
+      }),
+    });
+    if (res.ok) {
+      const saved = await res.json();
+      await loadSpots();
+      updateForm("location", saved.name);
+      setShowSpotManager(false);
+      setSpotForm({ name: "", latitude: "", longitude: "", description: "" });
+      setEditingSpotId(null);
+    }
+    setSpotSaving(false);
+  }
+
+  async function deleteSpot(spotId: string) {
+    if (!confirm("Remove this location?")) return;
+    await fetch(`/api/fishing/spots?id=${spotId}`, { method: "DELETE" });
+    await loadSpots();
+  }
+
+  function startEditSpot(spot: Spot) {
+    setEditingSpotId(spot.id);
+    setSpotForm({
+      name: spot.name,
+      latitude: spot.latitude?.toString() || "",
+      longitude: spot.longitude?.toString() || "",
+      description: spot.description || "",
+    });
+    setShowSpotManager(true);
+  }
+
   useEffect(() => {
     async function load() {
-      const [sessionRes, riversRes, locsRes] = await Promise.all([
+      const [sessionRes, riversRes, locsRes, spotsRes] = await Promise.all([
         fetch(`/api/fishing/session`),
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
+        fetch("/api/fishing/spots"),
       ]);
       const sessions = await sessionRes.json();
       const session = sessions.find((s: { id: string }) => s.id === id);
@@ -76,6 +133,7 @@ export default function EditSessionPage() {
       }
       setRivers(await riversRes.json());
       setLocations(await locsRes.json());
+      if (spotsRes.ok) setSpots(await spotsRes.json());
       setLoading(false);
     }
     load();
@@ -153,9 +211,34 @@ export default function EditSessionPage() {
               <datalist id="rivers-list">{rivers.map((r) => <option key={r} value={r} />)}</datalist>
             </div>
             <div>
-              <label className={labelCls}>Location</label>
-              <input list="locations-list" className={inputCls} value={form.location} onChange={(e) => updateForm("location", e.target.value)} />
-              <datalist id="locations-list">{locations.map((l) => <option key={l} value={l} />)}</datalist>
+              <div className="flex items-center justify-between mb-1">
+                <label className={labelCls + " mb-0"}>Location / Access Point</label>
+                <button type="button" onClick={() => { setEditingSpotId(null); setSpotForm({ name: form.location || "", latitude: "", longitude: "", description: "" }); setShowSpotManager(true); }}
+                  className="flex items-center gap-1 text-xs text-forest hover:text-forest-dark font-medium">
+                  <MapPin className="h-3.5 w-3.5" /> + Manage spots
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  ref={locationInputRef}
+                  list="locations-list"
+                  className={inputCls}
+                  value={form.location}
+                  onChange={(e) => updateForm("location", e.target.value)}
+                  placeholder="Select or type a location"
+                />
+                {/* Show coords if spot has them */}
+                {form.location && (() => { const s = spots.find(sp => sp.name === form.location); return s?.latitude ? (
+                  <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                    <MapPin className="h-3 w-3" /> {s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}
+                    <button type="button" onClick={() => startEditSpot(s)} className="ml-1 text-forest hover:underline">edit</button>
+                  </p>
+                ) : null; })()}
+              </div>
+              <datalist id="locations-list">
+                {spots.map(s => <option key={s.id} value={s.name} />)}
+                {locations.filter(l => !spots.find(s => s.name === l)).map((l) => <option key={l} value={l} />)}
+              </datalist>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -242,6 +325,65 @@ export default function EditSessionPage() {
             <label className={labelCls}>Tags</label>
             <input className={inputCls} placeholder="utah, provo" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
           </div>
+
+          {/* Spot Manager Modal */}
+          {showSpotManager && (
+            <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
+              <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                  <h3 className="font-bold text-slate-900">{editingSpotId ? "Edit Location" : "Add Location"}</h3>
+                  <button onClick={() => { setShowSpotManager(false); setEditingSpotId(null); setSpotForm({ name: "", latitude: "", longitude: "", description: "" }); }}>
+                    <X className="h-5 w-5 text-slate-400" />
+                  </button>
+                </div>
+                <div className="p-5 space-y-4">
+                  <div>
+                    <label className={labelCls}>Location Name <span className="text-red-500">*</span></label>
+                    <input className={inputCls} placeholder="Below Jordanelle" value={spotForm.name} onChange={e => setSpotForm(p => ({ ...p, name: e.target.value }))} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Latitude</label>
+                      <input className={inputCls} placeholder="40.5732" type="number" step="any" value={spotForm.latitude} onChange={e => setSpotForm(p => ({ ...p, latitude: e.target.value }))} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Longitude</label>
+                      <input className={inputCls} placeholder="-111.4285" type="number" step="any" value={spotForm.longitude} onChange={e => setSpotForm(p => ({ ...p, longitude: e.target.value }))} />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400">Tip: long-press a location in Google Maps → copy coordinates</p>
+                  <div>
+                    <label className={labelCls}>Notes (optional)</label>
+                    <input className={inputCls} placeholder="Public access, park at turnout" value={spotForm.description} onChange={e => setSpotForm(p => ({ ...p, description: e.target.value }))} />
+                  </div>
+                  <button onClick={saveSpot} disabled={!spotForm.name || spotSaving}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-forest py-3 text-white font-semibold hover:bg-forest-dark disabled:opacity-50 transition-colors">
+                    <Check className="h-4 w-4" /> {spotSaving ? "Saving…" : editingSpotId ? "Save Changes" : "Add Location"}
+                  </button>
+                </div>
+                {/* Existing spots list */}
+                {spots.length > 0 && (
+                  <div className="border-t border-slate-100 px-5 pb-4">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide pt-3 mb-2">Your Spots</p>
+                    <div className="space-y-1 max-h-40 overflow-y-auto">
+                      {spots.map(s => (
+                        <div key={s.id} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50 text-sm">
+                          <div>
+                            <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-slate-800 hover:text-forest text-left">{s.name}</button>
+                            {s.latitude && <p className="text-xs text-slate-400">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
+                          </div>
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-slate-400 hover:text-forest">Edit</button>
+                            <button type="button" onClick={() => deleteSpot(s.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="sticky bottom-4 pt-4 space-y-3">
             <button type="submit" disabled={saving}

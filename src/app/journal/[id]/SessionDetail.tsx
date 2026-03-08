@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight,
-  Cloud, Thermometer, Droplets, Wind, MapPin, Clock
+  Cloud, MapPin, Clock, Check, RotateCcw
 } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 
@@ -111,6 +111,26 @@ function FishLightbox({ catches, initialIndex, onClose }: {
 export default function SessionDetail({ session, catches, flies }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
+  // Inline notes editing
+  const [editingNotes, setEditingNotes] = useState(false);
+  const [notesValue, setNotesValue] = useState(session.notes || "");
+  const [notesSaving, setNotesSaving] = useState(false);
+  const [notesSaved, setNotesSaved] = useState(false);
+
+  async function saveNotes() {
+    if (notesValue === session.notes) { setEditingNotes(false); return; }
+    setNotesSaving(true);
+    await fetch(`/api/fishing/session?id=${session.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ notes: notesValue }),
+    });
+    setNotesSaving(false);
+    setEditingNotes(false);
+    setNotesSaved(true);
+    setTimeout(() => setNotesSaved(false), 2000);
+  }
+
   const totalFish = catches.reduce((s, c) => s + (c.quantities || 1), 0);
   const tags = session.trip_tags || session.tags || [];
   const fishPhotos = catches.filter(c => c.fish_image_url);
@@ -148,9 +168,10 @@ export default function SessionDetail({ session, catches, flies }: Props) {
               <ArrowLeft className="h-4 w-4" /> Journal
             </Link>
             <div className="flex items-center gap-2">
+              {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               <Link href={`/journal/${session.id}/edit`}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-forest hover:text-forest">
-                <Pencil className="h-3.5 w-3.5" /> Edit
+                className="flex items-center gap-1.5 rounded-lg bg-forest px-3 py-1.5 text-xs font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+                <Pencil className="h-3.5 w-3.5" /> Edit Session
               </Link>
             </div>
           </div>
@@ -174,15 +195,45 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                   {session.title || session.river_name || "Fishing Session"}
                 </h1>
 
-                {session.notes ? (
-                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap mb-3 max-w-lg">
-                    {session.notes}
-                  </p>
-                ) : (
-                  <Link href={`/journal/${session.id}/edit`} className="text-sm text-slate-400 hover:text-forest mb-3 block">
-                    + Add a description
-                  </Link>
-                )}
+                {/* Inline-editable notes */}
+                <div className="mb-3 max-w-lg group/notes relative">
+                  {editingNotes ? (
+                    <div>
+                      <textarea
+                        autoFocus
+                        rows={4}
+                        value={notesValue}
+                        onChange={e => setNotesValue(e.target.value)}
+                        onKeyDown={e => { if (e.key === "Escape") { setNotesValue(session.notes || ""); setEditingNotes(false); } }}
+                        className="w-full text-sm text-slate-700 leading-relaxed rounded-lg border border-forest/40 bg-white px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-forest"
+                      />
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <button onClick={saveNotes} disabled={notesSaving}
+                          className="flex items-center gap-1 text-xs font-semibold text-white bg-forest rounded-lg px-3 py-1.5 hover:bg-forest-dark disabled:opacity-60">
+                          <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
+                        </button>
+                        <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
+                          className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600">
+                          <RotateCcw className="h-3 w-3" /> Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : notesValue ? (
+                    <div className="cursor-text" onClick={() => setEditingNotes(true)}>
+                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
+                        {notesValue}
+                      </p>
+                      <span className="absolute top-0 right-0 opacity-0 group-hover/notes:opacity-100 transition-opacity">
+                        <Pencil className="h-3.5 w-3.5 text-slate-400" />
+                      </span>
+                    </div>
+                  ) : (
+                    <button onClick={() => setEditingNotes(true)}
+                      className="text-sm text-slate-400 hover:text-forest flex items-center gap-1.5 italic">
+                      <Pencil className="h-3.5 w-3.5" /> Add notes about this session…
+                    </button>
+                  )}
+                </div>
 
                 {session.flies_notes && (
                   <div className="text-xs text-slate-500 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100 max-w-md">
