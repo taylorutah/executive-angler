@@ -25,6 +25,11 @@ export default async function AccountPage() {
     .select("id")
     .eq("user_id", user.id);
 
+  const { data: favs } = await supabase
+    .from("user_favorites")
+    .select("id")
+    .eq("user_id", user.id);
+
   const totalSessions = sessions?.length || 0;
   const totalFish = catches?.reduce((sum, c) => sum + (c.quantities || 1), 0) || 0;
 
@@ -43,7 +48,7 @@ export default async function AccountPage() {
   return (
     <AccountClient
       user={{ id: user.id, email: user.email || "", displayName: user.user_metadata?.display_name || "" }}
-      stats={{ totalSessions, totalFish, totalRivers, totalFlies: flies?.length || 0, biggestFish, bestSession: bestSession ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location } : null }}
+      stats={{ totalSessions, totalFish, totalRivers, totalFlies: flies?.length || 0, totalFavorites: favs?.length || 0, biggestFish, bestSession: bestSession ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location } : null }}
     />
   );
 }

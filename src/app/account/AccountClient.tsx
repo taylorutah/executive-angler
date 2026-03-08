@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart } from "lucide-react";
 
 interface Props {
   user: { id: string; email: string; displayName: string };
@@ -13,6 +13,7 @@ interface Props {
     totalFish: number;
     totalRivers: number;
     totalFlies: number;
+    totalFavorites: number;
     biggestFish: number | null;
     bestSession: { river_name: string; date: string; total_fish: number; location?: string } | null;
   };
@@ -66,6 +67,7 @@ export default function AccountClient({ user, stats }: Props) {
     { icon: Fish, label: "Fish Caught", value: stats.totalFish, color: "text-blue-600" },
     { icon: MapPin, label: "Rivers Fished", value: stats.totalRivers, color: "text-amber-600" },
     { icon: Feather, label: "Fly Patterns", value: stats.totalFlies, color: "text-purple-600" },
+    { icon: Heart, label: "Favorites", value: stats.totalFavorites, color: "text-red-500" },
   ];
 
   return (
@@ -80,7 +82,7 @@ export default function AccountClient({ user, stats }: Props) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
           {statCards.map(({ icon: Icon, label, value, color }) => (
             <div key={label} className="bg-white rounded-xl p-4 shadow-sm text-center">
               <Icon className={`h-6 w-6 mx-auto mb-1 ${color}`} />
@@ -117,7 +119,7 @@ export default function AccountClient({ user, stats }: Props) {
         )}
 
         {/* Quick links */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
           <Link href="/journal"
             className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
             <BookOpen className="h-5 w-5 text-forest" />
@@ -128,10 +130,18 @@ export default function AccountClient({ user, stats }: Props) {
           </Link>
           <Link href="/journal/flies"
             className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-            <span className="text-2xl">🪰</span>
+            <span className="text-xl leading-none">🪰</span>
             <div>
               <p className="font-medium text-slate-900 text-sm">Fly Patterns</p>
               <p className="text-xs text-slate-500">{stats.totalFlies} patterns</p>
+            </div>
+          </Link>
+          <Link href="/favorites"
+            className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+            <Heart className="h-5 w-5 text-red-500" />
+            <div>
+              <p className="font-medium text-slate-900 text-sm">Favorites</p>
+              <p className="text-xs text-slate-500">{stats.totalFavorites} saved</p>
             </div>
           </Link>
         </div>
