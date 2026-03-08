@@ -8,8 +8,7 @@ export const articles: Article[] = [
     subtitle: "Master the Art of Tight-Line Nymphing",
     author: "Executive Angler Staff",
     category: "technique",
-    heroImageUrl:
-      "https://images.unsplash.com/photo-1688227053742-75f61122ab13?w=1200&q=80",
+    heroImageUrl: "/images/articles/euro-nymphing-rainbow-trout-catch-fly-fishing.jpg",
     thumbnailUrl:
       "https://images.unsplash.com/photo-1688227053742-75f61122ab13?w=400&q=80",
     excerpt:
