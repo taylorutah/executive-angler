@@ -50,17 +50,33 @@ export default async function JournalPage() {
     .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_pattern:fly_patterns(name)")
     .in("session_id", sessionIds);
 
-  // Fetch feed display preference
+  // Fetch feed display preference + profile
   const { data: profile } = await supabase
     .from("angler_profiles")
-    .select("feed_display")
+    .select("feed_display, display_name, avatar_url")
     .eq("user_id", user.id)
     .single();
+
+  const { count: flyCount } = await supabase
+    .from("fly_patterns")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id);
 
   const sessionsData = (sessions || []) as FishingSession[];
   const rigsData = (rigs || []) as SessionRig[];
   const catchesData = (catches || []) as unknown as Catch[];
   const feedDisplay = (profile?.feed_display as "collage" | "map") || "collage";
 
-  return <JournalClient sessions={sessionsData} rigs={rigsData} catches={catchesData} feedDisplay={feedDisplay} />;
+  return <JournalClient
+    sessions={sessionsData}
+    rigs={rigsData}
+    catches={catchesData}
+    feedDisplay={feedDisplay}
+    userProfile={{
+      displayName: profile?.display_name || user.user_metadata?.display_name || "",
+      email: user.email || "",
+      avatarUrl: profile?.avatar_url || "",
+    }}
+    totalFlyPatterns={flyCount || 0}
+  />;
 }

@@ -6,17 +6,26 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, Fish, BookOpen, MapPin, Feather } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+interface UserProfile {
+  displayName?: string;
+  email?: string;
+  avatarUrl?: string;
+}
 
 interface JournalClientProps {
   sessions: FishingSession[];
   rigs: SessionRig[];
   catches?: Catch[];
   feedDisplay?: "collage" | "map";
+  userProfile?: UserProfile;
+  totalFlyPatterns?: number;
 }
 
-export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "collage" }: JournalClientProps) {
+export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "collage", userProfile, totalFlyPatterns = 0 }: JournalClientProps) {
   // Group catches by session ID
   const catchesMap = catches.reduce((acc, c) => {
     const sid = (c as Catch & { session_id?: string }).session_id || "";
@@ -255,30 +264,94 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
       </div>
 
       {/* Desktop layout */}
-      <div className="mx-auto max-w-7xl lg:flex lg:gap-8 lg:px-8 lg:py-8">
-        {/* Desktop sidebar */}
-        <aside className="hidden lg:block lg:w-[280px] lg:flex-shrink-0">
-          <div className="sticky top-8">
-            <div className="mb-6">
-              <h1 className="font-heading text-3xl font-bold text-forest-dark mb-3">
-                Journal
-              </h1>
-              <div className="flex gap-2">
-                <Link
-                  href="/journal/new"
-                  className="flex-1 text-center rounded-lg bg-forest px-3 py-2 text-sm font-medium text-white hover:bg-forest-dark"
-                >
-                  + Log Session
+      <div className="mx-auto max-w-7xl lg:flex lg:gap-6 lg:px-8 lg:py-8">
+        {/* Desktop sidebar — Strava-style profile panel */}
+        <aside className="hidden lg:block lg:w-[240px] lg:flex-shrink-0">
+          <div className="sticky top-8 space-y-4">
+
+            {/* Profile card */}
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+              <div className="h-16 bg-gradient-to-br from-forest to-forest-dark" />
+              <div className="px-4 pb-4">
+                <Link href="/account" className="-mt-8 mb-3 block w-fit">
+                  <div className="h-14 w-14 rounded-full border-3 border-white bg-forest/20 overflow-hidden shadow-md flex items-center justify-center">
+                    {userProfile?.avatarUrl ? (
+                      <Image src={userProfile.avatarUrl} alt="Profile" width={56} height={56} className="object-cover w-full h-full" />
+                    ) : (
+                      <span className="text-lg font-bold text-forest">
+                        {(userProfile?.displayName || userProfile?.email || "A")[0].toUpperCase()}
+                      </span>
+                    )}
+                  </div>
                 </Link>
-                <Link
-                  href="/journal/flies"
-                  className="flex-1 text-center rounded-lg border border-forest px-3 py-2 text-sm font-medium text-forest hover:bg-forest/10"
-                >
-                  🪰 Flies
-                </Link>
+                <p className="font-bold text-slate-900 text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
+                <p className="text-xs text-slate-400 mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
+                <div className="grid grid-cols-3 gap-1 text-center border-t border-slate-100 pt-3">
+                  <div>
+                    <p className="text-base font-bold text-slate-900">{totalSessions}</p>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Sessions</p>
+                  </div>
+                  <div>
+                    <p className="text-base font-bold text-slate-900">{totalFish}</p>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Fish</p>
+                  </div>
+                  <div>
+                    <p className="text-base font-bold text-slate-900">{riversFished}</p>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Rivers</p>
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* Quick nav */}
+            <div className="bg-white rounded-xl border border-slate-100 p-3 space-y-1">
+              <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-forest/5 text-forest text-sm font-medium">
+                <BookOpen className="h-4 w-4" /> Journal
+              </Link>
+              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+                <Feather className="h-4 w-4" /> Fly Patterns
+                <span className="ml-auto text-xs text-slate-400">{totalFlyPatterns}</span>
+              </Link>
+              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+                <span className="text-base">❤️</span> Favorites
+              </Link>
+              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+                <span className="text-base">⚙️</span> Settings
+              </Link>
+            </div>
+
+            {/* Stats */}
+            <div className="bg-white rounded-xl border border-slate-100 p-4">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Your Numbers</p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1.5 text-slate-600"><Fish className="h-3.5 w-3.5 text-forest" /> Total Fish</span>
+                  <span className="font-bold text-slate-900">{totalFish}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1.5 text-slate-600"><MapPin className="h-3.5 w-3.5 text-amber-500" /> Rivers</span>
+                  <span className="font-bold text-slate-900">{riversFished}</span>
+                </div>
+                {bestSession && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-600">Best Day</span>
+                    <span className="font-bold text-slate-900">{bestSession.fish} fish</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Log buttons */}
+            <div className="space-y-2">
+              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-forest px-4 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+                + Log Session
+              </Link>
+              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 hover:border-forest hover:text-forest transition-colors">
+                + Add Fly Pattern
+              </Link>
+            </div>
+
+            {/* Filters */}
             <SidebarFilters
               sessions={sessions}
               filterRivers={filterRivers}
