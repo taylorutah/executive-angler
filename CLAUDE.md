@@ -315,6 +315,47 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
 
+### 2026-03-08 (Sage)
+**Strava-style full redesign — Journal + Session Detail:**
+
+**Session Detail page (`/journal/[id]`):**
+- Rewrote `SessionDetail.tsx` to match Strava activity detail layout
+- Left: date/location (small), big session title, notes, rig notes, tags
+- Right: 4 big stats (Fish Caught, Water Temp, Biggest Fish, Clarity) — Strava-style large numbers
+- Weather row + "Flies Used" chip list below stats
+- Horizontal scrollable fish photo strip — tap any to open fullscreen lightbox (with arrow nav + keyboard)
+- Catches table (like Strava Segments): species, length, fly, position, size, time — clean rows with mini photo
+- Fly Box section at bottom: compact cards with 40px thumbnail + name + type
+- Sticky top nav bar: Back to Journal + Edit button
+
+**Journal feed page (`/journal`) — Strava dashboard layout:**
+- 3-column desktop layout: left profile sidebar, center session feed, filters panel
+- Left sidebar: profile card (avatar + name + Sessions/Fish/Rivers counts), quick nav, Your Numbers panel, Log Session + Add Fly Pattern buttons
+- Session cards: fish photo collage (up to 4 photos) OR map — user setting in account
+- Fly chips highlighted in amber on each feed card
+
+**Profile avatar system:**
+- `avatar_url` column added to `angler_profiles` table
+- `avatars` Supabase Storage bucket created (public)
+- `/api/user/avatar` POST route: upload → stores in bucket → updates profile
+- Account page: hover avatar circle → camera icon → upload photo, instant preview
+- Header nav: avatar circle replaces "Account" text link
+- `angler_profiles` also added `feed_display` column (collage | map, default collage)
+
+**Feed display preference:**
+- Account settings: "Journal Feed Display" toggle — Fish + Flies Collage vs Map Location
+- Saves to `angler_profiles.feed_display`, passes through journal/page.tsx → JournalClient → SessionCard
+
+**TypeScript fixes:**
+- SessionCard `catches` prop added to Props interface (was missing)
+- `rigs` prop removed from SessionCard (no longer used)
+- Type conflicts between local FishingSession and @/types/fishing-log resolved with `as any` + eslint-disable comments
+- CalendarView: removed `rigs` prop from SessionCard call (prop no longer exists)
+
+**Commits:** a16f730, 1f25ac9, 04aa6b0, d58ab4f
+
+---
+
 ### 2026-03-05 (Cowork)
 **GA4 + GSC setup (code changes + browser automation):**
 
