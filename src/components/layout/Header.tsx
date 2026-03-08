@@ -40,7 +40,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-  const [user, setUser] = useState<{ email?: string } | null>(null);
+  const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string } | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -57,8 +57,18 @@ export default function Header() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user ? { email: user.email ?? undefined } : null);
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) { setUser(null); return; }
+      const { data: profile } = await supabase
+        .from("angler_profiles")
+        .select("avatar_url, display_name")
+        .eq("user_id", user.id)
+        .single();
+      setUser({
+        email: user.email ?? undefined,
+        avatarUrl: profile?.avatar_url || undefined,
+        displayName: profile?.display_name || user.user_metadata?.display_name || undefined,
+      });
     });
   }, []);
 
@@ -228,12 +238,16 @@ export default function Header() {
                     <BookOpen className="h-4 w-4" />
                     <span>Journal</span>
                   </Link>
-                  <Link
-                    href="/account"
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor} opacity-70`}
-                  >
-                    <User className="h-4 w-4" />
-                    <span>Account</span>
+                  <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-forest/10 transition-colors">
+                    <div className="h-7 w-7 rounded-full overflow-hidden bg-forest/20 flex items-center justify-center flex-shrink-0">
+                      {user?.avatarUrl ? (
+                        <Image src={user.avatarUrl} alt="Profile" width={28} height={28} className="object-cover w-full h-full" />
+                      ) : (
+                        <span className={`text-xs font-bold ${textColor}`}>
+                          {(user?.displayName || user?.email || "A")[0].toUpperCase()}
+                        </span>
+                      )}
+                    </div>
                   </Link>
                 </div>
               ) : (

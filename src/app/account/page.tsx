@@ -53,7 +53,7 @@ export default async function AccountPage() {
 
   return (
     <AccountClient
-      user={{ id: user.id, email: user.email || "", displayName: user.user_metadata?.display_name || "" }}
+      user={{ id: user.id, email: user.email || "", displayName: user.user_metadata?.display_name || "", avatarUrl: profile?.avatar_url || "" }}
       feedDisplay={(profile?.feed_display as "collage" | "map") || "collage"}
       stats={{ totalSessions, totalFish, totalRivers, totalFlies: flies?.length || 0, totalFavorites: favs?.length || 0, biggestFish, bestSession: bestSession ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location } : null }}
     />

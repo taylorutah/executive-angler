@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera } from "lucide-react";
 import { formatDate } from "@/lib/date";
+import Image from "next/image";
 
 interface Props {
-  user: { id: string; email: string; displayName: string };
+  user: { id: string; email: string; displayName: string; avatarUrl?: string };
   feedDisplay: "collage" | "map";
   stats: {
     totalSessions: number;
@@ -25,6 +26,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
+  const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
+  const [avatarUploading, setAvatarUploading] = useState(false);
   const [email] = useState(user.email);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -32,6 +35,18 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pwError, setPwError] = useState("");
   const [pwSaved, setPwSaved] = useState(false);
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarUploading(true);
+    const fd = new FormData();
+    fd.append("avatar", file);
+    const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
+    const data = await res.json();
+    if (data.url) setAvatarUrl(data.url);
+    setAvatarUploading(false);
+  }
 
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
@@ -77,11 +92,34 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   return (
     <div className="min-h-screen bg-cream">
       <div className="mx-auto max-w-3xl px-4 pt-24 pb-16">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-heading text-forest-dark text-3xl font-bold">My Account</h1>
+        {/* Profile header */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="relative flex-shrink-0">
+            <label className="cursor-pointer group">
+              <div className="h-16 w-16 rounded-full overflow-hidden bg-forest/10 border-2 border-white shadow-md flex items-center justify-center">
+                {avatarUrl ? (
+                  <Image src={avatarUrl} alt="Avatar" width={64} height={64} className="object-cover w-full h-full" />
+                ) : (
+                  <span className="text-2xl font-bold text-forest">{(displayName || user.email)[0].toUpperCase()}</span>
+                )}
+              </div>
+              <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                {avatarUploading ? (
+                  <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <Camera className="h-5 w-5 text-white" />
+                )}
+              </div>
+              <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+            </label>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="font-heading text-forest-dark text-2xl font-bold truncate">{displayName || "Angler"}</h1>
+            <p className="text-sm text-slate-400 truncate">{user.email}</p>
+          </div>
           <button onClick={handleSignOut}
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors">
-            <LogOut className="h-4 w-4" /> Sign Out
+            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-red-600 transition-colors">
+            <LogOut className="h-4 w-4" />
           </button>
         </div>
 
