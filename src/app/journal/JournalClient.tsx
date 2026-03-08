@@ -2,6 +2,7 @@
 
 import { FishingSession, SessionRig } from "@/types/fishing-log";
 import { useEffect, useState } from "react";
+import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
@@ -76,7 +77,7 @@ export function JournalClient({ sessions, rigs }: JournalClientProps) {
 
     // Year filter
     if (filterYears.length > 0) {
-      const year = new Date(session.date).getFullYear();
+      const year = parseLocalDate(session.date).getFullYear();
       if (!filterYears.includes(year)) {
         return false;
       }

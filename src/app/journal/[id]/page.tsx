@@ -8,6 +8,7 @@ import {
   DropletIcon, ArrowLeftIcon, PencilIcon, FishIcon, ClockIcon,
 } from "lucide-react";
 import SessionMap from "./SessionMap";
+import { parseLocalDate } from "@/lib/date";
 
 interface CatchRecord {
   id: string;
@@ -83,7 +84,7 @@ export default async function SessionDetailPage({ params }: Props) {
           <div className="mt-3 flex flex-wrap items-center gap-3 text-white/80 text-sm">
             <div className="flex items-center gap-1.5">
               <CalendarIcon className="h-4 w-4" />
-              {new Date(session.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+              {parseLocalDate(session.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
             </div>
             {session.location && (
               <div className="flex items-center gap-1.5">

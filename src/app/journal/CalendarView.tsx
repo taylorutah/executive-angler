@@ -3,6 +3,7 @@
 import { FishingSession, SessionRig } from "@/types/fishing-log";
 import { ChevronLeftIcon, ChevronRightIcon, FishIcon } from "lucide-react";
 import { useState } from "react";
+import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 
 interface CalendarViewProps {
@@ -36,7 +37,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
   // Get all available years
   const availableYears = Array.from(
-    new Set(sessions.map((s) => new Date(s.date).getFullYear()))
+    new Set(sessions.map((s) => parseLocalDate(s.date).getFullYear()))
   ).sort((a, b) => b - a);
 
   // Calendar helpers
@@ -225,7 +226,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                 <div className="border-b border-slate-200 bg-cream p-4">
                   <h3 className="mb-3 text-sm font-semibold text-forest-dark">
                     Sessions on{" "}
-                    {new Date(expandedDate).toLocaleDateString("en-US", {
+                    {parseLocalDate(expandedDate).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",

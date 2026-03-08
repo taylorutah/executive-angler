@@ -3,6 +3,7 @@
 import { FishingSession } from "@/types/fishing-log";
 import { useState } from "react";
 import Link from "next/link";
+import { parseLocalDate, formatDate } from "@/lib/date";
 
 interface SidebarFiltersProps {
   sessions: FishingSession[];
@@ -47,7 +48,7 @@ export function SidebarFilters({
 
   // Count sessions per year
   const yearCounts = sessions.reduce((acc, session) => {
-    const year = new Date(session.date).getFullYear();
+    const year = parseLocalDate(session.date).getFullYear();
     acc[year] = (acc[year] || 0) + 1;
     return acc;
   }, {} as Record<number, number>);
@@ -96,11 +97,7 @@ export function SidebarFilters({
         {stats.bestSession && (
           <div className="text-sm text-slate-600">
             <span className="font-medium">Best:</span> {stats.bestSession.fish} fish ·{" "}
-            {new Date(stats.bestSession.date).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
+            {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart } from "lucide-react";
+import { formatDate } from "@/lib/date";
 
 interface Props {
   user: { id: string; email: string; displayName: string };
@@ -110,7 +111,7 @@ export default function AccountClient({ user, stats }: Props) {
                   <p className="text-xs text-slate-500 mb-1">Best Day</p>
                   <p className="text-lg font-bold text-forest-dark">{stats.bestSession.total_fish} fish</p>
                   <p className="text-sm text-slate-600">
-                    {stats.bestSession.river_name} · {new Date(stats.bestSession.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    {stats.bestSession.river_name} · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                 </div>
               )}

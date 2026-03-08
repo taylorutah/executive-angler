@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FishingSession, SessionRig } from "@/types/fishing-log";
 import { FishIcon } from "lucide-react";
 import Image from "next/image";
+import { parseLocalDate } from "@/lib/date";
 
 interface SessionCardProps {
   session: FishingSession;
@@ -12,8 +13,8 @@ interface SessionCardProps {
 }
 
 export function SessionCard({ session, rigs, photoUrl }: SessionCardProps) {
-  // Format date
-  const date = new Date(session.date);
+  // Format date — use parseLocalDate to avoid UTC offset shifting day back
+  const date = parseLocalDate(session.date);
   const formattedDate = date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
