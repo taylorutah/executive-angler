@@ -228,17 +228,13 @@ export default function Header() {
                     <BookOpen className="h-4 w-4" />
                     <span>Journal</span>
                   </Link>
-                  <button
-                    onClick={async () => {
-                      const supabase = (await import('@/lib/supabase/client')).createClient();
-                      await supabase.auth.signOut();
-                      window.location.href = '/';
-                    }}
+                  <Link
+                    href="/account"
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-forest/10 ${textColor} opacity-70`}
                   >
                     <User className="h-4 w-4" />
-                    <span>Sign Out</span>
-                  </button>
+                    <span>Account</span>
+                  </Link>
                 </div>
               ) : (
                 <div className="hidden sm:flex items-center gap-2">
