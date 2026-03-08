@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Clock, User, Calendar, ArrowLeft } from "lucide-react";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import JsonLd from "@/components/seo/JsonLd";
@@ -132,15 +131,6 @@ export default async function ArticlePage({ params }: Props) {
           <div>
             <ScrollAnimation>
                 <div className="bg-white rounded-xl shadow-sm p-8 sm:p-10">
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {article.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" size="sm">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-
                   {/* Article Body — tighter prose sizing */}
                   <div className="prose prose-sm sm:prose-base max-w-none
                     prose-headings:font-heading prose-headings:text-forest-dark
