@@ -36,20 +36,26 @@ interface Props {
   feedDisplay?: "collage" | "map";
 }
 
-// River-themed accent colors — rotates by river name for consistency
-const RIVER_COLORS = [
-  "from-teal-600 to-emerald-700",
-  "from-forest to-green-800",
-  "from-slate-600 to-slate-800",
-  "from-blue-700 to-teal-700",
-  "from-emerald-600 to-green-700",
+// Accent border colors — rotates by river name for visual variety
+const ACCENT_COLORS = [
+  "bg-forest",
+  "bg-teal-600",
+  "bg-blue-600",
+  "bg-amber-500",
+  "bg-slate-500",
+  "bg-emerald-600",
+  "bg-cyan-600",
+  "bg-indigo-500",
 ];
 
-function riverColor(name?: string) {
-  if (!name) return RIVER_COLORS[0];
-  const idx = name.split("").reduce((s, c) => s + c.charCodeAt(0), 0) % RIVER_COLORS.length;
-  return RIVER_COLORS[idx];
+function accentColor(name?: string) {
+  if (!name) return ACCENT_COLORS[0];
+  const idx = name.split("").reduce((s, c) => s + c.charCodeAt(0), 0) % ACCENT_COLORS.length;
+  return ACCENT_COLORS[idx];
 }
+
+// Month abbreviations for the date stamp
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage" }: Props) {
   const date = parseLocalDate(session.date);
@@ -66,12 +72,18 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const hasPhotos = feedDisplay === "collage" && fishPhotos.length > 0;
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
 
+  const accent = accentColor(session.river_name);
+  const parsedDate = parseLocalDate(session.date);
+  const month = MONTHS[parsedDate.getMonth()];
+  const day = parsedDate.getDate();
+  const year = parsedDate.getFullYear();
+
   return (
     <Link href={`/journal/${session.id}`} className="block group">
       <article className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-slate-200 transition-all duration-200">
 
-        {/* Top visual — photo collage or gradient river banner */}
-        {hasPhotos ? (
+        {/* Photo collage (when available) */}
+        {hasPhotos && (
           <div className={`grid gap-0.5 h-40 overflow-hidden ${
             fishPhotos.length === 1 ? "grid-cols-1" :
             fishPhotos.length === 2 ? "grid-cols-2" :
@@ -84,76 +96,78 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               </div>
             ))}
           </div>
-        ) : (
-          <div className={`relative h-16 bg-gradient-to-r ${riverColor(session.river_name)} overflow-hidden`}>
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
-            <div className="absolute inset-0 flex items-center px-4">
-              <span className="text-white font-heading font-bold text-lg leading-tight opacity-90 line-clamp-1">
-                {session.river_name || "Fishing Session"}
-              </span>
-              {totalFish > 0 && (
-                <span className="ml-auto flex items-center gap-1 bg-white/20 text-white text-xs font-semibold rounded-full px-2.5 py-1">
-                  <Fish className="h-3 w-3" /> {totalFish}
-                </span>
-              )}
-            </div>
-          </div>
         )}
 
         {/* Card body */}
-        <div className="p-4">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="min-w-0 flex-1">
+        <div className={`flex gap-0 ${!hasPhotos ? "border-l-4 " + accent : ""}`}>
+
+          {/* Date stamp column (no-photo only) */}
+          {!hasPhotos && (
+            <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{month}</span>
+              <span className="text-2xl font-bold text-slate-800 leading-none">{day}</span>
+              <span className="text-[10px] text-slate-300 mt-0.5">{year}</span>
+            </div>
+          )}
+
+          <div className={`flex-1 min-w-0 p-4 ${!hasPhotos ? "pl-3 border-l border-slate-100" : ""}`}>
+            {/* Title + fish badge */}
+            <div className="flex items-start justify-between gap-2 mb-1">
               <h3 className="font-semibold text-slate-900 text-sm leading-snug group-hover:text-forest transition-colors line-clamp-1">
                 {title}
               </h3>
-              <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-1 text-[11px] text-slate-400">
-                <span>{formattedDate}</span>
-                {session.location && (
-                  <span className="flex items-center gap-0.5 truncate">
-                    <MapPin className="h-3 w-3 flex-shrink-0" />{session.location}
-                  </span>
-                )}
-              </div>
+              {totalFish > 0 && (
+                <span className="flex-shrink-0 flex items-center gap-1 bg-forest/10 text-forest rounded-full px-2 py-0.5 text-xs font-semibold">
+                  <Fish className="h-3 w-3" />{totalFish}
+                </span>
+              )}
             </div>
-            {hasPhotos && totalFish > 0 && (
-              <span className="flex-shrink-0 flex items-center gap-1 bg-forest/10 text-forest rounded-full px-2 py-0.5 text-xs font-semibold">
-                <Fish className="h-3 w-3" />{totalFish}
-              </span>
+
+            {/* Location */}
+            {session.location && (
+              <div className="flex items-center gap-1 text-[11px] text-slate-400 mb-2">
+                <MapPin className="h-3 w-3 flex-shrink-0" />
+                <span className="truncate">{session.location}</span>
+              </div>
+            )}
+
+            {/* Date row (photo cards) */}
+            {hasPhotos && (
+              <p className="text-[11px] text-slate-400 mb-2">{formattedDate}</p>
+            )}
+
+            {/* Notes excerpt */}
+            {session.notes && (
+              <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2 mb-2">{session.notes}</p>
+            )}
+
+            {/* Conditions */}
+            {hasConditions && (
+              <div className="flex flex-wrap gap-2 text-[11px] text-slate-400 mb-2">
+                {session.water_temp_f && <span className="flex items-center gap-0.5"><Thermometer className="h-3 w-3" />{session.water_temp_f}</span>}
+                {session.water_clarity && <span className="flex items-center gap-0.5"><Droplets className="h-3 w-3" />{session.water_clarity}</span>}
+                {session.weather && <span className="flex items-center gap-0.5"><Cloud className="h-3 w-3" />{session.weather}</span>}
+              </div>
+            )}
+
+            {/* Flies */}
+            {topFlies.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {topFlies.map(name => (
+                  <span key={name} className="text-[10px] bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2 py-0.5">🪰 {name}</span>
+                ))}
+              </div>
+            )}
+
+            {/* Tags fallback */}
+            {topFlies.length === 0 && tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {tags.slice(0, 3).map(tag => (
+                  <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">{tag}</span>
+                ))}
+              </div>
             )}
           </div>
-
-          {/* Notes excerpt */}
-          {session.notes && (
-            <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2 mb-2">{session.notes}</p>
-          )}
-
-          {/* Conditions row */}
-          {hasConditions && (
-            <div className="flex flex-wrap gap-2 text-[11px] text-slate-400 mb-2">
-              {session.water_temp_f && <span className="flex items-center gap-0.5"><Thermometer className="h-3 w-3" />{session.water_temp_f}</span>}
-              {session.water_clarity && <span className="flex items-center gap-0.5"><Droplets className="h-3 w-3" />{session.water_clarity}</span>}
-              {session.weather && <span className="flex items-center gap-0.5"><Cloud className="h-3 w-3" />{session.weather}</span>}
-            </div>
-          )}
-
-          {/* Flies */}
-          {topFlies.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {topFlies.map(name => (
-                <span key={name} className="text-[10px] bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2 py-0.5">🪰 {name}</span>
-              ))}
-            </div>
-          )}
-
-          {/* Tags (only if no flies) */}
-          {topFlies.length === 0 && tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {tags.slice(0, 3).map(tag => (
-                <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">{tag}</span>
-              ))}
-            </div>
-          )}
         </div>
       </article>
     </Link>
