@@ -22,10 +22,22 @@ async function createClient() {
   );
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const singleId = req.nextUrl.searchParams.get("id");
+  if (singleId) {
+    const { data, error } = await supabase
+      .from("fly_patterns")
+      .select("*")
+      .eq("id", singleId)
+      .eq("user_id", user.id)
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 404 });
+    return NextResponse.json(data);
+  }
 
   const { data, error } = await supabase
     .from("fly_patterns")
