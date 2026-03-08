@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { FishingSession, SessionRig } from "@/types/fishing-log";
+import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
 import { JournalClient } from "./JournalClient";
 
 export const metadata: Metadata = {
@@ -44,8 +44,23 @@ export default async function JournalPage() {
     console.error("Error fetching rigs:", rigsError);
   }
 
+  // Fetch catches with fish photos for feed collage
+  const { data: catches } = await supabase
+    .from("catches")
+    .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_pattern:fly_patterns(name)")
+    .in("session_id", sessionIds);
+
+  // Fetch feed display preference
+  const { data: profile } = await supabase
+    .from("angler_profiles")
+    .select("feed_display")
+    .eq("user_id", user.id)
+    .single();
+
   const sessionsData = (sessions || []) as FishingSession[];
   const rigsData = (rigs || []) as SessionRig[];
+  const catchesData = (catches || []) as unknown as Catch[];
+  const feedDisplay = (profile?.feed_display as "collage" | "map") || "collage";
 
-  return <JournalClient sessions={sessionsData} rigs={rigsData} />;
+  return <JournalClient sessions={sessionsData} rigs={rigsData} catches={catchesData} feedDisplay={feedDisplay} />;
 }

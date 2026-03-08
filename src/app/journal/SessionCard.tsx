@@ -1,100 +1,137 @@
 "use client";
 
 import Link from "next/link";
-import { FishingSession, SessionRig } from "@/types/fishing-log";
-import { FishIcon } from "lucide-react";
 import Image from "next/image";
+import { FishIcon, MapPin, Thermometer, Droplets } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 
-interface SessionCardProps {
-  session: FishingSession;
-  rigs?: SessionRig[];
-  photoUrl?: string;
+interface Catch {
+  id?: string;
+  species?: string;
+  length_inches?: string;
+  quantities?: number;
+  fish_image_url?: string;
+  fly_pattern?: { name?: string } | null;
 }
 
-export function SessionCard({ session, rigs, photoUrl }: SessionCardProps) {
-  // Format date — use parseLocalDate to avoid UTC offset shifting day back
+interface FishingSession {
+  id: string;
+  title?: string;
+  river_name?: string;
+  location?: string;
+  date: string;
+  total_fish?: number;
+  water_temp_f?: string;
+  water_clarity?: string;
+  weather?: string;
+  notes?: string;
+  trip_tags?: string[];
+  tags?: string[];
+  catches?: Catch[];
+}
+
+interface Props {
+  session: FishingSession;
+  catches?: Catch[];
+  feedDisplay?: "collage" | "map";
+}
+
+export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage" }: Props) {
   const date = parseLocalDate(session.date);
-  const formattedDate = date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const formattedDate = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "short" });
 
-  // Get top 2 flies from rigs
-  const topFlies = rigs?.slice(0, 2).map((rig) => {
-    const name = rig.fly_pattern?.name || rig.fly_name || "Unknown";
-    const size = rig.fly_pattern?.size ? ` #${rig.fly_pattern.size}` : "";
-    return `${name}${size}`;
-  });
-
-  // Build metadata line
-  const metadata: string[] = [];
-  if (session.river_name) {
-    // Extract location from tags if available
-    const locationTag = session.tags?.find((tag) =>
-      tag.toLowerCase().includes("walk-in") ||
-      tag.toLowerCase().includes("below") ||
-      tag.toLowerCase().includes("above")
-    );
-    if (locationTag) {
-      metadata.push(locationTag);
-    }
-  }
-  metadata.push(formattedDate);
-  if (session.water_temp_f !== undefined && session.water_temp_f !== null) {
-    metadata.push(`${session.water_temp_f}°F`);
-  }
+  const catches = catchesProp || session.catches || [];
+  const totalFish = session.total_fish ?? catches.reduce((s, c) => s + (c.quantities || 1), 0);
+  const fishPhotos = catches.map(c => c.fish_image_url).filter(Boolean).slice(0, 4) as string[];
+  const topFlies = Array.from(
+    new Map(
+      catches.filter(c => c.fly_pattern?.name).map(c => [c.fly_pattern!.name!, c.fly_pattern!.name!])
+    ).values()
+  ).slice(0, 2);
+  const tags = session.trip_tags || session.tags || [];
 
   return (
-    <Link
-      href={`/journal/${session.id}`}
-      className="block rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-slate-300 hover:bg-slate-50"
-    >
-      <div className="flex items-start gap-4">
-        <div className="flex-1 min-w-0">
-          {/* Line 1: River name */}
-          <h3 className="font-heading text-lg font-semibold text-forest-dark truncate">
-            {session.river_name || "Unknown River"}
-          </h3>
+    <Link href={`/journal/${session.id}`} className="block group">
+      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-slate-200 transition-all duration-200">
 
-          {/* Line 2: Metadata */}
-          <p className="mt-1 text-sm text-slate-600">
-            {metadata.join(" · ")}
-          </p>
+        {/* Photo collage or placeholder */}
+        {feedDisplay === "collage" && fishPhotos.length > 0 ? (
+          <div className={`grid gap-0.5 ${fishPhotos.length === 1 ? "grid-cols-1" : fishPhotos.length === 2 ? "grid-cols-2" : fishPhotos.length === 3 ? "grid-cols-3" : "grid-cols-2 grid-rows-2"} h-36 overflow-hidden`}>
+            {fishPhotos.map((url, i) => (
+              <div key={i} className="relative overflow-hidden">
+                <Image src={url} alt="Fish" fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="200px" />
+              </div>
+            ))}
+          </div>
+        ) : feedDisplay === "collage" && totalFish > 0 ? (
+          <div className="h-20 bg-gradient-to-br from-forest/5 to-forest/10 flex items-center justify-center gap-2">
+            <FishIcon className="h-6 w-6 text-forest/30" />
+            <span className="text-sm text-forest/40 font-medium">{totalFish} fish</span>
+          </div>
+        ) : null}
 
-          {/* Line 3: Flies */}
-          {topFlies && topFlies.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {topFlies.map((fly, idx) => (
-                <span
-                  key={idx}
-                  className="rounded-md bg-forest/10 px-2 py-1 text-xs font-medium text-forest"
-                >
-                  {fly}
+        <div className="p-3">
+          {/* Header row */}
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="min-w-0">
+              <h3 className="font-semibold text-slate-900 text-sm leading-tight truncate group-hover:text-forest transition-colors">
+                {session.title || session.river_name || "Fishing Session"}
+              </h3>
+              <div className="flex items-center gap-1 mt-0.5 text-[11px] text-slate-400">
+                <span>{dayOfWeek}, {formattedDate}</span>
+                {session.location && (
+                  <>
+                    <span>·</span>
+                    <MapPin className="h-3 w-3 flex-shrink-0" />
+                    <span className="truncate">{session.location}</span>
+                  </>
+                )}
+              </div>
+            </div>
+            {/* Fish count badge */}
+            {totalFish > 0 && (
+              <div className="flex-shrink-0 flex items-center gap-1 bg-forest/10 text-forest rounded-full px-2 py-0.5">
+                <FishIcon className="h-3 w-3" />
+                <span className="text-xs font-semibold">{totalFish}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Conditions row */}
+          {(session.water_temp_f || session.water_clarity || session.weather) && (
+            <div className="flex flex-wrap gap-2 mb-2 text-[11px] text-slate-500">
+              {session.water_temp_f && (
+                <span className="flex items-center gap-0.5">
+                  <Thermometer className="h-3 w-3" />{session.water_temp_f}
+                </span>
+              )}
+              {session.water_clarity && (
+                <span className="flex items-center gap-0.5">
+                  <Droplets className="h-3 w-3" />{session.water_clarity}
+                </span>
+              )}
+              {session.weather && <span>☁ {session.weather}</span>}
+            </div>
+          )}
+
+          {/* Flies highlight */}
+          {topFlies.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-2">
+              {topFlies.map(name => (
+                <span key={name} className="text-[10px] bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2 py-0.5">
+                  🪰 {name}
                 </span>
               ))}
             </div>
           )}
-        </div>
 
-        {/* Right side: fish count + photo */}
-        <div className="flex flex-col items-end gap-2">
-          {session.total_fish > 0 && (
-            <div className="flex items-center gap-1.5 rounded-full bg-river px-3 py-1 text-sm font-semibold text-white">
-              <FishIcon className="h-4 w-4" />
-              <span>{session.total_fish}</span>
-            </div>
-          )}
-          {photoUrl && (
-            <div className="relative h-14 w-14 overflow-hidden rounded-md">
-              <Image
-                src={photoUrl}
-                alt="Session photo"
-                fill
-                className="object-cover"
-                sizes="56px"
-              />
+          {/* Tags */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {tags.slice(0, 3).map(tag => (
+                <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">{tag}</span>
+              ))}
             </div>
           )}
         </div>

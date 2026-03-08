@@ -236,8 +236,8 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                     {sessionsByDate[expandedDate]?.map(({ session, rigs }) => (
                       <SessionCard
                         key={session.id}
-                        session={session}
-                        rigs={rigs}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        session={session as any}
                       />
                     ))}
                   </div>

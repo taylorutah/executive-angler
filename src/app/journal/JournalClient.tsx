@@ -1,6 +1,6 @@
 "use client";
 
-import { FishingSession, SessionRig } from "@/types/fishing-log";
+import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
 import { useEffect, useState } from "react";
 import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
@@ -12,9 +12,19 @@ import Link from "next/link";
 interface JournalClientProps {
   sessions: FishingSession[];
   rigs: SessionRig[];
+  catches?: Catch[];
+  feedDisplay?: "collage" | "map";
 }
 
-export function JournalClient({ sessions, rigs }: JournalClientProps) {
+export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "collage" }: JournalClientProps) {
+  // Group catches by session ID
+  const catchesMap = catches.reduce((acc, c) => {
+    const sid = (c as Catch & { session_id?: string }).session_id || "";
+    if (!acc.has(sid)) acc.set(sid, []);
+    acc.get(sid)!.push(c);
+    return acc;
+  }, new Map<string, Catch[]>());
+
   // Group rigs by session ID
   const rigsMap = rigs.reduce((acc, rig) => {
     if (!acc.has(rig.session_id)) {
@@ -337,8 +347,11 @@ export function JournalClient({ sessions, rigs }: JournalClientProps) {
                 {filteredSessions.map((session) => (
                   <SessionCard
                     key={session.id}
-                    session={session}
-                    rigs={rigsMap.get(session.id)}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    session={session as any}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    catches={catchesMap.get(session.id) as any}
+                    feedDisplay={feedDisplay}
                   />
                 ))}
               </div>

@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/date";
 
 interface Props {
   user: { id: string; email: string; displayName: string };
+  feedDisplay: "collage" | "map";
   stats: {
     totalSessions: number;
     totalFish: number;
@@ -20,9 +21,10 @@ interface Props {
   };
 }
 
-export default function AccountClient({ user, stats }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
+  const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
   const [email] = useState(user.email);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -36,6 +38,7 @@ export default function AccountClient({ user, stats }: Props) {
     setSaving(true);
     const supabase = createClient();
     await supabase.auth.updateUser({ data: { display_name: displayName } });
+    await supabase.from("angler_profiles").upsert({ user_id: user.id, feed_display: feedDisplay }, { onConflict: "user_id" });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -159,6 +162,20 @@ export default function AccountClient({ user, stats }: Props) {
               <label className={labelCls}>Email</label>
               <input className={inputCls + " opacity-60"} value={email} disabled />
               <p className="text-xs text-slate-400 mt-1">Contact support to change your email.</p>
+            </div>
+            <div>
+              <label className={labelCls}>Journal Feed Display</label>
+              <div className="flex gap-2 mt-1">
+                <button type="button" onClick={() => setFeedDisplay("collage")}
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-forest bg-forest text-white" : "border-slate-200 text-slate-600 hover:border-forest"}`}>
+                  🐟 Fish + Flies Collage
+                </button>
+                <button type="button" onClick={() => setFeedDisplay("map")}
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-forest bg-forest text-white" : "border-slate-200 text-slate-600 hover:border-forest"}`}>
+                  📍 Map Location
+                </button>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">Controls what shows in your journal feed cards.</p>
             </div>
             <button type="submit" disabled={saving}
               className="inline-flex items-center gap-2 rounded-lg bg-forest px-5 py-2.5 text-white text-sm font-medium hover:bg-forest-dark disabled:opacity-60">
