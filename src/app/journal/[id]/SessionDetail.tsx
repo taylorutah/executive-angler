@@ -191,9 +191,15 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                   {!session.location && session.river_name && <> · {session.river_name}</>}
                 </p>
 
-                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
-                  {session.title || session.river_name || "Fishing Session"}
-                </h1>
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                    {session.title || session.river_name || "Fishing Session"}
+                  </h1>
+                  <Link href={`/journal/${session.id}/edit`}
+                    className="flex-shrink-0 flex items-center gap-1.5 rounded-lg bg-forest px-3 py-2 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm mt-1">
+                    <Pencil className="h-3.5 w-3.5" /> Edit
+                  </Link>
+                </div>
 
                 {/* Inline-editable notes */}
                 <div className="mb-3 max-w-lg group/notes relative">
@@ -219,18 +225,24 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                       </div>
                     </div>
                   ) : notesValue ? (
-                    <div className="cursor-text" onClick={() => setEditingNotes(true)}>
+                    <div
+                      onClick={() => setEditingNotes(true)}
+                      className="cursor-text rounded-lg border border-transparent hover:border-forest/30 hover:bg-forest/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
+                      title="Click to edit notes"
+                    >
                       <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
                         {notesValue}
                       </p>
-                      <span className="absolute top-0 right-0 opacity-0 group-hover/notes:opacity-100 transition-opacity">
-                        <Pencil className="h-3.5 w-3.5 text-slate-400" />
-                      </span>
+                      <p className="text-[10px] text-slate-400 mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
+                        <Pencil className="h-3 w-3" /> Click to edit
+                      </p>
                     </div>
                   ) : (
                     <button onClick={() => setEditingNotes(true)}
-                      className="text-sm text-slate-400 hover:text-forest flex items-center gap-1.5 italic">
-                      <Pencil className="h-3.5 w-3.5" /> Add notes about this session…
+                      className="w-full text-left rounded-lg border border-dashed border-slate-300 hover:border-forest/50 hover:bg-forest/5 px-3 py-2.5 transition-colors">
+                      <span className="text-sm text-slate-400 hover:text-forest flex items-center gap-1.5">
+                        <Pencil className="h-3.5 w-3.5" /> Add session notes…
+                      </span>
                     </button>
                   )}
                 </div>
