@@ -144,12 +144,20 @@ export function JournalClient({ sessions, rigs }: JournalClientProps) {
       <div className="lg:hidden border-b border-slate-200 bg-white px-4 py-4">
         <div className="flex items-center justify-between">
           <h1 className="font-heading text-2xl font-bold text-forest-dark">Journal</h1>
-          <Link
-            href="/journal/new"
-            className="rounded-lg bg-forest px-4 py-2 text-sm font-medium text-white hover:bg-forest-dark"
-          >
-            + Log Session
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/journal/flies"
+              className="rounded-lg border border-forest px-3 py-2 text-sm font-medium text-forest hover:bg-forest/10"
+            >
+              🪰 Flies
+            </Link>
+            <Link
+              href="/journal/new"
+              className="rounded-lg bg-forest px-3 py-2 text-sm font-medium text-white hover:bg-forest-dark"
+            >
+              + Log
+            </Link>
+          </div>
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4">
@@ -241,16 +249,24 @@ export function JournalClient({ sessions, rigs }: JournalClientProps) {
         {/* Desktop sidebar */}
         <aside className="hidden lg:block lg:w-[280px] lg:flex-shrink-0">
           <div className="sticky top-8">
-            <div className="mb-6 flex items-center justify-between">
-              <h1 className="font-heading text-3xl font-bold text-forest-dark">
+            <div className="mb-6">
+              <h1 className="font-heading text-3xl font-bold text-forest-dark mb-3">
                 Journal
               </h1>
-              <Link
-                href="/journal/new"
-                className="rounded-lg bg-forest px-3 py-1.5 text-sm font-medium text-white hover:bg-forest-dark"
-              >
-                + Log
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href="/journal/new"
+                  className="flex-1 text-center rounded-lg bg-forest px-3 py-2 text-sm font-medium text-white hover:bg-forest-dark"
+                >
+                  + Log Session
+                </Link>
+                <Link
+                  href="/journal/flies"
+                  className="flex-1 text-center rounded-lg border border-forest px-3 py-2 text-sm font-medium text-forest hover:bg-forest/10"
+                >
+                  🪰 Flies
+                </Link>
+              </div>
             </div>
 
             <SidebarFilters

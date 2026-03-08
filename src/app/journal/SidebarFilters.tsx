@@ -251,7 +251,7 @@ export function SidebarFilters({
 
       {/* Fly Patterns Link */}
       <Link
-        href="/journal/fly-patterns"
+        href="/journal/flies"
         className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-forest transition-colors hover:bg-cream"
       >
         🪰 Fly Patterns →
