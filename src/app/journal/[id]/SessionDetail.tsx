@@ -163,12 +163,18 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 pt-24">
 
-          {/* Breadcrumb */}
+          {/* Breadcrumb + Edit */}
           <div className="flex items-center justify-between mb-4">
             <Link href="/journal" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-forest transition-colors">
               <ArrowLeft className="h-4 w-4" /> Back to Journal
             </Link>
-            {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
+            <div className="flex items-center gap-3">
+              {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
+              <Link href={`/journal/${session.id}/edit`}
+                className="flex items-center gap-1.5 rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+                <Pencil className="h-3.5 w-3.5" /> Edit Session
+              </Link>
+            </div>
           </div>
 
           {/* ---- STRAVA-STYLE HEADER CARD ---- */}
@@ -303,13 +309,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
             </div>
           </div>
 
-          {/* Edit button — bottom right of header card */}
-          <div className="flex justify-end pt-4 border-t border-slate-100 mt-2">
-            <Link href={`/journal/${session.id}/edit`}
-              className="flex items-center gap-1.5 rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
-              <Pencil className="h-3.5 w-3.5" /> Edit Session
-            </Link>
-          </div>
+
 
           {/* ---- FISH PHOTO STRIP (if photos exist) ---- */}
           {fishPhotos.length > 0 && (
