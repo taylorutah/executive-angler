@@ -132,19 +132,8 @@ export default async function ArticlePage({ params }: Props) {
           <div>
             <ScrollAnimation>
                 <div className="bg-white rounded-xl shadow-sm p-8 sm:p-10">
-                  {/* Article Body — tighter prose sizing */}
-                  <div className="prose prose-sm sm:prose-base max-w-none
-                    prose-headings:font-heading prose-headings:text-forest-dark
-                    prose-h2:text-xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-3
-                    prose-h3:text-base prose-h3:font-semibold prose-h3:mt-5 prose-h3:mb-2
-                    prose-h4:text-sm prose-h4:font-semibold prose-h4:mt-4 prose-h4:mb-1
-                    prose-p:text-slate-700 prose-p:leading-relaxed prose-p:my-3
-                    prose-a:text-forest prose-a:font-medium
-                    prose-strong:text-slate-900
-                    prose-li:text-slate-700 prose-li:my-1
-                    prose-ul:my-3 prose-ol:my-3">
-                    <div dangerouslySetInnerHTML={{ __html: article.content }} />
-                  </div>
+                  {/* Article Body */}
+                  <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
                 </div>
               </ScrollAnimation>
 
