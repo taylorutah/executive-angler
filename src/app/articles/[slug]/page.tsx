@@ -2,17 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, User, Calendar, ArrowLeft } from "lucide-react";
+import { Clock, User, Calendar } from "lucide-react";
 import Badge from "@/components/ui/Badge";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import JsonLd from "@/components/seo/JsonLd";
 import { articles } from "@/data/articles";
-import {
-  getArticleBySlug,
-  getAllArticles,
-} from "@/lib/db";
+import { getArticleBySlug, getAllArticles } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -24,7 +19,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article Not Found" };
-
   return {
     title: article.metaTitle || article.title,
     description: article.metaDescription || article.excerpt,
@@ -51,23 +45,21 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: article.title,
-          description: article.excerpt,
-          author: {
-            "@type": "Person",
-            name: article.author,
-          },
-          datePublished: article.publishedAt,
-          image: article.heroImageUrl,
-        }}
-      />
+      <JsonLd data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: article.title,
+        description: article.excerpt,
+        author: { "@type": "Person", name: article.author },
+        datePublished: article.publishedAt,
+        image: article.heroImageUrl,
+      }} />
 
-      {/* Hero */}
-      <section className="relative h-[50vh] w-full overflow-hidden">
+      {/* Reading progress bar — CSS scroll-driven */}
+      <div className="reading-progress-bar" aria-hidden="true" />
+
+      {/* Hero — tall, cinematic */}
+      <section className="relative h-[62vh] min-h-[420px] w-full overflow-hidden">
         <Image
           src={article.heroImageUrl}
           alt={article.title}
@@ -76,97 +68,74 @@ export default async function ArticlePage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="hero-overlay absolute inset-0" />
+        {/* gradient: transparent top → dark bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
         <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 pb-12">
-            <Badge variant="forest" size="md">
-              {article.category}
-            </Badge>
-            <h1 className="mt-3 text-white text-3xl sm:text-4xl lg:text-5xl font-heading font-bold">
+          <div className="w-full max-w-5xl mx-auto px-6 sm:px-10 pb-14">
+            <Badge variant="forest" size="md">{article.category}</Badge>
+            <h1 className="text-white font-heading font-bold text-3xl sm:text-4xl lg:text-[2.6rem] leading-tight max-w-3xl">
               {article.title}
             </h1>
             {article.subtitle && (
-              <p className="mt-3 text-xl text-white/80 italic">
-                {article.subtitle}
-              </p>
+              <p className="mt-2 text-white/75 text-lg italic max-w-2xl">{article.subtitle}</p>
             )}
-            <div className="mt-4 flex items-center gap-4 text-sm text-white/70">
-              <span className="flex items-center gap-1.5">
-                <User className="h-4 w-4" />
-                {article.author}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
-                {article.readingTimeMinutes} min read
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Calendar className="h-4 w-4" />
-                {new Date(article.publishedAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+            <div className="mt-5 flex flex-wrap items-center gap-5 text-[13px] text-white/60">
+              <span className="flex items-center gap-1.5"><User className="h-3.5 w-3.5" />{article.author}</span>
+              <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{article.readingTimeMinutes} min read</span>
+              <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />
+                {new Date(article.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
               </span>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="bg-cream">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Articles", href: "/articles" },
-                { label: article.title },
-              ]}
-            />
+      {/* Article page */}
+      <div className="bg-[#f8f7f4] min-h-screen">
+        <div className="max-w-5xl mx-auto px-6 sm:px-10">
+
+          {/* Breadcrumb + favorite — same width as content */}
+          <div className="flex items-center justify-between py-5 border-b border-slate-200 mb-10">
+            <nav className="flex items-center gap-1.5 text-[13px] text-slate-400">
+              <Link href="/" className="hover:text-forest transition-colors">Home</Link>
+              <span>/</span>
+              <Link href="/articles" className="hover:text-forest transition-colors">Articles</Link>
+              <span>/</span>
+              <span className="text-slate-600 truncate max-w-[200px] sm:max-w-none">{article.title}</span>
+            </nav>
             <FavoriteButton entityType="article" entityId={article.id} />
           </div>
+
+          {/* Article body — full width of container */}
+          <article className="pb-24">
+            <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
+
+            {/* Divider */}
+            <div className="mt-16 pt-10 border-t border-slate-200">
+              <h2 className="font-heading text-lg font-bold text-slate-900 mb-6">More Articles</h2>
+              {otherArticles.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                  {otherArticles.map((a) => (
+                    <Link key={a.id} href={`/articles/${a.slug}`}
+                      className="group block bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-forest/30 hover:shadow-md transition-all">
+                      {a.heroImageUrl && (
+                        <div className="relative h-36 w-full overflow-hidden">
+                          <Image src={a.heroImageUrl} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                        </div>
+                      )}
+                      <div className="p-4">
+                        <span className="text-[11px] text-forest font-semibold uppercase tracking-wide">{a.category}</span>
+                        <h3 className="mt-1 font-heading text-sm font-bold text-slate-900 leading-snug group-hover:text-forest transition-colors">{a.title}</h3>
+                        <p className="mt-1.5 text-xs text-slate-400">{a.readingTimeMinutes} min read</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </article>
         </div>
       </div>
-
-      {/* Article Content */}
-      <article className="bg-cream pb-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <div>
-            <ScrollAnimation>
-                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-10">
-                  {/* Article Body */}
-                  <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
-                </div>
-              </ScrollAnimation>
-
-              {/* Related Articles */}
-              {otherArticles.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-xl font-bold text-forest-dark mt-12 mb-5">
-                    More Articles
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {otherArticles.map((a) => (
-                      <Link
-                        key={a.id}
-                        href={`/articles/${a.slug}`}
-                        className="block p-4 bg-white rounded-xl shadow-sm card-hover"
-                      >
-                        <span className="text-xs text-forest font-medium uppercase">
-                          {a.category}
-                        </span>
-                        <h3 className="mt-1 font-heading text-sm font-semibold text-forest-dark">
-                          {a.title}
-                        </h3>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {a.readingTimeMinutes} min read
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              )}
-          </div>
-        </div>
-      </article>
     </>
   );
 }
