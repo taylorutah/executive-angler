@@ -309,7 +309,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 <BookOpen className="h-4 w-4" /> Journal
               </Link>
               <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
-                <Feather className="h-4 w-4" /> Fly Patterns
+                <Feather className="h-4 w-4" /> My Fly Box
                 <span className="ml-auto text-xs text-slate-400">{totalFlyPatterns}</span>
               </Link>
               <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
