@@ -1,181 +1,255 @@
-"use client";
+'use client'
 
-import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, Upload } from "lucide-react";
+import { useState, FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
-export default function NewFlyPage() {
-  const router = useRouter();
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [preview, setPreview] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+const FLY_TYPES = [
+  'Nymph',
+  'Dry Fly',
+  'Streamer',
+  'Wet Fly',
+  'Emerger',
+  'Terrestrial',
+  'Egg',
+  'Other'
+]
 
-  const [form, setForm] = useState({
-    name: "",
-    type: "",
-    size: "",
-    hook: "",
-    bead_size: "",
-    bead_color: "",
-    fly_color: "",
-    materials: "",
-    description: "",
-    video_url: "",
-    tags: "",
-  });
+export default function NewFlyPatternPage() {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-  function updateForm(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
-    setError("");
-
-    try {
-      const file = fileRef.current?.files?.[0];
-      let res: Response;
-
-      if (file) {
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-        fd.append("image", file);
-        res = await fetch("/api/fishing/flies", { method: "POST", body: fd });
-      } else {
-        res = await fetch("/api/fishing/flies", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
       }
-
-      if (!res.ok) {
-        const d = await res.json();
-        throw new Error(d.error || "Failed to save");
-      }
-
-      router.push("/journal/flies");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-      setSaving(false);
+      reader.readAsDataURL(file)
+    } else {
+      setImagePreview(null)
     }
   }
 
-  const inputCls = "w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest";
-  const labelCls = "block text-sm font-medium text-slate-700 mb-1";
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+
+    const formElement = e.currentTarget
+    const formData = new FormData(formElement)
+
+    try {
+      const response = await fetch('/api/fishing/flies', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to create fly pattern')
+      }
+
+      router.push('/journal/flies')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+      setIsSubmitting(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <div className="mx-auto max-w-2xl px-4 pt-24 pb-20">
-        <Link href="/journal/flies" className="inline-flex items-center gap-1 text-forest text-sm mb-6 hover:text-forest-dark">
-          <ArrowLeft className="h-4 w-4" /> Back to Fly Patterns
+    <div className="min-h-screen bg-white py-12">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <Link
+          href="/journal/flies"
+          className="inline-flex items-center text-forest hover:text-forest-dark mb-6"
+        >
+          ← Back to Fly Patterns
         </Link>
 
-        <h1 className="font-heading text-forest-dark text-3xl font-bold mb-8">Add Fly Pattern</h1>
+        <h1 className="text-4xl font-heading font-bold text-slate-900 mb-8">Add Fly Pattern</h1>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">{error}</div>
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-6">
+            {error}
+          </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={labelCls}>Pattern Name <span className="text-red-500">*</span></label>
-              <input required className={inputCls} placeholder="Perdigon" value={form.name} onChange={(e) => updateForm("name", e.target.value)} />
-            </div>
-            <div>
-              <label className={labelCls}>Type</label>
-              <select className={inputCls} value={form.type} onChange={(e) => updateForm("type", e.target.value)}>
-                <option value="">—</option>
-                {["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"].map((t) => (
-                  <option key={t}>{t}</option>
-                ))}
-              </select>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
+              Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div>
-              <label className={labelCls}>Hook Sizes</label>
-              <input className={inputCls} placeholder="#14, #16" value={form.size} onChange={(e) => updateForm("size", e.target.value)} />
-            </div>
-            <div>
-              <label className={labelCls}>Hook</label>
-              <input className={inputCls} placeholder="Hanak 400" value={form.hook} onChange={(e) => updateForm("hook", e.target.value)} />
-            </div>
-            <div>
-              <label className={labelCls}>Bead Size</label>
-              <input className={inputCls} placeholder="2.5mm" value={form.bead_size} onChange={(e) => updateForm("bead_size", e.target.value)} />
-            </div>
-            <div>
-              <label className={labelCls}>Bead Color</label>
-              <input className={inputCls} placeholder="Gold" value={form.bead_color} onChange={(e) => updateForm("bead_color", e.target.value)} />
-            </div>
+          <div>
+            <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
+              Type <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="type"
+              name="type"
+              required
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            >
+              <option value="">Select type...</option>
+              {FLY_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="hook_sizes" className="block text-sm font-semibold text-slate-700 mb-2">
+              Hook Sizes
+            </label>
+            <input
+              type="text"
+              id="hook_sizes"
+              name="hook_sizes"
+              placeholder="#14, #16, #18"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="hook" className="block text-sm font-semibold text-slate-700 mb-2">
+              Hook
+            </label>
+            <input
+              type="text"
+              id="hook"
+              name="hook"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelCls}>Fly Color</label>
-              <input className={inputCls} placeholder="Black, Red" value={form.fly_color} onChange={(e) => updateForm("fly_color", e.target.value)} />
+              <label htmlFor="bead_size" className="block text-sm font-semibold text-slate-700 mb-2">
+                Bead Size
+              </label>
+              <input
+                type="text"
+                id="bead_size"
+                name="bead_size"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              />
             </div>
             <div>
-              <label className={labelCls}>Tags</label>
-              <input className={inputCls} placeholder="euro, tight-line" value={form.tags} onChange={(e) => updateForm("tags", e.target.value)} />
+              <label htmlFor="bead_color" className="block text-sm font-semibold text-slate-700 mb-2">
+                Bead Color
+              </label>
+              <input
+                type="text"
+                id="bead_color"
+                name="bead_color"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              />
             </div>
           </div>
 
           <div>
-            <label className={labelCls}>Materials / Tying Recipe</label>
-            <textarea rows={4} className={inputCls} placeholder="Hook: Hanak 400 BL #16&#10;Bead: 2.5mm tungsten gold&#10;Thread: 8/0 black..." value={form.materials} onChange={(e) => updateForm("materials", e.target.value)} />
+            <label htmlFor="fly_color" className="block text-sm font-semibold text-slate-700 mb-2">
+              Fly Color
+            </label>
+            <input
+              type="text"
+              id="fly_color"
+              name="fly_color"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
           </div>
 
           <div>
-            <label className={labelCls}>Description / Notes</label>
-            <textarea rows={2} className={inputCls} placeholder="When and how to fish it..." value={form.description} onChange={(e) => updateForm("description", e.target.value)} />
+            <label htmlFor="materials" className="block text-sm font-semibold text-slate-700 mb-2">
+              Materials
+            </label>
+            <textarea
+              id="materials"
+              name="materials"
+              rows={4}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
           </div>
 
           <div>
-            <label className={labelCls}>Video URL <span className="text-slate-400 font-normal">(YouTube)</span></label>
-            <input type="url" className={inputCls} placeholder="https://youtube.com/..." value={form.video_url} onChange={(e) => updateForm("video_url", e.target.value)} />
+            <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={4}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
           </div>
 
-          {/* Image upload */}
           <div>
-            <label className={labelCls}>Photo</label>
-            <div className="flex gap-4 items-start">
-              {preview && (
-                <div className="relative h-24 w-24 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
-                  <Image src={preview} alt="Preview" fill className="object-cover" />
-                </div>
-              )}
-              <button type="button" onClick={() => fileRef.current?.click()}
-                className="flex items-center gap-2 rounded-lg border border-dashed border-slate-300 px-4 py-3 text-sm text-slate-500 hover:border-forest hover:text-forest transition-colors">
-                <Upload className="h-4 w-4" />
-                {preview ? "Change Photo" : "Upload Photo"}
-              </button>
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+            <label htmlFor="video_url" className="block text-sm font-semibold text-slate-700 mb-2">
+              Video URL
+            </label>
+            <input
+              type="text"
+              id="video_url"
+              name="video_url"
+              placeholder="https://youtube.com/..."
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
           </div>
 
-          <div className="sticky bottom-4 pt-4">
-            <button type="submit" disabled={saving}
-              className="w-full rounded-xl bg-forest py-4 text-white font-semibold text-lg shadow-lg hover:bg-forest-dark transition-colors disabled:opacity-60">
-              {saving ? "Saving…" : "Save Pattern"}
+          <div>
+            <label htmlFor="image" className="block text-sm font-semibold text-slate-700 mb-2">
+              Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+            />
+            {imagePreview && (
+              <div className="mt-4">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="max-w-xs rounded-lg border border-slate-200"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 bg-forest text-white font-semibold py-3 px-6 rounded-lg hover:bg-forest-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Creating...' : 'Create Pattern'}
             </button>
+            <Link
+              href="/journal/flies"
+              className="px-6 py-3 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              Cancel
+            </Link>
           </div>
         </form>
       </div>
     </div>
-  );
+  )
 }
