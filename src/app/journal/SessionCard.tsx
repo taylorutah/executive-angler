@@ -38,14 +38,14 @@ interface Props {
 
 // Accent border colors — rotates by river name for visual variety
 const ACCENT_COLORS = [
-  "bg-forest",
-  "bg-teal-600",
-  "bg-blue-600",
-  "bg-amber-500",
-  "bg-slate-500",
-  "bg-emerald-600",
-  "bg-cyan-600",
-  "bg-indigo-500",
+  "border-forest",
+  "border-teal-500",
+  "border-blue-500",
+  "border-amber-500",
+  "border-slate-400",
+  "border-emerald-500",
+  "border-cyan-500",
+  "border-indigo-400",
 ];
 
 function accentColor(name?: string) {
@@ -99,7 +99,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
         )}
 
         {/* Card body */}
-        <div className={`flex gap-0 ${!hasPhotos ? "border-l-4 " + accent : ""}`}>
+        <div className={`flex gap-0 ${!hasPhotos ? "border-l-4 " + accent : ""} rounded-b-xl`}>
 
           {/* Date stamp column (no-photo only) */}
           {!hasPhotos && (
