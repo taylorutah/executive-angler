@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, User, Calendar, ArrowLeft } from "lucide-react";
+import Badge from "@/components/ui/Badge";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
