@@ -104,9 +104,9 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
           {/* Date stamp column (no-photo only) */}
           {!hasPhotos && (
             <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{month}</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{month}</span>
               <span className="text-2xl font-bold text-slate-800 leading-none">{day}</span>
-              <span className="text-[10px] text-slate-300 mt-0.5">{year}</span>
+              <span className="text-[10px] text-slate-500 mt-0.5">{year}</span>
             </div>
           )}
 
@@ -117,7 +117,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
                 {title}
               </h3>
               {totalFish > 0 && (
-                <span className="flex-shrink-0 flex items-center gap-1 bg-forest/10 text-forest rounded-full px-2 py-0.5 text-xs font-semibold">
+                <span className="flex-shrink-0 flex items-center gap-1 bg-forest/15 text-forest-dark rounded-full px-2 py-0.5 text-xs font-semibold">
                   <Fish className="h-3 w-3" />{totalFish}
                 </span>
               )}
@@ -125,7 +125,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Location */}
             {session.location && (
-              <div className="flex items-center gap-1 text-[11px] text-slate-400 mb-2">
+              <div className="flex items-center gap-1 text-[11px] text-slate-600 mb-2">
                 <MapPin className="h-3 w-3 flex-shrink-0" />
                 <span className="truncate">{session.location}</span>
               </div>
@@ -133,7 +133,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Date row (photo cards) */}
             {hasPhotos && (
-              <p className="text-[11px] text-slate-400 mb-2">{formattedDate}</p>
+              <p className="text-[11px] text-slate-600 mb-2">{formattedDate}</p>
             )}
 
             {/* Notes excerpt */}
@@ -143,7 +143,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Conditions */}
             {hasConditions && (
-              <div className="flex flex-wrap gap-2 text-[11px] text-slate-400 mb-2">
+              <div className="flex flex-wrap gap-2 text-[11px] text-slate-600 mb-2">
                 {session.water_temp_f && <span className="flex items-center gap-0.5"><Thermometer className="h-3 w-3" />{session.water_temp_f}</span>}
                 {session.water_clarity && <span className="flex items-center gap-0.5"><Droplets className="h-3 w-3" />{session.water_clarity}</span>}
                 {session.weather && <span className="flex items-center gap-0.5"><Cloud className="h-3 w-3" />{session.weather}</span>}
