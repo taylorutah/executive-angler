@@ -15,6 +15,7 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { destinations } from "@/data/destinations";
+import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
   getDestinationBySlug,
@@ -43,6 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${dest.name} Fly Fishing`,
       description: dest.metaDescription || dest.tagline,
       images: [dest.heroImageUrl],
+    },
+    alternates: {
+      canonical: `${SITE_URL}/destinations/${slug}`,
     },
   };
 }

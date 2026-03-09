@@ -14,6 +14,7 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { rivers } from "@/data/rivers";
+import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -45,6 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
       images: [river.heroImageUrl],
+    },
+    alternates: {
+      canonical: `${SITE_URL}/rivers/${slug}`,
     },
   };
 }

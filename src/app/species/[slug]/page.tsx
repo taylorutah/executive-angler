@@ -14,6 +14,7 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { species } from "@/data/species";
+import { SITE_URL } from "@/lib/constants";
 import {
   getSpeciesBySlug,
   getDestinationsByIds,
@@ -42,6 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         sp.metaDescription ||
         (sp.description ? sp.description.substring(0, 160) : `Fly fishing guide for ${sp.commonName}.`),
       images: sp.imageUrl ? [sp.imageUrl] : [],
+    },
+    alternates: {
+      canonical: `${SITE_URL}/species/${slug}`,
     },
   };
 }

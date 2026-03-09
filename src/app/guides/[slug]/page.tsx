@@ -13,6 +13,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { guides } from "@/data/guides";
+import { SITE_URL } from "@/lib/constants";
 import {
   getAllGuides,
   getGuideBySlug,
@@ -38,6 +39,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       guide.metaDescription ||
       `${guide.name} — professional fly fishing guide. Specialties: ${(guide.specialties || []).join(", ")}.`,
+    alternates: {
+      canonical: `${SITE_URL}/guides/${slug}`,
+    },
   };
 }
 

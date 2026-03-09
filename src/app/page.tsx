@@ -32,6 +32,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: ["/images/madison-river-three-dollar-bridge.jpg"],
   },
+  alternates: {
+    canonical: SITE_URL,
+  },
 };
 
 export const revalidate = 3600;

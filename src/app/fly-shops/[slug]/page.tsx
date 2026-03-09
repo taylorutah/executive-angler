@@ -13,6 +13,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { flyShops } from "@/data/fly-shops";
+import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination } from "@/lib/db";
 
@@ -30,6 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${shop.name} — Fly Shop`,
     description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
+    alternates: {
+      canonical: `${SITE_URL}/fly-shops/${slug}`,
+    },
   };
 }
 

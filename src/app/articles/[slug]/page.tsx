@@ -7,6 +7,7 @@ import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import { articles } from "@/data/articles";
+import { SITE_URL } from "@/lib/constants";
 import { getArticleBySlug, getAllArticles } from "@/lib/db";
 
 interface Props {
@@ -27,6 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.excerpt,
       images: [article.heroImageUrl],
       type: "article",
+    },
+    alternates: {
+      canonical: `${SITE_URL}/articles/${slug}`,
     },
   };
 }

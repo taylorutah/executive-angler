@@ -16,6 +16,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { lodges } from "@/data/lodges";
+import { SITE_URL } from "@/lib/constants";
 import {
   getAllLodges,
   getLodgeBySlug,
@@ -44,6 +45,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: lodge.name,
       description: lodge.metaDescription || lodge.description.substring(0, 160),
       images: [lodge.heroImageUrl],
+    },
+    alternates: {
+      canonical: `${SITE_URL}/lodges/${slug}`,
     },
   };
 }
