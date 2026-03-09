@@ -12,6 +12,8 @@ interface EntityCardProps {
   badges?: string[];
   /** When true, shows a MapPin icon instead of an image (for guides, fly shops) */
   iconOnly?: boolean;
+  /** Use object-contain + cream bg for illustrations (fish species) */
+  imageContain?: boolean;
 }
 
 export default function EntityCard({
@@ -23,6 +25,7 @@ export default function EntityCard({
   meta,
   badges,
   iconOnly,
+  imageContain,
 }: EntityCardProps) {
   return (
     <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-white shadow-md">
@@ -33,12 +36,12 @@ export default function EntityCard({
           </div>
         </div>
       ) : (
-        <div className="relative h-56 overflow-hidden">
+        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-cream" : ""}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
             fill
-            className="object-cover card-image-zoom"
+            className={imageContain ? "object-contain p-4" : "object-cover card-image-zoom"}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {badges && badges.length > 0 && (

@@ -30,6 +30,7 @@ export default async function SpeciesListPage() {
       badges: sp.family ? [sp.family] : undefined,
       featured: sp.featured,
       description: sp.description?.substring(0, 150),
+      imageContain: true,
       _filterValues: {
         family: sp.family || "",
       },

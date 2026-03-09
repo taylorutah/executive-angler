@@ -220,6 +220,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
                   meta={item.meta}
                   badges={item.badges}
                   iconOnly={item.iconOnly}
+                  imageContain={item.imageContain}
                 />
               ))}
             </div>

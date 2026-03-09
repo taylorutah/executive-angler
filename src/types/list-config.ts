@@ -29,6 +29,8 @@ export interface CardData {
   description?: string;
   /** Icon-only cards (guides, fly shops) */
   iconOnly?: boolean;
+  /** Use object-contain instead of object-cover (for illustrations like fish species) */
+  imageContain?: boolean;
   /** Tags/chips shown below description */
   tags?: string[];
   /** Secondary line (e.g., daily rate, price) */
