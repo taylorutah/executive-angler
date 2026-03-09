@@ -158,7 +158,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     filterRivers.length > 0 || filterYears.length > 0 || filterLocations.length > 0;
 
   return (
-    <div className="min-h-screen bg-cream pt-16 lg:pt-0">
+    <div className="min-h-screen bg-cream pt-20 lg:pt-0">
       {/* Mobile header */}
       <div className="lg:hidden border-b border-slate-200 bg-white px-4 py-4">
         <div className="flex items-center justify-between">
