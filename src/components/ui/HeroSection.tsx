@@ -8,6 +8,7 @@ interface HeroSectionProps {
   height?: string;
   overlay?: "dark" | "light";
   children?: React.ReactNode;
+  imageContain?: boolean;
 }
 
 export default function HeroSection({
@@ -18,14 +19,15 @@ export default function HeroSection({
   height = "h-[60vh]",
   overlay = "dark",
   children,
+  imageContain = false,
 }: HeroSectionProps) {
   return (
-    <section className={`relative ${height} w-full overflow-hidden`}>
+    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-slate-800" : ""}`}>
       <Image
         src={imageUrl}
         alt={imageAlt}
         fill
-        className="object-cover"
+        className={imageContain ? "object-contain" : "object-cover"}
         priority
         sizes="100vw"
       />

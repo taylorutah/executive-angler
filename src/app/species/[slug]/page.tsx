@@ -123,6 +123,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
         title={sp.commonName}
         subtitle={sp.scientificName || undefined}
         height="h-[60vh]"
+        imageContain={true}
       />
 
       <div className="bg-cream">
