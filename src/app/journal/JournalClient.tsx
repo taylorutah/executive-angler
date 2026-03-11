@@ -6,7 +6,7 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, Fish, BookOpen, MapPin, Feather } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -318,27 +318,6 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
                 <span className="text-base">⚙️</span> Settings
               </Link>
-            </div>
-
-            {/* Stats */}
-            <div className="bg-white rounded-xl border border-slate-100 p-4">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Your Numbers</p>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-slate-600"><Fish className="h-3.5 w-3.5 text-forest" /> Total Fish</span>
-                  <span className="font-bold text-slate-900">{totalFish}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-slate-600"><MapPin className="h-3.5 w-3.5 text-amber-500" /> Rivers</span>
-                  <span className="font-bold text-slate-900">{riversFished}</span>
-                </div>
-                {bestSession && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Best Day</span>
-                    <span className="font-bold text-slate-900">{bestSession.fish} fish</span>
-                  </div>
-                )}
-              </div>
             </div>
 
             {/* Log buttons */}

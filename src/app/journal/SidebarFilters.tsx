@@ -95,9 +95,8 @@ export function SidebarFilters({
           <strong className="text-lg text-forest-dark">{stats.riversFished}</strong> Rivers Fished
         </div>
         {stats.bestSession && (
-          <div className="text-sm text-slate-600">
-            <span className="font-medium">Best:</span> {stats.bestSession.fish} fish ·{" "}
-            {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
+          <div className="text-xs text-slate-400 pt-0.5">
+            Best: {stats.bestSession.fish} fish · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
           </div>
         )}
       </div>

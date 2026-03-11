@@ -8,6 +8,23 @@ import { ArrowLeft, Upload, Trash2, X } from "lucide-react";
 
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
 
+/** Normalize array fields from DB — handles real arrays, JSON strings, and plain strings */
+function normalizeArrayField(val: unknown): string {
+  if (!val) return "";
+  if (Array.isArray(val)) return val.join(", ");
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (trimmed.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.join(", ");
+      } catch { /* fall through */ }
+    }
+    return trimmed;
+  }
+  return String(val);
+}
+
 export default function EditFlyPage() {
   const router = useRouter();
   const params = useParams();
@@ -36,9 +53,9 @@ export default function EditFlyPage() {
         setForm({
           name: fly.name || "",
           type: fly.type || "",
-          size: Array.isArray(fly.size) ? fly.size.join(", ") : fly.size || "",
+          size: normalizeArrayField(fly.size),
           hook: fly.hook || "",
-          bead_size: fly.bead_size || "",
+          bead_size: normalizeArrayField(fly.bead_size),
           bead_color: fly.bead_color || "",
           fly_color: fly.fly_color || "",
           materials: fly.materials || "",
