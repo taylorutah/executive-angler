@@ -83,25 +83,7 @@ export function SidebarFilters({
 
   return (
     <div className="space-y-6">
-      {/* Stats */}
-      <div className="space-y-2">
-        <div className="text-sm text-slate-600">
-          <strong className="text-lg text-forest-dark">{stats.totalSessions}</strong> Sessions
-        </div>
-        <div className="text-sm text-slate-600">
-          <strong className="text-lg text-forest-dark">{stats.totalFish}</strong> Fish Caught
-        </div>
-        <div className="text-sm text-slate-600">
-          <strong className="text-lg text-forest-dark">{stats.riversFished}</strong> Rivers Fished
-        </div>
-        {stats.bestSession && (
-          <div className="text-xs text-slate-400 pt-0.5">
-            Best: {stats.bestSession.fish} fish · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
-          </div>
-        )}
-      </div>
 
-      <hr className="border-slate-200" />
 
       {/* River Filter */}
       <div>
