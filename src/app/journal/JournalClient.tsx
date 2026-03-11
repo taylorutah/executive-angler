@@ -267,7 +267,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
       <div className="mx-auto max-w-7xl lg:flex lg:gap-6 lg:px-8 lg:py-8">
         {/* Desktop sidebar — Strava-style profile panel */}
         <aside className="hidden lg:block lg:w-[240px] lg:flex-shrink-0">
-          <div className="sticky top-8 space-y-4">
+          <div className="sticky top-20 space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto pb-8">
 
             {/* Profile card */}
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
