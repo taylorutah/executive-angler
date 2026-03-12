@@ -176,18 +176,11 @@ export async function DELETE(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  // Check if fly is used in any session
-  const { count } = await supabase
+  // Unlink any catches that reference this fly before deleting
+  await supabase
     .from("catches")
-    .select("*", { count: "exact", head: true })
+    .update({ fly_pattern_id: null })
     .eq("fly_pattern_id", id);
-
-  if (count && count > 0) {
-    return NextResponse.json(
-      { error: `This fly is used in ${count} catch record(s) and cannot be deleted.` },
-      { status: 409 }
-    );
-  }
 
   const { error } = await supabase
     .from("fly_patterns")
