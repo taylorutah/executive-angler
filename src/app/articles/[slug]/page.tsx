@@ -95,7 +95,7 @@ export default async function ArticlePage({ params }: Props) {
       </section>
 
       {/* Article page */}
-      <div className="bg-[#f8f7f4] min-h-screen">
+      <div className="bg-[#0D1117] min-h-screen">
         <div className="max-w-5xl mx-auto px-4 sm:px-8">
 
           {/* Breadcrumb + favorite — same width as content */}

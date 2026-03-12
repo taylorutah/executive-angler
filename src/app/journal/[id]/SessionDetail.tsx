@@ -312,7 +312,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                     <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Flies Used</p>
                     <div className="flex flex-wrap gap-1.5">
                       {usedFlies.map(f => (
-                        <span key={f.name} className="flex items-center gap-1 text-xs bg-amber-50 text-amber-800 border border-amber-100 rounded-full px-2.5 py-1">
+                        <span key={f.name} className="flex items-center gap-1 text-xs bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2.5 py-1">
                           🪰 {f.name}
                         </span>
                       ))}
