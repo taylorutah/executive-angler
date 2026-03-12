@@ -144,7 +144,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               {stats.biggestFish && (
                 <div className="rounded-lg bg-[#0D1117] p-4">
                   <p className="text-xs text-[#8B949E] mb-1">Biggest Fish</p>
-                  <p className="text-2xl font-bold text-[#E8923A]">{stats.biggestFish}&quot;</p>
+                  <p className="text-2xl font-bold text-[#E8923A]">{stats.biggestFish?.toFixed(1)}&quot;</p>
                 </div>
               )}
               {stats.bestSession && (

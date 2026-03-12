@@ -49,7 +49,7 @@ export default async function AccountPage() {
   const lengths = catches
     ?.map((c) => parseFloat(c.length_inches || "0"))
     .filter((l) => l > 0) || [];
-  const biggestFish = lengths.length > 0 ? Math.max(...lengths) : null;
+  const biggestFish = lengths.length > 0 ? Math.round(Math.max(...lengths) * 10) / 10 : null;
 
   return (
     <AccountClient

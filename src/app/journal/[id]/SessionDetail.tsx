@@ -162,10 +162,10 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     ).values()
   );
 
-  const biggestFish = catches.reduce((best, c) => {
+  const biggestFish = Math.round(catches.reduce((best, c) => {
     const len = parseFloat(c.length_inches || "0");
     return len > (best || 0) ? len : best;
-  }, 0);
+  }, 0) * 10) / 10;
 
   return (
     <>
@@ -286,7 +286,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                   )}
                   {biggestFish > 0 && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{biggestFish}&quot;</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{biggestFish.toFixed(1)}&quot;</p>
                       <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
