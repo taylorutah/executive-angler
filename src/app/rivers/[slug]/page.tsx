@@ -25,6 +25,7 @@ import {
   getFlyShopsByDestination,
   getArticlesByRiver,
 } from "@/lib/db";
+import { getRiverActivityStats } from "@/lib/db/river-stats";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -67,14 +68,29 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles] = await Promise.all([
+  const [dest, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, activityStats] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     getLodgesByRiver(river.id),
     river.destinationId ? getLodgesByDestination(river.destinationId) : Promise.resolve([]),
     getGuidesByRiver(river.id),
     river.destinationId ? getFlyShopsByDestination(river.destinationId) : Promise.resolve([]),
     getArticlesByRiver(river.id),
+    getRiverActivityStats(river.id),
   ]);
+
+  // Human-readable "time ago" for last session date
+  function timeAgo(dateStr: string | null): string {
+    if (!dateStr) return "Never";
+    const date = new Date(dateStr + "T12:00:00");
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) === 1 ? "" : "s"} ago`;
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
+    return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) === 1 ? "" : "s"} ago`;
+  }
 
   const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
   const lodgesHeading = riverLodges.length > 0
@@ -170,6 +186,56 @@ export default async function RiverPage({ params }: Props) {
                       </Badge>
                     ))}
                   </div>
+                </div>
+              </ScrollAnimation>
+
+              {/* What's Happening on the Water */}
+              <ScrollAnimation>
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    What&apos;s Happening on the Water
+                  </h2>
+                  {activityStats ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex flex-col gap-1">
+                        <span className="text-xs text-[#484F58] uppercase tracking-widest font-medium">Sessions (30d)</span>
+                        <span className="font-mono-data text-3xl font-bold text-[#E8923A]">
+                          {activityStats.sessions_last_30d ?? 0}
+                        </span>
+                      </div>
+                      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex flex-col gap-1">
+                        <span className="text-xs text-[#484F58] uppercase tracking-widest font-medium">Avg Fish / Trip</span>
+                        <span className="font-mono-data text-3xl font-bold text-[#E8923A]">
+                          {activityStats.avg_fish_per_session != null
+                            ? activityStats.avg_fish_per_session
+                            : "—"}
+                        </span>
+                      </div>
+                      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex flex-col gap-1">
+                        <span className="text-xs text-[#484F58] uppercase tracking-widest font-medium">Last Session</span>
+                        <span className="font-mono-data text-xl font-bold text-[#E8923A] leading-tight pt-1">
+                          {timeAgo(activityStats.last_session_date)}
+                        </span>
+                      </div>
+                      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex flex-col gap-1">
+                        <span className="text-xs text-[#484F58] uppercase tracking-widest font-medium">Total Fish</span>
+                        <span className="font-mono-data text-3xl font-bold text-[#E8923A]">
+                          {activityStats.total_fish_recorded ?? 0}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-[#161B22] rounded-xl border border-[#21262D] border-dashed p-8 text-center">
+                      <Fish className="h-8 w-8 text-[#484F58] mx-auto mb-3" />
+                      <p className="text-[#8B949E] text-sm mb-3">No sessions logged for this river yet.</p>
+                      <Link
+                        href="/log"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-[#E8923A] hover:text-[#F0A65A] transition-colors"
+                      >
+                        Be the first to log a session →
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </ScrollAnimation>
 
