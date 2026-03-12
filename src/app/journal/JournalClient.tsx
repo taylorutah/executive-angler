@@ -171,6 +171,12 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               🪰 Flies
             </Link>
             <Link
+              href="/account/gear"
+              className="rounded-lg border border-[#00B4D8] px-3 py-2 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+            >
+              🎣 Gear
+            </Link>
+            <Link
               href="/journal/new"
               className="rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#0D1117]"
             >
