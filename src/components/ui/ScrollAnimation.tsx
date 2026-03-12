@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface ScrollAnimationProps {
@@ -16,12 +17,20 @@ export default function ScrollAnimation({
   direction = "up",
 }: ScrollAnimationProps) {
   const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // iOS Safari has a known IntersectionObserver rootMargin bug that
+    // causes whileInView elements to stay at opacity:0 forever on mobile.
+    // Skip scroll animations on mobile entirely — content shows immediately.
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const initialX = direction === "left" ? -30 : direction === "right" ? 30 : 0;
   const initialY = direction === "up" ? 30 : 0;
 
-  // If user prefers reduced motion, render immediately without animation
-  if (prefersReducedMotion) {
+  // No animation on mobile or reduced-motion preference
+  if (isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
@@ -30,14 +39,7 @@ export default function ScrollAnimation({
       initial={{ opacity: 0, x: initialX, y: initialY }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       transition={{ duration: 0.6, delay, ease: "easeOut" }}
-      viewport={{
-        once: true,
-        // amount: trigger when just 1% of the element is visible (very sensitive)
-        amount: 0.01,
-        // margin: positive bottom margin pre-triggers animations 150px before
-        // they scroll into view — critical for mobile iOS Safari reliability
-        margin: "0px 0px 150px 0px",
-      }}
+      viewport={{ once: true, amount: 0.05 }}
       className={className}
     >
       {children}
