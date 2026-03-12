@@ -75,7 +75,7 @@ export default async function ArticlePage({ params }: Props) {
         {/* gradient: transparent top → dark bottom */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
         <div className="absolute inset-0 flex items-end">
-          <div className="w-full max-w-5xl mx-auto px-6 sm:px-10 pb-14">
+          <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 pb-14">
             <Badge variant="forest" size="md">{article.category}</Badge>
             <h1 className="text-white font-heading font-bold text-3xl sm:text-4xl lg:text-[2.6rem] leading-tight max-w-3xl">
               {article.title}
@@ -96,7 +96,7 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* Article page */}
       <div className="bg-[#f8f7f4] min-h-screen">
-        <div className="max-w-5xl mx-auto px-6 sm:px-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-8">
 
           {/* Breadcrumb + favorite — same width as content */}
           <div className="flex items-center justify-between py-5 border-b border-[#21262D] mb-10">
