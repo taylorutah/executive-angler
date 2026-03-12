@@ -495,11 +495,17 @@
    over @layer utilities via !important cascade.
    ============================================= */
 
-/* ── Backgrounds ── */
+/* ── Backgrounds — escaped selectors ── */
 .light-mode .bg-\[\#0D1117\] { background-color: #F7F3EC !important; }
 .light-mode .bg-\[\#161B22\] { background-color: #FFFFFF !important; }
 .light-mode .bg-\[\#1F2937\] { background-color: #EDE8DF !important; }
 .light-mode .bg-\[\#21262D\] { background-color: #E5DDD0 !important; }
+
+/* ── Backgrounds — attribute contains (Safari iOS) ── */
+.light-mode [class*="bg-[#0D1117]"] { background-color: #F7F3EC !important; }
+.light-mode [class*="bg-[#161B22]"] { background-color: #FFFFFF !important; }
+.light-mode [class*="bg-[#1F2937]"] { background-color: #EDE8DF !important; }
+.light-mode [class*="bg-[#21262D]"] { background-color: #E5DDD0 !important; }
 
 /* ── Hover backgrounds ── */
 .light-mode .hover\:bg-\[\#0D1117\]:hover { background-color: #F0ECE4 !important; }
@@ -507,10 +513,15 @@
 .light-mode .hover\:bg-\[\#1F2937\]:hover { background-color: #E5DDD0 !important; }
 .light-mode .hover\:bg-\[\#21262D\]:hover { background-color: #D8CFC4 !important; }
 
-/* ── Text colors ── */
+/* ── Text colors — escaped class selectors (desktop Chrome/Firefox) ── */
 .light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
 .light-mode .text-\[\#8B949E\] { color: #4B5563 !important; }
 .light-mode .text-\[\#484F58\] { color: #6B7280 !important; }
+
+/* ── Text colors — attribute contains (Safari iOS fallback, bulletproof) ── */
+.light-mode [class*="F0F6FC"] { color: #111827 !important; }
+.light-mode [class*="8B949E"] { color: #4B5563 !important; }
+.light-mode [class*="484F58"] { color: #6B7280 !important; }
 
 /* ── Hover text ── */
 .light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
