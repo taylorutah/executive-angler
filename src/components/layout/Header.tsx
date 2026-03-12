@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Search, User, Heart, BookOpen } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { createClient } from "@/lib/supabase/client";
 
 export default function Header() {
@@ -48,7 +49,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#161B22] border-b border-[#21262D]">
+      <header className="ea-header fixed top-0 left-0 right-0 z-50 border-b">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
@@ -77,6 +78,7 @@ export default function Header() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <Link
                 href="/search"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#8B949E] hover:text-[#F0F6FC]"
@@ -201,6 +203,7 @@ export default function Header() {
                   </>
                 )}
               </div>
+              <div className="mt-4 flex justify-center"><ThemeToggle /></div>
             </div>
           </div>
         </div>

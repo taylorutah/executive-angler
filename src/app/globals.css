@@ -40,12 +40,29 @@
 
   /* Light mode override */
   .light-mode {
-    --background: #FAFAFA;
+    --background: #F7F3EC;
     --foreground: #111827;
-    --color-bg: #FAFAFA;
+    --color-bg: #F7F3EC;
     --color-surface: #FFFFFF;
+    --color-surface-raised: #EDE8DF;
+    --color-accent: #D4751F;
+    --color-signal: #0090A8;
     --color-text-primary: #111827;
-    --color-text-secondary: #6B7280;
+    --color-text-secondary: #4B5563;
+    --color-text-muted: #9CA3AF;
+    --color-border: #D4CBB8;
+    --color-success: #16A34A;
+    --color-danger: #DC2626;
+  }
+
+  /* Header theming via CSS class */
+  .ea-header {
+    background: #161B22;
+    border-color: #21262D;
+  }
+  .light-mode .ea-header {
+    background: #FFFFFF;
+    border-color: #D4CBB8;
   }
 
   * {
