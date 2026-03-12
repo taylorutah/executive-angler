@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   if (singleId) {
     const { data, error } = await supabase
       .from("fishing_sessions")
-      .select("*, catches(*)")
+      .select("*, catches(*), gear_rod:gear_rod_id(*), gear_reel:gear_reel_id(*), gear_line:gear_line_id(*), gear_leader:gear_leader_id(*), gear_tippet:gear_tippet_id(*)")
       .eq("id", singleId)
       .eq("user_id", user.id)
       .single();
@@ -71,6 +71,39 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(data);
 }
 
+const GEAR_ID_FIELDS = ['gear_rod_id', 'gear_reel_id', 'gear_line_id', 'gear_leader_id', 'gear_tippet_id'] as const;
+const GEAR_SNAPSHOT_KEYS = ['rod', 'reel', 'line', 'leader', 'tippet'] as const;
+
+async function buildGearSnapshot(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  body: Record<string, unknown>
+): Promise<Record<string, { name: string; maker?: string; model?: string }>> {
+  const snapshot: Record<string, { name: string; maker?: string; model?: string }> = {};
+  const pairs: Array<{ field: string; key: string }> = GEAR_ID_FIELDS.map((f, i) => ({
+    field: f,
+    key: GEAR_SNAPSHOT_KEYS[i],
+  }));
+
+  const ids = pairs.map((p) => body[p.field]).filter(Boolean) as string[];
+  if (!ids.length) return snapshot;
+
+  const { data } = await supabase
+    .from("gear_items")
+    .select("id, name, maker, model")
+    .in("id", ids);
+
+  for (const { field, key } of pairs) {
+    const id = body[field] as string | undefined;
+    if (!id) continue;
+    const item = data?.find((g) => g.id === id);
+    if (item) {
+      snapshot[key] = { name: item.name, maker: item.maker ?? undefined, model: item.model ?? undefined };
+    }
+  }
+
+  return snapshot;
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -79,9 +112,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { catches, ...sessionData } = body;
 
+  // Build gear snapshot before insert
+  const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
+
   const { data: session, error } = await supabase
     .from("fishing_sessions")
-    .insert({ ...sessionData, user_id: user.id })
+    .insert({ ...sessionData, user_id: user.id, gear_snapshot })
     .select()
     .single();
 

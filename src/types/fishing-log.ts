@@ -25,6 +25,13 @@ export interface FishingSession {
   flies_notes?: string;
   tags?: string[];
   notion_id?: string;
+  // Gear tracking
+  gear_rod_id?: string;
+  gear_reel_id?: string;
+  gear_line_id?: string;
+  gear_leader_id?: string;
+  gear_tippet_id?: string;
+  gear_snapshot?: Record<string, { name: string; maker?: string; model?: string }>;
   created_at: string;
   updated_at: string;
 }
