@@ -6,7 +6,7 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -168,13 +168,13 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               href="/journal/flies"
               className="rounded-lg border border-[#E8923A] px-3 py-2 text-sm font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
             >
-              🪰 Flies
+              🪰 Fly Box
             </Link>
             <Link
               href="/account/gear"
               className="rounded-lg border border-[#00B4D8] px-3 py-2 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
             >
-              🎣 Gear
+              🎣 Gear Box
             </Link>
             <Link
               href="/journal/new"
@@ -273,7 +273,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
       <div className="mx-auto max-w-7xl lg:flex lg:gap-6 lg:px-8 lg:py-8">
         {/* Desktop sidebar — Strava-style profile panel */}
         <aside className="hidden lg:block lg:w-[240px] lg:flex-shrink-0">
-          <div className="sticky top-20 space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto pb-8">
+          <div className="sticky top-20 flex flex-col gap-4 max-h-[calc(100vh-5rem)] overflow-y-auto pb-4 pr-1">
 
             {/* Profile card */}
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
@@ -318,6 +318,9 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 <Feather className="h-4 w-4" /> My Fly Box
                 <span className="ml-auto text-xs text-[#484F58]">{totalFlyPatterns}</span>
               </Link>
+              <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+                <Package className="h-4 w-4" /> Gear Box
+              </Link>
               <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">❤️</span> Favorites
               </Link>
@@ -336,7 +339,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               </Link>
             </div>
 
-            {/* Filters */}
+            {/* Filters — always at bottom */}
             <SidebarFilters
               sessions={sessions}
               filterRivers={filterRivers}
