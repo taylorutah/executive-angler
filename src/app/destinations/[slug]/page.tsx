@@ -150,27 +150,26 @@ export default async function DestinationPage({ params }: Props) {
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <ScrollAnimation>
-                <div className="prose max-w-none">
+                <div>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Overview
                   </h2>
-                  {dest.description.split("\n\n").map((paragraph, i) => (
-                    <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </ScrollAnimation>
-
-              {/* Species */}
-              <ScrollAnimation>
-                <div className="flex flex-wrap gap-2">
-                  {(dest.primarySpecies || []).map((species) => (
-                    <Badge key={species} variant="forest" size="md">
-                      <Fish className="h-3.5 w-3.5 mr-1.5" />
-                      {species}
-                    </Badge>
-                  ))}
+                  <div className="destination-body">
+                    {dest.description.split("\n\n").map((paragraph, i) => (
+                      <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                  {/* Species badges — flex-wrap ensures no overflow on mobile */}
+                  <div className="entity-tags mt-4">
+                    {(dest.primarySpecies || []).map((species) => (
+                      <Badge key={species} variant="forest" size="md">
+                        <Fish className="h-3.5 w-3.5 mr-1.5" />
+                        {species}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </ScrollAnimation>
 

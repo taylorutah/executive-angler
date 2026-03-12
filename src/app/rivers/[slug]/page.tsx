@@ -150,21 +150,26 @@ export default async function RiverPage({ params }: Props) {
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
-                  Overview
-                </h2>
-                {river.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
-                    {p}
-                  </p>
-                ))}
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {(river.primarySpecies || []).map((species) => (
-                    <Badge key={species} variant="river" size="md">
-                      <Fish className="h-3.5 w-3.5 mr-1.5" />
-                      {species}
-                    </Badge>
-                  ))}
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                    Overview
+                  </h2>
+                  <div className="river-body">
+                    {river.description.split("\n\n").map((p, i) => (
+                      <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                  {/* Species badges — flex-wrap ensures no overflow on mobile */}
+                  <div className="entity-tags mt-4">
+                    {(river.primarySpecies || []).map((species) => (
+                      <Badge key={species} variant="river" size="md">
+                        <Fish className="h-3.5 w-3.5 mr-1.5" />
+                        {species}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </ScrollAnimation>
 

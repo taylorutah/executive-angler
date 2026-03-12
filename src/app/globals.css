@@ -436,6 +436,52 @@
 }
 
 /* =============================================
+   DESTINATION & RIVER BODY — description/overview text
+   ============================================= */
+
+/* Base: proper line-height and readable size for dark-bg body text */
+.destination-body p,
+.river-body p {
+  font-size: 1rem;       /* floor — never smaller than 16px */
+  line-height: 1.8;
+  color: #8B949E;
+  margin-bottom: 1rem;
+}
+
+/* Mobile: prevent viewport scaling from shrinking text */
+@media (max-width: 639px) {
+  .destination-body,
+  .river-body {
+    /* container already has px-4 from parent — no extra padding needed */
+  }
+  .destination-body p,
+  .river-body p {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+}
+
+/* =============================================
+   DESTINATION & RIVER — tags / metadata rows
+   ============================================= */
+
+/* Species, technique, and difficulty badge rows — always wrap, never overflow */
+.entity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  .entity-tags span,
+  .entity-tags a {
+    font-size: 0.75rem;   /* text-xs on mobile */
+  }
+}
+
+/* =============================================
    ARTICLE BODY — mobile overrides (max-width: 639px)
    ============================================= */
 
