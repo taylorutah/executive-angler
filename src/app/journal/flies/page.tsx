@@ -71,7 +71,7 @@ export default async function FlyBoxPage() {
             <p className="text-sm text-[#484F58] mt-0.5">{flies.length} pattern{flies.length !== 1 ? "s" : ""}</p>
           </div>
           <Link href="/journal/flies/new"
-            className="flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
+            className="flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
             <Plus className="h-4 w-4" /> Add Pattern
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default async function FlyBoxPage() {
             <Feather className="h-12 w-12 mx-auto text-[#484F58] mb-4" />
             <p className="text-[#8B949E] mb-4">Your fly box is empty</p>
             <Link href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark">
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117]">
               <Plus className="h-4 w-4" /> Add Your First Pattern
             </Link>
           </div>

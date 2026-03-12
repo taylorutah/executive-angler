@@ -216,7 +216,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <p className="text-xs text-[#484F58] mt-1">Controls what shows in your journal feed cards.</p>
             </div>
             <button type="submit" disabled={saving}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#E8923A]-dark disabled:opacity-60">
+              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#0D1117] disabled:opacity-60">
               <Save className="h-4 w-4" />
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save Profile"}
             </button>

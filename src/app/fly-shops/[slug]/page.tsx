@@ -112,7 +112,7 @@ export default async function FlyShopPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   About
                 </h2>
                 {shop.description.split("\n\n").map((p, i) => (
@@ -123,7 +123,7 @@ export default async function FlyShopPage({ params }: Props) {
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -137,7 +137,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {(shop.brandsCarried || []).length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Brands Carried
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -153,7 +153,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Waters We Know */}
               {nearbyRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Waters We Know
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -165,7 +165,7 @@ export default async function FlyShopPage({ params }: Props) {
                       >
                         <Waves className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-medium text-[#E8923A]-dark">{river.name}</h3>
+                          <h3 className="font-medium text-[#E8923A]">{river.name}</h3>
                           <p className="text-xs text-[#8B949E]">
                             {(river.primarySpecies || []).slice(0, 3).join(", ")}
                           </p>
@@ -179,7 +179,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Guides in This Area */}
               {areaGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Guides in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -193,7 +193,7 @@ export default async function FlyShopPage({ params }: Props) {
                           <User className="h-5 w-5 text-[#E8923A]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {guide.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">
@@ -212,7 +212,7 @@ export default async function FlyShopPage({ params }: Props) {
               )}
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Location
                 </h2>
                 <MapView
@@ -256,7 +256,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Hours */}
               {shop.hours && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4 flex items-center gap-2">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4 flex items-center gap-2">
                     <Clock className="h-5 w-5" />
                     Hours
                   </h3>
@@ -281,7 +281,7 @@ export default async function FlyShopPage({ params }: Props) {
                     href={shop.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A]-dark font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Website

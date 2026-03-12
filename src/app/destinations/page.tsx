@@ -54,7 +54,7 @@ export default async function DestinationsPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#E8923A]-dark pt-32 pb-16 sm:pb-20">
+      <section className="bg-[#0D1117] pt-32 pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Explore the World
@@ -95,7 +95,7 @@ export default async function DestinationsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest-dark/20 hidden lg:block" />
                   </div>
-                  <div className="bg-[#E8923A]-dark lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
+                  <div className="bg-[#0D1117] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
                       Featured Destination
                     </p>

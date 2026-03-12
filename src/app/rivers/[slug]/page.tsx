@@ -151,7 +151,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Overview */}
               <ScrollAnimation>
                 <div>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Overview
                   </h2>
                   <div className="river-body">
@@ -194,7 +194,7 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Interactive Map */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Access Points & Map
                 </h2>
                 <MapView
@@ -216,7 +216,7 @@ export default async function RiverPage({ params }: Props) {
                         {i + 1}
                       </div>
                       <div>
-                        <h4 className="font-medium text-[#E8923A]-dark">
+                        <h4 className="font-medium text-[#E8923A]">
                           {ap.name}
                         </h4>
                         {ap.description && (
@@ -244,7 +244,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Hatch Chart */}
               {river.hatchChart && river.hatchChart.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Hatch Chart
                   </h2>
                   <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
@@ -275,7 +275,7 @@ export default async function RiverPage({ params }: Props) {
                               >
                                 {hi === 0 && (
                                   <td
-                                    className="px-4 py-3 font-medium text-[#E8923A]-dark align-top"
+                                    className="px-4 py-3 font-medium text-[#E8923A] align-top"
                                     rowSpan={month.hatches.length}
                                   >
                                     {month.month}
@@ -303,7 +303,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Nearby Lodges */}
               {nearbyLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     {lodgesHeading}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -325,7 +325,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -337,7 +337,7 @@ export default async function RiverPage({ params }: Props) {
                       >
                         <Waves className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
@@ -359,7 +359,7 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Season Calendar */}
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                   Season
                 </h3>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -394,7 +394,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Nearby Guides */}
               {nearbyGuides.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Guides on This River
                   </h3>
                   <div className="space-y-3">
@@ -404,7 +404,7 @@ export default async function RiverPage({ params }: Props) {
                         href={`/guides/${guide.slug}`}
                         className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]-dark">
+                        <p className="text-sm font-medium text-[#E8923A]">
                           {guide.name}
                         </p>
                         <p className="text-xs text-[#8B949E] mt-0.5">
@@ -419,7 +419,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Related Articles */}
               {riverArticles.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Reading for This River
                   </h3>
                   <div className="space-y-3">
@@ -429,7 +429,7 @@ export default async function RiverPage({ params }: Props) {
                         href={`/articles/${article.slug}`}
                         className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]-dark">
+                        <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
                         <p className="text-xs text-[#8B949E] mt-1">

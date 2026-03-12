@@ -121,7 +121,7 @@ export default async function GuidePage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
@@ -132,7 +132,7 @@ export default async function GuidePage({ params }: Props) {
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -147,7 +147,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Rivers & Waters
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -159,7 +159,7 @@ export default async function GuidePage({ params }: Props) {
                       >
                         <MapPin className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-medium text-[#E8923A]-dark">
+                          <h3 className="font-medium text-[#E8923A]">
                             {river.name}
                           </h3>
                           <p className="text-xs text-[#8B949E]">
@@ -175,7 +175,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Lodges in This Area */}
               {areaLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Lodges in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -189,7 +189,7 @@ export default async function GuidePage({ params }: Props) {
                           🏕
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {lodge.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">{lodge.priceRange}</p>
@@ -208,7 +208,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {areaFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -220,7 +220,7 @@ export default async function GuidePage({ params }: Props) {
                       >
                         <MapPin className="h-5 w-5 text-[#E8923A] shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
@@ -265,7 +265,7 @@ export default async function GuidePage({ params }: Props) {
                     href={guide.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A]-dark font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Website

@@ -38,7 +38,7 @@ export default function SignupPage() {
             <p className="text-[#8B949E]">
               We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
             </p>
-            <Link href="/" className="mt-6 inline-block px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#E8923A]-dark transition-colors">
+            <Link href="/" className="mt-6 inline-block px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#0D1117] transition-colors">
               Back to Home
             </Link>
           </div>
@@ -90,7 +90,7 @@ export default function SignupPage() {
             {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{error}</p>}
             <button
               type="submit" disabled={loading}
-              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50"
+              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50"
             >
               {loading ? "Creating account…" : "Create Account"}
             </button>

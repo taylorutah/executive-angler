@@ -151,7 +151,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Overview
                 </h2>
                 {sp.description ? (
@@ -187,7 +187,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Taxonomy */}
               {sp.taxonomy && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Taxonomy
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
@@ -196,7 +196,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
                           Order
                         </p>
-                        <p className="text-sm font-semibold text-[#E8923A]-dark italic">
+                        <p className="text-sm font-semibold text-[#E8923A] italic">
                           {sp.taxonomy.order}
                         </p>
                       </div>
@@ -204,7 +204,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
                           Family
                         </p>
-                        <p className="text-sm font-semibold text-[#E8923A]-dark italic">
+                        <p className="text-sm font-semibold text-[#E8923A] italic">
                           {sp.taxonomy.family}
                         </p>
                       </div>
@@ -212,7 +212,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
                           Genus
                         </p>
-                        <p className="text-sm font-semibold text-[#E8923A]-dark italic">
+                        <p className="text-sm font-semibold text-[#E8923A] italic">
                           {sp.taxonomy.genus}
                         </p>
                       </div>
@@ -220,7 +220,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
                           Species
                         </p>
-                        <p className="text-sm font-semibold text-[#E8923A]-dark italic">
+                        <p className="text-sm font-semibold text-[#E8923A] italic">
                           {sp.taxonomy.species}
                         </p>
                       </div>
@@ -232,7 +232,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Habitat & Behavior */}
               {sp.preferredHabitat && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     <Droplets className="inline h-6 w-6 mr-2 text-river" />
                     Habitat & Behavior
                   </h2>
@@ -244,7 +244,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                       <div className="mt-4 flex items-start gap-2">
                         <MapPin className="h-4 w-4 text-[#E8923A] mt-0.5 shrink-0" />
                         <p className="text-sm text-[#8B949E]">
-                          <span className="font-medium text-[#E8923A]-dark">
+                          <span className="font-medium text-[#E8923A]">
                             Native Range:
                           </span>{" "}
                           {sp.nativeRange}
@@ -255,7 +255,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                       <div className="mt-2 flex items-start gap-2">
                         <MapPin className="h-4 w-4 text-[#484F58] mt-0.5 shrink-0" />
                         <p className="text-sm text-[#8B949E]">
-                          <span className="font-medium text-[#E8923A]-dark">
+                          <span className="font-medium text-[#E8923A]">
                             Introduced Range:
                           </span>{" "}
                           {sp.introducedRange}
@@ -269,7 +269,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Diet */}
               {sp.diet && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     <Bug className="inline h-6 w-6 mr-2 text-[#E8923A]" />
                     Diet
                   </h2>
@@ -282,7 +282,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Spawning */}
               {sp.spawningInfo && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Spawning
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
@@ -372,7 +372,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Conservation Status */}
               {sp.conservationStatus && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Conservation Status
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
@@ -398,7 +398,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Fly Fishing Tips */}
               {(sp.flyFishingTips || sp.tackleRecommendations) && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     <Fish className="inline h-6 w-6 mr-2 text-river" />
                     Fly Fishing Tips
                   </h2>
@@ -410,7 +410,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                     )}
                     {sp.tackleRecommendations && (
                       <div className="border-t border-[#21262D] pt-4">
-                        <h4 className="text-sm font-semibold text-[#E8923A]-dark mb-2">
+                        <h4 className="text-sm font-semibold text-[#E8923A] mb-2">
                           Tackle Recommendations
                         </h4>
                         <p className="text-sm text-[#8B949E] leading-relaxed">
@@ -425,7 +425,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Distribution Map */}
               {defaultCoords && mapMarkers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Distribution Map
                   </h2>
                   <MapView
@@ -441,7 +441,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Recommended Fly Patterns */}
               {sp.preferredFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     <Bug className="inline h-6 w-6 mr-2 text-[#E8923A]" />
                     Recommended Fly Patterns
                   </h2>
@@ -466,7 +466,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Related Destinations */}
               {relatedDests.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Where to Find {sp.commonName}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -488,7 +488,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Related Rivers */}
               {relatedRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Rivers with {sp.commonName}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -519,7 +519,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Fun Facts */}
               {sp.funFacts && sp.funFacts.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Fun Facts
                   </h3>
                   <ul className="space-y-3">
@@ -540,7 +540,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Where to Find */}
               {relatedDests.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Where to Find
                   </h3>
                   <div className="space-y-3">
@@ -550,7 +550,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         href={`/destinations/${dest.slug}`}
                         className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]-dark flex items-center gap-2">
+                        <p className="text-sm font-medium text-[#E8923A] flex items-center gap-2">
                           <MapPin className="h-3.5 w-3.5 text-[#E8923A]" />
                           {dest.name}
                         </p>
@@ -566,7 +566,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Preferred Size & Record */}
               {(sp.averageSize || sp.recordSize) && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Size Reference
                   </h3>
                   {sp.averageSize && (

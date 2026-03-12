@@ -171,7 +171,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
             <div className="flex items-center gap-3">
               {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               <Link href={`/journal/${session.id}/edit`}
-                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
+                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
                 <Pencil className="h-3.5 w-3.5" /> Edit Session
               </Link>
             </div>
@@ -207,7 +207,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveNotes} disabled={notesSaving}
-                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 hover:bg-[#E8923A]-dark disabled:opacity-60">
+                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 hover:bg-[#0D1117] disabled:opacity-60">
                           <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}

@@ -172,7 +172,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             </Link>
             <Link
               href="/journal/new"
-              className="rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#E8923A]-dark"
+              className="rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#0D1117]"
             >
               + Log
             </Link>
@@ -322,7 +322,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
             {/* Log buttons */}
             <div className="space-y-2">
-              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
+              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
                 + Log Session
               </Link>
               <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#8B949E] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">

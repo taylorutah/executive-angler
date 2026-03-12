@@ -237,7 +237,7 @@ export default function NewFlyPatternPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-[#E8923A] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#E8923A] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Creating...' : 'Create Pattern'}
             </button>

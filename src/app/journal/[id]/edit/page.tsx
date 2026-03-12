@@ -394,7 +394,7 @@ export default function EditSessionPage() {
                   <input className={input} placeholder="Public access, park at turnout" value={spotForm.description} onChange={e => setSpotForm(p => ({ ...p, description: e.target.value }))} />
                 </div>
                 <button onClick={saveSpot} disabled={!spotForm.name || spotSaving}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E8923A] py-3 text-white font-semibold hover:bg-[#E8923A]-dark disabled:opacity-50 transition-colors">
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E8923A] py-3 text-white font-semibold hover:bg-[#0D1117] disabled:opacity-50 transition-colors">
                   <Check className="h-4 w-4" /> {spotSaving ? "Saving…" : editingSpotId ? "Save Changes" : "Add Location"}
                 </button>
               </div>
@@ -428,7 +428,7 @@ export default function EditSessionPage() {
             {deleting ? "…" : <Trash2 className="h-4 w-4" />}
           </button>
           <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#E8923A]-dark transition-colors disabled:opacity-60 shadow-sm">
+            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#0D1117] transition-colors disabled:opacity-60 shadow-sm">
             {saving ? "Saving…" : "Save Changes"}
           </button>
         </div>

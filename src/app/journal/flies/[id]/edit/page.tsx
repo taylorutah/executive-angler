@@ -263,7 +263,7 @@ export default function EditFlyPage() {
             {deleting ? "…" : <Trash2 className="h-4 w-4" />}
           </button>
           <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#E8923A]-dark transition-colors disabled:opacity-60 shadow-sm">
+            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#0D1117] transition-colors disabled:opacity-60 shadow-sm">
             {saving ? "Saving…" : "Save Changes"}
           </button>
         </div>

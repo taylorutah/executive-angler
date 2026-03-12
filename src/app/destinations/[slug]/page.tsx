@@ -151,7 +151,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Overview */}
               <ScrollAnimation>
                 <div>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Overview
                   </h2>
                   <div className="destination-body">
@@ -176,7 +176,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Map
                   </h2>
                   <MapView
@@ -201,12 +201,12 @@ export default async function DestinationPage({ params }: Props) {
               {destRivers.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
                       Rivers & Waters
                     </h2>
                     <Link
                       href="/rivers"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -232,12 +232,12 @@ export default async function DestinationPage({ params }: Props) {
               {destLodges.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
                       Lodges & Outfitters
                     </h2>
                     <Link
                       href="/lodges"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -261,7 +261,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Guides */}
               {destGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
                     Guides
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -275,7 +275,7 @@ export default async function DestinationPage({ params }: Props) {
                           <MapPin className="h-6 w-6 text-[#E8923A]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {guide.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">
@@ -297,12 +297,12 @@ export default async function DestinationPage({ params }: Props) {
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
                       Fly Shops
                     </h2>
                     <Link
                       href="/fly-shops"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -315,7 +315,7 @@ export default async function DestinationPage({ params }: Props) {
                         className="flex items-center justify-between p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
                           <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
@@ -350,7 +350,7 @@ export default async function DestinationPage({ params }: Props) {
 
               {/* Best Months Calendar */}
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                   Best Months
                 </h3>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -385,7 +385,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Related Articles */}
               {destArticles.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -395,7 +395,7 @@ export default async function DestinationPage({ params }: Props) {
                         href={`/articles/${article.slug}`}
                         className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]-dark">
+                        <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
                         <p className="text-xs text-[#8B949E] mt-1">

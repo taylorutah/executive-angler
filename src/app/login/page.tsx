@@ -77,7 +77,7 @@ function LoginForm() {
             {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{error}</p>}
             <button
               type="submit" disabled={loading}
-              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50"
+              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50"
             >
               {loading ? "Signing in…" : "Sign In with Email"}
             </button>

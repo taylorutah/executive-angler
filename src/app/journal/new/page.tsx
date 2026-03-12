@@ -267,7 +267,7 @@ export default function NewSessionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#E8923A] text-white font-medium py-4 px-6 rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+            className="w-full bg-[#E8923A] text-white font-medium py-4 px-6 rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
           >
             {loading ? "Saving..." : "Save Session"}
           </button>
