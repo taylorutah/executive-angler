@@ -481,3 +481,7 @@
 .light-mode .bg-\[\#E8923A\] { color: #FFFFFF; }
 .light-mode .bg-\[\#d17d28\] { color: #FFFFFF; }
 .light-mode .hover\:bg-\[\#d17d28\]:hover { color: #FFFFFF; }
+
+/* ── Logo swap: dark/light mode ── */
+.light-mode .dark-logo { display: none !important; }
+.light-mode .light-logo { display: block !important; }

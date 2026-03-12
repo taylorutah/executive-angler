@@ -52,11 +52,24 @@ export default function Header() {
       <header className="ea-header fixed top-0 left-0 right-0 z-50 border-b">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
+            {/* Logo — white for dark mode, forest for light mode */}
             <Link href="/" className="flex-shrink-0">
-              <span className="text-[#F0F6FC] font-bold text-sm tracking-[0.08em]">
-                EXECUTIVE ANGLER
-              </span>
+              <Image
+                src="/images/logo-horizontal-white.svg"
+                alt="Executive Angler"
+                width={160}
+                height={32}
+                className="h-8 w-auto block dark-logo"
+                priority
+              />
+              <Image
+                src="/images/logo-horizontal-forest.svg"
+                alt="Executive Angler"
+                width={160}
+                height={32}
+                className="h-8 w-auto hidden light-logo"
+                priority
+              />
             </Link>
 
             {/* Desktop Navigation */}
