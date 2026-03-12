@@ -31,6 +31,14 @@ interface FlyPattern {
   image_url?: string;
 }
 
+interface GearSnapshot {
+  rod?: { name: string; maker?: string };
+  reel?: { name: string; maker?: string };
+  line?: { name: string; maker?: string };
+  leader?: { name: string; maker?: string };
+  tippet?: { name: string; maker?: string };
+}
+
 interface Session {
   id: string;
   title?: string;
@@ -44,6 +52,12 @@ interface Session {
   flies_notes?: string;
   trip_tags?: string[];
   tags?: string[];
+  gear_snapshot?: GearSnapshot;
+  gear_rod?: { name: string; maker?: string } | null;
+  gear_reel?: { name: string; maker?: string } | null;
+  gear_line?: { name: string; maker?: string } | null;
+  gear_leader?: { name: string; maker?: string } | null;
+  gear_tippet?: { name: string; maker?: string } | null;
 }
 
 interface Props {
@@ -305,6 +319,30 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                     </div>
                   </div>
                 )}
+
+                {/* Gear row */}
+                {(() => {
+                  const snap = session.gear_snapshot || {};
+                  const rod = session.gear_rod || snap.rod;
+                  const reel = session.gear_reel || snap.reel;
+                  const line = session.gear_line || snap.line;
+                  const leader = session.gear_leader || snap.leader;
+                  const tippet = session.gear_tippet || snap.tippet;
+                  const gearParts = [
+                    rod && `🎣 ${[rod.maker, rod.name].filter(Boolean).join(" ")}`,
+                    reel && `🪝 ${[reel.maker, reel.name].filter(Boolean).join(" ")}`,
+                    line && `〰️ ${[line.maker, line.name].filter(Boolean).join(" ")}`,
+                    leader && `📏 Leader: ${leader.name}`,
+                    tippet && `🧵 ${tippet.name}`,
+                  ].filter(Boolean);
+                  if (!gearParts.length) return null;
+                  return (
+                    <div className="border-t border-[#21262D] pt-3 mt-3">
+                      <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Gear</p>
+                      <p className="text-xs text-[#8B949E] leading-relaxed">{gearParts.join(" · ")}</p>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>

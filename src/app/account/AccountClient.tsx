@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 
@@ -184,6 +184,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             <div>
               <p className="font-medium text-[#F0F6FC] text-sm">Favorites</p>
               <p className="text-xs text-[#8B949E]">{stats.totalFavorites} saved</p>
+            </div>
+          </Link>
+          <Link href="/account/gear"
+            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow col-span-2 sm:col-span-1">
+            <Package className="h-5 w-5 text-[#00B4D8]" />
+            <div>
+              <p className="font-medium text-[#F0F6FC] text-sm">Gear Locker</p>
+              <p className="text-xs text-[#8B949E]">Rods, reels &amp; more</p>
             </div>
           </Link>
         </div>

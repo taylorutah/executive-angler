@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather } from "lucide-react";
+import GearPicker from "@/components/gear/GearPicker";
 
 interface Catch {
   id?: string;
@@ -42,6 +43,11 @@ export default function EditSessionPage() {
   const [spots, setSpots] = useState<Spot[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
   const [showSpotManager, setShowSpotManager] = useState(false);
+  const [gearRodId, setGearRodId] = useState<string | null>(null);
+  const [gearReelId, setGearReelId] = useState<string | null>(null);
+  const [gearLineId, setGearLineId] = useState<string | null>(null);
+  const [gearLeaderId, setGearLeaderId] = useState<string | null>(null);
+  const [gearTippetId, setGearTippetId] = useState<string | null>(null);
   const [spotForm, setSpotForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
   const [editingSpotId, setEditingSpotId] = useState<string | null>(null);
   const [spotSaving, setSpotSaving] = useState(false);
@@ -136,6 +142,12 @@ export default function EditSessionPage() {
             notes: c.notes || "",
           }))
         );
+        // Load gear
+        if (session.gear_rod_id) setGearRodId(session.gear_rod_id);
+        if (session.gear_reel_id) setGearReelId(session.gear_reel_id);
+        if (session.gear_line_id) setGearLineId(session.gear_line_id);
+        if (session.gear_leader_id) setGearLeaderId(session.gear_leader_id);
+        if (session.gear_tippet_id) setGearTippetId(session.gear_tippet_id);
       }
 
       if (riversRes.ok) setRivers(await riversRes.json());
@@ -165,6 +177,11 @@ export default function EditSessionPage() {
           ...form,
           trip_tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           catches: catches.filter((c) => c.species),
+          gear_rod_id: gearRodId || null,
+          gear_reel_id: gearReelId || null,
+          gear_line_id: gearLineId || null,
+          gear_leader_id: gearLeaderId || null,
+          gear_tippet_id: gearTippetId || null,
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
@@ -340,6 +357,18 @@ export default function EditSessionPage() {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Gear */}
+          <div className={section}>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2">🎣 Gear</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
+              <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
+              <GearPicker type="line" label="Line" value={gearLineId} onChange={setGearLineId} />
+              <GearPicker type="leader" label="Leader" value={gearLeaderId} onChange={setGearLeaderId} />
+              <GearPicker type="tippet" label="Tippet" value={gearTippetId} onChange={setGearTippetId} />
+            </div>
           </div>
 
           {/* Flies & Rig */}

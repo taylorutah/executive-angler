@@ -3,22 +3,36 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import GearPicker from "@/components/gear/GearPicker";
 
 export default function NewSessionPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [rivers, setRivers] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
+  const [gearRodId, setGearRodId] = useState<string | null>(null);
+  const [gearReelId, setGearReelId] = useState<string | null>(null);
+  const [gearLineId, setGearLineId] = useState<string | null>(null);
+  const [gearLeaderId, setGearLeaderId] = useState<string | null>(null);
+  const [gearTippetId, setGearTippetId] = useState<string | null>(null);
 
-  // Fetch autocomplete data
+  // Fetch autocomplete data + gear defaults
   useEffect(() => {
     Promise.all([
       fetch("/api/fishing/session?autocomplete=rivers").then((r) => r.json()),
       fetch("/api/fishing/session?autocomplete=locations").then((r) => r.json()),
+      fetch("/api/gear/defaults").then((r) => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([riversData, locationsData]) => {
+      .then(([riversData, locationsData, defaults]) => {
         setRivers(riversData || []);
         setLocations(locationsData || []);
+        if (defaults) {
+          if (defaults.rod) setGearRodId(defaults.rod);
+          if (defaults.reel) setGearReelId(defaults.reel);
+          if (defaults.line) setGearLineId(defaults.line);
+          if (defaults.leader) setGearLeaderId(defaults.leader);
+          if (defaults.tippet) setGearTippetId(defaults.tippet);
+        }
       })
       .catch((err) => console.error("Failed to fetch autocomplete data:", err));
   }, []);
@@ -44,6 +58,11 @@ export default function NewSessionPage() {
             .filter(Boolean)
         : undefined,
       notes: formData.get("notes") || undefined,
+      gear_rod_id: gearRodId || undefined,
+      gear_reel_id: gearReelId || undefined,
+      gear_line_id: gearLineId || undefined,
+      gear_leader_id: gearLeaderId || undefined,
+      gear_tippet_id: gearTippetId || undefined,
     };
 
     try {
@@ -261,6 +280,21 @@ export default function NewSessionPage() {
               rows={6}
               className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
+          </div>
+
+          {/* Gear */}
+          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
+            <h2 className="text-sm font-bold text-[#E8923A] mb-4 flex items-center gap-2">
+              🎣 Gear
+              <span className="text-xs font-normal text-[#484F58] normal-case">Pre-filled from your defaults</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
+              <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
+              <GearPicker type="line" label="Line" value={gearLineId} onChange={setGearLineId} />
+              <GearPicker type="leader" label="Leader" value={gearLeaderId} onChange={setGearLeaderId} />
+              <GearPicker type="tippet" label="Tippet" value={gearTippetId} onChange={setGearTippetId} />
+            </div>
           </div>
 
           {/* Submit */}
