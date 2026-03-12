@@ -237,6 +237,14 @@ export function SidebarFilters({
       >
         🪰 Fly Patterns →
       </Link>
+
+      {/* Gear Box Link */}
+      <Link
+        href="/account/gear"
+        className="flex items-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-3 text-sm font-medium text-[#00B4D8] transition-colors hover:bg-[#0D1117]"
+      >
+        🎣 Gear Box →
+      </Link>
     </div>
   );
 }
