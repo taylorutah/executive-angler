@@ -5,6 +5,23 @@ import { redirect } from 'next/navigation'
 import { Plus, Feather } from 'lucide-react'
 
 const TYPE_ORDER = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
+
+/** Normalize array fields from DB — handles real arrays, JSON strings, and plain strings */
+function parseArrayField(val: unknown): string {
+  if (!val) return "";
+  if (Array.isArray(val)) return val.filter(Boolean).join(", ");
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (trimmed.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.filter(Boolean).join(", ");
+      } catch { /* fall through */ }
+    }
+    return trimmed;
+  }
+  return String(val);
+}
 const TYPE_ICONS: Record<string, string> = {
   "Nymph": "🪝",
   "Dry Fly": "🦋",
@@ -127,15 +144,18 @@ export default async function FlyBoxPage() {
                       <div className="p-2">
                         <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {fly.bead_size && (
-                            <span className="text-[10px] text-[#484F58] truncate">{fly.bead_size}</span>
-                          )}
-                          {Array.isArray(fly.size) && fly.size.length > 0 && (
-                            <span className="text-[10px] text-[#484F58]">#{fly.size.slice(0,2).join(", #")}</span>
-                          )}
-                          {typeof fly.size === "string" && fly.size && (
-                            <span className="text-[10px] text-[#484F58]">{fly.size}</span>
-                          )}
+                          {(() => {
+                            const bead = parseArrayField(fly.bead_size);
+                            return bead ? (
+                              <span className="text-[10px] text-[#484F58] truncate">{bead}</span>
+                            ) : null;
+                          })()}
+                          {(() => {
+                            const sizes = parseArrayField(fly.size);
+                            return sizes ? (
+                              <span className="text-[10px] text-[#484F58]">{sizes}</span>
+                            ) : null;
+                          })()}
                         </div>
                       </div>
                     </Link>
