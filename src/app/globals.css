@@ -65,56 +65,6 @@
     border-color: #D4CBB8;
   }
 
-  /* =============================================
-     LIGHT MODE — Override hardcoded Tailwind hex classes
-     These override the 72 component files that use
-     hardcoded dark palette colors.
-     ============================================= */
-
-  /* ── Backgrounds ── */
-  .light-mode .bg-\[\#0D1117\] { background-color: #F7F3EC !important; }
-  .light-mode .bg-\[\#161B22\] { background-color: #FFFFFF !important; }
-  .light-mode .bg-\[\#1F2937\] { background-color: #EDE8DF !important; }
-  .light-mode .bg-\[\#21262D\] { background-color: #E5DDD0 !important; }
-
-  /* ── Hover backgrounds ── */
-  .light-mode .hover\:bg-\[\#0D1117\]:hover { background-color: #F0ECE4 !important; }
-  .light-mode .hover\:bg-\[\#161B22\]:hover { background-color: #F5F1EB !important; }
-  .light-mode .hover\:bg-\[\#1F2937\]:hover { background-color: #E5DDD0 !important; }
-  .light-mode .hover\:bg-\[\#21262D\]:hover { background-color: #D8CFC4 !important; }
-
-  /* ── Text colors ── */
-  .light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
-  .light-mode .text-\[\#8B949E\] { color: #4B5563 !important; }
-  .light-mode .text-\[\#484F58\] { color: #6B7280 !important; }
-
-  /* ── Hover text ── */
-  .light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
-  .light-mode .hover\:text-\[\#8B949E\]:hover { color: #4B5563 !important; }
-
-  /* ── Borders ── */
-  .light-mode .border-\[\#21262D\] { border-color: #D4CBB8 !important; }
-  .light-mode .border-\[\#484F58\] { border-color: #B0A898 !important; }
-
-  /* ── Hover borders ── */
-  .light-mode .hover\:border-\[\#484F58\]:hover { border-color: #B0A898 !important; }
-
-  /* ── Body / root background ── */
-  .light-mode body { background-color: #F7F3EC !important; }
-  .light-mode main { background-color: #F7F3EC !important; }
-
-  /* ── rgba teal/copper backgrounds (tinted cards) ── */
-  .light-mode [class*="bg-[rgba(0,180,216"] { background-color: rgba(0, 144, 168, 0.06) !important; }
-  .light-mode [class*="bg-[rgba(232,146,58"] { background-color: rgba(212, 117, 31, 0.06) !important; }
-
-  /* ── Accent/signal colors stay the same in light mode ── */
-  /* .text-[#E8923A], .text-[#00B4D8], .bg-[#E8923A], .bg-[#00B4D8] — no override needed */
-  /* Copper + Teal read well on both dark and light */
-  /* But copper CTA buttons need white text to stay readable */
-  .light-mode .bg-\[\#E8923A\] { color: #FFFFFF; }
-  .light-mode .bg-\[\#d17d28\] { color: #FFFFFF; }
-  .light-mode .hover\:bg-\[\#d17d28\]:hover { color: #FFFFFF; }
-
   * {
     box-sizing: border-box;
   }
@@ -484,3 +434,50 @@
 .article-body tr:nth-child(even) td {
   background: rgba(22, 27, 34, 0.5);
 }
+
+/* =============================================
+   LIGHT MODE — Override hardcoded Tailwind hex classes
+   MUST be top-level CSS (outside @layer) so it wins
+   over @layer utilities via !important cascade.
+   ============================================= */
+
+/* ── Backgrounds ── */
+.light-mode .bg-\[\#0D1117\] { background-color: #F7F3EC !important; }
+.light-mode .bg-\[\#161B22\] { background-color: #FFFFFF !important; }
+.light-mode .bg-\[\#1F2937\] { background-color: #EDE8DF !important; }
+.light-mode .bg-\[\#21262D\] { background-color: #E5DDD0 !important; }
+
+/* ── Hover backgrounds ── */
+.light-mode .hover\:bg-\[\#0D1117\]:hover { background-color: #F0ECE4 !important; }
+.light-mode .hover\:bg-\[\#161B22\]:hover { background-color: #F5F1EB !important; }
+.light-mode .hover\:bg-\[\#1F2937\]:hover { background-color: #E5DDD0 !important; }
+.light-mode .hover\:bg-\[\#21262D\]:hover { background-color: #D8CFC4 !important; }
+
+/* ── Text colors ── */
+.light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
+.light-mode .text-\[\#8B949E\] { color: #4B5563 !important; }
+.light-mode .text-\[\#484F58\] { color: #6B7280 !important; }
+
+/* ── Hover text ── */
+.light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
+.light-mode .hover\:text-\[\#8B949E\]:hover { color: #4B5563 !important; }
+
+/* ── Borders ── */
+.light-mode .border-\[\#21262D\] { border-color: #D4CBB8 !important; }
+.light-mode .border-\[\#484F58\] { border-color: #B0A898 !important; }
+
+/* ── Hover borders ── */
+.light-mode .hover\:border-\[\#484F58\]:hover { border-color: #B0A898 !important; }
+
+/* ── Body / root background ── */
+.light-mode body { background-color: #F7F3EC !important; }
+.light-mode main { background-color: #F7F3EC !important; }
+
+/* ── rgba tinted backgrounds ── */
+.light-mode [class*="bg-[rgba(0,180,216"] { background-color: rgba(0, 144, 168, 0.06) !important; }
+.light-mode [class*="bg-[rgba(232,146,58"] { background-color: rgba(212, 117, 31, 0.06) !important; }
+
+/* ── Copper CTA buttons: ensure white text ── */
+.light-mode .bg-\[\#E8923A\] { color: #FFFFFF; }
+.light-mode .bg-\[\#d17d28\] { color: #FFFFFF; }
+.light-mode .hover\:bg-\[\#d17d28\]:hover { color: #FFFFFF; }
