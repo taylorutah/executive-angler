@@ -170,7 +170,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
   return (
     <>
       {lightboxIdx !== null && (
-        <FishLightbox catches={catches.filter(c => c.fish_image_url || true)} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} />
+        <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} />
       )}
 
       <div className="min-h-screen bg-[#f8f7f4]">
@@ -357,10 +357,10 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                 <p className="text-xs text-[#484F58]">{fishPhotos.length} {fishPhotos.length === 1 ? "photo" : "photos"} · tap to expand</p>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {catches.map((c, i) => c.fish_image_url && (
+                {fishPhotos.map((c, i) => (
                   <button key={c.id} onClick={() => setLightboxIdx(i)}
                     className="relative flex-shrink-0 h-28 w-28 rounded-lg overflow-hidden group hover:ring-2 hover:ring-forest transition-all">
-                    <Image src={c.fish_image_url} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                    <Image src={c.fish_image_url!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
                       <p className="text-white text-[10px] font-medium truncate">{c.species || "Fish"}</p>
                       {c.length_inches && <p className="text-white/70 text-[9px]">{c.length_inches}&quot;</p>}
@@ -392,12 +392,12 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {catches.map((c, i) => (
+                    {catches.map((c) => (
                       <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
                         {fishPhotos.length > 0 && (
                           <td className="py-2 px-3">
                             {c.fish_image_url ? (
-                              <button onClick={() => setLightboxIdx(i)} className="block">
+                              <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
                                 <div className="relative h-8 w-8 rounded overflow-hidden">
                                   <Image src={c.fish_image_url} alt="" fill className="object-cover" />
                                 </div>

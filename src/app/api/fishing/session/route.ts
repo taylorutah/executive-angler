@@ -146,22 +146,49 @@ export async function PATCH(req: NextRequest) {
   const body = await req.json();
   const { catches, ...sessionData } = body;
 
+  // Rebuild gear_snapshot when gear IDs change (same as POST)
+  const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
+
   const { error } = await supabase
     .from("fishing_sessions")
-    .update(sessionData)
+    .update({ ...sessionData, gear_snapshot })
     .eq("id", id)
     .eq("user_id", user.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Replace catches
+  // Replace catches — but first preserve photo URLs from existing rows so they
+  // aren't wiped (the edit form doesn't include fish_image_url fields).
+  const { data: existingCatches } = await supabase
+    .from("catches")
+    .select("id, fish_image_url, fish_location_image_url, fly_image_url")
+    .eq("session_id", id);
+
+  const photoUrlsById = new Map(
+    (existingCatches || []).map((c) => [
+      c.id as string,
+      {
+        fish_image_url: c.fish_image_url as string | null,
+        fish_location_image_url: c.fish_location_image_url as string | null,
+        fly_image_url: c.fly_image_url as string | null,
+      },
+    ])
+  );
+
   await supabase.from("catches").delete().eq("session_id", id);
   if (catches?.length) {
-    const catchRows = catches.map((c: Record<string, unknown>) => ({
-      ...c,
-      session_id: id,
-      user_id: user.id,
-    }));
+    const catchRows = catches.map((c: Record<string, unknown>) => {
+      const existing = c.id ? photoUrlsById.get(c.id as string) : null;
+      return {
+        ...c,
+        session_id: id,
+        user_id: user.id,
+        // Restore photo URLs that the edit form doesn't carry
+        fish_image_url: c.fish_image_url ?? existing?.fish_image_url ?? null,
+        fish_location_image_url: c.fish_location_image_url ?? existing?.fish_location_image_url ?? null,
+        fly_image_url: c.fly_image_url ?? existing?.fly_image_url ?? null,
+      };
+    });
     await supabase.from("catches").insert(catchRows);
   }
 
