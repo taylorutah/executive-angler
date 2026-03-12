@@ -126,7 +126,7 @@ export default function EditFlyPage() {
   const displayImage = preview || existingImage;
 
   if (loading) return (
-    <div className="min-h-screen bg-[#f8f7f4] flex items-center justify-center pt-20">
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center pt-20">
       <div className="flex flex-col items-center gap-3 text-[#484F58]">
         <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading fly pattern…</p>
@@ -135,7 +135,7 @@ export default function EditFlyPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4]">
+    <div className="min-h-screen bg-[#0D1117]">
       <div className="mx-auto max-w-2xl px-4 pt-24 pb-32">
 
         {/* Header */}

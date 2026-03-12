@@ -173,7 +173,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
         <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} />
       )}
 
-      <div className="min-h-screen bg-[#f8f7f4]">
+      <div className="min-h-screen bg-[#0D1117]">
 
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 pt-24">
 
