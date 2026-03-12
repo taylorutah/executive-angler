@@ -115,10 +115,52 @@ export async function PATCH(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  const body = await req.json();
+  const contentType = req.headers.get("content-type") || "";
+  let body: Record<string, unknown> = {};
+  let imageUrl: string | undefined;
+
+  if (contentType.includes("multipart/form-data")) {
+    // Handle file upload in PATCH (e.g. replacing fly photo)
+    const formData = await req.formData();
+    const file = formData.get("image") as File | null;
+
+    if (file && file.size > 0) {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+      const arrayBuffer = await file.arrayBuffer();
+      const { error: uploadError } = await supabase.storage
+        .from("fly-pattern-images")
+        .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
+
+      if (!uploadError) {
+        const { data: { publicUrl } } = supabase.storage
+          .from("fly-pattern-images")
+          .getPublicUrl(path);
+        imageUrl = publicUrl;
+      }
+    }
+
+    for (const [key, value] of formData.entries()) {
+      if (key !== "image") body[key] = value;
+    }
+  } else {
+    body = await req.json();
+  }
+
+  // Parse array fields — same logic as POST so DB columns get proper arrays
+  const parseArr = (v: unknown) =>
+    typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
+
   const { error } = await supabase
     .from("fly_patterns")
-    .update(body)
+    .update({
+      ...body,
+      ...(imageUrl ? { image_url: imageUrl } : {}),
+      size: parseArr(body.size),
+      bead_color: parseArr(body.bead_color),
+      fly_color: parseArr(body.fly_color),
+      tags: parseArr(body.tags),
+    })
     .eq("id", id)
     .eq("user_id", user.id);
 

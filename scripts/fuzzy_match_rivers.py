@@ -100,13 +100,12 @@ def main():
     print(f"    Rivers in table             : {len(rivers)}")
 
     # ── Build unique-word index ───────────────────────────────────
-    # A word is "unique" if it appears in exactly one river's significant words
+    # A word is "unique" if it appears in exactly one river (union of name+slug words)
     from collections import Counter
     word_river_count = Counter()
     for river in rivers:
-        for w in sig_words(river["name"]):
-            word_river_count[w] += 1
-        for w in sig_words(river["slug"].replace("-", " ")):
+        combined = sig_words(river["name"]) | sig_words(river["slug"].replace("-", " "))
+        for w in combined:
             word_river_count[w] += 1
     unique_words = {w for w, cnt in word_river_count.items() if cnt == 1}
 
