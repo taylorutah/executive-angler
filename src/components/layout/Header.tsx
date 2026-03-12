@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Search, User, Heart, BookOpen } from "lucide-react";
+import { Menu, X, ChevronDown, Search, User, Heart, BookOpen, Package } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { createClient } from "@/lib/supabase/client";
@@ -197,6 +197,20 @@ export default function Header() {
                     >
                       <Heart className="h-5 w-5" />
                       Favorites
+                    </Link>
+                    <Link
+                      href="/account/gear"
+                      className="flex items-center gap-2 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#1F2937] hover:text-[#F0F6FC]"
+                    >
+                      <Package className="h-5 w-5" />
+                      Gear Locker
+                    </Link>
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-2 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#1F2937] hover:text-[#F0F6FC]"
+                    >
+                      <User className="h-5 w-5" />
+                      Account
                     </Link>
                   </>
                 ) : (
