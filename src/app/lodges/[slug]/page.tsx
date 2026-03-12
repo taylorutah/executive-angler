@@ -122,7 +122,7 @@ export default async function LodgePage({ params }: Props) {
         height="h-[60vh]"
       />
 
-      <div className="bg-cream">
+      <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
@@ -137,7 +137,7 @@ export default async function LodgePage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-cream pb-20">
+      <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
@@ -155,11 +155,11 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   About {lodge.name}
                 </h2>
                 {lodge.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
@@ -167,7 +167,7 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Amenities */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   Amenities & Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -182,7 +182,7 @@ export default async function LodgePage({ params }: Props) {
               {/* Photo Gallery */}
               {(lodge.galleryUrls || []).length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Photos
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -207,7 +207,7 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Map */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   Location
                 </h2>
                 <MapView
@@ -230,7 +230,7 @@ export default async function LodgePage({ params }: Props) {
               {/* Nearby Rivers */}
               {nearbyRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     Nearby Rivers
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -238,7 +238,7 @@ export default async function LodgePage({ params }: Props) {
                       <Link
                         key={river.id}
                         href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
                         <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0">
                           <Image
@@ -250,10 +250,10 @@ export default async function LodgePage({ params }: Props) {
                           />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {river.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">
+                          <p className="text-sm text-[#8B949E] mt-0.5">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -287,7 +287,7 @@ export default async function LodgePage({ params }: Props) {
               <QuickFacts facts={quickFacts} />
 
               {/* Booking CTA */}
-              <div className="bg-forest rounded-xl p-6 text-white shadow-lg">
+              <div className="bg-[#E8923A] rounded-xl p-6 text-white shadow-lg">
                 <h3 className="font-heading text-xl font-bold mb-3">
                   Book Your Stay
                 </h3>
@@ -299,7 +299,7 @@ export default async function LodgePage({ params }: Props) {
                     href={lodge.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-white text-forest-dark font-semibold rounded-lg hover:bg-cream transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A]-dark font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Website
@@ -329,22 +329,22 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Season Calendar */}
               {lodge.seasonStart && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-3">
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-3">
                     Season
                   </h3>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-[#8B949E]">
                     <Calendar className="h-4 w-4 inline mr-1.5" />
                     {lodge.seasonStart} through {lodge.seasonEnd}
                   </p>
                   {lodge.capacity && (
-                    <p className="text-sm text-slate-600 mt-2">
+                    <p className="text-sm text-[#8B949E] mt-2">
                       <Users className="h-4 w-4 inline mr-1.5" />
                       {lodge.capacity} guest capacity
                     </p>
                   )}
                   {lodge.priceRange && (
-                    <p className="text-sm text-slate-600 mt-2">
+                    <p className="text-sm text-[#8B949E] mt-2">
                       <DollarSign className="h-4 w-4 inline mr-1.5" />
                       {lodge.priceRange}
                     </p>

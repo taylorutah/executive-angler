@@ -64,14 +64,14 @@ export default async function FlyBoxPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-forest transition-colors mb-2">
+            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#484F58] hover:text-[#E8923A] transition-colors mb-2">
               ← Journal
             </Link>
-            <h1 className="font-heading text-2xl font-bold text-slate-900">My Fly Box</h1>
-            <p className="text-sm text-slate-400 mt-0.5">{flies.length} pattern{flies.length !== 1 ? "s" : ""}</p>
+            <h1 className="font-heading text-2xl font-bold text-[#F0F6FC]">My Fly Box</h1>
+            <p className="text-sm text-[#484F58] mt-0.5">{flies.length} pattern{flies.length !== 1 ? "s" : ""}</p>
           </div>
           <Link href="/journal/flies/new"
-            className="flex items-center gap-1.5 rounded-xl bg-forest px-4 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+            className="flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
             <Plus className="h-4 w-4" /> Add Pattern
           </Link>
         </div>
@@ -84,10 +84,10 @@ export default async function FlyBoxPage() {
 
         {flies.length === 0 ? (
           <div className="text-center py-20">
-            <Feather className="h-12 w-12 mx-auto text-slate-300 mb-4" />
-            <p className="text-slate-500 mb-4">Your fly box is empty</p>
+            <Feather className="h-12 w-12 mx-auto text-[#484F58] mb-4" />
+            <p className="text-[#8B949E] mb-4">Your fly box is empty</p>
             <Link href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-forest px-5 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark">
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark">
               <Plus className="h-4 w-4" /> Add Your First Pattern
             </Link>
           </div>
@@ -96,19 +96,19 @@ export default async function FlyBoxPage() {
             {sortedTypes.map(type => (
               <section key={type}>
                 {/* Section header */}
-                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
                   <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
-                  <h2 className="font-heading text-base font-bold text-slate-800">{type}</h2>
-                  <span className="text-xs text-slate-400 ml-1">{grouped[type].length}</span>
+                  <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
+                  <span className="text-xs text-[#484F58] ml-1">{grouped[type].length}</span>
                 </div>
 
                 {/* Fly grid — smaller cards */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
                   {grouped[type].map(fly => (
                     <Link key={fly.id} href={`/journal/flies/${fly.id}/edit`}
-                      className="group bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-forest/30 transition-all">
+                      className="group bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
                       {/* Image — smaller square */}
-                      <div className="relative aspect-square bg-slate-50 overflow-hidden">
+                      <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
                         {fly.image_url ? (
                           <Image
                             src={fly.image_url}
@@ -125,16 +125,16 @@ export default async function FlyBoxPage() {
                       </div>
                       {/* Info */}
                       <div className="p-2">
-                        <p className="text-xs font-semibold text-slate-900 leading-tight truncate">{fly.name}</p>
+                        <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {fly.bead_size && (
-                            <span className="text-[10px] text-slate-400 truncate">{fly.bead_size}</span>
+                            <span className="text-[10px] text-[#484F58] truncate">{fly.bead_size}</span>
                           )}
                           {Array.isArray(fly.size) && fly.size.length > 0 && (
-                            <span className="text-[10px] text-slate-400">#{fly.size.slice(0,2).join(", #")}</span>
+                            <span className="text-[10px] text-[#484F58]">#{fly.size.slice(0,2).join(", #")}</span>
                           )}
                           {typeof fly.size === "string" && fly.size && (
-                            <span className="text-[10px] text-slate-400">{fly.size}</span>
+                            <span className="text-[10px] text-[#484F58]">{fly.size}</span>
                           )}
                         </div>
                       </div>

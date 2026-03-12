@@ -1,6 +1,7 @@
 {
   "name": "executive-angler",
   "version": "0.1.0",
+  "description": "Executive Angler — Fly fishing intelligence platform. Track every session, log every catch, learn from your data.",
   "private": true,
   "scripts": {
     "dev": "next dev",

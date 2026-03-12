@@ -83,9 +83,9 @@ export default async function GuidesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-forest-dark pt-32 pb-16 sm:pb-20">
+      <section className="bg-[#E8923A]-dark pt-32 pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Expert Voices
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -99,9 +99,9 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
-      <section className="bg-cream py-12 sm:py-16">
+      <section className="bg-[#0D1117] py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-forest mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
             Featured Guides
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -112,7 +112,7 @@ export default async function GuidesPage() {
                 <ScrollAnimation key={guide.id} delay={i * 0.1}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                   >
                     {guide.photoUrl && (
                       <div className="relative h-56">
@@ -126,7 +126,7 @@ export default async function GuidesPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/10 to-transparent" />
                         {guide.yearsExperience && (
                           <div className="absolute bottom-4 left-4">
-                            <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-gold text-white">
+                            <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-[#E8923A] text-white">
                               {guide.yearsExperience} years experience
                             </span>
                           </div>
@@ -134,23 +134,23 @@ export default async function GuidesPage() {
                       </div>
                     )}
                     <div className="p-5">
-                      <h3 className="font-heading text-xl font-bold text-forest-dark group-hover:text-forest transition-colors leading-tight">
+                      <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-tight">
                         {guide.name}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-gold">
+                      <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
                         {GUIDE_HEADLINES[guide.slug]}
                       </p>
                       {dest && (
-                        <p className="mt-1 text-xs text-slate-400">{dest.name}</p>
+                        <p className="mt-1 text-xs text-[#484F58]">{dest.name}</p>
                       )}
-                      <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                      <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
                         {guide.bio.substring(0, 120)}...
                       </p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {guide.specialties.slice(0, 2).map((sp) => (
                           <span
                             key={sp}
-                            className="px-2 py-0.5 bg-cream text-forest-dark text-[10px] font-medium rounded-full"
+                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
                           >
                             {sp}
                           </span>
@@ -159,19 +159,19 @@ export default async function GuidesPage() {
                       <div className="mt-4 flex items-center justify-between">
                         {guide.googleRating && (
                           <div className="flex items-center gap-1">
-                            <Star className="h-3.5 w-3.5 fill-gold text-gold" />
-                            <span className="text-xs text-slate-500">
+                            <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
+                            <span className="text-xs text-[#8B949E]">
                               {guide.googleRating} ({guide.googleReviewCount})
                             </span>
                           </div>
                         )}
                         {guide.dailyRate && (
-                          <span className="text-xs font-semibold text-forest">
+                          <span className="text-xs font-semibold text-[#E8923A]">
                             {guide.dailyRate}
                           </span>
                         )}
                       </div>
-                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-forest group-hover:underline">
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
                         View Profile <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -184,15 +184,15 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-white border-t border-slate-100">
+      <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-forest-dark">All Guides</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Guides</h2>
+          <p className="text-sm text-[#8B949E] mt-1">
             {guides.length} guides — filterable by destination and experience
           </p>
         </div>
       </div>
-      <section className="bg-white pb-16 sm:pb-20">
+      <section className="bg-[#161B22] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="guides" />

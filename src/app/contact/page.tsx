@@ -82,21 +82,21 @@ export default function ContactPage() {
 
       <div className="pt-28 pb-20">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-heading text-4xl font-bold text-forest-dark mb-4">
+          <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-slate-600 mb-10">
+          <p className="text-lg text-[#8B949E] mb-10">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>
 
           {submitted ? (
-            <div className="rounded-xl bg-forest/5 border border-forest/20 p-8 text-center">
-              <CheckCircle className="h-12 w-12 text-forest mx-auto mb-4" />
-              <h2 className="font-heading text-2xl font-bold text-forest-dark mb-2">
+            <div className="rounded-xl bg-[#E8923A]/5 border border-forest/20 p-8 text-center">
+              <CheckCircle className="h-12 w-12 text-[#E8923A] mx-auto mb-4" />
+              <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
                 Message Sent
               </h2>
-              <p className="text-slate-600">
+              <p className="text-[#8B949E]">
                 Thank you for reaching out. We&apos;ll get back to you as soon
                 as possible.
               </p>
@@ -106,7 +106,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
+                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
                 >
                   Name
                 </label>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -123,7 +123,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
+                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
                 >
                   Email
                 </label>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                   placeholder="you@example.com"
                 />
               </div>
@@ -140,7 +140,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="subject"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
+                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
                 >
                   Subject
                 </label>
@@ -148,7 +148,7 @@ export default function ContactPage() {
                   id="subject"
                   name="subject"
                   required
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                 >
                   <option value="">Select a topic</option>
                   <option value="General Inquiry">General Inquiry</option>
@@ -165,7 +165,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
+                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
                 >
                   Message
                 </label>
@@ -174,7 +174,7 @@ export default function ContactPage() {
                   name="message"
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-colors resize-y"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors resize-y"
                   placeholder="How can we help?"
                 />
               </div>
@@ -191,7 +191,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="inline-flex items-center gap-2 rounded-lg bg-forest px-6 py-3 text-base font-medium text-white hover:bg-forest-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-3 text-base font-medium text-white hover:bg-[#E8923A]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
                   {sending ? "Sending..." : "Send Message"}
@@ -199,13 +199,13 @@ export default function ContactPage() {
 
                 {/* reCAPTCHA attribution (required by Google TOS when badge is hidden) */}
                 {RECAPTCHA_SITE_KEY && (
-                  <p className="text-xs text-slate-400 max-w-[200px] text-right leading-relaxed">
+                  <p className="text-xs text-[#484F58] max-w-[200px] text-right leading-relaxed">
                     Protected by{" "}
                     <a
                       href="https://policies.google.com/privacy"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-slate-600"
+                      className="underline hover:text-[#8B949E]"
                     >
                       reCAPTCHA
                     </a>
@@ -214,7 +214,7 @@ export default function ContactPage() {
                       href="https://policies.google.com/terms"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-slate-600"
+                      className="underline hover:text-[#8B949E]"
                     >
                       Terms
                     </a>

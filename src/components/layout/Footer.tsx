@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants";
 
 const footerLinks = {
@@ -37,30 +36,25 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
+    <footer className="bg-[#0D1117] text-[#8B949E] border-t border-[#21262D]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1 mb-4 lg:mb-0">
             <Link href="/" className="inline-block">
-              <Image
-                src="/images/logo-horizontal-cream.svg"
-                alt="Executive Angler"
-                width={180}
-                height={44}
-                className="h-8 w-auto"
-              />
+              <span className="text-[#F0F6FC] font-['DM_Serif_Display'] text-xl">
+                Executive Angler
+              </span>
             </Link>
-            <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-xs">
-              The definitive fly fishing resource. Destinations, rivers, lodges,
-              guides, and expert instruction from around the world.
+            <p className="mt-3 text-sm text-[#8B949E] leading-relaxed max-w-xs">
+              Fly fishing intelligence platform. Track every session, log every catch, learn from your data.
             </p>
             <div className="flex gap-4 mt-5">
               <a
                 href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -71,7 +65,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
                 aria-label="YouTube"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -82,7 +76,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -95,7 +89,7 @@ export default function Footer() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="font-sans text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4">
+              <h3 className="font-sans text-xs font-semibold text-[#F0F6FC] uppercase tracking-widest mb-4">
                 {title}
               </h3>
               <ul className="space-y-2.5">
@@ -103,7 +97,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
+                      className="text-sm text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -115,20 +109,20 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-slate-500">
+        <div className="mt-12 pt-8 border-t border-[#21262D] flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-[#484F58] font-['IBM_Plex_Mono']">
             &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link
               href="/privacy"
-              className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+              className="text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+              className="text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
             >
               Terms of Service
             </Link>

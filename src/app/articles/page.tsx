@@ -44,9 +44,9 @@ export default async function ArticlesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-forest-dark pt-32 pb-16 sm:pb-20">
+      <section className="bg-[#E8923A]-dark pt-32 pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Insights &amp; Stories
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -61,9 +61,9 @@ export default async function ArticlesPage() {
 
       {/* ── Featured Articles Spotlight ───────────────────────────────────── */}
       {heroArticle && (
-        <section className="bg-cream py-12 sm:py-16">
+        <section className="bg-[#0D1117] py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-forest mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
               Editor&apos;s Picks
             </p>
 
@@ -81,28 +81,28 @@ export default async function ArticlesPage() {
                       priority
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 to-transparent" />
-                    <span className="absolute top-4 left-4 px-3 py-1 bg-gold text-white text-xs font-semibold uppercase tracking-wide rounded-full">
+                    <span className="absolute top-4 left-4 px-3 py-1 bg-[#E8923A] text-white text-xs font-semibold uppercase tracking-wide rounded-full">
                       {heroArticle.category}
                     </span>
                   </div>
-                  <div className="bg-white p-8 lg:p-12 flex flex-col justify-center">
-                    <h2 className="font-heading text-2xl lg:text-3xl font-bold text-forest-dark group-hover:text-forest transition-colors leading-tight">
+                  <div className="bg-[#161B22] p-8 lg:p-12 flex flex-col justify-center">
+                    <h2 className="font-heading text-2xl lg:text-3xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-tight">
                       {heroArticle.title}
                     </h2>
                     {heroArticle.subtitle && (
-                      <p className="mt-2 text-base font-medium text-gold">
+                      <p className="mt-2 text-base font-medium text-[#E8923A]">
                         {heroArticle.subtitle}
                       </p>
                     )}
-                    <p className="mt-4 text-slate-600 leading-relaxed text-sm sm:text-base line-clamp-3">
+                    <p className="mt-4 text-[#8B949E] leading-relaxed text-sm sm:text-base line-clamp-3">
                       {heroArticle.excerpt}
                     </p>
-                    <div className="mt-5 flex items-center gap-3 text-sm text-slate-400">
+                    <div className="mt-5 flex items-center gap-3 text-sm text-[#484F58]">
                       <span>{heroArticle.readingTimeMinutes} min read</span>
                       <span>·</span>
                       <span>{heroArticle.author}</span>
                     </div>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-forest group-hover:underline">
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#E8923A] group-hover:underline">
                       Read Article <ChevronRight className="h-4 w-4" />
                     </span>
                   </div>
@@ -117,7 +117,7 @@ export default async function ArticlesPage() {
                   <ScrollAnimation key={article.id} delay={(i + 1) * 0.1}>
                     <Link
                       href={`/articles/${article.slug}`}
-                      className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                      className="group block bg-[#161B22] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
                     >
                       <div className="relative h-48">
                         <Image
@@ -127,18 +127,18 @@ export default async function ArticlesPage() {
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, 50vw"
                         />
-                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-gold text-white text-[10px] font-semibold uppercase tracking-wide rounded-full">
+                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[#E8923A] text-white text-[10px] font-semibold uppercase tracking-wide rounded-full">
                           {article.category}
                         </span>
                       </div>
                       <div className="p-6">
-                        <h3 className="font-heading text-lg font-bold text-forest-dark group-hover:text-forest transition-colors leading-snug">
+                        <h3 className="font-heading text-lg font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-snug">
                           {article.title}
                         </h3>
-                        <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                        <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
                           {article.excerpt}
                         </p>
-                        <p className="mt-3 text-xs text-slate-400">
+                        <p className="mt-3 text-xs text-[#484F58]">
                           {article.readingTimeMinutes} min read · {article.author}
                         </p>
                       </div>
@@ -152,15 +152,15 @@ export default async function ArticlesPage() {
       )}
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-white border-t border-slate-100">
+      <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-forest-dark">The Full Journal</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">The Full Journal</h2>
+          <p className="text-sm text-[#8B949E] mt-1">
             {articles.length} articles across techniques, destinations, gear &amp; more
           </p>
         </div>
       </div>
-      <section className="bg-white pb-16 sm:pb-20">
+      <section className="bg-[#161B22] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={articleListConfig} storageKey="articles" />

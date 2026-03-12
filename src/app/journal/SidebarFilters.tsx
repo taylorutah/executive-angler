@@ -87,11 +87,11 @@ export function SidebarFilters({
 
       {/* River Filter */}
       <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
           Filter by River
         </h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
             <input
               type="checkbox"
               checked={filterRivers.length === 0}
@@ -103,30 +103,30 @@ export function SidebarFilters({
                   }
                 });
               }}
-              className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+              className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
             />
             <span>All Rivers</span>
           </label>
           {visibleRivers.map(({ river, count }) => (
             <label
               key={river}
-              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
             >
               <input
                 type="checkbox"
                 checked={filterRivers.includes(river)}
                 onChange={() => onFilterChange("rivers", river)}
-                className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
               />
               <span>
-                {river} <span className="text-slate-500">({count})</span>
+                {river} <span className="text-[#8B949E]">({count})</span>
               </span>
             </label>
           ))}
           {riverOptions.length > 5 && (
             <button
               onClick={() => setShowAllRivers(!showAllRivers)}
-              className="text-xs text-forest hover:text-forest-dark"
+              className="text-xs text-[#E8923A] hover:text-[#E8923A]"
             >
               {showAllRivers ? "Show less" : `Show ${riverOptions.length - 5} more`}
             </button>
@@ -136,11 +136,11 @@ export function SidebarFilters({
 
       {/* Year Filter */}
       <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
           Filter by Year
         </h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
             <input
               type="checkbox"
               checked={filterYears.length === 0}
@@ -152,23 +152,23 @@ export function SidebarFilters({
                   }
                 });
               }}
-              className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+              className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
             />
             <span>All Years</span>
           </label>
           {yearOptions.map(({ year, count }) => (
             <label
               key={year}
-              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
             >
               <input
                 type="checkbox"
                 checked={filterYears.includes(year)}
                 onChange={() => onFilterChange("years", year)}
-                className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
               />
               <span>
-                {year} <span className="text-slate-500">({count})</span>
+                {year} <span className="text-[#8B949E]">({count})</span>
               </span>
             </label>
           ))}
@@ -178,11 +178,11 @@ export function SidebarFilters({
       {/* Location Filter */}
       {locationOptions.length > 0 && (
         <div>
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
             Filter by Location
           </h3>
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
               <input
                 type="checkbox"
                 checked={filterLocations.length === 0}
@@ -194,30 +194,30 @@ export function SidebarFilters({
                     }
                   });
                 }}
-                className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
               />
               <span>All Locations</span>
             </label>
             {visibleLocations.map(({ location, count }) => (
               <label
                 key={location}
-                className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
+                className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
               >
                 <input
                   type="checkbox"
                   checked={filterLocations.includes(location)}
                   onChange={() => onFilterChange("locations", location)}
-                  className="h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+                  className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
                 />
                 <span>
-                  {location} <span className="text-slate-500">({count})</span>
+                  {location} <span className="text-[#8B949E]">({count})</span>
                 </span>
               </label>
             ))}
             {locationOptions.length > 5 && (
               <button
                 onClick={() => setShowAllLocations(!showAllLocations)}
-                className="text-xs text-forest hover:text-forest-dark"
+                className="text-xs text-[#E8923A] hover:text-[#E8923A]"
               >
                 {showAllLocations
                   ? "Show less"
@@ -228,12 +228,12 @@ export function SidebarFilters({
         </div>
       )}
 
-      <hr className="border-slate-200" />
+      <hr className="border-[#21262D]" />
 
       {/* Fly Patterns Link */}
       <Link
         href="/journal/flies"
-        className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-forest transition-colors hover:bg-cream"
+        className="flex items-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-3 text-sm font-medium text-[#E8923A] transition-colors hover:bg-[#0D1117]"
       >
         🪰 Fly Patterns →
       </Link>

@@ -10,11 +10,11 @@ export default function Badge({
   size = "sm",
 }: BadgeProps) {
   const variants = {
-    default: "bg-slate-100 text-slate-700",
-    forest: "bg-forest/10 text-forest-dark",
-    river: "bg-river/10 text-river-dark",
-    gold: "bg-gold/10 text-gold",
-    outline: "border border-slate-300 text-slate-600",
+    default: "bg-[#161B22] text-[#8B949E]",
+    forest: "bg-[#E8923A]/10 text-[#E8923A]",
+    river: "bg-[#00B4D8]/10 text-[#00B4D8]",
+    gold: "bg-[#E8923A]/10 text-[#E8923A]",
+    outline: "border border-[#21262D] text-[#8B949E]",
   };
 
   const sizes = {

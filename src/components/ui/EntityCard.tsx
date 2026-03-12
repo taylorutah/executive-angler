@@ -28,15 +28,15 @@ export default function EntityCard({
   imageContain,
 }: EntityCardProps) {
   return (
-    <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-white shadow-md">
+    <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
       {iconOnly ? (
-        <div className="h-40 bg-forest/5 flex items-center justify-center">
-          <div className="w-14 h-14 rounded-full bg-forest/10 flex items-center justify-center">
-            <MapPin className="h-6 w-6 text-forest" />
+        <div className="h-40 bg-[#E8923A]/5 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
+            <MapPin className="h-6 w-6 text-[#E8923A]" />
           </div>
         </div>
       ) : (
-        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-cream" : ""}`}>
+        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-[#0D1117]" : ""}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
@@ -49,7 +49,7 @@ export default function EntityCard({
               {badges.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-white/90 backdrop-blur-sm text-forest-dark rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[#161B22]/90 backdrop-blur-sm text-[#E8923A] rounded-full"
                 >
                   {badge}
                 </span>
@@ -59,14 +59,14 @@ export default function EntityCard({
         </div>
       )}
       <div className="p-5">
-        <h3 className="font-heading text-lg font-semibold text-forest-dark group-hover:text-forest transition-colors">
+        <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
           {title}
         </h3>
         {subtitle && (
-          <p className="mt-1.5 text-sm text-slate-600 line-clamp-2">{subtitle}</p>
+          <p className="mt-1.5 text-sm text-[#8B949E] line-clamp-2">{subtitle}</p>
         )}
         {meta && (
-          <p className="mt-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
+          <p className="mt-2 text-xs font-medium text-[#484F58] uppercase tracking-wider">
             {meta}
           </p>
         )}

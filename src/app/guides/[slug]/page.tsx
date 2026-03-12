@@ -101,7 +101,7 @@ export default async function GuidePage({ params }: Props) {
         height="h-[50vh]"
       />
 
-      <div className="bg-cream">
+      <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
@@ -116,23 +116,23 @@ export default async function GuidePage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-cream pb-20">
+      <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -147,7 +147,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Rivers & Waters
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -155,14 +155,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={river.id}
                         href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-3 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
                         <MapPin className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-medium text-forest-dark">
+                          <h3 className="font-medium text-[#E8923A]-dark">
                             {river.name}
                           </h3>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-[#8B949E]">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -175,7 +175,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Lodges in This Area */}
               {areaLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     Lodges in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -183,18 +183,18 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={lodge.id}
                         href={`/lodges/${lodge.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
-                        <div className="w-12 h-12 rounded-lg bg-forest/10 flex items-center justify-center shrink-0 text-lg">
+                        <div className="w-12 h-12 rounded-lg bg-[#E8923A]/10 flex items-center justify-center shrink-0 text-lg">
                           🏕
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {lodge.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">{lodge.priceRange}</p>
+                          <p className="text-sm text-[#8B949E] mt-0.5">{lodge.priceRange}</p>
                           {lodge.seasonStart && (
-                            <p className="text-xs text-slate-400 mt-0.5">
+                            <p className="text-xs text-[#484F58] mt-0.5">
                               {lodge.seasonStart}–{lodge.seasonEnd}
                             </p>
                           )}
@@ -208,7 +208,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {areaFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -216,14 +216,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
-                        <MapPin className="h-5 w-5 text-forest shrink-0" />
+                        <MapPin className="h-5 w-5 text-[#E8923A] shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -253,7 +253,7 @@ export default async function GuidePage({ params }: Props) {
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
 
-              <div className="bg-forest rounded-xl p-6 text-white shadow-lg">
+              <div className="bg-[#E8923A] rounded-xl p-6 text-white shadow-lg">
                 <h3 className="font-heading text-xl font-bold mb-3">
                   Book a Trip
                 </h3>
@@ -265,7 +265,7 @@ export default async function GuidePage({ params }: Props) {
                     href={guide.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-white text-forest-dark font-semibold rounded-lg hover:bg-cream transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A]-dark font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Website

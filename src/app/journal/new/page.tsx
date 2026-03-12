@@ -65,16 +65,16 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream py-12">
+    <div className="min-h-screen bg-[#0D1117] py-12">
       <div className="container mx-auto px-4 max-w-3xl">
         <Link
           href="/journal"
-          className="inline-flex items-center gap-2 text-forest hover:text-forest-dark mb-6 text-sm font-medium"
+          className="inline-flex items-center gap-2 text-[#E8923A] hover:text-[#E8923A] mb-6 text-sm font-medium"
         >
           ← Back to Journal
         </Link>
 
-        <h1 className="text-4xl font-heading font-bold text-forest mb-8">
+        <h1 className="text-4xl font-heading font-bold text-[#E8923A] mb-8">
           Log New Session
         </h1>
 
@@ -83,7 +83,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Title (optional)
             </label>
@@ -91,7 +91,7 @@ export default function NewSessionPage() {
               type="text"
               id="title"
               name="title"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -99,7 +99,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="sessionDate"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Date
             </label>
@@ -109,7 +109,7 @@ export default function NewSessionPage() {
               name="sessionDate"
               defaultValue={new Date().toISOString().split("T")[0]}
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -117,7 +117,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="river"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               River
             </label>
@@ -127,7 +127,7 @@ export default function NewSessionPage() {
               name="river"
               list="rivers"
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
             <datalist id="rivers">
               {rivers.map((river) => (
@@ -140,7 +140,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Location
             </label>
@@ -150,7 +150,7 @@ export default function NewSessionPage() {
               name="location"
               list="locations"
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
             <datalist id="locations">
               {locations.map((loc) => (
@@ -163,7 +163,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="waterTemp"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Water Temp (optional)
             </label>
@@ -172,7 +172,7 @@ export default function NewSessionPage() {
               id="waterTemp"
               name="waterTemp"
               placeholder="e.g. 52°F"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -180,14 +180,14 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="waterClarity"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Water Clarity (optional)
             </label>
             <select
               id="waterClarity"
               name="waterClarity"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             >
               <option value="">Select...</option>
               <option value="Clear">Clear</option>
@@ -201,7 +201,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="weather"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Weather (optional)
             </label>
@@ -209,7 +209,7 @@ export default function NewSessionPage() {
               type="text"
               id="weather"
               name="weather"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -217,7 +217,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="fliesNotes"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Flies Notes (optional)
             </label>
@@ -226,7 +226,7 @@ export default function NewSessionPage() {
               name="fliesNotes"
               rows={3}
               placeholder="Rig notes, setup..."
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -234,7 +234,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="tags"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Tags (optional)
             </label>
@@ -243,7 +243,7 @@ export default function NewSessionPage() {
               id="tags"
               name="tags"
               placeholder="utah, provo, spring"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -251,7 +251,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="notes"
-              className="block text-sm font-medium text-forest mb-2"
+              className="block text-sm font-medium text-[#E8923A] mb-2"
             >
               Notes (optional)
             </label>
@@ -259,7 +259,7 @@ export default function NewSessionPage() {
               id="notes"
               name="notes"
               rows={6}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-forest"
+              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
           </div>
 
@@ -267,7 +267,7 @@ export default function NewSessionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-forest text-white font-medium py-4 px-6 rounded-lg hover:bg-forest-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+            className="w-full bg-[#E8923A] text-white font-medium py-4 px-6 rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
           >
             {loading ? "Saving..." : "Save Session"}
           </button>

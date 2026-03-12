@@ -19,7 +19,7 @@ export default function ListCard({
   return (
     <Link
       href={href}
-      className="group flex items-start gap-4 py-4 px-2 -mx-2 rounded-lg hover:bg-white/60 transition-colors border-b border-slate-100 last:border-b-0"
+      className="group flex items-start gap-4 py-4 px-2 -mx-2 rounded-lg hover:bg-[#1F2937]/60 transition-colors border-b border-[#21262D] last:border-b-0"
     >
       {/* Thumbnail */}
       {imageUrl && !iconOnly ? (
@@ -33,9 +33,9 @@ export default function ListCard({
           />
         </div>
       ) : (
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-forest/5 flex items-center justify-center shrink-0">
-          <div className="w-10 h-10 rounded-full bg-forest/10 flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-forest" />
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-[#E8923A]/5 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
+            <MapPin className="h-5 w-5 text-[#E8923A]" />
           </div>
         </div>
       )}
@@ -43,24 +43,24 @@ export default function ListCard({
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-heading text-base font-semibold text-forest-dark group-hover:text-forest transition-colors line-clamp-1">
+          <h3 className="font-heading text-base font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors line-clamp-1">
             {title}
           </h3>
           {accent && (
-            <span className="text-sm font-semibold text-forest shrink-0">{accent}</span>
+            <span className="text-sm font-semibold text-[#E8923A] shrink-0">{accent}</span>
           )}
         </div>
         {subtitle && (
-          <p className="text-sm text-slate-500 line-clamp-1 mt-0.5">{subtitle}</p>
+          <p className="text-sm text-[#8B949E] line-clamp-1 mt-0.5">{subtitle}</p>
         )}
         {description && (
-          <p className="text-sm text-slate-600 line-clamp-1 mt-1 hidden sm:block">{description}</p>
+          <p className="text-sm text-[#8B949E] line-clamp-1 mt-1 hidden sm:block">{description}</p>
         )}
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           {badges && badges.length > 0 && badges.map((badge) => (
             <span
               key={badge}
-              className="px-2 py-0.5 text-xs font-medium bg-forest/5 text-forest-dark rounded-full"
+              className="px-2 py-0.5 text-xs font-medium bg-[#E8923A]/5 text-[#E8923A] rounded-full"
             >
               {badge}
             </span>
@@ -68,13 +68,13 @@ export default function ListCard({
           {tags && tags.length > 0 && tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 text-xs bg-cream text-forest-dark rounded-full"
+              className="px-2 py-0.5 text-xs bg-[#1F2937] text-[#E8923A] rounded-full"
             >
               {tag}
             </span>
           ))}
           {meta && (
-            <span className="text-xs text-slate-400 uppercase tracking-wider">{meta}</span>
+            <span className="text-xs text-[#484F58] uppercase tracking-wider">{meta}</span>
           )}
         </div>
       </div>

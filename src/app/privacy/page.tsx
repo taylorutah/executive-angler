@@ -10,28 +10,28 @@ export default function PrivacyPage() {
   return (
     <div className="pt-28 pb-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-forest-dark mb-2">
+        <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-2">
           Privacy Policy
         </h1>
-        <p className="text-sm text-slate-500 mb-10">
+        <p className="text-sm text-[#8B949E] mb-10">
           Last updated: March 1, 2026
         </p>
 
-        <div className="prose prose-lg max-w-none text-slate-700 space-y-6">
+        <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
           <p>
             {SITE_NAME} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;)
             operates the website at{" "}
-            <a href={SITE_URL} className="text-forest hover:text-forest-light">
+            <a href={SITE_URL} className="text-[#E8923A] hover:text-[#E8923A]-light">
               {SITE_URL}
             </a>
             . This Privacy Policy explains how we collect, use, and protect your
             information when you use our website.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Information We Collect
           </h2>
-          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Account Information
           </h3>
           <p>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
             features like saving favorites.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Photo Submissions
           </h3>
           <p>
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
             address is not displayed publicly.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Contact Form
           </h3>
           <p>
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
             inquiry.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-forest-dark mt-6">
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Analytics
           </h3>
           <p>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
             identifiable information is collected by our analytics tools.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             How We Use Your Information
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
             <li>To send administrative communications about your account</li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Data Storage and Security
           </h2>
           <p>
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
             transit.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Third-Party Services
           </h2>
           <p>We use the following third-party services:</p>
@@ -115,7 +115,7 @@ export default function PrivacyPage() {
             Each service has its own privacy policy governing how they handle data.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Cookies
           </h2>
           <p>
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
             use advertising cookies or third-party tracking cookies.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Your Rights
           </h2>
           <p>You have the right to:</p>
@@ -135,13 +135,13 @@ export default function PrivacyPage() {
           </ul>
           <p>
             To exercise any of these rights, please contact us through our{" "}
-            <a href="/contact" className="text-forest hover:text-forest-light">
+            <a href="/contact" className="text-[#E8923A] hover:text-[#E8923A]-light">
               contact form
             </a>
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Children&apos;s Privacy
           </h2>
           <p>
@@ -151,7 +151,7 @@ export default function PrivacyPage() {
             immediately.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Changes to This Policy
           </h2>
           <p>
@@ -161,13 +161,13 @@ export default function PrivacyPage() {
             revised.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-forest-dark mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Contact
           </h2>
           <p>
             If you have questions about this Privacy Policy, please reach out
             through our{" "}
-            <a href="/contact" className="text-forest hover:text-forest-light">
+            <a href="/contact" className="text-[#E8923A] hover:text-[#E8923A]-light">
               contact form
             </a>
             .

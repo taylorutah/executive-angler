@@ -204,46 +204,46 @@ export default function PhotoSubmissionForm({
   if (isAuthenticated === null) return null;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-[#161B22] rounded-xl border border-[#21262D] shadow-sm overflow-hidden">
       {/* Collapsible Header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between p-6 text-left hover:bg-[#1F2937] transition-colors"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-forest/10 flex items-center justify-center">
-            <Camera className="h-5 w-5 text-forest" />
+          <div className="w-10 h-10 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
+            <Camera className="h-5 w-5 text-[#E8923A]" />
           </div>
           <div>
-            <h3 className="font-heading text-lg font-semibold text-forest-dark">
+            <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
               Submit Your Photo
             </h3>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <p className="text-sm text-[#8B949E] mt-0.5">
               Share your {entityName} fishing photos with the community
             </p>
           </div>
         </div>
         {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-slate-400" />
+          <ChevronUp className="h-5 w-5 text-[#484F58]" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-slate-400" />
+          <ChevronDown className="h-5 w-5 text-[#484F58]" />
         )}
       </button>
 
       {/* Collapsible Content */}
       {isOpen && (
-        <div className="border-t border-slate-200 p-6">
+        <div className="border-t border-[#21262D] p-6">
           {!isAuthenticated ? (
             <div className="text-center py-8">
-              <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                <Camera className="h-7 w-7 text-slate-400" />
+              <div className="w-14 h-14 rounded-full bg-[#1F2937] flex items-center justify-center mx-auto mb-4">
+                <Camera className="h-7 w-7 text-[#484F58]" />
               </div>
-              <p className="text-slate-600 mb-4">
+              <p className="text-[#8B949E] mb-4">
                 Sign in to submit your photos
               </p>
               <Link
                 href={`/login?redirect=${typeof window !== "undefined" ? window.location.pathname : ""}`}
-                className="inline-flex items-center px-5 py-2.5 bg-forest text-white text-sm font-medium rounded-lg hover:bg-forest-light transition-colors"
+                className="inline-flex items-center px-5 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0F6FC] hover:text-[#E8923A] transition-colors"
               >
                 Sign In
               </Link>
@@ -276,7 +276,7 @@ export default function PhotoSubmissionForm({
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Drag & Drop Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#F0F6FC] mb-2">
                     Photo <span className="text-red-500">*</span>
                   </label>
                   {!preview ? (
@@ -287,22 +287,22 @@ export default function PhotoSubmissionForm({
                       onClick={() => fileInputRef.current?.click()}
                       className={`relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
                         isDragging
-                          ? "border-forest bg-forest/5"
-                          : "border-slate-300 hover:border-forest/50 hover:bg-slate-50"
+                          ? "border-[#E8923A] bg-[#E8923A]/5"
+                          : "border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#1F2937]"
                       }`}
                     >
                       <Upload
                         className={`h-10 w-10 mx-auto mb-3 ${
-                          isDragging ? "text-forest" : "text-slate-400"
+                          isDragging ? "text-[#E8923A]" : "text-[#484F58]"
                         }`}
                       />
-                      <p className="text-sm text-slate-600">
-                        <span className="font-medium text-forest">
+                      <p className="text-sm text-[#8B949E]">
+                        <span className="font-medium text-[#E8923A]">
                           Click to upload
                         </span>{" "}
                         or drag and drop
                       </p>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-[#484F58] mt-1">
                         JPEG or PNG, max 10MB
                       </p>
                       <input
@@ -317,8 +317,8 @@ export default function PhotoSubmissionForm({
                       />
                     </div>
                   ) : (
-                    <div className="relative rounded-xl overflow-hidden border border-slate-200">
-                      <div className="relative h-64 w-full bg-slate-100">
+                    <div className="relative rounded-xl overflow-hidden border border-[#21262D]">
+                      <div className="relative h-64 w-full bg-[#0D1117]">
                         <Image
                           src={preview}
                           alt="Photo preview"
@@ -330,16 +330,16 @@ export default function PhotoSubmissionForm({
                       <button
                         type="button"
                         onClick={removeFile}
-                        className="absolute top-3 right-3 p-1.5 bg-white/90 rounded-full shadow-sm hover:bg-white transition-colors"
+                        className="absolute top-3 right-3 p-1.5 bg-[#161B22]/90 rounded-full shadow-sm hover:bg-[#161B22] transition-colors"
                       >
-                        <X className="h-4 w-4 text-slate-600" />
+                        <X className="h-4 w-4 text-[#8B949E]" />
                       </button>
-                      <div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center gap-2">
-                        <ImageIcon className="h-4 w-4 text-slate-400" />
-                        <span className="text-xs text-slate-600 truncate">
+                      <div className="p-3 bg-[#1F2937] border-t border-[#21262D] flex items-center gap-2">
+                        <ImageIcon className="h-4 w-4 text-[#484F58]" />
+                        <span className="text-xs text-[#8B949E] truncate">
                           {file?.name}
                         </span>
-                        <span className="text-xs text-slate-400 ml-auto">
+                        <span className="text-xs text-[#484F58] ml-auto">
                           {file
                             ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
                             : ""}
@@ -353,10 +353,10 @@ export default function PhotoSubmissionForm({
                 <div>
                   <label
                     htmlFor="caption"
-                    className="block text-sm font-medium text-slate-700 mb-2"
+                    className="block text-sm font-medium text-[#F0F6FC] mb-2"
                   >
                     Caption{" "}
-                    <span className="text-slate-400 font-normal">
+                    <span className="text-[#484F58] font-normal">
                       (optional)
                     </span>
                   </label>
@@ -367,18 +367,18 @@ export default function PhotoSubmissionForm({
                     maxLength={300}
                     rows={3}
                     placeholder="Describe your catch, the conditions, or the moment..."
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest resize-none"
+                    className="w-full px-4 py-3 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] resize-none"
                   />
-                  <p className="text-xs text-slate-400 mt-1 text-right">
+                  <p className="text-xs text-[#484F58] mt-1 text-right">
                     {caption.length}/300
                   </p>
                 </div>
 
                 {/* Camera Details */}
                 <div>
-                  <p className="text-sm font-medium text-slate-700 mb-3">
+                  <p className="text-sm font-medium text-[#F0F6FC] mb-3">
                     Camera Details{" "}
-                    <span className="text-slate-400 font-normal">
+                    <span className="text-[#484F58] font-normal">
                       (optional)
                     </span>
                   </p>
@@ -386,7 +386,7 @@ export default function PhotoSubmissionForm({
                     <div>
                       <label
                         htmlFor="cameraBody"
-                        className="block text-xs text-slate-500 mb-1"
+                        className="block text-xs text-[#8B949E] mb-1"
                       >
                         Camera Body
                       </label>
@@ -396,13 +396,13 @@ export default function PhotoSubmissionForm({
                         value={cameraBody}
                         onChange={(e) => setCameraBody(e.target.value)}
                         placeholder="e.g., Canon EOS R5"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="lens"
-                        className="block text-xs text-slate-500 mb-1"
+                        className="block text-xs text-[#8B949E] mb-1"
                       >
                         Lens
                       </label>
@@ -412,7 +412,7 @@ export default function PhotoSubmissionForm({
                         value={lens}
                         onChange={(e) => setLens(e.target.value)}
                         placeholder="e.g., 24-70mm f/2.8"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                   </div>
@@ -422,7 +422,7 @@ export default function PhotoSubmissionForm({
                     <div>
                       <label
                         htmlFor="aperture"
-                        className="block text-xs text-slate-500 mb-1"
+                        className="block text-xs text-[#8B949E] mb-1"
                       >
                         Aperture
                       </label>
@@ -432,13 +432,13 @@ export default function PhotoSubmissionForm({
                         value={aperture}
                         onChange={(e) => setAperture(e.target.value)}
                         placeholder="f/2.8"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="shutterSpeed"
-                        className="block text-xs text-slate-500 mb-1"
+                        className="block text-xs text-[#8B949E] mb-1"
                       >
                         Shutter Speed
                       </label>
@@ -448,13 +448,13 @@ export default function PhotoSubmissionForm({
                         value={shutterSpeed}
                         onChange={(e) => setShutterSpeed(e.target.value)}
                         placeholder="1/500"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="iso"
-                        className="block text-xs text-slate-500 mb-1"
+                        className="block text-xs text-[#8B949E] mb-1"
                       >
                         ISO
                       </label>
@@ -464,7 +464,7 @@ export default function PhotoSubmissionForm({
                         value={iso}
                         onChange={(e) => setIso(e.target.value)}
                         placeholder="200"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                   </div>
@@ -477,9 +477,9 @@ export default function PhotoSubmissionForm({
                     type="checkbox"
                     checked={rightsConfirmed}
                     onChange={(e) => setRightsConfirmed(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-forest focus:ring-forest"
+                    className="mt-0.5 h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
                   />
-                  <label htmlFor="rights" className="text-sm text-slate-600">
+                  <label htmlFor="rights" className="text-sm text-[#8B949E]">
                     I confirm I own the rights to this photo and grant Executive
                     Angler permission to display it on the site.{" "}
                     <span className="text-red-500">*</span>
@@ -490,7 +490,7 @@ export default function PhotoSubmissionForm({
                 <button
                   type="submit"
                   disabled={submitting || !file || !rightsConfirmed}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-forest text-white font-medium rounded-lg hover:bg-forest-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#F0F6FC] hover:text-[#E8923A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? (
                     <>

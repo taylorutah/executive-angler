@@ -129,7 +129,7 @@ export default async function DestinationPage({ params }: Props) {
         height="h-[65vh]"
       />
 
-      <div className="bg-cream">
+      <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
@@ -143,7 +143,7 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-cream pb-20">
+      <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
@@ -151,11 +151,11 @@ export default async function DestinationPage({ params }: Props) {
               {/* Overview */}
               <ScrollAnimation>
                 <div className="prose max-w-none">
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Overview
                   </h2>
                   {dest.description.split("\n\n").map((paragraph, i) => (
-                    <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                    <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
                       {paragraph}
                     </p>
                   ))}
@@ -177,7 +177,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Map
                   </h2>
                   <MapView
@@ -187,12 +187,12 @@ export default async function DestinationPage({ params }: Props) {
                     markers={mapMarkers}
                     className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
                   />
-                  <div className="mt-3 flex gap-4 text-xs text-slate-500">
+                  <div className="mt-3 flex gap-4 text-xs text-[#8B949E]">
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full bg-river" /> Rivers
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-gold" /> Lodges
+                      <span className="w-3 h-3 rounded-full bg-[#E8923A]" /> Lodges
                     </span>
                   </div>
                 </ScrollAnimation>
@@ -202,12 +202,12 @@ export default async function DestinationPage({ params }: Props) {
               {destRivers.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-forest-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
                       Rivers & Waters
                     </h2>
                     <Link
                       href="/rivers"
-                      className="text-sm text-forest font-medium hover:text-forest-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -233,12 +233,12 @@ export default async function DestinationPage({ params }: Props) {
               {destLodges.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-forest-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
                       Lodges & Outfitters
                     </h2>
                     <Link
                       href="/lodges"
-                      className="text-sm text-forest font-medium hover:text-forest-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -262,7 +262,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Guides */}
               {destGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     Guides
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -270,20 +270,20 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={guide.id}
                         href={`/guides/${guide.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
-                        <div className="w-16 h-16 rounded-full bg-forest/10 flex items-center justify-center shrink-0">
-                          <MapPin className="h-6 w-6 text-forest" />
+                        <div className="w-16 h-16 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0">
+                          <MapPin className="h-6 w-6 text-[#E8923A]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {guide.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">
+                          <p className="text-sm text-[#8B949E] mt-0.5">
                             {(guide.specialties || []).slice(0, 3).join(", ")}
                           </p>
                           {guide.dailyRate && (
-                            <p className="text-sm font-medium text-forest mt-1">
+                            <p className="text-sm font-medium text-[#E8923A] mt-1">
                               {guide.dailyRate}
                             </p>
                           )}
@@ -298,12 +298,12 @@ export default async function DestinationPage({ params }: Props) {
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-forest-dark">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark">
                       Fly Shops
                     </h2>
                     <Link
                       href="/fly-shops"
-                      className="text-sm text-forest font-medium hover:text-forest-dark inline-flex items-center gap-1"
+                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A]-dark inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -313,23 +313,23 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center justify-between p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
                           {(shop.services || []).length > 0 && (
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-xs text-[#484F58] mt-1">
                               {(shop.services || []).slice(0, 3).join(" · ")}
                             </p>
                           )}
                         </div>
                         {shop.googleRating && (
                           <div className="flex items-center gap-1 shrink-0 ml-4">
-                            <Star className="h-3.5 w-3.5 fill-gold text-gold" />
-                            <span className="text-sm font-medium text-slate-700">
+                            <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
+                            <span className="text-sm font-medium text-[#8B949E]">
                               {shop.googleRating}
                             </span>
                           </div>
@@ -350,8 +350,8 @@ export default async function DestinationPage({ params }: Props) {
               <QuickFacts facts={quickFacts} />
 
               {/* Best Months Calendar */}
-              <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
                   Best Months
                 </h3>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -372,8 +372,8 @@ export default async function DestinationPage({ params }: Props) {
                         key={month}
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
-                            ? "bg-forest text-white"
-                            : "bg-slate-100 text-slate-400"
+                            ? "bg-[#E8923A] text-white"
+                            : "bg-[#1F2937] text-[#484F58]"
                         }`}
                       >
                         {month}
@@ -385,8 +385,8 @@ export default async function DestinationPage({ params }: Props) {
 
               {/* Related Articles */}
               {destArticles.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -394,12 +394,12 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-cream transition-colors"
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-forest-dark">
+                        <p className="text-sm font-medium text-[#E8923A]-dark">
                           {article.title}
                         </p>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-[#8B949E] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

@@ -38,7 +38,7 @@ export default function ListToolbar({
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
   return (
-    <div className="sticky top-20 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-cream/95 backdrop-blur-sm border-b border-slate-200/60 mb-8">
+    <div className="sticky top-20 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[#0D1117]/95 backdrop-blur-sm border-b border-[#21262D]/60 mb-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Left: Filter pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide min-w-0 flex-1">
@@ -46,15 +46,15 @@ export default function ListToolbar({
             <div key={dimension.key} className="flex items-center gap-1.5 shrink-0">
               {dimension.options.length > 0 && (
                 <>
-                  <span className="text-xs text-slate-400 uppercase tracking-wider font-medium mr-0.5 hidden lg:inline">
+                  <span className="text-xs text-[#484F58] uppercase tracking-wider font-medium mr-0.5 hidden lg:inline">
                     {dimension.label}
                   </span>
                   <button
                     onClick={() => onFilterChange(dimension.key, null)}
                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                       !activeFilters[dimension.key]
-                        ? "bg-forest text-white shadow-sm"
-                        : "bg-white text-slate-600 hover:bg-forest/10 hover:text-forest-dark border border-slate-200"
+                        ? "bg-[#E8923A] text-white shadow-sm"
+                        : "bg-[#161B22] text-[#8B949E] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
                     }`}
                   >
                     All
@@ -70,8 +70,8 @@ export default function ListToolbar({
                       }
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                         activeFilters[dimension.key] === opt.value
-                          ? "bg-forest text-white shadow-sm"
-                          : "bg-white text-slate-600 hover:bg-forest/10 hover:text-forest-dark border border-slate-200"
+                          ? "bg-[#E8923A] text-white shadow-sm"
+                          : "bg-[#161B22] text-[#8B949E] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
                       }`}
                     >
                       {opt.label}
@@ -79,7 +79,7 @@ export default function ListToolbar({
                   ))}
                   {/* Separator between filter groups */}
                   {filters.length > 1 && dimension.key !== filters[filters.length - 1].key && (
-                    <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+                    <div className="w-px h-5 bg-[#21262D] mx-1 shrink-0" />
                   )}
                 </>
               )}
@@ -88,12 +88,12 @@ export default function ListToolbar({
 
           {hasActiveFilters && (
             <>
-              <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+              <div className="w-px h-5 bg-[#21262D] mx-1 shrink-0" />
               <button
                 onClick={() => {
                   filters.forEach((f) => onFilterChange(f.key, null));
                 }}
-                className="px-3 py-1.5 rounded-full text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 rounded-full text-sm font-medium text-[#484F58] hover:text-[#8B949E] transition-colors whitespace-nowrap"
               >
                 Clear all
               </button>
@@ -104,14 +104,14 @@ export default function ListToolbar({
         {/* Right: View toggle + Sort */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Result count */}
-          <span className="text-xs text-slate-400 hidden sm:inline">
+          <span className="text-xs text-[#484F58] hidden sm:inline">
             {filteredCount === totalCount
               ? `${totalCount} results`
               : `${filteredCount} of ${totalCount}`}
           </span>
 
           {/* View mode toggle */}
-          <div className="flex items-center gap-0.5 border border-slate-200 rounded-lg p-0.5 bg-white">
+          <div className="flex items-center gap-0.5 border border-[#21262D] rounded-lg p-0.5 bg-[#161B22]">
             {viewModes.map(({ mode, icon: Icon, label }) => (
               <button
                 key={mode}
@@ -120,8 +120,8 @@ export default function ListToolbar({
                 title={label}
                 className={`p-1.5 rounded-md transition-colors ${
                   viewMode === mode
-                    ? "bg-forest/10 text-forest"
-                    : "text-slate-400 hover:text-slate-600"
+                    ? "bg-[#E8923A]/10 text-[#E8923A]"
+                    : "text-[#484F58] hover:text-[#8B949E]"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -134,7 +134,7 @@ export default function ListToolbar({
             <select
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="appearance-none bg-white border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm text-slate-600 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest cursor-pointer"
+              className="appearance-none bg-[#161B22] border border-[#21262D] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[#8B949E] hover:border-[#E8923A]/30 focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] cursor-pointer"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -142,7 +142,7 @@ export default function ListToolbar({
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#484F58] pointer-events-none" />
           </div>
         </div>
       </div>

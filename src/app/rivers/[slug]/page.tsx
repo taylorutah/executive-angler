@@ -128,7 +128,7 @@ export default async function RiverPage({ params }: Props) {
         height="h-[60vh]"
       />
 
-      <div className="bg-cream">
+      <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
@@ -143,18 +143,18 @@ export default async function RiverPage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-cream pb-20">
+      <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   Overview
                 </h2>
                 {river.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-slate-700 leading-relaxed mb-4">
+                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
@@ -189,7 +189,7 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Interactive Map */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                   Access Points & Map
                 </h2>
                 <MapView
@@ -205,27 +205,27 @@ export default async function RiverPage({ params }: Props) {
                   {(river.accessPoints || []).map((ap, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-3 p-4 bg-white rounded-xl shadow-sm"
+                      className="flex items-start gap-3 p-4 bg-[#161B22] rounded-xl shadow-sm"
                     >
-                      <div className="w-8 h-8 rounded-full bg-forest text-white flex items-center justify-center text-sm font-bold shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#E8923A] text-white flex items-center justify-center text-sm font-bold shrink-0">
                         {i + 1}
                       </div>
                       <div>
-                        <h4 className="font-medium text-forest-dark">
+                        <h4 className="font-medium text-[#E8923A]-dark">
                           {ap.name}
                         </h4>
                         {ap.description && (
-                          <p className="text-sm text-slate-600 mt-0.5">
+                          <p className="text-sm text-[#8B949E] mt-0.5">
                             {ap.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-500">
+                        <div className="flex items-center gap-3 mt-1.5 text-xs text-[#8B949E]">
                           <span className="flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
                             {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
                           </span>
                           {ap.parking && (
-                            <span className="text-forest font-medium">
+                            <span className="text-[#E8923A] font-medium">
                               Parking available
                             </span>
                           )}
@@ -239,14 +239,14 @@ export default async function RiverPage({ params }: Props) {
               {/* Hatch Chart */}
               {river.hatchChart && river.hatchChart.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-4">
                     Hatch Chart
                   </h2>
-                  <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                  <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="bg-forest text-white">
+                          <tr className="bg-[#E8923A] text-white">
                             <th className="px-4 py-3 text-left font-semibold">
                               Month
                             </th>
@@ -266,23 +266,23 @@ export default async function RiverPage({ params }: Props) {
                             month.hatches.map((hatch, hi) => (
                               <tr
                                 key={`${month.month}-${hi}`}
-                                className="border-b border-slate-100 hover:bg-cream/50"
+                                className="border-b border-[#21262D] hover:bg-[#0D1117]/50"
                               >
                                 {hi === 0 && (
                                   <td
-                                    className="px-4 py-3 font-medium text-forest-dark align-top"
+                                    className="px-4 py-3 font-medium text-[#E8923A]-dark align-top"
                                     rowSpan={month.hatches.length}
                                   >
                                     {month.month}
                                   </td>
                                 )}
-                                <td className="px-4 py-3 text-slate-700">
+                                <td className="px-4 py-3 text-[#8B949E]">
                                   {hatch.insect}
                                 </td>
-                                <td className="px-4 py-3 text-slate-600">
+                                <td className="px-4 py-3 text-[#8B949E]">
                                   {hatch.size}
                                 </td>
-                                <td className="px-4 py-3 text-slate-600">
+                                <td className="px-4 py-3 text-[#8B949E]">
                                   {hatch.pattern}
                                 </td>
                               </tr>
@@ -298,7 +298,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Nearby Lodges */}
               {nearbyLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     {lodgesHeading}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -320,7 +320,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-forest-dark mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A]-dark mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -328,14 +328,14 @@ export default async function RiverPage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
                         <Waves className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-forest-dark">
+                          <h3 className="font-heading text-base font-semibold text-[#E8923A]-dark">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-slate-500 mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -353,8 +353,8 @@ export default async function RiverPage({ params }: Props) {
               <QuickFacts facts={quickFacts} />
 
               {/* Season Calendar */}
-              <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
                   Season
                 </h3>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -376,7 +376,7 @@ export default async function RiverPage({ params }: Props) {
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
                             ? "bg-river text-white"
-                            : "bg-slate-100 text-slate-400"
+                            : "bg-[#1F2937] text-[#484F58]"
                         }`}
                       >
                         {month}
@@ -388,8 +388,8 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Nearby Guides */}
               {nearbyGuides.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
                     Guides on This River
                   </h3>
                   <div className="space-y-3">
@@ -397,12 +397,12 @@ export default async function RiverPage({ params }: Props) {
                       <Link
                         key={guide.id}
                         href={`/guides/${guide.slug}`}
-                        className="block p-3 rounded-lg hover:bg-cream transition-colors"
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-forest-dark">
+                        <p className="text-sm font-medium text-[#E8923A]-dark">
                           {guide.name}
                         </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
+                        <p className="text-xs text-[#8B949E] mt-0.5">
                           {guide.dailyRate}
                         </p>
                       </Link>
@@ -413,8 +413,8 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Related Articles */}
               {riverArticles.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-forest-dark mb-4">
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A]-dark mb-4">
                     Reading for This River
                   </h3>
                   <div className="space-y-3">
@@ -422,12 +422,12 @@ export default async function RiverPage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-cream transition-colors"
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
                       >
-                        <p className="text-sm font-medium text-forest-dark">
+                        <p className="text-sm font-medium text-[#E8923A]-dark">
                           {article.title}
                         </p>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-[#8B949E] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

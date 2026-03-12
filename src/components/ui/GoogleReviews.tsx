@@ -19,7 +19,7 @@ function StarRating({ rating }: { rating: number }) {
           className={`h-4 w-4 ${
             star <= Math.round(rating)
               ? "text-amber-400 fill-amber-400"
-              : "text-slate-300"
+              : "text-[#484F58]"
           }`}
         />
       ))}
@@ -36,7 +36,7 @@ export default function GoogleReviews({
   if (!rating || !reviewCount) return null;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
       {/* Rating Summary */}
       <div className="flex items-center gap-3 mb-4">
         <svg
@@ -63,12 +63,12 @@ export default function GoogleReviews({
         </svg>
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-forest-dark">
+            <span className="text-2xl font-bold text-[#F0F6FC]">
               {rating.toFixed(1)}
             </span>
             <StarRating rating={rating} />
           </div>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[#8B949E]">
             {reviewCount.toLocaleString()} Google reviews
           </p>
         </div>
@@ -80,25 +80,25 @@ export default function GoogleReviews({
           {reviews.slice(0, 3).map((review, i) => (
             <div
               key={i}
-              className="border-t border-slate-100 pt-4 first:border-0 first:pt-0"
+              className="border-t border-[#21262D] pt-4 first:border-0 first:pt-0"
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-7 h-7 rounded-full bg-forest/10 flex items-center justify-center text-xs font-bold text-forest">
+                <div className="w-7 h-7 rounded-full bg-[#E8923A]/10 flex items-center justify-center text-xs font-bold text-[#E8923A]">
                   {review.authorName.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-forest-dark">
+                  <p className="text-sm font-medium text-[#F0F6FC]">
                     {review.authorName}
                   </p>
                   <div className="flex items-center gap-1.5">
                     <StarRating rating={review.rating} />
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-[#484F58]">
                       {review.relativeTimeDescription}
                     </span>
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
+              <p className="text-sm text-[#8B949E] leading-relaxed line-clamp-3">
                 {review.text}
               </p>
             </div>
@@ -112,7 +112,7 @@ export default function GoogleReviews({
           href={reviewsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-medium text-forest hover:text-forest-dark transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[#E8923A] hover:text-[#F0F6FC] transition-colors"
         >
           See all reviews on Google
           <svg

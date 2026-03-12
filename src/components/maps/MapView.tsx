@@ -59,7 +59,7 @@ export default function MapView({
     markers.forEach((marker) => {
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
         `<div><strong>${marker.title}</strong>${
-          marker.description ? `<p class="mt-1 text-slate-600">${marker.description}</p>` : ""
+          marker.description ? `<p class="mt-1 text-[#8B949E]">${marker.description}</p>` : ""
         }</div>`
       );
 

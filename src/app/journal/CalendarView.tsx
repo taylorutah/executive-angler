@@ -112,20 +112,20 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
         <div className="flex items-center gap-4">
           <button
             onClick={handlePrevMonth}
-            className="rounded-lg p-2 hover:bg-slate-100"
+            className="rounded-lg p-2 hover:bg-[#1F2937]"
             aria-label="Previous month"
           >
-            <ChevronLeftIcon className="h-5 w-5 text-slate-600" />
+            <ChevronLeftIcon className="h-5 w-5 text-[#8B949E]" />
           </button>
-          <h2 className="font-heading text-2xl font-semibold text-forest-dark min-w-[200px] text-center">
+          <h2 className="font-heading text-2xl font-semibold text-[#E8923A] min-w-[200px] text-center">
             {monthName} {currentYear}
           </h2>
           <button
             onClick={handleNextMonth}
-            className="rounded-lg p-2 hover:bg-slate-100"
+            className="rounded-lg p-2 hover:bg-[#1F2937]"
             aria-label="Next month"
           >
-            <ChevronRightIcon className="h-5 w-5 text-slate-600" />
+            <ChevronRightIcon className="h-5 w-5 text-[#8B949E]" />
           </button>
         </div>
 
@@ -140,8 +140,8 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
               }}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 year === currentYear
-                  ? "bg-forest text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[#E8923A] text-white"
+                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#21262D]"
               }`}
             >
               {year}
@@ -151,13 +151,13 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
       </div>
 
       {/* Calendar grid */}
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+      <div className="overflow-hidden rounded-lg border border-[#21262D] bg-[#161B22]">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
+        <div className="grid grid-cols-7 border-b border-[#21262D] bg-[#0D1117]">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div
               key={day}
-              className="p-2 text-center text-xs font-semibold uppercase text-slate-600"
+              className="p-2 text-center text-xs font-semibold uppercase text-[#8B949E]"
             >
               {day}
             </div>
@@ -167,10 +167,10 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
         {/* Calendar weeks */}
         {weeks.map((week, weekIdx) => (
           <div key={weekIdx}>
-            <div className="grid grid-cols-7 border-b border-slate-200 last:border-b-0">
+            <div className="grid grid-cols-7 border-b border-[#21262D] last:border-b-0">
               {week.map((day, dayIdx) => {
                 if (day === null) {
-                  return <div key={dayIdx} className="border-r border-slate-200 last:border-r-0 p-2 min-h-[80px]" />;
+                  return <div key={dayIdx} className="border-r border-[#21262D] last:border-r-0 p-2 min-h-[80px]" />;
                 }
 
                 const dateKey = getDateKey(day);
@@ -188,27 +188,27 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                         toggleDateExpansion(dateKey);
                       }
                     }}
-                    className={`border-r border-slate-200 last:border-r-0 p-2 min-h-[80px] text-left transition-colors ${
+                    className={`border-r border-[#21262D] last:border-r-0 p-2 min-h-[80px] text-left transition-colors ${
                       daySessions.length > 0
-                        ? "cursor-pointer hover:bg-slate-50"
+                        ? "cursor-pointer hover:bg-[#0D1117]"
                         : "cursor-default"
-                    } ${isToday(day) ? "bg-river/5 ring-2 ring-inset ring-river/30" : ""}`}
+                    } ${isToday(day) ? "bg-[#00B4D8]/5 ring-2 ring-inset ring-[#00B4D8]/30" : ""}`}
                   >
                     <div className="flex flex-col h-full">
                       <span
                         className={`text-sm font-medium ${
                           isToday(day)
-                            ? "text-river font-semibold"
-                            : "text-slate-700"
+                            ? "text-[#00B4D8] font-semibold"
+                            : "text-[#F0F6FC]"
                         }`}
                       >
                         {day}
                       </span>
                       {daySessions.length > 0 && (
                         <div className="mt-auto flex items-center justify-center gap-1">
-                          <div className="h-2 w-2 rounded-full bg-river" />
+                          <div className="h-2 w-2 rounded-full bg-[#00B4D8]" />
                           {totalFish > 0 && (
-                            <span className="text-xs font-semibold text-river">
+                            <span className="text-xs font-semibold text-[#00B4D8]">
                               {totalFish}
                             </span>
                           )}
@@ -223,8 +223,8 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
             {/* Expanded sessions for this week */}
             {expandedDate &&
               week.some((day) => day !== null && getDateKey(day) === expandedDate) && (
-                <div className="border-b border-slate-200 bg-cream p-4">
-                  <h3 className="mb-3 text-sm font-semibold text-forest-dark">
+                <div className="border-b border-[#21262D] bg-[#0D1117] p-4">
+                  <h3 className="mb-3 text-sm font-semibold text-[#E8923A]">
                     Sessions on{" "}
                     {parseLocalDate(expandedDate).toLocaleDateString("en-US", {
                       month: "long",

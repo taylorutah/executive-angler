@@ -78,11 +78,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     router.push("/");
   }
 
-  const inputCls = "w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-800 focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest";
-  const labelCls = "block text-sm font-medium text-slate-700 mb-1";
+  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-3 text-[#F0F6FC] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  const labelCls = "block text-sm font-medium text-[#8B949E] mb-1";
 
   const statCards = [
-    { icon: BookOpen, label: "Sessions", value: stats.totalSessions, color: "text-forest" },
+    { icon: BookOpen, label: "Sessions", value: stats.totalSessions, color: "text-[#E8923A]" },
     { icon: Fish, label: "Fish Caught", value: stats.totalFish, color: "text-blue-600" },
     { icon: MapPin, label: "Rivers Fished", value: stats.totalRivers, color: "text-amber-600" },
     { icon: Feather, label: "Fly Patterns", value: stats.totalFlies, color: "text-purple-600" },
@@ -90,17 +90,17 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   ];
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-[#0D1117]">
       <div className="mx-auto max-w-3xl px-4 pt-24 pb-16">
         {/* Profile header */}
         <div className="flex items-center gap-4 mb-8">
           <div className="relative flex-shrink-0">
             <label className="cursor-pointer group">
-              <div className="h-16 w-16 rounded-full overflow-hidden bg-forest/10 border-2 border-white shadow-md flex items-center justify-center">
+              <div className="h-16 w-16 rounded-full overflow-hidden bg-[#E8923A]/10 border-2 border-white shadow-md flex items-center justify-center">
                 {avatarUrl ? (
                   <Image src={avatarUrl} alt="Avatar" width={64} height={64} className="object-cover w-full h-full" />
                 ) : (
-                  <span className="text-2xl font-bold text-forest">{(displayName || user.email)[0].toUpperCase()}</span>
+                  <span className="text-2xl font-bold text-[#E8923A]">{(displayName || user.email)[0].toUpperCase()}</span>
                 )}
               </div>
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -114,11 +114,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             </label>
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="font-heading text-forest-dark text-2xl font-bold truncate">{displayName || "Angler"}</h1>
-            <p className="text-sm text-slate-400 truncate">{user.email}</p>
+            <h1 className="font-heading text-[#E8923A] text-2xl font-bold truncate">{displayName || "Angler"}</h1>
+            <p className="text-sm text-[#484F58] truncate">{user.email}</p>
           </div>
           <button onClick={handleSignOut}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-red-600 transition-colors">
+            className="inline-flex items-center gap-1.5 text-sm text-[#484F58] hover:text-red-600 transition-colors">
             <LogOut className="h-4 w-4" />
           </button>
         </div>
@@ -126,32 +126,32 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
           {statCards.map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="bg-white rounded-xl p-4 shadow-sm text-center">
+            <div key={label} className="bg-[#161B22] rounded-xl p-4 shadow-sm text-center">
               <Icon className={`h-6 w-6 mx-auto mb-1 ${color}`} />
-              <p className="text-2xl font-bold text-slate-900">{value}</p>
-              <p className="text-xs text-slate-500">{label}</p>
+              <p className="text-2xl font-bold text-[#F0F6FC]">{value}</p>
+              <p className="text-xs text-[#8B949E]">{label}</p>
             </div>
           ))}
         </div>
 
         {/* Personal Bests */}
         {(stats.biggestFish || stats.bestSession) && (
-          <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-            <h2 className="font-heading text-lg font-semibold text-forest-dark flex items-center gap-2 mb-4">
+          <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
+            <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
               <Trophy className="h-5 w-5 text-amber-500" /> Personal Bests
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {stats.biggestFish && (
-                <div className="rounded-lg bg-cream p-4">
-                  <p className="text-xs text-slate-500 mb-1">Biggest Fish</p>
-                  <p className="text-2xl font-bold text-forest-dark">{stats.biggestFish}&quot;</p>
+                <div className="rounded-lg bg-[#0D1117] p-4">
+                  <p className="text-xs text-[#8B949E] mb-1">Biggest Fish</p>
+                  <p className="text-2xl font-bold text-[#E8923A]">{stats.biggestFish}&quot;</p>
                 </div>
               )}
               {stats.bestSession && (
-                <div className="rounded-lg bg-cream p-4">
-                  <p className="text-xs text-slate-500 mb-1">Best Day</p>
-                  <p className="text-lg font-bold text-forest-dark">{stats.bestSession.total_fish} fish</p>
-                  <p className="text-sm text-slate-600">
+                <div className="rounded-lg bg-[#0D1117] p-4">
+                  <p className="text-xs text-[#8B949E] mb-1">Best Day</p>
+                  <p className="text-lg font-bold text-[#E8923A]">{stats.bestSession.total_fish} fish</p>
+                  <p className="text-sm text-[#8B949E]">
                     {stats.bestSession.river_name} · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                 </div>
@@ -163,34 +163,34 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         {/* Quick links */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
           <Link href="/journal"
-            className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-            <BookOpen className="h-5 w-5 text-forest" />
+            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+            <BookOpen className="h-5 w-5 text-[#E8923A]" />
             <div>
-              <p className="font-medium text-slate-900 text-sm">Fishing Journal</p>
-              <p className="text-xs text-slate-500">{stats.totalSessions} sessions</p>
+              <p className="font-medium text-[#F0F6FC] text-sm">Fishing Journal</p>
+              <p className="text-xs text-[#8B949E]">{stats.totalSessions} sessions</p>
             </div>
           </Link>
           <Link href="/journal/flies"
-            className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
             <span className="text-xl leading-none">🪰</span>
             <div>
-              <p className="font-medium text-slate-900 text-sm">Fly Patterns</p>
-              <p className="text-xs text-slate-500">{stats.totalFlies} patterns</p>
+              <p className="font-medium text-[#F0F6FC] text-sm">Fly Patterns</p>
+              <p className="text-xs text-[#8B949E]">{stats.totalFlies} patterns</p>
             </div>
           </Link>
           <Link href="/favorites"
-            className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
             <Heart className="h-5 w-5 text-red-500" />
             <div>
-              <p className="font-medium text-slate-900 text-sm">Favorites</p>
-              <p className="text-xs text-slate-500">{stats.totalFavorites} saved</p>
+              <p className="font-medium text-[#F0F6FC] text-sm">Favorites</p>
+              <p className="text-xs text-[#8B949E]">{stats.totalFavorites} saved</p>
             </div>
           </Link>
         </div>
 
         {/* Profile settings */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-heading text-lg font-semibold text-forest-dark mb-4">Profile</h2>
+        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
+          <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Profile</h2>
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
               <label className={labelCls}>Display Name</label>
@@ -199,24 +199,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             <div>
               <label className={labelCls}>Email</label>
               <input className={inputCls + " opacity-60"} value={email} disabled />
-              <p className="text-xs text-slate-400 mt-1">Contact support to change your email.</p>
+              <p className="text-xs text-[#484F58] mt-1">Contact support to change your email.</p>
             </div>
             <div>
               <label className={labelCls}>Journal Feed Display</label>
               <div className="flex gap-2 mt-1">
                 <button type="button" onClick={() => setFeedDisplay("collage")}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-forest bg-forest text-white" : "border-slate-200 text-slate-600 hover:border-forest"}`}>
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}>
                   🐟 Fish + Flies Collage
                 </button>
                 <button type="button" onClick={() => setFeedDisplay("map")}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-forest bg-forest text-white" : "border-slate-200 text-slate-600 hover:border-forest"}`}>
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}>
                   📍 Map Location
                 </button>
               </div>
-              <p className="text-xs text-slate-400 mt-1">Controls what shows in your journal feed cards.</p>
+              <p className="text-xs text-[#484F58] mt-1">Controls what shows in your journal feed cards.</p>
             </div>
             <button type="submit" disabled={saving}
-              className="inline-flex items-center gap-2 rounded-lg bg-forest px-5 py-2.5 text-white text-sm font-medium hover:bg-forest-dark disabled:opacity-60">
+              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#E8923A]-dark disabled:opacity-60">
               <Save className="h-4 w-4" />
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save Profile"}
             </button>
@@ -224,8 +224,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         </div>
 
         {/* Change password */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="font-heading text-lg font-semibold text-forest-dark mb-4">Change Password</h2>
+        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm">
+          <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Change Password</h2>
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div>
               <label className={labelCls}>New Password</label>
@@ -237,7 +237,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             </div>
             {pwError && <p className="text-sm text-red-600">{pwError}</p>}
             <button type="submit"
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-5 py-2.5 text-white text-sm font-medium hover:bg-slate-900">
+              className="inline-flex items-center gap-2 rounded-lg bg-[#1F2937] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#161B22]">
               {pwSaved ? "Password Updated ✓" : "Update Password"}
             </button>
           </form>

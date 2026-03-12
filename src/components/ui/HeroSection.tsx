@@ -22,7 +22,7 @@ export default function HeroSection({
   imageContain = false,
 }: HeroSectionProps) {
   return (
-    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-slate-800" : ""}`}>
+    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[#1F2937]" : ""}`}>
       <Image
         src={imageUrl}
         alt={imageAlt}

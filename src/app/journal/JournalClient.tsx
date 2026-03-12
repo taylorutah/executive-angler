@@ -158,21 +158,21 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     filterRivers.length > 0 || filterYears.length > 0 || filterLocations.length > 0;
 
   return (
-    <div className="min-h-screen bg-cream pt-20 lg:pt-0">
+    <div className="min-h-screen bg-[#0D1117] pt-20 lg:pt-0">
       {/* Mobile header */}
-      <div className="lg:hidden border-b border-slate-200 bg-white px-4 py-4">
+      <div className="lg:hidden border-b border-[#21262D] bg-[#161B22] px-4 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="font-heading text-2xl font-bold text-forest-dark">Journal</h1>
+          <h1 className="font-heading text-2xl font-bold text-[#E8923A]">Journal</h1>
           <div className="flex gap-2">
             <Link
               href="/journal/flies"
-              className="rounded-lg border border-forest px-3 py-2 text-sm font-medium text-forest hover:bg-forest/10"
+              className="rounded-lg border border-[#E8923A] px-3 py-2 text-sm font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
             >
               🪰 Flies
             </Link>
             <Link
               href="/journal/new"
-              className="rounded-lg bg-forest px-3 py-2 text-sm font-medium text-white hover:bg-forest-dark"
+              className="rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#E8923A]-dark"
             >
               + Log
             </Link>
@@ -185,8 +185,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("list")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "list"
-                  ? "bg-forest text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[#E8923A] text-white"
+                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#1F2937]"
               }`}
             >
               <ListIcon className="h-4 w-4" />
@@ -196,8 +196,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("calendar")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "calendar"
-                  ? "bg-forest text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[#E8923A] text-white"
+                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#1F2937]"
               }`}
             >
               <CalendarIcon className="h-4 w-4" />
@@ -206,12 +206,12 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           </div>
           <button
             onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            className="flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200"
+            className="flex items-center gap-1.5 rounded-lg bg-[#1F2937] px-3 py-2 text-sm font-medium text-[#8B949E] hover:bg-[#1F2937]"
           >
             <FilterIcon className="h-4 w-4" />
             Filters
             {hasActiveFilters && (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-forest text-xs text-white">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#E8923A] text-xs text-white">
                 {filterRivers.length + filterYears.length + filterLocations.length}
               </span>
             )}
@@ -219,7 +219,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         </div>
 
         {/* Mobile stats */}
-        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-slate-600">
+        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-[#8B949E]">
           <span>{totalSessions} Sessions</span>
           <span>·</span>
           <span>{totalFish} Fish</span>
@@ -231,16 +231,16 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         {mobileFiltersOpen && (
           <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setMobileFiltersOpen(false)}>
             <div
-              className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-xl bg-white p-6"
+              className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-xl bg-[#161B22] p-6"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-heading text-xl font-semibold text-forest-dark">
+                <h2 className="font-heading text-xl font-semibold text-[#E8923A]">
                   Filters
                 </h2>
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-[#8B949E] hover:text-[#8B949E]"
                 >
                   ✕
                 </button>
@@ -270,62 +270,62 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           <div className="sticky top-20 space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto pb-8">
 
             {/* Profile card */}
-            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
               <div className="h-16 bg-gradient-to-br from-forest to-forest-dark" />
               <div className="px-4 pb-4">
                 <Link href="/account" className="-mt-8 mb-3 block w-fit">
-                  <div className="h-14 w-14 rounded-full border-3 border-white bg-forest/20 overflow-hidden shadow-md flex items-center justify-center">
+                  <div className="h-14 w-14 rounded-full border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
                     {userProfile?.avatarUrl ? (
                       <Image src={userProfile.avatarUrl} alt="Profile" width={56} height={56} className="object-cover w-full h-full" />
                     ) : (
-                      <span className="text-lg font-bold text-forest">
+                      <span className="text-lg font-bold text-[#E8923A]">
                         {(userProfile?.displayName || userProfile?.email || "A")[0].toUpperCase()}
                       </span>
                     )}
                   </div>
                 </Link>
-                <p className="font-bold text-slate-900 text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
-                <p className="text-xs text-slate-400 mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
-                <div className="grid grid-cols-3 gap-1 text-center border-t border-slate-100 pt-3">
+                <p className="font-bold text-[#F0F6FC] text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
+                <p className="text-xs text-[#484F58] mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
+                <div className="grid grid-cols-3 gap-1 text-center border-t border-[#21262D] pt-3">
                   <div>
-                    <p className="text-base font-bold text-slate-900">{totalSessions}</p>
-                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Sessions</p>
+                    <p className="text-base font-bold text-[#F0F6FC]">{totalSessions}</p>
+                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Sessions</p>
                   </div>
                   <div>
-                    <p className="text-base font-bold text-slate-900">{totalFish}</p>
-                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Fish</p>
+                    <p className="text-base font-bold text-[#F0F6FC]">{totalFish}</p>
+                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Fish</p>
                   </div>
                   <div>
-                    <p className="text-base font-bold text-slate-900">{riversFished}</p>
-                    <p className="text-[10px] text-slate-400 uppercase tracking-wide">Rivers</p>
+                    <p className="text-base font-bold text-[#F0F6FC]">{riversFished}</p>
+                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Rivers</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Quick nav */}
-            <div className="bg-white rounded-xl border border-slate-100 p-3 space-y-1">
-              <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-forest/5 text-forest text-sm font-medium">
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3 space-y-1">
+              <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#E8923A]/5 text-[#E8923A] text-sm font-medium">
                 <BookOpen className="h-4 w-4" /> Journal
               </Link>
-              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
                 <Feather className="h-4 w-4" /> My Fly Box
-                <span className="ml-auto text-xs text-slate-400">{totalFlyPatterns}</span>
+                <span className="ml-auto text-xs text-[#484F58]">{totalFlyPatterns}</span>
               </Link>
-              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">❤️</span> Favorites
               </Link>
-              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 text-sm hover:bg-slate-50 transition-colors">
+              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">⚙️</span> Settings
               </Link>
             </div>
 
             {/* Log buttons */}
             <div className="space-y-2">
-              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-forest px-4 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
                 + Log Session
               </Link>
-              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 hover:border-forest hover:text-forest transition-colors">
+              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#8B949E] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
                 + Add Fly Pattern
               </Link>
             </div>
@@ -356,8 +356,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 onClick={() => setView("list")}
                 className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   view === "list"
-                    ? "bg-forest text-white"
-                    : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
+                    ? "bg-[#E8923A] text-white"
+                    : "bg-[#161B22] text-[#8B949E] hover:bg-[#0D1117] border border-[#21262D]"
                 }`}
               >
                 <ListIcon className="h-4 w-4" />
@@ -367,15 +367,15 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 onClick={() => setView("calendar")}
                 className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   view === "calendar"
-                    ? "bg-forest text-white"
-                    : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
+                    ? "bg-[#E8923A] text-white"
+                    : "bg-[#161B22] text-[#8B949E] hover:bg-[#0D1117] border border-[#21262D]"
                 }`}
               >
                 <CalendarIcon className="h-4 w-4" />
                 Calendar
               </button>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#8B949E]">
               Showing {filteredSessions.length} session{filteredSessions.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -383,12 +383,12 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           {/* Content */}
           {view === "list" ? (
             filteredSessions.length === 0 ? (
-              <div className="rounded-lg bg-white p-12 text-center shadow-sm">
-                <p className="text-slate-600">No sessions match your filters</p>
+              <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
+                <p className="text-[#8B949E]">No sessions match your filters</p>
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="mt-4 text-sm font-medium text-forest hover:text-forest-dark"
+                    className="mt-4 text-sm font-medium text-[#E8923A] hover:text-[#E8923A]"
                   >
                     Clear filters
                   </button>

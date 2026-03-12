@@ -56,9 +56,9 @@ export default async function RiversPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-forest-dark pt-32 pb-16 sm:pb-20">
+      <section className="bg-[#E8923A]-dark pt-32 pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Legendary Waters
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -72,9 +72,9 @@ export default async function RiversPage() {
       </section>
 
       {/* ── Spotlight Rivers ──────────────────────────────────────────────── */}
-      <section className="bg-cream py-12 sm:py-16">
+      <section className="bg-[#0D1117] py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-forest mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
             Iconic Rivers
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -84,7 +84,7 @@ export default async function RiversPage() {
                 <ScrollAnimation key={river.id} delay={i * 0.1}>
                   <Link
                     href={`/rivers/${river.slug}`}
-                    className="group block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                   >
                     <div className="relative h-56">
                       <Image
@@ -97,40 +97,40 @@ export default async function RiversPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                       <div className="absolute bottom-4 left-4">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-slate-100 text-slate-700"}`}
+                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#8B949E]"}`}
                         >
                           {river.difficulty}
                         </span>
                       </div>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-heading text-xl font-bold text-forest-dark group-hover:text-forest transition-colors">
+                      <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
                         {river.name}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-gold">
+                      <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
                         {RIVER_HEADLINES[river.slug]}
                       </p>
-                      <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                      <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
                         {river.description?.substring(0, 120)}...
                       </p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {river.primarySpecies.slice(0, 2).map((sp) => (
                           <span
                             key={sp}
-                            className="px-2 py-0.5 bg-cream text-forest-dark text-[10px] font-medium rounded-full"
+                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
                           >
                             {sp}
                           </span>
                         ))}
-                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-medium rounded-full capitalize">
+                        <span className="px-2 py-0.5 bg-[#1F2937] text-[#8B949E] text-[10px] font-medium rounded-full capitalize">
                           {river.wadingType}
                         </span>
                       </div>
                       <div className="mt-4 flex items-center justify-between">
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-[#484F58]">
                           Peak: {river.bestMonths.slice(0, 3).join(" · ")}
                         </span>
-                        <span className="text-sm font-semibold text-forest flex items-center gap-1 group-hover:underline">
+                        <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
                           Explore <ChevronRight className="h-3.5 w-3.5" />
                         </span>
                       </div>
@@ -144,17 +144,17 @@ export default async function RiversPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-white border-t border-slate-100">
+      <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-forest-dark">
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
             All Rivers &amp; Waters
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-[#8B949E] mt-1">
             {rivers.length} rivers — filterable by difficulty, access, and wading type
           </p>
         </div>
       </div>
-      <section className="bg-white pb-16 sm:pb-20">
+      <section className="bg-[#161B22] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={riverListConfig} storageKey="rivers" />

@@ -99,13 +99,13 @@ export default async function ArticlePage({ params }: Props) {
         <div className="max-w-5xl mx-auto px-6 sm:px-10">
 
           {/* Breadcrumb + favorite — same width as content */}
-          <div className="flex items-center justify-between py-5 border-b border-slate-200 mb-10">
-            <nav className="flex items-center gap-1.5 text-[13px] text-slate-400">
-              <Link href="/" className="hover:text-forest transition-colors">Home</Link>
+          <div className="flex items-center justify-between py-5 border-b border-[#21262D] mb-10">
+            <nav className="flex items-center gap-1.5 text-[13px] text-[#484F58]">
+              <Link href="/" className="hover:text-[#E8923A] transition-colors">Home</Link>
               <span>/</span>
-              <Link href="/articles" className="hover:text-forest transition-colors">Articles</Link>
+              <Link href="/articles" className="hover:text-[#E8923A] transition-colors">Articles</Link>
               <span>/</span>
-              <span className="text-slate-600 truncate max-w-[200px] sm:max-w-none">{article.title}</span>
+              <span className="text-[#8B949E] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
             </nav>
             <FavoriteButton entityType="article" entityId={article.id} />
           </div>
@@ -115,22 +115,22 @@ export default async function ArticlePage({ params }: Props) {
             <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
 
             {/* Divider */}
-            <div className="mt-16 pt-10 border-t border-slate-200">
-              <h2 className="font-heading text-lg font-bold text-slate-900 mb-6">More Articles</h2>
+            <div className="mt-16 pt-10 border-t border-[#21262D]">
+              <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6">More Articles</h2>
               {otherArticles.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                   {otherArticles.map((a) => (
                     <Link key={a.id} href={`/articles/${a.slug}`}
-                      className="group block bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-forest/30 hover:shadow-md transition-all">
+                      className="group block bg-[#161B22] rounded-xl overflow-hidden border border-[#21262D] hover:border-[#E8923A]/30 hover:shadow-md transition-all">
                       {a.heroImageUrl && (
                         <div className="relative h-36 w-full overflow-hidden">
                           <Image src={a.heroImageUrl} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                       )}
                       <div className="p-4">
-                        <span className="text-[11px] text-forest font-semibold uppercase tracking-wide">{a.category}</span>
-                        <h3 className="mt-1 font-heading text-sm font-bold text-slate-900 leading-snug group-hover:text-forest transition-colors">{a.title}</h3>
-                        <p className="mt-1.5 text-xs text-slate-400">{a.readingTimeMinutes} min read</p>
+                        <span className="text-[11px] text-[#E8923A] font-semibold uppercase tracking-wide">{a.category}</span>
+                        <h3 className="mt-1 font-heading text-sm font-bold text-[#F0F6FC] leading-snug group-hover:text-[#E8923A] transition-colors">{a.title}</h3>
+                        <p className="mt-1.5 text-xs text-[#484F58]">{a.readingTimeMinutes} min read</p>
                       </div>
                     </Link>
                   ))}

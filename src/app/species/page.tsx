@@ -46,7 +46,7 @@ export default async function SpeciesListPage() {
         subtitle="Detailed profiles of the world's most prized fly fishing species — habitat, behavior, fly patterns, and angling strategies."
       />
 
-      <section className="py-16 sm:py-20 bg-cream">
+      <section className="py-16 sm:py-20 bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView

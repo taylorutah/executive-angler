@@ -75,11 +75,11 @@ function FishLightbox({ catches, initialIndex, onClose }: {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
-      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20"><X className="h-5 w-5" /></button>
+      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
       {catches.length > 1 && (
         <>
-          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20"><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronRight className="h-5 w-5" /></button>
         </>
       )}
       <div className="max-w-2xl w-full mx-16" onClick={e => e.stopPropagation()}>
@@ -88,8 +88,8 @@ function FishLightbox({ catches, initialIndex, onClose }: {
             <Image src={c.fish_image_url} alt={c.species || "Fish"} fill className="object-cover" />
           </div>
         ) : (
-          <div className="w-full aspect-[4/3] rounded-xl bg-slate-800 flex items-center justify-center">
-            <Fish className="h-16 w-16 text-slate-600" />
+          <div className="w-full aspect-[4/3] rounded-xl bg-[#1F2937] flex items-center justify-center">
+            <Fish className="h-16 w-16 text-[#8B949E]" />
           </div>
         )}
         <div className="mt-4 text-center">
@@ -165,31 +165,31 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
           {/* Breadcrumb + Edit */}
           <div className="flex items-center justify-between mb-4">
-            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-forest transition-colors">
+            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
               <ArrowLeft className="h-4 w-4" /> Back to Journal
             </Link>
             <div className="flex items-center gap-3">
               {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               <Link href={`/journal/${session.id}/edit`}
-                className="flex items-center gap-1.5 rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest-dark transition-colors shadow-sm">
+                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#E8923A]-dark transition-colors shadow-sm">
                 <Pencil className="h-3.5 w-3.5" /> Edit Session
               </Link>
             </div>
           </div>
 
           {/* ---- STRAVA-STYLE HEADER CARD ---- */}
-          <div className="bg-white rounded-xl border border-slate-100 p-5 sm:p-6 mb-5">
+          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 sm:p-6 mb-5">
             <div className="flex flex-col sm:flex-row sm:gap-8">
 
               {/* LEFT: title + meta + notes */}
               <div className="flex-1 min-w-0 mb-5 sm:mb-0">
-                <p className="text-xs text-slate-400 mb-1">
+                <p className="text-xs text-[#484F58] mb-1">
                   {formattedDate}
                   {session.location && <> · <MapPin className="h-3 w-3 inline -mt-0.5" /> {session.river_name ? `${session.river_name}, ` : ""}{session.location}</>}
                   {!session.location && session.river_name && <> · {session.river_name}</>}
                 </p>
 
-                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
+                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-tight mb-3">
                   {session.title || session.river_name || "Fishing Session"}
                 </h1>
 
@@ -203,15 +203,15 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                         value={notesValue}
                         onChange={e => setNotesValue(e.target.value)}
                         onKeyDown={e => { if (e.key === "Escape") { setNotesValue(session.notes || ""); setEditingNotes(false); } }}
-                        className="w-full text-sm text-slate-700 leading-relaxed rounded-lg border border-forest/40 bg-white px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-forest"
+                        className="w-full text-sm text-[#8B949E] leading-relaxed rounded-lg border border-[#E8923A]/40 bg-[#161B22] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveNotes} disabled={notesSaving}
-                          className="flex items-center gap-1 text-xs font-semibold text-white bg-forest rounded-lg px-3 py-1.5 hover:bg-forest-dark disabled:opacity-60">
+                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 hover:bg-[#E8923A]-dark disabled:opacity-60">
                           <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
-                          className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600">
+                          className="flex items-center gap-1 text-xs text-[#484F58] hover:text-[#8B949E]">
                           <RotateCcw className="h-3 w-3" /> Cancel
                         </button>
                       </div>
@@ -219,20 +219,20 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                   ) : notesValue ? (
                     <div
                       onClick={() => setEditingNotes(true)}
-                      className="cursor-text rounded-lg border border-transparent hover:border-forest/30 hover:bg-forest/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
+                      className="cursor-text rounded-lg border border-transparent hover:border-[#E8923A]/30 hover:bg-[#E8923A]/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
                       title="Click to edit notes"
                     >
-                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm text-[#8B949E] leading-relaxed whitespace-pre-wrap">
                         {notesValue}
                       </p>
-                      <p className="text-[10px] text-slate-400 mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
+                      <p className="text-[10px] text-[#484F58] mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
                         <Pencil className="h-3 w-3" /> Click to edit
                       </p>
                     </div>
                   ) : (
                     <button onClick={() => setEditingNotes(true)}
-                      className="w-full text-left rounded-lg border border-dashed border-slate-300 hover:border-forest/50 hover:bg-forest/5 px-3 py-2.5 transition-colors">
-                      <span className="text-sm text-slate-400 hover:text-forest flex items-center gap-1.5">
+                      className="w-full text-left rounded-lg border border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-3 py-2.5 transition-colors">
+                      <span className="text-sm text-[#484F58] hover:text-[#E8923A] flex items-center gap-1.5">
                         <Pencil className="h-3.5 w-3.5" /> Add session notes…
                       </span>
                     </button>
@@ -240,15 +240,15 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                 </div>
 
                 {session.flies_notes && (
-                  <div className="text-xs text-slate-500 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100 max-w-md">
-                    <span className="font-medium text-slate-600">Rig: </span>{session.flies_notes}
+                  <div className="text-xs text-[#8B949E] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
+                    <span className="font-medium text-[#8B949E]">Rig: </span>{session.flies_notes}
                   </div>
                 )}
 
                 {tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {tags.map(t => (
-                      <span key={t} className="text-[11px] bg-forest/8 text-forest border border-forest/15 rounded-full px-2.5 py-0.5">{t}</span>
+                      <span key={t} className="text-[11px] bg-[#E8923A]/8 text-[#E8923A] border border-[#E8923A]/15 rounded-full px-2.5 py-0.5">{t}</span>
                     ))}
                   </div>
                 )}
@@ -261,41 +261,41 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                 {/* 4 big stats */}
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-4">
                   <div>
-                    <p className="text-2xl sm:text-3xl font-bold text-slate-900 leading-none">{totalFish > 0 ? totalFish : "—"}</p>
-                    <p className="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">Fish Caught</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
                   {session.water_temp_f && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-slate-900 leading-none">{session.water_temp_f}</p>
-                      <p className="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">Water Temp</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{session.water_temp_f}</p>
+                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Water Temp</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-slate-900 leading-none">{biggestFish}&quot;</p>
-                      <p className="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">Biggest Fish</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{biggestFish}&quot;</p>
+                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
                   {session.water_clarity && (
                     <div>
-                      <p className="text-xl font-bold text-slate-900 leading-none">{session.water_clarity}</p>
-                      <p className="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">Clarity</p>
+                      <p className="text-xl font-bold text-[#F0F6FC] leading-none">{session.water_clarity}</p>
+                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}
                 </div>
 
                 {/* Weather row — like Strava's weather section */}
                 {session.weather && (
-                  <div className="border-t border-slate-100 pt-3 flex items-center gap-2 text-sm text-slate-600">
-                    <Cloud className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                  <div className="border-t border-[#21262D] pt-3 flex items-center gap-2 text-sm text-[#8B949E]">
+                    <Cloud className="h-4 w-4 text-[#484F58] flex-shrink-0" />
                     <span>{session.weather}</span>
                   </div>
                 )}
 
                 {/* Flies used — compact */}
                 {usedFlies.length > 0 && (
-                  <div className="border-t border-slate-100 pt-3 mt-3">
-                    <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-2">Flies Used</p>
+                  <div className="border-t border-[#21262D] pt-3 mt-3">
+                    <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Flies Used</p>
                     <div className="flex flex-wrap gap-1.5">
                       {usedFlies.map(f => (
                         <span key={f.name} className="flex items-center gap-1 text-xs bg-amber-50 text-amber-800 border border-amber-100 rounded-full px-2.5 py-1">
@@ -313,10 +313,10 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
           {/* ---- FISH PHOTO STRIP (if photos exist) ---- */}
           {fishPhotos.length > 0 && (
-            <div className="bg-white rounded-xl border border-slate-100 p-4 mb-5">
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Photos</p>
-                <p className="text-xs text-slate-400">{fishPhotos.length} {fishPhotos.length === 1 ? "photo" : "photos"} · tap to expand</p>
+                <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide">Photos</p>
+                <p className="text-xs text-[#484F58]">{fishPhotos.length} {fishPhotos.length === 1 ? "photo" : "photos"} · tap to expand</p>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {catches.map((c, i) => c.fish_image_url && (
@@ -335,27 +335,27 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
           {/* ---- CATCHES TABLE (like Strava Segments) ---- */}
           {catches.length > 0 && (
-            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden mb-5">
-              <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-                <h2 className="text-sm font-bold text-slate-900">Fish Caught</h2>
-                <span className="text-xs text-slate-400">{totalFish} total</span>
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
+              <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
+                <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
+                <span className="text-xs text-[#484F58]">{totalFish} total</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-slate-100">
+                    <tr className="border-b border-[#21262D]">
                       {fishPhotos.length > 0 && <th className="w-10 py-2 px-3"></th>}
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Species</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Length</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Fly</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Position</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Size</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Time</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Species</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Length</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Fly</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Position</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Size</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {catches.map((c, i) => (
-                      <tr key={c.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
+                      <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
                         {fishPhotos.length > 0 && (
                           <td className="py-2 px-3">
                             {c.fish_image_url ? (
@@ -364,22 +364,22 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                                   <Image src={c.fish_image_url} alt="" fill className="object-cover" />
                                 </div>
                               </button>
-                            ) : <div className="h-8 w-8 rounded bg-slate-100 flex items-center justify-center"><Fish className="h-4 w-4 text-slate-300" /></div>}
+                            ) : <div className="h-8 w-8 rounded bg-[#1F2937] flex items-center justify-center"><Fish className="h-4 w-4 text-[#484F58]" /></div>}
                           </td>
                         )}
-                        <td className="py-2.5 px-3 font-medium text-slate-900">
+                        <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">
                           {c.species || "—"}
-                          {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-slate-400">×{c.quantities}</span>}
+                          {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#484F58]">×{c.quantities}</span>}
                         </td>
-                        <td className="py-2.5 px-3 text-slate-600">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
-                        <td className="py-2.5 px-3 text-slate-600 max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
+                        <td className="py-2.5 px-3 text-[#8B949E]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
+                        <td className="py-2.5 px-3 text-[#8B949E] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
                         <td className="py-2.5 px-3">
                           {c.fly_position ? (
-                            <span className="text-xs bg-forest/10 text-forest rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
-                          ) : <span className="text-slate-300">—</span>}
+                            <span className="text-xs bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
+                          ) : <span className="text-[#484F58]">—</span>}
                         </td>
-                        <td className="py-2.5 px-3 text-slate-500 text-xs">{c.fly_size || "—"}</td>
-                        <td className="py-2.5 px-3 text-slate-500 text-xs">{c.time_caught || "—"}</td>
+                        <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.fly_size || "—"}</td>
+                        <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.time_caught || "—"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -390,11 +390,11 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
           {/* ---- FLY PATTERNS (standalone, small cards) ---- */}
           {flies.length > 0 && (
-            <div className="bg-white rounded-xl border border-slate-100 p-4 mb-5">
-              <h2 className="text-sm font-bold text-slate-900 mb-3">Fly Box</h2>
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
+              <h2 className="text-sm font-bold text-[#F0F6FC] mb-3">Fly Box</h2>
               <div className="flex flex-wrap gap-3">
                 {flies.map(fly => (
-                  <div key={fly.id} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
+                  <div key={fly.id} className="flex items-center gap-2 bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D]">
                     {fly.image_url ? (
                       <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
                         <Image src={fly.image_url} alt={fly.name} fill className="object-cover" />
@@ -403,8 +403,8 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                       <span className="text-base flex-shrink-0">🪰</span>
                     )}
                     <div>
-                      <p className="text-xs font-medium text-slate-800">{fly.name}</p>
-                      {fly.type && <p className="text-[10px] text-slate-400">{fly.type}</p>}
+                      <p className="text-xs font-medium text-[#F0F6FC]">{fly.name}</p>
+                      {fly.type && <p className="text-[10px] text-[#484F58]">{fly.type}</p>}
                     </div>
                   </div>
                 ))}

@@ -154,8 +154,8 @@ export default function AdminPhotosPage() {
   // Loading state
   if (isAdmin === null) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <Loader2 className="h-8 w-8 text-forest animate-spin" />
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin" />
       </div>
     );
   }
@@ -163,21 +163,21 @@ export default function AdminPhotosPage() {
   // Access denied
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
           <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="h-8 w-8 text-red-500" />
           </div>
-          <h1 className="font-heading text-2xl font-bold text-forest-dark mb-2">
+          <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
             Access Denied
           </h1>
-          <p className="text-slate-600 mb-6">
+          <p className="text-[#8B949E] mb-6">
             You do not have permission to access the admin dashboard. Please
             sign in with an admin account.
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center px-5 py-2.5 bg-forest text-white text-sm font-medium rounded-lg hover:bg-forest-light transition-colors"
+            className="inline-flex items-center px-5 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#E8923A]-light transition-colors"
           >
             Sign In
           </Link>
@@ -213,23 +213,23 @@ export default function AdminPhotosPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-[#0D1117]">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-[#161B22] border-b border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#1F2937] transition-colors"
               aria-label="Back to home"
             >
-              <ArrowLeft className="h-5 w-5 text-slate-600" />
+              <ArrowLeft className="h-5 w-5 text-[#8B949E]" />
             </Link>
             <div>
-              <h1 className="font-heading text-2xl font-bold text-forest-dark">
+              <h1 className="font-heading text-2xl font-bold text-[#E8923A]">
                 Photo Submissions
               </h1>
-              <p className="text-sm text-slate-500 mt-0.5">
+              <p className="text-sm text-[#8B949E] mt-0.5">
                 Review and manage community photo submissions
               </p>
             </div>
@@ -246,8 +246,8 @@ export default function AdminPhotosPage() {
               onClick={() => setActiveTab(tab.key)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === tab.key
-                  ? "bg-forest text-white shadow-sm"
-                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                  ? "bg-[#E8923A] text-white shadow-sm"
+                  : "bg-[#161B22] text-[#8B949E] border border-[#21262D] hover:bg-[#0D1117]"
               }`}
             >
               {tab.icon}
@@ -256,10 +256,10 @@ export default function AdminPhotosPage() {
                 <span
                   className={`px-2 py-0.5 text-xs rounded-full font-semibold ${
                     activeTab === tab.key
-                      ? "bg-white/20 text-white"
+                      ? "bg-[#161B22]/20 text-white"
                       : tab.key === "pending"
                         ? "bg-amber-100 text-amber-700"
-                        : "bg-slate-100 text-slate-500"
+                        : "bg-[#1F2937] text-[#8B949E]"
                   }`}
                 >
                   {counts[tab.key]}
@@ -272,12 +272,12 @@ export default function AdminPhotosPage() {
         {/* Content */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 text-forest animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin" />
           </div>
         ) : filteredPhotos.length === 0 ? (
           <div className="text-center py-20">
-            <Camera className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-500">
+            <Camera className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
+            <p className="text-[#8B949E]">
               No {activeTab} photo submissions yet.
             </p>
           </div>
@@ -286,10 +286,10 @@ export default function AdminPhotosPage() {
             {filteredPhotos.map((photo) => (
               <div
                 key={photo.id}
-                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+                className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden"
               >
                 {/* Photo Thumbnail */}
-                <div className="relative h-56 bg-slate-100">
+                <div className="relative h-56 bg-[#1F2937]">
                   <Image
                     src={photo.photo_url}
                     alt={photo.caption || "Photo submission"}
@@ -318,14 +318,14 @@ export default function AdminPhotosPage() {
                 <div className="p-5 space-y-3">
                   {/* Submitter */}
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-forest/10 flex items-center justify-center shrink-0">
-                      <User className="h-4 w-4 text-forest" />
+                    <div className="w-8 h-8 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0">
+                      <User className="h-4 w-4 text-[#E8923A]" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-forest-dark truncate">
+                      <p className="text-sm font-medium text-[#E8923A] truncate">
                         {photo.submitter_name}
                       </p>
-                      <p className="text-xs text-slate-500 truncate flex items-center gap-1">
+                      <p className="text-xs text-[#8B949E] truncate flex items-center gap-1">
                         <Mail className="h-3 w-3" />
                         {photo.submitter_email}
                       </p>
@@ -333,25 +333,25 @@ export default function AdminPhotosPage() {
                   </div>
 
                   {/* Entity Info */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <div className="flex items-center gap-1.5 text-xs text-[#8B949E]">
                     <MapPin className="h-3 w-3" />
                     <span className="capitalize">{photo.entity_type}</span>
-                    <span className="text-slate-300">|</span>
-                    <span className="truncate font-mono text-slate-400">
+                    <span className="text-[#484F58]">|</span>
+                    <span className="truncate font-mono text-[#484F58]">
                       {photo.entity_id.substring(0, 8)}...
                     </span>
                   </div>
 
                   {/* Caption */}
                   {photo.caption && (
-                    <p className="text-sm text-slate-600 line-clamp-2 italic">
+                    <p className="text-sm text-[#8B949E] line-clamp-2 italic">
                       &ldquo;{photo.caption}&rdquo;
                     </p>
                   )}
 
                   {/* Camera Details */}
                   {(photo.camera_body || photo.lens) && (
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                    <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
                       <Camera className="h-3 w-3" />
                       {[photo.camera_body, photo.lens]
                         .filter(Boolean)
@@ -359,7 +359,7 @@ export default function AdminPhotosPage() {
                     </div>
                   )}
                   {(photo.aperture || photo.shutter_speed || photo.iso) && (
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                    <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
                       <Aperture className="h-3 w-3" />
                       {[
                         photo.aperture,
@@ -372,7 +372,7 @@ export default function AdminPhotosPage() {
                   )}
 
                   {/* Date */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                  <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
                     <Calendar className="h-3 w-3" />
                     Submitted {formatDate(photo.submitted_at)}
                   </div>
@@ -382,7 +382,7 @@ export default function AdminPhotosPage() {
                     href={photo.photo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-forest hover:text-forest-light transition-colors"
+                    className="inline-flex items-center gap-1 text-xs text-[#E8923A] hover:text-[#E8923A]-light transition-colors"
                   >
                     <ExternalLink className="h-3 w-3" />
                     View full image
@@ -390,11 +390,11 @@ export default function AdminPhotosPage() {
 
                   {/* Action Buttons */}
                   {photo.status === "pending" && (
-                    <div className="flex gap-3 pt-2 border-t border-slate-100">
+                    <div className="flex gap-3 pt-2 border-t border-[#21262D]">
                       <button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-forest text-white text-sm font-medium rounded-lg hover:bg-forest-light transition-colors disabled:opacity-50"
+                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#E8923A]-light transition-colors disabled:opacity-50"
                       >
                         {actionLoading === photo.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -406,7 +406,7 @@ export default function AdminPhotosPage() {
                       <button
                         onClick={() => handleAction(photo.id, "reject")}
                         disabled={actionLoading === photo.id}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#161B22] text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-colors disabled:opacity-50"
                       >
                         {actionLoading === photo.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -420,11 +420,11 @@ export default function AdminPhotosPage() {
 
                   {/* Reverse action for already-reviewed photos */}
                   {photo.status === "approved" && (
-                    <div className="pt-2 border-t border-slate-100">
+                    <div className="pt-2 border-t border-[#21262D]">
                       <button
                         onClick={() => handleAction(photo.id, "reject")}
                         disabled={actionLoading === photo.id}
-                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-red-500 text-sm font-medium rounded-lg border border-slate-200 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-red-500 text-sm font-medium rounded-lg border border-[#21262D] hover:bg-red-50 transition-colors disabled:opacity-50"
                       >
                         {actionLoading === photo.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -437,11 +437,11 @@ export default function AdminPhotosPage() {
                   )}
 
                   {photo.status === "rejected" && (
-                    <div className="pt-2 border-t border-slate-100">
+                    <div className="pt-2 border-t border-[#21262D]">
                       <button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}
-                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-forest text-sm font-medium rounded-lg border border-slate-200 hover:bg-green-50 transition-colors disabled:opacity-50"
+                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-[#E8923A] text-sm font-medium rounded-lg border border-[#21262D] hover:bg-green-50 transition-colors disabled:opacity-50"
                       >
                         {actionLoading === photo.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const MapView = dynamic(() => import("@/components/maps/MapView"), {
   ssr: false,
   loading: () => (
-    <div className="h-[400px] bg-slate-100 animate-pulse rounded-xl" />
+    <div className="h-[400px] bg-[#1F2937] animate-pulse rounded-xl" />
   ),
 });
 

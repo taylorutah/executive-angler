@@ -120,15 +120,15 @@ export default function EditFlyPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest";
-  const label = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
-  const section = "bg-white rounded-xl border border-slate-100 p-5 mb-4";
+  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  const label = "block text-xs font-semibold text-[#8B949E] uppercase tracking-wide mb-1";
+  const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5 mb-4";
   const displayImage = preview || existingImage;
 
   if (loading) return (
     <div className="min-h-screen bg-[#f8f7f4] flex items-center justify-center pt-20">
-      <div className="flex flex-col items-center gap-3 text-slate-400">
-        <div className="h-8 w-8 rounded-full border-2 border-slate-200 border-t-forest animate-spin" />
+      <div className="flex flex-col items-center gap-3 text-[#484F58]">
+        <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading fly pattern…</p>
       </div>
     </div>
@@ -140,10 +140,10 @@ export default function EditFlyPage() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/journal/flies" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-forest transition-colors">
+          <Link href="/journal/flies" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Fly Patterns
           </Link>
-          <h1 className="font-heading text-xl font-bold text-slate-900">Edit Fly Pattern</h1>
+          <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Fly Pattern</h1>
           <div className="w-24" />
         </div>
 
@@ -153,15 +153,15 @@ export default function EditFlyPage() {
 
           {/* Photo */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-4">📸 Photo</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-4">📸 Photo</h2>
             {displayImage ? (
               <div className="flex items-start gap-4">
-                <div className="relative h-32 w-32 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0">
+                <div className="relative h-32 w-32 rounded-xl overflow-hidden border border-[#21262D] flex-shrink-0">
                   <Image src={displayImage} alt="Fly" fill className="object-cover" />
                 </div>
                 <div className="flex flex-col gap-2 pt-1">
                   <button type="button" onClick={() => fileRef.current?.click()}
-                    className="flex items-center gap-1.5 text-xs font-medium text-forest border border-forest/30 rounded-lg px-3 py-2 hover:bg-forest/5">
+                    className="flex items-center gap-1.5 text-xs font-medium text-[#E8923A] border border-[#E8923A]/30 rounded-lg px-3 py-2 hover:bg-[#E8923A]/5">
                     <Upload className="h-3.5 w-3.5" /> Replace
                   </button>
                   <button type="button" onClick={removeImage}
@@ -172,7 +172,7 @@ export default function EditFlyPage() {
               </div>
             ) : (
               <button type="button" onClick={() => fileRef.current?.click()}
-                className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-200 rounded-xl py-8 text-slate-400 hover:border-forest/40 hover:text-forest transition-colors">
+                className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#21262D] rounded-xl py-8 text-[#484F58] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
                 <Upload className="h-6 w-6" />
                 <span className="text-sm font-medium">Upload fly photo</span>
                 <span className="text-xs">JPG, PNG — looks great at 1:1</span>
@@ -183,7 +183,7 @@ export default function EditFlyPage() {
 
           {/* Pattern Info */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-4">🪰 Pattern Info</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-4">🪰 Pattern Info</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Pattern Name <span className="text-red-400">*</span></label>
@@ -211,7 +211,7 @@ export default function EditFlyPage() {
 
           {/* Bead & Hook */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-4">⚙️ Bead & Hook</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-4">⚙️ Bead & Hook</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className={label}>Hook Model</label>
@@ -230,13 +230,13 @@ export default function EditFlyPage() {
 
           {/* Tying Recipe */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-3">📋 Tying Recipe</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📋 Tying Recipe</h2>
             <textarea rows={4} className={input} placeholder="Thread: 8/0 black&#10;Body: UV resin over thread&#10;Rib: copper wire&#10;Bead: 2.8mm tungsten" value={form.materials} onChange={e => updateForm("materials", e.target.value)} />
           </div>
 
           {/* Notes & Video */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-3">📝 Notes & Video</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📝 Notes & Video</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Notes</label>
@@ -249,7 +249,7 @@ export default function EditFlyPage() {
               <div>
                 <label className={label}>Tags</label>
                 <input className={input} placeholder="euro, tungsten, nymph, fast-water" value={form.tags} onChange={e => updateForm("tags", e.target.value)} />
-                <p className="text-xs text-slate-400 mt-1">Separate with commas</p>
+                <p className="text-xs text-[#484F58] mt-1">Separate with commas</p>
               </div>
             </div>
           </div>
@@ -257,13 +257,13 @@ export default function EditFlyPage() {
         </form>
 
         {/* Sticky save bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 flex gap-3 z-50 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 bg-[#161B22] border-t border-[#21262D] px-4 py-3 flex gap-3 z-50 shadow-lg">
           <button type="button" onClick={handleDelete} disabled={deleting}
             className="flex items-center justify-center rounded-xl border border-red-200 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50 flex-shrink-0">
             {deleting ? "…" : <Trash2 className="h-4 w-4" />}
           </button>
           <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-forest py-3 text-white font-semibold text-sm hover:bg-forest-dark transition-colors disabled:opacity-60 shadow-sm">
+            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#E8923A]-dark transition-colors disabled:opacity-60 shadow-sm">
             {saving ? "Saving…" : "Save Changes"}
           </button>
         </div>

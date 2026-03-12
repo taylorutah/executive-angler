@@ -61,16 +61,16 @@ export default function NewFlyPatternPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12">
+    <div className="min-h-screen bg-[#161B22] py-12">
       <div className="container mx-auto px-4 max-w-2xl">
         <Link
           href="/journal/flies"
-          className="inline-flex items-center text-forest hover:text-forest-dark mb-6"
+          className="inline-flex items-center text-[#E8923A] hover:text-[#E8923A] mb-6"
         >
           ← Back to Fly Patterns
         </Link>
 
-        <h1 className="text-4xl font-heading font-bold text-slate-900 mb-8">Add Fly Pattern</h1>
+        <h1 className="text-4xl font-heading font-bold text-[#F0F6FC] mb-8">Add Fly Pattern</h1>
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-6">
@@ -80,7 +80,7 @@ export default function NewFlyPatternPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -88,19 +88,19 @@ export default function NewFlyPatternPage() {
               id="name"
               name="name"
               required
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="type" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Type <span className="text-red-500">*</span>
             </label>
             <select
               id="type"
               name="type"
               required
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             >
               <option value="">Select type...</option>
               {FLY_TYPES.map((type) => (
@@ -112,7 +112,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="hook_sizes" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="hook_sizes" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Hook Sizes
             </label>
             <input
@@ -120,85 +120,85 @@ export default function NewFlyPatternPage() {
               id="hook_sizes"
               name="hook_sizes"
               placeholder="#14, #16, #18"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="hook" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="hook" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Hook
             </label>
             <input
               type="text"
               id="hook"
               name="hook"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="bead_size" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="bead_size" className="block text-sm font-semibold text-[#8B949E] mb-2">
                 Bead Size
               </label>
               <input
                 type="text"
                 id="bead_size"
                 name="bead_size"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+                className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
               />
             </div>
             <div>
-              <label htmlFor="bead_color" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="bead_color" className="block text-sm font-semibold text-[#8B949E] mb-2">
                 Bead Color
               </label>
               <input
                 type="text"
                 id="bead_color"
                 name="bead_color"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+                className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="fly_color" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="fly_color" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Fly Color
             </label>
             <input
               type="text"
               id="fly_color"
               name="fly_color"
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="materials" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="materials" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Materials
             </label>
             <textarea
               id="materials"
               name="materials"
               rows={4}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Description
             </label>
             <textarea
               id="description"
               name="description"
               rows={4}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="video_url" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="video_url" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Video URL
             </label>
             <input
@@ -206,12 +206,12 @@ export default function NewFlyPatternPage() {
               id="video_url"
               name="video_url"
               placeholder="https://youtube.com/..."
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="image" className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="image" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Image
             </label>
             <input
@@ -220,14 +220,14 @@ export default function NewFlyPatternPage() {
               name="image"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-forest focus:border-transparent"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
             {imagePreview && (
               <div className="mt-4">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="max-w-xs rounded-lg border border-slate-200"
+                  className="max-w-xs rounded-lg border border-[#21262D]"
                 />
               </div>
             )}
@@ -237,13 +237,13 @@ export default function NewFlyPatternPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-forest text-white font-semibold py-3 px-6 rounded-lg hover:bg-forest-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#E8923A] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#E8923A]-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Creating...' : 'Create Pattern'}
             </button>
             <Link
               href="/journal/flies"
-              className="px-6 py-3 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+              className="px-6 py-3 border border-[#21262D] text-[#8B949E] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
             >
               Cancel
             </Link>

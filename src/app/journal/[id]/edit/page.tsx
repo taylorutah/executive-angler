@@ -183,14 +183,14 @@ export default function EditSessionPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest";
-  const label = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
-  const section = "bg-white rounded-xl border border-slate-100 p-5 mb-4";
+  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  const label = "block text-xs font-semibold text-[#8B949E] uppercase tracking-wide mb-1";
+  const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5 mb-4";
 
   if (loading) return (
     <div className="min-h-screen bg-[#f8f7f4] flex items-center justify-center pt-20">
-      <div className="flex flex-col items-center gap-3 text-slate-400">
-        <div className="h-8 w-8 rounded-full border-2 border-slate-200 border-t-forest animate-spin" />
+      <div className="flex flex-col items-center gap-3 text-[#484F58]">
+        <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading session…</p>
       </div>
     </div>
@@ -202,10 +202,10 @@ export default function EditSessionPage() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-forest transition-colors">
+          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
-          <h1 className="font-heading text-xl font-bold text-slate-900">Edit Session</h1>
+          <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Session</h1>
           <div className="w-16" />
         </div>
 
@@ -215,7 +215,7 @@ export default function EditSessionPage() {
 
           {/* Basic Info */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">📋 Basic Info</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-4 flex items-center gap-2">📋 Basic Info</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Session Title</label>
@@ -235,13 +235,13 @@ export default function EditSessionPage() {
                   <div className="flex items-center justify-between mb-1">
                     <label className={label + " mb-0"}>Location</label>
                     <button type="button" onClick={() => { setEditingSpotId(null); setSpotForm({ name: form.location || "", latitude: "", longitude: "", description: "" }); setShowSpotManager(true); }}
-                      className="text-[10px] text-forest font-semibold flex items-center gap-0.5 hover:text-forest-dark">
+                      className="text-[10px] text-[#E8923A] font-semibold flex items-center gap-0.5 hover:text-[#E8923A]">
                       <MapPin className="h-3 w-3" /> Manage
                     </button>
                   </div>
                   <input ref={locationInputRef} list="locations-list" className={input} placeholder="Below Jordanelle" value={form.location} onChange={(e) => updateForm("location", e.target.value)} />
                   {form.location && (() => { const s = spots.find(sp => sp.name === form.location); return s?.latitude ? (
-                    <p className="text-[10px] text-slate-400 mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
+                    <p className="text-[10px] text-[#484F58] mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
                   ) : null; })()}
                   <datalist id="locations-list">
                     {spots.map(s => <option key={s.id} value={s.name} />)}
@@ -254,7 +254,7 @@ export default function EditSessionPage() {
 
           {/* Conditions */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-4">🌊 Conditions</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-4">🌊 Conditions</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className={label}>Water Temp</label>
@@ -277,26 +277,26 @@ export default function EditSessionPage() {
           {/* Fish Caught */}
           <div className={section}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-slate-700 flex items-center gap-2"><Fish className="h-4 w-4 text-forest" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
+              <h2 className="text-sm font-bold text-[#8B949E] flex items-center gap-2"><Fish className="h-4 w-4 text-[#E8923A]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
               <button type="button" onClick={() => setCatches((p) => [...p, emptyCatch()])}
-                className="flex items-center gap-1 text-xs font-semibold text-forest hover:text-forest-dark">
+                className="flex items-center gap-1 text-xs font-semibold text-[#E8923A] hover:text-[#E8923A]">
                 <Plus className="h-3.5 w-3.5" /> Add Fish
               </button>
             </div>
 
             {catches.length === 0 ? (
               <button type="button" onClick={() => setCatches([emptyCatch()])}
-                className="w-full rounded-lg border-2 border-dashed border-slate-200 py-6 text-sm text-slate-400 hover:border-forest/40 hover:text-forest transition-colors">
+                className="w-full rounded-lg border-2 border-dashed border-[#21262D] py-6 text-sm text-[#484F58] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
                 + Log a fish
               </button>
             ) : (
               <div className="space-y-3">
                 {catches.map((c, i) => (
-                  <div key={i} className="rounded-lg border border-slate-100 bg-slate-50/50 p-3">
+                  <div key={i} className="rounded-lg border border-[#21262D] bg-[#0D1117]/50 p-3">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-slate-500">Fish #{i + 1}</span>
+                      <span className="text-xs font-semibold text-[#8B949E]">Fish #{i + 1}</span>
                       <button type="button" onClick={() => setCatches((p) => p.filter((_, idx) => idx !== i))}
-                        className="text-slate-300 hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
+                        className="text-[#484F58] hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                       <div className="col-span-2">
@@ -344,21 +344,21 @@ export default function EditSessionPage() {
 
           {/* Flies & Rig */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
             <textarea rows={3} className={input} placeholder="Perdigon #16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
           </div>
 
           {/* Notes */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-3">📝 Session Notes</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📝 Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
           </div>
 
           {/* Tags */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-slate-700 mb-3">🏷 Tags</h2>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-3">🏷 Tags</h2>
             <input className={input} placeholder="utah, provo, nymphing, spring runoff" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
-            <p className="text-xs text-slate-400 mt-1.5">Separate tags with commas</p>
+            <p className="text-xs text-[#484F58] mt-1.5">Separate tags with commas</p>
           </div>
 
         </form>
@@ -366,11 +366,11 @@ export default function EditSessionPage() {
         {/* Spot Manager Modal */}
         {showSpotManager && (
           <div className="fixed inset-0 z-[200] bg-black/50 flex items-end sm:items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                <h3 className="font-bold text-slate-900">{editingSpotId ? "Edit Spot" : "Add Location"}</h3>
+            <div className="bg-[#161B22] rounded-2xl w-full max-w-md shadow-2xl">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D]">
+                <h3 className="font-bold text-[#F0F6FC]">{editingSpotId ? "Edit Spot" : "Add Location"}</h3>
                 <button onClick={() => { setShowSpotManager(false); setEditingSpotId(null); }}>
-                  <X className="h-5 w-5 text-slate-400" />
+                  <X className="h-5 w-5 text-[#484F58]" />
                 </button>
               </div>
               <div className="p-5 space-y-3">
@@ -388,28 +388,28 @@ export default function EditSessionPage() {
                     <input className={input} placeholder="-111.4285" type="number" step="any" value={spotForm.longitude} onChange={e => setSpotForm(p => ({ ...p, longitude: e.target.value }))} />
                   </div>
                 </div>
-                <p className="text-xs text-slate-400">Tip: long-press a spot in Google Maps → copy coordinates</p>
+                <p className="text-xs text-[#484F58]">Tip: long-press a spot in Google Maps → copy coordinates</p>
                 <div>
                   <label className={label}>Notes (optional)</label>
                   <input className={input} placeholder="Public access, park at turnout" value={spotForm.description} onChange={e => setSpotForm(p => ({ ...p, description: e.target.value }))} />
                 </div>
                 <button onClick={saveSpot} disabled={!spotForm.name || spotSaving}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-forest py-3 text-white font-semibold hover:bg-forest-dark disabled:opacity-50 transition-colors">
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E8923A] py-3 text-white font-semibold hover:bg-[#E8923A]-dark disabled:opacity-50 transition-colors">
                   <Check className="h-4 w-4" /> {spotSaving ? "Saving…" : editingSpotId ? "Save Changes" : "Add Location"}
                 </button>
               </div>
               {spots.length > 0 && (
-                <div className="border-t border-slate-100 px-5 pb-5">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide pt-4 mb-2">Your Spots</p>
+                <div className="border-t border-[#21262D] px-5 pb-5">
+                  <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide pt-4 mb-2">Your Spots</p>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {spots.map(s => (
-                      <div key={s.id} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50 text-sm">
+                      <div key={s.id} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-[#0D1117] text-sm">
                         <div>
-                          <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-slate-800 hover:text-forest text-left">{s.name}</button>
-                          {s.latitude && <p className="text-xs text-slate-400">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
+                          <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-[#F0F6FC] hover:text-[#E8923A] text-left">{s.name}</button>
+                          {s.latitude && <p className="text-xs text-[#484F58]">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
                         </div>
                         <div className="flex items-center gap-3 ml-2">
-                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-slate-400 hover:text-forest">Edit</button>
+                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-[#484F58] hover:text-[#E8923A]">Edit</button>
                           <button type="button" onClick={() => deleteSpot(s.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
                         </div>
                       </div>
@@ -422,13 +422,13 @@ export default function EditSessionPage() {
         )}
 
         {/* Sticky save bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 flex gap-3 z-50 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 bg-[#161B22] border-t border-[#21262D] px-4 py-3 flex gap-3 z-50 shadow-lg">
           <button type="button" onClick={handleDelete} disabled={deleting}
             className="flex items-center justify-center rounded-xl border border-red-200 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50 flex-shrink-0">
             {deleting ? "…" : <Trash2 className="h-4 w-4" />}
           </button>
           <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-forest py-3 text-white font-semibold text-sm hover:bg-forest-dark transition-colors disabled:opacity-60 shadow-sm">
+            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#E8923A]-dark transition-colors disabled:opacity-60 shadow-sm">
             {saving ? "Saving…" : "Save Changes"}
           </button>
         </div>
