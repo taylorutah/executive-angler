@@ -598,27 +598,48 @@
    sections. Excludes buttons/links (those use <a>/<button> not headings).
    HeroSection (photo + overlay) is unaffected — it has no bg-[#0D1117] class.
 */
-.light-mode .bg-\[#0D1117\] h1,
-.light-mode .bg-\[#0D1117\] h2,
-.light-mode .bg-\[#0D1117\] h3,
-.light-mode .bg-\[#0D1117\] h4,
-.light-mode .bg-\[#0D1117\] p,
-.light-mode .bg-\[#161B22\] h1,
-.light-mode .bg-\[#161B22\] h2,
-.light-mode .bg-\[#161B22\] h3,
-.light-mode .bg-\[#161B22\] h4,
-.light-mode .bg-\[#1F2937\] h1,
-.light-mode .bg-\[#1F2937\] h2,
-.light-mode .bg-\[#1F2937\] h3,
-.light-mode .bg-\[#1F2937\] h4 { color: #111827 !important; }
+/* Escaped selectors (Chrome/Firefox) */
+.light-mode .bg-\[\#0D1117\] h1,
+.light-mode .bg-\[\#0D1117\] h2,
+.light-mode .bg-\[\#0D1117\] h3,
+.light-mode .bg-\[\#0D1117\] h4,
+.light-mode .bg-\[\#0D1117\] p,
+.light-mode .bg-\[\#161B22\] h1,
+.light-mode .bg-\[\#161B22\] h2,
+.light-mode .bg-\[\#161B22\] h3,
+.light-mode .bg-\[\#161B22\] h4,
+.light-mode .bg-\[\#1F2937\] h1,
+.light-mode .bg-\[\#1F2937\] h2,
+.light-mode .bg-\[\#1F2937\] h3,
+.light-mode .bg-\[\#1F2937\] h4 { color: #111827 !important; }
+/* Attribute-contains selectors (Safari iOS — escaped selectors unreliable) */
+.light-mode [class*="bg-[#0D1117]"] h1,
+.light-mode [class*="bg-[#0D1117]"] h2,
+.light-mode [class*="bg-[#0D1117]"] h3,
+.light-mode [class*="bg-[#0D1117]"] h4,
+.light-mode [class*="bg-[#0D1117]"] p,
+.light-mode [class*="bg-[#161B22]"] h1,
+.light-mode [class*="bg-[#161B22]"] h2,
+.light-mode [class*="bg-[#161B22]"] h3,
+.light-mode [class*="bg-[#161B22]"] h4,
+.light-mode [class*="bg-[#1F2937]"] h1,
+.light-mode [class*="bg-[#1F2937]"] h2,
+.light-mode [class*="bg-[#1F2937]"] h3,
+.light-mode [class*="bg-[#1F2937]"] h4 { color: #111827 !important; }
 
 /* Subtitles using text-white/70 opacity variant */
-.light-mode .bg-\[#0D1117\] .text-white\/70,
-.light-mode .bg-\[#0D1117\] .text-white\/80,
-.light-mode .bg-\[#0D1117\] .text-white\/90,
-.light-mode .bg-\[#161B22\] .text-white\/70,
-.light-mode .bg-\[#161B22\] .text-white\/80,
-.light-mode .bg-\[#1F2937\] .text-white\/70 { color: #4B5563 !important; }
+.light-mode .bg-\[\#0D1117\] .text-white\/70,
+.light-mode .bg-\[\#0D1117\] .text-white\/80,
+.light-mode .bg-\[\#0D1117\] .text-white\/90,
+.light-mode .bg-\[\#161B22\] .text-white\/70,
+.light-mode .bg-\[\#161B22\] .text-white\/80,
+.light-mode .bg-\[\#1F2937\] .text-white\/70,
+.light-mode [class*="bg-[#0D1117]"] .text-white\/70,
+.light-mode [class*="bg-[#0D1117]"] .text-white\/80,
+.light-mode [class*="bg-[#0D1117]"] .text-white\/90,
+.light-mode [class*="bg-[#161B22]"] .text-white\/70,
+.light-mode [class*="bg-[#161B22]"] .text-white\/80,
+.light-mode [class*="bg-[#1F2937]"] .text-white\/70 { color: #4B5563 !important; }
 
 /* ── Logo swap: dark/light mode ── */
 .light-mode .dark-logo { display: none !important; }

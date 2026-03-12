@@ -5,7 +5,6 @@ Fetches data from Supabase, matches, and PATCHes HIGH confidence rows.
 """
 
 import json
-import os
 import re
 import subprocess
 from collections import Counter
@@ -14,7 +13,9 @@ SUPABASE_URL = "https://qlasxtfbodyxbcuchvxz.supabase.co"
 SERVICE_KEY  = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 
 STOPWORDS = {"river", "creek", "fork", "run", "spring", "the", "of", "a", "an",
-             "upper", "lower", "middle", "north", "south", "east", "west"}
+             "upper", "lower", "middle", "north", "south", "east", "west",
+             "big", "little", "great", "long", "deep", "clear", "black", "white",
+             "red", "blue", "green", "grand", "rock", "salt", "cold", "hot"}
 
 
 # ── HTTP helpers via curl ─────────────────────────────────────────────────────
@@ -102,6 +103,12 @@ def main():
     print("\n[1] Fetching data from Supabase...")
     sessions = get("fishing_sessions", "select=id,river_name&river_id=is.null")
     rivers   = get("rivers", "select=id,name,slug")
+    if not isinstance(sessions, list):
+        print(f"    ERROR - sessions response: {sessions}")
+        return
+    if not isinstance(rivers, list):
+        print(f"    ERROR - rivers response: {rivers}")
+        return
     print(f"    Sessions with NULL river_id : {len(sessions)}")
     print(f"    Rivers in table             : {len(rivers)}")
 
