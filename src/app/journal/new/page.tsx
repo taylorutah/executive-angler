@@ -84,7 +84,7 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] py-12">
+    <div className="min-h-screen bg-[#0D1117] pt-24 pb-12">
       <div className="container mx-auto px-4 max-w-3xl">
         <Link
           href="/journal"
