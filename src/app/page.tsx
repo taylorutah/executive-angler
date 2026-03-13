@@ -21,11 +21,11 @@ export const revalidate = 3600;
 
 async function getWaitlistCount(): Promise<number> {
   try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) return 0;
     const { createClient } = await import("@supabase/supabase-js");
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createClient(url, key);
     const { count } = await supabase
       .from("waitlist")
       .select("*", { count: "exact", head: true });
