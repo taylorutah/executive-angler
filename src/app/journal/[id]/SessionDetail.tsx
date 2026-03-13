@@ -53,6 +53,7 @@ interface Session {
   trip_tags?: string[];
   tags?: string[];
   total_fish?: number;
+  created_at?: string;
   gear_snapshot?: GearSnapshot;
   gear_rod?: { name: string; maker?: string } | null;
   gear_reel?: { name: string; maker?: string } | null;
@@ -154,9 +155,15 @@ export default function SessionDetail({ session, catches, flies }: Props) {
   const fishPhotos = catches.filter(c => c.fish_image_url);
 
   const formattedDate = parseLocalDate(session.date).toLocaleDateString("en-US", {
-    hour: "numeric", minute: "2-digit", weekday: undefined,
-    month: "long", day: "numeric", year: "numeric",
+    weekday: "long", month: "long", day: "numeric", year: "numeric",
   });
+
+  const sessionStartTime = (() => {
+    if (!session.created_at) return null;
+    try {
+      return new Date(session.created_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+    } catch { return null; }
+  })();
 
   // Unique flies used
   const usedFlies = Array.from(
@@ -203,6 +210,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
               <div className="flex-1 min-w-0 mb-5 sm:mb-0">
                 <p className="text-xs text-[#484F58] mb-1">
                   {formattedDate}
+                  {sessionStartTime && <> · {sessionStartTime}</>}
                   {session.location && <> · <MapPin className="h-3 w-3 inline -mt-0.5" /> {session.river_name ? `${session.river_name}, ` : ""}{session.location}</>}
                   {!session.location && session.river_name && <> · {session.river_name}</>}
                 </p>
