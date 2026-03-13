@@ -37,7 +37,8 @@ export default async function AccountPage() {
     .single();
 
   const totalSessions = sessions?.length || 0;
-  const totalFish = catches?.reduce((sum, c) => sum + (c.quantities || 1), 0) || 0;
+  // Sum total_fish from sessions (includes drift-mode sessions with count-only data)
+  const totalFish = sessions?.reduce((sum, s) => sum + (s.total_fish || 0), 0) || 0;
 
   const rivers = [...new Set(sessions?.map((s) => s.river_name).filter(Boolean))];
   const totalRivers = rivers.length;
