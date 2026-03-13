@@ -40,12 +40,22 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     const file = e.target.files?.[0];
     if (!file) return;
     setAvatarUploading(true);
-    const fd = new FormData();
-    fd.append("avatar", file);
-    const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
-    const data = await res.json();
-    if (data.url) setAvatarUrl(data.url);
-    setAvatarUploading(false);
+    try {
+      const fd = new FormData();
+      fd.append("avatar", file);
+      const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to upload avatar");
+        return;
+      }
+      if (data.url) setAvatarUrl(data.url);
+    } catch (err) {
+      console.error("Avatar upload error:", err);
+      alert("Failed to upload avatar. Please try again.");
+    } finally {
+      setAvatarUploading(false);
+    }
   }
 
   async function handleSaveProfile(e: React.FormEvent) {

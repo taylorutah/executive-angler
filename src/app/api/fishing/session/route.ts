@@ -212,20 +212,32 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = req.nextUrl.searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    const id = req.nextUrl.searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  await supabase.from("catches").delete().eq("session_id", id);
-  const { error } = await supabase
-    .from("fishing_sessions")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
+    const { error: catchError } = await supabase.from("catches").delete().eq("session_id", id);
+    if (catchError) {
+      console.error("Failed to delete catches:", catchError);
+    }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+    const { error } = await supabase
+      .from("fishing_sessions")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to delete session:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Session DELETE error:", err);
+    return NextResponse.json({ error: "Failed to delete session" }, { status: 500 });
+  }
 }

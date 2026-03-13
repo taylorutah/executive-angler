@@ -140,16 +140,18 @@ export default function GearLockerClient() {
   const fetchGear = useCallback(async () => {
     try {
       const res = await fetch("/api/gear");
-      if (res.ok) {
-        const data: Record<string, GearItem[]> | GearItem[] = await res.json();
-        // API returns grouped object — flatten to array
-        const flat: GearItem[] = Array.isArray(data)
-          ? data
-          : Object.values(data).flat();
-        setItems(flat.filter((i) => i.is_active));
+      if (!res.ok) {
+        console.error("Failed to fetch gear:", res.statusText);
+        return;
       }
-    } catch {
-      // ignore
+      const data: Record<string, GearItem[]> | GearItem[] = await res.json();
+      // API returns grouped object — flatten to array
+      const flat: GearItem[] = Array.isArray(data)
+        ? data
+        : Object.values(data).flat();
+      setItems(flat.filter((i) => i.is_active));
+    } catch (err) {
+      console.error("Gear fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -171,10 +173,16 @@ export default function GearLockerClient() {
 
   async function handleDelete(id: string) {
     try {
-      await fetch(`/api/gear?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/gear?id=${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Failed to delete gear item");
+        return;
+      }
       setItems((prev) => prev.filter((i) => i.id !== id));
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error("Delete gear error:", err);
+      alert("Failed to delete gear item. Please try again.");
     }
   }
 
@@ -185,17 +193,22 @@ export default function GearLockerClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ is_default: !item.is_default }),
       });
-      if (res.ok) {
-        const updated: GearItem = await res.json();
-        setItems((prev) => prev.map((i) => {
-          if (i.id === updated.id) return updated;
-          // Clear other defaults of same type when setting new default
-          if (updated.is_default && i.type === updated.type) return { ...i, is_default: false };
-          return i;
-        }));
+      if (!res.ok) {
+        const data = await res.json();
+        console.error("Toggle default error:", data.error);
+        alert(data.error || "Failed to update gear item");
+        return;
       }
-    } catch {
-      // ignore
+      const updated: GearItem = await res.json();
+      setItems((prev) => prev.map((i) => {
+        if (i.id === updated.id) return updated;
+        // Clear other defaults of same type when setting new default
+        if (updated.is_default && i.type === updated.type) return { ...i, is_default: false };
+        return i;
+      }));
+    } catch (err) {
+      console.error("Toggle default error:", err);
+      alert("Failed to update gear item. Please try again.");
     }
   }
 

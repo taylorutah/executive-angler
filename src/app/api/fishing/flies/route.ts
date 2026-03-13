@@ -23,171 +23,214 @@ async function createClient() {
 }
 
 export async function GET(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const singleId = req.nextUrl.searchParams.get("id");
-  if (singleId) {
+    const singleId = req.nextUrl.searchParams.get("id");
+    if (singleId) {
+      const { data, error } = await supabase
+        .from("fly_patterns")
+        .select("*")
+        .eq("id", singleId)
+        .eq("user_id", user.id)
+        .single();
+      if (error) {
+        console.error("Failed to fetch fly pattern:", error);
+        return NextResponse.json({ error: error.message }, { status: 404 });
+      }
+      return NextResponse.json(data);
+    }
+
     const { data, error } = await supabase
       .from("fly_patterns")
       .select("*")
-      .eq("id", singleId)
       .eq("user_id", user.id)
-      .single();
-    if (error) return NextResponse.json({ error: error.message }, { status: 404 });
+      .order("name");
+
+    if (error) {
+      console.error("Failed to fetch fly patterns:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
     return NextResponse.json(data);
+  } catch (err) {
+    console.error("Fly patterns GET error:", err);
+    return NextResponse.json({ error: "Failed to fetch fly patterns" }, { status: 500 });
   }
-
-  const { data, error } = await supabase
-    .from("fly_patterns")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("name");
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const contentType = req.headers.get("content-type") || "";
-  let body: Record<string, unknown> = {};
-  let imageUrl: string | undefined;
+    const contentType = req.headers.get("content-type") || "";
+    let body: Record<string, unknown> = {};
+    let imageUrl: string | undefined;
 
-  if (contentType.includes("multipart/form-data")) {
-    const formData = await req.formData();
-    const file = formData.get("image") as File | null;
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await req.formData();
+      const file = formData.get("image") as File | null;
 
-    if (file && file.size > 0) {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-      const arrayBuffer = await file.arrayBuffer();
-      const { error: uploadError } = await supabase.storage
-        .from("fly-pattern-images")
-        .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
-
-      if (!uploadError) {
-        const { data: { publicUrl } } = supabase.storage
+      if (file && file.size > 0) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+        const arrayBuffer = await file.arrayBuffer();
+        const { error: uploadError } = await supabase.storage
           .from("fly-pattern-images")
-          .getPublicUrl(path);
-        imageUrl = publicUrl;
+          .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
+
+        if (uploadError) {
+          console.error("Image upload error:", uploadError);
+        } else {
+          const { data: { publicUrl } } = supabase.storage
+            .from("fly-pattern-images")
+            .getPublicUrl(path);
+          imageUrl = publicUrl;
+        }
       }
+
+      for (const [key, value] of formData.entries()) {
+        if (key !== "image") body[key] = value;
+      }
+    } else {
+      body = await req.json();
     }
 
-    for (const [key, value] of formData.entries()) {
-      if (key !== "image") body[key] = value;
+    // Parse array fields
+    const parseArr = (v: unknown) =>
+      typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
+
+    const { data, error } = await supabase
+      .from("fly_patterns")
+      .insert({
+        ...body,
+        user_id: user.id,
+        ...(imageUrl ? { image_url: imageUrl } : {}),
+        size: parseArr(body.size),
+        bead_color: parseArr(body.bead_color),
+        fly_color: parseArr(body.fly_color),
+        tags: parseArr(body.tags),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Failed to create fly pattern:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
-  } else {
-    body = await req.json();
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error("Fly patterns POST error:", err);
+    return NextResponse.json({ error: "Failed to create fly pattern" }, { status: 500 });
   }
-
-  // Parse array fields
-  const parseArr = (v: unknown) =>
-    typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
-
-  const { data, error } = await supabase
-    .from("fly_patterns")
-    .insert({
-      ...body,
-      user_id: user.id,
-      ...(imageUrl ? { image_url: imageUrl } : {}),
-      size: parseArr(body.size),
-      bead_color: parseArr(body.bead_color),
-      fly_color: parseArr(body.fly_color),
-      tags: parseArr(body.tags),
-    })
-    .select()
-    .single();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
 }
 
 export async function PATCH(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = req.nextUrl.searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    const id = req.nextUrl.searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  const contentType = req.headers.get("content-type") || "";
-  let body: Record<string, unknown> = {};
-  let imageUrl: string | undefined;
+    const contentType = req.headers.get("content-type") || "";
+    let body: Record<string, unknown> = {};
+    let imageUrl: string | undefined;
 
-  if (contentType.includes("multipart/form-data")) {
-    // Handle file upload in PATCH (e.g. replacing fly photo)
-    const formData = await req.formData();
-    const file = formData.get("image") as File | null;
+    if (contentType.includes("multipart/form-data")) {
+      // Handle file upload in PATCH (e.g. replacing fly photo)
+      const formData = await req.formData();
+      const file = formData.get("image") as File | null;
 
-    if (file && file.size > 0) {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-      const arrayBuffer = await file.arrayBuffer();
-      const { error: uploadError } = await supabase.storage
-        .from("fly-pattern-images")
-        .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
-
-      if (!uploadError) {
-        const { data: { publicUrl } } = supabase.storage
+      if (file && file.size > 0) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+        const arrayBuffer = await file.arrayBuffer();
+        const { error: uploadError } = await supabase.storage
           .from("fly-pattern-images")
-          .getPublicUrl(path);
-        imageUrl = publicUrl;
+          .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
+
+        if (uploadError) {
+          console.error("Image upload error:", uploadError);
+        } else {
+          const { data: { publicUrl } } = supabase.storage
+            .from("fly-pattern-images")
+            .getPublicUrl(path);
+          imageUrl = publicUrl;
+        }
       }
+
+      for (const [key, value] of formData.entries()) {
+        if (key !== "image") body[key] = value;
+      }
+    } else {
+      body = await req.json();
     }
 
-    for (const [key, value] of formData.entries()) {
-      if (key !== "image") body[key] = value;
+    // Parse array fields — same logic as POST so DB columns get proper arrays
+    const parseArr = (v: unknown) =>
+      typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
+
+    const { error } = await supabase
+      .from("fly_patterns")
+      .update({
+        ...body,
+        ...(imageUrl ? { image_url: imageUrl } : {}),
+        size: parseArr(body.size),
+        bead_color: parseArr(body.bead_color),
+        fly_color: parseArr(body.fly_color),
+        tags: parseArr(body.tags),
+      })
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to update fly pattern:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
-  } else {
-    body = await req.json();
+    return NextResponse.json({ id });
+  } catch (err) {
+    console.error("Fly patterns PATCH error:", err);
+    return NextResponse.json({ error: "Failed to update fly pattern" }, { status: 500 });
   }
-
-  // Parse array fields — same logic as POST so DB columns get proper arrays
-  const parseArr = (v: unknown) =>
-    typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
-
-  const { error } = await supabase
-    .from("fly_patterns")
-    .update({
-      ...body,
-      ...(imageUrl ? { image_url: imageUrl } : {}),
-      size: parseArr(body.size),
-      bead_color: parseArr(body.bead_color),
-      fly_color: parseArr(body.fly_color),
-      tags: parseArr(body.tags),
-    })
-    .eq("id", id)
-    .eq("user_id", user.id);
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ id });
 }
 
 export async function DELETE(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = req.nextUrl.searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    const id = req.nextUrl.searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  // Unlink any catches that reference this fly before deleting
-  await supabase
-    .from("catches")
-    .update({ fly_pattern_id: null })
-    .eq("fly_pattern_id", id);
+    // Unlink any catches that reference this fly before deleting
+    const { error: unlinkError } = await supabase
+      .from("catches")
+      .update({ fly_pattern_id: null })
+      .eq("fly_pattern_id", id);
 
-  const { error } = await supabase
-    .from("fly_patterns")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
+    if (unlinkError) {
+      console.error("Failed to unlink catches:", unlinkError);
+    }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+    const { error } = await supabase
+      .from("fly_patterns")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to delete fly pattern:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Fly patterns DELETE error:", err);
+    return NextResponse.json({ error: "Failed to delete fly pattern" }, { status: 500 });
+  }
 }

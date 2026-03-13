@@ -40,14 +40,20 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  const supabase = getClient();
-  const { count, error } = await supabase
-    .from("waitlist")
-    .select("*", { count: "exact", head: true });
+  try {
+    const supabase = getClient();
+    const { count, error } = await supabase
+      .from("waitlist")
+      .select("*", { count: "exact", head: true });
 
-  if (error) {
+    if (error) {
+      console.error("Waitlist count error:", error);
+      return NextResponse.json({ count: 0 });
+    }
+
+    return NextResponse.json({ count: count ?? 0 });
+  } catch (err) {
+    console.error("Waitlist GET error:", err);
     return NextResponse.json({ count: 0 });
   }
-
-  return NextResponse.json({ count: count ?? 0 });
 }

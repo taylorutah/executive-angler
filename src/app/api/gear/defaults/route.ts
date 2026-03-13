@@ -27,24 +27,32 @@ async function createClient() {
 
 // GET /api/gear/defaults — returns { rod: GearItem|null, reel: GearItem|null, ... }
 export async function GET(_req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data, error } = await supabase
-    .from("gear_items")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("is_default", true)
-    .eq("is_active", true);
+    const { data, error } = await supabase
+      .from("gear_items")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("is_default", true)
+      .eq("is_active", true);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error("Failed to fetch gear defaults:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 
-  // Build result with null for types that have no default
-  const defaults: Record<string, unknown> = {};
-  for (const type of GEAR_TYPES) {
-    defaults[type] = data?.find((item) => item.type === type) ?? null;
+    // Build result with null for types that have no default
+    const defaults: Record<string, unknown> = {};
+    for (const type of GEAR_TYPES) {
+      defaults[type] = data?.find((item) => item.type === type) ?? null;
+    }
+
+    return NextResponse.json(defaults);
+  } catch (err) {
+    console.error("Gear defaults GET error:", err);
+    return NextResponse.json({ error: "Failed to fetch gear defaults" }, { status: 500 });
   }
-
-  return NextResponse.json(defaults);
 }
