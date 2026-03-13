@@ -172,19 +172,19 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         <div className="flex gap-2">
           <Link
             href="/journal/flies"
-            className="flex-1 text-center rounded-lg border border-[#E8923A] px-3 py-2 text-sm font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
+            className="flex-1 text-center rounded-md border border-[#E8923A] px-2 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
           >
             🪰 Fly Box
           </Link>
           <Link
             href="/account/gear"
-            className="flex-1 text-center rounded-lg border border-[#00B4D8] px-3 py-2 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+            className="flex-1 text-center rounded-md border border-[#00B4D8] px-2 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
           >
             🎣 Gear Box
           </Link>
           <Link
             href="/journal/new"
-            className="flex-1 text-center rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#E8923A]/80"
+            className="flex-1 text-center rounded-md bg-[#E8923A] px-2 py-1.5 text-xs font-medium text-white hover:bg-[#E8923A]/80"
           >
             + Log
           </Link>
