@@ -84,8 +84,15 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     null as { fish: number; date: string } | null
   );
 
+  // Sort most recent first
+  const sortedSessions = [...sessions].sort((a, b) => {
+    const aTime = a.created_at ? new Date(a.created_at).getTime() : new Date(a.date).getTime();
+    const bTime = b.created_at ? new Date(b.created_at).getTime() : new Date(b.date).getTime();
+    return bTime - aTime;
+  });
+
   // Filter sessions
-  const filteredSessions = sessions.filter((session) => {
+  const filteredSessions = sortedSessions.filter((session) => {
     // River filter
     if (filterRivers.length > 0) {
       const riverName = session.river_name || "Unknown";

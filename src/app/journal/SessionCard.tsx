@@ -20,6 +20,8 @@ interface FishingSession {
   river_name?: string;
   location?: string;
   date: string;
+  created_at?: string;
+  start_time?: string;
   total_fish?: number;
   water_temp_f?: string;
   water_clarity?: string;
@@ -68,7 +70,16 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
     new Map(catches.filter(c => c.fly_pattern?.name).map(c => [c.fly_pattern!.name!, c.fly_pattern!.name!])).values()
   ).slice(0, 3);
   const tags = session.trip_tags || session.tags || [];
-  const title = session.title || session.river_name || "Fishing Session";
+  const title = session.river_name || session.title || "Fishing Session";
+
+  // Format start time if available
+  const startTime = (() => {
+    const raw = session.created_at || session.start_time;
+    if (!raw) return null;
+    try {
+      return new Date(raw).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+    } catch { return null; }
+  })();
   const hasPhotos = feedDisplay === "collage" && fishPhotos.length > 0;
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
 
@@ -123,13 +134,18 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               )}
             </div>
 
-            {/* Location */}
-            {session.location && (
-              <div className="flex items-center gap-1 text-[11px] text-[#8B949E] mb-2">
-                <MapPin className="h-3 w-3 flex-shrink-0" />
-                <span className="truncate">{session.location}</span>
-              </div>
-            )}
+            {/* Location + time */}
+            <div className="flex items-center gap-2 text-[11px] text-[#8B949E] mb-2 flex-wrap">
+              {session.location && (
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3 flex-shrink-0" />
+                  <span className="truncate">{session.location}</span>
+                </span>
+              )}
+              {startTime && (
+                <span className="font-['IBM_Plex_Mono'] text-[#484F58]">{startTime}</span>
+              )}
+            </div>
 
             {/* Date row (photo cards) */}
             {hasPhotos && (
