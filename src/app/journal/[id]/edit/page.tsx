@@ -5,6 +5,12 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
+import dynamic from "next/dynamic";
+
+const SessionLocationPicker = dynamic(
+  () => import("@/components/maps/SessionLocationPicker"),
+  { ssr: false }
+);
 
 interface Catch {
   id?: string;
@@ -52,6 +58,8 @@ export default function EditSessionPage() {
   const [editingSpotId, setEditingSpotId] = useState<string | null>(null);
   const [spotSaving, setSpotSaving] = useState(false);
   const locationInputRef = useRef<HTMLInputElement>(null);
+  const [latitude, setLatitude] = useState<number | undefined>(undefined);
+  const [longitude, setLongitude] = useState<number | undefined>(undefined);
 
   const [form, setForm] = useState({
     title: "", date: "", river_name: "", location: "",
@@ -148,6 +156,9 @@ export default function EditSessionPage() {
         if (session.gear_line_id) setGearLineId(session.gear_line_id);
         if (session.gear_leader_id) setGearLeaderId(session.gear_leader_id);
         if (session.gear_tippet_id) setGearTippetId(session.gear_tippet_id);
+        // Load location
+        if (session.latitude !== undefined) setLatitude(session.latitude);
+        if (session.longitude !== undefined) setLongitude(session.longitude);
       }
 
       if (riversRes.ok) setRivers(await riversRes.json());
@@ -182,6 +193,8 @@ export default function EditSessionPage() {
           gear_line_id: gearLineId || null,
           gear_leader_id: gearLeaderId || null,
           gear_tippet_id: gearTippetId || null,
+          latitude: latitude ?? null,
+          longitude: longitude ?? null,
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
@@ -289,6 +302,20 @@ export default function EditSessionPage() {
                 <input className={input} placeholder="Sunny, 65°F" value={form.weather} onChange={(e) => updateForm("weather", e.target.value)} />
               </div>
             </div>
+          </div>
+
+          {/* Map Location */}
+          <div className={section}>
+            <h2 className="text-sm font-bold text-[#8B949E] mb-1 flex items-center gap-2">📍 Map Location</h2>
+            <p className="text-xs text-[#484F58] mb-3">Click or drag pin to reposition</p>
+            <SessionLocationPicker
+              initialLat={latitude}
+              initialLng={longitude}
+              onChange={(lat, lng) => {
+                setLatitude(lat);
+                setLongitude(lng);
+              }}
+            />
           </div>
 
           {/* Fish Caught */}

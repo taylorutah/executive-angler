@@ -25,6 +25,8 @@ export interface FishingSession {
   flies_notes?: string;
   tags?: string[];
   notion_id?: string;
+  latitude?: number;
+  longitude?: number;
   // Gear tracking
   gear_rod_id?: string;
   gear_reel_id?: string;

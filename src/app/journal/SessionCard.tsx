@@ -30,6 +30,8 @@ interface FishingSession {
   trip_tags?: string[];
   tags?: string[];
   catches?: Catch[];
+  latitude?: number;
+  longitude?: number;
 }
 
 interface Props {
@@ -86,11 +88,21 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
   const accent = accentColor(session.river_name);
 
+  // Build static map URL if coordinates exist
+  const mapToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+  const hasMapThumb =
+    session.latitude !== undefined &&
+    session.longitude !== undefined &&
+    mapToken;
+  const mapThumbUrl = hasMapThumb
+    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${session.longitude},${session.latitude})/${session.longitude},${session.latitude},11,0/64x96@2x?access_token=${mapToken}`
+    : null;
+
   return (
     <Link href={`/journal/${session.id}`} className="block group">
       <article className={`bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all duration-200 border-l-4 ${accent}`}>
 
-        {/* Always-present layout: date column on left + content on right */}
+        {/* Always-present layout: date column on left + content on right + optional map thumb */}
         <div className="flex gap-0">
 
           {/* Date stamp — always visible */}
@@ -180,6 +192,17 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
             )}
 
           </div>
+
+          {/* Map thumbnail — right column */}
+          {mapThumbUrl && (
+            <div className="flex-shrink-0 border-l border-[#21262D]">
+              <img
+                src={mapThumbUrl}
+                alt="Map"
+                className="h-full w-16 object-cover"
+              />
+            </div>
+          )}
         </div>
       </article>
     </Link>

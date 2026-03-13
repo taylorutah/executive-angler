@@ -9,6 +9,12 @@ import { CalendarView } from "./CalendarView";
 import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const JournalMapView = dynamic(
+  () => import("@/components/maps/JournalMapView"),
+  { ssr: false }
+);
 
 interface UserProfile {
   displayName?: string;
@@ -396,7 +402,10 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
           {/* Content */}
           {view === "list" ? (
-            filteredSessions.length === 0 ? (
+            feedDisplay === "map" ? (
+              // Map view when feed display is set to map
+              <JournalMapView sessions={filteredSessions} />
+            ) : filteredSessions.length === 0 ? (
               <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
                 <p className="text-[#8B949E]">No sessions match your filters</p>
                 {hasActiveFilters && (
