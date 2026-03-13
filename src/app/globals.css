@@ -644,3 +644,36 @@
 /* ── Logo swap: dark/light mode ── */
 .light-mode .dark-logo { display: none !important; }
 .light-mode .light-logo { display: block !important; }
+
+/* =============================================
+   FORM CONTROLS — normalize select appearance
+   Non-layered (higher cascade than @layer utilities)
+   so padding-right beats px-* Tailwind utilities.
+   Best practice: strip OS chrome, add custom chevron,
+   identical height/border/radius to text inputs.
+   ============================================= */
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Custom chevron — matches text-secondary (#8B949E) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B949E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px 12px;
+  padding-right: 2.25rem; /* room for chevron */
+  cursor: pointer;
+}
+
+/* Light mode — darker chevron for contrast on parchment */
+.light-mode select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234B5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+}
+
+/* Focus ring — copper, consistent with input focus */
+select:focus {
+  outline: none;
+  border-color: #E8923A !important;
+  box-shadow: 0 0 0 1px #E8923A;
+}
