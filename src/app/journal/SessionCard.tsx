@@ -143,7 +143,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
                 </span>
               )}
               {startTime && (
-                <span className="font-['IBM_Plex_Mono'] text-[#484F58]">{startTime}</span>
+                <span className="font-['IBM_Plex_Mono'] text-[#8B949E]">{startTime}</span>
               )}
             </div>
 
