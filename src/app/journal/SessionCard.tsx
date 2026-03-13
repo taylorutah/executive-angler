@@ -56,12 +56,14 @@ function accentColor(name?: string) {
   return ACCENT_COLORS[idx];
 }
 
-// Month abbreviations for the date stamp
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage" }: Props) {
-  const date = parseLocalDate(session.date);
-  const formattedDate = date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  const parsedDate = parseLocalDate(session.date);
+  const formattedDate = parsedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  const month = MONTHS[parsedDate.getMonth()];
+  const day = parsedDate.getDate();
+  const year = parsedDate.getFullYear();
 
   const catches = catchesProp || session.catches || [];
   const totalFish = session.total_fish ?? catches.reduce((s, c) => s + (c.quantities || 1), 0);
@@ -72,7 +74,6 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const tags = session.trip_tags || session.tags || [];
   const title = session.river_name || session.title || "Fishing Session";
 
-  // Format start time if available
   const startTime = (() => {
     const raw = session.created_at || session.start_time;
     if (!raw) return null;
@@ -80,48 +81,28 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
       return new Date(raw).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
     } catch { return null; }
   })();
+
   const hasPhotos = feedDisplay === "collage" && fishPhotos.length > 0;
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
-
   const accent = accentColor(session.river_name);
-  const parsedDate = parseLocalDate(session.date);
-  const month = MONTHS[parsedDate.getMonth()];
-  const day = parsedDate.getDate();
-  const year = parsedDate.getFullYear();
 
   return (
     <Link href={`/journal/${session.id}`} className="block group">
-      <article className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all duration-200">
+      <article className={`bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all duration-200 border-l-4 ${accent}`}>
 
-        {/* Photo collage (when available) */}
-        {hasPhotos && (
-          <div className={`grid gap-0.5 h-40 overflow-hidden ${
-            fishPhotos.length === 1 ? "grid-cols-1" :
-            fishPhotos.length === 2 ? "grid-cols-2" :
-            fishPhotos.length === 3 ? "grid-cols-3" :
-            "grid-cols-2 grid-rows-2"
-          }`}>
-            {fishPhotos.map((url, i) => (
-              <div key={i} className="relative overflow-hidden">
-                <Image src={url} alt="Fish" fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="200px" />
-              </div>
-            ))}
+        {/* Always-present layout: date column on left + content on right */}
+        <div className="flex gap-0">
+
+          {/* Date stamp — always visible */}
+          <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
+            <span className="text-[10px] font-bold text-[#8B949E] uppercase tracking-wider font-['IBM_Plex_Mono']">{month}</span>
+            <span className="text-2xl font-bold text-[#F0F6FC] leading-none font-['IBM_Plex_Mono']">{day}</span>
+            <span className="text-[10px] text-[#8B949E] mt-0.5 font-['IBM_Plex_Mono']">{year}</span>
           </div>
-        )}
 
-        {/* Card body */}
-        <div className={`flex gap-0 ${!hasPhotos ? "border-l-4 " + accent : ""} rounded-b-xl`}>
+          {/* Content */}
+          <div className="flex-1 min-w-0 p-4 pl-3 border-l border-[#21262D]">
 
-          {/* Date stamp column (no-photo only) */}
-          {!hasPhotos && (
-            <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
-              <span className="text-[10px] font-bold text-[#8B949E] uppercase tracking-wider font-['IBM_Plex_Mono']">{month}</span>
-              <span className="text-2xl font-bold text-[#F0F6FC] leading-none font-['IBM_Plex_Mono']">{day}</span>
-              <span className="text-[10px] text-[#8B949E] mt-0.5 font-['IBM_Plex_Mono']">{year}</span>
-            </div>
-          )}
-
-          <div className={`flex-1 min-w-0 p-4 ${!hasPhotos ? "pl-3 border-l border-[#21262D]" : ""}`}>
             {/* Title + fish badge */}
             <div className="flex items-start justify-between gap-2 mb-1">
               <h3 className="font-semibold text-[#F0F6FC] text-sm leading-snug group-hover:text-[#E8923A] transition-colors line-clamp-1">
@@ -147,10 +128,8 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               )}
             </div>
 
-            {/* Date row (photo cards) */}
-            {hasPhotos && (
-              <p className="text-[11px] text-[#8B949E] mb-2">{formattedDate}</p>
-            )}
+            {/* Date row */}
+            <p className="text-[11px] text-[#8B949E] mb-2">{formattedDate}</p>
 
             {/* Notes excerpt */}
             {session.notes && (
@@ -168,7 +147,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Flies */}
             {topFlies.length > 0 && (
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1 mb-2">
                 {topFlies.map(name => (
                   <span key={name} className="text-[10px] bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2 py-0.5">🪰 {name}</span>
                 ))}
@@ -177,12 +156,29 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Tags fallback */}
             {topFlies.length === 0 && tags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1 mb-2">
                 {tags.slice(0, 3).map(tag => (
                   <span key={tag} className="text-[10px] bg-[#1F2937] text-[#8B949E] rounded-full px-2 py-0.5">{tag}</span>
                 ))}
               </div>
             )}
+
+            {/* Photo collage — BELOW title/description */}
+            {hasPhotos && (
+              <div className={`grid gap-0.5 h-36 overflow-hidden rounded-lg mt-1 ${
+                fishPhotos.length === 1 ? "grid-cols-1" :
+                fishPhotos.length === 2 ? "grid-cols-2" :
+                fishPhotos.length === 3 ? "grid-cols-3" :
+                "grid-cols-2 grid-rows-2"
+              }`}>
+                {fishPhotos.map((url, i) => (
+                  <div key={i} className="relative overflow-hidden">
+                    <Image src={url} alt="Fish" fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="200px" />
+                  </div>
+                ))}
+              </div>
+            )}
+
           </div>
         </div>
       </article>
