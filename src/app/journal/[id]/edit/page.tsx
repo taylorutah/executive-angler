@@ -61,11 +61,24 @@ export default function EditSessionPage() {
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
 
+  // Simple/Full toggle — persisted per-session in localStorage
+  // Defaults to Simple if no catches exist (drift-mode session), Full otherwise
+  const [isSimpleMode, setIsSimpleMode] = useState(true); // resolved after load
+  const [simpleModeResolved, setSimpleModeResolved] = useState(false);
+
+  function toggleSimpleMode() {
+    const next = !isSimpleMode;
+    setIsSimpleMode(next);
+    try { localStorage.setItem(`ea-edit-mode-${id}`, next ? "simple" : "full"); } catch {}
+  }
+
   const [form, setForm] = useState({
     title: "", date: "", river_name: "", location: "",
     water_temp_f: "", water_clarity: "", weather: "",
     flies_notes: "", notes: "", trip_tags: "",
   });
+  // Simple mode fish count (total_fish direct entry, for drift sessions)
+  const [simpleFishCount, setSimpleFishCount] = useState<string>("");
 
   async function loadSpots() {
     const res = await fetch("/api/fishing/spots");
@@ -137,8 +150,7 @@ export default function EditSessionPage() {
           notes: session.notes || "",
           trip_tags: (session.trip_tags || session.tags || []).join(", "),
         });
-        setCatches(
-          (session.catches || []).map((c: Catch) => ({
+        const loadedCatches = (session.catches || []).map((c: Catch) => ({
             id: (c as Catch & { id?: string }).id,
             species: c.species || "",
             length_inches: c.length_inches || "",
@@ -148,8 +160,23 @@ export default function EditSessionPage() {
             bead_size: c.bead_size || "",
             time_caught: c.time_caught || "",
             notes: c.notes || "",
-          }))
-        );
+          }));
+        setCatches(loadedCatches);
+
+        // Resolve simple/full mode: prefer saved pref, otherwise default
+        // Simple = no catch rows (drift session) | Full = has detailed catches
+        try {
+          const saved = localStorage.getItem(`ea-edit-mode-${id}`);
+          if (saved === "simple" || saved === "full") {
+            setIsSimpleMode(saved === "simple");
+          } else {
+            setIsSimpleMode(loadedCatches.length === 0);
+          }
+        } catch {
+          setIsSimpleMode(loadedCatches.length === 0);
+        }
+        setSimpleFishCount(session.total_fish != null ? String(session.total_fish) : "");
+        setSimpleModeResolved(true);
         // Load gear
         if (session.gear_rod_id) setGearRodId(session.gear_rod_id);
         if (session.gear_reel_id) setGearReelId(session.gear_reel_id);
@@ -187,12 +214,19 @@ export default function EditSessionPage() {
         body: JSON.stringify({
           ...form,
           trip_tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
-          catches: catches.filter((c) => c.species),
-          gear_rod_id: gearRodId || null,
-          gear_reel_id: gearReelId || null,
-          gear_line_id: gearLineId || null,
-          gear_leader_id: gearLeaderId || null,
-          gear_tippet_id: gearTippetId || null,
+          // In simple mode: save the fish count directly; don't overwrite catches
+          ...(isSimpleMode
+            ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
+            : { catches: catches.filter((c) => c.species) }
+          ),
+          // Gear fields only sent in full mode (simple mode preserves existing gear)
+          ...(isSimpleMode ? {} : {
+            gear_rod_id: gearRodId || null,
+            gear_reel_id: gearReelId || null,
+            gear_line_id: gearLineId || null,
+            gear_leader_id: gearLeaderId || null,
+            gear_tippet_id: gearTippetId || null,
+          }),
           latitude: latitude ?? null,
           longitude: longitude ?? null,
         }),
@@ -236,7 +270,18 @@ export default function EditSessionPage() {
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
           <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Session</h1>
-          <div className="w-16" />
+          {/* Simple / Full toggle */}
+          {simpleModeResolved && (
+            <button
+              type="button"
+              onClick={toggleSimpleMode}
+              className="flex items-center gap-1.5 rounded-full border border-[#21262D] bg-[#161B22] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[#E8923A]/50"
+            >
+              <span className={isSimpleMode ? "text-[#E8923A]" : "text-[#8B949E]"}>Simple</span>
+              <span className="text-[#21262D]">|</span>
+              <span className={!isSimpleMode ? "text-[#E8923A]" : "text-[#8B949E]"}>Full</span>
+            </button>
+          )}
         </div>
 
         {error && <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">{error}</div>}
@@ -282,8 +327,28 @@ export default function EditSessionPage() {
             </div>
           </div>
 
-          {/* Conditions */}
-          <div className={section}>
+          {/* Simple mode: fish count field */}
+          {isSimpleMode && (
+            <div className={section}>
+              <h2 className="text-sm font-bold text-[#8B949E] mb-4 flex items-center gap-2">
+                <Fish className="h-4 w-4 text-[#E8923A]" /> Fish Count
+              </h2>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  min="0"
+                  className={`${input} w-32 text-2xl font-bold text-[#F0F6FC] font-['IBM_Plex_Mono'] text-center`}
+                  placeholder="0"
+                  value={simpleFishCount}
+                  onChange={(e) => setSimpleFishCount(e.target.value)}
+                />
+                <p className="text-xs text-[#484F58]">Total fish for this session.<br />Switch to Full to log individual catches with species, size &amp; fly.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Full mode: Conditions */}
+          {!isSimpleMode && <div className={section}>
             <h2 className="text-sm font-bold text-[#8B949E] mb-4">🌊 Conditions</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
@@ -304,8 +369,10 @@ export default function EditSessionPage() {
             </div>
           </div>
 
-          {/* Map Location */}
-          <div className={section}>
+          }
+
+          {/* Full mode: Map Location */}
+          {!isSimpleMode && <div className={section}>
             <h2 className="text-sm font-bold text-[#8B949E] mb-1 flex items-center gap-2">📍 Map Location</h2>
             <p className="text-xs text-[#484F58] mb-3">Click or drag pin to reposition</p>
             <SessionLocationPicker
@@ -316,10 +383,10 @@ export default function EditSessionPage() {
                 setLongitude(lng);
               }}
             />
-          </div>
+          </div>}
 
-          {/* Fish Caught */}
-          <div className={section}>
+          {/* Full mode: Fish Caught */}
+          {!isSimpleMode && <div className={section}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-[#8B949E] flex items-center gap-2"><Fish className="h-4 w-4 text-[#E8923A]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
               <button type="button" onClick={() => setCatches((p) => [...p, emptyCatch()])}
@@ -384,37 +451,37 @@ export default function EditSessionPage() {
                 ))}
               </div>
             )}
-          </div>
+          </div>}
 
-          {/* Gear */}
-          <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2">🎣 Gear</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
-              <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
-              <GearPicker type="line" label="Line" value={gearLineId} onChange={setGearLineId} />
-              <GearPicker type="leader" label="Leader" value={gearLeaderId} onChange={setGearLeaderId} />
-              <GearPicker type="tippet" label="Tippet" value={gearTippetId} onChange={setGearTippetId} />
+          {/* Full mode: Gear, Flies, Tags */}
+          {!isSimpleMode && <>
+            <div className={section}>
+              <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2">🎣 Gear</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
+                <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
+                <GearPicker type="line" label="Line" value={gearLineId} onChange={setGearLineId} />
+                <GearPicker type="leader" label="Leader" value={gearLeaderId} onChange={setGearLeaderId} />
+                <GearPicker type="tippet" label="Tippet" value={gearTippetId} onChange={setGearTippetId} />
+              </div>
             </div>
-          </div>
 
-          {/* Flies & Rig */}
-          <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
-            <textarea rows={3} className={input} placeholder="Perdigon #16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
-          </div>
+            <div className={section}>
+              <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
+              <textarea rows={3} className={input} placeholder="Perdigon #16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
+            </div>
 
-          {/* Notes */}
+            <div className={section}>
+              <h2 className="text-sm font-bold text-[#8B949E] mb-3">🏷 Tags</h2>
+              <input className={input} placeholder="utah, provo, nymphing, spring runoff" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
+              <p className="text-xs text-[#484F58] mt-1.5">Separate tags with commas</p>
+            </div>
+          </>}
+
+          {/* Notes — always visible */}
           <div className={section}>
             <h2 className="text-sm font-bold text-[#8B949E] mb-3">📝 Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
-          </div>
-
-          {/* Tags */}
-          <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3">🏷 Tags</h2>
-            <input className={input} placeholder="utah, provo, nymphing, spring runoff" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
-            <p className="text-xs text-[#484F58] mt-1.5">Separate tags with commas</p>
           </div>
 
         </form>
