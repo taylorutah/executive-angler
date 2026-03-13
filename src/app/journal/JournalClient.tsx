@@ -91,11 +91,12 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
   );
 
   // Sort most recent first
-  const sortedSessions = [...sessions].sort((a, b) => {
-    const aTime = a.created_at ? new Date(a.created_at).getTime() : new Date(a.date).getTime();
-    const bTime = b.created_at ? new Date(b.created_at).getTime() : new Date(b.date).getTime();
-    return bTime - aTime;
-  });
+  // Sort by fishing date DESC (most recent first).
+  // Do NOT sort by created_at — bulk-imported sessions all share the same import timestamp,
+  // which would scramble the order. The date field (YYYY-MM-DD) is the authoritative sort key.
+  const sortedSessions = [...sessions].sort((a, b) =>
+    a.date < b.date ? 1 : a.date > b.date ? -1 : 0
+  );
 
   // Filter sessions
   const filteredSessions = sortedSessions.filter((session) => {
