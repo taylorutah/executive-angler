@@ -17,6 +17,33 @@ const GEAR_TYPES: { type: GearType; label: string; emoji: string; desc: string }
   { type: "other", label: "Other", emoji: "🔧", desc: "Everything else" },
 ];
 
+/** Build a compact one-line summary of euro leader sections */
+function euroSectionsSummary(sections: Array<Record<string, unknown>>): string {
+  return sections.map((sec) => {
+    const role = sec.role as string;
+    if (role === "tippet-ring") {
+      return `Ring${sec.ring_size ? `: ${sec.ring_size}` : ""}`;
+    }
+    if (role === "tippet") {
+      const parts: string[] = ["Tippet"];
+      if (sec.length_ft) parts.push(`${sec.length_ft}ft`);
+      if (sec.material) parts.push(sec.material as string);
+      if (sec.x_size) parts.push(sec.x_size as string);
+      return parts.join(" ");
+    }
+    // butt / level / sighter
+    const label = role === "butt" ? "Butt"
+                : role === "level" ? "Level"
+                : "Sighter";
+    const parts: string[] = [label];
+    if (sec.length_ft) parts.push(`${sec.length_ft}ft`);
+    if (sec.material_name) parts.push(sec.material_name as string);
+    if (sec.lb_test) parts.push(`${sec.lb_test}lb`);
+    if (sec.diameter_mm) parts.push(`${sec.diameter_mm}mm`);
+    return parts.join(" ");
+  }).join(" · ");
+}
+
 function specsToString(item: GearItem): string {
   const s = item.specs || {};
   const parts: string[] = [];
@@ -59,6 +86,16 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const specs = specsToString(item);
 
+  // Euro leader section summary
+  const euroSections = (() => {
+    if (item.type !== "leader") return null;
+    const s = item.specs as Record<string, unknown>;
+    if (s?.style !== "euro") return null;
+    const secs = s?.sections as Array<Record<string, unknown>> | undefined;
+    if (!secs?.length) return null;
+    return euroSectionsSummary(secs);
+  })();
+
   return (
     <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 flex items-start gap-3 hover:border-[#484F58] transition-colors group">
       <div className="flex-1 min-w-0">
@@ -76,6 +113,11 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
           </p>
         )}
         {specs && <p className="text-xs text-[#484F58]">{specs}</p>}
+        {euroSections && (
+          <p className="text-[10px] text-[#484F58]/70 mt-1 leading-relaxed">
+            {euroSections}
+          </p>
+        )}
         {item.notes && <p className="text-xs text-[#484F58] italic mt-1 line-clamp-2">{item.notes}</p>}
       </div>
 
