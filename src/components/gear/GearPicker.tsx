@@ -32,13 +32,17 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
 
   async function fetchItems() {
     try {
-      const res = await fetch(`/api/gear?type=${type}&active=true`);
-      if (res.ok) {
-        const data: GearItem[] = await res.json();
-        setItems(data.filter((i) => i.is_active));
+      const res = await fetch(`/api/gear`);
+      if (!res.ok) {
+        console.error(`GearPicker: failed to fetch gear (${res.status})`);
+        setLoading(false);
+        return;
       }
-    } catch {
-      // API may not exist yet — fail silently
+      // API returns grouped object: { rod: [...], reel: [...], ... }
+      const grouped: Record<string, GearItem[]> = await res.json();
+      setItems(grouped[type] ?? []);
+    } catch (err) {
+      console.error("GearPicker: network error fetching gear", err);
     } finally {
       setLoading(false);
     }
