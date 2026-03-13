@@ -91,8 +91,8 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   // Build static map URL if coordinates exist
   const mapToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const hasMapThumb =
-    session.latitude !== undefined &&
-    session.longitude !== undefined &&
+    session.latitude != null &&
+    session.longitude != null &&
     mapToken;
   const mapThumbUrl = hasMapThumb
     ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${session.longitude},${session.latitude})/${session.longitude},${session.latitude},11,0/64x96@2x?access_token=${mapToken}`

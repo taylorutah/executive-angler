@@ -402,35 +402,42 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
           {/* Content */}
           {view === "list" ? (
-            feedDisplay === "map" ? (
-              // Map view when feed display is set to map
-              <JournalMapView sessions={filteredSessions} />
-            ) : filteredSessions.length === 0 ? (
-              <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
-                <p className="text-[#8B949E]">No sessions match your filters</p>
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="mt-4 text-sm font-medium text-[#E8923A] hover:text-[#E8923A]"
-                  >
-                    Clear filters
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {filteredSessions.map((session) => (
-                  <SessionCard
-                    key={session.id}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    session={session as any}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    catches={catchesMap.get(session.id) as any}
-                    feedDisplay={feedDisplay}
-                  />
-                ))}
-              </div>
-            )
+            <>
+              {/* Compact map panel — shown when feedDisplay==="map", collapsible */}
+              {feedDisplay === "map" && (
+                <div className="mb-4 rounded-xl overflow-hidden border border-[#21262D]">
+                  <JournalMapView sessions={filteredSessions} compact />
+                </div>
+              )}
+
+              {/* Session list — always visible */}
+              {filteredSessions.length === 0 ? (
+                <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
+                  <p className="text-[#8B949E]">No sessions match your filters</p>
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="mt-4 text-sm font-medium text-[#E8923A] hover:text-[#E8923A]"
+                    >
+                      Clear filters
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredSessions.map((session) => (
+                    <SessionCard
+                      key={session.id}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      session={session as any}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      catches={catchesMap.get(session.id) as any}
+                      feedDisplay={feedDisplay}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <CalendarView
               sessions={filteredSessions}

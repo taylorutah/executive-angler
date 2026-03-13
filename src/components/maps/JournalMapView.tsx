@@ -18,9 +18,11 @@ interface FishingSession {
 
 interface JournalMapViewProps {
   sessions: FishingSession[];
+  /** compact=true → 280px panel above session list. false/undefined → full-height standalone map */
+  compact?: boolean;
 }
 
-export default function JournalMapView({ sessions }: JournalMapViewProps) {
+export default function JournalMapView({ sessions, compact = false }: JournalMapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const router = useRouter();
@@ -141,7 +143,7 @@ export default function JournalMapView({ sessions }: JournalMapViewProps) {
   return (
     <div
       ref={mapContainer}
-      className="h-64 lg:h-[calc(100vh-5rem)] w-full rounded-xl overflow-hidden border border-[#21262D]"
+      className={compact ? "h-[280px] w-full" : "h-64 lg:h-[calc(100vh-5rem)] w-full rounded-xl overflow-hidden border border-[#21262D]"}
     />
   );
 }
