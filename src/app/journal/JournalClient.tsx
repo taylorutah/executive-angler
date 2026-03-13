@@ -168,28 +168,26 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     <div className="min-h-screen bg-[#0D1117] pt-20 lg:pt-0">
       {/* Mobile header */}
       <div className="lg:hidden border-b border-[#21262D] bg-[#161B22] px-4 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="font-heading text-2xl font-bold text-[#E8923A]">Journal</h1>
-          <div className="flex gap-2">
-            <Link
-              href="/journal/flies"
-              className="rounded-lg border border-[#E8923A] px-3 py-2 text-sm font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
-            >
-              🪰 Fly Box
-            </Link>
-            <Link
-              href="/account/gear"
-              className="rounded-lg border border-[#00B4D8] px-3 py-2 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
-            >
-              🎣 Gear Box
-            </Link>
-            <Link
-              href="/journal/new"
-              className="rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#0D1117]"
-            >
-              + Log
-            </Link>
-          </div>
+        <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">Journal</h1>
+        <div className="flex gap-2">
+          <Link
+            href="/journal/flies"
+            className="flex-1 text-center rounded-lg border border-[#E8923A] px-3 py-2 text-sm font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
+          >
+            🪰 Fly Box
+          </Link>
+          <Link
+            href="/account/gear"
+            className="flex-1 text-center rounded-lg border border-[#00B4D8] px-3 py-2 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+          >
+            🎣 Gear Box
+          </Link>
+          <Link
+            href="/journal/new"
+            className="flex-1 text-center rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-medium text-white hover:bg-[#E8923A]/80"
+          >
+            + Log
+          </Link>
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4">
