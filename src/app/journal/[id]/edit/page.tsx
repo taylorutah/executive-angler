@@ -122,7 +122,7 @@ export default function EditSessionPage() {
           date: session.date || "",
           river_name: session.river_name || "",
           location: session.location || "",
-          water_temp_f: session.water_temp_f || "",
+          water_temp_f: session.water_temp_f != null ? String(session.water_temp_f) : "",
           water_clarity: session.water_clarity || "",
           weather: session.weather || "",
           flies_notes: session.flies_notes || "",

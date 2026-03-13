@@ -31,12 +31,20 @@ export async function GET(req: NextRequest) {
   if (singleId) {
     const { data, error } = await supabase
       .from("fishing_sessions")
-      .select("*, catches(*), gear_rod:gear_rod_id(*), gear_reel:gear_reel_id(*), gear_line:gear_line_id(*), gear_leader:gear_leader_id(*), gear_tippet:gear_tippet_id(*)")
+      .select("*")
       .eq("id", singleId)
       .eq("user_id", user.id)
       .single();
     if (error) return NextResponse.json({ error: error.message }, { status: 404 });
-    return NextResponse.json(data);
+
+    // Fetch catches explicitly — auto-join catches(*) is unreliable without confirmed FK schema
+    const { data: catches } = await supabase
+      .from("catches")
+      .select("*")
+      .eq("session_id", singleId)
+      .order("created_at", { ascending: true });
+
+    return NextResponse.json({ ...data, catches: catches ?? [] });
   }
 
   const autocomplete = req.nextUrl.searchParams.get("autocomplete");
