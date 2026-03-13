@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
+import AvatarCropModal from "@/components/AvatarCropModal";
 
 interface Props {
   user: { id: string; email: string; displayName: string; avatarUrl?: string };
@@ -28,6 +29,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [email] = useState(user.email);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -36,20 +39,31 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [pwError, setPwError] = useState("");
   const [pwSaved, setPwSaved] = useState(false);
 
-  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  // Step 1: file selected → show crop modal
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Reset input so the same file can be re-selected after cancel
+    e.target.value = "";
+    const reader = new FileReader();
+    reader.onload = () => setCropSrc(reader.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  // Step 2: crop confirmed → upload blob
+  async function handleCropSave(blob: Blob) {
+    setCropSrc(null);
     setAvatarUploading(true);
     try {
       const fd = new FormData();
-      fd.append("avatar", file);
+      fd.append("avatar", blob, "avatar.jpg");
       const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) {
         alert(data.error || "Failed to upload avatar");
         return;
       }
-      if (data.url) setAvatarUrl(data.url);
+      if (data.url) setAvatarUrl(data.url + `?t=${Date.now()}`);
     } catch (err) {
       console.error("Avatar upload error:", err);
       alert("Failed to upload avatar. Please try again.");
@@ -101,6 +115,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
+      {/* Avatar crop modal */}
+      {cropSrc && (
+        <AvatarCropModal
+          imageSrc={cropSrc}
+          onSave={handleCropSave}
+          onCancel={() => { setCropSrc(null); }}
+        />
+      )}
       <div className="mx-auto max-w-3xl px-4 pt-24 pb-16">
         {/* Profile header */}
         <div className="flex items-center gap-4 mb-8">
@@ -120,7 +142,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                   <Camera className="h-5 w-5 text-white" />
                 )}
               </div>
-              <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
             </label>
           </div>
           <div className="flex-1 min-w-0">

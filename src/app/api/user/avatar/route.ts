@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: upsertError.message }, { status: 500 });
     }
 
-    return NextResponse.json({ url: publicUrl });
+    return NextResponse.json({ url: `${publicUrl}?t=${Date.now()}` });
   } catch (err) {
     console.error("Avatar POST error:", err);
     return NextResponse.json({ error: "Failed to upload avatar" }, { status: 500 });
