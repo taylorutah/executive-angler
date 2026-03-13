@@ -154,12 +154,20 @@ export async function PATCH(req: NextRequest) {
   const body = await req.json();
   const { catches, ...sessionData } = body;
 
-  // Rebuild gear_snapshot when gear IDs change (same as POST)
-  const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
+  // Only rebuild gear_snapshot when gear IDs are actually present in the payload.
+  // A partial PATCH (e.g. notes-only) must NOT overwrite existing gear_snapshot with {}.
+  const hasGearIds = GEAR_ID_FIELDS.some((f) => f in sessionData);
+  const gear_snapshot = hasGearIds
+    ? await buildGearSnapshot(supabase, sessionData)
+    : undefined;
+
+  const updatePayload = gear_snapshot !== undefined
+    ? { ...sessionData, gear_snapshot }
+    : { ...sessionData };
 
   const { error } = await supabase
     .from("fishing_sessions")
-    .update({ ...sessionData, gear_snapshot })
+    .update(updatePayload)
     .eq("id", id)
     .eq("user_id", user.id);
 

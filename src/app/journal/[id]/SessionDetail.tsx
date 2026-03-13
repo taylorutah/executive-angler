@@ -136,15 +136,28 @@ export default function SessionDetail({ session, catches, flies }: Props) {
   async function saveNotes() {
     if (notesValue === session.notes) { setEditingNotes(false); return; }
     setNotesSaving(true);
-    await fetch(`/api/fishing/session?id=${session.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ notes: notesValue }),
-    });
-    setNotesSaving(false);
-    setEditingNotes(false);
-    setNotesSaved(true);
-    setTimeout(() => setNotesSaved(false), 2000);
+    try {
+      const res = await fetch(`/api/fishing/session?id=${session.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: notesValue }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error("Notes save failed:", res.status, err);
+        alert(`Save failed (${res.status}). Please try again.`);
+        setNotesSaving(false);
+        return;
+      }
+      setEditingNotes(false);
+      setNotesSaved(true);
+      setTimeout(() => setNotesSaved(false), 2000);
+    } catch (e) {
+      console.error("Notes save error:", e);
+      alert("Save failed. Check your connection and try again.");
+    } finally {
+      setNotesSaving(false);
+    }
   }
 
   const totalFish = catches.length > 0
