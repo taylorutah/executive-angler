@@ -28,12 +28,17 @@ export interface LeaderSpecs {
 }
 
 export interface EuroLeaderSection {
-  material: 'mono' | 'fluoro' | 'bicolor-mono' | 'coated';
-  color?: string;         // e.g. "hot pink", "yellow", "clear"
-  role: 'butt' | 'sighter' | 'tippet-ring-section' | 'tippet';
-  length_ft: number;
+  role: 'butt' | 'level' | 'sighter' | 'tippet-ring' | 'tippet';
+  // butt / level / sighter: brand + material name (e.g. "Maxima Chameleon", "Pierre Sempe")
+  material_name?: string;
+  // tippet: fluoro, mono, etc.
+  material?: 'mono' | 'fluoro' | 'bicolor-mono' | 'coated';
+  color?: string;
+  length_ft?: number;     // not used for tippet-ring
   diameter_mm?: number;
-  x_size?: string;        // e.g. "3X"
+  lb_test?: number;       // butt sections (e.g. 6lb Maxima Chameleon)
+  x_size?: string;        // tippet: "3X", "5X" etc.
+  ring_size?: string;     // tippet-ring only: "small", "size 12", etc.
 }
 
 export interface TippetSpecs {
