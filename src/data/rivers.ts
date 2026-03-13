@@ -3424,4 +3424,299 @@ export const rivers: River[] = [
       "Giant trevally and tropical saltwater species on the Maldives' North Malé Atoll. Sight-casting to GTs on pristine Indian Ocean flats.",
     featured: false,
   },
+  {
+    id: "provo-river",
+    slug: "provo-river",
+    name: "Provo River",
+    destinationId: "dest-utah",
+    description:
+      "The Provo River is Utah's crown jewel of fly fishing — a blue-ribbon tailwater that flows within an hour of Salt Lake City yet consistently produces wild brown trout over 20 inches. It runs roughly 70 miles from its headwaters in the Uinta Mountains through the Heber Valley before emptying into Utah Lake, passing through three fundamentally different sections that together offer more variety per river mile than almost anywhere in the Mountain West.\n\nThe Upper Provo, above Jordanelle Reservoir, is the river in its most natural state — a classic freestone mountain stream tumbling through aspen and pine terrain east of Woodland on State Highway 35 and along the Mirror Lake Highway. The water is narrow, fast, and cold, holding native Bonneville cutthroat alongside browns and occasional rainbows. This section sees the least pressure of the three and rewards anglers willing to hike away from the road. The fishing is technical in tight casting lanes with spooky fish in crystal-clear water, but on a summer morning with Yellow Sallies on the surface and cutthroat rising behind every rock, it's as good as anywhere in Utah.\n\nThe Middle Provo — running 12.4 miles from Jordanelle Dam through the Heber Valley to Deer Creek Reservoir — is what defines the river's reputation. The Jordanelle releases cold, oxygen-rich water year-round, keeping temperatures in the low-to-mid 40s even in July when most Utah rivers grow too warm to fish. Every inch of this stretch is now publicly accessible following the DWR's land purchases, and catch-and-release regulations above Legacy Bridge have allowed wild fish populations to develop over decades. Browns averaging 14 to 18 inches are routine; genuine trophies in the 22-to-26-inch range hold in the deeper pools and undercut banks near Jordanelle and throughout the Heber Valley meadow sections. Named spots like Lunker Lane and Rickety Bridge, within walking distance of Rock Cliff Recreation Area, are legendary among local guides for good reason — fish per mile counts push 3,500 to 4,000 in this tailwater stretch. The braided, restored channel downstream of River Road holds larger-than-average fish in the secondary channels that most visiting anglers walk past.\n\nThe Lower Provo below Deer Creek Dam carries the same tailwater character through a narrower, more dramatic canyon section with sheer walls and runs that hold underappreciated numbers of large fish. Locals fish it regularly; most visiting anglers don't look past the Middle section, which makes the canyon a genuine sleeper for anyone willing to drive a few extra miles. Brown trout here average larger than the Middle Provo's fish, supplemented by rainbow trout — including occasional genuine trophies — and a sparse population of Bonneville cutthroat.\n\nSeasonally, the Provo fishes year-round. March and April bring reliable Blue-winged Olive hatches in the afternoons that bring fish to the surface even in cold weather. May opens the Pale Morning Dun season, the river's most celebrated hatch, with fish rising through the Heber Valley meadows on calm mornings. Summer shifts to evening caddis and terrestrials — hopper fishing along the meadow banks in July and August produces explosive takes from fish that would otherwise demand a size-22 dry on 7X. Fall is the Provo at its finest: October BWO hatches, cooling water, and pre-spawn brown trout in aggressive feeding mode combine for the best dry-fly fishing of the year. Winter midge fishing on the Middle Provo, with no other anglers in sight on a bluebird January afternoon, is its own reward.",
+    heroImageUrl: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80",
+    lengthMiles: 70,
+    flowType: "tailwater",
+    difficulty: "intermediate",
+    wadingType: "wade",
+    primarySpecies: ["Brown Trout", "Rainbow Trout", "Bonneville Cutthroat Trout"],
+    regulations:
+      "Middle Provo (Jordanelle Dam to Legacy Bridge): artificial flies and lures only, catch-and-release, 2-trout limit under 15 inches with all fish 15\"+ released immediately. Legacy Bridge to Charleston: bait allowed, 4-trout limit any size. Lower Provo regulations vary by section — check Utah DWR current rules before fishing. Utah fishing license required.",
+    accessPoints: [
+      {
+        name: "Upper Provo — Mirror Lake Hwy (UT-150)",
+        latitude: 40.7167,
+        longitude: -111.0833,
+        description: "Upper freestone section access along Hwy 150 east of Kamas. Artificial flies and lures only. Bonneville cutthroat and browns in narrow, fast water.",
+        parking: true,
+      },
+      {
+        name: "Upper Provo — State Hwy 35 (Woodland)",
+        latitude: 40.5833,
+        longitude: -111.1500,
+        description: "Public access east of Woodland on SR-35. Freestone character with browns and cutthroat. Multiple pullouts along the highway.",
+        parking: true,
+      },
+      {
+        name: "Middle Provo — Rock Cliff / Jordanelle Dam (Lunker Lane)",
+        latitude: 40.6027,
+        longitude: -111.4169,
+        description: "Primary access just below Jordanelle Dam. This is 'Lunker Lane' and 'Rickety Bridge' water — 3,500–4,000 fish per mile. Day-use fee applies at Rock Cliff Recreation Area. Catch-and-release, flies and lures only.",
+        parking: true,
+      },
+      {
+        name: "Middle Provo — River Road Access",
+        latitude: 40.5383,
+        longitude: -111.4456,
+        description: "Multiple pullouts along River Road through the Heber Valley meadow section. The braided, restored channel holds large browns in secondary channels. Best sight-fishing on the Middle Provo.",
+        parking: true,
+      },
+      {
+        name: "Middle Provo — Legacy Bridge (Midway Lane)",
+        latitude: 40.5167,
+        longitude: -111.4647,
+        description: "Regulation boundary access at SR-113 bridge. Flies/lures only upstream toward Jordanelle Dam; bait allowed downstream toward Charleston. Park on the south side.",
+        parking: true,
+      },
+      {
+        name: "Middle Provo — Charleston Bridge",
+        latitude: 40.4803,
+        longitude: -111.4656,
+        description: "Town of Charleston access at the lower end of the Middle Provo. Bait allowed here. Good riffles and runs both up and downstream. Less pressure than the Jordanelle end.",
+        parking: true,
+      },
+      {
+        name: "Middle Provo — Vivian Park (Provo Canyon)",
+        latitude: 40.3900,
+        longitude: -111.6000,
+        description: "Lower end of the productive Middle Provo in Provo Canyon. Canyon narrows here with challenging but rewarding wading. Big browns in the shadows below canyon walls.",
+        parking: true,
+      },
+      {
+        name: "Lower Provo — Deer Creek Dam",
+        latitude: 40.4200,
+        longitude: -111.5300,
+        description: "Access to the Lower Provo immediately below Deer Creek Reservoir. Cold dam releases create tailwater conditions extending through the canyon. Significantly less pressure than the Middle Provo with comparable and often larger fish.",
+        parking: true,
+      },
+    ],
+    bestMonths: ["March", "April", "May", "September", "October", "November"],
+    latitude: 40.50,
+    longitude: -111.45,
+    mapBounds: {
+      sw: [40.30, -111.70],
+      ne: [40.75, -111.05],
+    },
+    hatchChart: [
+      {
+        month: "January",
+        hatches: [
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-26",
+            pattern: "Mercury Midge, Zebra Midge, Griffith's Gnat",
+            timeOfDay: "midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "February",
+        hatches: [
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-26",
+            pattern: "Mercury Midge, Zebra Midge",
+            timeOfDay: "midday to afternoon",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "March",
+        hatches: [
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#18-22",
+            pattern: "Parachute BWO, RS2, Sparkle Dun",
+            timeOfDay: "afternoon",
+            intensity: "moderate",
+          },
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-24",
+            pattern: "Mercury Midge, Zebra Midge",
+            timeOfDay: "midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "April",
+        hatches: [
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#16-20",
+            pattern: "Parachute BWO, RS2, Comparadun",
+            timeOfDay: "afternoon",
+            intensity: "heavy",
+          },
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-24",
+            pattern: "Mercury Midge, Griffith's Gnat",
+            timeOfDay: "morning to midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "May",
+        hatches: [
+          {
+            insect: "Pale Morning Dun (Ephemerella)",
+            size: "#16-18",
+            pattern: "PMD Comparadun, Sparkle Dun, Pheasant Tail Nymph",
+            timeOfDay: "morning",
+            intensity: "heavy",
+          },
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#18-20",
+            pattern: "Parachute BWO, RS2",
+            timeOfDay: "afternoon",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "June",
+        hatches: [
+          {
+            insect: "Pale Morning Dun (Ephemerella)",
+            size: "#16-18",
+            pattern: "PMD Comparadun, CDC Dun",
+            timeOfDay: "morning",
+            intensity: "heavy",
+          },
+          {
+            insect: "Caddis (Trichoptera)",
+            size: "#14-18",
+            pattern: "Elk Hair Caddis, X-Caddis",
+            timeOfDay: "evening",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "July",
+        hatches: [
+          {
+            insect: "Caddis (Trichoptera)",
+            size: "#14-16",
+            pattern: "Elk Hair Caddis, Goddard Caddis",
+            timeOfDay: "evening",
+            intensity: "heavy",
+          },
+          {
+            insect: "Grasshopper / Terrestrials",
+            size: "#8-12",
+            pattern: "Dave's Hopper, Chernobyl Ant, Foam Beetle",
+            timeOfDay: "afternoon",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "August",
+        hatches: [
+          {
+            insect: "Grasshopper / Terrestrials",
+            size: "#8-12",
+            pattern: "Dave's Hopper, Parachute Hopper",
+            timeOfDay: "afternoon",
+            intensity: "heavy",
+          },
+          {
+            insect: "Caddis (Trichoptera)",
+            size: "#14-18",
+            pattern: "Elk Hair Caddis, Balloon Caddis",
+            timeOfDay: "evening",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "September",
+        hatches: [
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#18-22",
+            pattern: "Parachute BWO, RS2, Thorax BWO",
+            timeOfDay: "afternoon",
+            intensity: "moderate",
+          },
+          {
+            insect: "Trico (Tricorythodes)",
+            size: "#20-24",
+            pattern: "Trico Spinner, CDC Trico",
+            timeOfDay: "morning",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "October",
+        hatches: [
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#18-22",
+            pattern: "Parachute BWO, RS2, Barr Emerger",
+            timeOfDay: "afternoon",
+            intensity: "heavy",
+          },
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-26",
+            pattern: "Mercury Midge, Zebra Midge",
+            timeOfDay: "midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "November",
+        hatches: [
+          {
+            insect: "Blue-winged Olive (Baetis)",
+            size: "#18-22",
+            pattern: "Parachute BWO, RS2",
+            timeOfDay: "afternoon",
+            intensity: "moderate",
+          },
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-26",
+            pattern: "Mercury Midge, Zebra Midge",
+            timeOfDay: "midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+      {
+        month: "December",
+        hatches: [
+          {
+            insect: "Midge (Chironomidae)",
+            size: "#20-26",
+            pattern: "Mercury Midge, Griffith's Gnat",
+            timeOfDay: "midday",
+            intensity: "moderate",
+          },
+        ],
+      },
+    ],
+    metaTitle: "Provo River Fly Fishing Guide — Upper, Middle & Lower | Executive Angler",
+    metaDescription:
+      "Complete fly fishing guide to the Provo River, Utah. Upper, Middle, and Lower sections with access points, hatch charts, regulations, and insider tips for brown trout on this world-class tailwater.",
+    featured: true,
+  },
 ];
