@@ -52,6 +52,7 @@ interface Session {
   flies_notes?: string;
   trip_tags?: string[];
   tags?: string[];
+  total_fish?: number;
   gear_snapshot?: GearSnapshot;
   gear_rod?: { name: string; maker?: string } | null;
   gear_reel?: { name: string; maker?: string } | null;
@@ -145,7 +146,10 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     setTimeout(() => setNotesSaved(false), 2000);
   }
 
-  const totalFish = catches.reduce((s, c) => s + (c.quantities || 1), 0);
+  const totalFish = catches.length > 0
+    ? catches.reduce((s, c) => s + (c.quantities || 1), 0)
+    : (session.total_fish ?? 0);
+  const isDriftMode = catches.length === 0 && (session.total_fish ?? 0) > 0;
   const tags = session.trip_tags || session.tags || [];
   const fishPhotos = catches.filter(c => c.fish_image_url);
 
@@ -367,6 +371,28 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                     </div>
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* ---- DRIFT VIEW: count-only session (no detailed catches logged) ---- */}
+          {isDriftMode && (
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
+              <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
+                <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
+                <span className="text-xs text-[#484F58] bg-[#0D1117] rounded-full px-2 py-0.5">Drift mode</span>
+              </div>
+              <div className="p-6 flex flex-col items-center text-center gap-3">
+                <div className="flex items-center gap-3">
+                  <Fish className="h-8 w-8 text-[#E8923A]" />
+                  <span className="text-5xl font-bold text-[#F0F6FC] font-['IBM_Plex_Mono']">{session.total_fish}</span>
+                </div>
+                <p className="text-sm text-[#8B949E]">
+                  {session.total_fish === 1 ? "fish landed" : "fish landed"}
+                </p>
+                <p className="text-xs text-[#484F58] max-w-xs">
+                  This session was logged in drift mode — total count only, no per-catch details.
+                </p>
               </div>
             </div>
           )}
