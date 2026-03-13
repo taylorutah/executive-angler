@@ -114,7 +114,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. ON THE WATER ───────────────────────────────────────────────── */}
+      {/* ── 2. WAITLIST ───────────────────────────────────────────────────── */}
+      <WaitlistSection initialCount={waitlistCount} />
+
+      {/* ── 3. ON THE WATER ───────────────────────────────────────────────── */}
       <section className="bg-[#161B22] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
@@ -232,9 +235,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── 5. WAITLIST ───────────────────────────────────────────────────── */}
-      <WaitlistSection initialCount={waitlistCount} />
 
       {/* ── 6. FROM THE WATER (articles) ──────────────────────────────────── */}
       <section className="bg-[#0D1117] py-20">

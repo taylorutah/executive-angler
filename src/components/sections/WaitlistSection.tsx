@@ -94,7 +94,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 placeholder="First name (optional)"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="flex-1 bg-[#161B22] border border-[#21262D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#484F58] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-1 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#8B949E] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
               />
               <input
                 type="email"
@@ -102,14 +102,14 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 bg-[#161B22] border border-[#21262D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#484F58] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-1 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#8B949E] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
               />
             </div>
 
             <button
               type="submit"
-              disabled={state === "loading" || !email.trim()}
-              className="w-full flex items-center justify-center gap-2 px-7 py-3.5 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg text-base"
+              disabled={state === "loading"}
+              className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[#E8923A] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
             >
               {state === "loading" ? (
                 <>
