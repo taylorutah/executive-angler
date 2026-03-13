@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Droplets, Building2, ShoppingBag, Compass, BookOpen, Check } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import WaitlistSection from "@/components/sections/WaitlistSection";
 import { getFeaturedArticles } from "@/lib/db";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 
@@ -17,6 +18,22 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 3600;
+
+async function getWaitlistCount(): Promise<number> {
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    const { count } = await supabase
+      .from("waitlist")
+      .select("*", { count: "exact", head: true });
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}
 
 const RIVERS = [
   { name: "Green River", location: "UTAH", fish: 34, ago: "2h ago", href: "/rivers/green-river" },
@@ -35,7 +52,10 @@ const EXPLORE = [
 ];
 
 export default async function HomePage() {
-  const featuredArticles = await getFeaturedArticles().then((a) => a.slice(0, 3));
+  const [featuredArticles, waitlistCount] = await Promise.all([
+    getFeaturedArticles().then((a) => a.slice(0, 3)),
+    getWaitlistCount(),
+  ]);
 
   return (
     <>
@@ -213,7 +233,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. FROM THE WATER (articles) ──────────────────────────────────── */}
+      {/* ── 5. WAITLIST ───────────────────────────────────────────────────── */}
+      <WaitlistSection initialCount={waitlistCount} />
+
+      {/* ── 6. FROM THE WATER (articles) ──────────────────────────────────── */}
       <section className="bg-[#0D1117] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
