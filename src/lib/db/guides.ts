@@ -78,3 +78,4 @@ export async function getGuidesByDestination(destinationId: string): Promise<Gui
     return staticGuides.filter((g) => g.destinationId === destinationId);
   }
 }
+// Guide photos fixed Sat Mar 14 15:54:23 MDT 2026
