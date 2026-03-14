@@ -92,8 +92,9 @@ export default async function GuidePage({ params }: Props) {
 
       <HeroSection
         imageUrl={
-          guide.photoUrl ||
-          "https://images.unsplash.com/photo-1545816250-e12bedba42ba?w=1920&q=80"
+          (guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg")
+            ? guide.photoUrl
+            : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
         }
         imageAlt={`${guide.name} — fly fishing guide`}
         title={guide.name}

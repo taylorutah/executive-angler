@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background -->
+  <rect width="400" height="400" fill="#161B22"/>
+  
+  <!-- Subtle radial gradient -->
+  <radialGradient id="bg" cx="50%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#1F2937"/>
+    <stop offset="100%" stop-color="#0D1117"/>
+  </radialGradient>
+  <rect width="400" height="400" fill="url(#bg)"/>
+
+  <!-- Water ripple rings — bottom -->
+  <ellipse cx="200" cy="370" rx="180" ry="22" stroke="#21262D" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <ellipse cx="200" cy="370" rx="130" ry="15" stroke="#21262D" stroke-width="1" fill="none" opacity="0.4"/>
+  <ellipse cx="200" cy="370" rx="75" ry="9" stroke="#E8923A" stroke-width="1" fill="none" opacity="0.25"/>
+
+  <!-- Fly line arc -->
+  <path d="M 60 200 Q 150 100 260 155 Q 310 175 340 155" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <!-- Fly at end of line -->
+  <circle cx="340" cy="155" r="3" fill="#E8923A" opacity="0.5"/>
+
+  <!-- Person silhouette -->
+  <!-- Head -->
+  <circle cx="200" cy="155" r="38" fill="#21262D"/>
+  <!-- Body -->
+  <path d="M 138 290 Q 140 235 160 218 Q 178 208 200 206 Q 222 208 240 218 Q 260 235 262 290 Z" fill="#21262D"/>
+  <!-- Wading jacket detail -->
+  <path d="M 165 240 Q 200 248 235 240" stroke="#2D3748" stroke-width="2" fill="none" opacity="0.8"/>
+  <!-- Rod arm -->
+  <path d="M 238 225 L 310 160" stroke="#2D3748" stroke-width="5" stroke-linecap="round"/>
+  <!-- Hat brim -->
+  <ellipse cx="200" cy="124" rx="44" ry="10" fill="#2D3748"/>
+  <rect x="168" y="100" width="64" height="26" rx="6" fill="#2D3748"/>
+  <!-- Hat logo dot (copper) -->
+  <circle cx="200" cy="113" r="4" fill="#E8923A" opacity="0.7"/>
+
+  <!-- EA wordmark bottom -->
+  <text x="200" y="340" font-family="Georgia, serif" font-size="13" fill="#484F58" text-anchor="middle" letter-spacing="3">EXECUTIVE ANGLER</text>
+  <text x="200" y="358" font-family="Georgia, serif" font-size="10" fill="#E8923A" text-anchor="middle" letter-spacing="2" opacity="0.7">GUIDE</text>
+</svg>

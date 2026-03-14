@@ -114,25 +114,25 @@ export default async function GuidesPage() {
                     href={`/guides/${guide.slug}`}
                     className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                   >
-                    {guide.photoUrl && (
-                      <div className="relative h-56">
-                        <Image
-                          src={guide.photoUrl}
-                          alt={guide.name}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                        />
+                    <div className="relative h-56">
+                      <Image
+                        src={guide.photoUrl || "/images/guide-placeholder.svg"}
+                        alt={guide.name}
+                        fill
+                        className={`transition-transform duration-500 group-hover:scale-105 ${guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg" ? "object-cover" : "object-contain p-4"}`}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      {(guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg") && (
                         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/10 to-transparent" />
-                        {guide.yearsExperience && (
-                          <div className="absolute bottom-4 left-4">
-                            <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-[#E8923A] text-white">
-                              {guide.yearsExperience} years experience
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                      )}
+                      {guide.yearsExperience && (
+                        <div className="absolute bottom-4 left-4">
+                          <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-[#E8923A] text-white">
+                            {guide.yearsExperience} years experience
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <div className="p-5">
                       <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-tight">
                         {guide.name}
