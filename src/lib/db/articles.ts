@@ -1,30 +1,89 @@
 import type { Article } from "@/types/entities";
 import { articles as staticArticles } from "@/data/articles";
+import { createStaticClient } from "@/lib/supabase/static";
 
-export async function getAllArticles(): Promise<Article[]> {
-  return staticArticles;
+function mapRow(r: Record<string, unknown>): Article {
+  return {
+    id: r.id as string,
+    slug: r.slug as string,
+    title: r.title as string,
+    subtitle: (r.subtitle ?? undefined) as string | undefined,
+    author: (r.author ?? "") as string,
+    category: (r.category ?? "technique") as Article["category"],
+    heroImageUrl: (r.hero_image_url ?? "") as string,
+    thumbnailUrl: (r.thumbnail_url ?? undefined) as string | undefined,
+    excerpt: (r.excerpt ?? "") as string,
+    content: (r.content ?? "") as string,
+    readingTimeMinutes: r.reading_time_minutes ? Number(r.reading_time_minutes) : 5,
+    tags: (r.tags as string[]) ?? [],
+    relatedDestinationIds: (r.related_destination_ids as string[]) ?? [],
+    relatedRiverIds: (r.related_river_ids as string[]) ?? [],
+    publishedAt: (r.published_at ?? "") as string,
+    metaTitle: (r.meta_title ?? undefined) as string | undefined,
+    metaDescription: (r.meta_description ?? undefined) as string | undefined,
+    featured: (r.featured ?? false) as boolean,
+  };
 }
 
-export async function getArticleBySlug(
-  slug: string
-): Promise<Article | undefined> {
-  return staticArticles.find((a) => a.slug === slug);
+let cache: Article[] | null = null;
+let cacheTime = 0;
+const TTL = 5 * 60 * 1000;
+
+export async function getAllArticles(): Promise<Article[]> {
+  if (cache && Date.now() - cacheTime < TTL) return cache;
+  try {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase.from("articles").select("*").order("published_at", { ascending: false });
+    if (error) throw error;
+    if (!data?.length) throw new Error("empty");
+    cache = data.map(mapRow);
+    cacheTime = Date.now();
+    return cache;
+  } catch {
+    return staticArticles;
+  }
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
+  try {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).single();
+    if (error) throw error;
+    return mapRow(data as Record<string, unknown>);
+  } catch {
+    return staticArticles.find((a) => a.slug === slug);
+  }
 }
 
 export async function getFeaturedArticles(): Promise<Article[]> {
-  return staticArticles.filter((a) => a.featured);
+  try {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase.from("articles").select("*").eq("featured", true).order("published_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(mapRow);
+  } catch {
+    return staticArticles.filter((a) => a.featured);
+  }
 }
 
-export async function getArticlesByDestination(
-  destinationId: string
-): Promise<Article[]> {
-  return staticArticles.filter((a) =>
-    a.relatedDestinationIds.includes(destinationId)
-  );
+export async function getArticlesByDestination(destinationId: string): Promise<Article[]> {
+  try {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase.from("articles").select("*").contains("related_destination_ids", [destinationId]).order("published_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(mapRow);
+  } catch {
+    return staticArticles.filter((a) => (a.relatedDestinationIds ?? []).includes(destinationId));
+  }
 }
 
 export async function getArticlesByRiver(riverId: string): Promise<Article[]> {
-  return staticArticles.filter((a) =>
-    (a.relatedRiverIds || []).includes(riverId)
-  );
+  try {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase.from("articles").select("*").contains("related_river_ids", [riverId]).order("published_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(mapRow);
+  } catch {
+    return staticArticles.filter((a) => (a.relatedRiverIds ?? []).includes(riverId));
+  }
 }
