@@ -382,12 +382,11 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
             </div>
           )}
 
-          {(type === "net" || type === "waders" || type === "other") && (
-            <div>
-              <label className={labelCls}>Notes</label>
-              <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className={inputCls} placeholder="Any details about this gear…" />
-            </div>
-          )}
+          {/* Notes — available for all gear types */}
+          <div>
+            <label className={labelCls}>Notes</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className={inputCls} placeholder="Any details about this gear…" />
+          </div>
 
           {/* Default checkbox */}
           <label className="flex items-start gap-3 cursor-pointer group">
