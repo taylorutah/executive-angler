@@ -86,4 +86,5 @@ export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/executiveangler",
   youtube: "https://youtube.com/@executiveangler",
   facebook: "https://facebook.com/executiveangler",
+  x: "https://x.com/executiveangler",
 } as const;
