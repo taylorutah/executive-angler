@@ -38,7 +38,7 @@ export default function MapView({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f1f5f9;color:#64748b;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
       return;
     }
@@ -46,45 +46,65 @@ export default function MapView({
     mapboxgl.accessToken = token;
 
     try {
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
-      center: [longitude, latitude],
-      zoom,
-    });
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/outdoors-v12",
+        center: [longitude, latitude],
+        zoom,
+        // Required for mobile Safari WebGL stability
+        preserveDrawingBuffer: true,
+        antialias: false,
+      });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-    // Add markers
-    markers.forEach((marker) => {
-      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<div><strong>${marker.title}</strong>${
-          marker.description ? `<p class="mt-1 text-[#8B949E]">${marker.description}</p>` : ""
-        }</div>`
-      );
+      // Resize after map loads — fixes 0-dimension init on mobile Safari
+      map.current.on("load", () => {
+        map.current?.resize();
 
-      new mapboxgl.Marker({ color: marker.color || "#1B4332" })
-        .setLngLat([marker.longitude, marker.latitude])
-        .setPopup(popup)
-        .addTo(map.current!);
-    });
+        // Add markers after load for reliable placement on mobile
+        markers.forEach((marker) => {
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<div><strong>${marker.title}</strong>${
+              marker.description ? `<p style="margin-top:4px;color:#8B949E">${marker.description}</p>` : ""
+            }</div>`
+          );
 
-    // Fit bounds if provided (bounds data is [lat, lng], Mapbox needs [lng, lat])
-    if (bounds) {
-      map.current.fitBounds(
-        [[bounds.sw[1], bounds.sw[0]], [bounds.ne[1], bounds.ne[0]]],
-        { padding: 50, maxZoom: 12 }
-      );
-    } else if (markers.length > 1) {
-      const markerBounds = new mapboxgl.LngLatBounds();
-      markers.forEach((m) => markerBounds.extend([m.longitude, m.latitude]));
-      map.current.fitBounds(markerBounds, { padding: 50, maxZoom: 12 });
-    }
+          new mapboxgl.Marker({ color: marker.color || "#E8923A" })
+            .setLngLat([marker.longitude, marker.latitude])
+            .setPopup(popup)
+            .addTo(map.current!);
+        });
 
+        // Fit bounds if provided (bounds data is [lat, lng], Mapbox needs [lng, lat])
+        if (bounds) {
+          map.current!.fitBounds(
+            [[bounds.sw[1], bounds.sw[0]], [bounds.ne[1], bounds.ne[0]]],
+            { padding: 50, maxZoom: 12 }
+          );
+        } else if (markers.length > 1) {
+          const markerBounds = new mapboxgl.LngLatBounds();
+          markers.forEach((m) => markerBounds.extend([m.longitude, m.latitude]));
+          map.current!.fitBounds(markerBounds, { padding: 50, maxZoom: 12 });
+        }
+      });
+
+      // ResizeObserver keeps map sized correctly as layout shifts on mobile
+      const ro = new ResizeObserver(() => {
+        map.current?.resize();
+      });
+      if (mapContainer.current) ro.observe(mapContainer.current);
+
+      const cleanup = () => {
+        ro.disconnect();
+        map.current?.remove();
+      };
+
+      return cleanup;
     } catch (e) {
-      console.error('Mapbox failed to initialize:', e);
+      console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f1f5f9;color:#64748b;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
     }
 
