@@ -184,8 +184,10 @@ export default function EditSessionPage() {
         if (session.gear_leader_id) setGearLeaderId(session.gear_leader_id);
         if (session.gear_tippet_id) setGearTippetId(session.gear_tippet_id);
         // Load location
-        if (session.latitude !== undefined) setLatitude(session.latitude);
-        if (session.longitude !== undefined) setLongitude(session.longitude);
+        if (session.lat != null) setLatitude(session.lat);
+        else if (session.latitude != null) setLatitude(session.latitude);
+        if (session.lng != null) setLongitude(session.lng);
+        else if (session.longitude != null) setLongitude(session.longitude);
       }
 
       if (riversRes.ok) setRivers(await riversRes.json());
@@ -208,12 +210,13 @@ export default function EditSessionPage() {
     setSaving(true);
     setError("");
     try {
+      const { trip_tags: _tripTags, ...formFields } = form;
       const res = await fetch(`/api/fishing/session?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...form,
-          trip_tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+          ...formFields,
+          tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           // In simple mode: save the fish count directly; don't overwrite catches
           ...(isSimpleMode
             ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
@@ -227,8 +230,8 @@ export default function EditSessionPage() {
             gear_leader_id: gearLeaderId || null,
             gear_tippet_id: gearTippetId || null,
           }),
-          latitude: latitude ?? null,
-          longitude: longitude ?? null,
+          lat: latitude ?? null,
+          lng: longitude ?? null,
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }

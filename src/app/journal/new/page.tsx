@@ -44,13 +44,13 @@ export default function NewSessionPage() {
     const formData = new FormData(e.currentTarget);
     const data = {
       title: formData.get("title") || undefined,
-      sessionDate: formData.get("sessionDate"),
-      river: formData.get("river"),
+      date: formData.get("sessionDate"),
+      river_name: formData.get("river"),
       location: formData.get("location"),
-      waterTemp: formData.get("waterTemp") || undefined,
-      waterClarity: formData.get("waterClarity") || undefined,
+      water_temp_f: formData.get("waterTemp") || undefined,
+      water_clarity: formData.get("waterClarity") || undefined,
       weather: formData.get("weather") || undefined,
-      fliesNotes: formData.get("fliesNotes") || undefined,
+      flies_notes: formData.get("fliesNotes") || undefined,
       tags: formData.get("tags")
         ? (formData.get("tags") as string)
             .split(",")
