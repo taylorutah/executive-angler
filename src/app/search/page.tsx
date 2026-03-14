@@ -5,13 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, X, MapPin, Fish, Home, BookOpen, Users, Store, Compass } from "lucide-react";
-import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
-import { species } from "@/data/species";
-import { lodges } from "@/data/lodges";
-import { guides } from "@/data/guides";
-import { flyShops } from "@/data/fly-shops";
-import { articles } from "@/data/articles";
+
 
 interface SearchResult {
   type: "destination" | "river" | "species" | "lodge" | "guide" | "fly-shop" | "article";
@@ -35,94 +29,21 @@ const CATEGORY_META: Record<
   article: { label: "Articles", icon: BookOpen, color: "bg-orange-100 text-orange-700" },
 };
 
-function buildIndex(): SearchResult[] {
-  const results: SearchResult[] = [];
 
-  for (const d of destinations) {
-    results.push({
-      type: "destination",
-      slug: d.slug,
-      title: d.name,
-      subtitle: `${d.region}, ${d.country}`,
-      imageUrl: d.heroImageUrl,
-      href: `/destinations/${d.slug}`,
-    });
-  }
-  for (const r of rivers) {
-    const dest = destinations.find((d) => d.id === r.destinationId);
-    results.push({
-      type: "river",
-      slug: r.slug,
-      title: r.name,
-      subtitle: `${dest?.name ?? ""} — ${r.flowType}`,
-      imageUrl: r.heroImageUrl,
-      href: `/rivers/${r.slug}`,
-    });
-  }
-  for (const s of species) {
-    results.push({
-      type: "species",
-      slug: s.slug,
-      title: s.commonName,
-      subtitle: s.scientificName ?? (s.family ?? ""),
-      imageUrl: s.imageUrl,
-      href: `/species/${s.slug}`,
-    });
-  }
-  for (const l of lodges) {
-    const dest = destinations.find((d) => d.id === l.destinationId);
-    results.push({
-      type: "lodge",
-      slug: l.slug,
-      title: l.name,
-      subtitle: dest?.name ?? "",
-      imageUrl: l.heroImageUrl,
-      href: `/lodges/${l.slug}`,
-    });
-  }
-  for (const g of guides) {
-    const dest = destinations.find((d) => d.id === g.destinationId);
-    results.push({
-      type: "guide",
-      slug: g.slug,
-      title: g.name,
-      subtitle: `${dest?.name ?? ""} — ${g.specialties.slice(0, 2).join(", ")}`,
-      imageUrl: g.photoUrl,
-      href: `/guides/${g.slug}`,
-    });
-  }
-  for (const f of flyShops) {
-    const dest = destinations.find((d) => d.id === f.destinationId);
-    results.push({
-      type: "fly-shop",
-      slug: f.slug,
-      title: f.name,
-      subtitle: dest?.name ?? "",
-      imageUrl: f.heroImageUrl,
-      href: `/fly-shops/${f.slug}`,
-    });
-  }
-  for (const a of articles) {
-    results.push({
-      type: "article",
-      slug: a.slug,
-      title: a.title,
-      subtitle: `${a.category} — ${a.author}`,
-      imageUrl: a.heroImageUrl,
-      href: `/articles/${a.slug}`,
-    });
-  }
-
-  return results;
-}
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialQuery = searchParams.get("q") ?? "";
   const [query, setQuery] = useState(initialQuery);
+  const [index, setIndex] = useState<SearchResult[]>([]);
 
-  const index = useMemo(() => buildIndex(), []);
+  useEffect(() => {
+    fetch("/api/search-index")
+      .then((r) => r.json())
+      .then((data: SearchResult[]) => setIndex(data))
+      .catch(() => {});
+  }, []);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return [];
