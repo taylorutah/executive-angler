@@ -83,7 +83,7 @@ export default async function GuidesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-32 pb-16 sm:pb-20">
+      <section className="bg-[#0D1117] pt-20 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Expert Voices
@@ -99,7 +99,7 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] py-12 sm:py-16">
+      <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
             Featured Guides
