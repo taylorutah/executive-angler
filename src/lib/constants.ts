@@ -85,6 +85,6 @@ export const NAV_LINKS: NavLink[] = [
 export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/executiveangler",
   youtube: "https://youtube.com/@executiveangler",
-  facebook: "https://facebook.com/executiveangler",
+  facebook: "https://www.facebook.com/profile.php?id=61582264062434",
   x: "https://x.com/executiveangler",
 } as const;
