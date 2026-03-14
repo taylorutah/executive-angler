@@ -103,17 +103,30 @@ export async function POST(req: NextRequest) {
     const parseArr = (v: unknown) =>
       typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
 
+    const str = (v: unknown) => (v !== undefined && v !== null ? String(v) : undefined);
+
+    const row: Record<string, unknown> = {
+      user_id: user.id,
+      name: str(body.name),
+      type: str(body.type),
+      size: str(body.size),
+      hook: str(body.hook),
+      bead_size: str(body.bead_size),
+      bead_color: str(body.bead_color),
+      fly_color: str(body.fly_color),
+      materials: str(body.materials),
+      description: str(body.description),
+      video_url: str(body.video_url),
+      tags: parseArr(body.tags),
+      ...(imageUrl ? { image_url: imageUrl } : {}),
+    };
+
+    // Remove undefined values so Supabase uses column defaults
+    Object.keys(row).forEach((k) => row[k] === undefined && delete row[k]);
+
     const { data, error } = await supabase
       .from("fly_patterns")
-      .insert({
-        ...body,
-        user_id: user.id,
-        ...(imageUrl ? { image_url: imageUrl } : {}),
-        size: parseArr(body.size),
-        bead_color: parseArr(body.bead_color),
-        fly_color: parseArr(body.fly_color),
-        tags: parseArr(body.tags),
-      })
+      .insert(row)
       .select()
       .single();
 
@@ -175,16 +188,29 @@ export async function PATCH(req: NextRequest) {
     const parseArr = (v: unknown) =>
       typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : v;
 
+    const str = (v: unknown) => (v !== undefined ? String(v) : undefined);
+
+    const updates: Record<string, unknown> = {
+      name: str(body.name),
+      type: str(body.type),
+      size: str(body.size),
+      hook: str(body.hook),
+      bead_size: str(body.bead_size),
+      bead_color: str(body.bead_color),
+      fly_color: str(body.fly_color),
+      materials: str(body.materials),
+      description: str(body.description),
+      video_url: str(body.video_url),
+      tags: parseArr(body.tags),
+      ...(imageUrl ? { image_url: imageUrl } : {}),
+    };
+
+    // Remove undefined values so we only update fields that were sent
+    Object.keys(updates).forEach((k) => updates[k] === undefined && delete updates[k]);
+
     const { error } = await supabase
       .from("fly_patterns")
-      .update({
-        ...body,
-        ...(imageUrl ? { image_url: imageUrl } : {}),
-        size: parseArr(body.size),
-        bead_color: parseArr(body.bead_color),
-        fly_color: parseArr(body.fly_color),
-        tags: parseArr(body.tags),
-      })
+      .update(updates)
       .eq("id", id)
       .eq("user_id", user.id);
 

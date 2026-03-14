@@ -112,13 +112,13 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="hook_sizes" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="size" className="block text-sm font-semibold text-[#8B949E] mb-2">
               Hook Sizes
             </label>
             <input
               type="text"
-              id="hook_sizes"
-              name="hook_sizes"
+              id="size"
+              name="size"
               placeholder="#14, #16, #18"
               className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
@@ -208,6 +208,20 @@ export default function NewFlyPatternPage() {
               placeholder="https://youtube.com/..."
               className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
+          </div>
+
+          <div>
+            <label htmlFor="tags" className="block text-sm font-semibold text-[#8B949E] mb-2">
+              Tags
+            </label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder="euro, tungsten, nymph, fast-water"
+              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
+            />
+            <p className="text-xs text-[#484F58] mt-1">Separate with commas</p>
           </div>
 
           <div>

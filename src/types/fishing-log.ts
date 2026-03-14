@@ -1,10 +1,18 @@
 export interface FlyPattern {
   id: string;
+  user_id: string;
   name: string;
   type?: string;
   size?: string;
   hook?: string;
+  bead_size?: string;
+  bead_color?: string;
+  fly_color?: string;
   materials?: string;
+  description?: string;
+  video_url?: string;
+  tags?: string[];
+  image_url?: string;
   notes?: string;
   notion_id?: string;
   created_at: string;
