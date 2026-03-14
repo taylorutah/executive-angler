@@ -176,7 +176,7 @@ export default function RiversMapView({
     });
   }, [selectedState]);
 
-  // Add/update user location marker
+  // Add/update user location marker + fly to it
   useEffect(() => {
     if (!map.current) return;
 
@@ -190,25 +190,31 @@ export default function RiversMapView({
 
     const el = document.createElement("div");
     el.style.cssText = `
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background-color: #3B82F6;
+      background-color: #00B4D8;
       border: 3px solid white;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.4);
+      box-shadow: 0 0 0 4px rgba(0,180,216,0.35);
+      animation: pulse-ring 2s ease-out infinite;
     `;
 
     userMarkerRef.current = new mapboxgl.Marker({ element: el })
       .setLngLat([userLocation.lng, userLocation.lat])
       .addTo(map.current);
+
+    // Fly to user location
+    map.current.flyTo({
+      center: [userLocation.lng, userLocation.lat],
+      zoom: 7,
+      speed: 1.4,
+    });
   }, [userLocation]);
 
   return (
     <div
       ref={mapContainer}
       className={className}
-      style={{ height: "350px" }}
-      // Responsive height via Tailwind in parent, but set a sensible default here
     />
   );
 }

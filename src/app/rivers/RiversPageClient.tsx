@@ -53,6 +53,9 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [nearbyIds, setNearbyIds] = useState<Set<string>>(new Set());
   const [locating, setLocating] = useState(false);
+  const [geoError, setGeoError] = useState("");
+  const [zipInput, setZipInput] = useState("");
+  const [zipLoading, setZipLoading] = useState(false);
 
   // Filtered + sorted rivers
   const filteredRivers = useMemo(() => {
@@ -76,30 +79,73 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
     return result;
   }, [rivers, selectedStateName, nearbyIds]);
 
-  // Near Me handler
+  // Shared: given a lat/lng, find nearby rivers and zoom map
+  const applyLocation = (lat: number, lng: number) => {
+    setUserLocation({ lat, lng });
+    setGeoError("");
+
+    const withDist = rivers
+      .filter((r) => r.latitude && r.longitude)
+      .map((r) => ({
+        ...r,
+        dist: haversineKm(lat, lng, Number(r.latitude), Number(r.longitude)),
+      }))
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, 8);
+
+    setNearbyIds(new Set(withDist.map((r) => r.id)));
+    setSelectedStateName(""); // clear state filter when using location
+    setView("map");
+  };
+
+  // Near Me handler — browser geolocation
   const handleNearMe = () => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      setGeoError("Geolocation not supported by your browser.");
+      return;
+    }
     setLocating(true);
+    setGeoError("");
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const { latitude: lat, longitude: lng } = pos.coords;
-        setUserLocation({ lat, lng });
-
-        const withDist = rivers
-          .filter((r) => r.latitude && r.longitude)
-          .map((r) => ({
-            ...r,
-            dist: haversineKm(lat, lng, Number(r.latitude), Number(r.longitude)),
-          }))
-          .sort((a, b) => a.dist - b.dist)
-          .slice(0, 8);
-
-        setNearbyIds(new Set(withDist.map((r) => r.id)));
-        setView("map");
+        applyLocation(pos.coords.latitude, pos.coords.longitude);
         setLocating(false);
       },
-      () => setLocating(false)
+      (err) => {
+        setLocating(false);
+        if (err.code === 1) {
+          setGeoError("Location access denied. Try entering a ZIP code instead.");
+        } else {
+          setGeoError("Could not get location. Try a ZIP code.");
+        }
+      },
+      { timeout: 10000, maximumAge: 60000 }
     );
+  };
+
+  // ZIP code lookup via free geocoding API
+  const handleZipSearch = async () => {
+    const zip = zipInput.trim();
+    if (!zip) return;
+    setZipLoading(true);
+    setGeoError("");
+    try {
+      const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(zip)}.json?country=US&types=postcode&access_token=${token}`
+      );
+      const data = await res.json();
+      if (data.features?.length > 0) {
+        const [lng, lat] = data.features[0].center;
+        applyLocation(lat, lng);
+      } else {
+        setGeoError("ZIP code not found.");
+      }
+    } catch {
+      setGeoError("ZIP lookup failed. Try again.");
+    } finally {
+      setZipLoading(false);
+    }
   };
 
   const selectedStateObj =
@@ -151,10 +197,38 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
         <button
           onClick={handleNearMe}
           disabled={locating}
-          className="border border-[#E8923A] text-[#E8923A] hover:bg-[#E8923A] hover:text-white rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
+          className="border border-[#E8923A] text-[#E8923A] hover:bg-[#E8923A] hover:text-white rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
         >
-          {locating ? "..." : "📍 Near Me"}
+          {locating ? (
+            <span className="flex items-center gap-1.5">
+              <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+              Locating…
+            </span>
+          ) : "📍 Near Me"}
         </button>
+
+        {/* ZIP input */}
+        <div className="flex items-center gap-1.5">
+          <input
+            type="text"
+            value={zipInput}
+            onChange={(e) => setZipInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleZipSearch()}
+            placeholder="ZIP code"
+            maxLength={5}
+            className="bg-[#161B22] border border-[#21262D] text-[#F0F6FC] placeholder-[#484F58] rounded-lg px-3 py-2 text-sm w-28 focus:border-[#E8923A] focus:outline-none"
+          />
+          <button
+            onClick={handleZipSearch}
+            disabled={zipLoading || !zipInput.trim()}
+            className="bg-[#161B22] border border-[#21262D] text-[#8B949E] hover:text-[#E8923A] hover:border-[#E8923A] rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-40"
+          >
+            {zipLoading ? "…" : "Go"}
+          </button>
+        </div>
 
         {/* Result count */}
         <span className="text-sm text-[#484F58] ml-auto">
@@ -163,6 +237,11 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
           {nearbyIds.size > 0 && !selectedStateName ? " · showing nearby" : ""}
         </span>
       </div>
+
+      {/* Error message */}
+      {geoError && (
+        <p className="text-sm text-red-400 mb-4 -mt-2">{geoError}</p>
+      )}
 
       {/* ── List View ────────────────────────────────────────────────────── */}
       {view === "list" && (
