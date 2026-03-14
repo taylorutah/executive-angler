@@ -8,6 +8,7 @@ function mapRow(row: Record<string, unknown>): River {
     slug: row.slug as string,
     name: row.name as string,
     destinationId: (row.destination_id ?? row.ea_destination_id ?? "") as string,
+    additionalDestinationIds: (row.additional_destination_ids as string[]) ?? [],
     description: (row.description ?? "") as string,
     heroImageUrl: (row.hero_image_url ?? "") as string,
     thumbnailUrl: (row.thumbnail_url ?? row.hero_image_url ?? "") as string,

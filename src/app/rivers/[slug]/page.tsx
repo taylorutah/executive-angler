@@ -68,8 +68,9 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, activityStats] = await Promise.all([
+  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, activityStats] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
+    Promise.all((river.additionalDestinationIds ?? []).map((id) => getDestinationById(id))),
     getLodgesByRiver(river.id),
     river.destinationId ? getLodgesByDestination(river.destinationId) : Promise.resolve([]),
     getGuidesByRiver(river.id),
@@ -92,10 +93,16 @@ export default async function RiverPage({ params }: Props) {
     return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) === 1 ? "" : "s"} ago`;
   }
 
+  // All destinations (primary + additional), filtered to truthy
+  const allDests = [dest, ...(additionalDests ?? [])].filter(Boolean) as NonNullable<typeof dest>[];
+  const destinationLabel = allDests.length > 0
+    ? allDests.map((d) => d!.name).join(" · ")
+    : null;
+
   const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
   const lodgesHeading = riverLodges.length > 0
     ? "Lodges on This River"
-    : `Lodges in ${dest?.name ?? "This Area"}`;
+    : `Lodges in ${destinationLabel ?? "This Area"}`;
 
   const mapMarkers = [
     ...(river.accessPoints || []).map((ap) => ({
@@ -108,7 +115,7 @@ export default async function RiverPage({ params }: Props) {
   ];
 
   const quickFacts = [
-    ...(dest ? [{ label: "Destination", value: dest.name }] : []),
+    ...(destinationLabel ? [{ label: "States", value: destinationLabel }] : []),
     ...(river.lengthMiles
       ? [{ label: "Length", value: `${river.lengthMiles} miles` }]
       : []),
@@ -140,7 +147,7 @@ export default async function RiverPage({ params }: Props) {
         imageUrl={river.heroImageUrl}
         imageAlt={`${river.name} fly fishing`}
         title={river.name}
-        subtitle={`${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
+        subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
         height="h-[60vh]"
       />
 
@@ -151,6 +158,11 @@ export default async function RiverPage({ params }: Props) {
               items={[
                 { label: "Rivers", href: "/rivers" },
                 ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                ...(additionalDests && additionalDests.length > 0
+                  ? additionalDests
+                      .filter(Boolean)
+                      .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
+                  : []),
                 { label: river.name },
               ]}
             />

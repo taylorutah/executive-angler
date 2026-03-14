@@ -63,8 +63,12 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
 
     if (selectedStateName) {
       result = result.filter((r) => {
-        const state = DESTINATION_STATE_MAP[r.destinationId ?? ""];
-        return state === selectedStateName;
+        const primaryState = DESTINATION_STATE_MAP[r.destinationId ?? ""];
+        if (primaryState === selectedStateName) return true;
+        // Also check additional destination IDs (e.g. Green River: Wyoming + Utah)
+        return (r.additionalDestinationIds ?? []).some(
+          (id) => DESTINATION_STATE_MAP[id] === selectedStateName
+        );
       });
     }
 

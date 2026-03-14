@@ -28,6 +28,7 @@ export interface River {
   slug: string;
   name: string;
   destinationId: string;
+  additionalDestinationIds?: string[];
   description: string;
   heroImageUrl: string;
   thumbnailUrl?: string;
