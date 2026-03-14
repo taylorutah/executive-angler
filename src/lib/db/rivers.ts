@@ -121,3 +121,4 @@ export async function getRiversByIds(ids: string[]): Promise<River[]> {
     return staticRivers.filter((r) => ids.includes(r.id));
   }
 }
+// River images updated Sat Mar 14 15:52:26 MDT 2026
