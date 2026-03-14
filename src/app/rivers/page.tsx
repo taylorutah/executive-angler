@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
-import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllRivers } from "@/lib/db";
-import { riverListConfig } from "@/lib/list-configs";
-import type { CardData } from "@/types/list-config";
+import RiversPageClient from "./RiversPageClient";
 
 export const revalidate = 3600;
 
@@ -37,20 +34,24 @@ export default async function RiversPage() {
     Boolean
   );
 
-  const items: (CardData & { _filterValues: Record<string, string> })[] = rivers.map((river) => ({
-    href: `/rivers/${river.slug}`,
-    imageUrl: river.heroImageUrl,
-    imageAlt: `${river.name} fly fishing`,
-    title: river.name,
-    subtitle: river.primarySpecies.join(", "),
-    meta: `${river.flowType} · ${river.difficulty}`,
-    badges: [river.wadingType],
+  // Prepare serializable river data for the client component
+  const allRiversData = rivers.map((river) => ({
+    id: river.id,
+    slug: river.slug,
+    name: river.name,
+    destinationId: river.destinationId,
+    description: river.description,
+    heroImageUrl: river.heroImageUrl,
+    primarySpecies: river.primarySpecies,
+    flowType: river.flowType,
+    difficulty: river.difficulty,
+    wadingType: river.wadingType,
+    bestMonths: river.bestMonths,
+    latitude: river.latitude,
+    longitude: river.longitude,
     featured: river.featured,
-    description: river.description?.substring(0, 150),
-    _filterValues: {
-      difficulty: river.difficulty,
-      wading: river.wadingType,
-    },
+    // accessPoints needed by River type — pass empty array if not serializing full data
+    accessPoints: [],
   }));
 
   return (
@@ -144,21 +145,9 @@ export default async function RiversPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[#161B22] border-t border-[#21262D]">
+      <section className="bg-[#161B22] border-t border-[#21262D] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
-            All Rivers &amp; Waters
-          </h2>
-          <p className="text-sm text-[#8B949E] mt-1">
-            {rivers.length} rivers — filterable by difficulty, access, and wading type
-          </p>
-        </div>
-      </div>
-      <section className="bg-[#161B22] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Suspense>
-            <EntityListView items={items} config={riverListConfig} storageKey="rivers" />
-          </Suspense>
+          <RiversPageClient rivers={allRiversData} />
         </div>
       </section>
     </>
