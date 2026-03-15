@@ -20,6 +20,8 @@ interface PhotoSubmissionFormProps {
   entityType: string;
   entityId: string;
   entityName: string;
+  defaultOpen?: boolean;
+  showQualityGuidance?: boolean;
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -29,9 +31,11 @@ export default function PhotoSubmissionForm({
   entityType,
   entityId,
   entityName,
+  defaultOpen,
+  showQualityGuidance,
 }: PhotoSubmissionFormProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen ?? false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -302,6 +306,11 @@ export default function PhotoSubmissionForm({
                         </span>{" "}
                         or drag and drop
                       </p>
+                      {showQualityGuidance && (
+                        <p className="text-xs text-[#8B949E] mt-1">
+                          For best results: minimum 2000px wide, JPEG or PNG, under 20MB. Landscape orientation preferred for river shots.
+                        </p>
+                      )}
                       <p className="text-xs text-[#484F58] mt-1">
                         JPEG or PNG, max 10MB
                       </p>

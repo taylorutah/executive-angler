@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       .insert({
         entity_type: entityType,
         entity_id: entityId,
-        submitter_id: user.id,
+        user_id: user.id,
         submitter_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Anonymous",
         submitter_email: user.email,
         photo_url: photoUrl,

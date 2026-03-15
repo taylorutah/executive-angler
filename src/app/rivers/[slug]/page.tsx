@@ -11,8 +11,8 @@ import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
-import CommunityPhotos from "@/components/ui/CommunityPhotos";
-import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
+import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
+import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -145,6 +145,8 @@ export default async function RiverPage({ params }: Props) {
         subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
         height="h-[60vh]"
       />
+
+      <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -421,9 +423,8 @@ export default async function RiverPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Community Photos */}
-              <CommunityPhotos entityType="river" entityId={river.id} />
-              <PhotoSubmissionForm entityType="river" entityId={river.id} entityName={river.name} />
+
+
             </div>
 
             {/* Sidebar */}
@@ -463,6 +464,8 @@ export default async function RiverPage({ params }: Props) {
                   })}
                 </div>
               </div>
+
+              <RiverSidebarPhotoWidget riverId={river.id} riverSlug={river.slug} />
 
               {/* Nearby Guides */}
               {nearbyGuides.length > 0 && (
