@@ -155,6 +155,30 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
   const selectedStateObj =
     US_STATES.find((s) => s.name === selectedStateName) ?? null;
 
+  // Rivers to list below the map — nearby first (ordered), otherwise top filtered, capped at 8
+  const MAP_LIST_LIMIT = 8;
+
+  interface RiverWithDist extends River { dist?: number }
+
+  const mapListRivers = useMemo((): RiverWithDist[] => {
+    if (nearbyIds.size > 0 && userLocation) {
+      return rivers
+        .filter((r) => nearbyIds.has(r.id) && r.latitude && r.longitude)
+        .map((r): RiverWithDist => ({
+          ...r,
+          dist: haversineKm(
+            userLocation.lat,
+            userLocation.lng,
+            Number(r.latitude),
+            Number(r.longitude)
+          ),
+        }))
+        .sort((a, b) => (a.dist ?? 0) - (b.dist ?? 0))
+        .slice(0, MAP_LIST_LIMIT);
+    }
+    return filteredRivers.slice(0, MAP_LIST_LIMIT);
+  }, [rivers, nearbyIds, userLocation, filteredRivers]);
+
   return (
     <div>
       {/* ── Controls Bar ─────────────────────────────────────────────────── */}
@@ -306,13 +330,75 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
 
       {/* ── Map View ─────────────────────────────────────────────────────── */}
       {view === "map" && (
-        <div className="h-[350px] md:h-[520px]">
-          <DynamicRiversMapView
-            rivers={filteredRivers}
-            selectedState={selectedStateObj}
-            userLocation={userLocation}
-            className="w-full h-full rounded-xl overflow-hidden"
-          />
+        <div>
+          <div className="h-[350px] md:h-[520px]">
+            <DynamicRiversMapView
+              rivers={filteredRivers}
+              selectedState={selectedStateObj}
+              userLocation={userLocation}
+              className="w-full h-full rounded-xl overflow-hidden"
+            />
+          </div>
+
+          {/* Rivers below the map */}
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-[#F0F6FC]">
+                {nearbyIds.size > 0 && userLocation
+                  ? "Nearest Rivers"
+                  : selectedStateName
+                  ? `Rivers in ${selectedStateName}`
+                  : "Rivers"}
+              </h3>
+              {filteredRivers.length > MAP_LIST_LIMIT && (
+                <span className="text-xs text-[#484F58]">
+                  Showing {mapListRivers.length} of {filteredRivers.length} —{" "}
+                  <button
+                    onClick={() => setView("list")}
+                    className="text-[#E8923A] hover:underline"
+                  >
+                    view all
+                  </button>
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {mapListRivers.map((river) => (
+                <Link
+                  key={river.id}
+                  href={`/rivers/${river.slug}`}
+                  className="group block bg-[#161B22] rounded-xl overflow-hidden hover:shadow-lg transition-shadow ring-1 ring-[#21262D] hover:ring-[#E8923A]"
+                >
+                  <div className="relative h-28">
+                    <Image
+                      src={river.heroImageUrl}
+                      alt={river.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    {river.dist != null && (
+                      <div className="absolute top-2 right-2">
+                        <span className="bg-black/60 text-[#E8923A] text-[10px] font-mono px-1.5 py-0.5 rounded-full">
+                          {Math.round(river.dist)} km
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-2.5">
+                    <h4 className="font-heading font-bold text-[#F0F6FC] text-xs leading-tight line-clamp-1 group-hover:text-[#E8923A] transition-colors">
+                      {river.name}
+                    </h4>
+                    <p className="mt-0.5 text-[10px] text-[#8B949E] line-clamp-1">
+                      {river.primarySpecies.slice(0, 2).join(", ")}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
