@@ -14,7 +14,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { destinations } from "@/data/destinations";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
@@ -52,12 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  try {
-    const allDests = await getAllDestinations();
-    return allDests.map((d) => ({ slug: d.slug }));
-  } catch {
-    return destinations.map((d) => ({ slug: d.slug }));
-  }
+  const allDests = await getAllDestinations();
+  return allDests.map((d) => ({ slug: d.slug }));
 }
 
 export const revalidate = 3600;

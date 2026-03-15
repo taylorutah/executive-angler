@@ -6,7 +6,6 @@ import { Clock, User, Calendar } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import { articles } from "@/data/articles";
 import { SITE_URL } from "@/lib/constants";
 import { getArticleBySlug, getAllArticles } from "@/lib/db";
 
@@ -35,8 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  const allArticles = await getAllArticles();
+  return allArticles.map((a) => ({ slug: a.slug }));
 }
 
 export default async function ArticlePage({ params }: Props) {

@@ -15,7 +15,6 @@ import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { lodges } from "@/data/lodges";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllLodges,
@@ -53,12 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  try {
-    const allLodges = await getAllLodges();
-    return allLodges.map((l) => ({ slug: l.slug }));
-  } catch {
-    return lodges.map((l) => ({ slug: l.slug }));
-  }
+  const allLodges = await getAllLodges();
+  return allLodges.map((l) => ({ slug: l.slug }));
 }
 
 export default async function LodgePage({ params }: Props) {

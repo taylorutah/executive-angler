@@ -1,5 +1,4 @@
 import type { Article } from "@/types/entities";
-import { articles as staticArticles } from "@/data/articles";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(r: Record<string, unknown>): Article {
@@ -25,65 +24,76 @@ function mapRow(r: Record<string, unknown>): Article {
   };
 }
 
-let cache: Article[] | null = null;
-let cacheTime = 0;
-const TTL = 5 * 60 * 1000;
-
 export async function getAllArticles(): Promise<Article[]> {
-  if (cache && Date.now() - cacheTime < TTL) return cache;
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("articles").select("*").order("published_at", { ascending: false });
-    if (error) throw error;
-    if (!data?.length) throw new Error("empty");
-    cache = data.map(mapRow);
-    cacheTime = Date.now();
-    return cache;
-  } catch {
-    return staticArticles;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("[getAllArticles] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticArticles.find((a) => a.slug === slug);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[getArticleBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getFeaturedArticles(): Promise<Article[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("articles").select("*").eq("featured", true).order("published_at", { ascending: false });
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticArticles.filter((a) => a.featured);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("featured", true)
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("[getFeaturedArticles] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getArticlesByDestination(destinationId: string): Promise<Article[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("articles").select("*").contains("related_destination_ids", [destinationId]).order("published_at", { ascending: false });
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticArticles.filter((a) => (a.relatedDestinationIds ?? []).includes(destinationId));
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .contains("related_destination_ids", [destinationId])
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("[getArticlesByDestination] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getArticlesByRiver(riverId: string): Promise<Article[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("articles").select("*").contains("related_river_ids", [riverId]).order("published_at", { ascending: false });
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticArticles.filter((a) => (a.relatedRiverIds ?? []).includes(riverId));
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .contains("related_river_ids", [riverId])
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("[getArticlesByRiver] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }

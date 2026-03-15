@@ -1,5 +1,4 @@
 import type { Lodge } from "@/types/entities";
-import { lodges as staticLodges } from "@/data/lodges";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(r: Record<string, unknown>): Lodge {
@@ -37,65 +36,75 @@ function mapRow(r: Record<string, unknown>): Lodge {
   };
 }
 
-let cache: Lodge[] | null = null;
-let cacheTime = 0;
-const TTL = 5 * 60 * 1000;
-
 export async function getAllLodges(): Promise<Lodge[]> {
-  if (cache && Date.now() - cacheTime < TTL) return cache;
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("lodges").select("*").order("name");
-    if (error) throw error;
-    if (!data?.length) throw new Error("empty");
-    cache = data.map(mapRow);
-    cacheTime = Date.now();
-    return cache;
-  } catch {
-    return staticLodges;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("lodges")
+    .select("*")
+    .order("name");
+
+  if (error) {
+    console.error("[getAllLodges] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getLodgeBySlug(slug: string): Promise<Lodge | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("lodges").select("*").eq("slug", slug).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticLodges.find((l) => l.slug === slug);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("lodges")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[getLodgeBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getFeaturedLodges(): Promise<Lodge[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("lodges").select("*").eq("featured", true).order("name");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticLodges.filter((l) => l.featured);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("lodges")
+    .select("*")
+    .eq("featured", true)
+    .order("name");
+
+  if (error) {
+    console.error("[getFeaturedLodges] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getLodgesByDestination(destinationId: string): Promise<Lodge[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("lodges").select("*").eq("destination_id", destinationId).order("name");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticLodges.filter((l) => l.destinationId === destinationId);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("lodges")
+    .select("*")
+    .eq("destination_id", destinationId)
+    .order("name");
+
+  if (error) {
+    console.error("[getLodgesByDestination] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getLodgesByRiver(riverId: string): Promise<Lodge[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("lodges").select("*").contains("nearby_river_ids", [riverId]);
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticLodges.filter((l) => (l.nearbyRiverIds || []).includes(riverId));
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("lodges")
+    .select("*")
+    .contains("nearby_river_ids", [riverId]);
+
+  if (error) {
+    console.error("[getLodgesByRiver] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }

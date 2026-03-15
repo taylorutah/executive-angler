@@ -1,5 +1,4 @@
 import type { Destination } from "@/types/entities";
-import { destinations as staticDestinations } from "@/data/destinations";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(r: Record<string, unknown>): Destination {
@@ -29,66 +28,77 @@ function mapRow(r: Record<string, unknown>): Destination {
   };
 }
 
-let cache: Destination[] | null = null;
-let cacheTime = 0;
-const TTL = 5 * 60 * 1000;
-
 export async function getAllDestinations(): Promise<Destination[]> {
-  if (cache && Date.now() - cacheTime < TTL) return cache;
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("destinations").select("*").order("sort_order", { ascending: true }).order("name");
-    if (error) throw error;
-    if (!data?.length) throw new Error("empty");
-    cache = data.map(mapRow);
-    cacheTime = Date.now();
-    return cache;
-  } catch {
-    return staticDestinations;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("destinations")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("name");
+
+  if (error) {
+    console.error("[getAllDestinations] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getDestinationBySlug(slug: string): Promise<Destination | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("destinations").select("*").eq("slug", slug).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticDestinations.find((d) => d.slug === slug);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("destinations")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[getDestinationBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getDestinationById(id: string): Promise<Destination | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("destinations").select("*").eq("id", id).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticDestinations.find((d) => d.id === id);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("destinations")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("[getDestinationById] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getDestinationsByIds(ids: string[]): Promise<Destination[]> {
   if (!ids.length) return [];
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("destinations").select("*").in("id", ids);
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticDestinations.filter((d) => ids.includes(d.id));
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("destinations")
+    .select("*")
+    .in("id", ids);
+
+  if (error) {
+    console.error("[getDestinationsByIds] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getFeaturedDestinations(): Promise<Destination[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("destinations").select("*").eq("featured", true).order("sort_order");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticDestinations.filter((d) => d.featured);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("destinations")
+    .select("*")
+    .eq("featured", true)
+    .order("sort_order");
+
+  if (error) {
+    console.error("[getFeaturedDestinations] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }

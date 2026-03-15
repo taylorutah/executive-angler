@@ -1,5 +1,4 @@
 import type { River } from "@/types/entities";
-import { rivers as staticRivers } from "@/data/rivers";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(row: Record<string, unknown>): River {
@@ -30,96 +29,76 @@ function mapRow(row: Record<string, unknown>): River {
   };
 }
 
-let cachedRivers: River[] | null = null;
-let cacheTime = 0;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
 export async function getAllRivers(): Promise<River[]> {
-  // Return in-memory cache if fresh
-  if (cachedRivers && Date.now() - cacheTime < CACHE_TTL) {
-    return cachedRivers;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("rivers")
+    .select("*")
+    .order("name", { ascending: true });
+
+  if (error) {
+    console.error("[getAllRivers] Supabase error:", error);
+    throw error;
   }
-
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase
-      .from("rivers")
-      .select("*")
-      .order("name", { ascending: true });
-
-    if (error) throw error;
-    if (!data || data.length === 0) throw new Error("No rivers returned");
-
-    cachedRivers = data.map(mapRow);
-    cacheTime = Date.now();
-    return cachedRivers;
-  } catch (err) {
-    console.warn("[getAllRivers] Supabase fetch failed, falling back to static data:", err);
-    return staticRivers;
-  }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getRiverBySlug(slug: string): Promise<River | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase
-      .from("rivers")
-      .select("*")
-      .eq("slug", slug)
-      .single();
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("rivers")
+    .select("*")
+    .eq("slug", slug)
+    .single();
 
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticRivers.find((r) => r.slug === slug);
+  if (error) {
+    console.error("[getRiverBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getFeaturedRivers(): Promise<River[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase
-      .from("rivers")
-      .select("*")
-      .eq("featured", true)
-      .order("name");
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("rivers")
+    .select("*")
+    .eq("featured", true)
+    .order("name");
 
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticRivers.filter((r) => r.featured);
+  if (error) {
+    console.error("[getFeaturedRivers] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getRiversByDestination(destinationId: string): Promise<River[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase
-      .from("rivers")
-      .select("*")
-      .eq("destination_id", destinationId)
-      .order("name");
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("rivers")
+    .select("*")
+    .eq("destination_id", destinationId)
+    .order("name");
 
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticRivers.filter((r) => r.destinationId === destinationId);
+  if (error) {
+    console.error("[getRiversByDestination] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getRiversByIds(ids: string[]): Promise<River[]> {
   if (ids.length === 0) return [];
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase
-      .from("rivers")
-      .select("*")
-      .in("id", ids);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("rivers")
+    .select("*")
+    .in("id", ids);
 
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticRivers.filter((r) => ids.includes(r.id));
+  if (error) {
+    console.error("[getRiversByIds] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
-// River images updated Sat Mar 14 15:52:26 MDT 2026

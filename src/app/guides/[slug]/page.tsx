@@ -12,7 +12,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { guides } from "@/data/guides";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllGuides,
@@ -46,12 +45,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  try {
-    const allGuides = await getAllGuides();
-    return allGuides.map((g) => ({ slug: g.slug }));
-  } catch {
-    return guides.map((g) => ({ slug: g.slug }));
-  }
+  const allGuides = await getAllGuides();
+  return allGuides.map((g) => ({ slug: g.slug }));
 }
 
 export default async function GuidePage({ params }: Props) {

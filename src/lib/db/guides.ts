@@ -1,5 +1,4 @@
 import type { Guide } from "@/types/entities";
-import { guides as staticGuides } from "@/data/guides";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(r: Record<string, unknown>): Guide {
@@ -27,55 +26,61 @@ function mapRow(r: Record<string, unknown>): Guide {
   };
 }
 
-let cache: Guide[] | null = null;
-let cacheTime = 0;
-const TTL = 5 * 60 * 1000;
-
 export async function getAllGuides(): Promise<Guide[]> {
-  if (cache && Date.now() - cacheTime < TTL) return cache;
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("guides").select("*").order("name");
-    if (error) throw error;
-    if (!data?.length) throw new Error("empty");
-    cache = data.map(mapRow);
-    cacheTime = Date.now();
-    return cache;
-  } catch {
-    return staticGuides;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("guides")
+    .select("*")
+    .order("name");
+
+  if (error) {
+    console.error("[getAllGuides] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("guides").select("*").eq("slug", slug).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticGuides.find((g) => g.slug === slug);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("guides")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[getGuideBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getGuidesByRiver(riverId: string): Promise<Guide[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("guides").select("*").contains("river_ids", [riverId]).order("name");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticGuides.filter((g) => g.riverIds?.includes(riverId));
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("guides")
+    .select("*")
+    .contains("river_ids", [riverId])
+    .order("name");
+
+  if (error) {
+    console.error("[getGuidesByRiver] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getGuidesByDestination(destinationId: string): Promise<Guide[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("guides").select("*").eq("destination_id", destinationId).order("name");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticGuides.filter((g) => g.destinationId === destinationId);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("guides")
+    .select("*")
+    .eq("destination_id", destinationId)
+    .order("name");
+
+  if (error) {
+    console.error("[getGuidesByDestination] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
-// Guide photos fixed Sat Mar 14 15:54:23 MDT 2026

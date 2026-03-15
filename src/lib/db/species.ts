@@ -1,3 +1,4 @@
+// TODO: migrate species to Supabase table
 import type { Species } from "@/types/entities";
 import { species as staticSpecies } from "@/data/species";
 

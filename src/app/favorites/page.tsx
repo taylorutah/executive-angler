@@ -4,12 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, Trash2, MapPin, Fish, BookOpen, Home } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { destinations } from "@/data/destinations";
-import { rivers } from "@/data/rivers";
-import { lodges } from "@/data/lodges";
-import { articles } from "@/data/articles";
-import { guides } from "@/data/guides";
-import { flyShops } from "@/data/fly-shops";
 
 interface Favorite {
   id: string;
@@ -18,39 +12,77 @@ interface Favorite {
   created_at: string;
 }
 
-function getEntityDetails(type: string, id: string) {
+interface EntityInfo {
+  name: string;
+  href: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
+}
+
+function iconForType(type: string) {
   switch (type) {
-    case "destination": {
-      const d = destinations.find((x) => x.id === id);
-      return d ? { name: d.name, href: `/destinations/${d.slug}`, icon: MapPin } : null;
+    case "destination": return MapPin;
+    case "river": return Fish;
+    case "lodge": return Home;
+    case "article": return BookOpen;
+    case "guide": return MapPin;
+    case "fly_shop": return Home;
+    default: return MapPin;
+  }
+}
+
+function hrefForType(type: string, slug: string): string {
+  switch (type) {
+    case "destination": return `/destinations/${slug}`;
+    case "river": return `/rivers/${slug}`;
+    case "lodge": return `/lodges/${slug}`;
+    case "article": return `/articles/${slug}`;
+    case "guide": return `/guides/${slug}`;
+    case "fly_shop": return `/fly-shops/${slug}`;
+    default: return "/";
+  }
+}
+
+async function fetchEntityInfo(
+  supabase: ReturnType<typeof createClient>,
+  type: string,
+  id: string
+): Promise<EntityInfo | null> {
+  try {
+    let table: string;
+    let nameField = "name";
+    switch (type) {
+      case "destination": table = "destinations"; break;
+      case "river": table = "rivers"; break;
+      case "lodge": table = "lodges"; break;
+      case "article": table = "articles"; nameField = "title"; break;
+      case "guide": table = "guides"; break;
+      case "fly_shop": table = "fly_shops"; break;
+      default: return null;
     }
-    case "river": {
-      const r = rivers.find((x) => x.id === id);
-      return r ? { name: r.name, href: `/rivers/${r.slug}`, icon: Fish } : null;
-    }
-    case "lodge": {
-      const l = lodges.find((x) => x.id === id);
-      return l ? { name: l.name, href: `/lodges/${l.slug}`, icon: Home } : null;
-    }
-    case "article": {
-      const a = articles.find((x) => x.id === id);
-      return a ? { name: a.title, href: `/articles/${a.slug}`, icon: BookOpen } : null;
-    }
-    case "guide": {
-      const g = guides.find((x) => x.id === id);
-      return g ? { name: g.name, href: `/guides/${g.slug}`, icon: MapPin } : null;
-    }
-    case "fly_shop": {
-      const f = flyShops.find((x) => x.id === id);
-      return f ? { name: f.name, href: `/fly-shops/${f.slug}`, icon: Home } : null;
-    }
-    default:
-      return null;
+
+    const { data, error } = await supabase
+      .from(table)
+      .select(`id, slug, ${nameField}`)
+      .eq("id", id)
+      .single();
+
+    if (error || !data) return null;
+
+    const row = data as unknown as Record<string, string>;
+    return {
+      name: row[nameField],
+      href: hrefForType(type, row.slug),
+      icon: iconForType(type),
+    };
+  } catch {
+    return null;
   }
 }
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [entityMap, setEntityMap] = useState<Record<string, EntityInfo | null>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,7 +96,18 @@ export default function FavoritesPage() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    setFavorites(data || []);
+    const favs = data || [];
+    setFavorites(favs);
+
+    // Fetch entity info for each favorite from Supabase
+    const entries = await Promise.all(
+      favs.map(async (fav) => {
+        const key = `${fav.entity_type}:${fav.entity_id}`;
+        const info = await fetchEntityInfo(supabase, fav.entity_type, fav.entity_id);
+        return [key, info] as [string, EntityInfo | null];
+      })
+    );
+    setEntityMap(Object.fromEntries(entries));
     setLoading(false);
   }
 
@@ -117,7 +160,8 @@ export default function FavoritesPage() {
         ) : (
           <div className="space-y-3">
             {favorites.map((fav) => {
-              const details = getEntityDetails(fav.entity_type, fav.entity_id);
+              const key = `${fav.entity_type}:${fav.entity_id}`;
+              const details = entityMap[key];
               if (!details) return null;
               const Icon = details.icon;
 

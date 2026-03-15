@@ -13,7 +13,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { rivers } from "@/data/rivers";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -55,12 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  try {
-    const allRivers = await getAllRivers();
-    return allRivers.map((r) => ({ slug: r.slug }));
-  } catch {
-    return rivers.map((r) => ({ slug: r.slug }));
-  }
+  const allRivers = await getAllRivers();
+  return allRivers.map((r) => ({ slug: r.slug }));
 }
 
 export default async function RiverPage({ params }: Props) {

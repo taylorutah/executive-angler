@@ -1,5 +1,4 @@
 import type { FlyShop } from "@/types/entities";
-import { flyShops as staticFlyShops } from "@/data/fly-shops";
 import { createStaticClient } from "@/lib/supabase/static";
 
 function mapRow(r: Record<string, unknown>): FlyShop {
@@ -27,43 +26,46 @@ function mapRow(r: Record<string, unknown>): FlyShop {
   };
 }
 
-let cache: FlyShop[] | null = null;
-let cacheTime = 0;
-const TTL = 5 * 60 * 1000;
-
 export async function getAllFlyShops(): Promise<FlyShop[]> {
-  if (cache && Date.now() - cacheTime < TTL) return cache;
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("fly_shops").select("*").order("name");
-    if (error) throw error;
-    if (!data?.length) throw new Error("empty");
-    cache = data.map(mapRow);
-    cacheTime = Date.now();
-    return cache;
-  } catch {
-    return staticFlyShops;
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("fly_shops")
+    .select("*")
+    .order("name");
+
+  if (error) {
+    console.error("[getAllFlyShops] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }
 
 export async function getFlyShopBySlug(slug: string): Promise<FlyShop | undefined> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("fly_shops").select("*").eq("slug", slug).single();
-    if (error) throw error;
-    return mapRow(data as Record<string, unknown>);
-  } catch {
-    return staticFlyShops.find((s) => s.slug === slug);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("fly_shops")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[getFlyShopBySlug] Supabase error:", error);
+    throw error;
   }
+  return mapRow(data as Record<string, unknown>);
 }
 
 export async function getFlyShopsByDestination(destinationId: string): Promise<FlyShop[]> {
-  try {
-    const supabase = createStaticClient();
-    const { data, error } = await supabase.from("fly_shops").select("*").eq("destination_id", destinationId).order("name");
-    if (error) throw error;
-    return (data ?? []).map(mapRow);
-  } catch {
-    return staticFlyShops.filter((s) => s.destinationId === destinationId);
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("fly_shops")
+    .select("*")
+    .eq("destination_id", destinationId)
+    .order("name");
+
+  if (error) {
+    console.error("[getFlyShopsByDestination] Supabase error:", error);
+    throw error;
   }
+  return (data ?? []).map(mapRow);
 }

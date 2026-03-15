@@ -12,7 +12,6 @@ import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { flyShops } from "@/data/fly-shops";
 import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination } from "@/lib/db";
@@ -38,12 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  try {
-    const shops = await getAllFlyShops();
-    return shops.map((s) => ({ slug: s.slug }));
-  } catch {
-    return flyShops.map((s) => ({ slug: s.slug }));
-  }
+  const shops = await getAllFlyShops();
+  return shops.map((s) => ({ slug: s.slug }));
 }
 
 export default async function FlyShopPage({ params }: Props) {
