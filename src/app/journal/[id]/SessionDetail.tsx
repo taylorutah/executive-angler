@@ -35,9 +35,12 @@ function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; cla
     mapboxgl.accessToken = token;
 
     try {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const map = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/dark-v11",
+        style: prefersDark
+          ? "mapbox://styles/mapbox/dark-v11"
+          : "mapbox://styles/mapbox/outdoors-v12",
         center: [lng, lat],
         zoom: 12,
         interactive: false, // Disable all interactions
@@ -61,7 +64,7 @@ function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; cla
   }, [mounted, lat, lng]);
 
   if (!mounted) {
-    return <div className={className} style={{ background: "#161B22" }} />;
+    return <div className={`${className} bg-gray-100 dark:bg-[#161B22]`} />;
   }
 
   return <div ref={mapContainer} className={className} />;
