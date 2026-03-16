@@ -1,23 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 
+type UsernameStatus = "idle" | "checking" | "available" | "taken" | "invalid";
+
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [usernameEdited, setUsernameEdited] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>("idle");
+  const [usernameMessage, setUsernameMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  async function triggerUsernameCheck(value: string) {
+    const clean = value.trim().toLowerCase();
+    if (!clean || clean.length < 3) {
+      setUsernameStatus(clean.length === 0 ? "idle" : "invalid");
+      setUsernameMessage(clean.length === 0 ? "" : "At least 3 characters");
+      return;
+    }
+    const formatError = /^[a-z0-9_]+$/.test(clean) ? null : "Letters, numbers, and underscores only";
+    if (formatError) {
+      setUsernameStatus("invalid");
+      setUsernameMessage(formatError);
+      return;
+    }
+
+    setUsernameStatus("checking");
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .eq("username", clean)
+        .maybeSingle();
+      if (data) {
+        setUsernameStatus("taken");
+        setUsernameMessage(`${clean} is already taken — try a different one`);
+      } else {
+        setUsernameStatus("available");
+        setUsernameMessage(`${clean} is available ✓`);
+      }
+    }, 600);
+  }
 
   const canSubmit =
     fullName.trim() !== "" &&
     email.trim() !== "" &&
     password.length >= 8 &&
+    (username.trim() === "" || usernameStatus === "available") &&
     !loading;
 
   async function handleSignup(e: React.FormEvent) {
@@ -27,6 +68,7 @@ export default function SignupPage() {
     setLoading(true);
     const supabase = createClient();
     const name = fullName.trim();
+    const cleanUsername = username.trim().toLowerCase();
 
     const { data: authData, error: signupError } = await supabase.auth.signUp({
       email,
@@ -42,20 +84,44 @@ export default function SignupPage() {
       return;
     }
 
-    // Upsert profile rows — no username (nullable, set later in account settings)
-    await supabase.from("profiles").upsert(
-      { user_id: authData.user.id, display_name: name },
-      { onConflict: "user_id" }
-    );
-
-    await supabase.from("angler_profiles").upsert(
-      { user_id: authData.user.id, display_name: name },
-      { onConflict: "user_id" }
-    );
+    // Upsert profiles — include username only if provided and available
+    if (cleanUsername && usernameStatus === "available") {
+      await supabase.from("profiles").upsert(
+        { user_id: authData.user.id, display_name: name, username: cleanUsername },
+        { onConflict: "user_id" }
+      );
+      await supabase.from("angler_profiles").upsert(
+        { user_id: authData.user.id, display_name: name, username: cleanUsername },
+        { onConflict: "user_id" }
+      );
+    } else {
+      await supabase.from("profiles").upsert(
+        { user_id: authData.user.id, display_name: name },
+        { onConflict: "user_id" }
+      );
+      await supabase.from("angler_profiles").upsert(
+        { user_id: authData.user.id, display_name: name },
+        { onConflict: "user_id" }
+      );
+    }
 
     setSuccess(true);
     setLoading(false);
   }
+
+  const usernameBorder =
+    usernameStatus === "available"
+      ? "border-green-500"
+      : usernameStatus === "taken" || usernameStatus === "invalid"
+      ? "border-red-500"
+      : "border-[#21262D]";
+
+  const usernameMessageColor =
+    usernameStatus === "available"
+      ? "text-green-400"
+      : usernameStatus === "taken" || usernameStatus === "invalid"
+      ? "text-red-400"
+      : "text-[#484F58]";
 
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
@@ -120,11 +186,69 @@ export default function SignupPage() {
                 type="text"
                 required
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  if (!usernameEdited) {
+                    const suggested = e.target.value
+                      .trim()
+                      .toLowerCase()
+                      .split(/\s+/).join("_")
+                      .replace(/[^a-z0-9_]/g, "")
+                      .slice(0, 20);
+                    setUsername(suggested);
+                    triggerUsernameCheck(suggested);
+                  }
+                }}
                 className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none"
                 placeholder="Taylor Warnick"
                 autoComplete="name"
               />
+            </div>
+
+            {/* Username — optional, auto-suggested from name */}
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+                USERNAME{" "}
+                <span className="text-[#484F58] font-normal">· optional</span>
+              </label>
+              <div className="relative">
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => {
+                    setUsernameEdited(true);
+                    setUsername(e.target.value);
+                    triggerUsernameCheck(e.target.value);
+                  }}
+                  className={`w-full px-4 py-3 rounded-lg border ${usernameBorder} bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none pr-10`}
+                  placeholder="taylorutah"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                />
+                {/* Status indicator */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  {usernameStatus === "checking" && (
+                    <svg className="animate-spin h-4 w-4 text-[#484F58]" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  )}
+                  {usernameStatus === "available" && (
+                    <svg className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                  {(usernameStatus === "taken" || usernameStatus === "invalid") && (
+                    <svg className="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <p className={`mt-1 text-xs ${usernameMessageColor}`}>
+                {usernameMessage || "Skip to use your name publicly, or set a handle like taylorutah"}
+              </p>
             </div>
 
             <div>
