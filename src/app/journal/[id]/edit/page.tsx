@@ -226,9 +226,13 @@ export default function EditSessionPage() {
           ...formFields,
           tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           // In simple mode: save the fish count directly; don't overwrite catches
+          // In full mode: recalculate total_fish from catch rows
           ...(isSimpleMode
             ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
-            : { catches: catches.filter((c) => c.species) }
+            : {
+                catches: catches.filter((c) => c.species),
+                total_fish: catches.filter((c) => c.species).reduce((sum, c) => sum + (c.quantities || 1), 0),
+              }
           ),
           // Gear fields only sent in full mode (simple mode preserves existing gear)
           ...(isSimpleMode ? {} : {
