@@ -18,8 +18,8 @@ export default function SessionLocationPicker({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
+  const [satellite, setSatellite] = useState(false);
 
-  // Default to center of Utah if no coords provided
   const [coords, setCoords] = useState({
     lat: initialLat ?? 40.5,
     lng: initialLng ?? -111.5,
@@ -42,12 +42,11 @@ export default function SessionLocationPicker({
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/dark-v11",
+        style: "mapbox://styles/mapbox/outdoors-v12",
         center: [coords.lng, coords.lat],
-        zoom: 10,
+        zoom: 13,
       });
 
-      // Create draggable marker
       marker.current = new mapboxgl.Marker({
         color: "#E8923A",
         draggable: true,
@@ -55,14 +54,12 @@ export default function SessionLocationPicker({
         .setLngLat([coords.lng, coords.lat])
         .addTo(map.current);
 
-      // Handle marker drag
       marker.current.on("dragend", () => {
         const lngLat = marker.current!.getLngLat();
         setCoords({ lat: lngLat.lat, lng: lngLat.lng });
         onChange(lngLat.lat, lngLat.lng);
       });
 
-      // Handle map click
       map.current.on("click", (e) => {
         const { lat, lng } = e.lngLat;
         marker.current?.setLngLat([lng, lat]);
@@ -82,14 +79,28 @@ export default function SessionLocationPicker({
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Update coords display when initialLat/initialLng change
+  // Toggle between outdoors and satellite
+  useEffect(() => {
+    if (!map.current) return;
+    map.current.setStyle(
+      satellite
+        ? "mapbox://styles/mapbox/satellite-streets-v12"
+        : "mapbox://styles/mapbox/outdoors-v12"
+    );
+    // Re-add marker after style change
+    map.current.once("style.load", () => {
+      if (marker.current && map.current) {
+        marker.current.addTo(map.current);
+      }
+    });
+  }, [satellite]);
+
   useEffect(() => {
     if (initialLat !== undefined && initialLng !== undefined) {
       setCoords({ lat: initialLat, lng: initialLng });
     }
   }, [initialLat, initialLng]);
 
-  // Format coordinates for display
   const formatCoord = (value: number, isLat: boolean) => {
     const abs = Math.abs(value);
     const dir = isLat ? (value >= 0 ? "N" : "S") : (value >= 0 ? "E" : "W");
@@ -98,7 +109,22 @@ export default function SessionLocationPicker({
 
   return (
     <div>
-      <div ref={mapContainer} className="h-[200px] w-full rounded-lg" />
+      <div className="relative">
+        <div ref={mapContainer} className="h-[240px] w-full rounded-lg" />
+        {/* Satellite toggle */}
+        <button
+          type="button"
+          onClick={() => setSatellite(s => !s)}
+          className="absolute top-2 right-2 z-10 flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold shadow-md transition-colors"
+          style={{
+            background: satellite ? "#E8923A" : "rgba(255,255,255,0.9)",
+            color: satellite ? "#fff" : "#161B22",
+            border: "1px solid rgba(0,0,0,0.15)",
+          }}
+        >
+          {satellite ? "🗺 Map" : "🛰 Satellite"}
+        </button>
+      </div>
       <p className="mt-1.5 text-xs text-[#484F58] font-['IBM_Plex_Mono']">
         {formatCoord(coords.lat, true)}, {formatCoord(coords.lng, false)}
       </p>
