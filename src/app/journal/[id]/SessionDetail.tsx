@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,6 +9,63 @@ import {
 } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; className?: string }) {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || !mapContainer.current) return;
+
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (!token) {
+      if (mapContainer.current) {
+        mapContainer.current.innerHTML =
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
+      }
+      return;
+    }
+
+    mapboxgl.accessToken = token;
+
+    try {
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/dark-v11",
+        center: [lng, lat],
+        zoom: 12,
+        interactive: false, // Disable all interactions
+      });
+
+      // Add orange marker
+      new mapboxgl.Marker({ color: "#E8923A" })
+        .setLngLat([lng, lat])
+        .addTo(map);
+
+      return () => {
+        map.remove();
+      };
+    } catch (e) {
+      console.error("Mapbox mini-map failed:", e);
+      if (mapContainer.current) {
+        mapContainer.current.innerHTML =
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
+      }
+    }
+  }, [mounted, lat, lng]);
+
+  if (!mounted) {
+    return <div className={className} style={{ background: "#161B22" }} />;
+  }
+
+  return <div ref={mapContainer} className={className} />;
+}
 
 interface Catch {
   id: string;
@@ -55,6 +112,8 @@ interface Session {
   tags?: string[];
   total_fish?: number;
   created_at?: string;
+  latitude?: number;
+  longitude?: number;
   gear_snapshot?: GearSnapshot;
   gear_rod?: { name: string; maker?: string } | null;
   gear_reel?: { name: string; maker?: string } | null;
@@ -329,27 +388,32 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
               {/* RIGHT: Strava-style big stats */}
               <div className="sm:w-72 flex-shrink-0">
+                {/* Session map */}
+                {session.latitude && session.longitude && (
+                  <SessionMiniMap lat={session.latitude} lng={session.longitude} className="w-full aspect-square rounded-xl overflow-hidden mb-4" />
+                )}
+
                 {/* 4 big stats */}
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-4">
                   <div>
-                    <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
                     <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
                   {session.water_temp_f && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{session.water_temp_f}</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.water_temp_f}</p>
                       <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Water Temp</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-none">{biggestFish.toFixed(1)}&quot;</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
                       <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
                   {session.water_clarity && (
                     <div>
-                      <p className="text-xl font-bold text-[#F0F6FC] leading-none">{session.water_clarity}</p>
+                      <p className="text-xl font-bold text-[#E8923A] leading-none">{session.water_clarity}</p>
                       <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}
