@@ -112,6 +112,12 @@ async function buildGearSnapshot(
   return snapshot;
 }
 
+const stripNum = (v: unknown): number | null => {
+  if (v === null || v === undefined || v === "") return null;
+  const n = parseFloat(String(v).replace(/[^0-9.-]/g, ""));
+  return isNaN(n) ? null : n;
+};
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -119,6 +125,9 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const { catches, ...sessionData } = body;
+
+  // Sanitize numeric fields with unit suffixes
+  if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
 
   // Build gear snapshot before insert
   const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
@@ -136,6 +145,7 @@ export async function POST(req: NextRequest) {
       ...c,
       session_id: session.id,
       user_id: user.id,
+      length_inches: stripNum(c.length_inches) ?? null,
     }));
     await supabase.from("catches").insert(catchRows);
   }
@@ -153,6 +163,9 @@ export async function PATCH(req: NextRequest) {
 
   const body = await req.json();
   const { catches, ...sessionData } = body;
+
+  // Sanitize numeric fields with unit suffixes
+  if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
 
   // Only rebuild gear_snapshot when gear IDs are actually present in the payload.
   // A partial PATCH (e.g. notes-only) must NOT overwrite existing gear_snapshot with {}.
@@ -201,6 +214,7 @@ export async function PATCH(req: NextRequest) {
           ...c,
           session_id: id,
           user_id: user.id,
+          length_inches: stripNum(c.length_inches) ?? null,
           fish_image_url: c.fish_image_url ?? existing?.fish_image_url ?? null,
           fish_location_image_url: c.fish_location_image_url ?? existing?.fish_location_image_url ?? null,
           fly_image_url: c.fly_image_url ?? existing?.fly_image_url ?? null,

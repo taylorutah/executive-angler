@@ -258,9 +258,9 @@ export default function EditSessionPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-  const label = "block text-xs font-semibold text-[#8B949E] uppercase tracking-wide mb-1";
-  const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5 mb-4";
+  const input = "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] dark:border-[#21262D] dark:bg-[#161B22] dark:text-[#F0F6FC] dark:placeholder:text-[#484F58]";
+  const label = "block text-xs font-semibold text-gray-500 dark:text-[#8B949E] uppercase tracking-wide mb-1";
+  const section = "bg-white dark:bg-[#161B22] rounded-xl border border-gray-200 dark:border-[#21262D] p-5 mb-4";
 
   if (loading) return (
     <div className="min-h-screen bg-[#0D1117] flex items-center justify-center pt-20">
@@ -388,8 +388,8 @@ export default function EditSessionPage() {
             <h2 className="text-sm font-bold text-[#8B949E] mb-4">🌊 Conditions</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className={label}>Water Temp</label>
-                <input className={input} placeholder="52°F" value={form.water_temp_f} onChange={(e) => updateForm("water_temp_f", e.target.value)} />
+                <label className={label}>Water Temp (°F)</label>
+                <input type="number" step="0.1" className={input} placeholder="52" value={form.water_temp_f} onChange={(e) => updateForm("water_temp_f", e.target.value)} />
               </div>
               <div>
                 <label className={label}>Clarity</label>
@@ -452,8 +452,8 @@ export default function EditSessionPage() {
                         <datalist id={`species-list-${i}`}>{SPECIES.map((s) => <option key={s} value={s} />)}</datalist>
                       </div>
                       <div>
-                        <label className={label}>Length</label>
-                        <input className={input} placeholder='14"' value={c.length_inches} onChange={(e) => updateCatch(i, "length_inches", e.target.value)} />
+                        <label className={label}>Length (")</label>
+                        <input type="number" step="0.1" min="0" className={input} placeholder="15" value={c.length_inches} onChange={(e) => updateCatch(i, "length_inches", e.target.value)} />
                       </div>
                       <div>
                         <label className={label}>Qty</label>
@@ -474,12 +474,12 @@ export default function EditSessionPage() {
                         </select>
                       </div>
                       <div>
-                        <label className={label}>Fly Size</label>
-                        <input className={input} placeholder="#14" value={c.fly_size} onChange={(e) => updateCatch(i, "fly_size", e.target.value)} />
+                        <label className={label}>Fly Size (#)</label>
+                        <input type="number" step="1" min="1" className={input} placeholder="14" value={c.fly_size} onChange={(e) => updateCatch(i, "fly_size", e.target.value)} />
                       </div>
                       <div>
-                        <label className={label}>Bead</label>
-                        <input className={input} placeholder="2.8mm" value={c.bead_size} onChange={(e) => updateCatch(i, "bead_size", e.target.value)} />
+                        <label className={label}>Bead (mm)</label>
+                        <input type="number" step="0.1" min="0" className={input} placeholder="2.5" value={c.bead_size} onChange={(e) => updateCatch(i, "bead_size", e.target.value)} />
                       </div>
                       <div>
                         <label className={label}>Time</label>
@@ -594,7 +594,7 @@ export default function EditSessionPage() {
             {deleting ? "…" : <Trash2 className="h-4 w-4" />}
           </button>
           <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#0D1117] transition-colors disabled:opacity-60 shadow-sm">
+            className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#d4822f] transition-colors disabled:opacity-60 shadow-sm">
             {saving ? "Saving…" : "Save Changes"}
           </button>
         </div>
