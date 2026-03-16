@@ -377,11 +377,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     } catch { return null; }
   })();
 
-  // Unique flies used
+  // Unique flies used — prefer fly pattern image from flies prop, fall back to fly_image_url
   const usedFlies = Array.from(
     new Map(
       catches.filter(c => c.fly_pattern?.name)
-        .map(c => [c.fly_pattern!.name!, { name: c.fly_pattern!.name!, image: c.fly_image_url }])
+        .map(c => {
+          const patternImage = flies.find(f => f.name === c.fly_pattern!.name!)?.image_url;
+          return [c.fly_pattern!.name!, { name: c.fly_pattern!.name!, image: patternImage || c.fly_image_url }];
+        })
     ).values()
   );
 
@@ -499,6 +502,33 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </div>
                 )}
 
+                {/* Fish caught summary — compact cards under description */}
+                {catches.filter(c => c.species).length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {catches.filter(c => c.species).map((c, i) => {
+                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                      return (
+                        <div key={i} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-1.5">
+                          {photoUrl ? (
+                            <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))}
+                              className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
+                              <Image src={photoUrl} alt={c.species || "Fish"} fill className="object-cover" />
+                            </button>
+                          ) : (
+                            <Fish className="h-4 w-4 text-[#E8923A] flex-shrink-0" />
+                          )}
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium text-[#F0F6FC] leading-tight">{c.species || "Fish"}</p>
+                            <div className="flex items-center gap-1.5 text-[10px] text-[#8B949E]">
+                              {c.length_inches && <span>{c.length_inches}&quot;</span>}
+                              {c.fly_pattern?.name && <><span>·</span><span className="truncate max-w-[80px]">{c.fly_pattern.name}</span></>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
               </div>
 
@@ -543,15 +573,22 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </div>
                 )}
 
-                {/* Flies used — compact */}
+                {/* Flies used — with images */}
                 {usedFlies.length > 0 && (
                   <div className="border-t border-[#21262D] pt-3 mt-3">
                     <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Flies Used</p>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-2">
                       {usedFlies.map(f => (
-                        <span key={f.name} className="flex items-center gap-1 text-xs bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2.5 py-1">
-                          🪰 {f.name}
-                        </span>
+                        <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2 py-1.5">
+                          {f.image ? (
+                            <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
+                              <Image src={f.image} alt={f.name} fill className="object-cover" />
+                            </div>
+                          ) : (
+                            <span className="text-base flex-shrink-0">🪰</span>
+                          )}
+                          <span className="text-xs font-medium text-[#E8923A]">{f.name}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
