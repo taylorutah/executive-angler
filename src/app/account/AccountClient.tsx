@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,16 @@ import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
 
 interface Props {
-  user: { id: string; email: string; displayName: string; avatarUrl?: string };
+  user: {
+    id: string;
+    email: string;
+    displayName: string;
+    avatarUrl?: string;
+    username?: string;
+    bio?: string;
+    homeLocation?: string;
+    isPrivate?: boolean;
+  };
   feedDisplay: "collage" | "map";
   stats: {
     totalSessions: number;
@@ -26,6 +35,10 @@ interface Props {
 export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
+  const [username, setUsername] = useState(user.username || "");
+  const [bio, setBio] = useState(user.bio || "");
+  const [homeLocation, setHomeLocation] = useState(user.homeLocation || "");
+  const [isPrivate, setIsPrivate] = useState(user.isPrivate ?? false);
   const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -39,11 +52,57 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [pwError, setPwError] = useState("");
   const [pwSaved, setPwSaved] = useState(false);
 
+  // Username availability state
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+  const [usernameChecking, setUsernameChecking] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const checkUsername = useCallback(
+    async (val: string) => {
+      const clean = val.trim().toLowerCase();
+      if (!clean || clean.length < 3) {
+        setUsernameAvailable(null);
+        return;
+      }
+      if (clean === (user.username || "").toLowerCase()) {
+        setUsernameAvailable(true);
+        return;
+      }
+      setUsernameChecking(true);
+      try {
+        const res = await fetch(
+          `/api/user/username/check?username=${encodeURIComponent(clean)}&current=${encodeURIComponent((user.username || "").toLowerCase())}`
+        );
+        const data = await res.json();
+        setUsernameAvailable(data.available);
+      } catch {
+        setUsernameAvailable(null);
+      } finally {
+        setUsernameChecking(false);
+      }
+    },
+    [user.username]
+  );
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!username) {
+      setUsernameAvailable(null);
+      setUsernameChecking(false);
+      return;
+    }
+    debounceRef.current = setTimeout(() => {
+      checkUsername(username);
+    }, 600);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [username, checkUsername]);
+
   // Step 1: file selected → show crop modal
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Reset input so the same file can be re-selected after cancel
     e.target.value = "";
     const reader = new FileReader();
     reader.onload = () => setCropSrc(reader.result as string);
@@ -72,12 +131,45 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     }
   }
 
+  const saveDisabled =
+    saving ||
+    (username.length >= 3 && usernameAvailable === false) ||
+    usernameChecking;
+
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
+    if (saveDisabled) return;
     setSaving(true);
     const supabase = createClient();
+
+    const cleanUsername = username.trim().toLowerCase() || null;
+
     await supabase.auth.updateUser({ data: { display_name: displayName } });
-    await supabase.from("angler_profiles").upsert({ user_id: user.id, feed_display: feedDisplay }, { onConflict: "user_id" });
+
+    await supabase.from("angler_profiles").upsert(
+      {
+        user_id: user.id,
+        display_name: displayName,
+        username: cleanUsername,
+        bio: bio || null,
+        home_location: homeLocation || null,
+        is_private: isPrivate,
+        feed_display: feedDisplay,
+      },
+      { onConflict: "user_id" }
+    );
+
+    await supabase.from("profiles").upsert(
+      {
+        user_id: user.id,
+        username: cleanUsername,
+        display_name: displayName,
+        bio: bio || null,
+        is_private: isPrivate,
+      },
+      { onConflict: "user_id" }
+    );
+
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -147,6 +239,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="font-heading text-[#E8923A] text-2xl font-bold truncate">{displayName || "Angler"}</h1>
+            {username ? (
+              <p className="text-sm text-[#8B949E] truncate">@{username}</p>
+            ) : (
+              <p className="text-xs text-red-500">Set your @username</p>
+            )}
             <p className="text-sm text-[#484F58] truncate">{user.email}</p>
           </div>
           <button onClick={handleSignOut}
@@ -236,11 +333,90 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <label className={labelCls}>Display Name</label>
               <input className={inputCls} value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" />
             </div>
+
+            {/* Username */}
+            <div>
+              <label className={labelCls}>Username</label>
+              <div className="relative flex items-center">
+                <span className="absolute left-4 text-[#8B949E] pointer-events-none select-none">@</span>
+                <input
+                  className={inputCls + " pl-8 pr-10"}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase())}
+                  placeholder="yourhandle"
+                  maxLength={30}
+                />
+                {username.length >= 3 && (
+                  <span className="absolute right-3 text-sm pointer-events-none">
+                    {usernameChecking ? (
+                      <span className="text-[#8B949E]">…</span>
+                    ) : usernameAvailable === true ? (
+                      <span className="text-green-500">✓</span>
+                    ) : usernameAvailable === false ? (
+                      <span className="text-red-500">✗</span>
+                    ) : null}
+                  </span>
+                )}
+              </div>
+              {username.length >= 3 && usernameAvailable === false && (
+                <p className="text-xs text-red-500 mt-1">That username is taken.</p>
+              )}
+              <p className="text-xs text-[#484F58] mt-1">Letters, numbers, underscores. Min 3 characters.</p>
+            </div>
+
+            {/* Bio */}
+            <div>
+              <label className={labelCls}>Bio</label>
+              <textarea
+                className={inputCls + " resize-none"}
+                rows={3}
+                maxLength={160}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="Tell other anglers about yourself…"
+              />
+              <p className="text-xs text-[#484F58] mt-1 text-right">{bio.length}/160</p>
+            </div>
+
+            {/* Home Location */}
+            <div>
+              <label className={labelCls}>Home Location</label>
+              <input
+                className={inputCls}
+                value={homeLocation}
+                onChange={(e) => setHomeLocation(e.target.value)}
+                placeholder="e.g. Salt Lake City, UT"
+              />
+            </div>
+
+            {/* Profile Visibility */}
+            <div>
+              <label className={labelCls}>Profile Visibility</label>
+              <div className="flex gap-2 mt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsPrivate(false)}
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
+                >
+                  🌐 Public
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPrivate(true)}
+                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
+                >
+                  🔒 Private
+                </button>
+              </div>
+              <p className="text-xs text-[#484F58] mt-1">Public profiles appear on the Anglers page.</p>
+            </div>
+
             <div>
               <label className={labelCls}>Email</label>
               <input className={inputCls + " opacity-60"} value={email} disabled />
               <p className="text-xs text-[#484F58] mt-1">Contact support to change your email.</p>
             </div>
+
             <div>
               <label className={labelCls}>Journal Feed Display</label>
               <div className="flex gap-2 mt-1">
@@ -255,7 +431,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               </div>
               <p className="text-xs text-[#484F58] mt-1">Controls what shows in your journal feed cards.</p>
             </div>
-            <button type="submit" disabled={saving}
+
+            <button type="submit" disabled={saveDisabled}
               className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#0D1117] disabled:opacity-60">
               <Save className="h-4 w-4" />
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save Profile"}

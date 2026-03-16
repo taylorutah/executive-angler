@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import { Crown } from "lucide-react";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Anglers — Executive Angler",
@@ -16,6 +17,7 @@ export default async function AnglersPage() {
     .from("angler_profiles")
     .select("user_id, username, display_name, home_location, bio, avatar_url")
     .not("username", "is", null)
+    .eq("is_private", false)
     .order("created_at", { ascending: false })
     .limit(50);
 
@@ -56,10 +58,21 @@ export default async function AnglersPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {anglers.map((a) => {
               const crowns = crownsByUser.get(a.user_id) || [];
+              const initials = String(a.username?.charAt(0) ?? "A").toUpperCase();
               return (
                 <div key={a.user_id} className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 text-lg font-bold text-[#E8923A]">
-                    {String(a.username?.charAt(0) ?? "A").toUpperCase()}
+                  <div className="w-12 h-12 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">
+                    {a.avatar_url ? (
+                      <Image
+                        src={a.avatar_url}
+                        alt={a.display_name || a.username || "Angler"}
+                        width={48}
+                        height={48}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <span className="text-lg font-bold text-[#E8923A]">{initials}</span>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -73,6 +86,9 @@ export default async function AnglersPage() {
                         <span className="text-[10px] text-[#484F58]">+{crowns.length - 3}</span>
                       )}
                     </div>
+                    {a.username && (
+                      <p className="text-xs text-[#484F58] mt-0.5">@{a.username}</p>
+                    )}
                     {a.home_location && (
                       <p className="text-xs text-[#8B949E] mt-0.5">{a.home_location}</p>
                     )}

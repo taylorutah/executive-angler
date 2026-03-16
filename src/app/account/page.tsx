@@ -32,9 +32,16 @@ export default async function AccountPage() {
 
   const { data: profile } = await supabase
     .from("angler_profiles")
-    .select("feed_display, display_name, avatar_url")
+    .select("feed_display, display_name, avatar_url, home_location")
     .eq("user_id", user.id)
     .single();
+
+  // Fetch from profiles table (iOS-compatible) for username, bio, is_private
+  const { data: profilesRow } = await supabase
+    .from("profiles")
+    .select("username, display_name, bio, is_private")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
   const totalSessions = sessions?.length || 0;
   // Sum total_fish from sessions (includes drift-mode sessions with count-only data)
@@ -54,9 +61,28 @@ export default async function AccountPage() {
 
   return (
     <AccountClient
-      user={{ id: user.id, email: user.email || "", displayName: user.user_metadata?.display_name || "", avatarUrl: profile?.avatar_url || "" }}
+      user={{
+        id: user.id,
+        email: user.email || "",
+        displayName: user.user_metadata?.display_name || profile?.display_name || "",
+        avatarUrl: profile?.avatar_url || "",
+        username: profilesRow?.username || undefined,
+        bio: profilesRow?.bio || undefined,
+        homeLocation: profile?.home_location || undefined,
+        isPrivate: profilesRow?.is_private ?? false,
+      }}
       feedDisplay={(profile?.feed_display as "collage" | "map") || "collage"}
-      stats={{ totalSessions, totalFish, totalRivers, totalFlies: flies?.length || 0, totalFavorites: favs?.length || 0, biggestFish, bestSession: bestSession ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location } : null }}
+      stats={{
+        totalSessions,
+        totalFish,
+        totalRivers,
+        totalFlies: flies?.length || 0,
+        totalFavorites: favs?.length || 0,
+        biggestFish,
+        bestSession: bestSession
+          ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location }
+          : null,
+      }}
     />
   );
 }
