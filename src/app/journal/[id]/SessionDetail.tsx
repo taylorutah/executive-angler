@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight,
-  Cloud, MapPin, Clock, Check, RotateCcw
+  Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2
 } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
@@ -69,13 +69,15 @@ interface Props {
   flies: FlyPattern[];
 }
 
-function FishLightbox({ catches, initialIndex, onClose }: {
+function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
   catches: Catch[];
   initialIndex: number;
   onClose: () => void;
+  catchPhotos: Record<string, string>;
 }) {
   const [idx, setIdx] = useState(initialIndex);
   const c = catches[idx];
+  const imageUrl = catchPhotos[c.id] || c.fish_image_url;
   const goNext = useCallback(() => setIdx(p => (p + 1) % catches.length), [catches.length]);
   const goPrev = useCallback(() => setIdx(p => (p - 1 + catches.length) % catches.length), [catches.length]);
 
@@ -100,9 +102,9 @@ function FishLightbox({ catches, initialIndex, onClose }: {
         </>
       )}
       <div className="max-w-2xl w-full mx-16" onClick={e => e.stopPropagation()}>
-        {c.fish_image_url ? (
+        {imageUrl ? (
           <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-            <Image src={c.fish_image_url} alt={c.species || "Fish"} fill className="object-cover" />
+            <Image src={imageUrl} alt={c.species || "Fish"} fill className="object-cover" />
           </div>
         ) : (
           <div className="w-full aspect-[4/3] rounded-xl bg-[#1F2937] flex items-center justify-center">
@@ -127,6 +129,14 @@ function FishLightbox({ catches, initialIndex, onClose }: {
 
 export default function SessionDetail({ session, catches, flies }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+
+  // Catch photo uploads
+  const [catchPhotos, setCatchPhotos] = useState<Record<string, string>>(() => {
+    const m: Record<string, string> = {};
+    catches.forEach(c => { if (c.fish_image_url) m[c.id] = c.fish_image_url; });
+    return m;
+  });
+  const [uploadingCatch, setUploadingCatch] = useState<string | null>(null);
 
   // Inline notes editing
   const [editingNotes, setEditingNotes] = useState(false);
@@ -161,12 +171,33 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     }
   }
 
+  async function handleCatchPhotoUpload(catchId: string, file: File) {
+    setUploadingCatch(catchId);
+    const form = new FormData();
+    form.append("file", file);
+    form.append("catchId", catchId);
+    try {
+      const res = await fetch("/api/photos/catch", { method: "POST", body: form });
+      if (res.ok) {
+        const { url } = await res.json();
+        setCatchPhotos(prev => ({ ...prev, [catchId]: url }));
+      } else {
+        alert("Upload failed. Please try again.");
+      }
+    } catch (e) {
+      console.error("Upload error:", e);
+      alert("Upload failed. Check your connection and try again.");
+    } finally {
+      setUploadingCatch(null);
+    }
+  }
+
   const catchesTotal = catches.reduce((s, c) => s + (c.quantities || 1), 0);
   // Use whichever is larger: summed catch rows OR session.total_fish (drift mode or partial logging)
   const totalFish = Math.max(catchesTotal, session.total_fish ?? 0);
   const isDriftMode = catches.length === 0 && (session.total_fish ?? 0) > 0;
   const tags = session.trip_tags || session.tags || [];
-  const fishPhotos = catches.filter(c => c.fish_image_url);
+  const fishPhotos = catches.filter(c => catchPhotos[c.id] || c.fish_image_url);
 
   const formattedDate = parseLocalDate(session.date).toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric", year: "numeric",
@@ -195,7 +226,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
   return (
     <>
       {lightboxIdx !== null && (
-        <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} />
+        <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} catchPhotos={catchPhotos} />
       )}
 
       <div className="min-h-screen bg-[#0D1117]">
@@ -383,16 +414,19 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                 <p className="text-xs text-[#484F58]">{fishPhotos.length} {fishPhotos.length === 1 ? "photo" : "photos"} · tap to expand</p>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {fishPhotos.map((c, i) => (
-                  <button key={c.id} onClick={() => setLightboxIdx(i)}
-                    className="relative flex-shrink-0 h-28 w-28 rounded-lg overflow-hidden group hover:ring-2 hover:ring-forest transition-all">
-                    <Image src={c.fish_image_url!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
-                      <p className="text-white text-[10px] font-medium truncate">{c.species || "Fish"}</p>
-                      {c.length_inches && <p className="text-white/70 text-[9px]">{c.length_inches}&quot;</p>}
-                    </div>
-                  </button>
-                ))}
+                {fishPhotos.map((c, i) => {
+                  const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                  return (
+                    <button key={c.id} onClick={() => setLightboxIdx(i)}
+                      className="relative flex-shrink-0 h-28 w-28 rounded-lg overflow-hidden group hover:ring-2 hover:ring-forest transition-all">
+                      <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+                        <p className="text-white text-[10px] font-medium truncate">{c.species || "Fish"}</p>
+                        {c.length_inches && <p className="text-white/70 text-[9px]">{c.length_inches}&quot;</p>}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -437,7 +471,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#21262D]">
-                      {fishPhotos.length > 0 && <th className="w-10 py-2 px-3"></th>}
+                      <th className="w-10 py-2 px-3"></th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Species</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Length</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Fly</th>
@@ -447,34 +481,68 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {catches.map((c) => (
-                      <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
-                        {fishPhotos.length > 0 && (
+                    {catches.map((c) => {
+                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                      const isUploading = uploadingCatch === c.id;
+                      return (
+                        <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
                           <td className="py-2 px-3">
-                            {c.fish_image_url ? (
-                              <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
-                                <div className="relative h-8 w-8 rounded overflow-hidden">
-                                  <Image src={c.fish_image_url} alt="" fill className="object-cover" />
-                                </div>
-                              </button>
-                            ) : <div className="h-8 w-8 rounded bg-[#1F2937] flex items-center justify-center"><Fish className="h-4 w-4 text-[#484F58]" /></div>}
+                            {photoUrl ? (
+                              <div className="relative group/photo">
+                                <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
+                                  <div className="relative h-8 w-8 rounded overflow-hidden">
+                                    <Image src={photoUrl} alt="" fill className="object-cover" />
+                                  </div>
+                                </button>
+                                <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer flex items-center justify-center">
+                                  <Camera className="h-3.5 w-3.5 text-white" />
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={e => {
+                                      const file = e.target.files?.[0];
+                                      if (file) handleCatchPhotoUpload(c.id, file);
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                            ) : (
+                              <label className="h-8 w-8 rounded bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors group/upload">
+                                {isUploading ? (
+                                  <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                                ) : (
+                                  <Camera className="h-4 w-4 text-[#484F58] group-hover/upload:text-[#E8923A]" />
+                                )}
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  disabled={isUploading}
+                                  onChange={e => {
+                                    const file = e.target.files?.[0];
+                                    if (file) handleCatchPhotoUpload(c.id, file);
+                                  }}
+                                />
+                              </label>
+                            )}
                           </td>
-                        )}
-                        <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">
-                          {c.species || "—"}
-                          {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#484F58]">×{c.quantities}</span>}
-                        </td>
-                        <td className="py-2.5 px-3 text-[#8B949E]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
-                        <td className="py-2.5 px-3 text-[#8B949E] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
-                        <td className="py-2.5 px-3">
-                          {c.fly_position ? (
-                            <span className="text-xs bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
-                          ) : <span className="text-[#484F58]">—</span>}
-                        </td>
-                        <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.fly_size || "—"}</td>
-                        <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.time_caught || "—"}</td>
-                      </tr>
-                    ))}
+                          <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">
+                            {c.species || "—"}
+                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#484F58]">×{c.quantities}</span>}
+                          </td>
+                          <td className="py-2.5 px-3 text-[#8B949E]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
+                          <td className="py-2.5 px-3 text-[#8B949E] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
+                          <td className="py-2.5 px-3">
+                            {c.fly_position ? (
+                              <span className="text-xs bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
+                            ) : <span className="text-[#484F58]">—</span>}
+                          </td>
+                          <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.fly_size || "—"}</td>
+                          <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.time_caught || "—"}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
