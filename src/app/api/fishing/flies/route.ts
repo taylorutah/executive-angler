@@ -1,6 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+
+// Service role client for storage uploads (bypasses RLS)
+const serviceClient = createServiceClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -78,14 +85,14 @@ export async function POST(req: NextRequest) {
         const ext = file.name.split(".").pop() || "jpg";
         const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
         const arrayBuffer = await file.arrayBuffer();
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await serviceClient.storage
           .from("fly-pattern-images")
           .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
 
         if (uploadError) {
           console.error("Image upload error:", uploadError);
         } else {
-          const { data: { publicUrl } } = supabase.storage
+          const { data: { publicUrl } } = serviceClient.storage
             .from("fly-pattern-images")
             .getPublicUrl(path);
           imageUrl = publicUrl;
@@ -163,14 +170,14 @@ export async function PATCH(req: NextRequest) {
         const ext = file.name.split(".").pop() || "jpg";
         const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
         const arrayBuffer = await file.arrayBuffer();
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await serviceClient.storage
           .from("fly-pattern-images")
           .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
 
         if (uploadError) {
           console.error("Image upload error:", uploadError);
         } else {
-          const { data: { publicUrl } } = supabase.storage
+          const { data: { publicUrl } } = serviceClient.storage
             .from("fly-pattern-images")
             .getPublicUrl(path);
           imageUrl = publicUrl;
