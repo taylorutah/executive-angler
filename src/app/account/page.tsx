@@ -46,6 +46,13 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     .eq("user_id", user.id)
     .maybeSingle();
 
+  // Fetch user awards
+  const { data: awards } = await supabase
+    .from("user_awards")
+    .select("award_key, river_name, awarded_at, metadata")
+    .eq("user_id", user.id)
+    .order("awarded_at", { ascending: false });
+
   const totalSessions = sessions?.length || 0;
   // Sum total_fish from sessions (includes drift-mode sessions with count-only data)
   const totalFish = sessions?.reduce((sum, s) => sum + (s.total_fish || 0), 0) || 0;
@@ -86,6 +93,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location }
           : null,
       }}
+      awards={awards ?? []}
       welcome={welcome === "1"}
     />
   );

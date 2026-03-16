@@ -30,10 +30,16 @@ interface Props {
     biggestFish: number | null;
     bestSession: { river_name: string; date: string; total_fish: number; location?: string } | null;
   };
+  awards?: Array<{
+    award_key: string;
+    river_name?: string;
+    awarded_at: string;
+    metadata: { badge_icon?: string; badge_color?: string; display_name?: string; description?: string };
+  }>;
   welcome?: boolean;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, welcome }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [username, setUsername] = useState(user.username || "");
@@ -321,6 +327,32 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                   </p>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Achievements */}
+        {awards.length > 0 && (
+          <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
+            <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
+              <span className="text-xl">🏆</span> Achievements
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {awards.map((award, i) => (
+                <div key={i} className="flex items-center gap-3 rounded-lg bg-[#0D1117] p-3">
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-xl flex-shrink-0 border-2"
+                    style={{ backgroundColor: award.metadata.badge_color || "#E8923A", borderColor: award.metadata.badge_color || "#E8923A" }}
+                  >
+                    {award.metadata.badge_icon || "🏆"}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-[#F0F6FC] text-sm leading-tight">{award.metadata.display_name || award.award_key}</p>
+                    {award.river_name && <p className="text-xs text-[#E8923A] truncate">{award.river_name}</p>}
+                    <p className="text-xs text-[#8B949E]">{award.metadata.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
