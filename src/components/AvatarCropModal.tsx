@@ -82,7 +82,6 @@ export default function AvatarCropModal({ imageSrc, onSave, onCancel }: Props) {
             crop={crop}
             onChange={(c) => setCrop(c)}
             aspect={1}
-            circularCrop
             minWidth={60}
             className="max-h-80"
           >

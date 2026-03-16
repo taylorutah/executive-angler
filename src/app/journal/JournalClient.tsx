@@ -298,7 +298,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <div className="h-16 bg-gradient-to-br from-forest to-forest-dark" />
               <div className="px-4 pb-4">
                 <Link href="/account" className="-mt-8 mb-3 block w-fit">
-                  <div className="h-14 w-14 rounded-full border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
+                  <div className="h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
                     {userProfile?.avatarUrl ? (
                       <Image src={userProfile.avatarUrl} alt="Profile" width={56} height={56} className="object-cover w-full h-full" />
                     ) : (

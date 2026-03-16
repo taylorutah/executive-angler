@@ -264,14 +264,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         <div className="flex items-center gap-4 mb-8">
           <div className="relative flex-shrink-0">
             <label className="cursor-pointer group">
-              <div className="h-16 w-16 rounded-full overflow-hidden bg-[#E8923A]/10 border-2 border-white shadow-md flex items-center justify-center">
+              <div className="h-16 w-16 rounded-xl overflow-hidden bg-[#E8923A]/10 border-2 border-white shadow-md flex items-center justify-center">
                 {avatarUrl ? (
                   <Image src={avatarUrl} alt="Avatar" width={64} height={64} className="object-cover w-full h-full" />
                 ) : (
                   <span className="text-2xl font-bold text-[#E8923A]">{(displayName || user.email)[0].toUpperCase()}</span>
                 )}
               </div>
-              <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 rounded-xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 {avatarUploading ? (
                   <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                 ) : (

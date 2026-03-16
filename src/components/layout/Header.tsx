@@ -118,7 +118,7 @@ export default function Header() {
                     <span>Journal</span>
                   </Link>
                   <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors">
-                    <div className="h-7 w-7 rounded-full overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0">
+                    <div className="h-7 w-7 rounded-lg overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0">
                       {user?.avatarUrl ? (
                         <Image src={user.avatarUrl} alt="Profile" width={28} height={28} className="object-cover w-full h-full" />
                       ) : (

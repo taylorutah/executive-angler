@@ -60,7 +60,7 @@ export default async function AnglersPage() {
               const initials = String((a.display_name || a.username || "A").charAt(0)).toUpperCase();
               return (
                 <div key={a.user_id} className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-12 h-12 rounded-xl bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">
                     {a.avatar_url ? (
                       <Image
                         src={a.avatar_url}
