@@ -43,11 +43,18 @@ export default async function SessionDetailPage({ params }: Props) {
     ? await supabase.from("fly_patterns").select("id, name, type, image_url").in("id", flyPatternIds)
     : { data: [] };
 
+  const { data: sessionPhotos } = await supabase
+    .from("session_photos")
+    .select("id, url, caption, created_at")
+    .eq("session_id", id)
+    .order("created_at", { ascending: true });
+
   return (
     <SessionDetail
       session={session}
       catches={(catches || []) as Parameters<typeof SessionDetail>[0]["catches"]}
       flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
+      sessionPhotos={sessionPhotos ?? []}
     />
   );
 }

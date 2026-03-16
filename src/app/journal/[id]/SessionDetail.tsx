@@ -125,10 +125,18 @@ interface Session {
   gear_tippet?: { name: string; maker?: string } | null;
 }
 
+interface SessionPhoto {
+  id: string;
+  url: string;
+  caption?: string;
+  created_at: string;
+}
+
 interface Props {
   session: Session;
   catches: Catch[];
   flies: FlyPattern[];
+  sessionPhotos?: SessionPhoto[];
 }
 
 function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
@@ -189,7 +197,63 @@ function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
   );
 }
 
-export default function SessionDetail({ session, catches, flies }: Props) {
+function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
+  photos: SessionPhoto[];
+  initialIndex: number;
+  onClose: () => void;
+  onDelete: (id: string) => void;
+}) {
+  const [idx, setIdx] = useState(initialIndex);
+  const photo = photos[idx];
+  const goNext = useCallback(() => setIdx(p => (p + 1) % photos.length), [photos.length]);
+  const goPrev = useCallback(() => setIdx(p => (p - 1 + photos.length) % photos.length), [photos.length]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") goNext();
+      if (e.key === "ArrowLeft") goPrev();
+    };
+    document.addEventListener("keydown", h);
+    return () => { document.removeEventListener("keydown", h); document.body.style.overflow = ""; };
+  }, [onClose, goNext, goPrev]);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
+      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
+      <button
+        onClick={() => {
+          onDelete(photo.id);
+          if (photos.length === 1) onClose();
+          else if (idx >= photos.length - 1) setIdx(0);
+        }}
+        className="absolute top-4 right-16 p-2 rounded-full bg-red-600/80 text-white hover:bg-red-600"
+      >
+        Delete
+      </button>
+      {photos.length > 1 && (
+        <>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronRight className="h-5 w-5" /></button>
+        </>
+      )}
+      <div className="max-w-3xl w-full mx-16" onClick={e => e.stopPropagation()}>
+        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
+          <Image src={photo.url} alt={photo.caption || "Session photo"} fill className="object-cover" />
+        </div>
+        {photo.caption && (
+          <div className="mt-4 text-center">
+            <p className="text-white text-lg">{photo.caption}</p>
+          </div>
+        )}
+        {photos.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {photos.length}</p>}
+      </div>
+    </div>
+  );
+}
+
+export default function SessionDetail({ session, catches, flies, sessionPhotos = [] }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Catch photo uploads
@@ -199,6 +263,11 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     return m;
   });
   const [uploadingCatch, setUploadingCatch] = useState<string | null>(null);
+
+  // Session photo uploads
+  const [allSessionPhotos, setAllSessionPhotos] = useState(sessionPhotos);
+  const [uploadingSessionPhoto, setUploadingSessionPhoto] = useState(false);
+  const [sessionPhotoLightboxIdx, setSessionPhotoLightboxIdx] = useState<number | null>(null);
 
   // Inline notes editing
   const [editingNotes, setEditingNotes] = useState(false);
@@ -254,6 +323,42 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     }
   }
 
+  async function handleSessionPhotoUpload(file: File) {
+    setUploadingSessionPhoto(true);
+    const form = new FormData();
+    form.append("file", file);
+    form.append("sessionId", session.id);
+    try {
+      const res = await fetch("/api/photos/session", { method: "POST", body: form });
+      if (res.ok) {
+        const photo = await res.json();
+        setAllSessionPhotos(prev => [...prev, photo]);
+      } else {
+        alert("Upload failed. Please try again.");
+      }
+    } catch (e) {
+      console.error("Upload error:", e);
+      alert("Upload failed. Check your connection and try again.");
+    } finally {
+      setUploadingSessionPhoto(false);
+    }
+  }
+
+  async function handleSessionPhotoDelete(photoId: string) {
+    if (!confirm("Delete this photo?")) return;
+    try {
+      const res = await fetch(`/api/photos/session?id=${photoId}`, { method: "DELETE" });
+      if (res.ok) {
+        setAllSessionPhotos(prev => prev.filter(p => p.id !== photoId));
+      } else {
+        alert("Delete failed. Please try again.");
+      }
+    } catch (e) {
+      console.error("Delete error:", e);
+      alert("Delete failed. Check your connection and try again.");
+    }
+  }
+
   const catchesTotal = catches.reduce((s, c) => s + (c.quantities || 1), 0);
   // Use whichever is larger: summed catch rows OR session.total_fish (drift mode or partial logging)
   const totalFish = Math.max(catchesTotal, session.total_fish ?? 0);
@@ -289,6 +394,14 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     <>
       {lightboxIdx !== null && (
         <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} catchPhotos={catchPhotos} />
+      )}
+      {sessionPhotoLightboxIdx !== null && allSessionPhotos.length > 0 && (
+        <SessionPhotoLightbox
+          photos={allSessionPhotos}
+          initialIndex={sessionPhotoLightboxIdx}
+          onClose={() => setSessionPhotoLightboxIdx(null)}
+          onDelete={handleSessionPhotoDelete}
+        />
       )}
 
       <div className="min-h-screen bg-[#0D1117]">
@@ -473,27 +586,87 @@ export default function SessionDetail({ session, catches, flies }: Props) {
 
 
 
-          {/* ---- FISH PHOTO STRIP (if photos exist) ---- */}
-          {fishPhotos.length > 0 && (
+          {/* ---- COMBINED PHOTO GALLERY (fish + session) ---- */}
+          {(fishPhotos.length > 0 || allSessionPhotos.length > 0) && (
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide">Photos</p>
-                <p className="text-xs text-[#484F58]">{fishPhotos.length} {fishPhotos.length === 1 ? "photo" : "photos"} · tap to expand</p>
+                <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide">
+                  Photos ({fishPhotos.length + allSessionPhotos.length})
+                </p>
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-1">
-                {fishPhotos.map((c, i) => {
-                  const photoUrl = catchPhotos[c.id] || c.fish_image_url;
-                  return (
-                    <button key={c.id} onClick={() => setLightboxIdx(i)}
-                      className="relative flex-shrink-0 h-28 w-28 rounded-lg overflow-hidden group hover:ring-2 hover:ring-forest transition-all">
-                      <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
-                        <p className="text-white text-[10px] font-medium truncate">{c.species || "Fish"}</p>
-                        {c.length_inches && <p className="text-white/70 text-[9px]">{c.length_inches}&quot;</p>}
-                      </div>
-                    </button>
-                  );
-                })}
+
+              {/* Fish Photos Strip */}
+              {fishPhotos.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Fish</p>
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {fishPhotos.map((c, i) => {
+                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                      return (
+                        <button key={c.id} onClick={() => setLightboxIdx(i)}
+                          className="relative flex-shrink-0 h-32 w-32 rounded-lg overflow-hidden group hover:ring-2 hover:ring-[#E8923A] transition-all">
+                          <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
+                            <p className="text-white text-xs font-medium truncate">{c.species || "Fish"}</p>
+                            {c.length_inches && <p className="text-white/70 text-[10px]">{c.length_inches}&quot;</p>}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Session Photos Grid */}
+              <div>
+                {allSessionPhotos.length > 0 && (
+                  <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Session</p>
+                )}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                  {allSessionPhotos.map((photo, i) => (
+                    <div key={photo.id} className="relative group aspect-square rounded-lg overflow-hidden">
+                      <button onClick={() => setSessionPhotoLightboxIdx(i)} className="w-full h-full">
+                        <Image src={photo.url} alt={photo.caption || "Session photo"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                      </button>
+                      <button
+                        onClick={() => handleSessionPhotoDelete(photo.id)}
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                      {photo.caption && (
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
+                          <p className="text-white text-xs truncate">{photo.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add Photo Button */}
+                <label className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-4 py-3 cursor-pointer transition-colors">
+                  {uploadingSessionPhoto ? (
+                    <>
+                      <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                      <span className="text-sm text-[#8B949E]">Uploading…</span>
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="h-4 w-4 text-[#484F58]" />
+                      <span className="text-sm text-[#484F58] hover:text-[#E8923A] transition-colors">Add photo</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={uploadingSessionPhoto}
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (file) handleSessionPhotoUpload(file);
+                    }}
+                  />
+                </label>
               </div>
             </div>
           )}
