@@ -147,13 +147,13 @@ export default async function FlyBoxPage() {
                           {(() => {
                             const bead = parseArrayField(fly.bead_size);
                             return bead ? (
-                              <span className="text-[10px] text-[#484F58] truncate">{bead}</span>
+                              <span className="text-[10px] text-[#484F58] truncate"><span className="text-[#8B949E]">Bead:</span> {bead}</span>
                             ) : null;
                           })()}
                           {(() => {
                             const sizes = parseArrayField(fly.size);
                             return sizes ? (
-                              <span className="text-[10px] text-[#484F58]">{sizes}</span>
+                              <span className="text-[10px] text-[#484F58]"><span className="text-[#8B949E]">Size:</span> {sizes}</span>
                             ) : null;
                           })()}
                         </div>
