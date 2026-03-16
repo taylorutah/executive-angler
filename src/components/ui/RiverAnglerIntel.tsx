@@ -419,6 +419,50 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
         )}
       </div>
 
+      {/* ── Section Breakdown ───────────────────────────────────────────── */}
+      {intel.sections && intel.sections.length > 1 && (
+        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="h-4 w-4 text-[#E8923A]" />
+            <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
+              By Section
+            </h3>
+            <span className="ml-auto text-[10px] text-[#484F58]">{intel.sections.length} sections</span>
+          </div>
+          <div className="space-y-3">
+            {intel.sections.map((s, i) => {
+              const maxCount = intel.sections[0].sessionCount;
+              const pct = Math.round((s.sessionCount / maxCount) * 100);
+              return (
+                <div key={s.section}>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-[#484F58] w-4">#{i + 1}</span>
+                      <span className="text-sm font-semibold text-[#F0F6FC]">{s.section}</span>
+                      {s.topFly && (
+                        <span className="text-[10px] text-[#8B949E]">· {s.topFly}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-[#8B949E]">
+                      {s.avgFish != null && (
+                        <span className="font-mono text-[#E8923A]">{s.avgFish} avg</span>
+                      )}
+                      <span>{s.sessionCount} sessions</span>
+                    </div>
+                  </div>
+                  <div className="h-1 bg-[#21262D] rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#E8923A]/60 rounded-full"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ── Leaderboard ─────────────────────────────────────────────────── */}
       {intel.leaderboard && (
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">

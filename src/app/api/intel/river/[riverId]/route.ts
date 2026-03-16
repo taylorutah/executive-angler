@@ -51,6 +51,13 @@ export interface LeaderboardEntry {
   avatarUrl: string | null;
 }
 
+export interface SectionBreakdown {
+  section: string;
+  sessionCount: number;
+  avgFish: number | null;
+  topFly: string | null;
+}
+
 export interface RiverLeaderboard {
   riverChampion: (LeaderboardEntry & { sessionCount: number }) | null;
   biggestFish: (LeaderboardEntry & { lengthInches: number; species: string | null; sessionDate: string }) | null;
@@ -78,6 +85,8 @@ export interface RiverIntel {
   // Trip reports
   recentReports: TripReport[];
   totalReports: number;
+  // Section breakdown
+  sections: SectionBreakdown[];
   // PRO stats
   gearStats: GearStats | null;
   bestTimeOfDay: TimeOfDayStat | null;
@@ -101,7 +110,7 @@ export async function GET(
   // All public sessions for this river
   const { data: sessions } = await supabase
     .from("fishing_sessions")
-    .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather, user_id, gear_rod_id, gear_leader_id, gear_tippet_id, created_at")
+    .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather, user_id, gear_rod_id, gear_leader_id, gear_tippet_id, created_at, section")
     .eq("river_id", riverId)
     .eq("privacy", "public")
     .order("date", { ascending: false });
@@ -124,6 +133,7 @@ export async function GET(
       waterClarity: [],
       recentReports: [],
       totalReports: 0,
+      sections: [],
       gearStats: null,
       bestTimeOfDay: null,
       bestMonth: null,
@@ -283,6 +293,48 @@ export async function GET(
     weather: s.weather && s.weather.trim() ? s.weather.trim() : null,
     username: profileMap.get(s.id) ?? null,
   }));
+
+  // ── Section breakdown ────────────────────────────────────────────────────
+  const sectionMap = new Map<string, { fish: number; count: number; sessionIds: string[] }>();
+  (sessions || []).forEach((s) => {
+    if (!s.section) return;
+    const entry = sectionMap.get(s.section) ?? { fish: 0, count: 0, sessionIds: [] };
+    entry.fish += s.total_fish ?? 0;
+    entry.count++;
+    entry.sessionIds.push(s.id);
+    sectionMap.set(s.section, entry);
+  });
+
+  // For top fly per section, use the catches we already have
+  const catchesBySession = new Map<string, typeof catches>();
+  (catches || []).forEach((c) => {
+    const list = catchesBySession.get(c.session_id) ?? [];
+    list.push(c);
+    catchesBySession.set(c.session_id, list);
+  });
+
+  const sections: SectionBreakdown[] = Array.from(sectionMap.entries())
+    .map(([section, { fish, count, sessionIds }]) => {
+      // Top fly for this section
+      const flyCount = new Map<string, number>();
+      sessionIds.forEach((sid) => {
+        (catchesBySession.get(sid) || []).forEach((c) => {
+          const fp = c.fly_patterns as unknown as { name: string } | null;
+          const name = fp?.name ?? c.fly_name ?? null;
+          if (name) flyCount.set(name, (flyCount.get(name) ?? 0) + 1);
+        });
+      });
+      const topFly = flyCount.size > 0
+        ? [...flyCount.entries()].sort((a, b) => b[1] - a[1])[0][0]
+        : null;
+      return {
+        section,
+        sessionCount: count,
+        avgFish: count > 0 ? Math.round((fish / count) * 10) / 10 : null,
+        topFly,
+      };
+    })
+    .sort((a, b) => b.sessionCount - a.sessionCount);
 
   // ── Gear stats (PRO) ─────────────────────────────────────────────────────
   const rodIds = (sessions || []).map((s) => s.gear_rod_id).filter(Boolean) as string[];
@@ -478,6 +530,7 @@ export async function GET(
     waterClarity,
     recentReports,
     totalReports: sessionsWithNotes.length,
+    sections,
     gearStats,
     bestTimeOfDay,
     bestMonth,
