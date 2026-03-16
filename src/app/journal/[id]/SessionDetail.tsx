@@ -300,7 +300,7 @@ export default function SessionDetail({ session, catches, flies }: Props) {
             <div className="flex items-center gap-3">
               {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               <Link href={`/journal/${session.id}/edit`}
-                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
+                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4822f] transition-colors shadow-sm">
                 <Pencil className="h-3.5 w-3.5" /> Edit Session
               </Link>
             </div>
