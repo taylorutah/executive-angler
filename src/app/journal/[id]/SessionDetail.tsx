@@ -504,11 +504,11 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
                 {/* Fish caught summary — compact cards under description */}
                 {catches.filter(c => c.species).length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
                     {catches.filter(c => c.species).map((c, i) => {
                       const photoUrl = catchPhotos[c.id] || c.fish_image_url;
                       return (
-                        <div key={i} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-1.5">
+                        <div key={i} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-1.5 flex-shrink-0">
                           {photoUrl ? (
                             <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))}
                               className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
@@ -540,7 +540,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 )}
 
                 {/* 4 big stats */}
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4 mb-4">
                   <div>
                     <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
                     <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Fish Caught</p>
@@ -667,7 +667,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       </button>
                       <button
                         onClick={() => handleSessionPhotoDelete(photo.id)}
-                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all"
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-600 transition-all"
                       >
                         <X className="h-4 w-4" />
                       </button>
