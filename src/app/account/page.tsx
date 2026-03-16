@@ -4,7 +4,10 @@ import AccountClient from "./AccountClient";
 
 export const metadata = { title: "My Account | Executive Angler" };
 
-export default async function AccountPage() {
+export default async function AccountPage({ searchParams }: { searchParams: Promise<{ redirect?: string; welcome?: string }> }) {
+  const params = await searchParams;
+  const welcome = params.welcome;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/account");
@@ -83,6 +86,7 @@ export default async function AccountPage() {
           ? { river_name: bestSession.river_name || "", date: bestSession.date || "", total_fish: bestSession.total_fish || 0, location: bestSession.location }
           : null,
       }}
+      welcome={welcome === "1"}
     />
   );
 }

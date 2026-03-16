@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -30,9 +30,10 @@ interface Props {
     biggestFish: number | null;
     bestSession: { river_name: string; date: string; total_fish: number; location?: string } | null;
   };
+  welcome?: boolean;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, welcome }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [username, setUsername] = useState(user.username || "");
@@ -51,6 +52,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pwError, setPwError] = useState("");
   const [pwSaved, setPwSaved] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(welcome ?? false);
 
   // Username availability state
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
@@ -216,6 +218,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         />
       )}
       <div className="mx-auto max-w-3xl px-4 pt-24 pb-16">
+        {/* Welcome banner */}
+        {showWelcome && (
+          <div className="bg-[#E8923A] text-[#0D1117] rounded-lg p-4 mb-6 flex items-center justify-between">
+            <p className="font-medium">Welcome to Executive Angler! Complete your profile below.</p>
+            <button onClick={() => setShowWelcome(false)} className="text-[#0D1117] hover:text-[#161B22] transition-colors">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        )}
         {/* Profile header */}
         <div className="flex items-center gap-4 mb-8">
           <div className="relative flex-shrink-0">
@@ -439,7 +450,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         </div>
 
         {/* Change password */}
-        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm">
+        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
           <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Change Password</h2>
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div>
@@ -457,6 +468,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             </button>
           </form>
         </div>
+
+        {/* Sign Out */}
+        <button
+          onClick={handleSignOut}
+          className="w-full flex items-center justify-center gap-2 rounded-lg border border-red-800 text-red-400 px-5 py-3 text-sm font-medium hover:bg-red-900/20 transition-colors"
+        >
+          <LogOut className="h-4 w-4" />
+          Sign Out
+        </button>
       </div>
     </div>
   );

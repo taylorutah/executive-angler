@@ -11,6 +11,19 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // Check if user has completed profile
+      const { data: { user } } = await supabase.auth.getUser();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user?.id)
+        .single();
+
+      // If no full_name, redirect to account page with welcome flag
+      if (!profile?.full_name) {
+        return NextResponse.redirect(`${origin}/account?welcome=1`);
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
