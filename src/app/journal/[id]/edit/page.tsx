@@ -60,6 +60,8 @@ export default function EditSessionPage() {
   const locationInputRef = useRef<HTMLInputElement>(null);
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
+  const [riverOpen, setRiverOpen] = useState(false);
+  const [riverFilter, setRiverFilter] = useState("");
 
   // Simple/Full toggle — persisted per-session in localStorage
   // Defaults to Simple if no catches exist (drift-mode session), Full otherwise
@@ -306,8 +308,33 @@ export default function EditSessionPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className={label}>River</label>
-                  <input list="rivers-list" className={input} placeholder="Middle Provo River" value={form.river_name} onChange={(e) => updateForm("river_name", e.target.value)} />
-                  <datalist id="rivers-list">{rivers.map((r) => <option key={r} value={r} />)}</datalist>
+                  <div className="relative">
+                    <input
+                      className={input}
+                      placeholder="Middle Provo River"
+                      value={form.river_name}
+                      onChange={(e) => { updateForm("river_name", e.target.value); setRiverFilter(e.target.value); setRiverOpen(true); }}
+                      onFocus={() => setRiverOpen(true)}
+                      onBlur={() => setTimeout(() => setRiverOpen(false), 150)}
+                      autoComplete="off"
+                    />
+                    {riverOpen && rivers.filter(r => r.toLowerCase().includes(form.river_name.toLowerCase())).length > 0 && (
+                      <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-lg border border-[#21262D] bg-[#161B22] shadow-lg">
+                        {rivers
+                          .filter(r => !form.river_name || r.toLowerCase().includes(form.river_name.toLowerCase()))
+                          .slice(0, 20)
+                          .map(r => (
+                            <li
+                              key={r}
+                              onMouseDown={() => { updateForm("river_name", r); setRiverOpen(false); }}
+                              className="px-4 py-2 text-[#F0F6FC] hover:bg-[#21262D] cursor-pointer text-sm"
+                            >
+                              {r}
+                            </li>
+                          ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1">

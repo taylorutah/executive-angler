@@ -15,6 +15,9 @@ export default function NewSessionPage() {
   const [gearLineId, setGearLineId] = useState<string | null>(null);
   const [gearLeaderId, setGearLeaderId] = useState<string | null>(null);
   const [gearTippetId, setGearTippetId] = useState<string | null>(null);
+  const [riverOpen, setRiverOpen] = useState(false);
+  const [riverFilter, setRiverFilter] = useState("");
+  const [riverValue, setRiverValue] = useState("");
 
   // Fetch autocomplete data + gear defaults
   useEffect(() => {
@@ -140,19 +143,36 @@ export default function NewSessionPage() {
             >
               River
             </label>
-            <input
-              type="text"
-              id="river"
-              name="river"
-              list="rivers"
-              required
-              className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
-            />
-            <datalist id="rivers">
-              {rivers.map((river) => (
-                <option key={river} value={river} />
-              ))}
-            </datalist>
+            <div className="relative">
+              <input
+                type="text"
+                id="river"
+                name="river"
+                required
+                value={riverValue}
+                onChange={(e) => { setRiverValue(e.target.value); setRiverFilter(e.target.value); setRiverOpen(true); }}
+                onFocus={() => setRiverOpen(true)}
+                onBlur={() => setTimeout(() => setRiverOpen(false), 150)}
+                autoComplete="off"
+                className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A] bg-[#161B22] text-[#F0F6FC]"
+              />
+              {riverOpen && rivers.filter(r => r.toLowerCase().includes(riverValue.toLowerCase())).length > 0 && (
+                <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-lg border border-[#21262D] bg-[#161B22] shadow-lg">
+                  {rivers
+                    .filter(r => !riverValue || r.toLowerCase().includes(riverValue.toLowerCase()))
+                    .slice(0, 20)
+                    .map(r => (
+                      <li
+                        key={r}
+                        onMouseDown={() => { setRiverValue(r); setRiverOpen(false); }}
+                        className="px-4 py-2 text-[#F0F6FC] hover:bg-[#21262D] cursor-pointer text-sm"
+                      >
+                        {r}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
           </div>
 
           {/* Location */}
