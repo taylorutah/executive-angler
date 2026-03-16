@@ -238,8 +238,8 @@ export default function EditSessionPage() {
             gear_leader_id: gearLeaderId || null,
             gear_tippet_id: gearTippetId || null,
           }),
-          lat: latitude ?? null,
-          lng: longitude ?? null,
+          latitude: latitude ?? null,
+          longitude: longitude ?? null,
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
