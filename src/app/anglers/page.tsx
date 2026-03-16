@@ -16,7 +16,6 @@ export default async function AnglersPage() {
   const { data: anglers } = await supabase
     .from("angler_profiles")
     .select("user_id, username, display_name, home_location, bio, avatar_url")
-    .not("username", "is", null)
     .eq("is_private", false)
     .order("created_at", { ascending: false })
     .limit(50);
@@ -52,13 +51,13 @@ export default async function AnglersPage() {
         {(!anglers || anglers.length === 0) ? (
           <div className="text-center py-16 text-[#484F58]">
             <p>No public angler profiles yet.</p>
-            <p className="mt-2 text-sm">Get the app and set your username to appear here.</p>
+            <p className="mt-2 text-sm">Be the first to join!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {anglers.map((a) => {
               const crowns = crownsByUser.get(a.user_id) || [];
-              const initials = String(a.username?.charAt(0) ?? "A").toUpperCase();
+              const initials = String((a.display_name || a.username || "A").charAt(0)).toUpperCase();
               return (
                 <div key={a.user_id} className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">

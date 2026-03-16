@@ -239,10 +239,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="font-heading text-[#E8923A] text-2xl font-bold truncate">{displayName || "Angler"}</h1>
-            {username ? (
+            {username && (
               <p className="text-sm text-[#8B949E] truncate">@{username}</p>
-            ) : (
-              <p className="text-xs text-red-500">Set your @username</p>
             )}
             <p className="text-sm text-[#484F58] truncate">{user.email}</p>
           </div>
@@ -334,9 +332,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <input className={inputCls} value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" />
             </div>
 
-            {/* Username */}
+            {/* Username (optional) */}
             <div>
-              <label className={labelCls}>Username</label>
+              <label className={labelCls}>Username (optional)</label>
               <div className="relative flex items-center">
                 <span className="absolute left-4 text-[#8B949E] pointer-events-none select-none">@</span>
                 <input
@@ -361,7 +359,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               {username.length >= 3 && usernameAvailable === false && (
                 <p className="text-xs text-red-500 mt-1">That username is taken.</p>
               )}
-              <p className="text-xs text-[#484F58] mt-1">Letters, numbers, underscores. Min 3 characters.</p>
+              <p className="text-xs text-[#484F58] mt-1">Set a custom handle, e.g. @taylorutah. Leave blank to use your name.</p>
             </div>
 
             {/* Bio */}
