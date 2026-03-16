@@ -64,7 +64,7 @@ export default async function AccountPage() {
       user={{
         id: user.id,
         email: user.email || "",
-        displayName: user.user_metadata?.display_name || profile?.display_name || "",
+        displayName: profilesRow?.display_name || profile?.display_name || user.user_metadata?.display_name || "",
         avatarUrl: profile?.avatar_url || "",
         username: profilesRow?.username || undefined,
         bio: profilesRow?.bio || undefined,

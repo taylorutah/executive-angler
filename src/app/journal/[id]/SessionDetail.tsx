@@ -161,9 +161,9 @@ export default function SessionDetail({ session, catches, flies }: Props) {
     }
   }
 
-  const totalFish = catches.length > 0
-    ? catches.reduce((s, c) => s + (c.quantities || 1), 0)
-    : (session.total_fish ?? 0);
+  const catchesTotal = catches.reduce((s, c) => s + (c.quantities || 1), 0);
+  // Use whichever is larger: summed catch rows OR session.total_fish (drift mode or partial logging)
+  const totalFish = Math.max(catchesTotal, session.total_fish ?? 0);
   const isDriftMode = catches.length === 0 && (session.total_fish ?? 0) > 0;
   const tags = session.trip_tags || session.tags || [];
   const fishPhotos = catches.filter(c => c.fish_image_url);

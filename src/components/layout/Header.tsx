@@ -26,11 +26,19 @@ export default function Header() {
         .from("angler_profiles")
         .select("avatar_url, display_name")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
+
+      // Fall back to profiles table for display_name (iOS-written data)
+      const { data: profilesRow } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
       setUser({
         email: user.email ?? undefined,
         avatarUrl: profile?.avatar_url || undefined,
-        displayName: profile?.display_name || user.user_metadata?.display_name || undefined,
+        displayName: profilesRow?.display_name || profile?.display_name || user.user_metadata?.display_name || undefined,
       });
     });
   }, []);

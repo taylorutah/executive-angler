@@ -49,12 +49,13 @@ export async function getRiverBySlug(slug: string): Promise<River | undefined> {
     .from("rivers")
     .select("*")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("[getRiverBySlug] Supabase error:", error);
-    throw error;
+    return undefined;  // Return undefined → caller calls notFound() → 404 not 500
   }
+  if (!data) return undefined;
   return mapRow(data as Record<string, unknown>);
 }
 

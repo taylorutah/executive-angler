@@ -222,7 +222,7 @@ export default function SignupPage() {
                     triggerUsernameCheck(e.target.value);
                   }}
                   className={`w-full px-4 py-3 rounded-lg border ${usernameBorder} bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none pr-10`}
-                  placeholder="taylorutah"
+                  placeholder="yourhandle"
                   autoComplete="username"
                   autoCapitalize="none"
                 />

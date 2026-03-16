@@ -16,7 +16,7 @@ export default async function AnglersPage() {
   const { data: anglers } = await supabase
     .from("angler_profiles")
     .select("user_id, username, display_name, home_location, bio, avatar_url")
-    .eq("is_private", false)
+    .or("is_private.is.null,is_private.eq.false")
     .order("created_at", { ascending: false })
     .limit(50);
 

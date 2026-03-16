@@ -30,7 +30,7 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       .eq("user_id", user.id)
       .eq("entity_type", entityType)
       .eq("entity_id", entityId)
-      .single();
+      .maybeSingle();
 
     setIsFavorite(!!data);
   }
