@@ -8,6 +8,7 @@ import {
   Cloud, MapPin, Clock, Check, RotateCcw
 } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
+import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
 
 interface Catch {
   id: string;
@@ -393,6 +394,13 @@ export default function SessionDetail({ session, catches, flies }: Props) {
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* ---- RIVER STATS WIDGET ---- */}
+          {session.river_name && (
+            <div className="mb-5">
+              <RiverStatsWidget riverName={session.river_name} />
             </div>
           )}
 

@@ -6,7 +6,7 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -178,16 +178,22 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">Journal</h1>
         <div className="flex gap-2">
           <Link
+            href="/journal/stats"
+            className="flex-1 text-center rounded-md border border-[#00B4D8] px-2 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+          >
+            📊 Stats
+          </Link>
+          <Link
             href="/journal/flies"
             className="flex-1 text-center rounded-md border border-[#E8923A] px-2 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
           >
-            🪰 Fly Box
+            🪰 Flies
           </Link>
           <Link
             href="/account/gear"
             className="flex-1 text-center rounded-md border border-[#00B4D8] px-2 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
           >
-            🎣 Gear Box
+            🎣 Gear
           </Link>
           <Link
             href="/journal/new"
@@ -325,6 +331,9 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3 space-y-1">
               <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#E8923A]/5 text-[#E8923A] text-sm font-medium">
                 <BookOpen className="h-4 w-4" /> Journal
+              </Link>
+              <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+                <TrendingUp className="h-4 w-4" /> River Stats
               </Link>
               <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
                 <Feather className="h-4 w-4" /> My Fly Box

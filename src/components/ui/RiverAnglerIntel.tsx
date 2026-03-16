@@ -12,6 +12,11 @@ import {
   ChevronDown,
   ChevronUp,
   Activity,
+  Trophy,
+  Flame,
+  Crown,
+  Sunrise,
+  Lock,
 } from "lucide-react";
 import type { RiverIntel } from "@/app/api/intel/river/[riverId]/route";
 
@@ -413,6 +418,131 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
           </div>
         )}
       </div>
+
+      {/* ── Leaderboard ─────────────────────────────────────────────────── */}
+      {intel.leaderboard && (
+        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Trophy className="h-4 w-4 text-[#E8923A]" />
+            <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
+              River Records
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {intel.leaderboard.riverChampion && (
+              <div className="bg-[#0D1117] rounded-lg border border-[#E8923A]/40 p-4 flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Crown className="h-3.5 w-3.5 text-[#E8923A]" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">Most Active</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-[#E8923A]/20 border border-[#E8923A]/40 flex items-center justify-center text-sm font-bold text-[#E8923A] mb-1">
+                  {intel.leaderboard.riverChampion.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.riverChampion.username}</span>
+                <span className="text-xs text-[#8B949E] font-mono">{intel.leaderboard.riverChampion.sessionCount} sessions (90d)</span>
+              </div>
+            )}
+            {intel.leaderboard.biggestFish && (
+              <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Fish className="h-3.5 w-3.5 text-[#00B4D8]" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">River Record</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/40 flex items-center justify-center text-sm font-bold text-[#00B4D8] mb-1">
+                  {intel.leaderboard.biggestFish.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.biggestFish.username}</span>
+                <span className="text-xs text-[#8B949E] font-mono">
+                  {intel.leaderboard.biggestFish.lengthInches}&quot;
+                  {intel.leaderboard.biggestFish.species && ` ${intel.leaderboard.biggestFish.species}`}
+                </span>
+              </div>
+            )}
+            {intel.leaderboard.hotHand && (
+              <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Flame className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">Best Session</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-sm font-bold text-amber-400 mb-1">
+                  {intel.leaderboard.hotHand.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.hotHand.username}</span>
+                <span className="text-xs text-[#8B949E] font-mono">{intel.leaderboard.hotHand.fishCount} fish</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── PRO Stats ────────────────────────────────────────────────────── */}
+      {(intel.gearStats || intel.bestTimeOfDay || intel.bestMonth) && (
+        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Lock className="h-4 w-4 text-[#E8923A]" />
+            <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
+              Advanced Stats
+            </h3>
+            <span className="ml-1 px-1.5 py-0.5 text-[9px] font-bold bg-[#E8923A]/20 text-[#E8923A] rounded uppercase tracking-widest">
+              PRO
+            </span>
+          </div>
+          <div className="space-y-5">
+            {intel.gearStats && (intel.gearStats.topRodBrand || intel.gearStats.topLeader || intel.gearStats.topTippet) && (
+              <div>
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">What the Pros Use</p>
+                <div className="space-y-2">
+                  {intel.gearStats.topRodBrand && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[#8B949E]">Rod Brand</span>
+                      <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topRodBrand}</span>
+                    </div>
+                  )}
+                  {intel.gearStats.topLeader && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[#8B949E]">Leader</span>
+                      <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topLeader}</span>
+                    </div>
+                  )}
+                  {intel.gearStats.topTippet && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[#8B949E]">Tippet</span>
+                      <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topTippet}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {intel.bestTimeOfDay && (
+              <div>
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">Best Time to Fish</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {(["morning","midday","afternoon","evening"] as const).map((period) => {
+                    const isWinner = intel.bestTimeOfDay?.period === period;
+                    const labels: Record<string, string> = { morning: "Morning", midday: "Midday", afternoon: "Afternoon", evening: "Evening" };
+                    return (
+                      <div key={period} className={`text-center py-2 px-1 rounded-lg border text-xs transition-colors ${isWinner ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#484F58]"}`}>
+                        <div className="font-medium">{labels[period]}</div>
+                        {isWinner && <div className="font-mono text-[10px] mt-0.5">{intel.bestTimeOfDay?.avgFish} avg</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {intel.bestMonth && (
+              <div>
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">Best Month</p>
+                <div className="flex items-baseline gap-2">
+                  <Sunrise className="h-4 w-4 text-[#E8923A] shrink-0" />
+                  <span className="text-sm font-semibold text-[#F0F6FC]">{intel.bestMonth.month}</span>
+                  <span className="text-xs text-[#8B949E]">— avg <span className="font-mono text-[#E8923A]">{intel.bestMonth.avgFish}</span> fish/session ({intel.bestMonth.sessionCount} sessions)</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Attribution footer ───────────────────────────────────────────── */}
       <p className="text-[10px] text-[#484F58] text-right">

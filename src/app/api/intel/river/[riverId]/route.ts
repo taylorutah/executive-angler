@@ -26,6 +26,37 @@ export interface TripReport {
   username: string | null;
 }
 
+export interface GearStats {
+  topRodBrand: string | null;
+  topLeader: string | null;
+  topTippet: string | null;
+}
+
+export interface TimeOfDayStat {
+  period: "morning" | "midday" | "afternoon" | "evening";
+  label: string;
+  avgFish: number;
+  sessionCount: number;
+}
+
+export interface MonthStat {
+  month: string;
+  avgFish: number;
+  sessionCount: number;
+}
+
+export interface LeaderboardEntry {
+  userId: string;
+  username: string;
+  avatarUrl: string | null;
+}
+
+export interface RiverLeaderboard {
+  riverChampion: (LeaderboardEntry & { sessionCount: number }) | null;
+  biggestFish: (LeaderboardEntry & { lengthInches: number; species: string | null; sessionDate: string }) | null;
+  hotHand: (LeaderboardEntry & { fishCount: number; sessionDate: string }) | null;
+}
+
 export interface RiverIntel {
   riverId: string;
   // Activity
@@ -47,6 +78,11 @@ export interface RiverIntel {
   // Trip reports
   recentReports: TripReport[];
   totalReports: number;
+  // PRO stats
+  gearStats: GearStats | null;
+  bestTimeOfDay: TimeOfDayStat | null;
+  bestMonth: MonthStat | null;
+  leaderboard: RiverLeaderboard | null;
 }
 
 export async function GET(
@@ -60,10 +96,12 @@ export async function GET(
   const ago30 = new Date(now.getTime() - 30 * 86400000).toISOString().split("T")[0];
   const ago7 = new Date(now.getTime() - 7 * 86400000).toISOString().split("T")[0];
 
+  const ago90 = new Date(now.getTime() - 90 * 86400000).toISOString().split("T")[0];
+
   // All public sessions for this river
   const { data: sessions } = await supabase
     .from("fishing_sessions")
-    .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather")
+    .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather, user_id, gear_rod_id, gear_leader_id, gear_tippet_id, created_at")
     .eq("river_id", riverId)
     .eq("privacy", "public")
     .order("date", { ascending: false });
@@ -86,6 +124,10 @@ export async function GET(
       waterClarity: [],
       recentReports: [],
       totalReports: 0,
+      gearStats: null,
+      bestTimeOfDay: null,
+      bestMonth: null,
+      leaderboard: null,
     } satisfies RiverIntel);
   }
 
@@ -96,6 +138,7 @@ export async function GET(
     .from("catches")
     .select(`
       id,
+      session_id,
       species,
       length_inches,
       fly_size,
@@ -241,6 +284,183 @@ export async function GET(
     username: profileMap.get(s.id) ?? null,
   }));
 
+  // ── Gear stats (PRO) ─────────────────────────────────────────────────────
+  const rodIds = (sessions || []).map((s) => s.gear_rod_id).filter(Boolean) as string[];
+  const leaderIds = (sessions || []).map((s) => s.gear_leader_id).filter(Boolean) as string[];
+  const tippetIds = (sessions || []).map((s) => s.gear_tippet_id).filter(Boolean) as string[];
+
+  let gearStats: GearStats | null = null;
+
+  if (rodIds.length > 0 || leaderIds.length > 0 || tippetIds.length > 0) {
+    const allGearIds = [...new Set([...rodIds, ...leaderIds, ...tippetIds])];
+    const { data: gearItems } = await supabase
+      .from("gear_items")
+      .select("id, type, maker, name")
+      .in("id", allGearIds);
+
+    const gearById = new Map((gearItems || []).map((g) => [g.id, g]));
+
+    const topOf = (ids: string[], field: "maker" | "name") => {
+      const counts = new Map<string, number>();
+      ids.forEach((id) => {
+        const item = gearById.get(id);
+        const val = item?.[field];
+        if (val) counts.set(val, (counts.get(val) ?? 0) + 1);
+      });
+      return counts.size > 0
+        ? [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0]
+        : null;
+    };
+
+    gearStats = {
+      topRodBrand: topOf(rodIds, "maker"),
+      topLeader: topOf(leaderIds, "name"),
+      topTippet: topOf(tippetIds, "name"),
+    };
+
+    if (!gearStats.topRodBrand && !gearStats.topLeader && !gearStats.topTippet) {
+      gearStats = null;
+    }
+  }
+
+  // ── Best time of day (PRO) ────────────────────────────────────────────────
+  // Uses catches.time_caught (ISO timestamp) joined to sessions on this river
+  const { data: timedCatches } = await supabase
+    .from("catches")
+    .select("session_id, time_caught")
+    .in("session_id", sessionIds)
+    .not("time_caught", "is", null);
+
+  let bestTimeOfDay: TimeOfDayStat | null = null;
+
+  if ((timedCatches || []).length > 0) {
+    const periodMap = new Map<string, { catches: number; sessions: Set<string> }>();
+    const periods = [
+      { key: "morning" as const, label: "Morning (5–9am)", min: 5, max: 9 },
+      { key: "midday" as const, label: "Midday (10am–12pm)", min: 10, max: 12 },
+      { key: "afternoon" as const, label: "Afternoon (1–5pm)", min: 13, max: 17 },
+      { key: "evening" as const, label: "Evening (5–8pm)", min: 17, max: 20 },
+    ];
+
+    (timedCatches || []).forEach((c) => {
+      try {
+        const h = new Date(c.time_caught).getUTCHours();
+        const p = periods.find((p) => h >= p.min && h < p.max);
+        if (!p) return;
+        const entry = periodMap.get(p.key) ?? { catches: 0, sessions: new Set() };
+        entry.catches++;
+        entry.sessions.add(c.session_id);
+        periodMap.set(p.key, entry);
+      } catch { /* skip invalid timestamps */ }
+    });
+
+    let bestPeriod: TimeOfDayStat | null = null;
+    for (const [key, val] of periodMap.entries()) {
+      const p = periods.find((x) => x.key === key)!;
+      const avg = val.sessions.size > 0 ? Math.round((val.catches / val.sessions.size) * 10) / 10 : 0;
+      if (!bestPeriod || avg > bestPeriod.avgFish) {
+        bestPeriod = { period: key as TimeOfDayStat["period"], label: p.label, avgFish: avg, sessionCount: val.sessions.size };
+      }
+    }
+    bestTimeOfDay = bestPeriod;
+  }
+
+  // ── Best month (PRO) ─────────────────────────────────────────────────────
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthMap = new Map<number, { fish: number; count: number }>();
+  (sessions || []).forEach((s) => {
+    if (!s.date) return;
+    const m = parseInt(s.date.split("-")[1], 10) - 1;
+    const entry = monthMap.get(m) ?? { fish: 0, count: 0 };
+    entry.fish += s.total_fish ?? 0;
+    entry.count++;
+    monthMap.set(m, entry);
+  });
+
+  let bestMonth: MonthStat | null = null;
+  for (const [m, { fish, count }] of monthMap.entries()) {
+    if (count < 2) continue;
+    const avg = Math.round((fish / count) * 10) / 10;
+    if (!bestMonth || avg > bestMonth.avgFish) {
+      bestMonth = { month: MONTHS[m], avgFish: avg, sessionCount: count };
+    }
+  }
+
+  // ── Leaderboard (PRO) ────────────────────────────────────────────────────
+  let leaderboard: RiverLeaderboard | null = null;
+
+  // Fetch angler profiles for all unique users on this river
+  const uniqueUserIds = [...new Set((sessions || []).map((s) => s.user_id).filter(Boolean))] as string[];
+
+  if (uniqueUserIds.length > 0) {
+    const { data: anglerProfiles } = await supabase
+      .from("angler_profiles")
+      .select("user_id, username, avatar_url")
+      .in("user_id", uniqueUserIds);
+
+    const profileById = new Map((anglerProfiles || []).map((p) => [p.user_id, p]));
+
+    // River champion: most sessions in last 90 days
+    const championCounts = new Map<string, number>();
+    (sessions || []).filter((s) => s.date >= ago90).forEach((s) => {
+      if (s.user_id) championCounts.set(s.user_id, (championCounts.get(s.user_id) ?? 0) + 1);
+    });
+    let riverChampion: RiverLeaderboard["riverChampion"] = null;
+    if (championCounts.size > 0) {
+      const [topUid, topCount] = [...championCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+      const prof = profileById.get(topUid);
+      riverChampion = {
+        userId: topUid,
+        username: prof?.username ?? "Angler",
+        avatarUrl: prof?.avatar_url ?? null,
+        sessionCount: topCount,
+      };
+    }
+
+    // Biggest fish: max catch length on this river
+    let biggestFish: RiverLeaderboard["biggestFish"] = null;
+    if ((catches || []).length > 0) {
+      const sessionUserMap = new Map((sessions || []).map((s) => [s.id, s]));
+      const withLength = (catches || []).filter((c) => c.length_inches != null);
+      if (withLength.length > 0) {
+        const best = withLength.sort((a, b) => Number(b.length_inches) - Number(a.length_inches))[0];
+        const sess = sessionUserMap.get(best.session_id);
+        if (sess?.user_id) {
+          const prof = profileById.get(sess.user_id);
+          biggestFish = {
+            userId: sess.user_id,
+            username: prof?.username ?? "Angler",
+            avatarUrl: prof?.avatar_url ?? null,
+            lengthInches: Number(best.length_inches),
+            species: best.species ?? null,
+            sessionDate: sess.date,
+          };
+        }
+      }
+    }
+
+    // Hot hand: max total_fish in single session
+    let hotHand: RiverLeaderboard["hotHand"] = null;
+    const fishySessions = (sessions || []).filter((s) => (s.total_fish ?? 0) > 0);
+    if (fishySessions.length > 0) {
+      const best = fishySessions.sort((a, b) => (b.total_fish ?? 0) - (a.total_fish ?? 0))[0];
+      if (best.user_id) {
+        const prof = profileById.get(best.user_id);
+        hotHand = {
+          userId: best.user_id,
+          username: prof?.username ?? "Angler",
+          avatarUrl: prof?.avatar_url ?? null,
+          fishCount: best.total_fish ?? 0,
+          sessionDate: best.date,
+        };
+      }
+    }
+
+    if (riverChampion || biggestFish || hotHand) {
+      leaderboard = { riverChampion, biggestFish, hotHand };
+    }
+  }
+
   return NextResponse.json({
     riverId,
     totalSessions,
@@ -258,5 +478,9 @@ export async function GET(
     waterClarity,
     recentReports,
     totalReports: sessionsWithNotes.length,
+    gearStats,
+    bestTimeOfDay,
+    bestMonth,
+    leaderboard,
   } satisfies RiverIntel);
 }
