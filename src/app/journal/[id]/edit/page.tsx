@@ -17,6 +17,7 @@ interface Catch {
   species: string;
   length_inches: string;
   quantities: number;
+  fly_pattern_id?: string;
   fly_position: string;
   fly_size: string;
   bead_size: string;
@@ -32,6 +33,7 @@ const POSITIONS = ["On Point", "Dropper", "Tag", "Single"];
 
 const emptyCatch = (): Catch => ({
   species: "", length_inches: "", quantities: 1,
+  fly_pattern_id: "",
   fly_position: "", fly_size: "", bead_size: "", time_caught: "", notes: "",
 });
 
@@ -47,6 +49,7 @@ export default function EditSessionPage() {
   const [rivers, setRivers] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [spots, setSpots] = useState<Spot[]>([]);
+  const [flies, setFlies] = useState<{ id: string; name: string }[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
   const [showSpotManager, setShowSpotManager] = useState(false);
   const [gearRodId, setGearRodId] = useState<string | null>(null);
@@ -131,11 +134,12 @@ export default function EditSessionPage() {
 
   useEffect(() => {
     async function load() {
-      const [sessionRes, riversRes, locsRes, spotsRes] = await Promise.all([
+      const [sessionRes, riversRes, locsRes, spotsRes, fliesRes] = await Promise.all([
         fetch(`/api/fishing/session?id=${id}`),
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
         fetch("/api/fishing/spots"),
+        fetch("/api/fishing/flies"),
       ]);
 
       if (sessionRes.ok) {
@@ -157,6 +161,7 @@ export default function EditSessionPage() {
             species: c.species || "",
             length_inches: c.length_inches || "",
             quantities: c.quantities || 1,
+            fly_pattern_id: (c as any).fly_pattern_id || "",
             fly_position: c.fly_position || "",
             fly_size: c.fly_size || "",
             bead_size: c.bead_size || "",
@@ -195,6 +200,7 @@ export default function EditSessionPage() {
       if (riversRes.ok) setRivers(await riversRes.json());
       if (locsRes.ok) setLocations(await locsRes.json());
       if (spotsRes.ok) setSpots(await spotsRes.json());
+      if (fliesRes.ok) setFlies(await fliesRes.json());
       setLoading(false);
     }
     load();
@@ -452,6 +458,13 @@ export default function EditSessionPage() {
                       <div>
                         <label className={label}>Qty</label>
                         <input type="number" min={1} className={input} value={c.quantities} onChange={(e) => updateCatch(i, "quantities", parseInt(e.target.value) || 1)} />
+                      </div>
+                      <div className="col-span-2">
+                        <label className={label}>Fly Pattern</label>
+                        <select className={input} value={c.fly_pattern_id || ""} onChange={(e) => updateCatch(i, "fly_pattern_id", e.target.value)}>
+                          <option value="">— Select fly —</option>
+                          {flies.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                        </select>
                       </div>
                       <div>
                         <label className={label}>Position</label>
