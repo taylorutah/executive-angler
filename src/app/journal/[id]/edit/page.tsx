@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
 import dynamic from "next/dynamic";
 
@@ -23,6 +23,7 @@ interface Catch {
   bead_size: string;
   time_caught: string;
   notes: string;
+  fish_image_url?: string;
 }
 
 interface Spot { id: string; name: string; latitude?: number; longitude?: number; description?: string; }
@@ -51,6 +52,7 @@ export default function EditSessionPage() {
   const [spots, setSpots] = useState<Spot[]>([]);
   const [flies, setFlies] = useState<{ id: string; name: string }[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
+  const [uploadingCatchIdx, setUploadingCatchIdx] = useState<number | null>(null);
   const [showSpotManager, setShowSpotManager] = useState(false);
   const [gearRodId, setGearRodId] = useState<string | null>(null);
   const [gearReelId, setGearReelId] = useState<string | null>(null);
@@ -167,6 +169,7 @@ export default function EditSessionPage() {
             bead_size: c.bead_size || "",
             time_caught: c.time_caught || "",
             notes: c.notes || "",
+            fish_image_url: (c as any).fish_image_url || undefined,
           }));
         setCatches(loadedCatches);
 
@@ -211,6 +214,24 @@ export default function EditSessionPage() {
   }
   function updateCatch(i: number, field: string, value: string | number) {
     setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, [field]: value } : c));
+  }
+
+  async function handleCatchPhotoUpload(i: number, file: File) {
+    const catchId = catches[i].id;
+    if (!catchId) return;
+    setUploadingCatchIdx(i);
+    const form = new FormData();
+    form.append("file", file);
+    form.append("catchId", catchId);
+    try {
+      const res = await fetch("/api/photos/catch", { method: "POST", body: form });
+      if (res.ok) {
+        const { url } = await res.json();
+        setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, fish_image_url: url } : c));
+      }
+    } finally {
+      setUploadingCatchIdx(null);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -492,6 +513,37 @@ export default function EditSessionPage() {
                       <div className="col-span-2">
                         <label className={label}>Notes</label>
                         <input className={input} placeholder="What worked…" value={c.notes} onChange={(e) => updateCatch(i, "notes", e.target.value)} />
+                      </div>
+                      {/* Photo upload */}
+                      <div className="col-span-3">
+                        <label className={label}>Photo</label>
+                        {c.id ? (
+                          <label className="flex items-center gap-3 cursor-pointer group">
+                            {uploadingCatchIdx === i ? (
+                              <div className="h-14 w-14 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
+                                <div className="h-4 w-4 border-2 border-[#E8923A]/40 border-t-[#E8923A] rounded-full animate-spin" />
+                              </div>
+                            ) : c.fish_image_url ? (
+                              <div className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#21262D]">
+                                <img src={c.fish_image_url} alt="Fish" className="object-cover w-full h-full" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                  <Camera className="h-4 w-4 text-white" />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] group-hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors">
+                                <Camera className="h-5 w-5 text-[#484F58] group-hover:text-[#E8923A]" />
+                              </div>
+                            )}
+                            <span className="text-xs text-[#484F58] group-hover:text-[#E8923A] transition-colors">
+                              {c.fish_image_url ? "Replace photo" : "Add fish photo"}
+                            </span>
+                            <input type="file" accept="image/*" className="hidden"
+                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCatchPhotoUpload(i, f); }} />
+                          </label>
+                        ) : (
+                          <p className="text-xs text-[#484F58]">Save session first to add a photo</p>
+                        )}
                       </div>
                     </div>
                   </div>
