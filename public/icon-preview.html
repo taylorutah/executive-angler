@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { background: #0D1117; font-family: system-ui; padding: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .card { background: #161B22; border: 1px solid #21262D; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .badge { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid; }
+  .label { color: #F0F6FC; font-size: 12px; font-weight: 600; text-align: center; }
+  .desc { color: #8B949E; font-size: 10px; text-align: center; }
+  svg { width: 36px; height: 36px; }
+
+  /* Colors per badge */
+  .first  { background: rgba(0,180,216,0.15); border-color: #00B4D8; color: #00B4D8; }
+  .regular { background: rgba(232,146,58,0.15); border-color: #E8923A; color: #E8923A; }
+  .veteran { background: rgba(232,146,58,0.15); border-color: #E8923A; color: #E8923A; }
+  .legend { background: rgba(255,215,0,0.15); border-color: #FFD700; color: #FFD700; }
+  .centurion { background: rgba(0,180,216,0.15); border-color: #00B4D8; color: #00B4D8; }
+  .master { background: rgba(232,146,58,0.15); border-color: #E8923A; color: #E8923A; }
+  .species { background: rgba(0,180,216,0.15); border-color: #00B4D8; color: #00B4D8; }
+  .producer { background: rgba(0,180,216,0.15); border-color: #00B4D8; color: #00B4D8; }
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <div class="card">
+    <div class="badge first">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 10C11 8.5 8.5 7.5 8 9C7.5 10.5 9.5 11 12 10Z" fill="currentColor" fill-opacity="0.5" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/>
+        <path d="M12 10C13 8.5 15.5 7.5 16 9C16.5 10.5 14.5 11 12 10Z" fill="currentColor" fill-opacity="0.5" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/>
+        <ellipse cx="12" cy="10.4" rx="1.3" ry="0.7" fill="currentColor"/>
+        <path d="M13.2 10.6L15 12.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        <path d="M12.8 11L14.2 13.2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        <path d="M12.3 11.1L13.2 13.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+        <path d="M11.8 11.1Q11.5 13.5 10 14.5Q9 15 9 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        <path d="M5 18C7.5 17 9.5 16.5 12 17C14.5 17.5 16.5 17 19 16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M4 20C6.5 19 9 18.5 12 19C15 19.5 17.5 19 20 18" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.55"/>
+      </svg>
+    </div>
+    <div class="label">First Timer</div>
+    <div class="desc">First session on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge regular">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="18" width="4.5" height="2" rx="1" fill="currentColor" fill-opacity="0.5" transform="rotate(-40 3 18)"/>
+        <circle cx="5.5" cy="17.5" r="1.8" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="5.5" cy="17.5" r="0.5" fill="currentColor"/>
+        <path d="M7.5 16L20.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M10 13.5L20.5 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4"/>
+        <path d="M20.5 4Q22 10 18 15Q15.5 18 12.5 20" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        <circle cx="12" cy="20.5" r="0.9" fill="currentColor"/>
+        <path d="M11 20L10 19" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+        <path d="M13 20L14 19" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="label">Regular</div>
+    <div class="desc">5 sessions on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge veteran">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M7 5L7 14C7 14 7.5 15.5 10 16L16 16C18 16 19 17 19 18.5C19 19.5 18 20 17 20L5.5 20C4.5 20 4 19.5 4 18.5L4 5C4 4 5 3.5 5.5 3.5C6.5 3.5 7 4 7 5Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M4 20L19 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M5.5 7L6 12" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-opacity="0.5"/>
+        <path d="M4.5 6.5L7 6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
+        <path d="M4.5 8.5L7 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
+        <path d="M4.5 10.5L7 10.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="label">Veteran</div>
+    <div class="desc">10 sessions on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge legend">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M2 17.5C5 16.5 7.5 17.5 10 17S15 16.5 22 17.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M6 16C6.5 13 8 10 11 8C14 6 17 7 18.5 9C20 11 19.5 14.5 18 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M6.5 15.5C7 13 8.5 10.5 11 8.5C13.5 6.5 16.5 7.5 18 9.5C19.5 11.5 18.5 15 17.5 15.5" fill="currentColor" fill-opacity="0.2"/>
+        <path d="M18 16L20.5 14L19.5 17Z" fill="currentColor" fill-opacity="0.7" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M11 8.5L12 6L13.5 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="7.5" cy="14.5" r="0.8" fill="currentColor"/>
+        <circle cx="12" cy="10" r="0.5" fill="currentColor" fill-opacity="0.6"/>
+        <circle cx="14.5" cy="10.5" r="0.5" fill="currentColor" fill-opacity="0.6"/>
+        <circle cx="10" cy="11" r="0.4" fill="currentColor" fill-opacity="0.6"/>
+        <path d="M5.5 17L4.5 15.5M7 17L6.5 15" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="label">Legend</div>
+    <div class="desc">25 sessions on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge centurion">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="10" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M4.8 7.5L17.2 7.5" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M4.5 10L17.5 10" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M4.8 12.5L17.2 12.5" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M8 3.5L8 16.5" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M11 3.5L11 16.5" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M14 3.5L14 16.5" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M11 16.5L11 17.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M11 17.5L15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M9 9.5C10 8.5 13 8.5 13.5 10S11 11.5 9 10.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        <path d="M9 10.5L7.5 9.5L7.5 11Z" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">Centurion</div>
+    <div class="desc">100 fish on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge master">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 12C4 12 5 8 10 7C14 6 18 8 19.5 11C20.5 13 20 15 18 16C15 17.5 9 17 6 15C4.5 14 4 13 4 12Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M19.5 11L22.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M19.5 12L22.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M10 7L10 4.5L13.5 5L14 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 8.5Q18 7.5 18.5 9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M8 13Q7 15 6 14.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M11.5 16.5Q11.5 18 10 17.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+        <circle cx="5.8" cy="11.5" r="1" fill="currentColor"/>
+        <path d="M8 11.5Q13 10.5 18.5 11.5" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.5" stroke-dasharray="1.5 1.5"/>
+        <circle cx="10" cy="10.5" r="0.7" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="13" cy="9.8" r="0.65" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="15.5" cy="10.5" r="0.55" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="11.5" cy="12.5" r="0.55" fill="currentColor" fill-opacity="0.5"/>
+        <circle cx="14" cy="13" r="0.5" fill="currentColor" fill-opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="label">Master Angler</div>
+    <div class="desc">500 fish on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge species">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M3 7C3 7 5 5 8.5 5C12 5 14 7 14 7C14 7 12 9 8.5 9C5 9 3 7 3 7Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M14 7L16.5 5L16.5 9Z" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="4.5" cy="7" r="0.7" fill="currentColor"/>
+        <path d="M7 13C7 13 8.5 11 11 11C13.5 11 15.5 12.5 15.5 13.5C15.5 14.5 14 16 11 16C8 16 7 14.5 7 13Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M15.5 13L18 11.5L18 15Z" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="8.5" cy="13" r="0.7" fill="currentColor"/>
+        <path d="M12 20C12 20 13.5 18.5 16 18.5C18.5 18.5 20 20 20 20.5C20 21 18.5 22 16 22C13.5 22 12 21 12 20Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M20 20L22 19L22 21Z" fill="currentColor" fill-opacity="0.7"/>
+        <circle cx="13.5" cy="20" r="0.6" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">Species Hunter</div>
+    <div class="desc">3+ species on river</div>
+  </div>
+
+  <div class="card">
+    <div class="badge producer">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="16" width="3" height="5" rx="0.5" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.1"/>
+        <rect x="7.5" y="13" width="3" height="8" rx="0.5" fill="currentColor" fill-opacity="0.45" stroke="currentColor" stroke-width="1.1"/>
+        <rect x="12" y="9.5" width="3" height="11.5" rx="0.5" fill="currentColor" fill-opacity="0.6" stroke="currentColor" stroke-width="1.1"/>
+        <rect x="16.5" y="5.5" width="3" height="15.5" rx="0.5" fill="currentColor" fill-opacity="0.8" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M4.5 16L9 13L13.5 9.5L18 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16.5 4.5C17 3.5 19 3 19.5 4C20 5 18.5 5.5 17 5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        <path d="M16.5 4.5C16 3.5 14.5 3.5 14.5 4.5C14.5 5.5 16 5.5 17 5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        <ellipse cx="17" cy="5" rx="0.7" ry="0.4" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">Consistent Producer</div>
+    <div class="desc">10+ avg fish/session</div>
+  </div>
+
+</div>
+</body>
+</html>

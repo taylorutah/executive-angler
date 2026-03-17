@@ -8,6 +8,7 @@ import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, P
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
+import { IconFirstTimer, IconRegular, IconVeteran, IconLegend, IconCenturion, IconMasterAngler, IconSpeciesHunter, IconConsistentProducer } from "@/components/icons/AchievementIcons";
 
 interface Props {
   user: {
@@ -341,10 +342,18 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               {awards.map((award, i) => (
                 <div key={i} className="flex items-center gap-3 rounded-lg bg-[#0D1117] p-3">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-xl flex-shrink-0 border-2"
-                    style={{ backgroundColor: award.metadata.badge_color || "#E8923A", borderColor: award.metadata.badge_color || "#E8923A" }}
+                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border-2 p-1.5"
+                    style={{ backgroundColor: `${award.metadata.badge_color || "#E8923A"}20`, borderColor: award.metadata.badge_color || "#E8923A", color: award.metadata.badge_color || "#E8923A" }}
                   >
-                    {award.metadata.badge_icon || "🏆"}
+                    {award.award_key === "first_timer" && <IconFirstTimer className="w-full h-full" />}
+                    {award.award_key === "regular" && <IconRegular className="w-full h-full" />}
+                    {award.award_key === "veteran" && <IconVeteran className="w-full h-full" />}
+                    {award.award_key === "legend" && <IconLegend className="w-full h-full" />}
+                    {award.award_key === "centurion" && <IconCenturion className="w-full h-full" />}
+                    {award.award_key === "master_angler" && <IconMasterAngler className="w-full h-full" />}
+                    {award.award_key === "species_hunter" && <IconSpeciesHunter className="w-full h-full" />}
+                    {award.award_key === "consistent_producer" && <IconConsistentProducer className="w-full h-full" />}
+                    {!["first_timer","regular","veteran","legend","centurion","master_angler","species_hunter","consistent_producer"].includes(award.award_key) && <span className="text-xl">{award.metadata.badge_icon || "🏆"}</span>}
                   </div>
                   <div className="min-w-0">
                     <p className="font-semibold text-[#F0F6FC] text-sm leading-tight">{award.metadata.display_name || award.award_key}</p>
