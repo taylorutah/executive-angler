@@ -62,6 +62,19 @@ export default function MapView({
       map.current.on("load", () => {
         map.current?.resize();
 
+        // Require 2 fingers to pan on touch devices
+        const canvas = map.current!.getCanvas();
+        canvas.addEventListener("touchstart", (e) => {
+          if (e.touches.length < 2) {
+            map.current!.dragPan.disable();
+          } else {
+            map.current!.dragPan.enable();
+          }
+        });
+        canvas.addEventListener("touchend", () => {
+          map.current!.dragPan.enable(); // re-enable after lift
+        });
+
         // Add markers after load for reliable placement on mobile
         markers.forEach((marker) => {
           const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
@@ -113,5 +126,12 @@ export default function MapView({
     };
   }, [latitude, longitude, zoom, markers, bounds]);
 
-  return <div ref={mapContainer} className={className} />;
+  return (
+    <div className="relative">
+      <div ref={mapContainer} className={className} />
+      <div className="absolute bottom-2 right-2 bg-black/50 text-white/60 text-xs px-2 py-1 rounded-full pointer-events-none">
+        Two fingers to pan
+      </div>
+    </div>
+  );
 }
