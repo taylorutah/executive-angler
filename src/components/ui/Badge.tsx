@@ -12,7 +12,7 @@ export default function Badge({
   const variants = {
     default: "bg-[#161B22] text-[#8B949E]",
     forest: "bg-[#E8923A]/10 text-[#E8923A]",
-    river: "bg-[#00B4D8]/10 text-[#00B4D8]",
+    river: "bg-[#0BA5C7]/10 text-[#0BA5C7]",
     gold: "bg-[#E8923A]/10 text-[#E8923A]",
     outline: "border border-[#21262D] text-[#8B949E]",
   };

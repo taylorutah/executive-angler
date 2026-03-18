@@ -138,7 +138,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
         {/* Edit */}
         <button
           onClick={onEdit}
-          className="p-1.5 rounded-lg text-[#484F58] hover:text-[#00B4D8] hover:bg-[#00B4D8]/10 transition-colors"
+          className="p-1.5 rounded-lg text-[#484F58] hover:text-[#0BA5C7] hover:bg-[#0BA5C7]/10 transition-colors"
         >
           <Pencil className="h-3.5 w-3.5" />
         </button>
@@ -312,7 +312,7 @@ export default function GearLockerClient() {
                     </h2>
                     <button
                       onClick={() => openAdd(type)}
-                      className="flex items-center gap-1.5 text-xs font-medium text-[#00B4D8] hover:text-[#00B4D8]/80 border border-[#00B4D8]/20 hover:border-[#00B4D8]/40 rounded-lg px-2.5 py-1.5 transition-colors"
+                      className="flex items-center gap-1.5 text-xs font-medium text-[#0BA5C7] hover:text-[#0BA5C7]/80 border border-[#0BA5C7]/20 hover:border-[#0BA5C7]/40 rounded-lg px-2.5 py-1.5 transition-colors"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       Add {label.replace(/s$/, "")}

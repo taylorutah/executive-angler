@@ -1,29 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap');
 @import "tailwindcss";
 
 /* =============================================
-   THEME — Executive Angler Brand (2026)
+   THEME — Executive Angler Brand Spec v1.1 (March 2026)
    ============================================= */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'DM Serif Display', Georgia, serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
-  /* Brand Colors — Abyss Dark Palette */
-  --color-bg: #0D1117;
-  --color-surface: #161B22;
-  --color-surface-raised: #1F2937;
-  --color-accent: #E8923A;
-  --color-signal: #00B4D8;
-  --color-text-primary: #F0F6FC;
-  --color-text-secondary: #8B949E;
-  --color-text-muted: #484F58;
-  --color-border: #21262D;
-  --color-success: #3FB950;
-  --color-danger: #F85149;
+  /* Brand Colors — Abyss Dark Palette (v1.1) */
+  --color-bg: #0D1117;          /* Abyss — primary background */
+  --color-surface: #161B22;     /* Depth — cards, panels, nav */
+  --color-surface-raised: #1F2937; /* Stone — elevated surfaces */
+  --color-dusk: #2C1F14;        /* Dusk — warm surfaces, hover, selected */
+  --color-accent: #E8923A;      /* Copper Dawn — primary CTA, data accent */
+  --color-signal: #0BA5C7;      /* River Teal — text/labels (desaturated) */
+  --color-signal-pip: #00B4D8;  /* River Teal full-sat — indicator dots, badges ONLY */
+  --color-text-primary: #F0F6FC; /* Chalk */
+  --color-text-secondary: #8B949E; /* Slate */
+  --color-text-muted: #484F58;  /* Muted text (kept for contrast; Dusk too dark for text) */
+  --color-border: #21262D;      /* Tide */
+  --color-success: #2EA44F;     /* Rise — shifted from GitHub green */
+  --color-danger: #DA3633;      /* Cutthroat — shifted from GitHub red */
 }
 
 /* =============================================
@@ -35,7 +37,7 @@
     --background: #0D1117;
     --foreground: #F0F6FC;
     --font-heading: 'DM Serif Display', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
   /* Light mode override */
@@ -92,7 +94,7 @@
   }
 
   h3, h4, h5, h6 {
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.01em;
@@ -236,7 +238,7 @@
   }
 
   .text-signal {
-    color: #00B4D8;
+    color: #0BA5C7;
   }
 
   .bg-surface {
@@ -378,7 +380,7 @@
 }
 
 .article-body a {
-  color: #00B4D8;
+  color: #0BA5C7;
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 2px;

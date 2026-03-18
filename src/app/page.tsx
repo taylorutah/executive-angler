@@ -43,11 +43,11 @@ const RIVERS = [
 ];
 
 const EXPLORE = [
-  { icon: MapPin, label: "Destinations", desc: "Montana, Idaho, New Zealand and beyond.", href: "/destinations", color: "#00B4D8" },
-  { icon: Droplets, label: "Rivers", desc: "204 rivers with conditions, hatches, and access info.", href: "/rivers", color: "#00B4D8" },
+  { icon: MapPin, label: "Destinations", desc: "Montana, Idaho, New Zealand and beyond.", href: "/destinations", color: "#0BA5C7" },
+  { icon: Droplets, label: "Rivers", desc: "204 rivers with conditions, hatches, and access info.", href: "/rivers", color: "#0BA5C7" },
   { icon: Building2, label: "Lodges", desc: "World-class lodges and outfitters.", href: "/lodges", color: "#E8923A" },
   { icon: ShoppingBag, label: "Fly Shops", desc: "Find gear and local knowledge near any fishery.", href: "/fly-shops", color: "#E8923A" },
-  { icon: Compass, label: "Guides", desc: "Experienced guides across every major fishery.", href: "/guides", color: "#00B4D8" },
+  { icon: Compass, label: "Guides", desc: "Experienced guides across every major fishery.", href: "/guides", color: "#0BA5C7" },
   { icon: BookOpen, label: "Resources", desc: "Techniques, gear reviews, and destination guides.", href: "/articles", color: "#E8923A" },
 ];
 
@@ -61,12 +61,12 @@ export default async function HomePage() {
     <>
       {/* ── 1. HERO ───────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden bg-[#0D1117] flex items-center justify-center">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#00B4D8] opacity-10 blur-[120px] rounded-full" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0BA5C7] opacity-10 blur-[120px] rounded-full" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#E8923A] opacity-10 blur-[120px] rounded-full" />
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center py-20">
           <ScrollAnimation>
-            <p className="text-[#00B4D8] font-['IBM_Plex_Mono'] text-xs uppercase tracking-[0.15em] mb-6">
+            <p className="text-[#0BA5C7] font-['IBM_Plex_Mono'] text-xs uppercase tracking-[0.15em] mb-6">
               WORLD-CLASS FLY FISHING INTEL
             </p>
           </ScrollAnimation>
@@ -85,7 +85,7 @@ export default async function HomePage() {
               <Link href="/rivers" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors shadow-lg">
                 Explore Rivers →
               </Link>
-              <Link href="/destinations" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-[#00B4D8] text-[#00B4D8] font-medium rounded-xl hover:bg-[#00B4D8]/10 transition-colors">
+              <Link href="/destinations" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-[#0BA5C7] text-[#0BA5C7] font-medium rounded-xl hover:bg-[#0BA5C7]/10 transition-colors">
                 Explore Destinations
               </Link>
             </div>
@@ -136,7 +136,7 @@ export default async function HomePage() {
                   <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
                   <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal mb-0.5">{r.fish}</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-3">fish this week</div>
-                  <div className="font-['IBM_Plex_Mono'] text-[#00B4D8] text-xs mb-4">● {r.ago}</div>
+                  <div className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs mb-4">● {r.ago}</div>
                   <Link href={r.href} className="font-['IBM_Plex_Mono'] text-xs text-[#8B949E] group-hover:text-[#E8923A] transition-colors">
                     View River →
                   </Link>
@@ -146,7 +146,7 @@ export default async function HomePage() {
           </div>
           <ScrollAnimation delay={0.3}>
             <div className="text-center">
-              <Link href="/rivers" className="text-[#00B4D8] hover:text-[#E8923A] font-medium transition-colors">
+              <Link href="/rivers" className="text-[#0BA5C7] hover:text-[#E8923A] font-medium transition-colors">
                 Explore all 204 tracked rivers →
               </Link>
             </div>
@@ -172,7 +172,7 @@ export default async function HomePage() {
                   <item.icon className="h-7 w-7 mb-3" style={{ color: item.color }} strokeWidth={1.5} />
                   <h3 className="font-['DM_Sans'] font-semibold text-lg text-[#F0F6FC] mb-1">{item.label}</h3>
                   <p className="text-[#8B949E] text-sm leading-relaxed mb-3">{item.desc}</p>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#00B4D8] group-hover:text-[#E8923A] transition-colors">Explore →</span>
+                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#0BA5C7] group-hover:text-[#E8923A] transition-colors">Explore →</span>
                 </Link>
               </ScrollAnimation>
             ))}
@@ -199,7 +199,7 @@ export default async function HomePage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {["54°F", "#18 RS2", "Clear", "1,240 cfs"].map((tag) => (
-                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[#00B4D8] rounded-full px-3 py-1">
+                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[#0BA5C7] rounded-full px-3 py-1">
                       {tag}
                     </span>
                   ))}
@@ -208,7 +208,7 @@ export default async function HomePage() {
             </ScrollAnimation>
             {/* Copy */}
             <ScrollAnimation delay={0.2}>
-              <p className="font-['IBM_Plex_Mono'] text-[#00B4D8] text-xs uppercase tracking-[0.15em] mb-4">EXECUTIVE ANGLER APP</p>
+              <p className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs uppercase tracking-[0.15em] mb-4">EXECUTIVE ANGLER APP</p>
               <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
                 Your journal.<br />Your data.<br />Your river.
               </h2>
@@ -222,7 +222,7 @@ export default async function HomePage() {
                   "See what others are catching on your home water.",
                 ].map((line) => (
                   <div key={line} className="flex items-start gap-3">
-                    <Check className="h-4 w-4 text-[#3FB950] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
+                    <Check className="h-4 w-4 text-[#2EA44F] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
                     <span className="text-[#8B949E] text-sm">{line}</span>
                   </div>
                 ))}
@@ -252,7 +252,7 @@ export default async function HomePage() {
               <ScrollAnimation key={article.id} delay={i * 0.1}>
                 <Link href={`/articles/${article.slug}`} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden hover:border-[#484F58] transition-colors">
                   <div className="p-6">
-                    <div className="text-[#00B4D8] text-xs uppercase tracking-wider mb-3 font-['IBM_Plex_Mono']">{article.category}</div>
+                    <div className="text-[#0BA5C7] text-xs uppercase tracking-wider mb-3 font-['IBM_Plex_Mono']">{article.category}</div>
                     <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors mb-2 leading-tight">{article.title}</h3>
                     <p className="text-[#8B949E] text-sm line-clamp-2 mb-4">{article.excerpt}</p>
                     <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs">{article.readingTimeMinutes} min • {article.author}</p>
@@ -263,7 +263,7 @@ export default async function HomePage() {
           </div>
           <ScrollAnimation delay={0.3}>
             <div className="mt-10 text-center">
-              <Link href="/articles" className="inline-flex items-center gap-2 text-[#00B4D8] hover:text-[#E8923A] font-medium transition-colors">
+              <Link href="/articles" className="inline-flex items-center gap-2 text-[#0BA5C7] hover:text-[#E8923A] font-medium transition-colors">
                 Read all articles →
               </Link>
             </div>

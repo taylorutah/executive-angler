@@ -192,13 +192,13 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                       daySessions.length > 0
                         ? "cursor-pointer hover:bg-[#0D1117]"
                         : "cursor-default"
-                    } ${isToday(day) ? "bg-[#00B4D8]/5 ring-2 ring-inset ring-[#00B4D8]/30" : ""}`}
+                    } ${isToday(day) ? "bg-[#0BA5C7]/5 ring-2 ring-inset ring-[#0BA5C7]/30" : ""}`}
                   >
                     <div className="flex flex-col h-full">
                       <span
                         className={`text-sm font-medium ${
                           isToday(day)
-                            ? "text-[#00B4D8] font-semibold"
+                            ? "text-[#0BA5C7] font-semibold"
                             : "text-[#F0F6FC]"
                         }`}
                       >
@@ -206,9 +206,9 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                       </span>
                       {daySessions.length > 0 && (
                         <div className="mt-auto flex items-center justify-center gap-1">
-                          <div className="h-2 w-2 rounded-full bg-[#00B4D8]" />
+                          <div className="h-2 w-2 rounded-full bg-[#0BA5C7]" />
                           {totalFish > 0 && (
-                            <span className="text-xs font-semibold text-[#00B4D8]">
+                            <span className="text-xs font-semibold text-[#0BA5C7]">
                               {totalFish}
                             </span>
                           )}

@@ -179,7 +179,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         <div className="flex gap-2">
           <Link
             href="/journal/stats"
-            className="flex-1 text-center rounded-md border border-[#00B4D8] px-2 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+            className="flex-1 text-center rounded-md border border-[#0BA5C7] px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/10"
           >
             📊 Stats
           </Link>
@@ -191,7 +191,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           </Link>
           <Link
             href="/account/gear"
-            className="flex-1 text-center rounded-md border border-[#00B4D8] px-2 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/10"
+            className="flex-1 text-center rounded-md border border-[#0BA5C7] px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/10"
           >
             🎣 Gear
           </Link>

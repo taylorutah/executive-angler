@@ -43,12 +43,12 @@ interface Props {
 // Accent border colors — rotates by river name for visual variety
 const ACCENT_COLORS = [
   "border-[#E8923A]",
-  "border-[#00B4D8]",
+  "border-[#0BA5C7]",
   "border-[#E8923A]",
-  "border-[#00B4D8]",
+  "border-[#0BA5C7]",
   "border-[#484F58]",
   "border-[#E8923A]",
-  "border-[#00B4D8]",
+  "border-[#0BA5C7]",
   "border-[#484F58]",
 ];
 

@@ -217,7 +217,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
         <button
           type="button"
           onClick={add}
-          className="flex items-center gap-1.5 text-xs text-[#00B4D8] hover:text-[#00B4D8]/80 font-medium transition-colors"
+          className="flex items-center gap-1.5 text-xs text-[#0BA5C7] hover:text-[#0BA5C7]/80 font-medium transition-colors"
         >
           <Plus className="h-3.5 w-3.5" /> Add Section
         </button>
