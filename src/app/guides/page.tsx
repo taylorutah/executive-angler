@@ -117,7 +117,7 @@ export default async function GuidesPage() {
                     <div className="relative h-56">
                       <Image
                         src={guide.photoUrl || "/images/guide-placeholder.svg"}
-                        alt={guide.name}
+                        alt={`${guide.name} — fly fishing guide service`}
                         fill
                         className={`transition-transform duration-500 group-hover:scale-105 ${guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg" ? "object-cover" : "object-contain p-4"}`}
                         sizes="(max-width: 768px) 100vw, 33vw"
