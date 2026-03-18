@@ -19,8 +19,7 @@ export const guides: Guide[] = [
       "Beginner instruction",
     ],
     yearsExperience: 70,
-    photoUrl:
-      "https://images.unsplash.com/photo-1573111651443-48d029001795?w=800&q=80",
+    photoUrl: "/images/guides/bud-lillys-guide-service.jpg",
     websiteUrl: "https://www.budlillys.com",
     riverIds: ["river-madison", "river-gallatin", "river-yellowstone"],
     dailyRate: "$650/day (1-2 anglers)",
