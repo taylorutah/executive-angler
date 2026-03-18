@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "executiveangler.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.executiveangler.com",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
       },
       {
