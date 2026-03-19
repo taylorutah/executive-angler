@@ -1,50 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFE44D"/>
-      <stop offset="100%" stop-color="#C9A200"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2A2215"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#FFD700" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="50%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#C8A800"/>
+    </linearGradient>
+    <linearGradient id="fish" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#C8A800"/>
+    </linearGradient>
+    <linearGradient id="belly" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#FFE899"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#FFD700" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#FFD700" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <!-- Leaping fish body -->
-    <path d="M36,72 Q42,56 52,46 Q58,40 64,38 Q72,36 80,42 Q86,48 82,56 Q78,62 72,64 Q64,66 56,62 Q48,58 44,66 Z" fill="none" stroke="#FFD700" stroke-width="2" stroke-linejoin="round"/>
-    <!-- Tail fin -->
-    <path d="M36,72 L28,66 Q32,72 28,78 Z" fill="none" stroke="#FFD700" stroke-width="2" stroke-linejoin="round"/>
-    <!-- Dorsal fin -->
-    <path d="M62,40 L58,30 Q64,32 68,36 L70,42" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- Eye -->
-    <circle cx="76" cy="48" r="2.5" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-    <circle cx="76" cy="48" r="1" fill="#FFD700"/>
-    <!-- Mouth -->
-    <path d="M82,56 L86,54" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-    <!-- Water surface line -->
-    <path d="M24,76 L96,76" stroke="#FFD700" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4,3"/>
-    <!-- Splash arcs - left -->
-    <path d="M38,76 Q34,70 30,76" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M32,76 Q28,72 24,76" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.6" stroke-linecap="round"/>
-    <!-- Splash arcs - right -->
-    <path d="M48,76 Q52,70 56,76" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M54,76 Q58,72 62,76" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.6" stroke-linecap="round"/>
-    <!-- Water drops -->
-    <circle cx="34" cy="68" r="1.2" fill="#FFD700" opacity="0.5"/>
-    <circle cx="46" cy="72" r="1" fill="#FFD700" opacity="0.5"/>
-    <circle cx="28" cy="72" r="0.8" fill="#FFD700" opacity="0.4"/>
-    <!-- Ripple below water -->
-    <path d="M32,82 Q40,80 48,82" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.3"/>
-    <path d="M36,86 Q44,84 52,86" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.2"/>
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="5"/>
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.25"/>
+  <g filter="url(#glow)">
+    <path d="M30,58 Q40,42 58,40 Q72,40 84,50 Q90,56 90,60 Q90,64 84,70 Q72,80 58,80 Q40,78 30,62 Z" fill="url(#fish)" opacity="0.9"/>
+    <path d="M40,62 Q50,72 66,72 Q78,70 84,64 Q78,74 66,76 Q50,76 40,66 Z" fill="url(#belly)" opacity="0.3"/>
+    <path d="M30,58 L20,46 Q24,54 22,62 Q24,66 20,74 L30,62 Z" fill="#C8A800" opacity="0.8"/>
+    <path d="M56,40 L50,30 Q58,32 64,36 L66,40" fill="#C8A800" opacity="0.7"/>
+    <path d="M62,64 L56,74 Q60,72 64,68" fill="#B09500" opacity="0.5"/>
+    <circle cx="78" cy="56" r="4" fill="#F0F6FC"/>
+    <circle cx="79" cy="55.5" r="2" fill="#0D1117"/>
+    <circle cx="80" cy="54.5" r="0.8" fill="#F0F6FC"/>
+    <path d="M72,50 Q70,58 72,66" fill="none" stroke="#B09500" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="50" cy="55" r="3" fill="none" stroke="#C8A800" stroke-width="0.5" opacity="0.3"/>
+    <circle cx="56" cy="60" r="3" fill="none" stroke="#C8A800" stroke-width="0.5" opacity="0.3"/>
+    <circle cx="44" cy="60" r="3" fill="none" stroke="#C8A800" stroke-width="0.5" opacity="0.3"/>
+    <path d="M88,58 L90,60" stroke="#B09500" stroke-width="1.5" stroke-linecap="round"/>
   </g>
+  <circle cx="88" cy="88" r="14" fill="#FFD700"/>
+  <circle cx="88" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="88" y="92" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="10" fill="#0D1117">1K</text>
 </svg>

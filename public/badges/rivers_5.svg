@@ -1,40 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D99A5B"/>
-      <stop offset="100%" stop-color="#A5611E"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A2332"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4874D"/>
+      <stop offset="50%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#B06B2A"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#C77A2E"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <!-- Meandering river S-curve -->
-    <path d="M50,24 Q72,32 72,44 Q72,56 48,60 Q28,64 28,76 Q28,88 50,96" fill="none" stroke="#CD7F32" stroke-width="3" stroke-linecap="round"/>
-    <!-- River banks (parallel offset paths) -->
-    <path d="M44,24 Q66,32 66,44 Q66,54 44,58 Q24,62 24,74 Q24,86 44,94" fill="none" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
-    <path d="M56,24 Q78,32 78,44 Q78,58 52,62 Q32,66 32,78 Q32,90 56,98" fill="none" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
-    <!-- Waypoint dots along the river -->
-    <circle cx="52" cy="28" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="52" cy="28" r="1" fill="#CD7F32"/>
-    <circle cx="68" cy="44" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="68" cy="44" r="1" fill="#CD7F32"/>
-    <circle cx="48" cy="60" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="48" cy="60" r="1" fill="#CD7F32"/>
-    <circle cx="32" cy="76" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="32" cy="76" r="1" fill="#CD7F32"/>
-    <circle cx="48" cy="92" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="48" cy="92" r="1" fill="#CD7F32"/>
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="none" stroke="#E8923A" stroke-width="0.5" opacity="0.3"/>
+  <g filter="url(#glow)">
+    <!-- River main flow -->
+    <path d="M52,20 Q74,30 72,44 Q70,56 46,60 Q26,64 28,78 Q30,90 52,100" fill="none" stroke="url(#water)" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+    <!-- River highlight (center) -->
+    <path d="M52,20 Q74,30 72,44 Q70,56 46,60 Q26,64 28,78 Q30,90 52,100" fill="none" stroke="#F0A855" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+    <!-- River banks -->
+    <path d="M46,22 Q66,30 64,44 Q62,54 40,58 Q22,62 22,76 Q24,88 44,98" fill="none" stroke="#E8923A" stroke-width="1" stroke-linecap="round" opacity="0.2"/>
+    <path d="M58,18 Q82,28 80,44 Q78,58 52,62 Q32,66 34,80 Q36,92 58,102" fill="none" stroke="#E8923A" stroke-width="1" stroke-linecap="round" opacity="0.2"/>
+    <!-- Waypoint pins -->
+    <circle cx="54" cy="24" r="4" fill="#E8923A" opacity="0.8"/>
+    <circle cx="54" cy="24" r="2" fill="#0D1117"/>
+    <circle cx="70" cy="44" r="4" fill="#E8923A" opacity="0.8"/>
+    <circle cx="70" cy="44" r="2" fill="#0D1117"/>
+    <circle cx="46" cy="60" r="4" fill="#E8923A" opacity="0.8"/>
+    <circle cx="46" cy="60" r="2" fill="#0D1117"/>
+    <circle cx="30" cy="78" r="4" fill="#E8923A" opacity="0.8"/>
+    <circle cx="30" cy="78" r="2" fill="#0D1117"/>
+    <circle cx="48" cy="94" r="4" fill="#E8923A" opacity="0.8"/>
+    <circle cx="48" cy="94" r="2" fill="#0D1117"/>
   </g>
+  <circle cx="92" cy="88" r="14" fill="#E8923A"/>
+  <circle cx="92" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="92" y="93" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="14" fill="#0D1117">5</text>
 </svg>

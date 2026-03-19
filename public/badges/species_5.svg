@@ -1,59 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D99A5B"/>
-      <stop offset="100%" stop-color="#A5611E"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A2332"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4874D"/>
+      <stop offset="50%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#B06B2A"/>
+    </linearGradient>
+    <linearGradient id="fly" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#C77A2E"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E8923A" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#F0A855" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <!-- Mayfly body -->
-    <ellipse cx="60" cy="64" rx="3" ry="10" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="none" stroke="#E8923A" stroke-width="0.5" opacity="0.3"/>
+  <g filter="url(#glow)">
+    <!-- Fly body -->
+    <ellipse cx="60" cy="64" rx="4" ry="12" fill="url(#fly)"/>
     <!-- Body segments -->
-    <line x1="57" y1="60" x2="63" y2="60" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
-    <line x1="57" y1="64" x2="63" y2="64" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
-    <line x1="57" y1="68" x2="63" y2="68" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="56" y1="60" x2="64" y2="60" stroke="#B06B2A" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="64" x2="64" y2="64" stroke="#B06B2A" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="68" x2="64" y2="68" stroke="#B06B2A" stroke-width="0.8" opacity="0.6"/>
     <!-- Head -->
-    <circle cx="60" cy="52" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <circle cx="60" cy="50" r="4" fill="#E8923A"/>
     <!-- Upper wings - left -->
-    <path d="M57,58 Q40,44 36,36 Q38,42 44,52 Q48,58 57,58" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- Wing veins left -->
-    <path d="M57,58 Q44,48 38,40" fill="none" stroke="#CD7F32" stroke-width="0.6" stroke-opacity="0.4"/>
+    <path d="M56,56 Q36,40 32,32 Q36,42 44,52 Q50,58 56,58" fill="url(#wing)" stroke="#E8923A" stroke-width="1.2"/>
     <!-- Upper wings - right -->
-    <path d="M63,58 Q80,44 84,36 Q82,42 76,52 Q72,58 63,58" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- Wing veins right -->
-    <path d="M63,58 Q76,48 82,40" fill="none" stroke="#CD7F32" stroke-width="0.6" stroke-opacity="0.4"/>
+    <path d="M64,56 Q84,40 88,32 Q84,42 76,52 Q70,58 64,58" fill="url(#wing)" stroke="#E8923A" stroke-width="1.2"/>
     <!-- Lower wings - left -->
-    <path d="M57,62 Q46,58 42,52 Q44,58 50,64 Q54,66 57,64" fill="none" stroke="#CD7F32" stroke-width="1.2" stroke-opacity="0.7"/>
+    <path d="M56,60 Q44,56 40,50 Q42,58 50,64 Q54,66 56,62" fill="url(#wing)" stroke="#E8923A" stroke-width="0.8" opacity="0.7"/>
     <!-- Lower wings - right -->
-    <path d="M63,62 Q74,58 78,52 Q76,58 70,64 Q66,66 63,64" fill="none" stroke="#CD7F32" stroke-width="1.2" stroke-opacity="0.7"/>
+    <path d="M64,60 Q76,56 80,50 Q78,58 70,64 Q66,66 64,62" fill="url(#wing)" stroke="#E8923A" stroke-width="0.8" opacity="0.7"/>
     <!-- Antennae -->
-    <path d="M58,50 Q54,42 50,36" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
-    <path d="M62,50 Q66,42 70,36" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
-    <!-- Antenna tips -->
-    <circle cx="50" cy="36" r="1" fill="#CD7F32"/>
-    <circle cx="70" cy="36" r="1" fill="#CD7F32"/>
+    <path d="M58,48 Q52,38 48,32" fill="none" stroke="#E8923A" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M62,48 Q68,38 72,32" fill="none" stroke="#E8923A" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="48" cy="32" r="1.5" fill="#E8923A"/>
+    <circle cx="72" cy="32" r="1.5" fill="#E8923A"/>
     <!-- Tail filaments -->
-    <path d="M60,74 L56,86" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
-    <path d="M60,74 L60,88" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
-    <path d="M60,74 L64,86" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L55,88" fill="none" stroke="#C77A2E" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L60,90" fill="none" stroke="#C77A2E" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L65,88" fill="none" stroke="#C77A2E" stroke-width="1" stroke-linecap="round"/>
     <!-- Legs -->
-    <line x1="57" y1="60" x2="48" y2="66" stroke="#CD7F32" stroke-width="0.8"/>
-    <line x1="63" y1="60" x2="72" y2="66" stroke="#CD7F32" stroke-width="0.8"/>
-    <line x1="57" y1="64" x2="50" y2="70" stroke="#CD7F32" stroke-width="0.8"/>
-    <line x1="63" y1="64" x2="70" y2="70" stroke="#CD7F32" stroke-width="0.8"/>
+    <line x1="56" y1="60" x2="46" y2="68" stroke="#C77A2E" stroke-width="0.8"/>
+    <line x1="64" y1="60" x2="74" y2="68" stroke="#C77A2E" stroke-width="0.8"/>
   </g>
+  <circle cx="88" cy="88" r="14" fill="#E8923A"/>
+  <circle cx="88" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="88" y="93" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="14" fill="#0D1117">5</text>
 </svg>

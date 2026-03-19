@@ -1,49 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFE44D"/>
-      <stop offset="100%" stop-color="#C9A200"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2A2215"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#FFD700" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="50%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#C8A800"/>
+    </linearGradient>
+    <linearGradient id="fly" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#C8A800"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFE899" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#FFD700" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#FFD700" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <!-- DNA helix backbone left strand -->
-    <path d="M40,28 Q52,36 40,44 Q28,52 40,60 Q52,68 40,76 Q28,84 40,92" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-    <!-- DNA helix backbone right strand -->
-    <path d="M60,28 Q48,36 60,44 Q72,52 60,60 Q48,68 60,76 Q72,84 60,92" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-    <!-- Base pair rungs -->
-    <line x1="44" y1="32" x2="56" y2="32" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="40" y1="38" x2="60" y2="38" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="40" y1="44" x2="60" y2="44" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="36" y1="50" x2="64" y2="50" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="40" y1="56" x2="60" y2="56" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="44" y1="62" x2="56" y2="62" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="36" y1="68" x2="64" y2="68" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <line x1="40" y1="74" x2="60" y2="74" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
-    <!-- Top fish morph -->
-    <path d="M40,28 Q36,24 30,26 Q26,28 28,32 Q30,28 34,28 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-    <path d="M60,28 Q64,24 68,26 Q72,28 74,32 Q68,30 64,28 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-    <!-- Top fish tail -->
-    <path d="M28,32 L24,28 Q26,32 24,36 Z" fill="none" stroke="#FFD700" stroke-width="1.2"/>
-    <circle cx="70" cy="27" r="1" fill="#FFD700"/>
-    <!-- Bottom fish morph -->
-    <path d="M40,92 Q36,96 30,94 Q26,92 28,88 Q30,92 34,92 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-    <path d="M60,92 Q64,96 68,94 Q72,92 74,88 Q68,90 64,92 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-    <!-- Bottom fish tail -->
-    <path d="M74,88 L78,84 Q76,88 78,92 Z" fill="none" stroke="#FFD700" stroke-width="1.2"/>
-    <circle cx="30" cy="93" r="1" fill="#FFD700"/>
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="5"/>
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.25"/>
+  <g filter="url(#glow)">
+    <ellipse cx="60" cy="64" rx="4" ry="12" fill="url(#fly)"/>
+    <line x1="56" y1="60" x2="64" y2="60" stroke="#C8A800" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="64" x2="64" y2="64" stroke="#C8A800" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="68" x2="64" y2="68" stroke="#C8A800" stroke-width="0.8" opacity="0.6"/>
+    <circle cx="60" cy="50" r="4" fill="#FFD700"/>
+    <path d="M56,56 Q36,40 32,32 Q36,42 44,52 Q50,58 56,58" fill="url(#wing)" stroke="#FFD700" stroke-width="1.2"/>
+    <path d="M64,56 Q84,40 88,32 Q84,42 76,52 Q70,58 64,58" fill="url(#wing)" stroke="#FFD700" stroke-width="1.2"/>
+    <path d="M56,60 Q44,56 40,50 Q42,58 50,64 Q54,66 56,62" fill="url(#wing)" stroke="#FFD700" stroke-width="0.8" opacity="0.7"/>
+    <path d="M64,60 Q76,56 80,50 Q78,58 70,64 Q66,66 64,62" fill="url(#wing)" stroke="#FFD700" stroke-width="0.8" opacity="0.7"/>
+    <path d="M58,48 Q52,38 48,32" fill="none" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M62,48 Q68,38 72,32" fill="none" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="48" cy="32" r="1.5" fill="#FFD700"/>
+    <circle cx="72" cy="32" r="1.5" fill="#FFD700"/>
+    <path d="M60,76 L55,88" fill="none" stroke="#C8A800" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L60,90" fill="none" stroke="#C8A800" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L65,88" fill="none" stroke="#C8A800" stroke-width="1" stroke-linecap="round"/>
+    <line x1="56" y1="60" x2="46" y2="68" stroke="#C8A800" stroke-width="0.8"/>
+    <line x1="64" y1="60" x2="74" y2="68" stroke="#C8A800" stroke-width="0.8"/>
   </g>
+  <circle cx="88" cy="88" r="14" fill="#FFD700"/>
+  <circle cx="88" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="88" y="93" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="13" fill="#0D1117">30</text>
 </svg>

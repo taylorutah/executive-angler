@@ -1,48 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D4D4D4"/>
-      <stop offset="100%" stop-color="#909090"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#132030"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#C0C0C0" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#40C4E0"/>
+      <stop offset="50%" stop-color="#0BA5C7"/>
+      <stop offset="100%" stop-color="#0886A0"/>
+    </linearGradient>
+    <linearGradient id="fly" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0BA5C7"/>
+      <stop offset="100%" stop-color="#087F99"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0BA5C7" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#40C4E0" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#C0C0C0" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <!-- Notebook body -->
-    <rect x="36" y="30" width="48" height="60" rx="3" fill="none" stroke="#C0C0C0" stroke-width="2"/>
-    <!-- Notebook spine -->
-    <line x1="44" y1="30" x2="44" y2="90" stroke="#C0C0C0" stroke-width="1.5"/>
-    <!-- Spine rings -->
-    <circle cx="44" cy="38" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
-    <circle cx="44" cy="50" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
-    <circle cx="44" cy="62" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
-    <circle cx="44" cy="74" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
-    <!-- Page lines -->
-    <line x1="50" y1="38" x2="78" y2="38" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
-    <line x1="50" y1="44" x2="78" y2="44" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
-    <!-- Fish sketch on page -->
-    <path d="M52,56 Q58,50 64,52 Q70,54 76,58 Q70,62 64,64 Q58,66 52,56 Z" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
-    <!-- Fish tail in sketch -->
-    <path d="M52,56 L48,52 Q50,56 48,60 Z" fill="none" stroke="#C0C0C0" stroke-width="1.2"/>
-    <!-- Fish eye in sketch -->
-    <circle cx="70" cy="56" r="1.5" fill="#C0C0C0"/>
-    <!-- Fish dorsal fin in sketch -->
-    <path d="M62,52 L60,48 Q64,50 66,52" fill="none" stroke="#C0C0C0" stroke-width="1"/>
-    <!-- More page lines below sketch -->
-    <line x1="50" y1="72" x2="72" y2="72" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
-    <line x1="50" y1="78" x2="68" y2="78" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
-    <line x1="50" y1="84" x2="74" y2="84" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="none" stroke="#0BA5C7" stroke-width="0.5" opacity="0.3"/>
+  <g filter="url(#glow)">
+    <ellipse cx="60" cy="64" rx="4" ry="12" fill="url(#fly)"/>
+    <line x1="56" y1="60" x2="64" y2="60" stroke="#0886A0" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="64" x2="64" y2="64" stroke="#0886A0" stroke-width="0.8" opacity="0.6"/>
+    <line x1="56" y1="68" x2="64" y2="68" stroke="#0886A0" stroke-width="0.8" opacity="0.6"/>
+    <circle cx="60" cy="50" r="4" fill="#0BA5C7"/>
+    <path d="M56,56 Q36,40 32,32 Q36,42 44,52 Q50,58 56,58" fill="url(#wing)" stroke="#0BA5C7" stroke-width="1.2"/>
+    <path d="M64,56 Q84,40 88,32 Q84,42 76,52 Q70,58 64,58" fill="url(#wing)" stroke="#0BA5C7" stroke-width="1.2"/>
+    <path d="M56,60 Q44,56 40,50 Q42,58 50,64 Q54,66 56,62" fill="url(#wing)" stroke="#0BA5C7" stroke-width="0.8" opacity="0.7"/>
+    <path d="M64,60 Q76,56 80,50 Q78,58 70,64 Q66,66 64,62" fill="url(#wing)" stroke="#0BA5C7" stroke-width="0.8" opacity="0.7"/>
+    <path d="M58,48 Q52,38 48,32" fill="none" stroke="#0BA5C7" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M62,48 Q68,38 72,32" fill="none" stroke="#0BA5C7" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="48" cy="32" r="1.5" fill="#0BA5C7"/>
+    <circle cx="72" cy="32" r="1.5" fill="#0BA5C7"/>
+    <path d="M60,76 L55,88" fill="none" stroke="#087F99" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L60,90" fill="none" stroke="#087F99" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,76 L65,88" fill="none" stroke="#087F99" stroke-width="1" stroke-linecap="round"/>
+    <line x1="56" y1="60" x2="46" y2="68" stroke="#087F99" stroke-width="0.8"/>
+    <line x1="64" y1="60" x2="74" y2="68" stroke="#087F99" stroke-width="0.8"/>
   </g>
+  <circle cx="88" cy="88" r="14" fill="#0BA5C7"/>
+  <circle cx="88" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="88" y="93" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="13" fill="#FFFFFF">15</text>
 </svg>

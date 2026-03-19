@@ -1,32 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D99A5B"/>
-      <stop offset="100%" stop-color="#A5611E"/>
-    </linearGradient>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1E2430"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A2332"/>
       <stop offset="100%" stop-color="#0D1117"/>
-    </radialGradient>
-    <filter id="iconShadow">
-      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4874D"/>
+      <stop offset="50%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#B06B2A"/>
+    </linearGradient>
+    <linearGradient id="rod" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E8923A"/>
+      <stop offset="100%" stop-color="#C77A2E"/>
+    </linearGradient>
+    <linearGradient id="reel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8B949E"/>
+      <stop offset="100%" stop-color="#6E7681"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
-    </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
-  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
-  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
-  <g filter="url(#iconShadow)">
-    <line x1="32" y1="88" x2="78" y2="34" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="30" y1="90" x2="35" y2="85" stroke="#CD7F32" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="33" cy="87" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-    <circle cx="79" cy="33" r="1.5" fill="#CD7F32"/>
-    <path d="M79,33 Q92,28 88,42 Q84,54 76,50" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="76" cy="50" r="2" fill="#CD7F32"/>
-    <line x1="76" y1="50" x2="72" y2="46" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
-    <line x1="76" y1="50" x2="73" y2="52" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+  <!-- Background -->
+  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
+  <!-- Ring -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="none" stroke="#E8923A" stroke-width="0.5" opacity="0.3"/>
+  <!-- Rod -->
+  <g filter="url(#glow)">
+    <line x1="30" y1="85" x2="82" y2="30" stroke="url(#rod)" stroke-width="3" stroke-linecap="round"/>
+    <!-- Handle/grip -->
+    <rect x="26" y="80" width="12" height="5" rx="2" fill="#8B6F47" transform="rotate(-48, 32, 82)"/>
+    <rect x="24" y="83" width="8" height="4" rx="2" fill="#6B5535" transform="rotate(-48, 28, 85)"/>
+    <!-- Reel -->
+    <circle cx="36" cy="78" r="5" fill="url(#reel)" stroke="#484F58" stroke-width="1"/>
+    <circle cx="36" cy="78" r="2" fill="#21262D"/>
+    <!-- Guides on rod -->
+    <circle cx="50" cy="64" r="1.5" fill="none" stroke="#8B949E" stroke-width="1"/>
+    <circle cx="60" cy="52" r="1.5" fill="none" stroke="#8B949E" stroke-width="1"/>
+    <circle cx="70" cy="40" r="1.2" fill="none" stroke="#8B949E" stroke-width="0.8"/>
+    <!-- Line from tip -->
+    <path d="M82,30 Q90,26 88,36 Q86,44 80,48" fill="none" stroke="#E8923A" stroke-width="1" opacity="0.6"/>
+    <!-- Hook -->
+    <path d="M80,48 Q78,52 76,50 Q74,48 76,46" fill="none" stroke="#8B949E" stroke-width="1.2" stroke-linecap="round"/>
   </g>
+  <!-- Number badge -->
+  <circle cx="88" cy="88" r="14" fill="#E8923A"/>
+  <circle cx="88" cy="88" r="12" fill="none" stroke="#0D1117" stroke-width="1.5"/>
+  <text x="88" y="93" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="14" fill="#0D1117">10</text>
 </svg>
