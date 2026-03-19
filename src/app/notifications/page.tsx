@@ -21,7 +21,7 @@ export default async function NotificationsPage() {
     .select(
       `
       id, recipient_id, actor_id, type, session_id, message, read, created_at,
-      actor_profile:profiles!notifications_actor_id_fkey(
+      actor_profile:profiles!notifications_actor_id_profiles_fkey(
         display_name, username, avatar_url
       )
     `

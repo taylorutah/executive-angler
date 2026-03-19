@@ -62,20 +62,26 @@ export function FollowButton({ targetUserId, compact = false }: FollowButtonProp
         .eq("following_id", targetUserId);
       setStatus("not_following");
     } else {
-      // Follow — use "accepted" to match iOS convention
-      await supabase.from("follows").insert({
+      // Send follow request (pending until accepted)
+      const { error } = await supabase.from("follows").insert({
         follower_id: userId,
         following_id: targetUserId,
-        status: "accepted",
+        status: "pending",
       });
-      setStatus("following");
 
-      // Create notification for the followed user
+      if (error) {
+        console.error("Follow insert error:", error);
+        setLoading(false);
+        return;
+      }
+
+      setStatus("pending");
+
+      // Create follow_request notification for the target user
       await supabase.from("notifications").insert({
         recipient_id: targetUserId,
         actor_id: userId,
-        type: "follow_accepted",
-        message: null,
+        type: "follow_request",
       });
 
       // Trigger email notification (fire and forget)

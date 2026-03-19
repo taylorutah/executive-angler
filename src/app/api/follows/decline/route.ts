@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   // Mark the notification as read
   await supabase
     .from("notifications")
-    .update({ read: true })
+    .update({ read: true, read_at: new Date().toISOString() })
     .eq("recipient_id", user.id)
     .eq("actor_id", followerId)
     .eq("type", "follow_request");

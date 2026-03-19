@@ -14,12 +14,12 @@ export function useNotifications(userId: string | null) {
     setLoading(true);
     const supabase = createClient();
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("notifications")
       .select(
         `
         id, recipient_id, actor_id, type, session_id, message, read, created_at,
-        actor_profile:profiles!notifications_actor_id_fkey(
+        actor_profile:profiles!notifications_actor_id_profiles_fkey(
           display_name, username, avatar_url
         )
       `
@@ -27,6 +27,10 @@ export function useNotifications(userId: string | null) {
       .eq("recipient_id", userId)
       .order("created_at", { ascending: false })
       .limit(50);
+
+    if (error) {
+      console.error("Notifications fetch error:", error);
+    }
 
     if (data) {
       const mapped: AppNotification[] = data.map((n) => ({
@@ -91,7 +95,7 @@ export function useNotifications(userId: string | null) {
       const supabase = createClient();
       await supabase
         .from("notifications")
-        .update({ read: true })
+        .update({ read: true, read_at: new Date().toISOString() })
         .eq("id", notificationId)
         .eq("recipient_id", userId);
 
@@ -108,7 +112,7 @@ export function useNotifications(userId: string | null) {
     const supabase = createClient();
     await supabase
       .from("notifications")
-      .update({ read: true })
+      .update({ read: true, read_at: new Date().toISOString() })
       .eq("recipient_id", userId)
       .eq("read", false);
 
