@@ -15,6 +15,7 @@ interface DashboardProps {
   favDests: Array<{ id: string; name: string; slug: string; hero_image_url: string }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   followingFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string; user_id: string; profiles: any }>;
+  exploreFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; user_id: string; profiles: any }>;
   riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }>;
   totalFavorites: number;
 }
@@ -36,7 +37,7 @@ function formatDate(d: string): string {
 }
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, riverIntel, totalFavorites
+  user, profile, mySessions, favRivers, favDests, followingFeed, exploreFeed, riverIntel, totalFavorites
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const totalFish = mySessions.reduce((a, s) => a + (s.total_fish ?? 0), 0);
@@ -132,6 +133,52 @@ export default function DashboardClient({
                       )}
                     </div>
                     <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#E8923A] transition-colors shrink-0 mt-1" />
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Community Explore Feed */}
+        {exploreFeed.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Compass className="h-5 w-5 text-[#0BA5C7]" />
+                <h2 className="font-heading text-xl font-bold text-[#F0F6FC]">Explore</h2>
+              </div>
+              <Link href="/feed" className="text-sm text-[#8B949E] hover:text-[#0BA5C7] transition-colors">
+                See all &rarr;
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {exploreFeed.map((session) => {
+                const ep = session.profiles as { username: string | null; avatar_url: string | null; display_name: string | null } | null;
+                return (
+                  <Link
+                    key={session.id}
+                    href={`/journal/${session.id}`}
+                    className="flex items-start gap-4 p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-colors group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-[#0BA5C7]/10 flex items-center justify-center shrink-0 text-sm font-bold text-[#0BA5C7]">
+                      {String(ep?.username?.charAt(0) ?? "A").toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-medium text-[#F0F6FC]">@{ep?.username ?? "angler"}</span>
+                        <span className="text-xs text-[#484F58]">fished</span>
+                        <span className="text-sm font-medium text-[#0BA5C7]">{session.river_name ?? "a river"}</span>
+                        <span className="text-xs text-[#484F58] ml-auto">{timeAgo(session.date)}</span>
+                      </div>
+                      {session.total_fish != null && session.total_fish > 0 && (
+                        <p className="text-xs text-[#E8923A] font-mono mt-1">{session.total_fish} fish</p>
+                      )}
+                      {session.notes && (
+                        <p className="text-xs text-[#8B949E] mt-1 line-clamp-2">{session.notes}</p>
+                      )}
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7] transition-colors shrink-0 mt-1" />
                   </Link>
                 );
               })}

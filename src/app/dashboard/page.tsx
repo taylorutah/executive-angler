@@ -79,6 +79,15 @@ export default async function DashboardPage() {
         .limit(10)
     : { data: [] };
 
+  // Community explore feed — latest public sessions from anyone
+  const { data: exploreFeed } = await supabase
+    .from("fishing_sessions")
+    .select("id, date, river_name, total_fish, notes, privacy, user_id, profiles(username, avatar_url, display_name)")
+    .eq("privacy", "public")
+    .order("date", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(10);
+
   // River activity intel for favorited rivers (recent catch stats)
   const riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }> = {};
   if (favRiverIds.length > 0) {
@@ -110,6 +119,7 @@ export default async function DashboardPage() {
       favRivers={favRivers || []}
       favDests={favDests || []}
       followingFeed={(followingFeed || []) as any}
+      exploreFeed={(exploreFeed || []) as any}
       riverIntel={riverIntel}
       totalFavorites={(favorites || []).length}
     />

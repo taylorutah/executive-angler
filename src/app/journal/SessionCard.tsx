@@ -95,7 +95,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
     session.longitude != null &&
     mapToken;
   const mapThumbUrl = hasMapThumb
-    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${session.longitude},${session.latitude})/${session.longitude},${session.latitude},11,0/64x96@2x?access_token=${mapToken}`
+    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${session.longitude},${session.latitude})/${session.longitude},${session.latitude},11,0/128x160@2x?access_token=${mapToken}`
     : null;
 
   return (
@@ -199,7 +199,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               <img
                 src={mapThumbUrl}
                 alt="Map"
-                className="h-full w-16 object-cover"
+                className="h-full w-16 lg:w-32 object-cover"
               />
             </div>
           )}
