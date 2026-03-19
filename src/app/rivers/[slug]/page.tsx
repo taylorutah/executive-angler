@@ -14,6 +14,7 @@ import MapView from "@/components/maps/DynamicMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
+import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -382,6 +383,8 @@ export default async function RiverPage({ params }: Props) {
             {/* Sidebar */}
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
+
+              <RiverActivityPulse riverId={river.id} />
 
               {/* Season Calendar */}
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">

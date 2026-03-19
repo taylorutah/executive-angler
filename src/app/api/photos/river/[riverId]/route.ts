@@ -39,7 +39,7 @@ export async function GET(
       length_inches,
       created_at,
       fishing_sessions!inner(river_id, privacy),
-      angler_profiles(username)
+      profiles(username)
     `)
     .eq("fishing_sessions.river_id", riverId)
     .eq("fishing_sessions.privacy", "public")
@@ -62,7 +62,7 @@ export async function GET(
       photoUrl: c.fish_image_url,
       species: c.species || undefined,
       lengthInches: c.length_inches ? Number(c.length_inches) : undefined,
-      username: c.angler_profiles?.username || undefined,
+      username: c.profiles?.username || undefined,
       submittedAt: c.created_at,
     })),
   ].sort(

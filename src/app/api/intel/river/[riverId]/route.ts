@@ -161,12 +161,12 @@ export async function GET(
   // Session angler profiles for trip reports
   const { data: profiles } = await supabase
     .from("fishing_sessions")
-    .select("id, user_id, angler_profiles(username)")
+    .select("id, user_id, profiles(username)")
     .in("id", sessionIds.slice(0, 20));
 
   const profileMap = new Map<string, string | null>();
   (profiles || []).forEach((p) => {
-    const ap = p.angler_profiles as unknown as { username: string } | null;
+    const ap = p.profiles as unknown as { username: string } | null;
     profileMap.set(p.id, ap?.username ?? null);
   });
 
@@ -446,7 +446,7 @@ export async function GET(
 
   if (uniqueUserIds.length > 0) {
     const { data: anglerProfiles } = await supabase
-      .from("angler_profiles")
+      .from("profiles")
       .select("user_id, username, avatar_url")
       .in("user_id", uniqueUserIds);
 

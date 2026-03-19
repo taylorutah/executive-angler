@@ -170,7 +170,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
     await supabase.auth.updateUser({ data: { display_name: displayName } });
 
-    await supabase.from("angler_profiles").upsert(
+    await supabase.from("profiles").upsert(
       {
         user_id: user.id,
         display_name: displayName,
@@ -179,17 +179,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
         home_location: homeLocation || null,
         is_private: isPrivate,
         feed_display: feedDisplay,
-      },
-      { onConflict: "user_id" }
-    );
-
-    await supabase.from("profiles").upsert(
-      {
-        user_id: user.id,
-        username: cleanUsername,
-        display_name: displayName,
-        bio: bio || null,
-        is_private: isPrivate,
       },
       { onConflict: "user_id" }
     );

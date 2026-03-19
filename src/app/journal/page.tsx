@@ -50,16 +50,10 @@ export default async function JournalPage() {
     .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_pattern:fly_patterns(name)")
     .in("session_id", sessionIds);
 
-  // Fetch feed display preference + profile (angler_profiles) + profiles table
+  // Fetch feed display preference + profile
   const { data: profile } = await supabase
-    .from("angler_profiles")
-    .select("feed_display, display_name, avatar_url")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  const { data: profilesRow } = await supabase
     .from("profiles")
-    .select("display_name")
+    .select("feed_display, display_name, avatar_url")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -79,7 +73,7 @@ export default async function JournalPage() {
     catches={catchesData}
     feedDisplay={feedDisplay}
     userProfile={{
-      displayName: profilesRow?.display_name || profile?.display_name || user.user_metadata?.display_name || "",
+      displayName: profile?.display_name || user.user_metadata?.display_name || "",
       email: user.email || "",
       avatarUrl: profile?.avatar_url || "",
     }}

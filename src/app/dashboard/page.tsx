@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from("angler_profiles")
+    .from("profiles")
     .select("username, display_name, avatar_url, home_location")
     .eq("user_id", user.id)
     .single();
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
   const { data: followingFeed } = followingIds.length > 0
     ? await supabase
         .from("fishing_sessions")
-        .select("id, date, river_name, total_fish, notes, privacy, user_id, angler_profiles(username, avatar_url)")
+        .select("id, date, river_name, total_fish, notes, privacy, user_id, profiles(username, avatar_url)")
         .in("user_id", followingIds)
         .eq("privacy", "public")
         .order("date", { ascending: false })

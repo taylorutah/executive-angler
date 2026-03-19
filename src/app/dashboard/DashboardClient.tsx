@@ -14,7 +14,7 @@ interface DashboardProps {
   favRivers: Array<{ id: string; name: string; slug: string; hero_image_url: string; primary_species: string[] }>;
   favDests: Array<{ id: string; name: string; slug: string; hero_image_url: string }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  followingFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string; user_id: string; angler_profiles: any }>;
+  followingFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string; user_id: string; profiles: any }>;
   riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }>;
   totalFavorites: number;
 }
@@ -107,7 +107,7 @@ export default function DashboardClient({
             </div>
             <div className="space-y-3">
               {followingFeed.map((session) => {
-                const ap = session.angler_profiles as { username: string | null; avatar_url: string | null } | null;
+                const ap = session.profiles as { username: string | null; avatar_url: string | null } | null;
                 return (
                   <Link
                     key={session.id}

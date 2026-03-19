@@ -34,17 +34,10 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     .eq("user_id", user.id);
 
   const { data: profile } = await supabase
-    .from("angler_profiles")
-    .select("feed_display, display_name, avatar_url, home_location")
+    .from("profiles")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private")
     .eq("user_id", user.id)
     .single();
-
-  // Fetch from profiles table (iOS-compatible) for username, bio, is_private
-  const { data: profilesRow } = await supabase
-    .from("profiles")
-    .select("username, display_name, bio, is_private")
-    .eq("user_id", user.id)
-    .maybeSingle();
 
   // Fetch user awards
   const { data: awards } = await supabase
@@ -74,12 +67,12 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       user={{
         id: user.id,
         email: user.email || "",
-        displayName: profilesRow?.display_name || profile?.display_name || user.user_metadata?.display_name || "",
+        displayName: profile?.display_name || user.user_metadata?.display_name || "",
         avatarUrl: profile?.avatar_url || "",
-        username: profilesRow?.username || undefined,
-        bio: profilesRow?.bio || undefined,
+        username: profile?.username || undefined,
+        bio: profile?.bio || undefined,
         homeLocation: profile?.home_location || undefined,
-        isPrivate: profilesRow?.is_private ?? false,
+        isPrivate: profile?.is_private ?? false,
       }}
       feedDisplay={(profile?.feed_display as "collage" | "map") || "collage"}
       stats={{

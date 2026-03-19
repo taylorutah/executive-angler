@@ -90,16 +90,8 @@ export default function SignupPage() {
         { user_id: authData.user.id, display_name: name, username: cleanUsername },
         { onConflict: "user_id" }
       );
-      await supabase.from("angler_profiles").upsert(
-        { user_id: authData.user.id, display_name: name, username: cleanUsername },
-        { onConflict: "user_id" }
-      );
     } else {
       await supabase.from("profiles").upsert(
-        { user_id: authData.user.id, display_name: name },
-        { onConflict: "user_id" }
-      );
-      await supabase.from("angler_profiles").upsert(
         { user_id: authData.user.id, display_name: name },
         { onConflict: "user_id" }
       );

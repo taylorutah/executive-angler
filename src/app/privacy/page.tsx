@@ -14,7 +14,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="text-sm text-[#8B949E] mb-10">
-          Last updated: March 1, 2026
+          Last updated: March 18, 2026
         </p>
 
         <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
               {SITE_URL}
             </a>
             . This Privacy Policy explains how we collect, use, and protect your
-            information when you use our website.
+            information when you use our website and iOS app.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
@@ -37,49 +37,75 @@ export default function PrivacyPage() {
           <p>
             When you create an account, we collect your email address and password.
             If you sign in with Google, we receive your name and email address from
-            Google. We use this information solely to manage your account and provide
-            features like saving favorites.
+            Google. You may also provide a display name, username, bio, and profile
+            photo. We use this information to manage your account and provide
+            personalized features.
+          </p>
+
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
+            Fishing Session Data
+          </h3>
+          <p>
+            When you log a fishing session in our iOS app, we collect: session date
+            and duration, river name, water conditions, catches (species, size, fly
+            used), gear used, and photos you choose to attach. This data is stored
+            in your private journal and is only visible to you unless you explicitly
+            set a session to &quot;public.&quot;
+          </p>
+
+          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
+            Location Data
+          </h3>
+          <p>
+            During active fishing sessions, the app records your GPS location to
+            track your route and auto-detect the river you are fishing. Location
+            data is collected only while a session is active and only with your
+            explicit permission. <strong>We never share your precise GPS coordinates
+            or fishing spots with other users.</strong> When a session is set to
+            public, only the river name and aggregate catch data are visible — never
+            your route or exact locations.
           </p>
 
           <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Photo Submissions
           </h3>
           <p>
-            When you submit a photo, we collect your name, email address, the photo
-            file, and any optional caption or camera settings you provide. Photos
-            approved by our moderators are displayed publicly on the site. Your email
-            address is not displayed publicly.
-          </p>
-
-          <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
-            Contact Form
-          </h3>
-          <p>
-            When you use our contact form, we collect your name, email address, and
-            message content. This information is used solely to respond to your
-            inquiry.
+            When you submit a photo, we collect the photo file and any optional
+            caption or camera settings you provide. Photos approved by our
+            moderators may be displayed publicly on the site.
           </p>
 
           <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
             Analytics
           </h3>
           <p>
-            We use Vercel Analytics and Vercel Speed Insights to understand how
-            visitors use our site. These services collect anonymous usage data such
-            as page views, browser type, and device information. No personally
-            identifiable information is collected by our analytics tools.
+            We use Vercel Analytics and Vercel Speed Insights on our website to
+            understand how visitors use the site. These collect anonymous usage data.
+            The iOS app collects crash logs and performance data to improve stability.
+            No personally identifiable information is collected by our analytics tools.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             How We Use Your Information
           </h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>To provide and maintain your account and saved favorites</li>
+            <li>To provide and maintain your account, journal, and favorites</li>
+            <li>To record and display your fishing sessions and analytics</li>
             <li>To process and display community photo submissions</li>
-            <li>To respond to contact form inquiries</li>
-            <li>To improve our website and content</li>
+            <li>To enable social features (follows, kudos, comments) that you opt into</li>
+            <li>To improve our website, app, and content</li>
             <li>To send administrative communications about your account</li>
           </ul>
+
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+            In-App Purchases
+          </h2>
+          <p>
+            Executive Angler Pro subscriptions are processed by Apple through the
+            App Store. We do not collect or store your payment information. Apple
+            handles all billing. You can manage or cancel your subscription in your
+            Apple ID settings.
+          </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             Data Storage and Security
@@ -109,6 +135,10 @@ export default function PrivacyPage() {
             </li>
             <li>
               <strong>Google</strong> — OAuth sign-in and business reviews
+            </li>
+            <li>
+              <strong>Apple</strong> — App distribution, in-app purchases, and
+              crash reporting
             </li>
           </ul>
           <p>

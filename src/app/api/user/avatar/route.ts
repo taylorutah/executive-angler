@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
 
     const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
 
-    // Save to angler_profiles
-    const { error: upsertError } = await supabase.from("angler_profiles").upsert(
+    // Save to profiles
+    const { error: upsertError } = await supabase.from("profiles").upsert(
       { user_id: user.id, avatar_url: publicUrl + `?t=${Date.now()}` },
       { onConflict: "user_id" }
     );

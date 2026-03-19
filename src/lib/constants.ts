@@ -61,6 +61,10 @@ export const NAV_LINKS: NavLink[] = [
     href: "/guides",
   },
   {
+    label: "Feed",
+    href: "/feed",
+  },
+  {
     label: "Resources",
     href: "/articles",
     rightAlign: true,
