@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Discover fly anglers and follow their sessions.",
 };
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function AnglersPage() {
   const supabase = await createClient();
