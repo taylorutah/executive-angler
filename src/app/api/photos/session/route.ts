@@ -1,27 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
-    // Auth check
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const token = authHeader.substring(7);
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    // Cookie-based auth (matches how the browser sends credentials)
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -39,6 +27,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Service role client for storage uploads (bypasses RLS)
+    const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey);
+
     // Generate unique filename
     const uuid = crypto.randomUUID();
     const ext = file.name.split(".").pop() || "jpg";
@@ -46,9 +37,10 @@ export async function POST(request: NextRequest) {
 
     // Upload to storage
     const arrayBuffer = await file.arrayBuffer();
-    const { error: uploadError } = await supabase.storage
+    const buffer = Buffer.from(arrayBuffer);
+    const { error: uploadError } = await serviceClient.storage
       .from("session-photos")
-      .upload(filePath, arrayBuffer, {
+      .upload(filePath, buffer, {
         contentType: file.type,
         upsert: false,
       });
@@ -62,12 +54,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from("session-photos")
-      .getPublicUrl(filePath);
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/session-photos/${filePath}`;
 
-    // Insert record
-    const { data: photo, error: insertError } = await supabase
+    // Insert record using service client (bypasses RLS on session_photos table)
+    const { data: photo, error: insertError } = await serviceClient
       .from("session_photos")
       .insert({
         session_id: sessionId,
@@ -98,6 +88,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("sessionId");
 
@@ -134,14 +125,9 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // Auth check
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const token = authHeader.substring(7);
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    // Cookie-based auth
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -154,8 +140,11 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Missing id" }, { status: 400 });
     }
 
+    // Service role client for storage + DB operations
+    const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey);
+
     // Get photo to verify ownership and get storage path
-    const { data: photo, error: fetchError } = await supabase
+    const { data: photo, error: fetchError } = await serviceClient
       .from("session_photos")
       .select("*")
       .eq("id", photoId)
@@ -173,11 +162,11 @@ export async function DELETE(request: NextRequest) {
     const urlParts = photo.url.split("/session-photos/");
     if (urlParts.length === 2) {
       const filePath = urlParts[1];
-      await supabase.storage.from("session-photos").remove([filePath]);
+      await serviceClient.storage.from("session-photos").remove([filePath]);
     }
 
     // Delete from database
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await serviceClient
       .from("session_photos")
       .delete()
       .eq("id", photoId);

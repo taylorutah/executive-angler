@@ -624,13 +624,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
 
           {/* ---- COMBINED PHOTO GALLERY (fish + session) ---- */}
-          {(fishPhotos.length > 0 || allSessionPhotos.length > 0) && (
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
+          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
+              {(fishPhotos.length > 0 || allSessionPhotos.length > 0) && (
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide">
                   Photos ({fishPhotos.length + allSessionPhotos.length})
                 </p>
               </div>
+              )}
 
               {/* Fish Photos Strip */}
               {fishPhotos.length > 0 && (
@@ -705,8 +706,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   />
                 </label>
               </div>
-            </div>
-          )}
+          </div>
 
           {/* ---- RIVER STATS WIDGET ---- */}
           {session.river_name && (
