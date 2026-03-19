@@ -32,6 +32,7 @@ export default async function DashboardPage() {
     .select("id, date, river_name, total_fish, notes, privacy")
     .eq("user_id", user.id)
     .order("date", { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(5);
 
   // Fetch river details for favorited rivers
@@ -74,6 +75,7 @@ export default async function DashboardPage() {
         .in("user_id", followingIds)
         .eq("privacy", "public")
         .order("date", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(10)
     : { data: [] };
 
@@ -86,7 +88,8 @@ export default async function DashboardPage() {
       .select("river_id, date, id")
       .in("river_id", favRiverIds)
       .eq("privacy", "public")
-      .order("date", { ascending: false });
+      .order("date", { ascending: false })
+      .order("created_at", { ascending: false });
 
     favRiverIds.forEach((rid) => {
       const rs = (riverSessions || []).filter((s) => s.river_id === rid);

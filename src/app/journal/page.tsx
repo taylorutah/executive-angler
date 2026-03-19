@@ -26,7 +26,8 @@ export default async function JournalPage() {
     .from("fishing_sessions")
     .select("*")
     .eq("user_id", user.id)
-    .order("date", { ascending: false });
+    .order("date", { ascending: false })
+    .order("created_at", { ascending: false });
 
   if (sessionsError) {
     console.error("Error fetching sessions:", sessionsError);

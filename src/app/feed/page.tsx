@@ -64,6 +64,7 @@ export default async function FeedPage() {
     )
     .eq("privacy", "public")
     .order("date", { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(30);
 
   if (error) {
