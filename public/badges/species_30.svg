@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- DNA double helix / diversity symbol -->
+  <!-- Left strand -->
+  <path d="M42 32 Q58 42 42 52 Q26 62 42 72 Q58 82 42 88" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Right strand -->
+  <path d="M78 32 Q62 42 78 52 Q94 62 78 72 Q62 82 78 88" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Connecting rungs -->
+  <line x1="46" y1="37" x2="74" y2="37" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="42" y1="47" x2="78" y2="47" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="38" y1="57" x2="82" y2="57" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="42" y1="67" x2="78" y2="67" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="46" y1="77" x2="74" y2="77" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

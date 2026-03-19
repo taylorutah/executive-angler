@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Open book / collection -->
+  <!-- Book spine -->
+  <line x1="60" y1="38" x2="60" y2="82" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Left page -->
+  <path d="M60 40 Q50 36 36 40 L36 78 Q50 74 60 78" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Right page -->
+  <path d="M60 40 Q70 36 84 40 L84 78 Q70 74 60 78" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Page lines left -->
+  <line x1="42" y1="50" x2="56" y2="48" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <line x1="42" y1="58" x2="56" y2="56" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <line x1="42" y1="66" x2="56" y2="64" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <!-- Page lines right -->
+  <line x1="64" y1="48" x2="78" y2="50" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <line x1="64" y1="56" x2="78" y2="58" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <line x1="64" y1="64" x2="78" y2="66" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+</svg>

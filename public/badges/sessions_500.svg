@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Crown -->
+  <path d="M34 72 L34 52 L44 62 L52 42 L60 58 L68 42 L76 62 L86 52 L86 72 Z" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Crown base band -->
+  <rect x="34" y="72" width="52" height="6" rx="1" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Crown jewels (dots at tips) -->
+  <circle cx="52" cy="42" r="2.5" fill="#FFD700"/>
+  <circle cx="60" cy="48" r="2.5" fill="#FFD700"/>
+  <circle cx="68" cy="42" r="2.5" fill="#FFD700"/>
+</svg>

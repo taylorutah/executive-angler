@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Star outline -->
+  <polygon points="60,30 66,48 86,48 70,58 76,76 60,66 44,76 50,58 34,48 54,48" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Small fish inside star -->
+  <path d="M48 56 Q54 52 60 53 Q64 54 66 56 L70 53 L70 60 L66 58 Q64 60 60 60 Q54 62 48 56 Z" fill="#FFD700"/>
+</svg>

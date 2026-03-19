@@ -68,6 +68,16 @@ export default async function DashboardPage() {
 
   const followingIds = (follows || []).map((f) => f.following_id);
 
+  // Suggested anglers — active users the current user doesn't follow (exclude self)
+  const excludeIds = [...followingIds, user.id];
+  const { data: suggestedAnglers } = await supabase
+    .from("profiles")
+    .select("user_id, username, display_name, avatar_url, is_private")
+    .not("user_id", "in", `(${excludeIds.join(",")})`)
+    .not("username", "is", null)
+    .or("is_private.is.null,is_private.eq.false")
+    .limit(5);
+
   const { data: followingFeed } = followingIds.length > 0
     ? await supabase
         .from("fishing_sessions")
@@ -119,6 +129,7 @@ export default async function DashboardPage() {
       favRivers={favRivers || []}
       favDests={favDests || []}
       followingFeed={(followingFeed || []) as any}
+      suggestedAnglers={suggestedAnglers || []}
       exploreFeed={(exploreFeed || []) as any}
       riverIntel={riverIntel}
       totalFavorites={(favorites || []).length}

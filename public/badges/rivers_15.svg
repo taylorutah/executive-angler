@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Compass -->
+  <circle cx="60" cy="60" r="22" fill="none" stroke="#C0C0C0" stroke-width="2"/>
+  <circle cx="60" cy="60" r="2" fill="#C0C0C0"/>
+  <!-- Cardinal direction ticks -->
+  <line x1="60" y1="38" x2="60" y2="34" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="82" x2="60" y2="86" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  <line x1="38" y1="60" x2="34" y2="60" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  <line x1="82" y1="60" x2="86" y2="60" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  <!-- North pointer (filled) -->
+  <polygon points="60,38 55,58 60,54 65,58" fill="#C0C0C0"/>
+  <!-- South pointer (outline) -->
+  <polygon points="60,82 55,62 60,66 65,62" fill="none" stroke="#C0C0C0" stroke-width="1.2"/>
+  <!-- Outer ring marks -->
+  <circle cx="60" cy="60" r="26" fill="none" stroke="#C0C0C0" stroke-width="1" stroke-dasharray="2 6"/>
+</svg>

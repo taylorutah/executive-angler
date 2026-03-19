@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -38,9 +38,15 @@ interface Props {
     metadata: { badge_icon?: string; badge_color?: string; display_name?: string; description?: string };
   }>;
   welcome?: boolean;
+  notificationPrefs: {
+    emailNotifyFollows: boolean;
+    emailNotifyComments: boolean;
+    emailNotifyLikes: boolean;
+    emailDigestFrequency: "none" | "daily" | "weekly";
+  };
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, notificationPrefs }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [username, setUsername] = useState(user.username || "");
@@ -62,6 +68,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [showWelcome, setShowWelcome] = useState(welcome ?? false);
   const [googleLinked, setGoogleLinked] = useState(false);
   const [googleLinking, setGoogleLinking] = useState(false);
+
+  // Notification preferences
+  const [notifyFollows, setNotifyFollows] = useState(notificationPrefs.emailNotifyFollows);
+  const [notifyComments, setNotifyComments] = useState(notificationPrefs.emailNotifyComments);
+  const [notifyLikes, setNotifyLikes] = useState(notificationPrefs.emailNotifyLikes);
+  const [digestFrequency, setDigestFrequency] = useState<"none" | "daily" | "weekly">(notificationPrefs.emailDigestFrequency);
+  const [notifSaving, setNotifSaving] = useState(false);
+  const [notifSaved, setNotifSaved] = useState(false);
 
   // Username availability state
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
@@ -211,6 +225,20 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
       },
     });
     // Browser will redirect to Google OAuth, no need to reset loading
+  }
+
+  async function handleSaveNotifications() {
+    setNotifSaving(true);
+    const supabase = createClient();
+    await supabase.from("profiles").update({
+      email_notify_follows: notifyFollows,
+      email_notify_comments: notifyComments,
+      email_notify_likes: notifyLikes,
+      email_digest_frequency: digestFrequency,
+    }).eq("user_id", user.id);
+    setNotifSaving(false);
+    setNotifSaved(true);
+    setTimeout(() => setNotifSaved(false), 2500);
   }
 
   async function handleSignOut() {
@@ -559,6 +587,87 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <span>Google account connected ✓</span>
             </div>
           )}
+        </div>
+
+        {/* Notification Preferences */}
+        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
+          <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
+            <Bell className="h-5 w-5" /> Notifications
+          </h2>
+          <div className="space-y-4">
+            {/* Toggle: New Follower */}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#F0F6FC]">New follower</p>
+                <p className="text-xs text-[#8B949E]">Email when someone follows you</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotifyFollows(!notifyFollows)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyFollows ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
+              >
+                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyFollows ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Toggle: Session Comment */}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#F0F6FC]">Session comments</p>
+                <p className="text-xs text-[#8B949E]">Email when someone comments on your session</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotifyComments(!notifyComments)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyComments ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
+              >
+                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyComments ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Toggle: Session Like */}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#F0F6FC]">Session kudos</p>
+                <p className="text-xs text-[#8B949E]">Email when someone likes your session</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotifyLikes(!notifyLikes)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyLikes ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
+              >
+                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyLikes ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Digest Frequency */}
+            <div>
+              <p className="text-sm font-medium text-[#F0F6FC] mb-1">Email digest</p>
+              <p className="text-xs text-[#8B949E] mb-2">Summary of activity on your profile</p>
+              <div className="flex gap-2">
+                {(["none", "daily", "weekly"] as const).map((freq) => (
+                  <button
+                    key={freq}
+                    type="button"
+                    onClick={() => setDigestFrequency(freq)}
+                    className={`flex-1 rounded-lg border py-2 text-sm font-medium transition-colors capitalize ${digestFrequency === freq ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
+                  >
+                    {freq}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSaveNotifications}
+              disabled={notifSaving}
+              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#0D1117] disabled:opacity-60"
+            >
+              <Save className="h-4 w-4" />
+              {notifSaving ? "Saving..." : notifSaved ? "Saved ✓" : "Save Preferences"}
+            </button>
+          </div>
         </div>
 
         {/* Sign Out */}

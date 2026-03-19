@@ -35,7 +35,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency")
     .eq("user_id", user.id)
     .single();
 
@@ -88,6 +88,12 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       }}
       awards={awards ?? []}
       welcome={welcome === "1"}
+      notificationPrefs={{
+        emailNotifyFollows: profile?.email_notify_follows ?? true,
+        emailNotifyComments: profile?.email_notify_comments ?? true,
+        emailNotifyLikes: profile?.email_notify_likes ?? true,
+        emailDigestFrequency: (profile?.email_digest_frequency as "none" | "daily" | "weekly") ?? "weekly",
+      }}
     />
   );
 }

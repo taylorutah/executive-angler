@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- School of fish - three fish at different positions -->
+  <!-- Top fish -->
+  <path d="M30 46 Q38 40 48 42 Q54 42 58 44 L62 40 L62 50 L58 48 Q54 50 48 50 Q38 52 30 46 Z" fill="none" stroke="#C0C0C0" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="42" cy="44" r="1.5" fill="#C0C0C0"/>
+  <!-- Middle fish (larger) -->
+  <path d="M36 62 Q46 54 58 56 Q66 56 72 60 L78 54 L78 70 L72 66 Q66 68 58 68 Q46 70 36 62 Z" fill="none" stroke="#C0C0C0" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="50" cy="60" r="2" fill="#C0C0C0"/>
+  <!-- Bottom fish -->
+  <path d="M42 78 Q50 72 58 74 Q64 74 68 76 L72 72 L72 82 L68 80 Q64 82 58 82 Q50 84 42 78 Z" fill="none" stroke="#C0C0C0" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="52" cy="76" r="1.5" fill="#C0C0C0"/>
+</svg>

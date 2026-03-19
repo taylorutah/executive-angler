@@ -15,6 +15,7 @@ interface DashboardProps {
   favDests: Array<{ id: string; name: string; slug: string; hero_image_url: string }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   followingFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string; user_id: string; profiles: any }>;
+  suggestedAnglers: Array<{ user_id: string; username: string | null; display_name: string | null; avatar_url: string | null }>;
   exploreFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; user_id: string; profiles: any }>;
   riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }>;
   totalFavorites: number;
@@ -37,7 +38,7 @@ function formatDate(d: string): string {
 }
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, exploreFeed, riverIntel, totalFavorites
+  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const totalFish = mySessions.reduce((a, s) => a + (s.total_fish ?? 0), 0);
@@ -136,6 +137,57 @@ export default function DashboardClient({
                   </Link>
                 );
               })}
+            </div>
+          </section>
+        )}
+
+        {/* Suggested Anglers */}
+        {suggestedAnglers.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-[#E8923A]" />
+                <h2 className="font-heading text-xl font-bold text-[#F0F6FC]">Suggested Anglers</h2>
+              </div>
+              <Link href="/anglers" className="text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                Find anglers &rarr;
+              </Link>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {suggestedAnglers.map((angler) => (
+                <Link
+                  key={angler.user_id}
+                  href={`/anglers/${angler.username}`}
+                  className="group block shrink-0 min-w-[160px] bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#E8923A] transition-colors"
+                >
+                  <div className="flex flex-col items-center text-center gap-2">
+                    {angler.avatar_url ? (
+                      <Image
+                        src={angler.avatar_url}
+                        alt={angler.display_name || angler.username || "Angler"}
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[#E8923A]/10 flex items-center justify-center text-sm font-bold text-[#E8923A]">
+                        {String(angler.username?.charAt(0) ?? angler.display_name?.charAt(0) ?? "A").toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0 w-full">
+                      <p className="text-sm font-medium text-[#F0F6FC] truncate">
+                        {angler.display_name || angler.username}
+                      </p>
+                      {angler.username && (
+                        <p className="text-xs text-[#8B949E] truncate">@{angler.username}</p>
+                      )}
+                    </div>
+                    <span className="mt-1 px-3 py-1 text-xs font-medium border border-[#E8923A] text-[#E8923A] rounded-lg hover:bg-[#E8923A]/10 transition-colors">
+                      Follow
+                    </span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}

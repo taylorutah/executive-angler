@@ -3,11 +3,17 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-// Service role client for storage uploads (bypasses RLS)
-const serviceClient = createServiceClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Service role client for storage uploads (bypasses RLS) — lazy init to avoid build-time errors
+let _serviceClient: ReturnType<typeof createServiceClient> | null = null;
+function getServiceClient() {
+  if (!_serviceClient) {
+    _serviceClient = createServiceClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _serviceClient;
+}
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -85,14 +91,14 @@ export async function POST(req: NextRequest) {
         const ext = file.name.split(".").pop() || "jpg";
         const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
         const arrayBuffer = await file.arrayBuffer();
-        const { error: uploadError } = await serviceClient.storage
+        const { error: uploadError } = await getServiceClient().storage
           .from("fly-pattern-images")
           .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
 
         if (uploadError) {
           console.error("Image upload error:", uploadError);
         } else {
-          const { data: { publicUrl } } = serviceClient.storage
+          const { data: { publicUrl } } = getServiceClient().storage
             .from("fly-pattern-images")
             .getPublicUrl(path);
           imageUrl = publicUrl;
@@ -170,14 +176,14 @@ export async function PATCH(req: NextRequest) {
         const ext = file.name.split(".").pop() || "jpg";
         const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
         const arrayBuffer = await file.arrayBuffer();
-        const { error: uploadError } = await serviceClient.storage
+        const { error: uploadError } = await getServiceClient().storage
           .from("fly-pattern-images")
           .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
 
         if (uploadError) {
           console.error("Image upload error:", uploadError);
         } else {
-          const { data: { publicUrl } } = serviceClient.storage
+          const { data: { publicUrl } } = getServiceClient().storage
             .from("fly-pattern-images")
             .getPublicUrl(path);
           imageUrl = publicUrl;

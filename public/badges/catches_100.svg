@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Single fish silhouette -->
+  <path d="M32 60 Q42 48 58 50 Q68 50 74 54 L82 48 L82 72 L74 66 Q68 70 58 70 Q42 72 32 60 Z" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Eye -->
+  <circle cx="50" cy="58" r="2.5" fill="#CD7F32"/>
+  <!-- Fin detail -->
+  <path d="M58 50 L62 42 L66 52" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Gill line -->
+  <path d="M54 54 Q52 60 54 66" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

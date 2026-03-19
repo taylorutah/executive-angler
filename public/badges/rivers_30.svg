@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Mountain with river -->
+  <!-- Mountain peak -->
+  <polygon points="60,30 32,80 88,80" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Snow cap -->
+  <path d="M54 42 L60 30 L66 42 L62 40 L58 42 Z" fill="#FFD700" opacity="0.3"/>
+  <!-- Second smaller mountain behind -->
+  <polyline points="72,52 88,80" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+  <polyline points="28,80 44,56" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+  <!-- River flowing down -->
+  <path d="M60 48 Q56 56 62 62 Q58 68 62 74 Q58 78 56 80" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+  <!-- River at base -->
+  <path d="M32 84 Q46 80 60 84 Q74 88 88 84" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Fishing rod silhouette -->
+  <line x1="38" y1="82" x2="75" y2="32" stroke="#CD7F32" stroke-width="3" stroke-linecap="round"/>
+  <line x1="75" y1="32" x2="78" y2="30" stroke="#CD7F32" stroke-width="2" stroke-linecap="round"/>
+  <path d="M78 30 Q82 38 76 48 Q72 54 74 60" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="74" cy="60" r="2" fill="#CD7F32"/>
+  <!-- Reel -->
+  <circle cx="45" cy="74" r="5" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+  <circle cx="45" cy="74" r="1.5" fill="#CD7F32"/>
+  <!-- Handle grip -->
+  <line x1="38" y1="82" x2="34" y2="88" stroke="#CD7F32" stroke-width="4" stroke-linecap="round"/>
+</svg>

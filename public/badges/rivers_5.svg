@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
+  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
+  <!-- Wavy river lines -->
+  <path d="M30 42 Q40 36 50 42 Q60 48 70 42 Q80 36 90 42" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M30 54 Q40 48 50 54 Q60 60 70 54 Q80 48 90 54" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M30 66 Q40 60 50 66 Q60 72 70 66 Q80 60 90 66" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M30 78 Q40 72 50 78 Q60 84 70 78 Q80 72 90 78" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
