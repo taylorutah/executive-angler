@@ -150,7 +150,7 @@ export default function PhotoLightbox({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Image */}
-          <div className="relative w-full flex-1 min-h-0" style={{ maxHeight: "70vh" }}>
+          <div className="relative w-full" style={{ height: "70vh" }}>
             <Image
               src={photo.photoUrl}
               alt={photo.caption || `Photo by ${photo.submitterName}`}
