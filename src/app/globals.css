@@ -309,7 +309,7 @@
    ============================================= */
 
 .article-body {
-  color: #374151;
+  color: #C9D1D9;
   font-size: 1rem;
   line-height: 1.8;
   max-width: 100%;
@@ -330,7 +330,7 @@
   font-family: 'DM Serif Display', serif;
   font-size: 1.5rem;
   font-weight: 400;
-  color: #111827;
+  color: #F0F6FC;
   margin-top: 2.5rem;
   margin-bottom: 0.6rem;
   line-height: 1.3;
@@ -342,7 +342,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #111827;
+  color: #F0F6FC;
   margin-top: 1.75rem;
   margin-bottom: 0.4rem;
   line-height: 1.35;
@@ -351,7 +351,7 @@
 .article-body h4 {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #4B5563;
+  color: #8B949E;
   margin-top: 1.25rem;
   margin-bottom: 0.25rem;
   text-transform: uppercase;
@@ -376,7 +376,7 @@
 
 .article-body strong {
   font-weight: 700;
-  color: #111827;
+  color: #F0F6FC;
 }
 
 .article-body a {
@@ -427,6 +427,7 @@
   padding: 0.5rem 0.875rem;
   border-bottom: 1px solid #21262D;
   vertical-align: top;
+  color: #C9D1D9;
 }
 
 .article-body tr:last-child td {
@@ -642,6 +643,20 @@
 .light-mode [class*="bg-[#161B22]"] .text-white\/70,
 .light-mode [class*="bg-[#161B22]"] .text-white\/80,
 .light-mode [class*="bg-[#1F2937]"] .text-white\/70 { color: #4B5563 !important; }
+
+/* ── Article body — light-mode overrides ── */
+.light-mode .article-body { color: #374151 !important; }
+.light-mode .article-body h2 { color: #111827 !important; }
+.light-mode .article-body h3 { color: #111827 !important; }
+.light-mode .article-body h4 { color: #4B5563 !important; }
+.light-mode .article-body strong { color: #111827 !important; }
+.light-mode .article-body blockquote { color: #6B7280 !important; background: rgba(212, 117, 31, 0.06) !important; }
+.light-mode .article-body td { color: #374151 !important; }
+.light-mode .article-body th { background: #EDE8DF !important; color: #111827 !important; }
+.light-mode .article-body table { border-color: #D4CBB8 !important; }
+.light-mode .article-body td { border-color: #D4CBB8 !important; }
+.light-mode .article-body h2 { border-color: #D4CBB8 !important; }
+.light-mode .article-body tr:nth-child(even) td { background: rgba(237, 232, 223, 0.5) !important; }
 
 /* ── Logo swap: dark/light mode ── */
 .light-mode .dark-logo { display: none !important; }
