@@ -13,76 +13,49 @@ export type NavLink = {
   label: string;
   href: string;
   children?: NavChild[];
-  rightAlign?: boolean; // anchor dropdown to the right edge of the trigger
+  rightAlign?: boolean;
 };
 
 export const NAV_LINKS: NavLink[] = [
   {
-    label: "Destinations",
+    label: "Dashboard",
+    href: "/dashboard",
+  },
+  {
+    label: "Explore",
     href: "/destinations",
     children: [
+      { label: "Destinations", href: "", isSection: true },
       { label: "Montana", href: "/destinations/montana" },
       { label: "Wyoming", href: "/destinations/wyoming" },
       { label: "Colorado", href: "/destinations/colorado" },
       { label: "Idaho", href: "/destinations/idaho" },
       { label: "Alaska", href: "/destinations/alaska" },
-      { label: "New Zealand", href: "/destinations/new-zealand" },
-      { label: "View All", href: "/destinations" },
-    ],
-  },
-  {
-    label: "Rivers",
-    href: "/rivers",
-    children: [
+      { label: "All Destinations", href: "/destinations" },
+      { label: "Rivers", href: "", isSection: true },
       { label: "Madison River", href: "/rivers/madison-river" },
       { label: "Yellowstone River", href: "/rivers/yellowstone-river" },
-      { label: "Gallatin River", href: "/rivers/gallatin-river" },
       { label: "Missouri River", href: "/rivers/missouri-river" },
-      { label: "View All", href: "/rivers" },
+      { label: "All Rivers", href: "/rivers" },
+      { label: "Species", href: "", isSection: true },
+      { label: "Trout", href: "/species?family=trout" },
+      { label: "Salmon", href: "/species?family=salmon" },
+      { label: "All Species", href: "/species" },
+      { label: "Directory", href: "", isSection: true },
+      { label: "Lodges", href: "/lodges" },
+      { label: "Guides", href: "/guides" },
+      { label: "Fly Shops", href: "/fly-shops" },
+      { label: "Articles", href: "", isSection: true },
+      { label: "All Articles", href: "/articles" },
     ],
-  },
-  {
-    label: "Lodges",
-    href: "/lodges",
-    children: [
-      { label: "Firehole Ranch", href: "/lodges/firehole-ranch" },
-      { label: "Bristol Bay Sportfishing", href: "/lodges/bristol-bay-sportfishing" },
-      { label: "Dean River Lodge", href: "/lodges/dean-river-lodge" },
-      { label: "Snake River Sporting Club", href: "/lodges/snake-river-sporting-club" },
-      { label: "View All Lodges", href: "/lodges" },
-    ],
-  },
-  {
-    label: "Fly Shops",
-    href: "/fly-shops",
-  },
-  {
-    label: "Guides",
-    href: "/guides",
   },
   {
     label: "Feed",
     href: "/feed",
   },
   {
-    label: "Resources",
-    href: "/articles",
-    rightAlign: true,
-    children: [
-      { label: "Articles", href: "", isSection: true },
-      { label: "Techniques", href: "/articles?category=technique" },
-      { label: "Gear", href: "/articles?category=gear" },
-      { label: "Conservation", href: "/articles?category=conservation" },
-      { label: "Destinations", href: "/articles?category=destination" },
-      { label: "Culture", href: "/articles?category=culture" },
-      { label: "All Articles", href: "/articles" },
-      { label: "Species Guide", href: "", isSection: true },
-      { label: "Trout", href: "/species?family=trout" },
-      { label: "Salmon", href: "/species?family=salmon" },
-      { label: "Saltwater", href: "/species?family=saltwater" },
-      { label: "Warmwater", href: "/species?family=warmwater" },
-      { label: "All Species", href: "/species" },
-    ],
+    label: "Journal",
+    href: "/journal",
   },
 ];
 
