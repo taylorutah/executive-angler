@@ -15,6 +15,7 @@ import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
+import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -385,6 +386,8 @@ export default async function RiverPage({ params }: Props) {
               <QuickFacts facts={quickFacts} />
 
               <RiverActivityPulse riverId={river.id} />
+
+              <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
 
               {/* Season Calendar */}
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
