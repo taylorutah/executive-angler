@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Fish, MapPin, TrendingUp, Heart, Users,
-  ChevronRight, BookOpen, Compass, Star, Activity
+  ChevronRight, BookOpen, Compass, Star, Activity,
+  Feather, Package, Trophy, Target, Award
 } from "lucide-react";
+import type { RiverStats } from "@/types/awards";
 
 interface DashboardProps {
   user: { id: string; email: string };
@@ -19,6 +21,9 @@ interface DashboardProps {
   exploreFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; user_id: string; profiles: any }>;
   riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }>;
   totalFavorites: number;
+  flyCount: number;
+  gearCount: number;
+  riverStats: RiverStats[];
 }
 
 function timeAgo(dateStr: string | null): string {
@@ -38,7 +43,7 @@ function formatDate(d: string): string {
 }
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites
+  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const totalFish = mySessions.reduce((a, s) => a + (s.total_fish ?? 0), 0);
@@ -94,6 +99,168 @@ export default function DashboardClient({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
+
+        {/* Fly Box & Gear Box */}
+        <section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Fly Box */}
+            <Link
+              href="/journal/flies"
+              className="group relative flex items-center gap-5 p-6 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#E8923A]/5 to-transparent rounded-bl-full" />
+              <div className="w-14 h-14 rounded-2xl bg-[#E8923A]/10 flex items-center justify-center shrink-0">
+                <Feather className="h-7 w-7 text-[#E8923A]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-heading text-lg font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">My Fly Box</h3>
+                <p className="text-sm text-[#8B949E] mt-0.5">
+                  {flyCount > 0 ? `${flyCount} pattern${flyCount !== 1 ? "s" : ""}` : "Add your first pattern"}
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-[#484F58] group-hover:text-[#E8923A] transition-colors shrink-0" />
+            </Link>
+
+            {/* Gear Box */}
+            <Link
+              href="/account/gear"
+              className="group relative flex items-center gap-5 p-6 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#0BA5C7]/5 to-transparent rounded-bl-full" />
+              <div className="w-14 h-14 rounded-2xl bg-[#0BA5C7]/10 flex items-center justify-center shrink-0">
+                <Package className="h-7 w-7 text-[#0BA5C7]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-heading text-lg font-bold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Gear Box</h3>
+                <p className="text-sm text-[#8B949E] mt-0.5">
+                  {gearCount > 0 ? `${gearCount} item${gearCount !== 1 ? "s" : ""}` : "Add your gear"}
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-[#484F58] group-hover:text-[#0BA5C7] transition-colors shrink-0" />
+            </Link>
+          </div>
+        </section>
+
+        {/* Your Rivers — with full stats */}
+        {riverStats.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-[#E8923A]" />
+                <h2 className="font-heading text-xl font-bold text-[#F0F6FC]">Your Rivers</h2>
+              </div>
+              <Link href="/journal/stats" className="text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                Full stats &rarr;
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {riverStats.map((rs) => {
+                const riverSlug = favRivers.find((r) => r.name === rs.river_name)?.slug;
+                const riverHref = riverSlug ? `/rivers/${riverSlug}` : `/journal/stats`;
+                return (
+                  <div
+                    key={rs.river_name}
+                    className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 hover:border-[#E8923A]/40 transition-colors"
+                  >
+                    {/* River header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <Link href={riverHref} className="font-heading text-lg font-bold text-[#F0F6FC] hover:text-[#E8923A] transition-colors">
+                          {rs.river_name}
+                        </Link>
+                        <div className="flex items-center gap-3 text-xs text-[#8B949E] mt-1">
+                          <span>{rs.total_sessions} session{rs.total_sessions !== 1 ? "s" : ""}</span>
+                          <span className="text-[#21262D]">|</span>
+                          <span>{rs.total_fish} fish</span>
+                          <span className="text-[#21262D]">|</span>
+                          <span>Last: {timeAgo(rs.last_session)}</span>
+                        </div>
+                      </div>
+                      {/* Award badges */}
+                      {rs.awards.length > 0 && (
+                        <div className="flex gap-1.5 shrink-0">
+                          {rs.awards.slice(0, 4).map((a) => (
+                            <span
+                              key={a.award_key}
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm"
+                              style={{ backgroundColor: `${a.metadata.badge_color}20` }}
+                              title={`${a.metadata.display_name}: ${a.metadata.description}`}
+                            >
+                              {a.metadata.badge_icon}
+                            </span>
+                          ))}
+                          {rs.awards.length > 4 && (
+                            <span className="w-8 h-8 rounded-full bg-[#21262D] flex items-center justify-center text-[10px] text-[#8B949E]">
+                              +{rs.awards.length - 4}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Stats grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <TrendingUp className="h-3 w-3 text-[#E8923A]" />
+                          <span className="text-[10px] text-[#484F58] uppercase tracking-wide">Avg/Session</span>
+                        </div>
+                        <p className="font-mono text-lg font-bold text-[#F0F6FC]">{rs.avg_fish_per_session.toFixed(1)}</p>
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Trophy className="h-3 w-3 text-[#FFD700]" />
+                          <span className="text-[10px] text-[#484F58] uppercase tracking-wide">Best Session</span>
+                        </div>
+                        <p className="font-mono text-lg font-bold text-[#F0F6FC]">{rs.best_session_fish_count}</p>
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Fish className="h-3 w-3 text-[#0BA5C7]" />
+                          <span className="text-[10px] text-[#484F58] uppercase tracking-wide">Species</span>
+                        </div>
+                        <p className="font-mono text-lg font-bold text-[#F0F6FC]">{rs.species_caught.length}</p>
+                        {rs.species_caught.length > 0 && (
+                          <p className="text-[10px] text-[#8B949E] mt-0.5 truncate">{rs.species_caught.slice(0, 3).join(", ")}</p>
+                        )}
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Target className="h-3 w-3 text-[#0BA5C7]" />
+                          <span className="text-[10px] text-[#484F58] uppercase tracking-wide">{rs.biggest_fish ? "Biggest" : "Top Fly"}</span>
+                        </div>
+                        {rs.biggest_fish ? (
+                          <p className="font-mono text-lg font-bold text-[#F0F6FC]">{rs.biggest_fish}&quot;</p>
+                        ) : rs.favorite_fly ? (
+                          <p className="text-sm font-semibold text-[#F0F6FC] truncate">{rs.favorite_fly}</p>
+                        ) : (
+                          <p className="text-sm text-[#484F58]">&mdash;</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Favorite fly + link row */}
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#21262D]">
+                      {rs.favorite_fly && rs.biggest_fish ? (
+                        <span className="text-xs text-[#8B949E]">
+                          <span className="text-[#484F58]">Top fly:</span> {rs.favorite_fly}
+                        </span>
+                      ) : (
+                        <span />
+                      )}
+                      <Link
+                        href={riverHref}
+                        className="text-xs text-[#E8923A] hover:underline flex items-center gap-1"
+                      >
+                        View river <ChevronRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Following Feed */}
         {followingFeed.length > 0 && (
@@ -238,59 +405,42 @@ export default function DashboardClient({
           </section>
         )}
 
-        {/* Followed Rivers */}
+        {/* Followed Rivers (image cards for favorited rivers) */}
         {favRivers.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Heart className="h-5 w-5 text-[#E8923A]" />
-                <h2 className="font-heading text-xl font-bold text-[#F0F6FC]">Your Rivers</h2>
+                <h2 className="font-heading text-xl font-bold text-[#F0F6FC]">Followed Rivers</h2>
               </div>
               <Link href="/rivers" className="text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
                 Explore all &rarr;
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex gap-4 overflow-x-auto pb-2">
               {favRivers.map((river) => {
                 const intel = riverIntel[river.id];
                 return (
                   <Link
                     key={river.id}
                     href={`/rivers/${river.slug}`}
-                    className="group block bg-[#161B22] rounded-xl overflow-hidden border border-[#21262D] hover:border-[#E8923A] transition-all"
+                    className="group block shrink-0 w-56"
                   >
-                    <div className="relative h-36">
+                    <div className="relative h-32 rounded-xl overflow-hidden border border-[#21262D] group-hover:border-[#E8923A] transition-all">
                       <Image
                         src={river.hero_image_url}
                         alt={river.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 640px) 100vw, 33vw"
+                        sizes="224px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
-                        <h3 className="font-heading font-bold text-white text-sm leading-tight">{river.name}</h3>
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <p className="text-white text-xs font-bold leading-tight">{river.name}</p>
                         {intel && intel.sessions30d > 0 && (
-                          <span className="flex items-center gap-1 bg-[#00B4D8]/20 text-[#00B4D8] text-[10px] font-mono px-2 py-0.5 rounded-full">
-                            <Activity className="h-2.5 w-2.5" /> {intel.sessions30d} trips
-                          </span>
+                          <p className="text-[10px] text-[#00B4D8] font-mono mt-0.5">{intel.sessions30d} trips (30d)</p>
                         )}
                       </div>
-                    </div>
-                    <div className="p-3">
-                      <div className="flex items-center justify-between text-xs text-[#8B949E]">
-                        <span>{(river.primary_species || []).slice(0, 2).join(", ")}</span>
-                        {intel?.lastDate ? (
-                          <span className="font-mono text-[10px]">Last: {timeAgo(intel.lastDate)}</span>
-                        ) : (
-                          <span className="text-[#484F58] text-[10px]">No reports yet</span>
-                        )}
-                      </div>
-                      <span
-                        className="mt-2 text-[10px] text-[#E8923A] hover:underline flex items-center gap-1"
-                      >
-                        <TrendingUp className="h-3 w-3" /> View Angler Intel
-                      </span>
                     </div>
                   </Link>
                 );

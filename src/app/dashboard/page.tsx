@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
+import { RIVER_AWARDS } from "@/types/awards";
+import type { RiverStats } from "@/types/awards";
 
 export const metadata: Metadata = {
   title: "Dashboard — Executive Angler",
@@ -121,6 +123,93 @@ export default async function DashboardPage() {
     });
   }
 
+  // Fly Box count
+  const { count: flyCount } = await supabase
+    .from("fly_patterns")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
+  // Gear count
+  const { count: gearCount } = await supabase
+    .from("gear_items")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
+  // River stats (per-river metrics: sessions, fish, avg, best, species, awards)
+  const { data: allSessions } = await supabase
+    .from("fishing_sessions")
+    .select("id, date, river_name, river_id, total_fish")
+    .eq("user_id", user.id)
+    .order("date", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  const { data: allCatches } = await supabase
+    .from("catches")
+    .select("session_id, species, fly_name, length_inches")
+    .eq("user_id", user.id);
+
+  // Build river stats map
+  const riverStatsMap = new Map<string, (typeof allSessions extends (infer T)[] | null ? T : never)[]>();
+  (allSessions || []).forEach((s) => {
+    const key = s.river_name || "Unknown";
+    if (!riverStatsMap.has(key)) riverStatsMap.set(key, []);
+    riverStatsMap.get(key)!.push(s);
+  });
+
+  const riverStatsArr: RiverStats[] = [];
+  for (const [river, rSessions] of riverStatsMap.entries()) {
+    const sessionIds = rSessions.map((s) => s.id);
+    const rCatches = (allCatches || []).filter((c) => sessionIds.includes(c.session_id));
+    const speciesSet = new Set<string>();
+    rCatches.forEach((c) => { if (c.species) speciesSet.add(c.species); });
+    const biggestFish = rCatches.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
+    const flyCountMap = new Map<string, number>();
+    rCatches.forEach((c) => { if (c.fly_name) flyCountMap.set(c.fly_name, (flyCountMap.get(c.fly_name) || 0) + 1); });
+    const favFly = Array.from(flyCountMap.entries()).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const totalFishR = rSessions.reduce((sum, s) => sum + (s.total_fish || 0), 0);
+    const bestSession = rSessions.reduce((max, s) => Math.max(max, s.total_fish || 0), 0);
+
+    const stats: RiverStats = {
+      river_name: river,
+      river_id: rSessions[0]?.river_id ?? undefined,
+      total_sessions: rSessions.length,
+      total_fish: totalFishR,
+      biggest_fish: biggestFish > 0 ? biggestFish : undefined,
+      favorite_fly: favFly,
+      first_session: rSessions[rSessions.length - 1]?.date ?? "",
+      last_session: rSessions[0]?.date ?? "",
+      species_caught: Array.from(speciesSet),
+      avg_fish_per_session: rSessions.length > 0 ? totalFishR / rSessions.length : 0,
+      best_session_fish_count: bestSession,
+      awards: [],
+    };
+
+    // Check awards
+    for (const award of RIVER_AWARDS) {
+      if (award.check(stats)) {
+        stats.awards.push({
+          id: `${river}-${award.key}`,
+          user_id: user.id,
+          award_type: award.type,
+          award_key: award.key,
+          river_name: river,
+          awarded_at: new Date().toISOString(),
+          metadata: {
+            badge_icon: award.icon,
+            badge_color: award.color,
+            display_name: award.display_name,
+            description: award.description,
+          },
+        });
+      }
+    }
+
+    riverStatsArr.push(stats);
+  }
+
+  // Sort by total sessions descending
+  riverStatsArr.sort((a, b) => b.total_sessions - a.total_sessions);
+
   return (
     <DashboardClient
       user={{ id: user.id, email: user.email ?? "" }}
@@ -133,6 +222,9 @@ export default async function DashboardPage() {
       exploreFeed={(exploreFeed || []) as any}
       riverIntel={riverIntel}
       totalFavorites={(favorites || []).length}
+      flyCount={flyCount ?? 0}
+      gearCount={gearCount ?? 0}
+      riverStats={riverStatsArr}
     />
   );
 }
