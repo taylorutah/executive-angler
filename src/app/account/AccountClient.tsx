@@ -8,7 +8,33 @@ import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, P
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
-import { IconFirstTimer, IconRegular, IconVeteran, IconLegend, IconCenturion, IconMasterAngler, IconSpeciesHunter, IconConsistentProducer } from "@/components/icons/AchievementIcons";
+// Map award_key → SVG badge file in /public/badges/
+const BADGE_SVG_MAP: Record<string, string> = {
+  first_timer: "/badges/sessions_10.svg",
+  regular: "/badges/sessions_50.svg",
+  veteran: "/badges/sessions_100.svg",
+  legend: "/badges/sessions_500.svg",
+  centurion: "/badges/catches_100.svg",
+  master_angler: "/badges/catches_1000.svg",
+  consistent_producer: "/badges/catches_500.svg",
+  species_hunter: "/badges/species_5.svg",
+  // Global milestones (if used)
+  sessions_10: "/badges/sessions_10.svg",
+  sessions_50: "/badges/sessions_50.svg",
+  sessions_100: "/badges/sessions_100.svg",
+  sessions_500: "/badges/sessions_500.svg",
+  catches_100: "/badges/catches_100.svg",
+  catches_500: "/badges/catches_500.svg",
+  catches_1000: "/badges/catches_1000.svg",
+  species_5: "/badges/species_5.svg",
+  species_15: "/badges/species_15.svg",
+  species_30: "/badges/species_30.svg",
+  rivers_5: "/badges/rivers_5.svg",
+  rivers_15: "/badges/rivers_15.svg",
+  rivers_30: "/badges/rivers_30.svg",
+  streak_4: "/badges/streak_4.svg",
+  streak_12: "/badges/streak_12.svg",
+};
 
 interface Props {
   user: {
@@ -380,29 +406,36 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <span className="text-xl">🏆</span> Achievements
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {awards.map((award, i) => (
-                <div key={i} className="flex items-center gap-3 rounded-lg bg-[#0D1117] p-3">
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border-2 p-1.5"
-                    style={{ backgroundColor: `${award.metadata.badge_color || "#E8923A"}20`, borderColor: award.metadata.badge_color || "#E8923A", color: award.metadata.badge_color || "#E8923A" }}
-                  >
-                    {award.award_key === "first_timer" && <IconFirstTimer className="w-full h-full" />}
-                    {award.award_key === "regular" && <IconRegular className="w-full h-full" />}
-                    {award.award_key === "veteran" && <IconVeteran className="w-full h-full" />}
-                    {award.award_key === "legend" && <IconLegend className="w-full h-full" />}
-                    {award.award_key === "centurion" && <IconCenturion className="w-full h-full" />}
-                    {award.award_key === "master_angler" && <IconMasterAngler className="w-full h-full" />}
-                    {award.award_key === "species_hunter" && <IconSpeciesHunter className="w-full h-full" />}
-                    {award.award_key === "consistent_producer" && <IconConsistentProducer className="w-full h-full" />}
-                    {!["first_timer","regular","veteran","legend","centurion","master_angler","species_hunter","consistent_producer"].includes(award.award_key) && <span className="text-xl">{award.metadata.badge_icon || "🏆"}</span>}
+              {awards.map((award, i) => {
+                const badgeSrc = BADGE_SVG_MAP[award.award_key];
+                return (
+                  <div key={i} className="flex items-center gap-3 rounded-lg bg-[#0D1117] p-3">
+                    <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden">
+                      {badgeSrc ? (
+                        <Image
+                          src={badgeSrc}
+                          alt={award.metadata.display_name || award.award_key}
+                          width={48}
+                          height={48}
+                          className="w-full h-full"
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full rounded-full flex items-center justify-center border-2"
+                          style={{ backgroundColor: `${award.metadata.badge_color || "#E8923A"}20`, borderColor: award.metadata.badge_color || "#E8923A" }}
+                        >
+                          <span className="text-xl">{award.metadata.badge_icon || "🏆"}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[#F0F6FC] text-sm leading-tight">{award.metadata.display_name || award.award_key}</p>
+                      {award.river_name && <p className="text-xs text-[#E8923A] truncate">{award.river_name}</p>}
+                      <p className="text-xs text-[#8B949E]">{award.metadata.description}</p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <p className="font-semibold text-[#F0F6FC] text-sm leading-tight">{award.metadata.display_name || award.award_key}</p>
-                    {award.river_name && <p className="text-xs text-[#E8923A] truncate">{award.river_name}</p>}
-                    <p className="text-xs text-[#8B949E]">{award.metadata.description}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

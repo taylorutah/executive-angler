@@ -66,7 +66,10 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#F0F6FC] mb-1">Password</label>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-[#F0F6FC]">Password</label>
+                <Link href="/forgot-password" className="text-xs text-[#E8923A] hover:text-[#F0F6FC] transition-colors">Forgot password?</Link>
+              </div>
               <input
                 id="password" type="password" required value={password}
                 onChange={(e) => setPassword(e.target.value)}

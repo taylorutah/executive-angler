@@ -179,16 +179,31 @@ export default function DashboardClient({
                       {/* Award badges */}
                       {rs.awards.length > 0 && (
                         <div className="flex gap-1.5 shrink-0">
-                          {rs.awards.slice(0, 4).map((a) => (
-                            <span
-                              key={a.award_key}
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm"
-                              style={{ backgroundColor: `${a.metadata.badge_color}20` }}
-                              title={`${a.metadata.display_name}: ${a.metadata.description}`}
-                            >
-                              {a.metadata.badge_icon}
-                            </span>
-                          ))}
+                          {rs.awards.slice(0, 4).map((a) => {
+                            const badgeSrc = {
+                              first_timer: "/badges/sessions_10.svg",
+                              regular: "/badges/sessions_50.svg",
+                              veteran: "/badges/sessions_100.svg",
+                              legend: "/badges/sessions_500.svg",
+                              centurion: "/badges/catches_100.svg",
+                              master_angler: "/badges/catches_1000.svg",
+                              consistent_producer: "/badges/catches_500.svg",
+                              species_hunter: "/badges/species_5.svg",
+                            }[a.award_key];
+                            return (
+                              <span
+                                key={a.award_key}
+                                className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center"
+                                title={`${a.metadata.display_name}: ${a.metadata.description}`}
+                              >
+                                {badgeSrc ? (
+                                  <Image src={badgeSrc} alt={a.metadata.display_name || a.award_key} width={32} height={32} className="w-full h-full" />
+                                ) : (
+                                  <span className="text-sm" style={{ backgroundColor: `${a.metadata.badge_color}20` }}>{a.metadata.badge_icon}</span>
+                                )}
+                              </span>
+                            );
+                          })}
                           {rs.awards.length > 4 && (
                             <span className="w-8 h-8 rounded-full bg-[#21262D] flex items-center justify-center text-[10px] text-[#8B949E]">
                               +{rs.awards.length - 4}

@@ -59,7 +59,7 @@ export default async function FeedPage() {
       longitude,
       notes,
       created_at,
-      profile:profiles!fishing_sessions_user_id_fkey(
+      profile:profiles!fishing_sessions_user_id_profiles_fkey(
         display_name,
         username,
         avatar_url
