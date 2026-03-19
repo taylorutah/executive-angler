@@ -46,6 +46,19 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     .eq("user_id", user.id)
     .order("awarded_at", { ascending: false });
 
+  // Fetch follower/following counts
+  const { count: followerCount } = await supabase
+    .from("follows")
+    .select("id", { count: "exact", head: true })
+    .eq("following_id", user.id)
+    .eq("status", "accepted");
+
+  const { count: followingCount } = await supabase
+    .from("follows")
+    .select("id", { count: "exact", head: true })
+    .eq("follower_id", user.id)
+    .eq("status", "accepted");
+
   const totalSessions = sessions?.length || 0;
   // Sum total_fish from sessions (includes drift-mode sessions with count-only data)
   const totalFish = sessions?.reduce((sum, s) => sum + (s.total_fish || 0), 0) || 0;
@@ -88,6 +101,10 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       }}
       awards={awards ?? []}
       welcome={welcome === "1"}
+      socialCounts={{
+        followers: followerCount ?? 0,
+        following: followingCount ?? 0,
+      }}
       notificationPrefs={{
         emailNotifyFollows: profile?.email_notify_follows ?? true,
         emailNotifyComments: profile?.email_notify_comments ?? true,

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell, Users } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -38,6 +38,10 @@ interface Props {
     metadata: { badge_icon?: string; badge_color?: string; display_name?: string; description?: string };
   }>;
   welcome?: boolean;
+  socialCounts?: {
+    followers: number;
+    following: number;
+  };
   notificationPrefs: {
     emailNotifyFollows: boolean;
     emailNotifyComments: boolean;
@@ -46,7 +50,7 @@ interface Props {
   };
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, notificationPrefs }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs }: Props) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [username, setUsername] = useState(user.username || "");
@@ -305,6 +309,26 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               <p className="text-sm text-[#8B949E] truncate">@{username}</p>
             )}
             <p className="text-sm text-[#484F58] truncate">{user.email}</p>
+            {socialCounts && (
+              <div className="flex items-center gap-3 mt-1.5">
+                <Link
+                  href={`/anglers/${username || user.id}?tab=followers`}
+                  className="flex items-center gap-1 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors"
+                >
+                  <Users className="h-3.5 w-3.5" />
+                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.followers}</span>
+                  <span>follower{socialCounts.followers !== 1 ? "s" : ""}</span>
+                </Link>
+                <span className="text-[#21262D]">|</span>
+                <Link
+                  href={`/anglers/${username || user.id}?tab=following`}
+                  className="flex items-center gap-1 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors"
+                >
+                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.following}</span>
+                  <span>following</span>
+                </Link>
+              </div>
+            )}
           </div>
           <button onClick={handleSignOut}
             className="inline-flex items-center gap-1.5 text-sm text-[#484F58] hover:text-red-600 transition-colors">

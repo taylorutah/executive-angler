@@ -5,6 +5,16 @@ import { createClient } from "@/lib/supabase/client";
 import { MessageCircle, Send, Trash2 } from "lucide-react";
 import Image from "next/image";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getSessionOwnerId(supabase: any, sessionId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from("fishing_sessions")
+    .select("user_id")
+    .eq("id", sessionId)
+    .maybeSingle();
+  return data?.user_id ?? null;
+}
+
 interface Comment {
   id: string;
   session_id: string;
@@ -21,6 +31,7 @@ interface Comment {
 interface CommentsSectionProps {
   sessionId: string;
   initialCount: number;
+  sessionOwnerId?: string;
 }
 
 function timeAgo(dateStr: string): string {
@@ -47,7 +58,7 @@ export function CommentCount({ count }: { count: number }) {
   );
 }
 
-export function CommentsSection({ sessionId, initialCount }: CommentsSectionProps) {
+export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [expanded, setExpanded] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -120,6 +131,30 @@ export function CommentsSection({ sessionId, initialCount }: CommentsSectionProp
       setComments((prev) => [...prev, comment]);
       setCommentCount((c) => c + 1);
       setNewComment("");
+
+      // Create notification for session owner (if not self)
+      const ownerId = sessionOwnerId || await getSessionOwnerId(supabase, sessionId);
+      if (ownerId && ownerId !== userId) {
+        await supabase.from("notifications").insert({
+          recipient_id: ownerId,
+          actor_id: userId,
+          type: "comment",
+          session_id: sessionId,
+          message: null,
+        });
+
+        // Trigger email notification (fire and forget)
+        fetch("/api/notifications/email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "comment",
+            recipientId: ownerId,
+            actorId: userId,
+            sessionId,
+          }),
+        }).catch(() => {});
+      }
     }
     setPosting(false);
   }

@@ -69,6 +69,25 @@ export function FollowButton({ targetUserId, compact = false }: FollowButtonProp
         status: "accepted",
       });
       setStatus("following");
+
+      // Create notification for the followed user
+      await supabase.from("notifications").insert({
+        recipient_id: targetUserId,
+        actor_id: userId,
+        type: "follow_accepted",
+        message: null,
+      });
+
+      // Trigger email notification (fire and forget)
+      fetch("/api/notifications/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "follow",
+          recipientId: targetUserId,
+          actorId: userId,
+        }),
+      }).catch(() => {});
     }
 
     setLoading(false);

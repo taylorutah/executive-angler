@@ -4,11 +4,22 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Heart } from "lucide-react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getSessionOwnerId(supabase: any, sessionId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from("fishing_sessions")
+    .select("user_id")
+    .eq("id", sessionId)
+    .maybeSingle();
+  return data?.user_id ?? null;
+}
+
 interface KudosButtonProps {
   sessionId: string;
   initialCount: number;
   initialLiked?: boolean;
   compact?: boolean;
+  sessionOwnerId?: string;
 }
 
 export function KudosButton({
@@ -16,6 +27,7 @@ export function KudosButton({
   initialCount,
   initialLiked = false,
   compact = false,
+  sessionOwnerId,
 }: KudosButtonProps) {
   const [liked, setLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
@@ -61,6 +73,30 @@ export function KudosButton({
         .insert({ session_id: sessionId, user_id: userId });
       setLiked(true);
       setCount((c) => c + 1);
+
+      // Create notification for session owner (if not self)
+      const ownerId = sessionOwnerId || await getSessionOwnerId(supabase, sessionId);
+      if (ownerId && ownerId !== userId) {
+        await supabase.from("notifications").insert({
+          recipient_id: ownerId,
+          actor_id: userId,
+          type: "kudos",
+          session_id: sessionId,
+          message: null,
+        });
+
+        // Trigger email notification (fire and forget)
+        fetch("/api/notifications/email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "like",
+            recipientId: ownerId,
+            actorId: userId,
+            sessionId,
+          }),
+        }).catch(() => {});
+      }
     }
 
     setLoading(false);

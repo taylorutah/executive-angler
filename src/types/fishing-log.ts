@@ -236,6 +236,34 @@ export interface DMMessage {
 }
 
 // =============================================
+// Notifications
+// =============================================
+
+export type NotificationType =
+  | "follow_request"
+  | "follow_accepted"
+  | "kudos"
+  | "comment"
+  | "mention";
+
+export interface AppNotification {
+  id: string;
+  recipient_id: string;
+  actor_id: string | null;
+  type: NotificationType;
+  session_id: string | null;
+  message: string | null;
+  read: boolean;
+  created_at: string;
+  // Joined data
+  actor_profile?: {
+    display_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+  } | null;
+}
+
+// =============================================
 // Awards & Gamification
 // =============================================
 
