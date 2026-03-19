@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import crypto from "crypto";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) return null;
@@ -71,8 +75,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert photo submission record
-    const { data: submission, error: insertError } = await supabase
+    // Insert photo submission record using service role to bypass RLS
+    const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey);
+    const { data: submission, error: insertError } = await serviceClient
       .from("photo_submissions")
       .insert({
         entity_type: entityType,

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Search, User, Heart, BookOpen, Package } from "lucide-react";
+import { Menu, X, ChevronDown, Search, User, Heart, LayoutDashboard, Package } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { createClient } from "@/lib/supabase/client";
@@ -104,11 +104,11 @@ export default function Header() {
               {user ? (
                 <div className="hidden sm:flex items-center gap-1">
                   <Link
-                    href="/journal"
+                    href="/dashboard"
                     className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-[#1F2937] text-[#8B949E] hover:text-[#F0F6FC]"
                   >
-                    <BookOpen className="h-4 w-4" />
-                    <span>Journal</span>
+                    <LayoutDashboard className="h-4 w-4" />
+                    <span>Dashboard</span>
                   </Link>
                   <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors">
                     <div className="h-7 w-7 rounded-lg overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0">
@@ -197,11 +197,11 @@ export default function Header() {
                 {user ? (
                   <>
                     <Link
-                      href="/journal"
+                      href="/dashboard"
                       className="flex items-center gap-2 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#1F2937] hover:text-[#F0F6FC]"
                     >
-                      <BookOpen className="h-5 w-5" />
-                      My Journal
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
                     </Link>
                     <Link
                       href="/favorites"

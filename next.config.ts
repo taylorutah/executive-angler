@@ -44,6 +44,15 @@ const nextConfig: NextConfig = {
         hostname: "qlasxtfbodyxbcuchvxz.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      // Google OAuth profile pictures
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
       // Fly shop website image domains
       {
         protocol: "https",

@@ -25,7 +25,8 @@ export async function GET(request: Request) {
       .from('fishing_sessions')
       .select('*')
       .eq('user_id', user.id)
-      .order('date', { ascending: false });
+      .order('date', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (sessionsError) throw sessionsError;
 

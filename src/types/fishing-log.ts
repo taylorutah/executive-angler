@@ -200,6 +200,42 @@ export interface SessionLike {
 }
 
 // =============================================
+// Direct Messages
+// =============================================
+// Tables: dm_threads, dm_messages
+// Shared with iOS app.
+// =============================================
+
+export interface DMThread {
+  id: string;
+  participant_a: string;
+  participant_b: string;
+  last_message_at: string;
+  created_at: string;
+  // Joined data (not stored)
+  other_profile?: {
+    user_id: string;
+    display_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+  };
+  last_message_body?: string;
+  unread_count?: number;
+}
+
+export interface DMMessage {
+  id: string;
+  thread_id: string;
+  sender_id: string;
+  body: string;
+  read_at: string | null;
+  created_at: string;
+  deleted_at: string | null;
+  // Joined data
+  sender_profile?: Pick<Profile, 'display_name' | 'username' | 'avatar_url'>;
+}
+
+// =============================================
 // Awards & Gamification
 // =============================================
 

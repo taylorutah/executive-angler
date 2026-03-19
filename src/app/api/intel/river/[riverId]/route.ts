@@ -113,7 +113,8 @@ export async function GET(
     .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather, user_id, gear_rod_id, gear_leader_id, gear_tippet_id, created_at, section")
     .eq("river_id", riverId)
     .eq("privacy", "public")
-    .order("date", { ascending: false });
+    .order("date", { ascending: false })
+    .order("created_at", { ascending: false });
 
   if (!sessions || sessions.length === 0) {
     return NextResponse.json({

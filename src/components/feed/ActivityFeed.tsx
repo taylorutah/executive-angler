@@ -10,6 +10,8 @@ import {
   Navigation,
 } from "lucide-react";
 import type { FeedSession } from "@/app/feed/page";
+import { KudosButton } from "@/components/social/KudosButton";
+import { CommentsSection } from "@/components/social/CommentsSection";
 
 interface Props {
   sessions: FeedSession[];
@@ -200,13 +202,25 @@ function FeedCard({ session }: { session: FeedSession }) {
 
         {/* Coordinates indicator */}
         {hasCoords && (
-          <div className="flex items-center gap-1.5 text-[11px] text-[#484F58]">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#484F58] mb-3">
             <Navigation className="h-3 w-3" />
             <span className="font-['IBM_Plex_Mono']">
               {session.latitude!.toFixed(2)}, {session.longitude!.toFixed(2)}
             </span>
           </div>
         )}
+
+        {/* Social interaction bar */}
+        <div className="flex items-center gap-4 pt-2 border-t border-[#21262D]">
+          <KudosButton
+            sessionId={session.id}
+            initialCount={session.like_count}
+          />
+          <CommentsSection
+            sessionId={session.id}
+            initialCount={session.comment_count}
+          />
+        </div>
       </div>
     </article>
   );

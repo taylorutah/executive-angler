@@ -7,6 +7,8 @@ import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight,
   Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2
 } from "lucide-react";
+import { KudosButton } from "@/components/social/KudosButton";
+import { CommentsSection } from "@/components/social/CommentsSection";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
 import mapboxgl from "mapbox-gl";
@@ -849,6 +851,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               </div>
             </div>
           )}
+
+          {/* ---- SOCIAL: Kudos & Comments ---- */}
+          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
+            <div className="flex items-center gap-6">
+              <KudosButton sessionId={session.id} initialCount={0} />
+              <CommentsSection sessionId={session.id} initialCount={0} />
+            </div>
+          </div>
         </div>
       </div>
     </>

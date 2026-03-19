@@ -192,7 +192,7 @@ export default function SignupPage() {
                   }
                 }}
                 className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none"
-                placeholder="Taylor Warnick"
+                placeholder="John Smith"
                 autoComplete="name"
               />
             </div>
@@ -239,7 +239,7 @@ export default function SignupPage() {
                 </div>
               </div>
               <p className={`mt-1 text-xs ${usernameMessageColor}`}>
-                {usernameMessage || "Skip to use your name publicly, or set a handle like taylorutah"}
+                {usernameMessage || "Skip to use your name publicly, or set a handle like john_smith"}
               </p>
             </div>
 

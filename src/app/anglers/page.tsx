@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import { Crown } from "lucide-react";
 import Image from "next/image";
+import { FollowButton } from "@/components/social/FollowButton";
 
 export const metadata: Metadata = {
   title: "Anglers — Executive Angler",
@@ -75,7 +76,8 @@ export default async function AnglersPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-[#F0F6FC]">{a.display_name || a.username}</p>
+                      <p className="font-semibold text-[#F0F6FC] flex-1">{a.display_name || a.username}</p>
+                      <FollowButton targetUserId={a.user_id} compact />
                       {crowns.slice(0, 3).map((c) => (
                         <span key={c.award_key + c.river_name} title={`${(c.metadata as { display_name?: string })?.display_name ?? c.award_key}${c.river_name ? ` — ${c.river_name}` : ""}`}>
                           <span className="text-sm">{(c.metadata as { badge_icon?: string })?.badge_icon ?? "🏆"}</span>

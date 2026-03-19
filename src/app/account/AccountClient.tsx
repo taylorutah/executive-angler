@@ -427,7 +427,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
               {username.length >= 3 && usernameAvailable === false && (
                 <p className="text-xs text-red-500 mt-1">That username is taken.</p>
               )}
-              <p className="text-xs text-[#484F58] mt-1">Set a custom handle, e.g. @taylorutah. Leave blank to use your name.</p>
+              <p className="text-xs text-[#484F58] mt-1">Set a custom handle, e.g. @john_smith. Leave blank to use your name.</p>
             </div>
 
             {/* Bio */}

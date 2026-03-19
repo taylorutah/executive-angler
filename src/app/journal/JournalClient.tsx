@@ -16,6 +16,35 @@ const JournalMapView = dynamic(
   { ssr: false }
 );
 
+/** Resilient avatar — uses <img> to avoid Next.js domain whitelist issues, with error fallback */
+function AvatarImage({ url, name, size = 56 }: { url?: string; name: string; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  const initial = (name || "A").charAt(0).toUpperCase();
+
+  if (!url || failed) {
+    return (
+      <div className={`h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center`}>
+        <span className="text-lg font-bold text-[#E8923A]">{initial}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={url}
+        alt="Profile"
+        width={size}
+        height={size}
+        className="object-cover w-full h-full"
+        onError={() => setFailed(true)}
+        referrerPolicy="no-referrer"
+      />
+    </div>
+  );
+}
+
 interface UserProfile {
   displayName?: string;
   email?: string;
@@ -90,13 +119,11 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     null as { fish: number; date: string } | null
   );
 
-  // Sort most recent first
-  // Sort by fishing date DESC (most recent first).
-  // Do NOT sort by created_at — bulk-imported sessions all share the same import timestamp,
-  // which would scramble the order. The date field (YYYY-MM-DD) is the authoritative sort key.
-  const sortedSessions = [...sessions].sort((a, b) =>
-    a.date < b.date ? 1 : a.date > b.date ? -1 : 0
-  );
+  // Sort most recent first — date DESC, then created_at DESC as tiebreaker for same-day sessions
+  const sortedSessions = [...sessions].sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+    return a.created_at < b.created_at ? 1 : a.created_at > b.created_at ? -1 : 0;
+  });
 
   // Filter sessions
   const filteredSessions = sortedSessions.filter((session) => {
@@ -298,15 +325,11 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <div className="h-16 bg-gradient-to-br from-forest to-forest-dark" />
               <div className="px-4 pb-4">
                 <Link href="/account" className="-mt-8 mb-3 block w-fit">
-                  <div className="h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
-                    {userProfile?.avatarUrl ? (
-                      <Image src={userProfile.avatarUrl} alt="Profile" width={56} height={56} className="object-cover w-full h-full" />
-                    ) : (
-                      <span className="text-lg font-bold text-[#E8923A]">
-                        {(userProfile?.displayName || userProfile?.email || "A")[0].toUpperCase()}
-                      </span>
-                    )}
-                  </div>
+                  <AvatarImage
+                    url={userProfile?.avatarUrl}
+                    name={userProfile?.displayName || userProfile?.email || "A"}
+                    size={56}
+                  />
                 </Link>
                 <p className="font-bold text-[#F0F6FC] text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
                 <p className="text-xs text-[#484F58] mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>

@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 export interface FeedSession {
   id: string;
+  user_id: string;
   river_name: string | null;
   section: string | null;
   location: string | null;
@@ -25,6 +26,8 @@ export interface FeedSession {
   notes: string | null;
   created_at: string;
   catch_count: number;
+  like_count: number;
+  comment_count: number;
   profile: {
     display_name: string | null;
     username: string | null;
@@ -41,6 +44,7 @@ export default async function FeedPage() {
     .select(
       `
       id,
+      user_id,
       river_name,
       section,
       location,
@@ -89,8 +93,33 @@ export default async function FeedPage() {
     }
   }
 
+  // Fetch like counts per session
+  let likeCounts: Record<string, number> = {};
+  let commentCounts: Record<string, number> = {};
+
+  if (sessionIds.length > 0) {
+    const [likesRes, commentsRes] = await Promise.all([
+      supabase.from("session_likes").select("session_id").in("session_id", sessionIds),
+      supabase.from("session_comments").select("session_id").in("session_id", sessionIds),
+    ]);
+
+    if (likesRes.data) {
+      likeCounts = likesRes.data.reduce<Record<string, number>>((acc, l) => {
+        acc[l.session_id] = (acc[l.session_id] || 0) + 1;
+        return acc;
+      }, {});
+    }
+    if (commentsRes.data) {
+      commentCounts = commentsRes.data.reduce<Record<string, number>>((acc, c) => {
+        acc[c.session_id] = (acc[c.session_id] || 0) + 1;
+        return acc;
+      }, {});
+    }
+  }
+
   const feedSessions: FeedSession[] = (sessions || []).map((s) => ({
     id: s.id,
+    user_id: s.user_id,
     river_name: s.river_name,
     section: s.section,
     location: s.location,
@@ -106,6 +135,8 @@ export default async function FeedPage() {
     notes: s.notes,
     created_at: s.created_at,
     catch_count: catchCounts[s.id] || 0,
+    like_count: likeCounts[s.id] || 0,
+    comment_count: commentCounts[s.id] || 0,
     // Supabase returns joined single row as object, array, or null
     profile: Array.isArray(s.profile) ? s.profile[0] ?? null : s.profile ?? null,
   }));
