@@ -1,14 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4D4D4"/>
+      <stop offset="100%" stop-color="#909090"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#C0C0C0" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#C0C0C0" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Flame icon -->
-  <path d="M60 28 Q62 40 70 48 Q80 58 76 72 Q74 80 66 84 Q68 76 64 70 Q60 78 58 84 Q48 80 44 72 Q40 58 50 48 Q58 40 60 28 Z" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Inner flame -->
-  <path d="M60 50 Q64 58 66 64 Q68 72 62 78 Q58 74 56 70 Q52 72 52 66 Q54 58 60 50 Z" fill="#C0C0C0" opacity="0.3"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Chain link 1 -->
+    <rect x="24" y="50" width="20" height="20" rx="6" fill="none" stroke="#C0C0C0" stroke-width="2.5"/>
+    <!-- Chain link 2 (overlapping with 1) -->
+    <rect x="38" y="50" width="20" height="20" rx="6" fill="none" stroke="#C0C0C0" stroke-width="2.5"/>
+    <!-- Chain link 3 (overlapping with 2) -->
+    <rect x="52" y="50" width="20" height="20" rx="6" fill="none" stroke="#C0C0C0" stroke-width="2.5"/>
+    <!-- Chain link 4 (overlapping with 3) -->
+    <rect x="66" y="50" width="20" height="20" rx="6" fill="none" stroke="#C0C0C0" stroke-width="2.5"/>
+    <!-- Overlap covers to create interlocking effect -->
+    <!-- Link 1-2 overlap: link 2 goes behind link 1 on the right side -->
+    <line x1="44" y1="50" x2="44" y2="54" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="44" y1="50" x2="44" y2="54" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <line x1="44" y1="66" x2="44" y2="70" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="44" y1="66" x2="44" y2="70" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <!-- Link 2-3 overlap -->
+    <line x1="58" y1="50" x2="58" y2="54" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="58" y1="50" x2="58" y2="54" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <line x1="58" y1="66" x2="58" y2="70" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="58" y1="66" x2="58" y2="70" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <!-- Link 3-4 overlap -->
+    <line x1="72" y1="50" x2="72" y2="54" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="72" y1="50" x2="72" y2="54" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <line x1="72" y1="66" x2="72" y2="70" stroke="#1E2430" stroke-width="3.5"/>
+    <line x1="72" y1="66" x2="72" y2="70" stroke="#C0C0C0" stroke-width="2.5" stroke-opacity="0.15"/>
+    <!-- Subtle shine on each link -->
+    <line x1="28" y1="54" x2="32" y2="54" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
+    <line x1="42" y1="54" x2="46" y2="54" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
+    <line x1="56" y1="54" x2="60" y2="54" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
+    <line x1="70" y1="54" x2="74" y2="54" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
+  </g>
 </svg>

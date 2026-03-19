@@ -1,24 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4D4D4"/>
+      <stop offset="100%" stop-color="#909090"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#C0C0C0" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#C0C0C0" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Compass -->
-  <circle cx="60" cy="60" r="22" fill="none" stroke="#C0C0C0" stroke-width="2"/>
-  <circle cx="60" cy="60" r="2" fill="#C0C0C0"/>
-  <!-- Cardinal direction ticks -->
-  <line x1="60" y1="38" x2="60" y2="34" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
-  <line x1="60" y1="82" x2="60" y2="86" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
-  <line x1="38" y1="60" x2="34" y2="60" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
-  <line x1="82" y1="60" x2="86" y2="60" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
-  <!-- North pointer (filled) -->
-  <polygon points="60,38 55,58 60,54 65,58" fill="#C0C0C0"/>
-  <!-- South pointer (outline) -->
-  <polygon points="60,82 55,62 60,66 65,62" fill="none" stroke="#C0C0C0" stroke-width="1.2"/>
-  <!-- Outer ring marks -->
-  <circle cx="60" cy="60" r="26" fill="none" stroke="#C0C0C0" stroke-width="1" stroke-dasharray="2 6"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Compass outer circle -->
+    <circle cx="60" cy="62" r="26" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+    <!-- Compass inner circle -->
+    <circle cx="60" cy="62" r="22" fill="none" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.4"/>
+    <!-- Cardinal tick marks -->
+    <line x1="60" y1="36" x2="60" y2="40" stroke="#C0C0C0" stroke-width="2"/>
+    <line x1="60" y1="84" x2="60" y2="88" stroke="#C0C0C0" stroke-width="2"/>
+    <line x1="34" y1="62" x2="38" y2="62" stroke="#C0C0C0" stroke-width="2"/>
+    <line x1="82" y1="62" x2="86" y2="62" stroke="#C0C0C0" stroke-width="2"/>
+    <!-- Intercardinal ticks -->
+    <line x1="41.5" y1="43.5" x2="44.3" y2="46.3" stroke="#C0C0C0" stroke-width="1.2"/>
+    <line x1="78.5" y1="43.5" x2="75.7" y2="46.3" stroke="#C0C0C0" stroke-width="1.2"/>
+    <line x1="41.5" y1="80.5" x2="44.3" y2="77.7" stroke="#C0C0C0" stroke-width="1.2"/>
+    <line x1="78.5" y1="80.5" x2="75.7" y2="77.7" stroke="#C0C0C0" stroke-width="1.2"/>
+    <!-- Compass needle - north (filled) -->
+    <path d="M60,62 L56,50 L60,42 L64,50 Z" fill="#C0C0C0" opacity="0.7"/>
+    <!-- Compass needle - south (outline) -->
+    <path d="M60,62 L56,74 L60,82 L64,74 Z" fill="none" stroke="#C0C0C0" stroke-width="1.2"/>
+    <!-- Center pin -->
+    <circle cx="60" cy="62" r="2.5" fill="#C0C0C0"/>
+    <!-- Fish weathervane on top -->
+    <line x1="60" y1="36" x2="60" y2="26" stroke="#C0C0C0" stroke-width="1.5"/>
+    <!-- Fish atop the compass -->
+    <path d="M52,26 Q56,22 60,22 Q64,22 68,26 Q64,24 60,25 Q56,24 52,26 Z" fill="#C0C0C0"/>
+    <path d="M52,26 Q56,30 60,30 Q64,30 68,26 Q64,28 60,27 Q56,28 52,26 Z" fill="#C0C0C0" opacity="0.6"/>
+    <!-- Fish tail -->
+    <path d="M68,26 L74,22 Q72,26 74,30 Z" fill="#C0C0C0" opacity="0.8"/>
+    <!-- Fish eye -->
+    <circle cx="54" cy="25.5" r="1" fill="#1E2430"/>
+  </g>
 </svg>

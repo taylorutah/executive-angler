@@ -1,25 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4D4D4"/>
+      <stop offset="100%" stop-color="#909090"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#C0C0C0" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#C0C0C0" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Open book / collection -->
-  <!-- Book spine -->
-  <line x1="60" y1="38" x2="60" y2="82" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
-  <!-- Left page -->
-  <path d="M60 40 Q50 36 36 40 L36 78 Q50 74 60 78" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Right page -->
-  <path d="M60 40 Q70 36 84 40 L84 78 Q70 74 60 78" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Page lines left -->
-  <line x1="42" y1="50" x2="56" y2="48" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
-  <line x1="42" y1="58" x2="56" y2="56" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
-  <line x1="42" y1="66" x2="56" y2="64" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
-  <!-- Page lines right -->
-  <line x1="64" y1="48" x2="78" y2="50" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
-  <line x1="64" y1="56" x2="78" y2="58" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
-  <line x1="64" y1="64" x2="78" y2="66" stroke="#C0C0C0" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Notebook body -->
+    <rect x="36" y="30" width="48" height="60" rx="3" fill="none" stroke="#C0C0C0" stroke-width="2"/>
+    <!-- Notebook spine -->
+    <line x1="44" y1="30" x2="44" y2="90" stroke="#C0C0C0" stroke-width="1.5"/>
+    <!-- Spine rings -->
+    <circle cx="44" cy="38" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+    <circle cx="44" cy="50" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+    <circle cx="44" cy="62" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+    <circle cx="44" cy="74" r="2" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+    <!-- Page lines -->
+    <line x1="50" y1="38" x2="78" y2="38" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+    <line x1="50" y1="44" x2="78" y2="44" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+    <!-- Fish sketch on page -->
+    <path d="M52,56 Q58,50 64,52 Q70,54 76,58 Q70,62 64,64 Q58,66 52,56 Z" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+    <!-- Fish tail in sketch -->
+    <path d="M52,56 L48,52 Q50,56 48,60 Z" fill="none" stroke="#C0C0C0" stroke-width="1.2"/>
+    <!-- Fish eye in sketch -->
+    <circle cx="70" cy="56" r="1.5" fill="#C0C0C0"/>
+    <!-- Fish dorsal fin in sketch -->
+    <path d="M62,52 L60,48 Q64,50 66,52" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+    <!-- More page lines below sketch -->
+    <line x1="50" y1="72" x2="72" y2="72" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+    <line x1="50" y1="78" x2="68" y2="78" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+    <line x1="50" y1="84" x2="74" y2="84" stroke="#C0C0C0" stroke-width="0.8" stroke-opacity="0.3"/>
+  </g>
 </svg>

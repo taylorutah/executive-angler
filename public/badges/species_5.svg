@@ -1,16 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D99A5B"/>
+      <stop offset="100%" stop-color="#A5611E"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Magnifying glass -->
-  <circle cx="54" cy="54" r="16" fill="none" stroke="#CD7F32" stroke-width="2.5"/>
-  <line x1="65" y1="65" x2="80" y2="80" stroke="#CD7F32" stroke-width="3.5" stroke-linecap="round"/>
-  <!-- Small fish inside magnifying glass -->
-  <path d="M42 54 Q47 49 52 50 Q56 50 58 52 L62 49 L62 58 L58 56 Q56 58 52 58 Q47 60 42 54 Z" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
-  <circle cx="49" cy="53" r="1.2" fill="#CD7F32"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Mayfly body -->
+    <ellipse cx="60" cy="64" rx="3" ry="10" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <!-- Body segments -->
+    <line x1="57" y1="60" x2="63" y2="60" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="57" y1="64" x2="63" y2="64" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="57" y1="68" x2="63" y2="68" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <!-- Head -->
+    <circle cx="60" cy="52" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <!-- Upper wings - left -->
+    <path d="M57,58 Q40,44 36,36 Q38,42 44,52 Q48,58 57,58" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- Wing veins left -->
+    <path d="M57,58 Q44,48 38,40" fill="none" stroke="#CD7F32" stroke-width="0.6" stroke-opacity="0.4"/>
+    <!-- Upper wings - right -->
+    <path d="M63,58 Q80,44 84,36 Q82,42 76,52 Q72,58 63,58" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- Wing veins right -->
+    <path d="M63,58 Q76,48 82,40" fill="none" stroke="#CD7F32" stroke-width="0.6" stroke-opacity="0.4"/>
+    <!-- Lower wings - left -->
+    <path d="M57,62 Q46,58 42,52 Q44,58 50,64 Q54,66 57,64" fill="none" stroke="#CD7F32" stroke-width="1.2" stroke-opacity="0.7"/>
+    <!-- Lower wings - right -->
+    <path d="M63,62 Q74,58 78,52 Q76,58 70,64 Q66,66 63,64" fill="none" stroke="#CD7F32" stroke-width="1.2" stroke-opacity="0.7"/>
+    <!-- Antennae -->
+    <path d="M58,50 Q54,42 50,36" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <path d="M62,50 Q66,42 70,36" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <!-- Antenna tips -->
+    <circle cx="50" cy="36" r="1" fill="#CD7F32"/>
+    <circle cx="70" cy="36" r="1" fill="#CD7F32"/>
+    <!-- Tail filaments -->
+    <path d="M60,74 L56,86" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,74 L60,88" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <path d="M60,74 L64,86" fill="none" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <!-- Legs -->
+    <line x1="57" y1="60" x2="48" y2="66" stroke="#CD7F32" stroke-width="0.8"/>
+    <line x1="63" y1="60" x2="72" y2="66" stroke="#CD7F32" stroke-width="0.8"/>
+    <line x1="57" y1="64" x2="50" y2="70" stroke="#CD7F32" stroke-width="0.8"/>
+    <line x1="63" y1="64" x2="70" y2="70" stroke="#CD7F32" stroke-width="0.8"/>
+  </g>
 </svg>

@@ -1,22 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE44D"/>
+      <stop offset="100%" stop-color="#C9A200"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#FFD700" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#FFD700" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Mountain with river -->
-  <!-- Mountain peak -->
-  <polygon points="60,30 32,80 88,80" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Snow cap -->
-  <path d="M54 42 L60 30 L66 42 L62 40 L58 42 Z" fill="#FFD700" opacity="0.3"/>
-  <!-- Second smaller mountain behind -->
-  <polyline points="72,52 88,80" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
-  <polyline points="28,80 44,56" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
-  <!-- River flowing down -->
-  <path d="M60 48 Q56 56 62 62 Q58 68 62 74 Q58 78 56 80" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-  <!-- River at base -->
-  <path d="M32 84 Q46 80 60 84 Q74 88 88 84" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Globe circle -->
+    <circle cx="60" cy="60" r="28" fill="none" stroke="#FFD700" stroke-width="2"/>
+    <!-- Globe horizontal lines (latitude) -->
+    <ellipse cx="60" cy="46" rx="26" ry="4" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <ellipse cx="60" cy="60" rx="28" ry="0" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <line x1="32" y1="60" x2="88" y2="60" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <ellipse cx="60" cy="74" rx="26" ry="4" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <!-- Globe vertical lines (longitude) -->
+    <ellipse cx="60" cy="60" rx="10" ry="28" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <ellipse cx="60" cy="60" rx="22" ry="28" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-opacity="0.4"/>
+    <!-- River line 1 - flowing across globe -->
+    <path d="M36,48 Q44,44 52,50 Q60,56 68,52 Q76,48 84,52" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+    <!-- River line 2 -->
+    <path d="M34,64 Q42,68 50,62 Q58,56 66,64 Q74,72 82,68" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+    <!-- River line 3 - vertical -->
+    <path d="M54,34 Q50,44 56,54 Q62,64 58,74 Q54,82 56,88" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
+    <!-- Globe highlight arc -->
+    <path d="M42,40 Q48,34 56,34" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.3" stroke-linecap="round"/>
+  </g>
 </svg>

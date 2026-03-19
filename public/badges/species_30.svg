@@ -1,21 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE44D"/>
+      <stop offset="100%" stop-color="#C9A200"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#FFD700" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#FFD700" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- DNA double helix / diversity symbol -->
-  <!-- Left strand -->
-  <path d="M42 32 Q58 42 42 52 Q26 62 42 72 Q58 82 42 88" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- Right strand -->
-  <path d="M78 32 Q62 42 78 52 Q94 62 78 72 Q62 82 78 88" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- Connecting rungs -->
-  <line x1="46" y1="37" x2="74" y2="37" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="42" y1="47" x2="78" y2="47" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="38" y1="57" x2="82" y2="57" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="42" y1="67" x2="78" y2="67" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="46" y1="77" x2="74" y2="77" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- DNA helix backbone left strand -->
+    <path d="M40,28 Q52,36 40,44 Q28,52 40,60 Q52,68 40,76 Q28,84 40,92" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+    <!-- DNA helix backbone right strand -->
+    <path d="M60,28 Q48,36 60,44 Q72,52 60,60 Q48,68 60,76 Q72,84 60,92" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+    <!-- Base pair rungs -->
+    <line x1="44" y1="32" x2="56" y2="32" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="40" y1="38" x2="60" y2="38" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="40" y1="44" x2="60" y2="44" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="36" y1="50" x2="64" y2="50" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="40" y1="56" x2="60" y2="56" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="44" y1="62" x2="56" y2="62" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="36" y1="68" x2="64" y2="68" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <line x1="40" y1="74" x2="60" y2="74" stroke="#FFD700" stroke-width="1.2" stroke-opacity="0.5"/>
+    <!-- Top fish morph -->
+    <path d="M40,28 Q36,24 30,26 Q26,28 28,32 Q30,28 34,28 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+    <path d="M60,28 Q64,24 68,26 Q72,28 74,32 Q68,30 64,28 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+    <!-- Top fish tail -->
+    <path d="M28,32 L24,28 Q26,32 24,36 Z" fill="none" stroke="#FFD700" stroke-width="1.2"/>
+    <circle cx="70" cy="27" r="1" fill="#FFD700"/>
+    <!-- Bottom fish morph -->
+    <path d="M40,92 Q36,96 30,94 Q26,92 28,88 Q30,92 34,92 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+    <path d="M60,92 Q64,96 68,94 Q72,92 74,88 Q68,90 64,92 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+    <!-- Bottom fish tail -->
+    <path d="M74,88 L78,84 Q76,88 78,92 Z" fill="none" stroke="#FFD700" stroke-width="1.2"/>
+    <circle cx="30" cy="93" r="1" fill="#FFD700"/>
+  </g>
 </svg>

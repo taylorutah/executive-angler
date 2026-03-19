@@ -1,18 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D99A5B"/>
+      <stop offset="100%" stop-color="#A5611E"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Single fish silhouette -->
-  <path d="M32 60 Q42 48 58 50 Q68 50 74 54 L82 48 L82 72 L74 66 Q68 70 58 70 Q42 72 32 60 Z" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Eye -->
-  <circle cx="50" cy="58" r="2.5" fill="#CD7F32"/>
-  <!-- Fin detail -->
-  <path d="M58 50 L62 42 L66 52" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Gill line -->
-  <path d="M54 54 Q52 60 54 66" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <path d="M28,60 Q36,48 50,46 Q60,45 72,48 Q82,52 92,60 Q82,68 72,72 Q60,75 50,74 Q36,72 28,60 Z" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M28,60 L18,50 Q22,58 18,70 Z" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M50,46 L48,34 Q54,36 58,38 L62,46" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="50" y1="44" x2="50" y2="37" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="54" y1="44" x2="53" y2="37" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="58" y1="44" x2="56" y2="38" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.5"/>
+    <path d="M56,66 L52,76 Q58,74 62,70" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <path d="M38,70 L36,78 Q40,76 44,72" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <circle cx="82" cy="58" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <circle cx="82" cy="58" r="1.2" fill="#CD7F32"/>
+    <path d="M92,60 L88,62" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M34,60 Q50,58 74,56" fill="none" stroke="#CD7F32" stroke-width="0.8" stroke-opacity="0.4"/>
+    <circle cx="44" cy="56" r="1" fill="#CD7F32" opacity="0.5"/>
+    <circle cx="52" cy="54" r="1" fill="#CD7F32" opacity="0.5"/>
+    <circle cx="60" cy="56" r="1" fill="#CD7F32" opacity="0.5"/>
+    <circle cx="48" cy="62" r="1" fill="#CD7F32" opacity="0.5"/>
+    <circle cx="56" cy="64" r="1" fill="#CD7F32" opacity="0.5"/>
+    <circle cx="66" cy="58" r="1" fill="#CD7F32" opacity="0.5"/>
+  </g>
 </svg>

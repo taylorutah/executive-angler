@@ -1,17 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4D4D4"/>
+      <stop offset="100%" stop-color="#909090"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#C0C0C0" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#C0C0C0" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#C0C0C0" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- "100" in bold monospace paths -->
-  <!-- "1" -->
-  <path d="M30 48 L36 44 L36 72 M30 72 L42 72" fill="none" stroke="#C0C0C0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- First "0" -->
-  <rect x="47" y="44" width="14" height="28" rx="7" fill="none" stroke="#C0C0C0" stroke-width="3"/>
-  <!-- Second "0" -->
-  <rect x="66" y="44" width="14" height="28" rx="7" fill="none" stroke="#C0C0C0" stroke-width="3"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <path d="M60,28 L82,78 L38,78 Z" fill="none" stroke="#C0C0C0" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M44,48 L34,78" fill="none" stroke="#C0C0C0" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M44,48 L54,68" fill="none" stroke="#C0C0C0" stroke-width="1.5" stroke-opacity="0.5"/>
+    <path d="M60,28 L54,40 L57,38 L60,42 L63,38 L66,40 Z" fill="none" stroke="#C0C0C0" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M60,78 Q56,82 60,86 Q64,90 60,94" fill="none" stroke="#C0C0C0" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M56,78 Q52,82 56,86 Q60,90 56,94" fill="none" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round"/>
+    <path d="M64,78 Q60,82 64,86 Q68,90 64,94" fill="none" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round"/>
+  </g>
 </svg>

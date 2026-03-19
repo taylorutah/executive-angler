@@ -1,14 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE44D"/>
+      <stop offset="100%" stop-color="#C9A200"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#FFD700" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#FFD700" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#FFD700" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Star outline -->
-  <polygon points="60,30 66,48 86,48 70,58 76,76 60,66 44,76 50,58 34,48 54,48" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Small fish inside star -->
-  <path d="M48 56 Q54 52 60 53 Q64 54 66 56 L70 53 L70 60 L66 58 Q64 60 60 60 Q54 62 48 56 Z" fill="#FFD700"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <!-- Leaping fish body -->
+    <path d="M36,72 Q42,56 52,46 Q58,40 64,38 Q72,36 80,42 Q86,48 82,56 Q78,62 72,64 Q64,66 56,62 Q48,58 44,66 Z" fill="none" stroke="#FFD700" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Tail fin -->
+    <path d="M36,72 L28,66 Q32,72 28,78 Z" fill="none" stroke="#FFD700" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Dorsal fin -->
+    <path d="M62,40 L58,30 Q64,32 68,36 L70,42" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- Eye -->
+    <circle cx="76" cy="48" r="2.5" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+    <circle cx="76" cy="48" r="1" fill="#FFD700"/>
+    <!-- Mouth -->
+    <path d="M82,56 L86,54" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Water surface line -->
+    <path d="M24,76 L96,76" stroke="#FFD700" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+    <!-- Splash arcs - left -->
+    <path d="M38,76 Q34,70 30,76" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M32,76 Q28,72 24,76" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.6" stroke-linecap="round"/>
+    <!-- Splash arcs - right -->
+    <path d="M48,76 Q52,70 56,76" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M54,76 Q58,72 62,76" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.6" stroke-linecap="round"/>
+    <!-- Water drops -->
+    <circle cx="34" cy="68" r="1.2" fill="#FFD700" opacity="0.5"/>
+    <circle cx="46" cy="72" r="1" fill="#FFD700" opacity="0.5"/>
+    <circle cx="28" cy="72" r="0.8" fill="#FFD700" opacity="0.4"/>
+    <!-- Ripple below water -->
+    <path d="M32,82 Q40,80 48,82" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.3"/>
+    <path d="M36,86 Q44,84 52,86" fill="none" stroke="#FFD700" stroke-width="1" stroke-opacity="0.2"/>
+  </g>
 </svg>

@@ -1,20 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D99A5B"/>
+      <stop offset="100%" stop-color="#A5611E"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Fishing rod silhouette -->
-  <line x1="38" y1="82" x2="75" y2="32" stroke="#CD7F32" stroke-width="3" stroke-linecap="round"/>
-  <line x1="75" y1="32" x2="78" y2="30" stroke="#CD7F32" stroke-width="2" stroke-linecap="round"/>
-  <path d="M78 30 Q82 38 76 48 Q72 54 74 60" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
-  <circle cx="74" cy="60" r="2" fill="#CD7F32"/>
-  <!-- Reel -->
-  <circle cx="45" cy="74" r="5" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
-  <circle cx="45" cy="74" r="1.5" fill="#CD7F32"/>
-  <!-- Handle grip -->
-  <line x1="38" y1="82" x2="34" y2="88" stroke="#CD7F32" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <line x1="32" y1="88" x2="78" y2="34" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="30" y1="90" x2="35" y2="85" stroke="#CD7F32" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="33" cy="87" r="3" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <circle cx="79" cy="33" r="1.5" fill="#CD7F32"/>
+    <path d="M79,33 Q92,28 88,42 Q84,54 76,50" fill="none" stroke="#CD7F32" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="76" cy="50" r="2" fill="#CD7F32"/>
+    <line x1="76" y1="50" x2="72" y2="46" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+    <line x1="76" y1="50" x2="73" y2="52" stroke="#CD7F32" stroke-width="1" stroke-linecap="round"/>
+  </g>
 </svg>

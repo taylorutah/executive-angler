@@ -1,20 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#161B22"/>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D99A5B"/>
+      <stop offset="100%" stop-color="#A5611E"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E2430"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <filter id="iconShadow">
+      <feDropShadow dx="0" dy="0" stdDeviation="0.5" flood-color="#CD7F32" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#CD7F32" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#CD7F32" stop-opacity="0.15"/>
     </radialGradient>
   </defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="#CD7F32" stroke-width="6"/>
-  <circle cx="60" cy="60" r="50" fill="url(#bg)"/>
-  <!-- Trophy cup -->
-  <path d="M45 45 L45 38 L75 38 L75 45" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M45 45 Q45 68 60 72 Q75 68 75 45 Z" fill="none" stroke="#CD7F32" stroke-width="2.5" stroke-linejoin="round"/>
-  <!-- Left handle -->
-  <path d="M45 48 Q36 48 36 56 Q36 62 45 62" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linecap="round"/>
-  <!-- Right handle -->
-  <path d="M75 48 Q84 48 84 56 Q84 62 75 62" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linecap="round"/>
-  <!-- Stem and base -->
-  <line x1="60" y1="72" x2="60" y2="80" stroke="#CD7F32" stroke-width="2.5" stroke-linecap="round"/>
-  <path d="M48 84 L72 84 L70 80 L50 80 Z" fill="#CD7F32"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+  <circle cx="60" cy="60" r="53" fill="url(#bgGrad)"/>
+  <circle cx="60" cy="60" r="53" fill="url(#innerGlow)"/>
+  <g filter="url(#iconShadow)">
+    <path d="M38,52 L38,76 Q38,82 44,84 L76,84 Q82,82 82,76 L82,52 Z" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M36,52 L84,52 Q84,46 78,44 L42,44 Q36,46 36,52 Z" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M50,44 Q50,38 60,36 Q70,38 70,44" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+    <path d="M42,44 Q40,32 50,28 Q60,24 70,28 Q80,32 78,44" fill="none" stroke="#CD7F32" stroke-width="2" stroke-linecap="round"/>
+    <line x1="38" y1="60" x2="82" y2="60" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.6"/>
+    <line x1="38" y1="68" x2="82" y2="68" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.6"/>
+    <line x1="38" y1="76" x2="82" y2="76" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.6"/>
+    <line x1="50" y1="52" x2="50" y2="84" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.4"/>
+    <line x1="60" y1="52" x2="60" y2="84" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.4"/>
+    <line x1="70" y1="52" x2="70" y2="84" stroke="#CD7F32" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="60" cy="52" r="2" fill="#CD7F32"/>
+  </g>
 </svg>
