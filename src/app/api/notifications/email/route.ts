@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
+
+/* ── Singletons ── */
 
 let _supabaseAdmin: SupabaseClient | null = null;
 function getSupabaseAdmin() {
@@ -12,11 +15,123 @@ function getSupabaseAdmin() {
   return _supabaseAdmin;
 }
 
+let _resend: Resend | null = null;
+function getResend() {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) throw new Error("RESEND_API_KEY is not set");
+    _resend = new Resend(key);
+  }
+  return _resend;
+}
+
+/* ── Constants ── */
+
+const FROM_EMAIL = "Executive Angler <noreply@executiveangler.com>";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
+
 const NOTIFICATION_COLUMN_MAP: Record<string, string> = {
   follow: "email_notify_follows",
   comment: "email_notify_comments",
   like: "email_notify_likes",
 };
+
+/* ── Email Templates ── */
+
+function buildEmailHtml({
+  heading,
+  body,
+  ctaLabel,
+  ctaUrl,
+}: {
+  heading: string;
+  body: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+}) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background-color:#0D1117;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0D1117;padding:40px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+        <!-- Logo -->
+        <tr><td style="padding:0 24px 32px;">
+          <img src="${SITE_URL}/logo-email.png" alt="Executive Angler" width="180" style="display:block;" />
+        </td></tr>
+        <!-- Card -->
+        <tr><td style="background-color:#161B22;border-radius:12px;border:1px solid #21262D;padding:32px 28px;">
+          <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#F0F6FC;line-height:1.3;">
+            ${heading}
+          </h1>
+          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#8B949E;">
+            ${body}
+          </p>
+          ${ctaLabel && ctaUrl ? `
+          <a href="${ctaUrl}" style="display:inline-block;background-color:#E8923A;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:8px;">
+            ${ctaLabel}
+          </a>` : ""}
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="padding:24px 24px 0;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#484F58;line-height:1.5;">
+            You received this because of your notification settings.
+            <a href="${SITE_URL}/account" style="color:#484F58;text-decoration:underline;">Manage preferences</a>
+          </p>
+          <p style="margin:8px 0 0;font-size:11px;color:#484F58;">
+            &copy; ${new Date().getFullYear()} Executive Angler
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+function getNotificationContent(
+  type: string,
+  actorName: string,
+  sessionId?: string
+): { subject: string; heading: string; body: string; ctaLabel?: string; ctaUrl?: string } {
+  switch (type) {
+    case "follow":
+      return {
+        subject: `${actorName} started following you`,
+        heading: "New Follower",
+        body: `<strong style="color:#F0F6FC;">${actorName}</strong> is now following you on Executive Angler. Check out their profile and recent sessions.`,
+        ctaLabel: "View Profile",
+        ctaUrl: `${SITE_URL}/feed`,
+      };
+    case "comment":
+      return {
+        subject: `${actorName} commented on your session`,
+        heading: "New Comment",
+        body: `<strong style="color:#F0F6FC;">${actorName}</strong> left a comment on your fishing session.`,
+        ctaLabel: "View Comment",
+        ctaUrl: sessionId ? `${SITE_URL}/feed` : `${SITE_URL}/feed`,
+      };
+    case "like":
+      return {
+        subject: `${actorName} gave kudos on your session`,
+        heading: "New Kudos",
+        body: `<strong style="color:#F0F6FC;">${actorName}</strong> gave kudos on your fishing session. Nice work on the water!`,
+        ctaLabel: "View Session",
+        ctaUrl: sessionId ? `${SITE_URL}/feed` : `${SITE_URL}/feed`,
+      };
+    default:
+      return {
+        subject: "New notification from Executive Angler",
+        heading: "New Activity",
+        body: `You have new activity on Executive Angler.`,
+        ctaLabel: "Open App",
+        ctaUrl: SITE_URL,
+      };
+  }
+}
+
+/* ── Route Handler ── */
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,8 +158,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Fetch recipient profile to check notification preference
     const supabaseAdmin = getSupabaseAdmin();
+
+    // Fetch recipient profile + email
     const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select("user_id, display_name, email_notify_follows, email_notify_comments, email_notify_likes")
@@ -58,6 +174,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check notification preference
     const prefMap = {
       follow: profile.email_notify_follows,
       comment: profile.email_notify_comments,
@@ -73,7 +190,18 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Fetch actor display name for the notification
+    // Get recipient email from auth.users
+    const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(recipientId);
+    const recipientEmail = authUser?.user?.email;
+
+    if (!recipientEmail) {
+      return NextResponse.json(
+        { sent: false, reason: "Recipient has no email address" },
+        { status: 404 }
+      );
+    }
+
+    // Fetch actor display name
     const { data: actor } = await supabaseAdmin
       .from("profiles")
       .select("display_name, username")
@@ -82,15 +210,34 @@ export async function POST(req: NextRequest) {
 
     const actorName = actor?.display_name || actor?.username || "Someone";
 
-    // TODO: Replace with actual email sending (Resend, SendGrid, etc.)
+    // Build and send email via Resend
+    const content = getNotificationContent(type, actorName, sessionId);
+    const html = buildEmailHtml(content);
+
+    const resend = getResend();
+    const { data: emailResult, error: emailError } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: recipientEmail,
+      subject: content.subject,
+      html,
+    });
+
+    if (emailError) {
+      console.error("[EMAIL SEND ERROR]", emailError);
+      return NextResponse.json(
+        { sent: false, reason: `Email send failed: ${emailError.message}` },
+        { status: 502 }
+      );
+    }
+
     console.log(
-      `[EMAIL NOTIFICATION] type=${type} to=${recipientId} (${profile.display_name}) from=${actorName}` +
-        (sessionId ? ` session=${sessionId}` : "")
+      `[EMAIL SENT] type=${type} to=${recipientEmail} (${profile.display_name}) from=${actorName} resendId=${emailResult?.id}`
     );
 
     return NextResponse.json({
       sent: true,
-      reason: `${type} notification queued for ${profile.display_name}`,
+      reason: `${type} notification sent to ${profile.display_name}`,
+      emailId: emailResult?.id,
     });
   } catch (err) {
     console.error("[EMAIL NOTIFICATION ERROR]", err);
