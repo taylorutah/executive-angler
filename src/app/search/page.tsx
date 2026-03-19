@@ -14,6 +14,7 @@ interface SearchResult {
   subtitle: string;
   imageUrl?: string;
   href: string;
+  keywords?: string;
 }
 
 const CATEGORY_META: Record<
@@ -48,10 +49,22 @@ function SearchContent() {
   const filtered = useMemo(() => {
     if (!query.trim()) return [];
     const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    return index.filter((item) => {
-      const text = `${item.title} ${item.subtitle}`.toLowerCase();
-      return terms.every((t) => text.includes(t));
-    });
+    const scored = index
+      .map((item) => {
+        const titleLower = item.title.toLowerCase();
+        const subtitleLower = item.subtitle.toLowerCase();
+        const keywordsLower = (item.keywords ?? "").toLowerCase();
+        let score = 0;
+        for (const t of terms) {
+          if (titleLower.includes(t)) score += 3;
+          else if (subtitleLower.includes(t)) score += 2;
+          else if (keywordsLower.includes(t)) score += 1;
+        }
+        return { item, score };
+      })
+      .filter((r) => r.score > 0)
+      .sort((a, b) => b.score - a.score);
+    return scored.map((r) => r.item);
   }, [query, index]);
 
   const grouped = useMemo(() => {

@@ -21,6 +21,7 @@ export async function GET() {
     ]);
 
     const destMap = Object.fromEntries(destinations.map((d) => [d.id, d.name]));
+    const riverMap = Object.fromEntries(rivers.map((r) => [r.id, r.name]));
 
     const results = [
       ...destinations.map((d) => ({
@@ -30,15 +31,31 @@ export async function GET() {
         subtitle: `${d.region}, ${d.country}`,
         imageUrl: d.heroImageUrl,
         href: `/destinations/${d.slug}`,
+        keywords: [
+          d.state,
+          d.tagline,
+          ...d.primarySpecies,
+        ].filter(Boolean).join(" "),
       })),
-      ...rivers.map((r) => ({
-        type: "river" as const,
-        slug: r.slug,
-        title: r.name,
-        subtitle: `${destMap[r.destinationId] ?? ""} — ${r.flowType}`,
-        imageUrl: r.heroImageUrl,
-        href: `/rivers/${r.slug}`,
-      })),
+      ...rivers.map((r) => {
+        const hatchKeywords = (r.hatchChart ?? []).flatMap((m) =>
+          m.hatches.flatMap((h) => [h.insect, h.pattern])
+        );
+        return {
+          type: "river" as const,
+          slug: r.slug,
+          title: r.name,
+          subtitle: `${destMap[r.destinationId] ?? ""} — ${r.flowType}`,
+          imageUrl: r.heroImageUrl,
+          href: `/rivers/${r.slug}`,
+          keywords: [
+            ...r.accessPoints.map((ap) => ap.name),
+            ...r.primarySpecies,
+            r.description?.slice(0, 200),
+            ...new Set(hatchKeywords),
+          ].filter(Boolean).join(" "),
+        };
+      }),
       ...species.map((s) => ({
         type: "species" as const,
         slug: s.slug,
@@ -46,6 +63,11 @@ export async function GET() {
         subtitle: s.scientificName ?? (s.family ?? ""),
         imageUrl: s.imageUrl,
         href: `/species/${s.slug}`,
+        keywords: [
+          s.family,
+          s.preferredHabitat,
+          ...s.preferredFlies,
+        ].filter(Boolean).join(" "),
       })),
       ...lodges.map((l) => ({
         type: "lodge" as const,
@@ -54,6 +76,10 @@ export async function GET() {
         subtitle: destMap[l.destinationId] ?? "",
         imageUrl: l.heroImageUrl,
         href: `/lodges/${l.slug}`,
+        keywords: [
+          ...l.amenities,
+          ...l.nearbyRiverIds.map((id) => riverMap[id]).filter(Boolean),
+        ].join(" "),
       })),
       ...guides.map((g) => ({
         type: "guide" as const,
@@ -62,6 +88,7 @@ export async function GET() {
         subtitle: `${destMap[g.destinationId] ?? ""} — ${g.specialties.slice(0, 2).join(", ")}`,
         imageUrl: g.photoUrl,
         href: `/guides/${g.slug}`,
+        keywords: g.specialties.join(" "),
       })),
       ...flyShops.map((f) => ({
         type: "fly-shop" as const,
@@ -70,6 +97,10 @@ export async function GET() {
         subtitle: destMap[f.destinationId] ?? "",
         imageUrl: f.heroImageUrl,
         href: `/fly-shops/${f.slug}`,
+        keywords: [
+          ...f.services,
+          ...f.brandsCarried,
+        ].join(" "),
       })),
       ...articles.map((a) => ({
         type: "article" as const,
@@ -78,6 +109,10 @@ export async function GET() {
         subtitle: `${a.category} — ${a.author}`,
         imageUrl: a.heroImageUrl,
         href: `/articles/${a.slug}`,
+        keywords: [
+          ...a.tags,
+          a.excerpt,
+        ].join(" "),
       })),
     ];
 

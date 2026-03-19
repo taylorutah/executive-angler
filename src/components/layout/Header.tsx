@@ -95,7 +95,7 @@ export default function Header() {
               <ThemeToggle />
               <Link
                 href="/search"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#8B949E] hover:text-[#F0F6FC]"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#8B949E] hover:text-[#F0F6FC]"
                 title="Search (⌘K)"
               >
                 <Search className="h-4 w-4" />
@@ -167,6 +167,17 @@ export default function Header() {
           <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-[#161B22] shadow-2xl overflow-y-auto animate-fade-in border-l border-[#21262D]">
             <div className="p-6">
               <nav className="space-y-1">
+                <Link
+                  href="/search"
+                  className={`flex items-center gap-2 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    pathname === "/search"
+                      ? "bg-[#1F2937] text-[#F0F6FC]"
+                      : "text-[#8B949E] hover:bg-[#1F2937] hover:text-[#F0F6FC]"
+                  }`}
+                >
+                  <Search className="h-5 w-5" />
+                  Search
+                </Link>
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.label}
