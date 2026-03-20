@@ -30,18 +30,7 @@ export default function RiverPhotoStrip({
   }, [riverId]);
 
   if (!loading && photos.length === 0) {
-    return (
-      <div className="bg-[#0D1117] border-b border-[#21262D] px-4 py-3 flex items-center gap-4">
-        <Camera className="h-4 w-4 text-[#484F58] shrink-0" />
-        <span className="text-sm text-[#484F58]">No photos yet.</span>
-        <Link
-          href={`/rivers/${riverSlug}/photos#submit`}
-          className="text-sm text-[#E8923A] hover:underline flex items-center gap-1"
-        >
-          <Plus className="h-3.5 w-3.5" /> Be the first to submit a photo
-        </Link>
-      </div>
-    );
+    return null;
   }
 
   const displayPhotos = photos.slice(0, 12);

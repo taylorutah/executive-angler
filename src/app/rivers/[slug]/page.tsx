@@ -153,13 +153,13 @@ export default async function RiverPage({ params }: Props) {
         imageAlt={`${river.name} fly fishing`}
         title={river.name}
         subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
-        height="h-[60vh]"
+        height="h-[45vh]"
       />
 
       <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 
       <div className="bg-[#0D1117]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -182,11 +182,11 @@ export default async function RiverPage({ params }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-12">
+            <div className="lg:col-span-2 space-y-10">
               {/* Angler Intel — live data from app sessions (top billing) */}
               <ScrollAnimation>
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-5">
                     <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
                       Angler Intel
                     </h2>
@@ -202,7 +202,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Overview — collapsible, full text in DOM for SEO */}
               <ScrollAnimation>
                 <div>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                     Overview
                   </h2>
                   <CollapsibleOverview>
@@ -239,14 +239,14 @@ export default async function RiverPage({ params }: Props) {
               {/* Regulations */}
               {river.regulations && (
                 <ScrollAnimation>
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                  <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6">
                     <div className="flex items-start gap-3">
-                      <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                      <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
                       <div>
-                        <h3 className="font-heading text-lg font-semibold text-amber-900 mb-2">
+                        <h3 className="font-heading text-lg font-semibold text-amber-400 mb-2">
                           Regulations
                         </h3>
-                        <p className="text-sm text-amber-800 leading-relaxed">
+                        <p className="text-sm text-amber-200/80 leading-relaxed">
                           {river.regulations}
                         </p>
                       </div>
@@ -257,7 +257,7 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Interactive Map */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                   Access Points & Map
                 </h2>
                 <MapView
@@ -307,7 +307,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Hatch Chart */}
               {river.hatchChart && river.hatchChart.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                     Hatch Chart
                   </h2>
                   <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
@@ -366,7 +366,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Nearby Lodges */}
               {nearbyLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                     {lodgesHeading}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -388,7 +388,7 @@ export default async function RiverPage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -416,7 +416,7 @@ export default async function RiverPage({ params }: Props) {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-6 lg:sticky lg:top-24">
               <RiverConditionsCard riverId={river.id} />
 
               <QuickFacts facts={quickFacts} />
