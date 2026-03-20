@@ -5,13 +5,23 @@ import { createClient } from "@/lib/supabase/server";
  * GET /auth/callback
  *
  * Supabase OAuth callback handler for Google and Apple Sign-In.
- * Exchanges the authorization code for a session, ensures the user
- * has a profile row, then redirects to the intended destination.
+ * Handles two scenarios:
+ * 1. PKCE flow: code is in query params → exchange it for a session
+ * 2. Session already set: Supabase handled the token exchange (Apple form_post)
+ *    and redirected here with session cookies already in place
  */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/dashboard";
+  const error = searchParams.get("error");
+  const errorDescription = searchParams.get("error_description");
+
+  // If Supabase redirected with an error
+  if (error) {
+    console.error("[AUTH CALLBACK] Supabase returned error:", error, errorDescription);
+    return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+  }
 
   return handleCallback(code, next, origin);
 }
@@ -38,8 +48,9 @@ async function handleCallback(
 ) {
   console.log("[AUTH CALLBACK]", { hasCode: !!code, next, origin });
 
+  const supabase = await createClient();
+
   if (code) {
-    const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     console.log("[AUTH CALLBACK] exchangeCodeForSession:", {
       success: !error,
@@ -49,45 +60,58 @@ async function handleCallback(
     });
 
     if (!error) {
-      // Ensure the user has a profile row (OAuth users may not have one yet)
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("user_id, display_name")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        // Auto-create profile for new OAuth users
-        if (!profile) {
-          const displayName =
-            user.user_metadata?.full_name ||
-            user.user_metadata?.display_name ||
-            user.user_metadata?.name ||
-            user.email?.split("@")[0] ||
-            "Angler";
-
-          await supabase.from("profiles").upsert(
-            {
-              user_id: user.id,
-              display_name: displayName,
-              email_notify_follows: true,
-              email_notify_comments: true,
-              email_notify_likes: true,
-            },
-            { onConflict: "user_id" }
-          );
-        }
-      }
-
+      await ensureProfile(supabase);
       return NextResponse.redirect(`${origin}${next}`);
     }
 
-    console.error("[AUTH CALLBACK] Code exchange failed:", error.message, error);
-  } else {
-    console.error("[AUTH CALLBACK] No code provided in callback");
+    console.error("[AUTH CALLBACK] Code exchange failed:", error.message);
   }
 
+  // Fallback: check if user is already authenticated
+  // (Supabase may have set session cookies directly for Apple Sign-In)
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log("[AUTH CALLBACK] Fallback getUser:", {
+    hasUser: !!user,
+    email: user?.email,
+    provider: user?.app_metadata?.provider,
+  });
+
+  if (user) {
+    await ensureProfile(supabase);
+    return NextResponse.redirect(`${origin}${next}`);
+  }
+
+  console.error("[AUTH CALLBACK] No code and no session — auth failed");
   return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+}
+
+async function ensureProfile(supabase: Awaited<ReturnType<typeof createClient>>) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("user_id, display_name")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (!profile) {
+    const displayName =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.display_name ||
+      user.user_metadata?.name ||
+      user.email?.split("@")[0] ||
+      "Angler";
+
+    await supabase.from("profiles").upsert(
+      {
+        user_id: user.id,
+        display_name: displayName,
+        email_notify_follows: true,
+        email_notify_comments: true,
+        email_notify_likes: true,
+      },
+      { onConflict: "user_id" }
+    );
+  }
 }
