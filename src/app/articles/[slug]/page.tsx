@@ -10,6 +10,7 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds } from "@/lib/db";
+import { getAuthorByArticleName } from "@/data/authors";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -52,6 +53,8 @@ export default async function ArticlePage({ params }: Props) {
   const allArticles = await getAllArticles();
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
+  const authorData = getAuthorByArticleName(article.author);
+
   const [relatedDests, relatedRivers] = await Promise.all([
     article.relatedDestinationIds?.length
       ? getDestinationsByIds(article.relatedDestinationIds)
@@ -68,7 +71,18 @@ export default async function ArticlePage({ params }: Props) {
         "@type": "Article",
         headline: article.title,
         description: article.excerpt,
-        author: { "@type": "Person", name: article.author },
+        author: authorData
+          ? {
+              "@type": "Person",
+              name: authorData.name,
+              url: `${SITE_URL}/authors/${authorData.slug}`,
+              image: authorData.imageUrl.startsWith("/")
+                ? `${SITE_URL}${authorData.imageUrl}`
+                : authorData.imageUrl,
+              jobTitle: authorData.role,
+              sameAs: Object.values(authorData.socialLinks).filter(Boolean),
+            }
+          : { "@type": "Person", name: article.author },
         datePublished: article.publishedAt,
         dateModified: article.publishedAt,
         image: article.heroImageUrl,
@@ -111,7 +125,13 @@ export default async function ArticlePage({ params }: Props) {
               <p className="mt-2 text-white/75 text-lg italic max-w-2xl">{article.subtitle}</p>
             )}
             <div className="mt-5 flex flex-wrap items-center gap-5 text-[13px] text-white/60">
-              <span className="flex items-center gap-1.5"><User className="h-3.5 w-3.5" />{article.author}</span>
+              {authorData ? (
+                <Link href={`/authors/${authorData.slug}`} className="flex items-center gap-1.5 hover:text-[#E8923A] transition-colors">
+                  <User className="h-3.5 w-3.5" />Written by {authorData.name}
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1.5"><User className="h-3.5 w-3.5" />{article.author}</span>
+              )}
               <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{article.readingTimeMinutes} min read</span>
               <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />
                 {new Date(article.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -184,6 +204,37 @@ export default async function ArticlePage({ params }: Props) {
                     />
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Author bio box */}
+            {authorData && (
+              <div className="mt-16 pt-10 border-t border-[#21262D]">
+                <Link
+                  href={`/authors/${authorData.slug}`}
+                  className="group flex gap-5 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A]/30 p-5 transition-all"
+                >
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#E8923A]/30 flex-shrink-0">
+                    <Image
+                      src={authorData.imageUrl}
+                      alt={authorData.name}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] text-[#484F58] uppercase tracking-wide mb-0.5">
+                      Written by
+                    </p>
+                    <h3 className="font-heading text-base font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                      {authorData.name}
+                    </h3>
+                    <p className="text-sm text-[#8B949E] mt-1 leading-relaxed line-clamp-2">
+                      {authorData.shortBio}
+                    </p>
+                  </div>
+                </Link>
               </div>
             )}
 

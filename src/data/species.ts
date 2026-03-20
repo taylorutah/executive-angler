@@ -1772,9 +1772,9 @@ export const species: Species[] = [
       { name: "Miami Canals, FL", latitude: 25.8, longitude: -80.2 },
       { name: "Madeira River, Brazil", latitude: -8.8, longitude: -64.0 },
     ],
-    metaTitle: "Peacock Bass — Species Profile | Executive Angler",
+    metaTitle: "Peacock Bass — Topwater Tactics & Best Destinations",
     metaDescription:
-      "Complete guide to peacock bass fly fishing: the Amazon's explosive cichlid predator, topwater techniques, and top South American and Florida destinations.",
+      "Target peacock bass on the fly (record: 29 lbs). Best poppers, 8-10 wt setups, and top spots from the Amazon to South Florida canals. Free species guide.",
     featured: false,
   },
   // ═══════════════════════════════════════════════════════════════════

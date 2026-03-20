@@ -41,13 +41,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const river = await getRiverBySlug(slug);
   if (!river) return { title: "River Not Found" };
 
+  const speciesList = (river.primarySpecies || []).join(", ");
+  const fallbackTitle = `${river.name} Fly Fishing — ${speciesList || river.flowType || "Complete Guide"} | Executive Angler`;
+  const fallbackDesc = `Plan your trip to ${river.name}. ${river.lengthMiles ? river.lengthMiles + " miles of " : ""}${river.flowType || "prime"} water with ${speciesList || "world-class fishing"}. Access points, hatches, and local guides.`;
+
   return {
-    title: `${river.name} — Fly Fishing Guide`,
+    title: river.metaTitle || fallbackTitle,
     description:
-      river.metaDescription ||
-      `Complete fly fishing guide to ${river.name}. Species: ${(river.primarySpecies || []).join(", ")}. ${river.flowType} river.`,
+      river.metaDescription || fallbackDesc,
     openGraph: {
-      title: `${river.name} Fly Fishing Guide`,
+      title: river.metaTitle || `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
       images: [river.heroImageUrl],
     },
@@ -116,15 +119,30 @@ export default async function RiverPage({ params }: Props) {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "Place",
+          "@type": ["BodyOfWater", "Place"],
           name: river.name,
           description: river.description,
+          url: `${SITE_URL}/rivers/${slug}`,
           geo: {
             "@type": "GeoCoordinates",
             latitude: river.latitude,
             longitude: river.longitude,
           },
           image: river.heroImageUrl,
+          ...(dest
+            ? {
+                containedInPlace: {
+                  "@type": "Place",
+                  name: dest.name,
+                  url: `${SITE_URL}/destinations/${dest.slug}`,
+                },
+              }
+            : {}),
+          ...(river.primarySpecies && river.primarySpecies.length > 0
+            ? {
+                keywords: river.primarySpecies.join(", "),
+              }
+            : {}),
         }}
       />
 

@@ -35,13 +35,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dest = await getDestinationBySlug(slug);
   if (!dest) return { title: "Destination Not Found" };
 
+  const speciesList = (dest.primarySpecies || []).slice(0, 3).join(", ");
+  const monthStr = (dest.bestMonths || []).length > 0 ? `Best months: ${dest.bestMonths!.slice(0, 3).join(", ")}` : "";
+  const fallbackTitle = `${dest.name} Fly Fishing — ${speciesList || dest.tagline || "Complete Guide"} | Executive Angler`;
+  const fallbackDesc = `Plan your ${dest.name} fly fishing trip. ${speciesList ? "Target " + speciesList + ". " : ""}${monthStr ? monthStr + ". " : ""}Rivers, guides, lodges, and local intel.`;
+
   return {
-    title: `${dest.name} Fly Fishing — Destinations`,
+    title: dest.metaTitle || fallbackTitle,
     description:
-      dest.metaDescription ||
-      `Explore fly fishing in ${dest.name}. ${dest.tagline}`,
+      dest.metaDescription || fallbackDesc,
     openGraph: {
-      title: `${dest.name} Fly Fishing`,
+      title: dest.metaTitle || `${dest.name} Fly Fishing`,
       description: dest.metaDescription || dest.tagline,
       images: [
         dest.heroImageUrl ||
@@ -109,15 +113,25 @@ export default async function DestinationPage({ params }: Props) {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "TouristDestination",
+          "@type": ["TouristDestination", "Place"],
           name: `${dest.name} Fly Fishing`,
           description: dest.description,
+          url: `${SITE_URL}/destinations/${slug}`,
           geo: {
             "@type": "GeoCoordinates",
             latitude: dest.latitude,
             longitude: dest.longitude,
           },
           image: dest.heroImageUrl,
+          containedInPlace: {
+            "@type": "Country",
+            name: dest.country,
+          },
+          ...(dest.primarySpecies && dest.primarySpecies.length > 0
+            ? {
+                touristType: dest.primarySpecies.map((s) => `Fly fishing for ${s}`),
+              }
+            : {}),
         }}
       />
 

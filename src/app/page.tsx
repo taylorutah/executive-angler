@@ -7,11 +7,11 @@ import { getFeaturedArticles } from "@/lib/db";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — Track Every Fish. Master Every River.`,
-  description: "The easiest app to track fishing and catching data. Log sessions, analyze patterns, and join the most dedicated community of fly anglers on the planet.",
+  title: `${SITE_NAME} — Log Catches, Track Rivers, Join 200+ Anglers`,
+  description: "Free fly fishing app to log sessions, track catches with GPS, and analyze patterns across 200+ rivers. Explore guides, lodges, and hatches — built for serious anglers.",
   openGraph: {
-    title: `${SITE_NAME} — Track Every Fish. Master Every River.`,
-    description: "The easiest app to track fishing and catching data, wrapped in a world-class editorial experience.",
+    title: `${SITE_NAME} — Log Catches, Track Rivers, Join 200+ Anglers`,
+    description: "Free fly fishing app to log sessions, track catches with GPS, and analyze patterns across 200+ rivers. Built for serious anglers.",
     url: SITE_URL,
   },
   alternates: { canonical: SITE_URL },

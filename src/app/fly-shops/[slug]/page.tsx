@@ -71,8 +71,13 @@ export default async function FlyShopPage({ params }: Props) {
           "@type": "SportingGoodsStore",
           name: shop.name,
           description: shop.description,
-          address: shop.address,
-          url: shop.websiteUrl,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: shop.address,
+            ...(dest ? { addressRegion: dest.region, addressCountry: dest.country } : {}),
+          },
+          url: `${SITE_URL}/fly-shops/${slug}`,
+          ...(shop.websiteUrl ? { sameAs: shop.websiteUrl } : {}),
           ...(shop.phone ? { telephone: shop.phone } : {}),
           geo: {
             "@type": "GeoCoordinates",
@@ -80,13 +85,38 @@ export default async function FlyShopPage({ params }: Props) {
             longitude: shop.longitude,
           },
           ...(shop.heroImageUrl ? { image: shop.heroImageUrl } : {}),
+          ...(shop.hours ? {
+            openingHoursSpecification: Object.entries(shop.hours).map(([day, hours]) => ({
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
+              opens: hours === "Closed" ? undefined : hours.split("–")[0]?.trim(),
+              closes: hours === "Closed" ? undefined : hours.split("–")[1]?.trim(),
+            })),
+          } : {}),
           ...(shop.googleRating && shop.googleReviewCount ? {
             aggregateRating: {
               "@type": "AggregateRating",
               ratingValue: shop.googleRating,
               reviewCount: shop.googleReviewCount,
+              bestRating: 5,
+              worstRating: 1,
             },
           } : {}),
+          ...(shop.featuredReviews && shop.featuredReviews.length > 0
+            ? {
+                review: shop.featuredReviews.map((r) => ({
+                  "@type": "Review",
+                  author: { "@type": "Person", name: r.authorName },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: r.rating,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                  reviewBody: r.text,
+                })),
+              }
+            : {}),
         }}
       />
 

@@ -37,13 +37,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lodge = await getLodgeBySlug(slug);
   if (!lodge) return { title: "Lodge Not Found" };
 
+  const priceStr = lodge.priceRange ? ` from ${lodge.priceRange}` : "";
+  const amenityStr = (lodge.amenities || []).slice(0, 3).join(", ");
+  const fallbackTitle = `${lodge.name} — ${lodge.priceTier ? (lodge.priceTier <= 2 ? "Affordable" : "Premium") + " " : ""}Fly Fishing Lodge | Executive Angler`;
+  const fallbackDesc = `${lodge.name}${priceStr}. ${amenityStr}. Read reviews, see photos, and plan your stay at this fly fishing lodge.`;
+
   return {
-    title: `${lodge.name} — Fly Fishing Lodge`,
+    title: lodge.metaTitle || fallbackTitle,
     description:
-      lodge.metaDescription ||
-      `${lodge.name} — ${lodge.priceRange}. ${(lodge.amenities || []).slice(0, 4).join(", ")}.`,
+      lodge.metaDescription || fallbackDesc,
     openGraph: {
-      title: lodge.name,
+      title: lodge.metaTitle || lodge.name,
       description: lodge.metaDescription || lodge.description.substring(0, 160),
       images: [lodge.heroImageUrl],
     },
@@ -98,9 +102,11 @@ export default async function LodgePage({ params }: Props) {
           "@type": "LodgingBusiness",
           name: lodge.name,
           description: lodge.description,
-          url: lodge.websiteUrl,
+          url: `${SITE_URL}/lodges/${slug}`,
+          ...(lodge.websiteUrl ? { sameAs: lodge.websiteUrl } : {}),
           address: lodge.address,
           ...(lodge.phone ? { telephone: lodge.phone } : {}),
+          ...(lodge.email ? { email: lodge.email } : {}),
           ...(lodge.priceRange ? { priceRange: lodge.priceRange } : {}),
           geo: {
             "@type": "GeoCoordinates",
@@ -115,13 +121,30 @@ export default async function LodgePage({ params }: Props) {
               value: true,
             })),
           } : {}),
-          ...((lodge.googleRating || lodge.averageRating) && {
+          ...((lodge.googleRating || lodge.averageRating) ? {
             aggregateRating: {
               "@type": "AggregateRating",
               ratingValue: lodge.googleRating || lodge.averageRating,
               reviewCount: lodge.googleReviewCount || lodge.reviewCount,
+              bestRating: 5,
+              worstRating: 1,
             },
-          }),
+          } : {}),
+          ...(lodge.featuredReviews && lodge.featuredReviews.length > 0
+            ? {
+                review: lodge.featuredReviews.map((r) => ({
+                  "@type": "Review",
+                  author: { "@type": "Person", name: r.authorName },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: r.rating,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                  reviewBody: r.text,
+                })),
+              }
+            : {}),
         }}
       />
 

@@ -1412,9 +1412,9 @@ export const guides: Guide[] = [
       "https://images.unsplash.com/photo-1679426294035-b6a985d32b67?w=800&q=80",
     riverIds: ["river-eg-uur"],
     dailyRate: "Included in trip package",
-    metaTitle: "Bold Batbayar — Mongolia Taimen Fishing Guide",
+    metaTitle: "Bold Batbayar — 18 Years Guiding Mongolia Taimen",
     metaDescription:
-      "Mongolia's premier taimen guide. Eighteen years of experience on the Eg-Uur watershed pursuing the world's largest salmonid.",
+      "Book Bold Batbayar, Mongolia's top taimen guide. 18+ years on the Eg-Uur River chasing the world's largest salmonid. Mouse patterns, float trips, and 5-star reviews.",
     googleRating: 5,
     googleReviewCount: 21,
     googleReviewsUrl: 'https://www.google.com/maps/place/Taimen+Lodge+Mongolia/@51.4696654,99.0306987,17z/data=!3m1!4b1!4m6!3m5!1s0x5d11a7827dffa497:0xb0dedb7883e43703!8m2!3d51.4696654!4d99.0306987!16s%2Fg%2F11fj0gdkn7',

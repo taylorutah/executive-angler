@@ -673,9 +673,9 @@ export const lodges: Lodge[] = [
     nearbyRiverIds: ["river-white-river-ar", "river-norfork", "river-little-red"],
     averageRating: 4.5,
     reviewCount: 84,
-    metaTitle: "White River Trout Lodge | Arkansas Tailwater Fly Fishing",
+    metaTitle: "White River Trout Lodge — From $250/Night, Year-Round",
     metaDescription:
-      "Year-round fly fishing lodge on the White River near Cotter, Arkansas. Guided drift boat trips for trophy trout on two world-class tailwater fisheries.",
+      "Stay at White River Trout Lodge in Arkansas from $250/night. Guided drift boats, riverfront cabins, all meals included. Trophy trout fishing 365 days a year.",
     featured: false,
     googleRating: 5,
     googleReviewCount: 44,

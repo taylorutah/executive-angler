@@ -3240,9 +3240,9 @@ export const rivers: River[] = [
         ],
       },
     ],
-    metaTitle: "River Moy Fly Fishing Guide | Executive Angler",
+    metaTitle: "River Moy — Ireland's #1 Atlantic Salmon River",
     metaDescription:
-      "Ireland's premier Atlantic salmon river. Fish the legendary Ridge Pool and Moy Fishery beats in Ballina, County Mayo.",
+      "Fish the legendary Ridge Pool on Ireland's River Moy. 62 miles of freestone water for Atlantic salmon, brown trout, and sea trout. Access points, hatches, and ghillie info.",
     featured: false,
   },
   // ─── PHASE 3: KOLA PENINSULA ──────────────────────────────────────

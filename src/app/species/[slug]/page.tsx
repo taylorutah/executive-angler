@@ -32,13 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const sp = await getSpeciesBySlug(slug);
   if (!sp) return { title: "Species Not Found" };
 
+  const sizeInfo = sp.averageSize ? ` (avg ${sp.averageSize})` : "";
+  const fallbackTitle = `${sp.commonName} — Flies, Tactics & Where to Catch | Executive Angler`;
+  const fallbackDesc = `Complete ${sp.commonName} fly fishing guide${sizeInfo}. Best flies, proven tactics, habitat, and top destinations. Everything you need to target ${sp.commonName} on the fly.`;
+
   return {
-    title: `${sp.commonName} — Fly Fishing Species Guide`,
+    title: sp.metaTitle || fallbackTitle,
     description:
-      sp.metaDescription ||
-      `Complete fly fishing guide to ${sp.commonName} (${sp.scientificName || ""}). Habitat, preferred flies, tactics, and where to find them.`,
+      sp.metaDescription || fallbackDesc,
     openGraph: {
-      title: `${sp.commonName} Fly Fishing Guide`,
+      title: sp.metaTitle || `${sp.commonName} Fly Fishing Guide`,
       description:
         sp.metaDescription ||
         (sp.description ? sp.description.substring(0, 160) : `Fly fishing guide for ${sp.commonName}.`),
@@ -118,6 +121,15 @@ export default async function SpeciesDetailPage({ params }: Props) {
           alternateName: sp.scientificName,
           description: sp.description,
           image: sp.imageUrl,
+          url: `${SITE_URL}/species/${slug}`,
+          ...(sp.scientificName
+            ? {
+                sameAs: `https://en.wikipedia.org/wiki/${encodeURIComponent(sp.scientificName.replace(/ /g, "_"))}`,
+              }
+            : {}),
+          ...(sp.conservationStatus
+            ? { additionalProperty: { "@type": "PropertyValue", name: "Conservation Status", value: sp.conservationStatus } }
+            : {}),
         }}
       />
 

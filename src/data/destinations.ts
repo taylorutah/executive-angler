@@ -608,9 +608,9 @@ export const destinations: Destination[] = [
       "Tropical climate with warm temperatures year-round. Highs of 80-90F most of the year. Dry season from February through May offers the best weather for fishing. Rainy season from June through November brings afternoon showers but fishing remains productive. Hurricane season peaks August through October.",
     regulationsSummary:
       "Belize mandates catch-and-release for bonefish, permit, and tarpon when caught on the flats. Marine reserves have no-take zones that must be respected. Size and bag limits apply to certain reef species. Fishing within reserves requires permission. Consult your guide or lodge for current regulations.",
-    metaTitle: "Belize Fly Fishing Guide | Executive Angler",
+    metaTitle: "Belize Fly Fishing — Permit, Bonefish & Tarpon Flats",
     metaDescription:
-      "Explore Belize's world-class permit, bonefish, and tarpon fishing. Our guide covers Turneffe Atoll, the southern coast, and the Caribbean's best flats.",
+      "Plan your Belize flats trip. Chase permit, bonefish, and tarpon from March-June. Turneffe Atoll, southern coast, and lodges compared. No license required for C&R.",
     featured: false,
     sortOrder: 17,
   },

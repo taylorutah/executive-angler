@@ -35,11 +35,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const guide = await getGuideBySlug(slug);
   if (!guide) return { title: "Guide Not Found" };
 
+  const expStr = guide.yearsExperience ? `${guide.yearsExperience}+ yrs experience` : "";
+  const rateStr = guide.dailyRate ? ` | ${guide.dailyRate}` : "";
+  const fallbackTitle = `${guide.name} — ${(guide.specialties || []).slice(0, 2).join(", ") || "Expert Guide"} | Executive Angler`;
+  const fallbackDesc = `Book ${guide.name}. ${expStr}${rateStr}. Specialties: ${(guide.specialties || []).slice(0, 3).join(", ")}. Reviews, rates, and direct booking.`;
+
   return {
-    title: `${guide.name} — Fly Fishing Guide`,
+    title: guide.metaTitle || fallbackTitle,
     description:
-      guide.metaDescription ||
-      `${guide.name} — professional fly fishing guide. Specialties: ${(guide.specialties || []).join(", ")}.`,
+      guide.metaDescription || fallbackDesc,
     alternates: {
       canonical: `${SITE_URL}/guides/${slug}`,
     },
@@ -88,18 +92,52 @@ export default async function GuidePage({ params }: Props) {
           "@type": "ProfessionalService",
           name: guide.name,
           description: guide.bio,
-          url: guide.websiteUrl,
+          url: `${SITE_URL}/guides/${slug}`,
+          ...(guide.websiteUrl ? { sameAs: guide.websiteUrl } : {}),
           ...(guide.photoUrl ? { image: guide.photoUrl } : {}),
           ...(guide.phone ? { telephone: guide.phone } : {}),
           ...(guide.email ? { email: guide.email } : {}),
           ...(guide.dailyRate ? { priceRange: guide.dailyRate } : {}),
+          ...(dest ? {
+            areaServed: {
+              "@type": "Place",
+              name: dest.name,
+              url: `${SITE_URL}/destinations/${dest.slug}`,
+            },
+          } : {}),
+          employee: {
+            "@type": "Person",
+            name: guide.name,
+            ...(guide.photoUrl ? { image: guide.photoUrl } : {}),
+            ...(guide.yearsExperience ? { description: `Professional fly fishing guide with ${guide.yearsExperience}+ years of experience` } : {}),
+            ...(guide.specialties && guide.specialties.length > 0
+              ? { knowsAbout: guide.specialties }
+              : {}),
+          },
           ...(guide.googleRating && guide.googleReviewCount ? {
             aggregateRating: {
               "@type": "AggregateRating",
               ratingValue: guide.googleRating,
               reviewCount: guide.googleReviewCount,
+              bestRating: 5,
+              worstRating: 1,
             },
           } : {}),
+          ...(guide.featuredReviews && guide.featuredReviews.length > 0
+            ? {
+                review: guide.featuredReviews.map((r) => ({
+                  "@type": "Review",
+                  author: { "@type": "Person", name: r.authorName },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: r.rating,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                  reviewBody: r.text,
+                })),
+              }
+            : {}),
         }}
       />
 

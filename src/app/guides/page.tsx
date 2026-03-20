@@ -24,12 +24,12 @@ const GUIDE_HEADLINES: Record<string, string> = {
 };
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Guides",
+  title: "31 Expert Fly Fishing Guides — Compare & Book",
   description:
-    "Expert fly fishing guides worldwide — profiles, specialties, daily rates, and direct booking links. Thirty-one certified professionals on the world's most storied waters.",
+    "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. From Montana to Mongolia — find your next guide and book direct.",
   openGraph: {
-    title: "Fly Fishing Guides | Executive Angler",
-    description: "31 expert fly fishing guides worldwide — profiles, specialties, daily rates, and direct booking links.",
+    title: "31 Expert Fly Fishing Guides | Executive Angler",
+    description: "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. Find your next guide and book direct.",
     images: ["/api/og?title=Fly%20Fishing%20Guides&subtitle=31%20Expert%20Professionals&type=default"],
   },
 };

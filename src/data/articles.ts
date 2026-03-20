@@ -4214,9 +4214,9 @@ export const articles: Article[] = [
     relatedRiverIds: [],
     publishedAt: "2025-02-28T08:00:00Z",
     metaTitle:
-      "The Complete Guide to Fly Rod Selection | Executive Angler",
+      "Fly Rod Selection Guide — 3wt to 12wt Compared (2025)",
     metaDescription:
-      "Choose the right fly rod with this comprehensive guide to line weights, rod lengths, actions, and materials. From beginner to advanced, find the perfect rod for your fishing.",
+      "Pick the right fly rod with our weight-by-weight breakdown. Line weights, actions, rod lengths, and 1-to-4 rod quiver builds. Free printable chart inside.",
     featured: false,
   },
   {
