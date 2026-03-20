@@ -18,6 +18,7 @@ export {
   getAllSpecies,
   getSpeciesBySlug,
   getFeaturedSpecies,
+  getSpeciesByCommonNames,
 } from "./species";
 
 export {

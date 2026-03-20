@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Admin metrics and management.",
 };
 
-const ADMIN_EMAILS = ["taylor@executiveangler.com", "taylorwarnick@gmail.com"];
+const ADMIN_EMAILS = ["taylor@executiveangler.com", "taylor.warnick@gmail.com"];
 
 export default async function AdminPage() {
   const supabase = await createClient();

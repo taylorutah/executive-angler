@@ -1,82 +1,370 @@
 # Executive Angler
 
-> The definitive fly fishing resource — destinations, rivers, lodges, guides, species, and expert instruction from around the world.
+> The definitive fly fishing intelligence platform — destinations, rivers, lodges, guides, species, fly shops, and expert instruction from around the world. Plus a Strava-style fishing journal for tracking sessions, catches, and patterns.
 
 ## About
 
-Executive Angler is a comprehensive fly fishing resource website designed to be the single authoritative source for anglers worldwide. We cover every major fly fishing destination, river, lodge, guide service, fly shop, and fish species on earth. Our editorial content includes in-depth technique articles, species guides, gear reviews, and conservation coverage.
+Executive Angler is a comprehensive fly fishing resource and intelligence platform. We cover every major fly fishing destination, river, lodge, guide service, fly shop, and fish species on earth. Our editorial content includes in-depth technique articles, species guides, gear reviews, and conservation coverage.
+
+The platform also includes a personal fishing journal (think Strava for fly fishing) where anglers log sessions, track catches, record flies used, and analyze their performance over time.
 
 We do not sell gear or operate as a booking agent. We connect anglers directly with lodges and guides — no middleman.
 
-## Content Types
+Website: https://www.executiveangler.com
+
+---
+
+## Content Overview
+
+| Content Type | Count | Description |
+|---|---|---|
+| Destinations | 30 | Geographic fly fishing regions worldwide |
+| Rivers & Waters | 41 | Individual waterways with maps, hatch charts, access points |
+| Species | 35 | Fish species profiles with taxonomy, habitat, tactics |
+| Lodges | 32 | Fly fishing lodges with pricing, amenities, reviews |
+| Guides | 31 | Professional guide services with specialties, rates |
+| Fly Shops | 27+ | Local fly shops with hours, services, brands |
+| Articles | 16 | Long-form editorial: techniques, destinations, gear, conservation |
+
+---
+
+## Destinations (30)
+
+Each destination page includes: overview, best fishing months, target species, rivers, lodges, guides, fly shops, interactive maps, and community photos.
+
+### North America
+- /destinations/montana — Montana (Rainbow Trout, Brown Trout, Cutthroat Trout)
+- /destinations/wyoming — Wyoming (Snake River Cutthroat, Brown Trout, Rainbow Trout)
+- /destinations/colorado — Colorado (Rainbow Trout, Brown Trout, Cutthroat Trout)
+- /destinations/idaho — Idaho (Rainbow Trout, Brown Trout, Brook Trout)
+- /destinations/alaska — Alaska (Rainbow Trout, King Salmon, Silver Salmon)
+- /destinations/oregon — Oregon (Rainbow Trout, Summer Steelhead, Brown Trout)
+- /destinations/pennsylvania — Pennsylvania (Brown Trout, Rainbow Trout, Brook Trout)
+- /destinations/michigan — Michigan (Brown Trout, Steelhead, Chinook Salmon)
+- /destinations/arkansas — Arkansas (Rainbow Trout, Brown Trout, Cutthroat Trout)
+- /destinations/florida-keys — Florida Keys (Bonefish, Permit, Tarpon, Snook)
+- /destinations/utah — Utah (Brown Trout, Rainbow Trout, Bonneville Cutthroat)
+- /destinations/new-jersey — New Jersey (Brown Trout, Rainbow Trout, Brook Trout)
+- /destinations/british-columbia — British Columbia, Canada (Rainbow Trout, Chinook Salmon)
+
+### South America
+- /destinations/patagonia — Patagonia, Argentina (Brown Trout, Rainbow Trout, Brook Trout)
+- /destinations/chile — Chile (Brown Trout, Rainbow Trout, Brook Trout)
+- /destinations/tierra-del-fuego — Tierra del Fuego (Brown Trout, Sea Trout)
+
+### Europe
+- /destinations/iceland — Iceland (Atlantic Salmon, Arctic Char, Brown Trout)
+- /destinations/scotland — Scotland (Atlantic Salmon, Brown Trout, Sea Trout)
+- /destinations/slovenia — Slovenia (Brown Trout, Rainbow Trout, Marble Trout)
+- /destinations/ireland — Ireland (Atlantic Salmon, Brown Trout, Sea Trout)
+- /destinations/kola-peninsula — Kola Peninsula, Russia (Atlantic Salmon, Sea Trout, Arctic Char)
+
+### Oceania
+- /destinations/new-zealand — New Zealand (Brown Trout, Rainbow Trout)
+- /destinations/tasmania — Tasmania (Brown Trout, Rainbow Trout)
+
+### Asia
+- /destinations/japan — Japan (Yamame, Amago, Iwana)
+- /destinations/kamchatka — Kamchatka, Russia (King Salmon, Rainbow Trout, Char)
+- /destinations/mongolia — Mongolia (Siberian Taimen, Lenok, Grayling)
+
+### Saltwater / Tropical
+- /destinations/bahamas — Bahamas (Bonefish, Permit, Tarpon, Barracuda)
+- /destinations/belize — Belize (Bonefish, Permit, Tarpon)
+- /destinations/christmas-island — Christmas Island / Kiritimati (Bonefish, Giant Trevally)
+- /destinations/seychelles — Seychelles (Bonefish, Giant Trevally, Permit)
+- /destinations/cuba — Cuba (Bonefish, Permit, Tarpon)
+- /destinations/maldives — Maldives (Giant Trevally, Bluefin Trevally, Bonefish)
+
+---
+
+## Rivers & Waters (41)
+
+Each river page includes: description, species, flow type, difficulty, wading type, access points with GPS, hatch chart, interactive Mapbox map, nearby lodges, guides, fly shops, and live angler intel from the journal app.
+
+### Montana
+- /rivers/madison-river — Madison River (Rainbow Trout, Brown Trout — Freestone, 183 miles)
+- /rivers/gallatin-river — Gallatin River (Rainbow Trout, Brown Trout — Freestone)
+- /rivers/yellowstone-river — Yellowstone River (Cutthroat Trout, Brown Trout — Freestone)
+- /rivers/missouri-river — Missouri River (Rainbow Trout, Brown Trout — Tailwater)
+- /rivers/big-hole-river — Big Hole River (Brown Trout, Rainbow Trout — Freestone)
+- /rivers/rock-creek — Rock Creek (Rainbow Trout, Brown Trout, Cutthroat Trout)
+
+### Wyoming
+- /rivers/snake-river-wyoming — Snake River (Snake River Cutthroat — Freestone)
+- /rivers/north-platte-wyoming — North Platte River (Rainbow Trout, Brown Trout — Tailwater)
+- /rivers/firehole-river — Firehole River (Brown Trout, Rainbow Trout — Spring Creek)
+
+### Colorado
+- /rivers/south-platte-river — South Platte River (Rainbow Trout, Brown Trout — Tailwater)
+- /rivers/arkansas-river-colorado — Arkansas River (Brown Trout, Rainbow Trout — Freestone)
+- /rivers/frying-pan-river — Frying Pan River (Rainbow Trout, Brown Trout — Tailwater)
+
+### Idaho
+- /rivers/henrys-fork — Henry's Fork of the Snake River (Rainbow Trout — Spring Creek)
+- /rivers/silver-creek — Silver Creek (Rainbow Trout, Brown Trout — Spring Creek)
+- /rivers/south-fork-boise — South Fork of the Boise River (Rainbow Trout, Brown Trout)
+
+### Alaska
+- /rivers/kenai-river — Kenai River (Rainbow Trout, King Salmon — Freestone)
+- /rivers/bristol-bay — Bristol Bay Rivers (Rainbow Trout, Sockeye Salmon)
+- /rivers/copper-river-alaska — Copper River (King Salmon, Sockeye Salmon)
+
+### Oregon
+- /rivers/deschutes-river — Deschutes River (Rainbow Trout, Summer Steelhead — Freestone)
+- /rivers/rogue-river — Rogue River (Steelhead, Chinook Salmon — Freestone)
+- /rivers/mckenzie-river — McKenzie River (Rainbow Trout — Freestone)
+
+### Pennsylvania
+- /rivers/letort-spring-run — Letort Spring Run (Brown Trout — Spring Creek)
+- /rivers/big-spring-creek — Big Spring Creek (Brown Trout — Spring Creek)
+- /rivers/penns-creek — Penns Creek (Brown Trout, Rainbow Trout — Freestone)
+
+### Michigan
+- /rivers/au-sable-river — Au Sable River (Brown Trout — Freestone)
+- /rivers/pere-marquette-river — Pere Marquette River (Brown Trout, Steelhead — Freestone)
+- /rivers/manistee-river — Manistee River (Brown Trout, Steelhead — Freestone)
+
+### Arkansas
+- /rivers/white-river-arkansas — White River (Rainbow Trout, Brown Trout — Tailwater)
+- /rivers/norfork-river — Norfork River (Rainbow Trout, Brown Trout — Tailwater)
+- /rivers/little-red-river — Little Red River (Rainbow Trout, Brown Trout — Tailwater)
+
+### Utah
+- /rivers/provo-river — Provo River (Brown Trout, Rainbow Trout)
+- /rivers/green-river-flaming-gorge — Green River at Flaming Gorge (Brown Trout, Rainbow Trout — Tailwater)
+
+### International
+- /rivers/florida-keys-flats — Florida Keys Flats (Bonefish, Permit, Tarpon — Saltwater Flat)
+- /rivers/river-moy — River Moy, Ireland (Atlantic Salmon, Brown Trout — Freestone)
+- /rivers/ponoi-river — Ponoi River, Russia (Atlantic Salmon — Freestone)
+- /rivers/eg-uur-river — Eg-Uur River, Mongolia (Siberian Taimen, Lenok — Freestone)
+- /rivers/jardines-de-la-reina — Jardines de la Reina, Cuba (Bonefish, Permit, Tarpon — Saltwater)
+- /rivers/north-male-atoll — North Malé Atoll, Maldives (Giant Trevally — Saltwater)
+
+---
+
+## Species (35)
+
+Each species page includes: description, taxonomy, habitat, diet, spawning info with month calendar, conservation status, distribution map, recommended fly patterns, tackle recommendations, fly fishing tips, fun facts, related destinations, related rivers, and FAQ section.
+
+### Trout
+- /species/rainbow-trout — Rainbow Trout (Oncorhynchus mykiss)
+- /species/brown-trout — Brown Trout (Salmo trutta)
+- /species/cutthroat-trout — Cutthroat Trout (Oncorhynchus clarkii)
+- /species/bull-trout — Bull Trout (Salvelinus confluentus)
+- /species/lake-trout — Lake Trout (Salvelinus namaycush)
+- /species/golden-trout — Golden Trout (Oncorhynchus aguabonita)
+- /species/marble-trout — Marble Trout (Salmo marmoratus)
+- /species/brook-trout — Brook Trout (Salvelinus fontinalis)
+
+### Salmon
+- /species/chinook-salmon — Chinook Salmon / King Salmon (Oncorhynchus tshawytscha)
+- /species/coho-salmon — Coho Salmon / Silver Salmon (Oncorhynchus kisutch)
+- /species/sockeye-salmon — Sockeye Salmon / Red Salmon (Oncorhynchus nerka)
+- /species/pink-salmon — Pink Salmon (Oncorhynchus gorbuscha)
+- /species/chum-salmon — Chum Salmon (Oncorhynchus keta)
+- /species/atlantic-salmon — Atlantic Salmon (Salmo salar)
+
+### Steelhead
+- /species/steelhead — Steelhead (Oncorhynchus mykiss — anadromous rainbow trout)
+
+### Char
+- /species/arctic-char — Arctic Char (Salvelinus alpinus)
+
+### Grayling
+- /species/arctic-grayling — Arctic Grayling (Thymallus arcticus)
+
+### Saltwater
+- /species/bonefish — Bonefish (Albula vulpes)
+- /species/permit — Permit (Trachinotus falcatus)
+- /species/tarpon — Tarpon (Megalops atlanticus)
+- /species/redfish — Redfish / Red Drum (Sciaenops ocellatus)
+- /species/striped-bass — Striped Bass (Morone saxatilis)
+- /species/giant-trevally — Giant Trevally / GT (Caranx ignobilis)
+- /species/snook — Snook (Centropomus undecimalis)
+- /species/roosterfish — Roosterfish (Nematistius pectoralis)
+- /species/barracuda — Great Barracuda (Sphyraena barracuda)
+- /species/peacock-bass — Peacock Bass (Cichla temensis)
+
+### Warmwater
+- /species/largemouth-bass — Largemouth Bass (Micropterus salmoides)
+- /species/smallmouth-bass — Smallmouth Bass (Micropterus dolomieu)
+- /species/carp — Common Carp (Cyprinus carpio)
+- /species/mountain-whitefish — Mountain Whitefish (Prosopium williamsoni)
+
+### Pike
+- /species/northern-pike — Northern Pike (Esox lucius)
+- /species/musky — Musky / Muskellunge (Esox masquinongy)
+- /species/chain-pickerel — Chain Pickerel (Esox niger)
+- /species/tiger-musky — Tiger Musky (Esox masquinongy × lucius)
+
+---
+
+## Lodges (32)
+
+Each lodge page includes: description, amenities, photo gallery, pricing, season dates, capacity, nearby rivers, Google Reviews, community photos, interactive map, and direct booking links.
+
+- /lodges/firehole-ranch — Firehole Ranch (Montana — Madison, Gallatin)
+- /lodges/lone-mountain-ranch — Lone Mountain Ranch (Montana — Gallatin, Madison, Yellowstone)
+- /lodges/craig-montana-lodge — Craig Montana Lodge (Montana — Missouri)
+- /lodges/snake-river-sporting-club — Snake River Sporting Club Lodge (Wyoming — Snake River)
+- /lodges/taylor-creek-lodge — Taylor Creek Lodge (Colorado — Frying Pan, South Platte)
+- /lodges/henrys-fork-lodge — Henry's Fork Lodge (Idaho — Henry's Fork, Silver Creek)
+- /lodges/bristol-bay-sportfishing — Bristol Bay Sportfishing Lodge (Alaska — Bristol Bay, Kenai)
+- /lodges/steamboat-inn — Steamboat Inn (Oregon — Rogue, McKenzie, Deschutes)
+- /lodges/limestone-springs-inn — Limestone Springs Inn (Pennsylvania — Letort, Big Spring, Penns)
+- /lodges/pere-marquette-river-lodge — Pere Marquette River Lodge (Michigan)
+- /lodges/white-river-trout-lodge — White River Trout Lodge (Arkansas — White River, Norfork)
+- /lodges/islamorada-flats-lodge — Islamorada Flats Lodge (Florida Keys)
+- /lodges/tongariro-river-lodge — Tongariro River Lodge (New Zealand)
+- /lodges/estancia-rio-grande — Estancia Rio Grande (Patagonia, Argentina)
+- /lodges/dean-river-lodge — Dean River Lodge (British Columbia — Dean, Skeena)
+- /lodges/andros-south-bonefish-lodge — Andros South Bonefish Lodge (Bahamas)
+- /lodges/laxa-myvatn-lodge — Laxa i Myvatn Lodge (Iceland)
+- /lodges/baker-lodge-patagonia — Baker Lodge Patagonia (Chile)
+- /lodges/turneffe-flats-resort — Turneffe Flats Resort (Belize)
+- /lodges/craigellachie-house — Craigellachie House (Scotland — River Spey, River Tay)
+- /lodges/soca-valley-lodge — Soca Valley Lodge (Slovenia — Soca River)
+- /lodges/nagara-river-ryokan — Nagara River Ryokan (Japan)
+- /lodges/christmas-island-outfitters — Christmas Island Outfitters Lodge (Kiritimati)
+- /lodges/alphonse-island-lodge — Alphonse Island Lodge (Seychelles)
+- /lodges/western-lakes-lodge — Western Lakes Lodge (Tasmania)
+- /lodges/kamchatka-river-camp — Kamchatka River Camp (Kamchatka, Russia)
+- /lodges/kau-tapen-lodge — Kau Tapen Lodge (Tierra del Fuego)
+- /lodges/mount-falcon-estate — Mount Falcon Estate (Ireland — River Moy)
+- /lodges/ponoi-river-camp — Ponoi River Camp (Kola Peninsula, Russia)
+- /lodges/sweetwater-travel-mongolia — Sweetwater Travel Mongolia Camp (Mongolia)
+- /lodges/avalon-jardines-de-la-reina — Avalon Fleet — Jardines de la Reina (Cuba)
+- /lodges/maldives-flyfish-explorer — Maldives Flyfish Explorer (Maldives)
+
+---
+
+## Guides (31)
+
+Each guide page includes: bio, specialties, years of experience, daily rates, rivers covered, Google Reviews, community photos, and direct contact information.
+
+- /guides/bud-lillys-guide-service — Bud Lilly's Trout Shop Guide Service (Montana)
+- /guides/montana-troutfitters — Montana Troutfitters (Montana)
+- /guides/jackson-hole-anglers — Trent Kirkpatrick — Jackson Hole Anglers (Wyoming)
+- /guides/frying-pan-anglers — Miguel Vasquez — Frying Pan Anglers (Colorado)
+- /guides/henrys-fork-anglers — Dale Pearson — Henry's Fork Anglers (Idaho)
+- /guides/bristol-bay-fly-fishing — Nate Runyan — Bristol Bay Fly Fishing (Alaska)
+- /guides/deschutes-river-outfitters — Sarah Whitfield — Deschutes River Outfitters (Oregon)
+- /guides/cumberland-valley-anglers — Ed Shenk III — Cumberland Valley Anglers (Pennsylvania)
+- /guides/au-sable-river-guides — Jim Navarre — Au Sable River Guides (Michigan)
+- /guides/white-river-fly-fishing — Cody Lazenby — White River Fly Fishing (Arkansas)
+- /guides/islamorada-flats-guide — Captain Luis Cabrera — Islamorada Flats (Florida Keys)
+- /guides/nz-backcountry-fly-fishing — Hamish McLeod — NZ Backcountry Fly Fishing (New Zealand)
+- /guides/patagonia-trout-adventures — Matias Orellana — Patagonia Trout Adventures (Argentina)
+- /guides/skeena-steelhead-guide — Owen Blackwater — Skeena Steelhead Adventures (British Columbia)
+- /guides/andros-bonefish-guide — Prescott Rolle — Andros Island Bonefishing (Bahamas)
+- /guides/iceland-salmon-guide — Gudmundur Sigurdsson — Iceland Fly Fishing (Iceland)
+- /guides/chile-patagonia-guide — Rodrigo Sandoval — Patagonia Chile Fly Fishing (Chile)
+- /guides/belize-flats-guide — Elton Garbutt — Belize Saltwater Fly Fishing (Belize)
+- /guides/spey-ghillie — Alistair Grant — River Spey Ghillie (Scotland)
+- /guides/soca-marble-trout-guide — Luka Zupancic — Soca Valley Fly Fishing (Slovenia)
+- /guides/japan-tenkara-guide — Takeshi Yamamoto — Japan Tenkara Fly Fishing (Japan)
+- /guides/christmas-island-guide — Moamoa Teata — Kiritimati Flats Guide (Christmas Island)
+- /guides/seychelles-flats-guide — Keith Rose-Innes — Alphonse Flats Guide (Seychelles)
+- /guides/tasmania-highland-guide — Daniel Hackett — Tasmania Highland Fly Fishing (Tasmania)
+- /guides/kamchatka-wilderness-guide — Sergei Volkov — Kamchatka Wilderness Fishing (Kamchatka)
+- /guides/tierra-del-fuego-guide — Alejandro Fernandez — Rio Grande Sea Trout (Tierra del Fuego)
+- /guides/paddy-mcdonnell-moy-ghillie — Paddy McDonnell — Moy Ghillie Service (Ireland)
+- /guides/alexei-volkov-ponoi-guide — Alexei Volkov — Ponoi River Guide (Kola Peninsula)
+- /guides/bold-batbayar-mongolia-guide — Bold Batbayar — Mongolia Taimen Specialist (Mongolia)
+- /guides/carlos-garcia-cuba-guide — Carlos Garcia — Cuban Saltwater Specialist (Cuba)
+- /guides/ibrahim-naseem-maldives-guide — Ibrahim Naseem — Maldives GT Specialist (Maldives)
+
+---
+
+## Articles (16)
+
+Long-form editorial content with expert instruction, destination guides, gear reviews, and conservation coverage.
+
+### Techniques
+- /articles/introduction-to-euro-nymphing — Introduction to Euro Nymphing
+- /articles/reading-water-complete-guide — Reading Water: A Complete Guide
+- /articles/dry-fly-anglers-guide-matching-the-hatch — The Dry Fly Angler's Guide to Matching the Hatch
+- /articles/introduction-to-tenkara-fishing — Introduction to Tenkara Fishing
+- /articles/streamer-fishing-mastery — Streamer Fishing Mastery
+- /articles/saltwater-fly-fishing-chasing-grand-slam — Saltwater Fly Fishing: Chasing the Grand Slam
 
 ### Destinations
-Geographic regions organized by continent, country, and state/province. Each destination page includes an overview, best fishing months, target species, available waters, nearby lodges and guides, and interactive maps.
+- /articles/montanas-best-fly-fishing-waters — Montana's Best Fly Fishing Waters
+- /articles/first-timers-guide-to-patagonia — A First Timer's Guide to Patagonia
+- /articles/icelands-arctic-char-atlantic-salmon — Iceland's Arctic Char and Atlantic Salmon
 
-Current destinations span 30 locations worldwide including: Montana, Wyoming, Colorado, Idaho, Alaska, Oregon, Pennsylvania, Michigan, Arkansas, Florida Keys, New Zealand, Patagonia, British Columbia, Bahamas, Iceland, Chile, Belize, Scotland, Slovenia, Japan, Christmas Island, Seychelles, Tasmania, Kamchatka, Tierra del Fuego, Ireland, Kola Peninsula (Russia), Mongolia, Cuba, Maldives.
+### Gear
+- /articles/essential-fly-box-20-patterns — The Essential Fly Box: 20 Patterns Every Angler Needs
+- /articles/complete-guide-fly-rod-selection — The Complete Guide to Fly Rod Selection
 
-### Rivers & Waters
-Individual fly fishing waters with detailed information including species present, best months, flow type (freestone/tailwater/spring creek/saltwater flat), access points with GPS coordinates, regulations, hatch charts, and interactive Mapbox maps. Over 60 rivers and waters worldwide.
-
-Featured rivers: Madison River, Gallatin River, Yellowstone River, Missouri River, Big Hole River, Deschutes River, Henry's Fork, Snake River, South Platte, White River, River Moy, Ponoi River, Eg-Uur River, Jardines de la Reina, North Malé Atoll, and many more.
-
-### Lodges
-Fly fishing lodges and outfitters worldwide. Each listing includes location, pricing, season dates, capacity, amenities, photo galleries, community photos, and direct booking links to the lodge's official website. Over 30 lodges across all destinations.
-
-### Guides
-Professional fly fishing guide services. Profiles include specialties, years of experience, daily rates, rivers covered, and direct contact information. Over 30 guide services worldwide.
-
-### Fly Shops
-Local fly shops with services, hours, brands carried, and contact information. Shops are linked to their local waters and destinations. Over 25 fly shops worldwide.
+### Conservation
+- /articles/conservation-future-wild-trout — Conservation and the Future of Wild Trout
+- /articles/catch-and-release-best-practices — Catch and Release Best Practices
 
 ### Species
-Comprehensive fish species reference with 35+ species profiles. Each species page includes taxonomy, description, habitat, diet, spawning behavior, conservation status, distribution maps, recommended fly patterns, tackle recommendations, and fun facts. Species are categorized by family: Trout, Salmon, Char, Grayling, Saltwater, Warmwater, and Pike. Species images sourced from Wikimedia Commons and NOAA public domain scientific illustrations.
+- /articles/understanding-trout-behavior-through-seasons — Understanding Trout Behavior Through the Seasons
 
-### Articles
-Long-form editorial content organized by category:
-- Techniques (Euro nymphing, tenkara, streamer fishing, dry fly, saltwater)
-- Destination guides (Patagonia, Iceland, etc.)
-- Gear reviews and recommendations (fly rods, essential fly patterns)
-- Conservation and stewardship (wild trout, catch and release)
-- Species guides (trout identification, species behavior)
-- Culture (women in fly fishing, photography)
+### Culture
+- /articles/women-in-fly-fishing-breaking-the-current — Women in Fly Fishing: Breaking the Current
+- /articles/fly-fishing-photography-capturing-the-moment — Fly Fishing Photography: Capturing the Moment
 
-### Community Photos
-Users can submit their fishing photos to any destination, river, lodge, guide, fly shop, or species page. Photos are reviewed by admins before appearing in the community gallery. Each photo can include camera settings (body, lens, aperture, shutter speed, ISO) and captions.
+---
 
 ## Key Pages
 
-- / — Homepage with featured destinations, lodges, rivers, species, and articles
-- /destinations — Browse all 30 fly fishing destinations
-- /destinations/montana — Montana fly fishing guide (showcase destination)
-- /rivers — Browse all 60+ rivers and waters
-- /rivers/madison-river — Madison River complete guide with map and hatch chart
-- /lodges — Browse fly fishing lodges
-- /species — Browse all fish species with family filtering
-- /species/rainbow-trout — Rainbow Trout species profile with distribution map
-- /articles — Read expert articles and instruction
-- /articles/introduction-to-euro-nymphing — Comprehensive euro nymphing guide
-- /guides — Find fly fishing guides
-- /fly-shops — Find local fly shops
-- /search — Search across all content (destinations, rivers, species, lodges, guides, articles)
+- / — Homepage with featured destinations, lodges, rivers, guides, and articles
+- /destinations — Browse all 30 fly fishing destinations worldwide
+- /rivers — Browse all 41 rivers and waters with filtering
+- /species — Browse all 35 fish species with family filtering
+- /lodges — Browse 32 fly fishing lodges with filtering
+- /guides — Find 31 professional fly fishing guide services
+- /fly-shops — Find 27+ local fly shops
+- /articles — Read 16 expert articles and instruction
+- /search — Full-text search across all content types
+- /journal — Personal fishing journal (authenticated users)
 - /about — About Executive Angler
 - /contact — Contact form
 - /privacy — Privacy policy
 - /terms — Terms of service
+- /sitemap.xml — XML sitemap with all content pages
+
+---
+
+## Fishing Journal (App Feature)
+
+Executive Angler includes a Strava-style fishing journal where authenticated users can:
+- Log fishing sessions with date, location, river, weather conditions
+- Record individual catches with species, length, fly used, photo
+- Track flies used and build a personal fly box
+- View session statistics: fish caught, water temp, biggest fish, clarity
+- Browse a feed of their sessions with photo collages or map views
+- Analyze historical performance data over time
+
+The journal data powers the "Angler Intel" and "Activity Pulse" widgets on public river pages, showing real-time community activity without revealing individual user data.
+
+---
 
 ## Technical Details
 
-- Built with Next.js 16, hosted on Vercel
+- Built with Next.js 16 (App Router), hosted on Vercel
+- 250+ statically generated content pages
 - Interactive maps powered by Mapbox GL JS
-- Database: Supabase (PostgreSQL)
-- Schema.org structured data on all entity pages
+- Database: Supabase (PostgreSQL) for user data
+- Schema.org structured data: WebSite, BreadcrumbList, Article, TouristDestination, Place, LodgingBusiness, ProfessionalService, SportingGoodsStore, FAQPage
 - Dynamic sitemap at /sitemap.xml
+- Dynamic OG images at /api/og
 - User authentication via Supabase Auth
 - Photo submissions with admin approval workflow
 - Google Reviews integration for lodges, guides, and fly shops
-- Full-text search across all content types
+- Full-text search across all content types (Cmd+K shortcut)
 - Species images from Wikimedia Commons and NOAA (public domain)
+- Google Analytics 4 + Google Search Console verified
+
+---
 
 ## Contact
 
-Website: https://executiveangler.com
+Website: https://www.executiveangler.com
+Contact: https://www.executiveangler.com/contact

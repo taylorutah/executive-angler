@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "Fish Species Guide",
   description:
     "Explore detailed profiles of the most sought-after fly fishing species — from wild trout and salmon to saltwater game fish. Habitat, tactics, fly patterns, and more.",
+  openGraph: {
+    title: "Fish Species Guide | Executive Angler",
+    description: "Detailed profiles of 35 fly fishing species — trout, salmon, char, saltwater, and warmwater game fish.",
+    images: ["/api/og?title=Fish%20Species%20Guide&subtitle=35%20Species%20Profiles&type=species"],
+  },
 };
 
 export default async function SpeciesListPage() {

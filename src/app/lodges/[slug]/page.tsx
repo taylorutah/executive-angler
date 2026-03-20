@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign } from "lucide-react";
+import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign, Fish } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -22,6 +22,8 @@ import {
   getDestinationById,
   getRiversByDestination,
   getRiversByIds,
+  getArticlesByDestination,
+  getSpeciesByCommonNames,
 } from "@/lib/db";
 
 interface Props {
@@ -70,6 +72,11 @@ export default async function LodgePage({ params }: Props) {
         : Promise.resolve([]),
   ]);
 
+  const [lodgeArticles, lodgeSpecies] = await Promise.all([
+    lodge.destinationId ? getArticlesByDestination(lodge.destinationId) : Promise.resolve([]),
+    dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
+  ]);
+
   const quickFacts = [
     ...(dest ? [{ label: "Destination", value: dest.name }] : []),
     ...(lodge.priceRange
@@ -93,17 +100,26 @@ export default async function LodgePage({ params }: Props) {
           description: lodge.description,
           url: lodge.websiteUrl,
           address: lodge.address,
+          ...(lodge.phone ? { telephone: lodge.phone } : {}),
+          ...(lodge.priceRange ? { priceRange: lodge.priceRange } : {}),
           geo: {
             "@type": "GeoCoordinates",
             latitude: lodge.latitude,
             longitude: lodge.longitude,
           },
           image: lodge.heroImageUrl,
-          ...(lodge.averageRating && {
+          ...(lodge.amenities?.length ? {
+            amenityFeature: lodge.amenities.map((a: string) => ({
+              "@type": "LocationFeatureSpecification",
+              name: a,
+              value: true,
+            })),
+          } : {}),
+          ...((lodge.googleRating || lodge.averageRating) && {
             aggregateRating: {
               "@type": "AggregateRating",
-              ratingValue: lodge.averageRating,
-              reviewCount: lodge.reviewCount,
+              ratingValue: lodge.googleRating || lodge.averageRating,
+              reviewCount: lodge.googleReviewCount || lodge.reviewCount,
             },
           }),
         }}
@@ -258,6 +274,25 @@ export default async function LodgePage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
+              {/* Species in This Area */}
+              {lodgeSpecies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                    Species in This Area
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {lodgeSpecies.map((sp) => (
+                      <Link key={sp.id} href={`/species/${sp.slug}`}>
+                        <Badge variant="forest" size="md">
+                          <Fish className="h-3.5 w-3.5 mr-1.5" />
+                          {sp.commonName}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* Google Reviews */}
               <GoogleReviews
                 googleRating={lodge.googleRating ?? null}
@@ -344,6 +379,31 @@ export default async function LodgePage({ params }: Props) {
                       {lodge.priceRange}
                     </p>
                   )}
+                </div>
+              )}
+
+              {/* Related Articles */}
+              {lodgeArticles.length > 0 && (
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                    Related Articles
+                  </h3>
+                  <div className="space-y-3">
+                    {lodgeArticles.slice(0, 3).map((article) => (
+                      <Link
+                        key={article.id}
+                        href={`/articles/${article.slug}`}
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
+                      >
+                        <p className="text-sm font-medium text-[#E8923A]">
+                          {article.title}
+                        </p>
+                        <p className="text-xs text-[#8B949E] mt-1">
+                          {article.readingTimeMinutes} min read
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

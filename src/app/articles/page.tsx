@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   title: "Fly Fishing Articles & Instruction",
   description:
     "Expert fly fishing articles — techniques, destinations, gear reviews, conservation, and more. Your comprehensive angling library.",
+  openGraph: {
+    title: "Fly Fishing Articles & Instruction | Executive Angler",
+    description: "Expert fly fishing articles — techniques, destinations, gear reviews, conservation, and more.",
+    images: ["/api/og?title=Articles%20%26%20Instruction&subtitle=Expert%20Fly%20Fishing%20Content&type=article"],
+  },
 };
 
 export default async function ArticlesPage() {

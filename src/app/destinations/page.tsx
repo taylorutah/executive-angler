@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   title: "Fly Fishing Destinations",
   description:
     "Explore the world's finest fly fishing destinations — from the Rocky Mountain West to Patagonia, New Zealand, and beyond.",
+  openGraph: {
+    title: "Fly Fishing Destinations | Executive Angler",
+    description: "Explore the world's finest fly fishing destinations — from the Rocky Mountain West to Patagonia, New Zealand, and beyond.",
+    images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=30%20World-Class%20Waters&type=destination"],
+  },
 };
 
 export default async function DestinationsPage() {

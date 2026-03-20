@@ -41,8 +41,8 @@ interface PhotoRow {
 }
 
 const ADMIN_EMAILS = [
-  process.env.NEXT_PUBLIC_ADMIN_EMAIL,
-  "taylor@napcopumps.com",
+  "taylor@executiveangler.com",
+  "taylor.warnick@gmail.com",
 ].filter(Boolean);
 
 export default function AdminPhotosPage() {

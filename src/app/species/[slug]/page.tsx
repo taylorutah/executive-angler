@@ -42,7 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description:
         sp.metaDescription ||
         (sp.description ? sp.description.substring(0, 160) : `Fly fishing guide for ${sp.commonName}.`),
-      images: sp.imageUrl ? [sp.imageUrl] : [],
+      images: [
+        sp.imageUrl ||
+          `${SITE_URL}/api/og?title=${encodeURIComponent(sp.commonName)}&subtitle=${encodeURIComponent("Fly Fishing Species Guide")}&type=species`,
+      ],
     },
     alternates: {
       canonical: `${SITE_URL}/species/${slug}`,
@@ -506,6 +509,96 @@ export default async function SpeciesDetailPage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
+
+              {/* FAQ Section */}
+              {(() => {
+                const faqs: { question: string; answer: string }[] = [];
+                if (sp.preferredHabitat)
+                  faqs.push({
+                    question: `Where do ${sp.commonName} live?`,
+                    answer: sp.preferredHabitat,
+                  });
+                if (sp.diet)
+                  faqs.push({
+                    question: `What do ${sp.commonName} eat?`,
+                    answer: sp.diet,
+                  });
+                if (sp.averageSize)
+                  faqs.push({
+                    question: `How big do ${sp.commonName} get?`,
+                    answer: `${sp.commonName} average ${sp.averageSize}.${sp.recordSize ? ` The world record is ${sp.recordSize}.` : ""}`,
+                  });
+                if (sp.flyFishingTips)
+                  faqs.push({
+                    question: `How do you fly fish for ${sp.commonName}?`,
+                    answer: sp.flyFishingTips,
+                  });
+                if (sp.tackleRecommendations)
+                  faqs.push({
+                    question: `What tackle do you need for ${sp.commonName}?`,
+                    answer: sp.tackleRecommendations,
+                  });
+                if (sp.spawningInfo)
+                  faqs.push({
+                    question: `When do ${sp.commonName} spawn?`,
+                    answer: `${sp.spawningInfo}${sp.spawningTempF ? ` Optimal spawning temperature: ${sp.spawningTempF}.` : ""}`,
+                  });
+                if (sp.conservationStatus)
+                  faqs.push({
+                    question: `What is the conservation status of ${sp.commonName}?`,
+                    answer: `${sp.commonName} are currently classified as ${sp.conservationStatus}. Responsible catch-and-release practices help protect populations for future generations.`,
+                  });
+                if (sp.waterTemperatureRange)
+                  faqs.push({
+                    question: `What water temperature do ${sp.commonName} prefer?`,
+                    answer: `${sp.commonName} thrive in water temperatures of ${sp.waterTemperatureRange}.`,
+                  });
+
+                if (faqs.length === 0) return null;
+                return (
+                  <ScrollAnimation>
+                    <script
+                      type="application/ld+json"
+                      dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                          "@context": "https://schema.org",
+                          "@type": "FAQPage",
+                          mainEntity: faqs.map((faq) => ({
+                            "@type": "Question",
+                            name: faq.question,
+                            acceptedAnswer: {
+                              "@type": "Answer",
+                              text: faq.answer,
+                            },
+                          })),
+                        }),
+                      }}
+                    />
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                      Frequently Asked Questions
+                    </h2>
+                    <div className="space-y-4">
+                      {faqs.map((faq, i) => (
+                        <details
+                          key={i}
+                          className="group bg-[#161B22] rounded-xl border border-[#21262D] shadow-sm"
+                          {...(i === 0 ? { open: true } : {})}
+                        >
+                          <summary className="flex items-center justify-between p-5 cursor-pointer list-none text-[#F0F6FC] font-medium text-sm hover:text-[#E8923A] transition-colors">
+                            {faq.question}
+                            <span className="text-[#484F58] group-open:rotate-180 transition-transform ml-4 shrink-0">
+                              ▾
+                            </span>
+                          </summary>
+                          <div className="px-5 pb-5 pt-0 text-sm text-[#8B949E] leading-relaxed">
+                            {faq.answer}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </ScrollAnimation>
+                );
+              })()}
 
               {/* Community Photos */}
               <CommunityPhotos entityType="species" entityId={sp.id} />

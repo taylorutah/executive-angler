@@ -23,6 +23,7 @@ import {
   getGuidesByDestination,
   getArticlesByDestination,
   getFlyShopsByDestination,
+  getSpeciesByCommonNames,
 } from "@/lib/db";
 
 interface Props {
@@ -42,7 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${dest.name} Fly Fishing`,
       description: dest.metaDescription || dest.tagline,
-      images: [dest.heroImageUrl],
+      images: [
+        dest.heroImageUrl ||
+          `${SITE_URL}/api/og?title=${encodeURIComponent(dest.name)}&subtitle=${encodeURIComponent("Fly Fishing Destination Guide")}&type=destination`,
+      ],
     },
     alternates: {
       canonical: `${SITE_URL}/destinations/${slug}`,
@@ -62,12 +66,13 @@ export default async function DestinationPage({ params }: Props) {
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  const [destRivers, destLodges, destGuides, destArticles, destFlyShops] = await Promise.all([
+  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies] = await Promise.all([
     getRiversByDestination(dest.id),
     getLodgesByDestination(dest.id),
     getGuidesByDestination(dest.id),
     getArticlesByDestination(dest.id),
     getFlyShopsByDestination(dest.id),
+    getSpeciesByCommonNames(dest.primarySpecies || []),
   ]);
 
   const mapMarkers = [
@@ -158,12 +163,22 @@ export default async function DestinationPage({ params }: Props) {
                   </div>
                   {/* Species badges — flex-wrap ensures no overflow on mobile */}
                   <div className="entity-tags mt-4">
-                    {(dest.primarySpecies || []).map((species) => (
-                      <Badge key={species} variant="forest" size="md">
-                        <Fish className="h-3.5 w-3.5 mr-1.5" />
-                        {species}
-                      </Badge>
-                    ))}
+                    {(dest.primarySpecies || []).map((speciesName) => {
+                      const matched = destSpecies.find(
+                        (s) => s.commonName.toLowerCase() === speciesName.toLowerCase()
+                      );
+                      const badge = (
+                        <Badge key={speciesName} variant="forest" size="md">
+                          <Fish className="h-3.5 w-3.5 mr-1.5" />
+                          {speciesName}
+                        </Badge>
+                      );
+                      return matched ? (
+                        <Link key={speciesName} href={`/species/${matched.slug}`}>
+                          {badge}
+                        </Link>
+                      ) : badge;
+                    })}
                   </div>
                 </div>
               </ScrollAnimation>

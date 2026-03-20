@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: "Fly Fishing Lodges",
   description:
     "World-class fly fishing lodges at the world's greatest fisheries — from remote Alaskan fly-outs to Scottish castle beats. Real reviews, pricing, and direct booking links.",
+  openGraph: {
+    title: "Fly Fishing Lodges | Executive Angler",
+    description: "World-class fly fishing lodges — from remote Alaskan fly-outs to Scottish castle beats. Reviews, pricing, and booking.",
+    images: ["/api/og?title=Fly%20Fishing%20Lodges&subtitle=32%20Premier%20Properties&type=destination"],
+  },
 };
 
 export default async function LodgesPage() {

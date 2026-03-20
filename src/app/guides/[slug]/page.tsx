@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, MapPin } from "lucide-react";
+import { ExternalLink, Phone, Mail, Award, MapPin, Fish } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -20,6 +20,8 @@ import {
   getRiversByIds,
   getLodgesByDestination,
   getFlyShopsByDestination,
+  getArticlesByDestination,
+  getSpeciesByCommonNames,
 } from "@/lib/db";
 
 interface Props {
@@ -61,6 +63,11 @@ export default async function GuidePage({ params }: Props) {
     guide.destinationId ? getFlyShopsByDestination(guide.destinationId) : Promise.resolve([]),
   ]);
 
+  const [guideArticles, guideSpecies] = await Promise.all([
+    guide.destinationId ? getArticlesByDestination(guide.destinationId) : Promise.resolve([]),
+    dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
+  ]);
+
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),
     ...(guide.yearsExperience
@@ -78,10 +85,21 @@ export default async function GuidePage({ params }: Props) {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": ["LocalBusiness", "Person"],
+          "@type": "ProfessionalService",
           name: guide.name,
           description: guide.bio,
           url: guide.websiteUrl,
+          ...(guide.photoUrl ? { image: guide.photoUrl } : {}),
+          ...(guide.phone ? { telephone: guide.phone } : {}),
+          ...(guide.email ? { email: guide.email } : {}),
+          ...(guide.dailyRate ? { priceRange: guide.dailyRate } : {}),
+          ...(guide.googleRating && guide.googleReviewCount ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: guide.googleRating,
+              reviewCount: guide.googleReviewCount,
+            },
+          } : {}),
         }}
       />
 
@@ -227,6 +245,24 @@ export default async function GuidePage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
+              {guideSpecies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                    Species in This Area
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {guideSpecies.map((sp) => (
+                      <Link key={sp.id} href={`/species/${sp.slug}`}>
+                        <Badge variant="forest" size="md">
+                          <Fish className="h-3.5 w-3.5 mr-1.5" />
+                          {sp.commonName}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* Google Reviews */}
               <GoogleReviews
                 googleRating={guide.googleRating ?? null}
@@ -288,6 +324,30 @@ export default async function GuidePage({ params }: Props) {
                   )}
                 </div>
               </div>
+
+              {guideArticles.length > 0 && (
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                    Related Articles
+                  </h3>
+                  <div className="space-y-3">
+                    {guideArticles.slice(0, 3).map((article) => (
+                      <Link
+                        key={article.id}
+                        href={`/articles/${article.slug}`}
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
+                      >
+                        <p className="text-sm font-medium text-[#E8923A]">
+                          {article.title}
+                        </p>
+                        <p className="text-xs text-[#8B949E] mt-1">
+                          {article.readingTimeMinutes} min read
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

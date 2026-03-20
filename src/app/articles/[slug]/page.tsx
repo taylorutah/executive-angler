@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, User, Calendar } from "lucide-react";
+import { Clock, User, Calendar, MapPin, Fish } from "lucide-react";
 import Badge from "@/components/ui/Badge";
+import EntityCard from "@/components/ui/EntityCard";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import { SITE_URL } from "@/lib/constants";
-import { getArticleBySlug, getAllArticles } from "@/lib/db";
+import { SITE_URL, SITE_NAME } from "@/lib/constants";
+import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,7 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: article.title,
       description: article.excerpt,
-      images: [article.heroImageUrl],
+      images: [
+        article.heroImageUrl ||
+          `${SITE_URL}/api/og?title=${encodeURIComponent(article.title)}&subtitle=${encodeURIComponent(article.excerpt || "")}&type=article`,
+      ],
       type: "article",
     },
     alternates: {
@@ -47,6 +52,15 @@ export default async function ArticlePage({ params }: Props) {
   const allArticles = await getAllArticles();
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
+  const [relatedDests, relatedRivers] = await Promise.all([
+    article.relatedDestinationIds?.length
+      ? getDestinationsByIds(article.relatedDestinationIds)
+      : Promise.resolve([]),
+    article.relatedRiverIds?.length
+      ? getRiversByIds(article.relatedRiverIds)
+      : Promise.resolve([]),
+  ]);
+
   return (
     <>
       <JsonLd data={{
@@ -56,7 +70,20 @@ export default async function ArticlePage({ params }: Props) {
         description: article.excerpt,
         author: { "@type": "Person", name: article.author },
         datePublished: article.publishedAt,
+        dateModified: article.publishedAt,
         image: article.heroImageUrl,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${SITE_URL}/articles/${article.slug}`,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          logo: {
+            "@type": "ImageObject",
+            url: `${SITE_URL}/images/logo-1200.png`,
+          },
+        },
       }} />
 
       {/* Reading progress bar — CSS scroll-driven */}
@@ -113,6 +140,52 @@ export default async function ArticlePage({ params }: Props) {
           {/* Article body — full width of container */}
           <article className="pb-24">
             <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
+
+            {/* Related Destinations */}
+            {relatedDests.length > 0 && (
+              <div className="mt-16 pt-10 border-t border-[#21262D]">
+                <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6 flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-[#E8923A]" />
+                  Related Destinations
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {relatedDests.map((dest) => (
+                    <EntityCard
+                      key={dest.id}
+                      href={`/destinations/${dest.slug}`}
+                      imageUrl={dest.heroImageUrl}
+                      imageAlt={`Fly fishing in ${dest.name}`}
+                      title={dest.name}
+                      subtitle={dest.tagline}
+                      meta={dest.region}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Related Rivers */}
+            {relatedRivers.length > 0 && (
+              <div className="mt-16 pt-10 border-t border-[#21262D]">
+                <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6 flex items-center gap-2">
+                  <Fish className="h-5 w-5 text-[#E8923A]" />
+                  Related Rivers
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {relatedRivers.map((river) => (
+                    <EntityCard
+                      key={river.id}
+                      href={`/rivers/${river.slug}`}
+                      imageUrl={river.heroImageUrl}
+                      imageAlt={`${river.name} fly fishing`}
+                      title={river.name}
+                      subtitle={river.flowType}
+                      meta={(river.primarySpecies || []).slice(0, 3).join(" · ")}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Divider */}
             <div className="mt-16 pt-10 border-t border-[#21262D]">

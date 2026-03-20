@@ -93,7 +93,7 @@ function buildWelcomeHtml(displayName?: string) {
             <strong style="color:#8B949E;">The Executive Angler Team</strong>
           </p>
           <p style="margin:12px 0 0;font-size:11px;color:#484F58;">
-            <a href="${SITE_URL}/account" style="color:#484F58;text-decoration:underline;">Manage email preferences</a>
+            <a href="${SITE_URL}/account#notifications" style="color:#484F58;text-decoration:underline;">Manage email preferences</a>
             &nbsp;&middot;&nbsp;
             <a href="${SITE_URL}/privacy" style="color:#484F58;text-decoration:underline;">Privacy Policy</a>
           </p>

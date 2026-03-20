@@ -27,6 +27,11 @@ export const metadata: Metadata = {
   title: "Fly Fishing Guides",
   description:
     "Expert fly fishing guides worldwide — profiles, specialties, daily rates, and direct booking links. Thirty-one certified professionals on the world's most storied waters.",
+  openGraph: {
+    title: "Fly Fishing Guides | Executive Angler",
+    description: "31 expert fly fishing guides worldwide — profiles, specialties, daily rates, and direct booking links.",
+    images: ["/api/og?title=Fly%20Fishing%20Guides&subtitle=31%20Expert%20Professionals&type=default"],
+  },
 };
 
 export default async function GuidesPage() {

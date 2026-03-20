@@ -26,6 +26,11 @@ export const metadata: Metadata = {
   title: "Fly Fishing Rivers & Waters",
   description:
     "Explore the world's finest fly fishing rivers with detailed maps, hatch charts, access points, and regulations.",
+  openGraph: {
+    title: "Fly Fishing Rivers & Waters | Executive Angler",
+    description: "Explore the world's finest fly fishing rivers with detailed maps, hatch charts, access points, and regulations.",
+    images: ["/api/og?title=Fly%20Fishing%20Rivers&subtitle=41%20Legendary%20Waters&type=river"],
+  },
 };
 
 export default async function RiversPage() {

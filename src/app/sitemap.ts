@@ -8,10 +8,9 @@ import {
   getAllFlyShops,
   getAllSpecies,
 } from "@/lib/db";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 86400;
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [destinations, rivers, species, lodges, articles, guides, flyShops] =

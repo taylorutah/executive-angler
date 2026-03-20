@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   title: "Fly Shops",
   description:
     "Local knowledge, expert staff, and the right fly for the right river — curated fly shops near the best waters on earth.",
+  openGraph: {
+    title: "Fly Shops | Executive Angler",
+    description: "Curated fly shops near the best waters on earth — local knowledge, expert staff, and the right fly for the right river.",
+    images: ["/api/og?title=Fly%20Shops&subtitle=27%20Curated%20Shops&type=default"],
+  },
 };
 
 export default async function FlyShopsPage() {

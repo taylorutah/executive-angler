@@ -77,7 +77,7 @@ function buildEmailHtml({
         <tr><td style="padding:24px 24px 0;text-align:center;">
           <p style="margin:0;font-size:12px;color:#484F58;line-height:1.5;">
             You received this because of your notification settings.
-            <a href="${SITE_URL}/account" style="color:#484F58;text-decoration:underline;">Manage preferences</a>
+            <a href="${SITE_URL}/account#notifications" style="color:#484F58;text-decoration:underline;">Manage preferences</a>
           </p>
           <p style="margin:8px 0 0;font-size:11px;color:#484F58;">
             &copy; ${new Date().getFullYear()} Executive Angler
@@ -233,6 +233,31 @@ export async function POST(req: NextRequest) {
     console.log(
       `[EMAIL SENT] type=${type} to=${recipientEmail} (${profile.display_name}) from=${actorName} resendId=${emailResult?.id}`
     );
+
+    // Also send push notification (fire-and-forget — don't block email response)
+    const pushTitle = content.subject;
+    const pushBody = type === "follow"
+      ? `${actorName} started following you`
+      : type === "comment"
+      ? `${actorName} commented on your session`
+      : `${actorName} gave kudos on your session`;
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
+    fetch(`${siteUrl}/api/notifications/push`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.WEBHOOK_SECRET
+          ? { "x-webhook-secret": process.env.WEBHOOK_SECRET }
+          : {}),
+      },
+      body: JSON.stringify({
+        recipientId,
+        title: pushTitle,
+        body: pushBody,
+        data: { type, actorId, sessionId },
+      }),
+    }).catch((err) => console.error("[PUSH FIRE-AND-FORGET ERROR]", err));
 
     return NextResponse.json({
       sent: true,

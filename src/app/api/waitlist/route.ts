@@ -1,11 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 import { NextResponse } from "next/server";
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "taylor@executiveangler.com";
 
 function getClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+}
+
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  return new Resend(key);
 }
 
 export async function POST(request: Request) {
@@ -30,6 +39,19 @@ export async function POST(request: Request) {
       }
       console.error("Waitlist insert error:", error);
       return NextResponse.json({ error: "Something went wrong. Try again." }, { status: 500 });
+    }
+
+    // Notify admin of new waitlist signup (fire-and-forget)
+    const resend = getResend();
+    if (resend) {
+      const cleanEmail = email.toLowerCase().trim();
+      const cleanName = name?.trim() || "—";
+      resend.emails.send({
+        from: "Executive Angler <noreply@executiveangler.com>",
+        to: ADMIN_EMAIL,
+        subject: `🎣 New waitlist signup: ${cleanEmail}`,
+        html: `<p><strong>${cleanName}</strong> (${cleanEmail}) just joined the Executive Angler waitlist.</p>`,
+      }).catch((err) => console.error("[WAITLIST NOTIFY ERROR]", err));
     }
 
     return NextResponse.json({ success: true });

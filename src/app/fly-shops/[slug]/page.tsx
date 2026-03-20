@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExternalLink, Phone, MapPin, Clock, Waves, User } from "lucide-react";
+import { ExternalLink, Phone, MapPin, Clock, Waves, User, Fish } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -14,7 +14,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
-import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination } from "@/lib/db";
+import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination, getArticlesByDestination, getSpeciesByCommonNames } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -52,6 +52,11 @@ export default async function FlyShopPage({ params }: Props) {
     shop.destinationId ? getGuidesByDestination(shop.destinationId) : Promise.resolve([]),
   ]);
 
+  const [shopArticles, shopSpecies] = await Promise.all([
+    shop.destinationId ? getArticlesByDestination(shop.destinationId) : Promise.resolve([]),
+    dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
+  ]);
+
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),
     { label: "Address", value: shop.address },
@@ -63,16 +68,25 @@ export default async function FlyShopPage({ params }: Props) {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
+          "@type": "SportingGoodsStore",
           name: shop.name,
           description: shop.description,
           address: shop.address,
           url: shop.websiteUrl,
+          ...(shop.phone ? { telephone: shop.phone } : {}),
           geo: {
             "@type": "GeoCoordinates",
             latitude: shop.latitude,
             longitude: shop.longitude,
           },
+          ...(shop.heroImageUrl ? { image: shop.heroImageUrl } : {}),
+          ...(shop.googleRating && shop.googleReviewCount ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: shop.googleRating,
+              reviewCount: shop.googleReviewCount,
+            },
+          } : {}),
         }}
       />
 
@@ -206,6 +220,24 @@ export default async function FlyShopPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
+              {shopSpecies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                    Species in This Area
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {shopSpecies.map((sp) => (
+                      <Link key={sp.id} href={`/species/${sp.slug}`}>
+                        <Badge variant="forest" size="md">
+                          <Fish className="h-3.5 w-3.5 mr-1.5" />
+                          {sp.commonName}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
               <ScrollAnimation>
                 <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                   Location
@@ -298,6 +330,30 @@ export default async function FlyShopPage({ params }: Props) {
                   </p>
                 </div>
               </div>
+
+              {shopArticles.length > 0 && (
+                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                    Related Articles
+                  </h3>
+                  <div className="space-y-3">
+                    {shopArticles.slice(0, 3).map((article) => (
+                      <Link
+                        key={article.id}
+                        href={`/articles/${article.slug}`}
+                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
+                      >
+                        <p className="text-sm font-medium text-[#E8923A]">
+                          {article.title}
+                        </p>
+                        <p className="text-xs text-[#8B949E] mt-1">
+                          {article.readingTimeMinutes} min read
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

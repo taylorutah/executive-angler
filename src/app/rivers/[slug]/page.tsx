@@ -26,6 +26,7 @@ import {
   getGuidesByRiver,
   getFlyShopsByDestination,
   getArticlesByRiver,
+  getSpeciesByCommonNames,
 } from "@/lib/db";
 
 
@@ -66,7 +67,7 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles] = await Promise.all([
+  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     Promise.all((river.additionalDestinationIds ?? []).map((id) => getDestinationById(id))),
     getLodgesByRiver(river.id),
@@ -74,6 +75,7 @@ export default async function RiverPage({ params }: Props) {
     getGuidesByRiver(river.id),
     river.destinationId ? getFlyShopsByDestination(river.destinationId) : Promise.resolve([]),
     getArticlesByRiver(river.id),
+    getSpeciesByCommonNames(river.primarySpecies || []),
   ]);
 
   // All destinations (primary + additional), filtered to truthy
@@ -176,12 +178,22 @@ export default async function RiverPage({ params }: Props) {
                   </div>
                   {/* Species badges — flex-wrap ensures no overflow on mobile */}
                   <div className="entity-tags mt-4">
-                    {(river.primarySpecies || []).map((species) => (
-                      <Badge key={species} variant="river" size="md">
-                        <Fish className="h-3.5 w-3.5 mr-1.5" />
-                        {species}
-                      </Badge>
-                    ))}
+                    {(river.primarySpecies || []).map((speciesName) => {
+                      const matched = riverSpecies.find(
+                        (s) => s.commonName.toLowerCase() === speciesName.toLowerCase()
+                      );
+                      const badge = (
+                        <Badge key={speciesName} variant="river" size="md">
+                          <Fish className="h-3.5 w-3.5 mr-1.5" />
+                          {speciesName}
+                        </Badge>
+                      );
+                      return matched ? (
+                        <Link key={speciesName} href={`/species/${matched.slug}`}>
+                          {badge}
+                        </Link>
+                      ) : badge;
+                    })}
                   </div>
                 </div>
               </ScrollAnimation>

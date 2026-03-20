@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap');
 @import "tailwindcss";
 
 /* =============================================
@@ -9,8 +8,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: 'DM Serif Display', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-serif: var(--font-dm-serif), Georgia, serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
 
   /* Brand Colors — Abyss Dark Palette (v1.1) */
   --color-bg: #0D1117;          /* Abyss — primary background */

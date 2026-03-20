@@ -15,3 +15,12 @@ export async function getSpeciesBySlug(
 export async function getFeaturedSpecies(): Promise<Species[]> {
   return staticSpecies.filter((s) => s.featured);
 }
+
+export async function getSpeciesByCommonNames(
+  names: string[]
+): Promise<Species[]> {
+  const lower = names.map((n) => n.toLowerCase());
+  return staticSpecies.filter((s) =>
+    lower.includes(s.commonName.toLowerCase())
+  );
+}
