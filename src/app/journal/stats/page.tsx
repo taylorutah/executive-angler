@@ -20,7 +20,7 @@ export default async function StatsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] py-8">
+    <div className="min-h-screen bg-[#0D1117] pt-4 pb-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">

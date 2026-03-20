@@ -275,7 +275,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     <div className="min-h-screen bg-[#0D1117]">
       {cropSrc && <AvatarCropModal imageSrc={cropSrc} onSave={handleCropSave} onCancel={() => setCropSrc(null)} />}
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Welcome banner */}
         {showWelcome && (
           <div className="bg-gradient-to-r from-[#E8923A] to-[#D4782A] text-white rounded-xl p-4 mb-8 flex items-center justify-between">

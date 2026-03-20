@@ -47,7 +47,7 @@ export default async function FeedPage() {
   if (!user) {
     return (
       <main className="min-h-screen bg-[#0D1117]">
-        <div className="mx-auto max-w-xl px-4 pt-32 pb-24 text-center">
+        <div className="mx-auto max-w-xl px-4 pt-12 pb-24 text-center">
           {/* Icon */}
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#161B22] border border-[#21262D]">
             <svg
@@ -273,7 +273,7 @@ export default async function FeedPage() {
 
   return (
     <main className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-2xl px-4 pt-24 pb-16">
+      <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-[#F0F6FC] mb-1">
             Activity Feed

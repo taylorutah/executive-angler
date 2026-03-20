@@ -76,7 +76,7 @@ export default async function FlyBoxPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-24 pb-20">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 pb-20">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

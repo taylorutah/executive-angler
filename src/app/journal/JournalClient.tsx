@@ -199,7 +199,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     filterRivers.length > 0 || filterYears.length > 0 || filterLocations.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-20 lg:pt-0">
+    <div className="min-h-screen bg-[#0D1117]">
       {/* Mobile header */}
       <div className="lg:hidden border-b border-[#21262D] bg-[#161B22] px-4 py-4">
         <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">Journal</h1>

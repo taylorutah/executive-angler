@@ -418,7 +418,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
       <div className="min-h-screen bg-[#0D1117]">
 
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 pt-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 pb-6">
 
           {/* Breadcrumb + Edit */}
           <div className="flex items-center justify-between mb-4">
