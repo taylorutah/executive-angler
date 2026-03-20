@@ -210,6 +210,52 @@ export default async function DashboardPage() {
   // Sort by total sessions descending
   riverStatsArr.sort((a, b) => b.total_sessions - a.total_sessions);
 
+  // Compute enhanced stats matching iOS dashboard
+  const allSessionsList = allSessions || [];
+  const allCatchesList = allCatches || [];
+  const totalSessions = allSessionsList.length;
+  const totalFishAll = allSessionsList.reduce((sum, s) => sum + (s.total_fish || 0), 0);
+  const biggestFish = allCatchesList.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
+  const avgFishPerSession = totalSessions > 0 ? Math.round((totalFishAll / totalSessions) * 10) / 10 : 0;
+  const speciesSet = new Set<string>();
+  allCatchesList.forEach((c) => { if (c.species) speciesSet.add(c.species); });
+  const speciesCount = speciesSet.size;
+
+  // Favorite river (most sessions)
+  let favoriteRiver = "—";
+  if (riverStatsArr.length > 0) {
+    favoriteRiver = riverStatsArr[0].river_name;
+  }
+
+  // This month stats
+  const now = new Date();
+  const monthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const monthSessions = allSessionsList.filter((s) => s.date >= monthStart).length;
+  const monthFish = allSessionsList.filter((s) => s.date >= monthStart).reduce((sum, s) => sum + (s.total_fish || 0), 0);
+
+  // Weekly streak (consecutive weeks with at least one session)
+  let weeklyStreak = 0;
+  if (allSessionsList.length > 0) {
+    const getWeekKey = (d: string) => {
+      const date = new Date(d + "T12:00:00");
+      const jan1 = new Date(date.getFullYear(), 0, 1);
+      const weekNum = Math.ceil(((date.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7);
+      return `${date.getFullYear()}-W${weekNum}`;
+    };
+    const weeksWithSessions = new Set(allSessionsList.map((s) => getWeekKey(s.date)));
+    const currentDate = new Date();
+    let checkDate = new Date(currentDate);
+    while (true) {
+      const wk = getWeekKey(checkDate.toISOString().split("T")[0]);
+      if (weeksWithSessions.has(wk)) {
+        weeklyStreak++;
+        checkDate.setDate(checkDate.getDate() - 7);
+      } else {
+        break;
+      }
+    }
+  }
+
   return (
     <DashboardClient
       user={{ id: user.id, email: user.email ?? "" }}
@@ -225,6 +271,17 @@ export default async function DashboardPage() {
       flyCount={flyCount ?? 0}
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
+      enhancedStats={{
+        totalSessions,
+        totalFish: totalFishAll,
+        biggestFish,
+        avgFishPerSession,
+        speciesCount,
+        favoriteRiver,
+        monthSessions,
+        monthFish,
+        weeklyStreak,
+      }}
     />
   );
 }

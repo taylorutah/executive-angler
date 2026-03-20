@@ -24,6 +24,17 @@ interface DashboardProps {
   flyCount: number;
   gearCount: number;
   riverStats: RiverStats[];
+  enhancedStats: {
+    totalSessions: number;
+    totalFish: number;
+    biggestFish: number;
+    avgFishPerSession: number;
+    speciesCount: number;
+    favoriteRiver: string;
+    monthSessions: number;
+    monthFish: number;
+    weeklyStreak: number;
+  };
 }
 
 function timeAgo(dateStr: string | null): string {
@@ -43,10 +54,11 @@ function formatDate(d: string): string {
 }
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats
+  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats, enhancedStats
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const totalFish = mySessions.reduce((a, s) => a + (s.total_fish ?? 0), 0);
+  const es = enhancedStats;
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
@@ -74,25 +86,77 @@ export default function DashboardClient({
             </div>
           </div>
 
-          {/* Quick stats */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-5">
-            <div className="bg-[#0D1117] rounded-xl p-3 border border-[#21262D]">
-              <p className="text-[10px] text-[#484F58] uppercase tracking-widest">Sessions</p>
-              <p className="font-mono text-2xl font-bold text-[#E8923A] mt-0.5">{mySessions.length}</p>
+          {/* Stats Card — matching iOS dashboard */}
+          <div className="mt-5 rounded-xl border border-[#E8923A]/20 bg-gradient-to-br from-[#161B22] to-[#0D1117] p-5 shadow-lg shadow-[#E8923A]/5">
+            {/* Hero row */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <Target className="h-4 w-4 text-[#8B949E]" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest">Sessions</span>
+                </div>
+                <p className="font-mono text-3xl font-bold text-[#E8923A]">{es.totalSessions}</p>
+              </div>
+              <div className="text-center border-x border-[#21262D]">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <Fish className="h-4 w-4 text-[#8B949E]" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest">Total Fish</span>
+                </div>
+                <p className="font-mono text-3xl font-bold text-[#E8923A]">{es.totalFish}</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <Trophy className="h-4 w-4 text-[#8B949E]" />
+                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest">Biggest</span>
+                </div>
+                <p className="font-mono text-3xl font-bold text-[#E8923A]">
+                  {es.biggestFish > 0 ? <>{es.biggestFish}<span className="text-lg text-[#8B949E] ml-0.5">in</span></> : "—"}
+                </p>
+              </div>
             </div>
-            <div className="bg-[#0D1117] rounded-xl p-3 border border-[#21262D]">
-              <p className="text-[10px] text-[#484F58] uppercase tracking-widest">Fish Caught</p>
-              <p className="font-mono text-2xl font-bold text-[#E8923A] mt-0.5">{totalFish}</p>
+
+            {/* Divider */}
+            <div className="border-t border-[#21262D] mb-4" />
+
+            {/* Secondary metrics */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="text-center">
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-1">Avg/Session</p>
+                <p className="font-mono text-xl font-semibold text-[#F0F6FC]">{es.avgFishPerSession}</p>
+              </div>
+              <div className="text-center border-x border-[#21262D]">
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-1">Species</p>
+                <p className="font-mono text-xl font-semibold text-[#F0F6FC]">{es.speciesCount}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-1">Streak</p>
+                <p className="font-mono text-xl font-semibold text-[#F0F6FC] flex items-center justify-center gap-1">
+                  {es.weeklyStreak > 0 ? (
+                    <><span className="text-orange-400">🔥</span> {es.weeklyStreak}w</>
+                  ) : "—"}
+                </p>
+              </div>
             </div>
-            <div className="bg-[#0D1117] rounded-xl p-3 border border-[#21262D]">
-              <p className="text-[10px] text-[#484F58] uppercase tracking-widest">Favorites</p>
-              <p className="font-mono text-2xl font-bold text-[#E8923A] mt-0.5">{totalFavorites}</p>
-            </div>
-            <div className="bg-[#0D1117] rounded-xl p-3 border border-[#21262D] hidden sm:block">
-              <p className="text-[10px] text-[#484F58] uppercase tracking-widest">Last Session</p>
-              <p className="font-mono text-lg font-bold text-[#E8923A] mt-0.5 leading-tight">
-                {mySessions[0] ? timeAgo(mySessions[0].date) : "\u2014"}
-              </p>
+
+            {/* Divider */}
+            <div className="border-t border-[#21262D] mb-4" />
+
+            {/* This Month + Home Water */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-[#0D1117]/50 rounded-lg p-3">
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-1">This Month</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-lg font-bold text-[#F0F6FC]">{es.monthSessions}</span>
+                  <span className="text-xs text-[#8B949E]">sessions</span>
+                  <span className="text-[#21262D]">·</span>
+                  <span className="font-mono text-lg font-bold text-[#F0F6FC]">{es.monthFish}</span>
+                  <span className="text-xs text-[#8B949E]">fish</span>
+                </div>
+              </div>
+              <div className="bg-[#0D1117]/50 rounded-lg p-3">
+                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-1">Home Water</p>
+                <p className="text-sm font-semibold text-[#E8923A] truncate">{es.favoriteRiver}</p>
+              </div>
             </div>
           </div>
         </div>
