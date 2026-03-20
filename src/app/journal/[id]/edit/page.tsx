@@ -297,7 +297,7 @@ export default function EditSessionPage() {
   const section = "bg-white dark:bg-[#161B22] rounded-xl border border-gray-200 dark:border-[#21262D] p-5 mb-4";
 
   if (loading) return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center pt-20">
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
       <div className="flex flex-col items-center gap-3 text-[#484F58]">
         <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading session…</p>
@@ -307,7 +307,7 @@ export default function EditSessionPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-2xl px-4 pt-24 pb-32">
+      <div className="mx-auto max-w-2xl px-4 pt-6 pb-32">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

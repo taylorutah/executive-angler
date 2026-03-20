@@ -61,7 +61,7 @@ export default function NewFlyPatternPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#161B22] pt-24 pb-12">
+    <div className="min-h-screen bg-[#161B22] pt-6 pb-12">
       <div className="container mx-auto px-4 max-w-2xl">
         <Link
           href="/journal/flies"

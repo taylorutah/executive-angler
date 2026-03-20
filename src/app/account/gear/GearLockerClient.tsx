@@ -273,7 +273,7 @@ export default function GearLockerClient() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] pb-16">
-      <div className="mx-auto max-w-3xl px-4 pt-24">
+      <div className="mx-auto max-w-3xl px-4 pt-6">
         {/* Header */}
         <div className="flex items-center gap-4 mb-2">
           <Link href="/account" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">

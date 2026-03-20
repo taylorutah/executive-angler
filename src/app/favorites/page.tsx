@@ -119,7 +119,7 @@ export default function FavoritesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0D1117] pt-28 px-4">
+      <div className="min-h-screen bg-[#0D1117] pt-6 px-4">
         <div className="mx-auto max-w-3xl">
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map((i) => (
@@ -132,7 +132,7 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-28 pb-20 px-4">
+    <div className="min-h-screen bg-[#0D1117] pt-6 pb-20 px-4">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center gap-3 mb-8">
           <Heart className="h-8 w-8 text-red-500 fill-red-500" />

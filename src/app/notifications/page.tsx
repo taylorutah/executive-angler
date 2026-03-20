@@ -39,7 +39,7 @@ export default async function NotificationsPage() {
 
   return (
     <main className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-2xl px-4 pt-24 pb-16">
+      <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
         <NotificationsClient
           initialNotifications={mapped}
           userId={user.id}

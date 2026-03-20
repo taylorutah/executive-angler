@@ -84,7 +84,7 @@ export default function ResetPasswordPage() {
   const strength = getStrength(password);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4 pt-20">
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">

@@ -118,7 +118,7 @@ export default function SignupPage() {
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
     return (
-      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4 pt-20">
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
           <div className="bg-[#161B22] rounded-xl shadow-md p-8">
             <div className="text-4xl mb-4">✉️</div>
@@ -141,7 +141,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4 pt-20">
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">

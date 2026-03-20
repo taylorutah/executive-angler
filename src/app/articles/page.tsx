@@ -49,7 +49,7 @@ export default async function ArticlesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-20 pb-10 sm:pb-12">
+      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
             Insights &amp; Stories
