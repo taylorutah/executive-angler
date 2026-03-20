@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle } from "lucide-react";
 
-interface USGSConditions {
+interface GaugeReading {
   siteId: string;
   siteName: string;
+  section: string;
   riverId: string;
   timestamp: string;
   discharge?: { value: number; unit: string };
@@ -39,7 +40,8 @@ function getFlowLabel(cfs: number): { label: string; color: string } {
 }
 
 export default function RiverConditionsCard({ riverId }: { riverId: string }) {
-  const [conditions, setConditions] = useState<USGSConditions | null>(null);
+  const [gauges, setGauges] = useState<GaugeReading[]>([]);
+  const [selectedIdx, setSelectedIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -53,7 +55,9 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
           return;
         }
         const data = await res.json();
-        if (!cancelled) setConditions(data);
+        if (!cancelled && data.gauges) {
+          setGauges(data.gauges);
+        }
       } catch {
         if (!cancelled) setError(true);
       } finally {
@@ -61,7 +65,6 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
       }
     }
     load();
-    // Refresh every 15 minutes
     const interval = setInterval(load, 15 * 60 * 1000);
     return () => {
       cancelled = true;
@@ -82,11 +85,11 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
     );
   }
 
-  if (error || !conditions) return null; // No gauge configured — hide gracefully
+  if (error || gauges.length === 0) return null;
 
-  const flow = conditions.discharge
-    ? getFlowLabel(conditions.discharge.value)
-    : null;
+  const active = gauges[selectedIdx] ?? gauges[0];
+  const flow = active.discharge ? getFlowLabel(active.discharge.value) : null;
+  const hasMultiple = gauges.length > 1;
 
   return (
     <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
@@ -100,27 +103,46 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
         </span>
       </div>
 
-      {conditions.stale && (
+      {/* Section tabs — only if multiple gauges */}
+      {hasMultiple && (
+        <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+          {gauges.map((g, idx) => (
+            <button
+              key={g.siteId}
+              onClick={() => setSelectedIdx(idx)}
+              className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
+                idx === selectedIdx
+                  ? "bg-[#E8923A] text-white"
+                  : "bg-[#0D1117] text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#21262D]"
+              }`}
+            >
+              {g.section}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {active.stale && (
         <div className="flex items-center gap-2 mb-3 p-2 bg-amber-500/10 rounded-lg text-xs text-amber-400">
           <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-          <span>Reading may be delayed — last update {formatTimestamp(conditions.timestamp)}</span>
+          <span>Reading may be delayed — last update {formatTimestamp(active.timestamp)}</span>
         </div>
       )}
 
       <div className="space-y-3">
         {/* Discharge / Flow */}
-        {conditions.discharge && (
+        {active.discharge && (
           <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <Waves className="h-4.5 w-4.5 text-blue-400" />
+                <Waves className="h-4 w-4 text-blue-400" />
               </div>
               <div>
-                <p className="text-xs text-[#484F58] font-medium uppercase tracking-wide">
+                <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
                   Streamflow
                 </p>
                 <p className="text-sm font-semibold text-[#F0F6FC]">
-                  {conditions.discharge.value.toLocaleString()}{" "}
+                  {active.discharge.value.toLocaleString()}{" "}
                   <span className="text-[#484F58] font-normal">cfs</span>
                 </p>
               </div>
@@ -134,18 +156,18 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
         )}
 
         {/* Gage Height */}
-        {conditions.gageHeight && (
+        {active.gageHeight && (
           <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-[#E8923A]/10 flex items-center justify-center">
-                <ArrowUpDown className="h-4.5 w-4.5 text-[#E8923A]" />
+                <ArrowUpDown className="h-4 w-4 text-[#E8923A]" />
               </div>
               <div>
-                <p className="text-xs text-[#484F58] font-medium uppercase tracking-wide">
+                <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
                   Gage Height
                 </p>
                 <p className="text-sm font-semibold text-[#F0F6FC]">
-                  {conditions.gageHeight.value}{" "}
+                  {active.gageHeight.value}{" "}
                   <span className="text-[#484F58] font-normal">ft</span>
                 </p>
               </div>
@@ -154,20 +176,20 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
         )}
 
         {/* Water Temperature */}
-        {conditions.waterTemp && (
+        {active.waterTemp && (
           <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                <Thermometer className="h-4.5 w-4.5 text-emerald-400" />
+                <Thermometer className="h-4 w-4 text-emerald-400" />
               </div>
               <div>
-                <p className="text-xs text-[#484F58] font-medium uppercase tracking-wide">
+                <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
                   Water Temp
                 </p>
                 <p className="text-sm font-semibold text-[#F0F6FC]">
-                  {conditions.waterTemp.valueFahrenheit}°F{" "}
+                  {active.waterTemp.valueFahrenheit}°F{" "}
                   <span className="text-[#484F58] font-normal">
-                    / {conditions.waterTemp.valueCelsius}°C
+                    / {active.waterTemp.valueCelsius}°C
                   </span>
                 </p>
               </div>
@@ -180,7 +202,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
       <div className="mt-4 flex items-center gap-1.5 text-[10px] text-[#484F58]">
         <Clock className="h-3 w-3" />
         <span>
-          {formatTimestamp(conditions.timestamp)} &middot; {conditions.source}
+          {formatTimestamp(active.timestamp)} &middot; USGS {active.siteId}
         </span>
       </div>
     </div>
