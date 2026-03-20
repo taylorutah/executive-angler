@@ -95,27 +95,30 @@ function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
 
       <Divider />
 
-      {/* This Month bar */}
-      <div className="flex items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2">
-          <Flame className="h-3 w-3 text-[#E8923A]" />
-          <span className="text-[10px] font-bold text-[#8B949E] tracking-[0.1em]">THIS MONTH</span>
+      {/* Bottom bar — This Month + Home Water side by side on desktop, stacked on mobile */}
+      <div className="lg:grid lg:grid-cols-2 lg:divide-x lg:divide-[#21262D]">
+        {/* This Month */}
+        <div className="flex items-center justify-between px-5 py-3">
+          <div className="flex items-center gap-2">
+            <Flame className="h-3 w-3 text-[#E8923A]" />
+            <span className="text-[10px] font-bold text-[#8B949E] tracking-[0.1em]">THIS MONTH</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <MonthPill value={es.monthSessions} label="sessions" />
+            <MonthPill value={es.monthFish} label="fish" />
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <MonthPill value={es.monthSessions} label="sessions" />
-          <MonthPill value={es.monthFish} label="fish" />
-        </div>
-      </div>
 
-      <Divider />
+        <div className="block lg:hidden"><Divider /></div>
 
-      {/* Home Water footer */}
-      <div className="flex items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-3 w-3 text-[#E8923A]/60" />
-          <span className="text-[10px] font-bold text-[#8B949E] tracking-[0.08em]">HOME WATER</span>
+        {/* Home Water */}
+        <div className="flex items-center justify-between px-5 py-3">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-3 w-3 text-[#E8923A]/60" />
+            <span className="text-[10px] font-bold text-[#8B949E] tracking-[0.08em]">HOME WATER</span>
+          </div>
+          <span className="font-mono text-sm font-semibold text-[#F0F6FC] truncate max-w-[200px]">{es.favoriteRiver}</span>
         </div>
-        <span className="font-mono text-sm font-semibold text-[#F0F6FC] truncate max-w-[200px]">{es.favoriteRiver}</span>
       </div>
     </div>
   );

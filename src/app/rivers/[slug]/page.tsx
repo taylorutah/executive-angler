@@ -16,6 +16,7 @@ import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
+import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -414,6 +415,8 @@ export default async function RiverPage({ params }: Props) {
             {/* Sidebar */}
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
+
+              <RiverConditionsCard riverId={river.id} />
 
               <RiverActivityPulse riverId={river.id} />
 
