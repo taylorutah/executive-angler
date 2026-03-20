@@ -4,11 +4,11 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell, Users } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
-// Map award_key → SVG badge file in /public/badges/
+
 const BADGE_SVG_MAP: Record<string, string> = {
   first_timer: "/badges/sessions_10.svg",
   regular: "/badges/sessions_50.svg",
@@ -18,7 +18,6 @@ const BADGE_SVG_MAP: Record<string, string> = {
   master_angler: "/badges/catches_1000.svg",
   consistent_producer: "/badges/catches_500.svg",
   species_hunter: "/badges/species_5.svg",
-  // Global milestones (if used)
   sessions_10: "/badges/sessions_10.svg",
   sessions_50: "/badges/sessions_50.svg",
   sessions_100: "/badges/sessions_100.svg",
@@ -35,6 +34,8 @@ const BADGE_SVG_MAP: Record<string, string> = {
   streak_4: "/badges/streak_4.svg",
   streak_12: "/badges/streak_12.svg",
 };
+
+type Section = "overview" | "profile" | "notifications" | "security" | "connected";
 
 interface Props {
   user: {
@@ -78,6 +79,17 @@ interface Props {
 
 export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs }: Props) {
   const router = useRouter();
+
+  // Determine initial section from URL hash
+  const getInitialSection = (): Section => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
+      if (["overview", "profile", "notifications", "security", "connected"].includes(hash)) return hash as Section;
+    }
+    return "overview";
+  };
+
+  const [activeSection, setActiveSection] = useState<Section>(getInitialSection);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [username, setUsername] = useState(user.username || "");
   const [bio, setBio] = useState(user.bio || "");
@@ -107,7 +119,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [notifSaving, setNotifSaving] = useState(false);
   const [notifSaved, setNotifSaved] = useState(false);
 
-  // Username availability state
+  // Username availability
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [usernameChecking, setUsernameChecking] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -115,59 +127,47 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const checkUsername = useCallback(
     async (val: string) => {
       const clean = val.trim().toLowerCase();
-      if (!clean || clean.length < 3) {
-        setUsernameAvailable(null);
-        return;
-      }
-      if (clean === (user.username || "").toLowerCase()) {
-        setUsernameAvailable(true);
-        return;
-      }
+      if (!clean || clean.length < 3) { setUsernameAvailable(null); return; }
+      if (clean === (user.username || "").toLowerCase()) { setUsernameAvailable(true); return; }
       setUsernameChecking(true);
       try {
-        const res = await fetch(
-          `/api/user/username/check?username=${encodeURIComponent(clean)}&current=${encodeURIComponent((user.username || "").toLowerCase())}`
-        );
+        const res = await fetch(`/api/user/username/check?username=${encodeURIComponent(clean)}&current=${encodeURIComponent((user.username || "").toLowerCase())}`);
         const data = await res.json();
         setUsernameAvailable(data.available);
-      } catch {
-        setUsernameAvailable(null);
-      } finally {
-        setUsernameChecking(false);
-      }
+      } catch { setUsernameAvailable(null); } finally { setUsernameChecking(false); }
     },
     [user.username]
   );
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (!username) {
-      setUsernameAvailable(null);
-      setUsernameChecking(false);
-      return;
-    }
-    debounceRef.current = setTimeout(() => {
-      checkUsername(username);
-    }, 600);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
+    if (!username) { setUsernameAvailable(null); setUsernameChecking(false); return; }
+    debounceRef.current = setTimeout(() => checkUsername(username), 600);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [username, checkUsername]);
 
-  // Check if Google account is linked
   useEffect(() => {
     async function checkGoogleLinked() {
       const supabase = createClient();
       const { data } = await supabase.auth.getUser();
-      if (data.user?.identities) {
-        const hasGoogle = data.user.identities.some((identity) => identity.provider === "google");
-        setGoogleLinked(hasGoogle);
-      }
+      if (data.user?.identities) setGoogleLinked(data.user.identities.some((i) => i.provider === "google"));
     }
     checkGoogleLinked();
   }, []);
 
-  // Step 1: file selected → show crop modal
+  // Handle hash navigation
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (["overview", "profile", "notifications", "security", "connected"].includes(hash)) {
+      setActiveSection(hash as Section);
+    }
+  }, []);
+
+  function navigateSection(section: Section) {
+    setActiveSection(section);
+    window.history.replaceState(null, "", `#${section}`);
+  }
+
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -177,7 +177,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     reader.readAsDataURL(file);
   }
 
-  // Step 2: crop confirmed → upload blob
   async function handleCropSave(blob: Blob) {
     setCropSrc(null);
     setAvatarUploading(true);
@@ -186,47 +185,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
       fd.append("avatar", blob, "avatar.jpg");
       const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to upload avatar");
-        return;
-      }
+      if (!res.ok) { alert(data.error || "Failed to upload avatar"); return; }
       if (data.url) setAvatarUrl(data.url + `?t=${Date.now()}`);
-    } catch (err) {
-      console.error("Avatar upload error:", err);
-      alert("Failed to upload avatar. Please try again.");
-    } finally {
-      setAvatarUploading(false);
-    }
+    } catch { alert("Failed to upload avatar."); } finally { setAvatarUploading(false); }
   }
 
-  const saveDisabled =
-    saving ||
-    (username.length >= 3 && usernameAvailable === false) ||
-    usernameChecking;
+  const saveDisabled = saving || (username.length >= 3 && usernameAvailable === false) || usernameChecking;
 
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
     if (saveDisabled) return;
     setSaving(true);
     const supabase = createClient();
-
     const cleanUsername = username.trim().toLowerCase() || null;
-
     await supabase.auth.updateUser({ data: { display_name: displayName } });
-
     await supabase.from("profiles").upsert(
-      {
-        user_id: user.id,
-        display_name: displayName,
-        username: cleanUsername,
-        bio: bio || null,
-        home_location: homeLocation || null,
-        is_private: isPrivate,
-        feed_display: feedDisplay,
-      },
+      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, feed_display: feedDisplay },
       { onConflict: "user_id" }
     );
-
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -236,7 +212,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     e.preventDefault();
     setPwError("");
     if (newPassword !== confirmPassword) { setPwError("Passwords don't match"); return; }
-    if (newPassword.length < 8) { setPwError("Password must be at least 8 characters"); return; }
+    if (newPassword.length < 8) { setPwError("Min 8 characters"); return; }
     const supabase = createClient();
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) { setPwError(error.message); return; }
@@ -248,13 +224,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   async function handleLinkGoogle() {
     setGoogleLinking(true);
     const supabase = createClient();
-    await supabase.auth.linkIdentity({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin + "/auth/callback?next=/account",
-      },
-    });
-    // Browser will redirect to Google OAuth, no need to reset loading
+    await supabase.auth.linkIdentity({ provider: "google", options: { redirectTo: window.location.origin + "/auth/callback?next=/account" } });
   }
 
   async function handleSaveNotifications() {
@@ -277,464 +247,421 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     router.push("/");
   }
 
-  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-3 text-[#F0F6FC] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-  const labelCls = "block text-sm font-medium text-[#8B949E] mb-1";
+  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] transition-colors";
+  const labelCls = "block text-sm font-medium text-[#8B949E] mb-1.5";
 
-  const statCards = [
-    { icon: BookOpen, label: "Sessions", value: stats.totalSessions, color: "text-[#E8923A]" },
-    { icon: Fish, label: "Fish Caught", value: stats.totalFish, color: "text-blue-600" },
-    { icon: MapPin, label: "Rivers Fished", value: stats.totalRivers, color: "text-amber-600" },
-    { icon: Feather, label: "Fly Patterns", value: stats.totalFlies, color: "text-purple-600" },
-    { icon: Heart, label: "Favorites", value: stats.totalFavorites, color: "text-red-500" },
+  const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
+    { key: "overview", icon: User, label: "Overview" },
+    { key: "profile", icon: Settings, label: "Edit Profile" },
+    { key: "notifications", icon: Bell, label: "Notifications" },
+    { key: "security", icon: Key, label: "Security" },
+    { key: "connected", icon: Link2, label: "Connected Accounts" },
+  ];
+
+  // ─── Quick nav cards ───
+  const quickLinks = [
+    { href: "/journal", icon: BookOpen, label: "Fishing Journal", sub: `${stats.totalSessions} sessions`, color: "text-[#E8923A]", bg: "bg-[#E8923A]/10" },
+    { href: "/journal/flies", icon: Feather, label: "Fly Patterns", sub: `${stats.totalFlies} patterns`, color: "text-purple-400", bg: "bg-purple-400/10" },
+    { href: "/account/gear", icon: Package, label: "Gear Locker", sub: "Rods, reels & more", color: "text-[#0BA5C7]", bg: "bg-[#0BA5C7]/10" },
+    { href: "/favorites", icon: Heart, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-red-400", bg: "bg-red-400/10" },
   ];
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
-      {/* Avatar crop modal */}
-      {cropSrc && (
-        <AvatarCropModal
-          imageSrc={cropSrc}
-          onSave={handleCropSave}
-          onCancel={() => { setCropSrc(null); }}
-        />
-      )}
-      <div className="mx-auto max-w-3xl px-4 pt-24 pb-16">
+      {cropSrc && <AvatarCropModal imageSrc={cropSrc} onSave={handleCropSave} onCancel={() => setCropSrc(null)} />}
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         {/* Welcome banner */}
         {showWelcome && (
-          <div className="bg-[#E8923A] text-[#0D1117] rounded-lg p-4 mb-6 flex items-center justify-between">
-            <p className="font-medium">Welcome to Executive Angler! Complete your profile below.</p>
-            <button onClick={() => setShowWelcome(false)} className="text-[#0D1117] hover:text-[#161B22] transition-colors">
+          <div className="bg-gradient-to-r from-[#E8923A] to-[#D4782A] text-white rounded-xl p-4 mb-8 flex items-center justify-between">
+            <p className="font-medium">Welcome to Executive Angler! Set up your profile below to get started.</p>
+            <button onClick={() => setShowWelcome(false)} className="text-white/80 hover:text-white transition-colors ml-4 flex-shrink-0">
               <X className="h-5 w-5" />
             </button>
           </div>
         )}
-        {/* Profile header */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="relative flex-shrink-0">
-            <label className="cursor-pointer group">
-              <div className="h-16 w-16 rounded-xl overflow-hidden bg-[#E8923A]/10 border-2 border-white shadow-md flex items-center justify-center">
-                {avatarUrl ? (
-                  <Image src={avatarUrl} alt="Avatar" width={64} height={64} className="object-cover w-full h-full" />
-                ) : (
-                  <span className="text-2xl font-bold text-[#E8923A]">{(displayName || user.email)[0].toUpperCase()}</span>
-                )}
-              </div>
-              <div className="absolute inset-0 rounded-xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                {avatarUploading ? (
-                  <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <Camera className="h-5 w-5 text-white" />
-                )}
-              </div>
-              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-            </label>
-          </div>
+
+        {/* ─── Profile header (full width) ─── */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8">
+          <label className="cursor-pointer group relative flex-shrink-0">
+            <div className="h-20 w-20 rounded-2xl overflow-hidden bg-[#E8923A]/10 border-2 border-[#21262D] shadow-lg flex items-center justify-center">
+              {avatarUrl ? (
+                <Image src={avatarUrl} alt="Avatar" width={80} height={80} className="object-cover w-full h-full" />
+              ) : (
+                <span className="text-3xl font-bold text-[#E8923A]">{(displayName || user.email)[0].toUpperCase()}</span>
+              )}
+            </div>
+            <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              {avatarUploading ? (
+                <div className="h-5 w-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Camera className="h-5 w-5 text-white" />
+              )}
+            </div>
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+          </label>
+
           <div className="flex-1 min-w-0">
-            <h1 className="font-heading text-[#E8923A] text-2xl font-bold truncate">{displayName || "Angler"}</h1>
-            {username && (
-              <p className="text-sm text-[#8B949E] truncate">@{username}</p>
-            )}
-            <p className="text-sm text-[#484F58] truncate">{user.email}</p>
+            <div className="flex items-center gap-3">
+              <h1 className="font-heading text-2xl font-bold text-[#F0F6FC] truncate">{displayName || "Angler"}</h1>
+              {username && <span className="text-sm text-[#8B949E] font-mono">@{username}</span>}
+            </div>
+            <p className="text-sm text-[#484F58] mt-0.5">{user.email}</p>
             {socialCounts && (
-              <div className="flex items-center gap-3 mt-1.5">
-                <Link
-                  href={`/anglers/${username || user.id}?tab=followers`}
-                  className="flex items-center gap-1 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors"
-                >
-                  <Users className="h-3.5 w-3.5" />
-                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.followers}</span>
-                  <span>follower{socialCounts.followers !== 1 ? "s" : ""}</span>
+              <div className="flex items-center gap-4 mt-2">
+                <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </Link>
-                <span className="text-[#21262D]">|</span>
-                <Link
-                  href={`/anglers/${username || user.id}?tab=following`}
-                  className="flex items-center gap-1 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors"
-                >
-                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.following}</span>
-                  <span>following</span>
+                <span className="text-[#21262D]">·</span>
+                <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.following}</span> following
                 </Link>
               </div>
             )}
           </div>
-          <button onClick={handleSignOut}
-            className="inline-flex items-center gap-1.5 text-sm text-[#484F58] hover:text-red-600 transition-colors">
-            <LogOut className="h-4 w-4" />
+
+          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[#484F58] hover:text-red-400 transition-colors border border-[#21262D] rounded-lg px-4 py-2 hover:border-red-800">
+            <LogOut className="h-4 w-4" /> Sign Out
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
-          {statCards.map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="bg-[#161B22] rounded-xl p-4 shadow-sm text-center">
-              <Icon className={`h-6 w-6 mx-auto mb-1 ${color}`} />
-              <p className="text-2xl font-bold text-[#F0F6FC]">{value}</p>
-              <p className="text-xs text-[#8B949E]">{label}</p>
-            </div>
+        {/* ─── Quick nav cards (full width, horizontal) ─── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {quickLinks.map(({ href, icon: Icon, label, sub, color, bg }) => (
+            <Link key={href} href={href}
+              className="group flex items-center gap-3 bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#E8923A]/40 transition-all hover:shadow-lg hover:shadow-[#E8923A]/5">
+              <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center flex-shrink-0`}>
+                <Icon className={`h-5 w-5 ${color}`} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-[#F0F6FC] text-sm truncate">{label}</p>
+                <p className="text-xs text-[#8B949E]">{sub}</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#21262D] group-hover:text-[#8B949E] transition-colors flex-shrink-0" />
+            </Link>
           ))}
         </div>
 
-        {/* Personal Bests */}
-        {(stats.biggestFish || stats.bestSession) && (
-          <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-            <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
-              <Trophy className="h-5 w-5 text-amber-500" /> Personal Bests
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {stats.biggestFish && (
-                <div className="rounded-lg bg-[#0D1117] p-4">
-                  <p className="text-xs text-[#8B949E] mb-1">Biggest Fish</p>
-                  <p className="text-2xl font-bold text-[#E8923A]">{stats.biggestFish?.toFixed(1)}&quot;</p>
-                </div>
-              )}
-              {stats.bestSession && (
-                <div className="rounded-lg bg-[#0D1117] p-4">
-                  <p className="text-xs text-[#8B949E] mb-1">Best Day</p>
-                  <p className="text-lg font-bold text-[#E8923A]">{stats.bestSession.total_fish} fish</p>
-                  <p className="text-sm text-[#8B949E]">
-                    {stats.bestSession.river_name} · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {/* ─── Sidebar + Main Content ─── */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left sidebar nav */}
+          <aside className="lg:w-56 flex-shrink-0">
+            <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 lg:sticky lg:top-24">
+              {sidebarItems.map(({ key, icon: Icon, label }) => (
+                <button
+                  key={key}
+                  onClick={() => navigateSection(key)}
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                    activeSection === key
+                      ? "bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20"
+                      : "text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#161B22]"
+                  }`}
+                >
+                  <Icon className="h-4 w-4 flex-shrink-0" />
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </aside>
 
-        {/* Achievements */}
-        {awards.length > 0 && (
-          <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-            <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
-              <span className="text-xl">🏆</span> Achievements
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {awards.map((award, i) => {
-                const badgeSrc = BADGE_SVG_MAP[award.award_key];
-                return (
-                  <div key={i} className="flex items-center gap-3 rounded-lg bg-[#0D1117] p-3">
-                    <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden">
-                      {badgeSrc ? (
-                        <Image
-                          src={badgeSrc}
-                          alt={award.metadata.display_name || award.award_key}
-                          width={48}
-                          height={48}
-                          className="w-full h-full"
-                        />
-                      ) : (
-                        <div
-                          className="w-full h-full rounded-full flex items-center justify-center border-2"
-                          style={{ backgroundColor: `${award.metadata.badge_color || "#E8923A"}20`, borderColor: award.metadata.badge_color || "#E8923A" }}
-                        >
-                          <span className="text-xl">{award.metadata.badge_icon || "🏆"}</span>
+          {/* Right main content */}
+          <main className="flex-1 min-w-0">
+            {/* ═══════ OVERVIEW ═══════ */}
+            {activeSection === "overview" && (
+              <div className="space-y-6">
+                {/* Stats row */}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  {[
+                    { icon: BookOpen, label: "Sessions", value: stats.totalSessions, color: "text-[#E8923A]" },
+                    { icon: Fish, label: "Fish Caught", value: stats.totalFish, color: "text-blue-400" },
+                    { icon: MapPin, label: "Rivers", value: stats.totalRivers, color: "text-amber-500" },
+                    { icon: Feather, label: "Fly Patterns", value: stats.totalFlies, color: "text-purple-400" },
+                    { icon: Heart, label: "Favorites", value: stats.totalFavorites, color: "text-red-400" },
+                  ].map(({ icon: Icon, label, value, color }) => (
+                    <div key={label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
+                      <Icon className={`h-5 w-5 mx-auto mb-1.5 ${color}`} />
+                      <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{value}</p>
+                      <p className="text-xs text-[#8B949E] mt-0.5">{label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Personal bests */}
+                {(stats.biggestFish || stats.bestSession) && (
+                  <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
+                    <h3 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Trophy className="h-4 w-4 text-amber-500" /> Personal Bests
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {stats.biggestFish && (
+                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4">
+                          <p className="text-xs text-[#8B949E] mb-1">Biggest Fish</p>
+                          <p className="text-2xl font-bold text-[#E8923A] font-mono">{stats.biggestFish.toFixed(1)}&quot;</p>
+                        </div>
+                      )}
+                      {stats.bestSession && (
+                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4">
+                          <p className="text-xs text-[#8B949E] mb-1">Best Day</p>
+                          <p className="text-lg font-bold text-[#E8923A] font-mono">{stats.bestSession.total_fish} fish</p>
+                          <p className="text-xs text-[#8B949E] mt-0.5">
+                            {stats.bestSession.river_name} · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
+                          </p>
                         </div>
                       )}
                     </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-[#F0F6FC] text-sm leading-tight">{award.metadata.display_name || award.award_key}</p>
-                      {award.river_name && <p className="text-xs text-[#E8923A] truncate">{award.river_name}</p>}
-                      <p className="text-xs text-[#8B949E]">{award.metadata.description}</p>
+                  </div>
+                )}
+
+                {/* Achievements — compact inline strip */}
+                {awards.length > 0 && (
+                  <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider flex items-center gap-2">
+                        <Award className="h-4 w-4 text-amber-500" /> Achievements
+                      </h3>
+                      <span className="text-xs text-[#484F58] font-mono">{awards.length} earned</span>
+                    </div>
+                    {/* Compact badge grid — small circles with tooltips */}
+                    <div className="flex flex-wrap gap-2">
+                      {awards.slice(0, 20).map((award, i) => {
+                        const badgeSrc = BADGE_SVG_MAP[award.award_key];
+                        return (
+                          <div key={i} className="group relative">
+                            <div className="w-10 h-10 rounded-full overflow-hidden bg-[#0D1117] border border-[#21262D] hover:border-[#E8923A]/40 transition-colors cursor-default flex items-center justify-center">
+                              {badgeSrc ? (
+                                <Image src={badgeSrc} alt={award.metadata.display_name || award.award_key} width={32} height={32} className="w-8 h-8" />
+                              ) : (
+                                <span className="text-sm">{award.metadata.badge_icon || "🏆"}</span>
+                              )}
+                            </div>
+                            {/* Tooltip */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-[#1F2937] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
+                              <p className="font-semibold">{award.metadata.display_name || award.award_key}</p>
+                              {award.river_name && <p className="text-[#E8923A]">{award.river_name}</p>}
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-[#1F2937]" />
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {awards.length > 20 && (
+                        <div className="w-10 h-10 rounded-full bg-[#0D1117] border border-[#21262D] flex items-center justify-center">
+                          <span className="text-xs text-[#8B949E] font-mono">+{awards.length - 20}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Quick links */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-          <Link href="/journal"
-            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-            <BookOpen className="h-5 w-5 text-[#E8923A]" />
-            <div>
-              <p className="font-medium text-[#F0F6FC] text-sm">Fishing Journal</p>
-              <p className="text-xs text-[#8B949E]">{stats.totalSessions} sessions</p>
-            </div>
-          </Link>
-          <Link href="/journal/flies"
-            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-            <span className="text-xl leading-none">🪰</span>
-            <div>
-              <p className="font-medium text-[#F0F6FC] text-sm">Fly Patterns</p>
-              <p className="text-xs text-[#8B949E]">{stats.totalFlies} patterns</p>
-            </div>
-          </Link>
-          <Link href="/favorites"
-            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-            <Heart className="h-5 w-5 text-red-500" />
-            <div>
-              <p className="font-medium text-[#F0F6FC] text-sm">Favorites</p>
-              <p className="text-xs text-[#8B949E]">{stats.totalFavorites} saved</p>
-            </div>
-          </Link>
-          <Link href="/account/gear"
-            className="flex items-center gap-3 bg-[#161B22] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow col-span-2 sm:col-span-1">
-            <Package className="h-5 w-5 text-[#0BA5C7]" />
-            <div>
-              <p className="font-medium text-[#F0F6FC] text-sm">Gear Locker</p>
-              <p className="text-xs text-[#8B949E]">Rods, reels &amp; more</p>
-            </div>
-          </Link>
-        </div>
-
-        {/* Profile settings */}
-        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Profile</h2>
-          <form onSubmit={handleSaveProfile} className="space-y-4">
-            <div>
-              <label className={labelCls}>Display Name</label>
-              <input className={inputCls} value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" />
-            </div>
-
-            {/* Username (optional) */}
-            <div>
-              <label className={labelCls}>Username (optional)</label>
-              <div className="relative flex items-center">
-                <span className="absolute left-4 text-[#8B949E] pointer-events-none select-none">@</span>
-                <input
-                  className={inputCls + " pl-8 pr-10"}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase())}
-                  placeholder="yourhandle"
-                  maxLength={30}
-                />
-                {username.length >= 3 && (
-                  <span className="absolute right-3 text-sm pointer-events-none">
-                    {usernameChecking ? (
-                      <span className="text-[#8B949E]">…</span>
-                    ) : usernameAvailable === true ? (
-                      <span className="text-green-500">✓</span>
-                    ) : usernameAvailable === false ? (
-                      <span className="text-red-500">✗</span>
-                    ) : null}
-                  </span>
                 )}
               </div>
-              {username.length >= 3 && usernameAvailable === false && (
-                <p className="text-xs text-red-500 mt-1">That username is taken.</p>
-              )}
-              <p className="text-xs text-[#484F58] mt-1">Set a custom handle, e.g. @john_smith. Leave blank to use your name.</p>
-            </div>
+            )}
 
-            {/* Bio */}
-            <div>
-              <label className={labelCls}>Bio</label>
-              <textarea
-                className={inputCls + " resize-none"}
-                rows={3}
-                maxLength={160}
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="Tell other anglers about yourself…"
-              />
-              <p className="text-xs text-[#484F58] mt-1 text-right">{bio.length}/160</p>
-            </div>
+            {/* ═══════ EDIT PROFILE ═══════ */}
+            {activeSection === "profile" && (
+              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Edit Profile</h2>
+                <form onSubmit={handleSaveProfile} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className={labelCls}>Display Name</label>
+                      <input className={inputCls} value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Username</label>
+                      <div className="relative flex items-center">
+                        <span className="absolute left-4 text-[#484F58] pointer-events-none select-none">@</span>
+                        <input
+                          className={inputCls + " pl-8 pr-10"}
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase())}
+                          placeholder="yourhandle"
+                          maxLength={30}
+                        />
+                        {username.length >= 3 && (
+                          <span className="absolute right-3 text-sm pointer-events-none">
+                            {usernameChecking ? <span className="text-[#8B949E]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
+                          </span>
+                        )}
+                      </div>
+                      {username.length >= 3 && usernameAvailable === false && <p className="text-xs text-red-500 mt-1">Taken.</p>}
+                    </div>
+                  </div>
 
-            {/* Home Location */}
-            <div>
-              <label className={labelCls}>Home Location</label>
-              <input
-                className={inputCls}
-                value={homeLocation}
-                onChange={(e) => setHomeLocation(e.target.value)}
-                placeholder="e.g. Salt Lake City, UT"
-              />
-            </div>
+                  <div>
+                    <label className={labelCls}>Bio</label>
+                    <textarea className={inputCls + " resize-none"} rows={3} maxLength={160} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Tell other anglers about yourself…" />
+                    <p className="text-xs text-[#484F58] mt-1 text-right">{bio.length}/160</p>
+                  </div>
 
-            {/* Profile Visibility */}
-            <div>
-              <label className={labelCls}>Profile Visibility</label>
-              <div className="flex gap-2 mt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsPrivate(false)}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
-                >
-                  🌐 Public
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsPrivate(true)}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
-                >
-                  🔒 Private
-                </button>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className={labelCls}>Home Location</label>
+                      <input className={inputCls} value={homeLocation} onChange={(e) => setHomeLocation(e.target.value)} placeholder="e.g. Salt Lake City, UT" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Email</label>
+                      <input className={inputCls + " opacity-50 cursor-not-allowed"} value={email} disabled />
+                    </div>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className={labelCls}>Profile Visibility</label>
+                      <div className="flex gap-2">
+                        <button type="button" onClick={() => setIsPrivate(false)}
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          Public
+                        </button>
+                        <button type="button" onClick={() => setIsPrivate(true)}
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          Private
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Journal Feed Display</label>
+                      <div className="flex gap-2">
+                        <button type="button" onClick={() => setFeedDisplay("collage")}
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          Collage
+                        </button>
+                        <button type="button" onClick={() => setFeedDisplay("map")}
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          Map
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <button type="submit" disabled={saveDisabled}
+                      className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-2.5 text-white text-sm font-semibold hover:bg-[#D4782A] disabled:opacity-50 transition-colors">
+                      <Save className="h-4 w-4" />
+                      {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}
+                    </button>
+                  </div>
+                </form>
               </div>
-              <p className="text-xs text-[#484F58] mt-1">Public profiles appear on the Anglers page.</p>
-            </div>
+            )}
 
-            <div>
-              <label className={labelCls}>Email</label>
-              <input className={inputCls + " opacity-60"} value={email} disabled />
-              <p className="text-xs text-[#484F58] mt-1">Contact support to change your email.</p>
-            </div>
+            {/* ═══════ NOTIFICATIONS ═══════ */}
+            {activeSection === "notifications" && (
+              <div id="notifications" className="bg-[#161B22] border border-[#21262D] rounded-xl p-6 scroll-mt-24">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Email Notifications</h2>
+                <p className="text-sm text-[#8B949E] mb-6">Choose what emails you receive from Executive Angler.</p>
 
-            <div>
-              <label className={labelCls}>Journal Feed Display</label>
-              <div className="flex gap-2 mt-1">
-                <button type="button" onClick={() => setFeedDisplay("collage")}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}>
-                  🐟 Fish + Flies Collage
-                </button>
-                <button type="button" onClick={() => setFeedDisplay("map")}
-                  className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}>
-                  📍 Map Location
-                </button>
-              </div>
-              <p className="text-xs text-[#484F58] mt-1">Controls what shows in your journal feed cards.</p>
-            </div>
+                <div className="space-y-1">
+                  {/* Activity section */}
+                  <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Activity</p>
 
-            <button type="submit" disabled={saveDisabled}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#0D1117] disabled:opacity-60">
-              <Save className="h-4 w-4" />
-              {saving ? "Saving…" : saved ? "Saved ✓" : "Save Profile"}
-            </button>
-          </form>
-        </div>
+                  {[
+                    { label: "New followers", desc: "When someone starts following you", value: notifyFollows, set: setNotifyFollows },
+                    { label: "Session comments", desc: "When someone comments on your session", value: notifyComments, set: setNotifyComments },
+                    { label: "Session kudos", desc: "When someone gives kudos on your session", value: notifyLikes, set: setNotifyLikes },
+                  ].map(({ label, desc, value, set }) => (
+                    <div key={label} className="flex items-center justify-between py-3 border-b border-[#21262D] last:border-0">
+                      <div>
+                        <p className="text-sm font-medium text-[#F0F6FC]">{label}</p>
+                        <p className="text-xs text-[#484F58]">{desc}</p>
+                      </div>
+                      <button type="button" onClick={() => set(!value)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${value ? "bg-[#E8923A]" : "bg-[#21262D]"}`}>
+                        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${value ? "translate-x-6" : "translate-x-1"}`} />
+                      </button>
+                    </div>
+                  ))}
 
-        {/* Change password */}
-        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Change Password</h2>
-          <form onSubmit={handleChangePassword} className="space-y-4">
-            <div>
-              <label className={labelCls}>New Password</label>
-              <input type="password" className={inputCls} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min 8 characters" />
-            </div>
-            <div>
-              <label className={labelCls}>Confirm Password</label>
-              <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-            </div>
-            {pwError && <p className="text-sm text-red-600">{pwError}</p>}
-            <button type="submit"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#1F2937] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#161B22]">
-              {pwSaved ? "Password Updated ✓" : "Update Password"}
-            </button>
-          </form>
-        </div>
+                  {/* Digest section */}
+                  <div className="pt-4 mt-4">
+                    <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Digest</p>
+                    <div className="flex items-center justify-between py-3">
+                      <div>
+                        <p className="text-sm font-medium text-[#F0F6FC]">Activity digest</p>
+                        <p className="text-xs text-[#484F58]">Summary of activity on your profile</p>
+                      </div>
+                      <div className="flex gap-1.5">
+                        {(["none", "daily", "weekly"] as const).map((freq) => (
+                          <button key={freq} type="button" onClick={() => setDigestFrequency(freq)}
+                            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors capitalize ${
+                              digestFrequency === freq
+                                ? "bg-[#E8923A] text-white"
+                                : "bg-[#0D1117] border border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"
+                            }`}>
+                            {freq}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-        {/* Connected Accounts */}
-        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">Connected Accounts</h2>
-          {!googleLinked ? (
-            <button
-              type="button"
-              onClick={handleLinkGoogle}
-              disabled={googleLinking}
-              className="flex items-center gap-3 px-4 py-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[#F0F6FC] font-medium text-sm hover:bg-[#1F2937] transition-colors shadow-sm disabled:opacity-50"
-            >
-              {googleLinking ? (
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#484F58] border-t-transparent" />
-              ) : (
-                <svg className="h-5 w-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-              )}
-              Connect Google Account
-            </button>
-          ) : (
-            <div className="flex items-center gap-3 px-4 py-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[#8B949E] text-sm">
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              <span>Google account connected ✓</span>
-            </div>
-          )}
-        </div>
-
-        {/* Notification Preferences */}
-        <div className="bg-[#161B22] rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-heading text-lg font-semibold text-[#E8923A] flex items-center gap-2 mb-4">
-            <Bell className="h-5 w-5" /> Notifications
-          </h2>
-          <div className="space-y-4">
-            {/* Toggle: New Follower */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-[#F0F6FC]">New follower</p>
-                <p className="text-xs text-[#8B949E]">Email when someone follows you</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setNotifyFollows(!notifyFollows)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyFollows ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
-              >
-                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyFollows ? "translate-x-6" : "translate-x-1"}`} />
-              </button>
-            </div>
-
-            {/* Toggle: Session Comment */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-[#F0F6FC]">Session comments</p>
-                <p className="text-xs text-[#8B949E]">Email when someone comments on your session</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setNotifyComments(!notifyComments)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyComments ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
-              >
-                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyComments ? "translate-x-6" : "translate-x-1"}`} />
-              </button>
-            </div>
-
-            {/* Toggle: Session Like */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-[#F0F6FC]">Session kudos</p>
-                <p className="text-xs text-[#8B949E]">Email when someone likes your session</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setNotifyLikes(!notifyLikes)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifyLikes ? "bg-[#E8923A]" : "bg-[#21262D]"}`}
-              >
-                <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${notifyLikes ? "translate-x-6" : "translate-x-1"}`} />
-              </button>
-            </div>
-
-            {/* Digest Frequency */}
-            <div>
-              <p className="text-sm font-medium text-[#F0F6FC] mb-1">Email digest</p>
-              <p className="text-xs text-[#8B949E] mb-2">Summary of activity on your profile</p>
-              <div className="flex gap-2">
-                {(["none", "daily", "weekly"] as const).map((freq) => (
-                  <button
-                    key={freq}
-                    type="button"
-                    onClick={() => setDigestFrequency(freq)}
-                    className={`flex-1 rounded-lg border py-2 text-sm font-medium transition-colors capitalize ${digestFrequency === freq ? "border-[#E8923A] bg-[#E8923A] text-white" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]"}`}
-                  >
-                    {freq}
+                <div className="mt-6 pt-4 border-t border-[#21262D]">
+                  <button type="button" onClick={handleSaveNotifications} disabled={notifSaving}
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-2.5 text-white text-sm font-semibold hover:bg-[#D4782A] disabled:opacity-50 transition-colors">
+                    <Save className="h-4 w-4" />
+                    {notifSaving ? "Saving…" : notifSaved ? "Saved ✓" : "Save Preferences"}
                   </button>
-                ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <button
-              type="button"
-              onClick={handleSaveNotifications}
-              disabled={notifSaving}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-5 py-2.5 text-white text-sm font-medium hover:bg-[#0D1117] disabled:opacity-60"
-            >
-              <Save className="h-4 w-4" />
-              {notifSaving ? "Saving..." : notifSaved ? "Saved ✓" : "Save Preferences"}
+            {/* ═══════ SECURITY ═══════ */}
+            {activeSection === "security" && (
+              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Change Password</h2>
+                <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+                  <div>
+                    <label className={labelCls}>New Password</label>
+                    <input type="password" className={inputCls} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Min 8 characters" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Confirm Password</label>
+                    <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter password" />
+                  </div>
+                  {pwError && <p className="text-sm text-red-500">{pwError}</p>}
+                  <button type="submit"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#1F2937] border border-[#21262D] px-6 py-2.5 text-[#F0F6FC] text-sm font-semibold hover:bg-[#161B22] transition-colors">
+                    <Shield className="h-4 w-4" />
+                    {pwSaved ? "Updated ✓" : "Update Password"}
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {/* ═══════ CONNECTED ACCOUNTS ═══════ */}
+            {activeSection === "connected" && (
+              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Connected Accounts</h2>
+
+                <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <div>
+                      <p className="text-sm font-medium text-[#F0F6FC]">Google</p>
+                      <p className="text-xs text-[#484F58]">{googleLinked ? "Connected" : "Not connected"}</p>
+                    </div>
+                  </div>
+                  {!googleLinked ? (
+                    <button type="button" onClick={handleLinkGoogle} disabled={googleLinking}
+                      className="text-sm font-medium text-[#E8923A] hover:text-[#D4782A] transition-colors disabled:opacity-50">
+                      {googleLinking ? "Connecting…" : "Connect"}
+                    </button>
+                  ) : (
+                    <span className="text-sm text-green-500 font-medium">Connected ✓</span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Mobile sign out */}
+            <button onClick={handleSignOut} className="sm:hidden w-full mt-6 flex items-center justify-center gap-2 rounded-lg border border-red-800/40 text-red-400 px-5 py-3 text-sm font-medium hover:bg-red-900/10 transition-colors">
+              <LogOut className="h-4 w-4" /> Sign Out
             </button>
-          </div>
+          </main>
         </div>
-
-        {/* Sign Out */}
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center justify-center gap-2 rounded-lg border border-red-800 text-red-400 px-5 py-3 text-sm font-medium hover:bg-red-900/20 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign Out
-        </button>
       </div>
     </div>
   );
