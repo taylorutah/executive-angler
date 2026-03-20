@@ -417,9 +417,9 @@ export default async function RiverPage({ params }: Props) {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              <QuickFacts facts={quickFacts} />
-
               <RiverConditionsCard riverId={river.id} />
+
+              <QuickFacts facts={quickFacts} />
 
               <RiverActivityPulse riverId={river.id} />
 
