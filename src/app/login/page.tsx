@@ -15,6 +15,13 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
+  const authError = searchParams.get("error");
+
+  // Show OAuth callback errors
+  const authErrorMessage =
+    authError === "auth_failed" || authError === "auth_callback_failed"
+      ? "Sign-in failed. Please try again."
+      : null;
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -41,6 +48,13 @@ function LoginForm() {
         </div>
 
         <div className="bg-[#161B22] rounded-xl shadow-md p-8 space-y-5">
+          {/* OAuth error from callback */}
+          {authErrorMessage && (
+            <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900 text-center">
+              {authErrorMessage}
+            </p>
+          )}
+
           {/* OAuth */}
           <OAuthButtons redirectTo={redirect} />
 

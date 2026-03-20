@@ -1,31 +1,59 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * GET /auth/callback
+ *
+ * Supabase OAuth callback handler for Google and Apple Sign-In.
+ * Exchanges the authorization code for a session, ensures the user
+ * has a profile row, then redirects to the intended destination.
+ */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const next = searchParams.get("next") ?? "/dashboard";
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check if user has completed profile
+      // Ensure the user has a profile row (OAuth users may not have one yet)
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", user?.id)
-        .single();
 
-      // If no full_name, redirect to account page with welcome flag
-      if (!profile?.full_name) {
-        return NextResponse.redirect(`${origin}/account?welcome=1`);
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("user_id, display_name")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        // Auto-create profile for new OAuth users
+        if (!profile) {
+          const displayName =
+            user.user_metadata?.full_name ||
+            user.user_metadata?.display_name ||
+            user.user_metadata?.name ||
+            user.email?.split("@")[0] ||
+            "Angler";
+
+          await supabase.from("profiles").upsert(
+            {
+              user_id: user.id,
+              display_name: displayName,
+              email_notify_follows: true,
+              email_notify_comments: true,
+              email_notify_likes: true,
+            },
+            { onConflict: "user_id" }
+          );
+        }
       }
 
       return NextResponse.redirect(`${origin}${next}`);
     }
+
+    console.error("[AUTH CALLBACK] Code exchange failed:", error.message);
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth_failed`);

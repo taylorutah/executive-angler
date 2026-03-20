@@ -21,6 +21,13 @@ const footerLinks = {
     { label: "Guides", href: "/guides" },
     { label: "Fly Shops", href: "/fly-shops" },
   ],
+  Species: [
+    { label: "Rainbow Trout", href: "/species/rainbow-trout" },
+    { label: "Brown Trout", href: "/species/brown-trout" },
+    { label: "Steelhead", href: "/species/steelhead" },
+    { label: "Bonefish", href: "/species/bonefish" },
+    { label: "All Species", href: "/species" },
+  ],
   Resources: [
     { label: "Articles", href: "/articles" },
     { label: "Species Guide", href: "/species" },

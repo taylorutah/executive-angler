@@ -80,20 +80,23 @@ export function ThreadDetailClient({
     if (!trimmed || sending) return;
     setSending(true);
 
-    const supabase = createClient();
-    const { error } = await supabase.from("dm_messages").insert({
-      thread_id: threadId,
-      sender_id: currentUserId,
-      body: trimmed,
-    });
+    try {
+      const res = await fetch("/api/messages/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ threadId, body: trimmed }),
+      });
 
-    if (!error) {
-      await supabase
-        .from("dm_threads")
-        .update({ last_message_at: new Date().toISOString() })
-        .eq("id", threadId);
-      setBody("");
+      if (res.ok) {
+        setBody("");
+      } else {
+        const err = await res.json().catch(() => ({}));
+        console.error("[MESSAGE SEND ERROR]", err);
+      }
+    } catch (err) {
+      console.error("[MESSAGE SEND ERROR]", err);
     }
+
     setSending(false);
     inputRef.current?.focus();
   }

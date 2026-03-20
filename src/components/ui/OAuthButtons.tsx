@@ -9,21 +9,39 @@ interface Props {
 
 export default function OAuthButtons({ redirectTo = "/" }: Props) {
   const [loading, setLoading] = useState<"google" | "apple" | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function signInWith(provider: "google" | "apple") {
     setLoading(provider);
+    setError(null);
+
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
       },
     });
-    // Browser will redirect — no need to reset loading
+
+    if (error) {
+      console.error(`[OAUTH ERROR] ${provider}:`, error.message);
+      setError(
+        error.message.includes("missing OAuth secret")
+          ? `${provider === "apple" ? "Apple" : "Google"} Sign-In is not yet available. Use email instead.`
+          : error.message
+      );
+      setLoading(null);
+    }
+    // Otherwise browser will redirect — no need to reset loading
   }
 
   return (
     <div className="space-y-3">
+      {error && (
+        <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900 text-center">
+          {error}
+        </p>
+      )}
       <button
         type="button"
         onClick={() => signInWith("google")}

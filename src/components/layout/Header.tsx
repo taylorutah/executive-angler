@@ -95,19 +95,36 @@ export default function Header() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) { setUser(null); return; }
+
+    async function fetchUserProfile() {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) { setUser(null); return; }
       const { data: profile } = await supabase
         .from("profiles")
         .select("avatar_url, display_name")
-        .eq("user_id", user.id)
+        .eq("user_id", authUser.id)
         .maybeSingle();
       setUser({
-        email: user.email ?? undefined,
+        email: authUser.email ?? undefined,
         avatarUrl: profile?.avatar_url || undefined,
-        displayName: profile?.display_name || user.user_metadata?.display_name || undefined,
+        displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
       });
+    }
+
+    fetchUserProfile();
+
+    // Listen for auth changes (sign in, sign out, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        setUser(null);
+      } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        fetchUserProfile();
+      }
     });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Cmd+K shortcut
@@ -151,22 +168,24 @@ export default function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0">
+            <Link href="/" className="flex-shrink-0 cursor-pointer select-none">
               <Image
                 src="/images/logo-horizontal-white.svg"
                 alt="Executive Angler"
                 width={160}
                 height={32}
-                className="h-8 w-auto block dark-logo"
+                className="h-8 w-auto block dark-logo pointer-events-none"
                 priority
+                draggable={false}
               />
               <Image
                 src="/images/logo-horizontal-forest.svg"
                 alt="Executive Angler"
                 width={160}
                 height={32}
-                className="h-8 w-auto hidden light-logo"
+                className="h-8 w-auto hidden light-logo pointer-events-none"
                 priority
+                draggable={false}
               />
             </Link>
 
