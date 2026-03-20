@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ActivityFeed } from "@/components/feed/ActivityFeed";
+import Link from "next/link";
+import WaitlistForm from "@/components/sections/WaitlistForm";
 
 export const metadata: Metadata = {
   title: "Activity Feed | Executive Angler",
@@ -37,6 +39,123 @@ export interface FeedSession {
 
 export default async function FeedPage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  /* ── Unauthenticated gate ── */
+  if (!user) {
+    return (
+      <main className="min-h-screen bg-[#0D1117]">
+        <div className="mx-auto max-w-xl px-4 pt-32 pb-24 text-center">
+          {/* Icon */}
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#161B22] border border-[#21262D]">
+            <svg
+              className="h-8 w-8 text-[#E8923A]"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6V7.5Z"
+              />
+            </svg>
+          </div>
+
+          <h1 className="text-3xl font-bold text-[#F0F6FC] mb-3">
+            Community Feed
+          </h1>
+          <p className="text-[#8B949E] text-lg mb-10 max-w-md mx-auto">
+            Sign in to see what anglers are catching, share your own sessions,
+            and connect with the community.
+          </p>
+
+          {/* Sign-in CTA */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+            <Link
+              href="/login?redirect=/feed"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E8923A] px-6 py-3 text-sm font-semibold text-[#0D1117] hover:bg-[#D4812E] transition-colors w-full sm:w-auto"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-6 py-3 text-sm font-semibold text-[#F0F6FC] hover:bg-[#1F2937] transition-colors w-full sm:w-auto"
+            >
+              Create Free Account
+            </Link>
+          </div>
+
+          {/* What you get */}
+          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6 text-left mb-12">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#E8923A] mb-4">
+              What you get with an account
+            </h2>
+            <ul className="space-y-3">
+              {[
+                {
+                  icon: "📍",
+                  text: "Live activity feed — see sessions, catches, and river reports from anglers worldwide",
+                },
+                {
+                  icon: "🐟",
+                  text: "Log every fish with species, size, fly pattern, and GPS coordinates",
+                },
+                {
+                  icon: "📊",
+                  text: "Personal dashboard with stats, personal bests, and achievement badges",
+                },
+                {
+                  icon: "💬",
+                  text: "Comment on sessions, give kudos, and direct message other anglers",
+                },
+                {
+                  icon: "🗺️",
+                  text: "Explore 1,000+ rivers, fly shops, guides, and lodges",
+                },
+                {
+                  icon: "📓",
+                  text: "Private fishing journal — your complete catch history in one place",
+                },
+              ].map((item) => (
+                <li
+                  key={item.text}
+                  className="flex items-start gap-3 text-[#C9D1D9] text-sm"
+                >
+                  <span className="text-base leading-5 shrink-0">
+                    {item.icon}
+                  </span>
+                  {item.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* App waitlist */}
+          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="inline-flex items-center rounded-full bg-[#E8923A]/10 px-3 py-1 text-xs font-medium text-[#E8923A] border border-[#E8923A]/20">
+                Coming to iOS + Apple Watch
+              </span>
+            </div>
+            <h2 className="text-lg font-bold text-[#F0F6FC] mb-1">
+              Get the App
+            </h2>
+            <p className="text-sm text-[#8B949E] mb-4">
+              Log fish on-stream, track GPS sessions, and sync everything
+              automatically. Join the waitlist for early access.
+            </p>
+            <WaitlistForm />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  /* ── Authenticated: show the feed ── */
 
   // Fetch 30 most recent public sessions with profile data
   const { data: sessions, error } = await supabase
@@ -99,8 +218,14 @@ export default async function FeedPage() {
 
   if (sessionIds.length > 0) {
     const [likesRes, commentsRes] = await Promise.all([
-      supabase.from("session_likes").select("session_id").in("session_id", sessionIds),
-      supabase.from("session_comments").select("session_id").in("session_id", sessionIds),
+      supabase
+        .from("session_likes")
+        .select("session_id")
+        .in("session_id", sessionIds),
+      supabase
+        .from("session_comments")
+        .select("session_id")
+        .in("session_id", sessionIds),
     ]);
 
     if (likesRes.data) {
@@ -110,10 +235,13 @@ export default async function FeedPage() {
       }, {});
     }
     if (commentsRes.data) {
-      commentCounts = commentsRes.data.reduce<Record<string, number>>((acc, c) => {
-        acc[c.session_id] = (acc[c.session_id] || 0) + 1;
-        return acc;
-      }, {});
+      commentCounts = commentsRes.data.reduce<Record<string, number>>(
+        (acc, c) => {
+          acc[c.session_id] = (acc[c.session_id] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
     }
   }
 
@@ -138,7 +266,9 @@ export default async function FeedPage() {
     like_count: likeCounts[s.id] || 0,
     comment_count: commentCounts[s.id] || 0,
     // Supabase returns joined single row as object, array, or null
-    profile: Array.isArray(s.profile) ? s.profile[0] ?? null : s.profile ?? null,
+    profile: Array.isArray(s.profile)
+      ? s.profile[0] ?? null
+      : s.profile ?? null,
   }));
 
   return (
