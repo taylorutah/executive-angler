@@ -41,7 +41,14 @@ export async function POST(req: NextRequest) {
 
     if (uploadError) {
       console.error("Upload error:", uploadError);
-      return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+      const isPayloadTooLarge =
+        uploadError.message?.includes("Payload too large") ||
+        uploadError.message?.includes("exceeds the maximum") ||
+        uploadError.message?.includes("413");
+      const message = isPayloadTooLarge
+        ? "Photo is too large (max 5 MB). Please use a smaller image."
+        : `Upload failed: ${uploadError.message}`;
+      return NextResponse.json({ error: message }, { status: isPayloadTooLarge ? 413 : 500 });
     }
 
     // Get public URL

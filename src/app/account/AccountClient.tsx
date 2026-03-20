@@ -8,6 +8,7 @@ import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, P
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
+import { compressImage } from "@/lib/image-compress";
 
 const BADGE_SVG_MAP: Record<string, string> = {
   first_timer: "/badges/sessions_10.svg",
@@ -181,13 +182,17 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     setCropSrc(null);
     setAvatarUploading(true);
     try {
+      const compressed = await compressImage(blob, { maxDimension: 800 });
       const fd = new FormData();
-      fd.append("avatar", blob, "avatar.jpg");
+      fd.append("avatar", new File([compressed], "avatar.jpg", { type: "image/jpeg" }));
       const res = await fetch("/api/user/avatar", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) { alert(data.error || "Failed to upload avatar"); return; }
       if (data.url) setAvatarUrl(data.url + `?t=${Date.now()}`);
-    } catch { alert("Failed to upload avatar."); } finally { setAvatarUploading(false); }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to upload avatar.";
+      alert(msg);
+    } finally { setAvatarUploading(false); }
   }
 
   const saveDisabled = saving || (username.length >= 3 && usernameAvailable === false) || usernameChecking;

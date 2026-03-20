@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { compressImage } from "@/lib/image-compress";
 
 interface PhotoSubmissionFormProps {
   entityType: string;
@@ -148,14 +149,17 @@ export default function PhotoSubmissionForm({
         return;
       }
 
+      // Compress image before upload
+      const compressed = await compressImage(file);
+
       // Generate a unique filename
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-      const fileName = `${entityType}/${entityId}/${user.id}-${Date.now()}.${ext}`;
+      const fileName = `${entityType}/${entityId}/${user.id}-${Date.now()}.jpg`;
 
       // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from("photo-submissions")
-        .upload(fileName, file, {
+        .upload(fileName, compressed, {
+          contentType: "image/jpeg",
           cacheControl: "3600",
           upsert: false,
         });

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
+import { compressImage } from "@/lib/image-compress";
 import dynamic from "next/dynamic";
 
 const SessionLocationPicker = dynamic(
@@ -220,15 +221,23 @@ export default function EditSessionPage() {
     const catchId = catches[i].id;
     if (!catchId) return;
     setUploadingCatchIdx(i);
-    const form = new FormData();
-    form.append("file", file);
-    form.append("catchId", catchId);
     try {
+      const compressed = await compressImage(file);
+      const form = new FormData();
+      form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
+      form.append("catchId", catchId);
       const res = await fetch("/api/photos/catch", { method: "POST", body: form });
       if (res.ok) {
         const { url } = await res.json();
         setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, fish_image_url: url } : c));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Photo upload failed. Please try again.");
       }
+    } catch (e) {
+      console.error("Upload error:", e);
+      const msg = e instanceof Error ? e.message : "Photo upload failed.";
+      alert(msg);
     } finally {
       setUploadingCatchIdx(null);
     }

@@ -44,6 +44,12 @@ const nextConfig: NextConfig = {
         hostname: "qlasxtfbodyxbcuchvxz.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      // Supabase custom domain (used by iOS app for storage URLs)
+      {
+        protocol: "https",
+        hostname: "api.executiveangler.com",
+        pathname: "/storage/v1/object/public/**",
+      },
       // Google OAuth profile pictures
       {
         protocol: "https",

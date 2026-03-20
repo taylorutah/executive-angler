@@ -8,6 +8,7 @@ import {
   Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2
 } from "lucide-react";
 import { KudosButton } from "@/components/social/KudosButton";
+import { compressImage } from "@/lib/image-compress";
 import { CommentsSection } from "@/components/social/CommentsSection";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
@@ -306,20 +307,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
   async function handleCatchPhotoUpload(catchId: string, file: File) {
     setUploadingCatch(catchId);
-    const form = new FormData();
-    form.append("file", file);
-    form.append("catchId", catchId);
     try {
+      const compressed = await compressImage(file);
+      const form = new FormData();
+      form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
+      form.append("catchId", catchId);
       const res = await fetch("/api/photos/catch", { method: "POST", body: form });
       if (res.ok) {
         const { url } = await res.json();
         setCatchPhotos(prev => ({ ...prev, [catchId]: url }));
       } else {
-        alert("Upload failed. Please try again.");
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Upload failed. Please try again.");
       }
     } catch (e) {
       console.error("Upload error:", e);
-      alert("Upload failed. Check your connection and try again.");
+      const msg = e instanceof Error ? e.message : "Upload failed. Check your connection and try again.";
+      alert(msg);
     } finally {
       setUploadingCatch(null);
     }
@@ -327,20 +331,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
   async function handleSessionPhotoUpload(file: File) {
     setUploadingSessionPhoto(true);
-    const form = new FormData();
-    form.append("file", file);
-    form.append("sessionId", session.id);
     try {
+      const compressed = await compressImage(file);
+      const form = new FormData();
+      form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
+      form.append("sessionId", session.id);
       const res = await fetch("/api/photos/session", { method: "POST", body: form });
       if (res.ok) {
         const photo = await res.json();
         setAllSessionPhotos(prev => [...prev, photo]);
       } else {
-        alert("Upload failed. Please try again.");
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Upload failed. Please try again.");
       }
     } catch (e) {
       console.error("Upload error:", e);
-      alert("Upload failed. Check your connection and try again.");
+      const msg = e instanceof Error ? e.message : "Upload failed. Check your connection and try again.";
+      alert(msg);
     } finally {
       setUploadingSessionPhoto(false);
     }
