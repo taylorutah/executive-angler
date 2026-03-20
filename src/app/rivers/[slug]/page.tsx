@@ -17,6 +17,7 @@ import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
+import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -182,42 +183,7 @@ export default async function RiverPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
-              {/* Overview */}
-              <ScrollAnimation>
-                <div>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
-                    Overview
-                  </h2>
-                  <div className="river-body">
-                    {river.description.split("\n\n").map((p, i) => (
-                      <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
-                        {p}
-                      </p>
-                    ))}
-                  </div>
-                  {/* Species badges — flex-wrap ensures no overflow on mobile */}
-                  <div className="entity-tags mt-4">
-                    {(river.primarySpecies || []).map((speciesName) => {
-                      const matched = riverSpecies.find(
-                        (s) => s.commonName.toLowerCase() === speciesName.toLowerCase()
-                      );
-                      const badge = (
-                        <Badge key={speciesName} variant="river" size="md">
-                          <Fish className="h-3.5 w-3.5 mr-1.5" />
-                          {speciesName}
-                        </Badge>
-                      );
-                      return matched ? (
-                        <Link key={speciesName} href={`/species/${matched.slug}`}>
-                          {badge}
-                        </Link>
-                      ) : badge;
-                    })}
-                  </div>
-                </div>
-              </ScrollAnimation>
-
-              {/* Angler Intel — live data from app sessions */}
+              {/* Angler Intel — live data from app sessions (top billing) */}
               <ScrollAnimation>
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -230,6 +196,43 @@ export default async function RiverPage({ params }: Props) {
                     </span>
                   </div>
                   <RiverAnglerIntel riverId={river.id} riverName={river.name} />
+                </div>
+              </ScrollAnimation>
+
+              {/* Overview — collapsible, full text in DOM for SEO */}
+              <ScrollAnimation>
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    Overview
+                  </h2>
+                  <CollapsibleOverview>
+                    <div className="river-body">
+                      {river.description.split("\n\n").map((p, i) => (
+                        <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                    {/* Species badges */}
+                    <div className="entity-tags mt-4">
+                      {(river.primarySpecies || []).map((speciesName) => {
+                        const matched = riverSpecies.find(
+                          (s) => s.commonName.toLowerCase() === speciesName.toLowerCase()
+                        );
+                        const badge = (
+                          <Badge key={speciesName} variant="river" size="md">
+                            <Fish className="h-3.5 w-3.5 mr-1.5" />
+                            {speciesName}
+                          </Badge>
+                        );
+                        return matched ? (
+                          <Link key={speciesName} href={`/species/${matched.slug}`}>
+                            {badge}
+                          </Link>
+                        ) : badge;
+                      })}
+                    </div>
+                  </CollapsibleOverview>
                 </div>
               </ScrollAnimation>
 
