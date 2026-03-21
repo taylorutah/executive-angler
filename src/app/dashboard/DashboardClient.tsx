@@ -212,7 +212,7 @@ export default function DashboardClient({
             {/* Quick Actions Grid — matches iOS Dashboard */}
             <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <Link
-                href="/journal/stats"
+                href="/dashboard/analytics"
                 className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
               >
                 <div className="flex items-center justify-between mb-3">
@@ -224,7 +224,7 @@ export default function DashboardClient({
               </Link>
 
               <Link
-                href="/journal/stats#export"
+                href="/dashboard/export"
                 className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all"
               >
                 <div className="flex items-center justify-between mb-3">
