@@ -12,6 +12,7 @@ import {
   Heart,
   Image as ImageIcon,
   ChevronRight,
+  Database,
 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -111,6 +112,14 @@ export default function AdminClient({
                 <p className="text-[11px] text-[#484F58]">Review uploaded photos</p>
               </div>
               <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
+            </Link>
+            <Link href="/admin/setup" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#2EA44F] transition-colors">
+              <Database className="h-5 w-5 text-[#2EA44F]" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Database Setup</p>
+                <p className="text-[11px] text-[#484F58]">Schema status & migrations</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#2EA44F]" />
             </Link>
           </div>
         </section>
