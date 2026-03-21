@@ -141,16 +141,16 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {RIVERS.map((r, i) => (
               <ScrollAnimation key={r.name} delay={i * 0.08}>
-                <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
+                <Link href={r.href} className="block bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
                   <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs uppercase tracking-wider mb-1">{r.location}</p>
                   <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
                   <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal mb-0.5">{r.fish}</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-3">fish this week</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs mb-4">{"\u25CF"} {r.ago}</div>
-                  <Link href={r.href} className="font-['IBM_Plex_Mono'] text-xs text-[#8B949E] group-hover:text-[#E8923A] transition-colors">
+                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#8B949E] group-hover:text-[#E8923A] transition-colors">
                     View River &rarr;
-                  </Link>
-                </div>
+                  </span>
+                </Link>
               </ScrollAnimation>
             ))}
           </div>

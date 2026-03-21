@@ -10,30 +10,18 @@ import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
 import { compressImage } from "@/lib/image-compress";
 
-const BADGE_SVG_MAP: Record<string, string> = {
-  first_timer: "/badges/sessions_10.svg",
-  regular: "/badges/sessions_50.svg",
-  veteran: "/badges/sessions_100.svg",
-  legend: "/badges/sessions_500.svg",
-  centurion: "/badges/catches_100.svg",
-  master_angler: "/badges/catches_1000.svg",
-  consistent_producer: "/badges/catches_500.svg",
-  species_hunter: "/badges/species_5.svg",
-  sessions_10: "/badges/sessions_10.svg",
-  sessions_50: "/badges/sessions_50.svg",
-  sessions_100: "/badges/sessions_100.svg",
-  sessions_500: "/badges/sessions_500.svg",
-  catches_100: "/badges/catches_100.svg",
-  catches_500: "/badges/catches_500.svg",
-  catches_1000: "/badges/catches_1000.svg",
-  species_5: "/badges/species_5.svg",
-  species_15: "/badges/species_15.svg",
-  species_30: "/badges/species_30.svg",
-  rivers_5: "/badges/rivers_5.svg",
-  rivers_15: "/badges/rivers_15.svg",
-  rivers_30: "/badges/rivers_30.svg",
-  streak_4: "/badges/streak_4.svg",
-  streak_12: "/badges/streak_12.svg",
+const AWARD_EMOJI_MAP: Record<string, string> = {
+  first_timer: "🪝", sessions_10: "🪝",
+  regular: "🎣", sessions_50: "🎣",
+  veteran: "🥾", sessions_100: "🥾",
+  legend: "👑", sessions_500: "👑",
+  centurion: "💯", catches_100: "💯",
+  master_angler: "🐋", catches_1000: "🐋",
+  consistent_producer: "🔥", catches_500: "🔥",
+  species_hunter: "🦎", species_5: "🦎",
+  species_15: "🌊", species_30: "🏔️",
+  rivers_5: "🗺️", rivers_15: "🧭", rivers_30: "🌍",
+  streak_4: "⚡", streak_12: "💎",
 };
 
 type Section = "overview" | "profile" | "notifications" | "security" | "connected";
@@ -429,15 +417,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     {/* Compact badge grid — small circles with tooltips */}
                     <div className="flex flex-wrap gap-2">
                       {awards.slice(0, 20).map((award, i) => {
-                        const badgeSrc = BADGE_SVG_MAP[award.award_key];
+                        const emoji = AWARD_EMOJI_MAP[award.award_key] || award.metadata.badge_icon || "🏆";
                         return (
                           <div key={i} className="group relative">
-                            <div className="w-10 h-10 rounded-full overflow-hidden bg-[#0D1117] border border-[#21262D] hover:border-[#E8923A]/40 transition-colors cursor-default flex items-center justify-center">
-                              {badgeSrc ? (
-                                <Image src={badgeSrc} alt={award.metadata.display_name || award.award_key} width={32} height={32} className="w-8 h-8" />
-                              ) : (
-                                <span className="text-sm">{award.metadata.badge_icon || "🏆"}</span>
-                              )}
+                            <div
+                              className="w-10 h-10 rounded-full bg-[#0D1117] border-2 hover:brightness-125 transition-all cursor-default flex items-center justify-center"
+                              style={{ borderColor: award.metadata.badge_color || "#E8923A" }}
+                            >
+                              <span className="text-base leading-none">{emoji}</span>
                             </div>
                             {/* Tooltip */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-[#1F2937] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">

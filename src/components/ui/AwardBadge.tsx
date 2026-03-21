@@ -1,36 +1,31 @@
-import Image from "next/image";
 import type { UserAward } from "@/types/awards";
 
-// Map award_key → SVG badge file in /public/badges/
-const BADGE_SVG_MAP: Record<string, string> = {
-  first_timer: "/badges/sessions_10.svg",
-  regular: "/badges/sessions_50.svg",
-  veteran: "/badges/sessions_100.svg",
-  legend: "/badges/sessions_500.svg",
-  centurion: "/badges/catches_100.svg",
-  master_angler: "/badges/catches_1000.svg",
-  consistent_producer: "/badges/catches_500.svg",
-  species_hunter: "/badges/species_5.svg",
-  sessions_10: "/badges/sessions_10.svg",
-  sessions_50: "/badges/sessions_50.svg",
-  sessions_100: "/badges/sessions_100.svg",
-  sessions_500: "/badges/sessions_500.svg",
-  catches_100: "/badges/catches_100.svg",
-  catches_500: "/badges/catches_500.svg",
-  catches_1000: "/badges/catches_1000.svg",
-  species_5: "/badges/species_5.svg",
-  species_15: "/badges/species_15.svg",
-  species_30: "/badges/species_30.svg",
-  rivers_5: "/badges/rivers_5.svg",
-  rivers_15: "/badges/rivers_15.svg",
-  rivers_30: "/badges/rivers_30.svg",
-  streak_4: "/badges/streak_4.svg",
-  streak_12: "/badges/streak_12.svg",
+// Map every award_key to its emoji
+export const AWARD_EMOJI_MAP: Record<string, string> = {
+  first_timer: "🪝",
+  sessions_10: "🪝",
+  regular: "🎣",
+  sessions_50: "🎣",
+  veteran: "🥾",
+  sessions_100: "🥾",
+  legend: "👑",
+  sessions_500: "👑",
+  centurion: "💯",
+  catches_100: "💯",
+  master_angler: "🐋",
+  catches_1000: "🐋",
+  consistent_producer: "🔥",
+  catches_500: "🔥",
+  species_hunter: "🦎",
+  species_5: "🦎",
+  species_15: "🌊",
+  species_30: "🏔️",
+  rivers_5: "🗺️",
+  rivers_15: "🧭",
+  rivers_30: "🌍",
+  streak_4: "⚡",
+  streak_12: "💎",
 };
-
-export function getBadgeSrc(awardKey: string): string | null {
-  return BADGE_SVG_MAP[awardKey] || null;
-}
 
 interface AwardBadgeProps {
   award: UserAward;
@@ -44,43 +39,25 @@ export function AwardBadge({
   showDetails = false,
 }: AwardBadgeProps) {
   const sizeMap = {
-    sm: { cls: "w-8 h-8", px: 32 },
-    md: { cls: "w-12 h-12", px: 48 },
-    lg: { cls: "w-16 h-16", px: 64 },
+    sm: { cls: "w-8 h-8", text: "text-sm" },
+    md: { cls: "w-12 h-12", text: "text-xl" },
+    lg: { cls: "w-16 h-16", text: "text-2xl" },
   };
 
-  const { cls, px } = sizeMap[size];
-  const badgeSrc = getBadgeSrc(award.award_key);
+  const { cls, text } = sizeMap[size];
+  const emoji = AWARD_EMOJI_MAP[award.award_key] || award.metadata.badge_icon || "🏆";
+  const borderColor = award.metadata.badge_color || "#E8923A";
 
   const containerClasses = showDetails ? "flex items-start gap-3" : "inline-flex";
 
   return (
     <div className={containerClasses}>
       <div
-        className={`${cls} rounded-full flex-shrink-0 overflow-hidden`}
+        className={`${cls} rounded-full flex-shrink-0 flex items-center justify-center bg-[#0D1117] border-2`}
+        style={{ borderColor }}
         title={award.metadata.display_name}
       >
-        {badgeSrc ? (
-          <Image
-            src={badgeSrc}
-            alt={award.metadata.display_name || award.award_key}
-            width={px}
-            height={px}
-            className="w-full h-full"
-          />
-        ) : (
-          <div
-            className="w-full h-full rounded-full flex items-center justify-center border-2"
-            style={{
-              backgroundColor: award.metadata.badge_color || "#E8923A",
-              borderColor: award.metadata.badge_color || "#E8923A",
-            }}
-          >
-            <span className="filter drop-shadow-sm">
-              {award.metadata.badge_icon || "🏆"}
-            </span>
-          </div>
-        )}
+        <span className={`${text} leading-none`}>{emoji}</span>
       </div>
       {showDetails && (
         <div className="flex-1 min-w-0">

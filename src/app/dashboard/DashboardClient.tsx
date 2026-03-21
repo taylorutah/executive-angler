@@ -279,24 +279,23 @@ export default function DashboardClient({
                           {rs.awards.length > 0 && (
                             <div className="flex gap-1.5 shrink-0">
                               {rs.awards.slice(0, 4).map((a) => {
-                                const badgeSrc: Record<string, string> = {
-                                  first_timer: "/badges/sessions_10.svg",
-                                  regular: "/badges/sessions_50.svg",
-                                  veteran: "/badges/sessions_100.svg",
-                                  legend: "/badges/sessions_500.svg",
-                                  centurion: "/badges/catches_100.svg",
-                                  master_angler: "/badges/catches_1000.svg",
-                                  consistent_producer: "/badges/catches_500.svg",
-                                  species_hunter: "/badges/species_5.svg",
+                                const EMOJI_MAP: Record<string, string> = {
+                                  first_timer: "🪝", sessions_10: "🪝",
+                                  regular: "🎣", sessions_50: "🎣",
+                                  veteran: "🥾", sessions_100: "🥾",
+                                  legend: "👑", sessions_500: "👑",
+                                  centurion: "💯", catches_100: "💯",
+                                  master_angler: "🐋", catches_1000: "🐋",
+                                  consistent_producer: "🔥", catches_500: "🔥",
+                                  species_hunter: "🦎", species_5: "🦎",
+                                  species_15: "🌊", species_30: "🏔️",
+                                  rivers_5: "🗺️", rivers_15: "🧭", rivers_30: "🌍",
+                                  streak_4: "⚡", streak_12: "💎",
                                 };
-                                const src = badgeSrc[a.award_key];
+                                const emoji = EMOJI_MAP[a.award_key] || a.metadata.badge_icon || "🏆";
                                 return (
-                                  <span key={a.award_key} className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center" title={`${a.metadata.display_name}: ${a.metadata.description}`}>
-                                    {src ? (
-                                      <Image src={src} alt={a.metadata.display_name || a.award_key} width={32} height={32} className="w-full h-full" />
-                                    ) : (
-                                      <span className="text-sm" style={{ backgroundColor: `${a.metadata.badge_color}20` }}>{a.metadata.badge_icon}</span>
-                                    )}
+                                  <span key={a.award_key} className="w-8 h-8 rounded-full bg-[#0D1117] border-2 flex items-center justify-center" style={{ borderColor: a.metadata.badge_color || "#E8923A" }} title={`${a.metadata.display_name}: ${a.metadata.description}`}>
+                                    <span className="text-sm leading-none">{emoji}</span>
                                   </span>
                                 );
                               })}
