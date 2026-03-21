@@ -1,4 +1,5 @@
-// TODO: migrate species to Supabase table
+// Species served from static data — fast, no DB round-trip.
+// Migrate to Supabase only if species need user-editable fields or admin CRUD.
 import type { Species } from "@/types/entities";
 import { species as staticSpecies } from "@/data/species";
 

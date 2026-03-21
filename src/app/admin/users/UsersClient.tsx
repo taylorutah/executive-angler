@@ -124,9 +124,10 @@ export default function UsersClient({ users }: { users: User[] }) {
             </div>
           ) : (
             filtered.map(u => (
-              <div
+              <Link
                 key={u.userId}
-                className="grid grid-cols-1 sm:grid-cols-[auto_1fr_80px_80px_80px_100px] gap-3 px-4 py-3 border-b border-[#21262D] last:border-0 hover:bg-[#1F2937]/50 transition-colors items-center"
+                href={`/admin/users/${u.userId}`}
+                className="grid grid-cols-1 sm:grid-cols-[auto_1fr_80px_80px_80px_100px] gap-3 px-4 py-3 border-b border-[#21262D] last:border-0 hover:bg-[#1F2937]/50 transition-colors items-center cursor-pointer"
               >
                 {/* Avatar */}
                 <div className="hidden sm:flex w-10 h-10 shrink-0 rounded-full overflow-hidden bg-[#E8923A]/15 items-center justify-center">
@@ -188,7 +189,7 @@ export default function UsersClient({ users }: { users: User[] }) {
                     {u.lastSession ? formatDate(u.lastSession) : "Never"}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>
