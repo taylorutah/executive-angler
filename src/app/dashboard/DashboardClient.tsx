@@ -174,36 +174,60 @@ export default function DashboardClient({
       {/* ─── Dashboard Header ─── */}
       <div className="bg-[#161B22] border-b border-[#21262D]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
-          {/* Welcome + action */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC]">
-                Welcome back, {displayName}
-              </h1>
-              {profile?.home_location && (
-                <p className="text-sm text-[#8B949E] flex items-center gap-1 mt-1">
-                  <MapPin className="h-3.5 w-3.5" /> {profile.home_location}
-                </p>
-              )}
+          {/* Welcome + actions — stacks on mobile */}
+          <div className="mb-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h1 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC]">
+                  Welcome back, {displayName}
+                </h1>
+                {profile?.home_location && (
+                  <p className="text-sm text-[#8B949E] flex items-center gap-1 mt-1">
+                    <MapPin className="h-3.5 w-3.5" /> {profile.home_location}
+                  </p>
+                )}
+              </div>
+              {/* Desktop: buttons inline */}
+              <div className="hidden sm:flex gap-2 shrink-0">
+                <Link
+                  href="/contribute"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
+                >
+                  <Plus className="h-4 w-4" /> Contribute
+                </Link>
+                <Link
+                  href="/feedback"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#0BA5C7] hover:text-[#0BA5C7] transition-colors"
+                >
+                  <Lightbulb className="h-4 w-4" /> Ideas
+                </Link>
+                <Link
+                  href="/journal"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors"
+                >
+                  <BookOpen className="h-4 w-4" /> My Journal
+                </Link>
+              </div>
             </div>
-            <div className="flex gap-2 shrink-0">
+            {/* Mobile: full-width button row below name */}
+            <div className="flex sm:hidden gap-2 mt-4">
+              <Link
+                href="/journal"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#E8923A] text-white text-sm font-semibold rounded-lg"
+              >
+                <BookOpen className="h-4 w-4" /> Journal
+              </Link>
               <Link
                 href="/contribute"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg"
               >
-                <Plus className="h-4 w-4" /> Contribute
+                <Plus className="h-4 w-4" /> Add
               </Link>
               <Link
                 href="/feedback"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#0BA5C7] hover:text-[#0BA5C7] transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg"
               >
                 <Lightbulb className="h-4 w-4" /> Ideas
-              </Link>
-              <Link
-                href="/journal"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors"
-              >
-                <BookOpen className="h-4 w-4" /> My Journal
               </Link>
             </div>
           </div>
