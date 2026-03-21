@@ -93,10 +93,45 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
   const fields = ENTITY_FIELDS[entityType] || [];
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [heroImage, setHeroImage] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  async function handleImageUpload(file: File) {
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload an image file (JPEG, PNG, or WebP)");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image is too large. Maximum 10 MB.");
+      return;
+    }
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("submission_id", "new");
+
+      const res = await fetch("/api/submissions/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Upload failed");
+
+      setHeroImage(result.url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload failed");
+    }
+
+    setUploading(false);
+  }
 
   function updateField(key: string, value: string) {
     setFormData(prev => ({ ...prev, [key]: value }));
@@ -192,26 +227,62 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
           </div>
         )}
 
-        {/* Hero image */}
+        {/* Hero image upload */}
         <div className="mb-6">
           <label className="block text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-2">
             <ImageIcon className="h-3 w-3 inline mr-1" />
             Hero Image <span className="text-[#E8923A]">*strongly recommended</span>
           </label>
-          <input
-            type="url"
-            value={heroImage}
-            onChange={e => setHeroImage(e.target.value)}
-            placeholder="Paste image URL (upload to Imgur, Unsplash, or similar)"
-            className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
-          />
-          {heroImage && (
-            <div className="mt-2 rounded-lg overflow-hidden border border-[#21262D]">
+
+          {heroImage ? (
+            <div className="relative rounded-xl overflow-hidden border border-[#21262D]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={heroImage} alt="Preview" className="w-full h-40 object-cover" onError={() => setHeroImage("")} />
+              <img src={heroImage} alt="Preview" className="w-full h-48 object-cover" />
+              <button
+                onClick={() => setHeroImage("")}
+                className="absolute top-2 right-2 px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors"
+              >
+                Remove
+              </button>
             </div>
+          ) : (
+            <label
+              className={`flex flex-col items-center justify-center w-full h-48 bg-[#161B22] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#484F58]"
+              }`}
+              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[#E8923A]", "bg-[#E8923A]/5"); }}
+              onDragLeave={e => { e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5"); }}
+              onDrop={async e => {
+                e.preventDefault();
+                e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5");
+                const file = e.dataTransfer.files[0];
+                if (file) await handleImageUpload(file);
+              }}
+            >
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={async e => {
+                  const file = e.target.files?.[0];
+                  if (file) await handleImageUpload(file);
+                }}
+              />
+              {uploading ? (
+                <>
+                  <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin mb-2" />
+                  <span className="text-sm text-[#E8923A] font-medium">Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="h-8 w-8 text-[#484F58] mb-2" />
+                  <span className="text-sm text-[#8B949E] font-medium">Drop an image here or click to browse</span>
+                  <span className="text-[10px] text-[#484F58] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
+                </>
+              )}
+            </label>
           )}
-          <p className="text-[10px] text-[#484F58] mt-1">A great photo dramatically increases approval chances</p>
+          <p className="text-[10px] text-[#484F58] mt-1.5">A great photo dramatically increases approval chances</p>
         </div>
 
         {/* Dynamic fields */}
