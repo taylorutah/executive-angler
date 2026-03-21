@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
+import { isAdmin } from "@/lib/admin";
 
 export const metadata = { title: "My Account | Executive Angler" };
 
@@ -111,6 +112,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         emailNotifyLikes: profile?.email_notify_likes ?? true,
         emailDigestFrequency: (profile?.email_digest_frequency as "none" | "daily" | "weekly") ?? "weekly",
       }}
+      isAdmin={isAdmin(user.email)}
     />
   );
 }

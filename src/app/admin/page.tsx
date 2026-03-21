@@ -2,18 +2,17 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AdminClient from "./AdminClient";
+import { isAdmin } from "@/lib/admin";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard — Executive Angler",
   description: "Admin metrics and management.",
 };
 
-const ADMIN_EMAILS = ["taylor@executiveangler.com", "taylor.warnick@gmail.com"];
-
 export default async function AdminPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
+  if (!user || !isAdmin(user.email)) redirect("/dashboard");
 
   // Total users
   const { count: totalUsers } = await supabase

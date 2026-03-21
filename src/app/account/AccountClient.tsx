@@ -54,6 +54,7 @@ interface Props {
     metadata: { badge_icon?: string; badge_color?: string; display_name?: string; description?: string };
   }>;
   welcome?: boolean;
+  isAdmin?: boolean;
   socialCounts?: {
     followers: number;
     following: number;
@@ -66,7 +67,7 @@ interface Props {
   };
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false }: Props) {
   const router = useRouter();
 
   // Determine initial section from URL hash
@@ -336,6 +337,20 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                   {label}
                 </button>
               ))}
+
+              {/* Admin link — only visible to admins */}
+              {isAdmin && (
+                <>
+                  <div className="h-px bg-[#21262D] my-2" />
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors"
+                  >
+                    <Shield className="h-4 w-4 flex-shrink-0" />
+                    Admin Dashboard
+                  </Link>
+                </>
+              )}
             </nav>
           </aside>
 
