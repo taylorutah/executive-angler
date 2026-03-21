@@ -261,7 +261,7 @@ export default function DashboardClient({
               </Link>
 
               <Link
-                href="/account/gear"
+                href="/journal/stats"
                 className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
               >
                 <div className="flex items-center justify-between mb-3">

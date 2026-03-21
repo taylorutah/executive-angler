@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
+import { publishSubmission } from "@/lib/submissions/publish";
 
 /**
  * GET /api/submissions/[id] — Fetch a single submission
@@ -193,7 +194,14 @@ async function handleAdminAction(
       await updateContributorStats(supabase, submission.user_id as string, "approve");
       await notifySubmitter(submission.user_id as string, submission.name as string, submission.entity_type as string, "approved", supabase);
 
-      return NextResponse.json({ success: true, slug });
+      // Publish to the actual entity table
+      const publishResult = await publishSubmission(submission);
+      if (publishResult.error) {
+        console.error("[Publish] Failed:", publishResult.error);
+        return NextResponse.json({ success: true, slug, publishWarning: publishResult.error });
+      }
+
+      return NextResponse.json({ success: true, slug: publishResult.slug || slug });
     }
 
     case "reject": {
