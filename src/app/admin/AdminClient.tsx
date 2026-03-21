@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Shield,
   Users,
@@ -9,6 +10,8 @@ import {
   TrendingUp,
   Feather,
   Heart,
+  Image as ImageIcon,
+  ChevronRight,
 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -87,6 +90,31 @@ export default function AdminClient({
       </header>
 
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-8">
+        {/* ── Quick Links ── */}
+        <section>
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
+            Manage
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Link href="/admin/users" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#E8923A] transition-colors">
+              <Users className="h-5 w-5 text-[#E8923A]" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">User Management</p>
+                <p className="text-[11px] text-[#484F58]">View all users, activity, stats</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#E8923A]" />
+            </Link>
+            <Link href="/admin/photos" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#0BA5C7] transition-colors">
+              <ImageIcon className="h-5 w-5 text-[#0BA5C7]" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Photo Moderation</p>
+                <p className="text-[11px] text-[#484F58]">Review uploaded photos</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
+            </Link>
+          </div>
+        </section>
+
         {/* ── Metric Cards Grid ── */}
         <section>
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
