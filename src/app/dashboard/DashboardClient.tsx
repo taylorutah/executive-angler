@@ -57,8 +57,7 @@ function formatDate(d: string): string {
 /* ─── Stats Card (matches iOS HomeStatsCard exactly) ─── */
 function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
   return (
-    <div className="rounded-xl overflow-hidden border border-[#E8923A]/25 bg-[#161B22] shadow-lg shadow-[#E8923A]/5"
-      style={{ background: "linear-gradient(135deg, rgba(232,146,58,0.04) 0%, #161B22 40%, #0D1117 100%)" }}>
+    <div className="rounded-xl overflow-hidden border border-[#E8923A]/25 bg-[#161B22] shadow-lg shadow-[#E8923A]/5 ea-stats-card">
 
       {/* Hero row — Sessions · Total Fish · Biggest */}
       <div className="grid grid-cols-3 divide-x divide-[#21262D]">

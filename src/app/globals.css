@@ -693,3 +693,11 @@ select:focus {
   border-color: #E8923A !important;
   box-shadow: 0 0 0 1px #E8923A;
 }
+
+/* ── Dashboard Stats Card gradient ── */
+.ea-stats-card {
+  background: linear-gradient(135deg, rgba(232,146,58,0.04) 0%, #161B22 40%, #0D1117 100%) !important;
+}
+.light-mode .ea-stats-card {
+  background: linear-gradient(135deg, rgba(212,117,31,0.06) 0%, #FFFFFF 40%, #F7F3EC 100%) !important;
+}
