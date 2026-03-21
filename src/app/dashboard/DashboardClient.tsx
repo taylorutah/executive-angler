@@ -6,7 +6,7 @@ import {
   Fish, MapPin, TrendingUp, Heart, Users,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
-  BarChart3, Leaf, Ruler, Calendar, Plus
+  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 
@@ -193,6 +193,12 @@ export default function DashboardClient({
                 className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
               >
                 <Plus className="h-4 w-4" /> Contribute
+              </Link>
+              <Link
+                href="/feedback"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#0BA5C7] hover:text-[#0BA5C7] transition-colors"
+              >
+                <Lightbulb className="h-4 w-4" /> Ideas
               </Link>
               <Link
                 href="/journal"

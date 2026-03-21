@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS community_submissions (
 
   -- What type of entity is being submitted
   entity_type text NOT NULL CHECK (entity_type IN (
-    'river', 'fly_shop', 'guide', 'lodge', 'destination', 'species'
+    'river', 'fly_shop', 'guide', 'lodge', 'destination', 'species', 'feedback'
   )),
 
   -- Lifecycle status
