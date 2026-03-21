@@ -24,10 +24,17 @@ export default async function AdminSubmissionsPage() {
     .order("reviewed_at", { ascending: false })
     .limit(10);
 
+  // Normalize profiles from array to single object (Supabase join returns array)
+  const normalize = (list: unknown[]) =>
+    (list || []).map((s: any) => ({
+      ...s,
+      profiles: Array.isArray(s.profiles) ? s.profiles[0] || null : s.profiles,
+    }));
+
   return (
     <SubmissionsQueueClient
-      pending={submissions || []}
-      recent={recent || []}
+      pending={normalize(submissions || []) as any}
+      recent={normalize(recent || []) as any}
     />
   );
 }
