@@ -209,36 +209,52 @@ export default function DashboardClient({
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
 
-            {/* Quick Links: Fly Box + Gear Box */}
-            <section className="grid grid-cols-2 gap-4">
+            {/* Quick Actions Grid — matches iOS Dashboard */}
+            <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <Link
+                href="/journal/stats"
+                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <BarChart3 className="h-5 w-5 text-[#E8923A]" />
+                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                </div>
+                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
+                <p className="text-[11px] text-[#8B949E] mt-0.5">Trends & stats</p>
+              </Link>
+
+              <Link
+                href="/journal/stats#export"
+                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <BookOpen className="h-5 w-5 text-[#0BA5C7]" />
+                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                </div>
+                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Export</h3>
+                <p className="text-[11px] text-[#8B949E] mt-0.5">CSV & PDF</p>
+              </Link>
+
               <Link
                 href="/journal/flies"
-                className="group relative flex items-center gap-4 p-5 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all overflow-hidden"
+                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#2EA44F] transition-all"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#E8923A]/5 to-transparent rounded-bl-full" />
-                <div className="w-12 h-12 rounded-xl bg-[#E8923A]/10 flex items-center justify-center shrink-0">
-                  <Feather className="h-6 w-6 text-[#E8923A]" />
+                <div className="flex items-center justify-between mb-3">
+                  <Feather className="h-5 w-5 text-[#2EA44F]" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">My Fly Box</h3>
-                  <p className="text-sm text-[#8B949E]">{flyCount > 0 ? `${flyCount} pattern${flyCount !== 1 ? "s" : ""}` : "Add your first"}</p>
-                </div>
-                <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#E8923A] transition-colors shrink-0" />
+                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
+                <p className="text-[11px] text-[#8B949E] mt-0.5">{flyCount > 0 ? `${flyCount} patterns` : "Your patterns"}</p>
               </Link>
 
               <Link
                 href="/account/gear"
-                className="group relative flex items-center gap-4 p-5 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all overflow-hidden"
+                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#0BA5C7]/5 to-transparent rounded-bl-full" />
-                <div className="w-12 h-12 rounded-xl bg-[#0BA5C7]/10 flex items-center justify-center shrink-0">
-                  <Package className="h-6 w-6 text-[#0BA5C7]" />
+                <div className="flex items-center justify-between mb-3">
+                  <Trophy className="h-5 w-5 text-[#FFD700]" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-semibold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Gear Box</h3>
-                  <p className="text-sm text-[#8B949E]">{gearCount > 0 ? `${gearCount} item${gearCount !== 1 ? "s" : ""}` : "Add your gear"}</p>
-                </div>
-                <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7] transition-colors shrink-0" />
+                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">Achievements</h3>
+                <p className="text-[11px] text-[#8B949E] mt-0.5">{riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)} earned</p>
               </Link>
             </section>
 

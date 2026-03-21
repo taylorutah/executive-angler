@@ -24,7 +24,7 @@ const AWARD_EMOJI_MAP: Record<string, string> = {
   streak_4: "⚡", streak_12: "💎",
 };
 
-type Section = "overview" | "profile" | "notifications" | "security" | "connected";
+type Section = "profile" | "notifications" | "security" | "connected";
 
 interface Props {
   user: {
@@ -73,9 +73,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const getInitialSection = (): Section => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (["overview", "profile", "notifications", "security", "connected"].includes(hash)) return hash as Section;
+      if (["profile", "notifications", "security", "connected"].includes(hash)) return hash as Section;
     }
-    return "overview";
+    return "profile";
   };
 
   const [activeSection, setActiveSection] = useState<Section>(getInitialSection);
@@ -147,7 +147,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   // Handle hash navigation
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (["overview", "profile", "notifications", "security", "connected"].includes(hash)) {
+    if (["profile", "notifications", "security", "connected"].includes(hash)) {
       setActiveSection(hash as Section);
     }
   }, []);
@@ -244,7 +244,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const labelCls = "block text-sm font-medium text-[#8B949E] mb-1.5";
 
   const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
-    { key: "overview", icon: User, label: "Overview" },
     { key: "profile", icon: Settings, label: "Edit Profile" },
     { key: "notifications", icon: Bell, label: "Notifications" },
     { key: "security", icon: Key, label: "Security" },
@@ -318,23 +317,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
           </button>
         </div>
 
-        {/* ─── Quick nav cards (full width, horizontal) ─── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-          {quickLinks.map(({ href, icon: Icon, label, sub, color, bg }) => (
-            <Link key={href} href={href}
-              className="group flex items-center gap-3 bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#E8923A]/40 transition-all hover:shadow-lg hover:shadow-[#E8923A]/5">
-              <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center flex-shrink-0`}>
-                <Icon className={`h-5 w-5 ${color}`} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-[#F0F6FC] text-sm truncate">{label}</p>
-                <p className="text-xs text-[#8B949E]">{sub}</p>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[#21262D] group-hover:text-[#8B949E] transition-colors flex-shrink-0" />
-            </Link>
-          ))}
-        </div>
-
         {/* ─── Sidebar + Main Content ─── */}
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left sidebar nav */}
@@ -359,93 +341,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
           {/* Right main content */}
           <main className="flex-1 min-w-0">
-            {/* ═══════ OVERVIEW ═══════ */}
-            {activeSection === "overview" && (
-              <div className="space-y-6">
-                {/* Stats row */}
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                  {[
-                    { icon: BookOpen, label: "Sessions", value: stats.totalSessions, color: "text-[#E8923A]" },
-                    { icon: Fish, label: "Fish Caught", value: stats.totalFish, color: "text-blue-400" },
-                    { icon: MapPin, label: "Rivers", value: stats.totalRivers, color: "text-amber-500" },
-                    { icon: Feather, label: "Fly Patterns", value: stats.totalFlies, color: "text-purple-400" },
-                    { icon: Heart, label: "Favorites", value: stats.totalFavorites, color: "text-red-400" },
-                  ].map(({ icon: Icon, label, value, color }) => (
-                    <div key={label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
-                      <Icon className={`h-5 w-5 mx-auto mb-1.5 ${color}`} />
-                      <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{value}</p>
-                      <p className="text-xs text-[#8B949E] mt-0.5">{label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Personal bests */}
-                {(stats.biggestFish || stats.bestSession) && (
-                  <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-                    <h3 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-amber-500" /> Personal Bests
-                    </h3>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {stats.biggestFish && (
-                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4">
-                          <p className="text-xs text-[#8B949E] mb-1">Biggest Fish</p>
-                          <p className="text-2xl font-bold text-[#E8923A] font-mono">{stats.biggestFish.toFixed(1)}&quot;</p>
-                        </div>
-                      )}
-                      {stats.bestSession && (
-                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4">
-                          <p className="text-xs text-[#8B949E] mb-1">Best Day</p>
-                          <p className="text-lg font-bold text-[#E8923A] font-mono">{stats.bestSession.total_fish} fish</p>
-                          <p className="text-xs text-[#8B949E] mt-0.5">
-                            {stats.bestSession.river_name} · {formatDate(stats.bestSession.date, { month: "short", day: "numeric", year: "numeric" })}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Achievements — compact inline strip */}
-                {awards.length > 0 && (
-                  <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider flex items-center gap-2">
-                        <Award className="h-4 w-4 text-amber-500" /> Achievements
-                      </h3>
-                      <span className="text-xs text-[#484F58] font-mono">{awards.length} earned</span>
-                    </div>
-                    {/* Compact badge grid — small circles with tooltips */}
-                    <div className="flex flex-wrap gap-2">
-                      {awards.slice(0, 20).map((award, i) => {
-                        const emoji = AWARD_EMOJI_MAP[award.award_key] || award.metadata.badge_icon || "🏆";
-                        return (
-                          <div key={i} className="group relative">
-                            <div
-                              className="w-10 h-10 rounded-full bg-[#0D1117] border-2 hover:brightness-125 transition-all cursor-default flex items-center justify-center"
-                              style={{ borderColor: award.metadata.badge_color || "#E8923A" }}
-                            >
-                              <span className="text-base leading-none">{emoji}</span>
-                            </div>
-                            {/* Tooltip */}
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-[#1F2937] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
-                              <p className="font-semibold">{award.metadata.display_name || award.award_key}</p>
-                              {award.river_name && <p className="text-[#E8923A]">{award.river_name}</p>}
-                              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-[#1F2937]" />
-                            </div>
-                          </div>
-                        );
-                      })}
-                      {awards.length > 20 && (
-                        <div className="w-10 h-10 rounded-full bg-[#0D1117] border border-[#21262D] flex items-center justify-center">
-                          <span className="text-xs text-[#8B949E] font-mono">+{awards.length - 20}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* ═══════ EDIT PROFILE ═══════ */}
             {activeSection === "profile" && (
               <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
