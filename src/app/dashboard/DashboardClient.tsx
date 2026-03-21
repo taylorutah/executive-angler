@@ -6,7 +6,7 @@ import {
   Fish, MapPin, TrendingUp, Heart, Users,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
-  BarChart3, Leaf, Ruler, Calendar
+  BarChart3, Leaf, Ruler, Calendar, Plus
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 
@@ -187,12 +187,20 @@ export default function DashboardClient({
                 </p>
               )}
             </div>
-            <Link
-              href="/journal"
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors shrink-0"
-            >
-              <BookOpen className="h-4 w-4" /> My Journal
-            </Link>
+            <div className="flex gap-2 shrink-0">
+              <Link
+                href="/contribute"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
+              >
+                <Plus className="h-4 w-4" /> Contribute
+              </Link>
+              <Link
+                href="/journal"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors"
+              >
+                <BookOpen className="h-4 w-4" /> My Journal
+              </Link>
+            </div>
           </div>
 
           {/* Stats Card */}
