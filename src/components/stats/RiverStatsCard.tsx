@@ -60,10 +60,9 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
           </div>
         </div>
         {stats.awards.length > 0 && (
-          <div className="flex gap-2 flex-wrap justify-end max-w-[200px]">
-            {stats.awards.map((award) => (
-              <AwardBadge key={award.id} award={award} size="md" />
-            ))}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E8923A]/10 rounded-full">
+            <Star className="w-3.5 h-3.5 text-[#E8923A]" />
+            <span className="text-xs font-bold text-[#E8923A]">{stats.awards.length} awards</span>
           </div>
         )}
       </div>
