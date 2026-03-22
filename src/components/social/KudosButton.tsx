@@ -105,7 +105,7 @@ export function KudosButton({
   if (!userId) {
     // Not logged in — show static count only
     return (
-      <div className="flex items-center gap-1 text-[#484F58]">
+      <div className="flex items-center gap-1 text-[#6E7681]">
         <Heart className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
         {count > 0 && (
           <span className={`font-['IBM_Plex_Mono'] ${compact ? "text-[10px]" : "text-xs"}`}>
@@ -123,7 +123,7 @@ export function KudosButton({
       className={`flex items-center gap-1 transition-colors duration-150 ${
         liked
           ? "text-[#DA3633]"
-          : "text-[#484F58] hover:text-[#DA3633]"
+          : "text-[#6E7681] hover:text-[#DA3633]"
       } ${loading ? "opacity-50" : ""}`}
       aria-label={liked ? "Remove kudos" : "Give kudos"}
     >

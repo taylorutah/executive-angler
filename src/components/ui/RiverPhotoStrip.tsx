@@ -84,7 +84,7 @@ export default function RiverPhotoStrip({
               {photos.length > 0 && (
                 <Link
                   href={`/rivers/${riverSlug}/photos`}
-                  className="text-xs text-[#8B949E] hover:text-[#F0F6FC] whitespace-nowrap transition-colors"
+                  className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] whitespace-nowrap transition-colors"
                 >
                   View all {photos.length} →
                 </Link>

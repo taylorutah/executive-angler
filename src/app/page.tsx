@@ -93,7 +93,7 @@ export default async function HomePage() {
             </h1>
           </ScrollAnimation>
           <ScrollAnimation delay={0.2}>
-            <p className="text-[#8B949E] text-lg max-w-xl mx-auto leading-relaxed mb-10">
+            <p className="text-[#A8B2BD] text-lg max-w-xl mx-auto leading-relaxed mb-10">
               The easiest app to track your fishing sessions, log every catch, and turn your time on the water into actionable insights.
             </p>
           </ScrollAnimation>
@@ -111,7 +111,7 @@ export default async function HomePage() {
               {APP_FEATURES.map((f) => (
                 <div key={f.text} className="flex items-center gap-2.5 bg-[#161B22] border border-[#21262D] rounded-xl px-4 py-3">
                   <f.icon className="h-4 w-4 text-[#E8923A] flex-shrink-0" strokeWidth={1.5} />
-                  <span className="text-[#8B949E] text-xs text-left leading-snug">{f.text}</span>
+                  <span className="text-[#A8B2BD] text-xs text-left leading-snug">{f.text}</span>
                 </div>
               ))}
             </div>
@@ -127,7 +127,7 @@ export default async function HomePage() {
               ].map((s) => (
                 <div key={s.label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
                   <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-5xl font-normal mb-1">{s.n}</div>
-                  <div className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs uppercase tracking-[0.1em]">{s.label}</div>
+                  <div className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs uppercase tracking-[0.1em]">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -142,7 +142,7 @@ export default async function HomePage() {
             <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
               What&apos;s Happening on the Water
             </h2>
-            <p className="text-[#8B949E] text-center mb-12 max-w-xl mx-auto">
+            <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
               Real catch data from anglers in the field. Public sessions updated daily.
             </p>
           </ScrollAnimation>
@@ -150,12 +150,12 @@ export default async function HomePage() {
             {RIVERS.map((r, i) => (
               <ScrollAnimation key={r.name} delay={i * 0.08}>
                 <Link href={r.href} className="block bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
-                  <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs uppercase tracking-wider mb-1">{r.location}</p>
+                  <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs uppercase tracking-wider mb-1">{r.location}</p>
                   <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
                   <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal mb-0.5">{r.fish}</div>
-                  <div className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-3">fish this week</div>
+                  <div className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-3">fish this week</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs mb-4">{"\u25CF"} {r.ago}</div>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#8B949E] group-hover:text-[#E8923A] transition-colors">
+                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#A8B2BD] group-hover:text-[#E8923A] transition-colors">
                     View River &rarr;
                   </span>
                 </Link>
@@ -179,17 +179,17 @@ export default async function HomePage() {
             <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
               Explore the World&apos;s Best Fly Fishing
             </h2>
-            <p className="text-[#8B949E] text-center mb-12 max-w-xl mx-auto">
+            <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
               Hand-curated destinations, rivers, lodges, guides, fly shops, and expert resources.
             </p>
           </ScrollAnimation>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {EXPLORE.map((item, i) => (
               <ScrollAnimation key={item.label} delay={i * 0.07}>
-                <Link href={item.href} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl p-6 hover:border-[#484F58] transition-colors">
+                <Link href={item.href} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl p-6 hover:border-[#6E7681] transition-colors">
                   <item.icon className="h-7 w-7 mb-3" style={{ color: item.color }} strokeWidth={1.5} />
                   <h3 className="font-['DM_Sans'] font-semibold text-lg text-[#F0F6FC] mb-1">{item.label}</h3>
-                  <p className="text-[#8B949E] text-sm leading-relaxed mb-3">{item.desc}</p>
+                  <p className="text-[#A8B2BD] text-sm leading-relaxed mb-3">{item.desc}</p>
                   <span className="font-['IBM_Plex_Mono'] text-xs text-[#0BA5C7] group-hover:text-[#E8923A] transition-colors">Explore &rarr;</span>
                 </Link>
               </ScrollAnimation>
@@ -208,7 +208,7 @@ export default async function HomePage() {
               <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
                 Your journal.<br />Your data.<br />Your river.
               </h2>
-              <p className="text-[#8B949E] text-lg leading-relaxed mb-6">
+              <p className="text-[#A8B2BD] text-lg leading-relaxed mb-6">
                 Every session on the water, captured in full. Species, length, fly, conditions &mdash; all in one place. Public or private. Your data, yours forever.
               </p>
               <div className="space-y-3 mb-8">
@@ -219,35 +219,35 @@ export default async function HomePage() {
                 ].map((line) => (
                   <div key={line} className="flex items-start gap-3">
                     <Check className="h-4 w-4 text-[#2EA44F] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
-                    <span className="text-[#8B949E] text-sm">{line}</span>
+                    <span className="text-[#A8B2BD] text-sm">{line}</span>
                   </div>
                 ))}
               </div>
               <a href="#waitlist" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors shadow-lg">
                 Join the Waitlist &rarr;
               </a>
-              <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs mt-3">iPhone + Apple Watch &bull; Free to start</p>
+              <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-3">iPhone + Apple Watch &bull; Free to start</p>
             </ScrollAnimation>
 
             {/* Session card mockup — shown second on mobile, left on desktop */}
             <ScrollAnimation className="order-2 lg:order-1">
               <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
                 <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
-                <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
+                <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
                 <div className="flex items-baseline justify-between mb-6">
                   <div className="text-center">
                     <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">14</div>
-                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
+                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
                   </div>
                   <div className="h-8 w-px bg-[#21262D]" />
                   <div className="text-center">
                     <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none whitespace-nowrap">3<span className="text-2xl">h</span> 12<span className="text-2xl">m</span></div>
-                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
+                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
                   </div>
                   <div className="h-8 w-px bg-[#21262D]" />
                   <div className="text-center">
                     <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">18<span className="text-2xl">&quot;</span></div>
-                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
+                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -270,19 +270,19 @@ export default async function HomePage() {
             <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
               From the Water
             </h2>
-            <p className="text-[#8B949E] text-center mb-12 max-w-2xl mx-auto">
+            <p className="text-[#A8B2BD] text-center mb-12 max-w-2xl mx-auto">
               Dispatches, technique, and destination guides from serious anglers.
             </p>
           </ScrollAnimation>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredArticles.map((article, i) => (
               <ScrollAnimation key={article.id} delay={i * 0.1}>
-                <Link href={`/articles/${article.slug}`} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden hover:border-[#484F58] transition-colors">
+                <Link href={`/articles/${article.slug}`} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden hover:border-[#6E7681] transition-colors">
                   <div className="p-6">
                     <div className="text-[#0BA5C7] text-xs uppercase tracking-wider mb-3 font-['IBM_Plex_Mono']">{article.category}</div>
                     <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors mb-2 leading-tight">{article.title}</h3>
-                    <p className="text-[#8B949E] text-sm line-clamp-2 mb-4">{article.excerpt}</p>
-                    <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs">{article.readingTimeMinutes} min &bull; {article.author}</p>
+                    <p className="text-[#A8B2BD] text-sm line-clamp-2 mb-4">{article.excerpt}</p>
+                    <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs">{article.readingTimeMinutes} min &bull; {article.author}</p>
                   </div>
                 </Link>
               </ScrollAnimation>
@@ -311,13 +311,13 @@ export default async function HomePage() {
             <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-5xl mb-4">
               The app is almost here.
             </h2>
-            <p className="text-[#8B949E] text-lg mb-10 max-w-xl mx-auto">
+            <p className="text-[#A8B2BD] text-lg mb-10 max-w-xl mx-auto">
               Executive Angler is heading to the App Store. Join the waitlist for early access &mdash; spots in the closed beta are limited.
             </p>
             <div className="max-w-lg mx-auto">
               <WaitlistForm initialCount={waitlistCount} />
             </div>
-            <p className="mt-4 font-['IBM_Plex_Mono'] text-[#484F58] text-xs">
+            <p className="mt-4 font-['IBM_Plex_Mono'] text-[#6E7681] text-xs">
               No spam. One email when beta opens. That&apos;s it.
             </p>
           </ScrollAnimation>

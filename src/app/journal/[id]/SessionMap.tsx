@@ -72,7 +72,7 @@ export default function SessionMap({ riverName, location }: Props) {
       <h2 className="font-heading text-xl font-semibold text-[#E8923A] mb-4 flex items-center gap-2">
         <span>📍</span> Location
       </h2>
-      <p className="text-sm text-[#8B949E] mb-3">
+      <p className="text-sm text-[#A8B2BD] mb-3">
         {riverName}{location ? ` — ${location}` : ""}
       </p>
       <MapView
@@ -82,7 +82,7 @@ export default function SessionMap({ riverName, location }: Props) {
         markers={markers}
         className="h-64 w-full rounded-xl overflow-hidden"
       />
-      <p className="text-xs text-[#484F58] mt-2">
+      <p className="text-xs text-[#6E7681] mt-2">
         GPS catch pins coming with Apple Watch integration.
       </p>
     </div>

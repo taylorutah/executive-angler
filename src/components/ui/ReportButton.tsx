@@ -62,7 +62,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-1.5 text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
+        className="flex items-center gap-1.5 text-xs text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
         title="Report an issue"
       >
         <Flag className="h-3.5 w-3.5" />
@@ -76,19 +76,19 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
               <div className="text-center py-4">
                 <CheckCircle className="h-10 w-10 text-[#2EA44F] mx-auto mb-3" />
                 <p className="text-[#F0F6FC] font-semibold">Report submitted</p>
-                <p className="text-xs text-[#8B949E] mt-1">We&apos;ll review this shortly. Thank you.</p>
+                <p className="text-xs text-[#A8B2BD] mt-1">We&apos;ll review this shortly. Thank you.</p>
               </div>
             ) : (
               <>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-base font-bold text-[#F0F6FC]">Report an Issue</h3>
-                  <button onClick={() => setIsOpen(false)} className="text-[#484F58] hover:text-[#F0F6FC]">
+                  <button onClick={() => setIsOpen(false)} className="text-[#6E7681] hover:text-[#F0F6FC]">
                     <X className="h-5 w-5" />
                   </button>
                 </div>
 
                 <div className="space-y-3 mb-4">
-                  <p className="text-xs text-[#8B949E]">What&apos;s wrong with this {entityType.replace("_", " ")}?</p>
+                  <p className="text-xs text-[#A8B2BD]">What&apos;s wrong with this {entityType.replace("_", " ")}?</p>
                   <div className="grid grid-cols-2 gap-2">
                     {REASONS.map(r => (
                       <button
@@ -97,7 +97,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
                         className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors ${
                           reason === r.key
                             ? "bg-[#E8923A]/15 text-[#E8923A] border border-[#E8923A]/30"
-                            : "bg-[#0D1117] text-[#8B949E] border border-[#21262D] hover:border-[#484F58]"
+                            : "bg-[#0D1117] text-[#A8B2BD] border border-[#21262D] hover:border-[#6E7681]"
                         }`}
                       >
                         {r.label}
@@ -112,7 +112,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
                     onChange={e => setDetails(e.target.value)}
                     placeholder="Additional details (optional)..."
                     rows={3}
-                    className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] resize-none"
+                    className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
                   />
                 </div>
 

@@ -53,7 +53,7 @@ function clarityColor(clarity: string): string {
   if (c.includes("clear")) return "text-[#00B4D8]";
   if (c.includes("stained") || c.includes("off")) return "text-amber-400";
   if (c.includes("muddy") || c.includes("high")) return "text-red-400";
-  return "text-[#8B949E]";
+  return "text-[#A8B2BD]";
 }
 
 // Skeleton for loading state
@@ -94,11 +94,11 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
   if (!intel || intel.totalSessions === 0) {
     return (
       <div className="bg-[#161B22] rounded-xl border border-[#21262D] border-dashed p-8 text-center">
-        <Activity className="h-9 w-9 text-[#484F58] mx-auto mb-3" />
+        <Activity className="h-9 w-9 text-[#6E7681] mx-auto mb-3" />
         <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] mb-1">
           No Angler Reports Yet
         </h3>
-        <p className="text-sm text-[#8B949E] mb-4 max-w-sm mx-auto">
+        <p className="text-sm text-[#A8B2BD] mb-4 max-w-sm mx-auto">
           Be the first to log a session on {riverName}. Your reports help the whole community fish smarter.
         </p>
         <Link
@@ -122,7 +122,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
       {/* ── Stat Cards ──────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 flex flex-col gap-1">
-          <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">
+          <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">
             Sessions (30d)
           </span>
           <span className="font-mono text-3xl font-bold text-[#E8923A]">
@@ -135,39 +135,39 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
           )}
         </div>
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 flex flex-col gap-1">
-          <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">
+          <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">
             Avg Fish / Trip
           </span>
           <span className="font-mono text-3xl font-bold text-[#E8923A]">
             {intel.avgFishPerSession ?? "—"}
           </span>
           {intel.maxLengthInches && (
-            <span className="text-[10px] text-[#8B949E]">
+            <span className="text-[10px] text-[#A8B2BD]">
               Best: {intel.maxLengthInches}&quot;
             </span>
           )}
         </div>
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 flex flex-col gap-1">
-          <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">
+          <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">
             Last Session
           </span>
           <span className="font-mono text-xl font-bold text-[#E8923A] leading-tight pt-1">
             {timeAgo(intel.lastSessionDate)}
           </span>
           {intel.lastSessionDate && (
-            <span className="text-[10px] text-[#484F58]">
+            <span className="text-[10px] text-[#6E7681]">
               {formatDate(intel.lastSessionDate)}
             </span>
           )}
         </div>
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 flex flex-col gap-1">
-          <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">
+          <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">
             Fish Recorded
           </span>
           <span className="font-mono text-3xl font-bold text-[#E8923A]">
             {intel.totalFishRecorded}
           </span>
-          <span className="text-[10px] text-[#484F58]">
+          <span className="text-[10px] text-[#6E7681]">
             {intel.totalSessions} session{intel.totalSessions !== 1 ? "s" : ""} total
           </span>
         </div>
@@ -184,7 +184,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                 <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
                   What&apos;s Working
                 </h3>
-                <span className="ml-auto text-[10px] text-[#484F58]">from app data</span>
+                <span className="ml-auto text-[10px] text-[#6E7681]">from app data</span>
               </div>
               <div className="space-y-2.5">
                 {intel.topFlies.map((fly, i) => {
@@ -194,14 +194,14 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                     <div key={fly.flyName}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-[#484F58] w-4">
+                          <span className="text-[10px] font-mono text-[#6E7681] w-4">
                             #{i + 1}
                           </span>
                           <span className="text-sm font-medium text-[#F0F6FC]">
                             {fly.flyName}
                           </span>
                           {fly.sizes.length > 0 && (
-                            <span className="text-[10px] text-[#8B949E]">
+                            <span className="text-[10px] text-[#A8B2BD]">
                               #{fly.sizes.join(", #")}
                             </span>
                           )}
@@ -232,7 +232,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                   Species Caught
                 </h3>
                 {intel.avgLengthInches && (
-                  <span className="ml-auto text-[10px] text-[#484F58]">
+                  <span className="ml-auto text-[10px] text-[#6E7681]">
                     avg {intel.avgLengthInches}&quot;
                   </span>
                 )}
@@ -249,9 +249,9 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                         <span className="text-sm font-medium text-[#F0F6FC]">
                           {sp.species}
                         </span>
-                        <div className="flex items-center gap-2 text-xs text-[#8B949E]">
+                        <div className="flex items-center gap-2 text-xs text-[#A8B2BD]">
                           {sp.avgLengthInches && (
-                            <span className="font-mono text-[#8B949E]">
+                            <span className="font-mono text-[#A8B2BD]">
                               avg {sp.avgLengthInches}&quot;
                             </span>
                           )}
@@ -260,7 +260,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                               best {sp.maxLengthInches}&quot;
                             </span>
                           )}
-                          <span className="text-[#484F58]">{pct}%</span>
+                          <span className="text-[#6E7681]">{pct}%</span>
                         </div>
                       </div>
                       <div className="h-1 bg-[#21262D] rounded-full overflow-hidden">
@@ -292,7 +292,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
             <div className="space-y-3">
               {intel.avgWaterTempF != null && (
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-[#8B949E]">
+                  <div className="flex items-center gap-2 text-sm text-[#A8B2BD]">
                     <Thermometer className="h-3.5 w-3.5" />
                     Water Temp
                   </div>
@@ -300,13 +300,13 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                     <span className="font-mono text-lg font-bold text-[#F0F6FC]">
                       {intel.avgWaterTempF}°F
                     </span>
-                    <span className="text-[10px] text-[#484F58] ml-1">avg</span>
+                    <span className="text-[10px] text-[#6E7681] ml-1">avg</span>
                   </div>
                 </div>
               )}
               {intel.recentWaterTemps.length > 1 && (
                 <div>
-                  <p className="text-[10px] text-[#484F58] mb-1.5 uppercase tracking-widest">
+                  <p className="text-[10px] text-[#6E7681] mb-1.5 uppercase tracking-widest">
                     Recent readings
                   </p>
                   <div className="flex items-end gap-1 h-10">
@@ -330,7 +330,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
               )}
               {intel.waterClarity.length > 0 && (
                 <div className="flex items-center justify-between pt-1 border-t border-[#21262D]">
-                  <div className="flex items-center gap-2 text-sm text-[#8B949E]">
+                  <div className="flex items-center gap-2 text-sm text-[#A8B2BD]">
                     <Droplets className="h-3.5 w-3.5" />
                     Clarity
                   </div>
@@ -341,7 +341,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                         className={`text-xs font-medium ${clarityColor(c.clarity)}`}
                       >
                         {c.clarity}
-                        <span className="text-[#484F58] ml-0.5">({c.count})</span>
+                        <span className="text-[#6E7681] ml-0.5">({c.count})</span>
                       </span>
                     ))}
                   </div>
@@ -359,7 +359,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
               <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
                 Trip Reports
               </h3>
-              <span className="ml-auto text-[10px] text-[#484F58]">
+              <span className="ml-auto text-[10px] text-[#6E7681]">
                 {intel.totalReports} with notes
               </span>
             </div>
@@ -373,8 +373,8 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                   className="border-l-2 border-[#E8923A]/30 pl-3"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <Calendar className="h-3 w-3 text-[#484F58]" />
-                    <span className="text-[10px] text-[#484F58]">
+                    <Calendar className="h-3 w-3 text-[#6E7681]" />
+                    <span className="text-[10px] text-[#6E7681]">
                       {formatDate(report.date)}
                     </span>
                     {report.totalFish > 0 && (
@@ -388,11 +388,11 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#8B949E] line-clamp-3 leading-relaxed">
+                  <p className="text-xs text-[#A8B2BD] line-clamp-3 leading-relaxed">
                     &ldquo;{report.notes}&rdquo;
                   </p>
                   {report.username && (
-                    <p className="text-[10px] text-[#484F58] mt-1">
+                    <p className="text-[10px] text-[#6E7681] mt-1">
                       — {report.username}
                     </p>
                   )}
@@ -402,7 +402,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
             {intel.recentReports.length > 3 && (
               <button
                 onClick={() => setShowAllReports(!showAllReports)}
-                className="mt-4 flex items-center gap-1 text-xs text-[#8B949E] hover:text-[#E8923A] transition-colors"
+                className="mt-4 flex items-center gap-1 text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
               >
                 {showAllReports ? (
                   <>
@@ -427,7 +427,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
             <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
               By Section
             </h3>
-            <span className="ml-auto text-[10px] text-[#484F58]">{intel.sections.length} sections</span>
+            <span className="ml-auto text-[10px] text-[#6E7681]">{intel.sections.length} sections</span>
           </div>
           <div className="space-y-3">
             {intel.sections.map((s, i) => {
@@ -437,13 +437,13 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                 <div key={s.section}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-[#484F58] w-4">#{i + 1}</span>
+                      <span className="text-[10px] font-mono text-[#6E7681] w-4">#{i + 1}</span>
                       <span className="text-sm font-semibold text-[#F0F6FC]">{s.section}</span>
                       {s.topFly && (
-                        <span className="text-[10px] text-[#8B949E]">· {s.topFly}</span>
+                        <span className="text-[10px] text-[#A8B2BD]">· {s.topFly}</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-[#8B949E]">
+                    <div className="flex items-center gap-3 text-xs text-[#A8B2BD]">
                       {s.avgFish != null && (
                         <span className="font-mono text-[#E8923A]">{s.avgFish} avg</span>
                       )}
@@ -477,26 +477,26 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
               <div className="bg-[#0D1117] rounded-lg border border-[#E8923A]/40 p-4 flex flex-col gap-1">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Crown className="h-3.5 w-3.5 text-[#E8923A]" />
-                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">Most Active</span>
+                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Most Active</span>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-[#E8923A]/20 border border-[#E8923A]/40 flex items-center justify-center text-sm font-bold text-[#E8923A] mb-1">
                   {intel.leaderboard.riverChampion.username.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.riverChampion.username}</span>
-                <span className="text-xs text-[#8B949E] font-mono">{intel.leaderboard.riverChampion.sessionCount} sessions (90d)</span>
+                <span className="text-xs text-[#A8B2BD] font-mono">{intel.leaderboard.riverChampion.sessionCount} sessions (90d)</span>
               </div>
             )}
             {intel.leaderboard.biggestFish && (
               <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Fish className="h-3.5 w-3.5 text-[#00B4D8]" />
-                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">River Record</span>
+                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">River Record</span>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/40 flex items-center justify-center text-sm font-bold text-[#00B4D8] mb-1">
                   {intel.leaderboard.biggestFish.username.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.biggestFish.username}</span>
-                <span className="text-xs text-[#8B949E] font-mono">
+                <span className="text-xs text-[#A8B2BD] font-mono">
                   {intel.leaderboard.biggestFish.lengthInches}&quot;
                   {intel.leaderboard.biggestFish.species && ` ${intel.leaderboard.biggestFish.species}`}
                 </span>
@@ -506,13 +506,13 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
               <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Flame className="h-3.5 w-3.5 text-amber-400" />
-                  <span className="text-[10px] text-[#484F58] uppercase tracking-widest font-medium">Best Session</span>
+                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Best Session</span>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-sm font-bold text-amber-400 mb-1">
                   {intel.leaderboard.hotHand.username.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.hotHand.username}</span>
-                <span className="text-xs text-[#8B949E] font-mono">{intel.leaderboard.hotHand.fishCount} fish</span>
+                <span className="text-xs text-[#A8B2BD] font-mono">{intel.leaderboard.hotHand.fishCount} fish</span>
               </div>
             )}
           </div>
@@ -534,23 +534,23 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
           <div className="space-y-5">
             {intel.gearStats && (intel.gearStats.topRodBrand || intel.gearStats.topLeader || intel.gearStats.topTippet) && (
               <div>
-                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">What the Pros Use</p>
+                <p className="text-[10px] text-[#6E7681] uppercase tracking-widest mb-2">What the Pros Use</p>
                 <div className="space-y-2">
                   {intel.gearStats.topRodBrand && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#8B949E]">Rod Brand</span>
+                      <span className="text-[#A8B2BD]">Rod Brand</span>
                       <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topRodBrand}</span>
                     </div>
                   )}
                   {intel.gearStats.topLeader && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#8B949E]">Leader</span>
+                      <span className="text-[#A8B2BD]">Leader</span>
                       <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topLeader}</span>
                     </div>
                   )}
                   {intel.gearStats.topTippet && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#8B949E]">Tippet</span>
+                      <span className="text-[#A8B2BD]">Tippet</span>
                       <span className="text-[#F0F6FC] font-medium">{intel.gearStats.topTippet}</span>
                     </div>
                   )}
@@ -559,13 +559,13 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
             )}
             {intel.bestTimeOfDay && (
               <div>
-                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">Best Time to Fish</p>
+                <p className="text-[10px] text-[#6E7681] uppercase tracking-widest mb-2">Best Time to Fish</p>
                 <div className="grid grid-cols-4 gap-2">
                   {(["morning","midday","afternoon","evening"] as const).map((period) => {
                     const isWinner = intel.bestTimeOfDay?.period === period;
                     const labels: Record<string, string> = { morning: "Morning", midday: "Midday", afternoon: "Afternoon", evening: "Evening" };
                     return (
-                      <div key={period} className={`text-center py-2 px-1 rounded-lg border text-xs transition-colors ${isWinner ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#484F58]"}`}>
+                      <div key={period} className={`text-center py-2 px-1 rounded-lg border text-xs transition-colors ${isWinner ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#6E7681]"}`}>
                         <div className="font-medium">{labels[period]}</div>
                         {isWinner && <div className="font-mono text-[10px] mt-0.5">{intel.bestTimeOfDay?.avgFish} avg</div>}
                       </div>
@@ -576,11 +576,11 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
             )}
             {intel.bestMonth && (
               <div>
-                <p className="text-[10px] text-[#484F58] uppercase tracking-widest mb-2">Best Month</p>
+                <p className="text-[10px] text-[#6E7681] uppercase tracking-widest mb-2">Best Month</p>
                 <div className="flex items-baseline gap-2">
                   <Sunrise className="h-4 w-4 text-[#E8923A] shrink-0" />
                   <span className="text-sm font-semibold text-[#F0F6FC]">{intel.bestMonth.month}</span>
-                  <span className="text-xs text-[#8B949E]">— avg <span className="font-mono text-[#E8923A]">{intel.bestMonth.avgFish}</span> fish/session ({intel.bestMonth.sessionCount} sessions)</span>
+                  <span className="text-xs text-[#A8B2BD]">— avg <span className="font-mono text-[#E8923A]">{intel.bestMonth.avgFish}</span> fish/session ({intel.bestMonth.sessionCount} sessions)</span>
                 </div>
               </div>
             )}
@@ -589,7 +589,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
       )}
 
       {/* ── Attribution footer ───────────────────────────────────────────── */}
-      <p className="text-[10px] text-[#484F58] text-right">
+      <p className="text-[10px] text-[#6E7681] text-right">
         Data from {intel.totalSessions} public session{intel.totalSessions !== 1 ? "s" : ""} logged in the{" "}
         <Link href="/" className="text-[#E8923A] hover:underline">
           Executive Angler app

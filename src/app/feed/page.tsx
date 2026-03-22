@@ -68,7 +68,7 @@ export default async function FeedPage() {
           <h1 className="text-3xl font-bold text-[#F0F6FC] mb-3">
             Community Feed
           </h1>
-          <p className="text-[#8B949E] text-lg mb-10 max-w-md mx-auto">
+          <p className="text-[#A8B2BD] text-lg mb-10 max-w-md mx-auto">
             Sign in to see what anglers are catching, share your own sessions,
             and connect with the community.
           </p>
@@ -144,7 +144,7 @@ export default async function FeedPage() {
             <h2 className="text-lg font-bold text-[#F0F6FC] mb-1">
               Get the App
             </h2>
-            <p className="text-sm text-[#8B949E] mb-4">
+            <p className="text-sm text-[#A8B2BD] mb-4">
               Log fish on-stream, track GPS sessions, and sync everything
               automatically. Join the waitlist for early access.
             </p>
@@ -278,7 +278,7 @@ export default async function FeedPage() {
           <h1 className="text-2xl font-bold text-[#F0F6FC] mb-1">
             Activity Feed
           </h1>
-          <p className="text-sm text-[#8B949E]">
+          <p className="text-sm text-[#A8B2BD]">
             Recent sessions from the Executive Angler community
           </p>
         </header>

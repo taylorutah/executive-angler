@@ -193,12 +193,12 @@ export default async function SpeciesDetailPage({ params }: Props) {
                 </h2>
                 {sp.description ? (
                   sp.description.split("\n\n").map((p, i) => (
-                    <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
+                    <p key={i} className="text-[#A8B2BD] leading-relaxed mb-4">
                       {p}
                     </p>
                   ))
                 ) : (
-                  <p className="text-[#8B949E] leading-relaxed">
+                  <p className="text-[#A8B2BD] leading-relaxed">
                     Species profile for {sp.commonName}.
                   </p>
                 )}
@@ -230,7 +230,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       <div>
-                        <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                        <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                           Order
                         </p>
                         <p className="text-sm font-semibold text-[#E8923A] italic">
@@ -238,7 +238,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                        <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                           Family
                         </p>
                         <p className="text-sm font-semibold text-[#E8923A] italic">
@@ -246,7 +246,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                        <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                           Genus
                         </p>
                         <p className="text-sm font-semibold text-[#E8923A] italic">
@@ -254,7 +254,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                        <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                           Species
                         </p>
                         <p className="text-sm font-semibold text-[#E8923A] italic">
@@ -274,13 +274,13 @@ export default async function SpeciesDetailPage({ params }: Props) {
                     Habitat & Behavior
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                    <p className="text-[#8B949E] leading-relaxed">
+                    <p className="text-[#A8B2BD] leading-relaxed">
                       {sp.preferredHabitat}
                     </p>
                     {sp.nativeRange && (
                       <div className="mt-4 flex items-start gap-2">
                         <MapPin className="h-4 w-4 text-[#E8923A] mt-0.5 shrink-0" />
-                        <p className="text-sm text-[#8B949E]">
+                        <p className="text-sm text-[#A8B2BD]">
                           <span className="font-medium text-[#E8923A]">
                             Native Range:
                           </span>{" "}
@@ -290,8 +290,8 @@ export default async function SpeciesDetailPage({ params }: Props) {
                     )}
                     {sp.introducedRange && (
                       <div className="mt-2 flex items-start gap-2">
-                        <MapPin className="h-4 w-4 text-[#484F58] mt-0.5 shrink-0" />
-                        <p className="text-sm text-[#8B949E]">
+                        <MapPin className="h-4 w-4 text-[#6E7681] mt-0.5 shrink-0" />
+                        <p className="text-sm text-[#A8B2BD]">
                           <span className="font-medium text-[#E8923A]">
                             Introduced Range:
                           </span>{" "}
@@ -311,7 +311,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                     Diet
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                    <p className="text-[#8B949E] leading-relaxed">{sp.diet}</p>
+                    <p className="text-[#A8B2BD] leading-relaxed">{sp.diet}</p>
                   </div>
                 </ScrollAnimation>
               )}
@@ -323,12 +323,12 @@ export default async function SpeciesDetailPage({ params }: Props) {
                     Spawning
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                    <p className="text-[#8B949E] leading-relaxed mb-4">
+                    <p className="text-[#A8B2BD] leading-relaxed mb-4">
                       {sp.spawningInfo}
                     </p>
                     {sp.spawningMonths && sp.spawningMonths.length > 0 && (
                       <div className="mt-4">
-                        <p className="text-sm font-medium text-[#8B949E] mb-2">
+                        <p className="text-sm font-medium text-[#A8B2BD] mb-2">
                           Spawning Months
                         </p>
                         <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
@@ -384,7 +384,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                                 className={`text-center py-2 rounded text-xs font-medium ${
                                   isSpawning
                                     ? "bg-[#E8923A]/20 text-[#E8923A] font-semibold"
-                                    : "bg-[#1F2937] text-[#484F58]"
+                                    : "bg-[#1F2937] text-[#6E7681]"
                                 }`}
                               >
                                 {month}
@@ -395,9 +395,9 @@ export default async function SpeciesDetailPage({ params }: Props) {
                       </div>
                     )}
                     {sp.spawningTempF && (
-                      <p className="mt-3 text-sm text-[#8B949E]">
+                      <p className="mt-3 text-sm text-[#A8B2BD]">
                         Spawning Temperature:{" "}
-                        <span className="font-medium text-[#8B949E]">
+                        <span className="font-medium text-[#A8B2BD]">
                           {sp.spawningTempF}
                         </span>
                       </p>
@@ -422,7 +422,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         {sp.conservationStatus}
                       </Badge>
                     </div>
-                    <p className="text-sm text-[#8B949E] leading-relaxed">
+                    <p className="text-sm text-[#A8B2BD] leading-relaxed">
                       The {sp.commonName} is currently classified as{" "}
                       <strong>{sp.conservationStatus}</strong>. Responsible
                       catch-and-release practices help protect populations for
@@ -441,7 +441,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm space-y-4">
                     {sp.flyFishingTips && (
-                      <p className="text-[#8B949E] leading-relaxed">
+                      <p className="text-[#A8B2BD] leading-relaxed">
                         {sp.flyFishingTips}
                       </p>
                     )}
@@ -450,7 +450,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <h4 className="text-sm font-semibold text-[#E8923A] mb-2">
                           Tackle Recommendations
                         </h4>
-                        <p className="text-sm text-[#8B949E] leading-relaxed">
+                        <p className="text-sm text-[#A8B2BD] leading-relaxed">
                           {sp.tackleRecommendations}
                         </p>
                       </div>
@@ -491,7 +491,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <div className="w-8 h-8 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0">
                           <Fish className="h-4 w-4 text-[#E8923A]" />
                         </div>
-                        <span className="text-sm font-medium text-[#8B949E]">
+                        <span className="text-sm font-medium text-[#A8B2BD]">
                           {fly}
                         </span>
                       </div>
@@ -620,11 +620,11 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         >
                           <summary className="flex items-center justify-between p-5 cursor-pointer list-none text-[#F0F6FC] font-medium text-sm hover:text-[#E8923A] transition-colors">
                             {faq.question}
-                            <span className="text-[#484F58] group-open:rotate-180 transition-transform ml-4 shrink-0">
+                            <span className="text-[#6E7681] group-open:rotate-180 transition-transform ml-4 shrink-0">
                               ▾
                             </span>
                           </summary>
-                          <div className="px-5 pb-5 pt-0 text-sm text-[#8B949E] leading-relaxed">
+                          <div className="px-5 pb-5 pt-0 text-sm text-[#A8B2BD] leading-relaxed">
                             {faq.answer}
                           </div>
                         </details>
@@ -655,7 +655,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         <span className="w-5 h-5 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 mt-0.5">
                           <Fish className="h-3 w-3 text-[#E8923A]" />
                         </span>
-                        <span className="text-sm text-[#8B949E] leading-relaxed">
+                        <span className="text-sm text-[#A8B2BD] leading-relaxed">
                           {fact}
                         </span>
                       </li>
@@ -681,7 +681,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                           <MapPin className="h-3.5 w-3.5 text-[#E8923A]" />
                           {dest.name}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-0.5 ml-5">
+                        <p className="text-xs text-[#A8B2BD] mt-0.5 ml-5">
                           {dest.region}
                         </p>
                       </Link>
@@ -698,7 +698,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                   </h3>
                   {sp.averageSize && (
                     <div className="mb-3 pb-3 border-b border-[#21262D]">
-                      <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                      <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                         Average Size
                       </p>
                       <p className="text-sm font-medium text-[#F0F6FC]">
@@ -708,7 +708,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                   )}
                   {sp.recordSize && (
                     <div>
-                      <p className="text-xs font-medium text-[#484F58] uppercase tracking-wider mb-1">
+                      <p className="text-xs font-medium text-[#6E7681] uppercase tracking-wider mb-1">
                         World Record
                       </p>
                       <p className="text-sm font-medium text-[#F0F6FC]">

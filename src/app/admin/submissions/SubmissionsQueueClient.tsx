@@ -61,7 +61,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/admin" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <Shield className="h-5 w-5 text-[#E8923A]" />
@@ -84,7 +84,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
           <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
             <CheckCircle className="h-10 w-10 text-[#2EA44F] mx-auto mb-3" />
             <p className="text-[#F0F6FC] font-semibold">Queue is clear!</p>
-            <p className="text-sm text-[#8B949E] mt-1">No pending submissions to review.</p>
+            <p className="text-sm text-[#A8B2BD] mt-1">No pending submissions to review.</p>
           </div>
         ) : (
           <div className="space-y-3 mb-10">
@@ -109,7 +109,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           {s.status.replace("_", " ").toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-xs text-[#484F58] mt-0.5">
+                      <p className="text-xs text-[#6E7681] mt-0.5">
                         {s.entity_type.replace("_", " ")} · by {submitter} · {formatDate(s.submitted_at || s.created_at)} · v{s.version}
                         {s.source !== "manual" && ` · via ${s.source.replace("_", " ")}`}
                       </p>
@@ -128,7 +128,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                       </button>
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : s.id)}
-                        className="p-2 bg-[#21262D] text-[#8B949E] rounded-lg hover:text-[#F0F6FC] transition-colors"
+                        className="p-2 bg-[#21262D] text-[#A8B2BD] rounded-lg hover:text-[#F0F6FC] transition-colors"
                         title="More options"
                       >
                         <ChevronRight className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
@@ -160,7 +160,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           value={feedback[s.id] || ""}
                           onChange={e => setFeedback(prev => ({ ...prev, [s.id]: e.target.value }))}
                           placeholder="Reason / feedback..."
-                          className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+                          className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                         />
                         <button
                           onClick={() => handleAction(s.id, "needs_info", { feedback: feedback[s.id] || "" })}
@@ -190,7 +190,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
         {/* Recent decisions */}
         {recent.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Recent Decisions</h2>
+            <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Recent Decisions</h2>
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl divide-y divide-[#21262D]">
               {recent.map(s => (
                 <div key={s.id} className="px-5 py-3 flex items-center gap-3">
@@ -201,7 +201,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                   }`}>
                     {s.status.toUpperCase()}
                   </span>
-                  <span className="text-xs text-[#484F58]">{formatDate(s.reviewed_at || s.updated_at)}</span>
+                  <span className="text-xs text-[#6E7681]">{formatDate(s.reviewed_at || s.updated_at)}</span>
                 </div>
               ))}
             </div>

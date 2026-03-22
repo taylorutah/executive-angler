@@ -31,7 +31,7 @@ interface Stats {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode; bg: string }> = {
-  draft: { label: "Draft", color: "text-[#8B949E]", icon: <FileEdit className="h-3.5 w-3.5" />, bg: "bg-[#21262D]" },
+  draft: { label: "Draft", color: "text-[#A8B2BD]", icon: <FileEdit className="h-3.5 w-3.5" />, bg: "bg-[#21262D]" },
   submitted: { label: "Submitted", color: "text-[#0BA5C7]", icon: <Send className="h-3.5 w-3.5" />, bg: "bg-[#0BA5C7]/15" },
   in_review: { label: "In Review", color: "text-[#E8923A]", icon: <Eye className="h-3.5 w-3.5" />, bg: "bg-[#E8923A]/15" },
   needs_info: { label: "Needs Info", color: "text-yellow-400", icon: <AlertCircle className="h-3.5 w-3.5" />, bg: "bg-yellow-400/15" },
@@ -45,7 +45,7 @@ const TYPE_EMOJI: Record<string, string> = {
 };
 
 const TRUST_LABELS: Record<string, { label: string; color: string }> = {
-  new: { label: "New Contributor", color: "text-[#8B949E]" },
+  new: { label: "New Contributor", color: "text-[#A8B2BD]" },
   contributor: { label: "Contributor", color: "text-[#0BA5C7]" },
   trusted: { label: "Trusted Contributor", color: "text-[#2EA44F]" },
   verified: { label: "Verified", color: "text-[#E8923A]" },
@@ -75,7 +75,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Link href="/account" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+            <Link href="/account" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <h1 className="font-serif text-2xl text-[#F0F6FC]">My Submissions</h1>
@@ -96,7 +96,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
               <Shield className="h-5 w-5 text-[#E8923A]" />
               <div>
                 <p className={`text-sm font-semibold ${trustInfo.color}`}>{trustInfo.label}</p>
-                <p className="text-[11px] text-[#484F58]">
+                <p className="text-[11px] text-[#6E7681]">
                   {stats.submissions_approved} approved · {stats.submissions_rejected} rejected · {stats.submissions_total} total
                 </p>
               </div>
@@ -120,7 +120,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                 filter === tab.key
                   ? "bg-[#E8923A] text-white"
-                  : "bg-[#161B22] text-[#8B949E] hover:text-[#F0F6FC]"
+                  : "bg-[#161B22] text-[#A8B2BD] hover:text-[#F0F6FC]"
               }`}
             >
               {tab.label}
@@ -136,7 +136,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
         {/* Submissions list */}
         {filtered.length === 0 ? (
           <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
-            <p className="text-[#484F58] mb-3">
+            <p className="text-[#6E7681] mb-3">
               {filter === "all" ? "No submissions yet" : `No ${filter} submissions`}
             </p>
             <Link href="/contribute" className="text-sm text-[#E8923A] hover:underline">
@@ -151,7 +151,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
               const canDelete = s.status === "draft";
 
               return (
-                <div key={s.id} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#484F58] transition-colors">
+                <div key={s.id} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#6E7681] transition-colors">
                   <div className="flex items-start gap-3">
                     {/* Type emoji */}
                     <span className="text-2xl mt-0.5">{TYPE_EMOJI[s.entity_type] || "📄"}</span>
@@ -165,7 +165,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                         </span>
                       </div>
 
-                      <p className="text-xs text-[#484F58] mt-1">
+                      <p className="text-xs text-[#6E7681] mt-1">
                         {s.entity_type.replace("_", " ")} · v{s.version} · Updated {formatDate(s.updated_at)}
                       </p>
 
@@ -189,7 +189,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                       {canEdit && (
                         <Link
                           href={`/contribute/${s.entity_type}?edit=${s.id}`}
-                          className="p-2 bg-[#21262D] rounded-lg text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                          className="p-2 bg-[#21262D] rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                           title="Edit"
                         >
                           <FileEdit className="h-4 w-4" />
@@ -199,7 +199,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                         <button
                           onClick={() => handleDelete(s.id)}
                           disabled={deleting === s.id}
-                          className="p-2 bg-[#21262D] rounded-lg text-[#8B949E] hover:text-red-400 transition-colors disabled:opacity-50"
+                          className="p-2 bg-[#21262D] rounded-lg text-[#A8B2BD] hover:text-red-400 transition-colors disabled:opacity-50"
                           title="Delete draft"
                         >
                           {deleting === s.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}

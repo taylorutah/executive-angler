@@ -64,14 +64,14 @@ export default function RiverActivityPulse({ riverId }: RiverActivityPulseProps)
 
       {/* Last fished */}
       {lastSessionDate && (
-        <span className="text-xs text-[#8B949E]">
+        <span className="text-xs text-[#A8B2BD]">
           Last fished: {timeAgo(lastSessionDate)}
         </span>
       )}
 
       {/* Water temp */}
       {recentWaterTemp != null && (
-        <span className="text-xs text-[#8B949E]">
+        <span className="text-xs text-[#A8B2BD]">
           Water temp: <span className="font-mono text-[#F0F6FC]">{recentWaterTemp}&deg;F</span>
         </span>
       )}

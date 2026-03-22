@@ -103,7 +103,7 @@ export default async function RiversPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                       <div className="absolute bottom-4 left-4">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#8B949E]"}`}
+                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
                         >
                           {river.difficulty}
                         </span>
@@ -116,7 +116,7 @@ export default async function RiversPage() {
                       <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
                         {RIVER_HEADLINES[river.slug]}
                       </p>
-                      <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
+                      <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
                         {river.description?.substring(0, 120)}...
                       </p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
@@ -128,12 +128,12 @@ export default async function RiversPage() {
                             {sp}
                           </span>
                         ))}
-                        <span className="px-2 py-0.5 bg-[#1F2937] text-[#8B949E] text-[10px] font-medium rounded-full capitalize">
+                        <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
                           {river.wadingType}
                         </span>
                       </div>
                       <div className="mt-4 flex items-center justify-between">
-                        <span className="text-xs text-[#484F58]">
+                        <span className="text-xs text-[#6E7681]">
                           Peak: {river.bestMonths.slice(0, 3).join(" · ")}
                         </span>
                         <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">

@@ -87,11 +87,11 @@ export function SidebarFilters({
 
       {/* River Filter */}
       <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
           Filter by River
         </h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
             <input
               type="checkbox"
               checked={filterRivers.length === 0}
@@ -110,7 +110,7 @@ export function SidebarFilters({
           {visibleRivers.map(({ river, count }) => (
             <label
               key={river}
-              className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
+              className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
             >
               <input
                 type="checkbox"
@@ -119,7 +119,7 @@ export function SidebarFilters({
                 className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
               />
               <span>
-                {river} <span className="text-[#8B949E]">({count})</span>
+                {river} <span className="text-[#A8B2BD]">({count})</span>
               </span>
             </label>
           ))}
@@ -136,11 +136,11 @@ export function SidebarFilters({
 
       {/* Year Filter */}
       <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
           Filter by Year
         </h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
             <input
               type="checkbox"
               checked={filterYears.length === 0}
@@ -159,7 +159,7 @@ export function SidebarFilters({
           {yearOptions.map(({ year, count }) => (
             <label
               key={year}
-              className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
+              className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
             >
               <input
                 type="checkbox"
@@ -168,7 +168,7 @@ export function SidebarFilters({
                 className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
               />
               <span>
-                {year} <span className="text-[#8B949E]">({count})</span>
+                {year} <span className="text-[#A8B2BD]">({count})</span>
               </span>
             </label>
           ))}
@@ -178,11 +178,11 @@ export function SidebarFilters({
       {/* Location Filter */}
       {locationOptions.length > 0 && (
         <div>
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8B949E]">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
             Filter by Location
           </h3>
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
               <input
                 type="checkbox"
                 checked={filterLocations.length === 0}
@@ -201,7 +201,7 @@ export function SidebarFilters({
             {visibleLocations.map(({ location, count }) => (
               <label
                 key={location}
-                className="flex items-center gap-2 text-sm text-[#8B949E] cursor-pointer"
+                className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
               >
                 <input
                   type="checkbox"
@@ -210,7 +210,7 @@ export function SidebarFilters({
                   className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
                 />
                 <span>
-                  {location} <span className="text-[#8B949E]">({count})</span>
+                  {location} <span className="text-[#A8B2BD]">({count})</span>
                 </span>
               </label>
             ))}

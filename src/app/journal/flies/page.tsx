@@ -81,11 +81,11 @@ export default async function FlyBoxPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#484F58] hover:text-[#E8923A] transition-colors mb-2">
+            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#6E7681] hover:text-[#E8923A] transition-colors mb-2">
               ← Journal
             </Link>
             <h1 className="font-heading text-2xl font-bold text-[#F0F6FC]">My Fly Box</h1>
-            <p className="text-sm text-[#484F58] mt-0.5">{flies.length} pattern{flies.length !== 1 ? "s" : ""}</p>
+            <p className="text-sm text-[#6E7681] mt-0.5">{flies.length} pattern{flies.length !== 1 ? "s" : ""}</p>
           </div>
           <Link href="/journal/flies/new"
             className="flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
@@ -101,8 +101,8 @@ export default async function FlyBoxPage() {
 
         {flies.length === 0 ? (
           <div className="text-center py-20">
-            <Feather className="h-12 w-12 mx-auto text-[#484F58] mb-4" />
-            <p className="text-[#8B949E] mb-4">Your fly box is empty</p>
+            <Feather className="h-12 w-12 mx-auto text-[#6E7681] mb-4" />
+            <p className="text-[#A8B2BD] mb-4">Your fly box is empty</p>
             <Link href="/journal/flies/new"
               className="inline-flex items-center gap-1.5 rounded-xl bg-[#E8923A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117]">
               <Plus className="h-4 w-4" /> Add Your First Pattern
@@ -116,7 +116,7 @@ export default async function FlyBoxPage() {
                 <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
                   <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
                   <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
-                  <span className="text-xs text-[#484F58] ml-1">{grouped[type].length}</span>
+                  <span className="text-xs text-[#6E7681] ml-1">{grouped[type].length}</span>
                 </div>
 
                 {/* Fly grid — smaller cards */}
@@ -147,13 +147,13 @@ export default async function FlyBoxPage() {
                           {(() => {
                             const bead = parseArrayField(fly.bead_size);
                             return bead ? (
-                              <span className="text-[10px] text-[#484F58] truncate"><span className="text-[#8B949E]">Bead:</span> {bead}</span>
+                              <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
                             ) : null;
                           })()}
                           {(() => {
                             const sizes = parseArrayField(fly.size);
                             return sizes ? (
-                              <span className="text-[10px] text-[#484F58]"><span className="text-[#8B949E]">Size:</span> {sizes}</span>
+                              <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
                             ) : null;
                           })()}
                         </div>

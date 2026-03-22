@@ -85,7 +85,7 @@ export default function ContactPage() {
           <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-[#8B949E] mb-10">
+          <p className="text-lg text-[#A8B2BD] mb-10">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>
@@ -96,7 +96,7 @@ export default function ContactPage() {
               <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
                 Message Sent
               </h2>
-              <p className="text-[#8B949E]">
+              <p className="text-[#A8B2BD]">
                 Thank you for reaching out. We&apos;ll get back to you as soon
                 as possible.
               </p>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                   placeholder="you@example.com"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function ContactPage() {
                   name="message"
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors resize-y"
+                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors resize-y"
                   placeholder="How can we help?"
                 />
               </div>
@@ -199,13 +199,13 @@ export default function ContactPage() {
 
                 {/* reCAPTCHA attribution (required by Google TOS when badge is hidden) */}
                 {RECAPTCHA_SITE_KEY && (
-                  <p className="text-xs text-[#484F58] max-w-[200px] text-right leading-relaxed">
+                  <p className="text-xs text-[#6E7681] max-w-[200px] text-right leading-relaxed">
                     Protected by{" "}
                     <a
                       href="https://policies.google.com/privacy"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-[#8B949E]"
+                      className="underline hover:text-[#A8B2BD]"
                     >
                       reCAPTCHA
                     </a>
@@ -214,7 +214,7 @@ export default function ContactPage() {
                       href="https://policies.google.com/terms"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-[#8B949E]"
+                      className="underline hover:text-[#A8B2BD]"
                     >
                       Terms
                     </a>

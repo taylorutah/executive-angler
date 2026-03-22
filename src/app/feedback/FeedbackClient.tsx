@@ -30,7 +30,7 @@ const STATUS_DISPLAY: Record<string, { label: string; color: string; icon: React
   in_review: { label: "Under Review", color: "text-[#E8923A]", icon: <Wrench className="h-3 w-3" /> },
   approved: { label: "Planned", color: "text-[#2EA44F]", icon: <ThumbsUp className="h-3 w-3" /> },
   published: { label: "Shipped!", color: "text-[#2EA44F]", icon: <CheckCircle className="h-3 w-3" /> },
-  rejected: { label: "Not Planned", color: "text-[#484F58]", icon: <AlertCircle className="h-3 w-3" /> },
+  rejected: { label: "Not Planned", color: "text-[#6E7681]", icon: <AlertCircle className="h-3 w-3" /> },
   needs_info: { label: "Need More Details", color: "text-yellow-400", icon: <AlertCircle className="h-3 w-3" /> },
 };
 
@@ -93,7 +93,7 @@ export default function FeedbackClient({
             <Lightbulb className="h-7 w-7 text-[#E8923A]" />
           </div>
           <h1 className="font-serif text-3xl text-[#F0F6FC] mb-2">Ideas & Feedback</h1>
-          <p className="text-[#8B949E] max-w-md mx-auto">
+          <p className="text-[#A8B2BD] max-w-md mx-auto">
             Executive Angler is built by anglers, for anglers. Your ideas shape what we build next.
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function FeedbackClient({
           <div className="bg-[#161B22] border border-[#2EA44F]/30 rounded-xl p-8 text-center">
             <CheckCircle className="h-12 w-12 text-[#2EA44F] mx-auto mb-4" />
             <h2 className="text-lg font-bold text-[#F0F6FC] mb-2">Thanks for the feedback!</h2>
-            <p className="text-sm text-[#8B949E] mb-6">
+            <p className="text-sm text-[#A8B2BD] mb-6">
               We read every submission. If we have questions, we&apos;ll reach out through the app.
             </p>
             <div className="flex gap-3 justify-center">
@@ -125,7 +125,7 @@ export default function FeedbackClient({
           <>
             {/* Category picker */}
             <div className="mb-6">
-              <p className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">What kind of feedback?</p>
+              <p className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">What kind of feedback?</p>
               <div className="grid grid-cols-2 gap-3">
                 {CATEGORIES.map(cat => (
                   <button
@@ -134,17 +134,17 @@ export default function FeedbackClient({
                     className={`flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
                       category === cat.key
                         ? cat.bg + " border-opacity-100"
-                        : "bg-[#161B22] border-[#21262D] hover:border-[#484F58]"
+                        : "bg-[#161B22] border-[#21262D] hover:border-[#6E7681]"
                     }`}
                   >
-                    <span className={category === cat.key ? cat.color : "text-[#484F58]"}>
+                    <span className={category === cat.key ? cat.color : "text-[#6E7681]"}>
                       {cat.icon}
                     </span>
                     <div>
-                      <p className={`text-sm font-semibold ${category === cat.key ? "text-[#F0F6FC]" : "text-[#8B949E]"}`}>
+                      <p className={`text-sm font-semibold ${category === cat.key ? "text-[#F0F6FC]" : "text-[#A8B2BD]"}`}>
                         {cat.label}
                       </p>
-                      <p className="text-[10px] text-[#484F58] mt-0.5">{cat.description}</p>
+                      <p className="text-[10px] text-[#6E7681] mt-0.5">{cat.description}</p>
                     </div>
                   </button>
                 ))}
@@ -155,7 +155,7 @@ export default function FeedbackClient({
             {category && (
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
                     Title <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -169,22 +169,22 @@ export default function FeedbackClient({
                           ? "e.g., Hatch calendar with insect emergence data"
                           : "e.g., Make the catch logging form faster"
                     }
-                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                     maxLength={120}
                   />
-                  <p className="text-[10px] text-[#484F58] mt-1 text-right">{title.length}/120</p>
+                  <p className="text-[10px] text-[#6E7681] mt-1 text-right">{title.length}/120</p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-2">
-                    Details <span className="text-[#484F58]">(optional)</span>
+                  <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+                    Details <span className="text-[#6E7681]">(optional)</span>
                   </label>
                   <textarea
                     value={details}
                     onChange={e => setDetails(e.target.value)}
                     placeholder="Give us the full picture. What problem does this solve? How would it work? The more detail, the better we can build it."
                     rows={5}
-                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] resize-none"
+                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
                   />
                 </div>
 
@@ -215,7 +215,7 @@ export default function FeedbackClient({
           <div className="mt-10">
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-2 text-sm text-[#8B949E] hover:text-[#F0F6FC] transition-colors mb-3"
+              className="flex items-center gap-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors mb-3"
             >
               <ChevronDown className={`h-4 w-4 transition-transform ${showHistory ? "rotate-180" : ""}`} />
               Your previous feedback ({existing.length})
@@ -232,12 +232,12 @@ export default function FeedbackClient({
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className={catInfo?.color || "text-[#8B949E]"}>
+                            <span className={catInfo?.color || "text-[#A8B2BD]"}>
                               {catInfo?.icon || <MessageSquarePlus className="h-4 w-4" />}
                             </span>
                             <h3 className="text-sm font-semibold text-[#F0F6FC]">{fb.name}</h3>
                           </div>
-                          <p className="text-xs text-[#484F58] mt-1">
+                          <p className="text-xs text-[#6E7681] mt-1">
                             {new Date(fb.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </p>
                           {fb.admin_feedback && (

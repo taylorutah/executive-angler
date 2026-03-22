@@ -64,11 +64,11 @@ export function AwardBadge({
           <div className="font-semibold text-[#F0F6FC]">
             {award.metadata.display_name}
           </div>
-          <div className="text-sm text-[#8B949E]">
+          <div className="text-sm text-[#A8B2BD]">
             {award.metadata.description}
           </div>
           {award.awarded_at && (
-            <div className="text-xs text-[#484F58] mt-1">
+            <div className="text-xs text-[#6E7681] mt-1">
               Earned {new Date(award.awarded_at).toLocaleDateString()}
             </div>
           )}

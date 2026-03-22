@@ -199,7 +199,7 @@ export default async function GuidePage({ params }: Props) {
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
+                  <p key={i} className="text-[#A8B2BD] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
@@ -236,7 +236,7 @@ export default async function GuidePage({ params }: Props) {
                           <h3 className="font-medium text-[#E8923A]">
                             {river.name}
                           </h3>
-                          <p className="text-xs text-[#8B949E]">
+                          <p className="text-xs text-[#A8B2BD]">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -266,9 +266,9 @@ export default async function GuidePage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {lodge.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">{lodge.priceRange}</p>
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">{lodge.priceRange}</p>
                           {lodge.seasonStart && (
-                            <p className="text-xs text-[#484F58] mt-0.5">
+                            <p className="text-xs text-[#6E7681] mt-0.5">
                               {lodge.seasonStart}–{lodge.seasonEnd}
                             </p>
                           )}
@@ -297,7 +297,7 @@ export default async function GuidePage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -400,7 +400,7 @@ export default async function GuidePage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

@@ -85,7 +85,7 @@ function NewMessageModal({
           <h3 className="text-sm font-semibold text-[#F0F6FC]">New Message</h3>
           <button
             onClick={onClose}
-            className="p-1 text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+            className="p-1 text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -94,14 +94,14 @@ function NewMessageModal({
         {/* Search */}
         <div className="px-4 py-3 border-b border-[#21262D]">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#484F58]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search anglers by name..."
-              className="w-full pl-9 pr-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] transition-colors"
+              className="w-full pl-9 pr-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
             />
           </div>
         </div>
@@ -110,11 +110,11 @@ function NewMessageModal({
         <div className="max-h-64 overflow-y-auto">
           {searching && (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-5 w-5 animate-spin text-[#8B949E]" />
+              <Loader2 className="h-5 w-5 animate-spin text-[#A8B2BD]" />
             </div>
           )}
           {!searching && query.length >= 2 && results.length === 0 && (
-            <p className="text-center text-sm text-[#484F58] py-8">
+            <p className="text-center text-sm text-[#6E7681] py-8">
               No anglers found
             </p>
           )}
@@ -140,7 +140,7 @@ function NewMessageModal({
                     className="rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-[#1F2937] border border-[#21262D] flex items-center justify-center text-xs text-[#8B949E] font-medium">
+                  <div className="w-9 h-9 rounded-full bg-[#1F2937] border border-[#21262D] flex items-center justify-center text-xs text-[#A8B2BD] font-medium">
                     {(r.display_name || r.username || "?")[0]?.toUpperCase()}
                   </div>
                 )}
@@ -149,13 +149,13 @@ function NewMessageModal({
                     {r.display_name || r.username || "Angler"}
                   </p>
                   {r.username && (
-                    <p className="text-xs text-[#8B949E]">@{r.username}</p>
+                    <p className="text-xs text-[#A8B2BD]">@{r.username}</p>
                   )}
                 </div>
               </button>
             ))}
           {!searching && query.length < 2 && (
-            <p className="text-center text-sm text-[#484F58] py-8">
+            <p className="text-center text-sm text-[#6E7681] py-8">
               Type at least 2 characters to search
             </p>
           )}
@@ -305,7 +305,7 @@ function ConversationPanel({
       <div className="flex items-center gap-3 px-4 py-3 border-b border-[#21262D] bg-[#161B22]">
         <button
           onClick={onBack}
-          className="lg:hidden p-1 text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+          className="lg:hidden p-1 text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
@@ -318,7 +318,7 @@ function ConversationPanel({
             className="rounded-full object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#8B949E] font-medium">
+          <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#A8B2BD] font-medium">
             {otherName[0]?.toUpperCase()}
           </div>
         )}
@@ -331,11 +331,11 @@ function ConversationPanel({
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-5 w-5 animate-spin text-[#8B949E]" />
+            <Loader2 className="h-5 w-5 animate-spin text-[#A8B2BD]" />
           </div>
         )}
         {!loading && messages.length === 0 && (
-          <p className="text-center text-sm text-[#484F58] py-12">
+          <p className="text-center text-sm text-[#6E7681] py-12">
             No messages yet. Say hello!
           </p>
         )}
@@ -374,7 +374,7 @@ function ConversationPanel({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] transition-colors"
+            className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
           />
           <button
             type="submit"
@@ -554,8 +554,8 @@ export function MessagesClient({
             {threads.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
                 <MessageCircle className="h-10 w-10 text-[#21262D] mb-3" />
-                <p className="text-sm text-[#8B949E] mb-1">No messages yet</p>
-                <p className="text-xs text-[#484F58]">
+                <p className="text-sm text-[#A8B2BD] mb-1">No messages yet</p>
+                <p className="text-xs text-[#6E7681]">
                   Start a conversation with a fellow angler
                 </p>
               </div>
@@ -587,7 +587,7 @@ export function MessagesClient({
                         className="rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#1F2937] border border-[#21262D] flex items-center justify-center text-sm text-[#8B949E] font-medium">
+                      <div className="w-10 h-10 rounded-full bg-[#1F2937] border border-[#21262D] flex items-center justify-center text-sm text-[#A8B2BD] font-medium">
                         {name[0]?.toUpperCase()}
                       </div>
                     )}
@@ -608,14 +608,14 @@ export function MessagesClient({
                       >
                         {name}
                       </span>
-                      <span className="text-[10px] font-['IBM_Plex_Mono'] text-[#484F58] flex-shrink-0 ml-2">
+                      <span className="text-[10px] font-['IBM_Plex_Mono'] text-[#6E7681] flex-shrink-0 ml-2">
                         {timeAgo(thread.last_message_at)}
                       </span>
                     </div>
                     {thread.last_message_body && (
                       <p
                         className={`text-xs truncate mt-0.5 ${
-                          hasUnread ? "text-[#C9D1D9]" : "text-[#484F58]"
+                          hasUnread ? "text-[#C9D1D9]" : "text-[#6E7681]"
                         }`}
                       >
                         {thread.last_message_body}
@@ -653,7 +653,7 @@ export function MessagesClient({
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
               <MessageCircle className="h-12 w-12 text-[#21262D] mb-3" />
-              <p className="text-sm text-[#8B949E]">
+              <p className="text-sm text-[#A8B2BD]">
                 Select a conversation or start a new one
               </p>
             </div>

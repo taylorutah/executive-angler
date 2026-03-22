@@ -49,7 +49,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
         className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-[#F0F6FC] font-medium text-sm hover:bg-[#1F2937] transition-colors shadow-sm disabled:opacity-50"
       >
         {loading === "google" ? (
-          <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#484F58] border-t-transparent" />
+          <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#6E7681] border-t-transparent" />
         ) : (
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

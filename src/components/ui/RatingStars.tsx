@@ -18,7 +18,7 @@ export default function RatingStars({ rating, count, size = "sm" }: RatingStarsP
             className={`${starSize} ${
               star <= Math.round(rating)
                 ? "text-[#E8923A] fill-[#E8923A]"
-                : "text-[#484F58]"
+                : "text-[#6E7681]"
             }`}
           />
         ))}
@@ -27,7 +27,7 @@ export default function RatingStars({ rating, count, size = "sm" }: RatingStarsP
         {rating.toFixed(1)}
       </span>
       {count !== undefined && (
-        <span className="text-sm text-[#8B949E]">({count} reviews)</span>
+        <span className="text-sm text-[#A8B2BD]">({count} reviews)</span>
       )}
     </div>
   );

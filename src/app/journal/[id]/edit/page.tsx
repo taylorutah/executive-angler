@@ -292,13 +292,13 @@ export default function EditSessionPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] dark:border-[#21262D] dark:bg-[#161B22] dark:text-[#F0F6FC] dark:placeholder:text-[#484F58]";
-  const label = "block text-xs font-semibold text-gray-500 dark:text-[#8B949E] uppercase tracking-wide mb-1";
+  const input = "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] dark:border-[#21262D] dark:bg-[#161B22] dark:text-[#F0F6FC] dark:placeholder:text-[#6E7681]";
+  const label = "block text-xs font-semibold text-gray-500 dark:text-[#A8B2BD] uppercase tracking-wide mb-1";
   const section = "bg-white dark:bg-[#161B22] rounded-xl border border-gray-200 dark:border-[#21262D] p-5 mb-4";
 
   if (loading) return (
     <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3 text-[#484F58]">
+      <div className="flex flex-col items-center gap-3 text-[#6E7681]">
         <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading session…</p>
       </div>
@@ -311,7 +311,7 @@ export default function EditSessionPage() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
           <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Session</h1>
@@ -322,9 +322,9 @@ export default function EditSessionPage() {
               onClick={toggleSimpleMode}
               className="flex items-center gap-1.5 rounded-full border border-[#21262D] bg-[#161B22] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[#E8923A]/50"
             >
-              <span className={isSimpleMode ? "text-[#E8923A]" : "text-[#8B949E]"}>Simple</span>
+              <span className={isSimpleMode ? "text-[#E8923A]" : "text-[#A8B2BD]"}>Simple</span>
               <span className="text-[#21262D]">|</span>
-              <span className={!isSimpleMode ? "text-[#E8923A]" : "text-[#8B949E]"}>Full</span>
+              <span className={!isSimpleMode ? "text-[#E8923A]" : "text-[#A8B2BD]"}>Full</span>
             </button>
           )}
         </div>
@@ -335,7 +335,7 @@ export default function EditSessionPage() {
 
           {/* Basic Info */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-4 flex items-center gap-2">📋 Basic Info</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-4 flex items-center gap-2">📋 Basic Info</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Session Title</label>
@@ -386,7 +386,7 @@ export default function EditSessionPage() {
                   </div>
                   <input ref={locationInputRef} list="locations-list" className={input} placeholder="Below Jordanelle" value={form.location} onChange={(e) => updateForm("location", e.target.value)} />
                   {form.location && (() => { const s = spots.find(sp => sp.name === form.location); return s?.latitude ? (
-                    <p className="text-[10px] text-[#484F58] mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
+                    <p className="text-[10px] text-[#6E7681] mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
                   ) : null; })()}
                   <datalist id="locations-list">
                     {spots.map(s => <option key={s.id} value={s.name} />)}
@@ -400,7 +400,7 @@ export default function EditSessionPage() {
           {/* Simple mode: fish count field */}
           {isSimpleMode && (
             <div className={section}>
-              <h2 className="text-sm font-bold text-[#8B949E] mb-4 flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[#A8B2BD] mb-4 flex items-center gap-2">
                 <Fish className="h-4 w-4 text-[#E8923A]" /> Fish Count
               </h2>
               <div className="flex items-center gap-3">
@@ -412,14 +412,14 @@ export default function EditSessionPage() {
                   value={simpleFishCount}
                   onChange={(e) => setSimpleFishCount(e.target.value)}
                 />
-                <p className="text-xs text-[#484F58]">Total fish for this session.<br />Switch to Full to log individual catches with species, size &amp; fly.</p>
+                <p className="text-xs text-[#6E7681]">Total fish for this session.<br />Switch to Full to log individual catches with species, size &amp; fly.</p>
               </div>
             </div>
           )}
 
           {/* Full mode: Conditions */}
           {!isSimpleMode && <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-4">🌊 Conditions</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-4">🌊 Conditions</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className={label}>Water Temp (°F)</label>
@@ -443,8 +443,8 @@ export default function EditSessionPage() {
 
           {/* Full mode: Map Location */}
           {!isSimpleMode && <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-1 flex items-center gap-2">📍 Map Location</h2>
-            <p className="text-xs text-[#484F58] mb-3">Click or drag pin to reposition</p>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-1 flex items-center gap-2">📍 Map Location</h2>
+            <p className="text-xs text-[#6E7681] mb-3">Click or drag pin to reposition</p>
             <SessionLocationPicker
               initialLat={latitude}
               initialLng={longitude}
@@ -458,7 +458,7 @@ export default function EditSessionPage() {
           {/* Full mode: Fish Caught */}
           {!isSimpleMode && <div className={section}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-[#8B949E] flex items-center gap-2"><Fish className="h-4 w-4 text-[#E8923A]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
+              <h2 className="text-sm font-bold text-[#A8B2BD] flex items-center gap-2"><Fish className="h-4 w-4 text-[#E8923A]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
               <button type="button" onClick={() => setCatches((p) => [...p, emptyCatch()])}
                 className="flex items-center gap-1 text-xs font-semibold text-[#E8923A] hover:text-[#E8923A]">
                 <Plus className="h-3.5 w-3.5" /> Add Fish
@@ -467,7 +467,7 @@ export default function EditSessionPage() {
 
             {catches.length === 0 ? (
               <button type="button" onClick={() => setCatches([emptyCatch()])}
-                className="w-full rounded-lg border-2 border-dashed border-[#21262D] py-6 text-sm text-[#484F58] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
+                className="w-full rounded-lg border-2 border-dashed border-[#21262D] py-6 text-sm text-[#6E7681] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
                 + Log a fish
               </button>
             ) : (
@@ -475,9 +475,9 @@ export default function EditSessionPage() {
                 {catches.map((c, i) => (
                   <div key={i} className="rounded-lg border border-[#21262D] bg-[#0D1117]/50 p-3">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-[#8B949E]">Fish #{i + 1}</span>
+                      <span className="text-xs font-semibold text-[#A8B2BD]">Fish #{i + 1}</span>
                       <button type="button" onClick={() => setCatches((p) => p.filter((_, idx) => idx !== i))}
-                        className="text-[#484F58] hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
+                        className="text-[#6E7681] hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                       <div className="col-span-2">
@@ -541,17 +541,17 @@ export default function EditSessionPage() {
                               </div>
                             ) : (
                               <div className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] group-hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors">
-                                <Camera className="h-5 w-5 text-[#484F58] group-hover:text-[#E8923A]" />
+                                <Camera className="h-5 w-5 text-[#6E7681] group-hover:text-[#E8923A]" />
                               </div>
                             )}
-                            <span className="text-xs text-[#484F58] group-hover:text-[#E8923A] transition-colors">
+                            <span className="text-xs text-[#6E7681] group-hover:text-[#E8923A] transition-colors">
                               {c.fish_image_url ? "Replace photo" : "Add fish photo"}
                             </span>
                             <input type="file" accept="image/*" className="hidden"
                               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCatchPhotoUpload(i, f); }} />
                           </label>
                         ) : (
-                          <p className="text-xs text-[#484F58]">Save session first to add a photo</p>
+                          <p className="text-xs text-[#6E7681]">Save session first to add a photo</p>
                         )}
                       </div>
                     </div>
@@ -564,7 +564,7 @@ export default function EditSessionPage() {
           {/* Full mode: Gear, Flies, Tags */}
           {!isSimpleMode && <>
             <div className={section}>
-              <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2">🎣 Gear</h2>
+              <h2 className="text-sm font-bold text-[#A8B2BD] mb-3 flex items-center gap-2">🎣 Gear</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
                 <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
@@ -575,20 +575,20 @@ export default function EditSessionPage() {
             </div>
 
             <div className={section}>
-              <h2 className="text-sm font-bold text-[#8B949E] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
+              <h2 className="text-sm font-bold text-[#A8B2BD] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
               <textarea rows={3} className={input} placeholder="Perdigon #16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
             </div>
 
             <div className={section}>
-              <h2 className="text-sm font-bold text-[#8B949E] mb-3">🏷 Tags</h2>
+              <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">🏷 Tags</h2>
               <input className={input} placeholder="utah, provo, nymphing, spring runoff" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
-              <p className="text-xs text-[#484F58] mt-1.5">Separate tags with commas</p>
+              <p className="text-xs text-[#6E7681] mt-1.5">Separate tags with commas</p>
             </div>
           </>}
 
           {/* Notes — always visible */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📝 Session Notes</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">📝 Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
           </div>
 
@@ -601,7 +601,7 @@ export default function EditSessionPage() {
               <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D]">
                 <h3 className="font-bold text-[#F0F6FC]">{editingSpotId ? "Edit Spot" : "Add Location"}</h3>
                 <button onClick={() => { setShowSpotManager(false); setEditingSpotId(null); }}>
-                  <X className="h-5 w-5 text-[#484F58]" />
+                  <X className="h-5 w-5 text-[#6E7681]" />
                 </button>
               </div>
               <div className="p-5 space-y-3">
@@ -619,7 +619,7 @@ export default function EditSessionPage() {
                     <input className={input} placeholder="-111.4285" type="number" step="any" value={spotForm.longitude} onChange={e => setSpotForm(p => ({ ...p, longitude: e.target.value }))} />
                   </div>
                 </div>
-                <p className="text-xs text-[#484F58]">Tip: long-press a spot in Google Maps → copy coordinates</p>
+                <p className="text-xs text-[#6E7681]">Tip: long-press a spot in Google Maps → copy coordinates</p>
                 <div>
                   <label className={label}>Notes (optional)</label>
                   <input className={input} placeholder="Public access, park at turnout" value={spotForm.description} onChange={e => setSpotForm(p => ({ ...p, description: e.target.value }))} />
@@ -631,16 +631,16 @@ export default function EditSessionPage() {
               </div>
               {spots.length > 0 && (
                 <div className="border-t border-[#21262D] px-5 pb-5">
-                  <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide pt-4 mb-2">Your Spots</p>
+                  <p className="text-xs font-semibold text-[#6E7681] uppercase tracking-wide pt-4 mb-2">Your Spots</p>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {spots.map(s => (
                       <div key={s.id} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-[#0D1117] text-sm">
                         <div>
                           <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-[#F0F6FC] hover:text-[#E8923A] text-left">{s.name}</button>
-                          {s.latitude && <p className="text-xs text-[#484F58]">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
+                          {s.latitude && <p className="text-xs text-[#6E7681]">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
                         </div>
                         <div className="flex items-center gap-3 ml-2">
-                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-[#484F58] hover:text-[#E8923A]">Edit</button>
+                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-[#6E7681] hover:text-[#E8923A]">Edit</button>
                           <button type="button" onClick={() => deleteSpot(s.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
                         </div>
                       </div>

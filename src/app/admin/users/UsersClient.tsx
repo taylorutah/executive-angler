@@ -89,7 +89,7 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
     <div className="min-h-screen bg-[#0D1117]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[#8B949E] hover:text-[#F0F6FC]"><ChevronLeft className="h-5 w-5" /></Link>
+          <Link href="/admin" className="text-[#A8B2BD] hover:text-[#F0F6FC]"><ChevronLeft className="h-5 w-5" /></Link>
           <Shield className="h-5 w-5 text-[#E8923A]" />
           <h1 className="font-serif text-2xl text-[#F0F6FC]">User Management</h1>
         </div>
@@ -104,7 +104,7 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
           ].map(s => (
             <div key={s.label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
               <p className={`text-2xl font-bold font-mono ${s.color}`}>{s.val}</p>
-              <p className="text-[10px] text-[#8B949E] uppercase tracking-wider">{s.label}</p>
+              <p className="text-[10px] text-[#A8B2BD] uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </div>
@@ -118,14 +118,14 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
         {/* Search + filter */}
         <div className="flex gap-3 mb-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#484F58]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
             <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, name, or ID..."
-              className="w-full pl-10 pr-4 py-2.5 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
+              className="w-full pl-10 pr-4 py-2.5 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
           </div>
           <div className="flex gap-1">
             {(["all", "premium", "banned"] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
-                className={`px-3 py-2 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#8B949E]"}`}>
+                className={`px-3 py-2 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#A8B2BD]"}`}>
                 {f === "all" ? "All" : f === "premium" ? "Pro" : "Banned"}
               </button>
             ))}
@@ -153,32 +153,32 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                       {u.is_premium && <Crown className="h-3.5 w-3.5 text-[#E8923A]" />}
                       {u.is_banned && <Ban className="h-3.5 w-3.5 text-red-400" />}
                     </div>
-                    <p className="text-xs text-[#484F58]">
+                    <p className="text-xs text-[#6E7681]">
                       @{u.username || "—"} · {u.session_count}s · {u.catch_count}f · {formatDate(u.created_at)}
                     </p>
                   </div>
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[#484F58]" /> : <ChevronDown className="h-4 w-4 text-[#484F58]" />}
+                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[#6E7681]" /> : <ChevronDown className="h-4 w-4 text-[#6E7681]" />}
                 </div>
 
                 {isExpanded && (
                   <div className="px-5 pb-4 border-t border-[#21262D] pt-4 space-y-3">
-                    <p className="text-xs text-[#484F58] font-mono break-all">ID: {u.user_id}</p>
+                    <p className="text-xs text-[#6E7681] font-mono break-all">ID: {u.user_id}</p>
 
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
                         <Calendar className="h-4 w-4 text-[#E8923A] mx-auto mb-1" />
                         <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.session_count}</p>
-                        <p className="text-[9px] text-[#484F58] uppercase">Sessions</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Sessions</p>
                       </div>
                       <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
                         <Fish className="h-4 w-4 text-[#0BA5C7] mx-auto mb-1" />
                         <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.catch_count}</p>
-                        <p className="text-[9px] text-[#484F58] uppercase">Catches</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Catches</p>
                       </div>
                       <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
                         <Crown className="h-4 w-4 text-[#E8923A] mx-auto mb-1" />
                         <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.is_premium ? "Pro" : "Free"}</p>
-                        <p className="text-[9px] text-[#484F58] uppercase">Tier</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Tier</p>
                       </div>
                     </div>
 
@@ -205,7 +205,7 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                       <div className="flex gap-2">
                         <input type="text" value={banReason[u.user_id] || ""} onChange={e => setBanReason(prev => ({ ...prev, [u.user_id]: e.target.value }))}
                           placeholder="Ban reason (required)..."
-                          className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-red-400" />
+                          className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-red-400" />
                         <button onClick={() => adminAction("ban", u.user_id, { reason: banReason[u.user_id] || "" })}
                           disabled={!!actionLoading || !banReason[u.user_id]?.trim()}
                           className="px-3 py-2 bg-red-950/30 text-red-400 rounded-lg text-xs font-bold disabled:opacity-50">
@@ -225,9 +225,9 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                     <div className="flex gap-2">
                       <input type="text" value={noteText[u.user_id] || ""} onChange={e => setNoteText(prev => ({ ...prev, [u.user_id]: e.target.value }))}
                         placeholder="Add internal note..."
-                        className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
+                        className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
                       <button onClick={() => addNote(u.user_id)} disabled={!!actionLoading || !noteText[u.user_id]?.trim()}
-                        className="px-3 py-2 bg-[#21262D] text-[#8B949E] rounded-lg text-xs font-bold hover:text-[#F0F6FC] disabled:opacity-50">
+                        className="px-3 py-2 bg-[#21262D] text-[#A8B2BD] rounded-lg text-xs font-bold hover:text-[#F0F6FC] disabled:opacity-50">
                         <StickyNote className="h-3.5 w-3.5" />
                       </button>
                     </div>
@@ -240,7 +240,7 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
 
         {filtered.length === 0 && (
           <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
-            <p className="text-[#484F58]">No users match</p>
+            <p className="text-[#6E7681]">No users match</p>
           </div>
         )}
       </div>

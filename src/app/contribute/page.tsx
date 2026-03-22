@@ -29,7 +29,7 @@ export default async function ContributePage() {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="font-serif text-3xl text-[#F0F6FC] mb-3">Contribute to Executive Angler</h1>
-          <p className="text-[#8B949E] max-w-lg mx-auto">
+          <p className="text-[#A8B2BD] max-w-lg mx-auto">
             Help build the most complete fly fishing resource. Your local knowledge makes this platform better for every angler.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default async function ContributePage() {
                 <span className="text-3xl">{icon}</span>
                 <div>
                   <h2 className="text-base font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">{label}</h2>
-                  <p className="text-xs text-[#8B949E] mt-1">{description}</p>
+                  <p className="text-xs text-[#A8B2BD] mt-1">{description}</p>
                 </div>
               </div>
             </Link>
@@ -57,7 +57,7 @@ export default async function ContributePage() {
         {/* Info section */}
         <div className="mt-10 bg-[#161B22] border border-[#21262D] rounded-xl p-6">
           <h3 className="text-sm font-bold text-[#F0F6FC] mb-3">How it works</h3>
-          <ol className="space-y-3 text-sm text-[#8B949E]">
+          <ol className="space-y-3 text-sm text-[#A8B2BD]">
             <li className="flex gap-3">
               <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#E8923A]/15 text-[#E8923A] text-xs font-bold shrink-0">1</span>
               <span>Choose what you want to add and fill in the details. A high-quality photo is strongly recommended.</span>

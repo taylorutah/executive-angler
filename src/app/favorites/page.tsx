@@ -143,11 +143,11 @@ export default function FavoritesPage() {
 
         {favorites.length === 0 ? (
           <div className="text-center py-16 bg-[#161B22] rounded-xl shadow-sm">
-            <Heart className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
-            <h2 className="font-heading text-xl font-semibold text-[#8B949E] mb-2">
+            <Heart className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+            <h2 className="font-heading text-xl font-semibold text-[#A8B2BD] mb-2">
               No favorites yet
             </h2>
-            <p className="text-[#484F58] mb-6">
+            <p className="text-[#6E7681] mb-6">
               Explore destinations, rivers, and lodges — save the ones you love.
             </p>
             <Link
@@ -179,14 +179,14 @@ export default function FavoritesPage() {
                       <p className="font-medium text-[#E8923A]">
                         {details.name}
                       </p>
-                      <p className="text-xs text-[#8B949E] capitalize">
+                      <p className="text-xs text-[#A8B2BD] capitalize">
                         {fav.entity_type.replace("_", " ")}
                       </p>
                     </div>
                   </Link>
                   <button
                     onClick={() => removeFavorite(fav.id)}
-                    className="p-2 text-[#484F58] hover:text-red-500 transition-colors"
+                    className="p-2 text-[#6E7681] hover:text-red-500 transition-colors"
                     aria-label="Remove favorite"
                   >
                     <Trash2 className="h-4 w-4" />

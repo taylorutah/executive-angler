@@ -74,7 +74,7 @@ export default function RiverPhotosClient({
             <Camera className="h-5 w-5 text-[#E8923A]" />
             <div>
               <h2 className="font-heading text-lg font-semibold text-[#E8923A]">Submit Your Photo</h2>
-              <p className="text-xs text-[#8B949E] mt-0.5">
+              <p className="text-xs text-[#A8B2BD] mt-0.5">
                 Share your best shots from {riverName}. Ideal: 2000px+ wide, JPEG or PNG, well-exposed. All photos are reviewed before publishing.
               </p>
             </div>
@@ -106,12 +106,12 @@ export default function RiverPhotosClient({
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 tab === key
                   ? "border-[#E8923A] text-[#E8923A]"
-                  : "border-transparent text-[#8B949E] hover:text-[#F0F6FC]"
+                  : "border-transparent text-[#A8B2BD] hover:text-[#F0F6FC]"
               }`}
             >
               {label}
               <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full font-mono ${
-                tab === key ? "bg-[#E8923A]/10 text-[#E8923A]" : "bg-[#1F2937] text-[#484F58]"
+                tab === key ? "bg-[#E8923A]/10 text-[#E8923A]" : "bg-[#1F2937] text-[#6E7681]"
               }`}>
                 {count}
               </span>
@@ -128,7 +128,7 @@ export default function RiverPhotosClient({
         ) : filteredPhotos.length === 0 ? (
           <div className="text-center py-16">
             <Camera className="h-12 w-12 text-[#21262D] mx-auto mb-4" />
-            <p className="text-[#484F58]">
+            <p className="text-[#6E7681]">
               {tab === "all" ? "No photos yet." : `No ${tab} photos yet.`}
             </p>
           </div>
@@ -169,7 +169,7 @@ export default function RiverPhotosClient({
                       {[photo.species, photo.lengthInches ? `${photo.lengthInches}"` : ""].filter(Boolean).join(" · ")}
                     </p>
                   )}
-                  <div className="flex items-center justify-between text-[10px] text-[#484F58]">
+                  <div className="flex items-center justify-between text-[10px] text-[#6E7681]">
                     <span className="flex items-center gap-1">
                       <User className="h-2.5 w-2.5" />
                       {photo.submitterName || photo.username || "Angler"}

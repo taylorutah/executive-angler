@@ -13,7 +13,7 @@ export default function TermsPage() {
         <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-2">
           Terms of Service
         </h1>
-        <p className="text-sm text-[#8B949E] mb-10">
+        <p className="text-sm text-[#A8B2BD] mb-10">
           Last updated: March 1, 2026
         </p>
 

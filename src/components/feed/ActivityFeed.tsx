@@ -53,8 +53,8 @@ export function ActivityFeed({ sessions }: Props) {
   if (sessions.length === 0) {
     return (
       <div className="text-center py-16">
-        <Fish className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
-        <p className="text-[#8B949E] text-sm">
+        <Fish className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+        <p className="text-[#A8B2BD] text-sm">
           No public sessions yet. Be the first to share a session!
         </p>
       </div>
@@ -83,7 +83,7 @@ function FeedCard({ session }: { session: FeedSession }) {
   const hasCoords = session.latitude != null && session.longitude != null;
 
   return (
-    <article className="bg-[#161B22] rounded-lg border border-[#21262D] overflow-hidden hover:border-[#484F58] transition-colors duration-200">
+    <article className="bg-[#161B22] rounded-lg border border-[#21262D] overflow-hidden hover:border-[#6E7681] transition-colors duration-200">
       {/* User header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
         <div className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0">
@@ -96,7 +96,7 @@ function FeedCard({ session }: { session: FeedSession }) {
               className="object-cover w-full h-full"
             />
           ) : (
-            <span className="text-sm font-bold text-[#8B949E] font-['IBM_Plex_Mono']">
+            <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
               {avatarInitials(
                 profile?.display_name ?? null,
                 profile?.username ?? null
@@ -111,12 +111,12 @@ function FeedCard({ session }: { session: FeedSession }) {
               {displayName}
             </span>
             {username && (
-              <span className="text-xs text-[#484F58] truncate">
+              <span className="text-xs text-[#6E7681] truncate">
                 @{username}
               </span>
             )}
           </div>
-          <span className="text-[11px] text-[#484F58]">
+          <span className="text-[11px] text-[#6E7681]">
             {relativeTime(session.date)}
           </span>
         </div>
@@ -140,7 +140,7 @@ function FeedCard({ session }: { session: FeedSession }) {
               {session.river_name}
             </span>
             {session.section && (
-              <span className="text-xs text-[#8B949E]">
+              <span className="text-xs text-[#A8B2BD]">
                 &middot; {session.section}
               </span>
             )}
@@ -157,14 +157,14 @@ function FeedCard({ session }: { session: FeedSession }) {
 
         {/* Notes excerpt */}
         {session.notes && (
-          <p className="text-xs text-[#8B949E] leading-relaxed line-clamp-2 mb-3">
+          <p className="text-xs text-[#A8B2BD] leading-relaxed line-clamp-2 mb-3">
             {session.notes}
           </p>
         )}
 
         {/* Conditions row */}
         {hasConditions && (
-          <div className="flex flex-wrap gap-3 text-[11px] text-[#8B949E] mb-3">
+          <div className="flex flex-wrap gap-3 text-[11px] text-[#A8B2BD] mb-3">
             {session.weather != null && (
               <span className="flex items-center gap-1">
                 <Cloud className="h-3 w-3" />
@@ -192,7 +192,7 @@ function FeedCard({ session }: { session: FeedSession }) {
             {tags.slice(0, 4).map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] bg-[#21262D] text-[#8B949E] rounded-full px-2 py-0.5"
+                className="text-[10px] bg-[#21262D] text-[#A8B2BD] rounded-full px-2 py-0.5"
               >
                 {tag}
               </span>
@@ -202,7 +202,7 @@ function FeedCard({ session }: { session: FeedSession }) {
 
         {/* Coordinates indicator */}
         {hasCoords && (
-          <div className="flex items-center gap-1.5 text-[11px] text-[#484F58] mb-3">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#6E7681] mb-3">
             <Navigation className="h-3 w-3" />
             <span className="font-['IBM_Plex_Mono']">
               {session.latitude!.toFixed(2)}, {session.longitude!.toFixed(2)}

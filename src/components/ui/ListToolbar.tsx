@@ -46,7 +46,7 @@ export default function ListToolbar({
             <div key={dimension.key} className="flex items-center gap-1.5 shrink-0">
               {dimension.options.length > 0 && (
                 <>
-                  <span className="text-xs text-[#484F58] uppercase tracking-wider font-medium mr-0.5 hidden lg:inline">
+                  <span className="text-xs text-[#6E7681] uppercase tracking-wider font-medium mr-0.5 hidden lg:inline">
                     {dimension.label}
                   </span>
                   <button
@@ -54,7 +54,7 @@ export default function ListToolbar({
                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                       !activeFilters[dimension.key]
                         ? "bg-[#E8923A] text-white shadow-sm"
-                        : "bg-[#161B22] text-[#8B949E] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
+                        : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
                     }`}
                   >
                     All
@@ -71,7 +71,7 @@ export default function ListToolbar({
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                         activeFilters[dimension.key] === opt.value
                           ? "bg-[#E8923A] text-white shadow-sm"
-                          : "bg-[#161B22] text-[#8B949E] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
+                          : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#E8923A]/10 hover:text-[#E8923A] border border-[#21262D]"
                       }`}
                     >
                       {opt.label}
@@ -93,7 +93,7 @@ export default function ListToolbar({
                 onClick={() => {
                   filters.forEach((f) => onFilterChange(f.key, null));
                 }}
-                className="px-3 py-1.5 rounded-full text-sm font-medium text-[#484F58] hover:text-[#8B949E] transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 rounded-full text-sm font-medium text-[#6E7681] hover:text-[#A8B2BD] transition-colors whitespace-nowrap"
               >
                 Clear all
               </button>
@@ -104,7 +104,7 @@ export default function ListToolbar({
         {/* Right: View toggle + Sort */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Result count */}
-          <span className="text-xs text-[#484F58] hidden sm:inline">
+          <span className="text-xs text-[#6E7681] hidden sm:inline">
             {filteredCount === totalCount
               ? `${totalCount} results`
               : `${filteredCount} of ${totalCount}`}
@@ -121,7 +121,7 @@ export default function ListToolbar({
                 className={`p-1.5 rounded-md transition-colors ${
                   viewMode === mode
                     ? "bg-[#E8923A]/10 text-[#E8923A]"
-                    : "text-[#484F58] hover:text-[#8B949E]"
+                    : "text-[#6E7681] hover:text-[#A8B2BD]"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -134,7 +134,7 @@ export default function ListToolbar({
             <select
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="appearance-none bg-[#161B22] border border-[#21262D] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[#8B949E] hover:border-[#E8923A]/30 focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] cursor-pointer"
+              className="appearance-none bg-[#161B22] border border-[#21262D] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[#A8B2BD] hover:border-[#E8923A]/30 focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] cursor-pointer"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -142,7 +142,7 @@ export default function ListToolbar({
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#484F58] pointer-events-none" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681] pointer-events-none" />
           </div>
         </div>
       </div>

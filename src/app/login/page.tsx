@@ -44,7 +44,7 @@ function LoginForm() {
           <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">
             {SITE_NAME}
           </Link>
-          <p className="mt-2 text-[#8B949E]">Sign in to your account.</p>
+          <p className="mt-2 text-[#A8B2BD]">Sign in to your account.</p>
         </div>
 
         <div className="bg-[#161B22] rounded-xl shadow-md p-8 space-y-5">
@@ -64,7 +64,7 @@ function LoginForm() {
               <div className="w-full border-t border-[#21262D]" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#161B22] px-3 text-[#484F58] tracking-wider">or</span>
+              <span className="bg-[#161B22] px-3 text-[#6E7681] tracking-wider">or</span>
             </div>
           </div>
 
@@ -100,7 +100,7 @@ function LoginForm() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-[#8B949E]">
+          <p className="text-center text-sm text-[#A8B2BD]">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-[#E8923A] font-medium hover:text-[#E8923A]">Create one</Link>
           </p>

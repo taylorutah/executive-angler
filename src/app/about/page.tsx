@@ -16,7 +16,7 @@ export default function AboutPage() {
         </h1>
 
         <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
-          <p className="text-xl text-[#8B949E] leading-relaxed">
+          <p className="text-xl text-[#A8B2BD] leading-relaxed">
             {SITE_NAME} is the definitive fly fishing resource, built to connect
             anglers with the world&apos;s finest waters, lodges, guides, and expert
             instruction.

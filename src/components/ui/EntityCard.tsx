@@ -63,10 +63,10 @@ export default function EntityCard({
           {title}
         </h3>
         {subtitle && (
-          <p className="mt-1.5 text-sm text-[#8B949E] line-clamp-2">{subtitle}</p>
+          <p className="mt-1.5 text-sm text-[#A8B2BD] line-clamp-2">{subtitle}</p>
         )}
         {meta && (
-          <p className="mt-2 text-xs font-medium text-[#484F58] uppercase tracking-wider">
+          <p className="mt-2 text-xs font-medium text-[#6E7681] uppercase tracking-wider">
             {meta}
           </p>
         )}

@@ -34,7 +34,7 @@ const DEFAULT_SECTIONS: EuroLeaderSection[] = [
 
 const cls =
   "bg-[#0D1117] border border-[#21262D] rounded-lg px-2 py-1.5 text-[#F0F6FC] text-xs focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-const lbl = "text-[10px] text-[#484F58] flex-shrink-0";
+const lbl = "text-[10px] text-[#6E7681] flex-shrink-0";
 
 function newSection(): EuroLeaderSection {
   return { role: "tippet", material: "fluoro", length_ft: 2 };
@@ -72,7 +72,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
 
   return (
     <div className="rounded-xl border border-[#21262D] bg-[#0D1117] p-4">
-      <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wide mb-3">
+      <p className="text-xs font-semibold text-[#A8B2BD] uppercase tracking-wide mb-3">
         Euro Leader Sections
       </p>
 
@@ -92,7 +92,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
             }`}
           >
             {/* Drag handle */}
-            <GripVertical className="h-4 w-4 text-[#484F58] flex-shrink-0 cursor-grab active:cursor-grabbing" />
+            <GripVertical className="h-4 w-4 text-[#6E7681] flex-shrink-0 cursor-grab active:cursor-grabbing" />
 
             {/* Role selector */}
             <select
@@ -205,7 +205,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
             <button
               type="button"
               onClick={() => remove(idx)}
-              className="ml-auto flex-shrink-0 p-1 rounded text-[#484F58] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+              className="ml-auto flex-shrink-0 p-1 rounded text-[#6E7681] hover:text-red-500 hover:bg-red-500/10 transition-colors"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -221,7 +221,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
         >
           <Plus className="h-3.5 w-3.5" /> Add Section
         </button>
-        <span className="text-xs text-[#8B949E] font-medium">
+        <span className="text-xs text-[#A8B2BD] font-medium">
           Total: <span className="text-[#E8923A] font-bold">{totalFt.toFixed(1)} ft</span>
         </span>
       </div>

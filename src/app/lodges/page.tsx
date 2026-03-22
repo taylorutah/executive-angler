@@ -227,7 +227,7 @@ export default async function LodgesPage() {
                       {lodge.averageRating && (
                         <div className="mt-3 flex items-center gap-1">
                           <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                          <span className="text-[#8B949E] text-xs">
+                          <span className="text-[#A8B2BD] text-xs">
                             {lodge.averageRating} ({lodge.reviewCount} reviews)
                           </span>
                         </div>
@@ -248,7 +248,7 @@ export default async function LodgesPage() {
       <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Lodges</h2>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {lodges.length} world-class lodges — filter by destination, river &amp; price
           </p>
         </div>

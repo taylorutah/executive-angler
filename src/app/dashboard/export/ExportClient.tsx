@@ -194,7 +194,7 @@ export default function ExportClient({
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <Link href="/dashboard" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex items-center gap-2">
@@ -207,16 +207,16 @@ export default function ExportClient({
         <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-[#8B949E] uppercase tracking-wider mb-1">Sessions</p>
+              <p className="text-xs text-[#A8B2BD] uppercase tracking-wider mb-1">Sessions</p>
               <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{sessions.length}</p>
             </div>
             <div>
-              <p className="text-xs text-[#8B949E] uppercase tracking-wider mb-1">Catches</p>
+              <p className="text-xs text-[#A8B2BD] uppercase tracking-wider mb-1">Catches</p>
               <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{catches.length}</p>
             </div>
           </div>
           {sessions.length > 0 && (
-            <p className="text-xs text-[#484F58] mt-3">
+            <p className="text-xs text-[#6E7681] mt-3">
               {sessions[sessions.length - 1].date} → {sessions[0].date}
             </p>
           )}
@@ -224,14 +224,14 @@ export default function ExportClient({
 
         {/* Format picker */}
         <div className="mb-6">
-          <p className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Format</p>
+          <p className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Format</p>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setFormat("csv")}
               className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                 format === "csv"
                   ? "bg-[#E8923A]/10 border-[#E8923A] text-[#E8923A]"
-                  : "bg-[#161B22] border-[#21262D] text-[#8B949E] hover:border-[#484F58]"
+                  : "bg-[#161B22] border-[#21262D] text-[#A8B2BD] hover:border-[#6E7681]"
               }`}
             >
               <Table className="h-6 w-6" />
@@ -246,7 +246,7 @@ export default function ExportClient({
               className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                 format === "pdf"
                   ? "bg-[#0BA5C7]/10 border-[#0BA5C7] text-[#0BA5C7]"
-                  : "bg-[#161B22] border-[#21262D] text-[#8B949E] hover:border-[#484F58]"
+                  : "bg-[#161B22] border-[#21262D] text-[#A8B2BD] hover:border-[#6E7681]"
               }`}
             >
               <FileText className="h-6 w-6" />
@@ -260,7 +260,7 @@ export default function ExportClient({
 
         {/* What's included */}
         <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
-          <p className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Includes</p>
+          <p className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Includes</p>
           <ul className="space-y-2 text-sm text-[#F0F6FC]">
             <li className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-[#2EA44F] shrink-0" />
@@ -302,7 +302,7 @@ export default function ExportClient({
         </button>
 
         {format === "pdf" && (
-          <p className="text-xs text-[#484F58] mt-3 text-center">
+          <p className="text-xs text-[#6E7681] mt-3 text-center">
             Opens a formatted report in a new tab — use your browser&apos;s Print → Save as PDF
           </p>
         )}

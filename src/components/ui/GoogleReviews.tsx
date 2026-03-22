@@ -19,7 +19,7 @@ function StarRating({ rating }: { rating: number }) {
           className={`h-4 w-4 ${
             star <= Math.round(rating)
               ? "text-amber-400 fill-amber-400"
-              : "text-[#484F58]"
+              : "text-[#6E7681]"
           }`}
         />
       ))}
@@ -68,7 +68,7 @@ export default function GoogleReviews({
             </span>
             <StarRating rating={rating} />
           </div>
-          <p className="text-sm text-[#8B949E]">
+          <p className="text-sm text-[#A8B2BD]">
             {reviewCount.toLocaleString()} Google reviews
           </p>
         </div>
@@ -92,13 +92,13 @@ export default function GoogleReviews({
                   </p>
                   <div className="flex items-center gap-1.5">
                     <StarRating rating={review.rating} />
-                    <span className="text-xs text-[#484F58]">
+                    <span className="text-xs text-[#6E7681]">
                       {review.relativeTimeDescription}
                     </span>
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-[#8B949E] leading-relaxed line-clamp-3">
+              <p className="text-sm text-[#A8B2BD] leading-relaxed line-clamp-3">
                 {review.text}
               </p>
             </div>

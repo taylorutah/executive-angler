@@ -146,9 +146,9 @@ export default async function GuidesPage() {
                         {GUIDE_HEADLINES[guide.slug]}
                       </p>
                       {dest && (
-                        <p className="mt-1 text-xs text-[#484F58]">{dest.name}</p>
+                        <p className="mt-1 text-xs text-[#6E7681]">{dest.name}</p>
                       )}
-                      <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
+                      <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
                         {guide.bio.substring(0, 120)}...
                       </p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
@@ -165,7 +165,7 @@ export default async function GuidesPage() {
                         {guide.googleRating && (
                           <div className="flex items-center gap-1">
                             <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                            <span className="text-xs text-[#8B949E]">
+                            <span className="text-xs text-[#A8B2BD]">
                               {guide.googleRating} ({guide.googleReviewCount})
                             </span>
                           </div>
@@ -192,7 +192,7 @@ export default async function GuidesPage() {
       <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Guides</h2>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {guides.length} guides — filterable by destination and experience
           </p>
         </div>

@@ -50,17 +50,17 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               Featured
             </span>
             {meta && (
-              <span className="text-xs text-[#484F58] uppercase tracking-wider">{meta}</span>
+              <span className="text-xs text-[#6E7681] uppercase tracking-wider">{meta}</span>
             )}
           </div>
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-2 text-lg text-[#8B949E] italic">{subtitle}</p>
+            <p className="mt-2 text-lg text-[#A8B2BD] italic">{subtitle}</p>
           )}
           {description && (
-            <p className="mt-3 text-[#8B949E] line-clamp-3">{description}</p>
+            <p className="mt-3 text-[#A8B2BD] line-clamp-3">{description}</p>
           )}
         </div>
       </div>

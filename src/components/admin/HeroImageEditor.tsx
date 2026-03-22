@@ -167,9 +167,9 @@ export default function HeroImageEditor({
           <div className="flex items-center gap-2">
             <Crop className="h-5 w-5 text-[#E8923A]" />
             <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
-            <span className="text-[10px] text-[#484F58] ml-2">21:9 aspect ratio · Drag to reposition · Scroll to zoom</span>
+            <span className="text-[10px] text-[#6E7681] ml-2">21:9 aspect ratio · Drag to reposition · Scroll to zoom</span>
           </div>
-          <button onClick={handleCropCancel} className="text-[#484F58] hover:text-[#F0F6FC]">
+          <button onClick={handleCropCancel} className="text-[#6E7681] hover:text-[#F0F6FC]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -196,7 +196,7 @@ export default function HeroImageEditor({
         {/* Zoom slider + actions */}
         <div className="px-6 py-4 bg-[#161B22] border-t border-[#21262D]">
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-xs text-[#8B949E]">Zoom</span>
+            <span className="text-xs text-[#A8B2BD]">Zoom</span>
             <input
               type="range"
               min={1}
@@ -206,7 +206,7 @@ export default function HeroImageEditor({
               onChange={e => setZoom(Number(e.target.value))}
               className="flex-1 accent-[#E8923A]"
             />
-            <span className="text-xs text-[#8B949E] font-mono w-10 text-right">{zoom.toFixed(1)}×</span>
+            <span className="text-xs text-[#A8B2BD] font-mono w-10 text-right">{zoom.toFixed(1)}×</span>
           </div>
           <div className="flex gap-3">
             <button
@@ -239,7 +239,7 @@ export default function HeroImageEditor({
             <ImageIcon className="h-5 w-5 text-[#E8923A]" />
             <h2 className="text-base font-bold text-[#F0F6FC]">Edit Hero Image</h2>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-[#484F58] hover:text-[#F0F6FC]">
+          <button onClick={() => setIsOpen(false)} className="text-[#6E7681] hover:text-[#F0F6FC]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -248,10 +248,10 @@ export default function HeroImageEditor({
           {/* Image preview + upload */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold text-[#8B949E] uppercase tracking-wider">Image</label>
+              <label className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Image</label>
               <div className="group relative">
-                <Info className="h-3.5 w-3.5 text-[#484F58] cursor-help" />
-                <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#8B949E] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
+                <Info className="h-3.5 w-3.5 text-[#6E7681] cursor-help" />
+                <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#A8B2BD] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
                   <p className="font-bold text-[#F0F6FC] mb-1">Optimal image specs:</p>
                   <ul className="space-y-0.5">
                     <li>• <strong>Size:</strong> 2400 × 1000px (21:9 ratio)</li>
@@ -288,7 +288,7 @@ export default function HeroImageEditor({
             ) : (
               <label
                 className={`flex flex-col items-center justify-center w-full h-48 bg-[#0D1117] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                  uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#484F58]"
+                  uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#6E7681]"
                 }`}
                 onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[#E8923A]"); }}
                 onDragLeave={e => { e.currentTarget.classList.remove("border-[#E8923A]"); }}
@@ -315,9 +315,9 @@ export default function HeroImageEditor({
                   </>
                 ) : (
                   <>
-                    <Upload className="h-8 w-8 text-[#484F58] mb-2" />
-                    <span className="text-sm text-[#8B949E] font-medium">Drop image here or click to browse</span>
-                    <span className="text-[10px] text-[#484F58] mt-1">Drag & crop to 21:9 · JPEG/WebP · 15 MB max</span>
+                    <Upload className="h-8 w-8 text-[#6E7681] mb-2" />
+                    <span className="text-sm text-[#A8B2BD] font-medium">Drop image here or click to browse</span>
+                    <span className="text-[10px] text-[#6E7681] mt-1">Drag & crop to 21:9 · JPEG/WebP · 15 MB max</span>
                   </>
                 )}
               </label>
@@ -329,13 +329,13 @@ export default function HeroImageEditor({
           {/* Alt text */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold text-[#8B949E] uppercase tracking-wider flex items-center gap-1">
+              <label className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider flex items-center gap-1">
                 <Type className="h-3 w-3" />
                 Alt Text <span className="text-red-400">*</span>
               </label>
               <div className="group relative">
-                <Info className="h-3.5 w-3.5 text-[#484F58] cursor-help" />
-                <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#8B949E] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
+                <Info className="h-3.5 w-3.5 text-[#6E7681] cursor-help" />
+                <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#A8B2BD] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
                   <p className="font-bold text-[#F0F6FC] mb-1">SEO alt text tips:</p>
                   <ul className="space-y-0.5">
                     <li>• Describe the scene: river, location, season</li>
@@ -351,40 +351,40 @@ export default function HeroImageEditor({
               onChange={e => setAltText(e.target.value)}
               placeholder="e.g., Fly fishing the Madison River at sunset during fall caddis hatch, Montana"
               maxLength={200}
-              className="w-full px-4 py-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+              className="w-full px-4 py-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
             />
             <div className="flex justify-between mt-1">
-              <span className={`text-[10px] ${altText.length >= 80 && altText.length <= 125 ? "text-[#2EA44F]" : altText.length > 0 ? "text-[#E8923A]" : "text-[#484F58]"}`}>
+              <span className={`text-[10px] ${altText.length >= 80 && altText.length <= 125 ? "text-[#2EA44F]" : altText.length > 0 ? "text-[#E8923A]" : "text-[#6E7681]"}`}>
                 {altText.length >= 80 && altText.length <= 125 ? "✓ Perfect length for SEO" : altText.length > 125 ? "A bit long — aim for 80–125" : "Aim for 80–125 characters"}
               </span>
-              <span className="text-[10px] text-[#484F58]">{altText.length}/200</span>
+              <span className="text-[10px] text-[#6E7681]">{altText.length}/200</span>
             </div>
           </div>
 
           {/* Photo credit */}
           <div>
-            <label className="text-xs font-bold text-[#8B949E] uppercase tracking-wider flex items-center gap-1 mb-2">
+            <label className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider flex items-center gap-1 mb-2">
               <Camera className="h-3 w-3" />
-              Photo Credit <span className="text-[#484F58] font-normal normal-case">(optional)</span>
+              Photo Credit <span className="text-[#6E7681] font-normal normal-case">(optional)</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <div className="flex items-center gap-1 mb-1">
-                  <User className="h-2.5 w-2.5 text-[#484F58]" />
-                  <span className="text-[10px] text-[#484F58]">Photographer</span>
+                  <User className="h-2.5 w-2.5 text-[#6E7681]" />
+                  <span className="text-[10px] text-[#6E7681]">Photographer</span>
                 </div>
                 <input type="text" value={credit} onChange={e => setCredit(e.target.value)}
                   placeholder="Pat Ford Photography"
-                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
+                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
               </div>
               <div>
                 <div className="flex items-center gap-1 mb-1">
-                  <LinkIcon className="h-2.5 w-2.5 text-[#484F58]" />
-                  <span className="text-[10px] text-[#484F58]">Portfolio URL</span>
+                  <LinkIcon className="h-2.5 w-2.5 text-[#6E7681]" />
+                  <span className="text-[10px] text-[#6E7681]">Portfolio URL</span>
                 </div>
                 <input type="url" value={creditUrl} onChange={e => setCreditUrl(e.target.value)}
                   placeholder="https://patford.com"
-                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
+                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
               </div>
             </div>
           </div>

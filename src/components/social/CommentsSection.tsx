@@ -49,7 +49,7 @@ function timeAgo(dateStr: string): string {
 
 export function CommentCount({ count }: { count: number }) {
   return (
-    <div className="flex items-center gap-1 text-[#484F58]">
+    <div className="flex items-center gap-1 text-[#6E7681]">
       <MessageCircle className="h-4 w-4" />
       {count > 0 && (
         <span className="font-['IBM_Plex_Mono'] text-xs">{count}</span>
@@ -171,7 +171,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
       {/* Toggle button */}
       <button
         onClick={handleToggle}
-        className="flex items-center gap-1 text-[#484F58] hover:text-[#8B949E] transition-colors"
+        className="flex items-center gap-1 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
       >
         <MessageCircle className="h-4 w-4" />
         {commentCount > 0 && (
@@ -183,7 +183,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
       {expanded && (
         <div className="mt-3 border-t border-[#21262D] pt-3 space-y-3">
           {loading && (
-            <div className="text-xs text-[#484F58]">Loading comments...</div>
+            <div className="text-xs text-[#6E7681]">Loading comments...</div>
           )}
 
           {comments.map((comment) => (
@@ -199,7 +199,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <span className="text-[10px] font-bold text-[#8B949E]">
+                  <span className="text-[10px] font-bold text-[#A8B2BD]">
                     {(comment.profile?.display_name || "A").charAt(0).toUpperCase()}
                   </span>
                 )}
@@ -211,20 +211,20 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
                   <span className="text-xs font-semibold text-[#F0F6FC]">
                     {comment.profile?.display_name || comment.profile?.username || "Angler"}
                   </span>
-                  <span className="text-[10px] text-[#484F58]">
+                  <span className="text-[10px] text-[#6E7681]">
                     {timeAgo(comment.created_at)}
                   </span>
                   {comment.user_id === userId && (
                     <button
                       onClick={() => deleteComment(comment.id)}
-                      className="opacity-0 group-hover:opacity-100 text-[#484F58] hover:text-[#DA3633] transition-all ml-auto"
+                      className="opacity-0 group-hover:opacity-100 text-[#6E7681] hover:text-[#DA3633] transition-all ml-auto"
                       aria-label="Delete comment"
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>
                   )}
                 </div>
-                <p className="text-xs text-[#8B949E] leading-relaxed">{comment.body}</p>
+                <p className="text-xs text-[#A8B2BD] leading-relaxed">{comment.body}</p>
               </div>
             </div>
           ))}
@@ -239,13 +239,13 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && postComment()}
                 placeholder="Add a comment..."
-                className="flex-1 bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-1.5 text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] transition-colors"
+                className="flex-1 bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
                 maxLength={500}
               />
               <button
                 onClick={postComment}
                 disabled={!newComment.trim() || posting}
-                className="text-[#E8923A] disabled:text-[#484F58] hover:text-[#F0F6FC] transition-colors p-1"
+                className="text-[#E8923A] disabled:text-[#6E7681] hover:text-[#F0F6FC] transition-colors p-1"
                 aria-label="Post comment"
               >
                 <Send className="h-4 w-4" />

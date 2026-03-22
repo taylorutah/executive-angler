@@ -207,7 +207,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/contribute" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/contribute" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <h1 className="font-serif text-2xl text-[#F0F6FC]">Add {entityLabel}</h1>
@@ -229,7 +229,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
 
         {/* Hero image upload */}
         <div className="mb-6">
-          <label className="block text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-2">
+          <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
             <ImageIcon className="h-3 w-3 inline mr-1" />
             Hero Image <span className="text-[#E8923A]">*strongly recommended</span>
           </label>
@@ -248,7 +248,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
           ) : (
             <label
               className={`flex flex-col items-center justify-center w-full h-48 bg-[#161B22] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#484F58]"
+                uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#6E7681]"
               }`}
               onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[#E8923A]", "bg-[#E8923A]/5"); }}
               onDragLeave={e => { e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5"); }}
@@ -275,21 +275,21 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
                 </>
               ) : (
                 <>
-                  <Upload className="h-8 w-8 text-[#484F58] mb-2" />
-                  <span className="text-sm text-[#8B949E] font-medium">Drop an image here or click to browse</span>
-                  <span className="text-[10px] text-[#484F58] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
+                  <Upload className="h-8 w-8 text-[#6E7681] mb-2" />
+                  <span className="text-sm text-[#A8B2BD] font-medium">Drop an image here or click to browse</span>
+                  <span className="text-[10px] text-[#6E7681] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
                 </>
               )}
             </label>
           )}
-          <p className="text-[10px] text-[#484F58] mt-1.5">A great photo dramatically increases approval chances</p>
+          <p className="text-[10px] text-[#6E7681] mt-1.5">A great photo dramatically increases approval chances</p>
         </div>
 
         {/* Dynamic fields */}
         <div className="space-y-5">
           {fields.map(field => (
             <div key={field.key}>
-              <label className="block text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
                 {field.label}
                 {field.required && <span className="text-red-400 ml-1">*</span>}
               </label>
@@ -300,7 +300,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                 />
               )}
 
@@ -310,7 +310,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] resize-none"
+                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
                 />
               )}
 
@@ -334,9 +334,9 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
                     value={formData[field.key] || ""}
                     onChange={e => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                   />
-                  <p className="text-[10px] text-[#484F58] mt-1">Separate with commas</p>
+                  <p className="text-[10px] text-[#6E7681] mt-1">Separate with commas</p>
                 </>
               )}
             </div>

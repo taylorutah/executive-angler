@@ -215,7 +215,7 @@ export default async function LodgePage({ params }: Props) {
                   About {lodge.name}
                 </h2>
                 {lodge.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
+                  <p key={i} className="text-[#A8B2BD] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
@@ -309,7 +309,7 @@ export default async function LodgePage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {river.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -408,18 +408,18 @@ export default async function LodgePage({ params }: Props) {
                   <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-3">
                     Season
                   </h3>
-                  <p className="text-sm text-[#8B949E]">
+                  <p className="text-sm text-[#A8B2BD]">
                     <Calendar className="h-4 w-4 inline mr-1.5" />
                     {lodge.seasonStart} through {lodge.seasonEnd}
                   </p>
                   {lodge.capacity && (
-                    <p className="text-sm text-[#8B949E] mt-2">
+                    <p className="text-sm text-[#A8B2BD] mt-2">
                       <Users className="h-4 w-4 inline mr-1.5" />
                       {lodge.capacity} guest capacity
                     </p>
                   )}
                   {lodge.priceRange && (
-                    <p className="text-sm text-[#8B949E] mt-2">
+                    <p className="text-sm text-[#A8B2BD] mt-2">
                       <DollarSign className="h-4 w-4 inline mr-1.5" />
                       {lodge.priceRange}
                     </p>
@@ -443,7 +443,7 @@ export default async function LodgePage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

@@ -107,7 +107,7 @@ export function ThreadDetailClient({
       <div className="flex items-center gap-3 px-4 py-3 border-b border-[#21262D] bg-[#161B22] safe-area-top">
         <Link
           href="/messages"
-          className="p-1 text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+          className="p-1 text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
@@ -120,7 +120,7 @@ export function ThreadDetailClient({
             className="rounded-full object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#8B949E] font-medium">
+          <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#A8B2BD] font-medium">
             {otherName[0]?.toUpperCase()}
           </div>
         )}
@@ -132,7 +132,7 @@ export function ThreadDetailClient({
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-[#484F58] py-12">
+          <p className="text-center text-sm text-[#6E7681] py-12">
             No messages yet. Say hello!
           </p>
         )}
@@ -171,7 +171,7 @@ export function ThreadDetailClient({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] transition-colors"
+            className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
           />
           <button
             type="submit"

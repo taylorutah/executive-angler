@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
           <div
             style={{
               fontSize: "24px",
-              color: "#8B949E",
+              color: "#A8B2BD",
               lineHeight: 1.5,
               maxWidth: "800px",
             }}
@@ -119,7 +119,7 @@ export async function GET(req: NextRequest) {
             alignItems: "center",
           }}
         >
-          <span style={{ fontSize: "16px", color: "#484F58" }}>
+          <span style={{ fontSize: "16px", color: "#6E7681" }}>
             executiveangler.com
           </span>
           <div
@@ -137,7 +137,7 @@ export async function GET(req: NextRequest) {
                 backgroundColor: "#E8923A",
               }}
             />
-            <span style={{ fontSize: "14px", color: "#484F58" }}>
+            <span style={{ fontSize: "14px", color: "#6E7681" }}>
               Track · Log · Discover
             </span>
           </div>

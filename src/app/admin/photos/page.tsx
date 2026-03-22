@@ -171,7 +171,7 @@ export default function AdminPhotosPage() {
           <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
             Access Denied
           </h1>
-          <p className="text-[#8B949E] mb-6">
+          <p className="text-[#A8B2BD] mb-6">
             You do not have permission to access the admin dashboard. Please
             sign in with an admin account.
           </p>
@@ -223,13 +223,13 @@ export default function AdminPhotosPage() {
               className="p-2 rounded-lg hover:bg-[#1F2937] transition-colors"
               aria-label="Back to home"
             >
-              <ArrowLeft className="h-5 w-5 text-[#8B949E]" />
+              <ArrowLeft className="h-5 w-5 text-[#A8B2BD]" />
             </Link>
             <div>
               <h1 className="font-heading text-2xl font-bold text-[#E8923A]">
                 Photo Submissions
               </h1>
-              <p className="text-sm text-[#8B949E] mt-0.5">
+              <p className="text-sm text-[#A8B2BD] mt-0.5">
                 Review and manage community photo submissions
               </p>
             </div>
@@ -247,7 +247,7 @@ export default function AdminPhotosPage() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === tab.key
                   ? "bg-[#E8923A] text-white shadow-sm"
-                  : "bg-[#161B22] text-[#8B949E] border border-[#21262D] hover:bg-[#0D1117]"
+                  : "bg-[#161B22] text-[#A8B2BD] border border-[#21262D] hover:bg-[#0D1117]"
               }`}
             >
               {tab.icon}
@@ -259,7 +259,7 @@ export default function AdminPhotosPage() {
                       ? "bg-[#161B22]/20 text-white"
                       : tab.key === "pending"
                         ? "bg-amber-100 text-amber-700"
-                        : "bg-[#1F2937] text-[#8B949E]"
+                        : "bg-[#1F2937] text-[#A8B2BD]"
                   }`}
                 >
                   {counts[tab.key]}
@@ -276,8 +276,8 @@ export default function AdminPhotosPage() {
           </div>
         ) : filteredPhotos.length === 0 ? (
           <div className="text-center py-20">
-            <Camera className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
-            <p className="text-[#8B949E]">
+            <Camera className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+            <p className="text-[#A8B2BD]">
               No {activeTab} photo submissions yet.
             </p>
           </div>
@@ -325,7 +325,7 @@ export default function AdminPhotosPage() {
                       <p className="text-sm font-medium text-[#E8923A] truncate">
                         {photo.submitter_name}
                       </p>
-                      <p className="text-xs text-[#8B949E] truncate flex items-center gap-1">
+                      <p className="text-xs text-[#A8B2BD] truncate flex items-center gap-1">
                         <Mail className="h-3 w-3" />
                         {photo.submitter_email}
                       </p>
@@ -333,25 +333,25 @@ export default function AdminPhotosPage() {
                   </div>
 
                   {/* Entity Info */}
-                  <div className="flex items-center gap-1.5 text-xs text-[#8B949E]">
+                  <div className="flex items-center gap-1.5 text-xs text-[#A8B2BD]">
                     <MapPin className="h-3 w-3" />
                     <span className="capitalize">{photo.entity_type}</span>
-                    <span className="text-[#484F58]">|</span>
-                    <span className="truncate font-mono text-[#484F58]">
+                    <span className="text-[#6E7681]">|</span>
+                    <span className="truncate font-mono text-[#6E7681]">
                       {photo.entity_id.substring(0, 8)}...
                     </span>
                   </div>
 
                   {/* Caption */}
                   {photo.caption && (
-                    <p className="text-sm text-[#8B949E] line-clamp-2 italic">
+                    <p className="text-sm text-[#A8B2BD] line-clamp-2 italic">
                       &ldquo;{photo.caption}&rdquo;
                     </p>
                   )}
 
                   {/* Camera Details */}
                   {(photo.camera_body || photo.lens) && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
+                    <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
                       <Camera className="h-3 w-3" />
                       {[photo.camera_body, photo.lens]
                         .filter(Boolean)
@@ -359,7 +359,7 @@ export default function AdminPhotosPage() {
                     </div>
                   )}
                   {(photo.aperture || photo.shutter_speed || photo.iso) && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
+                    <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
                       <Aperture className="h-3 w-3" />
                       {[
                         photo.aperture,
@@ -372,7 +372,7 @@ export default function AdminPhotosPage() {
                   )}
 
                   {/* Date */}
-                  <div className="flex items-center gap-1.5 text-xs text-[#484F58]">
+                  <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
                     <Calendar className="h-3 w-3" />
                     Submitted {formatDate(photo.submitted_at)}
                   </div>

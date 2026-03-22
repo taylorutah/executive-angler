@@ -8,7 +8,7 @@ export default function NotFound() {
         <h1 className="font-serif text-3xl text-[#F0F6FC] mb-3">
           River Not Found
         </h1>
-        <p className="text-[#8B949E] mb-8">
+        <p className="text-[#A8B2BD] mb-8">
           Looks like you&apos;ve waded into uncharted water. The page you&apos;re
           looking for doesn&apos;t exist or has been moved.
         </p>

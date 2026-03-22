@@ -14,7 +14,7 @@ export default function GlobalError({
           <div style={{ textAlign: "center", maxWidth: "400px" }}>
             <p style={{ fontSize: "4rem", fontWeight: "bold", opacity: 0.2, color: "#E8923A" }}>Error</p>
             <h2 style={{ fontSize: "1.5rem", marginBottom: "0.75rem" }}>Something went wrong</h2>
-            <p style={{ color: "#8B949E", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
+            <p style={{ color: "#A8B2BD", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
               {error.message || "An unexpected error occurred."}
             </p>
             <button

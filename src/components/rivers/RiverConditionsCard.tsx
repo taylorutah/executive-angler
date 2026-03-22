@@ -133,7 +133,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
               className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
                 idx === selectedIdx
                   ? "bg-[#E8923A] text-white"
-                  : "bg-[#0D1117] text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#21262D]"
+                  : "bg-[#0D1117] text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D]"
               }`}
             >
               {g.section}
@@ -161,12 +161,12 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <Waves className="h-4 w-4 text-blue-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">
                       Streamflow
                     </p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.discharge.value.toLocaleString()}{" "}
-                      <span className="text-[#484F58] font-normal">cfs</span>
+                      <span className="text-[#6E7681] font-normal">cfs</span>
                     </p>
                   </div>
                 </div>
@@ -185,12 +185,12 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <ArrowUpDown className="h-4 w-4 text-[#E8923A]" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">
                       Gage Height
                     </p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.gageHeight.value}{" "}
-                      <span className="text-[#484F58] font-normal">ft</span>
+                      <span className="text-[#6E7681] font-normal">ft</span>
                     </p>
                   </div>
                 </div>
@@ -204,12 +204,12 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <Thermometer className="h-4 w-4 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">
                       Water Temp
                     </p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.waterTemp.valueFahrenheit}°F{" "}
-                      <span className="text-[#484F58] font-normal">
+                      <span className="text-[#6E7681] font-normal">
                         / {active.waterTemp.valueCelsius}°C
                       </span>
                     </p>
@@ -220,7 +220,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
           </div>
 
           {/* Footer */}
-          <div className="mt-4 flex items-center gap-1.5 text-[10px] text-[#484F58]">
+          <div className="mt-4 flex items-center gap-1.5 text-[10px] text-[#6E7681]">
             <Clock className="h-3 w-3" />
             <span>
               {formatTimestamp(active.timestamp)} &middot; USGS {active.siteId}
@@ -238,7 +238,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <Waves className="h-4 w-4 text-blue-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">Streamflow</p>
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Streamflow</p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.discharge ? `${active.discharge.value.toLocaleString()} cfs` : "--- cfs"}
                     </p>
@@ -253,7 +253,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <ArrowUpDown className="h-4 w-4 text-[#E8923A]" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">Gage Height</p>
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Gage Height</p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.gageHeight ? `${active.gageHeight.value} ft` : "-.-- ft"}
                     </p>
@@ -267,7 +267,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
                     <Thermometer className="h-4 w-4 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#484F58] font-medium uppercase tracking-wide">Water Temp</p>
+                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Water Temp</p>
                     <p className="text-sm font-semibold text-[#F0F6FC]">
                       {active.waterTemp ? `${active.waterTemp.valueFahrenheit}°F` : "--°F"}
                     </p>
@@ -287,7 +287,7 @@ export default function RiverConditionsCard({ riverId }: { riverId: string }) {
             <Smartphone className="h-4 w-4" />
             Unlock with Pro
           </a>
-          <p className="mt-2 text-center text-[10px] text-[#484F58]">
+          <p className="mt-2 text-center text-[10px] text-[#6E7681]">
             Live USGS flow, gage height &amp; water temp — updated every 15 min
           </p>
         </>

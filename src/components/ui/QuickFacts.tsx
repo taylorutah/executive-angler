@@ -20,7 +20,7 @@ export default function QuickFacts({ title = "Quick Facts", facts }: QuickFactsP
             key={fact.label}
             className="flex justify-between items-start gap-4 py-2 border-b border-[#21262D] last:border-0"
           >
-            <dt className="text-sm text-[#8B949E] shrink-0">{fact.label}</dt>
+            <dt className="text-sm text-[#A8B2BD] shrink-0">{fact.label}</dt>
             <dd className="text-sm font-medium text-[#F0F6FC] text-right break-words min-w-0">
               {fact.value}
             </dd>

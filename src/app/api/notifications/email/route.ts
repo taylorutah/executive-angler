@@ -65,7 +65,7 @@ function buildEmailHtml({
           <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#F0F6FC;line-height:1.3;">
             ${heading}
           </h1>
-          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#8B949E;">
+          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A8B2BD;">
             ${body}
           </p>
           ${ctaLabel && ctaUrl ? `
@@ -75,11 +75,11 @@ function buildEmailHtml({
         </td></tr>
         <!-- Footer -->
         <tr><td style="padding:24px 24px 0;text-align:center;">
-          <p style="margin:0;font-size:12px;color:#484F58;line-height:1.5;">
+          <p style="margin:0;font-size:12px;color:#6E7681;line-height:1.5;">
             You received this because of your notification settings.
-            <a href="${SITE_URL}/account#notifications" style="color:#484F58;text-decoration:underline;">Manage preferences</a>
+            <a href="${SITE_URL}/account#notifications" style="color:#6E7681;text-decoration:underline;">Manage preferences</a>
           </p>
-          <p style="margin:8px 0 0;font-size:11px;color:#484F58;">
+          <p style="margin:8px 0 0;font-size:11px;color:#6E7681;">
             &copy; ${new Date().getFullYear()} Executive Angler
           </p>
         </td></tr>

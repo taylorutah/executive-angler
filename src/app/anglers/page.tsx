@@ -45,12 +45,12 @@ export default async function AnglersPage() {
       <div className="bg-[#161B22] border-b border-[#21262D]">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">Anglers</h1>
-          <p className="text-[#8B949E] mt-2">Discover fly anglers and follow their sessions.</p>
+          <p className="text-[#A8B2BD] mt-2">Discover fly anglers and follow their sessions.</p>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {(!anglers || anglers.length === 0) ? (
-          <div className="text-center py-16 text-[#484F58]">
+          <div className="text-center py-16 text-[#6E7681]">
             <p>No public angler profiles yet.</p>
             <p className="mt-2 text-sm">Be the first to join!</p>
           </div>
@@ -84,22 +84,22 @@ export default async function AnglersPage() {
                         </span>
                       ))}
                       {crowns.length > 3 && (
-                        <span className="text-[10px] text-[#484F58]">+{crowns.length - 3}</span>
+                        <span className="text-[10px] text-[#6E7681]">+{crowns.length - 3}</span>
                       )}
                     </div>
                     {a.username && (
-                      <p className="text-xs text-[#484F58] mt-0.5">@{a.username}</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5">@{a.username}</p>
                     )}
                     {a.home_location && (
-                      <p className="text-xs text-[#8B949E] mt-0.5">{a.home_location}</p>
+                      <p className="text-xs text-[#A8B2BD] mt-0.5">{a.home_location}</p>
                     )}
                     {a.bio && (
-                      <p className="text-xs text-[#8B949E] mt-1 line-clamp-2">{a.bio}</p>
+                      <p className="text-xs text-[#A8B2BD] mt-1 line-clamp-2">{a.bio}</p>
                     )}
                     {crowns.length > 0 && (
                       <div className="flex items-center gap-1 mt-2">
                         <Crown className="h-3 w-3 text-[#E8923A]" />
-                        <span className="text-[10px] text-[#484F58]">{crowns.length} award{crowns.length !== 1 ? "s" : ""}</span>
+                        <span className="text-[10px] text-[#6E7681]">{crowns.length} award{crowns.length !== 1 ? "s" : ""}</span>
                       </div>
                     )}
                   </div>

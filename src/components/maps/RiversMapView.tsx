@@ -54,7 +54,7 @@ export default function RiversMapView({
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
       return;
     }
@@ -93,7 +93,7 @@ export default function RiversMapView({
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,14 +142,14 @@ export default function RiversMapView({
       el.addEventListener("mouseenter", () => { el.style.transform = "scale(1.4)"; });
       el.addEventListener("mouseleave", () => { el.style.transform = "scale(1)"; });
 
-      const difficultyColor = DIFFICULTY_COLORS[river.difficulty] ?? "#8B949E";
+      const difficultyColor = DIFFICULTY_COLORS[river.difficulty] ?? "#A8B2BD";
       const speciesList = (river.primarySpecies ?? []).slice(0, 3).join(", ");
 
       const popup = new mapboxgl.Popup({ offset: 18, closeButton: true, maxWidth: "260px" })
         .setHTML(`
           <div style="background:#161B22;border-radius:8px;padding:12px;color:#F0F6FC;font-family:sans-serif;">
             <a href="/rivers/${river.slug}" style="color:#E8923A;font-weight:700;font-size:14px;text-decoration:none;display:block;margin-bottom:5px;">${river.name}</a>
-            <div style="font-size:11px;color:#8B949E;margin-bottom:6px;">${speciesList}</div>
+            <div style="font-size:11px;color:#A8B2BD;margin-bottom:6px;">${speciesList}</div>
             <span style="display:inline-block;background:${difficultyColor}22;color:${difficultyColor};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;padding:2px 7px;border-radius:999px;">${river.difficulty ?? ""}</span>
             <a href="/rivers/${river.slug}" style="display:block;margin-top:8px;font-size:11px;color:#E8923A;text-decoration:none;">View River →</a>
           </div>

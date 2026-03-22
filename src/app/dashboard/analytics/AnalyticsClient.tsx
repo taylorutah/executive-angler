@@ -131,7 +131,7 @@ export default function AnalyticsClient({
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+            <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ export default function AnalyticsClient({
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
                   range === r
                     ? "bg-[#E8923A] text-white"
-                    : "text-[#8B949E] hover:text-[#F0F6FC]"
+                    : "text-[#A8B2BD] hover:text-[#F0F6FC]"
                 }`}
               >
                 {r}
@@ -169,9 +169,9 @@ export default function AnalyticsClient({
 
         {totalSessions === 0 ? (
           <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
-            <BarChart3 className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
+            <BarChart3 className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">No data to analyze</h2>
-            <p className="text-sm text-[#8B949E]">Start logging sessions to see your trends here.</p>
+            <p className="text-sm text-[#A8B2BD]">Start logging sessions to see your trends here.</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-2 gap-6">
@@ -192,7 +192,7 @@ export default function AnalyticsClient({
                 ))}
               </div>
               {catchRateData.length > 0 && (
-                <div className="flex justify-between mt-2 text-[9px] text-[#484F58]">
+                <div className="flex justify-between mt-2 text-[9px] text-[#6E7681]">
                   <span>{catchRateData[0].date}</span>
                   <span>{catchRateData[catchRateData.length - 1].date}</span>
                 </div>
@@ -206,7 +206,7 @@ export default function AnalyticsClient({
                   <div key={species}>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-[#F0F6FC] font-medium truncate mr-2">{species}</span>
-                      <span className="text-[#8B949E] font-mono shrink-0">{count}</span>
+                      <span className="text-[#A8B2BD] font-mono shrink-0">{count}</span>
                     </div>
                     <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
                       <div
@@ -216,7 +216,7 @@ export default function AnalyticsClient({
                     </div>
                   </div>
                 ))}
-                {speciesData.length === 0 && <p className="text-xs text-[#484F58]">No species data</p>}
+                {speciesData.length === 0 && <p className="text-xs text-[#6E7681]">No species data</p>}
               </div>
             </ChartCard>
 
@@ -227,7 +227,7 @@ export default function AnalyticsClient({
                   <div key={river}>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-[#F0F6FC] font-medium truncate mr-2">{river}</span>
-                      <span className="text-[#8B949E] font-mono shrink-0">{data.sessions}s · {data.fish}f</span>
+                      <span className="text-[#A8B2BD] font-mono shrink-0">{data.sessions}s · {data.fish}f</span>
                     </div>
                     <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
                       <div
@@ -237,7 +237,7 @@ export default function AnalyticsClient({
                     </div>
                   </div>
                 ))}
-                {riverData.length === 0 && <p className="text-xs text-[#484F58]">No river data</p>}
+                {riverData.length === 0 && <p className="text-xs text-[#6E7681]">No river data</p>}
               </div>
             </ChartCard>
 
@@ -250,14 +250,14 @@ export default function AnalyticsClient({
                       className="w-full bg-[#2EA44F]/70 rounded-t hover:bg-[#2EA44F] transition-colors min-h-[2px]"
                       style={{ height: `${(m.fish / maxMonthlyFish) * 100}%` }}
                     />
-                    <span className="text-[8px] text-[#484F58] mt-1 truncate w-full text-center">{m.label}</span>
+                    <span className="text-[8px] text-[#6E7681] mt-1 truncate w-full text-center">{m.label}</span>
                     <div className="absolute bottom-full mb-1 px-2 py-1 bg-[#1F2937] border border-[#21262D] rounded text-[10px] text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                       {m.sessions} sessions · {m.fish} fish
                     </div>
                   </div>
                 ))}
               </div>
-              {monthlyData.length === 0 && <p className="text-xs text-[#484F58]">No monthly data</p>}
+              {monthlyData.length === 0 && <p className="text-xs text-[#6E7681]">No monthly data</p>}
             </ChartCard>
 
             {/* Top Flies */}
@@ -267,7 +267,7 @@ export default function AnalyticsClient({
                   <div key={fly}>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-[#F0F6FC] font-medium truncate mr-2">{fly}</span>
-                      <span className="text-[#8B949E] font-mono shrink-0">{count} catches</span>
+                      <span className="text-[#A8B2BD] font-mono shrink-0">{count} catches</span>
                     </div>
                     <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
                       <div
@@ -277,7 +277,7 @@ export default function AnalyticsClient({
                     </div>
                   </div>
                 ))}
-                {flyData.length === 0 && <p className="text-xs text-[#484F58]">No fly data — log catches with flies to see this</p>}
+                {flyData.length === 0 && <p className="text-xs text-[#6E7681]">No fly data — log catches with flies to see this</p>}
               </div>
             </ChartCard>
           </div>
@@ -292,7 +292,7 @@ function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string
     <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
       <div className="flex items-center justify-center mb-1.5">{icon}</div>
       <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{value}</p>
-      <p className="text-[10px] text-[#8B949E] mt-0.5 uppercase tracking-wider">{label}</p>
+      <p className="text-[10px] text-[#A8B2BD] mt-0.5 uppercase tracking-wider">{label}</p>
     </div>
   );
 }
@@ -302,7 +302,7 @@ function ChartCard({ title, icon, children, span }: { title: string; icon: React
     <div className={`bg-[#161B22] border border-[#21262D] rounded-xl p-5 ${span || ""}`}>
       <div className="flex items-center gap-2 mb-4">
         {icon}
-        <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider">{title}</h3>
+        <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">{title}</h3>
       </div>
       {children}
     </div>

@@ -38,7 +38,7 @@ export default function MapView({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
       return;
     }
@@ -79,7 +79,7 @@ export default function MapView({
         markers.forEach((marker) => {
           const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
             `<div><strong>${marker.title}</strong>${
-              marker.description ? `<p style="margin-top:4px;color:#8B949E">${marker.description}</p>` : ""
+              marker.description ? `<p style="margin-top:4px;color:#A8B2BD">${marker.description}</p>` : ""
             }</div>`
           );
 
@@ -117,7 +117,7 @@ export default function MapView({
     } catch (e) {
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#8B949E;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
       }
     }
 

@@ -30,7 +30,7 @@ function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; cla
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
       }
       return;
     }
@@ -61,7 +61,7 @@ function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; cla
       console.error("Mapbox mini-map failed:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
       }
     }
   }, [mounted, lat, lng]);
@@ -181,7 +181,7 @@ function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
           </div>
         ) : (
           <div className="w-full aspect-[4/3] rounded-xl bg-[#1F2937] flex items-center justify-center">
-            <Fish className="h-16 w-16 text-[#8B949E]" />
+            <Fish className="h-16 w-16 text-[#A8B2BD]" />
           </div>
         )}
         <div className="mt-4 text-center">
@@ -422,7 +422,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           {/* Breadcrumb + Edit */}
           <div className="flex items-center justify-between mb-4">
-            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
               <ArrowLeft className="h-4 w-4" /> Back to Journal
             </Link>
             <div className="flex items-center gap-3">
@@ -440,7 +440,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
               {/* LEFT: title + meta + notes */}
               <div className="flex-1 min-w-0 mb-5 sm:mb-0">
-                <p className="text-xs text-[#484F58] mb-1">
+                <p className="text-xs text-[#6E7681] mb-1">
                   {formattedDate}
                   {sessionStartTime && <> · {sessionStartTime}</>}
                   {session.location && <> · <MapPin className="h-3 w-3 inline -mt-0.5" /> {session.river_name ? `${session.river_name}, ` : ""}{session.location}</>}
@@ -461,7 +461,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         value={notesValue}
                         onChange={e => setNotesValue(e.target.value)}
                         onKeyDown={e => { if (e.key === "Escape") { setNotesValue(session.notes || ""); setEditingNotes(false); } }}
-                        className="w-full text-sm text-[#8B949E] leading-relaxed rounded-lg border border-[#E8923A]/40 bg-[#161B22] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
+                        className="w-full text-sm text-[#A8B2BD] leading-relaxed rounded-lg border border-[#E8923A]/40 bg-[#161B22] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveNotes} disabled={notesSaving}
@@ -469,7 +469,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
-                          className="flex items-center gap-1 text-xs text-[#484F58] hover:text-[#8B949E]">
+                          className="flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#A8B2BD]">
                           <RotateCcw className="h-3 w-3" /> Cancel
                         </button>
                       </div>
@@ -480,17 +480,17 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       className="cursor-text rounded-lg border border-transparent hover:border-[#E8923A]/30 hover:bg-[#E8923A]/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
                       title="Click to edit notes"
                     >
-                      <p className="text-sm text-[#8B949E] leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm text-[#A8B2BD] leading-relaxed whitespace-pre-wrap">
                         {notesValue}
                       </p>
-                      <p className="text-[10px] text-[#484F58] mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
+                      <p className="text-[10px] text-[#6E7681] mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
                         <Pencil className="h-3 w-3" /> Click to edit
                       </p>
                     </div>
                   ) : (
                     <button onClick={() => setEditingNotes(true)}
                       className="w-full text-left rounded-lg border border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-3 py-2.5 transition-colors">
-                      <span className="text-sm text-[#484F58] hover:text-[#E8923A] flex items-center gap-1.5">
+                      <span className="text-sm text-[#6E7681] hover:text-[#E8923A] flex items-center gap-1.5">
                         <Pencil className="h-3.5 w-3.5" /> Add session notes…
                       </span>
                     </button>
@@ -498,8 +498,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </div>
 
                 {session.flies_notes && (
-                  <div className="text-xs text-[#8B949E] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
-                    <span className="font-medium text-[#8B949E]">Rig: </span>{session.flies_notes}
+                  <div className="text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
+                    <span className="font-medium text-[#A8B2BD]">Rig: </span>{session.flies_notes}
                   </div>
                 )}
 
@@ -528,7 +528,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           )}
                           <div className="min-w-0">
                             <p className="text-xs font-medium text-[#F0F6FC] leading-tight">{c.species || "Fish"}</p>
-                            <div className="flex items-center gap-1.5 text-[10px] text-[#8B949E]">
+                            <div className="flex items-center gap-1.5 text-[10px] text-[#A8B2BD]">
                               {c.length_inches && <span>{c.length_inches}&quot;</span>}
                               {c.fly_pattern?.name && <><span>·</span><span className="truncate max-w-[80px]">{c.fly_pattern.name}</span></>}
                             </div>
@@ -552,32 +552,32 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4 mb-4">
                   <div>
                     <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
-                    <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Fish Caught</p>
+                    <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
                   {session.water_temp_f && (
                     <div>
                       <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.water_temp_f}</p>
-                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Water Temp</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Water Temp</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
                     <div>
                       <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
-                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
                   {session.water_clarity && (
                     <div>
                       <p className="text-xl font-bold text-[#E8923A] leading-none">{session.water_clarity}</p>
-                      <p className="text-xs text-[#484F58] mt-0.5 uppercase tracking-wide">Clarity</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}
                 </div>
 
                 {/* Weather row — like Strava's weather section */}
                 {session.weather && (
-                  <div className="border-t border-[#21262D] pt-3 flex items-center gap-2 text-sm text-[#8B949E]">
-                    <Cloud className="h-4 w-4 text-[#484F58] flex-shrink-0" />
+                  <div className="border-t border-[#21262D] pt-3 flex items-center gap-2 text-sm text-[#A8B2BD]">
+                    <Cloud className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
                     <span>{session.weather}</span>
                   </div>
                 )}
@@ -585,7 +585,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* Flies used — with images */}
                 {usedFlies.length > 0 && (
                   <div className="border-t border-[#21262D] pt-3 mt-3">
-                    <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Flies Used</p>
+                    <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Flies Used</p>
                     <div className="flex flex-wrap gap-2">
                       {usedFlies.map(f => (
                         <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2 py-1.5">
@@ -621,8 +621,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   if (!gearParts.length) return null;
                   return (
                     <div className="border-t border-[#21262D] pt-3 mt-3">
-                      <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Gear</p>
-                      <p className="text-xs text-[#8B949E] leading-relaxed">{gearParts.join(" · ")}</p>
+                      <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Gear</p>
+                      <p className="text-xs text-[#A8B2BD] leading-relaxed">{gearParts.join(" · ")}</p>
                     </div>
                   );
                 })()}
@@ -636,7 +636,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
               {(fishPhotos.length > 0 || allSessionPhotos.length > 0) && (
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-[#484F58] uppercase tracking-wide">
+                <p className="text-xs font-semibold text-[#6E7681] uppercase tracking-wide">
                   Photos ({fishPhotos.length + allSessionPhotos.length})
                 </p>
               </div>
@@ -645,7 +645,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               {/* Fish Photos Strip */}
               {fishPhotos.length > 0 && (
                 <div className="mb-4">
-                  <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Fish</p>
+                  <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Fish</p>
                   <div className="flex gap-2 overflow-x-auto pb-1">
                     {fishPhotos.map((c, i) => {
                       const photoUrl = catchPhotos[c.id] || c.fish_image_url;
@@ -667,7 +667,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               {/* Session Photos Grid */}
               <div>
                 {allSessionPhotos.length > 0 && (
-                  <p className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wide mb-2">Session</p>
+                  <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Session</p>
                 )}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                   {allSessionPhotos.map((photo, i) => (
@@ -695,12 +695,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {uploadingSessionPhoto ? (
                     <>
                       <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
-                      <span className="text-sm text-[#8B949E]">Uploading…</span>
+                      <span className="text-sm text-[#A8B2BD]">Uploading…</span>
                     </>
                   ) : (
                     <>
-                      <Camera className="h-4 w-4 text-[#484F58]" />
-                      <span className="text-sm text-[#484F58] hover:text-[#E8923A] transition-colors">Add photo</span>
+                      <Camera className="h-4 w-4 text-[#6E7681]" />
+                      <span className="text-sm text-[#6E7681] hover:text-[#E8923A] transition-colors">Add photo</span>
                     </>
                   )}
                   <input
@@ -729,17 +729,17 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
               <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
                 <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
-                <span className="text-xs text-[#484F58] bg-[#0D1117] rounded-full px-2 py-0.5">Drift mode</span>
+                <span className="text-xs text-[#6E7681] bg-[#0D1117] rounded-full px-2 py-0.5">Drift mode</span>
               </div>
               <div className="p-6 flex flex-col items-center text-center gap-3">
                 <div className="flex items-center gap-3">
                   <Fish className="h-8 w-8 text-[#E8923A]" />
                   <span className="text-5xl font-bold text-[#F0F6FC] font-['IBM_Plex_Mono']">{session.total_fish}</span>
                 </div>
-                <p className="text-sm text-[#8B949E]">
+                <p className="text-sm text-[#A8B2BD]">
                   {session.total_fish === 1 ? "fish landed" : "fish landed"}
                 </p>
-                <p className="text-xs text-[#484F58] max-w-xs">
+                <p className="text-xs text-[#6E7681] max-w-xs">
                   This session was logged in drift mode — total count only, no per-catch details.
                 </p>
               </div>
@@ -751,19 +751,19 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
               <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
                 <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
-                <span className="text-xs text-[#484F58]">{totalFish} total</span>
+                <span className="text-xs text-[#6E7681]">{totalFish} total</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#21262D]">
                       <th className="w-10 py-2 px-3"></th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Species</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Length</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Fly</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Position</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Size</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#484F58] uppercase tracking-wide">Time</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Species</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Length</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Fly</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Position</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Size</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Time</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -798,7 +798,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                 {isUploading ? (
                                   <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
                                 ) : (
-                                  <Camera className="h-4 w-4 text-[#484F58] group-hover/upload:text-[#E8923A]" />
+                                  <Camera className="h-4 w-4 text-[#6E7681] group-hover/upload:text-[#E8923A]" />
                                 )}
                                 <input
                                   type="file"
@@ -815,17 +815,17 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           </td>
                           <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">
                             {c.species || "—"}
-                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#484F58]">×{c.quantities}</span>}
+                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#6E7681]">×{c.quantities}</span>}
                           </td>
-                          <td className="py-2.5 px-3 text-[#8B949E]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
-                          <td className="py-2.5 px-3 text-[#8B949E] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
+                          <td className="py-2.5 px-3 text-[#A8B2BD]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
+                          <td className="py-2.5 px-3 text-[#A8B2BD] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
                           <td className="py-2.5 px-3">
                             {c.fly_position ? (
                               <span className="text-xs bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
-                            ) : <span className="text-[#484F58]">—</span>}
+                            ) : <span className="text-[#6E7681]">—</span>}
                           </td>
-                          <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.fly_size || "—"}</td>
-                          <td className="py-2.5 px-3 text-[#8B949E] text-xs">{c.time_caught || "—"}</td>
+                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.fly_size || "—"}</td>
+                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.time_caught || "—"}</td>
                         </tr>
                       );
                     })}
@@ -851,7 +851,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     )}
                     <div>
                       <p className="text-xs font-medium text-[#F0F6FC]">{fly.name}</p>
-                      {fly.type && <p className="text-[10px] text-[#484F58]">{fly.type}</p>}
+                      {fly.type && <p className="text-[10px] text-[#6E7681]">{fly.type}</p>}
                     </div>
                   </div>
                 ))}

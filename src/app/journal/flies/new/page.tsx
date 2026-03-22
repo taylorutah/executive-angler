@@ -80,7 +80,7 @@ export default function NewFlyPatternPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="name" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -93,7 +93,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="type" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="type" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Type <span className="text-red-500">*</span>
             </label>
             <select
@@ -112,7 +112,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="size" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="size" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Hook Sizes
             </label>
             <input
@@ -125,7 +125,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="hook" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="hook" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Hook
             </label>
             <input
@@ -138,7 +138,7 @@ export default function NewFlyPatternPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="bead_size" className="block text-sm font-semibold text-[#8B949E] mb-2">
+              <label htmlFor="bead_size" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
                 Bead Size
               </label>
               <input
@@ -149,7 +149,7 @@ export default function NewFlyPatternPage() {
               />
             </div>
             <div>
-              <label htmlFor="bead_color" className="block text-sm font-semibold text-[#8B949E] mb-2">
+              <label htmlFor="bead_color" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
                 Bead Color
               </label>
               <input
@@ -162,7 +162,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="fly_color" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="fly_color" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Fly Color
             </label>
             <input
@@ -174,7 +174,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="materials" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="materials" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Materials
             </label>
             <textarea
@@ -186,7 +186,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="description" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Description
             </label>
             <textarea
@@ -198,7 +198,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="video_url" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="video_url" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Video URL
             </label>
             <input
@@ -211,7 +211,7 @@ export default function NewFlyPatternPage() {
           </div>
 
           <div>
-            <label htmlFor="tags" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="tags" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Tags
             </label>
             <input
@@ -221,11 +221,11 @@ export default function NewFlyPatternPage() {
               placeholder="euro, tungsten, nymph, fast-water"
               className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
             />
-            <p className="text-xs text-[#484F58] mt-1">Separate with commas</p>
+            <p className="text-xs text-[#6E7681] mt-1">Separate with commas</p>
           </div>
 
           <div>
-            <label htmlFor="image" className="block text-sm font-semibold text-[#8B949E] mb-2">
+            <label htmlFor="image" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
               Image
             </label>
             <input
@@ -257,7 +257,7 @@ export default function NewFlyPatternPage() {
             </button>
             <Link
               href="/journal/flies"
-              className="px-6 py-3 border border-[#21262D] text-[#8B949E] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
+              className="px-6 py-3 border border-[#21262D] text-[#A8B2BD] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
             >
               Cancel
             </Link>

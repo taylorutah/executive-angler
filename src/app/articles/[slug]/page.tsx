@@ -166,12 +166,12 @@ export default async function ArticlePage({ params }: Props) {
 
           {/* Breadcrumb + favorite — same width as content */}
           <div className="flex items-center justify-between py-5 border-b border-[#21262D] mb-10">
-            <nav className="flex items-center gap-1.5 text-[13px] text-[#484F58]">
+            <nav className="flex items-center gap-1.5 text-[13px] text-[#6E7681]">
               <Link href="/" className="hover:text-[#E8923A] transition-colors">Home</Link>
               <span>/</span>
               <Link href="/articles" className="hover:text-[#E8923A] transition-colors">Articles</Link>
               <span>/</span>
-              <span className="text-[#8B949E] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
+              <span className="text-[#A8B2BD] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
             </nav>
             <FavoriteButton entityType="article" entityId={article.id} />
           </div>
@@ -243,13 +243,13 @@ export default async function ArticlePage({ params }: Props) {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-[#484F58] uppercase tracking-wide mb-0.5">
+                    <p className="text-[11px] text-[#6E7681] uppercase tracking-wide mb-0.5">
                       Written by
                     </p>
                     <h3 className="font-heading text-base font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
                       {authorData.name}
                     </h3>
-                    <p className="text-sm text-[#8B949E] mt-1 leading-relaxed line-clamp-2">
+                    <p className="text-sm text-[#A8B2BD] mt-1 leading-relaxed line-clamp-2">
                       {authorData.shortBio}
                     </p>
                   </div>
@@ -273,7 +273,7 @@ export default async function ArticlePage({ params }: Props) {
                       <div className="p-4">
                         <span className="text-[11px] text-[#E8923A] font-semibold uppercase tracking-wide">{a.category}</span>
                         <h3 className="mt-1 font-heading text-sm font-bold text-[#F0F6FC] leading-snug group-hover:text-[#E8923A] transition-colors">{a.title}</h3>
-                        <p className="mt-1.5 text-xs text-[#484F58]">{a.readingTimeMinutes} min read</p>
+                        <p className="mt-1.5 text-xs text-[#6E7681]">{a.readingTimeMinutes} min read</p>
                       </div>
                     </Link>
                   ))}

@@ -61,12 +61,12 @@ function MetricCard({
   return (
     <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <span className="text-[#484F58]">{icon}</span>
+        <span className="text-[#6E7681]">{icon}</span>
       </div>
       <p className="font-mono text-3xl font-bold text-[#E8923A]">
         {value.toLocaleString()}
       </p>
-      <p className="text-xs font-semibold uppercase tracking-wider text-[#484F58]">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[#6E7681]">
         {label}
       </p>
     </div>
@@ -94,7 +94,7 @@ export default function AdminClient({
       <main className="mx-auto max-w-7xl space-y-10 px-6 py-8">
         {/* ── Quick Links ── */}
         <section>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
             Manage
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -102,48 +102,48 @@ export default function AdminClient({
               <Users className="h-5 w-5 text-[#E8923A]" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">User Management</p>
-                <p className="text-[11px] text-[#484F58]">View all users, activity, stats</p>
+                <p className="text-[11px] text-[#6E7681]">View all users, activity, stats</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#E8923A]" />
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A]" />
             </Link>
             <Link href="/admin/photos" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#0BA5C7] transition-colors">
               <ImageIcon className="h-5 w-5 text-[#0BA5C7]" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Photo Moderation</p>
-                <p className="text-[11px] text-[#484F58]">Review uploaded photos</p>
+                <p className="text-[11px] text-[#6E7681]">Review uploaded photos</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#0BA5C7]" />
             </Link>
             <Link href="/admin/users" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#0BA5C7] transition-colors">
               <Users className="h-5 w-5 text-[#0BA5C7]" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Users</p>
-                <p className="text-[11px] text-[#484F58]">Manage accounts, Pro & bans</p>
+                <p className="text-[11px] text-[#6E7681]">Manage accounts, Pro & bans</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#0BA5C7]" />
             </Link>
             <Link href="/admin/submissions" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-purple-400 transition-colors">
               <Send className="h-5 w-5 text-purple-400" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-purple-400 transition-colors">Submissions</p>
-                <p className="text-[11px] text-[#484F58]">Review community content</p>
+                <p className="text-[11px] text-[#6E7681]">Review community content</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-purple-400" />
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-purple-400" />
             </Link>
             <Link href="/admin/setup" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#2EA44F] transition-colors">
               <Database className="h-5 w-5 text-[#2EA44F]" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Database Setup</p>
-                <p className="text-[11px] text-[#484F58]">Schema status & migrations</p>
+                <p className="text-[11px] text-[#6E7681]">Schema status & migrations</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#2EA44F]" />
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#2EA44F]" />
             </Link>
           </div>
         </section>
 
         {/* ── Metric Cards Grid ── */}
         <section>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
             Overview
           </h2>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -188,7 +188,7 @@ export default function AdminClient({
         {/* ── Top Rivers ── */}
         {topRivers.length > 0 && (
           <section>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
               Top Rivers
             </h2>
             <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
@@ -200,7 +200,7 @@ export default function AdminClient({
                   );
                   return (
                     <li key={river.name} className="flex items-center gap-3">
-                      <span className="w-5 shrink-0 text-right font-mono text-xs text-[#484F58]">
+                      <span className="w-5 shrink-0 text-right font-mono text-xs text-[#6E7681]">
                         {i + 1}
                       </span>
                       <div className="flex-1">
@@ -231,13 +231,13 @@ export default function AdminClient({
         {/* ── Recent Sessions ── */}
         {recentSessions.length > 0 && (
           <section>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#8B949E]">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
               Recent Sessions
             </h2>
             <div className="overflow-x-auto rounded-xl border border-[#21262D] bg-[#161B22]">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#21262D] text-xs uppercase tracking-wider text-[#484F58]">
+                  <tr className="border-b border-[#21262D] text-xs uppercase tracking-wider text-[#6E7681]">
                     <th className="px-5 py-3 font-semibold">Date</th>
                     <th className="px-5 py-3 font-semibold">River</th>
                     <th className="px-5 py-3 font-semibold">Angler</th>
@@ -255,13 +255,13 @@ export default function AdminClient({
                         key={s.id}
                         className="transition-colors hover:bg-[#21262D]/40"
                       >
-                        <td className="whitespace-nowrap px-5 py-3 font-mono text-xs text-[#8B949E]">
+                        <td className="whitespace-nowrap px-5 py-3 font-mono text-xs text-[#A8B2BD]">
                           {s.date}
                         </td>
                         <td className="px-5 py-3 text-[#F0F6FC]">
                           {s.river_name ?? "—"}
                         </td>
-                        <td className="px-5 py-3 text-[#8B949E]">
+                        <td className="px-5 py-3 text-[#A8B2BD]">
                           {displayName}
                         </td>
                         <td className="px-5 py-3 text-right font-mono text-[#E8923A]">

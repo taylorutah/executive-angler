@@ -33,7 +33,7 @@ export default function SessionLocationPicker({
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing token</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing token</div>';
       }
       return;
     }
@@ -71,7 +71,7 @@ export default function SessionLocationPicker({
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
       }
     }
 
@@ -130,7 +130,7 @@ export default function SessionLocationPicker({
           ))}
         </div>
       </div>
-      <p className="mt-1.5 text-xs text-[#484F58] font-['IBM_Plex_Mono']">
+      <p className="mt-1.5 text-xs text-[#6E7681] font-['IBM_Plex_Mono']">
         {formatCoord(coords.lat, true)}, {formatCoord(coords.lng, false)}
       </p>
     </div>

@@ -226,15 +226,15 @@ export default function PhotoSubmissionForm({
             <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
               Submit Your Photo
             </h3>
-            <p className="text-sm text-[#8B949E] mt-0.5">
+            <p className="text-sm text-[#A8B2BD] mt-0.5">
               Share your {entityName} fishing photos with the community
             </p>
           </div>
         </div>
         {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-[#484F58]" />
+          <ChevronUp className="h-5 w-5 text-[#6E7681]" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-[#484F58]" />
+          <ChevronDown className="h-5 w-5 text-[#6E7681]" />
         )}
       </button>
 
@@ -244,9 +244,9 @@ export default function PhotoSubmissionForm({
           {!isAuthenticated ? (
             <div className="text-center py-8">
               <div className="w-14 h-14 rounded-full bg-[#1F2937] flex items-center justify-center mx-auto mb-4">
-                <Camera className="h-7 w-7 text-[#484F58]" />
+                <Camera className="h-7 w-7 text-[#6E7681]" />
               </div>
-              <p className="text-[#8B949E] mb-4">
+              <p className="text-[#A8B2BD] mb-4">
                 Sign in to submit your photos
               </p>
               <Link
@@ -301,21 +301,21 @@ export default function PhotoSubmissionForm({
                     >
                       <Upload
                         className={`h-10 w-10 mx-auto mb-3 ${
-                          isDragging ? "text-[#E8923A]" : "text-[#484F58]"
+                          isDragging ? "text-[#E8923A]" : "text-[#6E7681]"
                         }`}
                       />
-                      <p className="text-sm text-[#8B949E]">
+                      <p className="text-sm text-[#A8B2BD]">
                         <span className="font-medium text-[#E8923A]">
                           Click to upload
                         </span>{" "}
                         or drag and drop
                       </p>
                       {showQualityGuidance && (
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           For best results: minimum 2000px wide, JPEG or PNG, under 20MB. Landscape orientation preferred for river shots.
                         </p>
                       )}
-                      <p className="text-xs text-[#484F58] mt-1">
+                      <p className="text-xs text-[#6E7681] mt-1">
                         JPEG or PNG, max 10MB
                       </p>
                       <input
@@ -345,14 +345,14 @@ export default function PhotoSubmissionForm({
                         onClick={removeFile}
                         className="absolute top-3 right-3 p-1.5 bg-[#161B22]/90 rounded-full shadow-sm hover:bg-[#161B22] transition-colors"
                       >
-                        <X className="h-4 w-4 text-[#8B949E]" />
+                        <X className="h-4 w-4 text-[#A8B2BD]" />
                       </button>
                       <div className="p-3 bg-[#1F2937] border-t border-[#21262D] flex items-center gap-2">
-                        <ImageIcon className="h-4 w-4 text-[#484F58]" />
-                        <span className="text-xs text-[#8B949E] truncate">
+                        <ImageIcon className="h-4 w-4 text-[#6E7681]" />
+                        <span className="text-xs text-[#A8B2BD] truncate">
                           {file?.name}
                         </span>
-                        <span className="text-xs text-[#484F58] ml-auto">
+                        <span className="text-xs text-[#6E7681] ml-auto">
                           {file
                             ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
                             : ""}
@@ -369,7 +369,7 @@ export default function PhotoSubmissionForm({
                     className="block text-sm font-medium text-[#F0F6FC] mb-2"
                   >
                     Caption{" "}
-                    <span className="text-[#484F58] font-normal">
+                    <span className="text-[#6E7681] font-normal">
                       (optional)
                     </span>
                   </label>
@@ -380,9 +380,9 @@ export default function PhotoSubmissionForm({
                     maxLength={300}
                     rows={3}
                     placeholder="Describe your catch, the conditions, or the moment..."
-                    className="w-full px-4 py-3 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] resize-none"
+                    className="w-full px-4 py-3 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] resize-none"
                   />
-                  <p className="text-xs text-[#484F58] mt-1 text-right">
+                  <p className="text-xs text-[#6E7681] mt-1 text-right">
                     {caption.length}/300
                   </p>
                 </div>
@@ -391,7 +391,7 @@ export default function PhotoSubmissionForm({
                 <div>
                   <p className="text-sm font-medium text-[#F0F6FC] mb-3">
                     Camera Details{" "}
-                    <span className="text-[#484F58] font-normal">
+                    <span className="text-[#6E7681] font-normal">
                       (optional)
                     </span>
                   </p>
@@ -399,7 +399,7 @@ export default function PhotoSubmissionForm({
                     <div>
                       <label
                         htmlFor="cameraBody"
-                        className="block text-xs text-[#8B949E] mb-1"
+                        className="block text-xs text-[#A8B2BD] mb-1"
                       >
                         Camera Body
                       </label>
@@ -409,13 +409,13 @@ export default function PhotoSubmissionForm({
                         value={cameraBody}
                         onChange={(e) => setCameraBody(e.target.value)}
                         placeholder="e.g., Canon EOS R5"
-                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="lens"
-                        className="block text-xs text-[#8B949E] mb-1"
+                        className="block text-xs text-[#A8B2BD] mb-1"
                       >
                         Lens
                       </label>
@@ -425,7 +425,7 @@ export default function PhotoSubmissionForm({
                         value={lens}
                         onChange={(e) => setLens(e.target.value)}
                         placeholder="e.g., 24-70mm f/2.8"
-                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                   </div>
@@ -435,7 +435,7 @@ export default function PhotoSubmissionForm({
                     <div>
                       <label
                         htmlFor="aperture"
-                        className="block text-xs text-[#8B949E] mb-1"
+                        className="block text-xs text-[#A8B2BD] mb-1"
                       >
                         Aperture
                       </label>
@@ -445,13 +445,13 @@ export default function PhotoSubmissionForm({
                         value={aperture}
                         onChange={(e) => setAperture(e.target.value)}
                         placeholder="f/2.8"
-                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="shutterSpeed"
-                        className="block text-xs text-[#8B949E] mb-1"
+                        className="block text-xs text-[#A8B2BD] mb-1"
                       >
                         Shutter Speed
                       </label>
@@ -461,13 +461,13 @@ export default function PhotoSubmissionForm({
                         value={shutterSpeed}
                         onChange={(e) => setShutterSpeed(e.target.value)}
                         placeholder="1/500"
-                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="iso"
-                        className="block text-xs text-[#8B949E] mb-1"
+                        className="block text-xs text-[#A8B2BD] mb-1"
                       >
                         ISO
                       </label>
@@ -477,7 +477,7 @@ export default function PhotoSubmissionForm({
                         value={iso}
                         onChange={(e) => setIso(e.target.value)}
                         placeholder="200"
-                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#484F58] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
+                        className="w-full px-3 py-2 border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] bg-[#0D1117] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A]"
                       />
                     </div>
                   </div>
@@ -492,7 +492,7 @@ export default function PhotoSubmissionForm({
                     onChange={(e) => setRightsConfirmed(e.target.checked)}
                     className="mt-0.5 h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
                   />
-                  <label htmlFor="rights" className="text-sm text-[#8B949E]">
+                  <label htmlFor="rights" className="text-sm text-[#A8B2BD]">
                     I confirm I own the rights to this photo and grant Executive
                     Angler permission to display it on the site.{" "}
                     <span className="text-red-500">*</span>

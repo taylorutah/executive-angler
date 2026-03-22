@@ -100,24 +100,24 @@ function SearchContent() {
 
       {/* Search input */}
       <div className="relative mb-10">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#484F58]" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#6E7681]" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search destinations, rivers, species, lodges, guides, articles..."
           autoFocus
-          className="w-full rounded-xl border border-[#21262D] bg-[#161B22] pl-12 pr-12 py-4 text-lg text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors shadow-sm"
+          className="w-full rounded-xl border border-[#21262D] bg-[#161B22] pl-12 pr-12 py-4 text-lg text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors shadow-sm"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#484F58] hover:text-[#8B949E]"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#A8B2BD]"
           >
             <X className="h-5 w-5" />
           </button>
         )}
-        <div className="absolute right-14 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 text-xs text-[#484F58]">
+        <div className="absolute right-14 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 text-xs text-[#6E7681]">
           <kbd className="px-1.5 py-0.5 rounded bg-[#1F2937] border border-[#21262D] font-mono">
             ⌘
           </kbd>
@@ -130,11 +130,11 @@ function SearchContent() {
       {/* Results */}
       {query.trim() && filtered.length === 0 && (
         <div className="text-center py-16">
-          <Search className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
-          <p className="text-lg text-[#8B949E]">
+          <Search className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+          <p className="text-lg text-[#A8B2BD]">
             No results found for &quot;{query}&quot;
           </p>
-          <p className="text-sm text-[#484F58] mt-2">
+          <p className="text-sm text-[#6E7681] mt-2">
             Try a different search term or browse our categories above.
           </p>
         </div>
@@ -142,8 +142,8 @@ function SearchContent() {
 
       {!query.trim() && (
         <div className="text-center py-16">
-          <Search className="h-12 w-12 text-[#484F58] mx-auto mb-4" />
-          <p className="text-lg text-[#8B949E]">
+          <Search className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+          <p className="text-lg text-[#A8B2BD]">
             Search across {index.length} destinations, rivers, species, lodges,
             guides, fly shops, and articles.
           </p>
@@ -162,7 +162,7 @@ function SearchContent() {
                 <Icon className="h-4 w-4" />
                 {meta.label}
               </span>
-              <span className="text-sm text-[#484F58]">
+              <span className="text-sm text-[#6E7681]">
                 {items!.length} result{items!.length !== 1 ? "s" : ""}
               </span>
             </div>
@@ -188,7 +188,7 @@ function SearchContent() {
                     <p className="font-medium text-[#F0F6FC] group-hover:text-[#E8923A] truncate">
                       {item.title}
                     </p>
-                    <p className="text-sm text-[#8B949E] truncate">
+                    <p className="text-sm text-[#A8B2BD] truncate">
                       {item.subtitle}
                     </p>
                   </div>
@@ -200,7 +200,7 @@ function SearchContent() {
       })}
 
       {query.trim() && filtered.length > 0 && (
-        <p className="text-center text-sm text-[#484F58] mt-8">
+        <p className="text-center text-sm text-[#6E7681] mt-8">
           Showing {filtered.length} result{filtered.length !== 1 ? "s" : ""}{" "}
           for &quot;{query}&quot;
         </p>
@@ -216,8 +216,8 @@ export default function SearchPage() {
         <Suspense
           fallback={
             <div className="text-center py-16">
-              <Search className="h-12 w-12 text-[#484F58] mx-auto mb-4 animate-pulse" />
-              <p className="text-lg text-[#8B949E]">Loading search...</p>
+              <Search className="h-12 w-12 text-[#6E7681] mx-auto mb-4 animate-pulse" />
+              <p className="text-lg text-[#A8B2BD]">Loading search...</p>
             </div>
           }
         >

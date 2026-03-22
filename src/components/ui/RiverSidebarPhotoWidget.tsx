@@ -49,7 +49,7 @@ export default function RiverSidebarPhotoWidget({
         </div>
       ) : photos.length === 0 ? (
         <div className="text-center py-4">
-          <p className="text-xs text-[#484F58] mb-3">No photos yet.</p>
+          <p className="text-xs text-[#6E7681] mb-3">No photos yet.</p>
           <Link
             href={`/rivers/${riverSlug}/photos#submit`}
             className="inline-flex items-center gap-1.5 text-sm text-[#E8923A] hover:underline"
@@ -83,7 +83,7 @@ export default function RiverSidebarPhotoWidget({
           <div className="flex items-center justify-between">
             <Link
               href={`/rivers/${riverSlug}/photos`}
-              className="text-xs text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+              className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
             >
               View all {photos.length} photos →
             </Link>

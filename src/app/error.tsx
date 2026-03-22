@@ -18,7 +18,7 @@ export default function Error({
       <div className="text-center max-w-md">
         <p className="text-6xl font-bold text-[#E8923A]/30 font-mono mb-4">Error</p>
         <h2 className="font-serif text-2xl text-[#F0F6FC] mb-3">Something went wrong</h2>
-        <p className="text-[#8B949E] mb-6 text-sm">
+        <p className="text-[#A8B2BD] mb-6 text-sm">
           {error.message || "An unexpected error occurred. Please try again."}
         </p>
         <button

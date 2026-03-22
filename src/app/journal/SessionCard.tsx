@@ -46,10 +46,10 @@ const ACCENT_COLORS = [
   "border-[#0BA5C7]",
   "border-[#E8923A]",
   "border-[#0BA5C7]",
-  "border-[#484F58]",
+  "border-[#6E7681]",
   "border-[#E8923A]",
   "border-[#0BA5C7]",
-  "border-[#484F58]",
+  "border-[#6E7681]",
 ];
 
 function accentColor(name?: string) {
@@ -107,9 +107,9 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
           {/* Date stamp — always visible */}
           <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
-            <span className="text-[10px] font-bold text-[#8B949E] uppercase tracking-wider font-['IBM_Plex_Mono']">{month}</span>
+            <span className="text-[10px] font-bold text-[#A8B2BD] uppercase tracking-wider font-['IBM_Plex_Mono']">{month}</span>
             <span className="text-2xl font-bold text-[#F0F6FC] leading-none font-['IBM_Plex_Mono']">{day}</span>
-            <span className="text-[10px] text-[#8B949E] mt-0.5 font-['IBM_Plex_Mono']">{year}</span>
+            <span className="text-[10px] text-[#A8B2BD] mt-0.5 font-['IBM_Plex_Mono']">{year}</span>
           </div>
 
           {/* Content */}
@@ -128,7 +128,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
             </div>
 
             {/* Location + time */}
-            <div className="flex items-center gap-2 text-[11px] text-[#8B949E] mb-2 flex-wrap">
+            <div className="flex items-center gap-2 text-[11px] text-[#A8B2BD] mb-2 flex-wrap">
               {session.location && (
                 <span className="flex items-center gap-1">
                   <MapPin className="h-3 w-3 flex-shrink-0" />
@@ -136,21 +136,21 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
                 </span>
               )}
               {startTime && (
-                <span className="font-['IBM_Plex_Mono'] text-[#8B949E]">{startTime}</span>
+                <span className="font-['IBM_Plex_Mono'] text-[#A8B2BD]">{startTime}</span>
               )}
             </div>
 
             {/* Date row */}
-            <p className="text-[11px] text-[#8B949E] mb-2">{formattedDate}</p>
+            <p className="text-[11px] text-[#A8B2BD] mb-2">{formattedDate}</p>
 
             {/* Notes excerpt */}
             {session.notes && (
-              <p className="text-[12px] text-[#8B949E] leading-relaxed line-clamp-2 mb-2">{session.notes}</p>
+              <p className="text-[12px] text-[#A8B2BD] leading-relaxed line-clamp-2 mb-2">{session.notes}</p>
             )}
 
             {/* Conditions */}
             {hasConditions && (
-              <div className="flex flex-wrap gap-2 text-[11px] text-[#8B949E] mb-2">
+              <div className="flex flex-wrap gap-2 text-[11px] text-[#A8B2BD] mb-2">
                 {session.water_temp_f && <span className="flex items-center gap-0.5 font-['IBM_Plex_Mono']"><Thermometer className="h-3 w-3" />{session.water_temp_f}</span>}
                 {session.water_clarity && <span className="flex items-center gap-0.5"><Droplets className="h-3 w-3" />{session.water_clarity}</span>}
                 {session.weather && <span className="flex items-center gap-0.5"><Cloud className="h-3 w-3" />{session.weather}</span>}
@@ -170,7 +170,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
             {topFlies.length === 0 && tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mb-2">
                 {tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="text-[10px] bg-[#1F2937] text-[#8B949E] rounded-full px-2 py-0.5">{tag}</span>
+                  <span key={tag} className="text-[10px] bg-[#1F2937] text-[#A8B2BD] rounded-full px-2 py-0.5">{tag}</span>
                 ))}
               </div>
             )}

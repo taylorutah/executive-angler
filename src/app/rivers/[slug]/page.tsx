@@ -236,7 +236,7 @@ export default async function RiverPage({ params }: Props) {
                   <CollapsibleOverview>
                     <div className="river-body">
                       {river.description.split("\n\n").map((p, i) => (
-                        <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
+                        <p key={i} className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
                           {p}
                         </p>
                       ))}
@@ -311,11 +311,11 @@ export default async function RiverPage({ params }: Props) {
                           {ap.name}
                         </h4>
                         {ap.description && (
-                          <p className="text-sm text-[#8B949E] mt-0.5">
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">
                             {ap.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-1.5 text-xs text-[#8B949E]">
+                        <div className="flex items-center gap-3 mt-1.5 text-xs text-[#A8B2BD]">
                           <span className="flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
                             {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
@@ -372,13 +372,13 @@ export default async function RiverPage({ params }: Props) {
                                     {month.month}
                                   </td>
                                 )}
-                                <td className="px-4 py-3 text-[#8B949E]">
+                                <td className="px-4 py-3 text-[#A8B2BD]">
                                   {hatch.insect}
                                 </td>
-                                <td className="px-4 py-3 text-[#8B949E]">
+                                <td className="px-4 py-3 text-[#A8B2BD]">
                                   {hatch.size}
                                 </td>
-                                <td className="px-4 py-3 text-[#8B949E]">
+                                <td className="px-4 py-3 text-[#A8B2BD]">
                                   {hatch.pattern}
                                 </td>
                               </tr>
@@ -431,7 +431,7 @@ export default async function RiverPage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -477,7 +477,7 @@ export default async function RiverPage({ params }: Props) {
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
                             ? "bg-river text-white"
-                            : "bg-[#1F2937] text-[#484F58]"
+                            : "bg-[#1F2937] text-[#6E7681]"
                         }`}
                       >
                         {month}
@@ -505,7 +505,7 @@ export default async function RiverPage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {guide.name}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-0.5">
+                        <p className="text-xs text-[#A8B2BD] mt-0.5">
                           {guide.dailyRate}
                         </p>
                       </Link>
@@ -530,7 +530,7 @@ export default async function RiverPage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

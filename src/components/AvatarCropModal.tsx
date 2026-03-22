@@ -69,9 +69,9 @@ export default function AvatarCropModal({ imageSrc, onSave, onCancel }: Props) {
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D]">
           <div>
             <h2 className="text-sm font-bold text-[#F0F6FC]">Crop Profile Photo</h2>
-            <p className="text-xs text-[#484F58] mt-0.5">Drag to reposition · Resize the square</p>
+            <p className="text-xs text-[#6E7681] mt-0.5">Drag to reposition · Resize the square</p>
           </div>
-          <button onClick={onCancel} className="text-[#484F58] hover:text-[#F0F6FC] transition-colors">
+          <button onClick={onCancel} className="text-[#6E7681] hover:text-[#F0F6FC] transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function AvatarCropModal({ imageSrc, onSave, onCancel }: Props) {
         <div className="flex gap-3 px-5 py-4 border-t border-[#21262D]">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#8B949E] hover:text-[#F0F6FC] hover:border-[#484F58] transition-colors"
+            className="flex-1 rounded-lg border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#6E7681] transition-colors"
           >
             Cancel
           </button>

@@ -24,18 +24,18 @@ export default function AuthorsPage() {
     <div className="bg-[#0D1117] min-h-screen pt-6 pb-20">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-[13px] text-[#484F58] mb-8">
+        <nav className="flex items-center gap-1.5 text-[13px] text-[#6E7681] mb-8">
           <Link href="/" className="hover:text-[#E8923A] transition-colors">
             Home
           </Link>
           <span>/</span>
-          <span className="text-[#8B949E]">Authors</span>
+          <span className="text-[#A8B2BD]">Authors</span>
         </nav>
 
         <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-3">
           Our Authors
         </h1>
-        <p className="text-[#8B949E] text-lg mb-10 max-w-2xl leading-relaxed">
+        <p className="text-[#A8B2BD] text-lg mb-10 max-w-2xl leading-relaxed">
           Meet the expert anglers and writers behind {SITE_NAME}. Every article
           is crafted by experienced fly fishers with real, on-the-water
           knowledge.
@@ -62,7 +62,7 @@ export default function AuthorsPage() {
                   {author.name}
                 </h2>
                 <p className="text-sm text-[#E8923A] mb-2">{author.role}</p>
-                <p className="text-sm text-[#8B949E] leading-relaxed line-clamp-2">
+                <p className="text-sm text-[#A8B2BD] leading-relaxed line-clamp-2">
                   {author.shortBio}
                 </p>
                 <span className="inline-flex items-center gap-1 mt-3 text-xs text-[#E8923A] font-medium group-hover:gap-2 transition-all">

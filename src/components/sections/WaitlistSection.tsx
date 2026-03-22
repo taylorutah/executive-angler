@@ -65,7 +65,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
         </h2>
 
         {/* Subheadline */}
-        <p className="text-[#8B949E] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+        <p className="text-[#A8B2BD] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
           Executive Angler is heading to the App Store. Join the waitlist and we&apos;ll reach out the moment closed beta opens — spots are limited.
         </p>
 
@@ -76,11 +76,11 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
             <h3 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-2xl mb-2">
               You&apos;re on the list.
             </h3>
-            <p className="text-[#8B949E] text-sm">
+            <p className="text-[#A8B2BD] text-sm">
               We&apos;ll email you when closed beta opens. Get your rod ready.
             </p>
             {count > 0 && (
-              <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs mt-4">
+              <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-4">
                 {count.toLocaleString()} anglers ahead of the hatch
               </p>
             )}
@@ -94,7 +94,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 placeholder="First name (optional)"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#8B949E] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
               />
               <input
                 type="email"
@@ -102,7 +102,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#8B949E] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
               />
             </div>
 
@@ -131,12 +131,12 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
 
         {/* Social proof counter */}
         {count > 0 && state !== "success" && (
-          <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs mt-5">
+          <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-5">
             {count.toLocaleString()} anglers already on the list
           </p>
         )}
 
-        <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs mt-4">
+        <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-4">
           No spam. One email when beta opens. That&apos;s it.
         </p>
       </div>

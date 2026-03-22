@@ -23,7 +23,7 @@ export function MessageIcon() {
   return (
     <Link
       href="/messages"
-      className="relative flex items-center justify-center p-2 rounded-lg text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#1F2937] transition-colors"
+      className="relative flex items-center justify-center p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937] transition-colors"
       aria-label="Messages"
     >
       <MessageSquare className="h-4.5 w-4.5" />

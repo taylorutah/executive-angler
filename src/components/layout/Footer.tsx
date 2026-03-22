@@ -43,7 +43,7 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0D1117] text-[#8B949E] border-t border-[#21262D]">
+    <footer className="bg-[#0D1117] text-[#A8B2BD] border-t border-[#21262D]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Brand Column */}
@@ -53,7 +53,7 @@ export default function Footer() {
                 Executive Angler
               </span>
             </Link>
-            <p className="mt-3 text-sm text-[#8B949E] leading-relaxed max-w-xs">
+            <p className="mt-3 text-sm text-[#A8B2BD] leading-relaxed max-w-xs">
               Fly fishing intelligence platform. Track every session, log every catch, learn from your data.
             </p>
             <div className="flex gap-4 mt-5">
@@ -61,7 +61,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -72,7 +72,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                 aria-label="YouTube"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@ export default function Footer() {
                 href={SOCIAL_LINKS.x}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                 aria-label="X (Twitter)"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                      className="text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -128,19 +128,19 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[#21262D] flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-[#484F58] font-['IBM_Plex_Mono']">
+          <p className="text-xs text-[#6E7681] font-['IBM_Plex_Mono']">
             &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link
               href="/privacy"
-              className="text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
+              className="text-xs text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
+              className="text-xs text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
             >
               Terms of Service
             </Link>

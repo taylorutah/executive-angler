@@ -155,7 +155,7 @@ function FollowRequestActions({
     return (
       <span
         className={`text-xs font-medium ${
-          resolved === "accepted" ? "text-green-500" : "text-[#8B949E]"
+          resolved === "accepted" ? "text-green-500" : "text-[#A8B2BD]"
         }`}
       >
         {resolved === "accepted" ? "Accepted" : "Declined"}
@@ -181,7 +181,7 @@ function FollowRequestActions({
           handleAction("decline");
         }}
         disabled={acting}
-        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#21262D] text-[#8B949E] hover:bg-[#DA3633] hover:text-white transition-colors disabled:opacity-50"
+        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#21262D] text-[#A8B2BD] hover:bg-[#DA3633] hover:text-white transition-colors disabled:opacity-50"
       >
         Decline
       </button>
@@ -299,7 +299,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-[#F0F6FC]">Notifications</h1>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {unreadCount > 0
               ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
               : "All caught up"}
@@ -319,9 +319,9 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
       {/* Notifications list */}
       {notifications.length === 0 ? (
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
-          <Bell className="h-12 w-12 text-[#484F58] mx-auto mb-3" />
-          <p className="text-[#8B949E] text-sm">No notifications yet</p>
-          <p className="text-[#484F58] text-xs mt-1">
+          <Bell className="h-12 w-12 text-[#6E7681] mx-auto mb-3" />
+          <p className="text-[#A8B2BD] text-sm">No notifications yet</p>
+          <p className="text-[#6E7681] text-xs mt-1">
             When someone follows you, gives kudos, or comments on your sessions,
             you&apos;ll see it here.
           </p>
@@ -333,7 +333,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
             if (!items || items.length === 0) return null;
             return (
               <div key={groupLabel}>
-                <h2 className="text-xs font-semibold text-[#484F58] uppercase tracking-wider mb-2 px-1">
+                <h2 className="text-xs font-semibold text-[#6E7681] uppercase tracking-wider mb-2 px-1">
                   {groupLabel}
                 </h2>
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden divide-y divide-[#21262D]">
@@ -366,7 +366,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
                             className="object-cover w-full h-full"
                           />
                         ) : (
-                          <span className="text-xs font-bold text-[#8B949E]">
+                          <span className="text-xs font-bold text-[#A8B2BD]">
                             {(
                               n.actor_profile?.display_name ||
                               n.actor_profile?.username ||
@@ -390,7 +390,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
                           <p className="text-sm text-[#F0F6FC] leading-snug">
                             {getNotificationText(n)}
                           </p>
-                          <p className="text-xs text-[#484F58] mt-0.5">
+                          <p className="text-xs text-[#6E7681] mt-0.5">
                             {timeAgo(n.created_at)}
                           </p>
                         </Link>

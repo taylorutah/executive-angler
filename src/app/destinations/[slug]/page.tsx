@@ -194,7 +194,7 @@ export default async function DestinationPage({ params }: Props) {
                   </h2>
                   <div className="destination-body">
                     {dest.description.split("\n\n").map((paragraph, i) => (
-                      <p key={i} className="text-[#8B949E] text-base leading-[1.8] mb-4">
+                      <p key={i} className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
                         {paragraph}
                       </p>
                     ))}
@@ -234,7 +234,7 @@ export default async function DestinationPage({ params }: Props) {
                     markers={mapMarkers}
                     className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
                   />
-                  <div className="mt-3 flex gap-4 text-xs text-[#8B949E]">
+                  <div className="mt-3 flex gap-4 text-xs text-[#A8B2BD]">
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full bg-river" /> Rivers
                     </span>
@@ -326,7 +326,7 @@ export default async function DestinationPage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {guide.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">
                             {(guide.specialties || []).slice(0, 3).join(", ")}
                           </p>
                           {guide.dailyRate && (
@@ -366,9 +366,9 @@ export default async function DestinationPage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">{shop.address}</p>
                           {(shop.services || []).length > 0 && (
-                            <p className="text-xs text-[#484F58] mt-1">
+                            <p className="text-xs text-[#6E7681] mt-1">
                               {(shop.services || []).slice(0, 3).join(" · ")}
                             </p>
                           )}
@@ -376,7 +376,7 @@ export default async function DestinationPage({ params }: Props) {
                         {shop.googleRating && (
                           <div className="flex items-center gap-1 shrink-0 ml-4">
                             <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                            <span className="text-sm font-medium text-[#8B949E]">
+                            <span className="text-sm font-medium text-[#A8B2BD]">
                               {shop.googleRating}
                             </span>
                           </div>
@@ -420,7 +420,7 @@ export default async function DestinationPage({ params }: Props) {
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
                             ? "bg-[#E8923A] text-white"
-                            : "bg-[#1F2937] text-[#484F58]"
+                            : "bg-[#1F2937] text-[#6E7681]"
                         }`}
                       >
                         {month}
@@ -446,7 +446,7 @@ export default async function DestinationPage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

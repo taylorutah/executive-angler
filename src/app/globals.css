@@ -20,8 +20,8 @@
   --color-signal: #0BA5C7;      /* River Teal — text/labels (desaturated) */
   --color-signal-pip: #00B4D8;  /* River Teal full-sat — indicator dots, badges ONLY */
   --color-text-primary: #F0F6FC; /* Chalk */
-  --color-text-secondary: #8B949E; /* Slate */
-  --color-text-muted: #484F58;  /* Muted text (kept for contrast; Dusk too dark for text) */
+  --color-text-secondary: #A8B2BD; /* Slate — bumped from #8B949E for 5.2:1 WCAG AA contrast */
+  --color-text-muted: #6E7681;  /* Muted — bumped from #484F58 for 3.5:1 readability */
   --color-border: #21262D;      /* Tide */
   --color-success: #2EA44F;     /* Rise — shifted from GitHub green */
   --color-danger: #DA3633;      /* Cutthroat — shifted from GitHub red */
@@ -563,17 +563,17 @@
 
 /* ── Text colors — escaped class selectors (desktop Chrome/Firefox) ── */
 .light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
-.light-mode .text-\[\#8B949E\] { color: #4B5563 !important; }
-.light-mode .text-\[\#484F58\] { color: #6B7280 !important; }
+.light-mode .text-\[\#A8B2BD\] { color: #4B5563 !important; }
+.light-mode .text-\[\#6E7681\] { color: #6B7280 !important; }
 
 /* ── Text colors — attribute contains (Safari iOS fallback, bulletproof) ── */
 .light-mode [class*="F0F6FC"] { color: #111827 !important; }
-.light-mode [class*="8B949E"] { color: #4B5563 !important; }
-.light-mode [class*="484F58"] { color: #6B7280 !important; }
+.light-mode [class*="A8B2BD"] { color: #4B5563 !important; }
+.light-mode [class*="6E7681"] { color: #6B7280 !important; }
 
 /* ── Hover text ── */
 .light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
-.light-mode .hover\:text-\[\#8B949E\]:hover { color: #4B5563 !important; }
+.light-mode .hover\:text-\[\#A8B2BD\]:hover { color: #4B5563 !important; }
 
 /* ── Borders ── */
 .light-mode .border-\[\#21262D\] { border-color: #D4CBB8 !important; }

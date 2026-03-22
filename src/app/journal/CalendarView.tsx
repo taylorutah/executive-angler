@@ -135,18 +135,18 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button onClick={handlePrevMonth} className="rounded-lg p-2 hover:bg-[#1F2937] transition-colors" aria-label="Previous month">
-            <ChevronLeftIcon className="h-5 w-5 text-[#8B949E]" />
+            <ChevronLeftIcon className="h-5 w-5 text-[#A8B2BD]" />
           </button>
           <div className="min-w-[200px] text-center">
             <h2 className="font-serif text-2xl text-[#E8923A]">{monthName} {currentYear}</h2>
             {monthSessionCount > 0 && (
-              <p className="text-xs text-[#8B949E] mt-0.5">
+              <p className="text-xs text-[#A8B2BD] mt-0.5">
                 {monthSessionCount} session{monthSessionCount !== 1 ? "s" : ""} &middot; {monthFishCount} fish
               </p>
             )}
           </div>
           <button onClick={handleNextMonth} className="rounded-lg p-2 hover:bg-[#1F2937] transition-colors" aria-label="Next month">
-            <ChevronRightIcon className="h-5 w-5 text-[#8B949E]" />
+            <ChevronRightIcon className="h-5 w-5 text-[#A8B2BD]" />
           </button>
         </div>
 
@@ -159,7 +159,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 year === currentYear
                   ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#21262D]"
+                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#21262D]"
               }`}
             >
               {year}
@@ -183,7 +183,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                   ? "bg-[#E8923A] text-white font-semibold"
                   : hasSession
                     ? "text-[#0BA5C7] hover:bg-[#1F2937] font-medium"
-                    : "text-[#484F58] hover:bg-[#1F2937]"
+                    : "text-[#6E7681] hover:bg-[#1F2937]"
               }`}
               title={`${monthAbbr} ${currentYear}`}
             >
@@ -198,7 +198,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
         {/* Day headers */}
         <div className="grid grid-cols-7 border-b border-[#21262D] bg-[#0D1117]">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="p-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#8B949E]">
+            <div key={day} className="p-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#A8B2BD]">
               {day}
             </div>
           ))}
@@ -241,7 +241,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                     <div className="flex flex-col h-full gap-1">
                       {/* Day number */}
                       <span className={`text-xs font-medium ${
-                        isToday(day) ? "text-[#0BA5C7] font-bold" : hasSession ? "text-[#F0F6FC]" : "text-[#484F58]"
+                        isToday(day) ? "text-[#0BA5C7] font-bold" : hasSession ? "text-[#F0F6FC]" : "text-[#6E7681]"
                       }`}>
                         {day}
                       </span>
@@ -258,7 +258,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                             </div>
                           ))}
                           {rivers.length > 2 && (
-                            <span className="text-[8px] text-[#484F58]">+{rivers.length - 2} more</span>
+                            <span className="text-[8px] text-[#6E7681]">+{rivers.length - 2} more</span>
                           )}
 
                           {/* Fish count + session count */}
@@ -270,7 +270,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                               </div>
                             )}
                             {daySessions.length > 1 && (
-                              <span className="text-[9px] text-[#8B949E]">
+                              <span className="text-[9px] text-[#A8B2BD]">
                                 {daySessions.length} trips
                               </span>
                             )}
@@ -297,7 +297,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                   </h3>
                   <button
                     onClick={() => setExpandedDate(null)}
-                    className="text-xs text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                    className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                   >
                     Close
                   </button>
@@ -305,7 +305,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
                 {/* Quick summary */}
                 {sessionsByDate[expandedDate] && (
-                  <div className="flex items-center gap-4 mb-3 text-xs text-[#8B949E]">
+                  <div className="flex items-center gap-4 mb-3 text-xs text-[#A8B2BD]">
                     <span>{sessionsByDate[expandedDate].length} session{sessionsByDate[expandedDate].length !== 1 ? "s" : ""}</span>
                     <span>&middot;</span>
                     <span>{sessionsByDate[expandedDate].reduce((s, d) => s + (d.session.total_fish || 0), 0)} fish total</span>
@@ -333,11 +333,11 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
       {/* Empty month state */}
       {monthSessionCount === 0 && (
-        <div className="text-center py-8 text-[#8B949E]">
-          <Fish className="h-8 w-8 mx-auto mb-2 text-[#484F58]" />
+        <div className="text-center py-8 text-[#A8B2BD]">
+          <Fish className="h-8 w-8 mx-auto mb-2 text-[#6E7681]" />
           <p className="text-sm">No sessions in {monthName} {currentYear}</p>
           {monthsWithSessions.size > 0 && (
-            <p className="text-xs text-[#484F58] mt-1">
+            <p className="text-xs text-[#6E7681] mt-1">
               Try {[...monthsWithSessions].map(m =>
                 new Date(currentYear, m, 1).toLocaleDateString("en-US", { month: "short" })
               ).join(", ")}

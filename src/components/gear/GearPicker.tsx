@@ -72,7 +72,7 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
     <>
       <div>
         {label && (
-          <label className="block text-xs font-semibold text-[#8B949E] mb-1 uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-[#A8B2BD] mb-1 uppercase tracking-wide">
             {label}
           </label>
         )}

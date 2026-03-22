@@ -73,7 +73,7 @@ export default async function AuthorPage({ params }: Props) {
       <div className="bg-[#0D1117] min-h-screen pt-6 pb-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-[13px] text-[#484F58] mb-8">
+          <nav className="flex items-center gap-1.5 text-[13px] text-[#6E7681] mb-8">
             <Link href="/" className="hover:text-[#E8923A] transition-colors">
               Home
             </Link>
@@ -82,7 +82,7 @@ export default async function AuthorPage({ params }: Props) {
               Authors
             </Link>
             <span>/</span>
-            <span className="text-[#8B949E]">{author.name}</span>
+            <span className="text-[#A8B2BD]">{author.name}</span>
           </nav>
 
           {/* Author header */}
@@ -103,7 +103,7 @@ export default async function AuthorPage({ params }: Props) {
               <p className="mt-1 text-[#E8923A] font-medium text-lg">
                 {author.role}
               </p>
-              <p className="mt-3 text-[#8B949E] leading-relaxed">
+              <p className="mt-3 text-[#A8B2BD] leading-relaxed">
                 {author.shortBio}
               </p>
 
@@ -114,7 +114,7 @@ export default async function AuthorPage({ params }: Props) {
                     href={author.socialLinks.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#484F58] hover:text-[#E8923A] transition-colors"
+                    className="text-[#6E7681] hover:text-[#E8923A] transition-colors"
                     aria-label="Website"
                   >
                     <Globe className="h-5 w-5" />
@@ -125,7 +125,7 @@ export default async function AuthorPage({ params }: Props) {
                     href={author.socialLinks.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#484F58] hover:text-[#E8923A] transition-colors"
+                    className="text-[#6E7681] hover:text-[#E8923A] transition-colors"
                     aria-label="Instagram"
                   >
                     <Instagram className="h-5 w-5" />
@@ -136,7 +136,7 @@ export default async function AuthorPage({ params }: Props) {
                     href={author.socialLinks.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#484F58] hover:text-[#E8923A] transition-colors"
+                    className="text-[#6E7681] hover:text-[#E8923A] transition-colors"
                     aria-label="Twitter / X"
                   >
                     <Twitter className="h-5 w-5" />
@@ -147,7 +147,7 @@ export default async function AuthorPage({ params }: Props) {
                     href={author.socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#484F58] hover:text-[#E8923A] transition-colors"
+                    className="text-[#6E7681] hover:text-[#E8923A] transition-colors"
                     aria-label="LinkedIn"
                   >
                     <Linkedin className="h-5 w-5" />
@@ -158,7 +158,7 @@ export default async function AuthorPage({ params }: Props) {
                     href={author.socialLinks.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#484F58] hover:text-[#E8923A] transition-colors"
+                    className="text-[#6E7681] hover:text-[#E8923A] transition-colors"
                     aria-label="YouTube"
                   >
                     <Youtube className="h-5 w-5" />
@@ -175,7 +175,7 @@ export default async function AuthorPage({ params }: Props) {
               <h2 className="font-heading text-xl font-bold text-[#F0F6FC] mb-4">
                 About {author.name.split(" ")[0]}
               </h2>
-              <div className="space-y-4 text-[#8B949E] leading-relaxed">
+              <div className="space-y-4 text-[#A8B2BD] leading-relaxed">
                 {author.bio.split("\n\n").map((paragraph, i) => (
                   <p key={i}>{paragraph}</p>
                 ))}
@@ -212,7 +212,7 @@ export default async function AuthorPage({ params }: Props) {
                   {author.credentials.map((cred) => (
                     <li
                       key={cred}
-                      className="text-sm text-[#8B949E] flex items-start gap-2"
+                      className="text-sm text-[#A8B2BD] flex items-start gap-2"
                     >
                       <ChevronRight className="h-3.5 w-3.5 text-[#E8923A] mt-0.5 flex-shrink-0" />
                       {cred}
@@ -254,7 +254,7 @@ export default async function AuthorPage({ params }: Props) {
                       <h3 className="mt-1 font-heading text-sm font-bold text-[#F0F6FC] leading-snug group-hover:text-[#E8923A] transition-colors">
                         {article.title}
                       </h3>
-                      <p className="mt-1.5 text-xs text-[#484F58]">
+                      <p className="mt-1.5 text-xs text-[#6E7681]">
                         {article.readingTimeMinutes} min read
                       </p>
                     </div>

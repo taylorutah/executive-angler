@@ -99,10 +99,10 @@ export default async function ArticlesPage() {
                         {heroArticle.subtitle}
                       </p>
                     )}
-                    <p className="mt-4 text-[#8B949E] leading-relaxed text-sm sm:text-base line-clamp-3">
+                    <p className="mt-4 text-[#A8B2BD] leading-relaxed text-sm sm:text-base line-clamp-3">
                       {heroArticle.excerpt}
                     </p>
-                    <div className="mt-5 flex items-center gap-3 text-sm text-[#484F58]">
+                    <div className="mt-5 flex items-center gap-3 text-sm text-[#6E7681]">
                       <span>{heroArticle.readingTimeMinutes} min read</span>
                       <span>·</span>
                       <span>{heroArticle.author}</span>
@@ -140,10 +140,10 @@ export default async function ArticlesPage() {
                         <h3 className="font-heading text-lg font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-snug">
                           {article.title}
                         </h3>
-                        <p className="mt-2 text-sm text-[#8B949E] line-clamp-2">
+                        <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
                           {article.excerpt}
                         </p>
-                        <p className="mt-3 text-xs text-[#484F58]">
+                        <p className="mt-3 text-xs text-[#6E7681]">
                           {article.readingTimeMinutes} min read · {article.author}
                         </p>
                       </div>
@@ -160,7 +160,7 @@ export default async function ArticlesPage() {
       <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-[#E8923A]">The Full Journal</h2>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {articles.length} articles across techniques, destinations, gear &amp; more
           </p>
         </div>

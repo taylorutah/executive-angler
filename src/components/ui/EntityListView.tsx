@@ -180,7 +180,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         >
           {sortedItems.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-[#8B949E] text-lg">
+              <p className="text-[#A8B2BD] text-lg">
                 No results match your filters.
               </p>
               <button

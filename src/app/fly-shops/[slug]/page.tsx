@@ -177,7 +177,7 @@ export default async function FlyShopPage({ params }: Props) {
                   About
                 </h2>
                 {shop.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[#8B949E] leading-relaxed mb-4">
+                  <p key={i} className="text-[#A8B2BD] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
@@ -227,7 +227,7 @@ export default async function FlyShopPage({ params }: Props) {
                         <Waves className="h-5 w-5 text-river shrink-0" />
                         <div>
                           <h3 className="font-medium text-[#E8923A]">{river.name}</h3>
-                          <p className="text-xs text-[#8B949E]">
+                          <p className="text-xs text-[#A8B2BD]">
                             {(river.primarySpecies || []).slice(0, 3).join(", ")}
                           </p>
                         </div>
@@ -257,7 +257,7 @@ export default async function FlyShopPage({ params }: Props) {
                           <h3 className="font-heading text-base font-semibold text-[#E8923A]">
                             {guide.name}
                           </h3>
-                          <p className="text-sm text-[#8B949E] mt-0.5">
+                          <p className="text-sm text-[#A8B2BD] mt-0.5">
                             {(guide.specialties || []).slice(0, 2).join(", ")}
                           </p>
                           {guide.dailyRate && (
@@ -342,8 +342,8 @@ export default async function FlyShopPage({ params }: Props) {
                   <dl className="space-y-2">
                     {Object.entries(shop.hours || {}).map(([day, hours]) => (
                       <div key={day} className="flex justify-between text-sm">
-                        <dt className="text-[#8B949E] capitalize">{day}</dt>
-                        <dd className="font-medium text-[#8B949E]">{hours}</dd>
+                        <dt className="text-[#A8B2BD] capitalize">{day}</dt>
+                        <dd className="font-medium text-[#A8B2BD]">{hours}</dd>
                       </div>
                     ))}
                   </dl>
@@ -398,7 +398,7 @@ export default async function FlyShopPage({ params }: Props) {
                         <p className="text-sm font-medium text-[#E8923A]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#8B949E] mt-1">
+                        <p className="text-xs text-[#A8B2BD] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

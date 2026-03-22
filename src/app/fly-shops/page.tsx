@@ -152,7 +152,7 @@ export default async function FlyShopsPage() {
                         {SHOP_HEADLINES[shop.slug]}
                       </p>
                       {(shop.address || dest) && (
-                        <div className="mt-1.5 flex items-start gap-1 text-[#484F58] text-xs">
+                        <div className="mt-1.5 flex items-start gap-1 text-[#6E7681] text-xs">
                           <MapPin className="h-3 w-3 flex-shrink-0 mt-0.5" />
                           <span className="line-clamp-1">
                             {shop.address ?? dest?.name}
@@ -170,7 +170,7 @@ export default async function FlyShopsPage() {
                         ))}
                       </div>
                       {shop.googleReviewCount && (
-                        <p className="mt-3 text-xs text-[#484F58]">
+                        <p className="mt-3 text-xs text-[#6E7681]">
                           {shop.googleReviewCount.toLocaleString()} Google reviews
                         </p>
                       )}
@@ -192,7 +192,7 @@ export default async function FlyShopsPage() {
           <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
             All Fly Shops
           </h2>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {flyShops.length} shops — filterable by destination
           </p>
         </div>

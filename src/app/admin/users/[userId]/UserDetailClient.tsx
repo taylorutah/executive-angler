@@ -89,7 +89,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
   if (!data?.profile) {
     return (
       <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
-        <p className="text-[#8B949E]">User not found</p>
+        <p className="text-[#A8B2BD]">User not found</p>
       </div>
     );
   }
@@ -106,7 +106,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin/users" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/admin/users" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <Shield className="h-5 w-5 text-[#E8923A]" />
@@ -153,9 +153,9 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                   </span>
                 )}
               </div>
-              {p.bio && <p className="text-sm text-[#8B949E] mt-1 line-clamp-2">{p.bio}</p>}
-              <div className="flex items-center gap-4 mt-2 text-xs text-[#484F58]">
-                <span>ID: <code className="text-[#8B949E]">{p.user_id.slice(0, 12)}...</code></span>
+              {p.bio && <p className="text-sm text-[#A8B2BD] mt-1 line-clamp-2">{p.bio}</p>}
+              <div className="flex items-center gap-4 mt-2 text-xs text-[#6E7681]">
+                <span>ID: <code className="text-[#A8B2BD]">{p.user_id.slice(0, 12)}...</code></span>
                 <span>Joined {formatDate(p.created_at)}</span>
                 {p.premium_granted_by && (
                   <span>Pro granted by {p.premium_granted_by} on {formatDate(p.premium_granted_at)}</span>
@@ -178,22 +178,22 @@ export default function UserDetailClient({ userId }: { userId: string }) {
           <div className="lg:col-span-1 space-y-4">
             {/* Stats */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Stats</h3>
+              <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Stats</h3>
               <div className="space-y-3">
                 <StatRow icon={<Calendar className="h-4 w-4 text-[#E8923A]" />} label="Sessions" value={String(data.sessions.length)} />
                 <StatRow icon={<Fish className="h-4 w-4 text-[#0BA5C7]" />} label="Total Fish" value={String(totalFish)} />
                 <StatRow icon={<Fish className="h-4 w-4 text-yellow-400" />} label="Species" value={String(species.length)} />
                 <StatRow icon={<Feather className="h-4 w-4 text-purple-400" />} label="Fly Patterns" value={String(data.flies.length)} />
                 <StatRow icon={<Users className="h-4 w-4 text-[#E8923A]" />} label="Followers" value={String(data.followers)} />
-                <StatRow icon={<Users className="h-4 w-4 text-[#8B949E]" />} label="Following" value={String(data.following)} />
+                <StatRow icon={<Users className="h-4 w-4 text-[#A8B2BD]" />} label="Following" value={String(data.following)} />
                 {biggestFish && <StatRow icon={<Fish className="h-4 w-4 text-green-400" />} label="Biggest Fish" value={`${biggestFish.toFixed(1)}"`} />}
-                <StatRow icon={<Clock className="h-4 w-4 text-[#484F58]" />} label="Last Session" value={lastSession ? formatDate(lastSession.date) : "Never"} />
+                <StatRow icon={<Clock className="h-4 w-4 text-[#6E7681]" />} label="Last Session" value={lastSession ? formatDate(lastSession.date) : "Never"} />
               </div>
             </div>
 
             {/* Quick Actions */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Actions</h3>
+              <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Actions</h3>
               <div className="space-y-2">
                 {/* Pro toggle */}
                 {!p.is_premium ? (
@@ -203,7 +203,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                       value={proReason}
                       onChange={e => setProReason(e.target.value)}
                       placeholder="Reason (optional)"
-                      className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
+                      className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                     />
                     <button
                       onClick={() => adminAction("grant_pro", { reason: proReason })}
@@ -218,7 +218,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                   <button
                     onClick={() => adminAction("revoke_pro")}
                     disabled={actionLoading === "revoke_pro"}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-[#21262D] text-[#8B949E] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-[#21262D] text-[#A8B2BD] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
                   >
                     {actionLoading === "revoke_pro" ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
                     Revoke Pro Access
@@ -235,7 +235,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                         value={banReason}
                         onChange={e => setBanReason(e.target.value)}
                         placeholder="Ban reason (required)"
-                        className="w-full px-3 py-2 bg-[#0D1117] border border-red-900/50 rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-red-500"
+                        className="w-full px-3 py-2 bg-[#0D1117] border border-red-900/50 rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-red-500"
                       />
                       <div className="flex gap-2">
                         <button
@@ -247,7 +247,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                         </button>
                         <button
                           onClick={() => { setShowBanConfirm(false); setBanReason(""); }}
-                          className="px-3 py-2 bg-[#21262D] text-[#8B949E] rounded-lg text-xs hover:bg-[#2D333B]"
+                          className="px-3 py-2 bg-[#21262D] text-[#A8B2BD] rounded-lg text-xs hover:bg-[#2D333B]"
                         >
                           Cancel
                         </button>
@@ -277,13 +277,13 @@ export default function UserDetailClient({ userId }: { userId: string }) {
 
             {/* Admin Notes */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-              <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Add Note</h3>
+              <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Add Note</h3>
               <textarea
                 value={noteText}
                 onChange={e => setNoteText(e.target.value)}
                 placeholder="Internal note about this user..."
                 rows={3}
-                className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A] resize-none"
+                className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
               />
               <button
                 onClick={() => { if (noteText.trim()) { adminAction("add_note", { note: noteText }); setNoteText(""); } }}
@@ -301,17 +301,17 @@ export default function UserDetailClient({ userId }: { userId: string }) {
             {/* Recent Sessions */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-[#21262D]">
-                <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider">Recent Sessions ({data.sessions.length})</h3>
+                <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Recent Sessions ({data.sessions.length})</h3>
               </div>
               {data.sessions.length === 0 ? (
-                <p className="px-5 py-6 text-sm text-[#484F58] text-center">No sessions</p>
+                <p className="px-5 py-6 text-sm text-[#6E7681] text-center">No sessions</p>
               ) : (
                 <div className="divide-y divide-[#21262D]">
                   {data.sessions.slice(0, 20).map(s => (
                     <div key={s.id} className="px-5 py-3 flex items-center justify-between hover:bg-[#1F2937]/30 transition-colors">
                       <div>
                         <p className="text-sm text-[#F0F6FC] font-medium">{s.river_name || "Unknown"}</p>
-                        <p className="text-xs text-[#484F58]">{formatDate(s.date)} {s.is_private ? "· 🔒 Private" : ""}</p>
+                        <p className="text-xs text-[#6E7681]">{formatDate(s.date)} {s.is_private ? "· 🔒 Private" : ""}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-mono text-[#E8923A]">{s.total_fish || 0} fish</span>
@@ -325,7 +325,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
             {/* Species caught */}
             {species.length > 0 && (
               <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
-                <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Species Caught ({species.length})</h3>
+                <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Species Caught ({species.length})</h3>
                 <div className="flex flex-wrap gap-2">
                   {species.map(s => (
                     <span key={s} className="px-2.5 py-1 bg-[#0D1117] text-[#F0F6FC] rounded-full text-xs">{s}</span>
@@ -337,10 +337,10 @@ export default function UserDetailClient({ userId }: { userId: string }) {
             {/* Audit Log */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-[#21262D]">
-                <h3 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider">Audit Log</h3>
+                <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Audit Log</h3>
               </div>
               {data.auditLog.length === 0 ? (
-                <p className="px-5 py-6 text-sm text-[#484F58] text-center">No admin actions on this user</p>
+                <p className="px-5 py-6 text-sm text-[#6E7681] text-center">No admin actions on this user</p>
               ) : (
                 <div className="divide-y divide-[#21262D]">
                   {data.auditLog.map(log => (
@@ -350,11 +350,11 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                           <AuditIcon action={log.action} />
                           <span className="text-sm text-[#F0F6FC] font-medium">{formatAction(log.action)}</span>
                         </div>
-                        <span className="text-xs text-[#484F58]">{formatDateTime(log.created_at)}</span>
+                        <span className="text-xs text-[#6E7681]">{formatDateTime(log.created_at)}</span>
                       </div>
-                      <p className="text-xs text-[#484F58] mt-1">by {log.admin_email}</p>
+                      <p className="text-xs text-[#6E7681] mt-1">by {log.admin_email}</p>
                       {log.details && Object.keys(log.details).length > 0 && (
-                        <p className="text-xs text-[#8B949E] mt-1 font-mono bg-[#0D1117] px-2 py-1 rounded">
+                        <p className="text-xs text-[#A8B2BD] mt-1 font-mono bg-[#0D1117] px-2 py-1 rounded">
                           {JSON.stringify(log.details)}
                         </p>
                       )}
@@ -375,7 +375,7 @@ function StatRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         {icon}
-        <span className="text-xs text-[#8B949E]">{label}</span>
+        <span className="text-xs text-[#A8B2BD]">{label}</span>
       </div>
       <span className="text-sm font-mono text-[#F0F6FC]">{value}</span>
     </div>
@@ -385,12 +385,12 @@ function StatRow({ icon, label, value }: { icon: React.ReactNode; label: string;
 function AuditIcon({ action }: { action: string }) {
   switch (action) {
     case "grant_pro": return <Sparkles className="h-3.5 w-3.5 text-[#E8923A]" />;
-    case "revoke_pro": return <XCircle className="h-3.5 w-3.5 text-[#8B949E]" />;
+    case "revoke_pro": return <XCircle className="h-3.5 w-3.5 text-[#A8B2BD]" />;
     case "ban_user": return <Ban className="h-3.5 w-3.5 text-red-400" />;
     case "unban_user": return <UserCheck className="h-3.5 w-3.5 text-green-400" />;
     case "add_note": return <StickyNote className="h-3.5 w-3.5 text-blue-400" />;
     case "kill_session": return <AlertTriangle className="h-3.5 w-3.5 text-yellow-400" />;
-    default: return <Shield className="h-3.5 w-3.5 text-[#484F58]" />;
+    default: return <Shield className="h-3.5 w-3.5 text-[#6E7681]" />;
   }
 }
 

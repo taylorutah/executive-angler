@@ -28,7 +28,7 @@ const TYPE_LABELS: Record<GearType, string> = {
 
 const inputCls =
   "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-[#F0F6FC] text-sm focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-const labelCls = "block text-xs font-semibold text-[#8B949E] mb-1 uppercase tracking-wide";
+const labelCls = "block text-xs font-semibold text-[#A8B2BD] mb-1 uppercase tracking-wide";
 const selectCls = inputCls;
 
 export default function GearForm({ open, onClose, onSaved, initialType = "rod", editItem = null, isFirstOfType = false }: Props) {
@@ -215,7 +215,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
           <h2 className="font-heading font-bold text-[#F0F6FC] text-lg">
             {editItem ? `Edit ${TYPE_LABELS[type]}` : `Add ${TYPE_LABELS[initialType]}`}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -400,7 +400,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
               <span className="text-sm font-medium text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
                 Set as default for new sessions
               </span>
-              <span className="block text-xs text-[#484F58] mt-0.5">
+              <span className="block text-xs text-[#6E7681] mt-0.5">
                 Like Strava&apos;s gear — this {TYPE_LABELS[type].toLowerCase()} will auto-attach whenever you log a new session.
               </span>
             </span>
@@ -409,7 +409,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-[#21262D] py-2.5 text-sm text-[#8B949E] hover:text-[#F0F6FC] hover:border-[#484F58] transition-colors">
+            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-[#21262D] py-2.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#6E7681] transition-colors">
               Cancel
             </button>
             <button type="submit" disabled={saving} className="flex-1 rounded-lg bg-[#E8923A] py-2.5 text-sm font-semibold text-white hover:bg-[#d07e31] disabled:opacity-60 transition-colors">

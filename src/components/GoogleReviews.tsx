@@ -22,7 +22,7 @@ function Stars({ rating }: { rating: number }) {
           className={`h-4 w-4 ${
             star <= Math.round(rating)
               ? "text-amber-400 fill-amber-400"
-              : "text-[#484F58]"
+              : "text-[#6E7681]"
           }`}
         />
       ))}
@@ -39,7 +39,7 @@ function LargeStars({ rating }: { rating: number }) {
           className={`h-6 w-6 ${
             star <= Math.round(rating)
               ? "text-amber-400 fill-amber-400"
-              : "text-[#484F58]"
+              : "text-[#6E7681]"
           }`}
         />
       ))}
@@ -84,9 +84,9 @@ export default function GoogleReviews({
         <span className="text-2xl font-bold text-[#E8923A]">
           {googleRating.toFixed(1)}
         </span>
-        <span className="text-[#8B949E]">/5 on Google</span>
+        <span className="text-[#A8B2BD]">/5 on Google</span>
         {googleReviewCount != null && (
-          <span className="text-sm text-[#484F58]">
+          <span className="text-sm text-[#6E7681]">
             ({googleReviewCount.toLocaleString()} reviews)
           </span>
         )}
@@ -105,7 +105,7 @@ export default function GoogleReviews({
               className="bg-[#161B22] rounded-xl shadow-sm p-5 flex flex-col"
             >
               <Stars rating={review.rating} />
-              <p className="text-[#8B949E] text-sm leading-relaxed mt-3 flex-1 line-clamp-5">
+              <p className="text-[#A8B2BD] text-sm leading-relaxed mt-3 flex-1 line-clamp-5">
                 &ldquo;{review.text}&rdquo;
               </p>
               <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#21262D]">

@@ -241,8 +241,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     router.push("/");
   }
 
-  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] transition-colors";
-  const labelCls = "block text-sm font-medium text-[#8B949E] mb-1.5";
+  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] transition-colors";
+  const labelCls = "block text-sm font-medium text-[#A8B2BD] mb-1.5";
 
   const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
     { key: "profile", icon: Settings, label: "Edit Profile" },
@@ -297,23 +297,23 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
               <h1 className="font-heading text-2xl font-bold text-[#F0F6FC] truncate">{displayName || "Angler"}</h1>
-              {username && <span className="text-sm text-[#8B949E] font-mono">@{username}</span>}
+              {username && <span className="text-sm text-[#A8B2BD] font-mono">@{username}</span>}
             </div>
-            <p className="text-sm text-[#484F58] mt-0.5">{user.email}</p>
+            <p className="text-sm text-[#6E7681] mt-0.5">{user.email}</p>
             {socialCounts && (
               <div className="flex items-center gap-4 mt-2">
-                <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
                   <span className="font-semibold text-[#F0F6FC]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </Link>
                 <span className="text-[#21262D]">·</span>
-                <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+                <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
                   <span className="font-semibold text-[#F0F6FC]">{socialCounts.following}</span> following
                 </Link>
               </div>
             )}
           </div>
 
-          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[#484F58] hover:text-red-400 transition-colors border border-[#21262D] rounded-lg px-4 py-2 hover:border-red-800">
+          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[#6E7681] hover:text-red-400 transition-colors border border-[#21262D] rounded-lg px-4 py-2 hover:border-red-800">
             <LogOut className="h-4 w-4" /> Sign Out
           </button>
         </div>
@@ -330,7 +330,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                     activeSection === key
                       ? "bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20"
-                      : "text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#161B22]"
+                      : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22]"
                   }`}
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
@@ -369,7 +369,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     <div>
                       <label className={labelCls}>Username</label>
                       <div className="relative flex items-center">
-                        <span className="absolute left-4 text-[#484F58] pointer-events-none select-none">@</span>
+                        <span className="absolute left-4 text-[#6E7681] pointer-events-none select-none">@</span>
                         <input
                           className={inputCls + " pl-8 pr-10"}
                           value={username}
@@ -379,7 +379,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                         />
                         {username.length >= 3 && (
                           <span className="absolute right-3 text-sm pointer-events-none">
-                            {usernameChecking ? <span className="text-[#8B949E]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
+                            {usernameChecking ? <span className="text-[#A8B2BD]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
                           </span>
                         )}
                       </div>
@@ -390,7 +390,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                   <div>
                     <label className={labelCls}>Bio</label>
                     <textarea className={inputCls + " resize-none"} rows={3} maxLength={160} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Tell other anglers about yourself…" />
-                    <p className="text-xs text-[#484F58] mt-1 text-right">{bio.length}/160</p>
+                    <p className="text-xs text-[#6E7681] mt-1 text-right">{bio.length}/160</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -409,11 +409,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                       <label className={labelCls}>Profile Visibility</label>
                       <div className="flex gap-2">
                         <button type="button" onClick={() => setIsPrivate(false)}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
                           Public
                         </button>
                         <button type="button" onClick={() => setIsPrivate(true)}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
                           Private
                         </button>
                       </div>
@@ -422,11 +422,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                       <label className={labelCls}>Journal Feed Display</label>
                       <div className="flex gap-2">
                         <button type="button" onClick={() => setFeedDisplay("collage")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
                           Collage
                         </button>
                         <button type="button" onClick={() => setFeedDisplay("map")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
                           Map
                         </button>
                       </div>
@@ -448,11 +448,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
             {activeSection === "notifications" && (
               <div id="notifications" className="bg-[#161B22] border border-[#21262D] rounded-xl p-6 scroll-mt-24">
                 <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Email Notifications</h2>
-                <p className="text-sm text-[#8B949E] mb-6">Choose what emails you receive from Executive Angler.</p>
+                <p className="text-sm text-[#A8B2BD] mb-6">Choose what emails you receive from Executive Angler.</p>
 
                 <div className="space-y-1">
                   {/* Activity section */}
-                  <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Activity</p>
+                  <p className="text-xs font-semibold text-[#A8B2BD] uppercase tracking-wider mb-3">Activity</p>
 
                   {[
                     { label: "New followers", desc: "When someone starts following you", value: notifyFollows, set: setNotifyFollows },
@@ -462,7 +462,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     <div key={label} className="flex items-center justify-between py-3 border-b border-[#21262D] last:border-0">
                       <div>
                         <p className="text-sm font-medium text-[#F0F6FC]">{label}</p>
-                        <p className="text-xs text-[#484F58]">{desc}</p>
+                        <p className="text-xs text-[#6E7681]">{desc}</p>
                       </div>
                       <button type="button" onClick={() => set(!value)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${value ? "bg-[#E8923A]" : "bg-[#21262D]"}`}>
@@ -473,11 +473,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
                   {/* Digest section */}
                   <div className="pt-4 mt-4">
-                    <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Digest</p>
+                    <p className="text-xs font-semibold text-[#A8B2BD] uppercase tracking-wider mb-3">Digest</p>
                     <div className="flex items-center justify-between py-3">
                       <div>
                         <p className="text-sm font-medium text-[#F0F6FC]">Activity digest</p>
-                        <p className="text-xs text-[#484F58]">Summary of activity on your profile</p>
+                        <p className="text-xs text-[#6E7681]">Summary of activity on your profile</p>
                       </div>
                       <div className="flex gap-1.5">
                         {(["none", "daily", "weekly"] as const).map((freq) => (
@@ -485,7 +485,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                             className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors capitalize ${
                               digestFrequency === freq
                                 ? "bg-[#E8923A] text-white"
-                                : "bg-[#0D1117] border border-[#21262D] text-[#8B949E] hover:border-[#E8923A]/40"
+                                : "bg-[#0D1117] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"
                             }`}>
                             {freq}
                           </button>
@@ -543,7 +543,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     </svg>
                     <div>
                       <p className="text-sm font-medium text-[#F0F6FC]">Google</p>
-                      <p className="text-xs text-[#484F58]">{googleLinked ? "Connected" : "Not connected"}</p>
+                      <p className="text-xs text-[#6E7681]">{googleLinked ? "Connected" : "Not connected"}</p>
                     </div>
                   </div>
                   {!googleLinked ? (

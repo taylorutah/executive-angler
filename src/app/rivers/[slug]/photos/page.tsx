@@ -38,17 +38,17 @@ export default async function RiverPhotosPage({ params }: Props) {
       <div className="bg-[#161B22] border-b border-[#21262D]">
         <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-[#484F58] mb-3">
+          <nav className="flex items-center gap-2 text-sm text-[#6E7681] mb-3">
             <Link href="/rivers" className="hover:text-[#E8923A] transition-colors">Rivers</Link>
             <span>/</span>
             <Link href={`/rivers/${slug}`} className="hover:text-[#E8923A] transition-colors">{river.name}</Link>
             <span>/</span>
-            <span className="text-[#8B949E]">Photos</span>
+            <span className="text-[#A8B2BD]">Photos</span>
           </nav>
           <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">
             {river.name} — Community Photos
           </h1>
-          <p className="mt-2 text-[#8B949E]">
+          <p className="mt-2 text-[#A8B2BD]">
             Photos submitted by anglers and catches logged in the app.
           </p>
         </div>

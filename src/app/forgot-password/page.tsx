@@ -48,12 +48,12 @@ export default function ForgotPasswordPage() {
                 <CheckCircle className="h-7 w-7 text-[#E8923A]" />
               </div>
               <h1 className="text-xl font-bold text-[#F0F6FC]">Check your email</h1>
-              <p className="text-sm text-[#8B949E] leading-relaxed">
+              <p className="text-sm text-[#A8B2BD] leading-relaxed">
                 We sent a password reset link to{" "}
                 <span className="text-[#F0F6FC] font-medium">{email}</span>.
                 Click the link in the email to reset your password.
               </p>
-              <p className="text-xs text-[#484F58]">
+              <p className="text-xs text-[#6E7681]">
                 Didn&apos;t receive it? Check your spam folder, or{" "}
                 <button
                   onClick={() => { setSent(false); setError(""); }}
@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
               </p>
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#F0F6FC] transition-colors mt-2"
+                className="inline-flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors mt-2"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
                 Back to sign in
@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
                   <Mail className="h-7 w-7 text-[#E8923A]" />
                 </div>
                 <h1 className="text-xl font-bold text-[#F0F6FC]">Reset your password</h1>
-                <p className="text-sm text-[#8B949E] mt-1">
+                <p className="text-sm text-[#A8B2BD] mt-1">
                   Enter the email address associated with your account and we&apos;ll send you a link to reset your password.
                 </p>
               </div>
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#484F58]"
+                    className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#6E7681]"
                     placeholder="you@example.com"
                     autoFocus
                   />
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
               <div className="text-center">
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#F0F6FC] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Back to sign in

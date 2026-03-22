@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
                 <CheckCircle className="h-7 w-7 text-green-500" />
               </div>
               <h1 className="text-xl font-bold text-[#F0F6FC]">Password updated</h1>
-              <p className="text-sm text-[#8B949E]">
+              <p className="text-sm text-[#A8B2BD]">
                 Your password has been reset successfully. Redirecting to your dashboard…
               </p>
               <div className="flex justify-center">
@@ -114,10 +114,10 @@ export default function ResetPasswordPage() {
                 <Lock className="h-7 w-7 text-[#E8923A] animate-pulse" />
               </div>
               <h1 className="text-xl font-bold text-[#F0F6FC]">Verifying your link…</h1>
-              <p className="text-sm text-[#8B949E]">
+              <p className="text-sm text-[#A8B2BD]">
                 Please wait while we verify your reset token.
               </p>
-              <p className="text-xs text-[#484F58]">
+              <p className="text-xs text-[#6E7681]">
                 If this takes too long,{" "}
                 <Link href="/forgot-password" className="text-[#E8923A] hover:underline">
                   request a new link
@@ -132,7 +132,7 @@ export default function ResetPasswordPage() {
                   <Lock className="h-7 w-7 text-[#E8923A]" />
                 </div>
                 <h1 className="text-xl font-bold text-[#F0F6FC]">Set new password</h1>
-                <p className="text-sm text-[#8B949E] mt-1">
+                <p className="text-sm text-[#A8B2BD] mt-1">
                   Choose a strong password for your account.
                 </p>
               </div>
@@ -149,14 +149,14 @@ export default function ResetPasswordPage() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-3 pr-12 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#484F58]"
+                      className="w-full px-4 py-3 pr-12 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#6E7681]"
                       placeholder="Min. 8 characters"
                       autoFocus
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#484F58] hover:text-[#8B949E] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -167,7 +167,7 @@ export default function ResetPasswordPage() {
                       <div className="h-1.5 bg-[#21262D] rounded-full overflow-hidden">
                         <div className={`h-full ${strength.color} ${strength.width} transition-all duration-300 rounded-full`} />
                       </div>
-                      <p className="text-xs text-[#484F58]">{strength.label}</p>
+                      <p className="text-xs text-[#6E7681]">{strength.label}</p>
                     </div>
                   )}
                 </div>
@@ -182,7 +182,7 @@ export default function ResetPasswordPage() {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#484F58] ${
+                    className={`w-full px-4 py-3 rounded-lg border bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#6E7681] ${
                       confirmPassword.length > 0 && confirmPassword !== password
                         ? "border-[#DA3633]"
                         : confirmPassword.length > 0 && confirmPassword === password

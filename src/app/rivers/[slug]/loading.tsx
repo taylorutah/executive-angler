@@ -17,7 +17,7 @@ export default function Loading() {
           <div className="flex items-center justify-center py-24">
             <div className="flex flex-col items-center gap-4">
               <div className="w-12 h-12 rounded-full border-4 border-[#E8923A] border-t-transparent animate-spin" />
-              <p className="text-[#8B949E] text-sm">Loading river guide…</p>
+              <p className="text-[#A8B2BD] text-sm">Loading river guide…</p>
             </div>
           </div>
         </div>

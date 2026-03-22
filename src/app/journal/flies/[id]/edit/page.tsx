@@ -120,14 +120,14 @@ export default function EditFlyPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#484F58] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-  const label = "block text-xs font-semibold text-[#8B949E] uppercase tracking-wide mb-1";
+  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  const label = "block text-xs font-semibold text-[#A8B2BD] uppercase tracking-wide mb-1";
   const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5 mb-4";
   const displayImage = preview || existingImage;
 
   if (loading) return (
     <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3 text-[#484F58]">
+      <div className="flex flex-col items-center gap-3 text-[#6E7681]">
         <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-forest animate-spin" />
         <p className="text-sm">Loading fly pattern…</p>
       </div>
@@ -140,7 +140,7 @@ export default function EditFlyPage() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/journal/flies" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+          <Link href="/journal/flies" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Fly Patterns
           </Link>
           <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Fly Pattern</h1>
@@ -153,7 +153,7 @@ export default function EditFlyPage() {
 
           {/* Photo */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-4">📸 Photo</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-4">📸 Photo</h2>
             {displayImage ? (
               <div className="flex items-start gap-4">
                 <div className="relative h-32 w-32 rounded-xl overflow-hidden border border-[#21262D] flex-shrink-0">
@@ -172,7 +172,7 @@ export default function EditFlyPage() {
               </div>
             ) : (
               <button type="button" onClick={() => fileRef.current?.click()}
-                className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#21262D] rounded-xl py-8 text-[#484F58] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
+                className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#21262D] rounded-xl py-8 text-[#6E7681] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
                 <Upload className="h-6 w-6" />
                 <span className="text-sm font-medium">Upload fly photo</span>
                 <span className="text-xs">JPG, PNG — looks great at 1:1</span>
@@ -183,7 +183,7 @@ export default function EditFlyPage() {
 
           {/* Pattern Info */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-4">🪰 Pattern Info</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-4">🪰 Pattern Info</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Pattern Name <span className="text-red-400">*</span></label>
@@ -211,7 +211,7 @@ export default function EditFlyPage() {
 
           {/* Bead & Hook */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-4">⚙️ Bead & Hook</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-4">⚙️ Bead & Hook</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className={label}>Hook Model</label>
@@ -230,13 +230,13 @@ export default function EditFlyPage() {
 
           {/* Tying Recipe */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📋 Tying Recipe</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">📋 Tying Recipe</h2>
             <textarea rows={4} className={input} placeholder="Thread: 8/0 black&#10;Body: UV resin over thread&#10;Rib: copper wire&#10;Bead: 2.8mm tungsten" value={form.materials} onChange={e => updateForm("materials", e.target.value)} />
           </div>
 
           {/* Notes & Video */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[#8B949E] mb-3">📝 Notes & Video</h2>
+            <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">📝 Notes & Video</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Notes</label>
@@ -249,7 +249,7 @@ export default function EditFlyPage() {
               <div>
                 <label className={label}>Tags</label>
                 <input className={input} placeholder="euro, tungsten, nymph, fast-water" value={form.tags} onChange={e => updateForm("tags", e.target.value)} />
-                <p className="text-xs text-[#484F58] mt-1">Separate with commas</p>
+                <p className="text-xs text-[#6E7681] mt-1">Separate with commas</p>
               </div>
             </div>
           </div>

@@ -51,10 +51,10 @@ export default function ListCard({
           )}
         </div>
         {subtitle && (
-          <p className="text-sm text-[#8B949E] line-clamp-1 mt-0.5">{subtitle}</p>
+          <p className="text-sm text-[#A8B2BD] line-clamp-1 mt-0.5">{subtitle}</p>
         )}
         {description && (
-          <p className="text-sm text-[#8B949E] line-clamp-1 mt-1 hidden sm:block">{description}</p>
+          <p className="text-sm text-[#A8B2BD] line-clamp-1 mt-1 hidden sm:block">{description}</p>
         )}
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           {badges && badges.length > 0 && badges.map((badge) => (
@@ -74,7 +74,7 @@ export default function ListCard({
             </span>
           ))}
           {meta && (
-            <span className="text-xs text-[#484F58] uppercase tracking-wider">{meta}</span>
+            <span className="text-xs text-[#6E7681] uppercase tracking-wider">{meta}</span>
           )}
         </div>
       </div>

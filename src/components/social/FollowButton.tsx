@@ -110,7 +110,7 @@ export function FollowButton({ targetUserId, compact = false }: FollowButtonProp
       icon: Clock,
       label: "Pending",
       className:
-        "bg-[#21262D] text-[#8B949E] hover:bg-[#DA3633] hover:text-[#F0F6FC]",
+        "bg-[#21262D] text-[#A8B2BD] hover:bg-[#DA3633] hover:text-[#F0F6FC]",
     },
     following: {
       icon: UserCheck,

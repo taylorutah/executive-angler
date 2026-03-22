@@ -122,7 +122,7 @@ function FollowRequestActions({
           handleAction("decline");
         }}
         disabled={acting}
-        className="px-2.5 py-1 text-[10px] font-semibold rounded-md bg-[#21262D] text-[#8B949E] hover:bg-[#DA3633] hover:text-white transition-colors disabled:opacity-50"
+        className="px-2.5 py-1 text-[10px] font-semibold rounded-md bg-[#21262D] text-[#A8B2BD] hover:bg-[#DA3633] hover:text-white transition-colors disabled:opacity-50"
       >
         Decline
       </button>
@@ -167,7 +167,7 @@ export function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative flex items-center justify-center p-2 rounded-lg text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#1F2937] transition-colors"
+        className="relative flex items-center justify-center p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937] transition-colors"
         aria-label="Notifications"
       >
         <Bell className="h-4.5 w-4.5" />
@@ -200,8 +200,8 @@ export function NotificationBell() {
           <div className="max-h-[400px] overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="py-10 text-center">
-                <Bell className="h-8 w-8 text-[#484F58] mx-auto mb-2" />
-                <p className="text-sm text-[#8B949E]">No notifications yet</p>
+                <Bell className="h-8 w-8 text-[#6E7681] mx-auto mb-2" />
+                <p className="text-sm text-[#A8B2BD]">No notifications yet</p>
               </div>
             ) : (
               notifications.slice(0, 20).map((n) => (
@@ -229,7 +229,7 @@ export function NotificationBell() {
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <span className="text-xs font-bold text-[#8B949E]">
+                      <span className="text-xs font-bold text-[#A8B2BD]">
                         {(
                           n.actor_profile?.display_name ||
                           n.actor_profile?.username ||
@@ -244,14 +244,14 @@ export function NotificationBell() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[#8B949E]">
+                      <span className="text-[#A8B2BD]">
                         {getNotificationIcon(n.type)}
                       </span>
                       <p className="text-xs text-[#F0F6FC] leading-snug line-clamp-2">
                         {getNotificationText(n)}
                       </p>
                     </div>
-                    <p className="text-[10px] text-[#484F58] mt-0.5">
+                    <p className="text-[10px] text-[#6E7681] mt-0.5">
                       {timeAgo(n.created_at)}
                     </p>
 

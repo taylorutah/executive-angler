@@ -237,7 +237,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "list"
                   ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#1F2937]"
+                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#1F2937]"
               }`}
             >
               <ListIcon className="h-4 w-4" />
@@ -248,7 +248,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "calendar"
                   ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#8B949E] hover:bg-[#1F2937]"
+                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#1F2937]"
               }`}
             >
               <CalendarIcon className="h-4 w-4" />
@@ -257,7 +257,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           </div>
           <button
             onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            className="flex items-center gap-1.5 rounded-lg bg-[#1F2937] px-3 py-2 text-sm font-medium text-[#8B949E] hover:bg-[#1F2937]"
+            className="flex items-center gap-1.5 rounded-lg bg-[#1F2937] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:bg-[#1F2937]"
           >
             <FilterIcon className="h-4 w-4" />
             Filters
@@ -270,7 +270,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         </div>
 
         {/* Mobile stats */}
-        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-[#8B949E]">
+        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-[#A8B2BD]">
           <span>{totalSessions} Sessions</span>
           <span>·</span>
           <span>{totalFish} Fish</span>
@@ -291,7 +291,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 </h2>
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="text-[#8B949E] hover:text-[#8B949E]"
+                  className="text-[#A8B2BD] hover:text-[#A8B2BD]"
                 >
                   ✕
                 </button>
@@ -332,19 +332,19 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                   />
                 </Link>
                 <p className="font-bold text-[#F0F6FC] text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
-                <p className="text-xs text-[#484F58] mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
+                <p className="text-xs text-[#6E7681] mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
                 <div className="grid grid-cols-3 gap-1 text-center border-t border-[#21262D] pt-3">
                   <div>
                     <p className="text-base font-bold text-[#F0F6FC]">{totalSessions}</p>
-                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Sessions</p>
+                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Sessions</p>
                   </div>
                   <div>
                     <p className="text-base font-bold text-[#F0F6FC]">{totalFish}</p>
-                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Fish</p>
+                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Fish</p>
                   </div>
                   <div>
                     <p className="text-base font-bold text-[#F0F6FC]">{riversFished}</p>
-                    <p className="text-[10px] text-[#484F58] uppercase tracking-wide">Rivers</p>
+                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Rivers</p>
                   </div>
                 </div>
               </div>
@@ -355,20 +355,20 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#E8923A]/5 text-[#E8923A] text-sm font-medium">
                 <BookOpen className="h-4 w-4" /> Journal
               </Link>
-              <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <TrendingUp className="h-4 w-4" /> River Stats
               </Link>
-              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <Feather className="h-4 w-4" /> My Fly Box
-                <span className="ml-auto text-xs text-[#484F58]">{totalFlyPatterns}</span>
+                <span className="ml-auto text-xs text-[#6E7681]">{totalFlyPatterns}</span>
               </Link>
-              <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <Package className="h-4 w-4" /> Gear Box
               </Link>
-              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">❤️</span> Favorites
               </Link>
-              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#8B949E] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">⚙️</span> Settings
               </Link>
             </div>
@@ -378,7 +378,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
                 + Log Session
               </Link>
-              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#8B949E] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
+              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#A8B2BD] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
                 + Add Fly Pattern
               </Link>
             </div>
@@ -410,7 +410,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   view === "list"
                     ? "bg-[#E8923A] text-white"
-                    : "bg-[#161B22] text-[#8B949E] hover:bg-[#0D1117] border border-[#21262D]"
+                    : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#0D1117] border border-[#21262D]"
                 }`}
               >
                 <ListIcon className="h-4 w-4" />
@@ -421,14 +421,14 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   view === "calendar"
                     ? "bg-[#E8923A] text-white"
-                    : "bg-[#161B22] text-[#8B949E] hover:bg-[#0D1117] border border-[#21262D]"
+                    : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#0D1117] border border-[#21262D]"
                 }`}
               >
                 <CalendarIcon className="h-4 w-4" />
                 Calendar
               </button>
             </div>
-            <p className="text-sm text-[#8B949E]">
+            <p className="text-sm text-[#A8B2BD]">
               Showing {filteredSessions.length} session{filteredSessions.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -446,7 +446,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               {/* Session list — always visible */}
               {filteredSessions.length === 0 ? (
                 <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
-                  <p className="text-[#8B949E]">No sessions match your filters</p>
+                  <p className="text-[#A8B2BD]">No sessions match your filters</p>
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}

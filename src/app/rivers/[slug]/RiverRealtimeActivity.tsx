@@ -301,14 +301,14 @@ export default function RiverRealtimeActivity({
                   )}
                 </p>
                 {evt.section && (
-                  <p className="text-[10px] text-[#8B949E] truncate">
+                  <p className="text-[10px] text-[#A8B2BD] truncate">
                     {evt.section}
                   </p>
                 )}
               </div>
 
               {/* Timestamp */}
-              <span className="flex items-center gap-1 shrink-0 text-[10px] text-[#484F58]">
+              <span className="flex items-center gap-1 shrink-0 text-[10px] text-[#6E7681]">
                 <Clock className="h-3 w-3" />
                 {relativeTime(now - evt.timestamp)}
               </span>
@@ -320,7 +320,7 @@ export default function RiverRealtimeActivity({
       {/* ── Empty state ────────────────────────────────────────────── */}
       {events.length === 0 && activeCount === 0 && connected && (
         <div className="px-5 py-6 text-center">
-          <p className="text-xs text-[#484F58]">
+          <p className="text-xs text-[#6E7681]">
             Listening for activity on {riverName}...
           </p>
         </div>

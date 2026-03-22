@@ -97,7 +97,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
   })();
 
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 flex items-start gap-3 hover:border-[#484F58] transition-colors group">
+    <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 flex items-start gap-3 hover:border-[#6E7681] transition-colors group">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="font-semibold text-[#F0F6FC] text-sm truncate">{item.name}</span>
@@ -108,17 +108,17 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
           )}
         </div>
         {(item.maker || item.model) && (
-          <p className="text-xs text-[#8B949E] mb-1">
+          <p className="text-xs text-[#A8B2BD] mb-1">
             {[item.maker, item.model].filter(Boolean).join(" ")}
           </p>
         )}
-        {specs && <p className="text-xs text-[#484F58]">{specs}</p>}
+        {specs && <p className="text-xs text-[#6E7681]">{specs}</p>}
         {euroSections && (
-          <p className="text-[10px] text-[#484F58]/70 mt-1 leading-relaxed">
+          <p className="text-[10px] text-[#6E7681]/70 mt-1 leading-relaxed">
             {euroSections}
           </p>
         )}
-        {item.notes && <p className="text-xs text-[#484F58] italic mt-1 line-clamp-2">{item.notes}</p>}
+        {item.notes && <p className="text-xs text-[#6E7681] italic mt-1 line-clamp-2">{item.notes}</p>}
       </div>
 
       <div className="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -129,7 +129,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
           className={`p-1.5 rounded-lg transition-colors ${
             item.is_default
               ? "text-[#E8923A] bg-[#E8923A]/10 hover:bg-[#E8923A]/20"
-              : "text-[#484F58] hover:text-[#E8923A] hover:bg-[#E8923A]/10"
+              : "text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10"
           }`}
         >
           <Star className={`h-3.5 w-3.5 ${item.is_default ? "fill-current" : ""}`} />
@@ -138,7 +138,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
         {/* Edit */}
         <button
           onClick={onEdit}
-          className="p-1.5 rounded-lg text-[#484F58] hover:text-[#0BA5C7] hover:bg-[#0BA5C7]/10 transition-colors"
+          className="p-1.5 rounded-lg text-[#6E7681] hover:text-[#0BA5C7] hover:bg-[#0BA5C7]/10 transition-colors"
         >
           <Pencil className="h-3.5 w-3.5" />
         </button>
@@ -154,7 +154,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
             </button>
             <button
               onClick={() => setConfirmDelete(false)}
-              className="text-[10px] text-[#484F58] border border-[#21262D] rounded px-2 py-1 hover:bg-[#21262D] transition-colors"
+              className="text-[10px] text-[#6E7681] border border-[#21262D] rounded px-2 py-1 hover:bg-[#21262D] transition-colors"
             >
               Cancel
             </button>
@@ -162,7 +162,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
         ) : (
           <button
             onClick={() => setConfirmDelete(true)}
-            className="p-1.5 rounded-lg text-[#484F58] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+            className="p-1.5 rounded-lg text-[#6E7681] hover:text-red-500 hover:bg-red-500/10 transition-colors"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -276,14 +276,14 @@ export default function GearLockerClient() {
       <div className="mx-auto max-w-3xl px-4 pt-6">
         {/* Header */}
         <div className="flex items-center gap-4 mb-2">
-          <Link href="/account" className="flex items-center gap-1.5 text-sm text-[#8B949E] hover:text-[#E8923A] transition-colors">
+          <Link href="/account" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Account
           </Link>
         </div>
 
         <div className="mb-8">
           <h1 className="font-heading text-3xl font-bold text-[#E8923A] mb-1">Gear Locker</h1>
-          <p className="text-sm text-[#484F58]">
+          <p className="text-sm text-[#6E7681]">
             Track your rods, reels, lines, and leaders — like Strava&apos;s shoe tracking, but for fly fishing.
             Mark a default and it auto-attaches to every new session you log.
           </p>
@@ -305,7 +305,7 @@ export default function GearLockerClient() {
                       <span>{emoji}</span>
                       {label}
                       {typeItems.length > 0 && (
-                        <span className="text-xs font-normal text-[#484F58] normal-case tracking-normal">
+                        <span className="text-xs font-normal text-[#6E7681] normal-case tracking-normal">
                           ({typeItems.length})
                         </span>
                       )}
@@ -322,7 +322,7 @@ export default function GearLockerClient() {
                   {typeItems.length === 0 ? (
                     <button
                       onClick={() => openAdd(type)}
-                      className="w-full border border-dashed border-[#21262D] rounded-xl py-6 text-center text-sm text-[#484F58] hover:border-[#E8923A]/30 hover:text-[#E8923A]/60 transition-colors"
+                      className="w-full border border-dashed border-[#21262D] rounded-xl py-6 text-center text-sm text-[#6E7681] hover:border-[#E8923A]/30 hover:text-[#E8923A]/60 transition-colors"
                     >
                       <span className="text-2xl block mb-1">{emoji}</span>
                       No {label.toLowerCase()} yet — add one

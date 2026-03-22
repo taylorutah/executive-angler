@@ -203,7 +203,7 @@ export default function Header() {
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isExplorePath || exploreOpen
                       ? "text-[#F0F6FC]"
-                      : "text-[#8B949E] hover:text-[#F0F6FC]"
+                      : "text-[#A8B2BD] hover:text-[#F0F6FC]"
                   }`}
                 >
                   <Compass className="h-4 w-4" />
@@ -230,7 +230,7 @@ export default function Header() {
                                 <Link
                                   key={link.href + link.label}
                                   href={link.href}
-                                  className="block px-2 py-1.5 text-sm text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
+                                  className="block px-2 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
                                 >
                                   {link.label}
                                 </Link>
@@ -263,7 +263,7 @@ export default function Header() {
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       isActive
                         ? "text-[#F0F6FC]"
-                        : "text-[#8B949E] hover:text-[#F0F6FC]"
+                        : "text-[#A8B2BD] hover:text-[#F0F6FC]"
                     }`}
                   >
                     {link.label}
@@ -277,7 +277,7 @@ export default function Header() {
               <ThemeToggle />
               <Link
                 href="/search"
-                className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#8B949E] hover:text-[#F0F6FC]"
+                className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#A8B2BD] hover:text-[#F0F6FC]"
                 title="Search (⌘K)"
               >
                 <Search className="h-4.5 w-4.5" />
@@ -292,7 +292,7 @@ export default function Header() {
                       {user?.avatarUrl ? (
                         <Image src={user.avatarUrl} alt="Profile" width={32} height={32} className="object-cover w-full h-full" />
                       ) : (
-                        <span className="text-xs font-bold text-[#8B949E]">
+                        <span className="text-xs font-bold text-[#A8B2BD]">
                           {(user?.displayName || user?.email || "A")[0].toUpperCase()}
                         </span>
                       )}
@@ -303,7 +303,7 @@ export default function Header() {
                 <div className="hidden sm:flex items-center gap-2 ml-2">
                   <Link
                     href="/login"
-                    className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                    className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
                   >
                     Sign In
                   </Link>
@@ -319,7 +319,7 @@ export default function Header() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-lg text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                className="lg:hidden p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
                 aria-label="Toggle menu"
               >
                 {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -344,7 +344,7 @@ export default function Header() {
               {/* Search */}
               <Link
                 href="/search"
-                className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-[#8B949E] hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors"
+                className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors"
               >
                 <Search className="h-5 w-5" />
                 Search
@@ -355,7 +355,7 @@ export default function Header() {
                 <Link
                   href="/dashboard"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    pathname === "/dashboard" ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#8B949E] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    pathname === "/dashboard" ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
                   }`}
                 >
                   Dashboard
@@ -364,7 +364,7 @@ export default function Header() {
               <Link
                 href="/feed"
                 className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                  pathname === "/feed" ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#8B949E] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                  pathname === "/feed" ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
                 }`}
               >
                 Feed
@@ -373,7 +373,7 @@ export default function Header() {
                 <Link
                   href="/journal"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    pathname.startsWith("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#8B949E] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    pathname.startsWith("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
                   }`}
                 >
                   Journal
@@ -401,13 +401,13 @@ export default function Header() {
                         <div key={section.title} className="px-4">
                           <div className="flex items-center gap-2 mb-1">
                             <Icon className="h-3.5 w-3.5 text-[#E8923A]" />
-                            <span className="text-[10px] font-bold text-[#484F58] uppercase tracking-widest">{section.title}</span>
+                            <span className="text-[10px] font-bold text-[#6E7681] uppercase tracking-widest">{section.title}</span>
                           </div>
                           {section.links.map((link) => (
                             <Link
                               key={link.href + link.label}
                               href={link.href}
-                              className="block px-3 py-2 text-sm text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
+                              className="block px-3 py-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
                             >
                               {link.label}
                             </Link>
@@ -431,25 +431,25 @@ export default function Header() {
               <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
                 {user ? (
                   <>
-                    <Link href="/notifications" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/notifications" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <Bell className="h-5 w-5" /> Notifications
                     </Link>
-                    <Link href="/messages" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/messages" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <MessageSquare className="h-5 w-5" /> Messages
                     </Link>
-                    <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <Heart className="h-5 w-5" /> Favorites
                     </Link>
-                    <Link href="/account/gear" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/account/gear" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <Package className="h-5 w-5" /> Gear Locker
                     </Link>
-                    <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <User className="h-5 w-5" /> Account
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className="block px-4 py-3 text-base font-medium text-[#8B949E] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/login" className="block px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       Sign In
                     </Link>
                     <Link href="/signup" className="block px-4 py-3 text-base font-medium text-white bg-[#E8923A] rounded-lg text-center hover:bg-[#d17d28]">

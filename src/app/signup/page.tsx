@@ -113,7 +113,7 @@ export default function SignupPage() {
       ? "text-green-400"
       : usernameStatus === "taken" || usernameStatus === "invalid"
       ? "text-red-400"
-      : "text-[#484F58]";
+      : "text-[#6E7681]";
 
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
@@ -125,7 +125,7 @@ export default function SignupPage() {
             <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">
               Welcome, {firstName}!
             </h2>
-            <p className="text-[#8B949E]">
+            <p className="text-[#A8B2BD]">
               We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
             </p>
             <Link
@@ -147,7 +147,7 @@ export default function SignupPage() {
           <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">
             {SITE_NAME}
           </Link>
-          <p className="mt-2 text-[#8B949E]">
+          <p className="mt-2 text-[#A8B2BD]">
             Create a free account to save favorites and log your sessions.
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function SignupPage() {
               <div className="w-full border-t border-[#21262D]" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#161B22] px-3 text-[#484F58] tracking-wider">
+              <span className="bg-[#161B22] px-3 text-[#6E7681] tracking-wider">
                 or sign up with email
               </span>
             </div>
@@ -201,7 +201,7 @@ export default function SignupPage() {
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-[#F0F6FC] mb-1">
                 USERNAME{" "}
-                <span className="text-[#484F58] font-normal">· optional</span>
+                <span className="text-[#6E7681] font-normal">· optional</span>
               </label>
               <div className="relative">
                 <input
@@ -221,7 +221,7 @@ export default function SignupPage() {
                 {/* Status indicator */}
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   {usernameStatus === "checking" && (
-                    <svg className="animate-spin h-4 w-4 text-[#484F58]" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-[#6E7681]" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
@@ -289,7 +289,7 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-[#8B949E]">
+          <p className="text-center text-sm text-[#A8B2BD]">
             Already have an account?{" "}
             <Link href="/login" className="text-[#E8923A] font-medium hover:text-[#cf7d30]">
               Sign in

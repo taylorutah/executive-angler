@@ -73,7 +73,7 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       className={`p-2.5 rounded-full transition-all ${
         isFavorite
           ? "bg-red-50 text-red-500 hover:bg-red-100"
-          : "bg-[#161B22]/80 text-[#8B949E] hover:text-red-500 hover:bg-[#161B22]"
+          : "bg-[#161B22]/80 text-[#A8B2BD] hover:text-red-500 hover:bg-[#161B22]"
       } shadow-sm backdrop-blur-sm`}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
     >

@@ -193,7 +193,7 @@ export default async function DestinationsPage() {
       <div className="bg-[#161B22] border-t border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Destinations</h2>
-          <p className="text-sm text-[#8B949E] mt-1">
+          <p className="text-sm text-[#A8B2BD] mt-1">
             {destinations.length} destinations — filterable by region
           </p>
         </div>

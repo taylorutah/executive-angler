@@ -108,7 +108,7 @@ export default function SetupClient({
     <div className="min-h-screen bg-[#0D1117]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[#8B949E] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/admin" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <h1 className="font-serif text-2xl text-[#F0F6FC]">Database Setup</h1>
@@ -116,7 +116,7 @@ export default function SetupClient({
 
         {/* Schema checks */}
         <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
-          <h2 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider mb-3">Schema Status</h2>
+          <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Schema Status</h2>
           <div className="space-y-2">
             {Object.entries(checks).map(([key, ok]) => (
               <div key={key} className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export default function SetupClient({
           <>
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-4">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-bold text-[#8B949E] uppercase tracking-wider">Migration SQL</h2>
+                <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Migration SQL</h2>
                 <div className="flex gap-2">
                   <button
                     onClick={handleCopy}
@@ -161,11 +161,11 @@ export default function SetupClient({
                   </a>
                 </div>
               </div>
-              <pre className="text-xs text-[#8B949E] bg-[#0D1117] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">
+              <pre className="text-xs text-[#A8B2BD] bg-[#0D1117] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">
                 {MIGRATION_SQL}
               </pre>
             </div>
-            <p className="text-xs text-[#484F58] text-center">
+            <p className="text-xs text-[#6E7681] text-center">
               Copy the SQL above → paste in Supabase SQL Editor → click Run → refresh this page
             </p>
           </>

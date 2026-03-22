@@ -306,7 +306,7 @@ export default function NewSessionPage() {
           <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
             <h2 className="text-sm font-bold text-[#E8923A] mb-4 flex items-center gap-2">
               🎣 Gear
-              <span className="text-xs font-normal text-[#484F58] normal-case">Pre-filled from your defaults</span>
+              <span className="text-xs font-normal text-[#6E7681] normal-case">Pre-filled from your defaults</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />

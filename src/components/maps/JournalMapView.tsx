@@ -34,7 +34,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing Mapbox token</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing Mapbox token</div>';
       }
       return;
     }
@@ -47,7 +47,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
     if (sessionsWithCoords.length === 0) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">No sessions with map locations yet</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">No sessions with map locations yet</div>';
       }
       return;
     }
@@ -81,7 +81,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
             <div style="font-weight: 600; color: #0D1117; margin-bottom: 4px;">
               ${session.river_name || session.location || "Session"}
             </div>
-            <div style="font-size: 12px; color: #8B949E; margin-bottom: 6px;">
+            <div style="font-size: 12px; color: #A8B2BD; margin-bottom: 6px;">
               ${formattedDate}
             </div>
             ${
@@ -131,7 +131,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#8B949E;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
       }
     }
 
