@@ -19,7 +19,10 @@ import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -72,6 +75,11 @@ export default async function RiverPage({ params }: Props) {
   const { slug } = await params;
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
@@ -149,15 +157,29 @@ export default async function RiverPage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={river.heroImageUrl}
-        imageAlt={`${river.name} fly fishing`}
-        title={river.name}
-        subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
-        height="h-[45vh]"
-        imageCredit={river.heroImageCredit}
-        imageCreditUrl={river.heroImageCreditUrl}
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={river.heroImageUrl}
+          imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
+          title={river.name}
+          subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
+          height="h-[45vh]"
+          imageCredit={river.heroImageCredit}
+          imageCreditUrl={river.heroImageCreditUrl}
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="rivers"
+              entityId={river.id}
+              currentImageUrl={river.heroImageUrl}
+              currentAlt={river.heroImageAlt}
+              currentCredit={river.heroImageCredit}
+              currentCreditUrl={river.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 

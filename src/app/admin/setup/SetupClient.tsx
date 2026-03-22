@@ -58,17 +58,23 @@ WHERE user_id IN (
   WHERE email IN ('taylor.warnick@gmail.com', 'taylor@executiveangler.com')
 );
 
--- 7. Photo credit columns on all entity tables
+-- 7. Photo credit + alt text columns on all entity tables
+ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE destinations ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE destinations ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE destinations ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE fly_shops ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE fly_shops ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE fly_shops ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE lodges ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE lodges ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE lodges ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
 
