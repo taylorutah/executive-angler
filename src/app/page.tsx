@@ -13,6 +13,14 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Log Catches, Track Rivers, Join 200+ Anglers`,
     description: "Free fly fishing app to log sessions, track catches with GPS, and analyze patterns across 200+ rivers. Built for serious anglers.",
     url: SITE_URL,
+    images: [
+      {
+        url: "/images/madison-river-three-dollar-bridge.jpg",
+        width: 1920,
+        height: 1036,
+        alt: "The Madison River in Montana — Executive Angler",
+      },
+    ],
   },
   alternates: { canonical: SITE_URL },
 };
