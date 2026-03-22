@@ -367,7 +367,7 @@ export default function DashboardClient({
                           <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
                             <div className="flex items-center gap-1.5 mb-1">
                               <Fish className="h-3 w-3 text-[#0BA5C7]" />
-                              <span className="text-[10px] text-[#6E7681] uppercase tracking-wide">Species</span>
+                              <span className="text-[10px] text-[#A8B2BD] uppercase tracking-wide">Species</span>
                             </div>
                             <p className="font-mono text-lg font-bold text-[#F0F6FC]">{rs.species_caught.length}</p>
                             {rs.species_caught.length > 0 && (
@@ -377,7 +377,7 @@ export default function DashboardClient({
                           <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
                             <div className="flex items-center gap-1.5 mb-1">
                               <Target className="h-3 w-3 text-[#0BA5C7]" />
-                              <span className="text-[10px] text-[#6E7681] uppercase tracking-wide">{rs.biggest_fish ? "Biggest" : "Top Fly"}</span>
+                              <span className="text-[10px] text-[#A8B2BD] uppercase tracking-wide">{rs.biggest_fish ? "Biggest" : "Top Fly"}</span>
                             </div>
                             {rs.biggest_fish ? (
                               <p className="font-mono text-lg font-bold text-[#F0F6FC]">
@@ -673,7 +673,7 @@ function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string
     <div className="bg-[#0D1117] rounded-lg p-3 border border-[#21262D]">
       <div className="flex items-center gap-1.5 mb-1">
         {icon}
-        <span className="text-[10px] text-[#6E7681] uppercase tracking-wide">{label}</span>
+        <span className="text-[10px] text-[#A8B2BD] uppercase tracking-wide">{label}</span>
       </div>
       <p className="font-mono text-lg font-bold text-[#F0F6FC]">{value}</p>
     </div>
