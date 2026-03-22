@@ -406,6 +406,28 @@
   color: #E0E6EC !important;
 }
 
+/* Override light-themed Tailwind classes embedded in article HTML content */
+.article-body .text-slate-600,
+.article-body .text-slate-500,
+.article-body .text-slate-400,
+.article-body .text-gray-600,
+.article-body .text-gray-500 {
+  color: #D8DEE4 !important;
+}
+
+.article-body .text-forest-dark {
+  color: #F0F6FC !important;
+}
+
+.article-body .bg-forest\/5,
+.article-body [class*="bg-forest"] {
+  background-color: rgba(232, 146, 58, 0.06) !important;
+}
+
+.article-body .border-forest {
+  border-color: #E8923A !important;
+}
+
 .article-body table {
   width: 100%;
   font-size: 0.875rem;
