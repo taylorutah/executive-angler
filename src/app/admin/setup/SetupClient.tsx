@@ -77,6 +77,9 @@ ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
 ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_alt text;
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
 
 -- 8. Indexes
 CREATE INDEX IF NOT EXISTS idx_audit_log_target ON admin_audit_log(target_user_id);

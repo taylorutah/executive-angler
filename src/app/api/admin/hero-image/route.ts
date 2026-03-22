@@ -72,16 +72,39 @@ export async function PATCH(request: Request) {
   }
 
   if (result.error) {
-    // If hero_image_alt column doesn't exist, retry without it
-    if (result.error.message?.includes("hero_image_alt")) {
-      delete update.hero_image_alt;
-      const retry = await supabase.from(table).update(update).eq("id", entity_id);
-      if (retry.error) {
-        return NextResponse.json({ error: retry.error.message }, { status: 500 });
+    // Column might not exist yet — progressively strip fields and retry
+    const missingCols = ["hero_image_credit_url", "hero_image_credit", "hero_image_alt"];
+    let retryUpdate = { ...update };
+    let lastError = result.error;
+
+    for (const col of missingCols) {
+      if (lastError.message?.includes(col)) {
+        delete retryUpdate[col];
+        const retry = await supabase.from(table).update(retryUpdate).eq("id", entity_id);
+        if (!retry.error) {
+          // Also try by slug if id didn't match
+          if (retry.count === 0) {
+            await supabase.from(table).update(retryUpdate).eq("slug", entity_id);
+          }
+          const missing = missingCols.filter(c => !(c in retryUpdate));
+          return NextResponse.json({ success: true, note: `Columns missing (run migration): ${missing.join(", ")}` });
+        }
+        lastError = retry.error;
       }
-      return NextResponse.json({ success: true, note: "hero_image_alt column not yet added — run migration" });
     }
-    return NextResponse.json({ error: result.error.message }, { status: 500 });
+
+    // Last resort: just update hero_image_url only
+    if (hero_image_url) {
+      const minimal = await supabase.from(table).update({ hero_image_url }).eq("id", entity_id);
+      if (!minimal.error) {
+        if (minimal.count === 0) {
+          await supabase.from(table).update({ hero_image_url }).eq("slug", entity_id);
+        }
+        return NextResponse.json({ success: true, note: "Only hero_image_url updated — credit/alt columns missing" });
+      }
+    }
+
+    return NextResponse.json({ error: lastError.message }, { status: 500 });
   }
 
   // Log the action
