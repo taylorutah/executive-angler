@@ -194,30 +194,8 @@ export default async function HomePage() {
       <section className="bg-[#161B22] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Session card mockup */}
-            <ScrollAnimation>
-              <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 shadow-2xl">
-                <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
-                <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  {[{ n: "14", l: "Fish" }, { n: "3h 12m", l: "Duration" }, { n: "18\"", l: "Best" }].map((s) => (
-                    <div key={s.l}>
-                      <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-3xl font-normal">{s.n}</div>
-                      <div className="text-[#8B949E] text-xs">{s.l}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {["54\u00B0F", "#18 RS2", "Clear", "1,240 cfs"].map((tag) => (
-                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[#0BA5C7] rounded-full px-3 py-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollAnimation>
-            {/* Copy */}
-            <ScrollAnimation delay={0.2}>
+            {/* Copy — shown first on mobile for context, right on desktop */}
+            <ScrollAnimation delay={0.2} className="order-1 lg:order-2">
               <p className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs uppercase tracking-[0.15em] mb-4">EXECUTIVE ANGLER APP</p>
               <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
                 Your journal.<br />Your data.<br />Your river.
@@ -241,6 +219,35 @@ export default async function HomePage() {
                 Join the Waitlist &rarr;
               </a>
               <p className="font-['IBM_Plex_Mono'] text-[#484F58] text-xs mt-3">iPhone + Apple Watch &bull; Free to start</p>
+            </ScrollAnimation>
+
+            {/* Session card mockup — shown second on mobile, left on desktop */}
+            <ScrollAnimation className="order-2 lg:order-1">
+              <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 shadow-2xl">
+                <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
+                <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div>
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-3xl font-normal">14</div>
+                    <div className="text-[#8B949E] text-xs">Fish</div>
+                  </div>
+                  <div>
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-2xl sm:text-3xl font-normal whitespace-nowrap">3h 12m</div>
+                    <div className="text-[#8B949E] text-xs">Duration</div>
+                  </div>
+                  <div>
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-3xl font-normal">18&quot;</div>
+                    <div className="text-[#8B949E] text-xs">Best</div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {["54\u00B0F", "#18 RS2", "Clear", "1,240 cfs"].map((tag) => (
+                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[#0BA5C7] rounded-full px-3 py-1">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </ScrollAnimation>
           </div>
         </div>
