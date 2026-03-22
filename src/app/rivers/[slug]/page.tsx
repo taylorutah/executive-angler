@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
+import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
@@ -175,7 +176,10 @@ export default async function RiverPage({ params }: Props) {
                 { label: river.name },
               ]}
             />
-            <FavoriteButton entityType="river" entityId={river.id} />
+            <div className="flex items-center gap-3">
+              <ReportButton entityType="river" entityId={river.id} />
+              <FavoriteButton entityType="river" entityId={river.id} />
+            </div>
           </div>
         </div>
       </div>

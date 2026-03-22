@@ -114,6 +114,14 @@ export default function AdminClient({
               </div>
               <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
             </Link>
+            <Link href="/admin/users" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#0BA5C7] transition-colors">
+              <Users className="h-5 w-5 text-[#0BA5C7]" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Users</p>
+                <p className="text-[11px] text-[#484F58]">Manage accounts, Pro & bans</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#484F58] group-hover:text-[#0BA5C7]" />
+            </Link>
             <Link href="/admin/submissions" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-purple-400 transition-colors">
               <Send className="h-5 w-5 text-purple-400" />
               <div className="flex-1">

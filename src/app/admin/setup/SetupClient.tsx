@@ -58,7 +58,21 @@ WHERE user_id IN (
   WHERE email IN ('taylor.warnick@gmail.com', 'taylor@executiveangler.com')
 );
 
--- 7. Indexes
+-- 7. Photo credit columns on all entity tables
+ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE destinations ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE destinations ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE fly_shops ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE fly_shops ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE lodges ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE lodges ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE guides ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit text;
+ALTER TABLE species ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
+
+-- 8. Indexes
 CREATE INDEX IF NOT EXISTS idx_audit_log_target ON admin_audit_log(target_user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created ON admin_audit_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_user_notes_user ON admin_user_notes(user_id);

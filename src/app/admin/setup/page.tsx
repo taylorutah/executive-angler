@@ -27,6 +27,14 @@ export default async function AdminSetupPage() {
   const { error: e4 } = await supabase.from("admin_user_notes").select("id").limit(1);
   checks["admin_user_notes"] = !e4;
 
+  // community_submissions table
+  const { error: e5 } = await supabase.from("community_submissions").select("id").limit(1);
+  checks["community_submissions"] = !e5;
+
+  // Photo credit columns
+  const { error: e6 } = await supabase.from("rivers").select("hero_image_credit").limit(1);
+  checks["rivers.hero_image_credit"] = !e6;
+
   const allGood = Object.values(checks).every(Boolean);
 
   return <SetupClient checks={checks} allGood={allGood} />;
