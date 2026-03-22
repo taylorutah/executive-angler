@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { escapeHtml } from "@/lib/html-escape";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) return null;
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
         from: "Executive Angler <noreply@executiveangler.com>",
         to: "taylor.warnick@gmail.com",
         replyTo: email,
-        subject: `Contact Form: ${subject}`,
+        subject: `Contact Form: ${escapeHtml(subject)}`,
         html: `
           <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto;">
             <div style="background: #1B4332; padding: 24px; text-align: center;">
@@ -62,20 +63,20 @@ export async function POST(request: NextRequest) {
               <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 16px;">
                 <tr>
                   <td style="padding: 8px 0; color: #94A3B8; width: 100px;">From</td>
-                  <td style="padding: 8px 0; color: #334155;">${name}</td>
+                  <td style="padding: 8px 0; color: #334155;">${escapeHtml(name)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #94A3B8;">Email</td>
-                  <td style="padding: 8px 0; color: #334155;"><a href="mailto:${email}" style="color: #1B4332;">${email}</a></td>
+                  <td style="padding: 8px 0; color: #334155;"><a href="mailto:${escapeHtml(email)}" style="color: #1B4332;">${escapeHtml(email)}</a></td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #94A3B8;">Subject</td>
-                  <td style="padding: 8px 0; color: #334155;">${subject}</td>
+                  <td style="padding: 8px 0; color: #334155;">${escapeHtml(subject)}</td>
                 </tr>
               </table>
               <div style="border-top: 1px solid #E2E8F0; padding-top: 16px;">
                 <p style="color: #94A3B8; font-size: 12px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.08em;">Message</p>
-                <p style="color: #334155; line-height: 1.6; margin: 0; white-space: pre-wrap;">${message}</p>
+                <p style="color: #334155; line-height: 1.6; margin: 0; white-space: pre-wrap;">${escapeHtml(message)}
               </div>
             </div>
             <div style="padding: 12px 24px; background: #F8FAFC; text-align: center; border: 1px solid #E2E8F0; border-top: none;">

@@ -135,6 +135,21 @@ function getNotificationContent(
 
 export async function POST(req: NextRequest) {
   try {
+    // Auth: require webhook secret OR authenticated user
+    const authHeader = req.headers.get("x-webhook-secret");
+    const webhookSecret = process.env.WEBHOOK_SECRET || process.env.PHOTO_REVIEW_SECRET;
+    const isWebhook = authHeader && webhookSecret && authHeader === webhookSecret;
+
+    if (!isWebhook) {
+      // Fallback: check if request is from an authenticated Supabase user
+      const { createClient: createServerClient } = await import("@/lib/supabase/server");
+      const supabase = await createServerClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        return NextResponse.json({ sent: false, reason: "Unauthorized" }, { status: 401 });
+      }
+    }
+
     const body = await req.json();
     const { type, recipientId, actorId, sessionId } = body as {
       type: "follow" | "comment" | "like";
