@@ -223,21 +223,23 @@ export default async function HomePage() {
 
             {/* Session card mockup — shown second on mobile, left on desktop */}
             <ScrollAnimation className="order-2 lg:order-1">
-              <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 shadow-2xl">
+              <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
                 <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
                 <p className="font-['IBM_Plex_Mono'] text-[#8B949E] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div>
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-3xl font-normal">14</div>
-                    <div className="text-[#8B949E] text-xs">Fish</div>
+                <div className="flex items-baseline justify-between mb-6">
+                  <div className="text-center">
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">14</div>
+                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
                   </div>
-                  <div>
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-2xl sm:text-3xl font-normal whitespace-nowrap">3h 12m</div>
-                    <div className="text-[#8B949E] text-xs">Duration</div>
+                  <div className="h-8 w-px bg-[#21262D]" />
+                  <div className="text-center">
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none whitespace-nowrap">3<span className="text-2xl">h</span> 12<span className="text-2xl">m</span></div>
+                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
                   </div>
-                  <div>
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-3xl font-normal">18&quot;</div>
-                    <div className="text-[#8B949E] text-xs">Best</div>
+                  <div className="h-8 w-px bg-[#21262D]" />
+                  <div className="text-center">
+                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">18<span className="text-2xl">&quot;</span></div>
+                    <div className="text-[#8B949E] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
