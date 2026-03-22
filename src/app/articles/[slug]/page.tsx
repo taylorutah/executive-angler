@@ -7,8 +7,11 @@ import Badge from "@/components/ui/Badge";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds } from "@/lib/db";
 import { getAuthorByArticleName } from "@/data/authors";
 
@@ -49,6 +52,10 @@ export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
+
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const allArticles = await getAllArticles();
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
@@ -105,6 +112,18 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* Hero — tall, cinematic */}
       <section className="relative h-[62vh] min-h-[420px] w-full overflow-hidden">
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="articles"
+              entityId={article.id}
+              currentImageUrl={article.heroImageUrl}
+              currentAlt={article.heroImageAlt}
+              currentCredit={article.heroImageCredit}
+              currentCreditUrl={article.heroImageCreditUrl}
+            />
+          </div>
+        )}
         <Image
           src={article.heroImageUrl}
           alt={article.title}

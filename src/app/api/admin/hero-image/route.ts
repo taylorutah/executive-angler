@@ -40,6 +40,8 @@ export async function PATCH(request: Request) {
     guides: "guides",
     guide: "guides",
     species: "species",
+    articles: "articles",
+    article: "articles",
   };
 
   const table = TABLE_MAP[entity_type];
