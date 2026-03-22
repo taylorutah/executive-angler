@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
+import Cropper from "react-easy-crop";
+import type { Area } from "react-easy-crop";
 import {
   Camera, Upload, X, Save, Loader2, CheckCircle, Info,
-  Pencil, Image as ImageIcon, Type, User, Link as LinkIcon
+  Pencil, Image as ImageIcon, Type, User, Link as LinkIcon, Crop, RotateCw
 } from "lucide-react";
 
 interface HeroImageEditorProps {
-  entityType: string; // "rivers", "destinations", "fly_shops", etc.
-  entityId: string;   // slug or uuid
+  entityType: string;
+  entityId: string;
   currentImageUrl: string;
   currentAlt?: string;
   currentCredit?: string;
@@ -34,7 +36,19 @@ export default function HeroImageEditor({
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  async function handleFileUpload(file: File) {
+  // Crop state
+  const [cropMode, setCropMode] = useState(false);
+  const [rawImageUrl, setRawImageUrl] = useState<string>("");
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [cropProcessing, setCropProcessing] = useState(false);
+
+  const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
+  async function handleFileSelect(file: File) {
     if (!file.type.startsWith("image/")) {
       setError("Please upload an image (JPEG, PNG, or WebP)");
       return;
@@ -43,13 +57,29 @@ export default function HeroImageEditor({
       setError("Image too large. Maximum 15 MB.");
       return;
     }
+    setError(null);
 
-    setUploading(true);
+    // Show crop UI with local preview
+    const localUrl = URL.createObjectURL(file);
+    setRawImageUrl(localUrl);
+    setCropMode(true);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+  }
+
+  async function handleCropConfirm() {
+    if (!croppedAreaPixels || !rawImageUrl) return;
+    setCropProcessing(true);
     setError(null);
 
     try {
+      // Create cropped image on canvas
+      const croppedBlob = await getCroppedImage(rawImageUrl, croppedAreaPixels);
+
+      // Upload cropped image
+      setUploading(true);
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", croppedBlob, "hero-cropped.jpg");
       formData.append("submission_id", `hero-${entityType}-${entityId}`);
 
       const res = await fetch("/api/submissions/upload", {
@@ -61,28 +91,31 @@ export default function HeroImageEditor({
       if (!res.ok) throw new Error(result.error || "Upload failed");
 
       setImageUrl(result.url);
+      setCropMode(false);
+      URL.revokeObjectURL(rawImageUrl);
 
-      // Auto-generate alt text suggestion if empty
+      // Auto-generate alt text if empty
       if (!altText) {
         const name = entityId.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
         setAltText(`${name} — fly fishing`);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Upload failed");
+      setError(e instanceof Error ? e.message : "Crop/upload failed");
     }
 
     setUploading(false);
+    setCropProcessing(false);
+  }
+
+  function handleCropCancel() {
+    setCropMode(false);
+    if (rawImageUrl) URL.revokeObjectURL(rawImageUrl);
+    setRawImageUrl("");
   }
 
   async function handleSave() {
-    if (!imageUrl) {
-      setError("No image selected");
-      return;
-    }
-    if (!altText.trim()) {
-      setError("Alt text is required for SEO. Describe what's in the image.");
-      return;
-    }
+    if (!imageUrl) { setError("No image selected"); return; }
+    if (!altText.trim()) { setError("Alt text is required for SEO."); return; }
 
     setSaving(true);
     setError(null);
@@ -105,15 +138,10 @@ export default function HeroImageEditor({
       if (!res.ok) throw new Error(result.error || "Save failed");
 
       setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        setIsOpen(false);
-        window.location.reload();
-      }, 1500);
+      setTimeout(() => { setSuccess(false); setIsOpen(false); window.location.reload(); }, 1500);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
     }
-
     setSaving(false);
   }
 
@@ -130,6 +158,78 @@ export default function HeroImageEditor({
     );
   }
 
+  // Crop mode UI
+  if (cropMode && rawImageUrl) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black flex flex-col">
+        {/* Crop header */}
+        <div className="flex items-center justify-between px-4 py-3 bg-[#161B22] border-b border-[#21262D]">
+          <div className="flex items-center gap-2">
+            <Crop className="h-5 w-5 text-[#E8923A]" />
+            <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
+            <span className="text-[10px] text-[#484F58] ml-2">21:9 aspect ratio · Drag to reposition · Scroll to zoom</span>
+          </div>
+          <button onClick={handleCropCancel} className="text-[#484F58] hover:text-[#F0F6FC]">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Crop area */}
+        <div className="flex-1 relative">
+          <Cropper
+            image={rawImageUrl}
+            crop={crop}
+            zoom={zoom}
+            aspect={21 / 9}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+            showGrid={true}
+            cropShape="rect"
+            style={{
+              containerStyle: { background: "#000" },
+              cropAreaStyle: { border: "2px solid #E8923A" },
+            }}
+          />
+        </div>
+
+        {/* Zoom slider + actions */}
+        <div className="px-6 py-4 bg-[#161B22] border-t border-[#21262D]">
+          <div className="flex items-center gap-4 mb-4">
+            <span className="text-xs text-[#8B949E]">Zoom</span>
+            <input
+              type="range"
+              min={1}
+              max={3}
+              step={0.05}
+              value={zoom}
+              onChange={e => setZoom(Number(e.target.value))}
+              className="flex-1 accent-[#E8923A]"
+            />
+            <span className="text-xs text-[#8B949E] font-mono w-10 text-right">{zoom.toFixed(1)}×</span>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={handleCropCancel}
+              className="flex-1 px-4 py-3 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleCropConfirm}
+              disabled={cropProcessing}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+            >
+              {cropProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
+              {cropProcessing ? "Processing..." : "Apply Crop"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Main editor modal
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
       <div className="bg-[#161B22] border border-[#21262D] rounded-2xl max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
@@ -159,7 +259,7 @@ export default function HeroImageEditor({
                     <li>• <strong>File size:</strong> 200–500 KB ideal, 15 MB max</li>
                     <li>• <strong>Quality:</strong> 80% JPEG compression</li>
                     <li>• <strong>Content:</strong> Landscape, no text overlays</li>
-                    <li>• <strong>Focus:</strong> Subject in center/left third (text overlays right)</li>
+                    <li>• <strong>Focus:</strong> Subject in center/left third</li>
                   </ul>
                 </div>
               </div>
@@ -172,9 +272,10 @@ export default function HeroImageEditor({
                 <div className="absolute top-2 right-2 flex gap-1.5">
                   <button
                     onClick={() => fileRef.current?.click()}
-                    className="px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors"
+                    className="px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors flex items-center gap-1"
                   >
-                    Replace
+                    <Crop className="h-3 w-3" />
+                    Replace & Crop
                   </button>
                   <button
                     onClick={() => setImageUrl("")}
@@ -195,17 +296,16 @@ export default function HeroImageEditor({
                   e.preventDefault();
                   e.currentTarget.classList.remove("border-[#E8923A]");
                   const file = e.dataTransfer.files[0];
-                  if (file) await handleFileUpload(file);
+                  if (file) await handleFileSelect(file);
                 }}
               >
                 <input
-                  ref={fileRef}
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
                   className="hidden"
                   onChange={async e => {
                     const file = e.target.files?.[0];
-                    if (file) await handleFileUpload(file);
+                    if (file) await handleFileSelect(file);
                   }}
                 />
                 {uploading ? (
@@ -217,16 +317,16 @@ export default function HeroImageEditor({
                   <>
                     <Upload className="h-8 w-8 text-[#484F58] mb-2" />
                     <span className="text-sm text-[#8B949E] font-medium">Drop image here or click to browse</span>
-                    <span className="text-[10px] text-[#484F58] mt-1">2400×1000px ideal · JPEG/WebP · 15 MB max</span>
+                    <span className="text-[10px] text-[#484F58] mt-1">Drag & crop to 21:9 · JPEG/WebP · 15 MB max</span>
                   </>
                 )}
               </label>
             )}
             <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
-              onChange={async e => { const f = e.target.files?.[0]; if (f) await handleFileUpload(f); }} />
+              onChange={async e => { const f = e.target.files?.[0]; if (f) await handleFileSelect(f); }} />
           </div>
 
-          {/* Alt text — REQUIRED */}
+          {/* Alt text */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-bold text-[#8B949E] uppercase tracking-wider flex items-center gap-1">
@@ -238,9 +338,8 @@ export default function HeroImageEditor({
                 <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#8B949E] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
                   <p className="font-bold text-[#F0F6FC] mb-1">SEO alt text tips:</p>
                   <ul className="space-y-0.5">
-                    <li>• Describe the scene: river, location, season, conditions</li>
+                    <li>• Describe the scene: river, location, season</li>
                     <li>• Include keywords: "fly fishing", river name, state</li>
-                    <li>• Be specific: "Fall brown trout fishing on the Madison River near Three Dollar Bridge" not "river photo"</li>
                     <li>• 80–125 characters is ideal for Google</li>
                   </ul>
                 </div>
@@ -256,7 +355,7 @@ export default function HeroImageEditor({
             />
             <div className="flex justify-between mt-1">
               <span className={`text-[10px] ${altText.length >= 80 && altText.length <= 125 ? "text-[#2EA44F]" : altText.length > 0 ? "text-[#E8923A]" : "text-[#484F58]"}`}>
-                {altText.length >= 80 && altText.length <= 125 ? "Perfect length for SEO" : altText.length > 125 ? "A bit long — aim for 80–125 chars" : "Aim for 80–125 characters"}
+                {altText.length >= 80 && altText.length <= 125 ? "✓ Perfect length for SEO" : altText.length > 125 ? "A bit long — aim for 80–125" : "Aim for 80–125 characters"}
               </span>
               <span className="text-[10px] text-[#484F58]">{altText.length}/200</span>
             </div>
@@ -274,44 +373,33 @@ export default function HeroImageEditor({
                   <User className="h-2.5 w-2.5 text-[#484F58]" />
                   <span className="text-[10px] text-[#484F58]">Photographer</span>
                 </div>
-                <input
-                  type="text"
-                  value={credit}
-                  onChange={e => setCredit(e.target.value)}
+                <input type="text" value={credit} onChange={e => setCredit(e.target.value)}
                   placeholder="Pat Ford Photography"
-                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
-                />
+                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
               </div>
               <div>
                 <div className="flex items-center gap-1 mb-1">
                   <LinkIcon className="h-2.5 w-2.5 text-[#484F58]" />
                   <span className="text-[10px] text-[#484F58]">Portfolio URL</span>
                 </div>
-                <input
-                  type="url"
-                  value={creditUrl}
-                  onChange={e => setCreditUrl(e.target.value)}
+                <input type="url" value={creditUrl} onChange={e => setCreditUrl(e.target.value)}
                   placeholder="https://patford.com"
-                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]"
-                />
+                  className="w-full px-3 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#484F58] focus:outline-none focus:border-[#E8923A]" />
               </div>
             </div>
           </div>
 
           {/* Error / Success */}
           {error && (
-            <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">
-              {error}
-            </div>
+            <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">{error}</div>
           )}
           {success && (
             <div className="px-4 py-3 bg-green-950/30 border border-green-800 rounded-lg text-sm text-green-400 flex items-center gap-2">
-              <CheckCircle className="h-4 w-4" />
-              Saved! Reloading...
+              <CheckCircle className="h-4 w-4" /> Saved! Reloading...
             </div>
           )}
 
-          {/* Save button */}
+          {/* Save */}
           <button
             onClick={handleSave}
             disabled={saving || !imageUrl || !altText.trim()}
@@ -324,4 +412,44 @@ export default function HeroImageEditor({
       </div>
     </div>
   );
+}
+
+// MARK: - Canvas Crop Helper
+
+async function getCroppedImage(imageSrc: string, crop: Area): Promise<Blob> {
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("No canvas context");
+
+  // Output at max 2400px wide for hero images
+  const maxWidth = 2400;
+  const scale = Math.min(maxWidth / crop.width, 1);
+
+  canvas.width = Math.round(crop.width * scale);
+  canvas.height = Math.round(crop.height * scale);
+
+  ctx.drawImage(
+    image,
+    crop.x, crop.y, crop.width, crop.height,
+    0, 0, canvas.width, canvas.height
+  );
+
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      blob => blob ? resolve(blob) : reject(new Error("Canvas toBlob failed")),
+      "image/jpeg",
+      0.85
+    );
+  });
+}
+
+function createImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.addEventListener("load", () => resolve(img));
+    img.addEventListener("error", reject);
+    img.crossOrigin = "anonymous";
+    img.src = url;
+  });
 }
