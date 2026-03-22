@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
 
 /**
  * PATCH /api/admin/hero-image
  * Update hero image, alt text, and photo credit for any entity.
+ * Uses service role key to bypass RLS.
  * Admin only.
  */
 export async function PATCH(request: Request) {
+  // Auth check via user session
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isAdmin(user.email)) {
@@ -27,21 +30,14 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "entity_type and entity_id are required" }, { status: 400 });
   }
 
-  // Map entity types to table names
   const TABLE_MAP: Record<string, string> = {
-    rivers: "rivers",
-    river: "rivers",
-    destinations: "destinations",
-    destination: "destinations",
-    fly_shops: "fly_shops",
-    fly_shop: "fly_shops",
-    lodges: "lodges",
-    lodge: "lodges",
-    guides: "guides",
-    guide: "guides",
+    rivers: "rivers", river: "rivers",
+    destinations: "destinations", destination: "destinations",
+    fly_shops: "fly_shops", fly_shop: "fly_shops",
+    lodges: "lodges", lodge: "lodges",
+    guides: "guides", guide: "guides",
     species: "species",
-    articles: "articles",
-    article: "articles",
+    articles: "articles", article: "articles",
   };
 
   const table = TABLE_MAP[entity_type];
@@ -49,73 +45,95 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: `Unknown entity type: ${entity_type}` }, { status: 400 });
   }
 
-  // Determine the ID column — rivers use 'id' (slug), others may use 'id' or 'slug'
-  // Try slug first, fall back to id
+  // Use service role client to bypass RLS
+  const admin = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  // Build update payload
   const update: Record<string, unknown> = {};
   if (hero_image_url !== undefined) update.hero_image_url = hero_image_url;
   if (hero_image_alt !== undefined) update.hero_image_alt = hero_image_alt;
   if (hero_image_credit !== undefined) update.hero_image_credit = hero_image_credit;
   if (hero_image_credit_url !== undefined) update.hero_image_credit_url = hero_image_credit_url;
 
-  // Try by slug first
-  let result = await supabase
+  // Try by id first, then by slug
+  let { data, error } = await admin
     .from(table)
     .update(update)
-    .eq("slug", entity_id);
+    .eq("id", entity_id)
+    .select("id")
+    .maybeSingle();
 
-  // If no rows matched by slug, try by id
-  if (result.error || result.count === 0) {
-    result = await supabase
+  if (!data && !error) {
+    // No row matched by id — try slug
+    const slugResult = await admin
       .from(table)
       .update(update)
-      .eq("id", entity_id);
+      .eq("slug", entity_id)
+      .select("id")
+      .maybeSingle();
+    data = slugResult.data;
+    error = slugResult.error;
   }
 
-  if (result.error) {
-    // Column might not exist yet — progressively strip fields and retry
-    const missingCols = ["hero_image_credit_url", "hero_image_credit", "hero_image_alt"];
+  if (error) {
+    // Column might not exist — progressively strip and retry
+    const cols = ["hero_image_credit_url", "hero_image_credit", "hero_image_alt"];
     let retryUpdate = { ...update };
-    let lastError = result.error;
+    let lastErr = error;
 
-    for (const col of missingCols) {
-      if (lastError.message?.includes(col)) {
+    for (const col of cols) {
+      if (lastErr.message?.includes(col)) {
         delete retryUpdate[col];
-        const retry = await supabase.from(table).update(retryUpdate).eq("id", entity_id);
+        const retry = await admin.from(table).update(retryUpdate).eq("id", entity_id).select("id").maybeSingle();
         if (!retry.error) {
-          // Also try by slug if id didn't match
-          if (retry.count === 0) {
-            await supabase.from(table).update(retryUpdate).eq("slug", entity_id);
+          if (!retry.data) {
+            await admin.from(table).update(retryUpdate).eq("slug", entity_id);
           }
-          const missing = missingCols.filter(c => !(c in retryUpdate));
-          return NextResponse.json({ success: true, note: `Columns missing (run migration): ${missing.join(", ")}` });
+          await logAudit(admin, user, entity_type, entity_id, update);
+          return NextResponse.json({ success: true, note: `Column ${col} missing — run migration` });
         }
-        lastError = retry.error;
+        lastErr = retry.error;
       }
     }
 
-    // Last resort: just update hero_image_url only
+    // Last resort: just hero_image_url
     if (hero_image_url) {
-      const minimal = await supabase.from(table).update({ hero_image_url }).eq("id", entity_id);
+      const minimal = await admin.from(table).update({ hero_image_url }).eq("id", entity_id).select("id").maybeSingle();
       if (!minimal.error) {
-        if (minimal.count === 0) {
-          await supabase.from(table).update({ hero_image_url }).eq("slug", entity_id);
-        }
-        return NextResponse.json({ success: true, note: "Only hero_image_url updated — credit/alt columns missing" });
+        if (!minimal.data) await admin.from(table).update({ hero_image_url }).eq("slug", entity_id);
+        await logAudit(admin, user, entity_type, entity_id, { hero_image_url });
+        return NextResponse.json({ success: true, note: "Only hero_image_url updated" });
       }
     }
 
-    return NextResponse.json({ error: lastError.message }, { status: 500 });
+    return NextResponse.json({ error: lastErr.message }, { status: 500 });
   }
 
-  // Log the action
+  if (!data) {
+    return NextResponse.json({ error: `No ${entity_type} found with id or slug: ${entity_id}` }, { status: 404 });
+  }
+
+  await logAudit(admin, user, entity_type, entity_id, update);
+  return NextResponse.json({ success: true });
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function logAudit(
+  admin: any,
+  user: { id: string; email?: string },
+  entityType: string,
+  entityId: string,
+  update: Record<string, unknown>
+) {
   try {
-    await supabase.from("admin_audit_log").insert({
+    await admin.from("admin_audit_log").insert({
       admin_user_id: user.id,
       admin_email: user.email,
       action: "update_hero_image",
-      details: { entity_type, entity_id, hero_image_url, hero_image_alt, hero_image_credit },
+      details: { entity_type: entityType, entity_id: entityId, ...update },
     });
-  } catch { /* audit log optional */ }
-
-  return NextResponse.json({ success: true });
+  } catch { /* audit optional */ }
 }
