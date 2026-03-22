@@ -308,7 +308,7 @@
    ============================================= */
 
 .article-body {
-  color: #C9D1D9;
+  color: #D8DEE4;
   font-size: 1rem;
   line-height: 1.8;
   max-width: 100%;
@@ -401,8 +401,9 @@
   font-style: italic;
 }
 
-.article-body blockquote p {
-  color: #D4DAE0 !important;
+.article-body blockquote p,
+.article-body blockquote {
+  color: #E0E6EC !important;
 }
 
 .article-body table {
@@ -450,7 +451,7 @@
 .river-body p {
   font-size: 1rem;       /* floor — never smaller than 16px */
   line-height: 1.8;
-  color: #A8B2BD;
+  color: #D8DEE4;
   margin-bottom: 1rem;
 }
 
