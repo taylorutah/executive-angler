@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Camera } from "lucide-react";
 
 interface HeroSectionProps {
   imageUrl: string;
@@ -9,6 +10,10 @@ interface HeroSectionProps {
   overlay?: "dark" | "light";
   children?: React.ReactNode;
   imageContain?: boolean;
+  /** Photo credit — photographer name or "© Name" */
+  imageCredit?: string;
+  /** Optional link to photographer's site or portfolio */
+  imageCreditUrl?: string;
 }
 
 export default function HeroSection({
@@ -20,6 +25,8 @@ export default function HeroSection({
   overlay = "dark",
   children,
   imageContain = false,
+  imageCredit,
+  imageCreditUrl,
 }: HeroSectionProps) {
   return (
     <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[#1F2937]" : ""}`}>
@@ -49,6 +56,28 @@ export default function HeroSection({
           {children}
         </div>
       </div>
+
+      {/* Photo credit — bottom right, subtle */}
+      {imageCredit && (
+        <div className="absolute bottom-3 right-4 z-10">
+          {imageCreditUrl ? (
+            <a
+              href={imageCreditUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded bg-black/40 backdrop-blur-sm text-white/60 hover:text-white/90 transition-colors text-[10px] font-medium"
+            >
+              <Camera className="h-2.5 w-2.5" />
+              {imageCredit}
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-black/40 backdrop-blur-sm text-white/50 text-[10px] font-medium">
+              <Camera className="h-2.5 w-2.5" />
+              {imageCredit}
+            </span>
+          )}
+        </div>
+      )}
     </section>
   );
 }

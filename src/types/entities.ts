@@ -8,6 +8,8 @@ export interface Destination {
   tagline?: string;
   description: string;
   heroImageUrl: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   thumbnailUrl?: string;
   latitude: number;
   longitude: number;
@@ -31,6 +33,8 @@ export interface River {
   additionalDestinationIds?: string[];
   description: string;
   heroImageUrl: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   thumbnailUrl?: string;
   lengthMiles?: number;
   flowType: string;
@@ -77,6 +81,8 @@ export interface Lodge {
   destinationId: string;
   description: string;
   heroImageUrl: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   thumbnailUrl?: string;
   galleryUrls: string[];
   websiteUrl?: string;
@@ -160,6 +166,8 @@ export interface Article {
   author: string;
   category: "technique" | "destination" | "gear" | "conservation" | "culture" | "species";
   heroImageUrl: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   thumbnailUrl?: string;
   excerpt: string;
   content: string;

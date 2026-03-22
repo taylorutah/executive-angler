@@ -141,6 +141,8 @@ export default async function DestinationPage({ params }: Props) {
         title={dest.name}
         subtitle={dest.tagline}
         height="h-[65vh]"
+        imageCredit={dest.heroImageCredit}
+        imageCreditUrl={dest.heroImageCreditUrl}
       />
 
       <div className="bg-[#0D1117]">

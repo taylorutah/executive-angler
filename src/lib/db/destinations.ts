@@ -12,6 +12,8 @@ function mapRow(r: Record<string, unknown>): Destination {
     tagline: (r.tagline ?? undefined) as string | undefined,
     description: (r.description ?? "") as string,
     heroImageUrl: (r.hero_image_url ?? "") as string,
+    heroImageCredit: r.hero_image_credit as string | undefined,
+    heroImageCreditUrl: r.hero_image_credit_url as string | undefined,
     thumbnailUrl: (r.thumbnail_url ?? undefined) as string | undefined,
     latitude: r.latitude ? Number(r.latitude) : 0,
     longitude: r.longitude ? Number(r.longitude) : 0,

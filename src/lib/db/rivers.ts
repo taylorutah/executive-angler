@@ -10,6 +10,8 @@ function mapRow(row: Record<string, unknown>): River {
     additionalDestinationIds: (row.additional_destination_ids as string[]) ?? [],
     description: (row.description ?? "") as string,
     heroImageUrl: (row.hero_image_url ?? "") as string,
+    heroImageCredit: row.hero_image_credit as string | undefined,
+    heroImageCreditUrl: row.hero_image_credit_url as string | undefined,
     thumbnailUrl: (row.thumbnail_url ?? row.hero_image_url ?? "") as string,
     lengthMiles: row.length_miles ? Number(row.length_miles) : undefined,
     flowType: (row.flow_type ?? "freestone") as River["flowType"],

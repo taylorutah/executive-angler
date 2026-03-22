@@ -154,6 +154,8 @@ export default async function RiverPage({ params }: Props) {
         title={river.name}
         subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
         height="h-[45vh]"
+        imageCredit={river.heroImageCredit}
+        imageCreditUrl={river.heroImageCreditUrl}
       />
 
       <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
