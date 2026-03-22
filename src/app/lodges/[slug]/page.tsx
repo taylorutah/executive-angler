@@ -15,6 +15,9 @@ import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllLodges,
@@ -66,6 +69,11 @@ export default async function LodgePage({ params }: Props) {
   const { slug } = await params;
   const lodge = await getLodgeBySlug(slug);
   if (!lodge) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, nearbyRivers] = await Promise.all([
     lodge.destinationId ? getDestinationById(lodge.destinationId) : Promise.resolve(undefined),
@@ -148,13 +156,27 @@ export default async function LodgePage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={lodge.heroImageUrl}
-        imageAlt={lodge.name}
-        title={lodge.name}
-        subtitle={lodge.priceRange}
-        height="h-[60vh]"
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={lodge.heroImageUrl}
+          imageAlt={lodge.heroImageAlt || lodge.name}
+          title={lodge.name}
+          subtitle={lodge.priceRange}
+          height="h-[60vh]"
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="lodges"
+              entityId={lodge.id}
+              currentImageUrl={lodge.heroImageUrl}
+              currentAlt={lodge.heroImageAlt}
+              currentCredit={lodge.heroImageCredit}
+              currentCreditUrl={lodge.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

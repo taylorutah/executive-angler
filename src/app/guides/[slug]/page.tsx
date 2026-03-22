@@ -12,6 +12,9 @@ import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllGuides,
@@ -59,6 +62,11 @@ export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, guideRivers, areaLodges, areaFlyShops] = await Promise.all([
     guide.destinationId ? getDestinationById(guide.destinationId) : Promise.resolve(undefined),
@@ -141,17 +149,31 @@ export default async function GuidePage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={
-          (guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg")
-            ? guide.photoUrl
-            : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
-        }
-        imageAlt={`${guide.name} — fly fishing guide`}
-        title={guide.name}
-        subtitle={`Fly Fishing Guide${dest ? ` — ${dest.name}` : ""}`}
-        height="h-[50vh]"
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={
+            (guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg")
+              ? guide.photoUrl
+              : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
+          }
+          imageAlt={guide.heroImageAlt || `${guide.name} — fly fishing guide`}
+          title={guide.name}
+          subtitle={`Fly Fishing Guide${dest ? ` — ${dest.name}` : ""}`}
+          height="h-[50vh]"
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="guides"
+              entityId={guide.id}
+              currentImageUrl={guide.photoUrl || ""}
+              currentAlt={guide.heroImageAlt}
+              currentCredit={guide.heroImageCredit}
+              currentCreditUrl={guide.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

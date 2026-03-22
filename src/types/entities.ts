@@ -122,6 +122,9 @@ export interface Guide {
   specialties: string[];
   yearsExperience?: number;
   photoUrl?: string;
+  heroImageAlt?: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   websiteUrl?: string;
   phone?: string;
   email?: string;
@@ -144,6 +147,9 @@ export interface FlyShop {
   destinationId: string;
   description: string;
   heroImageUrl?: string;
+  heroImageAlt?: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   address: string;
   latitude: number;
   longitude: number;
@@ -193,6 +199,9 @@ export interface Species {
   family?: "trout" | "salmon" | "char" | "grayling" | "saltwater" | "warmwater" | "pike";
   description?: string;
   imageUrl?: string;
+  heroImageAlt?: string;
+  heroImageCredit?: string;
+  heroImageCreditUrl?: string;
   illustrationUrl?: string;
   nativeRange?: string;
   introducedRange?: string;

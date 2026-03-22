@@ -14,6 +14,9 @@ import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import { species } from "@/data/species";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
   getSpeciesBySlug,
@@ -72,6 +75,11 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const { slug } = await params;
   const sp = await getSpeciesBySlug(slug);
   if (!sp) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [relatedDests, relatedRivers] = await Promise.all([
     sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
@@ -133,17 +141,31 @@ export default async function SpeciesDetailPage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={
-          sp.imageUrl ||
-          "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
-        }
-        imageAlt={`${sp.commonName} fly fishing`}
-        title={sp.commonName}
-        subtitle={sp.scientificName || undefined}
-        height="h-[60vh]"
-        imageContain={true}
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={
+            sp.imageUrl ||
+            "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
+          }
+          imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
+          title={sp.commonName}
+          subtitle={sp.scientificName || undefined}
+          height="h-[60vh]"
+          imageContain={true}
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="species"
+              entityId={sp.id}
+              currentImageUrl={sp.imageUrl || ""}
+              currentAlt={sp.heroImageAlt}
+              currentCredit={sp.heroImageCredit}
+              currentCreditUrl={sp.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

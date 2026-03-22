@@ -14,6 +14,9 @@ import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
@@ -69,6 +72,11 @@ export default async function DestinationPage({ params }: Props) {
   const { slug } = await params;
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies] = await Promise.all([
     getRiversByDestination(dest.id),
@@ -135,15 +143,29 @@ export default async function DestinationPage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={dest.heroImageUrl}
-        imageAlt={`Fly fishing in ${dest.name}`}
-        title={dest.name}
-        subtitle={dest.tagline}
-        height="h-[65vh]"
-        imageCredit={dest.heroImageCredit}
-        imageCreditUrl={dest.heroImageCreditUrl}
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={dest.heroImageUrl}
+          imageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
+          title={dest.name}
+          subtitle={dest.tagline}
+          height="h-[65vh]"
+          imageCredit={dest.heroImageCredit}
+          imageCreditUrl={dest.heroImageCreditUrl}
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="destinations"
+              entityId={dest.id}
+              currentImageUrl={dest.heroImageUrl}
+              currentAlt={dest.heroImageAlt}
+              currentCredit={dest.heroImageCredit}
+              currentCreditUrl={dest.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

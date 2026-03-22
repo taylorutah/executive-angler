@@ -12,6 +12,9 @@ import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
+import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination, getArticlesByDestination, getSpeciesByCommonNames } from "@/lib/db";
@@ -45,6 +48,11 @@ export default async function FlyShopPage({ params }: Props) {
   const { slug } = await params;
   const shop = await getFlyShopBySlug(slug);
   if (!shop) notFound();
+
+  // Check if current user is admin (for hero image editor)
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, nearbyRivers, areaGuides] = await Promise.all([
     shop.destinationId ? getDestinationById(shop.destinationId) : Promise.resolve(undefined),
@@ -120,16 +128,30 @@ export default async function FlyShopPage({ params }: Props) {
         }}
       />
 
-      <HeroSection
-        imageUrl={
-          shop.heroImageUrl ||
-          "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=1920&q=80"
-        }
-        imageAlt={shop.name}
-        title={shop.name}
-        subtitle={shop.address}
-        height="h-[50vh]"
-      />
+      <div className="relative">
+        <HeroSection
+          imageUrl={
+            shop.heroImageUrl ||
+            "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=1920&q=80"
+          }
+          imageAlt={shop.heroImageAlt || shop.name}
+          title={shop.name}
+          subtitle={shop.address}
+          height="h-[50vh]"
+        />
+        {userIsAdmin && (
+          <div className="absolute top-4 right-4 z-20">
+            <HeroImageEditor
+              entityType="fly_shops"
+              entityId={shop.id}
+              currentImageUrl={shop.heroImageUrl || ""}
+              currentAlt={shop.heroImageAlt}
+              currentCredit={shop.heroImageCredit}
+              currentCreditUrl={shop.heroImageCreditUrl}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
