@@ -135,6 +135,15 @@ export default async function DashboardPage() {
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id);
 
+  // River slug lookup — maps river_id → slug for "Your Rivers" links
+  const { data: allRiverSlugs } = await supabase
+    .from("rivers")
+    .select("id, slug");
+  const riverSlugMap: Record<string, string> = {};
+  (allRiverSlugs || []).forEach((r: { id: string; slug: string }) => {
+    riverSlugMap[r.id] = r.slug;
+  });
+
   // River stats (per-river metrics: sessions, fish, avg, best, species, awards)
   const { data: allSessions } = await supabase
     .from("fishing_sessions")
@@ -271,6 +280,7 @@ export default async function DashboardPage() {
       flyCount={flyCount ?? 0}
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
+      riverSlugMap={riverSlugMap}
       enhancedStats={{
         totalSessions,
         totalFish: totalFishAll,

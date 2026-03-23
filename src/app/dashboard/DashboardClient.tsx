@@ -25,6 +25,7 @@ interface DashboardProps {
   flyCount: number;
   gearCount: number;
   riverStats: RiverStats[];
+  riverSlugMap: Record<string, string>;
   enhancedStats: {
     totalSessions: number;
     totalFish: number;
@@ -163,7 +164,7 @@ function Divider() {
 /* ─── Main Component ─── */
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats, enhancedStats
+  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats, riverSlugMap, enhancedStats
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const es = enhancedStats;
@@ -309,8 +310,8 @@ export default function DashboardClient({
                 </div>
                 <div className="space-y-3">
                   {riverStats.map((rs) => {
-                    const riverSlug = favRivers.find((r) => r.name === rs.river_name)?.slug;
-                    const riverHref = riverSlug ? `/rivers/${riverSlug}` : `/journal/stats`;
+                    const riverSlug = rs.river_id ? riverSlugMap[rs.river_id] : favRivers.find((r) => r.name === rs.river_name)?.slug;
+                    const riverHref = riverSlug ? `/rivers/${riverSlug}` : `/rivers`;
                     return (
                       <div
                         key={rs.river_name}
