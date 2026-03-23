@@ -589,7 +589,7 @@ export default function DashboardClient({
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-[#E8923A]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Followed Rivers</h2>
+                    <h2 className="font-serif text-lg text-[#F0F6FC]">Favorite Rivers</h2>
                   </div>
                   <Link href="/rivers" className="text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
                     All &rarr;
