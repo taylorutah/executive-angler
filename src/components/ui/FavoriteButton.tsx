@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
+import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -72,12 +72,12 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       disabled={loading}
       className={`p-2.5 rounded-full transition-all ${
         isFavorite
-          ? "bg-red-50 text-red-500 hover:bg-red-100"
-          : "bg-[#161B22]/80 text-[#A8B2BD] hover:text-red-500 hover:bg-[#161B22]"
+          ? "bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20"
+          : "bg-[#161B22]/80 text-[#A8B2BD] hover:text-[#E8923A] hover:bg-[#161B22]"
       } shadow-sm backdrop-blur-sm`}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
     >
-      <Heart
+      <Star
         className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
       />
     </button>

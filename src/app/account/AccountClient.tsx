@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Heart, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -256,7 +256,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     { href: "/journal", icon: BookOpen, label: "Fishing Journal", sub: `${stats.totalSessions} sessions`, color: "text-[#E8923A]", bg: "bg-[#E8923A]/10" },
     { href: "/journal/flies", icon: Feather, label: "Fly Patterns", sub: `${stats.totalFlies} patterns`, color: "text-purple-400", bg: "bg-purple-400/10" },
     { href: "/account/gear", icon: Package, label: "Gear Locker", sub: "Rods, reels & more", color: "text-[#0BA5C7]", bg: "bg-[#0BA5C7]/10" },
-    { href: "/favorites", icon: Heart, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-red-400", bg: "bg-red-400/10" },
+    { href: "/favorites", icon: Star, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-[#E8923A]", bg: "bg-[#E8923A]/10" },
   ];
 
   return (

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Heart, Trash2, MapPin, Fish, BookOpen, Home } from "lucide-react";
+import { Star, Trash2, MapPin, Fish, BookOpen, Home } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Favorite {
@@ -135,7 +135,7 @@ export default function FavoritesPage() {
     <div className="min-h-screen bg-[#0D1117] pt-6 pb-20 px-4">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center gap-3 mb-8">
-          <Heart className="h-8 w-8 text-red-500 fill-red-500" />
+          <Star className="h-8 w-8 text-[#E8923A] fill-[#E8923A]" />
           <h1 className="font-heading text-3xl font-bold text-[#E8923A]">
             Your Favorites
           </h1>
@@ -143,7 +143,7 @@ export default function FavoritesPage() {
 
         {favorites.length === 0 ? (
           <div className="text-center py-16 bg-[#161B22] rounded-xl shadow-sm">
-            <Heart className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
+            <Star className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
             <h2 className="font-heading text-xl font-semibold text-[#A8B2BD] mb-2">
               No favorites yet
             </h2>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Menu, X, ChevronDown, Search, User, Heart, Package, Bell,
+  Menu, X, ChevronDown, Search, User, Star, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
   BookOpen, ShoppingBag, Users2, Newspaper
 } from "lucide-react";
@@ -438,7 +438,7 @@ export default function Header() {
                       <MessageSquare className="h-5 w-5" /> Messages
                     </Link>
                     <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
-                      <Heart className="h-5 w-5" /> Favorites
+                      <Star className="h-5 w-5" /> Favorites
                     </Link>
                     <Link href="/account/gear" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <Package className="h-5 w-5" /> Gear Locker
