@@ -174,17 +174,24 @@ export default function EditSessionPage() {
           }));
         setCatches(loadedCatches);
 
-        // Resolve simple/full mode: prefer saved pref, otherwise default
-        // Simple = no catch rows (drift session) | Full = has detailed catches
-        try {
-          const saved = localStorage.getItem(`ea-edit-mode-${id}`);
-          if (saved === "simple" || saved === "full") {
-            setIsSimpleMode(saved === "simple");
-          } else {
-            setIsSimpleMode(loadedCatches.length === 0);
+        // Resolve simple/full mode:
+        // If catches exist in the DB → ALWAYS open in Full mode (data wins over localStorage).
+        // This ensures drift-mode sessions edited into full mode stay in full mode.
+        // Only fall back to localStorage/default when there are no catches.
+        if (loadedCatches.length > 0) {
+          setIsSimpleMode(false);
+          try { localStorage.setItem(`ea-edit-mode-${id}`, "full"); } catch {}
+        } else {
+          try {
+            const saved = localStorage.getItem(`ea-edit-mode-${id}`);
+            if (saved === "simple" || saved === "full") {
+              setIsSimpleMode(saved === "simple");
+            } else {
+              setIsSimpleMode(true);
+            }
+          } catch {
+            setIsSimpleMode(true);
           }
-        } catch {
-          setIsSimpleMode(loadedCatches.length === 0);
         }
         setSimpleFishCount(session.total_fish != null ? String(session.total_fish) : "");
         setSimpleModeResolved(true);
