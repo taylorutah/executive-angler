@@ -164,7 +164,7 @@ export default function EditSessionPage() {
             species: c.species || "",
             length_inches: c.length_inches || "",
             quantities: c.quantities || 1,
-            fly_pattern_id: (c as any).fly_pattern_id || "",
+            fly_pattern_id: (c as any).fly_pattern_id || null,
             fly_position: c.fly_position || "",
             fly_size: c.fly_size || "",
             bead_size: c.bead_size || "",
@@ -260,7 +260,11 @@ export default function EditSessionPage() {
           ...(isSimpleMode
             ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
             : {
-                catches: catches.filter((c) => c.species),
+                catches: catches.filter((c) => c.species).map((c) => ({
+                  ...c,
+                  fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+                  length_inches: c.length_inches || null,
+                })),
                 total_fish: catches.filter((c) => c.species).reduce((sum, c) => sum + (c.quantities || 1), 0),
               }
           ),
@@ -277,6 +281,11 @@ export default function EditSessionPage() {
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
+      // Persist edit mode — if user saved in full mode with catches, lock to full going forward
+      try {
+        const mode = isSimpleMode ? "simple" : "full";
+        localStorage.setItem(`ea-edit-mode-${id}`, mode);
+      } catch {}
       router.push(`/journal/${id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
