@@ -261,14 +261,14 @@ export async function PATCH(req: NextRequest) {
         }
       }
 
-      // Update existing catches one by one
-      for (const row of toUpdate) {
-        const { error: updateError } = await supabase
-          .from("catches")
-          .update(row.data)
-          .eq("id", row.id);
-        if (updateError) {
-          console.error(`[SESSION PATCH] Failed to update catch ${row.id}:`, updateError.message);
+      // Update existing catches — use upsert instead of individual updates for reliability
+      // Upsert handles both RLS edge cases and ensures data persists
+      if (toUpdate.length > 0) {
+        const upsertRows = toUpdate.map((row) => ({ id: row.id, ...row.data }));
+        const { error: upsertError } = await supabase.from("catches").upsert(upsertRows, { onConflict: "id" });
+        if (upsertError) {
+          console.error("[SESSION PATCH] Failed to upsert catches:", upsertError.message);
+          return NextResponse.json({ error: "Failed to update catches: " + upsertError.message }, { status: 500 });
         }
       }
 
