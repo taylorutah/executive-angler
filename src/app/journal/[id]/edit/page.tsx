@@ -25,6 +25,9 @@ interface Catch {
   time_caught: string;
   notes: string;
   fish_image_url?: string;
+  fish_image_urls?: string[];
+  pendingPhotos?: File[];
+  removedPhotoUrls?: string[];
 }
 
 interface Spot { id: string; name: string; latitude?: number; longitude?: number; description?: string; }
@@ -38,6 +41,7 @@ const emptyCatch = (): Catch => ({
   species: "", length_inches: "", quantities: 1,
   fly_pattern_id: "",
   fly_position: "", fly_size: "", bead_size: "", time_caught: "", notes: "",
+  fish_image_urls: [], pendingPhotos: [], removedPhotoUrls: [],
 });
 
 export default function EditSessionPage() {
@@ -54,7 +58,7 @@ export default function EditSessionPage() {
   const [spots, setSpots] = useState<Spot[]>([]);
   const [flies, setFlies] = useState<{ id: string; name: string }[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
-  const [uploadingCatchIdx, setUploadingCatchIdx] = useState<number | null>(null);
+  const [savingPhotos, setSavingPhotos] = useState(false);
   const [showSpotManager, setShowSpotManager] = useState(false);
   const [gearRodId, setGearRodId] = useState<string | null>(null);
   const [gearReelId, setGearReelId] = useState<string | null>(null);
@@ -199,18 +203,21 @@ export default function EditSessionPage() {
           notes: session.notes || "",
           trip_tags: (session.trip_tags || session.tags || []).join(", "),
         });
-        const loadedCatches = (session.catches || []).map((c: Catch) => ({
-            id: (c as Catch & { id?: string }).id,
+        const loadedCatches = (session.catches || []).map((c: any) => ({
+            id: c.id,
             species: c.species || "",
             length_inches: c.length_inches || "",
             quantities: c.quantities || 1,
-            fly_pattern_id: (c as any).fly_pattern_id || null,
+            fly_pattern_id: c.fly_pattern_id || null,
             fly_position: c.fly_position || "",
             fly_size: c.fly_size || "",
             bead_size: c.bead_size || "",
             time_caught: c.time_caught || "",
             notes: c.notes || "",
-            fish_image_url: (c as any).fish_image_url || undefined,
+            fish_image_url: c.fish_image_url || undefined,
+            fish_image_urls: c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []),
+            pendingPhotos: [] as File[],
+            removedPhotoUrls: [] as string[],
           }));
         setCatches(loadedCatches);
 
@@ -264,68 +271,47 @@ export default function EditSessionPage() {
     setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, [field]: value } : c));
   }
 
-  async function handleCatchPhotoUpload(i: number, file: File) {
-    let catchId = catches[i].id;
-    // If catch hasn't been saved yet, save the session first to get DB IDs
-    if (!catchId) {
-      try {
-        const saveRes = await fetch(`/api/fishing/session?id=${id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            catches: catches.filter((c) => c.species).map((c) => ({
-              ...c,
-              fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
-              length_inches: c.length_inches || null,
-            })),
-            total_fish: catches.filter((c) => c.species).reduce((sum, c) => sum + (c.quantities || 1), 0),
-          }),
-        });
-        if (saveRes.ok) {
-          const result = await saveRes.json();
-          if (result.catches?.length) {
-            const updated = result.catches.map((c: Catch & { id?: string }) => ({
-              id: c.id,
-              species: c.species || "",
-              length_inches: c.length_inches != null ? String(c.length_inches) : "",
-              quantities: c.quantities || 1,
-              fly_pattern_id: (c as any).fly_pattern_id || null,
-              fly_position: c.fly_position || "",
-              fly_size: c.fly_size || "",
-              bead_size: c.bead_size || "",
-              time_caught: c.time_caught || "",
-              notes: c.notes || "",
-              fish_image_url: (c as any).fish_image_url || undefined,
-            }));
-            setCatches(updated);
-            catchId = updated[i]?.id;
-          }
-        }
-      } catch { /* fall through */ }
-      if (!catchId) { alert("Please save the session first, then add a photo."); return; }
-    }
-    setUploadingCatchIdx(i);
-    try {
-      const compressed = await compressImage(file);
-      const form = new FormData();
-      form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
-      form.append("catchId", catchId);
-      const res = await fetch("/api/photos/catch", { method: "POST", body: form });
-      if (res.ok) {
-        const { url } = await res.json();
-        setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, fish_image_url: url } : c));
-      } else {
-        const data = await res.json().catch(() => ({}));
-        alert(data.error || "Photo upload failed. Please try again.");
-      }
-    } catch (e) {
-      console.error("Upload error:", e);
-      const msg = e instanceof Error ? e.message : "Photo upload failed.";
-      alert(msg);
-    } finally {
-      setUploadingCatchIdx(null);
-    }
+  function addCatchPhoto(catchIdx: number, file: File) {
+    setCatches(prev => prev.map((c, i) => {
+      if (i !== catchIdx) return c;
+      const existing = (c.fish_image_urls || []).length;
+      const pending = (c.pendingPhotos || []).length;
+      if (existing + pending >= 3) { alert("Maximum 3 photos per catch"); return c; }
+      return { ...c, pendingPhotos: [...(c.pendingPhotos || []), file] };
+    }));
   }
+
+  function removeCatchPhoto(catchIdx: number, url: string) {
+    setCatches(prev => prev.map((c, i) => {
+      if (i !== catchIdx) return c;
+      return {
+        ...c,
+        fish_image_urls: (c.fish_image_urls || []).filter(u => u !== url),
+        removedPhotoUrls: [...(c.removedPhotoUrls || []), url],
+      };
+    }));
+  }
+
+  function removePendingPhoto(catchIdx: number, fileIdx: number) {
+    setCatches(prev => prev.map((c, i) => {
+      if (i !== catchIdx) return c;
+      const pending = [...(c.pendingPhotos || [])];
+      pending.splice(fileIdx, 1);
+      return { ...c, pendingPhotos: pending };
+    }));
+  }
+
+  // Clean up object URLs on unmount
+  useEffect(() => {
+    return () => {
+      catches.forEach(c => {
+        (c.pendingPhotos || []).forEach(f => {
+          try { URL.revokeObjectURL(URL.createObjectURL(f)); } catch {}
+        });
+      });
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -365,23 +351,33 @@ export default function EditSessionPage() {
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
-      // Update catches state with DB-assigned IDs so photo uploads work immediately
       const result = await res.json();
-      if (result.catches?.length) {
-        setCatches(result.catches.map((c: Catch & { id?: string }) => ({
-          id: c.id,
-          species: c.species || "",
-          length_inches: c.length_inches != null ? String(c.length_inches) : "",
-          quantities: c.quantities || 1,
-          fly_pattern_id: (c as any).fly_pattern_id || null,
-          fly_position: c.fly_position || "",
-          fly_size: c.fly_size || "",
-          bead_size: c.bead_size || "",
-          time_caught: c.time_caught || "",
-          notes: c.notes || "",
-          fish_image_url: (c as any).fish_image_url || undefined,
-        })));
+      const updatedCatches = result.catches || [];
+
+      // Upload pending photos now that we have DB IDs
+      const hasPendingPhotos = catches.some(c => (c.pendingPhotos || []).length > 0);
+      if (hasPendingPhotos) {
+        setSavingPhotos(true);
+        for (let i = 0; i < updatedCatches.length; i++) {
+          const catchData = catches[i];
+          const dbCatch = updatedCatches[i];
+          if (catchData?.pendingPhotos?.length && dbCatch?.id) {
+            for (const file of catchData.pendingPhotos) {
+              try {
+                const compressed = await compressImage(file);
+                const formData = new FormData();
+                formData.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
+                formData.append("catchId", dbCatch.id);
+                await fetch("/api/photos/catch", { method: "POST", body: formData });
+              } catch (e) {
+                console.error("Photo upload error:", e);
+              }
+            }
+          }
+        }
+        setSavingPhotos(false);
       }
+
       // Persist edit mode — if user saved in full mode with catches, lock to full going forward
       try {
         const mode = isSimpleMode ? "simple" : "full";
@@ -644,32 +640,45 @@ export default function EditSessionPage() {
                         <label className={label}>Notes</label>
                         <input className={input} placeholder="What worked…" value={c.notes} onChange={(e) => updateCatch(i, "notes", e.target.value)} />
                       </div>
-                      {/* Photo upload */}
+                      {/* Photo grid */}
                       <div className="col-span-3">
-                        <label className={label}>Photo</label>
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                          {uploadingCatchIdx === i ? (
-                            <div className="h-14 w-14 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
-                              <div className="h-4 w-4 border-2 border-[#E8923A]/40 border-t-[#E8923A] rounded-full animate-spin" />
+                        <label className={label}>Photos ({(c.fish_image_urls || []).length + (c.pendingPhotos || []).length}/3)</label>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {/* Existing uploaded photos */}
+                          {(c.fish_image_urls || []).map((url, pi) => (
+                            <div key={`existing-${pi}`} className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#21262D] group">
+                              <img src={url} alt="Fish" className="object-cover w-full h-full" />
+                              <button
+                                type="button"
+                                onClick={() => removeCatchPhoto(i, url)}
+                                className="absolute top-0 right-0 bg-black/60 rounded-bl-lg p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="h-3 w-3 text-white" />
+                              </button>
                             </div>
-                          ) : c.fish_image_url ? (
-                            <div className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#21262D]">
-                              <img src={c.fish_image_url} alt="Fish" className="object-cover w-full h-full" />
-                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                <Camera className="h-4 w-4 text-white" />
-                              </div>
+                          ))}
+                          {/* Pending local photos */}
+                          {(c.pendingPhotos || []).map((file, fi) => (
+                            <div key={`pending-${fi}`} className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#E8923A]/40 group">
+                              <img src={URL.createObjectURL(file)} alt="Pending" className="object-cover w-full h-full" />
+                              <button
+                                type="button"
+                                onClick={() => removePendingPhoto(i, fi)}
+                                className="absolute top-0 right-0 bg-black/60 rounded-bl-lg p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="h-3 w-3 text-white" />
+                              </button>
                             </div>
-                          ) : (
-                            <div className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] group-hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors">
-                              <Camera className="h-5 w-5 text-[#6E7681] group-hover:text-[#E8923A]" />
-                            </div>
+                          ))}
+                          {/* Add photo button */}
+                          {(c.fish_image_urls || []).length + (c.pendingPhotos || []).length < 3 && (
+                            <label className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer">
+                              <Camera className="h-5 w-5 text-[#6E7681] hover:text-[#E8923A]" />
+                              <input type="file" accept="image/*" className="hidden"
+                                onChange={(e) => { const f = e.target.files?.[0]; if (f) addCatchPhoto(i, f); e.target.value = ""; }} />
+                            </label>
                           )}
-                          <span className="text-xs text-[#6E7681] group-hover:text-[#E8923A] transition-colors">
-                            {c.fish_image_url ? "Replace photo" : "Add fish photo"}
-                          </span>
-                          <input type="file" accept="image/*" className="hidden"
-                            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCatchPhotoUpload(i, f); }} />
-                        </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -833,7 +842,7 @@ export default function EditSessionPage() {
           </button>
           <button onClick={handleSubmit} disabled={saving}
             className="flex-1 rounded-xl bg-[#E8923A] py-3 text-white font-semibold text-sm hover:bg-[#d4822f] transition-colors disabled:opacity-60 shadow-sm">
-            {saving ? "Saving…" : "Save Changes"}
+            {savingPhotos ? "Saving photos…" : saving ? "Saving…" : "Save Changes"}
           </button>
         </div>
 
