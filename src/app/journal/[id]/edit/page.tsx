@@ -265,8 +265,45 @@ export default function EditSessionPage() {
   }
 
   async function handleCatchPhotoUpload(i: number, file: File) {
-    const catchId = catches[i].id;
-    if (!catchId) return;
+    let catchId = catches[i].id;
+    // If catch hasn't been saved yet, save the session first to get DB IDs
+    if (!catchId) {
+      try {
+        const saveRes = await fetch(`/api/fishing/session?id=${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            catches: catches.filter((c) => c.species).map((c) => ({
+              ...c,
+              fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+              length_inches: c.length_inches || null,
+            })),
+            total_fish: catches.filter((c) => c.species).reduce((sum, c) => sum + (c.quantities || 1), 0),
+          }),
+        });
+        if (saveRes.ok) {
+          const result = await saveRes.json();
+          if (result.catches?.length) {
+            const updated = result.catches.map((c: Catch & { id?: string }) => ({
+              id: c.id,
+              species: c.species || "",
+              length_inches: c.length_inches != null ? String(c.length_inches) : "",
+              quantities: c.quantities || 1,
+              fly_pattern_id: (c as any).fly_pattern_id || null,
+              fly_position: c.fly_position || "",
+              fly_size: c.fly_size || "",
+              bead_size: c.bead_size || "",
+              time_caught: c.time_caught || "",
+              notes: c.notes || "",
+              fish_image_url: (c as any).fish_image_url || undefined,
+            }));
+            setCatches(updated);
+            catchId = updated[i]?.id;
+          }
+        }
+      } catch { /* fall through */ }
+      if (!catchId) { alert("Please save the session first, then add a photo."); return; }
+    }
     setUploadingCatchIdx(i);
     try {
       const compressed = await compressImage(file);
@@ -610,33 +647,29 @@ export default function EditSessionPage() {
                       {/* Photo upload */}
                       <div className="col-span-3">
                         <label className={label}>Photo</label>
-                        {c.id ? (
-                          <label className="flex items-center gap-3 cursor-pointer group">
-                            {uploadingCatchIdx === i ? (
-                              <div className="h-14 w-14 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
-                                <div className="h-4 w-4 border-2 border-[#E8923A]/40 border-t-[#E8923A] rounded-full animate-spin" />
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                          {uploadingCatchIdx === i ? (
+                            <div className="h-14 w-14 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
+                              <div className="h-4 w-4 border-2 border-[#E8923A]/40 border-t-[#E8923A] rounded-full animate-spin" />
+                            </div>
+                          ) : c.fish_image_url ? (
+                            <div className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#21262D]">
+                              <img src={c.fish_image_url} alt="Fish" className="object-cover w-full h-full" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <Camera className="h-4 w-4 text-white" />
                               </div>
-                            ) : c.fish_image_url ? (
-                              <div className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[#21262D]">
-                                <img src={c.fish_image_url} alt="Fish" className="object-cover w-full h-full" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                  <Camera className="h-4 w-4 text-white" />
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] group-hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors">
-                                <Camera className="h-5 w-5 text-[#6E7681] group-hover:text-[#E8923A]" />
-                              </div>
-                            )}
-                            <span className="text-xs text-[#6E7681] group-hover:text-[#E8923A] transition-colors">
-                              {c.fish_image_url ? "Replace photo" : "Add fish photo"}
-                            </span>
-                            <input type="file" accept="image/*" className="hidden"
-                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCatchPhotoUpload(i, f); }} />
-                          </label>
-                        ) : (
-                          <p className="text-xs text-[#6E7681]">Save session first to add a photo</p>
-                        )}
+                            </div>
+                          ) : (
+                            <div className="h-14 w-14 rounded-lg border-2 border-dashed border-[#21262D] group-hover:border-[#E8923A]/50 flex items-center justify-center flex-shrink-0 transition-colors">
+                              <Camera className="h-5 w-5 text-[#6E7681] group-hover:text-[#E8923A]" />
+                            </div>
+                          )}
+                          <span className="text-xs text-[#6E7681] group-hover:text-[#E8923A] transition-colors">
+                            {c.fish_image_url ? "Replace photo" : "Add fish photo"}
+                          </span>
+                          <input type="file" accept="image/*" className="hidden"
+                            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCatchPhotoUpload(i, f); }} />
+                        </label>
                       </div>
                     </div>
                   </div>
