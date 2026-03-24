@@ -233,7 +233,7 @@ export async function PATCH(req: NextRequest) {
           fish_location_image_url: c.fish_location_image_url ?? existing?.fish_location_image_url ?? null,
           fly_image_url: c.fly_image_url ?? existing?.fly_image_url ?? null,
           // Remove id for new catches (let DB generate it)
-          ...(c.id ? {} : { id: undefined }),
+          id: (c.id && c.id !== "") ? c.id : undefined,
         };
       });
 
