@@ -251,33 +251,37 @@ export async function PATCH(req: NextRequest) {
         }
       }
 
-      // Delete catches the user removed (exist in DB but not in incoming payload)
-      const toDelete = [...existingIds].filter((eid) => !incomingIds.has(eid));
-      if (toDelete.length > 0) {
-        const { error: deleteError } = await supabase.from("catches").delete().in("id", toDelete);
-        if (deleteError) {
-          console.error("[SESSION PATCH] Failed to delete removed catches:", deleteError.message);
-          return NextResponse.json({ error: "Failed to delete removed catches: " + deleteError.message }, { status: 500 });
+      // STEP 1: Update existing catches (individual updates — don't change user_id)
+      for (const row of toUpdate) {
+        // Remove user_id from update payload — RLS blocks changing the owner
+        const { user_id: _uid, ...updateData } = row.data as Record<string, unknown> & { user_id?: unknown };
+        const { error: updateError } = await supabase
+          .from("catches")
+          .update(updateData)
+          .eq("id", row.id)
+          .eq("user_id", user.id); // RLS safety: only update own catches
+        if (updateError) {
+          console.error(`[SESSION PATCH] Failed to update catch ${row.id}:`, updateError.message);
+          // Non-fatal: continue with other catches
         }
       }
 
-      // Update existing catches — use upsert instead of individual updates for reliability
-      // Upsert handles both RLS edge cases and ensures data persists
-      if (toUpdate.length > 0) {
-        const upsertRows = toUpdate.map((row) => ({ id: row.id, ...row.data }));
-        const { error: upsertError } = await supabase.from("catches").upsert(upsertRows, { onConflict: "id" });
-        if (upsertError) {
-          console.error("[SESSION PATCH] Failed to upsert catches:", upsertError.message);
-          return NextResponse.json({ error: "Failed to update catches: " + upsertError.message }, { status: 500 });
-        }
-      }
-
-      // Insert new catches
+      // STEP 2: Insert new catches
       if (toInsert.length > 0) {
         const { error: insertError } = await supabase.from("catches").insert(toInsert);
         if (insertError) {
           console.error("[SESSION PATCH] Failed to insert new catches:", insertError.message);
           return NextResponse.json({ error: "Failed to insert new catches: " + insertError.message }, { status: 500 });
+        }
+      }
+
+      // STEP 3: Delete removed catches LAST (only after updates and inserts succeed)
+      const toDelete = [...existingIds].filter((eid) => !incomingIds.has(eid));
+      if (toDelete.length > 0) {
+        const { error: deleteError } = await supabase.from("catches").delete().in("id", toDelete);
+        if (deleteError) {
+          console.error("[SESSION PATCH] Failed to delete removed catches:", deleteError.message);
+          // Non-fatal: orphaned catches are better than lost catches
         }
       }
     } else {
