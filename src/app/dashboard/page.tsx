@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
+
+// Never cache — always fetch fresh data
+export const dynamic = "force-dynamic";
 import type { RiverStats } from "@/types/awards";
 
 export const metadata: Metadata = {

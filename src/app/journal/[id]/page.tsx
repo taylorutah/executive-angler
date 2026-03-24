@@ -3,6 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import SessionDetail from "./SessionDetail";
 
+// Never cache — always fetch fresh data from Supabase
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ id: string }>;
 }

@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
 import { JournalClient } from "./JournalClient";
 
+// Never cache — always fetch fresh session data
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "My Fishing Journal | Executive Angler",
   description: "Your personal fishing log with sessions, catches, and river reports.",
