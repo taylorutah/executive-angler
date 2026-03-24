@@ -206,8 +206,8 @@ export default function EditSessionPage() {
         const loadedCatches = (session.catches || []).map((c: any) => ({
             id: c.id,
             species: c.species || "",
-            length_inches: c.length_inches || "",
-            quantities: c.quantities || 1,
+            length_inches: c.length_inches ?? "",
+            quantities: c.quantities ?? 1,
             fly_pattern_id: c.fly_pattern_id || null,
             fly_position: c.fly_position || "",
             fly_size: c.fly_size || "",
@@ -320,18 +320,20 @@ export default function EditSessionPage() {
     try {
       const { trip_tags: _tripTags, ...formFields } = form;
 
-      // Build clean catch payloads — strip client-only fields, apply removed photos
-      const validCatches = catches.filter((c) => c.species);
+      // Build clean catch payloads — include ALL catches (even without species)
+      // to prevent silent deletion of catches the user is still editing.
+      // Only truly empty catches (no species, no length, no photos, no notes) are excluded.
+      const validCatches = catches.filter((c) => c.species || c.id || c.length_inches || c.notes || (c.fish_image_urls || []).length > 0 || (c.pendingPhotos || []).length > 0);
       const catchPayloads = validCatches.map((c) => {
         // Compute final fish_image_urls: existing URLs minus any the user removed
         const currentUrls = (c.fish_image_urls || []).filter(
-          (url) => !(c.removedPhotoUrls || []).includes(url)
+          (url: string) => !(c.removedPhotoUrls || []).includes(url)
         );
         return {
           id: c.id || undefined, // existing catches have an id; new ones don't
-          species: c.species,
-          length_inches: c.length_inches || null,
-          quantities: c.quantities || 1,
+          species: c.species || null,
+          length_inches: c.length_inches ?? null,
+          quantities: c.quantities ?? 1,
           fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
           fly_position: c.fly_position || null,
           fly_size: c.fly_size || null,
@@ -435,19 +437,22 @@ export default function EditSessionPage() {
           }
         }
 
-        // Persist all photo URL updates in a single PATCH
+        // Persist photo URL updates — only send minimal catch payloads with IDs + photo fields
+        // This avoids the fragile full-overwrite pattern that can delete catches
         if (photoUpdates.length > 0) {
-          const photoMap = new Map(photoUpdates.map(({ catchId, urls }) => [catchId, urls]));
           await fetch(`/api/fishing/session?id=${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               catches: dbCatches.map((c) => {
-                const urls = photoMap.get(c.id);
-                if (urls) {
-                  return { ...c, fish_image_url: urls[0] || null, fish_image_urls: urls };
-                }
-                return c;
+                const update = photoUpdates.find(p => p.catchId === c.id);
+                // Only send id + photo fields for each catch — minimal payload
+                return {
+                  id: c.id,
+                  species: c.species,
+                  fish_image_url: update ? (update.urls[0] || null) : (c.fish_image_url || null),
+                  fish_image_urls: update ? update.urls : (c.fish_image_urls || null),
+                };
               }),
             }),
           });
@@ -460,7 +465,8 @@ export default function EditSessionPage() {
         const mode = isSimpleMode ? "simple" : "full";
         localStorage.setItem(`ea-edit-mode-${id}`, mode);
       } catch {}
-      router.push(`/journal/${id}`);
+      // Full page load to bypass Next.js router cache — ensures fresh data
+      window.location.href = `/journal/${id}`;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setSaving(false);
@@ -470,9 +476,15 @@ export default function EditSessionPage() {
   async function handleDelete() {
     if (!confirm("Delete this session permanently? This cannot be undone.")) return;
     setDeleting(true);
-    const res = await fetch(`/api/fishing/session?id=${id}`, { method: "DELETE" });
-    if (res.ok) router.push("/journal");
-    else { setDeleting(false); setError("Failed to delete"); }
+    try {
+      const res = await fetch(`/api/fishing/session?id=${id}`, { method: "DELETE" });
+      if (res.ok) window.location.href = "/journal";
+      else { setError("Failed to delete session"); }
+    } catch {
+      setError("Network error — check your connection and try again");
+    } finally {
+      setDeleting(false);
+    }
   }
 
   const input = "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] dark:border-[#21262D] dark:bg-[#161B22] dark:text-[#F0F6FC] dark:placeholder:text-[#6E7681]";
