@@ -319,26 +319,43 @@ export default function EditSessionPage() {
     setError("");
     try {
       const { trip_tags: _tripTags, ...formFields } = form;
+
+      // Build clean catch payloads — strip client-only fields, apply removed photos
+      const validCatches = catches.filter((c) => c.species);
+      const catchPayloads = validCatches.map((c) => {
+        // Compute final fish_image_urls: existing URLs minus any the user removed
+        const currentUrls = (c.fish_image_urls || []).filter(
+          (url) => !(c.removedPhotoUrls || []).includes(url)
+        );
+        return {
+          id: c.id || undefined, // existing catches have an id; new ones don't
+          species: c.species,
+          length_inches: c.length_inches || null,
+          quantities: c.quantities || 1,
+          fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+          fly_position: c.fly_position || null,
+          fly_size: c.fly_size || null,
+          bead_size: c.bead_size || null,
+          time_caught: c.time_caught || null,
+          notes: c.notes || null,
+          fish_image_url: currentUrls[0] || null,
+          fish_image_urls: currentUrls.length > 0 ? currentUrls : null,
+        };
+      });
+
       const res = await fetch(`/api/fishing/session?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formFields,
           tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
-          // In simple mode: save the fish count directly; don't overwrite catches
-          // In full mode: recalculate total_fish from catch rows
           ...(isSimpleMode
             ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
             : {
-                catches: catches.filter((c) => c.species).map((c) => ({
-                  ...c,
-                  fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
-                  length_inches: c.length_inches || null,
-                })),
-                total_fish: catches.filter((c) => c.species).reduce((sum, c) => sum + (c.quantities || 1), 0),
+                catches: catchPayloads,
+                total_fish: validCatches.reduce((sum, c) => sum + (c.quantities || 1), 0),
               }
           ),
-          // Gear fields only sent in full mode (simple mode preserves existing gear)
           ...(isSimpleMode ? {} : {
             gear_rod_id: gearRodId || null,
             gear_reel_id: gearReelId || null,
@@ -352,33 +369,93 @@ export default function EditSessionPage() {
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
       const result = await res.json();
-      const updatedCatches = result.catches || [];
+      const dbCatches: Array<Record<string, any>> = result.catches || [];
+
+      // Match DB catches back to our local catches by id (existing) or by order (new inserts)
+      // DB returns catches ordered by created_at, new inserts are at the end in insertion order
+      const dbById = new Map(dbCatches.map((c) => [c.id, c]));
+      // Separate: catches that had an id vs new ones
+      const existingPayloads = catchPayloads.filter((c) => c.id);
+      const newPayloads = catchPayloads.filter((c) => !c.id);
+      // New DB catches = those whose id isn't in our existing payload ids
+      const existingPayloadIds = new Set(existingPayloads.map((c) => c.id));
+      const newDbCatches = dbCatches.filter((c) => !existingPayloadIds.has(c.id));
 
       // Upload pending photos now that we have DB IDs
-      const hasPendingPhotos = catches.some(c => (c.pendingPhotos || []).length > 0);
+      const hasPendingPhotos = validCatches.some(c => (c.pendingPhotos || []).length > 0);
+      const photoUpdates: Array<{ catchId: string; urls: string[] }> = [];
+
       if (hasPendingPhotos) {
         setSavingPhotos(true);
-        for (let i = 0; i < updatedCatches.length; i++) {
-          const catchData = catches[i];
-          const dbCatch = updatedCatches[i];
-          if (catchData?.pendingPhotos?.length && dbCatch?.id) {
-            for (const file of catchData.pendingPhotos) {
-              try {
-                const compressed = await compressImage(file);
-                const formData = new FormData();
-                formData.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
-                formData.append("catchId", dbCatch.id);
-                await fetch("/api/photos/catch", { method: "POST", body: formData });
-              } catch (e) {
-                console.error("Photo upload error:", e);
+        let newIdx = 0;
+        for (let i = 0; i < validCatches.length; i++) {
+          const catchData = validCatches[i];
+          if (!(catchData.pendingPhotos || []).length) {
+            if (!catchData.id) newIdx++;
+            continue;
+          }
+
+          // Find the DB id for this catch
+          let dbCatchId: string | null = null;
+          if (catchData.id) {
+            dbCatchId = catchData.id;
+          } else {
+            // Match to newly inserted DB catch by order
+            if (newIdx < newDbCatches.length) {
+              dbCatchId = newDbCatches[newIdx].id;
+            }
+            newIdx++;
+          }
+
+          if (!dbCatchId) continue;
+
+          const uploadedUrls: string[] = [];
+          for (const file of catchData.pendingPhotos!) {
+            try {
+              const compressed = await compressImage(file);
+              const formData = new FormData();
+              formData.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
+              formData.append("catchId", dbCatchId);
+              const uploadRes = await fetch("/api/photos/catch", { method: "POST", body: formData });
+              if (uploadRes.ok) {
+                const { url } = await uploadRes.json();
+                if (url) uploadedUrls.push(url);
               }
+            } catch (e) {
+              console.error("Photo upload error:", e);
             }
           }
+
+          if (uploadedUrls.length > 0) {
+            // Combine existing URLs with newly uploaded ones
+            const dbCatch = dbById.get(dbCatchId);
+            const existingUrls: string[] = dbCatch?.fish_image_urls || (dbCatch?.fish_image_url ? [dbCatch.fish_image_url] : []);
+            const allUrls = [...existingUrls, ...uploadedUrls].slice(0, 3);
+            photoUpdates.push({ catchId: dbCatchId, urls: allUrls });
+          }
+        }
+
+        // Persist all photo URL updates in a single PATCH
+        if (photoUpdates.length > 0) {
+          const photoMap = new Map(photoUpdates.map(({ catchId, urls }) => [catchId, urls]));
+          await fetch(`/api/fishing/session?id=${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              catches: dbCatches.map((c) => {
+                const urls = photoMap.get(c.id);
+                if (urls) {
+                  return { ...c, fish_image_url: urls[0] || null, fish_image_urls: urls };
+                }
+                return c;
+              }),
+            }),
+          });
         }
         setSavingPhotos(false);
       }
 
-      // Persist edit mode — if user saved in full mode with catches, lock to full going forward
+      // Persist edit mode
       try {
         const mode = isSimpleMode ? "simple" : "full";
         localStorage.setItem(`ea-edit-mode-${id}`, mode);

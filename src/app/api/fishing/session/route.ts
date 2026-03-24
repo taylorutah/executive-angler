@@ -198,10 +198,10 @@ export async function PATCH(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Only replace catches when the payload explicitly includes the catches key.
+  // Only touch catches when the payload explicitly includes the catches key.
   // A partial PATCH (e.g. notes-only) must NOT touch existing catch rows.
   if (catches !== undefined) {
-    // Preserve photo URLs and extra fields from existing rows.
+    // Fetch existing catches from DB
     const { data: existingCatches } = await supabase
       .from("catches")
       .select("*")
@@ -210,62 +210,78 @@ export async function PATCH(req: NextRequest) {
     const existingById = new Map(
       (existingCatches || []).map((c) => [c.id as string, c as Record<string, unknown>])
     );
+    const existingIds = new Set((existingCatches || []).map((c) => c.id as string));
 
     if (catches?.length) {
-      // Sanitize catch rows — convert empty strings to null for UUID/numeric fields
-      const catchRows = catches.map((c: Record<string, unknown>) => {
+      const toUpdate: Array<{ id: string; data: Record<string, unknown> }> = [];
+      const toInsert: Record<string, unknown>[] = [];
+      const incomingIds = new Set<string>();
+
+      for (const c of catches as Record<string, unknown>[]) {
         const existing = c.id ? existingById.get(c.id as string) : null;
-        return {
-          // Merge existing DB fields first (preserves photo URLs, GPS, notes, etc.)
-          ...(existing || {}),
-          // Then overlay client fields
-          ...c,
-          // Ensure required fields
+
+        // Build clean catch data
+        const clean: Record<string, unknown> = {
           session_id: id,
           user_id: user.id,
-          // Sanitize: empty strings → null for UUID fields
-          fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
-          // Sanitize: numeric fields
+          species: c.species || null,
           length_inches: stripNum(c.length_inches) ?? null,
-          quantities: c.quantities ? Number(c.quantities) || null : existing?.quantities ?? null,
-          // Preserve photos from existing if not provided by client
-          fish_image_url: c.fish_image_url ?? existing?.fish_image_url ?? null,
-          fish_location_image_url: c.fish_location_image_url ?? existing?.fish_location_image_url ?? null,
-          fly_image_url: c.fly_image_url ?? existing?.fly_image_url ?? null,
-          // Remove id for new catches (let DB generate it)
-          id: (c.id && c.id !== "") ? c.id : undefined,
+          quantities: c.quantities ? Number(c.quantities) || 1 : existing?.quantities ?? 1,
+          fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+          fly_position: c.fly_position || null,
+          fly_size: c.fly_size || null,
+          bead_size: c.bead_size || null,
+          time_caught: c.time_caught || null,
+          notes: c.notes || null,
+          // Preserve photos: use client value if explicitly provided (including null to clear),
+          // otherwise fall back to existing DB value
+          fish_image_url: c.fish_image_url !== undefined ? (c.fish_image_url || null) : (existing?.fish_image_url ?? null),
+          fish_image_urls: c.fish_image_urls !== undefined ? (c.fish_image_urls || null) : (existing?.fish_image_urls ?? null),
+          fish_location_image_url: c.fish_location_image_url !== undefined ? (c.fish_location_image_url || null) : (existing?.fish_location_image_url ?? null),
+          fly_image_url: c.fly_image_url !== undefined ? (c.fly_image_url || null) : (existing?.fly_image_url ?? null),
         };
-      });
 
-      // Clean: remove undefined keys (PostgREST doesn't like them)
-      const cleanRows = catchRows.map((row: Record<string, unknown>) => {
-        const clean: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(row)) {
-          if (v !== undefined) clean[k] = v;
+        if (c.id && existingIds.has(c.id as string)) {
+          // Existing catch — UPDATE
+          toUpdate.push({ id: c.id as string, data: clean });
+          incomingIds.add(c.id as string);
+        } else {
+          // New catch — INSERT (no id, let DB generate UUID)
+          toInsert.push(clean);
         }
-        return clean;
-      });
+      }
 
-      // Delete old catches ONLY after we've prepared new ones
-      const { error: deleteError } = await supabase.from("catches").delete().eq("session_id", id);
-      if (deleteError) {
-        console.error("[SESSION PATCH] Failed to delete old catches:", deleteError.message);
-        return NextResponse.json({ error: "Failed to update catches: " + deleteError.message }, { status: 500 });
+      // Delete catches the user removed (exist in DB but not in incoming payload)
+      const toDelete = [...existingIds].filter((eid) => !incomingIds.has(eid));
+      if (toDelete.length > 0) {
+        const { error: deleteError } = await supabase.from("catches").delete().in("id", toDelete);
+        if (deleteError) {
+          console.error("[SESSION PATCH] Failed to delete removed catches:", deleteError.message);
+          return NextResponse.json({ error: "Failed to delete removed catches: " + deleteError.message }, { status: 500 });
+        }
+      }
+
+      // Update existing catches one by one
+      for (const row of toUpdate) {
+        const { error: updateError } = await supabase
+          .from("catches")
+          .update(row.data)
+          .eq("id", row.id);
+        if (updateError) {
+          console.error(`[SESSION PATCH] Failed to update catch ${row.id}:`, updateError.message);
+        }
       }
 
       // Insert new catches
-      const { error: insertError } = await supabase.from("catches").insert(cleanRows);
-      if (insertError) {
-        console.error("[SESSION PATCH] Failed to insert catches:", insertError.message);
-        // Attempt to restore old catches if insert failed
-        if (existingCatches?.length) {
-          await supabase.from("catches").insert(existingCatches);
-          console.log("[SESSION PATCH] Restored original catches after insert failure");
+      if (toInsert.length > 0) {
+        const { error: insertError } = await supabase.from("catches").insert(toInsert);
+        if (insertError) {
+          console.error("[SESSION PATCH] Failed to insert new catches:", insertError.message);
+          return NextResponse.json({ error: "Failed to insert new catches: " + insertError.message }, { status: 500 });
         }
-        return NextResponse.json({ error: "Failed to save catches: " + insertError.message }, { status: 500 });
       }
     } else {
-      // Empty catches array — delete all catches for this session
+      // Empty catches array — user deleted all fish
       await supabase.from("catches").delete().eq("session_id", id);
     }
   }
