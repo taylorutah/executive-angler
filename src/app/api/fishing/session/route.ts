@@ -44,7 +44,9 @@ export async function GET(req: NextRequest) {
       .eq("session_id", singleId)
       .order("created_at", { ascending: true });
 
-    return NextResponse.json({ ...data, catches: catches ?? [] });
+    const resp = NextResponse.json({ ...data, catches: catches ?? [] });
+    resp.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    return resp;
   }
 
   const autocomplete = req.nextUrl.searchParams.get("autocomplete");
@@ -268,7 +270,14 @@ export async function PATCH(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ id });
+  // Re-fetch catches so the client gets DB-assigned IDs for any newly added catches
+  const { data: updatedCatches } = await supabase
+    .from("catches")
+    .select("*")
+    .eq("session_id", id)
+    .order("created_at", { ascending: true });
+
+  return NextResponse.json({ id, catches: updatedCatches ?? [] });
 }
 
 export async function DELETE(req: NextRequest) {

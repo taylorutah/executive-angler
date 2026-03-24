@@ -178,7 +178,7 @@ export default function EditSessionPage() {
   useEffect(() => {
     async function load() {
       const [sessionRes, riversRes, locsRes, spotsRes, fliesRes] = await Promise.all([
-        fetch(`/api/fishing/session?id=${id}`),
+        fetch(`/api/fishing/session?id=${id}`, { cache: "no-store" }),
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
         fetch("/api/fishing/spots"),
@@ -328,6 +328,23 @@ export default function EditSessionPage() {
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
+      // Update catches state with DB-assigned IDs so photo uploads work immediately
+      const result = await res.json();
+      if (result.catches?.length) {
+        setCatches(result.catches.map((c: Catch & { id?: string }) => ({
+          id: c.id,
+          species: c.species || "",
+          length_inches: c.length_inches != null ? String(c.length_inches) : "",
+          quantities: c.quantities || 1,
+          fly_pattern_id: (c as any).fly_pattern_id || null,
+          fly_position: c.fly_position || "",
+          fly_size: c.fly_size || "",
+          bead_size: c.bead_size || "",
+          time_caught: c.time_caught || "",
+          notes: c.notes || "",
+          fish_image_url: (c as any).fish_image_url || undefined,
+        })));
+      }
       // Persist edit mode — if user saved in full mode with catches, lock to full going forward
       try {
         const mode = isSimpleMode ? "simple" : "full";
