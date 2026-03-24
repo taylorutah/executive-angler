@@ -32,6 +32,7 @@ interface Spot { id: string; name: string; latitude?: number; longitude?: number
 const SPECIES = ["Brown Trout", "Rainbow Trout", "Cutthroat Trout", "Brook Trout", "Mountain Whitefish", "Tiger Trout", "Bull Trout"];
 const CLARITY = ["Crystal Clear", "Clear", "Slightly Cloudy", "Cloudy", "Murky"];
 const POSITIONS = ["On Point", "Dropper", "Tag", "Single"];
+const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
 
 const emptyCatch = (): Catch => ({
   species: "", length_inches: "", quantities: 1,
@@ -64,6 +65,11 @@ export default function EditSessionPage() {
   const [editingSpotId, setEditingSpotId] = useState<string | null>(null);
   const [spotSaving, setSpotSaving] = useState(false);
   const locationInputRef = useRef<HTMLInputElement>(null);
+  // New Fly modal state
+  const [showNewFly, setShowNewFly] = useState(false);
+  const [newFlyCatchIdx, setNewFlyCatchIdx] = useState<number | null>(null);
+  const [newFlyForm, setNewFlyForm] = useState({ name: "", type: "", size: "" });
+  const [newFlySaving, setNewFlySaving] = useState(false);
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
   const [riverOpen, setRiverOpen] = useState(false);
@@ -122,6 +128,40 @@ export default function EditSessionPage() {
     if (!confirm("Remove this location?")) return;
     await fetch(`/api/fishing/spots?id=${spotId}`, { method: "DELETE" });
     await loadSpots();
+  }
+
+  async function saveNewFly() {
+    if (!newFlyForm.name.trim()) return;
+    setNewFlySaving(true);
+    try {
+      const res = await fetch("/api/fishing/flies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newFlyForm.name.trim(),
+          type: newFlyForm.type || undefined,
+          size: newFlyForm.size || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create fly");
+      }
+      const created = await res.json();
+      // Refresh fly list and auto-select the new fly on the target catch
+      const fliesRes = await fetch("/api/fishing/flies");
+      if (fliesRes.ok) setFlies(await fliesRes.json());
+      if (newFlyCatchIdx !== null) {
+        updateCatch(newFlyCatchIdx, "fly_pattern_id", created.id);
+      }
+      setShowNewFly(false);
+      setNewFlyForm({ name: "", type: "", size: "" });
+      setNewFlyCatchIdx(null);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to create fly");
+    } finally {
+      setNewFlySaving(false);
+    }
   }
 
   function startEditSpot(spot: Spot) {
@@ -511,9 +551,20 @@ export default function EditSessionPage() {
                       </div>
                       <div className="col-span-2">
                         <label className={label}>Fly Pattern</label>
-                        <select className={input} value={c.fly_pattern_id || ""} onChange={(e) => updateCatch(i, "fly_pattern_id", e.target.value)}>
+                        <select className={input} value={c.fly_pattern_id || ""} onChange={(e) => {
+                          if (e.target.value === "__NEW__") {
+                            setNewFlyCatchIdx(i);
+                            setNewFlyForm({ name: "", type: "", size: "" });
+                            setShowNewFly(true);
+                            // Reset the select back so it doesn't stick on "__NEW__"
+                            e.target.value = c.fly_pattern_id || "";
+                          } else {
+                            updateCatch(i, "fly_pattern_id", e.target.value);
+                          }
+                        }}>
                           <option value="">— Select fly —</option>
                           {flies.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                          <option value="__NEW__">+ Add New Fly</option>
                         </select>
                       </div>
                       <div>
@@ -664,6 +715,62 @@ export default function EditSessionPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* New Fly Modal */}
+        {showNewFly && (
+          <div className="fixed inset-0 z-[200] bg-black/50 flex items-end sm:items-center justify-center p-4">
+            <div className="bg-[#161B22] rounded-2xl w-full max-w-md shadow-2xl">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D]">
+                <h3 className="font-bold text-[#F0F6FC]">Add New Fly</h3>
+                <button onClick={() => { setShowNewFly(false); setNewFlyCatchIdx(null); }}>
+                  <X className="h-5 w-5 text-[#6E7681]" />
+                </button>
+              </div>
+              <div className="p-5 space-y-3">
+                <div>
+                  <label className={label}>Name <span className="text-red-400">*</span></label>
+                  <input
+                    className={input}
+                    placeholder="e.g. Perdigon, Pheasant Tail"
+                    value={newFlyForm.name}
+                    onChange={(e) => setNewFlyForm((p) => ({ ...p, name: e.target.value }))}
+                    autoFocus
+                  />
+                </div>
+                <div>
+                  <label className={label}>Type</label>
+                  <select
+                    className={input}
+                    value={newFlyForm.type}
+                    onChange={(e) => setNewFlyForm((p) => ({ ...p, type: e.target.value }))}
+                  >
+                    <option value="">— Select type —</option>
+                    {FLY_TYPES.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className={label}>Size</label>
+                  <input
+                    className={input}
+                    placeholder="#14, #16, #18"
+                    value={newFlyForm.size}
+                    onChange={(e) => setNewFlyForm((p) => ({ ...p, size: e.target.value }))}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={saveNewFly}
+                  disabled={!newFlyForm.name.trim() || newFlySaving}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E8923A] py-3 text-white font-semibold hover:bg-[#d4822f] disabled:opacity-50 transition-colors"
+                >
+                  <Check className="h-4 w-4" /> {newFlySaving ? "Creating…" : "Create & Select"}
+                </button>
+              </div>
             </div>
           </div>
         )}
