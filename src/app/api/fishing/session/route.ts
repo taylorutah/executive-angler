@@ -220,21 +220,27 @@ export async function PATCH(req: NextRequest) {
       for (const c of catches as Record<string, unknown>[]) {
         const existing = c.id ? existingById.get(c.id as string) : null;
 
-        // Build clean catch data
+        // Build clean catch data — for EVERY field, if client didn't send it (undefined),
+        // preserve the existing DB value. This prevents partial updates from wiping data.
+        const v = (field: string, fallback: unknown = null) => {
+          const val = c[field];
+          if (val === undefined) return existing?.[field] ?? fallback;
+          return val || fallback;
+        };
         const clean: Record<string, unknown> = {
           session_id: id,
           user_id: user.id,
-          species: c.species || null,
-          length_inches: stripNum(c.length_inches) ?? null,
-          quantities: c.quantities ? Number(c.quantities) || 1 : existing?.quantities ?? 1,
-          fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
-          fly_position: c.fly_position || null,
-          fly_size: c.fly_size || null,
-          bead_size: c.bead_size || null,
-          time_caught: c.time_caught || null,
-          notes: c.notes || null,
-          // Preserve photos: use client value if explicitly provided (including null to clear),
-          // otherwise fall back to existing DB value
+          species: v("species"),
+          length_inches: c.length_inches !== undefined ? (stripNum(c.length_inches) ?? null) : (existing?.length_inches ?? null),
+          quantities: c.quantities !== undefined ? (Number(c.quantities) || 1) : (existing?.quantities ?? 1),
+          fly_pattern_id: c.fly_pattern_id !== undefined
+            ? (c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null)
+            : (existing?.fly_pattern_id ?? null),
+          fly_position: v("fly_position"),
+          fly_size: v("fly_size"),
+          bead_size: v("bead_size"),
+          time_caught: v("time_caught"),
+          notes: v("notes"),
           fish_image_url: c.fish_image_url !== undefined ? (c.fish_image_url || null) : (existing?.fish_image_url ?? null),
           fish_image_urls: c.fish_image_urls !== undefined ? (c.fish_image_urls || null) : (existing?.fish_image_urls ?? null),
           fish_location_image_url: c.fish_location_image_url !== undefined ? (c.fish_location_image_url || null) : (existing?.fish_location_image_url ?? null),

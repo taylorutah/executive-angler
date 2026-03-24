@@ -437,25 +437,26 @@ export default function EditSessionPage() {
           }
         }
 
-        // Persist photo URL updates — only send minimal catch payloads with IDs + photo fields
-        // This avoids the fragile full-overwrite pattern that can delete catches
+        // Persist photo URL updates — pass through ALL DB fields, only override photos
+        // This prevents the API from nulling out length, fly, notes, etc.
         if (photoUpdates.length > 0) {
-          await fetch(`/api/fishing/session?id=${id}`, {
+          const photoRes = await fetch(`/api/fishing/session?id=${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               catches: dbCatches.map((c) => {
                 const update = photoUpdates.find(p => p.catchId === c.id);
-                // Only send id + photo fields for each catch — minimal payload
                 return {
-                  id: c.id,
-                  species: c.species,
+                  ...c, // pass ALL fields from DB catch (length, fly, notes, etc.)
                   fish_image_url: update ? (update.urls[0] || null) : (c.fish_image_url || null),
                   fish_image_urls: update ? update.urls : (c.fish_image_urls || null),
                 };
               }),
             }),
           });
+          if (!photoRes.ok) {
+            console.error("[EDIT] Photo URL save failed:", await photoRes.text());
+          }
         }
         setSavingPhotos(false);
       }
