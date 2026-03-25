@@ -5,19 +5,20 @@ import { getAllGuides } from "@/lib/db/guides";
 import { getAllFlyShops } from "@/lib/db/fly-shops";
 import { getAllLodges } from "@/lib/db/lodges";
 import { getAllArticles } from "@/lib/db/articles";
-import { species } from "@/data/species"; // species stay static — no DB table yet
+import { getAllSpecies } from "@/lib/db/species";
 
 export const revalidate = 300; // 5-minute cache
 
 export async function GET() {
   try {
-    const [rivers, destinations, guides, flyShops, lodges, articles] = await Promise.all([
+    const [rivers, destinations, guides, flyShops, lodges, articles, species] = await Promise.all([
       getAllRivers(),
       getAllDestinations(),
       getAllGuides(),
       getAllFlyShops(),
       getAllLodges(),
       getAllArticles(),
+      getAllSpecies(),
     ]);
 
     const destMap = Object.fromEntries(destinations.map((d) => [d.id, d.name]));

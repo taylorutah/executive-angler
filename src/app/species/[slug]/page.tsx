@@ -13,12 +13,12 @@ import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import { species } from "@/data/species";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
+  getAllSpecies,
   getSpeciesBySlug,
   getDestinationsByIds,
   getRiversByIds,
@@ -59,8 +59,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return species.map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  const allSpecies = await getAllSpecies();
+  return allSpecies.map((s) => ({ slug: s.slug }));
 }
 
 function getConservationColor(status: string): "forest" | "gold" | "river" {
