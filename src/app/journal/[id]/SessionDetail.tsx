@@ -511,6 +511,55 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </div>
                 )}
 
+                {/* ---- FLIES THAT WORKED — elevated for instant scanning ---- */}
+                {usedFlies.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-[#21262D]">
+                    <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Flies That Worked</p>
+                    <div className="flex flex-wrap gap-2">
+                      {usedFlies.map(f => (
+                        <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#E8923A]/20 px-3 py-2 hover:border-[#E8923A]/40 transition-colors">
+                          {f.image ? (
+                            <div className="relative h-9 w-9 rounded overflow-hidden flex-shrink-0">
+                              <Image src={f.image} alt={f.name} fill className="object-cover" />
+                            </div>
+                          ) : (
+                            <span className="text-lg flex-shrink-0">🪰</span>
+                          )}
+                          <span className="text-sm font-medium text-[#E8923A]">{f.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* ---- MOBILE-ONLY: Quick Stats Bar ---- */}
+                <div className="sm:hidden mt-4 grid grid-cols-3 gap-2">
+                  <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
+                    <p className="text-2xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Fish</p>
+                  </div>
+                  {biggestFish > 0 && (
+                    <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
+                      <p className="text-2xl font-bold text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
+                      <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Biggest</p>
+                    </div>
+                  )}
+                  {session.water_clarity && (
+                    <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
+                      <p className="text-lg font-bold text-[#E8923A] leading-none mt-0.5">{session.water_clarity}</p>
+                      <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Clarity</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* ---- SOCIAL: Kudos & Comments (prominent, not buried) ---- */}
+                <div className="mt-4 pt-4 border-t border-[#21262D]">
+                  <div className="flex items-center gap-6">
+                    <KudosButton sessionId={session.id} initialCount={0} />
+                    <CommentsSection sessionId={session.id} initialCount={0} />
+                  </div>
+                </div>
+
                 {/* Fish caught summary — compact cards under description */}
                 {catches.filter(c => c.species).length > 0 && (
                   <div className="mt-4 flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
@@ -541,8 +590,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
               </div>
 
-              {/* RIGHT: Strava-style big stats */}
-              <div className="sm:w-72 flex-shrink-0">
+              {/* RIGHT: Strava-style big stats (hidden on mobile — stats shown in left column) */}
+              <div className="hidden sm:block sm:w-72 flex-shrink-0">
                 {/* Session map */}
                 {session.latitude && session.longitude && (
                   <SessionMiniMap lat={session.latitude} lng={session.longitude} className="w-full aspect-square rounded-xl overflow-hidden mb-4" />
@@ -579,27 +628,6 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   <div className="border-t border-[#21262D] pt-3 flex items-center gap-2 text-sm text-[#A8B2BD]">
                     <Cloud className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
                     <span>{session.weather}</span>
-                  </div>
-                )}
-
-                {/* Flies used — with images */}
-                {usedFlies.length > 0 && (
-                  <div className="border-t border-[#21262D] pt-3 mt-3">
-                    <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Flies Used</p>
-                    <div className="flex flex-wrap gap-2">
-                      {usedFlies.map(f => (
-                        <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2 py-1.5">
-                          {f.image ? (
-                            <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
-                              <Image src={f.image} alt={f.name} fill className="object-cover" />
-                            </div>
-                          ) : (
-                            <span className="text-base flex-shrink-0">🪰</span>
-                          )}
-                          <span className="text-xs font-medium text-[#E8923A]">{f.name}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 )}
 
@@ -716,6 +744,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </label>
               </div>
           </div>
+
+          {/* ---- MOBILE-ONLY: Map (compact, below photos) ---- */}
+          {session.latitude && session.longitude && (
+            <div className="sm:hidden mb-5">
+              <SessionMiniMap lat={session.latitude} lng={session.longitude} className="w-full aspect-[2/1] rounded-xl overflow-hidden" />
+            </div>
+          )}
 
           {/* ---- RIVER STATS WIDGET ---- */}
           {session.river_name && (
@@ -859,13 +894,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             </div>
           )}
 
-          {/* ---- SOCIAL: Kudos & Comments ---- */}
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
-            <div className="flex items-center gap-6">
-              <KudosButton sessionId={session.id} initialCount={0} />
-              <CommentsSection sessionId={session.id} initialCount={0} />
-            </div>
-          </div>
+          {/* Social bar is now in the header card left column */}
         </div>
       </div>
     </>

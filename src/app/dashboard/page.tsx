@@ -174,7 +174,7 @@ export default async function DashboardPage() {
     const rCatches = (allCatches || []).filter((c) => sessionIds.includes(c.session_id));
     const speciesSet = new Set<string>();
     rCatches.forEach((c) => { if (c.species) speciesSet.add(c.species); });
-    const biggestFish = rCatches.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
+    const biggestFish = Math.round(rCatches.reduce((max, c) => Math.max(max, parseFloat(String(c.length_inches || 0))), 0) * 10) / 10;
     const flyCountMap = new Map<string, number>();
     rCatches.forEach((c) => { if (c.fly_name) flyCountMap.set(c.fly_name, (flyCountMap.get(c.fly_name) || 0) + 1); });
     const favFly = Array.from(flyCountMap.entries()).sort((a, b) => b[1] - a[1])[0]?.[0];
@@ -227,7 +227,7 @@ export default async function DashboardPage() {
   const allCatchesList = allCatches || [];
   const totalSessions = allSessionsList.length;
   const totalFishAll = allSessionsList.reduce((sum, s) => sum + (s.total_fish || 0), 0);
-  const biggestFish = allCatchesList.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
+  const biggestFish = Math.round(allCatchesList.reduce((max, c) => Math.max(max, parseFloat(String(c.length_inches || 0))), 0) * 10) / 10;
   const avgFishPerSession = totalSessions > 0 ? Math.round((totalFishAll / totalSessions) * 10) / 10 : 0;
   const speciesSet = new Set<string>();
   allCatchesList.forEach((c) => { if (c.species) speciesSet.add(c.species); });
