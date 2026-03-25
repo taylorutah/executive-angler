@@ -365,7 +365,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 <span className="ml-auto text-xs text-[#6E7681]">{totalFlyPatterns}</span>
               </Link>
               <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
-                <Package className="h-4 w-4" /> Gear Box
+                <Package className="h-4 w-4" /> Gear Locker
               </Link>
               <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <span className="text-base">❤️</span> Favorites

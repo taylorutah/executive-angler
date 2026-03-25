@@ -299,52 +299,70 @@ export default function DashboardClient({
             )}
 
             {/* Quick Actions Grid — matches iOS Dashboard */}
-            <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <Link
-                href="/dashboard/analytics"
-                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <BarChart3 className="h-5 w-5 text-[#E8923A]" />
-                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
-                </div>
-                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
-                <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends & stats</p>
-              </Link>
+            <section>
+              {/* Top row: 3 cards */}
+              <div className="grid grid-cols-3 gap-3 mb-3">
+                <Link
+                  href="/dashboard/analytics"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <BarChart3 className="h-5 w-5 text-[#E8923A]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends & stats</p>
+                </Link>
 
-              <Link
-                href="/dashboard/export"
-                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <BookOpen className="h-5 w-5 text-[#0BA5C7]" />
-                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
-                </div>
-                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Export</h3>
-                <p className="text-[11px] text-[#A8B2BD] mt-0.5">CSV & PDF</p>
-              </Link>
+                <Link
+                  href="/dashboard/export"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <BookOpen className="h-5 w-5 text-[#0BA5C7]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Export</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">CSV & PDF</p>
+                </Link>
 
-              <Link
-                href="/journal/flies"
-                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#2EA44F] transition-all"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <Feather className="h-5 w-5 text-[#2EA44F]" />
-                </div>
-                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
-                <p className="text-[11px] text-[#A8B2BD] mt-0.5">{flyCount > 0 ? `${flyCount} patterns` : "Your patterns"}</p>
-              </Link>
+                <Link
+                  href="/journal/flies"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#2EA44F] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Feather className="h-5 w-5 text-[#2EA44F]" />
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">{flyCount > 0 ? `${flyCount} patterns` : "Your patterns"}</p>
+                </Link>
+              </div>
 
-              <Link
-                href="/journal/stats"
-                className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <Trophy className="h-5 w-5 text-[#FFD700]" />
-                </div>
-                <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">Achievements</h3>
-                <p className="text-[11px] text-[#A8B2BD] mt-0.5">{riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)} earned</p>
-              </Link>
+              {/* Bottom row: 2 cards */}
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/account/gear"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A8B2BD] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Package className="h-5 w-5 text-[#A8B2BD]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels & more</p>
+                </Link>
+
+                <Link
+                  href="/journal/stats"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Trophy className="h-5 w-5 text-[#FFD700]" />
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">Achievements</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">{riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)} earned</p>
+                </Link>
+              </div>
             </section>
 
             {/* Your Rivers */}
