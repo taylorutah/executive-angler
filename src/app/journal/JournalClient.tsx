@@ -58,9 +58,11 @@ interface JournalClientProps {
   feedDisplay?: "collage" | "map";
   userProfile?: UserProfile;
   totalFlyPatterns?: number;
+  likeCounts?: Record<string, number>;
+  commentCounts?: Record<string, number>;
 }
 
-export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "collage", userProfile, totalFlyPatterns = 0 }: JournalClientProps) {
+export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "collage", userProfile, totalFlyPatterns = 0, likeCounts = {}, commentCounts = {} }: JournalClientProps) {
   // Group catches by session ID
   const catchesMap = catches.reduce((acc, c) => {
     const sid = (c as Catch & { session_id?: string }).session_id || "";
@@ -466,6 +468,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       catches={catchesMap.get(session.id) as any}
                       feedDisplay={feedDisplay}
+                      kudosCount={likeCounts[session.id] || 0}
+                      commentCount={commentCounts[session.id] || 0}
                     />
                   ))}
                 </div>

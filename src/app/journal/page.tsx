@@ -54,6 +54,19 @@ export default async function JournalPage() {
     .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_pattern:fly_patterns(name)")
     .in("session_id", sessionIds);
 
+  // Fetch social engagement counts (kudos + comments per session)
+  const { data: likes } = sessionIds.length > 0
+    ? await supabase.from("session_likes").select("session_id").in("session_id", sessionIds)
+    : { data: [] };
+  const { data: comments } = sessionIds.length > 0
+    ? await supabase.from("session_comments").select("session_id").in("session_id", sessionIds)
+    : { data: [] };
+
+  const likeCounts: Record<string, number> = {};
+  (likes || []).forEach((l) => { likeCounts[l.session_id] = (likeCounts[l.session_id] || 0) + 1; });
+  const commentCounts: Record<string, number> = {};
+  (comments || []).forEach((c) => { commentCounts[c.session_id] = (commentCounts[c.session_id] || 0) + 1; });
+
   // Fetch feed display preference + profile
   const { data: profile } = await supabase
     .from("profiles")
@@ -82,5 +95,7 @@ export default async function JournalPage() {
       avatarUrl: profile?.avatar_url || "",
     }}
     totalFlyPatterns={flyCount || 0}
+    likeCounts={likeCounts}
+    commentCounts={commentCounts}
   />;
 }

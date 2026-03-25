@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fish, MapPin, Droplets, Thermometer, Cloud } from "lucide-react";
+import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 
 interface Catch {
@@ -38,6 +38,8 @@ interface Props {
   session: FishingSession;
   catches?: Catch[];
   feedDisplay?: "collage" | "map";
+  kudosCount?: number;
+  commentCount?: number;
 }
 
 // Accent border colors — rotates by river name for visual variety
@@ -60,7 +62,7 @@ function accentColor(name?: string) {
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage" }: Props) {
+export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage", kudosCount = 0, commentCount = 0 }: Props) {
   const parsedDate = parseLocalDate(session.date);
   const formattedDate = parsedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
   const month = MONTHS[parsedDate.getMonth()];
@@ -175,6 +177,18 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               </div>
             )}
 
+            {/* Catch summary — shown when no photos, gives card substance */}
+            {!hasPhotos && catches.length > 0 && (
+              <p className="text-[11px] text-[#A8B2BD] mb-2 truncate">
+                {catches.filter(c => c.species).map(c => {
+                  const parts = [c.species];
+                  if (c.length_inches) parts.push(`${c.length_inches}"`);
+                  if (c.fly_pattern?.name) parts.push(c.fly_pattern.name);
+                  return parts.join(" · ");
+                }).join("  ·  ")}
+              </p>
+            )}
+
             {/* Photo collage — BELOW title/description */}
             {hasPhotos && (
               <div className={`grid gap-0.5 h-36 overflow-hidden rounded-lg mt-1 ${
@@ -191,11 +205,27 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               </div>
             )}
 
+            {/* Social engagement — kudos + comments */}
+            {(kudosCount > 0 || commentCount > 0) && (
+              <div className="flex items-center gap-4 mt-2 pt-2 border-t border-[#21262D]">
+                {kudosCount > 0 && (
+                  <span className="flex items-center gap-1 text-[11px] text-[#A8B2BD]">
+                    <Heart className="h-3 w-3 text-[#DA3633]" fill="#DA3633" />{kudosCount}
+                  </span>
+                )}
+                {commentCount > 0 && (
+                  <span className="flex items-center gap-1 text-[11px] text-[#A8B2BD]">
+                    <MessageCircle className="h-3 w-3" />{commentCount}
+                  </span>
+                )}
+              </div>
+            )}
+
           </div>
 
-          {/* Map thumbnail — right column */}
+          {/* Map thumbnail — right column (hidden on mobile, too small to be useful) */}
           {mapThumbUrl && (
-            <div className="flex-shrink-0 border-l border-[#21262D]">
+            <div className="hidden sm:block flex-shrink-0 border-l border-[#21262D]">
               <img
                 src={mapThumbUrl}
                 alt="Map"

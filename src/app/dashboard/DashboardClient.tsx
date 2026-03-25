@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -61,17 +62,20 @@ function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
     <div className="rounded-xl overflow-hidden border border-[#E8923A]/25 bg-[#161B22] shadow-lg shadow-[#E8923A]/5 ea-stats-card">
 
       {/* Hero row — Sessions · Total Fish · Biggest */}
+      <div className="px-4 pt-2 pb-0">
+        <span className="text-[8px] font-bold text-[#6E7681] tracking-[0.15em] uppercase">All Time</span>
+      </div>
       <div className="grid grid-cols-3 divide-x divide-[#21262D]">
         <HeroStat icon={<Calendar className="h-3.5 w-3.5 text-[#E8923A]/60" />} value={String(es.totalSessions)} label="SESSIONS" />
         <HeroStat icon={<Fish className="h-3.5 w-3.5 text-[#E8923A]/60" />} value={String(es.totalFish)} label="TOTAL FISH" />
         <div className="flex flex-col items-center justify-center py-4">
           <div className="flex items-baseline gap-1">
             <Ruler className="h-3.5 w-3.5 text-[#E8923A]/60 self-center" />
-            <span className="font-mono text-3xl font-semibold text-[#F0F6FC] ml-1">
+            <span className="font-mono text-2xl sm:text-3xl font-semibold text-[#F0F6FC] ml-1">
               {es.biggestFish > 0 ? es.biggestFish : "—"}
             </span>
             {es.biggestFish > 0 && (
-              <span className="font-mono text-base text-[#A8B2BD]">in</span>
+              <span className="font-mono text-sm sm:text-base text-[#A8B2BD]">in</span>
             )}
           </div>
           <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">BIGGEST</span>
@@ -129,7 +133,7 @@ function HeroStat({ icon, value, label }: { icon: React.ReactNode; value: string
     <div className="flex flex-col items-center justify-center py-4">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="font-mono text-3xl font-semibold text-[#F0F6FC]">{value}</span>
+        <span className="font-mono text-2xl sm:text-3xl font-semibold text-[#F0F6FC]">{value}</span>
       </div>
       <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">{label}</span>
     </div>
@@ -168,6 +172,7 @@ export default function DashboardClient({
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const es = enhancedStats;
+  const [showAllRivers, setShowAllRivers] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
@@ -247,6 +252,50 @@ export default function DashboardClient({
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
 
+            {/* ─── MOBILE-ONLY: Explore Feed (shown early, before rivers) ─── */}
+            {exploreFeed.length > 0 && (
+              <section className="lg:hidden">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Compass className="h-4 w-4 text-[#0BA5C7]" />
+                    <h2 className="font-serif text-lg text-[#F0F6FC]">Explore</h2>
+                  </div>
+                  <Link href="/feed" className="text-xs text-[#A8B2BD] hover:text-[#0BA5C7] transition-colors">
+                    See all &rarr;
+                  </Link>
+                </div>
+                <div className="space-y-2">
+                  {exploreFeed.slice(0, 4).map((session) => {
+                    const ep = session.profiles as { username: string | null; avatar_url: string | null; display_name: string | null } | null;
+                    return (
+                      <Link
+                        key={session.id}
+                        href={`/journal/${session.id}`}
+                        className="flex items-start gap-3 p-3 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#0BA5C7]/40 transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#0BA5C7]/10 flex items-center justify-center shrink-0 text-xs font-bold text-[#0BA5C7]">
+                          {String(ep?.username?.charAt(0) ?? "A").toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className="font-medium text-[#F0F6FC]">@{ep?.username ?? "angler"}</span>
+                            <span className="text-[#6E7681]">&middot;</span>
+                            <span className="text-[#0BA5C7] truncate">{session.river_name ?? "river"}</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            {session.total_fish != null && session.total_fish > 0 && (
+                              <span className="text-[10px] text-[#E8923A] font-mono">{session.total_fish} fish</span>
+                            )}
+                            <span className="text-[10px] text-[#6E7681]">{timeAgo(session.date)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
             {/* Quick Actions Grid — matches iOS Dashboard */}
             <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <Link
@@ -309,7 +358,7 @@ export default function DashboardClient({
                   </Link>
                 </div>
                 <div className="space-y-3">
-                  {riverStats.map((rs) => {
+                  {(showAllRivers ? riverStats : riverStats.slice(0, 3)).map((rs) => {
                     const riverSlug = rs.river_id ? riverSlugMap[rs.river_id] : favRivers.find((r) => r.name === rs.river_name)?.slug;
                     const riverHref = riverSlug ? `/rivers/${riverSlug}` : `/rivers`;
                     return (
@@ -403,6 +452,14 @@ export default function DashboardClient({
                       </div>
                     );
                   })}
+                  {riverStats.length > 3 && (
+                    <button
+                      onClick={() => setShowAllRivers(!showAllRivers)}
+                      className="w-full py-2.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A]/40 transition-colors"
+                    >
+                      {showAllRivers ? "Show fewer" : `Show all ${riverStats.length} rivers`}
+                    </button>
+                  )}
                 </div>
               </section>
             )}
@@ -503,9 +560,9 @@ export default function DashboardClient({
               </section>
             )}
 
-            {/* Explore Feed */}
+            {/* Explore Feed (desktop sidebar only — mobile version is above) */}
             {exploreFeed.length > 0 && (
-              <section>
+              <section className="hidden lg:block">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Compass className="h-4 w-4 text-[#0BA5C7]" />
