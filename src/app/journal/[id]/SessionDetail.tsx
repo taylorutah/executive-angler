@@ -670,34 +670,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               </div>
               )}
 
-              {/* Fish Photos Strip */}
-              {fishPhotos.length > 0 && (
-                <div className="mb-4">
-                  <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Fish</p>
-                  <div className="flex gap-2 overflow-x-auto pb-1">
-                    {fishPhotos.map((c, i) => {
-                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
-                      return (
-                        <button key={c.id} onClick={() => setLightboxIdx(i)}
-                          className="relative flex-shrink-0 h-32 w-32 rounded-lg overflow-hidden group hover:ring-2 hover:ring-[#E8923A] transition-all">
-                          <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
-                            <p className="text-white text-xs font-medium truncate">{c.species || "Fish"}</p>
-                            {c.length_inches && <p className="text-white/70 text-[10px]">{c.length_inches}&quot;</p>}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Session Photos Grid */}
+              {/* Unified Photo Grid — fish + session photos together */}
               <div>
-                {allSessionPhotos.length > 0 && (
-                  <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Session</p>
-                )}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                  {fishPhotos.map((c, i) => {
+                    const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                    return (
+                      <div key={`fish-${c.id}`} className="relative group aspect-square rounded-lg overflow-hidden">
+                        <button onClick={() => setLightboxIdx(i)} className="w-full h-full">
+                          <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                        </button>
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
+                          <p className="text-white text-xs font-medium truncate">{c.species || "Fish"}</p>
+                          {c.length_inches && <p className="text-white/70 text-[10px]">{c.length_inches}&quot;</p>}
+                        </div>
+                      </div>
+                    );
+                  })}
                   {allSessionPhotos.map((photo, i) => (
                     <div key={photo.id} className="relative group aspect-square rounded-lg overflow-hidden">
                       <button onClick={() => setSessionPhotoLightboxIdx(i)} className="w-full h-full">
@@ -788,7 +777,58 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
                 <span className="text-xs text-[#6E7681]">{totalFish} total</span>
               </div>
-              <div className="overflow-x-auto">
+              {/* Mobile: Stacked catch cards */}
+              <div className="sm:hidden divide-y divide-[#21262D]">
+                {catches.map((c) => {
+                  const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                  const isUploading = uploadingCatch === c.id;
+                  return (
+                    <div key={c.id} className="flex gap-3 px-4 py-3">
+                      {/* Photo / upload */}
+                      <div className="flex-shrink-0">
+                        {photoUrl ? (
+                          <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
+                            <div className="relative h-12 w-12 rounded-lg overflow-hidden">
+                              <Image src={photoUrl} alt="" fill className="object-cover" />
+                            </div>
+                          </button>
+                        ) : (
+                          <label className="h-12 w-12 rounded-lg bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors">
+                            {isUploading ? (
+                              <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                            ) : (
+                              <Camera className="h-4 w-4 text-[#6E7681]" />
+                            )}
+                            <input type="file" accept="image/*" className="hidden" disabled={isUploading}
+                              onChange={e => { const file = e.target.files?.[0]; if (file) handleCatchPhotoUpload(c.id, file); }} />
+                          </label>
+                        )}
+                      </div>
+                      {/* Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline justify-between">
+                          <p className="font-medium text-[#F0F6FC] text-sm truncate">
+                            {c.species || "—"}
+                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#6E7681]">×{c.quantities}</span>}
+                          </p>
+                          {c.length_inches && <span className="text-sm font-mono text-[#E8923A] ml-2 flex-shrink-0">{c.length_inches}&quot;</span>}
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-[#A8B2BD]">
+                          {c.fly_pattern?.name && <span className="truncate">{c.fly_pattern.name}</span>}
+                          {c.fly_position && (
+                            <span className="bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium flex-shrink-0">{c.fly_position}</span>
+                          )}
+                          {c.fly_size && <span className="flex-shrink-0">#{c.fly_size}</span>}
+                          {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{c.time_caught}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop: Full table */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#21262D]">
