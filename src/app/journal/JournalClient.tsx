@@ -361,7 +361,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 <TrendingUp className="h-4 w-4" /> River Stats
               </Link>
               <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
-                <Feather className="h-4 w-4" /> My Fly Box
+                <Feather className="h-4 w-4" /> Fly Box
                 <span className="ml-auto text-xs text-[#6E7681]">{totalFlyPatterns}</span>
               </Link>
               <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
