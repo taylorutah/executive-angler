@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle } from "lucide-react";
+import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle, Lock } from "lucide-react";
 import { parseLocalDate } from "@/lib/date";
 
 interface Catch {
@@ -32,6 +32,7 @@ interface FishingSession {
   catches?: Catch[];
   latitude?: number;
   longitude?: number;
+  privacy?: string;
 }
 
 interface Props {
@@ -122,11 +123,16 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               <h3 className="font-semibold text-[#F0F6FC] text-sm leading-snug group-hover:text-[#E8923A] transition-colors line-clamp-1">
                 {title}
               </h3>
-              {totalFish > 0 && (
-                <span className="flex-shrink-0 flex items-center gap-1 bg-[#E8923A]/15 text-[#E8923A] rounded-full px-2 py-0.5 text-xs font-semibold font-['IBM_Plex_Mono']">
-                  <Fish className="h-3 w-3" />{totalFish}
-                </span>
-              )}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {session.privacy && session.privacy !== "public" && (
+                  <Lock className="h-3 w-3 text-[#6E7681]" />
+                )}
+                {totalFish > 0 && (
+                  <span className="flex items-center gap-1 bg-[#E8923A]/15 text-[#E8923A] rounded-full px-2 py-0.5 text-xs font-semibold font-['IBM_Plex_Mono']">
+                    <Fish className="h-3 w-3" />{totalFish}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Location + time */}

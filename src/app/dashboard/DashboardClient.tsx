@@ -59,7 +59,8 @@ function formatDate(d: string): string {
 /* ─── Stats Card (matches iOS HomeStatsCard exactly) ─── */
 function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
   return (
-    <div className="rounded-xl overflow-hidden border border-[#E8923A]/25 bg-[#161B22] shadow-lg shadow-[#E8923A]/5 ea-stats-card">
+    <div className="rounded-xl p-px bg-gradient-to-br from-[#E8923A]/40 via-[#E8923A]/15 to-[#0BA5C7]/30 shadow-lg shadow-[#E8923A]/5">
+    <div className="rounded-[11px] overflow-hidden bg-[#161B22] ea-stats-card">
 
       {/* Hero row — Sessions · Total Fish · Biggest */}
       <div className="px-4 pt-2 pb-0">
@@ -71,11 +72,11 @@ function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
         <div className="flex flex-col items-center justify-center py-4">
           <div className="flex items-baseline gap-1">
             <Ruler className="h-3.5 w-3.5 text-[#E8923A]/60 self-center" />
-            <span className="font-mono text-2xl sm:text-3xl font-semibold text-[#F0F6FC] ml-1">
+            <span className="font-mono text-xl sm:text-3xl font-semibold text-[#F0F6FC] ml-1">
               {es.biggestFish > 0 ? es.biggestFish : "—"}
             </span>
             {es.biggestFish > 0 && (
-              <span className="font-mono text-sm sm:text-base text-[#A8B2BD]">in</span>
+              <span className="font-mono text-xs sm:text-base text-[#A8B2BD]">in</span>
             )}
           </div>
           <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">BIGGEST</span>
@@ -125,6 +126,7 @@ function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
         </div>
       </div>
     </div>
+    </div>
   );
 }
 
@@ -133,7 +135,7 @@ function HeroStat({ icon, value, label }: { icon: React.ReactNode; value: string
     <div className="flex flex-col items-center justify-center py-4">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="font-mono text-2xl sm:text-3xl font-semibold text-[#F0F6FC]">{value}</span>
+        <span className="font-mono text-xl sm:text-3xl font-semibold text-[#F0F6FC]">{value}</span>
       </div>
       <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">{label}</span>
     </div>
