@@ -18,6 +18,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
+import HashScroller from "@/components/ui/HashScroller";
 import { ExternalLink } from "lucide-react";
 
 export const revalidate = 86400;
@@ -231,6 +232,7 @@ export default async function FlyDetailPage({ params }: Props) {
 
   return (
     <>
+      <HashScroller />
       <JsonLd
         data={{
           "@context": "https://schema.org",
