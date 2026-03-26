@@ -88,6 +88,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Fly category pages
+  const flyCategories = ["dry", "nymph", "streamer", "emerger", "wet", "terrestrial", "egg", "midge"];
+  const flyCategoryPages = flyCategories.map((cat) => ({
+    url: `${SITE_URL}/flies/category/${cat}`,
+    lastModified: new Date(),
+    priority: 0.7,
+  }));
+
+  // Fly-for-river pages (one per river)
+  const flyForRiverPages = rivers.map((r) => ({
+    url: `${SITE_URL}/flies/for/${r.slug}`,
+    lastModified: new Date(),
+    priority: 0.6,
+  }));
+
+  // Fly hatch/insect pages (unique imitates values)
+  const insectSlugs = new Set<string>();
+  for (const fly of canonicalFlies) {
+    for (const im of (fly.imitates ?? [])) {
+      const slug = im
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+      if (slug) insectSlugs.add(slug);
+    }
+  }
+  const flyHatchPages = Array.from(insectSlugs).map((slug) => ({
+    url: `${SITE_URL}/flies/hatch/${slug}`,
+    lastModified: new Date(),
+    priority: 0.6,
+  }));
+
   return [
     ...staticPages,
     { url: `${SITE_URL}/flies`, lastModified: new Date(), priority: 0.9 },
@@ -99,5 +133,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...guidePages,
     ...shopPages,
     ...flyPages,
+    ...flyCategoryPages,
+    ...flyForRiverPages,
+    ...flyHatchPages,
   ];
 }

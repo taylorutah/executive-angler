@@ -12,7 +12,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
-import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds } from "@/lib/db";
+import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds, getFliesByCategory, getAllCanonicalFlies } from "@/lib/db";
 import { getAuthorByArticleName } from "@/data/authors";
 
 interface Props {
@@ -62,12 +62,29 @@ export default async function ArticlePage({ params }: Props) {
 
   const authorData = getAuthorByArticleName(article.author);
 
-  const [relatedDests, relatedRivers] = await Promise.all([
+  // Map article topics to fly categories for cross-linking
+  const ARTICLE_FLY_MAP: Record<string, string | null> = {
+    "introduction-to-euro-nymphing": "nymph",
+    "streamer-fishing-mastery": "streamer",
+    "dry-fly-anglers-guide-matching-the-hatch": "dry",
+    "essential-fly-box-20-patterns": null, // all categories
+    "reading-water-complete-guide": null,
+  };
+
+  const flyCategory = ARTICLE_FLY_MAP[article.slug];
+  const shouldShowFlies = flyCategory !== undefined || article.category === "technique" || article.category === "gear";
+
+  const [relatedDests, relatedRivers, relatedFlies] = await Promise.all([
     article.relatedDestinationIds?.length
       ? getDestinationsByIds(article.relatedDestinationIds)
       : Promise.resolve([]),
     article.relatedRiverIds?.length
       ? getRiversByIds(article.relatedRiverIds)
+      : Promise.resolve([]),
+    shouldShowFlies
+      ? (flyCategory
+          ? getFliesByCategory(flyCategory).then((f) => f.slice(0, 6))
+          : getAllCanonicalFlies().then((f) => f.filter((p) => p.featured).slice(0, 6)))
       : Promise.resolve([]),
   ]);
 
@@ -220,6 +237,30 @@ export default async function ArticlePage({ params }: Props) {
                       title={river.name}
                       subtitle={river.flowType}
                       meta={(river.primarySpecies || []).slice(0, 3).join(" · ")}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Related Fly Patterns */}
+            {relatedFlies.length > 0 && (
+              <div className="mt-12">
+                <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                  Related Fly Patterns
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {relatedFlies.map((fly) => (
+                    <EntityCard
+                      key={fly.id}
+                      href={`/flies/${fly.slug}`}
+                      imageUrl={fly.heroImageUrl || "/images/fly-icons/" + fly.category + ".svg"}
+                      imageAlt={fly.name}
+                      title={fly.name}
+                      subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
+                      meta={`Sizes ${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`}
+                      iconOnly={!fly.heroImageUrl}
+                      imageContain={!!fly.heroImageUrl}
                     />
                   ))}
                 </div>

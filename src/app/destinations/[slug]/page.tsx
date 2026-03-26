@@ -27,6 +27,7 @@ import {
   getArticlesByDestination,
   getFlyShopsByDestination,
   getSpeciesByCommonNames,
+  getFliesForDestination,
 } from "@/lib/db";
 
 interface Props {
@@ -78,13 +79,14 @@ export default async function DestinationPage({ params }: Props) {
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
 
-  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies] = await Promise.all([
+  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies] = await Promise.all([
     getRiversByDestination(dest.id),
     getLodgesByDestination(dest.id),
     getGuidesByDestination(dest.id),
     getArticlesByDestination(dest.id),
     getFlyShopsByDestination(dest.id),
     getSpeciesByCommonNames(dest.primarySpecies || []),
+    getFliesForDestination(dest.id),
   ]);
 
   const mapMarkers = [
@@ -382,6 +384,29 @@ export default async function DestinationPage({ params }: Props) {
                           </div>
                         )}
                       </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Essential Flies */}
+              {destFlies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-6">
+                    Essential Flies for {dest.name}
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {destFlies.slice(0, 8).map((fly) => (
+                      <EntityCard
+                        key={fly.id}
+                        href={`/flies/${fly.slug}`}
+                        imageUrl={fly.heroImageUrl || ""}
+                        imageAlt={fly.name}
+                        title={fly.name}
+                        subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
+                        meta={(fly.effectiveSpecies || []).slice(0, 3).join(" · ") || undefined}
+                        iconOnly={!fly.heroImageUrl}
+                      />
                     ))}
                   </div>
                 </ScrollAnimation>

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   Menu, X, ChevronDown, Search, User, Star, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
-  BookOpen, ShoppingBag, Users2, Newspaper
+  BookOpen, ShoppingBag, Users2, Newspaper, Bug
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -53,6 +53,18 @@ const EXPLORE_SECTIONS = [
       { label: "Brook Trout", href: "/species/brook-trout" },
     ],
     viewAll: { label: "All Species", href: "/species" },
+  },
+  {
+    title: "Fly Library",
+    icon: Bug,
+    links: [
+      { label: "Dry Flies", href: "/flies/category/dry" },
+      { label: "Nymphs", href: "/flies/category/nymph" },
+      { label: "Streamers", href: "/flies/category/streamer" },
+      { label: "Emergers", href: "/flies/category/emerger" },
+      { label: "Terrestrials", href: "/flies/category/terrestrial" },
+    ],
+    viewAll: { label: "All Patterns", href: "/flies" },
   },
   {
     title: "Directory",
