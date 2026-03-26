@@ -23,6 +23,7 @@ interface PhotoSubmissionFormProps {
   entityName: string;
   defaultOpen?: boolean;
   showQualityGuidance?: boolean;
+  hideHeader?: boolean;
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -34,6 +35,7 @@ export default function PhotoSubmissionForm({
   entityName,
   defaultOpen,
   showQualityGuidance,
+  hideHeader,
 }: PhotoSubmissionFormProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isOpen, setIsOpen] = useState(defaultOpen ?? false);
@@ -212,31 +214,33 @@ export default function PhotoSubmissionForm({
   if (isAuthenticated === null) return null;
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] shadow-sm overflow-hidden">
-      {/* Collapsible Header */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left hover:bg-[#1F2937] transition-colors"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
-            <Camera className="h-5 w-5 text-[#E8923A]" />
+    <div className={hideHeader ? "" : "bg-[#161B22] rounded-xl border border-[#21262D] shadow-sm overflow-hidden"}>
+      {/* Collapsible Header — hidden when parent provides its own */}
+      {!hideHeader && (
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full flex items-center justify-between p-6 text-left hover:bg-[#1F2937] transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
+              <Camera className="h-5 w-5 text-[#E8923A]" />
+            </div>
+            <div>
+              <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
+                Submit Your Photo
+              </h3>
+              <p className="text-sm text-[#A8B2BD] mt-0.5">
+                Share your {entityName} fishing photos with the community
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
-              Submit Your Photo
-            </h3>
-            <p className="text-sm text-[#A8B2BD] mt-0.5">
-              Share your {entityName} fishing photos with the community
-            </p>
-          </div>
-        </div>
-        {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-[#6E7681]" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-[#6E7681]" />
-        )}
-      </button>
+          {isOpen ? (
+            <ChevronUp className="h-5 w-5 text-[#6E7681]" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-[#6E7681]" />
+          )}
+        </button>
+      )}
 
       {/* Collapsible Content */}
       {isOpen && (

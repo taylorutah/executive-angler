@@ -86,6 +86,7 @@ export default function RiverPhotosClient({
               entityName={riverName}
               defaultOpen={true}
               showQualityGuidance={true}
+              hideHeader={true}
             />
           </div>
         </div>
