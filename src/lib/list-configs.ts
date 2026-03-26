@@ -177,6 +177,47 @@ export const flyShopListConfig: EntityListConfig = {
   defaultView: "grid",
 };
 
+export const flyListConfig: EntityListConfig = {
+  filters: [
+    {
+      key: "category",
+      label: "Category",
+      options: [
+        { value: "dry", label: "Dry Fly" },
+        { value: "nymph", label: "Nymph" },
+        { value: "streamer", label: "Streamer" },
+        { value: "emerger", label: "Emerger" },
+        { value: "wet", label: "Wet Fly" },
+        { value: "terrestrial", label: "Terrestrial" },
+        { value: "egg", label: "Egg" },
+        { value: "midge", label: "Midge" },
+      ],
+    },
+    {
+      key: "imitates",
+      label: "Imitates",
+      options: [
+        { value: "mayfly", label: "Mayfly" },
+        { value: "caddis", label: "Caddis" },
+        { value: "midge", label: "Midge" },
+        { value: "stonefly", label: "Stonefly" },
+        { value: "terrestrial", label: "Terrestrial" },
+        { value: "baitfish", label: "Baitfish" },
+        { value: "attractor", label: "Attractor" },
+        { value: "worm", label: "Worm / Egg" },
+      ],
+    },
+  ],
+  sortOptions: [
+    { value: "rank", label: "Most Popular" },
+    { value: "name-asc", label: "Name A–Z" },
+    { value: "name-desc", label: "Name Z–A" },
+    { value: "featured", label: "Featured First" },
+  ],
+  defaultSort: "rank",
+  defaultView: "grid",
+};
+
 export const articleListConfig: EntityListConfig = {
   filters: [
     {

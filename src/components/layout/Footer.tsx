@@ -28,6 +28,13 @@ const footerLinks = {
     { label: "Bonefish", href: "/species/bonefish" },
     { label: "All Species", href: "/species" },
   ],
+  "Fly Library": [
+    { label: "All Patterns", href: "/flies" },
+    { label: "Dry Flies", href: "/flies?category=dry" },
+    { label: "Nymphs", href: "/flies?category=nymph" },
+    { label: "Streamers", href: "/flies?category=streamer" },
+    { label: "Emergers", href: "/flies?category=emerger" },
+  ],
   Resources: [
     { label: "Articles", href: "/articles" },
     { label: "Species Guide", href: "/species" },

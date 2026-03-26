@@ -49,3 +49,13 @@ export {
   getArticlesByDestination,
   getArticlesByRiver,
 } from "./articles";
+
+export {
+  getAllCanonicalFlies,
+  getCanonicalFlyBySlug,
+  getFeaturedFlies,
+  getFliesByCategory,
+  getFliesForRiver,
+  getFliesByImitates,
+  getFliesByEffectiveSpecies,
+} from "./flies";

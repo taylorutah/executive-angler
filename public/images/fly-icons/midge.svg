@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Midge silhouette: tiny slim profile with thread body -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Hook shank (fine) -->
+    <path d="M20 44 Q28 42 44 40 Q52 39 56 40" stroke="#E8923A" stroke-width="1.2" fill="none"/>
+    <!-- Slim thread body -->
+    <ellipse cx="36" cy="41" rx="12" ry="2" opacity="0.5"/>
+    <!-- Ribbing (fine wraps) -->
+    <path d="M26 41.5 L27 41 M29 41 L30 40.5 M32 40.5 L33 40 M35 40 L36 39.5 M38 40 L39 39.5 M41 40 L42 40 M44 40 L45 40" stroke="#E8923A" stroke-width="0.4" opacity="0.3"/>
+    <!-- Tiny wing bud -->
+    <path d="M48 39 Q46 34 44 32 Q46 34 48 36 Q50 38 48 39" fill="#E8923A" opacity="0.35"/>
+    <!-- Head (small) -->
+    <circle cx="54" cy="40" r="2.5" fill="#E8923A" opacity="0.7"/>
+    <!-- Tail (single fiber) -->
+    <path d="M20 44 L14 42" stroke="#E8923A" stroke-width="0.6" stroke-linecap="round" opacity="0.4"/>
+    <!-- Hook bend (small) -->
+    <path d="M20 44 Q16 48 18 52 Q20 54 24 52" stroke="#E8923A" stroke-width="1.2" fill="none" opacity="0.7"/>
+    <!-- Hook point -->
+    <path d="M24 52 L26 48" stroke="#E8923A" stroke-width="0.8" opacity="0.5"/>
+    <!-- Cluster of hackle fibers (for Griffith's Gnat style) -->
+    <path d="M48 39 L46 34 M48 39 L50 34 M48 39 L44 36 M48 39 L52 36" stroke="#E8923A" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+  </g>
+</svg>

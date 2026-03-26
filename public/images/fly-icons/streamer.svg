@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Streamer silhouette: long flowing profile -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Hook shank -->
+    <path d="M8 40 Q20 38 40 38 Q55 38 62 40" stroke="#E8923A" stroke-width="1.5" fill="none"/>
+    <!-- Marabou tail (flowing) -->
+    <path d="M8 40 Q4 36 2 30 Q6 34 10 36 Q6 38 4 42 Q8 44 8 40" fill="#E8923A" opacity="0.4"/>
+    <path d="M8 40 Q2 42 0 48 Q4 46 8 44 Q4 40 2 36 Q6 36 8 40" fill="#E8923A" opacity="0.3"/>
+    <!-- Body -->
+    <ellipse cx="35" cy="39" rx="20" ry="5" opacity="0.5"/>
+    <!-- Palmered hackle marks -->
+    <path d="M20 39 L18 32 M20 39 L22 46 M28 38.5 L26 31 M28 38.5 L30 46 M36 38 L34 31 M36 38 L38 45 M44 38 L42 32 M44 38 L46 44" stroke="#E8923A" stroke-width="0.6" stroke-linecap="round" opacity="0.35"/>
+    <!-- Head -->
+    <ellipse cx="60" cy="40" rx="4" ry="3.5" fill="#E8923A" opacity="0.7"/>
+    <!-- Eye -->
+    <circle cx="61" cy="39" r="1.2" fill="#0D1117" opacity="0.6"/>
+    <!-- Hook bend -->
+    <path d="M62 40 Q66 43 64 47 Q62 50 58 48" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <!-- Hook point -->
+    <path d="M58 48 L56 44" stroke="#E8923A" stroke-width="1" opacity="0.5"/>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Dry Fly silhouette: upwing mayfly profile with hackle -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Hook shank -->
+    <path d="M16 52 Q20 50 40 48 Q56 46 62 50 Q66 53 64 56 Q62 59 58 58 Q54 57 50 56" stroke="#E8923A" stroke-width="1.5" fill="none"/>
+    <!-- Body -->
+    <ellipse cx="40" cy="47" rx="14" ry="4" opacity="0.7"/>
+    <!-- Hackle (radiating fibers) -->
+    <path d="M38 47 L30 34 M38 47 L34 32 M38 47 L38 30 M38 47 L42 32 M38 47 L46 34" stroke="#E8923A" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+    <!-- Upwing -->
+    <path d="M42 44 Q44 30 38 18 Q36 14 38 12 Q42 14 44 20 Q48 30 46 44" fill="#E8923A" opacity="0.5"/>
+    <path d="M44 44 Q48 32 44 20 Q42 16 44 14 Q48 16 50 22 Q54 32 50 44" fill="#E8923A" opacity="0.35"/>
+    <!-- Tail fibers -->
+    <path d="M16 52 L6 44 M16 52 L8 48 M16 52 L10 52" stroke="#E8923A" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+    <!-- Hook bend -->
+    <path d="M62 50 Q66 53 64 56 Q62 59 58 58" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <!-- Hook point -->
+    <path d="M58 58 L56 62 L58 60" stroke="#E8923A" stroke-width="1" fill="none" opacity="0.6"/>
+  </g>
+</svg>

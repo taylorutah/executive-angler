@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Emerger silhouette: half-submerged, trailing shuck -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Water surface line -->
+    <path d="M0 42 Q10 40 20 42 Q30 44 40 42 Q50 40 60 42 Q70 44 80 42" stroke="#E8923A" stroke-width="0.5" opacity="0.25"/>
+    <!-- Trailing shuck (below surface) -->
+    <path d="M18 46 Q14 50 10 52 Q8 54 6 52" stroke="#E8923A" stroke-width="1.2" fill="none" opacity="0.4"/>
+    <path d="M10 52 Q8 48 12 46 Q16 44 18 46" fill="#E8923A" opacity="0.3"/>
+    <!-- Abdomen (curving up through surface) -->
+    <path d="M18 46 Q24 44 32 42 Q38 40 42 38" stroke="#E8923A" stroke-width="1.8" fill="none" opacity="0.6"/>
+    <ellipse cx="30" cy="43" rx="8" ry="3" opacity="0.4"/>
+    <!-- Thorax (above surface) -->
+    <ellipse cx="44" cy="37" rx="6" ry="4" opacity="0.6"/>
+    <!-- Wings (partially unfurled) -->
+    <path d="M44 37 Q42 26 38 20 Q40 22 44 28 Q46 32 46 37" fill="#E8923A" opacity="0.4"/>
+    <path d="M46 36 Q48 28 46 22 Q48 24 50 30 Q52 34 50 37" fill="#E8923A" opacity="0.3"/>
+    <!-- Head -->
+    <circle cx="50" cy="36" r="2.5" fill="#E8923A" opacity="0.7"/>
+    <!-- Legs dangling -->
+    <path d="M42 38 L40 48 M44 38 L43 47 M46 37 L46 46" stroke="#E8923A" stroke-width="0.6" stroke-linecap="round" opacity="0.35"/>
+    <!-- Hook -->
+    <path d="M50 36 Q54 38 56 42 Q56 46 52 46 Q50 44 50 42" stroke="#E8923A" stroke-width="1.2" fill="none" opacity="0.5"/>
+  </g>
+</svg>

@@ -7,13 +7,14 @@ import {
   getAllGuides,
   getAllFlyShops,
   getAllSpecies,
+  getAllCanonicalFlies,
 } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [destinations, rivers, species, lodges, articles, guides, flyShops] =
+  const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies] =
     await Promise.all([
       getAllDestinations(),
       getAllRivers(),
@@ -22,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getAllArticles(),
       getAllGuides(),
       getAllFlyShops(),
+      getAllCanonicalFlies(),
     ]);
   const staticPages = [
     { url: SITE_URL, lastModified: new Date(), priority: 1 },
@@ -80,8 +82,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const flyPages = canonicalFlies.map((f) => ({
+    url: `${SITE_URL}/flies/${f.slug}`,
+    lastModified: new Date(),
+    priority: 0.7,
+  }));
+
   return [
     ...staticPages,
+    { url: `${SITE_URL}/flies`, lastModified: new Date(), priority: 0.9 },
     ...destinationPages,
     ...riverPages,
     ...speciesPages,
@@ -89,5 +98,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...articlePages,
     ...guidePages,
     ...shopPages,
+    ...flyPages,
   ];
 }

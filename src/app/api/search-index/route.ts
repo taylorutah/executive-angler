@@ -6,12 +6,13 @@ import { getAllFlyShops } from "@/lib/db/fly-shops";
 import { getAllLodges } from "@/lib/db/lodges";
 import { getAllArticles } from "@/lib/db/articles";
 import { getAllSpecies } from "@/lib/db/species";
+import { getAllCanonicalFlies } from "@/lib/db/flies";
 
 export const revalidate = 300; // 5-minute cache
 
 export async function GET() {
   try {
-    const [rivers, destinations, guides, flyShops, lodges, articles, species] = await Promise.all([
+    const [rivers, destinations, guides, flyShops, lodges, articles, species, canonicalFlies] = await Promise.all([
       getAllRivers(),
       getAllDestinations(),
       getAllGuides(),
@@ -19,6 +20,7 @@ export async function GET() {
       getAllLodges(),
       getAllArticles(),
       getAllSpecies(),
+      getAllCanonicalFlies(),
     ]);
 
     const destMap = Object.fromEntries(destinations.map((d) => [d.id, d.name]));
@@ -114,6 +116,20 @@ export async function GET() {
           ...a.tags,
           a.excerpt,
         ].join(" "),
+      })),
+      ...canonicalFlies.map((f) => ({
+        type: "fly" as const,
+        slug: f.slug,
+        title: f.name,
+        subtitle: `${f.category} — Sizes ${f.sizes[0] || ""}–${f.sizes[f.sizes.length - 1] || ""}`,
+        imageUrl: f.heroImageUrl,
+        href: `/flies/${f.slug}`,
+        keywords: [
+          f.category,
+          ...f.imitates,
+          ...f.colors,
+          f.description?.slice(0, 200),
+        ].filter(Boolean).join(" "),
       })),
     ];
 

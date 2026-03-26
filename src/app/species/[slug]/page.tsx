@@ -22,6 +22,7 @@ import {
   getSpeciesBySlug,
   getDestinationsByIds,
   getRiversByIds,
+  getFliesByEffectiveSpecies,
 } from "@/lib/db";
 
 interface Props {
@@ -82,9 +83,10 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
 
-  const [relatedDests, relatedRivers] = await Promise.all([
+  const [relatedDests, relatedRivers, speciesFlies] = await Promise.all([
     sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
     sp.relatedRiverIds ? getRiversByIds(sp.relatedRiverIds) : Promise.resolve([]),
+    getFliesByEffectiveSpecies(sp.commonName),
   ]);
 
   const mapMarkers = sp.distributionCoordinates
@@ -496,6 +498,29 @@ export default async function SpeciesDetailPage({ params }: Props) {
                           {fly}
                         </span>
                       </div>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Proven Fly Patterns (from canonical_flies) */}
+              {speciesFlies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                    Proven Fly Patterns for {sp.commonName}
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {speciesFlies.slice(0, 8).map((fly) => (
+                      <EntityCard
+                        key={fly.id}
+                        href={`/flies/${fly.slug}`}
+                        imageUrl={fly.heroImageUrl || ""}
+                        imageAlt={fly.name}
+                        title={fly.name}
+                        subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
+                        meta={(fly.imitates || []).slice(0, 3).join(" · ") || undefined}
+                        iconOnly={!fly.heroImageUrl}
+                      />
                     ))}
                   </div>
                 </ScrollAnimation>

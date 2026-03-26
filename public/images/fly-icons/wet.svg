@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Wet Fly silhouette: soft hackle, swept-back wing -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Hook shank -->
+    <path d="M16 44 Q24 42 40 40 Q52 39 58 40" stroke="#E8923A" stroke-width="1.5" fill="none"/>
+    <!-- Body -->
+    <ellipse cx="36" cy="41" rx="14" ry="3.5" opacity="0.5"/>
+    <!-- Ribbing -->
+    <path d="M24 41.5 L26 41 M29 41 L31 40.5 M34 40.5 L36 40 M39 40 L41 39.5" stroke="#E8923A" stroke-width="0.5" opacity="0.3"/>
+    <!-- Soft hackle (swept back) -->
+    <path d="M52 39 Q48 34 44 36 Q48 36 52 39" fill="#E8923A" opacity="0.35"/>
+    <path d="M52 39 Q46 32 42 34 Q46 34 52 39" fill="#E8923A" opacity="0.3"/>
+    <path d="M52 39 Q50 44 46 46 Q50 44 52 39" fill="#E8923A" opacity="0.35"/>
+    <path d="M52 39 Q48 46 44 48 Q48 46 52 39" fill="#E8923A" opacity="0.3"/>
+    <!-- Swept wing -->
+    <path d="M50 38 Q42 30 34 28 Q38 28 44 32 Q48 34 50 38" fill="#E8923A" opacity="0.4"/>
+    <!-- Head -->
+    <ellipse cx="56" cy="40" rx="3" ry="2.5" fill="#E8923A" opacity="0.7"/>
+    <!-- Tail -->
+    <path d="M16 44 L10 40 M16 44 L10 44 M16 44 L12 48" stroke="#E8923A" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
+    <!-- Hook bend -->
+    <path d="M16 44 Q12 48 14 52 Q16 54 20 52" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M20 52 L22 48" stroke="#E8923A" stroke-width="1" opacity="0.5"/>
+  </g>
+</svg>

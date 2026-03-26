@@ -4,11 +4,11 @@ import { Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, X, MapPin, Fish, Home, BookOpen, Users, Store, Compass } from "lucide-react";
+import { Search, X, MapPin, Fish, Home, BookOpen, Users, Store, Compass, Bug } from "lucide-react";
 
 
 interface SearchResult {
-  type: "destination" | "river" | "species" | "lodge" | "guide" | "fly-shop" | "article";
+  type: "destination" | "river" | "species" | "lodge" | "guide" | "fly-shop" | "article" | "fly";
   slug: string;
   title: string;
   subtitle: string;
@@ -28,6 +28,7 @@ const CATEGORY_META: Record<
   guide: { label: "Guides", icon: Users, color: "bg-rose-100 text-rose-700" },
   "fly-shop": { label: "Fly Shops", icon: Store, color: "bg-cyan-100 text-cyan-700" },
   article: { label: "Articles", icon: BookOpen, color: "bg-orange-100 text-orange-700" },
+  fly: { label: "Fly Patterns", icon: Bug, color: "bg-yellow-100 text-yellow-700" },
 };
 
 

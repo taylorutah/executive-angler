@@ -234,6 +234,72 @@ export interface Species {
   featured: boolean;
 }
 
+export interface CanonicalFly {
+  id: string;
+  slug: string;
+  name: string;
+  category: "dry" | "nymph" | "streamer" | "emerger" | "wet" | "terrestrial" | "egg" | "midge";
+
+  // Editorial
+  tagline?: string;
+  description: string;
+  history?: string;
+  tyingOverview?: string;
+  tyingSteps?: { step: number; instruction: string; tip?: string }[];
+  materialsList?: { material: string; description: string; substitute?: string }[];
+  fishingTips?: string;
+  whenToUse?: string;
+
+  // Classification
+  imitates: string[];
+  effectiveSpecies: string[];
+  waterTypes: string[];
+
+  // Variations
+  sizes: string[];
+  colors: string[];
+  beadOptions: string[];
+  hookStyles: string[];
+  keyVariations?: {
+    name: string;
+    slugFragment: string;
+    description?: string;
+    sizes?: string[];
+    colors?: string[];
+    bead?: string;
+    materialsDiff?: string;
+    imageUrl?: string;
+    videoUrl?: string;
+  }[];
+
+  // Media
+  heroImageUrl?: string;
+  galleryUrls: string[];
+  iconUrl?: string;
+  videoUrl?: string;
+  additionalVideos?: { title: string; url: string; channel: string; description?: string }[];
+
+  // Relationships
+  relatedFlyIds: string[];
+  relatedRiverIds: string[];
+  relatedDestinationIds: string[];
+  hatchAssociations?: { insect: string; months: string[]; rivers: string[] }[];
+
+  // Commerce
+  affiliateLinks?: { vendor: string; url: string; description?: string }[];
+  flyShopIds: string[];
+  originCredit?: string;
+
+  // SEO
+  metaTitle?: string;
+  metaDescription?: string;
+
+  // Display
+  rank?: number;
+  featured: boolean;
+  isHeroPattern: boolean;
+}
+
 export interface GoogleReview {
   authorName: string;
   rating: number;

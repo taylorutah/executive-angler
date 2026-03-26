@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Egg pattern silhouette: round egg on hook -->
+  <g fill="#E8923A" opacity="0.9">
+    <!-- Hook shank -->
+    <path d="M24 42 Q32 40 42 40" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <!-- Egg body (round) -->
+    <circle cx="40" cy="38" r="12" fill="#E8923A" opacity="0.45"/>
+    <!-- Egg highlight -->
+    <circle cx="36" cy="34" r="4" fill="#E8923A" opacity="0.2"/>
+    <!-- Veil/collar -->
+    <path d="M34 46 Q40 50 46 46" stroke="#E8923A" stroke-width="1" fill="none" opacity="0.35"/>
+    <!-- Hook bend -->
+    <path d="M24 42 Q18 46 20 52 Q22 56 28 54" stroke="#E8923A" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <!-- Hook point -->
+    <path d="M28 54 L30 50" stroke="#E8923A" stroke-width="1" opacity="0.5"/>
+    <!-- Eye of hook -->
+    <circle cx="52" cy="40" r="2" stroke="#E8923A" stroke-width="1" fill="none" opacity="0.5"/>
+  </g>
+</svg>

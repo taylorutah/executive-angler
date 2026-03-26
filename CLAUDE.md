@@ -190,7 +190,7 @@ All tables with `updated_at` columns have `update_updated_at_column()` before-up
 - All public content readable without login
 
 ## Content Data Model
-All content lives as TypeScript constants in `src/data/`. Pages use `generateStaticParams()` to pre-render at build time. The seed script (`scripts/seed-all.ts`) can push this data to Supabase, but **pages currently read from the TS files, NOT from Supabase queries**. The only Supabase reads at runtime are `user_favorites`, `photo_submissions` (approved), and `reviews`.
+Content originates as TypeScript constants in `src/data/` and is seeded to Supabase via `scripts/seed-all.ts`. **All 7 entity pages now read from Supabase** via `src/lib/db/*.ts` query modules using `createStaticClient()`. Pages use `generateStaticParams()` with async DB queries to pre-render at build time. User-specific data (`user_favorites`, `photo_submissions`, `reviews`) uses auth-aware `createClient()`.
 
 ### Content Counts
 | Entity | Count | Featured |
@@ -279,7 +279,7 @@ PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejec
 - All entity pages use `generateStaticParams()` reading from `src/data/*` TypeScript constants
 - Pages are pre-rendered at build time as static HTML (250+ pages)
 - API routes (`/api/*`) are serverless functions
-- **Pages do NOT query Supabase for content** — only for user data (favorites, photos, reviews)
+- **All entity pages query Supabase** via `src/lib/db/*.ts` using `createStaticClient()` (cookie-free, safe for static generation). User data (favorites, photos, reviews) uses `createClient()` from server/client.
 
 ### Homepage Section Backgrounds (alternating)
 1. Hero (full-bleed image)
@@ -298,7 +298,7 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 2. **Admin dashboard (`/admin/photos`) has NO authentication gate** — anyone with the URL can view pending photos
 3. **Supabase Storage bucket `photo-submissions` must be created manually** via Supabase dashboard (settings: public bucket, 10MB file size limit, allowed MIME: image/jpeg, image/png, image/webp)
 4. **Google OAuth not configured** — needs Google Cloud OAuth credentials added in Supabase Auth dashboard
-5. **Pages read from TypeScript files, not Supabase** — the seed script exists but pages are not wired to query the database; migrating to Supabase reads is a future task
+5. ~~**Pages read from TypeScript files, not Supabase**~~ — **COMPLETED 2026-03-25**: All 7 entity types now query Supabase via `src/lib/db/*.ts` using `createStaticClient()`. Static TS data files in `src/data/` retained as seed source only.
 6. **No admin content management** — all content changes require editing `src/data/*.ts` files and redeploying
 7. **Resend sender domain not verified** — photo notification emails will fail until configured in Resend dashboard
 8. **Google Reviews data** — `GoogleReviews` component built; no API needed. Data hardcoded per location via browser scrape → Supabase upsert. ~30/49 fly shops populated; lodges/guides not yet populated.
