@@ -32,8 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!shop) return { title: "Fly Shop Not Found" };
 
   return {
-    title: `${shop.name} — Fly Shop`,
+    title: shop.metaTitle || `${shop.name} — Fly Shop`,
     description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
+    openGraph: {
+      title: shop.metaTitle || shop.name,
+      description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
+      images: [
+        shop.heroImageUrl ||
+          `${SITE_URL}/api/og?title=${encodeURIComponent(shop.name)}&subtitle=Fly%20Shop&type=shop`,
+      ],
+    },
     alternates: {
       canonical: `${SITE_URL}/fly-shops/${slug}`,
     },

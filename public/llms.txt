@@ -25,6 +25,10 @@ Website: https://www.executiveangler.com
 | Guides | 31 | Professional guide services with specialties, rates |
 | Fly Shops | 27+ | Local fly shops with hours, services, brands |
 | Articles | 16 | Long-form editorial: techniques, destinations, gear, conservation |
+| Fly Library | 102+ | Canonical fly patterns with tying guides, variations, river matches |
+| Fly Categories | 8 | Dry, Nymph, Streamer, Emerger, Wet, Terrestrial, Egg, Midge |
+| Flies by River | 41 | Best patterns matched to each river's hatches and conditions |
+| Flies by Hatch | 20+ | Patterns grouped by insect type (mayfly, caddis, stonefly, etc.) |
 
 ---
 
@@ -312,6 +316,48 @@ Long-form editorial content with expert instruction, destination guides, gear re
 
 ---
 
+## Fly Library (102+ Patterns)
+
+The Fly Library is a comprehensive catalog of canonical fly patterns for fly fishing. Each pattern page includes: description, category, size range, variations, tying instructions, what it imitates, effective species, best rivers, affiliate links to purchase, and cross-links to related patterns.
+
+### Browse by Category
+- /flies/category/dry — Dry Flies (Adams, Elk Hair Caddis, Parachute Adams, Blue-Winged Olive, etc.)
+- /flies/category/nymph — Nymphs (Pheasant Tail, Hare's Ear, Prince Nymph, Copper John, etc.)
+- /flies/category/streamer — Streamers (Woolly Bugger, Clouser Minnow, Muddler Minnow, etc.)
+- /flies/category/emerger — Emergers (RS2, Klinkhamer, Sparkle Dun, etc.)
+- /flies/category/wet — Wet Flies (Soft Hackle, Partridge and Orange, etc.)
+- /flies/category/terrestrial — Terrestrials (Dave's Hopper, Chernobyl Ant, Foam Beetle, etc.)
+- /flies/category/egg — Egg Patterns (Glo Bug, Sucker Spawn, etc.)
+- /flies/category/midge — Midges (Zebra Midge, Griffith's Gnat, etc.)
+
+### Browse by Hatch/Insect
+- /flies/hatch/mayfly — Mayfly Imitations
+- /flies/hatch/caddis — Caddis Imitations
+- /flies/hatch/stonefly — Stonefly Imitations
+- /flies/hatch/midge — Midge Imitations
+- /flies/hatch/terrestrial — Terrestrial Imitations
+- /flies/hatch/baitfish — Baitfish Imitations
+
+### Best Flies by River
+- /flies/for/madison-river — Best Flies for Madison River
+- /flies/for/henrys-fork — Best Flies for Henry's Fork
+- /flies/for/missouri-river — Best Flies for Missouri River
+- (41 total — one for every river in the database)
+
+### Featured Patterns
+- /flies/adams — Adams (Dry Fly — the universal mayfly imitation)
+- /flies/elk-hair-caddis — Elk Hair Caddis (Dry Fly)
+- /flies/woolly-bugger — Woolly Bugger (Streamer — most versatile fly ever tied)
+- /flies/pheasant-tail-nymph — Pheasant Tail Nymph
+- /flies/hares-ear-nymph — Hare's Ear Nymph
+- /flies/copper-john — Copper John
+- /flies/parachute-adams — Parachute Adams
+- /flies/clouser-minnow — Clouser Minnow (Streamer — saltwater & warmwater)
+- /flies/zebra-midge — Zebra Midge
+- /flies/royal-wulff — Royal Wulff (Attractor Dry Fly)
+
+---
+
 ## Key Pages
 
 - / — Homepage with featured destinations, lodges, rivers, guides, and articles
@@ -322,6 +368,7 @@ Long-form editorial content with expert instruction, destination guides, gear re
 - /guides — Find 31 professional fly fishing guide services
 - /fly-shops — Find 27+ local fly shops
 - /articles — Read 16 expert articles and instruction
+- /flies — Trout Fly Library: 102+ canonical patterns with complete tying guides
 - /search — Full-text search across all content types
 - /journal — Personal fishing journal (authenticated users)
 - /about — About Executive Angler
@@ -349,10 +396,10 @@ The journal data powers the "Angler Intel" and "Activity Pulse" widgets on publi
 ## Technical Details
 
 - Built with Next.js 16 (App Router), hosted on Vercel
-- 250+ statically generated content pages
+- 400+ statically generated content pages (including 170+ fly library pages)
 - Interactive maps powered by Mapbox GL JS
 - Database: Supabase (PostgreSQL) for user data
-- Schema.org structured data: WebSite, BreadcrumbList, Article, TouristDestination, Place, LodgingBusiness, ProfessionalService, SportingGoodsStore, FAQPage
+- Schema.org structured data: WebSite, BreadcrumbList, Article (with Speakable + HowTo for techniques), TouristDestination, Place, BodyOfWater, LodgingBusiness, ProfessionalService, SportingGoodsStore, FAQPage, CollectionPage
 - Dynamic sitemap at /sitemap.xml
 - Dynamic OG images at /api/og
 - User authentication via Supabase Auth

@@ -122,7 +122,29 @@ export default async function ArticlePage({ params }: Props) {
             url: `${SITE_URL}/images/logo-1200.png`,
           },
         },
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: [".article-body h2", ".article-body p:first-of-type"],
+        },
       }} />
+
+      {/* HowTo schema for technique articles */}
+      {article.category === "technique" && (
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          name: article.title,
+          description: article.excerpt,
+          image: article.heroImageUrl,
+          totalTime: `PT${article.readingTimeMinutes}M`,
+          step: [{
+            "@type": "HowToStep",
+            name: article.title,
+            text: article.excerpt,
+            url: `${SITE_URL}/articles/${article.slug}`,
+          }],
+        }} />
+      )}
 
       {/* Reading progress bar — CSS scroll-driven */}
       <div className="reading-progress-bar" aria-hidden="true" />

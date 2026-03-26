@@ -101,6 +101,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${dmSerif.variable} ${ibmPlexMono.variable}`}>
       <head>
+        {/* Preconnect to critical third-party origins */}
+        <link rel="preconnect" href="https://qlasxtfbodyxbcuchvxz.supabase.co" />
+        <link rel="preconnect" href="https://api.mapbox.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}

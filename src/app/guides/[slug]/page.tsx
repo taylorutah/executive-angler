@@ -47,6 +47,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: guide.metaTitle || fallbackTitle,
     description:
       guide.metaDescription || fallbackDesc,
+    openGraph: {
+      title: guide.metaTitle || guide.name,
+      description: guide.metaDescription || fallbackDesc,
+      images: [
+        guide.photoUrl ||
+          `${SITE_URL}/api/og?title=${encodeURIComponent(guide.name)}&subtitle=${encodeURIComponent(`Fly Fishing Guide${guide.dailyRate ? ` — ${guide.dailyRate}` : ""}`)}&type=guide`,
+      ],
+    },
     alternates: {
       canonical: `${SITE_URL}/guides/${slug}`,
     },
