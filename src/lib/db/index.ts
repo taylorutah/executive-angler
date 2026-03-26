@@ -57,6 +57,7 @@ export {
   getFliesByCategory,
   getFliesForRiver,
   getFliesForDestination,
+  getFliesForFlyShop,
   getFliesByImitates,
   getFliesByEffectiveSpecies,
 } from "./flies";

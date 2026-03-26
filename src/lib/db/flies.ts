@@ -174,6 +174,24 @@ export async function getFliesForDestination(
   return (data ?? []).map(mapRow);
 }
 
+export async function getFliesForFlyShop(
+  shopId: string
+): Promise<CanonicalFly[]> {
+  const supabase = createStaticClient();
+  const { data, error } = await supabase
+    .from("canonical_flies")
+    .select("*")
+    .contains("fly_shop_ids", [shopId])
+    .order("rank", { ascending: true })
+    .limit(8);
+
+  if (error) {
+    console.error("[getFliesForFlyShop] Supabase error:", error);
+    throw error;
+  }
+  return (data ?? []).map(mapRow);
+}
+
 export async function getFliesByImitates(
   insect: string
 ): Promise<CanonicalFly[]> {

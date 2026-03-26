@@ -34,6 +34,7 @@ import {
   getArticlesByRiver,
   getSpeciesByCommonNames,
   getFliesForRiver,
+  getAllCanonicalFlies,
 } from "@/lib/db";
 
 
@@ -82,7 +83,7 @@ export default async function RiverPage({ params }: Props) {
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
 
-  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies] = await Promise.all([
+  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     Promise.all((river.additionalDestinationIds ?? []).map((id) => getDestinationById(id))),
     getLodgesByRiver(river.id),
@@ -92,7 +93,10 @@ export default async function RiverPage({ params }: Props) {
     getArticlesByRiver(river.id),
     getSpeciesByCommonNames(river.primarySpecies || []),
     getFliesForRiver(river.id),
+    getAllCanonicalFlies(),
   ]);
+
+  const flyByName = new Map(allFlies.map(f => [f.name.toLowerCase(), f]));
 
   // All destinations (primary + additional), filtered to truthy
   const allDests = [dest, ...(additionalDests ?? [])].filter(Boolean) as NonNullable<typeof dest>[];
@@ -381,7 +385,16 @@ export default async function RiverPage({ params }: Props) {
                                   {hatch.size}
                                 </td>
                                 <td className="px-4 py-3 text-[#A8B2BD]">
-                                  {hatch.pattern}
+                                  {(() => {
+                                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
+                                    return matchedFly ? (
+                                      <Link href={`/flies/${matchedFly.slug}`} className="text-[#E8923A] hover:underline">
+                                        {hatch.pattern}
+                                      </Link>
+                                    ) : (
+                                      hatch.pattern
+                                    );
+                                  })()}
                                 </td>
                               </tr>
                             ))

@@ -45,6 +45,9 @@ export default function EntityListView({ items, config, storageKey }: EntityList
     [storageKey]
   );
 
+  // Search query from URL params
+  const searchQuery = searchParams.get("q") || "";
+
   // Active filters from URL params
   const activeFilters: Record<string, string> = useMemo(() => {
     const filters: Record<string, string> = {};
@@ -75,6 +78,13 @@ export default function EntityListView({ items, config, storageKey }: EntityList
     [searchParams, router, pathname]
   );
 
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      updateParams({ q: value || null });
+    },
+    [updateParams]
+  );
+
   const handleFilterChange = useCallback(
     (key: string, value: string | null) => {
       updateParams({ [key]: value });
@@ -91,7 +101,24 @@ export default function EntityListView({ items, config, storageKey }: EntityList
 
   // Filter items
   const filteredItems = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return items.filter((item) => {
+      // Text search
+      if (q) {
+        const haystack = [
+          item.title,
+          item.subtitle,
+          item.description,
+          item.meta,
+          ...(item.badges || []),
+          ...(item.tags || []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+
       // Each CardData item has a _filterValues map injected by the page
       const filterVals = (item as CardData & { _filterValues?: Record<string, string | number> })._filterValues;
       if (!filterVals) return true;
@@ -103,7 +130,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
       }
       return true;
     });
-  }, [items, activeFilters]);
+  }, [items, activeFilters, searchQuery]);
 
   // Sort items
   const sortedItems = useMemo(() => {
@@ -168,6 +195,8 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         onViewChange={handleViewChange}
         totalCount={items.length}
         filteredCount={sortedItems.length}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
       />
 
       <AnimatePresence mode="wait">
@@ -181,11 +210,12 @@ export default function EntityListView({ items, config, storageKey }: EntityList
           {sortedItems.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-[#A8B2BD] text-lg">
-                No results match your filters.
+                {searchQuery ? "No results match your search." : "No results match your filters."}
               </p>
               <button
                 onClick={() => {
                   config.filters.forEach((f) => handleFilterChange(f.key, null));
+                  handleSearchChange("");
                 }}
                 className="mt-4 inline-block text-[#E8923A] font-medium hover:underline"
               >

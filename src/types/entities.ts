@@ -286,7 +286,7 @@ export interface CanonicalFly {
   hatchAssociations?: { insect: string; months: string[]; rivers: string[] }[];
 
   // Commerce
-  affiliateLinks?: { vendor: string; url: string; description?: string }[];
+  affiliateLinks?: { label: string; url: string }[];
   flyShopIds: string[];
   originCredit?: string;
 

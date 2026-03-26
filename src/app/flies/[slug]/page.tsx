@@ -5,6 +5,8 @@ import {
   getAllCanonicalFlies,
   getCanonicalFlyBySlug,
   getRiversByIds,
+  getAllFlyShops,
+  getAllArticles,
 } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import JsonLd from "@/components/seo/JsonLd";
@@ -12,8 +14,11 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import CommunityPhotos from "@/components/ui/CommunityPhotos";
+import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
+import { ExternalLink } from "lucide-react";
 
 export const revalidate = 86400;
 
@@ -91,7 +96,7 @@ export default async function FlyDetailPage({ params }: Props) {
       : fly.sizes[0];
 
   // Load related data
-  const [relatedRivers, relatedFlies] = await Promise.all([
+  const [relatedRivers, relatedFlies, allFlyShops, allArticles] = await Promise.all([
     fly.relatedRiverIds.length > 0
       ? getRiversByIds(fly.relatedRiverIds)
       : Promise.resolve([]),
@@ -100,7 +105,21 @@ export default async function FlyDetailPage({ params }: Props) {
           all.filter((f) => fly.relatedFlyIds.includes(f.id))
         )
       : Promise.resolve([]),
+    fly.flyShopIds.length > 0
+      ? getAllFlyShops()
+      : Promise.resolve([]),
+    getAllArticles(),
   ]);
+
+  // Filter fly shops that carry this fly
+  const flyShops = fly.flyShopIds.length > 0
+    ? allFlyShops.filter((shop) => fly.flyShopIds.includes(shop.id))
+    : [];
+
+  // Filter related articles (technique or gear categories)
+  const relatedArticles = allArticles.filter(
+    (a) => a.category === "technique" || a.category === "gear"
+  );
 
   // Build Quick Facts
   const quickFacts = [
@@ -233,7 +252,7 @@ export default async function FlyDetailPage({ params }: Props) {
       </div>
 
       {/* Hero section */}
-      <section className="bg-[#0D1117] pb-8">
+      <section className="bg-[#0D1117] pb-20 lg:pb-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-3 lg:gap-12">
             {/* Left: content */}
@@ -448,6 +467,7 @@ export default async function FlyDetailPage({ params }: Props) {
               )}
 
               {/* Tying Steps (hero patterns only) */}
+              {/* TODO: Gate steps 4+ behind premium */}
               {fly.tyingSteps && fly.tyingSteps.length > 0 && (
                 <ScrollAnimation delay={0.5}>
                   <div className="mt-10">
@@ -509,6 +529,16 @@ export default async function FlyDetailPage({ params }: Props) {
                   </div>
                 </ScrollAnimation>
               )}
+
+              {/* Community Photos */}
+              <div className="mt-10">
+                <CommunityPhotos entityType="fly" entityId={fly.id} />
+              </div>
+
+              {/* Photo Submission */}
+              <div className="mt-10">
+                <PhotoSubmissionForm entityType="fly" entityId={fly.id} entityName={fly.name} />
+              </div>
             </div>
 
             {/* Right sidebar */}
@@ -521,6 +551,33 @@ export default async function FlyDetailPage({ params }: Props) {
                 canonicalFlyId={fly.id}
                 flyName={fly.name}
               />
+
+              {/* Buy This Fly */}
+              {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="font-heading uppercase tracking-wider text-xs text-slate-400">
+                    Buy This Fly
+                  </h3>
+                  {fly.affiliateLinks.map((link, i) => (
+                    <a
+                      key={i}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="flex items-center justify-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold hover:bg-gold/20 transition-colors"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* Community Stats */}
+              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 text-center">
+                <p className="text-2xl font-heading font-bold text-[#F0F6FC]">&mdash;</p>
+                <p className="text-xs text-[#6E7681] mt-1">catches logged by anglers</p>
+              </div>
 
               {/* Effective Species */}
               {fly.effectiveSpecies.length > 0 && (
@@ -594,6 +651,44 @@ export default async function FlyDetailPage({ params }: Props) {
                   </div>
                 </div>
               )}
+
+              {/* Fly Shops that carry it */}
+              {flyShops.length > 0 && (
+                <div>
+                  <h3 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
+                    Available At
+                  </h3>
+                  <div className="space-y-3">
+                    {flyShops.slice(0, 4).map((shop) => (
+                      <EntityCard
+                        key={shop.id}
+                        href={`/fly-shops/${shop.slug}`}
+                        imageUrl={
+                          shop.heroImageUrl ||
+                          "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80"
+                        }
+                        imageAlt={shop.name}
+                        title={shop.name}
+                        iconOnly
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Related Reading */}
+              {relatedArticles.length > 0 && (
+                <div>
+                  <h3 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">Related Reading</h3>
+                  <div className="space-y-2">
+                    {relatedArticles.slice(0, 3).map((a) => (
+                      <Link key={a.id} href={`/articles/${a.slug}`} className="block text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
+                        {a.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -605,6 +700,33 @@ export default async function FlyDetailPage({ params }: Props) {
               canonicalFlyId={fly.id}
               flyName={fly.name}
             />
+
+            {/* Buy This Fly */}
+            {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
+              <div className="space-y-2">
+                <h3 className="font-heading uppercase tracking-wider text-xs text-slate-400">
+                  Buy This Fly
+                </h3>
+                {fly.affiliateLinks.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="flex items-center justify-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold hover:bg-gold/20 transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Community Stats */}
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 text-center">
+              <p className="text-2xl font-heading font-bold text-[#F0F6FC]">&mdash;</p>
+              <p className="text-xs text-[#6E7681] mt-1">catches logged by anglers</p>
+            </div>
 
             {fly.effectiveSpecies.length > 0 && (
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
@@ -679,6 +801,11 @@ export default async function FlyDetailPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Sticky mobile CTA */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D1117]/95 backdrop-blur-sm border-t border-[#21262D] px-4 py-3 safe-area-bottom">
+        <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+      </div>
     </>
   );
 }

@@ -17,7 +17,8 @@ import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
-import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination, getArticlesByDestination, getSpeciesByCommonNames } from "@/lib/db";
+import EntityCard from "@/components/ui/EntityCard";
+import { getAllFlyShops, getFlyShopBySlug, getDestinationById, getRiversByDestination, getGuidesByDestination, getArticlesByDestination, getSpeciesByCommonNames, getFliesForFlyShop } from "@/lib/db";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -60,9 +61,10 @@ export default async function FlyShopPage({ params }: Props) {
     shop.destinationId ? getGuidesByDestination(shop.destinationId) : Promise.resolve([]),
   ]);
 
-  const [shopArticles, shopSpecies] = await Promise.all([
+  const [shopArticles, shopSpecies, shopFlies] = await Promise.all([
     shop.destinationId ? getArticlesByDestination(shop.destinationId) : Promise.resolve([]),
     dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
+    getFliesForFlyShop(shop.id),
   ]);
 
   const quickFacts = [
@@ -285,6 +287,28 @@ export default async function FlyShopPage({ params }: Props) {
                           {sp.commonName}
                         </Badge>
                       </Link>
+                    ))}
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {shopFlies.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                    Featured Patterns
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {shopFlies.map((fly) => (
+                      <EntityCard
+                        key={fly.id}
+                        href={`/flies/${fly.slug}`}
+                        imageUrl={fly.heroImageUrl || ""}
+                        imageAlt={fly.name}
+                        title={fly.name}
+                        subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
+                        meta={(fly.effectiveSpecies || []).slice(0, 3).join(" · ") || undefined}
+                        iconOnly={!fly.heroImageUrl}
+                      />
                     ))}
                   </div>
                 </ScrollAnimation>

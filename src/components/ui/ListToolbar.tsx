@@ -1,6 +1,7 @@
 "use client";
 
-import { LayoutGrid, Grid3X3, List, Newspaper, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { LayoutGrid, Grid3X3, List, Newspaper, ChevronDown, Search, X } from "lucide-react";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
 
 interface ListToolbarProps {
@@ -14,6 +15,8 @@ interface ListToolbarProps {
   onViewChange: (mode: ViewMode) => void;
   totalCount: number;
   filteredCount: number;
+  searchQuery?: string;
+  onSearchChange?: (value: string) => void;
 }
 
 const viewModes: { mode: ViewMode; icon: typeof LayoutGrid; label: string }[] = [
@@ -34,11 +37,48 @@ export default function ListToolbar({
   onViewChange,
   totalCount,
   filteredCount,
+  searchQuery = "",
+  onSearchChange,
 }: ListToolbarProps) {
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
+  // Debounced local search state
+  const [localSearch, setLocalSearch] = useState(searchQuery);
+  useEffect(() => {
+    setLocalSearch(searchQuery);
+  }, [searchQuery]);
+  useEffect(() => {
+    if (localSearch === searchQuery) return;
+    const timer = setTimeout(() => {
+      onSearchChange?.(localSearch);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [localSearch]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="sticky top-20 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[#0D1117]/95 backdrop-blur-sm border-b border-[#21262D]/60 mb-8">
+      {/* Search bar */}
+      {onSearchChange && (
+        <div className="relative mb-3">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+          <input
+            type="text"
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            placeholder="Search patterns..."
+            className="w-full bg-[#161B22] border border-[#21262D] rounded-lg pl-9 pr-9 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] transition-colors"
+          />
+          {localSearch && (
+            <button
+              onClick={() => { setLocalSearch(""); onSearchChange(""); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Left: Filter pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide min-w-0 flex-1">
