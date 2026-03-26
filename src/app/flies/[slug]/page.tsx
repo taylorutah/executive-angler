@@ -309,13 +309,12 @@ export default async function FlyDetailPage({ params }: Props) {
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-4">
                       {fly.keyVariations.map((v) => (
-                        <a
+                        <div
                           key={v.slugFragment}
                           id={v.slugFragment}
-                          href={`#${v.slugFragment}`}
-                          className="block bg-[#161B22] rounded-xl border border-[#21262D] p-5 hover:border-[#E8923A]/40 transition-colors group"
+                          className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 scroll-mt-20"
                         >
-                          <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                          <h3 className="font-heading text-lg font-semibold text-[#F0F6FC]">
                             {v.name}
                           </h3>
                           {v.description && (
@@ -344,7 +343,7 @@ export default async function FlyDetailPage({ params }: Props) {
                                 </span>
                               ))}
                           </div>
-                        </a>
+                        </div>
                       ))}
                     </div>
                   </div>
