@@ -56,14 +56,28 @@
     --color-danger: #DC2626;
   }
 
-  /* Header theming via CSS class */
-  .ea-header {
-    background: #161B22;
-    border-color: #21262D;
+  /* Header theming — two-tier nav */
+  .ea-header-primary {
+    background: #0D1117;
   }
-  .light-mode .ea-header {
+  .ea-header-category {
+    background: #161B22;
+  }
+  .light-mode .ea-header-primary {
+    background: #EDE8DF;
+    border-color: #D4CBB8;
+  }
+  .light-mode .ea-header-category {
     background: #FFFFFF;
     border-color: #D4CBB8;
+  }
+
+  /* Mobile category bar scroll fade */
+  @media (max-width: 1023px) {
+    .category-bar-fade {
+      mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    }
   }
 
   * {

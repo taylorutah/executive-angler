@@ -16,7 +16,19 @@ import { createClient } from "@/lib/supabase/client";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
 
-/* ── Explore mega-menu data ── */
+/* ── Category bar links (Tier 2) ── */
+const CATEGORY_NAV = [
+  { label: "Destinations", href: "/destinations" },
+  { label: "Rivers", href: "/rivers" },
+  { label: "Species", href: "/species" },
+  { label: "Fly Library", href: "/flies" },
+  { label: "Lodges", href: "/lodges" },
+  { label: "Guides", href: "/guides" },
+  { label: "Fly Shops", href: "/fly-shops" },
+  { label: "Articles", href: "/articles" },
+];
+
+/* ── Explore deep-link data (mobile hamburger accordion) ── */
 const EXPLORE_SECTIONS = [
   {
     title: "Destinations",
@@ -88,7 +100,7 @@ const EXPLORE_SECTIONS = [
   },
 ];
 
-/* ── Main nav items (non-Explore) ── */
+/* ── Main nav items (Tier 1, app-level) ── */
 const MAIN_NAV = [
   { label: "Dashboard", href: "/dashboard", authOnly: true },
   { label: "Journal", href: "/journal", authOnly: true },
@@ -97,16 +109,13 @@ const MAIN_NAV = [
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
   const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string } | null>(null);
   const pathname = usePathname();
-  const exploreRef = useRef<HTMLDivElement>(null);
-  const exploreTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   const plusRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMobileOpen(false); setExploreOpen(false); setPlusOpen(false); }, [pathname]);
+  useEffect(() => { setMobileOpen(false); setPlusOpen(false); }, [pathname]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -128,7 +137,6 @@ export default function Header() {
 
     fetchUserProfile();
 
-    // Listen for auth changes (sign in, sign out, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
         setUser(null);
@@ -154,12 +162,9 @@ export default function Header() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Close explore on outside click
+  // Close plus menu on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
-        setExploreOpen(false);
-      }
       if (plusRef.current && !plusRef.current.contains(e.target as Node)) {
         setPlusOpen(false);
       }
@@ -168,237 +173,186 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const handleExploreEnter = () => {
-    clearTimeout(exploreTimeout.current);
-    setExploreOpen(true);
-  };
-  const handleExploreLeave = () => {
-    exploreTimeout.current = setTimeout(() => setExploreOpen(false), 200);
-  };
-
-  const isExplorePath = ["/destinations", "/rivers", "/species", "/lodges", "/guides", "/fly-shops", "/articles"].some(
-    (p) => pathname.startsWith(p)
-  );
-
   return (
     <>
-      <header className="ea-header fixed top-0 left-0 right-0 z-50 border-b">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex-shrink-0 cursor-pointer select-none">
-              <Image
-                src="/images/logo-horizontal-white.svg"
-                alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-8 w-auto block dark-logo pointer-events-none"
-                priority
-                draggable={false}
-              />
-              <Image
-                src="/images/logo-horizontal-forest.svg"
-                alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-8 w-auto hidden light-logo pointer-events-none"
-                priority
-                draggable={false}
-              />
-            </Link>
-
-            {/* ── Desktop Navigation ── */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {/* Explore mega-menu trigger */}
-              <div
-                ref={exploreRef}
-                className="relative"
-                onMouseEnter={handleExploreEnter}
-                onMouseLeave={handleExploreLeave}
-              >
-                <button
-                  onClick={() => setExploreOpen(!exploreOpen)}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isExplorePath || exploreOpen
-                      ? "text-[#F0F6FC]"
-                      : "text-[#A8B2BD] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  <Compass className="h-4 w-4" />
-                  Explore
-                  <ChevronDown className={`h-3.5 w-3.5 transition-transform ${exploreOpen ? "rotate-180" : ""}`} />
-                </button>
-
-                {/* Mega-menu dropdown */}
-                {exploreOpen && (
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 w-[720px] bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden animate-fade-in">
-                    {/* Copper accent line at top */}
-                    <div className="h-0.5 bg-gradient-to-r from-[#E8923A] via-[#0BA5C7] to-[#E8923A]" />
-                    <div className="grid grid-cols-3 gap-0 p-4">
-                      {EXPLORE_SECTIONS.map((section) => {
-                        const Icon = section.icon;
-                        return (
-                          <div key={section.title} className="px-3 py-2">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Icon className="h-3.5 w-3.5 text-[#E8923A]" />
-                              <span className="text-[10px] font-bold text-[#E8923A] uppercase tracking-widest">{section.title}</span>
-                            </div>
-                            <div className="space-y-0.5">
-                              {section.links.map((link) => (
-                                <Link
-                                  key={link.href + link.label}
-                                  href={link.href}
-                                  className="block px-2 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
-                                >
-                                  {link.label}
-                                </Link>
-                              ))}
-                              {section.viewAll && (
-                                <Link
-                                  href={section.viewAll.href}
-                                  className="block px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:text-[#F0F6FC] transition-colors mt-1"
-                                >
-                                  {section.viewAll.label} &rarr;
-                                </Link>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Main nav links */}
-              {MAIN_NAV.map((link) => {
-                if (link.authOnly && !user) return null;
-                const isActive = pathname.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? "text-[#F0F6FC]"
-                        : "text-[#A8B2BD] hover:text-[#F0F6FC]"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            {/* ── Right Actions ── */}
-            <div className="flex items-center gap-1">
-              <ThemeToggle />
-              <Link
-                href="/search"
-                className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#A8B2BD] hover:text-[#F0F6FC]"
-                title="Search (⌘K)"
-              >
-                <Search className="h-4.5 w-4.5" />
+      <header className="fixed top-0 left-0 right-0 z-50">
+        {/* ── Tier 1: Primary Bar ── */}
+        <div className="ea-header-primary border-b border-[#21262D]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex h-12 items-center justify-between">
+              {/* Logo */}
+              <Link href="/" className="flex-shrink-0 cursor-pointer select-none">
+                <Image
+                  src="/images/logo-horizontal-white.svg"
+                  alt="Executive Angler"
+                  width={160}
+                  height={32}
+                  className="h-7 w-auto block dark-logo pointer-events-none"
+                  priority
+                  draggable={false}
+                />
+                <Image
+                  src="/images/logo-horizontal-forest.svg"
+                  alt="Executive Angler"
+                  width={160}
+                  height={32}
+                  className="h-7 w-auto hidden light-logo pointer-events-none"
+                  priority
+                  draggable={false}
+                />
               </Link>
 
-              {user ? (
-                <div className="hidden sm:flex items-center gap-0.5">
-                  <NotificationBell />
-                  <MessageIcon />
-                  <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors ml-1">
-                    <div className="h-8 w-8 rounded-full overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0 ring-2 ring-transparent hover:ring-[#E8923A]/40 transition-all">
-                      {user?.avatarUrl ? (
-                        <Image src={user.avatarUrl} alt="Profile" width={32} height={32} className="object-cover w-full h-full" />
-                      ) : (
-                        <span className="text-xs font-bold text-[#A8B2BD]">
-                          {(user?.displayName || user?.email || "A")[0].toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
-                </div>
-              ) : (
-                <div className="hidden sm:flex items-center gap-2 ml-2">
-                  <Link
-                    href="/login"
-                    className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="px-4 py-1.5 rounded-lg text-sm font-medium bg-[#E8923A] text-white hover:bg-[#d17d28] transition-colors"
-                  >
-                    Join Free
-                  </Link>
-                </div>
-              )}
+              {/* ── Desktop App Nav (Tier 1 center) ── */}
+              <nav className="hidden lg:flex items-center gap-1">
+                {MAIN_NAV.map((link) => {
+                  if (link.authOnly && !user) return null;
+                  const isActive = pathname.startsWith(link.href);
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                        isActive
+                          ? "text-[#F0F6FC]"
+                          : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </nav>
 
-              {/* ── Plus / Quick Actions ── */}
-              {user && (
-                <div ref={plusRef} className="relative">
-                  <button
-                    onClick={() => setPlusOpen(!plusOpen)}
-                    aria-label="Quick actions"
-                    className={`flex items-center justify-center w-9 h-9 rounded-full bg-[#E8923A] text-white hover:bg-[#F0A65A] transition-all shadow-md hover:shadow-lg active:scale-95 ${plusOpen ? "rotate-45" : ""} duration-200`}
-                  >
-                    <Plus className="h-5 w-5" strokeWidth={2.5} />
-                  </button>
+              {/* ── Right Actions ── */}
+              <div className="flex items-center gap-1">
+                <ThemeToggle />
+                <Link
+                  href="/search"
+                  className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  title="Search (⌘K)"
+                >
+                  <Search className="h-4.5 w-4.5" />
+                </Link>
 
-                  {plusOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
-                      <div className="h-0.5 bg-[#E8923A]" />
-                      <div className="py-1">
-                        <Link
-                          href="/journal/sessions/new"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
-                        >
-                          <FishSymbol className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-                          Log a Session
-                        </Link>
-                        <div className="h-px bg-[#21262D] mx-4" />
-                        <Link
-                          href="/contribute"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
-                        >
-                          <GitPullRequest className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-                          Contribute
-                        </Link>
-                        <Link
-                          href="/feedback"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
-                        >
-                          <Lightbulb className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-                          Share an Idea
-                        </Link>
+                {user ? (
+                  <div className="hidden sm:flex items-center gap-0.5">
+                    <NotificationBell />
+                    <MessageIcon />
+                    <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors ml-1">
+                      <div className="h-8 w-8 rounded-full overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0 ring-2 ring-transparent hover:ring-[#E8923A]/40 transition-all">
+                        {user?.avatarUrl ? (
+                          <Image src={user.avatarUrl} alt="Profile" width={32} height={32} className="object-cover w-full h-full" />
+                        ) : (
+                          <span className="text-xs font-bold text-[#A8B2BD]">
+                            {(user?.displayName || user?.email || "A")[0].toUpperCase()}
+                          </span>
+                        )}
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="hidden sm:flex items-center gap-2 ml-2">
+                    <Link
+                      href="/login"
+                      className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="px-4 py-1.5 rounded-lg text-sm font-medium bg-[#E8923A] text-white hover:bg-[#d17d28] transition-colors"
+                    >
+                      Join Free
+                    </Link>
+                  </div>
+                )}
 
-              {/* Mobile Menu Toggle */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
-                aria-label="Toggle menu"
-              >
-                {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
+                {/* ── Plus / Quick Actions ── */}
+                {user && (
+                  <div ref={plusRef} className="relative">
+                    <button
+                      onClick={() => setPlusOpen(!plusOpen)}
+                      aria-label="Quick actions"
+                      className={`flex items-center justify-center w-9 h-9 rounded-full bg-[#E8923A] text-white hover:bg-[#F0A65A] transition-all shadow-md hover:shadow-lg active:scale-95 ${plusOpen ? "rotate-45" : ""} duration-200`}
+                    >
+                      <Plus className="h-5 w-5" strokeWidth={2.5} />
+                    </button>
+
+                    {plusOpen && (
+                      <div className="absolute right-0 top-full mt-2 w-52 bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
+                        <div className="h-0.5 bg-[#E8923A]" />
+                        <div className="py-1">
+                          <Link
+                            href="/journal/sessions/new"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                          >
+                            <FishSymbol className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                            Log a Session
+                          </Link>
+                          <div className="h-px bg-[#21262D] mx-4" />
+                          <Link
+                            href="/contribute"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                          >
+                            <GitPullRequest className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                            Contribute
+                          </Link>
+                          <Link
+                            href="/feedback"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                          >
+                            <Lightbulb className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                            Share an Idea
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Mobile Menu Toggle */}
+                <button
+                  onClick={() => setMobileOpen(!mobileOpen)}
+                  className="lg:hidden p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                  aria-label="Toggle menu"
+                >
+                  {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        {/* Active indicator bar — Strava copper underline */}
-        <div className="hidden lg:block absolute bottom-0 left-0 right-0 h-[2px]">
+
+        {/* ── Tier 2: Category Bar ── */}
+        <div className="ea-header-category border-b border-[#21262D]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Active page copper bar would go here via CSS if needed */}
+            <nav className="flex items-center h-9 overflow-x-auto scrollbar-hide category-bar-fade lg:overflow-visible">
+              <div className="flex items-center gap-1 whitespace-nowrap lg:whitespace-normal">
+                {CATEGORY_NAV.map((link) => {
+                  const isActive = pathname.startsWith(link.href);
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`px-3 py-1 text-[13px] font-medium tracking-wide transition-colors border-b-2 ${
+                        isActive
+                          ? "text-[#F0F6FC] border-[#E8923A]"
+                          : "text-[#A8B2BD] border-transparent hover:text-[#F0F6FC]"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
           </div>
         </div>
       </header>
 
       {/* ── Mobile Menu ── */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden" style={{ top: "64px" }}>
+        <div className="fixed inset-0 z-40 lg:hidden" style={{ top: "84px" }}>
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
           <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-[#161B22] shadow-2xl overflow-y-auto animate-fade-in border-l border-[#21262D]">
             <div className="p-5">
