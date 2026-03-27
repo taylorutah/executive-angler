@@ -18,7 +18,6 @@ import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
-import RiverWeatherCard from "@/components/rivers/RiverWeatherCard";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
@@ -482,14 +481,11 @@ export default async function RiverPage({ params }: Props) {
 
             {/* Sidebar */}
             <div className="space-y-6 lg:sticky lg:top-24">
-              {river.latitude && river.longitude && (
-                <RiverWeatherCard
-                  riverId={river.id}
-                  riverLatitude={river.latitude}
-                  riverLongitude={river.longitude}
-                />
-              )}
-              <RiverConditionsCard riverId={river.id} />
+              <RiverConditionsCard
+                riverId={river.id}
+                riverLatitude={river.latitude}
+                riverLongitude={river.longitude}
+              />
 
               <QuickFacts facts={quickFacts} />
 
