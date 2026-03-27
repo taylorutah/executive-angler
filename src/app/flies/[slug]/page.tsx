@@ -284,16 +284,12 @@ export default async function FlyDetailPage({ params }: Props) {
               {/* Fly Hero Image */}
               {fly.heroImageUrl && (
                 <div className="mt-8">
-                  <div className="rounded-2xl overflow-hidden bg-[#F8F4EE] border border-[#21262D] flex items-center justify-center p-6">
-                    <Image
+                  <div className="rounded-2xl overflow-hidden bg-white border border-[#21262D]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={fly.heroImageUrl}
                       alt={`${fly.name} fly pattern`}
-                      width={700}
-                      height={320}
-                      unoptimized
-                      priority
-                      className="object-contain w-full"
-                      style={{maxHeight: '320px'}}
+                      className="w-full h-auto block"
                     />
                   </div>
                   <p className="text-xs text-[#6E7681] text-center mt-2">
