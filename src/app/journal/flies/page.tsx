@@ -88,8 +88,8 @@ export default async function FlyBoxPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  // Fetch both tables in parallel
-  const [patternsResult, flyBoxResult] = await Promise.all([
+  // Fetch all three in parallel
+  const [patternsResult, flyBoxResult, canonicalResult] = await Promise.all([
     supabase
       .from('fly_patterns')
       .select('*')
@@ -108,7 +108,15 @@ export default async function FlyBoxPage() {
       `)
       .eq('user_id', user.id)
       .order('added_at', { ascending: false }),
+    supabase
+      .from('canonical_flies')
+      .select('name, slug'),
   ]);
+
+  // Build a lowercase name set for fast lookup
+  const canonicalNames = new Set(
+    (canonicalResult.data || []).map(f => f.name.toLowerCase().trim())
+  );
 
   const personalFlies = (patternsResult.data || []) as FlyPattern[];
   const libraryEntries = (flyBoxResult.data || []) as unknown as UserFlyBoxEntry[];
@@ -261,13 +269,19 @@ export default async function FlyBoxPage() {
                             </div>
                           </Link>
                           <div className="mt-auto px-2 pb-2">
-                            <Link
-                              href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
-                              className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                              title="Nominate this pattern for the EA library"
-                            >
-                              🪰 Submit to Library
-                            </Link>
+                            {canonicalNames.has(fly.name.toLowerCase().trim()) ? (
+                              <span className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
+                                ✓ In EA Library
+                              </span>
+                            ) : (
+                              <Link
+                                href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
+                                className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                                title="Nominate this pattern for the EA library"
+                              >
+                                🪰 Submit to Library
+                              </Link>
+                            )}
                           </div>
                         </div>
                       ))}
