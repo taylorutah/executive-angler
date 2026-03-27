@@ -41,7 +41,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
 };
 
 const TYPE_EMOJI: Record<string, string> = {
-  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟",
+  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰",
 };
 
 const TRUST_LABELS: Record<string, { label: string; color: string }> = {

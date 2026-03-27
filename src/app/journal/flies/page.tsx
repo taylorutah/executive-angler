@@ -122,43 +122,54 @@ export default async function FlyBoxPage() {
                 {/* Fly grid — smaller cards */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
                   {grouped[type].map(fly => (
-                    <Link key={fly.id} href={`/journal/flies/${fly.id}/edit`}
-                      className="group bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
-                      {/* Image — smaller square */}
-                      <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
-                        {fly.image_url ? (
-                          <Image
-                            src={fly.image_url}
-                            alt={fly.name}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-200"
-                            sizes="140px"
-                          />
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "🪰"}</span>
-                          </div>
-                        )}
-                      </div>
-                      {/* Info */}
-                      <div className="p-2">
-                        <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {(() => {
-                            const bead = parseArrayField(fly.bead_size);
-                            return bead ? (
-                              <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
-                            ) : null;
-                          })()}
-                          {(() => {
-                            const sizes = parseArrayField(fly.size);
-                            return sizes ? (
-                              <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
-                            ) : null;
-                          })()}
+                    <div key={fly.id} className="group bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                      <Link href={`/journal/flies/${fly.id}/edit`}>
+                        {/* Image — smaller square */}
+                        <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
+                          {fly.image_url ? (
+                            <Image
+                              src={fly.image_url}
+                              alt={fly.name}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-200"
+                              sizes="140px"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "🪰"}</span>
+                            </div>
+                          )}
                         </div>
+                        {/* Info */}
+                        <div className="p-2">
+                          <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {(() => {
+                              const bead = parseArrayField(fly.bead_size);
+                              return bead ? (
+                                <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
+                              ) : null;
+                            })()}
+                            {(() => {
+                              const sizes = parseArrayField(fly.size);
+                              return sizes ? (
+                                <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
+                              ) : null;
+                            })()}
+                          </div>
+                        </div>
+                      </Link>
+                      {/* Submit to Library */}
+                      <div className="px-2 pb-2">
+                        <Link
+                          href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
+                          className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#6366f1]/10 text-[10px] font-semibold text-[#6366f1] hover:bg-[#6366f1]/20 transition-colors"
+                          title="Nominate this pattern for the EA library"
+                        >
+                          🪰 Submit to Library
+                        </Link>
                       </div>
-                    </Link>
+                    </div>
                   ))}
                 </div>
               </section>

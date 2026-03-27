@@ -12,6 +12,7 @@ interface Props {
   entityType: string;
   entityLabel: string;
   userId: string;
+  prefillData?: Record<string, string>;
 }
 
 // Field definitions per entity type
@@ -86,13 +87,33 @@ const ENTITY_FIELDS: Record<string, { label: string; key: string; type: string; 
     { label: "Preferred Flies", key: "preferred_flies", type: "tags", placeholder: "Elk Hair Caddis, Parachute Adams, Prince Nymph" },
     { label: "Range / Distribution", key: "range", type: "text", placeholder: "e.g., Northern Rockies, Pacific Northwest" },
   ],
+  fly_pattern: [
+    { label: "Pattern Name", key: "name", type: "text", required: true, placeholder: "e.g., Red Dart, Duracell Jig" },
+    { label: "Category", key: "category", type: "select", required: true, options: ["dry", "nymph", "streamer", "emerger", "wet", "terrestrial", "egg", "midge"] },
+    { label: "Tagline", key: "tagline", type: "text", placeholder: "One-line description — what makes this pattern unique" },
+    { label: "Description", key: "description", type: "textarea", required: true, placeholder: "Detailed description of the pattern, its history, and why it works" },
+    { label: "What it Imitates", key: "imitates", type: "tags", placeholder: "Baetis nymph, Caddis larva, Stonefly" },
+    { label: "Effective Species", key: "effective_species", type: "tags", placeholder: "Brown Trout, Rainbow Trout, Cutthroat" },
+    { label: "Sizes (comma-separated)", key: "sizes", type: "tags", placeholder: "14, 16, 18, 20" },
+    { label: "Colors / Variants", key: "colors", type: "tags", placeholder: "Olive, Black, Natural" },
+    { label: "Bead Options", key: "bead_options", type: "tags", placeholder: "Tungsten copper, Tungsten gold, Unweighted" },
+    { label: "Hook Style", key: "hook_styles", type: "tags", placeholder: "Standard dry, Jig, Scud/pupa" },
+    { label: "Water Types", key: "water_types", type: "tags", placeholder: "Tailwater, Freestone, Spring creek, Still water" },
+    { label: "When to Use", key: "when_to_use", type: "textarea", placeholder: "Seasonal timing, conditions, hatch matches" },
+    { label: "Fishing Tips", key: "fishing_tips", type: "textarea", placeholder: "How to fish it — presentation, retrieve, depth" },
+    { label: "Materials List", key: "materials_list", type: "textarea", placeholder: "Hook: Umpqua U202 #16\nThread: UTC 70 Black\nBead: Tungsten copper 3/32\"" },
+    { label: "Tying Overview", key: "tying_overview", type: "textarea", placeholder: "Step-by-step tying summary" },
+    { label: "YouTube Tying Video URL", key: "video_url", type: "text", placeholder: "https://www.youtube.com/watch?v=..." },
+    { label: "Origin / Tier Credit", key: "origin_credit", type: "text", placeholder: "e.g., Tied by John Barr, South Platte CO" },
+  ],
 };
 
-export default function SubmissionForm({ entityType, entityLabel, userId }: Props) {
+export default function SubmissionForm({ entityType, entityLabel, userId, prefillData }: Props) {
   const router = useRouter();
   const fields = ENTITY_FIELDS[entityType] || [];
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(prefillData || {});
   const [heroImage, setHeroImage] = useState<string>("");
+  const [showPrefillBanner, setShowPrefillBanner] = useState(!!prefillData);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -182,6 +203,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
           email: core.contact_email,
           entity_data: entityData,
           hero_image_url: heroImage || undefined,
+          source_fly_pattern_id: prefillData?.source_fly_pattern_id || undefined,
           submit,
         }),
       });
@@ -224,6 +246,14 @@ export default function SubmissionForm({ entityType, entityLabel, userId }: Prop
           <div className="mb-4 px-4 py-3 bg-green-950/30 border border-green-800 rounded-lg flex items-start gap-2">
             <CheckCircle className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
             <p className="text-sm text-green-400">{success}</p>
+          </div>
+        )}
+
+        {/* Prefill banner */}
+        {showPrefillBanner && (
+          <div className="mb-4 px-4 py-3 bg-[#E8923A]/10 border border-[#E8923A]/30 rounded-lg flex items-center justify-between">
+            <p className="text-sm text-[#E8923A]">Pre-filled from your fly box — review and complete the details below.</p>
+            <button onClick={() => setShowPrefillBanner(false)} className="text-[#E8923A] hover:text-[#F0A65A] text-lg leading-none ml-3">&times;</button>
           </div>
         )}
 

@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     latitude, longitude, state, region, country,
     address, website, phone, email: contactEmail,
     entity_data, hero_image_url, additional_images,
-    source, source_session_id, submit,
+    source, source_session_id, source_fly_pattern_id, submit,
   } = body;
 
   if (!entity_type || !name) {
@@ -72,7 +72,10 @@ export async function POST(request: Request) {
       website,
       phone,
       email: contactEmail,
-      entity_data: entity_data || {},
+      entity_data: {
+        ...(entity_data || {}),
+        ...(source_fly_pattern_id ? { source_fly_pattern_id } : {}),
+      },
       hero_image_url,
       additional_images: additional_images || [],
       source: source || "manual",

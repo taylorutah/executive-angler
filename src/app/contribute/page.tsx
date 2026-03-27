@@ -16,6 +16,7 @@ const ENTITY_TYPES = [
   { type: "lodge", label: "Lodge or Resort", icon: "🏡", description: "Fishing lodges, ranch stays, and resorts", color: "#9B59B6" },
   { type: "destination", label: "Destination", icon: "🗺️", description: "Fly fishing destinations and regions", color: "#E74C3C" },
   { type: "species", label: "Species", icon: "🐟", description: "Fish species with habitat and fly recommendations", color: "#F39C12" },
+  { type: "fly_pattern", label: "Fly Pattern", icon: "🪰", description: "Share a pattern for the EA canonical fly library", color: "#6366f1" },
 ];
 
 export default async function ContributePage() {

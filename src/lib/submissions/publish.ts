@@ -143,6 +143,67 @@ export async function publishSubmission(submission: Record<string, unknown>): Pr
         break;
       }
 
+      case "fly_pattern": {
+        const flySlug = generateSlug(submission.name as string);
+        const rawMaterials = (entityData.materials_list as string) || "";
+        const materialsList = rawMaterials
+          .split("\n")
+          .filter(Boolean)
+          .map((line: string) => {
+            const colonIdx = line.indexOf(":");
+            if (colonIdx > -1) {
+              return { material: line.slice(0, colonIdx).trim(), description: line.slice(colonIdx + 1).trim() };
+            }
+            return { material: line.trim(), description: "" };
+          });
+
+        const parseTags = (val: unknown): string[] => {
+          if (Array.isArray(val)) return val;
+          if (typeof val === "string") return val.split(",").map(s => s.trim()).filter(Boolean);
+          return [];
+        };
+
+        const { error: flyError } = await supabase.from("canonical_flies").insert({
+          slug: flySlug,
+          name: submission.name,
+          category: entityData.category || "nymph",
+          tagline: entityData.tagline || null,
+          description: submission.description,
+          history: null,
+          tying_overview: entityData.tying_overview || null,
+          tying_steps: [],
+          materials_list: materialsList,
+          fishing_tips: entityData.fishing_tips || null,
+          when_to_use: entityData.when_to_use || null,
+          imitates: parseTags(entityData.imitates),
+          effective_species: parseTags(entityData.effective_species),
+          water_types: parseTags(entityData.water_types),
+          sizes: parseTags(entityData.sizes),
+          colors: parseTags(entityData.colors),
+          bead_options: parseTags(entityData.bead_options),
+          hook_styles: parseTags(entityData.hook_styles),
+          key_variations: [],
+          hero_image_url: (submission.hero_image_url as string) || null,
+          gallery_urls: [],
+          video_url: entityData.video_url || null,
+          additional_videos: [],
+          related_fly_ids: [],
+          related_river_ids: [],
+          related_destination_ids: [],
+          hatch_associations: [],
+          affiliate_links: [],
+          fly_shop_ids: [],
+          origin_credit: entityData.origin_credit || null,
+          meta_title: `${submission.name as string} — Fly Pattern | Executive Angler`,
+          meta_description: ((submission.description as string) || "").slice(0, 160),
+          rank: 50,
+          featured: false,
+          is_hero_pattern: false,
+        });
+        if (flyError) return { slug: flySlug, error: flyError.message };
+        break;
+      }
+
       case "feedback":
         // Feedback doesn't publish to a table — it's just tracked in submissions
         return { slug: "" };

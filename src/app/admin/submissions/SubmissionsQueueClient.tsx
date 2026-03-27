@@ -25,7 +25,7 @@ interface Submission {
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟",
+  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰",
 };
 
 export default function SubmissionsQueueClient({ pending, recent }: { pending: Submission[]; recent: Submission[] }) {
