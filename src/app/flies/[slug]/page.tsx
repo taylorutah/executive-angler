@@ -283,18 +283,13 @@ export default async function FlyDetailPage({ params }: Props) {
 
               {/* Fly Hero Image */}
               {fly.heroImageUrl && (
-                <div className="mt-8">
-                  <div className="rounded-2xl overflow-hidden bg-white border border-[#21262D]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={fly.heroImageUrl}
-                      alt={`${fly.name} fly pattern`}
-                      className="w-full h-auto block"
-                    />
-                  </div>
-                  <p className="text-xs text-[#6E7681] text-center mt-2">
-                    {fly.name} — {CATEGORY_LABELS[fly.category] || fly.category}
-                  </p>
+                <div className="mt-8 mb-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={fly.heroImageUrl}
+                    alt={`${fly.name} fly pattern`}
+                    className="w-full h-auto block rounded-2xl"
+                  />
                 </div>
               )}
 
