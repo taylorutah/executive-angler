@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import {
   Menu, X, ChevronDown, Search, User, Star, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
-  BookOpen, ShoppingBag, Users2, Newspaper, Bug
+  BookOpen, ShoppingBag, Users2, Newspaper, Bug,
+  Plus, FishSymbol, Lightbulb, GitPullRequest
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -98,12 +99,14 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
+  const [plusOpen, setPlusOpen] = useState(false);
   const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string } | null>(null);
   const pathname = usePathname();
   const exploreRef = useRef<HTMLDivElement>(null);
   const exploreTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const plusRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMobileOpen(false); setExploreOpen(false); }, [pathname]);
+  useEffect(() => { setMobileOpen(false); setExploreOpen(false); setPlusOpen(false); }, [pathname]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -156,6 +159,9 @@ export default function Header() {
     const handleClick = (e: MouseEvent) => {
       if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
         setExploreOpen(false);
+      }
+      if (plusRef.current && !plusRef.current.contains(e.target as Node)) {
+        setPlusOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClick);
@@ -328,6 +334,49 @@ export default function Header() {
                 </div>
               )}
 
+              {/* ── Plus / Quick Actions ── */}
+              {user && (
+                <div ref={plusRef} className="relative">
+                  <button
+                    onClick={() => setPlusOpen(!plusOpen)}
+                    aria-label="Quick actions"
+                    className={`flex items-center justify-center w-9 h-9 rounded-full bg-[#E8923A] text-white hover:bg-[#F0A65A] transition-all shadow-md hover:shadow-lg active:scale-95 ${plusOpen ? "rotate-45" : ""} duration-200`}
+                  >
+                    <Plus className="h-5 w-5" strokeWidth={2.5} />
+                  </button>
+
+                  {plusOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
+                      <div className="h-0.5 bg-[#E8923A]" />
+                      <div className="py-1">
+                        <Link
+                          href="/journal/sessions/new"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                        >
+                          <FishSymbol className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                          Log a Session
+                        </Link>
+                        <div className="h-px bg-[#21262D] mx-4" />
+                        <Link
+                          href="/contribute"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                        >
+                          <GitPullRequest className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                          Contribute
+                        </Link>
+                        <Link
+                          href="/feedback"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
+                        >
+                          <Lightbulb className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                          Share an Idea
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -438,6 +487,22 @@ export default function Header() {
                   </div>
                 )}
               </div>
+
+              {/* Quick actions — mobile */}
+              {user && (
+                <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
+                  <p className="px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">Quick Actions</p>
+                  <Link href="/journal/sessions/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#F0F6FC] rounded-lg hover:bg-[#0D1117] transition-colors">
+                    <FishSymbol className="h-5 w-5 text-[#E8923A]" /> Log a Session
+                  </Link>
+                  <Link href="/contribute" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors">
+                    <GitPullRequest className="h-5 w-5 text-[#E8923A]" /> Contribute
+                  </Link>
+                  <Link href="/feedback" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors">
+                    <Lightbulb className="h-5 w-5 text-[#E8923A]" /> Share an Idea
+                  </Link>
+                </div>
+              )}
 
               {/* User section */}
               <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
