@@ -87,8 +87,8 @@ export async function POST(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Log status change
-  await supabase.from("submission_status_history").insert({
+  // Log status change + contributor stats — fire-and-forget, never block the response
+  void supabase.from("submission_status_history").insert({
     submission_id: data.id,
     new_status: status,
     changed_by: user.id,
@@ -96,15 +96,14 @@ export async function POST(request: Request) {
     notes: submit ? "User submitted for review" : "Draft created",
   });
 
-  // Initialize contributor stats if needed
-  await supabase.from("contributor_stats").upsert(
+  void supabase.from("contributor_stats").upsert(
     { user_id: user.id, submissions_total: 1 },
     { onConflict: "user_id" }
   );
 
-  // If submitted, send notification email to admin
+  // Send admin notification — fire-and-forget
   if (submit) {
-    await sendAdminNotification(name, entity_type, user.email || "unknown");
+    sendAdminNotification(name, entity_type, user.email || "unknown").catch(() => {});
   }
 
   return NextResponse.json({ id: data.id, status: data.status });
