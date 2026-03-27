@@ -67,6 +67,7 @@ export default async function FliesPage() {
       href: `/flies/${fly.slug}`,
       imageUrl: fly.heroImageUrl || undefined,
       imageAlt: `${fly.name} fly pattern for trout fishing`,
+      imageContain: true,
       title: fly.name,
       subtitle: fly.tagline || undefined,
       meta: `Sizes ${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`,
