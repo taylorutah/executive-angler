@@ -90,8 +90,8 @@ const EXPLORE_SECTIONS = [
 /* ── Main nav items (non-Explore) ── */
 const MAIN_NAV = [
   { label: "Dashboard", href: "/dashboard", authOnly: true },
-  { label: "Feed", href: "/feed", authOnly: false },
   { label: "Journal", href: "/journal", authOnly: true },
+  { label: "Feed", href: "/feed", authOnly: false },
 ];
 
 export default function Header() {
