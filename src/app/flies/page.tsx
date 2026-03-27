@@ -131,14 +131,12 @@ export default async function FliesPage() {
                           </p>
                         </div>
                           {fly!.heroImageUrl ? (
-                          <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-[#F8F4EE] flex items-center justify-center">
-                            <Image
+                          <div className="flex-shrink-0 w-28 rounded-lg overflow-hidden bg-[#F8F4EE]" style={{aspectRatio: '3/2'}}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
                               src={fly!.heroImageUrl}
                               alt={`${fly!.name} fly pattern`}
-                              width={80}
-                              height={80}
-                              unoptimized
-                              className="object-contain w-full h-full"
+                              className="w-full h-full object-cover"
                             />
                           </div>
                         ) : (
