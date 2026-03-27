@@ -286,6 +286,27 @@ export default async function FlyDetailPage({ params }: Props) {
                 </p>
               </div>
 
+              {/* Fly Hero Image */}
+              {fly.heroImageUrl && (
+                <div className="mt-8">
+                  <div className="rounded-2xl overflow-hidden bg-[#161B22] border border-[#21262D] flex items-center justify-center" style={{minHeight: '360px', maxHeight: '440px'}}>
+                    <Image
+                      src={fly.heroImageUrl}
+                      alt={`${fly.name} fly pattern`}
+                      width={800}
+                      height={420}
+                      unoptimized
+                      priority
+                      className="w-full object-contain"
+                      style={{maxHeight: '440px', background: '#161B22'}}
+                    />
+                  </div>
+                  <p className="text-xs text-[#6E7681] text-center mt-2">
+                    {fly.name} — {CATEGORY_LABELS[fly.category] || fly.category}
+                  </p>
+                </div>
+              )}
+
               {/* History (expandable) */}
               {fly.history && (
                 <ScrollAnimation delay={0.1}>
