@@ -41,6 +41,7 @@ export default function EntityCard({
             src={imageUrl}
             alt={imageAlt}
             fill
+            unoptimized
             className={imageContain ? "object-contain p-4" : "object-cover card-image-zoom"}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
