@@ -110,6 +110,13 @@ interface Session {
   location?: string;
   date: string;
   weather?: string;
+  weather_temp_f?: number | null;
+  weather_feels_like_f?: number | null;
+  weather_humidity?: number | null;
+  weather_wind_mph?: number | null;
+  weather_wind_dir?: string | null;
+  weather_pressure_hpa?: number | null;
+  weather_condition?: string | null;
   water_temp_f?: string;
   river_flow_cfs?: number | null;
   gage_height_ft?: number | null;
@@ -637,11 +644,59 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   )}
                 </div>
 
-                {/* Weather row — like Strava's weather section */}
-                {session.weather && (
-                  <div className="border-t border-[#21262D] pt-3 flex items-center gap-2 text-sm text-[#A8B2BD]">
-                    <Cloud className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
-                    <span>{session.weather}</span>
+                {/* Weather conditions */}
+                {(session.weather_temp_f != null || session.weather != null) && (
+                  <div className="border-t border-[#21262D] pt-3 space-y-2">
+                    {session.weather_temp_f != null ? (
+                      <>
+                        {/* Air temp + condition */}
+                        <div className="flex items-center gap-3 p-2.5 bg-[#0D1117] rounded-lg">
+                          <Cloud className="h-4 w-4 text-[#E8923A] flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-[#F0F6FC]">
+                              {Math.round(session.weather_temp_f)}°F
+                              {session.weather_feels_like_f != null && (
+                                <span className="text-xs font-normal text-[#6E7681] ml-1.5">
+                                  feels like {Math.round(session.weather_feels_like_f)}°F
+                                </span>
+                              )}
+                            </p>
+                            {session.weather_condition && (
+                              <p className="text-xs text-[#A8B2BD]">{session.weather_condition}</p>
+                            )}
+                          </div>
+                        </div>
+                        {/* Wind + Humidity + Pressure */}
+                        <div className="grid grid-cols-3 gap-2">
+                          {session.weather_wind_mph != null && (
+                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
+                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Wind</p>
+                              <p className="text-sm font-semibold text-[#F0F6FC]">{Math.round(session.weather_wind_mph)} <span className="text-xs font-normal text-[#6E7681]">mph</span></p>
+                              {session.weather_wind_dir && <p className="text-xs text-[#A8B2BD]">{session.weather_wind_dir}</p>}
+                            </div>
+                          )}
+                          {session.weather_humidity != null && (
+                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
+                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Humidity</p>
+                              <p className="text-sm font-semibold text-[#F0F6FC]">{session.weather_humidity}<span className="text-xs font-normal text-[#6E7681]">%</span></p>
+                            </div>
+                          )}
+                          {session.weather_pressure_hpa != null && (
+                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
+                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Pressure</p>
+                              <p className="text-sm font-semibold text-[#F0F6FC]">{(session.weather_pressure_hpa / 33.8639).toFixed(2)}</p>
+                              <p className="text-xs text-[#A8B2BD]">inHg</p>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      /* Legacy fallback — old sessions only have the string */
+                      <div className="flex items-center gap-2 text-sm text-[#A8B2BD]">
+                        <Cloud className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
+                        <span>{session.weather}</span>
+                      </div>
+                    )}
                   </div>
                 )}
 
