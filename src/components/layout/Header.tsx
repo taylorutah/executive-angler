@@ -326,7 +326,7 @@ export default function Header() {
         {/* ── Tier 2: Category Bar ── */}
         <div className="ea-header-category border-b border-[#21262D]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center h-9 overflow-x-auto scrollbar-hide category-bar-fade lg:overflow-visible">
+            <nav className="flex items-center h-9 overflow-x-auto scrollbar-hide category-bar-fade lg:overflow-visible lg:justify-center">
               <div className="flex items-center gap-1 whitespace-nowrap lg:whitespace-normal">
                 {CATEGORY_NAV.map((link) => {
                   const isActive = pathname.startsWith(link.href);
@@ -334,7 +334,7 @@ export default function Header() {
                     <Link
                       key={link.label}
                       href={link.href}
-                      className={`px-3 py-1 text-[13px] font-medium tracking-wide transition-colors border-b-2 ${
+                      className={`px-3 py-1 text-[11px] font-semibold uppercase tracking-widest transition-colors border-b-2 ${
                         isActive
                           ? "text-[#F0F6FC] border-[#E8923A]"
                           : "text-[#A8B2BD] border-transparent hover:text-[#F0F6FC]"
