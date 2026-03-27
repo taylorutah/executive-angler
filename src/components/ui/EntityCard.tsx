@@ -39,14 +39,13 @@ export default function EntityCard({
           </div>
         </div>
       ) : (
-        <div className={`relative h-56 overflow-hidden${imageContain || imageZoom ? " bg-[#F5F0EA]" : ""}`}>
+        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
             fill
             unoptimized
             className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
-            style={imageZoom ? { transform: `scale(${imageZoom})`, objectFit: "cover" } : undefined}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {badges && badges.length > 0 && (
