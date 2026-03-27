@@ -283,12 +283,12 @@ export default async function FlyDetailPage({ params }: Props) {
 
               {/* Fly Hero Image */}
               {fly.heroImageUrl && (
-                <div className="mt-8 mb-2">
+                <div className="mt-8 mb-2 rounded-2xl overflow-hidden h-72 sm:h-80">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={fly.heroImageUrl}
                     alt={`${fly.name} fly pattern`}
-                    className="w-full h-auto block rounded-2xl"
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
               )}
