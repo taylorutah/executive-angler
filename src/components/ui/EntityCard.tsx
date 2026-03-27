@@ -39,7 +39,7 @@ export default function EntityCard({
           </div>
         </div>
       ) : (
-        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
+        <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
