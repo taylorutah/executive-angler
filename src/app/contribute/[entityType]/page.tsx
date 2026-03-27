@@ -79,6 +79,7 @@ export default async function SubmissionPage({
         imitates: parseField(flyPattern.imitates),
         effective_species: parseField(flyPattern.effective_species),
         source_fly_pattern_id: flyPattern.id,
+        _prefill_hero_image: flyPattern.image_url || "",
       };
 
       // Remove empty values

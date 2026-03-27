@@ -122,7 +122,7 @@ export default async function FlyBoxPage() {
                 {/* Fly grid — smaller cards */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
                   {grouped[type].map(fly => (
-                    <div key={fly.id} className="group bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                    <div key={fly.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
                       <Link href={`/journal/flies/${fly.id}/edit`}>
                         {/* Image — smaller square */}
                         <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
@@ -159,11 +159,11 @@ export default async function FlyBoxPage() {
                           </div>
                         </div>
                       </Link>
-                      {/* Submit to Library */}
-                      <div className="px-2 pb-2">
+                      {/* Submit to Library — floats to bottom */}
+                      <div className="mt-auto px-2 pb-2">
                         <Link
                           href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
-                          className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#6366f1]/10 text-[10px] font-semibold text-[#6366f1] hover:bg-[#6366f1]/20 transition-colors"
+                          className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
                           title="Nominate this pattern for the EA library"
                         >
                           🪰 Submit to Library

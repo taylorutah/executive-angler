@@ -111,8 +111,14 @@ const ENTITY_FIELDS: Record<string, { label: string; key: string; type: string; 
 export default function SubmissionForm({ entityType, entityLabel, userId, prefillData }: Props) {
   const router = useRouter();
   const fields = ENTITY_FIELDS[entityType] || [];
-  const [formData, setFormData] = useState<Record<string, string>>(prefillData || {});
-  const [heroImage, setHeroImage] = useState<string>("");
+  const [formData, setFormData] = useState<Record<string, string>>(() => {
+    if (!prefillData) return {};
+    // Strip internal prefill keys from form data
+    const { _prefill_hero_image, ...rest } = prefillData;
+    void _prefill_hero_image;
+    return rest;
+  });
+  const [heroImage, setHeroImage] = useState<string>(prefillData?._prefill_hero_image || "");
   const [showPrefillBanner, setShowPrefillBanner] = useState(!!prefillData);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
