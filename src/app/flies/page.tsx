@@ -130,14 +130,27 @@ export default async function FliesPage() {
                             {fly!.sizes[0]}–{fly!.sizes[fly!.sizes.length - 1]}
                           </p>
                         </div>
-                        <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-[#0D1117] flex items-center justify-center p-2">
-                          <Image
-                            src={CATEGORY_ICONS[fly!.category] || CATEGORY_ICONS.dry}
-                            alt={FLY_CATEGORY_LABELS[fly!.category] || fly!.category}
-                            width={48}
-                            height={48}
-                          />
-                        </div>
+                          {fly!.heroImageUrl ? (
+                          <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-[#F8F4EE] flex items-center justify-center">
+                            <Image
+                              src={fly!.heroImageUrl}
+                              alt={`${fly!.name} fly pattern`}
+                              width={80}
+                              height={80}
+                              unoptimized
+                              className="object-contain w-full h-full"
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-[#0D1117] flex items-center justify-center p-2">
+                            <Image
+                              src={CATEGORY_ICONS[fly!.category] || CATEGORY_ICONS.dry}
+                              alt={FLY_CATEGORY_LABELS[fly!.category] || fly!.category}
+                              width={48}
+                              height={48}
+                            />
+                          </div>
+                        )}
                       </div>
                       <p className="mt-3 text-sm text-[#A8B2BD] line-clamp-2">
                         {fly!.description?.substring(0, 120)}

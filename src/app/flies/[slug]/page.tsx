@@ -260,23 +260,18 @@ export default async function FlyDetailPage({ params }: Props) {
             {/* Left: content */}
             <div className="lg:col-span-2">
               {/* Title block */}
-              <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-[#161B22] border border-[#21262D] flex items-center justify-center p-2">
-                  <Image src={categoryIcon} alt={categoryLabel} width={48} height={48} />
-                </div>
-                <div>
-                  <span className="inline-block px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full mb-2">
-                    {categoryLabel}
-                  </span>
-                  <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F0F6FC]">
-                    {fly.name}
-                  </h1>
-                  {fly.tagline && (
-                    <p className="mt-2 text-lg text-[#A8B2BD]">
-                      {fly.tagline}
-                    </p>
-                  )}
-                </div>
+              <div className="mb-6">
+                <span className="inline-block px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full mb-3">
+                  {categoryLabel}
+                </span>
+                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F0F6FC]">
+                  {fly.name}
+                </h1>
+                {fly.tagline && (
+                  <p className="mt-2 text-lg text-[#A8B2BD]">
+                    {fly.tagline}
+                  </p>
+                )}
               </div>
 
               {/* Description */}
