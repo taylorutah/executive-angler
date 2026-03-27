@@ -251,6 +251,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
                   badges={item.badges}
                   iconOnly={item.iconOnly}
                   imageContain={item.imageContain}
+                  imageZoom={(item as { imageZoom?: number }).imageZoom}
                 />
               ))}
             </div>

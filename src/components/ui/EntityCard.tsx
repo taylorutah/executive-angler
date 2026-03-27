@@ -14,6 +14,8 @@ interface EntityCardProps {
   iconOnly?: boolean;
   /** Use object-contain + cream bg for illustrations (fish species) */
   imageContain?: boolean;
+  /** Scale the image beyond its natural size to eliminate padding baked into product photos (e.g. 1.6 = 160%) */
+  imageZoom?: number;
 }
 
 export default function EntityCard({
@@ -26,6 +28,7 @@ export default function EntityCard({
   badges,
   iconOnly,
   imageContain,
+  imageZoom,
 }: EntityCardProps) {
   return (
     <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
@@ -36,13 +39,14 @@ export default function EntityCard({
           </div>
         </div>
       ) : (
-        <div className={`relative h-56 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
+        <div className={`relative h-56 overflow-hidden${imageContain || imageZoom ? " bg-[#F5F0EA]" : ""}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
             fill
             unoptimized
             className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
+            style={imageZoom ? { transform: `scale(${imageZoom})`, objectFit: "cover" } : undefined}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {badges && badges.length > 0 && (

@@ -31,6 +31,8 @@ export interface CardData {
   iconOnly?: boolean;
   /** Use object-contain instead of object-cover (for illustrations like fish species) */
   imageContain?: boolean;
+  /** Scale the image to fill frame — useful for product photos with baked-in padding */
+  imageZoom?: number;
   /** Tags/chips shown below description */
   tags?: string[];
   /** Secondary line (e.g., daily rate, price) */
