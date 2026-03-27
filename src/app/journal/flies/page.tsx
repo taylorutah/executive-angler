@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import { Plus, Feather, BookOpen } from 'lucide-react'
+import { Plus, Feather } from 'lucide-react'
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -121,15 +121,32 @@ export default async function FlyBoxPage() {
   const personalFlies = (patternsResult.data || []) as FlyPattern[];
   const libraryEntries = (flyBoxResult.data || []) as unknown as UserFlyBoxEntry[];
 
-  const totalCount = personalFlies.length + libraryEntries.length;
+  // Unified card type for rendering
+  type UnifiedFly =
+    | { source: 'personal'; fly: FlyPattern }
+    | { source: 'library'; entry: UserFlyBoxEntry };
 
-  // Group personal flies by type
-  const grouped: Record<string, FlyPattern[]> = {};
-  for (const fly of personalFlies) {
-    const type = fly.type || "Other";
+  // Convert library entries to unified cards
+  const libraryCards: UnifiedFly[] = libraryEntries
+    .filter(e => e.canonical_fly)
+    .map(e => ({ source: 'library', entry: e }));
+
+  const personalCards: UnifiedFly[] = personalFlies.map(f => ({ source: 'personal', fly: f }));
+
+  // Group all cards by type
+  const grouped: Record<string, UnifiedFly[]> = {};
+  for (const card of [...libraryCards, ...personalCards]) {
+    let type: string;
+    if (card.source === 'library') {
+      type = CATEGORY_TO_TYPE[card.entry.canonical_fly.category] || "Other";
+    } else {
+      type = card.fly.type || "Other";
+    }
     if (!grouped[type]) grouped[type] = [];
-    grouped[type].push(fly);
+    grouped[type].push(card);
   }
+
+  const totalCount = personalFlies.length + libraryEntries.length;
   const sortedTypes = [
     ...TYPE_ORDER.filter(t => grouped[t]?.length),
     ...Object.keys(grouped).filter(t => !TYPE_ORDER.includes(t) && grouped[t]?.length),
@@ -165,132 +182,113 @@ export default async function FlyBoxPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-12">
-
-            {/* ── EA Library flies (from user_fly_box) ── */}
-            {libraryEntries.length > 0 && (
-              <section>
+          <div className="space-y-10">
+            {sortedTypes.map(type => (
+              <section key={type}>
                 <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
-                  <BookOpen className="h-4 w-4 text-[#E8923A]" />
-                  <h2 className="font-heading text-base font-bold text-[#F0F6FC]">From EA Library</h2>
-                  <span className="text-xs text-[#6E7681] ml-1">{libraryEntries.length}</span>
+                  <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
+                  <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
+                  <span className="text-xs text-[#6E7681] ml-1">{grouped[type].length}</span>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                  {libraryEntries.map(entry => {
-                    const fly = entry.canonical_fly;
-                    if (!fly) return null;
-                    const typeLabel = CATEGORY_TO_TYPE[fly.category] || "Other";
+                  {grouped[type].map(card => {
+                    if (card.source === 'library') {
+                      const cf = card.entry.canonical_fly;
+                      return (
+                        <div key={card.entry.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                          <Link href={`/flies/${cf.slug}`}>
+                            <div className="relative aspect-square bg-white overflow-hidden">
+                              {cf.hero_image_url ? (
+                                <img
+                                  src={cf.hero_image_url}
+                                  alt={cf.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                />
+                              ) : (
+                                <div className="absolute inset-0 flex items-center justify-center bg-[#0D1117]">
+                                  <span className="text-3xl">{TYPE_ICONS[type] || "🪰"}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-2">
+                              <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{cf.name}</p>
+                              {cf.sizes && cf.sizes.length > 0 && (
+                                <p className="text-[10px] text-[#6E7681] mt-0.5">
+                                  <span className="text-[#A8B2BD]">Sizes:</span> {cf.sizes.slice(0, 3).join(", ")}
+                                </p>
+                              )}
+                            </div>
+                          </Link>
+                          <div className="mt-auto px-2 pb-2">
+                            <Link
+                              href={`/flies/${cf.slug}`}
+                              className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#A8B2BD] hover:bg-[#2D333B] transition-colors"
+                            >
+                              View Pattern →
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Personal fly
+                    const fly = card.fly;
                     return (
-                      <div key={entry.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
-                        <Link href={`/flies/${fly.slug}`}>
-                          <div className="relative aspect-square bg-white overflow-hidden">
-                            {fly.hero_image_url ? (
-                              <img
-                                src={fly.hero_image_url}
+                      <div key={fly.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                        <Link href={`/journal/flies/${fly.id}/edit`}>
+                          <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
+                            {fly.image_url ? (
+                              <Image
+                                src={fly.image_url}
                                 alt={fly.name}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-200"
+                                sizes="140px"
                               />
                             ) : (
-                              <div className="absolute inset-0 flex items-center justify-center bg-[#0D1117]">
-                                <span className="text-3xl">{TYPE_ICONS[typeLabel] || "🪰"}</span>
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "🪰"}</span>
                               </div>
                             )}
                           </div>
                           <div className="p-2">
                             <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
-                            <p className="text-[10px] text-[#6E7681] mt-0.5">{typeLabel}</p>
-                            {fly.sizes && fly.sizes.length > 0 && (
-                              <p className="text-[10px] text-[#6E7681]">
-                                <span className="text-[#A8B2BD]">Sizes:</span> {fly.sizes.slice(0, 3).join(", ")}
-                              </p>
-                            )}
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {(() => {
+                                const bead = parseArrayField(fly.bead_size);
+                                return bead ? (
+                                  <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
+                                ) : null;
+                              })()}
+                              {(() => {
+                                const sizes = parseArrayField(fly.size);
+                                return sizes ? (
+                                  <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
+                                ) : null;
+                              })()}
+                            </div>
                           </div>
                         </Link>
                         <div className="mt-auto px-2 pb-2">
-                          <Link
-                            href={`/flies/${fly.slug}`}
-                            className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#A8B2BD] hover:bg-[#2D333B] transition-colors"
-                          >
-                            View Pattern →
-                          </Link>
+                          {canonicalNames.has(fly.name.toLowerCase().trim()) ? (
+                            <span className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
+                              ✓ In Fly Library
+                            </span>
+                          ) : (
+                            <Link
+                              href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
+                              className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                            >
+                              🪰 Submit to Library
+                            </Link>
+                          )}
                         </div>
                       </div>
                     );
                   })}
                 </div>
               </section>
-            )}
-
-            {/* ── Personal patterns (from fly_patterns) ── */}
-            {personalFlies.length > 0 && (
-              <div className="space-y-10">
-                {sortedTypes.map(type => (
-                  <section key={type}>
-                    <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
-                      <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
-                      <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
-                      <span className="text-xs text-[#6E7681] ml-1">{grouped[type].length}</span>
-                    </div>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                      {grouped[type].map(fly => (
-                        <div key={fly.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
-                          <Link href={`/journal/flies/${fly.id}/edit`}>
-                            <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
-                              {fly.image_url ? (
-                                <Image
-                                  src={fly.image_url}
-                                  alt={fly.name}
-                                  fill
-                                  className="object-cover group-hover:scale-105 transition-transform duration-200"
-                                  sizes="140px"
-                                />
-                              ) : (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "🪰"}</span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="p-2">
-                              <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {(() => {
-                                  const bead = parseArrayField(fly.bead_size);
-                                  return bead ? (
-                                    <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
-                                  ) : null;
-                                })()}
-                                {(() => {
-                                  const sizes = parseArrayField(fly.size);
-                                  return sizes ? (
-                                    <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
-                                  ) : null;
-                                })()}
-                              </div>
-                            </div>
-                          </Link>
-                          <div className="mt-auto px-2 pb-2">
-                            {canonicalNames.has(fly.name.toLowerCase().trim()) ? (
-                              <span className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
-                                ✓ In EA Library
-                              </span>
-                            ) : (
-                              <Link
-                                href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
-                                className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                                title="Nominate this pattern for the EA library"
-                              >
-                                🪰 Submit to Library
-                              </Link>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                ))}
-              </div>
-            )}
-
+            ))}
           </div>
         )}
       </div>
