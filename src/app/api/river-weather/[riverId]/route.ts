@@ -116,6 +116,34 @@ async function fetchWeather(lat: number, lng: number): Promise<WeatherData | nul
   };
 }
 
+// ── Fetch real USGS site coordinates for a batch of site IDs ──
+async function fetchUSGSSiteCoords(
+  siteIds: string[]
+): Promise<Map<string, { lat: number; lng: number }>> {
+  const result = new Map<string, { lat: number; lng: number }>();
+  if (siteIds.length === 0) return result;
+  try {
+    const url = `https://waterservices.usgs.gov/nwis/site/?format=rdb&sites=${siteIds.join(",")}&siteOutput=basic`;
+    const res = await fetch(url, { next: { revalidate: 86400 } }); // site coords change rarely
+    if (!res.ok) return result;
+    const text = await res.text();
+    for (const line of text.split("\n")) {
+      if (line.startsWith("#") || line.startsWith("agency") || line.startsWith("5s")) continue;
+      const cols = line.split("\t");
+      if (cols.length < 6) continue;
+      const siteId = cols[1]?.trim();
+      const lat = parseFloat(cols[4]);
+      const lng = parseFloat(cols[5]);
+      if (siteId && !isNaN(lat) && !isNaN(lng)) {
+        result.set(siteId, { lat, lng });
+      }
+    }
+  } catch {
+    // Non-fatal — fall back to river coords
+  }
+  return result;
+}
+
 // ── Coordinate deduplication (within 0.01°) ──
 function coordKey(lat: number, lng: number): string {
   return `${Math.round(lat * 100)},${Math.round(lng * 100)}`;
@@ -189,7 +217,7 @@ export async function GET(
     }
   }
 
-  // Build coordinate list: per-section if available, else river-level
+  // Build coordinate list: per-section if available, else look up from USGS
   interface CoordEntry {
     section: string;
     latitude: number;
@@ -199,12 +227,18 @@ export async function GET(
   const coordEntries: CoordEntry[] = [];
 
   if (gauges.length > 0) {
+    // Fetch real USGS site coordinates for gauges that don't have explicit coords
+    const needsCoords = gauges.filter(g => g.latitude == null || g.longitude == null);
+    const usgsCoords = needsCoords.length > 0
+      ? await fetchUSGSSiteCoords(needsCoords.map(g => g.site_id))
+      : new Map<string, { lat: number; lng: number }>();
+
     for (const g of gauges) {
-      coordEntries.push({
-        section: g.section,
-        latitude: g.latitude ?? river.latitude,
-        longitude: g.longitude ?? river.longitude,
-      });
+      // Priority: explicit config coords > USGS site coords > river-level coords
+      const usgs = usgsCoords.get(g.site_id);
+      const lat = g.latitude ?? usgs?.lat ?? river.latitude;
+      const lng = g.longitude ?? usgs?.lng ?? river.longitude;
+      coordEntries.push({ section: g.section, latitude: lat, longitude: lng });
     }
   } else {
     coordEntries.push({
