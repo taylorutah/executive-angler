@@ -111,6 +111,8 @@ interface Session {
   date: string;
   weather?: string;
   water_temp_f?: string;
+  river_flow_cfs?: number | null;
+  gage_height_ft?: number | null;
   water_clarity?: string;
   notes?: string;
   flies_notes?: string;
@@ -607,6 +609,18 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     <div>
                       <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.water_temp_f}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Water Temp</p>
+                    </div>
+                  )}
+                  {session.river_flow_cfs != null && (
+                    <div>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{Math.round(session.river_flow_cfs).toLocaleString()}</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Flow (cfs)</p>
+                    </div>
+                  )}
+                  {session.gage_height_ft != null && (
+                    <div>
+                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.gage_height_ft.toFixed(2)}</p>
+                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Gage (ft)</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
