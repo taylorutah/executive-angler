@@ -283,7 +283,7 @@ export default function Header() {
                         <div className="h-0.5 bg-[#E8923A]" />
                         <div className="py-1">
                           <Link
-                            href="/journal/sessions/new"
+                            href="/journal/new"
                             className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors"
                           >
                             <FishSymbol className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
@@ -446,7 +446,7 @@ export default function Header() {
               {user && (
                 <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
                   <p className="px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">Quick Actions</p>
-                  <Link href="/journal/sessions/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#F0F6FC] rounded-lg hover:bg-[#0D1117] transition-colors">
+                  <Link href="/journal/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#F0F6FC] rounded-lg hover:bg-[#0D1117] transition-colors">
                     <FishSymbol className="h-5 w-5 text-[#E8923A]" /> Log a Session
                   </Link>
                   <Link href="/contribute" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors">
