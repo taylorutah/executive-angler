@@ -12,6 +12,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds, getFliesByCategory, getAllCanonicalFlies } from "@/lib/db";
 import { getAuthorByArticleName } from "@/data/authors";
 
@@ -217,7 +218,7 @@ export default async function ArticlePage({ params }: Props) {
 
           {/* Article body — full width of container */}
           <article className="pb-24">
-            <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
+            <div className="article-body" dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
 
             {/* Related Destinations */}
             {relatedDests.length > 0 && (

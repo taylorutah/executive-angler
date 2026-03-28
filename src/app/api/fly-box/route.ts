@@ -60,13 +60,20 @@ export async function POST(request: Request) {
     }
 
     // Check fly box count for premium gating
-    const { count } = await supabase
-      .from("user_fly_box")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id);
+    const [{ count }, { data: profile }] = await Promise.all([
+      supabase
+        .from("user_fly_box")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id),
+      supabase
+        .from("profiles")
+        .select("is_premium")
+        .eq("user_id", user.id)
+        .single(),
+    ]);
 
     // Free tier limit: 10 flies
-    const isPremium = false; // TODO: check user premium status
+    const isPremium = profile?.is_premium ?? false;
     if (!isPremium && (count ?? 0) >= 10) {
       return NextResponse.json(
         { error: "Free tier limit reached. Upgrade to Pro for unlimited flies." },

@@ -13,7 +13,10 @@ function getResend() {
 }
 
 function generateToken(photoId: string, action: string): string {
-  const secret = process.env.PHOTO_REVIEW_SECRET || "executive-angler-photo-review-secret";
+  const secret = process.env.PHOTO_REVIEW_SECRET;
+  if (!secret) {
+    throw new Error("PHOTO_REVIEW_SECRET environment variable is not set");
+  }
   return crypto
     .createHmac("sha256", secret)
     .update(`${photoId}:${action}`)

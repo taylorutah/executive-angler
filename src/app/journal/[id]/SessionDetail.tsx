@@ -864,7 +864,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         {photoUrl ? (
                           <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
                             <div className="relative h-12 w-12 rounded-lg overflow-hidden">
-                              <Image src={photoUrl} alt="" fill className="object-cover" />
+                              <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                             </div>
                           </button>
                         ) : (
@@ -939,7 +939,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                               <div className="relative group/photo">
                                 <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
                                   <div className="relative h-8 w-8 rounded overflow-hidden">
-                                    <Image src={photoUrl} alt="" fill className="object-cover" />
+                                    <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                                   </div>
                                 </button>
                                 <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer flex items-center justify-center">

@@ -19,7 +19,8 @@ import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
 import HashScroller from "@/components/ui/HashScroller";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Lock } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 86400;
 
@@ -95,6 +96,19 @@ export default async function FlyDetailPage({ params }: Props) {
     fly.sizes.length > 1
       ? `${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`
       : fly.sizes[0];
+
+  // Check premium status for gating tying steps 4+
+  const supabase = await createClient();
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  let isPremium = false;
+  if (currentUser) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_premium")
+      .eq("user_id", currentUser.id)
+      .single();
+    isPremium = profile?.is_premium ?? false;
+  }
 
   // Load related data
   const [relatedRivers, relatedFlies, allFlyShops, allArticles] = await Promise.all([
@@ -475,8 +489,7 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Tying Steps (hero patterns only) */}
-              {/* TODO: Gate steps 4+ behind premium */}
+              {/* Tying Steps — steps 4+ gated behind premium */}
               {fly.tyingSteps && fly.tyingSteps.length > 0 && (
                 <ScrollAnimation delay={0.5}>
                   <div className="mt-10">
@@ -484,7 +497,9 @@ export default async function FlyDetailPage({ params }: Props) {
                       Tying Steps
                     </h2>
                     <div className="space-y-3">
-                      {fly.tyingSteps.map((step) => (
+                      {fly.tyingSteps
+                        .filter((step) => isPremium || step.step <= 3)
+                        .map((step) => (
                         <div
                           key={step.step}
                           className="bg-[#161B22] rounded-xl border border-[#21262D] p-5"
@@ -506,6 +521,23 @@ export default async function FlyDetailPage({ params }: Props) {
                           </div>
                         </div>
                       ))}
+                      {!isPremium && fly.tyingSteps.length > 3 && (
+                        <div className="bg-[#161B22] rounded-xl border border-[#E8923A]/30 p-6 text-center">
+                          <Lock className="h-6 w-6 text-[#E8923A] mx-auto mb-3" />
+                          <p className="text-sm font-semibold text-[#F0F6FC] mb-1">
+                            Premium Required
+                          </p>
+                          <p className="text-xs text-[#A8B2BD] mb-4">
+                            Steps 4–{fly.tyingSteps.length} are available to Pro members.
+                          </p>
+                          <Link
+                            href="/pricing"
+                            className="inline-block px-5 py-2 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#D4801F] transition-colors"
+                          >
+                            Upgrade to Pro
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </ScrollAnimation>

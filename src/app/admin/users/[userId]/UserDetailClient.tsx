@@ -130,7 +130,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
             {/* Avatar */}
             <div className="w-16 h-16 rounded-full overflow-hidden bg-[#E8923A]/15 flex items-center justify-center shrink-0">
               {p.avatar_url ? (
-                <Image src={p.avatar_url} alt="" width={64} height={64} className="object-cover w-16 h-16" unoptimized />
+                <Image src={p.avatar_url} alt={p.display_name || "User avatar"} width={64} height={64} className="object-cover w-16 h-16" unoptimized />
               ) : (
                 <span className="text-2xl font-bold text-[#E8923A]">
                   {(p.display_name || p.username || "?")[0]?.toUpperCase()}
