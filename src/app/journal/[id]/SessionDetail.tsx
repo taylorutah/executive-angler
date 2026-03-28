@@ -90,6 +90,8 @@ interface Catch {
   weather_condition?: string | null;
   weather_wind_mph?: number | null;
   weather_wind_dir?: string | null;
+  weather_humidity?: number | null;
+  weather_pressure_hpa?: number | null;
 }
 
 interface FlyPattern {
@@ -894,13 +896,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           {c.fly_size && <span className="flex-shrink-0">#{c.fly_size}</span>}
                           {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{c.time_caught}</span>}
                         </div>
-                        {(c.weather_temp_f != null || c.weather_condition) && (
-                          <div className="flex items-center gap-1.5 mt-1 text-[10px] text-[#6E7681]">
+                        {(c.weather_temp_f != null || c.weather_condition || c.weather_humidity != null || c.weather_pressure_hpa != null) && (
+                          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[10px] text-[#6E7681]">
                             {c.weather_temp_f != null && <span>{Math.round(c.weather_temp_f)}°F</span>}
                             {c.weather_condition && <span>· {c.weather_condition}</span>}
                             {c.weather_wind_mph != null && (
-                              <span>· {Math.round(c.weather_wind_mph)} mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
+                              <span>· {Math.round(c.weather_wind_mph)}mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
                             )}
+                            {c.weather_humidity != null && <span>· {c.weather_humidity}% RH</span>}
+                            {c.weather_pressure_hpa != null && <span>· {(c.weather_pressure_hpa / 33.8639).toFixed(2)} inHg</span>}
                           </div>
                         )}
                       </div>
@@ -985,14 +989,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.fly_size || "—"}</td>
                           <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.time_caught || "—"}</td>
                           <td className="py-2.5 px-3 text-xs text-[#6E7681]">
-                            {c.weather_temp_f != null ? (
-                              <span>
-                                {Math.round(c.weather_temp_f)}°F
-                                {c.weather_condition && <span className="ml-1 text-[#A8B2BD]">{c.weather_condition}</span>}
-                                {c.weather_wind_mph != null && (
-                                  <span className="ml-1">{Math.round(c.weather_wind_mph)}mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
+                            {(c.weather_temp_f != null || c.weather_humidity != null || c.weather_pressure_hpa != null) ? (
+                              <div className="space-y-0.5">
+                                <div>
+                                  {c.weather_temp_f != null && <span className="text-[#A8B2BD]">{Math.round(c.weather_temp_f)}°F</span>}
+                                  {c.weather_condition && <span className="ml-1">{c.weather_condition}</span>}
+                                  {c.weather_wind_mph != null && (
+                                    <span className="ml-1">{Math.round(c.weather_wind_mph)}mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
+                                  )}
+                                </div>
+                                {(c.weather_humidity != null || c.weather_pressure_hpa != null) && (
+                                  <div className="text-[10px]">
+                                    {c.weather_humidity != null && <span>{c.weather_humidity}% RH</span>}
+                                    {c.weather_humidity != null && c.weather_pressure_hpa != null && <span className="mx-1">·</span>}
+                                    {c.weather_pressure_hpa != null && <span>{(c.weather_pressure_hpa / 33.8639).toFixed(2)} inHg</span>}
+                                  </div>
                                 )}
-                              </span>
+                              </div>
                             ) : "—"}
                           </td>
                         </tr>
