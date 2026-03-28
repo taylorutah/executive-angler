@@ -86,6 +86,10 @@ interface Catch {
   fish_location_image_url?: string;
   fly_image_url?: string;
   fly_pattern?: { name?: string; type?: string } | null;
+  weather_temp_f?: number | null;
+  weather_condition?: string | null;
+  weather_wind_mph?: number | null;
+  weather_wind_dir?: string | null;
 }
 
 interface FlyPattern {
@@ -890,6 +894,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           {c.fly_size && <span className="flex-shrink-0">#{c.fly_size}</span>}
                           {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{c.time_caught}</span>}
                         </div>
+                        {(c.weather_temp_f != null || c.weather_condition) && (
+                          <div className="flex items-center gap-1.5 mt-1 text-[10px] text-[#6E7681]">
+                            {c.weather_temp_f != null && <span>{Math.round(c.weather_temp_f)}°F</span>}
+                            {c.weather_condition && <span>· {c.weather_condition}</span>}
+                            {c.weather_wind_mph != null && (
+                              <span>· {Math.round(c.weather_wind_mph)} mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -908,6 +921,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Position</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Size</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Time</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Weather</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -970,6 +984,17 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           </td>
                           <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.fly_size || "—"}</td>
                           <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.time_caught || "—"}</td>
+                          <td className="py-2.5 px-3 text-xs text-[#6E7681]">
+                            {c.weather_temp_f != null ? (
+                              <span>
+                                {Math.round(c.weather_temp_f)}°F
+                                {c.weather_condition && <span className="ml-1 text-[#A8B2BD]">{c.weather_condition}</span>}
+                                {c.weather_wind_mph != null && (
+                                  <span className="ml-1">{Math.round(c.weather_wind_mph)}mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
+                                )}
+                              </span>
+                            ) : "—"}
+                          </td>
                         </tr>
                       );
                     })}
