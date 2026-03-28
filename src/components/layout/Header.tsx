@@ -20,11 +20,11 @@ import { MessageIcon } from "@/components/notifications/MessageIcon";
 const CATEGORY_NAV = [
   { label: "Destinations", href: "/destinations" },
   { label: "Rivers", href: "/rivers" },
-  { label: "Species", href: "/species" },
   { label: "Fly Library", href: "/flies" },
+  { label: "Fly Shops", href: "/fly-shops" },
   { label: "Lodges", href: "/lodges" },
   { label: "Guides", href: "/guides" },
-  { label: "Fly Shops", href: "/fly-shops" },
+  { label: "Species", href: "/species" },
   { label: "Articles", href: "/articles" },
 ];
 
