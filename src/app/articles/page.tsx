@@ -8,16 +8,18 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllArticles } from "@/lib/db";
 import { articleListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Articles & Instruction",
+  title: "Fly Fishing Articles — Techniques, Gear & Trip Planning",
   description:
-    "Expert fly fishing articles — techniques, destinations, gear reviews, conservation, and more. Your comprehensive angling library.",
+    "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation. Level up your angling with in-depth instruction.",
+  alternates: { canonical: `${SITE_URL}/articles` },
   openGraph: {
-    title: "Fly Fishing Articles & Instruction | Executive Angler",
-    description: "Expert fly fishing articles — techniques, destinations, gear reviews, conservation, and more.",
+    title: "Fly Fishing Articles — Techniques, Gear & Trip Planning | Executive Angler",
+    description: "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation.",
     images: ["/api/og?title=Articles%20%26%20Instruction&subtitle=Expert%20Fly%20Fishing%20Content&type=article"],
   },
 };

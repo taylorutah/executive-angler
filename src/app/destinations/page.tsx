@@ -8,6 +8,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllDestinations } from "@/lib/db";
 import { destinationListConfig, destinationRegionGroups } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -22,12 +23,13 @@ function getRegionGroup(region: string): string {
 }
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Destinations",
+  title: "30+ Fly Fishing Destinations Worldwide — Plan Your Trip",
   description:
-    "Explore the world's finest fly fishing destinations — from the Rocky Mountain West to Patagonia, New Zealand, and beyond.",
+    "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Maps, best months, species, and local intel to plan your next adventure.",
+  alternates: { canonical: `${SITE_URL}/destinations` },
   openGraph: {
-    title: "Fly Fishing Destinations | Executive Angler",
-    description: "Explore the world's finest fly fishing destinations — from the Rocky Mountain West to Patagonia, New Zealand, and beyond.",
+    title: "30+ Fly Fishing Destinations Worldwide | Executive Angler",
+    description: "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Plan your next adventure.",
     images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=30%20World-Class%20Waters&type=destination"],
   },
 };

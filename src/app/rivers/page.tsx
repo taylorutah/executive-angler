@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -23,12 +24,13 @@ const DIFFICULTY_STYLES: Record<string, string> = {
 };
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Rivers & Waters",
+  title: "41 Fly Fishing Rivers — Maps, Hatches & Access Points",
   description:
-    "Explore the world's finest fly fishing rivers with detailed maps, hatch charts, access points, and regulations.",
+    "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. From the Madison to the Moy — find your next water.",
+  alternates: { canonical: `${SITE_URL}/rivers` },
   openGraph: {
-    title: "Fly Fishing Rivers & Waters | Executive Angler",
-    description: "Explore the world's finest fly fishing rivers with detailed maps, hatch charts, access points, and regulations.",
+    title: "41 Fly Fishing Rivers — Maps, Hatches & Access | Executive Angler",
+    description: "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. Find your next water.",
     images: ["/api/og?title=Fly%20Fishing%20Rivers&subtitle=41%20Legendary%20Waters&type=river"],
   },
 };

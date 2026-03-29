@@ -40,10 +40,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lodge = await getLodgeBySlug(slug);
   if (!lodge) return { title: "Lodge Not Found" };
 
-  const priceStr = lodge.priceRange ? ` from ${lodge.priceRange}` : "";
-  const amenityStr = (lodge.amenities || []).slice(0, 3).join(", ");
-  const fallbackTitle = `${lodge.name} — ${lodge.priceTier ? (lodge.priceTier <= 2 ? "Affordable" : "Premium") + " " : ""}Fly Fishing Lodge | Executive Angler`;
-  const fallbackDesc = `${lodge.name}${priceStr}. ${amenityStr}. Read reviews, see photos, and plan your stay at this fly fishing lodge.`;
+  const priceLabel = lodge.priceTier ? (lodge.priceTier <= 2 ? "Value" : lodge.priceTier <= 3 ? "Mid-Range" : "Premium") : "";
+  const nearbyCount = (lodge.nearbyRiverIds || []).length;
+  const amenityHighlights = (lodge.amenities || []).slice(0, 3).join(", ");
+  const capacityStr = lodge.capacity ? `${lodge.capacity} guests. ` : "";
+  const fallbackTitle = `${lodge.name} — ${priceLabel ? priceLabel + " " : ""}Fly Fishing Lodge | Reviews & Booking | Executive Angler`;
+  const fallbackDesc = `${lodge.name}${lodge.priceRange ? ` — ${lodge.priceRange}` : ""}. ${capacityStr}${amenityHighlights ? amenityHighlights + ". " : ""}${nearbyCount > 0 ? `${nearbyCount} nearby rivers. ` : ""}Book direct and read reviews.`;
 
   return {
     title: lodge.metaTitle || fallbackTitle,

@@ -18,21 +18,21 @@ Website: https://www.executiveangler.com
 
 | Content Type | Count | Description |
 |---|---|---|
-| Destinations | 30 | Geographic fly fishing regions worldwide |
-| Rivers & Waters | 41 | Individual waterways with maps, hatch charts, access points |
+| Destinations | 31 | Geographic fly fishing regions worldwide |
+| Rivers & Waters | 37 | Individual waterways with maps, hatch charts, access points |
 | Species | 35 | Fish species profiles with taxonomy, habitat, tactics |
 | Lodges | 32 | Fly fishing lodges with pricing, amenities, reviews |
 | Guides | 31 | Professional guide services with specialties, rates |
-| Fly Shops | 27+ | Local fly shops with hours, services, brands |
+| Fly Shops | 56 | Local fly shops with hours, services, brands |
 | Articles | 16 | Long-form editorial: techniques, destinations, gear, conservation |
-| Fly Library | 102+ | Canonical fly patterns with tying guides, variations, river matches |
+| Fly Library | 100 | Canonical fly patterns with tying guides, variations, river matches |
 | Fly Categories | 8 | Dry, Nymph, Streamer, Emerger, Wet, Terrestrial, Egg, Midge |
-| Flies by River | 41 | Best patterns matched to each river's hatches and conditions |
-| Flies by Hatch | 20+ | Patterns grouped by insect type (mayfly, caddis, stonefly, etc.) |
+| Flies by River | 37 | Best patterns matched to each river's hatches and conditions |
+| Flies by Hatch | 54 | Patterns grouped by insect type (mayfly, caddis, stonefly, etc.) |
 
 ---
 
-## Destinations (30)
+## Destinations (31)
 
 Each destination page includes: overview, best fishing months, target species, rivers, lodges, guides, fly shops, interactive maps, and community photos.
 
@@ -82,7 +82,7 @@ Each destination page includes: overview, best fishing months, target species, r
 
 ---
 
-## Rivers & Waters (41)
+## Rivers & Waters (37)
 
 Each river page includes: description, species, flow type, difficulty, wading type, access points with GPS, hatch chart, interactive Mapbox map, nearby lodges, guides, fly shops, and live angler intel from the journal app.
 
@@ -316,7 +316,7 @@ Long-form editorial content with expert instruction, destination guides, gear re
 
 ---
 
-## Fly Library (102+ Patterns)
+## Fly Library (100 Patterns)
 
 The Fly Library is a comprehensive catalog of canonical fly patterns for fly fishing. Each pattern page includes: description, category, size range, variations, tying instructions, what it imitates, effective species, best rivers, affiliate links to purchase, and cross-links to related patterns.
 
@@ -342,7 +342,7 @@ The Fly Library is a comprehensive catalog of canonical fly patterns for fly fis
 - /flies/for/madison-river — Best Flies for Madison River
 - /flies/for/henrys-fork — Best Flies for Henry's Fork
 - /flies/for/missouri-river — Best Flies for Missouri River
-- (41 total — one for every river in the database)
+- (37 total — one for every river in the database)
 
 ### Featured Patterns
 - /flies/adams — Adams (Dry Fly — the universal mayfly imitation)
@@ -361,14 +361,14 @@ The Fly Library is a comprehensive catalog of canonical fly patterns for fly fis
 ## Key Pages
 
 - / — Homepage with featured destinations, lodges, rivers, guides, and articles
-- /destinations — Browse all 30 fly fishing destinations worldwide
-- /rivers — Browse all 41 rivers and waters with filtering
+- /destinations — Browse all 31 fly fishing destinations worldwide
+- /rivers — Browse all 37 rivers and waters with filtering
 - /species — Browse all 35 fish species with family filtering
 - /lodges — Browse 32 fly fishing lodges with filtering
 - /guides — Find 31 professional fly fishing guide services
-- /fly-shops — Find 27+ local fly shops
+- /fly-shops — Find 56 local fly shops
 - /articles — Read 16 expert articles and instruction
-- /flies — Trout Fly Library: 102+ canonical patterns with complete tying guides
+- /flies — Trout Fly Library: 100 canonical patterns with complete tying guides
 - /search — Full-text search across all content types
 - /journal — Personal fishing journal (authenticated users)
 - /about — About Executive Angler
@@ -396,7 +396,7 @@ The journal data powers the "Angler Intel" and "Activity Pulse" widgets on publi
 ## Technical Details
 
 - Built with Next.js 16 (App Router), hosted on Vercel
-- 400+ statically generated content pages (including 170+ fly library pages)
+- 450+ statically generated content pages (including 200+ fly library pages)
 - Interactive maps powered by Mapbox GL JS
 - Database: Supabase (PostgreSQL) for user data
 - Schema.org structured data: WebSite, BreadcrumbList, Article (with Speakable + HowTo for techniques), TouristDestination, Place, BodyOfWater, LodgingBusiness, ProfessionalService, SportingGoodsStore, FAQPage, CollectionPage

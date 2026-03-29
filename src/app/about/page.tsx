@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { SITE_NAME } from "@/lib/constants";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Executive Angler — Data-Driven Fly Fishing Resource",
   description:
-    "Executive Angler is the definitive fly fishing resource — connecting anglers with destinations, rivers, lodges, guides, and expert instruction worldwide.",
+    "Executive Angler combines world-class fishing editorial with data-driven tools. Explore 30+ destinations, 41 rivers, 35 species, and 120+ fly patterns.",
+  alternates: { canonical: `${SITE_URL}/about` },
+  openGraph: {
+    title: "About Executive Angler",
+    description: "Executive Angler combines world-class fishing editorial with data-driven tools. Explore 30+ destinations, 41 rivers, and 120+ fly patterns.",
+    images: ["/api/og?title=About%20Executive%20Angler&type=default"],
+  },
 };
 
 export default function AboutPage() {

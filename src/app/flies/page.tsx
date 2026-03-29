@@ -7,6 +7,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -42,9 +43,10 @@ const SPOTLIGHT_SLUGS = [
 ];
 
 export const metadata: Metadata = {
-  title: "Trout Fly Library — Complete Pattern Guide",
+  title: "Trout Fly Library — 120+ Proven Patterns & Tying Guides",
   description:
     "Browse 120+ proven trout fly patterns with tying guides, materials, variations, and where to fish them. Dry flies, nymphs, streamers, emergers, and more.",
+  alternates: { canonical: `${SITE_URL}/flies` },
   openGraph: {
     title: "Trout Fly Library | Executive Angler",
     description:

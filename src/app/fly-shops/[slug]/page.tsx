@@ -31,12 +31,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const shop = await getFlyShopBySlug(slug);
   if (!shop) return { title: "Fly Shop Not Found" };
 
+  const servicesList = (shop.services || []).slice(0, 4).join(", ");
+  const brandCount = (shop.brandsCarried || []).length;
+  const hasHours = shop.hours && Object.keys(shop.hours).length > 0;
+  const fallbackTitle = `${shop.name} — Fly Shop & Outfitter | ${shop.address.split(",").slice(-2, -1)[0]?.trim() || "Local Pro Shop"} | Executive Angler`;
+  const fallbackDesc = `${shop.name} — ${shop.address}. ${servicesList ? servicesList + ". " : ""}${brandCount > 0 ? `${brandCount} brands carried. ` : ""}${hasHours ? "Hours & directions. " : ""}Visit your local fly fishing pro shop.`;
+
   return {
-    title: shop.metaTitle || `${shop.name} — Fly Shop`,
-    description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
+    title: shop.metaTitle || fallbackTitle,
+    description: shop.metaDescription || fallbackDesc,
     openGraph: {
       title: shop.metaTitle || shop.name,
-      description: shop.metaDescription || `${shop.name} — ${shop.address}. ${(shop.services || []).join(", ")}.`,
+      description: shop.metaDescription || fallbackDesc,
       images: [
         shop.heroImageUrl ||
           `${SITE_URL}/api/og?title=${encodeURIComponent(shop.name)}&subtitle=Fly%20Shop&type=shop`,

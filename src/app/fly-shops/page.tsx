@@ -8,6 +8,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllFlyShops, getAllDestinations } from "@/lib/db";
 import { flyShopListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -26,12 +27,13 @@ const SHOP_HEADLINES: Record<string, string> = {
 };
 
 export const metadata: Metadata = {
-  title: "Fly Shops",
+  title: "27 Fly Shops Near the Best Fishing Waters — Local Gear",
   description:
-    "Local knowledge, expert staff, and the right fly for the right river — curated fly shops near the best waters on earth.",
+    "Find 27 curated fly shops near top fishing waters. Local knowledge, expert staff, hours, services, and the right flies for every river. Browse by region.",
+  alternates: { canonical: `${SITE_URL}/fly-shops` },
   openGraph: {
-    title: "Fly Shops | Executive Angler",
-    description: "Curated fly shops near the best waters on earth — local knowledge, expert staff, and the right fly for the right river.",
+    title: "27 Fly Shops Near the Best Fishing Waters | Executive Angler",
+    description: "Find 27 curated fly shops near top fishing waters. Local knowledge, expert staff, and the right flies for every river.",
     images: ["/api/og?title=Fly%20Shops&subtitle=27%20Curated%20Shops&type=default"],
   },
 };

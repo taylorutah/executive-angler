@@ -26,9 +26,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article Not Found" };
+  const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
+  const readTime = article.readingTimeMinutes ? `${article.readingTimeMinutes} min read. ` : "";
+  const fallbackTitle = `${article.title} | Expert Fly Fishing ${categoryLabel} | Executive Angler`;
+  const fallbackDesc = `${readTime}${article.excerpt ? article.excerpt.substring(0, 140) : `Expert fly fishing ${categoryLabel.toLowerCase()} guide.`}${article.excerpt && article.excerpt.length > 140 ? "..." : ""} Read now.`;
+
   return {
-    title: article.metaTitle || article.title,
-    description: article.metaDescription || article.excerpt,
+    title: article.metaTitle || fallbackTitle,
+    description: article.metaDescription || fallbackDesc,
     openGraph: {
       title: article.title,
       description: article.excerpt,

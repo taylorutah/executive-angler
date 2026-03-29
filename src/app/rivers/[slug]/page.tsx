@@ -49,9 +49,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const river = await getRiverBySlug(slug);
   if (!river) return { title: "River Not Found" };
 
-  const speciesList = (river.primarySpecies || []).join(", ");
-  const fallbackTitle = `${river.name} Fly Fishing — ${speciesList || river.flowType || "Complete Guide"} | Executive Angler`;
-  const fallbackDesc = `Plan your trip to ${river.name}. ${river.lengthMiles ? river.lengthMiles + " miles of " : ""}${river.flowType || "prime"} water with ${speciesList || "world-class fishing"}. Access points, hatches, and local guides.`;
+  const speciesList = (river.primarySpecies || []).slice(0, 3).join(", ");
+  const flowLabel = river.flowType ? river.flowType.charAt(0).toUpperCase() + river.flowType.slice(1) : "";
+  const accessCount = (river.accessPoints || []).length;
+  const fallbackTitle = `${river.name} Fly Fishing — ${flowLabel || "Prime"} Water for ${speciesList || "Trout"} | Executive Angler`;
+  const fallbackDesc = `${river.name}: ${river.lengthMiles ? river.lengthMiles + " miles, " : ""}${river.difficulty || "all-level"} ${river.flowType || ""} water.${speciesList ? ` Target ${speciesList}.` : ""}${accessCount > 0 ? ` ${accessCount} access points.` : ""} Hatch charts, guides & trip planning.`;
 
   return {
     title: river.metaTitle || fallbackTitle,

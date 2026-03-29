@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Executive Angler — Questions & Partnerships",
   description:
-    "Get in touch with Executive Angler — questions about fly fishing destinations, lodge recommendations, guide bookings, or partnership inquiries.",
+    "Get in touch with the Executive Angler team. Questions about destinations, guide bookings, lodge recommendations, or partnerships — we're here to help.",
+  alternates: { canonical: `${SITE_URL}/contact` },
   openGraph: {
-    title: "Contact Us | Executive Angler",
+    title: "Contact Executive Angler",
     description:
-      "Get in touch with Executive Angler — questions about fly fishing destinations, lodge recommendations, guide bookings, or partnership inquiries.",
+      "Get in touch with the Executive Angler team. Questions about destinations, guide bookings, or partnerships — we're here to help.",
     images: ["/api/og?title=Contact%20Us&type=default"],
   },
 };

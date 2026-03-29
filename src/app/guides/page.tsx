@@ -8,6 +8,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { guideListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
   title: "31 Expert Fly Fishing Guides — Compare & Book",
   description:
     "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. From Montana to Mongolia — find your next guide and book direct.",
+  alternates: { canonical: `${SITE_URL}/guides` },
   openGraph: {
     title: "31 Expert Fly Fishing Guides | Executive Angler",
     description: "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. Find your next guide and book direct.",

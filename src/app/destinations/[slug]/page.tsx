@@ -40,9 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!dest) return { title: "Destination Not Found" };
 
   const speciesList = (dest.primarySpecies || []).slice(0, 3).join(", ");
-  const monthStr = (dest.bestMonths || []).length > 0 ? `Best months: ${dest.bestMonths!.slice(0, 3).join(", ")}` : "";
-  const fallbackTitle = `${dest.name} Fly Fishing — ${speciesList || dest.tagline || "Complete Guide"} | Executive Angler`;
-  const fallbackDesc = `Plan your ${dest.name} fly fishing trip. ${speciesList ? "Target " + speciesList + ". " : ""}${monthStr ? monthStr + ". " : ""}Rivers, guides, lodges, and local intel.`;
+  const speciesCount = (dest.primarySpecies || []).length;
+  const bestMonths = (dest.bestMonths || []).slice(0, 3).join(", ");
+  const geo = dest.state || dest.country || dest.region || "";
+  const fallbackTitle = `${dest.name} Fly Fishing — ${geo} Guide to Rivers, Lodges & Hatches | Executive Angler`;
+  const fallbackDesc = `Plan your ${dest.name} fly fishing trip.${speciesCount > 0 ? ` Target ${speciesCount} species including ${speciesList}.` : ""}${bestMonths ? ` Best months: ${bestMonths}.` : ""} Rivers, lodges, guides & hatch charts. Plan your trip today.`;
 
   return {
     title: dest.metaTitle || fallbackTitle,

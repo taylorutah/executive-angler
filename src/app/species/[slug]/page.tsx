@@ -36,9 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const sp = await getSpeciesBySlug(slug);
   if (!sp) return { title: "Species Not Found" };
 
-  const sizeInfo = sp.averageSize ? ` (avg ${sp.averageSize})` : "";
-  const fallbackTitle = `${sp.commonName} — Flies, Tactics & Where to Catch | Executive Angler`;
-  const fallbackDesc = `Complete ${sp.commonName} fly fishing guide${sizeInfo}. Best flies, proven tactics, habitat, and top destinations. Everything you need to target ${sp.commonName} on the fly.`;
+  const sizeStr = sp.averageSize ? `Avg size: ${sp.averageSize}. ` : "";
+  const flyCount = (sp.preferredFlies || []).length;
+  const destCount = (sp.relatedDestinationIds || []).length;
+  const habitatStr = sp.preferredHabitat ? sp.preferredHabitat.split(".")[0] + ". " : "";
+  const fallbackTitle = `${sp.commonName} — Fly Fishing Guide: Best Flies, Tactics & Waters | Executive Angler`;
+  const fallbackDesc = `${sp.commonName} fly fishing guide. ${sizeStr}${habitatStr}${flyCount > 0 ? `${flyCount} proven fly patterns. ` : ""}${destCount > 0 ? `${destCount} top destinations. ` : ""}Tactics, gear & where to catch them.`;
 
   return {
     title: sp.metaTitle || fallbackTitle,

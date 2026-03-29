@@ -38,10 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const guide = await getGuideBySlug(slug);
   if (!guide) return { title: "Guide Not Found" };
 
-  const expStr = guide.yearsExperience ? `${guide.yearsExperience}+ yrs experience` : "";
-  const rateStr = guide.dailyRate ? ` | ${guide.dailyRate}` : "";
-  const fallbackTitle = `${guide.name} — ${(guide.specialties || []).slice(0, 2).join(", ") || "Expert Guide"} | Executive Angler`;
-  const fallbackDesc = `Book ${guide.name}. ${expStr}${rateStr}. Specialties: ${(guide.specialties || []).slice(0, 3).join(", ")}. Reviews, rates, and direct booking.`;
+  const topSpecialties = (guide.specialties || []).slice(0, 2).join(" & ");
+  const expStr = guide.yearsExperience ? `${guide.yearsExperience}+ years experience. ` : "";
+  const rateStr = guide.dailyRate ? `Rates from ${guide.dailyRate}. ` : "";
+  const riverCount = (guide.riverIds || []).length;
+  const fallbackTitle = `${guide.name} — Expert Fly Fishing Guide | ${topSpecialties || "All Methods"} | Executive Angler`;
+  const fallbackDesc = `Book ${guide.name} — expert fly fishing guide. ${expStr}${rateStr}Specialties: ${(guide.specialties || []).slice(0, 3).join(", ") || "all methods"}.${riverCount > 0 ? ` Access to ${riverCount} rivers.` : ""} Read reviews & book direct.`;
 
   return {
     title: guide.metaTitle || fallbackTitle,

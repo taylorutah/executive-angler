@@ -5,16 +5,18 @@ import EntityListView from "@/components/ui/EntityListView";
 import { getAllSpecies } from "@/lib/db";
 import { speciesListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Fish Species Guide",
+  title: "35 Fly Fishing Species — Trout, Salmon & Saltwater Guide",
   description:
-    "Explore detailed profiles of the most sought-after fly fishing species — from wild trout and salmon to saltwater game fish. Habitat, tactics, fly patterns, and more.",
+    "Detailed profiles of 35 fly fishing species — trout, salmon, char, bass, and saltwater game fish. Habitat, tactics, fly patterns, and conservation status.",
+  alternates: { canonical: `${SITE_URL}/species` },
   openGraph: {
-    title: "Fish Species Guide | Executive Angler",
-    description: "Detailed profiles of 35 fly fishing species — trout, salmon, char, saltwater, and warmwater game fish.",
+    title: "35 Fly Fishing Species Guide | Executive Angler",
+    description: "Detailed profiles of 35 fly fishing species — trout, salmon, char, bass, and saltwater game fish. Habitat, tactics, and fly patterns.",
     images: ["/api/og?title=Fish%20Species%20Guide&subtitle=35%20Species%20Profiles&type=species"],
   },
 };

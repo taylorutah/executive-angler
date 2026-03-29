@@ -8,6 +8,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllLodges, getAllDestinations, getAllRivers } from "@/lib/db";
 import { lodgeListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
+import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
@@ -15,12 +16,13 @@ const HERO_SLUG = "firehole-ranch";
 const SECONDARY_SLUGS = ["bristol-bay-sportfishing", "dean-river-lodge", "snake-river-sporting-club"];
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Lodges",
+  title: "32 Premier Fly Fishing Lodges — Reviews & Rates",
   description:
-    "World-class fly fishing lodges at the world's greatest fisheries — from remote Alaskan fly-outs to Scottish castle beats. Real reviews, pricing, and direct booking links.",
+    "Compare 32 fly fishing lodges worldwide — from Alaskan fly-outs to Scottish castle beats. Real reviews, pricing tiers, amenities, and direct booking links.",
+  alternates: { canonical: `${SITE_URL}/lodges` },
   openGraph: {
-    title: "Fly Fishing Lodges | Executive Angler",
-    description: "World-class fly fishing lodges — from remote Alaskan fly-outs to Scottish castle beats. Reviews, pricing, and booking.",
+    title: "32 Premier Fly Fishing Lodges | Executive Angler",
+    description: "Compare 32 fly fishing lodges worldwide — real reviews, pricing tiers, amenities, and direct booking links.",
     images: ["/api/og?title=Fly%20Fishing%20Lodges&subtitle=32%20Premier%20Properties&type=destination"],
   },
 };
