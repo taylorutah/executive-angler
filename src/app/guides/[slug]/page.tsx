@@ -159,9 +159,14 @@ export default async function GuidePage({ params }: Props) {
             ]}
           />
 
-          <h1 className="mt-6 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-            {guide.name}
-          </h1>
+          <div className="mt-6 flex items-start gap-4">
+            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white flex-1">
+              {guide.name}
+            </h1>
+            <div className="mt-2 shrink-0">
+              <FavoriteButton entityType="guide" entityId={guide.id} />
+            </div>
+          </div>
 
           {/* Badge Row: Destination, Experience, Rate */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -195,19 +200,16 @@ export default async function GuidePage({ params }: Props) {
             ))}
           </div>
 
-          {/* Rating + Favorite */}
-          <div className="mt-6 flex items-center gap-4">
-            {guide.googleRating && (
-              <div className="flex items-center gap-1.5">
-                <Star className="h-5 w-5 fill-[#E8923A] text-[#E8923A]" />
-                <span className="text-white font-semibold">{guide.googleRating}</span>
-                {guide.googleReviewCount && (
-                  <span className="text-[#6E7681] text-sm">({guide.googleReviewCount} reviews)</span>
-                )}
-              </div>
-            )}
-            <FavoriteButton entityType="guide" entityId={guide.id} />
-          </div>
+          {/* Rating */}
+          {guide.googleRating && (
+            <div className="mt-6 flex items-center gap-1.5">
+              <Star className="h-5 w-5 fill-[#E8923A] text-[#E8923A]" />
+              <span className="text-white font-semibold">{guide.googleRating}</span>
+              {guide.googleReviewCount && (
+                <span className="text-[#6E7681] text-sm">({guide.googleReviewCount} reviews)</span>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
