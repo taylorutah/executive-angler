@@ -63,3 +63,46 @@
 - Avg position: 43.5 → 25
 - Backlinks: 0 → 30+
 - Organic sessions: 31/mo → 300+/mo
+
+---
+
+## 5. Implementation Log (2026-03-29)
+
+### Global Metadata Optimization (19 files modified)
+All pages now have keyword-rich `<title>` tags, compelling `<meta description>`, and canonical URLs via `generateMetadata`.
+
+**Detail Pages (7 entity types):**
+- Destinations: `{Name} Fly Fishing — {State/Country} Guide to Rivers, Lodges & Hatches | Executive Angler`
+- Rivers: `{Name} Fly Fishing — {FlowType} Water for {TopSpecies} | Executive Angler` + miles, difficulty, access count in description
+- Species: `{CommonName} — Fly Fishing Guide: Best Flies, Tactics & Waters`
+- Lodges: `{Name} — {PriceTier} Fly Fishing Lodge | Reviews & Booking`
+- Guides: `{Name} — Expert Fly Fishing Guide | {Specialties}`
+- Fly Shops: `{Name} — Fly Shop & Outfitter | {City/State}` (city extracted from address)
+- Articles: `{Title} | Expert Fly Fishing {Category}`
+
+**List Pages (8 pages):** All updated with entity counts in titles, canonical URLs added.
+
+**Utility Pages:**
+- `/about` — full metadata + OG + canonical
+- `/contact` — metadata + canonical
+- `/search` — set to `noindex, follow` to preserve crawl budget
+
+### llms.txt Updated
+Corrected entity counts: 31 destinations, 37 rivers, 56 fly shops, 100 fly patterns, 37 fly-for-river pages, 54 hatch pages, 450+ total pages.
+
+### GA4 Internal Traffic Filter
+- Defined IP rule: `136.59.155.1/32` (Owner - Taylor Warnick)
+- Data filter activated: Internal Traffic → Exclude → Active
+- Owner's browsing no longer skews analytics data going forward
+
+### Documents Created
+- `docs/SEO-Bible-v3.md` — This file
+- `docs/Backlink-Strategy.md` — 5-phase link building plan with targets, templates, KPIs
+
+### Sitemap Resubmitted
+- Resubmitted sitemap.xml in GSC for the www property
+
+### Canonical Duplicate Investigation
+- 6 pages flagged for duplicate canonical (validation failed 3/28)
+- All affected pages now have explicit canonical URLs from generateMetadata
+- Needs re-validation in GSC after deployment completes
