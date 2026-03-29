@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, MapPin, Fish } from "lucide-react";
-import HeroSection from "@/components/ui/HeroSection";
+import { ExternalLink, Phone, Mail, Award, MapPin, Fish, Star } from "lucide-react";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
@@ -10,11 +9,6 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
-import CommunityPhotos from "@/components/ui/CommunityPhotos";
-import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllGuides,
@@ -72,11 +66,6 @@ export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
-
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, guideRivers, areaLodges, areaFlyShops] = await Promise.all([
     guide.destinationId ? getDestinationById(guide.destinationId) : Promise.resolve(undefined),
@@ -159,46 +148,68 @@ export default async function GuidePage({ params }: Props) {
         }}
       />
 
-      <div className="relative">
-        <HeroSection
-          imageUrl={
-            (guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg")
-              ? guide.photoUrl
-              : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
-          }
-          imageAlt={guide.heroImageAlt || `${guide.name} — fly fishing guide`}
-          title={guide.name}
-          subtitle={`Fly Fishing Guide${dest ? ` — ${dest.name}` : ""}`}
-          height="h-[50vh]"
-        />
-        {userIsAdmin && (
-          <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
-              entityType="guides"
-              entityId={guide.id}
-              currentImageUrl={guide.photoUrl || ""}
-              currentAlt={guide.heroImageAlt}
-              currentCredit={guide.heroImageCredit}
-              currentCreditUrl={guide.heroImageCreditUrl}
-            />
-          </div>
-        )}
-      </div>
+      {/* Text Hero */}
+      <section className="bg-[#0D1117] pt-6 pb-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Guides", href: "/guides" },
+              ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+              { label: guide.name },
+            ]}
+          />
 
-      <div className="bg-[#0D1117]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Guides", href: "/guides" },
-                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                { label: guide.name },
-              ]}
-            />
+          <h1 className="mt-6 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+            {guide.name}
+          </h1>
+
+          {/* Badge Row: Destination, Experience, Rate */}
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            {dest && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#161B22] text-[#A8B2BD] text-sm font-medium rounded-full border border-[#21262D]">
+                <MapPin className="h-4 w-4 text-[#E8923A]" />
+                {dest.name}
+              </span>
+            )}
+            {guide.yearsExperience && (
+              <span className="inline-flex items-center px-3 py-1.5 bg-[#161B22] text-[#A8B2BD] text-sm font-medium rounded-full border border-[#21262D]">
+                {guide.yearsExperience}+ years experience
+              </span>
+            )}
+            {guide.dailyRate && (
+              <span className="inline-flex items-center px-3 py-1.5 bg-[#E8923A]/10 text-[#E8923A] text-sm font-semibold rounded-full border border-[#E8923A]/30">
+                {guide.dailyRate}
+              </span>
+            )}
+          </div>
+
+          {/* Specialty Pills */}
+          <div className="mt-5 flex flex-wrap gap-2">
+            {(guide.specialties || []).map((s) => (
+              <span
+                key={s}
+                className="px-3 py-1 bg-[#0D1117] text-[#E8923A] text-sm font-medium rounded-full border border-[#21262D]"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+
+          {/* Rating + Favorite */}
+          <div className="mt-6 flex items-center gap-4">
+            {guide.googleRating && (
+              <div className="flex items-center gap-1.5">
+                <Star className="h-5 w-5 fill-[#E8923A] text-[#E8923A]" />
+                <span className="text-white font-semibold">{guide.googleRating}</span>
+                {guide.googleReviewCount && (
+                  <span className="text-[#6E7681] text-sm">({guide.googleReviewCount} reviews)</span>
+                )}
+              </div>
+            )}
             <FavoriteButton entityType="guide" entityId={guide.id} />
           </div>
         </div>
-      </div>
+      </section>
 
       <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -346,10 +357,6 @@ export default async function GuidePage({ params }: Props) {
                   })) ?? null
                 }
               />
-
-              {/* Community Photos */}
-              <CommunityPhotos entityType="guide" entityId={guide.id} />
-              <PhotoSubmissionForm entityType="guide" entityId={guide.id} entityName={guide.name} />
             </div>
 
             <div className="space-y-6">

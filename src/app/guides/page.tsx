@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight, Star } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -64,6 +63,7 @@ export default async function GuidesPage() {
   const config: EntityListConfig = {
     ...guideListConfig,
     filters: [{ ...guideListConfig.filters[0], options: destOptions }],
+    defaultView: "list",
   };
 
   const items: (CardData & { _filterValues: Record<string, string | number> })[] = guides.map(
@@ -71,7 +71,7 @@ export default async function GuidesPage() {
       const dest = destinations.find((d) => d.id === guide.destinationId);
       return {
         href: `/guides/${guide.slug}`,
-        imageUrl: guide.photoUrl || undefined,
+        imageUrl: undefined,
         imageAlt: guide.name,
         title: guide.name,
         subtitle: dest?.name,
@@ -119,67 +119,57 @@ export default async function GuidesPage() {
                 <ScrollAnimation key={guide.id} delay={i * 0.1}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                    className="group block bg-[#161B22] rounded-xl border-l-4 border-[#E8923A] shadow-lg hover:bg-[#1C2128] transition-colors"
                   >
-                    <div className="relative h-56">
-                      <Image
-                        src={guide.photoUrl || "/images/guide-placeholder.svg"}
-                        alt={`${guide.name} — fly fishing guide service`}
-                        fill
-                        className={`transition-transform duration-500 group-hover:scale-105 ${guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg" ? "object-cover" : "object-contain p-4"}`}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                      {(guide.photoUrl && guide.photoUrl !== "/images/guide-placeholder.svg") && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/10 to-transparent" />
-                      )}
-                      {guide.yearsExperience && (
-                        <div className="absolute bottom-4 left-4">
-                          <span className="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-[#E8923A] text-white">
-                            {guide.yearsExperience} years experience
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-tight">
+                    <div className="p-6">
+                      <h3 className="font-heading text-2xl font-bold text-white group-hover:text-[#E8923A] transition-colors leading-tight">
                         {guide.name}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
+                      <p className="mt-2 text-sm font-medium text-[#E8923A] italic">
                         {GUIDE_HEADLINES[guide.slug]}
                       </p>
                       {dest && (
-                        <p className="mt-1 text-xs text-[#6E7681]">{dest.name}</p>
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[#6E7681]">
+                          {dest.name}
+                        </p>
                       )}
-                      <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
-                        {guide.bio.substring(0, 120)}...
+                      <p className="mt-4 text-sm text-[#A8B2BD] leading-relaxed line-clamp-3">
+                        {guide.bio.substring(0, 150)}...
                       </p>
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {guide.specialties.slice(0, 2).map((sp) => (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {guide.specialties.slice(0, 3).map((sp) => (
                           <span
                             key={sp}
-                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                            className="px-2.5 py-1 bg-[#0D1117] text-[#E8923A] text-xs font-medium rounded-full border border-[#21262D]"
                           >
                             {sp}
                           </span>
                         ))}
                       </div>
-                      <div className="mt-4 flex items-center justify-between">
-                        {guide.googleRating && (
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                            <span className="text-xs text-[#A8B2BD]">
-                              {guide.googleRating} ({guide.googleReviewCount})
+                      <div className="mt-5 flex items-center justify-between border-t border-[#21262D] pt-4">
+                        <div className="flex items-center gap-4">
+                          {guide.googleRating && (
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 fill-[#E8923A] text-[#E8923A]" />
+                              <span className="text-sm text-[#A8B2BD]">
+                                {guide.googleRating}
+                              </span>
+                            </div>
+                          )}
+                          {guide.yearsExperience && (
+                            <span className="text-xs text-[#6E7681]">
+                              {guide.yearsExperience}+ yrs
                             </span>
-                          </div>
-                        )}
+                          )}
+                        </div>
                         {guide.dailyRate && (
-                          <span className="text-xs font-semibold text-[#E8923A]">
+                          <span className="text-sm font-semibold text-[#E8923A]">
                             {guide.dailyRate}
                           </span>
                         )}
                       </div>
                       <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
-                        View Profile <ChevronRight className="h-3.5 w-3.5" />
+                        View Profile <ChevronRight className="h-4 w-4" />
                       </span>
                     </div>
                   </Link>
