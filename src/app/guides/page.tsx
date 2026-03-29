@@ -12,13 +12,13 @@ import { SITE_URL } from "@/lib/constants";
 export const revalidate = 3600;
 
 const SPOTLIGHT_SLUGS = [
-  "bud-lillys-guide-service",
+  "domenick-swentosky-troutbitten",
   "jackson-hole-anglers",
   "paddy-mcdonnell-moy-ghillie",
 ] as const;
 
 const GUIDE_HEADLINES: Record<string, string> = {
-  "bud-lillys-guide-service": "Seven Decades on Montana's Blue-Ribbon Waters",
+  "domenick-swentosky-troutbitten": "Twenty-Five Years on Pennsylvania's Wild Limestone Streams",
   "jackson-hole-anglers": "Wild Cutthroats in the Shadow of the Tetons",
   "paddy-mcdonnell-moy-ghillie": "Third-Generation Ghillie on Ireland's River Moy",
 };
