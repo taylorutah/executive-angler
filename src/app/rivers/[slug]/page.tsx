@@ -18,6 +18,7 @@ import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
+import WaterLevelChart from "@/components/rivers/WaterLevelChart";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
@@ -486,6 +487,8 @@ export default async function RiverPage({ params }: Props) {
                 riverLatitude={river.latitude}
                 riverLongitude={river.longitude}
               />
+
+              <WaterLevelChart riverId={river.id} />
 
               <QuickFacts facts={quickFacts} />
 

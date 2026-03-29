@@ -6,6 +6,10 @@ import {
   BarChart3, Fish, MapPin, TrendingUp, Calendar, ChevronLeft,
   Flame, Target, Feather
 } from "lucide-react";
+import {
+  AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
+  ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell
+} from "recharts";
 
 interface Session {
   id: string;
@@ -31,6 +35,8 @@ interface Catch {
 }
 
 type TimeRange = "1M" | "3M" | "6M" | "1Y" | "ALL";
+
+const SPECIES_COLORS = ["#0BA5C7", "#E8923A", "#2EA44F", "#A855F7", "#F59E0B", "#EC4899", "#6366F1", "#14B8A6"];
 
 export default function AnalyticsClient({
   sessions,
@@ -119,11 +125,8 @@ export default function AnalyticsClient({
       }));
   }, [filteredSessions]);
 
-  const maxMonthlyFish = Math.max(...monthlyData.map(m => m.fish), 1);
-  const maxSpecies = speciesData.length > 0 ? speciesData[0][1] : 1;
   const maxRiverSessions = riverData.length > 0 ? riverData[0][1].sessions : 1;
   const maxFly = flyData.length > 0 ? flyData[0][1] : 1;
-  const maxCatchRate = Math.max(...catchRateData.map(d => d.fish), 1);
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
@@ -175,49 +178,77 @@ export default function AnalyticsClient({
           </div>
         ) : (
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Catch Rate Over Time */}
+            {/* Catch Rate Over Time — recharts AreaChart */}
             <ChartCard title="Catch Rate" icon={<TrendingUp className="h-4 w-4 text-[#E8923A]" />} span="lg:col-span-2">
-              <div className="flex items-end gap-[2px] h-40">
-                {catchRateData.map((d, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center justify-end group relative">
-                    <div
-                      className="w-full bg-[#E8923A]/80 rounded-t hover:bg-[#E8923A] transition-colors min-h-[2px]"
-                      style={{ height: `${(d.fish / maxCatchRate) * 100}%` }}
-                    />
-                    <div className="absolute bottom-full mb-1 px-2 py-1 bg-[#1F2937] border border-[#21262D] rounded text-[10px] text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                      {d.fish} fish · {d.date}
-                      {d.river && <span className="text-[#E8923A]"> · {d.river}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {catchRateData.length > 0 && (
-                <div className="flex justify-between mt-2 text-[9px] text-[#6E7681]">
-                  <span>{catchRateData[0].date}</span>
-                  <span>{catchRateData[catchRateData.length - 1].date}</span>
+              {catchRateData.length > 0 ? (
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={catchRateData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
+                      <defs>
+                        <linearGradient id="catchGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#E8923A" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#E8923A" stopOpacity={0.02} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
+                      <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#6E7681" }} axisLine={{ stroke: "#21262D" }} tickLine={false} interval={Math.max(0, Math.floor(catchRateData.length / 8))} />
+                      <YAxis tick={{ fontSize: 10, fill: "#6E7681" }} axisLine={false} tickLine={false} width={30} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "#0D1117", border: "1px solid #21262D", borderRadius: "8px", fontSize: "12px", color: "#F0F6FC" }}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        formatter={(value: any, _name: any, props: any) => {
+                          const river = props?.payload?.river;
+                          return [`${value} fish${river ? ` · ${river}` : ""}`, "Catch"];
+                        }}
+                      />
+                      <Area type="monotone" dataKey="fish" stroke="#E8923A" strokeWidth={2} fill="url(#catchGrad)" dot={false} activeDot={{ r: 4, fill: "#E8923A", stroke: "#0D1117", strokeWidth: 2 }} />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
+              ) : (
+                <p className="text-xs text-[#6E7681]">No catch data</p>
               )}
             </ChartCard>
 
-            {/* Species Breakdown */}
+            {/* Species Breakdown — pie + bars */}
             <ChartCard title="Species Breakdown" icon={<Fish className="h-4 w-4 text-[#0BA5C7]" />}>
-              <div className="space-y-2.5">
-                {speciesData.map(([species, count]) => (
-                  <div key={species}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[#F0F6FC] font-medium truncate mr-2">{species}</span>
-                      <span className="text-[#A8B2BD] font-mono shrink-0">{count}</span>
-                    </div>
-                    <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#0BA5C7] rounded-full transition-all"
-                        style={{ width: `${(count / maxSpecies) * 100}%` }}
-                      />
-                    </div>
+              {speciesData.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  <div className="h-36">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={speciesData.map(([name, value]) => ({ name, value }))}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={55}
+                          innerRadius={25}
+                          strokeWidth={1}
+                          stroke="#0D1117"
+                        >
+                          {speciesData.map((_, i) => (
+                            <Cell key={i} fill={SPECIES_COLORS[i % SPECIES_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip contentStyle={{ backgroundColor: "#0D1117", border: "1px solid #21262D", borderRadius: "8px", fontSize: "12px", color: "#F0F6FC" }} />
+                      </PieChart>
+                    </ResponsiveContainer>
                   </div>
-                ))}
-                {speciesData.length === 0 && <p className="text-xs text-[#6E7681]">No species data</p>}
-              </div>
+                  <div className="space-y-2">
+                    {speciesData.map(([species, count], i) => (
+                      <div key={species} className="flex items-center gap-2 text-xs">
+                        <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: SPECIES_COLORS[i % SPECIES_COLORS.length] }} />
+                        <span className="text-[#F0F6FC] truncate flex-1">{species}</span>
+                        <span className="text-[#A8B2BD] font-mono">{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-[#6E7681]">No species data</p>
+              )}
             </ChartCard>
 
             {/* Top Rivers */}
@@ -241,23 +272,27 @@ export default function AnalyticsClient({
               </div>
             </ChartCard>
 
-            {/* Monthly Activity */}
+            {/* Monthly Activity — recharts BarChart */}
             <ChartCard title="Monthly Activity" icon={<Calendar className="h-4 w-4 text-[#2EA44F]" />}>
-              <div className="flex items-end gap-1 h-32">
-                {monthlyData.map((m, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center justify-end group relative">
-                    <div
-                      className="w-full bg-[#2EA44F]/70 rounded-t hover:bg-[#2EA44F] transition-colors min-h-[2px]"
-                      style={{ height: `${(m.fish / maxMonthlyFish) * 100}%` }}
-                    />
-                    <span className="text-[8px] text-[#6E7681] mt-1 truncate w-full text-center">{m.label}</span>
-                    <div className="absolute bottom-full mb-1 px-2 py-1 bg-[#1F2937] border border-[#21262D] rounded text-[10px] text-[#F0F6FC] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                      {m.sessions} sessions · {m.fish} fish
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {monthlyData.length === 0 && <p className="text-xs text-[#6E7681]">No monthly data</p>}
+              {monthlyData.length > 0 ? (
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={monthlyData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
+                      <XAxis dataKey="label" tick={{ fontSize: 9, fill: "#6E7681" }} axisLine={{ stroke: "#21262D" }} tickLine={false} />
+                      <YAxis tick={{ fontSize: 10, fill: "#6E7681" }} axisLine={false} tickLine={false} width={25} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "#0D1117", border: "1px solid #21262D", borderRadius: "8px", fontSize: "12px", color: "#F0F6FC" }}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        formatter={(value: any, name: any) => [value, name === "fish" ? "Fish" : "Sessions"]}
+                      />
+                      <Bar dataKey="fish" fill="#2EA44F" radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <p className="text-xs text-[#6E7681]">No monthly data</p>
+              )}
             </ChartCard>
 
             {/* Top Flies */}

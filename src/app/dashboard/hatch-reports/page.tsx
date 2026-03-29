@@ -4,17 +4,17 @@ import Link from "next/link";
 import { Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { checkPremium } from "@/lib/admin";
-import ExportClient from "./ExportClient";
+import HatchReportsClient from "./HatchReportsClient";
 
 export const metadata: Metadata = {
-  title: "Export Data — Executive Angler",
-  description: "Download your fishing data as CSV or PDF.",
+  title: "Hatch Reports — Executive Angler",
+  description: "Real-time and historical hatch reports from your fishing data.",
 };
 
-export default async function ExportPage() {
+export default async function HatchReportsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?redirect=/dashboard/export");
+  if (!user) redirect("/login?redirect=/dashboard/hatch-reports");
 
   const isPremium = await checkPremium(supabase, user.id, user.email);
   if (!isPremium) {
@@ -24,8 +24,8 @@ export default async function ExportPage() {
           <Lock className="h-12 w-12 text-[#E8923A] mx-auto mb-4" />
           <h1 className="text-xl font-bold text-[#F0F6FC] mb-2">Pro Feature</h1>
           <p className="text-sm text-[#A8B2BD] mb-6">
-            Data export (CSV &amp; PDF) is available with Executive Angler Pro.
-            Download your complete fishing history anytime.
+            Hatch Reports combine community data with your personal catch history
+            to show what&apos;s hatching and what flies are working right now.
           </p>
           <Link
             href="/account"
@@ -38,33 +38,44 @@ export default async function ExportPage() {
     );
   }
 
-  // Fetch all sessions
+  // Fetch user sessions with catches for hatch matching
   const { data: sessions } = await supabase
     .from("fishing_sessions")
-    .select("id, date, river_name, total_fish, weather, water_temp_f, water_clarity, notes, section, location")
+    .select("id, date, river_name, water_temp_f")
     .eq("user_id", user.id)
     .order("date", { ascending: false });
 
-  // Fetch all catches
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, fly_pattern_id, fly_size, time_caught, notes, quantities")
+    .select("id, session_id, species, fly_pattern_id, fly_size, time_caught, quantities")
     .eq("user_id", user.id);
 
-  // Fetch fly patterns for name lookup
   const { data: flies } = await supabase
     .from("fly_patterns")
-    .select("id, name")
+    .select("id, name, type")
     .eq("user_id", user.id);
 
-  const flyMap = Object.fromEntries((flies || []).map(f => [f.id, f.name]));
+  const flyMap = Object.fromEntries((flies || []).map(f => [f.id, { name: f.name, type: f.type }]));
+
+  // Fetch rivers with hatch charts for matching
+  const { data: rivers } = await supabase
+    .from("rivers")
+    .select("id, slug, name, hatch_chart")
+    .not("hatch_chart", "is", null);
 
   return (
-    <ExportClient
+    <HatchReportsClient
       sessions={sessions || []}
       catches={(catches || []).map(c => ({
         ...c,
-        flyPatternName: c.fly_pattern_id ? flyMap[c.fly_pattern_id] || null : null,
+        flyName: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.name || null : null,
+        flyType: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.type || null : null,
+      }))}
+      rivers={(rivers || []).map(r => ({
+        id: r.id,
+        slug: r.slug,
+        name: r.name,
+        hatchChart: r.hatch_chart || [],
       }))}
     />
   );

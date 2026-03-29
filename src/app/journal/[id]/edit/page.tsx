@@ -93,7 +93,7 @@ export default function EditSessionPage() {
   const [form, setForm] = useState({
     title: "", date: "", river_name: "", location: "",
     water_temp_f: "", water_clarity: "", weather: "",
-    flies_notes: "", notes: "", trip_tags: "",
+    flies_notes: "", notes: "", private_memo: "", trip_tags: "",
   });
   // Simple mode fish count (total_fish direct entry, for drift sessions)
   const [simpleFishCount, setSimpleFishCount] = useState<string>("");
@@ -201,6 +201,7 @@ export default function EditSessionPage() {
           weather: session.weather || "",
           flies_notes: session.flies_notes || "",
           notes: session.notes || "",
+          private_memo: session.private_memo || "",
           trip_tags: (session.trip_tags || session.tags || []).join(", "),
         });
         const loadedCatches = (session.catches || []).map((c: any) => ({
@@ -806,6 +807,13 @@ export default function EditSessionPage() {
           <div className={section}>
             <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">📝 Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
+          </div>
+
+          {/* Private Memo */}
+          <div>
+            <h2 className="text-sm font-bold text-[#6E7681] mb-3 flex items-center gap-1.5">🔒 Private Memo</h2>
+            <textarea rows={3} className={input} placeholder="Personal notes only you can see — never shared on public sessions…" value={form.private_memo} onChange={(e) => updateForm("private_memo", e.target.value)} />
+            <p className="text-[10px] text-[#6E7681] mt-1">Only visible to you, even on public sessions.</p>
           </div>
 
         </form>

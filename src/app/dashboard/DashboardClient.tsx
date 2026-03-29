@@ -338,8 +338,32 @@ export default function DashboardClient({
                 </Link>
               </div>
 
-              {/* Bottom row: 2 cards */}
+              {/* Bottom row: 4 cards */}
               <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/dashboard/insights"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A855F7] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Lightbulb className="h-5 w-5 text-[#A855F7]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">AI Insights</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Smart patterns</p>
+                </Link>
+
+                <Link
+                  href="/dashboard/hatch-reports"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#14B8A6] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Leaf className="h-5 w-5 text-[#14B8A6]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#14B8A6] transition-colors">Hatch Reports</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">What&apos;s hatching</p>
+                </Link>
+
                 <Link
                   href="/account/gear"
                   className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A8B2BD] transition-all"

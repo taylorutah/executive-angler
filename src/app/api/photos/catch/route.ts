@@ -54,10 +54,25 @@ export async function POST(req: NextRequest) {
     // Get public URL
     const publicUrl = `${supabaseUrl}/storage/v1/object/public/fish-images/${filePath}`;
 
-    // Update catches table
+    // Fetch existing photo URLs for this catch
+    const { data: existingCatch } = await supabase
+      .from("catches")
+      .select("fish_image_url, fish_image_urls")
+      .eq("id", catchId)
+      .eq("user_id", user.id)
+      .single();
+
+    const existingUrls: string[] = existingCatch?.fish_image_urls
+      || (existingCatch?.fish_image_url ? [existingCatch.fish_image_url] : []);
+    const updatedUrls = [...existingUrls, publicUrl].slice(0, 3); // max 3 photos
+
+    // Update catches table — both singular (primary) and array (all photos)
     const { error: updateError } = await supabase
       .from("catches")
-      .update({ fish_image_url: publicUrl })
+      .update({
+        fish_image_url: updatedUrls[0] || publicUrl,
+        fish_image_urls: updatedUrls,
+      })
       .eq("id", catchId)
       .eq("user_id", user.id);
 
@@ -66,7 +81,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to update catch" }, { status: 500 });
     }
 
-    return NextResponse.json({ url: publicUrl });
+    return NextResponse.json({ url: publicUrl, urls: updatedUrls });
   } catch (error) {
     console.error("Photo upload error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight,
-  Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2
+  Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2, Lock
 } from "lucide-react";
 import { KudosButton } from "@/components/social/KudosButton";
 import { compressImage } from "@/lib/image-compress";
@@ -83,6 +83,7 @@ interface Catch {
   bead_size?: string;
   time_caught?: string;
   fish_image_url?: string;
+  fish_image_urls?: string[];
   fish_location_image_url?: string;
   fly_image_url?: string;
   fly_pattern?: { name?: string; type?: string } | null;
@@ -128,6 +129,7 @@ interface Session {
   gage_height_ft?: number | null;
   water_clarity?: string;
   notes?: string;
+  private_memo?: string;
   flies_notes?: string;
   trip_tags?: string[];
   tags?: string[];
@@ -157,17 +159,22 @@ interface Props {
   sessionPhotos?: SessionPhoto[];
 }
 
-function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
-  catches: Catch[];
+interface FishPhotoEntry {
+  catchRef: Catch;
+  url: string;
+}
+
+function FishLightbox({ photos, initialIndex, onClose }: {
+  photos: FishPhotoEntry[];
   initialIndex: number;
   onClose: () => void;
-  catchPhotos: Record<string, string>;
 }) {
   const [idx, setIdx] = useState(initialIndex);
-  const c = catches[idx];
-  const imageUrl = catchPhotos[c.id] || c.fish_image_url;
-  const goNext = useCallback(() => setIdx(p => (p + 1) % catches.length), [catches.length]);
-  const goPrev = useCallback(() => setIdx(p => (p - 1 + catches.length) % catches.length), [catches.length]);
+  const entry = photos[idx];
+  const c = entry.catchRef;
+  const imageUrl = entry.url;
+  const goNext = useCallback(() => setIdx(p => (p + 1) % photos.length), [photos.length]);
+  const goPrev = useCallback(() => setIdx(p => (p - 1 + photos.length) % photos.length), [photos.length]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -183,7 +190,7 @@ function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
       <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
-      {catches.length > 1 && (
+      {photos.length > 1 && (
         <>
           <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
           <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronRight className="h-5 w-5" /></button>
@@ -209,7 +216,7 @@ function FishLightbox({ catches, initialIndex, onClose, catchPhotos }: {
             {c.time_caught && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{c.time_caught}</span>}
           </div>
         </div>
-        {catches.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {catches.length}</p>}
+        {photos.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {photos.length}</p>}
       </div>
     </div>
   );
@@ -274,10 +281,13 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
 export default function SessionDetail({ session, catches, flies, sessionPhotos = [] }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
-  // Catch photo uploads
-  const [catchPhotos, setCatchPhotos] = useState<Record<string, string>>(() => {
-    const m: Record<string, string> = {};
-    catches.forEach(c => { if (c.fish_image_url) m[c.id] = c.fish_image_url; });
+  // Catch photo uploads — track all photos per catch (array)
+  const [catchPhotos, setCatchPhotos] = useState<Record<string, string[]>>(() => {
+    const m: Record<string, string[]> = {};
+    catches.forEach(c => {
+      const urls = c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
+      if (urls.length > 0) m[c.id] = urls;
+    });
     return m;
   });
   const [uploadingCatch, setUploadingCatch] = useState<string | null>(null);
@@ -292,6 +302,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
   const [notesValue, setNotesValue] = useState(session.notes || "");
   const [notesSaving, setNotesSaving] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
+
+  // Private memo (like Strava — only visible to session owner, never public)
+  const [editingMemo, setEditingMemo] = useState(false);
+  const [memoValue, setMemoValue] = useState(session.private_memo || "");
+  const [memoSaving, setMemoSaving] = useState(false);
+  const [memoSaved, setMemoSaved] = useState(false);
 
   async function saveNotes() {
     if (notesValue === session.notes) { setEditingNotes(false); return; }
@@ -320,6 +336,33 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     }
   }
 
+  async function saveMemo() {
+    if (memoValue === session.private_memo) { setEditingMemo(false); return; }
+    setMemoSaving(true);
+    try {
+      const res = await fetch(`/api/fishing/session?id=${session.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ private_memo: memoValue }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error("Memo save failed:", res.status, err);
+        alert(`Save failed (${res.status}). Please try again.`);
+        setMemoSaving(false);
+        return;
+      }
+      setEditingMemo(false);
+      setMemoSaved(true);
+      setTimeout(() => setMemoSaved(false), 2000);
+    } catch (e) {
+      console.error("Memo save error:", e);
+      alert("Save failed. Check your connection and try again.");
+    } finally {
+      setMemoSaving(false);
+    }
+  }
+
   async function handleCatchPhotoUpload(catchId: string, file: File) {
     setUploadingCatch(catchId);
     try {
@@ -329,8 +372,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
       form.append("catchId", catchId);
       const res = await fetch("/api/photos/catch", { method: "POST", body: form });
       if (res.ok) {
-        const { url } = await res.json();
-        setCatchPhotos(prev => ({ ...prev, [catchId]: url }));
+        const { url, urls } = await res.json();
+        setCatchPhotos(prev => ({ ...prev, [catchId]: urls || [url] }));
       } else {
         const data = await res.json().catch(() => ({}));
         alert(data.error || "Upload failed. Please try again.");
@@ -388,7 +431,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
   const totalFish = Math.max(catchesTotal, session.total_fish ?? 0);
   const isDriftMode = catches.length === 0 && (session.total_fish ?? 0) > 0;
   const tags = session.trip_tags || session.tags || [];
-  const fishPhotos = catches.filter(c => catchPhotos[c.id] || c.fish_image_url);
+  // Build flat list of all catch photos (multiple per catch supported)
+  const fishPhotoEntries: FishPhotoEntry[] = catches.flatMap(c => {
+    const urls = catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
+    return urls.map(url => ({ catchRef: c, url }));
+  });
+  // Catches that have at least one photo (for backwards-compat references)
+  const catchesWithPhotos = catches.filter(c => (catchPhotos[c.id]?.length || 0) > 0 || c.fish_image_urls?.length || c.fish_image_url);
 
   const formattedDate = parseLocalDate(session.date).toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric", year: "numeric",
@@ -420,7 +469,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
   return (
     <>
       {lightboxIdx !== null && (
-        <FishLightbox catches={fishPhotos} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} catchPhotos={catchPhotos} />
+        <FishLightbox photos={fishPhotoEntries} initialIndex={lightboxIdx} onClose={() => setLightboxIdx(null)} />
       )}
       {sessionPhotoLightboxIdx !== null && allSessionPhotos.length > 0 && (
         <SessionPhotoLightbox
@@ -512,6 +561,58 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   )}
                 </div>
 
+                {/* Private memo — only visible to owner */}
+                <div className="mb-3 max-w-lg group/memo relative">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <Lock className="h-3 w-3 text-[#6E7681]" />
+                    <span className="text-[10px] text-[#6E7681] uppercase tracking-wide font-semibold">Private Memo</span>
+                    {memoSaved && <span className="text-[10px] text-green-400 ml-1">Saved</span>}
+                  </div>
+                  {editingMemo ? (
+                    <div>
+                      <textarea
+                        autoFocus
+                        rows={3}
+                        value={memoValue}
+                        onChange={e => setMemoValue(e.target.value)}
+                        onKeyDown={e => { if (e.key === "Escape") { setMemoValue(session.private_memo || ""); setEditingMemo(false); } }}
+                        placeholder="Personal notes only you can see…"
+                        className="w-full text-sm text-[#A8B2BD] leading-relaxed rounded-lg border border-[#6E7681]/40 bg-[#0D1117] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#6E7681]"
+                      />
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <button onClick={saveMemo} disabled={memoSaving}
+                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#6E7681] rounded-lg px-3 py-1.5 hover:bg-[#A8B2BD] disabled:opacity-60">
+                          <Check className="h-3 w-3" /> {memoSaving ? "Saving…" : "Save"}
+                        </button>
+                        <button onClick={() => { setMemoValue(session.private_memo || ""); setEditingMemo(false); }}
+                          className="flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#A8B2BD]">
+                          <RotateCcw className="h-3 w-3" /> Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : memoValue ? (
+                    <div
+                      onClick={() => setEditingMemo(true)}
+                      className="cursor-text rounded-lg border border-dashed border-[#6E7681]/20 hover:border-[#6E7681]/40 bg-[#0D1117] px-3 py-2 -mx-0 transition-colors group/memoblock"
+                      title="Click to edit private memo"
+                    >
+                      <p className="text-sm text-[#6E7681] leading-relaxed whitespace-pre-wrap italic">
+                        {memoValue}
+                      </p>
+                      <p className="text-[10px] text-[#6E7681] mt-1 opacity-0 group-hover/memoblock:opacity-100 transition-opacity flex items-center gap-1">
+                        <Pencil className="h-3 w-3" /> Click to edit
+                      </p>
+                    </div>
+                  ) : (
+                    <button onClick={() => setEditingMemo(true)}
+                      className="w-full text-left rounded-lg border border-dashed border-[#6E7681]/20 hover:border-[#6E7681]/40 hover:bg-[#0D1117] px-3 py-2 transition-colors">
+                      <span className="text-sm text-[#6E7681] hover:text-[#A8B2BD] flex items-center gap-1.5 italic">
+                        <Pencil className="h-3.5 w-3.5" /> Add private memo…
+                      </span>
+                    </button>
+                  )}
+                </div>
+
                 {session.flies_notes && (
                   <div className="text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
                     <span className="font-medium text-[#A8B2BD]">Rig: </span>{session.flies_notes}
@@ -579,11 +680,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {catches.filter(c => c.species).length > 0 && (
                   <div className="mt-4 flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
                     {catches.filter(c => c.species).map((c, i) => {
-                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                      const photoUrls = catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
+                      const photoUrl = photoUrls[0];
                       return (
                         <div key={i} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-1.5 flex-shrink-0">
                           {photoUrl ? (
-                            <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))}
+                            <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))}
                               className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
                               <Image src={photoUrl} alt={c.species || "Fish"} fill className="object-cover" />
                             </button>
@@ -737,10 +839,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           {/* ---- COMBINED PHOTO GALLERY (fish + session) ---- */}
           <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
-              {(fishPhotos.length > 0 || allSessionPhotos.length > 0) && (
+              {(fishPhotoEntries.length > 0 || allSessionPhotos.length > 0) && (
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-[#6E7681] uppercase tracking-wide">
-                  Photos ({fishPhotos.length + allSessionPhotos.length})
+                  Photos ({fishPhotoEntries.length + allSessionPhotos.length})
                 </p>
               </div>
               )}
@@ -748,12 +850,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               {/* Unified Photo Grid — fish + session photos together */}
               <div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-                  {fishPhotos.map((c, i) => {
-                    const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                  {fishPhotoEntries.map((entry, i) => {
+                    const c = entry.catchRef;
                     return (
-                      <div key={`fish-${c.id}`} className="relative group aspect-square rounded-lg overflow-hidden">
+                      <div key={`fish-${c.id}-${i}`} className="relative group aspect-square rounded-lg overflow-hidden">
                         <button onClick={() => setLightboxIdx(i)} className="w-full h-full">
-                          <Image src={photoUrl!} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                          <Image src={entry.url} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
                         </button>
                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
                           <p className="text-white text-xs font-medium truncate">{c.species || "Fish"}</p>
@@ -855,14 +957,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               {/* Mobile: Stacked catch cards */}
               <div className="sm:hidden divide-y divide-[#21262D]">
                 {catches.map((c) => {
-                  const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                  const photoUrls = catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
+                  const photoUrl = photoUrls[0];
                   const isUploading = uploadingCatch === c.id;
                   return (
                     <div key={c.id} className="flex gap-3 px-4 py-3">
                       {/* Photo / upload */}
                       <div className="flex-shrink-0">
                         {photoUrl ? (
-                          <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
+                          <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))} className="block">
                             <div className="relative h-12 w-12 rounded-lg overflow-hidden">
                               <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                             </div>
@@ -930,14 +1033,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </thead>
                   <tbody>
                     {catches.map((c) => {
-                      const photoUrl = catchPhotos[c.id] || c.fish_image_url;
+                      const photoUrls = catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
+                      const photoUrl = photoUrls[0];
                       const isUploading = uploadingCatch === c.id;
                       return (
                         <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
                           <td className="py-2 px-3">
                             {photoUrl ? (
                               <div className="relative group/photo">
-                                <button onClick={() => setLightboxIdx(fishPhotos.findIndex(p => p.id === c.id))} className="block">
+                                <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))} className="block">
                                   <div className="relative h-8 w-8 rounded overflow-hidden">
                                     <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                                   </div>
