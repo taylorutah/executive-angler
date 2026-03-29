@@ -197,6 +197,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         filteredCount={sortedItems.length}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
+        availableViews={config.availableViews}
       />
 
       <AnimatePresence mode="wait">

@@ -64,6 +64,7 @@ export default async function GuidesPage() {
     ...guideListConfig,
     filters: [{ ...guideListConfig.filters[0], options: destOptions }],
     defaultView: "list",
+    availableViews: ["list", "compact"],
   };
 
   const items: (CardData & { _filterValues: Record<string, string | number> })[] = guides.map(

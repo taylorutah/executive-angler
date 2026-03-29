@@ -44,4 +44,6 @@ export interface EntityListConfig {
   sortOptions: SortOption[];
   defaultSort: string;
   defaultView: ViewMode;
+  /** Restrict which view modes are available (defaults to all if not set) */
+  availableViews?: ViewMode[];
 }

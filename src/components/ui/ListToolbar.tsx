@@ -17,6 +17,8 @@ interface ListToolbarProps {
   filteredCount: number;
   searchQuery?: string;
   onSearchChange?: (value: string) => void;
+  /** Restrict which view modes are shown (defaults to all) */
+  availableViews?: ViewMode[];
 }
 
 const viewModes: { mode: ViewMode; icon: typeof LayoutGrid; label: string }[] = [
@@ -39,7 +41,12 @@ export default function ListToolbar({
   filteredCount,
   searchQuery = "",
   onSearchChange,
+  availableViews,
 }: ListToolbarProps) {
+  // Filter view modes based on availableViews prop
+  const filteredViewModes = availableViews
+    ? viewModes.filter((v) => availableViews.includes(v.mode))
+    : viewModes;
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
   // Debounced local search state
@@ -152,7 +159,7 @@ export default function ListToolbar({
 
           {/* View mode toggle */}
           <div className="flex items-center gap-0.5 border border-[#21262D] rounded-lg p-0.5 bg-[#161B22]">
-            {viewModes.map(({ mode, icon: Icon, label }) => (
+            {filteredViewModes.map(({ mode, icon: Icon, label }) => (
               <button
                 key={mode}
                 onClick={() => onViewChange(mode)}
