@@ -32,10 +32,14 @@ export default function EntityListView({ items, config, storageKey }: EntityList
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem(`${VIEW_STORAGE_KEY}-${storageKey}`);
-    if (stored && ["grid", "compact", "list", "magazine"].includes(stored)) {
+    const allowed = config.availableViews ?? ["grid", "compact", "list", "magazine"];
+    if (stored && (allowed as string[]).includes(stored)) {
       setViewMode(stored as ViewMode);
+    } else if (stored && !(allowed as string[]).includes(stored)) {
+      // Stored view not allowed — reset to default
+      setViewMode(config.defaultView);
     }
-  }, [storageKey]);
+  }, [storageKey, config.availableViews, config.defaultView]);
 
   const handleViewChange = useCallback(
     (mode: ViewMode) => {
