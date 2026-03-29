@@ -9,7 +9,7 @@ import { guideListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 const SPOTLIGHT_SLUGS = [
   "domenick-swentosky-troutbitten",
