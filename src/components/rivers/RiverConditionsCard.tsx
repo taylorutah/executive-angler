@@ -94,11 +94,12 @@ interface Props {
   riverId: string;
   riverLatitude?: number | null;
   riverLongitude?: number | null;
+  onSectionChange?: (siteId: string, section: string) => void;
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function RiverConditionsCard({ riverId, riverLatitude, riverLongitude }: Props) {
+export default function RiverConditionsCard({ riverId, riverLatitude, riverLongitude, onSectionChange }: Props) {
   const [gauges, setGauges] = useState<GaugeReading[]>([]);
   const [weatherSections, setWeatherSections] = useState<WeatherSection[]>([]);
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -121,7 +122,12 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
         const res = await fetch(`/api/river-conditions/${riverId}`);
         if (!res.ok) { setConditionsError(true); return; }
         const data = await res.json();
-        if (!cancelled && data.gauges) setGauges(data.gauges);
+        if (!cancelled && data.gauges) {
+          setGauges(data.gauges);
+          if (data.gauges.length > 0) {
+            onSectionChange?.(data.gauges[0].siteId, data.gauges[0].section);
+          }
+        }
       } catch {
         if (!cancelled) setConditionsError(true);
       } finally {
@@ -205,7 +211,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           {gauges.map((g, idx) => (
             <button
               key={g.siteId}
-              onClick={() => setSelectedIdx(idx)}
+              onClick={() => { setSelectedIdx(idx); onSectionChange?.(g.siteId, g.section); }}
               className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
                 idx === selectedIdx
                   ? "bg-[#E8923A] text-white"

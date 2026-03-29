@@ -17,8 +17,7 @@ import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
-import RiverConditionsCard from "@/components/rivers/RiverConditionsCard";
-import WaterLevelChart from "@/components/rivers/WaterLevelChart";
+import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
@@ -461,18 +460,33 @@ export default async function RiverPage({ params }: Props) {
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
                     Best Flies for {river.name}
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {riverFlies.slice(0, 8).map((fly) => (
-                      <EntityCard
+                      <Link
                         key={fly.id}
                         href={`/flies/${fly.slug}`}
-                        imageUrl={fly.heroImageUrl || ""}
-                        imageAlt={fly.name}
-                        title={fly.name}
-                        subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
-                        meta={(fly.effectiveSpecies || []).slice(0, 3).join(" · ") || undefined}
-                        iconOnly={!fly.heroImageUrl}
-                      />
+                        className="flex items-center gap-2.5 p-2.5 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#E8923A]/40 transition-colors group"
+                      >
+                        {fly.heroImageUrl ? (
+                          <img
+                            src={fly.heroImageUrl}
+                            alt={fly.name}
+                            className="w-8 h-8 rounded object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded bg-[#21262D] flex items-center justify-center shrink-0">
+                            <Fish className="h-3.5 w-3.5 text-[#6E7681]" />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors truncate">
+                            {fly.name}
+                          </p>
+                          <p className="text-[10px] text-[#6E7681] truncate">
+                            {fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
+                          </p>
+                        </div>
+                      </Link>
                     ))}
                   </div>
                 </ScrollAnimation>
@@ -482,13 +496,11 @@ export default async function RiverPage({ params }: Props) {
 
             {/* Sidebar */}
             <div className="space-y-6 lg:sticky lg:top-24">
-              <RiverConditionsCard
+              <RiverSidebarLive
                 riverId={river.id}
                 riverLatitude={river.latitude}
                 riverLongitude={river.longitude}
               />
-
-              <WaterLevelChart riverId={river.id} />
 
               <QuickFacts facts={quickFacts} />
 
