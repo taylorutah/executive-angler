@@ -15,7 +15,7 @@ interface Props {
 
 const MONTHLY_PRICE = 4.99;
 const ANNUAL_PRICE = 29.99;
-const ANNUAL_MONTHLY = +(ANNUAL_PRICE / 12).toFixed(2);
+const ANNUAL_MONTHLY = (ANNUAL_PRICE / 12).toFixed(2);
 const SAVINGS_PCT = Math.round(((MONTHLY_PRICE * 12 - ANNUAL_PRICE) / (MONTHLY_PRICE * 12)) * 100);
 
 const FEATURES = [
