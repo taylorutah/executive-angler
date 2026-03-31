@@ -225,7 +225,68 @@ export default function InsightsClient({
       }
     }
 
-    // 8. Trend — improving or declining?
+    // 8. Seasonal patterns
+    if (sessions.length >= 8) {
+      const monthBuckets: Record<string, { total: number; count: number }> = {};
+      sessions.forEach(s => {
+        const month = new Date(s.date + 'T00:00:00').toLocaleString('en-US', { month: 'long' });
+        if (!monthBuckets[month]) monthBuckets[month] = { total: 0, count: 0 };
+        monthBuckets[month].total += s.total_fish || 0;
+        monthBuckets[month].count++;
+      });
+      const bestMonth = Object.entries(monthBuckets)
+        .filter(([, d]) => d.count >= 2)
+        .map(([month, data]) => ({ month, avg: data.total / data.count }))
+        .sort((a, b) => b.avg - a.avg)[0];
+      if (bestMonth) {
+        results.push({
+          icon: <Timer className="h-5 w-5 text-orange-400" />,
+          title: "Best Month",
+          body: `${bestMonth.month} is your peak season — ${bestMonth.avg.toFixed(1)} fish per session across ${monthBuckets[bestMonth.month].count} sessions. Mark your calendar.`,
+          type: "pattern",
+        });
+      }
+    }
+
+    // 9. Fly effectiveness by conditions (temp + fly cross-reference)
+    if (sessionsWithTemp.length >= 3 && catches.length >= 10) {
+      const flyByTemp: Record<string, Record<string, number>> = {}; // fly -> tempRange -> count
+      catches.forEach(c => {
+        if (!c.flyName) return;
+        const session = sessions.find(s => s.id === c.session_id);
+        if (!session?.water_temp_f) return;
+        const tempRange = session.water_temp_f < 45 ? 'cold (<45F)'
+          : session.water_temp_f < 55 ? 'cool (45-55F)'
+          : session.water_temp_f < 65 ? 'moderate (55-65F)'
+          : 'warm (65F+)';
+        if (!flyByTemp[c.flyName]) flyByTemp[c.flyName] = {};
+        flyByTemp[c.flyName][tempRange] = (flyByTemp[c.flyName][tempRange] || 0) + (c.quantities || 1);
+      });
+      // Find fly with highest concentration in one temp range
+      let bestComboData: { fly: string; range: string; count: number; total: number } | null = null;
+      Object.entries(flyByTemp).forEach(([fly, ranges]) => {
+        const flyTotal = Object.values(ranges).reduce((s, v) => s + v, 0);
+        if (flyTotal < 3) return;
+        Object.entries(ranges).forEach(([range, count]) => {
+          const pct = count / flyTotal;
+          if (pct >= 0.6 && count >= 3 && (!bestComboData || count > bestComboData.count)) {
+            bestComboData = { fly, range, count, total: flyTotal };
+          }
+        });
+      });
+      const bestCombo = bestComboData as { fly: string; range: string; count: number; total: number } | null;
+      if (bestCombo) {
+        const pct = Math.round((bestCombo.count / bestCombo.total) * 100);
+        results.push({
+          icon: <Thermometer className="h-5 w-5 text-emerald-400" />,
+          title: "Fly + Temperature Match",
+          body: `${pct}% of your ${bestCombo.fly} catches come in ${bestCombo.range} water. When temps hit that range, reach for this pattern first.`,
+          type: "recommendation",
+        });
+      }
+    }
+
+    // 10. Trend — improving or declining?
     if (sortedSessions.length >= 6) {
       const half = Math.floor(sortedSessions.length / 2);
       const firstHalf = sortedSessions.slice(0, half);
