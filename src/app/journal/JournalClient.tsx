@@ -6,7 +6,7 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -383,6 +383,25 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#A8B2BD] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
                 + Add Fly Pattern
               </Link>
+            </div>
+
+            {/* Export */}
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-[#6E7681] uppercase tracking-wide font-medium mb-1">
+                <Download className="h-3.5 w-3.5" /> Export Journal
+              </div>
+              <a
+                href="/api/export/csv"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors"
+              >
+                CSV (Spreadsheet)
+              </a>
+              <a
+                href="/api/export/pdf"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors"
+              >
+                PDF (Trip Report)
+              </a>
             </div>
 
             {/* Filters — always at bottom */}
