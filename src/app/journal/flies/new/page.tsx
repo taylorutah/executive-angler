@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { RecipeBuilder, type RecipeStep } from '@/components/flies/RecipeBuilder'
 
 const FLY_TYPES = [
   'Nymph',
@@ -15,11 +16,16 @@ const FLY_TYPES = [
   'Other'
 ]
 
+const FLY_SOURCES = ['tied', 'bought', 'gifted'] as const;
+
 export default function NewFlyPatternPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>([])
+  const [source, setSource] = useState<typeof FLY_SOURCES[number]>('tied')
+  const [showRecipeBuilder, setShowRecipeBuilder] = useState(false)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -41,6 +47,22 @@ export default function NewFlyPatternPage() {
 
     const formElement = e.currentTarget
     const formData = new FormData(formElement)
+
+    // Add recipe steps if using structured builder
+    if (showRecipeBuilder && recipeSteps.length > 0) {
+      formData.set('recipe_steps', JSON.stringify(recipeSteps.map((s, i) => ({
+        role: s.role,
+        material_id: s.material?.id || null,
+        material_name: s.materialName || s.material?.name || '',
+        step_position: i + 1,
+        color_choice: s.colorChoice || null,
+        size_choice: s.sizeChoice || null,
+        quantity: s.quantity || null,
+        notes: s.notes || null,
+        is_optional: s.isOptional,
+      }))));
+      formData.set('has_structured_recipe', 'true');
+    }
 
     try {
       const response = await fetch('/api/fishing/flies', {
@@ -173,16 +195,56 @@ export default function NewFlyPatternPage() {
             />
           </div>
 
+          {/* Source toggle */}
           <div>
-            <label htmlFor="materials" className="block text-sm font-semibold text-[#A8B2BD] mb-2">
-              Materials
-            </label>
-            <textarea
-              id="materials"
-              name="materials"
-              rows={4}
-              className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent"
-            />
+            <label className="block text-sm font-semibold text-[#A8B2BD] mb-2">Source</label>
+            <div className="flex gap-2">
+              {FLY_SOURCES.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSource(s)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
+                    source === s
+                      ? 'bg-[#E8923A] text-white'
+                      : 'bg-[#0D1117] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+            <input type="hidden" name="source" value={source} />
+          </div>
+
+          {/* Materials — free text or structured recipe */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label htmlFor="materials" className="block text-sm font-semibold text-[#A8B2BD]">
+                Materials
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowRecipeBuilder(!showRecipeBuilder)}
+                className="text-xs text-[#E8923A] hover:underline"
+              >
+                {showRecipeBuilder ? 'Use simple text' : 'Use structured recipe builder'}
+              </button>
+            </div>
+
+            {showRecipeBuilder ? (
+              <RecipeBuilder
+                onChange={(steps) => setRecipeSteps(steps)}
+              />
+            ) : (
+              <textarea
+                id="materials"
+                name="materials"
+                rows={4}
+                placeholder="List materials or switch to the structured recipe builder above"
+                className="w-full px-4 py-2 border border-[#21262D] rounded-lg focus:ring-2 focus:ring-[#E8923A] focus:border-transparent bg-[#0D1117] text-[#F0F6FC] placeholder-[#6E7681]"
+              />
+            )}
           </div>
 
           <div>

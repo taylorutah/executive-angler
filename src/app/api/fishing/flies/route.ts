@@ -131,6 +131,8 @@ export async function POST(req: NextRequest) {
       description: str(body.description),
       video_url: str(body.video_url),
       tags: parseArr(body.tags),
+      source: str(body.source) || 'tied',
+      has_structured_recipe: body.has_structured_recipe === 'true',
       ...(imageUrl ? { image_url: imageUrl } : {}),
     };
 
@@ -147,6 +149,41 @@ export async function POST(req: NextRequest) {
       console.error("Failed to create fly pattern:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Save recipe ingredients if structured recipe was provided
+    if (body.recipe_steps && data) {
+      try {
+        const steps = typeof body.recipe_steps === 'string'
+          ? JSON.parse(body.recipe_steps as string)
+          : body.recipe_steps;
+
+        if (Array.isArray(steps) && steps.length > 0) {
+          const ingredients = steps.map((s: Record<string, unknown>) => ({
+            fly_pattern_id: data.id,
+            material_id: s.material_id || null,
+            material_name: s.material_name || null,
+            step_position: s.step_position,
+            role: s.role,
+            color_choice: s.color_choice || null,
+            size_choice: s.size_choice || null,
+            quantity: s.quantity || null,
+            notes: s.notes || null,
+            is_optional: s.is_optional || false,
+          }));
+
+          const { error: ingredientError } = await supabase
+            .from('fly_recipe_ingredients')
+            .insert(ingredients);
+
+          if (ingredientError) {
+            console.error("Failed to save recipe ingredients:", ingredientError);
+          }
+        }
+      } catch (parseErr) {
+        console.error("Failed to parse recipe steps:", parseErr);
+      }
+    }
+
     return NextResponse.json(data);
   } catch (err) {
     console.error("Fly patterns POST error:", err);
