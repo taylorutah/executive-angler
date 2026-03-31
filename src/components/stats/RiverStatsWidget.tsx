@@ -6,6 +6,8 @@ import type { RiverStats } from '@/types/awards';
 import { TrendingUp, Loader2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
+
 interface RiverStatsWidgetProps {
   riverName: string;
 }
@@ -78,11 +80,11 @@ export function RiverStatsWidget({ riverName }: RiverStatsWidgetProps) {
         </div>
       </div>
 
-      {/* Awards */}
-      {stats.awards.length > 0 && (
+      {/* Awards — hidden when feature flag is off */}
+      {AWARDS_VISIBLE && stats.awards.length > 0 && (
         <div>
           <div className="text-xs text-[#A8B2BD] uppercase tracking-wide mb-2">
-            Achievements ({stats.awards.length})
+            River Milestones ({stats.awards.length})
           </div>
           <div className="flex flex-wrap gap-2">
             {stats.awards.map((award) => (

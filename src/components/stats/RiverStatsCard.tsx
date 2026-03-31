@@ -2,7 +2,9 @@
 
 import { AwardBadge } from '@/components/ui/AwardBadge';
 import type { RiverStats } from '@/types/awards';
-import { Trophy, Fish, TrendingUp, Star, Target, Calendar } from 'lucide-react';
+import { Trophy, Fish, TrendingUp, Star, Target } from 'lucide-react';
+
+const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
 interface RiverStatsCardProps {
   stats: RiverStats;
@@ -20,7 +22,7 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
               {stats.total_sessions} {stats.total_sessions === 1 ? 'session' : 'sessions'}
             </div>
           </div>
-          {stats.awards.length > 0 && (
+          {AWARDS_VISIBLE && stats.awards.length > 0 && (
             <div className="flex gap-1">
               {stats.awards.slice(0, 3).map((award) => (
                 <AwardBadge key={award.id} award={award} size="sm" />
@@ -59,7 +61,7 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
             <span>{stats.total_fish} fish</span>
           </div>
         </div>
-        {stats.awards.length > 0 && (
+        {AWARDS_VISIBLE && stats.awards.length > 0 && (
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E8923A]/10 rounded-full">
             <Star className="w-3.5 h-3.5 text-[#E8923A]" />
             <span className="text-xs font-bold text-[#E8923A]">{stats.awards.length} awards</span>
@@ -121,12 +123,12 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
         </div>
       </div>
 
-      {/* Awards Section */}
-      {stats.awards.length > 0 && (
+      {/* Awards Section — hidden when FEATURE_AWARDS_VISIBLE is false */}
+      {AWARDS_VISIBLE && stats.awards.length > 0 && (
         <div className="mt-6 pt-6 border-t border-[#21262D]">
           <h4 className="font-heading text-lg text-cream mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-[#E8923A]" />
-            Achievements
+            River Milestones
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {stats.awards.map((award) => (

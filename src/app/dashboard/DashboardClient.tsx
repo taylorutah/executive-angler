@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 
+const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
+
 interface DashboardProps {
   user: { id: string; email: string };
   profile: { username: string | null; display_name: string | null; avatar_url: string | null; home_location: string | null } | null;
@@ -394,6 +396,7 @@ export default function DashboardClient({
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels & more</p>
                 </Link>
 
+                {AWARDS_VISIBLE && (
                 <Link
                   href="/journal/stats"
                   className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
@@ -401,9 +404,10 @@ export default function DashboardClient({
                   <div className="flex items-center justify-between mb-3">
                     <Trophy className="h-5 w-5 text-[#FFD700]" />
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">Achievements</h3>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">River Milestones</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">{riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)} earned</p>
                 </Link>
+                )}
               </div>
             </section>
 
@@ -441,7 +445,7 @@ export default function DashboardClient({
                               <span>Last: {timeAgo(rs.last_session)}</span>
                             </div>
                           </div>
-                          {rs.awards.length > 0 && (
+                          {AWARDS_VISIBLE && rs.awards.length > 0 && (
                             <div className="flex gap-1.5 shrink-0">
                               {rs.awards.slice(0, 4).map((a) => {
                                 const EMOJI_MAP: Record<string, string> = {

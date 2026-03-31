@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { RiverStatsCard } from '@/components/stats/RiverStatsCard';
 import type { RiverStats } from '@/types/awards';
-import { Loader2, TrendingUp, Award } from 'lucide-react';
+import { Loader2, TrendingUp } from 'lucide-react';
+
+const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
 export default function RiverStatsView() {
   const [stats, setStats] = useState<RiverStats[]>([]);
@@ -53,7 +55,6 @@ export default function RiverStatsView() {
     );
   }
 
-  const totalAwards = stats.reduce((sum, s) => sum + s.awards.length, 0);
   const totalSessions = stats.reduce((sum, s) => sum + s.total_sessions, 0);
   const totalFish = stats.reduce((sum, s) => sum + s.total_fish, 0);
 
@@ -65,11 +66,10 @@ export default function RiverStatsView() {
           <TrendingUp className="w-6 h-6" />
           Your River Stats
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className={`grid grid-cols-2 ${AWARDS_VISIBLE ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-4`}>
           <SummaryBox label="Rivers Fished" value={stats.length} />
           <SummaryBox label="Total Sessions" value={totalSessions} />
           <SummaryBox label="Total Fish" value={totalFish} />
-          <SummaryBox label="Awards Earned" value={totalAwards} icon={Award} />
         </div>
       </div>
 

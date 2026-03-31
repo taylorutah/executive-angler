@@ -33,7 +33,7 @@ export default async function StatsPage() {
           </Link>
           <h1 className="font-heading text-4xl text-cream">River Statistics</h1>
           <p className="text-slate-400 mt-2">
-            Track your progress, earn achievements, and see how you&apos;re doing on each river
+            Track your progress and see how you&apos;re doing on each river
           </p>
         </div>
 

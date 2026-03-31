@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AnglersPage() {
+  const awardsVisible = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
   const supabase = await createClient();
 
   const { data: anglers } = await supabase
@@ -21,9 +22,9 @@ export default async function AnglersPage() {
     .order("created_at", { ascending: false })
     .limit(50);
 
-  // Fetch active crowns for all anglers (expires_at > now or null)
+  // Fetch active crowns for all anglers (only if awards are visible)
   const anglerUserIds = (anglers || []).map((a) => a.user_id);
-  const { data: allCrowns } = anglerUserIds.length > 0
+  const { data: allCrowns } = awardsVisible && anglerUserIds.length > 0
     ? await supabase
         .from("user_awards")
         .select("user_id, award_key, river_name, metadata, expires_at")
@@ -78,12 +79,12 @@ export default async function AnglersPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-semibold text-[#F0F6FC] flex-1">{a.display_name || a.username}</p>
                       <FollowButton targetUserId={a.user_id} compact />
-                      {crowns.slice(0, 3).map((c) => (
+                      {awardsVisible && crowns.slice(0, 3).map((c) => (
                         <span key={c.award_key + c.river_name} title={`${(c.metadata as { display_name?: string })?.display_name ?? c.award_key}${c.river_name ? ` — ${c.river_name}` : ""}`}>
                           <span className="text-sm">{(c.metadata as { badge_icon?: string })?.badge_icon ?? "🏆"}</span>
                         </span>
                       ))}
-                      {crowns.length > 3 && (
+                      {awardsVisible && crowns.length > 3 && (
                         <span className="text-[10px] text-[#6E7681]">+{crowns.length - 3}</span>
                       )}
                     </div>
@@ -96,10 +97,10 @@ export default async function AnglersPage() {
                     {a.bio && (
                       <p className="text-xs text-[#A8B2BD] mt-1 line-clamp-2">{a.bio}</p>
                     )}
-                    {crowns.length > 0 && (
+                    {awardsVisible && crowns.length > 0 && (
                       <div className="flex items-center gap-1 mt-2">
                         <Crown className="h-3 w-3 text-[#E8923A]" />
-                        <span className="text-[10px] text-[#6E7681]">{crowns.length} award{crowns.length !== 1 ? "s" : ""}</span>
+                        <span className="text-[10px] text-[#6E7681]">{crowns.length} milestone{crowns.length !== 1 ? "s" : ""}</span>
                       </div>
                     )}
                   </div>
