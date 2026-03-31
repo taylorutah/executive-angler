@@ -8,7 +8,7 @@ import {
   Menu, X, ChevronDown, Search, User, Star, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
   BookOpen, ShoppingBag, Users2, Newspaper, Bug,
-  Plus, FishSymbol, Lightbulb, GitPullRequest
+  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -221,6 +221,17 @@ export default function Header() {
                     </Link>
                   );
                 })}
+                <Link
+                  href="/pricing"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === "/pricing"
+                      ? "text-[#E8923A]"
+                      : "text-[#E8923A]/70 hover:text-[#E8923A]"
+                  }`}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Pro
+                </Link>
               </nav>
 
               {/* ── Right Actions ── */}
@@ -394,6 +405,15 @@ export default function Header() {
                   Journal
                 </Link>
               )}
+              <Link
+                href="/pricing"
+                className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                  pathname === "/pricing" ? "bg-[#E8923A]/10 text-[#E8923A]" : "text-[#E8923A]/70 hover:text-[#E8923A] hover:bg-[#E8923A]/5"
+                }`}
+              >
+                <Sparkles className="h-5 w-5" />
+                Pro
+              </Link>
 
               {/* Explore accordion */}
               <div className="mt-4 pt-4 border-t border-[#21262D]">

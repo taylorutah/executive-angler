@@ -14,7 +14,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="text-sm text-[#A8B2BD] mb-10">
-          Last updated: March 18, 2026
+          Last updated: March 31, 2026
         </p>
 
         <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
               {SITE_URL}
             </a>
             . This Privacy Policy explains how we collect, use, and protect your
-            information when you use our website and iOS app.
+            information when you use our website, iOS app, and Android app.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
@@ -46,11 +46,11 @@ export default function PrivacyPage() {
             Fishing Session Data
           </h3>
           <p>
-            When you log a fishing session in our iOS app, we collect: session date
-            and duration, river name, water conditions, catches (species, size, fly
-            used), gear used, and photos you choose to attach. This data is stored
-            in your private journal and is only visible to you unless you explicitly
-            set a session to &quot;public.&quot;
+            When you log a fishing session in our iOS or Android app, we collect:
+            session date and duration, river name, water conditions, catches
+            (species, size, fly used), gear used, and photos you choose to attach.
+            This data is stored in your private journal and is only visible to you
+            unless you explicitly set a session to &quot;public.&quot;
           </p>
 
           <h3 className="font-heading text-xl font-semibold text-[#E8923A] mt-6">
@@ -98,13 +98,31 @@ export default function PrivacyPage() {
           </ul>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
-            In-App Purchases
+            Subscriptions &amp; Billing
           </h2>
           <p>
-            Executive Angler Pro subscriptions are processed by Apple through the
-            App Store. We do not collect or store your payment information. Apple
-            handles all billing. You can manage or cancel your subscription in your
-            Apple ID settings.
+            Executive Angler Pro subscriptions can be purchased on any platform.
+            Depending on where you subscribe, billing is handled by:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>
+              <strong>Apple App Store</strong> — Manage or cancel in your
+              Apple&nbsp;ID → Subscriptions settings.
+            </li>
+            <li>
+              <strong>Google Play Store</strong> — Manage or cancel in the
+              Google&nbsp;Play app → Payments &amp; subscriptions.
+            </li>
+            <li>
+              <strong>Stripe (web)</strong> — Manage or cancel from your
+              Account → Subscription page on our website.
+            </li>
+          </ul>
+          <p>
+            We do not directly collect or store your payment card information.
+            All payment processing is handled by the respective platform
+            (Apple, Google, or Stripe). Your Pro access syncs automatically
+            across iOS, Android, and web — regardless of where you subscribed.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
@@ -139,6 +157,14 @@ export default function PrivacyPage() {
             <li>
               <strong>Apple</strong> — App distribution, in-app purchases, and
               crash reporting
+            </li>
+            <li>
+              <strong>Google</strong> — Android app distribution and in-app
+              purchases via Google Play
+            </li>
+            <li>
+              <strong>Stripe</strong> — Web payment processing for Pro
+              subscriptions
             </li>
           </ul>
           <p>

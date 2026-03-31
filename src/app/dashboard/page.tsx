@@ -24,10 +24,10 @@ export default async function DashboardPage() {
     .select("entity_type, entity_id")
     .eq("user_id", user.id);
 
-  // Fetch user profile
+  // Fetch user profile (including premium status)
   const { data: profile } = await supabase
     .from("profiles")
-    .select("username, display_name, avatar_url, home_location")
+    .select("username, display_name, avatar_url, home_location, is_premium")
     .eq("user_id", user.id)
     .single();
 
@@ -284,6 +284,7 @@ export default async function DashboardPage() {
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
       riverSlugMap={riverSlugMap}
+      isPremium={profile?.is_premium ?? false}
       enhancedStats={{
         totalSessions,
         totalFish: totalFishAll,

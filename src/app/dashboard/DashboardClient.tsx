@@ -7,7 +7,7 @@ import {
   Fish, MapPin, TrendingUp, Users,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
-  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb
+  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 
@@ -25,6 +25,7 @@ interface DashboardProps {
   totalFavorites: number;
   flyCount: number;
   gearCount: number;
+  isPremium: boolean;
   riverStats: RiverStats[];
   riverSlugMap: Record<string, string>;
   enhancedStats: {
@@ -170,7 +171,7 @@ function Divider() {
 /* ─── Main Component ─── */
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, riverStats, riverSlugMap, enhancedStats
+  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, isPremium, riverStats, riverSlugMap, enhancedStats
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const es = enhancedStats;
@@ -296,6 +297,23 @@ export default function DashboardClient({
                   })}
                 </div>
               </section>
+            )}
+
+            {/* Upgrade Banner (free users only) */}
+            {!isPremium && (
+              <Link
+                href="/pricing"
+                className="group flex items-center gap-4 p-4 bg-gradient-to-r from-[#E8923A]/10 via-[#E8923A]/5 to-[#0BA5C7]/10 rounded-xl border border-[#E8923A]/20 hover:border-[#E8923A]/40 transition-all"
+              >
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#E8923A]/15 shrink-0">
+                  <Sparkles className="h-5 w-5 text-[#E8923A]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Upgrade to Pro</h3>
+                  <p className="text-[11px] text-[#A8B2BD] truncate">Analytics, AI insights, hatch reports, and more — $2.50/mo</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors shrink-0" />
+              </Link>
             )}
 
             {/* Quick Actions Grid — matches iOS Dashboard */}

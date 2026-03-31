@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -24,7 +24,7 @@ const AWARD_EMOJI_MAP: Record<string, string> = {
   streak_4: "⚡", streak_12: "💎",
 };
 
-type Section = "profile" | "notifications" | "security" | "connected";
+type Section = "profile" | "subscription" | "notifications" | "security" | "connected";
 
 interface Props {
   user: {
@@ -65,16 +65,24 @@ interface Props {
     emailNotifyLikes: boolean;
     emailDigestFrequency: "none" | "daily" | "weekly";
   };
+  isPremium?: boolean;
+  subscription?: {
+    source: "apple" | "google" | "stripe";
+    plan: "monthly" | "annual";
+    status: "active" | "trialing";
+    currentPeriodEnd: string | null;
+  } | null;
+  hasStripeCustomer?: boolean;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false }: Props) {
   const router = useRouter();
 
   // Determine initial section from URL hash
   const getInitialSection = (): Section => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (["profile", "notifications", "security", "connected"].includes(hash)) return hash as Section;
+      if (["profile", "subscription", "notifications", "security", "connected"].includes(hash)) return hash as Section;
     }
     return "profile";
   };
@@ -108,6 +116,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [digestFrequency, setDigestFrequency] = useState<"none" | "daily" | "weekly">(notificationPrefs.emailDigestFrequency);
   const [notifSaving, setNotifSaving] = useState(false);
   const [notifSaved, setNotifSaved] = useState(false);
+
+  // Subscription portal
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  async function handleManageSubscription() {
+    setPortalLoading(true);
+    try {
+      const res = await fetch("/api/checkout/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setPortalLoading(false);
+    }
+  }
 
   // Username availability
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
@@ -246,6 +272,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
   const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
     { key: "profile", icon: Settings, label: "Edit Profile" },
+    { key: "subscription", icon: CreditCard, label: "Subscription" },
     { key: "notifications", icon: Bell, label: "Notifications" },
     { key: "security", icon: Key, label: "Security" },
     { key: "connected", icon: Link2, label: "Connected Accounts" },
@@ -441,6 +468,116 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     </button>
                   </div>
                 </form>
+              </div>
+            )}
+
+            {/* ═══════ SUBSCRIPTION ═══════ */}
+            {activeSection === "subscription" && (
+              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Subscription</h2>
+
+                {isPremium ? (
+                  <div className="space-y-6">
+                    {/* Status card */}
+                    <div className="rounded-xl bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent border border-[#E8923A]/20 p-5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="h-10 w-10 rounded-full bg-[#E8923A]/15 flex items-center justify-center">
+                          <Crown className="h-5 w-5 text-[#E8923A]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-[#F0F6FC]">Executive Angler Pro</p>
+                          <p className="text-xs text-[#2EA44F] font-medium">
+                            {subscription?.status === "trialing" ? "Free Trial" : "Active"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid sm:grid-cols-3 gap-4">
+                        <div>
+                          <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Plan</p>
+                          <p className="text-sm text-[#F0F6FC] font-medium mt-0.5 capitalize">
+                            {subscription?.plan || "Pro"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Source</p>
+                          <p className="text-sm text-[#F0F6FC] font-medium mt-0.5 capitalize">
+                            {subscription?.source === "apple" ? "Apple App Store" : subscription?.source === "google" ? "Google Play" : subscription?.source === "stripe" ? "Web (Stripe)" : "—"}
+                          </p>
+                        </div>
+                        {subscription?.currentPeriodEnd && (
+                          <div>
+                            <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Renews</p>
+                            <p className="text-sm text-[#F0F6FC] font-medium mt-0.5">
+                              {new Date(subscription.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Management options */}
+                    <div className="space-y-3">
+                      {subscription?.source === "stripe" || hasStripeCustomer ? (
+                        <button
+                          onClick={handleManageSubscription}
+                          disabled={portalLoading}
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[#0D1117] border border-[#21262D] hover:border-[#E8923A]/40 transition-colors disabled:opacity-50"
+                        >
+                          <span className="text-sm font-medium text-[#F0F6FC]">Manage Subscription</span>
+                          <ChevronRight className="h-4 w-4 text-[#6E7681]" />
+                        </button>
+                      ) : null}
+
+                      {subscription?.source === "apple" && (
+                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] px-4 py-3">
+                          <p className="text-sm text-[#A8B2BD]">
+                            Your subscription is managed through the <strong className="text-[#F0F6FC]">Apple App Store</strong>.
+                          </p>
+                          <p className="text-xs text-[#6E7681] mt-1">
+                            Open Settings → Apple ID → Subscriptions on your iPhone to manage billing.
+                          </p>
+                        </div>
+                      )}
+
+                      {subscription?.source === "google" && (
+                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] px-4 py-3">
+                          <p className="text-sm text-[#A8B2BD]">
+                            Your subscription is managed through <strong className="text-[#F0F6FC]">Google Play</strong>.
+                          </p>
+                          <p className="text-xs text-[#6E7681] mt-1">
+                            Open the Google Play Store app → Payments & subscriptions to manage billing.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="text-[11px] text-[#6E7681]">
+                      Your Pro access syncs across iOS, Android, and web — regardless of where you subscribed.
+                    </p>
+                  </div>
+                ) : (
+                  /* Not premium — upgrade CTA */
+                  <div className="text-center py-6">
+                    <div className="h-14 w-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="h-7 w-7 text-[#E8923A]" />
+                    </div>
+                    <h3 className="font-serif text-xl text-[#F0F6FC] mb-2">Upgrade to Pro</h3>
+                    <p className="text-sm text-[#A8B2BD] max-w-sm mx-auto mb-6">
+                      Unlock live river conditions, advanced analytics, AI insights, hatch reports, and more.
+                    </p>
+                    <Link
+                      href="/pricing"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      View Plans
+                    </Link>
+                    <p className="text-[11px] text-[#6E7681] mt-4">
+                      Starting at $2.50/mo. Same price on iOS, Android, and web.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
