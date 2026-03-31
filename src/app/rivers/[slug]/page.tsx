@@ -18,6 +18,8 @@ import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
+import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
+import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
@@ -234,6 +236,9 @@ export default async function RiverPage({ params }: Props) {
                   <RiverAnglerIntel riverId={river.id} riverName={river.name} />
                 </div>
               </ScrollAnimation>
+
+              {/* Personal Flow Overlay — catch data on USGS flow chart (premium) */}
+              <PersonalFlowOverlay riverId={river.id} />
 
               {/* Overview — collapsible, full text in DOM for SEO */}
               <ScrollAnimation>
@@ -503,6 +508,8 @@ export default async function RiverPage({ params }: Props) {
                 riverLatitude={river.latitude}
                 riverLongitude={river.longitude}
               />
+
+              <BestWindowCalculator riverId={river.id} />
 
               <QuickFacts facts={quickFacts} />
 
