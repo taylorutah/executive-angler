@@ -158,7 +158,7 @@ function StatBox({
         <Icon className="w-4 h-4" style={{ color }} />
         <div className="text-xs text-slate-500 uppercase tracking-wide">{label}</div>
       </div>
-      <div className="text-2xl font-bold text-cream">{value}</div>
+      <div className="text-2xl font-bold font-mono text-cream">{value}</div>
     </div>
   );
 }

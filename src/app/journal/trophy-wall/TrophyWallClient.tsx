@@ -109,7 +109,7 @@ export default function TrophyWallClient({ catches, sessions }: TrophyWallClient
               </div>
             )}
             <div className="flex-1">
-              <div className="text-5xl font-bold text-cream mb-2">
+              <div className="text-5xl font-bold font-mono text-cream mb-2">
                 {biggestOverall.length_inches}&quot;
               </div>
               {biggestOverall.species && (
@@ -173,7 +173,7 @@ export default function TrophyWallClient({ catches, sessions }: TrophyWallClient
                         </div>
                       </div>
                       <div className="text-right shrink-0">
-                        <div className="text-xl font-bold text-[#E8923A]">{c.length_inches}&quot;</div>
+                        <div className="text-xl font-bold font-mono text-[#E8923A]">{c.length_inches}&quot;</div>
                       </div>
                     </div>
                   );
@@ -211,7 +211,7 @@ export default function TrophyWallClient({ catches, sessions }: TrophyWallClient
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-xl font-bold text-[#00B4D8]">{c.length_inches}&quot;</div>
+                      <div className="text-xl font-bold font-mono text-[#00B4D8]">{c.length_inches}&quot;</div>
                     </div>
                   </div>
                 ))}
@@ -245,7 +245,7 @@ export default function TrophyWallClient({ catches, sessions }: TrophyWallClient
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-xl font-bold text-[#FFD700]">{s.total_fish}</div>
+                    <div className="text-xl font-bold font-mono text-[#FFD700]">{s.total_fish}</div>
                     <div className="text-[10px] text-[#6E7681]">fish</div>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function TrophyWallClient({ catches, sessions }: TrophyWallClient
               <h3 className="font-heading text-lg text-cream">Most Species in One Session</h3>
             </div>
             <div className="p-5">
-              <div className="text-4xl font-bold text-[#00B4D8] mb-2">{mostSpeciesSession.count} species</div>
+              <div className="text-4xl font-bold font-mono text-[#00B4D8] mb-2">{mostSpeciesSession.count} species</div>
               <div className="text-sm text-cream">{mostSpeciesSession.session.title || mostSpeciesSession.session.river_name || 'Session'}</div>
               <div className="text-xs text-[#6E7681] mt-1">
                 {mostSpeciesSession.session.river_name && <span>{mostSpeciesSession.session.river_name} — </span>}

@@ -119,25 +119,25 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
       {/* Current stats row */}
       <div className="grid grid-cols-4 gap-3 mb-4">
         <div>
-          <p className="text-lg font-bold text-[#E8923A] leading-none">
+          <p className="text-lg font-bold font-mono text-[#E8923A] leading-none">
             {stats.current.toLocaleString()}
           </p>
           <p className="text-[10px] text-[#6E7681] mt-0.5">Current cfs</p>
         </div>
         <div>
-          <p className="text-lg font-bold text-[#F0F6FC] leading-none">
+          <p className="text-lg font-bold font-mono text-[#F0F6FC] leading-none">
             {stats.avg.toLocaleString()}
           </p>
           <p className="text-[10px] text-[#6E7681] mt-0.5">12mo Avg</p>
         </div>
         <div>
-          <p className="text-lg font-bold text-[#3B82F6] leading-none">
+          <p className="text-lg font-bold font-mono text-[#3B82F6] leading-none">
             {stats.min.toLocaleString()}
           </p>
           <p className="text-[10px] text-[#6E7681] mt-0.5">12mo Low</p>
         </div>
         <div>
-          <p className="text-lg font-bold text-[#EF4444] leading-none">
+          <p className="text-lg font-bold font-mono text-[#EF4444] leading-none">
             {stats.max.toLocaleString()}
           </p>
           <p className="text-[10px] text-[#6E7681] mt-0.5">12mo High</p>

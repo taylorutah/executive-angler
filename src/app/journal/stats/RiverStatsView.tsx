@@ -94,7 +94,7 @@ function SummaryBox({
 }) {
   return (
     <div className="text-center">
-      <div className="text-3xl font-bold text-cream mb-1 flex items-center justify-center gap-2">
+      <div className="text-3xl font-bold font-mono text-cream mb-1 flex items-center justify-center gap-2">
         {Icon && <Icon className="w-6 h-6 text-[#E8923A]" />}
         {value}
       </div>

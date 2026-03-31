@@ -183,18 +183,18 @@ export default function HatchReportsClient({
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
               <div>
-                <p className="text-xl font-bold text-[#E8923A]">{monthCatchData.sessions}</p>
+                <p className="text-xl font-bold font-mono text-[#E8923A]">{monthCatchData.sessions}</p>
                 <p className="text-[10px] text-[#6E7681] uppercase">Sessions</p>
               </div>
               <div>
-                <p className="text-xl font-bold text-[#F0F6FC]">{monthCatchData.totalCatches}</p>
+                <p className="text-xl font-bold font-mono text-[#F0F6FC]">{monthCatchData.totalCatches}</p>
                 <p className="text-[10px] text-[#6E7681] uppercase">Fish Caught</p>
               </div>
               {monthCatchData.avgTemp && (
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-4 w-4 text-red-400" />
                   <div>
-                    <p className="text-xl font-bold text-[#F0F6FC]">{monthCatchData.avgTemp}°F</p>
+                    <p className="text-xl font-bold font-mono text-[#F0F6FC]">{monthCatchData.avgTemp}°F</p>
                     <p className="text-[10px] text-[#6E7681] uppercase">Avg Water Temp</p>
                   </div>
                 </div>

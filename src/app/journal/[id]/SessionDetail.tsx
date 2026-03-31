@@ -651,7 +651,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* ---- MOBILE-ONLY: Quick Stats Bar ---- */}
                 <div className="sm:hidden mt-4 grid grid-cols-3 gap-2">
                   <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
-                    <p className="text-2xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-2xl font-bold font-mono text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
                     <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Fish</p>
                   </div>
                   {biggestFish > 0 && (
@@ -717,36 +717,36 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* 4 big stats */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4 mb-4">
                   <div>
-                    <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
                     <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
                   {session.water_temp_f && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.water_temp_f}</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{session.water_temp_f}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Water Temp</p>
                     </div>
                   )}
                   {session.river_flow_cfs != null && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{Math.round(session.river_flow_cfs).toLocaleString()}</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{Math.round(session.river_flow_cfs).toLocaleString()}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Flow (cfs)</p>
                     </div>
                   )}
                   {session.gage_height_ft != null && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{session.gage_height_ft.toFixed(2)}</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{session.gage_height_ft.toFixed(2)}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Gage (ft)</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
                   {session.water_clarity && (
                     <div>
-                      <p className="text-xl font-bold text-[#E8923A] leading-none">{session.water_clarity}</p>
+                      <p className="text-xl font-bold font-mono text-[#E8923A] leading-none">{session.water_clarity}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}

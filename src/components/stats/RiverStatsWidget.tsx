@@ -68,15 +68,15 @@ export function RiverStatsWidget({ riverName }: RiverStatsWidgetProps) {
       <div className="grid grid-cols-3 gap-3 mb-3">
         <div className="bg-[#0D1117] rounded p-2 border border-[#21262D]">
           <div className="text-xs text-[#A8B2BD]">Sessions</div>
-          <div className="text-lg font-bold text-cream">{stats.total_sessions}</div>
+          <div className="text-lg font-bold font-mono text-cream">{stats.total_sessions}</div>
         </div>
         <div className="bg-[#0D1117] rounded p-2 border border-[#21262D]">
           <div className="text-xs text-[#A8B2BD]">Total Fish</div>
-          <div className="text-lg font-bold text-cream">{stats.total_fish}</div>
+          <div className="text-lg font-bold font-mono text-cream">{stats.total_fish}</div>
         </div>
         <div className="bg-[#0D1117] rounded p-2 border border-[#21262D]">
           <div className="text-xs text-[#A8B2BD]">Avg/Trip</div>
-          <div className="text-lg font-bold text-cream">{stats.avg_fish_per_session.toFixed(1)}</div>
+          <div className="text-lg font-bold font-mono text-cream">{stats.avg_fish_per_session.toFixed(1)}</div>
         </div>
       </div>
 

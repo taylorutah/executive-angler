@@ -184,17 +184,17 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
       {correlationStats && (
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="bg-[#0D1117] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-[#E8923A]">{correlationStats.totalSessions}</p>
+            <p className="text-lg font-bold font-mono text-[#E8923A]">{correlationStats.totalSessions}</p>
             <p className="text-[10px] text-[#6E7681]">Sessions</p>
           </div>
           <div className="bg-[#0D1117] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-[#00B4D8]">
+            <p className="text-lg font-bold font-mono text-[#00B4D8]">
               {correlationStats.sweetSpotMin}–{correlationStats.sweetSpotMax}
             </p>
             <p className="text-[10px] text-[#6E7681]">Sweet Spot (cfs)</p>
           </div>
           <div className="bg-[#0D1117] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-green-400">
+            <p className="text-lg font-bold font-mono text-green-400">
               {correlationStats.bestDayFish} fish
             </p>
             <p className="text-[10px] text-[#6E7681]">
