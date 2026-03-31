@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { Plus, Feather } from 'lucide-react'
+import { FlyBoxTabs } from '@/components/flies/FlyBoxTabs'
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -79,6 +80,7 @@ interface UserFlyBoxEntry {
   preferred_sizes?: string[] | null;
   personal_notes?: string | null;
   is_favorite?: boolean;
+  is_tie_next?: boolean;
   times_used?: number;
   canonical_fly: CanonicalFly;
 }
@@ -103,6 +105,7 @@ export default async function FlyBoxPage() {
         preferred_sizes,
         personal_notes,
         is_favorite,
+        is_tie_next,
         times_used,
         canonical_fly:canonical_flies(id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url)
       `)
@@ -147,6 +150,11 @@ export default async function FlyBoxPage() {
   }
 
   const totalCount = personalFlies.length + libraryEntries.length;
+  const favCount = libraryEntries.filter(e => e.is_favorite).length
+    + personalFlies.filter(f => (f as unknown as { is_favorite?: boolean }).is_favorite).length;
+  const tieNextCount = libraryEntries.filter(e => e.is_tie_next).length
+    + personalFlies.filter(f => (f as unknown as { is_tie_next?: boolean }).is_tie_next).length;
+
   const sortedTypes = [
     ...TYPE_ORDER.filter(t => grouped[t]?.length),
     ...Object.keys(grouped).filter(t => !TYPE_ORDER.includes(t) && grouped[t]?.length),
@@ -182,16 +190,33 @@ export default async function FlyBoxPage() {
             </Link>
           </div>
         ) : (
+          <FlyBoxTabs favCount={favCount} tieNextCount={tieNextCount}>
+            {(activeTab) => (
           <div className="space-y-10">
-            {sortedTypes.map(type => (
+            {sortedTypes.map(type => {
+              // Filter cards based on active tab
+              const filteredCards = grouped[type].filter(card => {
+                if (activeTab === 'all') return true;
+                if (activeTab === 'favorites') {
+                  if (card.source === 'library') return card.entry.is_favorite;
+                  return (card.fly as unknown as { is_favorite?: boolean }).is_favorite;
+                }
+                if (activeTab === 'tie-next') {
+                  if (card.source === 'library') return card.entry.is_tie_next;
+                  return (card.fly as unknown as { is_tie_next?: boolean }).is_tie_next;
+                }
+                return true;
+              });
+              if (filteredCards.length === 0) return null;
+              return (
               <section key={type}>
                 <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
                   <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
                   <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
-                  <span className="text-xs text-[#6E7681] ml-1">{grouped[type].length}</span>
+                  <span className="text-xs text-[#6E7681] ml-1">{filteredCards.length}</span>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                  {grouped[type].map(card => {
+                  {filteredCards.map(card => {
                     if (card.source === 'library') {
                       const cf = card.entry.canonical_fly;
                       return (
@@ -288,8 +313,11 @@ export default async function FlyBoxPage() {
                   })}
                 </div>
               </section>
-            ))}
+              );
+            })}
           </div>
+            )}
+          </FlyBoxTabs>
         )}
       </div>
     </div>
