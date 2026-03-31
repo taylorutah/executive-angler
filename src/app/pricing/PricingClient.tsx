@@ -240,18 +240,18 @@ export default function PricingClient({ isLoggedIn, isPremium }: Props) {
 
           <div className="bg-[#161B22] rounded-2xl border border-[#21262D] overflow-hidden">
             {/* Table header */}
-            <div className="grid grid-cols-[1fr,80px,80px] sm:grid-cols-[1fr,100px,100px] px-4 sm:px-6 py-3 border-b border-[#21262D] bg-[#0D1117]/50">
-              <span className="text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">Feature</span>
-              <span className="text-[10px] font-bold text-[#6E7681] tracking-wider uppercase text-center">Free</span>
-              <span className="text-[10px] font-bold text-[#E8923A] tracking-wider uppercase text-center">Pro</span>
+            <div className="flex items-center px-4 sm:px-6 py-3 border-b border-[#21262D] bg-[#0D1117]/50">
+              <span className="flex-1 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">Feature</span>
+              <span className="w-20 sm:w-24 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase text-center">Free</span>
+              <span className="w-20 sm:w-24 text-[10px] font-bold text-[#E8923A] tracking-wider uppercase text-center">Pro</span>
             </div>
 
             {/* Free tier basics */}
             {FREE_FEATURES.map((f, i) => (
-              <div key={f} className={`grid grid-cols-[1fr,80px,80px] sm:grid-cols-[1fr,100px,100px] px-4 sm:px-6 py-3 ${i > 0 ? "border-t border-[#21262D]/50" : ""}`}>
-                <span className="text-sm text-[#A8B2BD]">{f}</span>
-                <div className="flex justify-center"><Check className="h-4 w-4 text-[#2EA44F]" /></div>
-                <div className="flex justify-center"><Check className="h-4 w-4 text-[#E8923A]" /></div>
+              <div key={f} className={`flex items-center px-4 sm:px-6 py-3 ${i > 0 ? "border-t border-[#21262D]/50" : ""}`}>
+                <span className="flex-1 text-sm text-[#A8B2BD]">{f}</span>
+                <div className="w-20 sm:w-24 flex justify-center"><Check className="h-4 w-4 text-[#2EA44F]" /></div>
+                <div className="w-20 sm:w-24 flex justify-center"><Check className="h-4 w-4 text-[#E8923A]" /></div>
               </div>
             ))}
 
@@ -260,22 +260,22 @@ export default function PricingClient({ isLoggedIn, isPremium }: Props) {
 
             {/* Pro features */}
             {FEATURES.map((f) => (
-              <div key={f.label} className="grid grid-cols-[1fr,80px,80px] sm:grid-cols-[1fr,100px,100px] px-4 sm:px-6 py-3 border-t border-[#21262D]/50">
-                <div className="flex items-center gap-2.5">
+              <div key={f.label} className="flex items-center px-4 sm:px-6 py-3 border-t border-[#21262D]/50">
+                <div className="flex-1 flex items-center gap-2.5 min-w-0">
                   <f.icon className="h-4 w-4 text-[#6E7681] shrink-0 hidden sm:block" />
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-sm text-[#F0F6FC]">{f.label}</span>
                     <p className="text-[11px] text-[#6E7681] mt-0.5 hidden sm:block">{f.desc}</p>
                   </div>
                 </div>
-                <div className="flex justify-center items-center">
+                <div className="w-20 sm:w-24 flex justify-center items-center shrink-0">
                   {f.free === false ? (
                     <X className="h-4 w-4 text-[#6E7681]/40" />
                   ) : (
                     <span className="text-xs text-[#A8B2BD] font-mono">{f.free}</span>
                   )}
                 </div>
-                <div className="flex justify-center items-center">
+                <div className="w-20 sm:w-24 flex justify-center items-center shrink-0">
                   {f.pro === true ? (
                     <Check className="h-4 w-4 text-[#E8923A]" />
                   ) : (
