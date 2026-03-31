@@ -6,7 +6,7 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download } from "lucide-react";
+import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -359,6 +359,9 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               </Link>
               <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <TrendingUp className="h-4 w-4" /> River Stats
+              </Link>
+              <Link href="/journal/trophy-wall" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+                <Trophy className="h-4 w-4" /> Trophy Wall
               </Link>
               <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
                 <Feather className="h-4 w-4" /> Fly Box
