@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ChevronLeft, Sparkles, TrendingUp, TrendingDown,
-  Thermometer, Cloud, Droplets, Timer, MapPin, Bug
+  Thermometer, Cloud, Droplets, Timer, MapPin, Bug,
+  BrainCircuit, Loader2, RefreshCw,
 } from "lucide-react";
 
 interface Session {
@@ -309,6 +310,30 @@ export default function InsightsClient({
     return results;
   }, [sessions, catches]);
 
+  // AI Journal Summary state
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
+  async function generateAiSummary() {
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const res = await fetch("/api/insights/journal", { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json();
+        setAiError(data.error || "Failed to generate analysis");
+        return;
+      }
+      const data = await res.json();
+      setAiSummary(data.summary);
+    } catch {
+      setAiError("Network error — try again");
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
   const typeColors: Record<string, string> = {
     pattern: "border-blue-500/20 bg-blue-500/5",
     recommendation: "border-purple-500/20 bg-purple-500/5",
@@ -339,6 +364,68 @@ export default function InsightsClient({
         <p className="text-sm text-[#A8B2BD] mb-8">
           Personalized analysis based on {sessions.length} sessions and {catches.length} catches.
         </p>
+
+        {/* AI Journal Summary */}
+        <div className="bg-gradient-to-br from-[#161B22] to-[#1a1f2a] rounded-xl border border-purple-500/20 p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <BrainCircuit className="h-5 w-5 text-purple-400" />
+              <h2 className="text-sm font-bold text-[#F0F6FC]">AI Journal Analysis</h2>
+              <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
+            </div>
+            {aiSummary && !aiLoading && (
+              <button
+                onClick={generateAiSummary}
+                className="text-[#6E7681] hover:text-[#F0F6FC] transition-colors"
+                title="Regenerate"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {aiSummary ? (
+            <div className="prose prose-sm prose-invert max-w-none">
+              {aiSummary.split("\n\n").map((p, i) => (
+                <p key={i} className="text-sm text-[#A8B2BD] leading-relaxed mb-3 last:mb-0">
+                  {p}
+                </p>
+              ))}
+            </div>
+          ) : aiLoading ? (
+            <div className="flex items-center gap-3 py-4">
+              <Loader2 className="h-5 w-5 text-purple-400 animate-spin" />
+              <span className="text-sm text-[#A8B2BD]">Analyzing your journal with AI...</span>
+            </div>
+          ) : aiError ? (
+            <div className="text-center py-4">
+              <p className="text-sm text-red-400 mb-3">{aiError}</p>
+              <button
+                onClick={generateAiSummary}
+                className="text-xs text-[#E8923A] hover:underline"
+              >
+                Try again
+              </button>
+            </div>
+          ) : (
+            <div className="text-center py-2">
+              <p className="text-sm text-[#6E7681] mb-3">
+                Claude analyzes your patterns, trends, and conditions to deliver personalized fishing intelligence.
+              </p>
+              <button
+                onClick={generateAiSummary}
+                disabled={sessions.length < 3}
+                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg px-5 py-2.5 transition-colors"
+              >
+                <BrainCircuit className="h-4 w-4" />
+                Generate AI Analysis
+              </button>
+              {sessions.length < 3 && (
+                <p className="text-xs text-[#6E7681] mt-2">Need at least 3 sessions</p>
+              )}
+            </div>
+          )}
+        </div>
 
         {insights.length === 0 ? (
           <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
