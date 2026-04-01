@@ -123,41 +123,50 @@ export default function RiversMapView({
       const lng = Number(river.longitude);
       if (!lat || !lng || isNaN(lat) || isNaN(lng)) return;
 
-      const size = river.featured ? 16 : 12;
+      const dotSize = river.featured ? 16 : 12;
+      const hitSize = 36; // large invisible hit target for easy clicking
 
+      // Outer wrapper = large clickable hit target, centered over the map point
       const el = document.createElement("div");
       el.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
+        width: ${hitSize}px;
+        height: ${hitSize}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      `;
+
+      // Inner visible dot — pointer-events: none so hover/click goes to outer el
+      const dot = document.createElement("div");
+      dot.style.cssText = `
+        width: ${dotSize}px;
+        height: ${dotSize}px;
         border-radius: 50%;
         background-color: #E8923A;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         box-shadow: 0 1px 4px rgba(0,0,0,0.5);
         transition: transform 0.15s ease;
+        transform-origin: center center;
+        pointer-events: none;
       `;
-      el.innerHTML = `<div style="width:${Math.round(size * 0.35)}px;height:${Math.round(size * 0.35)}px;border-radius:50%;background:white;pointer-events:none;"></div>`;
-      el.addEventListener("mouseenter", () => { el.style.transform = "scale(1.4)"; });
-      el.addEventListener("mouseleave", () => { el.style.transform = "scale(1)"; });
+      dot.innerHTML = `<div style="width:${Math.round(dotSize * 0.35)}px;height:${Math.round(dotSize * 0.35)}px;border-radius:50%;background:white;"></div>`;
+      el.appendChild(dot);
 
-      const difficultyColor = DIFFICULTY_COLORS[river.difficulty] ?? "#A8B2BD";
-      const speciesList = (river.primarySpecies ?? []).slice(0, 3).join(", ");
+      // Hover effect on the dot (triggered by outer el)
+      el.addEventListener("mouseenter", () => { dot.style.transform = "scale(1.4)"; });
+      el.addEventListener("mouseleave", () => { dot.style.transform = "scale(1)"; });
 
-      const popup = new mapboxgl.Popup({ offset: 18, closeButton: true, maxWidth: "260px" })
-        .setHTML(`
-          <div style="background:#161B22;border-radius:8px;padding:12px;color:#F0F6FC;font-family:sans-serif;">
-            <a href="/rivers/${river.slug}" style="color:#E8923A;font-weight:700;font-size:14px;text-decoration:none;display:block;margin-bottom:5px;">${river.name}</a>
-            <div style="font-size:11px;color:#A8B2BD;margin-bottom:6px;">${speciesList}</div>
-            <span style="display:inline-block;background:${difficultyColor}22;color:${difficultyColor};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;padding:2px 7px;border-radius:999px;">${river.difficulty ?? ""}</span>
-            <a href="/rivers/${river.slug}" style="display:block;margin-top:8px;font-size:11px;color:#E8923A;text-decoration:none;">View River →</a>
-          </div>
-        `);
+      // Click → navigate to river page
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.location.href = `/rivers/${river.slug}`;
+      });
 
-      const marker = new mapboxgl.Marker({ element: el })
+      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([lng, lat])
-        .setPopup(popup)
         .addTo(map.current!);
 
       markersRef.current.push(marker);

@@ -118,9 +118,11 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
       (err) => {
         setLocating(false);
         if (err.code === 1) {
-          setGeoError("Location access denied. Try entering a ZIP code instead.");
+          setGeoError("Location access denied. In Safari, go to Settings → Privacy → Location Services and allow your browser. Or enter a ZIP code.");
+        } else if (err.code === 2) {
+          setGeoError("Location unavailable. Try entering a ZIP code instead.");
         } else {
-          setGeoError("Could not get location. Try a ZIP code.");
+          setGeoError("Location request timed out. Try a ZIP code instead.");
         }
       },
       { timeout: 10000, maximumAge: 60000 }
