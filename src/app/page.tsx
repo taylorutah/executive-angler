@@ -63,7 +63,7 @@ export default async function HomePage() {
           </ScrollAnimation>
           <ScrollAnimation delay={0.1}>
             <h1 className="text-[#F0F6FC] font-['DM_Serif_Display'] font-normal leading-[1.05] mb-6" style={{ fontSize: "clamp(3rem, 8vw, 5rem)", letterSpacing: "-0.02em" }}>
-              Log it. Learn from it.<br />Fish better.
+              Better data.<br />Better days on the water.
             </h1>
           </ScrollAnimation>
           <ScrollAnimation delay={0.2}>
