@@ -101,7 +101,7 @@ export async function getFeaturedFlies(): Promise<CanonicalFly[]> {
 
   if (error) {
     console.error("[getFeaturedFlies] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -118,7 +118,7 @@ export async function getFliesByCategory(
 
   if (error) {
     console.error("[getFliesByCategory] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -135,7 +135,7 @@ export async function getFliesForRiver(
 
   if (error) {
     console.error("[getFliesForRiver] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -152,7 +152,7 @@ export async function getFliesByEffectiveSpecies(
 
   if (error) {
     console.error("[getFliesByEffectiveSpecies] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -169,7 +169,7 @@ export async function getFliesForDestination(
 
   if (error) {
     console.error("[getFliesForDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -187,7 +187,7 @@ export async function getFliesForFlyShop(
 
   if (error) {
     console.error("[getFliesForFlyShop] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -204,7 +204,7 @@ export async function getFliesByImitates(
 
   if (error) {
     console.error("[getFliesByImitates] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

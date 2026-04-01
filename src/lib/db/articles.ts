@@ -66,7 +66,7 @@ export async function getFeaturedArticles(): Promise<Article[]> {
 
   if (error) {
     console.error("[getFeaturedArticles] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -81,7 +81,7 @@ export async function getArticlesByDestination(destinationId: string): Promise<A
 
   if (error) {
     console.error("[getArticlesByDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -96,7 +96,7 @@ export async function getArticlesByRiver(riverId: string): Promise<Article[]> {
 
   if (error) {
     console.error("[getArticlesByRiver] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

@@ -72,7 +72,7 @@ export async function getFeaturedRivers(): Promise<River[]> {
 
   if (error) {
     console.error("[getFeaturedRivers] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -87,7 +87,7 @@ export async function getRiversByDestination(destinationId: string): Promise<Riv
 
   if (error) {
     console.error("[getRiversByDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -102,7 +102,7 @@ export async function getRiversByIds(ids: string[]): Promise<River[]> {
 
   if (error) {
     console.error("[getRiversByIds] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

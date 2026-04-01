@@ -65,7 +65,7 @@ export async function getFlyShopsByDestination(destinationId: string): Promise<F
 
   if (error) {
     console.error("[getFlyShopsByDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

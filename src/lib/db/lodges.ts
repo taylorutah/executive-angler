@@ -75,7 +75,7 @@ export async function getFeaturedLodges(): Promise<Lodge[]> {
 
   if (error) {
     console.error("[getFeaturedLodges] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -90,7 +90,7 @@ export async function getLodgesByDestination(destinationId: string): Promise<Lod
 
   if (error) {
     console.error("[getLodgesByDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -104,7 +104,7 @@ export async function getLodgesByRiver(riverId: string): Promise<Lodge[]> {
 
   if (error) {
     console.error("[getLodgesByRiver] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

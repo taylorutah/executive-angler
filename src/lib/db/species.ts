@@ -76,7 +76,7 @@ export async function getFeaturedSpecies(): Promise<Species[]> {
 
   if (error) {
     console.error("[getFeaturedSpecies] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -92,7 +92,7 @@ export async function getSpeciesByCommonNames(names: string[]): Promise<Species[
 
   if (error) {
     console.error("[getSpeciesByCommonNames] Supabase error:", error);
-    throw error;
+    return [];
   }
 
   const lower = names.map((n) => n.toLowerCase());

@@ -70,7 +70,7 @@ export async function getDestinationById(id: string): Promise<Destination | unde
 
   if (error) {
     console.error("[getDestinationById] Supabase error:", error);
-    throw error;
+    return undefined;
   }
   return mapRow(data as Record<string, unknown>);
 }
@@ -85,7 +85,7 @@ export async function getDestinationsByIds(ids: string[]): Promise<Destination[]
 
   if (error) {
     console.error("[getDestinationsByIds] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -100,7 +100,7 @@ export async function getFeaturedDestinations(): Promise<Destination[]> {
 
   if (error) {
     console.error("[getFeaturedDestinations] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

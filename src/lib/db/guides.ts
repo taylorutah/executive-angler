@@ -65,7 +65,7 @@ export async function getGuidesByRiver(riverId: string): Promise<Guide[]> {
 
   if (error) {
     console.error("[getGuidesByRiver] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }
@@ -80,7 +80,7 @@ export async function getGuidesByDestination(destinationId: string): Promise<Gui
 
   if (error) {
     console.error("[getGuidesByDestination] Supabase error:", error);
-    throw error;
+    return [];
   }
   return (data ?? []).map(mapRow);
 }

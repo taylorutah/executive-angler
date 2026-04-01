@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Heart } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllRivers } from "@/lib/db";
+import { createClient } from "@/lib/supabase/server";
 import RiversPageClient from "./RiversPageClient";
 import { SITE_URL } from "@/lib/constants";
 
-export const revalidate = 3600;
+export const revalidate = 0; // dynamic — needs auth for favorites
 
 const SPOTLIGHT_SLUGS = ["madison-river", "snake-river-wyoming", "henrys-fork"] as const;
 
@@ -37,6 +38,25 @@ export const metadata: Metadata = {
 
 export default async function RiversPage() {
   const rivers = await getAllRivers();
+
+  // Check auth and fetch user's favorited rivers
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  let favoriteRiverIds: string[] = [];
+  if (user) {
+    const { data: favs } = await supabase
+      .from("user_favorites")
+      .select("entity_id")
+      .eq("user_id", user.id)
+      .eq("entity_type", "river");
+    favoriteRiverIds = (favs ?? []).map((f) => f.entity_id);
+  }
+
+  const myRivers = favoriteRiverIds.length > 0
+    ? rivers.filter((r) => favoriteRiverIds.includes(r.id))
+    : [];
+
   const spotlightRivers = SPOTLIGHT_SLUGS.map((s) => rivers.find((r) => r.slug === s)).filter(
     Boolean
   );
@@ -79,75 +99,145 @@ export default async function RiversPage() {
         </div>
       </section>
 
-      {/* ── Spotlight Rivers ──────────────────────────────────────────────── */}
+      {/* ── My Rivers / Spotlight Rivers ──────────────────────────────────── */}
       <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
-            Iconic Rivers
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {spotlightRivers.map((river, i) => {
-              if (!river) return null;
-              return (
-                <ScrollAnimation key={river.id} delay={i * 0.1}>
-                  <Link
-                    href={`/rivers/${river.slug}`}
-                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    <div className="relative h-56">
-                      <Image
-                        src={river.heroImageUrl}
-                        alt={river.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
-                      <div className="absolute bottom-4 left-4">
-                        <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
-                        >
-                          {river.difficulty}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
-                        {river.name}
-                      </h3>
-                      <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
-                        {RIVER_HEADLINES[river.slug]}
-                      </p>
-                      <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
-                        {river.description?.substring(0, 120)}...
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {river.primarySpecies.slice(0, 2).map((sp) => (
+          {myRivers.length > 0 ? (
+            <>
+              <div className="flex items-center gap-2 mb-8">
+                <Heart className="h-4 w-4 text-[#E8923A] fill-[#E8923A]" />
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+                  My Rivers
+                </p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-6">
+                {myRivers.map((river, i) => (
+                  <ScrollAnimation key={river.id} delay={i * 0.1}>
+                    <Link
+                      href={`/rivers/${river.slug}`}
+                      className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                      <div className="relative h-56">
+                        <Image
+                          src={river.heroImageUrl}
+                          alt={river.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                        <div className="absolute bottom-4 left-4">
                           <span
-                            key={sp}
-                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                            className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
                           >
-                            {sp}
+                            {river.difficulty}
                           </span>
-                        ))}
-                        <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
-                          {river.wadingType}
-                        </span>
+                        </div>
                       </div>
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="text-xs text-[#6E7681]">
-                          Peak: {river.bestMonths.slice(0, 3).join(" · ")}
-                        </span>
-                        <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
-                          Explore <ChevronRight className="h-3.5 w-3.5" />
-                        </span>
+                      <div className="p-5">
+                        <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
+                          {river.name}
+                        </h3>
+                        <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
+                          {river.description?.substring(0, 120)}...
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {river.primarySpecies.slice(0, 3).map((sp) => (
+                            <span
+                              key={sp}
+                              className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                            >
+                              {sp}
+                            </span>
+                          ))}
+                          <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
+                            {river.wadingType}
+                          </span>
+                        </div>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-xs text-[#6E7681]">
+                            Peak: {river.bestMonths.slice(0, 3).join(" · ")}
+                          </span>
+                          <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
+                            Explore <ChevronRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
+                    </Link>
+                  </ScrollAnimation>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+                Iconic Rivers
+              </p>
+              <div className="grid md:grid-cols-3 gap-6">
+                {spotlightRivers.map((river, i) => {
+                  if (!river) return null;
+                  return (
+                    <ScrollAnimation key={river.id} delay={i * 0.1}>
+                      <Link
+                        href={`/rivers/${river.slug}`}
+                        className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                      >
+                        <div className="relative h-56">
+                          <Image
+                            src={river.heroImageUrl}
+                            alt={river.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                          <div className="absolute bottom-4 left-4">
+                            <span
+                              className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
+                            >
+                              {river.difficulty}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5">
+                          <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
+                            {river.name}
+                          </h3>
+                          <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
+                            {RIVER_HEADLINES[river.slug]}
+                          </p>
+                          <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
+                            {river.description?.substring(0, 120)}...
+                          </p>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {river.primarySpecies.slice(0, 2).map((sp) => (
+                              <span
+                                key={sp}
+                                className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                              >
+                                {sp}
+                              </span>
+                            ))}
+                            <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
+                              {river.wadingType}
+                            </span>
+                          </div>
+                          <div className="mt-4 flex items-center justify-between">
+                            <span className="text-xs text-[#6E7681]">
+                              Peak: {river.bestMonths.slice(0, 3).join(" · ")}
+                            </span>
+                            <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
+                              Explore <ChevronRight className="h-3.5 w-3.5" />
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </ScrollAnimation>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
