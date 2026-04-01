@@ -124,16 +124,36 @@ export default function Header() {
     async function fetchUserProfile() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (!authUser) { setUser(null); return; }
-      const { data: profile } = await supabase
+
+      // Fetch profile — is_premium may be on profiles table or subscriptions table
+      const { data: profile, error: profileErr } = await supabase
         .from("profiles")
         .select("avatar_url, display_name, is_premium")
         .eq("user_id", authUser.id)
         .maybeSingle();
+
+      let isPremium = profile?.is_premium === true;
+
+      // Fallback: check subscriptions table for active subscription
+      if (!isPremium) {
+        const { data: sub } = await supabase
+          .from("subscriptions")
+          .select("status")
+          .eq("user_id", authUser.id)
+          .in("status", ["active", "trialing"])
+          .maybeSingle();
+        if (sub) isPremium = true;
+      }
+
+      if (profileErr) {
+        console.warn("[Header] profiles query error:", profileErr.message);
+      }
+
       setUser({
         email: authUser.email ?? undefined,
         avatarUrl: profile?.avatar_url || undefined,
         displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
-        isPremium: profile?.is_premium || false,
+        isPremium,
       });
     }
 
@@ -409,15 +429,17 @@ export default function Header() {
                   Journal
                 </Link>
               )}
-              <Link
-                href="/pricing"
-                className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                  pathname === "/pricing" ? "bg-[#E8923A]/10 text-[#E8923A]" : "text-[#E8923A]/70 hover:text-[#E8923A] hover:bg-[#E8923A]/5"
-                }`}
-              >
-                <Sparkles className="h-5 w-5" />
-                Pro
-              </Link>
+              {!user?.isPremium && (
+                <Link
+                  href="/pricing"
+                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    pathname === "/pricing" ? "bg-[#E8923A]/10 text-[#E8923A]" : "text-[#E8923A]/70 hover:text-[#E8923A] hover:bg-[#E8923A]/5"
+                  }`}
+                >
+                  <Sparkles className="h-5 w-5" />
+                  Pro
+                </Link>
+              )}
 
               {/* Explore accordion */}
               <div className="mt-4 pt-4 border-t border-[#21262D]">
