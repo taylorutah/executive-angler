@@ -132,7 +132,7 @@ export default function RootLayout({
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider>
           <Header />
-          <main className="flex-1 pt-[84px]">{children}</main>
+          <main className="flex-1 pt-[56px]">{children}</main>
           <Footer />
         </ThemeProvider>
         <Analytics />
