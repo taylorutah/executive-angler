@@ -188,9 +188,18 @@ export default function WorkbenchClient() {
                 Tying Workbench
               </h1>
             </div>
-            <div className="text-right">
-              <span className="font-mono text-2xl text-accent font-semibold">{inventory.length}</span>
-              <span className="text-text-muted text-sm ml-1">materials</span>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <span className="font-mono text-2xl text-accent font-semibold">{inventory.length}</span>
+                <span className="text-text-muted text-sm ml-1">materials</span>
+              </div>
+              <Link
+                href="/journal/flies/new"
+                className="flex items-center gap-2 bg-accent text-bg px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+              >
+                <Plus size={16} />
+                New Fly
+              </Link>
             </div>
           </div>
 
