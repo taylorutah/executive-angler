@@ -205,7 +205,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                           </span>
                           {fly.sizes.length > 0 && (
                             <span className="text-[10px] text-[#A8B2BD]">
-                              #{fly.sizes.join(", #")}
+                              {fly.sizes.map(s => `#${s.replace(/^#/, "")}`).join(", ")}
                             </span>
                           )}
                         </div>

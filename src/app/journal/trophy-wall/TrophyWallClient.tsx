@@ -85,7 +85,7 @@ function PhotoLightbox({ photos, initialIndex, onClose }: {
           </p>
           <div className="flex items-center justify-center gap-3 mt-1 text-sm text-white/60 flex-wrap">
             {entry.session?.river_name && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{entry.session.river_name}</span>}
-            {entry.catchRecord.fly_name && <span>{entry.catchRecord.fly_name}{entry.catchRecord.fly_size ? ` #${entry.catchRecord.fly_size}` : ''}</span>}
+            {entry.catchRecord.fly_name && <span>{entry.catchRecord.fly_name}{entry.catchRecord.fly_size ? ` #${String(entry.catchRecord.fly_size).replace(/^#/, "")}` : ''}</span>}
             {entry.session?.date && (
               <span>{new Date(entry.session.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             )}
@@ -243,7 +243,7 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-[#6E7681]" />
                     {biggestOverall.fly_name}
-                    {biggestOverall.fly_size && <span className="text-[#6E7681]">#{biggestOverall.fly_size}</span>}
+                    {biggestOverall.fly_size && <span className="text-[#6E7681]">#{String(biggestOverall.fly_size).replace(/^#/, "")}</span>}
                   </div>
                 )}
               </div>

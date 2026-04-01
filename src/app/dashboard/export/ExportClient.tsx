@@ -133,7 +133,7 @@ export default function ExportClient({
         let line = `• ${c.species || "Unknown"}`;
         if (c.length_inches) line += ` — ${c.length_inches.toFixed(1)}"`;
         if (c.flyPatternName) line += ` on ${c.flyPatternName}`;
-        if (c.fly_size) line += ` #${c.fly_size}`;
+        if (c.fly_size) line += ` #${String(c.fly_size).replace(/^#/, "")}`;
         html += `<div class="catch-row">${line}</div>`;
       }
 

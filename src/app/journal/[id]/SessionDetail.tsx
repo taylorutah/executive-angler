@@ -996,7 +996,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           {c.fly_position && (
                             <span className="bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium flex-shrink-0">{c.fly_position}</span>
                           )}
-                          {c.fly_size && <span className="flex-shrink-0">#{c.fly_size}</span>}
+                          {c.fly_size && <span className="flex-shrink-0">#{String(c.fly_size).replace(/^#/, "")}</span>}
                           {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{c.time_caught}</span>}
                         </div>
                         {(c.weather_temp_f != null || c.weather_condition || c.weather_humidity != null || c.weather_pressure_hpa != null) && (
