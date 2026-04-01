@@ -112,7 +112,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
-  const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string } | null>(null);
+  const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string; isPremium?: boolean } | null>(null);
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
 
@@ -126,13 +126,14 @@ export default function Header() {
       if (!authUser) { setUser(null); return; }
       const { data: profile } = await supabase
         .from("profiles")
-        .select("avatar_url, display_name")
+        .select("avatar_url, display_name, is_premium")
         .eq("user_id", authUser.id)
         .maybeSingle();
       setUser({
         email: authUser.email ?? undefined,
         avatarUrl: profile?.avatar_url || undefined,
         displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
+        isPremium: profile?.is_premium || false,
       });
     }
 
@@ -222,17 +223,19 @@ export default function Header() {
                     </Link>
                   );
                 })}
-                <Link
-                  href="/pricing"
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === "/pricing"
-                      ? "text-[#E8923A]"
-                      : "text-[#E8923A]/70 hover:text-[#E8923A]"
-                  }`}
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  Pro
-                </Link>
+                {!user?.isPremium && (
+                  <Link
+                    href="/pricing"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      pathname === "/pricing"
+                        ? "text-[#E8923A]"
+                        : "text-[#E8923A]/70 hover:text-[#E8923A]"
+                    }`}
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Pro
+                  </Link>
+                )}
               </nav>
 
               {/* ── Right Actions ── */}
