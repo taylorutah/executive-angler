@@ -209,8 +209,9 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                             </span>
                           )}
                         </div>
-                        <span className="text-xs font-mono text-[#E8923A]">
+                        <span className="flex items-center gap-1 text-xs font-mono text-[#E8923A]">
                           {fly.catchCount}
+                          <Fish className="h-3 w-3 opacity-60" />
                         </span>
                       </div>
                       <div className="h-1 bg-[#21262D] rounded-full overflow-hidden">

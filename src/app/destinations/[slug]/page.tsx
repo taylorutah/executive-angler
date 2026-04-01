@@ -16,7 +16,9 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin, checkPremium } from "@/lib/admin";
+import { getHeroHeight } from "@/lib/hero-height";
+import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
@@ -80,6 +82,14 @@ export default async function DestinationPage({ params }: Props) {
   const supabase = await createClient();
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
+
+  // Auth-aware hero height
+  let heroTier: HeroTier = "anonymous";
+  if (currentUser) {
+    const isPro = await checkPremium(supabase, currentUser.id, currentUser.email);
+    heroTier = isPro ? "pro" : "free";
+  }
+  const heroHeight = getHeroHeight("destination", heroTier);
 
   const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies] = await Promise.all([
     getRiversByDestination(dest.id),
@@ -153,7 +163,7 @@ export default async function DestinationPage({ params }: Props) {
           imageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
           title={dest.name}
           subtitle={dest.tagline}
-          height="h-[65vh]"
+          height={heroHeight}
           imageCredit={dest.heroImageCredit}
           imageCreditUrl={dest.heroImageCreditUrl}
         />

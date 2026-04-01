@@ -25,7 +25,9 @@ import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin, checkPremium } from "@/lib/admin";
+import { getHeroHeight } from "@/lib/hero-height";
+import type { HeroTier } from "@/lib/hero-height";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -87,6 +89,14 @@ export default async function RiverPage({ params }: Props) {
   const supabase = await createClient();
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
+
+  // Auth-aware hero height
+  let heroTier: HeroTier = "anonymous";
+  if (currentUser) {
+    const isPro = await checkPremium(supabase, currentUser.id, currentUser.email);
+    heroTier = isPro ? "pro" : "free";
+  }
+  const heroHeight = getHeroHeight("river", heroTier);
 
   const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
@@ -174,7 +184,7 @@ export default async function RiverPage({ params }: Props) {
           imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
           title={river.name}
           subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
-          height="h-[45vh]"
+          height={heroHeight}
           imageCredit={river.heroImageCredit}
           imageCreditUrl={river.heroImageCreditUrl}
         />

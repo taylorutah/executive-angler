@@ -15,7 +15,9 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin, checkPremium } from "@/lib/admin";
+import { getHeroHeight } from "@/lib/hero-height";
+import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllSpecies,
@@ -85,6 +87,14 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const supabase = await createClient();
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
+
+  // Auth-aware hero height
+  let heroTier: HeroTier = "anonymous";
+  if (currentUser) {
+    const isPro = await checkPremium(supabase, currentUser.id, currentUser.email);
+    heroTier = isPro ? "pro" : "free";
+  }
+  const heroHeight = getHeroHeight("species", heroTier);
 
   const [relatedDests, relatedRivers, speciesFlies] = await Promise.all([
     sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
@@ -156,7 +166,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
           imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
           title={sp.commonName}
           subtitle={sp.scientificName || undefined}
-          height="h-[60vh]"
+          height={heroHeight}
           imageContain={true}
         />
         {userIsAdmin && (

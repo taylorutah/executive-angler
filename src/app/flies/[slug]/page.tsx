@@ -285,7 +285,7 @@ export default async function FlyDetailPage({ params }: Props) {
       />
 
       {/* Breadcrumbs */}
-      <div className="bg-[#0D1117] pt-6 pb-4">
+      <div className="bg-[#0D1117] pt-6 pb-2">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
@@ -297,206 +297,143 @@ export default async function FlyDetailPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Hero section */}
-      <section className="bg-[#0D1117] pb-20 lg:pb-8">
+      {/* ─── Product Header: image + title + quick specs ─── */}
+      <section className="bg-[#0D1117] pb-6 border-b border-[#21262D]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-3 lg:gap-12">
-            {/* Left: content */}
-            <div className="lg:col-span-2">
-              {/* Title block */}
-              <div className="mb-6">
-                <span className="inline-block px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full mb-3">
+          <div className="flex flex-col sm:flex-row gap-6 items-start">
+            {/* Compact fly image — product card style */}
+            <div className="shrink-0 w-full sm:w-40 h-40 rounded-xl overflow-hidden bg-[#161B22] border border-[#21262D]">
+              {fly.heroImageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={fly.heroImageUrl}
+                  alt={`${fly.name} fly pattern`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Image src={categoryIcon} alt={categoryLabel} width={56} height={56} className="opacity-40" />
+                </div>
+              )}
+            </div>
+
+            {/* Title + inline specs */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-block px-2.5 py-0.5 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full">
                   {categoryLabel}
                 </span>
-                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F0F6FC]">
-                  {fly.name}
-                </h1>
-                {fly.tagline && (
-                  <p className="mt-2 text-lg text-[#A8B2BD]">
-                    {fly.tagline}
-                  </p>
+                <span className="text-xs text-[#6E7681]">Sizes {sizeRange}</span>
+                {fly.originCredit && (
+                  <span className="text-xs text-[#6E7681]">by {fly.originCredit}</span>
+                )}
+              </div>
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-2">
+                {fly.name}
+              </h1>
+              {fly.tagline && (
+                <p className="text-base text-[#A8B2BD] mb-3">{fly.tagline}</p>
+              )}
+
+              {/* Inline spec chips */}
+              <div className="flex flex-wrap gap-2">
+                {fly.imitates.length > 0 && (
+                  <span className="px-2.5 py-1 text-xs bg-[#21262D] text-[#A8B2BD] rounded-full">
+                    Imitates: {fly.imitates.join(", ")}
+                  </span>
+                )}
+                {fly.waterTypes.length > 0 && (
+                  <span className="px-2.5 py-1 text-xs bg-[#21262D] text-[#A8B2BD] rounded-full">
+                    {fly.waterTypes.join(", ")}
+                  </span>
+                )}
+                {fly.hookStyles.length > 0 && (
+                  <span className="px-2.5 py-1 text-xs bg-[#21262D] text-[#A8B2BD] rounded-full">
+                    {fly.hookStyles.join(", ")}
+                  </span>
+                )}
+                {fly.beadOptions.length > 0 && (
+                  <span className="px-2.5 py-1 text-xs bg-[#E8923A]/10 text-[#E8923A] rounded-full">
+                    {fly.beadOptions.join(", ")}
+                  </span>
                 )}
               </div>
 
-              {/* Description */}
-              <div className="prose prose-invert max-w-none">
-                <p className="text-[#D8DEE4] text-lg leading-relaxed">
-                  {fly.description}
-                </p>
+              {/* Desktop: action buttons inline */}
+              <div className="hidden sm:flex items-center gap-2 mt-4">
+                <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+                <FlyFavoriteButton canonicalFlyId={fly.id} compact />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {/* Fly Hero Image */}
-              {fly.heroImageUrl && (
-                <div className="mt-8 mb-2 rounded-2xl overflow-hidden" style={{height: '320px'}}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={fly.heroImageUrl}
-                    alt={`${fly.name} fly pattern`}
-                    className="w-full h-full object-cover"
+      {/* ─── Main Content + Sidebar ─── */}
+      <section className="bg-[#0D1117] py-10 pb-20 lg:pb-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-12">
+            {/* ─── Left: Main Content (tying-first ordering) ─── */}
+            <div className="lg:col-span-2 space-y-10">
+
+              {/* 1. Structured Recipe (top billing for tiers) */}
+              {recipeIngredients && recipeIngredients.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+                      Tying Recipe
+                    </h2>
+                    <RecipePdfButton flyId={fly.id} flyName={fly.name} isPremium={isPremium} />
+                  </div>
+                  <RecipeCard
+                    flyName={fly.name}
+                    flyType={categoryLabel}
+                    flySize={sizeRange}
+                    ingredients={recipeIngredients.map(ing => ({
+                      ...ing,
+                      material: ing.material || undefined,
+                    }))}
+                    substitutionMap={substitutionMap}
                   />
                 </div>
               )}
 
-              {/* History (expandable) */}
-              {fly.history && (
-                <ScrollAnimation delay={0.1}>
-                  <details className="mt-6 bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
-                    <summary className="px-6 py-4 cursor-pointer text-sm font-semibold uppercase tracking-wider text-[#E8923A] hover:bg-[#21262D]/50 transition-colors">
-                      History &amp; Lore
-                    </summary>
-                    <div className="px-6 pb-6">
-                      <p className="text-[#A8B2BD] leading-relaxed">
-                        {fly.history}
-                      </p>
-                    </div>
-                  </details>
-                </ScrollAnimation>
-              )}
-
-              {/* Variations */}
-              {fly.keyVariations && fly.keyVariations.length > 0 && (
-                <ScrollAnimation delay={0.2}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-6">
-                      Variations
-                    </h2>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      {fly.keyVariations.map((v) => (
+              {/* 2. Materials List */}
+              {fly.materialsList && fly.materialsList.length > 0 && (
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    Materials
+                  </h2>
+                  <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
+                    <dl className="divide-y divide-[#21262D]">
+                      {fly.materialsList.map((m) => (
                         <div
-                          key={v.slugFragment}
-                          id={v.slugFragment}
-                          className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 scroll-mt-20"
+                          key={m.material}
+                          className="flex justify-between items-start gap-4 px-6 py-3"
                         >
-                          <h3 className="font-heading text-lg font-semibold text-[#F0F6FC]">
-                            {v.name}
-                          </h3>
-                          {v.description && (
-                            <p className="mt-1 text-sm text-[#A8B2BD]">
-                              {v.description}
-                            </p>
-                          )}
-                          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                            {v.sizes && (
-                              <span className="px-2 py-0.5 bg-[#21262D] text-[#A8B2BD] rounded">
-                                Sizes {v.sizes.join(", ")}
+                          <dt className="text-sm font-medium text-[#A8B2BD] shrink-0 w-24">
+                            {m.material}
+                          </dt>
+                          <dd className="text-sm text-[#F0F6FC] text-right font-mono">
+                            {m.description}
+                            {m.substitute && (
+                              <span className="block text-xs text-[#6E7681] mt-0.5">
+                                Alt: {m.substitute}
                               </span>
                             )}
-                            {v.bead && (
-                              <span className="px-2 py-0.5 bg-[#E8923A]/10 text-[#E8923A] rounded">
-                                {v.bead}
-                              </span>
-                            )}
-                            {v.colors &&
-                              v.colors.map((c) => (
-                                <span
-                                  key={c}
-                                  className="px-2 py-0.5 bg-[#21262D] text-[#A8B2BD] rounded"
-                                >
-                                  {c}
-                                </span>
-                              ))}
-                          </div>
+                          </dd>
                         </div>
                       ))}
-                    </div>
+                    </dl>
                   </div>
-                </ScrollAnimation>
+                </div>
               )}
 
-              {/* How to Fish It */}
-              {fly.fishingTips && (
-                <ScrollAnimation delay={0.3}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
-                      How to Fish It
-                    </h2>
-                    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-                      <p className="text-[#D8DEE4] leading-relaxed">
-                        {fly.fishingTips}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* When to Use */}
-              {fly.whenToUse && (
-                <ScrollAnimation delay={0.35}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
-                      When to Use
-                    </h2>
-                    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-                      <p className="text-[#D8DEE4] leading-relaxed">
-                        {fly.whenToUse}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Structured Recipe (from fly_recipe_ingredients table) */}
-              {recipeIngredients && recipeIngredients.length > 0 && (
-                <ScrollAnimation delay={0.38}>
-                  <div className="mt-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD]">
-                        Tying Recipe
-                      </h2>
-                      <RecipePdfButton flyId={fly.id} flyName={fly.name} isPremium={isPremium} />
-                    </div>
-                    <RecipeCard
-                      flyName={fly.name}
-                      flyType={categoryLabel}
-                      flySize={sizeRange}
-                      ingredients={recipeIngredients.map(ing => ({
-                        ...ing,
-                        material: ing.material || undefined,
-                      }))}
-                      substitutionMap={substitutionMap}
-                    />
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Materials List */}
-              {fly.materialsList && fly.materialsList.length > 0 && (
-                <ScrollAnimation delay={0.4}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
-                      Materials
-                    </h2>
-                    <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
-                      <dl className="divide-y divide-[#21262D]">
-                        {fly.materialsList.map((m) => (
-                          <div
-                            key={m.material}
-                            className="flex justify-between items-start gap-4 px-6 py-3"
-                          >
-                            <dt className="text-sm font-medium text-[#A8B2BD] shrink-0 w-24">
-                              {m.material}
-                            </dt>
-                            <dd className="text-sm text-[#F0F6FC] text-right font-mono">
-                              {m.description}
-                              {m.substitute && (
-                                <span className="block text-xs text-[#6E7681] mt-0.5">
-                                  Alt: {m.substitute}
-                                </span>
-                              )}
-                            </dd>
-                          </div>
-                        ))}
-                      </dl>
-                    </div>
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Tying Video */}
+              {/* 3. Tying Video */}
               {fly.videoUrl && (
-                <ScrollAnimation delay={0.45}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                       Tying Video
                     </h2>
                     <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
@@ -543,11 +480,11 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Tying Steps — steps 4+ gated behind premium */}
+              {/* 4. Tying Steps — steps 4+ gated behind premium */}
               {fly.tyingSteps && fly.tyingSteps.length > 0 && (
-                <ScrollAnimation delay={0.5}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                       Tying Steps
                     </h2>
                     <div className="space-y-3">
@@ -568,7 +505,7 @@ export default async function FlyDetailPage({ params }: Props) {
                               </p>
                               {step.tip && (
                                 <p className="mt-2 text-sm text-[#E8923A] italic">
-                                  💡 {step.tip}
+                                  Tip: {step.tip}
                                 </p>
                               )}
                             </div>
@@ -582,7 +519,7 @@ export default async function FlyDetailPage({ params }: Props) {
                             Premium Required
                           </p>
                           <p className="text-xs text-[#A8B2BD] mb-4">
-                            Steps 4–{fly.tyingSteps.length} are available to Pro members.
+                            Steps 4&ndash;{fly.tyingSteps.length} are available to Pro members.
                           </p>
                           <Link
                             href="/pricing"
@@ -597,11 +534,118 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* FAQ Section */}
+              {/* 5. Description (moved below tying content) */}
+              <ScrollAnimation>
+                <div>
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    About This Pattern
+                  </h2>
+                  <p className="text-[#D8DEE4] text-base leading-relaxed">
+                    {fly.description}
+                  </p>
+                </div>
+              </ScrollAnimation>
+
+              {/* 6. How to Fish It + When to Use — combined */}
+              {(fly.fishingTips || fly.whenToUse) && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                      On the Water
+                    </h2>
+                    <div className="space-y-4">
+                      {fly.fishingTips && (
+                        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
+                          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#6E7681] mb-3">How to Fish It</h3>
+                          <p className="text-[#D8DEE4] leading-relaxed">
+                            {fly.fishingTips}
+                          </p>
+                        </div>
+                      )}
+                      {fly.whenToUse && (
+                        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
+                          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#6E7681] mb-3">When to Use</h3>
+                          <p className="text-[#D8DEE4] leading-relaxed">
+                            {fly.whenToUse}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* 7. Variations */}
+              {fly.keyVariations && fly.keyVariations.length > 0 && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                      Variations
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {fly.keyVariations.map((v) => (
+                        <div
+                          key={v.slugFragment}
+                          id={v.slugFragment}
+                          className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 scroll-mt-20"
+                        >
+                          <h3 className="font-heading text-lg font-semibold text-[#F0F6FC]">
+                            {v.name}
+                          </h3>
+                          {v.description && (
+                            <p className="mt-1 text-sm text-[#A8B2BD]">
+                              {v.description}
+                            </p>
+                          )}
+                          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                            {v.sizes && (
+                              <span className="px-2 py-0.5 bg-[#21262D] text-[#A8B2BD] rounded">
+                                Sizes {v.sizes.join(", ")}
+                              </span>
+                            )}
+                            {v.bead && (
+                              <span className="px-2 py-0.5 bg-[#E8923A]/10 text-[#E8923A] rounded">
+                                {v.bead}
+                              </span>
+                            )}
+                            {v.colors &&
+                              v.colors.map((c) => (
+                                <span
+                                  key={c}
+                                  className="px-2 py-0.5 bg-[#21262D] text-[#A8B2BD] rounded"
+                                >
+                                  {c}
+                                </span>
+                              ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* 8. History (expandable) */}
+              {fly.history && (
+                <ScrollAnimation>
+                  <details className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
+                    <summary className="px-6 py-4 cursor-pointer text-sm font-semibold uppercase tracking-wider text-[#E8923A] hover:bg-[#21262D]/50 transition-colors">
+                      History &amp; Lore
+                    </summary>
+                    <div className="px-6 pb-6">
+                      <p className="text-[#A8B2BD] leading-relaxed">
+                        {fly.history}
+                      </p>
+                    </div>
+                  </details>
+                </ScrollAnimation>
+              )}
+
+              {/* 9. FAQ */}
               {faqEntries.length > 0 && (
-                <ScrollAnimation delay={0.55}>
-                  <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                       Frequently Asked Questions
                     </h2>
                     <div className="space-y-3">
@@ -625,30 +669,15 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Community Photos */}
-              <div className="mt-10">
-                <CommunityPhotos entityType="fly" entityId={fly.id} />
-              </div>
-
-              {/* Photo Submission */}
-              <div className="mt-10">
-                <PhotoSubmissionForm entityType="fly" entityId={fly.id} entityName={fly.name} />
-              </div>
+              {/* 10. Community Photos */}
+              <CommunityPhotos entityType="fly" entityId={fly.id} />
+              <PhotoSubmissionForm entityType="fly" entityId={fly.id} entityName={fly.name} />
             </div>
 
-            {/* Right sidebar */}
-            <div className="hidden lg:block lg:col-span-1 space-y-6 mt-8 lg:mt-0">
-              {/* Quick Facts */}
+            {/* ─── Right Sidebar ─── */}
+            <div className="hidden lg:block lg:col-span-1 space-y-6">
+              {/* Pattern Details */}
               <QuickFacts title="Pattern Details" facts={quickFacts} />
-
-              {/* Add to Fly Box + Favorite */}
-              <div className="space-y-2">
-                <AddToFlyBoxButton
-                  canonicalFlyId={fly.id}
-                  flyName={fly.name}
-                />
-                <FlyFavoriteButton canonicalFlyId={fly.id} />
-              </div>
 
               {/* Buy This Fly */}
               {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
@@ -671,13 +700,7 @@ export default async function FlyDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {/* Community Stats */}
-              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 text-center">
-                <p className="text-2xl font-heading font-bold text-[#F0F6FC]">&mdash;</p>
-                <p className="text-xs text-[#6E7681] mt-1">catches logged by anglers</p>
-              </div>
-
-              {/* Effective Species */}
+              {/* Target Species */}
               {fly.effectiveSpecies.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
                   <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
@@ -695,6 +718,12 @@ export default async function FlyDetailPage({ params }: Props) {
                   </div>
                 </div>
               )}
+
+              {/* Community Stats */}
+              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 text-center">
+                <p className="text-2xl font-heading font-bold text-[#F0F6FC]">&mdash;</p>
+                <p className="text-xs text-[#6E7681] mt-1">catches logged by anglers</p>
+              </div>
 
               {/* Related Rivers */}
               {relatedRivers.length > 0 && (
@@ -750,7 +779,7 @@ export default async function FlyDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {/* Fly Shops that carry it */}
+              {/* Fly Shops */}
               {flyShops.length > 0 && (
                 <div>
                   <h3 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
@@ -790,17 +819,15 @@ export default async function FlyDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Mobile: Quick Facts + Species (shown below content on small screens) */}
+          {/* ─── Mobile: sidebar content below main ─── */}
           <div className="lg:hidden mt-8 space-y-6">
-            <QuickFacts title="Pattern Details" facts={quickFacts} />
-
+            {/* Mobile action buttons */}
             <div className="space-y-2">
-              <AddToFlyBoxButton
-                canonicalFlyId={fly.id}
-                flyName={fly.name}
-              />
+              <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
               <FlyFavoriteButton canonicalFlyId={fly.id} />
             </div>
+
+            <QuickFacts title="Pattern Details" facts={quickFacts} />
 
             {/* Buy This Fly */}
             {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
@@ -823,12 +850,6 @@ export default async function FlyDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Community Stats */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 text-center">
-              <p className="text-2xl font-heading font-bold text-[#F0F6FC]">&mdash;</p>
-              <p className="text-xs text-[#6E7681] mt-1">catches logged by anglers</p>
-            </div>
-
             {fly.effectiveSpecies.length > 0 && (
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
                 <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
@@ -847,7 +868,6 @@ export default async function FlyDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Mobile: Related Rivers */}
             {relatedRivers.length > 0 && (
               <div>
                 <h3 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
@@ -872,7 +892,6 @@ export default async function FlyDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Mobile: Similar Patterns */}
             {relatedFlies.length > 0 && (
               <div>
                 <h3 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
