@@ -18,13 +18,13 @@ import { MessageIcon } from "@/components/notifications/MessageIcon";
 
 /* ── Category bar links (Tier 2) ── */
 const CATEGORY_NAV = [
-  { label: "Destinations", href: "/destinations" },
   { label: "Rivers", href: "/rivers" },
-  { label: "Fly Library", href: "/flies" },
-  { label: "Fly Shops", href: "/fly-shops" },
+  { label: "Flies", href: "/flies" },
+  { label: "Species", href: "/species" },
+  { label: "Destinations", href: "/destinations" },
   { label: "Lodges", href: "/lodges" },
   { label: "Guides", href: "/guides" },
-  { label: "Species", href: "/species" },
+  { label: "Fly Shops", href: "/fly-shops" },
   { label: "Articles", href: "/articles" },
 ];
 
@@ -102,9 +102,10 @@ const EXPLORE_SECTIONS = [
 
 /* ── Main nav items (Tier 1, app-level) ── */
 const MAIN_NAV = [
-  { label: "Dashboard", href: "/dashboard", authOnly: true },
   { label: "Journal", href: "/journal", authOnly: true },
-  { label: "Feed", href: "/feed", authOnly: false },
+  { label: "Flies", href: "/flies", authOnly: false },
+  { label: "Rivers", href: "/rivers", authOnly: false },
+  { label: "Feed", href: "/feed", authOnly: true },
 ];
 
 export default function Header() {

@@ -18,6 +18,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
+import { RecipeCard } from "@/components/flies/RecipeCard";
 import HashScroller from "@/components/ui/HashScroller";
 import { ExternalLink, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -109,6 +110,13 @@ export default async function FlyDetailPage({ params }: Props) {
       .single();
     isPremium = profile?.is_premium ?? false;
   }
+
+  // Fetch structured recipe ingredients if they exist
+  const { data: recipeIngredients } = await supabase
+    .from('fly_recipe_ingredients')
+    .select('*, material:tying_materials(*)')
+    .eq('canonical_fly_id', fly.id)
+    .order('step_position', { ascending: true });
 
   // Load related data
   const [relatedRivers, relatedFlies, allFlyShops, allArticles] = await Promise.all([
@@ -401,6 +409,26 @@ export default async function FlyDetailPage({ params }: Props) {
                         {fly.whenToUse}
                       </p>
                     </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {/* Structured Recipe (from fly_recipe_ingredients table) */}
+              {recipeIngredients && recipeIngredients.length > 0 && (
+                <ScrollAnimation delay={0.38}>
+                  <div className="mt-10">
+                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
+                      Tying Recipe
+                    </h2>
+                    <RecipeCard
+                      flyName={fly.name}
+                      flyType={categoryLabel}
+                      flySize={sizeRange}
+                      ingredients={recipeIngredients.map(ing => ({
+                        ...ing,
+                        material: ing.material || undefined,
+                      }))}
+                    />
                   </div>
                 </ScrollAnimation>
               )}

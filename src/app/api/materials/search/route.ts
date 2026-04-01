@@ -1,25 +1,22 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-// GET /api/materials/search?q=semperfli&category=thread&limit=10
+// GET /api/materials/search?q=semperfli&category=thread&limit=10&offset=0
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q') || '';
   const category = searchParams.get('category');
-  const limit = Math.min(parseInt(searchParams.get('limit') || '10', 10), 50);
-
-  if (!q && !category) {
-    return NextResponse.json([]);
-  }
+  const limit = Math.min(parseInt(searchParams.get('limit') || '10', 10), 60);
+  const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10), 0);
 
   const supabase = await createClient();
 
   let query = supabase
     .from('tying_materials')
-    .select('id, slug, name, brand, category, subcategory, sizes, colors, material_type, finish, image_url')
+    .select('id, slug, name, brand, category, subcategory, sizes, colors, material_type, weight, finish, description, image_url, vendor_url, popularity')
     .eq('is_verified', true)
     .order('popularity', { ascending: false })
-    .limit(limit);
+    .range(offset, offset + limit - 1);
 
   if (q) {
     // Search name and brand using ilike
