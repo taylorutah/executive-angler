@@ -39,21 +39,53 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'material_id is required' }, { status: 400 });
   }
 
-  const { data, error } = await supabase
+  // Check if this exact material+color+size combo already exists
+  const colorVal = color_owned || null;
+  const sizeVal = size_owned || null;
+
+  let existingQuery = supabase
     .from('user_materials_inventory')
-    .upsert(
-      {
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('material_id', material_id);
+
+  if (colorVal) {
+    existingQuery = existingQuery.eq('color_owned', colorVal);
+  } else {
+    existingQuery = existingQuery.is('color_owned', null);
+  }
+  if (sizeVal) {
+    existingQuery = existingQuery.eq('size_owned', sizeVal);
+  } else {
+    existingQuery = existingQuery.is('size_owned', null);
+  }
+
+  const { data: existing } = await existingQuery.maybeSingle();
+
+  let data, error;
+  if (existing) {
+    // Update existing
+    ({ data, error } = await supabase
+      .from('user_materials_inventory')
+      .update({ quantity: quantity || null, notes: notes || null })
+      .eq('id', existing.id)
+      .select('*, material:tying_materials(*)')
+      .single());
+  } else {
+    // Insert new
+    ({ data, error } = await supabase
+      .from('user_materials_inventory')
+      .insert({
         user_id: user.id,
         material_id,
-        color_owned: color_owned || null,
-        size_owned: size_owned || null,
+        color_owned: colorVal,
+        size_owned: sizeVal,
         quantity: quantity || null,
         notes: notes || null,
-      },
-      { onConflict: 'user_id,material_id' }
-    )
-    .select('*, material:tying_materials(*)')
-    .single();
+      })
+      .select('*, material:tying_materials(*)')
+      .single());
+  }
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
