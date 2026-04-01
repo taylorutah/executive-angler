@@ -5,8 +5,8 @@ import Image from "next/image";
 import { FollowButton } from "@/components/social/FollowButton";
 
 export const metadata: Metadata = {
-  title: "Anglers — Executive Angler",
-  description: "Discover fly anglers and follow their sessions.",
+  title: "Angler Directory — Executive Angler",
+  description: "Browse the angler directory. Find anglers on your rivers and follow their session reports.",
 };
 
 export const dynamic = "force-dynamic";
@@ -45,8 +45,8 @@ export default async function AnglersPage() {
     <div className="min-h-screen bg-[#0D1117]">
       <div className="bg-[#161B22] border-b border-[#21262D]">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">Anglers</h1>
-          <p className="text-[#A8B2BD] mt-2">Discover fly anglers and follow their sessions.</p>
+          <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">Angler Directory</h1>
+          <p className="text-[#A8B2BD] mt-2">Browse anglers and follow their river reports.</p>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 py-8">

@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+
+const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
+
 import {
   Fish,
   Thermometer,
@@ -463,13 +466,13 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
         </div>
       )}
 
-      {/* ── Leaderboard ─────────────────────────────────────────────────── */}
-      {intel.leaderboard && (
+      {/* ── River Activity (anonymous data utility) ─────────────────────── */}
+      {AWARDS_VISIBLE && intel.leaderboard && (
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
           <div className="flex items-center gap-2 mb-4">
             <Trophy className="h-4 w-4 text-[#E8923A]" />
             <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
-              River Records
+              River Activity
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -479,40 +482,31 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
                   <Crown className="h-3.5 w-3.5 text-[#E8923A]" />
                   <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Most Active</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-[#E8923A]/20 border border-[#E8923A]/40 flex items-center justify-center text-sm font-bold text-[#E8923A] mb-1">
-                  {intel.leaderboard.riverChampion.username.charAt(0).toUpperCase()}
-                </div>
-                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.riverChampion.username}</span>
-                <span className="text-xs text-[#A8B2BD] font-mono">{intel.leaderboard.riverChampion.sessionCount} sessions (90d)</span>
+                <span className="text-sm font-semibold text-[#F0F6FC]">Peak Activity</span>
+                <span className="text-xs text-[#A8B2BD] font-mono">{intel.leaderboard.riverChampion.sessionCount} sessions in 90 days</span>
               </div>
             )}
             {intel.leaderboard.biggestFish && (
               <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Fish className="h-3.5 w-3.5 text-[#00B4D8]" />
-                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">River Record</span>
+                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Biggest Reported</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/40 flex items-center justify-center text-sm font-bold text-[#00B4D8] mb-1">
-                  {intel.leaderboard.biggestFish.username.charAt(0).toUpperCase()}
-                </div>
-                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.biggestFish.username}</span>
-                <span className="text-xs text-[#A8B2BD] font-mono">
+                <span className="text-sm font-semibold text-[#F0F6FC]">
                   {intel.leaderboard.biggestFish.lengthInches}&quot;
                   {intel.leaderboard.biggestFish.species && ` ${intel.leaderboard.biggestFish.species}`}
                 </span>
+                <span className="text-xs text-[#A8B2BD] font-mono">largest catch logged</span>
               </div>
             )}
             {intel.leaderboard.hotHand && (
               <div className="bg-[#0D1117] rounded-lg border border-[#21262D] p-4 flex flex-col gap-1">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Flame className="h-3.5 w-3.5 text-amber-400" />
-                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Best Session</span>
+                  <span className="text-[10px] text-[#6E7681] uppercase tracking-widest font-medium">Top Session</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-sm font-bold text-amber-400 mb-1">
-                  {intel.leaderboard.hotHand.username.charAt(0).toUpperCase()}
-                </div>
-                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.hotHand.username}</span>
-                <span className="text-xs text-[#A8B2BD] font-mono">{intel.leaderboard.hotHand.fishCount} fish</span>
+                <span className="text-sm font-semibold text-[#F0F6FC]">{intel.leaderboard.hotHand.fishCount} fish</span>
+                <span className="text-xs text-[#A8B2BD] font-mono">single session high</span>
               </div>
             )}
           </div>

@@ -5,9 +5,9 @@ import Link from "next/link";
 import WaitlistForm from "@/components/sections/WaitlistForm";
 
 export const metadata: Metadata = {
-  title: "Activity Feed | Executive Angler",
+  title: "River Activity | Executive Angler",
   description:
-    "See what the Executive Angler community is catching. Browse recent public fishing sessions, catches, and river reports from anglers everywhere.",
+    "Recent fishing sessions, catches, and river conditions reported by anglers. Browse river intel from waterways everywhere.",
 };
 
 export interface FeedSession {
@@ -66,11 +66,11 @@ export default async function FeedPage() {
           </div>
 
           <h1 className="text-3xl font-bold text-[#F0F6FC] mb-3">
-            Community Feed
+            River Activity
           </h1>
           <p className="text-[#A8B2BD] text-lg mb-10 max-w-md mx-auto">
-            Sign in to see what anglers are catching, share your own sessions,
-            and connect with the community.
+            Sign in to browse recent river conditions, catch reports,
+            and session data from anglers on your rivers.
           </p>
 
           {/* Sign-in CTA */}
@@ -98,7 +98,7 @@ export default async function FeedPage() {
               {[
                 {
                   icon: "📍",
-                  text: "Live activity feed — see sessions, catches, and river reports from anglers worldwide",
+                  text: "River activity data — sessions, catches, and conditions reported from waterways worldwide",
                 },
                 {
                   icon: "🐟",
@@ -110,7 +110,7 @@ export default async function FeedPage() {
                 },
                 {
                   icon: "💬",
-                  text: "Comment on sessions, give kudos, and direct message other anglers",
+                  text: "Annotate sessions and compare notes with anglers you follow",
                 },
                 {
                   icon: "🗺️",
@@ -276,10 +276,10 @@ export default async function FeedPage() {
       <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-[#F0F6FC] mb-1">
-            Activity Feed
+            River Activity
           </h1>
           <p className="text-sm text-[#A8B2BD]">
-            Recent sessions from the Executive Angler community
+            Recent sessions and river conditions reported by anglers
           </p>
         </header>
 

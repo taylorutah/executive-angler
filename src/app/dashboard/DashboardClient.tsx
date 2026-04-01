@@ -257,13 +257,13 @@ export default function DashboardClient({
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
 
-            {/* ─── MOBILE-ONLY: Explore Feed (shown early, before rivers) ─── */}
+            {/* ─── MOBILE-ONLY: Recent Activity (shown early, before rivers) ─── */}
             {exploreFeed.length > 0 && (
               <section className="lg:hidden">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Compass className="h-4 w-4 text-[#0BA5C7]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Explore</h2>
+                    <h2 className="font-serif text-lg text-[#F0F6FC]">Recent Activity</h2>
                   </div>
                   <Link href="/feed" className="text-xs text-[#A8B2BD] hover:text-[#0BA5C7] transition-colors">
                     See all &rarr;
@@ -626,13 +626,13 @@ export default function DashboardClient({
               </section>
             )}
 
-            {/* Explore Feed (desktop sidebar only — mobile version is above) */}
+            {/* Recent Activity (desktop sidebar only — mobile version is above) */}
             {exploreFeed.length > 0 && (
               <section className="hidden lg:block">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Compass className="h-4 w-4 text-[#0BA5C7]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Explore</h2>
+                    <h2 className="font-serif text-lg text-[#F0F6FC]">Recent Activity</h2>
                   </div>
                   <Link href="/feed" className="text-xs text-[#A8B2BD] hover:text-[#0BA5C7] transition-colors">
                     See all &rarr;
@@ -670,41 +670,7 @@ export default function DashboardClient({
               </section>
             )}
 
-            {/* Suggested Anglers */}
-            {suggestedAnglers.length > 0 && (
-              <section>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-[#E8923A]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Suggested</h2>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  {suggestedAnglers.map((angler) => (
-                    <Link
-                      key={angler.user_id}
-                      href={`/anglers/${angler.username}`}
-                      className="flex items-center gap-3 p-3 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#E8923A]/50 transition-colors"
-                    >
-                      {angler.avatar_url ? (
-                        <Image src={angler.avatar_url} alt={angler.display_name || angler.username || "Angler"} width={32} height={32} className="rounded-full object-cover w-8 h-8" />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-[#E8923A]/10 flex items-center justify-center text-xs font-bold text-[#E8923A]">
-                          {String(angler.username?.charAt(0) ?? angler.display_name?.charAt(0) ?? "A").toUpperCase()}
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#F0F6FC] truncate">{angler.display_name || angler.username}</p>
-                        {angler.username && <p className="text-[10px] text-[#A8B2BD]">@{angler.username}</p>}
-                      </div>
-                      <span className="text-[10px] font-medium border border-[#E8923A]/40 text-[#E8923A] px-2 py-0.5 rounded hover:bg-[#E8923A]/10 transition-colors shrink-0">
-                        Follow
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
+            {/* Suggested Anglers — hidden per pivot (social discovery is noise) */}
 
             {/* Followed Rivers */}
             {favRivers.length > 0 && (

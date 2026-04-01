@@ -514,6 +514,10 @@ export async function GET(
     }
   }
 
+  // Gate leaderboard behind feature flag — data still calculates silently,
+  // but the API returns null when awards are not visible in production.
+  const awardsVisible = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
+
   return NextResponse.json({
     riverId,
     totalSessions,
@@ -535,6 +539,6 @@ export async function GET(
     gearStats,
     bestTimeOfDay,
     bestMonth,
-    leaderboard,
+    leaderboard: awardsVisible ? leaderboard : null,
   } satisfies RiverIntel);
 }
