@@ -11,6 +11,7 @@ import {
   Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
+import { isPermanentPro } from "@/lib/admin";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { createClient } from "@/lib/supabase/client";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
@@ -125,35 +126,30 @@ export default function Header() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (!authUser) { setUser(null); return; }
 
-      // Fetch profile — is_premium may be on profiles table or subscriptions table
-      const { data: profile, error: profileErr } = await supabase
+      const { data: profile } = await supabase
         .from("profiles")
         .select("avatar_url, display_name, is_premium")
         .eq("user_id", authUser.id)
         .maybeSingle();
 
-      let isPremium = profile?.is_premium === true;
-
-      // Fallback: check subscriptions table for active subscription
-      if (!isPremium) {
+      // Check premium: permanent pro whitelist → profiles.is_premium → subscriptions
+      let premium = isPermanentPro(authUser.email);
+      if (!premium) premium = profile?.is_premium === true;
+      if (!premium) {
         const { data: sub } = await supabase
           .from("subscriptions")
           .select("status")
           .eq("user_id", authUser.id)
           .in("status", ["active", "trialing"])
           .maybeSingle();
-        if (sub) isPremium = true;
-      }
-
-      if (profileErr) {
-        console.warn("[Header] profiles query error:", profileErr.message);
+        if (sub) premium = true;
       }
 
       setUser({
         email: authUser.email ?? undefined,
         avatarUrl: profile?.avatar_url || undefined,
         displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
-        isPremium,
+        isPremium: premium,
       });
     }
 
