@@ -1,5 +1,6 @@
 import type { Guide } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(r: Record<string, unknown>): Guide {
   return {
@@ -27,32 +28,39 @@ function mapRow(r: Record<string, unknown>): Guide {
 }
 
 export async function getAllGuides(): Promise<Guide[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("guides")
-    .select("*")
-    .order("name");
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("guides")
+      .select("*")
+      .order("name");
 
-  if (error) {
-    console.error("[getAllGuides] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllGuides] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllGuides");
 }
 
 export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("guides")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("guides")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  if (error) {
-    console.error("[getGuideBySlug] Supabase error:", error);
-    throw error;
-  }
-  return mapRow(data as Record<string, unknown>);
+    if (error) {
+      console.error("[getGuideBySlug] Supabase error:", error);
+      throw error;
+    }
+    return mapRow(data as Record<string, unknown>);
+  }, "getGuideBySlug").catch((err) => {
+    console.error(`[getGuideBySlug] All retries failed for "${slug}":`, err);
+    return undefined;
+  });
 }
 
 export async function getGuidesByRiver(riverId: string): Promise<Guide[]> {

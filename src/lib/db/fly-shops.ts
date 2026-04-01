@@ -1,5 +1,6 @@
 import type { FlyShop } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(r: Record<string, unknown>): FlyShop {
   return {
@@ -27,32 +28,39 @@ function mapRow(r: Record<string, unknown>): FlyShop {
 }
 
 export async function getAllFlyShops(): Promise<FlyShop[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("fly_shops")
-    .select("*")
-    .order("name");
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("fly_shops")
+      .select("*")
+      .order("name");
 
-  if (error) {
-    console.error("[getAllFlyShops] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllFlyShops] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllFlyShops");
 }
 
 export async function getFlyShopBySlug(slug: string): Promise<FlyShop | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("fly_shops")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("fly_shops")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  if (error) {
-    console.error("[getFlyShopBySlug] Supabase error:", error);
-    throw error;
-  }
-  return mapRow(data as Record<string, unknown>);
+    if (error) {
+      console.error("[getFlyShopBySlug] Supabase error:", error);
+      throw error;
+    }
+    return mapRow(data as Record<string, unknown>);
+  }, "getFlyShopBySlug").catch((err) => {
+    console.error(`[getFlyShopBySlug] All retries failed for "${slug}":`, err);
+    return undefined;
+  });
 }
 
 export async function getFlyShopsByDestination(destinationId: string): Promise<FlyShop[]> {

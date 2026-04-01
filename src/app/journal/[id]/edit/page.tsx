@@ -56,7 +56,8 @@ export default function EditSessionPage() {
   const [rivers, setRivers] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [spots, setSpots] = useState<Spot[]>([]);
-  const [flies, setFlies] = useState<{ id: string; name: string }[]>([]);
+  const [flies, setFlies] = useState<{ id: string; name: string; isCanonical?: boolean; category?: string }[]>([]);
+  const [catalogFlies, setCatalogFlies] = useState<{ id: string; name: string; category?: string }[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
   const [savingPhotos, setSavingPhotos] = useState(false);
   const [showSpotManager, setShowSpotManager] = useState(false);
@@ -153,8 +154,16 @@ export default function EditSessionPage() {
       }
       const created = await res.json();
       // Refresh fly list and auto-select the new fly on the target catch
-      const fliesRes = await fetch("/api/fishing/flies");
-      if (fliesRes.ok) setFlies(await fliesRes.json());
+      const fliesRes = await fetch("/api/fishing/flies?include_catalog=true");
+      if (fliesRes.ok) {
+        const fliesData = await fliesRes.json();
+        if (fliesData.userFlies) {
+          setFlies(fliesData.userFlies);
+          setCatalogFlies(fliesData.catalogFlies || []);
+        } else {
+          setFlies(fliesData);
+        }
+      }
       if (newFlyCatchIdx !== null) {
         updateCatch(newFlyCatchIdx, "fly_pattern_id", created.id);
       }
@@ -186,7 +195,7 @@ export default function EditSessionPage() {
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
         fetch("/api/fishing/spots"),
-        fetch("/api/fishing/flies"),
+        fetch("/api/fishing/flies?include_catalog=true"),
       ]);
 
       if (sessionRes.ok) {
@@ -259,7 +268,16 @@ export default function EditSessionPage() {
       if (riversRes.ok) setRivers(await riversRes.json());
       if (locsRes.ok) setLocations(await locsRes.json());
       if (spotsRes.ok) setSpots(await spotsRes.json());
-      if (fliesRes.ok) setFlies(await fliesRes.json());
+      if (fliesRes.ok) {
+        const fliesData = await fliesRes.json();
+        if (fliesData.userFlies) {
+          setFlies(fliesData.userFlies);
+          setCatalogFlies(fliesData.catalogFlies || []);
+        } else {
+          // Fallback for old response format
+          setFlies(fliesData);
+        }
+      }
       setLoading(false);
     }
     load();
@@ -704,7 +722,16 @@ export default function EditSessionPage() {
                           }
                         }}>
                           <option value="">— Select fly —</option>
-                          {flies.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                          {flies.length > 0 && (
+                            <optgroup label="My Fly Box">
+                              {flies.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                            </optgroup>
+                          )}
+                          {catalogFlies.length > 0 && (
+                            <optgroup label="Fly Library">
+                              {catalogFlies.map(f => <option key={`cat-${f.id}`} value={f.id}>{f.name}{f.category ? ` (${f.category})` : ""}</option>)}
+                            </optgroup>
+                          )}
                           <option value="__NEW__">+ Add New Fly</option>
                         </select>
                       </div>

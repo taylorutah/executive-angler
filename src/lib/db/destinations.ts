@@ -1,5 +1,6 @@
 import type { Destination } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(r: Record<string, unknown>): Destination {
   return {
@@ -31,33 +32,40 @@ function mapRow(r: Record<string, unknown>): Destination {
 }
 
 export async function getAllDestinations(): Promise<Destination[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("destinations")
-    .select("*")
-    .order("sort_order", { ascending: true })
-    .order("name");
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("destinations")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("name");
 
-  if (error) {
-    console.error("[getAllDestinations] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllDestinations] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllDestinations");
 }
 
 export async function getDestinationBySlug(slug: string): Promise<Destination | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("destinations")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("destinations")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  if (error) {
-    console.error("[getDestinationBySlug] Supabase error:", error);
-    throw error;
-  }
-  return mapRow(data as Record<string, unknown>);
+    if (error) {
+      console.error("[getDestinationBySlug] Supabase error:", error);
+      throw error;
+    }
+    return mapRow(data as Record<string, unknown>);
+  }, "getDestinationBySlug").catch((err) => {
+    console.error(`[getDestinationBySlug] All retries failed for "${slug}":`, err);
+    return undefined;
+  });
 }
 
 export async function getDestinationById(id: string): Promise<Destination | undefined> {

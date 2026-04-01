@@ -1,5 +1,6 @@
 import type { Article } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(r: Record<string, unknown>): Article {
   return {
@@ -28,32 +29,39 @@ function mapRow(r: Record<string, unknown>): Article {
 }
 
 export async function getAllArticles(): Promise<Article[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*")
-    .order("published_at", { ascending: false });
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .order("published_at", { ascending: false });
 
-  if (error) {
-    console.error("[getAllArticles] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllArticles] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllArticles");
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  if (error) {
-    console.error("[getArticleBySlug] Supabase error:", error);
-    throw error;
-  }
-  return mapRow(data as Record<string, unknown>);
+    if (error) {
+      console.error("[getArticleBySlug] Supabase error:", error);
+      throw error;
+    }
+    return mapRow(data as Record<string, unknown>);
+  }, "getArticleBySlug").catch((err) => {
+    console.error(`[getArticleBySlug] All retries failed for "${slug}":`, err);
+    return undefined;
+  });
 }
 
 export async function getFeaturedArticles(): Promise<Article[]> {

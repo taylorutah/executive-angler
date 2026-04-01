@@ -66,6 +66,28 @@ export async function GET(req: NextRequest) {
       console.error("Failed to fetch fly patterns:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Also fetch canonical flies from the library catalog
+    const includeCatalog = req.nextUrl.searchParams.get("include_catalog") === "true";
+    if (includeCatalog) {
+      const { data: catalog } = await supabase
+        .from("canonical_flies")
+        .select("id, name, category, sizes, hero_image_url")
+        .order("name");
+
+      return NextResponse.json({
+        userFlies: data ?? [],
+        catalogFlies: (catalog ?? []).map((f: Record<string, unknown>) => ({
+          id: f.id,
+          name: f.name,
+          category: f.category,
+          sizes: f.sizes,
+          heroImageUrl: f.hero_image_url,
+          isCanonical: true,
+        })),
+      });
+    }
+
     return NextResponse.json(data);
   } catch (err) {
     console.error("Fly patterns GET error:", err);

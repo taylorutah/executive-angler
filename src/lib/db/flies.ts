@@ -1,5 +1,6 @@
 import type { CanonicalFly } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(row: Record<string, unknown>): CanonicalFly {
   return {
@@ -60,35 +61,43 @@ function mapRow(row: Record<string, unknown>): CanonicalFly {
 }
 
 export async function getAllCanonicalFlies(): Promise<CanonicalFly[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("canonical_flies")
-    .select("*")
-    .order("rank", { ascending: true, nullsFirst: false });
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("canonical_flies")
+      .select("*")
+      .order("rank", { ascending: true, nullsFirst: false });
 
-  if (error) {
-    console.error("[getAllCanonicalFlies] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllCanonicalFlies] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllCanonicalFlies");
 }
 
 export async function getCanonicalFlyBySlug(
   slug: string
 ): Promise<CanonicalFly | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("canonical_flies")
-    .select("*")
-    .eq("slug", slug)
-    .maybeSingle();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("canonical_flies")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
 
-  if (error) {
-    console.error("[getCanonicalFlyBySlug] Supabase error:", error);
+    if (error) {
+      console.error("[getCanonicalFlyBySlug] Supabase error:", error);
+      throw error; // Let retry handle transient errors
+    }
+    if (!data) return undefined;
+    return mapRow(data as Record<string, unknown>);
+  }, "getCanonicalFlyBySlug").catch((err) => {
+    // After all retries exhausted, return undefined so notFound() handles it
+    console.error(`[getCanonicalFlyBySlug] All retries failed for "${slug}":`, err);
     return undefined;
-  }
-  if (!data) return undefined;
-  return mapRow(data as Record<string, unknown>);
+  });
 }
 
 export async function getFeaturedFlies(): Promise<CanonicalFly[]> {

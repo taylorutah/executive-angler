@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Menu, X, ChevronDown, Search, User, Star, Package, Bell,
+  Menu, X, ChevronDown, Search, User, Heart, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
-  BookOpen, ShoppingBag, Users2, Newspaper, Bug,
+  BookOpen, ShoppingBag, Users2, Newspaper, Bug, Wrench,
   Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
@@ -105,6 +105,7 @@ const EXPLORE_SECTIONS = [
 const MAIN_NAV = [
   { label: "Journal", href: "/journal", authOnly: true },
   { label: "Flies", href: "/flies", authOnly: false },
+  { label: "Workbench", href: "/journal/flies/workbench", authOnly: true },
   { label: "Rivers", href: "/rivers", authOnly: false },
   { label: "Feed", href: "/feed", authOnly: true },
 ];
@@ -416,14 +417,25 @@ export default function Header() {
                 Feed
               </Link>
               {user && (
-                <Link
-                  href="/journal"
-                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    pathname.startsWith("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  Journal
-                </Link>
+                <>
+                  <Link
+                    href="/journal"
+                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                      pathname === "/journal" || (pathname.startsWith("/journal") && !pathname.startsWith("/journal/flies/workbench")) ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    }`}
+                  >
+                    Journal
+                  </Link>
+                  <Link
+                    href="/journal/flies/workbench"
+                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                      pathname.startsWith("/journal/flies/workbench") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    }`}
+                  >
+                    <Wrench className="h-5 w-5 text-[#E8923A]" />
+                    Workbench
+                  </Link>
+                </>
               )}
               {!user?.isPremium && (
                 <Link
@@ -511,7 +523,7 @@ export default function Header() {
                       <MessageSquare className="h-5 w-5" /> Messages
                     </Link>
                     <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
-                      <Star className="h-5 w-5" /> Favorites
+                      <Heart className="h-5 w-5" /> Favorites
                     </Link>
                     <Link href="/account/gear" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <Package className="h-5 w-5" /> Gear Locker

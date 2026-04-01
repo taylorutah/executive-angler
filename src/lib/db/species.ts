@@ -1,5 +1,6 @@
 import type { Species } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(r: Record<string, unknown>): Species {
   return {
@@ -39,32 +40,39 @@ function mapRow(r: Record<string, unknown>): Species {
 }
 
 export async function getAllSpecies(): Promise<Species[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("species")
-    .select("*")
-    .order("common_name");
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("species")
+      .select("*")
+      .order("common_name");
 
-  if (error) {
-    console.error("[getAllSpecies] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllSpecies] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllSpecies");
 }
 
 export async function getSpeciesBySlug(slug: string): Promise<Species | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("species")
-    .select("*")
-    .eq("slug", slug)
-    .maybeSingle();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("species")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
 
-  if (error) {
-    console.error("[getSpeciesBySlug] Supabase error:", error);
+    if (error) {
+      console.error("[getSpeciesBySlug] Supabase error:", error);
+      throw error;
+    }
+    return data ? mapRow(data as Record<string, unknown>) : undefined;
+  }, "getSpeciesBySlug").catch((err) => {
+    console.error(`[getSpeciesBySlug] All retries failed for "${slug}":`, err);
     return undefined;
-  }
-  return data ? mapRow(data as Record<string, unknown>) : undefined;
+  });
 }
 
 export async function getFeaturedSpecies(): Promise<Species[]> {

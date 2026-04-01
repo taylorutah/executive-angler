@@ -1,5 +1,6 @@
 import type { River } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withRetry } from "./retry";
 
 function mapRow(row: Record<string, unknown>): River {
   return {
@@ -33,33 +34,40 @@ function mapRow(row: Record<string, unknown>): River {
 }
 
 export async function getAllRivers(): Promise<River[]> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("rivers")
-    .select("*")
-    .order("name", { ascending: true });
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("rivers")
+      .select("*")
+      .order("name", { ascending: true });
 
-  if (error) {
-    console.error("[getAllRivers] Supabase error:", error);
-    throw error;
-  }
-  return (data ?? []).map(mapRow);
+    if (error) {
+      console.error("[getAllRivers] Supabase error:", error);
+      throw error;
+    }
+    return (data ?? []).map(mapRow);
+  }, "getAllRivers");
 }
 
 export async function getRiverBySlug(slug: string): Promise<River | undefined> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("rivers")
-    .select("*")
-    .eq("slug", slug)
-    .maybeSingle();
+  return withRetry(async () => {
+    const supabase = createStaticClient();
+    const { data, error } = await supabase
+      .from("rivers")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
 
-  if (error) {
-    console.error("[getRiverBySlug] Supabase error:", error);
-    return undefined;  // Return undefined → caller calls notFound() → 404 not 500
-  }
-  if (!data) return undefined;
-  return mapRow(data as Record<string, unknown>);
+    if (error) {
+      console.error("[getRiverBySlug] Supabase error:", error);
+      throw error;
+    }
+    if (!data) return undefined;
+    return mapRow(data as Record<string, unknown>);
+  }, "getRiverBySlug").catch((err) => {
+    console.error(`[getRiverBySlug] All retries failed for "${slug}":`, err);
+    return undefined;
+  });
 }
 
 export async function getFeaturedRivers(): Promise<River[]> {

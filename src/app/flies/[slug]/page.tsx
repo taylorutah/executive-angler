@@ -19,6 +19,7 @@ import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
 import { RecipeCard } from "@/components/flies/RecipeCard";
+import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
 import { ExternalLink, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -117,6 +118,26 @@ export default async function FlyDetailPage({ params }: Props) {
     .select('*, material:tying_materials(*)')
     .eq('canonical_fly_id', fly.id)
     .order('step_position', { ascending: true });
+
+  // Build substitution map: collect all substitute_ids across ingredients, fetch in one query
+  let substitutionMap: Record<string, { id: string; slug: string; name: string; brand?: string; category: string }> = {};
+  if (recipeIngredients?.length) {
+    const allSubIds = recipeIngredients
+      .flatMap((ing: Record<string, unknown>) => (ing.substitute_ids as string[]) || [])
+      .filter(Boolean);
+    const uniqueSubIds = [...new Set(allSubIds)];
+    if (uniqueSubIds.length > 0) {
+      const { data: subMaterials } = await supabase
+        .from('tying_materials')
+        .select('id, slug, name, brand, category')
+        .in('id', uniqueSubIds);
+      if (subMaterials) {
+        for (const m of subMaterials) {
+          substitutionMap[m.id] = m;
+        }
+      }
+    }
+  }
 
   // Load related data
   const [relatedRivers, relatedFlies, allFlyShops, allArticles] = await Promise.all([
@@ -417,9 +438,12 @@ export default async function FlyDetailPage({ params }: Props) {
               {recipeIngredients && recipeIngredients.length > 0 && (
                 <ScrollAnimation delay={0.38}>
                   <div className="mt-10">
-                    <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD] mb-4">
-                      Tying Recipe
-                    </h2>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="font-heading text-sm uppercase tracking-wider text-[#A8B2BD]">
+                        Tying Recipe
+                      </h2>
+                      <RecipePdfButton flyId={fly.id} flyName={fly.name} isPremium={isPremium} />
+                    </div>
                     <RecipeCard
                       flyName={fly.name}
                       flyType={categoryLabel}
@@ -428,6 +452,7 @@ export default async function FlyDetailPage({ params }: Props) {
                         ...ing,
                         material: ing.material || undefined,
                       }))}
+                      substitutionMap={substitutionMap}
                     />
                   </div>
                 </ScrollAnimation>
