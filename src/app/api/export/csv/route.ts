@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { checkPremium } from '@/lib/admin';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -14,6 +15,11 @@ export async function GET(request: Request) {
 
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const premium = await checkPremium(supabase, user.id, user.email);
+  if (!premium) {
+    return NextResponse.json({ error: 'Premium required' }, { status: 403 });
   }
 
   try {
@@ -35,7 +41,7 @@ export async function GET(request: Request) {
     const { data: catches, error: catchesError } = sessionIds.length > 0
       ? await supabase
           .from('catches')
-          .select('*')
+          .select('*, fly_pattern:fly_patterns(name)')
           .in('session_id', sessionIds)
           .order('created_at', { ascending: true })
       : { data: [], error: null };
@@ -45,24 +51,21 @@ export async function GET(request: Request) {
     // Build CSV — one row per catch, with session context
     const headers = [
       'Date',
+      'Title',
       'River',
-      'Section',
-      'Session Title',
+      'Location',
+      'Water Temp (°F)',
       'Weather',
-      'Water Temp (F)',
-      'Water Clarity',
-      'Session Total Fish',
+      'Clarity',
+      'Flow',
       'Species',
       'Length (in)',
-      'Fly Name',
+      'Fly Pattern',
       'Fly Size',
       'Fly Position',
-      'Time Caught',
-      'Catch Notes',
-      'Session Notes',
-      'Tags',
-      'Latitude',
-      'Longitude',
+      'Bead Size',
+      'Quantities',
+      'Notes',
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,46 +79,33 @@ export async function GET(request: Request) {
 
     for (const session of sessions || []) {
       const sessionCatches = catchesBySession.get(session.id) || [];
+      const sessionBase = [
+        session.date || '',
+        session.title || '',
+        session.river_name || '',
+        session.location || session.section || '',
+        session.water_temp_f?.toString() || '',
+        session.weather || '',
+        session.water_clarity || '',
+        session.river_flow_cfs?.toString() || '',
+      ];
 
       if (sessionCatches.length === 0) {
-        // Session with no individual catches — still include it
-        rows.push([
-          session.date || '',
-          session.river_name || '',
-          session.section || '',
-          session.title || '',
-          session.weather || '',
-          session.water_temp_f?.toString() || '',
-          session.water_clarity || '',
-          session.total_fish?.toString() || '0',
-          '', '', '', '', '', '', '',
-          session.notes || '',
-          (session.tags || []).join('; '),
-          session.latitude?.toString() || '',
-          session.longitude?.toString() || '',
-        ]);
+        // Session with no individual catches — one row with empty catch columns
+        rows.push([...sessionBase, '', '', '', '', '', '', '', session.notes || '']);
       } else {
         for (const c of sessionCatches) {
+          const flyName = c.fly_pattern?.name || c.fly_name || '';
           rows.push([
-            session.date || '',
-            session.river_name || '',
-            session.section || '',
-            session.title || '',
-            session.weather || '',
-            session.water_temp_f?.toString() || '',
-            session.water_clarity || '',
-            session.total_fish?.toString() || '0',
+            ...sessionBase,
             c.species || '',
             c.length_inches?.toString() || '',
-            c.fly_name || '',
+            flyName,
             c.fly_size || '',
             c.fly_position || '',
-            c.time_caught || c.time || '',
-            c.catch_note || c.notes || '',
+            c.bead_size || '',
+            c.quantities?.toString() || '1',
             session.notes || '',
-            (session.tags || []).join('; '),
-            c.latitude?.toString() || session.latitude?.toString() || '',
-            c.longitude?.toString() || session.longitude?.toString() || '',
           ]);
         }
       }
@@ -135,8 +125,8 @@ export async function GET(request: Request) {
     ].join('\n');
 
     const filename = from && to
-      ? `executive-angler-journal-${from}-to-${to}.csv`
-      : `executive-angler-journal-export.csv`;
+      ? `executive-angler-export-${from}-to-${to}.csv`
+      : 'executive-angler-export.csv';
 
     return new Response(csvContent, {
       headers: {

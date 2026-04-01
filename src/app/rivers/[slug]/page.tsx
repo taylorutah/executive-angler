@@ -19,6 +19,7 @@ import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
 import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
+import FlowChart from "@/components/rivers/FlowChart";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
@@ -237,7 +238,16 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
-              {/* Personal Flow Overlay — catch data on USGS flow chart (premium) */}
+              {/* 30-Day USGS Flow Chart with session overlay */}
+              <ScrollAnimation>
+                <FlowChart
+                  usgsGaugeId={river.usgsGaugeId ?? null}
+                  riverName={river.name}
+                  riverId={river.id}
+                />
+              </ScrollAnimation>
+
+              {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
               <PersonalFlowOverlay riverId={river.id} />
 
               {/* Overview — collapsible, full text in DOM for SEO */}

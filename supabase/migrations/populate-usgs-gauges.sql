@@ -37,8 +37,8 @@ UPDATE rivers SET usgs_gauge_id = '[{"site_id":"06036805","name":"At Old Faithfu
 -- South Platte River (CO) — 2 gauges
 UPDATE rivers SET usgs_gauge_id = '[{"site_id":"06700000","name":"Above Cheesman Lake","section":"Deckers"},{"site_id":"06701900","name":"Below Cheesman Dam","section":"Cheesman Canyon"}]' WHERE id = 'river-south-platte';
 
--- Arkansas River (CO) — 3 gauges
-UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07087200","name":"At Buena Vista","section":"Upper Arkansas"},{"site_id":"07094500","name":"At Parkdale","section":"Royal Gorge"},{"site_id":"07109500","name":"Below Pueblo Dam","section":"Pueblo Tailwater"}]' WHERE id = 'river-arkansas-co';
+-- Arkansas River (CO) — 3 gauges (Parkdale 07094500 dead, replaced with Wellsville 07093700)
+UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07087200","name":"At Buena Vista","section":"Upper Arkansas"},{"site_id":"07093700","name":"Near Wellsville","section":"Royal Gorge"},{"site_id":"07109500","name":"Below Pueblo Dam","section":"Pueblo Tailwater"}]' WHERE id = 'river-arkansas-co';
 
 -- Frying Pan River (CO) — 1 gauge
 UPDATE rivers SET usgs_gauge_id = '[{"site_id":"09080400","name":"Near Ruedi","section":"Below Ruedi Dam"}]' WHERE id = 'river-frying-pan';
@@ -85,8 +85,8 @@ UPDATE rivers SET usgs_gauge_id = '[{"site_id":"04123500","name":"Near Grayling"
 -- White River (AR) — 2 gauges
 UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07057370","name":"Near Norfork","section":"Below Bull Shoals Dam"},{"site_id":"07060500","name":"At Calico Rock","section":"Middle Tailwater"}]' WHERE id = 'river-white-river-ar';
 
--- Norfork River (AR) — 1 gauge (White River gauge as proxy)
-UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07057370","name":"White River near Norfork","section":"Norfork Tailwater Area"}]' WHERE id = 'river-norfork';
+-- Norfork River (AR) — 1 gauge (all actual North Fork gauges discontinued; Army Corps controls dam releases)
+UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07057370","name":"White River near Norfork","section":"Norfork Tailwater (White River gauge)"}]' WHERE id = 'river-norfork';
 
 -- Little Red River (AR) — 2 gauges
 UPDATE rivers SET usgs_gauge_id = '[{"site_id":"07076000","name":"Near Heber Springs","section":"Below Greers Ferry Dam"},{"site_id":"07076517","name":"Near Dewey","section":"Lower Tailwater"}]' WHERE id = 'river-little-red';

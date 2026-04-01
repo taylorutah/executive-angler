@@ -19,13 +19,21 @@ export default async function TrophyWallPage() {
     redirect('/login?redirect=/journal/trophy-wall');
   }
 
-  // Fetch all catches with session data
+  // Fetch all catches with session data (include fish_image_urls for gallery)
   const { data: catches } = await supabase
     .from('catches')
-    .select('id, session_id, species, length_inches, fly_name, fly_size, fish_image_url, time_caught, created_at')
+    .select('id, session_id, species, length_inches, fly_name, fly_size, fish_image_url, fish_image_urls, time_caught, created_at')
     .eq('user_id', user.id)
     .not('length_inches', 'is', null)
     .order('length_inches', { ascending: false });
+
+  // Fetch all catches with photos (including those without length)
+  const { data: photoCatches } = await supabase
+    .from('catches')
+    .select('id, session_id, species, length_inches, fly_name, fly_size, fish_image_url, fish_image_urls, time_caught, created_at')
+    .eq('user_id', user.id)
+    .or('fish_image_url.neq.,fish_image_urls.neq.{}')
+    .order('created_at', { ascending: false });
 
   // Fetch all sessions for context
   const { data: sessions } = await supabase
@@ -51,7 +59,7 @@ export default async function TrophyWallPage() {
           </p>
         </div>
 
-        <TrophyWallClient catches={catches || []} sessions={sessions || []} />
+        <TrophyWallClient catches={catches || []} sessions={sessions || []} photoCatches={photoCatches || []} />
       </div>
     </div>
   );

@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { Heart, ListChecks, Layers } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Heart, ListChecks, Layers, Check, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 type Tab = 'all' | 'favorites' | 'tie-next';
 
 const TYPE_ICONS: Record<string, string> = {
-  "Nymph": "🪝",
-  "Dry Fly": "🦋",
-  "Streamer": "🐟",
-  "Wet Fly": "💧",
-  "Emerger": "🌊",
-  "Terrestrial": "🦗",
-  "Egg": "🟠",
-  "Midge": "🦟",
-  "Other": "🪰",
+  "Nymph": "\uD83E\uDE9D",
+  "Dry Fly": "\uD83E\uDD8B",
+  "Streamer": "\uD83D\uDC1F",
+  "Wet Fly": "\uD83D\uDCA7",
+  "Emerger": "\uD83C\uDF0A",
+  "Terrestrial": "\uD83E\uDD97",
+  "Egg": "\uD83D\uDFE0",
+  "Midge": "\uD83E\uDD9F",
+  "Other": "\uD83E\uDEB0",
 };
 
 /** Normalize array fields from DB */
@@ -88,16 +88,274 @@ interface FlyBoxTabsProps {
   canonicalNames: string[];
 }
 
-export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canonicalNames }: FlyBoxTabsProps) {
+// Toggle button for favorite/tie-next actions on a card
+function CardActions({
+  card,
+  onToggleFavorite,
+  onToggleTieNext,
+}: {
+  card: UnifiedFly;
+  onToggleFavorite: (card: UnifiedFly) => void;
+  onToggleTieNext: (card: UnifiedFly) => void;
+}) {
+  const isFav = card.source === 'library' ? card.entry.is_favorite : card.fly.is_favorite;
+  const isTie = card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
+
+  return (
+    <div className="flex gap-1">
+      <button
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(card); }}
+        title={isFav ? "Remove from Favorites" : "Add to Favorites"}
+        className={`p-1 rounded transition-colors ${
+          isFav
+            ? 'text-red-400 hover:text-red-300'
+            : 'text-[#6E7681] hover:text-red-400'
+        }`}
+      >
+        <Heart className={`h-3 w-3 ${isFav ? 'fill-red-400' : ''}`} />
+      </button>
+      <button
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleTieNext(card); }}
+        title={isTie ? "Remove from Tie Next" : "Add to Tie Next"}
+        className={`p-1 rounded transition-colors ${
+          isTie
+            ? 'text-[#E8923A] hover:text-[#F0A65A]'
+            : 'text-[#6E7681] hover:text-[#E8923A]'
+        }`}
+      >
+        <ListChecks className={`h-3 w-3`} />
+      </button>
+    </div>
+  );
+}
+
+// Completion checkbox for tie-next cards
+function TieNextCheckbox({
+  card,
+  onComplete,
+  loading,
+}: {
+  card: UnifiedFly;
+  onComplete: (card: UnifiedFly) => void;
+  loading: boolean;
+}) {
+  return (
+    <button
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onComplete(card); }}
+      title="Mark as tied"
+      disabled={loading}
+      className="flex items-center gap-1 px-2 py-1 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20 text-[10px] font-semibold transition-colors"
+    >
+      {loading ? (
+        <Loader2 className="h-3 w-3 animate-spin" />
+      ) : (
+        <Check className="h-3 w-3" />
+      )}
+      Done
+    </button>
+  );
+}
+
+export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTieNextCount, sortedTypes, grouped: initialGrouped, canonicalNames }: FlyBoxTabsProps) {
   const [tab, setTab] = useState<Tab>('all');
+  const [grouped, setGrouped] = useState(initialGrouped);
+  const [favCount, setFavCount] = useState(initialFavCount);
+  const [tieNextCount, setTieNextCount] = useState(initialTieNextCount);
+  const [completingIds, setCompletingIds] = useState<Set<string>>(new Set());
 
   const canonicalNameSet = new Set(canonicalNames);
+
+  const getCardId = (card: UnifiedFly) =>
+    card.source === 'library' ? card.entry.id : card.fly.id;
+
+  const toggleFavorite = useCallback(async (card: UnifiedFly) => {
+    const currentFav = card.source === 'library' ? card.entry.is_favorite : card.fly.is_favorite;
+    const newFav = !currentFav;
+
+    // Optimistic update
+    setGrouped(prev => {
+      const next = { ...prev };
+      for (const type of Object.keys(next)) {
+        next[type] = next[type].map(c => {
+          if (getCardId(c) !== getCardId(card)) return c;
+          if (c.source === 'library') return { ...c, entry: { ...c.entry, is_favorite: newFav } };
+          return { ...c, fly: { ...c.fly, is_favorite: newFav } };
+        });
+      }
+      return next;
+    });
+    setFavCount(prev => newFav ? prev + 1 : prev - 1);
+
+    // API call
+    const body = card.source === 'library'
+      ? { flyBoxId: card.entry.id, favorite: newFav }
+      : { flyPatternId: card.fly.id, favorite: newFav };
+
+    try {
+      const res = await fetch('/api/fishing/fly-favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        // Revert on failure
+        setGrouped(prev => {
+          const next = { ...prev };
+          for (const type of Object.keys(next)) {
+            next[type] = next[type].map(c => {
+              if (getCardId(c) !== getCardId(card)) return c;
+              if (c.source === 'library') return { ...c, entry: { ...c.entry, is_favorite: currentFav } };
+              return { ...c, fly: { ...c.fly, is_favorite: currentFav } };
+            });
+          }
+          return next;
+        });
+        setFavCount(prev => newFav ? prev - 1 : prev + 1);
+      }
+    } catch {
+      // Revert
+      setGrouped(prev => {
+        const next = { ...prev };
+        for (const type of Object.keys(next)) {
+          next[type] = next[type].map(c => {
+            if (getCardId(c) !== getCardId(card)) return c;
+            if (c.source === 'library') return { ...c, entry: { ...c.entry, is_favorite: currentFav } };
+            return { ...c, fly: { ...c.fly, is_favorite: currentFav } };
+          });
+        }
+        return next;
+      });
+      setFavCount(prev => newFav ? prev - 1 : prev + 1);
+    }
+  }, []);
+
+  const toggleTieNext = useCallback(async (card: UnifiedFly) => {
+    const currentTie = card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
+    const newTie = !currentTie;
+
+    // Optimistic update
+    setGrouped(prev => {
+      const next = { ...prev };
+      for (const type of Object.keys(next)) {
+        next[type] = next[type].map(c => {
+          if (getCardId(c) !== getCardId(card)) return c;
+          if (c.source === 'library') return { ...c, entry: { ...c.entry, is_tie_next: newTie } };
+          return { ...c, fly: { ...c.fly, is_tie_next: newTie } };
+        });
+      }
+      return next;
+    });
+    setTieNextCount(prev => newTie ? prev + 1 : prev - 1);
+
+    // API call
+    if (newTie) {
+      const body = card.source === 'library'
+        ? { flyBoxId: card.entry.id }
+        : { flyPatternId: card.fly.id };
+
+      try {
+        const res = await fetch('/api/fishing/tie-next', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error();
+      } catch {
+        // Revert
+        setGrouped(prev => {
+          const next = { ...prev };
+          for (const type of Object.keys(next)) {
+            next[type] = next[type].map(c => {
+              if (getCardId(c) !== getCardId(card)) return c;
+              if (c.source === 'library') return { ...c, entry: { ...c.entry, is_tie_next: currentTie } };
+              return { ...c, fly: { ...c.fly, is_tie_next: currentTie } };
+            });
+          }
+          return next;
+        });
+        setTieNextCount(prev => newTie ? prev - 1 : prev + 1);
+      }
+    } else {
+      const param = card.source === 'library'
+        ? `flyBoxId=${card.entry.id}`
+        : `flyPatternId=${card.fly.id}`;
+
+      try {
+        const res = await fetch(`/api/fishing/tie-next?${param}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error();
+      } catch {
+        // Revert
+        setGrouped(prev => {
+          const next = { ...prev };
+          for (const type of Object.keys(next)) {
+            next[type] = next[type].map(c => {
+              if (getCardId(c) !== getCardId(card)) return c;
+              if (c.source === 'library') return { ...c, entry: { ...c.entry, is_tie_next: currentTie } };
+              return { ...c, fly: { ...c.fly, is_tie_next: currentTie } };
+            });
+          }
+          return next;
+        });
+        setTieNextCount(prev => newTie ? prev - 1 : prev + 1);
+      }
+    }
+  }, []);
+
+  const completeTieNext = useCallback(async (card: UnifiedFly) => {
+    const id = getCardId(card);
+    setCompletingIds(prev => new Set(prev).add(id));
+
+    const param = card.source === 'library'
+      ? `flyBoxId=${card.entry.id}`
+      : `flyPatternId=${card.fly.id}`;
+
+    try {
+      const res = await fetch(`/api/fishing/tie-next?${param}`, { method: 'DELETE' });
+      if (res.ok) {
+        // Remove tie-next flag optimistically
+        setGrouped(prev => {
+          const next = { ...prev };
+          for (const type of Object.keys(next)) {
+            next[type] = next[type].map(c => {
+              if (getCardId(c) !== id) return c;
+              if (c.source === 'library') return { ...c, entry: { ...c.entry, is_tie_next: false } };
+              return { ...c, fly: { ...c.fly, is_tie_next: false } };
+            });
+          }
+          return next;
+        });
+        setTieNextCount(prev => Math.max(0, prev - 1));
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setCompletingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  }, []);
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode; count?: number }[] = [
     { key: 'all', label: 'My Box', icon: <Layers className="h-3.5 w-3.5" /> },
     { key: 'favorites', label: 'Favorites', icon: <Heart className="h-3.5 w-3.5" />, count: favCount },
     { key: 'tie-next', label: 'Tie Next', icon: <ListChecks className="h-3.5 w-3.5" />, count: tieNextCount },
   ];
+
+  // Check if any flies match the current filter
+  const hasVisibleCards = sortedTypes.some(type =>
+    (grouped[type] || []).some(card => {
+      if (tab === 'all') return true;
+      if (tab === 'favorites') {
+        return card.source === 'library' ? card.entry.is_favorite : card.fly.is_favorite;
+      }
+      if (tab === 'tie-next') {
+        return card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
+      }
+      return true;
+    })
+  );
 
   return (
     <div>
@@ -123,6 +381,25 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
         ))}
       </div>
 
+      {!hasVisibleCards && (
+        <div className="text-center py-16">
+          {tab === 'favorites' && (
+            <>
+              <Heart className="h-10 w-10 mx-auto text-[#6E7681] mb-3" />
+              <p className="text-[#A8B2BD] mb-1">No favorite flies yet</p>
+              <p className="text-sm text-[#6E7681]">Tap the heart icon on any fly to save it here</p>
+            </>
+          )}
+          {tab === 'tie-next' && (
+            <>
+              <ListChecks className="h-10 w-10 mx-auto text-[#6E7681] mb-3" />
+              <p className="text-[#A8B2BD] mb-1">Your tying queue is empty</p>
+              <p className="text-sm text-[#6E7681]">Add flies to your Tie Next queue to plan your next session at the vise</p>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="space-y-10">
         {sortedTypes.map(type => {
           const filteredCards = (grouped[type] || []).filter(card => {
@@ -141,7 +418,7 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
           return (
             <section key={type}>
               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
-                <span className="text-lg">{TYPE_ICONS[type] || "🪰"}</span>
+                <span className="text-lg">{TYPE_ICONS[type] || "\uD83E\uDEB0"}</span>
                 <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
                 <span className="text-xs text-[#6E7681] ml-1">{filteredCards.length}</span>
               </div>
@@ -161,7 +438,7 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
                               />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center bg-[#0D1117]">
-                                <span className="text-3xl">{TYPE_ICONS[type] || "🪰"}</span>
+                                <span className="text-3xl">{TYPE_ICONS[type] || "\uD83E\uDEB0"}</span>
                               </div>
                             )}
                           </div>
@@ -174,13 +451,19 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
                             )}
                           </div>
                         </Link>
-                        <div className="mt-auto px-2 pb-2">
-                          <Link
-                            href={`/flies/${cf.slug}`}
-                            className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#A8B2BD] hover:bg-[#2D333B] transition-colors"
-                          >
-                            View Pattern →
-                          </Link>
+                        <div className="mt-auto px-2 pb-2 flex items-center justify-between">
+                          <CardActions card={card} onToggleFavorite={toggleFavorite} onToggleTieNext={toggleTieNext} />
+                          {tab === 'tie-next' && (
+                            <TieNextCheckbox card={card} onComplete={completeTieNext} loading={completingIds.has(card.entry.id)} />
+                          )}
+                          {tab !== 'tie-next' && (
+                            <Link
+                              href={`/flies/${cf.slug}`}
+                              className="flex items-center justify-center gap-1 py-1 px-2 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#A8B2BD] hover:bg-[#2D333B] transition-colors"
+                            >
+                              View
+                            </Link>
+                          )}
                         </div>
                       </div>
                     );
@@ -202,7 +485,7 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
                             />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "🪰"}</span>
+                              <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "\uD83E\uDEB0"}</span>
                             </div>
                           )}
                         </div>
@@ -224,18 +507,24 @@ export function FlyBoxTabs({ favCount, tieNextCount, sortedTypes, grouped, canon
                           </div>
                         </div>
                       </Link>
-                      <div className="mt-auto px-2 pb-2">
-                        {canonicalNameSet.has(fly.name.toLowerCase().trim()) ? (
-                          <span className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
-                            ✓ In Fly Library
-                          </span>
-                        ) : (
-                          <Link
-                            href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
-                            className="flex items-center justify-center gap-1 w-full py-1 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                          >
-                            🪰 Submit to Library
-                          </Link>
+                      <div className="mt-auto px-2 pb-2 flex items-center justify-between">
+                        <CardActions card={card} onToggleFavorite={toggleFavorite} onToggleTieNext={toggleTieNext} />
+                        {tab === 'tie-next' && (
+                          <TieNextCheckbox card={card} onComplete={completeTieNext} loading={completingIds.has(fly.id)} />
+                        )}
+                        {tab !== 'tie-next' && (
+                          canonicalNameSet.has(fly.name.toLowerCase().trim()) ? (
+                            <span className="flex items-center gap-1 py-1 px-2 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
+                              In Library
+                            </span>
+                          ) : (
+                            <Link
+                              href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
+                              className="flex items-center gap-1 py-1 px-2 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                            >
+                              Submit
+                            </Link>
+                          )
                         )}
                       </div>
                     </div>

@@ -29,6 +29,7 @@ function mapRow(row: Record<string, unknown>): River {
     hatchChart: (row.hatch_chart as River["hatchChart"]) ?? [],
     metaTitle: (row.meta_title ?? "") as string,
     metaDescription: (row.meta_description ?? "") as string,
+    usgsGaugeId: (row.usgs_gauge_id as string | null) ?? null,
     featured: (row.featured ?? false) as boolean,
   };
 }

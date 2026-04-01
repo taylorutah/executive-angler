@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import type { TyingMaterial, MaterialCategory } from '@/types/materials';
-import { Search, X } from 'lucide-react';
+import { Search, X, Plus } from 'lucide-react';
+import { SubmitMaterialForm } from './SubmitMaterialForm';
 
 interface MaterialAutocompleteProps {
   category?: MaterialCategory;
@@ -24,6 +25,7 @@ export function MaterialAutocomplete({
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [useFreeText, setUseFreeText] = useState(!!initialFreeText && !value);
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const debounceRef = useRef<any>(null);
@@ -157,16 +159,41 @@ export function MaterialAutocomplete({
         </div>
       )}
 
-      {isOpen && !loading && results.length === 0 && query.length >= 2 && (
+      {isOpen && !loading && results.length === 0 && query.length >= 2 && !showSubmitForm && (
         <div className="absolute z-50 mt-1 w-full bg-[#161B22] border border-[#21262D] rounded-lg shadow-xl p-3">
           <div className="text-sm text-[#6E7681]">No materials found</div>
-          <button
-            type="button"
-            onClick={handleFreeTextToggle}
-            className="mt-1 text-xs text-[#E8923A] hover:underline"
-          >
-            Use free text instead
-          </button>
+          <div className="flex items-center gap-3 mt-2">
+            <button
+              type="button"
+              onClick={handleFreeTextToggle}
+              className="text-xs text-[#E8923A] hover:underline"
+            >
+              Use free text instead
+            </button>
+            <span className="text-xs text-[#484F58]">or</span>
+            <button
+              type="button"
+              onClick={() => { setIsOpen(false); setShowSubmitForm(true); }}
+              className="flex items-center gap-1 text-xs text-[#0BA5C7] hover:underline"
+            >
+              <Plus className="w-3 h-3" />
+              Submit a new material
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showSubmitForm && (
+        <div className="mt-2 rounded-lg border border-[#21262D] bg-[#161B22] p-4">
+          <h4 className="text-sm font-medium text-[#F0F6FC] mb-3">Submit a New Material</h4>
+          <SubmitMaterialForm
+            initialName={query}
+            initialCategory={category}
+            onSuccess={() => {
+              setShowSubmitForm(false);
+            }}
+            onCancel={() => setShowSubmitForm(false)}
+          />
         </div>
       )}
     </div>

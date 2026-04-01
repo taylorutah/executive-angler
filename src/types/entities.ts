@@ -52,6 +52,7 @@ export interface River {
   hatchChart?: HatchMonth[];
   metaTitle?: string;
   metaDescription?: string;
+  usgsGaugeId?: string | null;
   featured: boolean;
 }
 

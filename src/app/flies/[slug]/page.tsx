@@ -18,6 +18,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
+import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
@@ -640,11 +641,14 @@ export default async function FlyDetailPage({ params }: Props) {
               {/* Quick Facts */}
               <QuickFacts title="Pattern Details" facts={quickFacts} />
 
-              {/* Add to Fly Box */}
-              <AddToFlyBoxButton
-                canonicalFlyId={fly.id}
-                flyName={fly.name}
-              />
+              {/* Add to Fly Box + Favorite */}
+              <div className="space-y-2">
+                <AddToFlyBoxButton
+                  canonicalFlyId={fly.id}
+                  flyName={fly.name}
+                />
+                <FlyFavoriteButton canonicalFlyId={fly.id} />
+              </div>
 
               {/* Buy This Fly */}
               {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
@@ -790,10 +794,13 @@ export default async function FlyDetailPage({ params }: Props) {
           <div className="lg:hidden mt-8 space-y-6">
             <QuickFacts title="Pattern Details" facts={quickFacts} />
 
-            <AddToFlyBoxButton
-              canonicalFlyId={fly.id}
-              flyName={fly.name}
-            />
+            <div className="space-y-2">
+              <AddToFlyBoxButton
+                canonicalFlyId={fly.id}
+                flyName={fly.name}
+              />
+              <FlyFavoriteButton canonicalFlyId={fly.id} />
+            </div>
 
             {/* Buy This Fly */}
             {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
@@ -898,7 +905,12 @@ export default async function FlyDetailPage({ params }: Props) {
 
       {/* Sticky mobile CTA */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D1117]/95 backdrop-blur-sm border-t border-[#21262D] px-4 py-3 safe-area-bottom">
-        <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+          </div>
+          <FlyFavoriteButton canonicalFlyId={fly.id} compact />
+        </div>
       </div>
     </>
   );
