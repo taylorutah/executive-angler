@@ -56,7 +56,7 @@ export default async function HomePage() {
           alt=""
           fill
           priority
-          className="object-cover opacity-[0.07] pointer-events-none"
+          className="object-cover opacity-[0.09] pointer-events-none"
           sizes="100vw"
         />
         {/* Dark gradient overlay to blend edges */}
@@ -386,7 +386,7 @@ export default async function HomePage() {
 
       {/* ── 8. FINAL CTA ─────────────────────────────────────────────── */}
       <section className="relative bg-[#0D1117] border-t border-[#21262D] py-24 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.07] blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <ScrollAnimation>
             <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-5xl mb-4">
