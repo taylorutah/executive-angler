@@ -387,7 +387,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
                 + Log Session
               </Link>
-              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#21262D] px-4 py-2.5 text-sm font-medium text-[#A8B2BD] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
+              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#00B4D8] bg-[#00B4D8]/10 px-4 py-2.5 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors">
                 + Add Fly Pattern
               </Link>
             </div>
