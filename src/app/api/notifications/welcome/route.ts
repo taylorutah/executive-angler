@@ -37,8 +37,8 @@ function buildWelcomeHtml(displayName?: string) {
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
         <!-- Logo -->
-        <tr><td style="padding:0 24px 32px;">
-          <img src="${SITE_URL}/logo-email.png" alt="Executive Angler" width="180" style="display:block;" />
+        <tr><td style="padding:0 24px 32px;" align="center">
+          <img src="${SITE_URL}/images/logo-email.png" alt="Executive Angler" width="240" style="display:block;margin:0 auto;" />
         </td></tr>
         <!-- Card -->
         <tr><td style="background-color:#161B22;border-radius:12px;border:1px solid #21262D;padding:32px 28px;">
