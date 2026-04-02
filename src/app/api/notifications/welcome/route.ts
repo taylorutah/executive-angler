@@ -45,23 +45,29 @@ function buildWelcomeHtml(displayName?: string) {
           <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#F0F6FC;line-height:1.3;">
             ${greeting}
           </h1>
-          <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A8B2BD;">
-            You just joined the most dedicated community of fly anglers on the planet.
-            Executive Angler helps you track every session, log every catch, and turn
-            your time on the water into actionable insights.
-          </p>
-          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A8B2BD;">
-            Here is what to do next:
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A8B2BD;">
+            Your fishing just got smarter. Executive Angler is the intelligence platform
+            built for serious fly anglers &mdash; log every session, build fly recipes,
+            track live river conditions, and let your data reveal what actually works.
           </p>
 
-          <!-- Steps -->
+          <!-- Divider -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+            <tr><td style="border-top:1px solid #21262D;"></td></tr>
+          </table>
+
+          <p style="margin:0 0 20px;font-size:13px;font-weight:600;color:#E8923A;text-transform:uppercase;letter-spacing:0.1em;">
+            What you can do right now
+          </p>
+
+          <!-- Features -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
             <tr>
               <td style="padding:8px 0;vertical-align:top;width:32px;">
                 <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">1</span>
               </td>
               <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Download the iOS app</strong> and start your first fishing session with one tap.
+                <strong style="color:#F0F6FC;">Log your first session</strong> &mdash; GPS, weather, water conditions, and catch details are captured automatically. Every outing builds your personal fishing intelligence.
               </td>
             </tr>
             <tr>
@@ -69,7 +75,7 @@ function buildWelcomeHtml(displayName?: string) {
                 <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">2</span>
               </td>
               <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Explore destinations and rivers</strong> with our editorial guides and hatch charts.
+                <strong style="color:#F0F6FC;">Browse the fly library</strong> &mdash; 120+ patterns with structured recipes, 500+ tying materials, and a workbench to build and organize your own.
               </td>
             </tr>
             <tr>
@@ -77,14 +83,40 @@ function buildWelcomeHtml(displayName?: string) {
                 <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">3</span>
               </td>
               <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Follow other anglers</strong> to see their sessions and learn from their patterns.
+                <strong style="color:#F0F6FC;">Explore 138 rivers</strong> &mdash; live USGS flow data, hatch charts, access points, and conditions reports from the community.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;vertical-align:top;width:32px;">
+                <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">4</span>
+              </td>
+              <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
+                <strong style="color:#F0F6FC;">Discover lodges, guides, and fly shops</strong> &mdash; curated directory with Google Reviews across 31 destinations.
               </td>
             </tr>
           </table>
 
-          <a href="${SITE_URL}/dashboard" style="display:inline-block;background-color:#E8923A;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:8px;">
-            Go to Your Dashboard
+          <a href="${SITE_URL}/journal" style="display:inline-block;background-color:#E8923A;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:8px;">
+            Start Your Journal
           </a>
+
+          <!-- Pro teaser -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;">
+            <tr><td style="border-top:1px solid #21262D;"></td></tr>
+          </table>
+          <p style="margin:20px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
+            <strong style="color:#A8B2BD;">Unlock Pro</strong> for AI-powered journal insights,
+            personal catch overlays on flow charts, unlimited fly patterns, PDF recipe export,
+            and full data export.
+            <a href="${SITE_URL}/pricing" style="color:#E8923A;text-decoration:none;font-weight:600;">See plans &rarr;</a>
+          </p>
+
+          <!-- Mobile apps teaser -->
+          <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
+            <span style="color:#0BA5C7;">&#9679;</span>&nbsp;
+            <strong style="color:#A8B2BD;">iOS &amp; Android apps coming soon</strong> &mdash;
+            log sessions on the water, sync to your account, and pick up where you left off on the web.
+          </p>
         </td></tr>
         <!-- Footer -->
         <tr><td style="padding:24px 24px 0;text-align:center;">

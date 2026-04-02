@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
-    console.error("Checkout error:", err.message);
-    return NextResponse.json({ error: "Checkout failed" }, { status: 500 });
+    console.error("Checkout error:", err.message, err.type, err.statusCode, JSON.stringify(err.raw || {}));
+    return NextResponse.json({ error: err.message || "Checkout failed" }, { status: 500 });
   }
 }

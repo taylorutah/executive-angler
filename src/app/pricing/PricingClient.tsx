@@ -63,8 +63,12 @@ export default function PricingClient({ isLoggedIn, isPremium }: Props) {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else {
+        console.error("Checkout response:", data);
+        alert(data.error || "Checkout failed. Please try again.");
       }
-    } catch {
+    } catch (err) {
+      console.error("Checkout fetch error:", err);
       alert("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
