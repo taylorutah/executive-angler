@@ -5,6 +5,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
+import TurnstileWidget from "@/components/ui/TurnstileWidget";
+
+const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 type UsernameStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
@@ -19,6 +22,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   async function triggerUsernameCheck(value: string) {
@@ -58,6 +62,7 @@ export default function SignupPage() {
     fullName.trim() !== "" &&
     email.trim() !== "" &&
     password.length >= 8 &&
+    captchaToken !== "" &&
     (username.trim() === "" || usernameStatus === "available") &&
     !loading;
 
@@ -75,6 +80,7 @@ export default function SignupPage() {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        captchaToken,
         data: { display_name: name },
       },
     });
@@ -121,18 +127,18 @@ export default function SignupPage() {
       <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
           <div className="bg-[#161B22] rounded-xl shadow-md p-8">
-            <div className="text-4xl mb-4">✉️</div>
+            <div className="text-4xl mb-4">🎣</div>
             <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">
               Welcome, {firstName}!
             </h2>
             <p className="text-[#A8B2BD]">
-              We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+              Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
             <Link
-              href="/"
-              className="mt-6 inline-block px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#0D1117] transition-colors"
+              href="/journal"
+              className="mt-6 inline-block px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#cf7d30] transition-colors"
             >
-              Back to Home
+              Go to Your Journal
             </Link>
           </div>
         </div>
@@ -273,6 +279,8 @@ export default function SignupPage() {
                 placeholder="At least 8 characters"
               />
             </div>
+
+            <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} />
 
             {error && (
               <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">

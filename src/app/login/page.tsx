@@ -6,12 +6,16 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
+import TurnstileWidget from "@/components/ui/TurnstileWidget";
+
+const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
@@ -28,7 +32,11 @@ function LoginForm() {
     setError("");
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken },
+    });
     if (error) {
       setError(error.message);
       setLoading(false);
@@ -91,9 +99,10 @@ function LoginForm() {
                 placeholder="Your password"
               />
             </div>
-            {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{error}</p>}
+            <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} />
+            {error && <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">{error}</p>}
             <button
-              type="submit" disabled={loading}
+              type="submit" disabled={loading || !captchaToken}
               className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50"
             >
               {loading ? "Signing in…" : "Sign In with Email"}

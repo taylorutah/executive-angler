@@ -23,10 +23,12 @@ function getStripe() {
   });
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
-
 export async function POST(req: NextRequest) {
   try {
+    // Use origin from request headers as most reliable source
+    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+    const siteUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+
     // 1. Authenticate user via Supabase session
     const supabase = await createServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -76,8 +78,8 @@ export async function POST(req: NextRequest) {
       customer: customerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${SITE_URL}/dashboard?checkout=success`,
-      cancel_url: `${SITE_URL}/dashboard?checkout=canceled`,
+      success_url: `${siteUrl}/dashboard?checkout=success`,
+      cancel_url: `${siteUrl}/pricing?checkout=canceled`,
       metadata: { user_id: user.id },
       subscription_data: {
         metadata: { user_id: user.id },

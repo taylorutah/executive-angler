@@ -64,12 +64,12 @@ export default function PricingClient({ isLoggedIn, isPremium }: Props) {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        console.error("Checkout response:", data);
-        alert(data.error || "Checkout failed. Please try again.");
+        console.error("Checkout response:", res.status, data);
+        alert(`Checkout error: ${data.error || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Checkout fetch error:", err);
-      alert("Something went wrong. Please try again.");
+      alert("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);
     }

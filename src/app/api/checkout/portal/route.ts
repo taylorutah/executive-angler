@@ -19,10 +19,11 @@ function getStripe() {
   });
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
-
 export async function POST(req: NextRequest) {
   try {
+    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+    const siteUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+
     const supabase = await createServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     const session = await getStripe().billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${SITE_URL}/dashboard`,
+      return_url: `${siteUrl}/dashboard`,
     });
 
     return NextResponse.json({ url: session.url });
