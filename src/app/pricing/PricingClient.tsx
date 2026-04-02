@@ -31,6 +31,7 @@ const FEATURES = [
   { icon: Wrench, label: "Gear tracking", desc: "Track rods, reels, lines, and leader builds", free: false, pro: true },
   { icon: Lock, label: "Private sessions", desc: "Keep sessions visible only to you", free: false, pro: true },
   { icon: FileText, label: "Data export", desc: "CSV & PDF trip reports", free: false, pro: true },
+  { icon: Wrench, label: "Fly Tying Workbench", desc: "Structured recipe builder, 500+ materials, PDF export", free: false, pro: true },
 ];
 
 const FREE_FEATURES = [
