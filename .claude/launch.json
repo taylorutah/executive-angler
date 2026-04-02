@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["/Users/taylorwarnick/My Sites-Apps/personal/executive-angler/.claude/start-dev.sh"],
+      "port": 3000,
+      "autoPort": false
     }
   ]
 }

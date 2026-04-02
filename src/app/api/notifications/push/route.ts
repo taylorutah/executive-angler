@@ -132,6 +132,129 @@ async function sendPush(
   }
 }
 
+/* ── FCM Push (Android) ── */
+
+async function getFCMAccessToken(): Promise<string> {
+  const serviceAccount = process.env.FCM_SERVICE_ACCOUNT_JSON;
+  if (!serviceAccount) {
+    throw new Error("Missing FCM_SERVICE_ACCOUNT_JSON env var");
+  }
+
+  const sa = JSON.parse(serviceAccount);
+  const now = Math.floor(Date.now() / 1000);
+
+  const pemKey = sa.private_key.replace(/\\n/g, "\n");
+  const privateKey = await importPKCS8(pemKey, "RS256");
+
+  const token = await new SignJWT({
+    iss: sa.client_email,
+    sub: sa.client_email,
+    aud: "https://oauth2.googleapis.com/token",
+    scope: "https://www.googleapis.com/auth/firebase.messaging",
+  })
+    .setProtectedHeader({ alg: "RS256", typ: "JWT" })
+    .setIssuedAt(now)
+    .setExpirationTime(now + 3600)
+    .sign(privateKey);
+
+  // Exchange JWT for OAuth2 access token
+  const resp = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${token}`,
+  });
+
+  if (!resp.ok) {
+    throw new Error(`FCM OAuth failed: ${resp.status}`);
+  }
+
+  const data = await resp.json();
+  return (data as { access_token: string }).access_token;
+}
+
+let _cachedFCMToken: { token: string; expiresAt: number } | null = null;
+
+async function getCachedFCMToken(): Promise<string> {
+  if (_cachedFCMToken && Date.now() < _cachedFCMToken.expiresAt) {
+    return _cachedFCMToken.token;
+  }
+  const token = await getFCMAccessToken();
+  _cachedFCMToken = { token, expiresAt: Date.now() + 50 * 60 * 1000 };
+  return token;
+}
+
+async function sendFCMPush(
+  fcmToken: string,
+  payload: { title: string; body: string; data?: Record<string, unknown>; badge?: number }
+): Promise<{ success: boolean; token: string; error?: string }> {
+  try {
+    const serviceAccount = process.env.FCM_SERVICE_ACCOUNT_JSON;
+    if (!serviceAccount) {
+      return { success: false, token: fcmToken, error: "FCM not configured" };
+    }
+
+    const sa = JSON.parse(serviceAccount);
+    const projectId = sa.project_id;
+    const accessToken = await getCachedFCMToken();
+
+    const fcmPayload = {
+      message: {
+        token: fcmToken,
+        notification: {
+          title: payload.title,
+          body: payload.body,
+        },
+        data: payload.data
+          ? Object.fromEntries(
+              Object.entries(payload.data).map(([k, v]) => [k, String(v)])
+            )
+          : undefined,
+        android: {
+          priority: "high" as const,
+          notification: {
+            channel_id: "social",
+            sound: "default",
+          },
+        },
+      },
+    };
+
+    const response = await fetch(
+      `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(fcmPayload),
+      }
+    );
+
+    if (response.ok) {
+      return { success: true, token: fcmToken };
+    }
+
+    const errorBody = await response.json().catch(() => ({}));
+    const errorDetails = errorBody as { error?: { message?: string; status?: string } };
+    const reason = errorDetails.error?.message || `HTTP ${response.status}`;
+
+    // Remove invalid tokens
+    if (
+      errorDetails.error?.status === "NOT_FOUND" ||
+      reason.includes("not a valid FCM registration token")
+    ) {
+      console.log(`[FCM] Removing stale token ${fcmToken.substring(0, 8)}...`);
+      const admin = getSupabaseAdmin();
+      await admin.from("device_tokens").delete().eq("token", fcmToken);
+    }
+
+    return { success: false, token: fcmToken, error: reason };
+  } catch (err) {
+    return { success: false, token: fcmToken, error: String(err) };
+  }
+}
+
 /* ── Route Handler ── */
 
 export async function POST(req: NextRequest) {
@@ -161,13 +284,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Fetch all device tokens for the recipient
+    // Fetch all device tokens for the recipient (iOS + Android)
     const admin = getSupabaseAdmin();
     const { data: tokens, error } = await admin
       .from("device_tokens")
-      .select("token")
-      .eq("user_id", recipientId)
-      .eq("platform", "ios");
+      .select("token, platform")
+      .eq("user_id", recipientId);
 
     if (error) {
       console.error("[PUSH] Failed to fetch device tokens:", error.message);
@@ -181,12 +303,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const iosTokens = tokens.filter((t) => t.platform === "ios");
+    const androidTokens = tokens.filter((t) => t.platform === "android");
+
     // Send to all devices in parallel
-    const results = await Promise.all(
-      tokens.map((t) =>
-        sendPush(t.token, { title, body: notifBody, data, badge })
-      )
-    );
+    const pushPayload = { title, body: notifBody, data, badge };
+    const results = await Promise.all([
+      ...iosTokens.map((t) => sendPush(t.token, pushPayload)),
+      ...androidTokens.map((t) => sendFCMPush(t.token, pushPayload)),
+    ]);
 
     const succeeded = results.filter((r) => r.success).length;
     const failed = results.filter((r) => !r.success);
@@ -199,7 +324,7 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(
-      `[PUSH] Sent ${succeeded}/${tokens.length} to user ${recipientId.substring(0, 8)}...`
+      `[PUSH] Sent ${succeeded}/${tokens.length} (${iosTokens.length} iOS, ${androidTokens.length} Android) to user ${recipientId.substring(0, 8)}...`
     );
 
     return NextResponse.json({
