@@ -41,6 +41,33 @@ export const lodges: Lodge[] = [
     nearbyRiverIds: ["river-madison", "river-gallatin"],
     averageRating: 4.9,
     reviewCount: 47,
+    googlePlaceId: "ChIJ7yvL2qFNUFMR0ns-UU_WbJ8",
+    googleRating: 4.8,
+    googleReviewCount: 11,
+    googleReviewsUrl: "https://maps.google.com/?cid=11487792385669102546",
+    featuredReviews: [
+      {
+        authorName: "Michael Basak",
+        rating: 5,
+        text: "Outstanding! Like coming home! We've fished Montana for every year for the last fifteen years. This last week was our fifth consecutive year at Firehole. The fishing, accommodations and dining all continue to be outstanding.",
+        relativeTimeDescription: "8 months ago",
+        time: 1753040451,
+      },
+      {
+        authorName: "Clayton Rose",
+        rating: 5,
+        text: "I rarely write reviews. Just returned from my 6th trip to FHR. Once again it was a fantastic experience. Great fishing, lodge, food, and to a person the staff and guides are simply awesome.",
+        relativeTimeDescription: "8 months ago",
+        time: 1752930283,
+      },
+      {
+        authorName: "Bill Simons",
+        rating: 5,
+        text: "If you love fly fishing and good people, this is the place for you. The staff, guides, and atmosphere are second to none. Beautiful setting with great access to premier fishing waters.",
+        relativeTimeDescription: "a year ago",
+        time: 1740000000,
+      },
+    ],
     metaTitle: "Firehole Ranch | Premier Montana Fly Fishing Lodge",
     metaDescription:
       "Firehole Ranch near West Yellowstone offers world-class guided fly fishing, luxury accommodations, and all-inclusive dining on the doorstep of Yellowstone National Park.",

@@ -266,7 +266,6 @@ Each guide page includes: bio, specialties, years of experience, daily rates, ri
 - /guides/iceland-salmon-guide — Gudmundur Sigurdsson — Iceland Fly Fishing (Iceland)
 - /guides/chile-patagonia-guide — Rodrigo Sandoval — Patagonia Chile Fly Fishing (Chile)
 - /guides/belize-flats-guide — Elton Garbutt — Belize Saltwater Fly Fishing (Belize)
-- /guides/spey-ghillie — Alistair Grant — River Spey Ghillie (Scotland)
 - /guides/soca-marble-trout-guide — Luka Zupancic — Soca Valley Fly Fishing (Slovenia)
 - /guides/japan-tenkara-guide — Takeshi Yamamoto — Japan Tenkara Fly Fishing (Japan)
 - /guides/christmas-island-guide — Moamoa Teata — Kiritimati Flats Guide (Christmas Island)

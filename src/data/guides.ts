@@ -929,35 +929,6 @@ export const guides: Guide[] = [
       },
     ],
   },
-  // ─── SCOTLAND ──────────────────────────────────────────────────────
-  {
-    id: "guide-spey-ghillie",
-    slug: "spey-ghillie",
-    name: "Alistair Grant — River Spey Ghillie",
-    destinationId: "dest-scotland",
-    bio:
-      "Alistair Grant is a third-generation ghillie on the River Spey, carrying forward a family tradition of riverkeeping and salmon fishing that stretches back to the early twentieth century in the Scottish Highlands. Born and raised in Aberlour, Alistair has tended the middle beats of the Spey for twenty-eight years, maintaining the riverbanks, managing the fish stocks, and guiding visiting rods through the pools and runs that his grandfather first fished as a young apprentice ghillie. His knowledge of the Spey is not merely extensive but ancestral, woven into the fabric of a life lived entirely on and around one of Scotland's greatest salmon rivers.\n\nAlistair is widely regarded as one of the finest Spey casting instructors in Scotland, a distinction that carries considerable weight on the river that gave the technique its name. He can diagnose and correct casting faults in minutes, transforming a struggling angler's presentation from a tangled mess into an elegant, fishable cast that covers the water with authority. His teaching draws on the traditional Scottish school of Spey casting while incorporating modern line technologies and casting mechanics, producing a style that is both beautiful to watch and devastatingly effective at presenting a fly to running salmon.\n\nBeyond the Spey, Alistair guides on the River Tay for autumn salmon and advises visiting anglers on other Scottish salmon rivers. He is also a single malt whisky enthusiast whose knowledge of Speyside distilleries rivals his knowledge of salmon pools.",
-    specialties: [
-      "Atlantic salmon fishing",
-      "Spey casting mastery",
-      "Traditional ghillie service",
-      "Beat management and riverkeeping",
-      "Salmon fly selection",
-      "Speyside whisky expertise",
-      "River Tay autumn salmon",
-    ],
-    yearsExperience: 28,
-    photoUrl:
-      "https://images.unsplash.com/photo-1725876349691-78926de02b28?w=800&q=80",
-    riverIds: ["river-river-spey", "river-river-tay"],
-    dailyRate: "£450/day (1-2 rods, beat fee additional)",
-    metaTitle: "Alistair Grant — River Spey Ghillie & Salmon Fishing Guide, Scotland",
-    metaDescription:
-      "Third-generation ghillie on Scotland's River Spey. Atlantic salmon fishing, expert Spey casting instruction, and Highland tradition on the birthplace of Spey casting.",
-    googleRating: 4.8,
-    googleReviewCount: 86,
-    googleReviewsUrl: 'https://www.google.com/maps/place/(Fly+Fishing+Guide)+The+Wild+Rise+Company+(Spey+Salmon+Fishing+Scotland)/@57.402747,-3.451093,17z/data=!3m1!4b1!4m6!3m5!1s0x48859742989223ab:0x75c1fd3787cd6c7a!8m2!3d57.402747!4d-3.451093!16s%2Fg%2F11c6t8km6k',
-  },
   // ─── SLOVENIA ──────────────────────────────────────────────────────
   {
     id: "guide-soca-marble-trout-guide",

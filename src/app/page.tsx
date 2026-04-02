@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Check, Smartphone, Activity, BarChart3, Bug, Droplets,
   BookOpen, Map, Wrench, Search as SearchIcon, Sparkles
@@ -49,6 +50,17 @@ export default async function HomePage() {
     <>
       {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden bg-[#0D1117] flex items-center justify-center">
+        {/* Subtle river background — Taylor's Madison River photo */}
+        <Image
+          src="/images/madison-river-three-dollar-bridge.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-[0.07] pointer-events-none"
+          sizes="100vw"
+        />
+        {/* Dark gradient overlay to blend edges */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0D1117] via-transparent to-[#0D1117] pointer-events-none" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0BA5C7] opacity-10 blur-[120px] rounded-full" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#E8923A] opacity-10 blur-[120px] rounded-full" />
 

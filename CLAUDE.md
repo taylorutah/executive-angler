@@ -24,7 +24,7 @@
 | Icons | Lucide React | 0.575 |
 | Images | sharp | 0.34 (dev, for next/image optimization) |
 | Analytics | @vercel/analytics + @vercel/speed-insights | |
-| Fonts | Playfair Display (headings) + Source Sans 3 (body) | Google Fonts via CSS import |
+| Fonts | Playfair Display (headings) + Source Sans 3 (body) — Brand spec targets DM Serif Display + DM Sans + IBM Plex Mono (Phase 6 migration pending) | Google Fonts via CSS import |
 
 ## Project Structure
 ```
@@ -61,6 +61,11 @@ src/
     articles/
       page.tsx                  # List: 16 articles, filterable by category
       [slug]/page.tsx           # Detail: full HTML content, related entities
+    journal/
+      trophy-wall/page.tsx      # Personal bests + trophy wall
+      insights/page.tsx         # Rule-based + AI journal insights
+      flies/
+        workbench/page.tsx      # Fly tying workbench
     login/page.tsx              # Email/password + Google OAuth
     signup/page.tsx             # Registration form
     auth/callback/route.ts      # Supabase OAuth callback handler
@@ -69,6 +74,7 @@ src/
       photos/page.tsx           # Photo moderation dashboard (no auth gate yet)
     api/
       favorites/route.ts        # GET/POST/DELETE user favorites (auth required)
+      reviews/route.ts          # GET/POST/PUT/DELETE user reviews (auth required for writes)
       google-reviews/route.ts   # Proxy to Google Places API (requires GOOGLE_PLACES_API_KEY)
       photos/
         submit/route.ts         # POST photo submission + email notification
@@ -90,6 +96,7 @@ src/
       QuickFacts.tsx            # Key-value fact grid
       RatingStars.tsx           # Star rating display
       ScrollAnimation.tsx       # Framer Motion scroll-triggered fade-in
+      UserReviews.tsx            # Review list + form + edit/delete (client component)
     maps/
       MapView.tsx               # Mapbox GL map component
       DynamicMapView.tsx        # Dynamic import wrapper (ssr: false)
@@ -98,6 +105,7 @@ src/
   lib/
     constants.ts                # SITE_NAME, SITE_URL, NAV_LINKS, SOCIAL_LINKS
     utils.ts                    # Utility functions
+    hero-height.ts              # Auth-aware hero height helper (HeroTier type)
     supabase/
       client.ts                 # Browser Supabase client
       server.ts                 # Server Supabase client (cookies-based)
@@ -234,7 +242,10 @@ NEXT_PUBLIC_SITE_URL=https://executiveangler.com
 # Optional — features degrade gracefully without these
 GOOGLE_PLACES_API_KEY=<key>         # Google Reviews component — shows empty state without it
 RESEND_API_KEY=<key>                # Photo approval email notifications — silently skipped without it
-PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejection URLs
+PHOTO_REVIEW_SECRET=<secret>        # HMAC token for signed photo approval/rejection URLs — now set in Vercel
+
+# Local-only (not in Vercel)
+SUPABASE_SERVICE_ROLE_KEY=<key>     # Required for seed scripts only (not in Vercel, local only)
 ```
 
 ## Key Patterns & Gotchas
@@ -296,14 +307,16 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 ## Known Issues & Missing Pieces
 1. **All images except hero and species are Unsplash placeholders** — need real photography or licensed stock (species use Wikimedia Commons public domain illustrations)
 2. **Admin dashboard (`/admin/photos`) has NO authentication gate** — anyone with the URL can view pending photos
-3. **Supabase Storage bucket `photo-submissions` must be created manually** via Supabase dashboard (settings: public bucket, 10MB file size limit, allowed MIME: image/jpeg, image/png, image/webp)
+3. ~~**Supabase Storage bucket `photo-submissions` must be created manually**~~ — **COMPLETED**: Bucket exists and is configured (public, 20MB file size limit, allowed MIME: image/jpeg, image/png, image/webp)
 4. **Google OAuth not configured** — needs Google Cloud OAuth credentials added in Supabase Auth dashboard
 5. ~~**Pages read from TypeScript files, not Supabase**~~ — **COMPLETED 2026-03-25**: All 7 entity types now query Supabase via `src/lib/db/*.ts` using `createStaticClient()`. Static TS data files in `src/data/` retained as seed source only.
 6. **No admin content management** — all content changes require editing `src/data/*.ts` files and redeploying
 7. **Resend sender domain not verified** — photo notification emails will fail until configured in Resend dashboard
 8. **Google Reviews data** — `GoogleReviews` component built; no API needed. Data hardcoded per location via browser scrape → Supabase upsert. ~30/49 fly shops populated; lodges/guides not yet populated.
-9. **`PHOTO_REVIEW_SECRET` not set** — photo approval HMAC links will not generate correctly without it
-10. **No user review submission UI** — database table and RLS exist but no form/page to write reviews
+9. ~~**`PHOTO_REVIEW_SECRET` not set**~~ — **COMPLETED 2026-04-02**: Now set in Vercel environment variables
+10. ~~**No user review submission UI**~~ — **COMPLETED 2026-04-02**: Full CRUD built — `/api/reviews` route + `UserReviews` component on lodges/guides/fly-shops
+11. **Google OAuth not configured** — needs Google Cloud Console OAuth credentials + Supabase Auth dashboard configuration
+12. **Resend sender domain not verified** — needs DNS records configured before photo notification emails will deliver
 
 ## Deployment
 - Vercel auto-deploys on push to `main`
@@ -314,6 +327,38 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
+
+### 2026-04-02
+**Review UI + Vercel build fix + cross-platform push:**
+
+**User Review System:**
+- New API route: `src/app/api/reviews/route.ts` — full CRUD (GET public, POST/PUT/DELETE auth-required)
+- New component: `src/components/ui/UserReviews.tsx` — star rating picker, review form, edit/delete own reviews
+- Integrated on lodge, guide, and fly-shop detail pages
+- Resolves display names from angler_profiles
+
+**Vercel Build Fix:**
+- `tsconfig.json`: added `scripts` to `exclude` array — standalone CLI scripts were failing TS type check during `next build`
+- `seed-demo-account.ts`: replaced hardcoded service role key with `process.env.SUPABASE_SERVICE_ROLE_KEY` env var
+
+**Auth-Aware Hero Heights (from previous session):**
+- New helper: `src/lib/hero-height.ts` — centralized hero height config per page type and auth tier
+- `HeroTier` type: "anonymous" | "free" | "pro"
+- Applied to rivers, species, destinations detail pages
+- Uses `checkPremium()` 3-tier check: permanent pro email → profiles.is_premium → active subscription
+
+**Fly Detail Page Redesign:**
+- Complete layout restructure from hero-image-first to product-card-first
+- 160px compact image header + category badge + spec chips + action buttons
+- Content reordered: Recipe → Materials → Video → Tying Steps → About → On the Water → Variations → History → FAQ
+
+**Cross-Platform Push:**
+- iOS: 7 new views (FlyCatalog, JournalMap, Insights, RiverIntel, RiverCommunityPhotos, NotificationPreferences, SuggestedAnglers) + 15 updated files + build artifact cleanup
+- Android: 8 new files (FlyCatalog, CommunityPhotos, RiverIntel, RiverWeather, WaterLevel, splash icon) + 18 updated files
+
+**Commits:** 8aaf779, 98e23b0 (web) | 7636054 (iOS) | 4bdc9c8 (Android)
+
+---
 
 ### 2026-03-08 (Sage)
 **Strava-style full redesign — Journal + Session Detail:**
