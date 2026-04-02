@@ -10,6 +10,7 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
+import UserReviews from "@/components/ui/UserReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
@@ -361,6 +362,11 @@ export default async function FlyShopPage({ params }: Props) {
                   })) ?? null
                 }
               />
+
+              {/* User Reviews */}
+              <ScrollAnimation>
+                <UserReviews entityType="fly-shop" entityId={shop.id} />
+              </ScrollAnimation>
 
               {/* Community Photos */}
               <CommunityPhotos entityType="fly-shop" entityId={shop.id} />

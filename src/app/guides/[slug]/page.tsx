@@ -9,6 +9,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
+import UserReviews from "@/components/ui/UserReviews";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllGuides,
@@ -359,6 +360,11 @@ export default async function GuidePage({ params }: Props) {
                   })) ?? null
                 }
               />
+
+              {/* User Reviews */}
+              <ScrollAnimation>
+                <UserReviews entityType="guide" entityId={guide.id} />
+              </ScrollAnimation>
             </div>
 
             <div className="space-y-6">

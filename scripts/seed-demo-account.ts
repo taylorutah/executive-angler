@@ -8,13 +8,12 @@
  */
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qlasxtfbodyxbcuchvxz.supabase.co";
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!SERVICE_ROLE_KEY) {
+const SERVICE_ROLE_KEY: string = process.env.SUPABASE_SERVICE_ROLE_KEY ?? (() => {
   console.error("ERROR: SUPABASE_SERVICE_ROLE_KEY env var is required.");
   console.error("Usage: SUPABASE_SERVICE_ROLE_KEY=<key> npx tsx scripts/seed-demo-account.ts");
   process.exit(1);
-}
+  return ""; // unreachable
+})();
 
 const DEMO_EMAIL = "demo@executiveangler.com";
 const DEMO_PASSWORD = "DemoAngler2026!";
