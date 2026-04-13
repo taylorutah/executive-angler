@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ActivityFeed } from "@/components/feed/ActivityFeed";
 import Link from "next/link";
-import WaitlistForm from "@/components/sections/WaitlistForm";
+import { APP_STORE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "River Activity | Executive Angler",
@@ -134,21 +134,33 @@ export default async function FeedPage() {
             </ul>
           </div>
 
-          {/* App waitlist */}
+          {/* App download */}
           <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="inline-flex items-center rounded-full bg-[#E8923A]/10 px-3 py-1 text-xs font-medium text-[#E8923A] border border-[#E8923A]/20">
-                Coming to iOS + Apple Watch
+              <span className="inline-flex items-center rounded-full bg-[#2EA44F]/10 px-3 py-1 text-xs font-medium text-[#2EA44F] border border-[#2EA44F]/20">
+                Live on the App Store
               </span>
             </div>
             <h2 className="text-lg font-bold text-[#F0F6FC] mb-1">
-              Get the App
+              Get the iPhone App
             </h2>
             <p className="text-sm text-[#A8B2BD] mb-4">
-              Log fish on-stream, track GPS sessions, and sync everything
-              automatically. Join the waitlist for early access.
+              Log fish on-stream, track GPS sessions, and sync everything to your account.
             </p>
-            <WaitlistForm />
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 px-7 py-3 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors"
+            >
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+              </svg>
+              Download for iPhone
+            </a>
+            <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-3 text-center">
+              Android coming soon
+            </p>
           </div>
         </div>
       </main>

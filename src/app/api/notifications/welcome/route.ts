@@ -111,11 +111,12 @@ function buildWelcomeHtml(displayName?: string) {
             <a href="${SITE_URL}/pricing" style="color:#E8923A;text-decoration:none;font-weight:600;">See plans &rarr;</a>
           </p>
 
-          <!-- Mobile apps teaser -->
+          <!-- Mobile app -->
           <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
-            <span style="color:#0BA5C7;">&#9679;</span>&nbsp;
-            <strong style="color:#A8B2BD;">iOS &amp; Android apps coming soon</strong> &mdash;
-            log sessions on the water, sync to your account, and pick up where you left off on the web.
+            <span style="color:#2EA44F;">&#9679;</span>&nbsp;
+            <strong style="color:#A8B2BD;">The iPhone app is live.</strong>
+            <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#E8923A;text-decoration:none;font-weight:600;">Download from the App Store &rarr;</a>
+            <br>Log sessions on the water, sync to your account, and pick up where you left off on the web. Android is on the way.
           </p>
         </td></tr>
         <!-- Footer -->

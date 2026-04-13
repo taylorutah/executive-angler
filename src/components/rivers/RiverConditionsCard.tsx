@@ -6,6 +6,7 @@ import {
   Lock, Smartphone, Wind, Droplets, Gauge
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { APP_STORE_URL } from "@/lib/constants";
 
 // ── USGS types ──────────────────────────────────────────────────────────────
 
@@ -403,7 +404,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           </div>
 
           <a
-            href="https://apps.apple.com/app/executive-angler/id6745498032"
+            href={APP_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#E8923A] hover:bg-[#F0A65A] text-white text-sm font-semibold rounded-lg transition-colors"

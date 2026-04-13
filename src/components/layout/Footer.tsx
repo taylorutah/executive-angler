@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE_NAME, SOCIAL_LINKS, APP_STORE_URL } from "@/lib/constants";
 
 const footerColumns = {
   Product: [
@@ -46,7 +46,7 @@ export default function Footer() {
             {/* App Download Badges */}
             <div className="flex items-center gap-3 mt-5">
               <a
-                href="https://apps.apple.com/app/executive-angler/id6744145937"
+                href={APP_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-md bg-[#161B22] border border-[#30363D] px-3 py-1.5 text-xs text-[#F0F6FC] hover:border-[#8B949E] transition-colors"

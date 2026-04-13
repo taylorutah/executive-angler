@@ -2,6 +2,7 @@ export const SITE_NAME = "Executive Angler";
 export const SITE_DESCRIPTION =
   "The definitive fly fishing resource — destinations, rivers, lodges, guides, and expert instruction from around the world.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+export const APP_STORE_URL = "https://apps.apple.com/us/app/executive-angler/id6760311036";
 
 export type NavChild = {
   label: string;
