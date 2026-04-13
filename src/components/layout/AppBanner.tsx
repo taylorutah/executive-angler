@@ -54,15 +54,15 @@ export default function AppBanner() {
         <X className="h-4 w-4" />
       </button>
 
-      {/* App icon */}
-      <div className="flex-shrink-0 w-9 h-9 rounded-[9px] overflow-hidden bg-[#161B22] border border-[#21262D] flex items-center justify-center">
-        {/* EA logo mark */}
-        <svg viewBox="0 0 36 36" className="w-6 h-6" fill="none">
-          <path d="M18 4C10.268 4 4 10.268 4 18s6.268 14 14 14 14-6.268 14-14S25.732 4 18 4z" fill="#E8923A" opacity=".15" />
-          <path d="M10 18l5-7 3 4 3-3 5 6" stroke="#E8923A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="18" cy="18" r="2" fill="#0BA5C7" />
-        </svg>
-      </div>
+      {/* App icon — actual iOS app icon */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/apple-touch-icon.png"
+        alt="Executive Angler"
+        width={36}
+        height={36}
+        className="flex-shrink-0 rounded-[9px]"
+      />
 
       {/* App info */}
       <div className="flex-1 min-w-0">
