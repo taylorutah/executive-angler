@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import AppBanner from "@/components/layout/AppBanner";
 import { ThemeProvider } from "@/lib/theme-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import "./globals.css";
@@ -108,6 +109,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${dmSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
       <head>
+        {/* Apple native Smart App Banner — Safari iOS only, complements custom banner */}
+        <meta name="apple-itunes-app" content="app-id=6760311036" />
         {/* Preconnect to critical third-party origins */}
         <link rel="preconnect" href="https://qlasxtfbodyxbcuchvxz.supabase.co" />
         <link rel="preconnect" href="https://api.mapbox.com" />
@@ -132,6 +135,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider>
+          <AppBanner />
           <Header />
           <main className="flex-1 pt-[56px]">{children}</main>
           <Footer />

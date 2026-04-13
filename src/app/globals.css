@@ -90,6 +90,21 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* App banner: push fixed header + main content down when iOS banner is visible */
+  :root {
+    --app-banner-height: 0px;
+  }
+
+  /* When iOS app banner is showing, shift fixed header below it */
+  header[class*="fixed"] {
+    top: var(--app-banner-height, 0px) !important;
+  }
+
+  /* Offset main content to account for banner + header */
+  main[class*="pt-"] {
+    padding-top: calc(56px + var(--app-banner-height, 0px)) !important;
+  }
+
   body {
     background: var(--background);
     color: var(--foreground);
