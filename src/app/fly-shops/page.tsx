@@ -12,6 +12,29 @@ import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
+const FLY_SHOP_FALLBACKS = [
+  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80",
+  "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80",
+  "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=1200&q=80",
+  "https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200&q=80",
+  "https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=1200&q=80",
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80",
+  "https://images.unsplash.com/photo-1537905569824-f89f14cceb68?w=1200&q=80",
+];
+
+function hashSlug(slug: string): number {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash << 5) - hash + slug.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function getFlyShopFallback(slug: string): string {
+  return FLY_SHOP_FALLBACKS[hashSlug(slug) % FLY_SHOP_FALLBACKS.length];
+}
+
 const SPOTLIGHT_SLUGS = [
   "blue-ribbon-flies",
   "jack-dennis-outdoor-shop",
@@ -76,14 +99,14 @@ export default async function FlyShopsPage() {
       const dest = destinations.find((d) => d.id === shop.destinationId);
       return {
         href: `/fly-shops/${shop.slug}`,
-        imageUrl: shop.heroImageUrl || undefined,
+        imageUrl: shop.heroImageUrl || getFlyShopFallback(shop.slug),
         imageAlt: shop.name,
         title: shop.name,
         subtitle: dest?.name,
         description: shop.description.substring(0, 120),
         tags: shop.services.slice(0, 3),
         featured: false,
-        iconOnly: !shop.heroImageUrl,
+        iconOnly: false,
         _filterValues: {
           destination: shop.destinationId,
         },
