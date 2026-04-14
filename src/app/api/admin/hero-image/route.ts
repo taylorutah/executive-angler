@@ -45,6 +45,12 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: `Unknown entity type: ${entity_type}` }, { status: 400 });
   }
 
+  // Species uses image_url instead of hero_image_url
+  const IMAGE_FIELD_MAP: Record<string, string> = {
+    species: "image_url",
+  };
+  const heroField = IMAGE_FIELD_MAP[table] || "hero_image_url";
+
   // Use service role client to bypass RLS
   const admin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -53,7 +59,7 @@ export async function PATCH(request: Request) {
 
   // Build update payload
   const update: Record<string, unknown> = {};
-  if (hero_image_url !== undefined) update.hero_image_url = hero_image_url;
+  if (hero_image_url !== undefined) update[heroField] = hero_image_url;
   if (hero_image_alt !== undefined) update.hero_image_alt = hero_image_alt;
   if (hero_image_credit !== undefined) update.hero_image_credit = hero_image_credit;
   if (hero_image_credit_url !== undefined) update.hero_image_credit_url = hero_image_credit_url;
@@ -99,13 +105,14 @@ export async function PATCH(request: Request) {
       }
     }
 
-    // Last resort: just hero_image_url
+    // Last resort: just the hero image field
     if (hero_image_url) {
-      const minimal = await admin.from(table).update({ hero_image_url }).eq("id", entity_id).select("id").maybeSingle();
+      const minimalPayload = { [heroField]: hero_image_url };
+      const minimal = await admin.from(table).update(minimalPayload).eq("id", entity_id).select("id").maybeSingle();
       if (!minimal.error) {
-        if (!minimal.data) await admin.from(table).update({ hero_image_url }).eq("slug", entity_id);
-        await logAudit(admin, user, entity_type, entity_id, { hero_image_url });
-        return NextResponse.json({ success: true, note: "Only hero_image_url updated" });
+        if (!minimal.data) await admin.from(table).update(minimalPayload).eq("slug", entity_id);
+        await logAudit(admin, user, entity_type, entity_id, minimalPayload);
+        return NextResponse.json({ success: true, note: "Only hero image updated" });
       }
     }
 
