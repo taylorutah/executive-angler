@@ -12,33 +12,6 @@ import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
-const FLY_SHOP_FALLBACKS = [
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/cutthroat-trout-hand-held-western-river.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brown-trout-golden-hand-clear-water-release.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brook-trout-landing-net-fly-fishing.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brown-trout-macro-eye-catch-release.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/cutthroat-trout-rocky-streambed-pink-streamer.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/angler-drift-boat-brown-trout-river.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brook-trout-in-net-orange-fins-fly-fishing.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/fly-box-macro-nymphs-dry-flies.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/fly-box-bead-head-nymphs-collection.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/copper-bead-head-nymph-pheasant-tail-macro.jpg",
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/tungsten-bead-nymphs-fly-tying-macro.jpg",
-];
-
-function hashSlug(slug: string): number {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = (hash << 5) - hash + slug.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-
-function getFlyShopFallback(slug: string): string {
-  return FLY_SHOP_FALLBACKS[hashSlug(slug) % FLY_SHOP_FALLBACKS.length];
-}
-
 const SPOTLIGHT_SLUGS = [
   "blue-ribbon-flies",
   "jack-dennis-outdoor-shop",
@@ -103,14 +76,13 @@ export default async function FlyShopsPage() {
       const dest = destinations.find((d) => d.id === shop.destinationId);
       return {
         href: `/fly-shops/${shop.slug}`,
-        imageUrl: shop.heroImageUrl || getFlyShopFallback(shop.slug),
         imageAlt: shop.name,
         title: shop.name,
         subtitle: dest?.name,
         description: shop.description.substring(0, 120),
         tags: shop.services.slice(0, 3),
         featured: false,
-        iconOnly: false,
+        iconOnly: true,
         _filterValues: {
           destination: shop.destinationId,
         },

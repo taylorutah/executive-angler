@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, Store } from "lucide-react";
 
 interface EntityCardProps {
   href: string;
@@ -39,8 +39,8 @@ export default function EntityCard({
   accent,
   description,
 }: EntityCardProps) {
-  // Text-only card when no image and not icon-only mode
-  if (!imageUrl && !iconOnly) {
+  // Text-only card when no image
+  if (!imageUrl) {
     return (
       <Link
         href={href}
@@ -98,10 +98,11 @@ export default function EntityCard({
   return (
     <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
       {iconOnly ? (
-        <div className="h-40 bg-[#E8923A]/5 flex items-center justify-center">
+        <div className="h-44 bg-[#161B22] flex flex-col items-center justify-center gap-2 border-b border-[#21262D]">
           <div className="w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
-            <MapPin className="h-6 w-6 text-[#E8923A]" />
+            <Store className="h-6 w-6 text-[#E8923A]" />
           </div>
+          <span className="text-[#6E7681] text-xs">Photo coming soon</span>
         </div>
       ) : (
         <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
