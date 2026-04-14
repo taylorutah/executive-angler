@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
+
+function getAdminSupabase() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  return createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 /**
  * GET /api/admin/users/[userId] — Fetch full user detail
@@ -18,15 +27,20 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
-  // Profile
-  const { data: profile } = await supabase
+  const admin = getAdminSupabase();
+  if (!admin) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
+  // Profile — use service role to read any user's profile
+  const { data: profile } = await admin
     .from("profiles")
     .select("*")
     .eq("user_id", userId)
     .single();
 
   // Sessions
-  const { data: sessions } = await supabase
+  const { data: sessions } = await admin
     .from("fishing_sessions")
     .select("id, date, river_name, total_fish, weather, water_temp_f, location, section, created_at, is_private")
     .eq("user_id", userId)
@@ -34,25 +48,25 @@ export async function GET(
     .limit(50);
 
   // Catches
-  const { data: catches } = await supabase
+  const { data: catches } = await admin
     .from("catches")
     .select("id, session_id, species, length_inches, fly_pattern_id, created_at")
     .eq("user_id", userId);
 
   // Fly patterns
-  const { data: flies } = await supabase
+  const { data: flies } = await admin
     .from("fly_patterns")
     .select("id, name, image_url, created_at")
     .eq("user_id", userId);
 
   // Follow counts
-  const { count: followers } = await supabase
+  const { count: followers } = await admin
     .from("follows")
     .select("id", { count: "exact", head: true })
     .eq("following_id", userId)
     .eq("status", "accepted");
 
-  const { count: following } = await supabase
+  const { count: following } = await admin
     .from("follows")
     .select("id", { count: "exact", head: true })
     .eq("follower_id", userId)
@@ -61,7 +75,7 @@ export async function GET(
   // Audit log for this user (table may not exist yet)
   let auditLog: unknown[] = [];
   try {
-    const { data } = await supabase
+    const { data } = await admin
       .from("admin_audit_log")
       .select("*")
       .eq("target_user_id", userId)
@@ -94,12 +108,17 @@ export async function PATCH(
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
+  const admin = getAdminSupabase();
+  if (!admin) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
   const body = await request.json();
   const { action, ...data } = body;
 
-  // Log every admin action
+  // Log every admin action (service role bypasses RLS on audit table)
   const logAction = async (actionType: string, details: Record<string, unknown>) => {
-    await supabase.from("admin_audit_log").insert({
+    await admin.from("admin_audit_log").insert({
       admin_user_id: user.id,
       admin_email: user.email,
       action: actionType,
@@ -110,25 +129,27 @@ export async function PATCH(
 
   switch (action) {
     case "grant_pro": {
-      await supabase
+      const { error } = await admin
         .from("profiles")
         .update({ is_premium: true, premium_granted_by: user.email, premium_granted_at: new Date().toISOString() })
         .eq("user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("grant_pro", { reason: data.reason || "Admin grant" });
       return NextResponse.json({ success: true, message: "Pro access granted" });
     }
 
     case "revoke_pro": {
-      await supabase
+      const { error } = await admin
         .from("profiles")
         .update({ is_premium: false, premium_granted_by: null, premium_granted_at: null })
         .eq("user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("revoke_pro", { reason: data.reason || "Admin revoke" });
       return NextResponse.json({ success: true, message: "Pro access revoked" });
     }
 
     case "ban": {
-      await supabase
+      const { error } = await admin
         .from("profiles")
         .update({
           is_banned: true,
@@ -137,15 +158,17 @@ export async function PATCH(
           banned_by: user.email,
         })
         .eq("user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("ban_user", { reason: data.reason });
       return NextResponse.json({ success: true, message: "User banned" });
     }
 
     case "unban": {
-      await supabase
+      const { error } = await admin
         .from("profiles")
         .update({ is_banned: false, ban_reason: null, banned_at: null, banned_by: null })
         .eq("user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("unban_user", {});
       return NextResponse.json({ success: true, message: "User unbanned" });
     }
@@ -155,28 +178,31 @@ export async function PATCH(
       const updates: Record<string, string> = {};
       allowedFields.forEach(f => { if (data[f] !== undefined) updates[f] = data[f]; });
       if (Object.keys(updates).length > 0) {
-        await supabase.from("profiles").update(updates).eq("user_id", userId);
+        const { error } = await admin.from("profiles").update(updates).eq("user_id", userId);
+        if (error) return NextResponse.json({ error: error.message }, { status: 500 });
         await logAction("update_profile", updates);
       }
       return NextResponse.json({ success: true, message: "Profile updated" });
     }
 
     case "add_note": {
-      await supabase.from("admin_user_notes").insert({
+      const { error } = await admin.from("admin_user_notes").insert({
         user_id: userId,
         admin_email: user.email,
         note: data.note,
       });
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("add_note", { note: data.note });
       return NextResponse.json({ success: true, message: "Note added" });
     }
 
     case "kill_session": {
-      await supabase
+      const { error } = await admin
         .from("fishing_sessions")
         .update({ ended_at: new Date().toISOString() })
         .eq("id", data.sessionId)
         .eq("user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       await logAction("kill_session", { sessionId: data.sessionId });
       return NextResponse.json({ success: true, message: "Session ended" });
     }

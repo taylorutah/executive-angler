@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
+
+function getAdminSupabase() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  return createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 /**
  * PATCH /api/admin/users — Admin user actions (grant/revoke pro, ban/unban)
@@ -14,6 +23,11 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
+  const admin = getAdminSupabase();
+  if (!admin) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
   const { user_id, action, reason } = await request.json();
   if (!user_id || !action) {
     return NextResponse.json({ error: "user_id and action required" }, { status: 400 });
@@ -21,7 +35,7 @@ export async function PATCH(request: Request) {
 
   switch (action) {
     case "grant_premium": {
-      const { error } = await supabase
+      const { error } = await admin
         .from("profiles")
         .update({
           is_premium: true,
@@ -32,12 +46,12 @@ export async function PATCH(request: Request) {
 
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-      await logAudit(supabase, user, "grant_premium", user_id);
+      await logAudit(admin, user, "grant_premium", user_id);
       return NextResponse.json({ message: "Pro access granted" });
     }
 
     case "revoke_premium": {
-      const { error } = await supabase
+      const { error } = await admin
         .from("profiles")
         .update({
           is_premium: false,
@@ -48,12 +62,12 @@ export async function PATCH(request: Request) {
 
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-      await logAudit(supabase, user, "revoke_premium", user_id);
+      await logAudit(admin, user, "revoke_premium", user_id);
       return NextResponse.json({ message: "Pro access revoked" });
     }
 
     case "ban": {
-      const { error } = await supabase
+      const { error } = await admin
         .from("profiles")
         .update({
           is_banned: true,
@@ -65,12 +79,12 @@ export async function PATCH(request: Request) {
 
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-      await logAudit(supabase, user, "ban", user_id, { reason });
+      await logAudit(admin, user, "ban", user_id, { reason });
       return NextResponse.json({ message: "User banned" });
     }
 
     case "unban": {
-      const { error } = await supabase
+      const { error } = await admin
         .from("profiles")
         .update({
           is_banned: false,
@@ -82,7 +96,7 @@ export async function PATCH(request: Request) {
 
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-      await logAudit(supabase, user, "unban", user_id);
+      await logAudit(admin, user, "unban", user_id);
       return NextResponse.json({ message: "User unbanned" });
     }
 
@@ -98,12 +112,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
+  const admin = getAdminSupabase();
+  if (!admin) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
   const { user_id, note } = await request.json();
   if (!user_id || !note) {
     return NextResponse.json({ error: "user_id and note required" }, { status: 400 });
   }
 
-  const { error } = await supabase.from("admin_user_notes").insert({
+  const { error } = await admin.from("admin_user_notes").insert({
     user_id,
     admin_email: user.email,
     note,
@@ -111,19 +130,20 @@ export async function POST(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  await logAudit(supabase, user, "add_note", user_id, { note });
+  await logAudit(admin, user, "add_note", user_id, { note });
   return NextResponse.json({ success: true });
 }
 
 async function logAudit(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  adminClient: { from: (table: string) => any },
   admin: { id: string; email?: string },
   action: string,
   targetUserId: string,
   details?: Record<string, unknown>
 ) {
   try {
-    await supabase.from("admin_audit_log").insert({
+    await adminClient.from("admin_audit_log").insert({
       admin_user_id: admin.id,
       admin_email: admin.email || "",
       action,
