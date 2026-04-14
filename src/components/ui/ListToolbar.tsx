@@ -17,6 +17,7 @@ interface ListToolbarProps {
   filteredCount: number;
   searchQuery?: string;
   onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
   /** Restrict which view modes are shown (defaults to all) */
   availableViews?: ViewMode[];
 }
@@ -41,6 +42,7 @@ export default function ListToolbar({
   filteredCount,
   searchQuery = "",
   onSearchChange,
+  searchPlaceholder,
   availableViews,
 }: ListToolbarProps) {
   // Filter view modes based on availableViews prop
@@ -63,7 +65,7 @@ export default function ListToolbar({
   }, [localSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="sticky top-20 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[#0D1117]/95 backdrop-blur-sm border-b border-[#21262D]/60 mb-8">
+    <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[#0D1117] border-b border-[#21262D]/60 mb-8">
       {/* Search bar */}
       {onSearchChange && (
         <div className="relative mb-3">
@@ -72,7 +74,7 @@ export default function ListToolbar({
             type="text"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
-            placeholder="Search patterns..."
+            placeholder={searchPlaceholder ?? "Search..."}
             className="w-full bg-[#161B22] border border-[#21262D] rounded-lg pl-9 pr-9 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/20 focus:border-[#E8923A] transition-colors"
           />
           {localSearch && (

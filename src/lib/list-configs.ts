@@ -23,6 +23,7 @@ export const destinationListConfig: EntityListConfig = {
   ],
   defaultSort: "featured",
   defaultView: "grid",
+  searchPlaceholder: "Search destinations...",
 };
 
 // Maps grouped region filter values to actual region strings in the data
@@ -84,6 +85,7 @@ export const riverListConfig: EntityListConfig = {
   ],
   defaultSort: "featured",
   defaultView: "grid",
+  searchPlaceholder: "Search rivers...",
 };
 
 export const speciesListConfig: EntityListConfig = {
@@ -109,6 +111,7 @@ export const speciesListConfig: EntityListConfig = {
   ],
   defaultSort: "name-asc",
   defaultView: "grid",
+  searchPlaceholder: "Search species...",
 };
 
 export const lodgeListConfig: EntityListConfig = {
@@ -142,6 +145,7 @@ export const lodgeListConfig: EntityListConfig = {
   ],
   defaultSort: "featured",
   defaultView: "grid",
+  searchPlaceholder: "Search lodges...",
 };
 
 export const guideListConfig: EntityListConfig = {
@@ -159,6 +163,7 @@ export const guideListConfig: EntityListConfig = {
   ],
   defaultSort: "name-asc",
   defaultView: "grid",
+  searchPlaceholder: "Search guides...",
 };
 
 export const flyShopListConfig: EntityListConfig = {
@@ -175,6 +180,7 @@ export const flyShopListConfig: EntityListConfig = {
   ],
   defaultSort: "name-asc",
   defaultView: "grid",
+  searchPlaceholder: "Search fly shops...",
 };
 
 export const flyListConfig: EntityListConfig = {
@@ -216,6 +222,7 @@ export const flyListConfig: EntityListConfig = {
   ],
   defaultSort: "rank",
   defaultView: "grid",
+  searchPlaceholder: "Search flies...",
 };
 
 export const articleListConfig: EntityListConfig = {
@@ -240,4 +247,5 @@ export const articleListConfig: EntityListConfig = {
   ],
   defaultSort: "newest",
   defaultView: "grid",
+  searchPlaceholder: "Search articles...",
 };

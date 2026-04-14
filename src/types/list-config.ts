@@ -46,4 +46,6 @@ export interface EntityListConfig {
   defaultView: ViewMode;
   /** Restrict which view modes are available (defaults to all if not set) */
   availableViews?: ViewMode[];
+  /** Placeholder text for the search input */
+  searchPlaceholder?: string;
 }

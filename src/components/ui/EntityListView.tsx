@@ -201,6 +201,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         filteredCount={sortedItems.length}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
+        searchPlaceholder={config.searchPlaceholder}
         availableViews={config.availableViews}
       />
 
