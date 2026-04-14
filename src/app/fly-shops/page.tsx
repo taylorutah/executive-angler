@@ -13,13 +13,17 @@ import { SITE_URL } from "@/lib/constants";
 export const revalidate = 3600;
 
 const FLY_SHOP_FALLBACKS = [
-  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80",
-  "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80",
-  "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=1200&q=80",
-  "https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200&q=80",
-  "https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=1200&q=80",
-  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80",
-  "https://images.unsplash.com/photo-1537905569824-f89f14cceb68?w=1200&q=80",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/cutthroat-trout-hand-held-western-river.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brown-trout-golden-hand-clear-water-release.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brook-trout-landing-net-fly-fishing.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brown-trout-macro-eye-catch-release.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/cutthroat-trout-rocky-streambed-pink-streamer.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/angler-drift-boat-brown-trout-river.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/brook-trout-in-net-orange-fins-fly-fishing.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/fly-box-macro-nymphs-dry-flies.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/fly-box-bead-head-nymphs-collection.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/copper-bead-head-nymph-pheasant-tail-macro.jpg",
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/river-images/site-assets/tungsten-bead-nymphs-fly-tying-macro.jpg",
 ];
 
 function hashSlug(slug: string): number {
