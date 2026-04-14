@@ -179,7 +179,8 @@ export const flyShopListConfig: EntityListConfig = {
     { value: "name-desc", label: "Name Z–A" },
   ],
   defaultSort: "name-asc",
-  defaultView: "grid",
+  defaultView: "compact",
+  availableViews: ["list", "compact"],
   searchPlaceholder: "Search fly shops...",
 };
 

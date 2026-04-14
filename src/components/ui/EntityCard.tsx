@@ -39,8 +39,8 @@ export default function EntityCard({
   accent,
   description,
 }: EntityCardProps) {
-  // Text-only card when no image
-  if (!imageUrl) {
+  // Text-only card when no image or iconOnly
+  if (!imageUrl || iconOnly) {
     return (
       <Link
         href={href}
