@@ -17,6 +17,7 @@ const ENTITY_TYPES = [
   { type: "destination", label: "Destination", icon: "🗺️", description: "Fly fishing destinations and regions", color: "#E74C3C" },
   { type: "species", label: "Species", icon: "🐟", description: "Fish species with habitat and fly recommendations", color: "#F39C12" },
   { type: "fly_pattern", label: "Fly Pattern", icon: "🪰", description: "Share a pattern for the EA canonical fly library", color: "#6366f1" },
+  { type: "photo_update", label: "Update a Listing Photo", icon: "📷", description: "Submit a hero photo for an existing fly shop, lodge, guide, or river", color: "#E8923A" },
 ];
 
 export default async function ContributePage() {
@@ -40,7 +41,7 @@ export default async function ContributePage() {
           {ENTITY_TYPES.map(({ type, label, icon, description, color }) => (
             <Link
               key={type}
-              href={`/contribute/${type}`}
+              href={type === "photo_update" ? "/contribute/photo-update" : `/contribute/${type}`}
               className="group p-5 bg-[#161B22] border border-[#21262D] rounded-xl hover:border-opacity-60 transition-all"
               style={{ ["--hover-color" as string]: color }}
             >

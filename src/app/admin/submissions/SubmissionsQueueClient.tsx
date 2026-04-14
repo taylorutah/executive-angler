@@ -20,12 +20,13 @@ interface Submission {
   updated_at: string;
   user_id: string;
   version: number;
+  entity_data?: Record<string, string> | null;
   profiles: { username: string | null; display_name: string | null } | null;
   reviewed_at?: string;
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰",
+  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰", photo_update: "📷",
 };
 
 export default function SubmissionsQueueClient({ pending, recent }: { pending: Submission[]; recent: Submission[] }) {
@@ -110,7 +111,17 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                         </span>
                       </div>
                       <p className="text-xs text-[#6E7681] mt-0.5">
-                        {s.entity_type.replace("_", " ")} · by {submitter} · {formatDate(s.submitted_at || s.created_at)} · v{s.version}
+                        {s.entity_type === "photo_update" ? (
+                          <>
+                            <span className="text-[#E8923A] font-semibold">PHOTO UPDATE</span>
+                            {s.entity_data?.target_entity_type && (
+                              <> · updating {s.entity_data.target_entity_type.replace("_", " ")} <span className="text-[#A8B2BD]">{s.entity_data.target_slug}</span></>
+                            )}
+                          </>
+                        ) : (
+                          s.entity_type.replace("_", " ")
+                        )}
+                        {" "}· by {submitter} · {formatDate(s.submitted_at || s.created_at)} · v{s.version}
                         {s.source !== "manual" && ` · via ${s.source.replace("_", " ")}`}
                       </p>
                     </div>

@@ -12,7 +12,7 @@ export default async function AdminSubmissionsPage() {
 
   const { data: submissions } = await supabase
     .from("community_submissions")
-    .select("id, entity_type, status, name, short_description, hero_image_url, source, created_at, submitted_at, updated_at, user_id, version, profiles(username, display_name)")
+    .select("id, entity_type, status, name, short_description, hero_image_url, source, created_at, submitted_at, updated_at, user_id, version, entity_data, profiles(username, display_name)")
     .in("status", ["submitted", "in_review", "needs_info"])
     .order("submitted_at", { ascending: true });
 

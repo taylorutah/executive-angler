@@ -204,6 +204,35 @@ export async function publishSubmission(submission: Record<string, unknown>): Pr
         break;
       }
 
+      case "photo_update": {
+        const targetType = entityData.target_entity_type as string;
+        const targetSlug = entityData.target_slug as string;
+        const tableMap: Record<string, string> = {
+          fly_shop: "fly_shops",
+          guide: "guides",
+          lodge: "lodges",
+          river: "rivers",
+        };
+        const imgField = targetType === "guide" ? "photo_url" : "hero_image_url";
+        const table = tableMap[targetType];
+        if (!table) return { slug: targetSlug || "", error: `Unknown target entity type: ${targetType}` };
+        const { error: updateError } = await supabase
+          .from(table)
+          .update({ [imgField]: submission.hero_image_url })
+          .eq("slug", targetSlug);
+        if (updateError) return { slug: targetSlug, error: updateError.message };
+        // Update submission status and return — skip the generic slug-based publish below
+        await supabase
+          .from("community_submissions")
+          .update({
+            status: "published",
+            published_entity_id: targetSlug,
+            published_at: new Date().toISOString(),
+          })
+          .eq("id", submission.id);
+        return { slug: targetSlug };
+      }
+
       case "feedback":
         // Feedback doesn't publish to a table — it's just tracked in submissions
         return { slug: "" };
