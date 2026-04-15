@@ -1104,4 +1104,346 @@ export const destinations: Destination[] = [
       "Fly fishing in New Jersey — the South Branch of the Raritan, Big Flatbrook, and Musconetcong River offer exceptional wild trout fishing within reach of New York City and Philadelphia.",
     featured: false,
   },
+  {
+    id: "dest-california",
+    slug: "california",
+    name: "California",
+    region: "Pacific West",
+    country: "United States",
+    state: "California",
+    tagline: "From Sierra Spring Creeks to North Coast Steelhead — The Golden State's Wild Trout Legacy",
+    description:
+      "California is the most diverse fly fishing state in the contiguous United States, a geography so varied that it encompasses everything from the technical spring creeks of the Eastern Sierra to the powerful winter steelhead rivers of the North Coast to the salt flats and estuaries of the Bay Area. No other state demands such adaptability from its anglers, and none rewards the curious explorer more generously.\n\nThe Eastern Sierra is the spiritual home of California dry fly fishing. Hot Creek, a short, spring-fed channel near Mammoth Lakes managed as an ecological reserve, is one of the most technically demanding and visually spectacular spring creeks in the West — crystalline water over a chalk-white bottom, large brown trout rising to impossibly specific hatches, and the Sierra Nevada rising as a wall behind it. The lower Owens River below Pleasant Valley Reservoir is a tailwater of national reputation, producing brown trout of exceptional size on Baetis and midge imitations fished in the shadow of the Alabama Hills. Bishop Creek above town drains the high Sierra and offers wild rainbow and brown trout in classic mountain freestone habitat.\n\nNorthern California is steelhead country. The Upper Sacramento River below Lake Siskiyou at the foot of Mount Shasta is a pristine, catch-and-release rainbow trout fishery of world-class caliber — cold, clear, and perpetually under the shadow of a volcanic peak. The McCloud, Trinity, and Klamath rivers drain vast wilderness drainage systems and carry winter steelhead runs that draw anglers from across the world. The Smith River, California's last undammed major river, runs the color of jade through towering redwoods and delivers chrome-bright steelhead on two-handed rods in conditions that feel entirely removed from the state's reputation for sunshine and crowds.\n\nThe San Francisco Bay Area is the unlikely gateway to saltwater fly fishing on the California coast. Striped bass pursue anchovies and sardines through the bay and along the beaches of the Marin Peninsula, offering accessible urban fly fishing of surprising quality. The Russian River provides a short drive north to winter steelhead, while the Pit River system in the volcanic plateau northeast of Redding holds populations of wild rainbow and brown trout that receive a fraction of the pressure their quality deserves.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=1200&q=80",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=800&q=80",
+    latitude: 37.7749,
+    longitude: -119.4194,
+    bestMonths: ["April", "May", "June", "September", "October", "November", "December"],
+    primarySpecies: ["Rainbow Trout", "Brown Trout", "Steelhead", "Striped Bass", "Brook Trout"],
+    licenseInfo:
+      "California fishing license required for all anglers 16 and older. A separate steelhead report card is required to fish for steelhead. Trout stamp required for designated inland trout waters. Available online through the California Department of Fish and Wildlife.",
+    elevationRange: "Sea level - 14,500 ft",
+    climateNotes:
+      "Highly variable by region and elevation. Eastern Sierra streams fish best April through June and September through October; summer midday heat pushes trout deep. North Coast steelhead rivers peak December through March with winter rain events bringing fresh fish. Bay Area saltwater fishing is year-round with fall and winter peaks for striped bass.",
+    regulationsSummary:
+      "California Department of Fish and Wildlife manages an extensive and complex set of regulations that vary by drainage, species, and season. Hot Creek Ecological Reserve has strict fly-fishing-only, catch-and-release regulations. Upper Sacramento and McCloud are closely regulated wild trout waters. Steelhead regulations include mandatory reporting and punch cards. Always consult the current CDFW regulations before fishing any California water.",
+    metaTitle: "California Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in California — Eastern Sierra spring creeks, Upper Sacramento trout water, North Coast steelhead, and Bay Area striped bass. The Golden State's diverse fly fishing destinations.",
+    featured: false,
+  },
+  {
+    id: "dest-maine",
+    slug: "maine",
+    name: "Maine",
+    region: "New England",
+    country: "United States",
+    state: "Maine",
+    tagline: "The Last Great Wilderness — Remote Brook Trout Ponds and Wild Landlocked Salmon",
+    description:
+      "Maine is the last place in the contiguous United States where an angler can climb into a floatplane, land on a remote pond no road reaches, and catch native brook trout that have never seen a hatchery truck. The state's North Woods encompass millions of acres of boreal forest, peat bogs, and cold-water drainages that drain into rivers and lakes holding some of the finest wild salmonid fishing left in America. For the angler willing to accept the remoteness — the portages, the black flies, the floatplane logistics — Maine delivers a fishing experience that belongs to another era.\n\nThe Rangeley Lakes Region in western Maine occupies a unique place in the history of American fly fishing. Rangeley Lake, Mooselookmeguntic, and the connected chain of waters were famous in the nineteenth century as the finest brook trout and landlocked salmon fishery in New England, drawing wealthy sportsmen from Boston and New York on overnight trains. The brook trout that evolved in this system were a distinct subspecies of exceptional size — specimens of six and seven pounds were once common — and while those days of surplus are long past, the region still produces wild brook trout and landlocked salmon in water that retains its austere, northern beauty. Theodore Gordon, Carrie Stevens, and the earliest American dry fly innovators all drew inspiration from these waters.\n\nThe Penobscot River system drains the central wilderness and once supported the largest Atlantic salmon runs on the East Coast. While commercial and dam-related pressures collapsed those runs in the twentieth century, the West Branch of the Penobscot below Ripogenus Dam is now one of Maine's finest wild trout rivers — a boulder-strewn tailwater below a dramatic gorge that holds wild brook trout and holdover rainbow trout of exceptional size. The Kennebec, Androscoggin, and Aroostook drainages in the north provide additional wild trout and landlocked salmon water, much of it accessible only by canoe or floatplane.\n\nThe remote sporting camps that have operated in Maine's backcountry for over a century are inseparable from the fly fishing culture here. These operations — fly-in or road-access only, offering meals, guides, and canoes — preserve a way of fishing that has vanished from most of the country. Early mornings in a canoe, casting dry flies to rising brook trout in a mist-covered pond, with loons calling on the far shore, represents one of the most elemental fly fishing experiences available anywhere in North America.",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    latitude: 45.2538,
+    longitude: -69.4455,
+    bestMonths: ["May", "June", "July", "August", "September"],
+    primarySpecies: ["Brook Trout", "Landlocked Salmon", "Brown Trout", "Lake Trout", "Smallmouth Bass"],
+    licenseInfo:
+      "Maine fishing license required for all anglers 16 and older. Non-resident licenses are available for one-day, three-day, seven-day, or season duration. A separate permit is required for Rapid River (special lottery). Some wilderness ponds have special regulations. Available online through the Maine Department of Inland Fisheries and Wildlife.",
+    elevationRange: "Sea level - 5,267 ft",
+    climateNotes:
+      "Short, intense fishing season driven by snowmelt and black fly emergence. Ice-out on most northern ponds occurs in late April to early May. Peak brook trout dry fly fishing runs May through late June. Summer months produce evening rises on ponds. Fall (September-October) brings landlocked salmon into rivers for spawning runs and offers the best combination of fish activity and absent crowds.",
+    regulationsSummary:
+      "Maine Department of Inland Fisheries and Wildlife manages wild trout waters with a strong conservation ethic. Many remote ponds are fly-fishing-only with strict catch-and-release or minimal-kill regulations. Rapid River is one of the most carefully managed wild brook trout fisheries in the East, with limited access permits. Always consult the current Maine IF&W regulations, as rules vary significantly by waterbody.",
+    metaTitle: "Maine Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Maine — remote brook trout ponds, wild landlocked salmon, and the legendary Rangeley Lakes. One of North America's last great wilderness fly fishing destinations.",
+    featured: false,
+  },
+
+  // ── United States — Southeast & Southwest ─────────────────────────────────
+  {
+    id: "dest-virginia",
+    slug: "virginia",
+    name: "Virginia",
+    region: "Mid-Atlantic & Appalachian",
+    country: "United States",
+    state: "Virginia",
+    tagline: "Spring Creeks, Shenandoah Limestone, and the James River Smallmouth Corridor",
+    description:
+      "Virginia holds more fly fishing variety per square mile than almost any state in the East. The Blue Ridge Mountains divide the state into two entirely different fisheries: to the west, cold freestone streams and limestone spring creeks produce wild brown and brook trout of surprising size and sophistication; to the east, the rivers spilling off the Piedmont into the coastal plain offer some of the finest warm-water fly fishing in North America, anchored by the James River's extraordinary smallmouth bass population.\n\nThe Shenandoah Valley is Virginia's limestone country, where springs emerge from the karite bedrock to feed streams of exceptional clarity and fertility. Mossy Creek, the South Fork of the Shenandoah, and a network of private and public spring creeks carry dense populations of wild brown trout that feed selectively on specific hatches — sulphurs, Tricos, and blue-winged olives dominate the calendar — and reward presentation over power. These are technical waters that will humble the angler accustomed to throwing attractor patterns at forgiving western fish.\n\nThe James River from Lynchburg to Richmond is a different world entirely: a broad, rocky Piedmont river with massive boulders, shallow ledge systems, and sight-fishing opportunities for smallmouth bass that rival anything in the Ozarks or the Susquehanna. Summer mornings on the James, with fog burning off the water and bass stacked behind every large rock, represent some of the most visually dynamic fly fishing available anywhere on the East Coast.",
+    heroImageUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=800&q=80",
+    latitude: 37.7693,
+    longitude: -78.1700,
+    bestMonths: ["April", "May", "June", "July", "August", "September", "October"],
+    primarySpecies: ["Brown Trout", "Brook Trout", "Smallmouth Bass", "Rainbow Trout"],
+    licenseInfo:
+      "Virginia fishing license required for all anglers 16 and older. A trout fishing license is required in addition to the base license to fish designated stocked trout waters. Available online through the Virginia Department of Wildlife Resources.",
+    elevationRange: "Sea level - 5,729 ft",
+    climateNotes:
+      "Humid subtropical in the east, humid continental in the mountains. Spring hatches begin in March at lower elevations. Summer warmwater fishing peaks June through September. Mountain streams fish best April through June and September through November. Winters are mild at lower elevations; mountain streams freeze rarely but run cold.",
+    regulationsSummary:
+      "Virginia DWR manages a mix of stocked, put-and-take, and wild trout waters with varying regulations. Special regulation streams — including catch-and-release, single hook, and artificial lures only — protect the best wild trout populations. The James River has liberal regulations for smallmouth. Always consult current Virginia DWR regulations.",
+    metaTitle: "Virginia Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Virginia — Shenandoah Valley spring creeks, Blue Ridge brook trout streams, and James River smallmouth bass. Virginia's diverse fly fishing destinations.",
+    featured: false,
+  },
+  {
+    id: "dest-tennessee",
+    slug: "tennessee",
+    name: "Tennessee",
+    region: "Southern Appalachian",
+    country: "United States",
+    state: "Tennessee",
+    tagline: "Tailwater Trout and Wild Appalachian Streams in the Southern Highlands",
+    description:
+      "Tennessee is the unlikely home of some of the finest trout fishing in the American South, a product of cold TVA tailwater releases and the high-elevation streams of the Great Smoky Mountains and Cherokee National Forest. The state's trout fisheries range from world-class tailwaters with trophy-sized fish to intimate mountain freestone streams draining some of the most biodiverse forest in the Northern Hemisphere.\n\nThe South Holston River below South Holston Dam in northeastern Tennessee is the crown jewel of Southern tailwater fishing — a cold, fertile stream with extraordinary insect populations and catch rates that rival any trout river in the country. The prolific sulfur hatches on the South Holston are legendary, producing surface feeding activity of an intensity rarely seen outside the limestone rivers of Montana or Pennsylvania. The Watauga River tailwater below Wilbur Dam runs parallel to the South Holston and offers similar quality with slightly different character. The Hiwassee River in the Cherokee National Forest is a broader tailwater known for massive brown trout and consistent year-round flows.\n\nAbove the tailwaters, the streams draining the Great Smoky Mountains National Park represent some of the most pristine wild brook trout habitat in the eastern United States. The park's hundreds of miles of mountain streams are managed as wild trout waters, closed to stocking, with native Southern Appalachian brook trout that have adapted to the precise chemistry and temperature of their particular drainage over thousands of years.",
+    heroImageUrl: "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?w=800&q=80",
+    latitude: 35.8601,
+    longitude: -86.6602,
+    bestMonths: ["March", "April", "May", "June", "September", "October", "November"],
+    primarySpecies: ["Brown Trout", "Rainbow Trout", "Brook Trout"],
+    licenseInfo:
+      "Tennessee fishing license required for all anglers 13 and older. A separate trout stamp is required to fish designated trout waters. Available online through the Tennessee Wildlife Resources Agency.",
+    elevationRange: "200 - 6,643 ft",
+    climateNotes:
+      "Humid subtropical climate with mild winters and hot summers. Tailwaters fish year-round due to cold dam releases. Mountain streams peak April through June and September through November. Summer heat pushes trout activity to early morning and evening on lower-elevation waters.",
+    regulationsSummary:
+      "Tennessee TWRA manages tailwaters with special trophy sections, catch-and-release zones, and size/creel limits that vary by section. Great Smoky Mountains National Park requires a park fishing permit (no state license required within park boundaries). Always verify current TWRA and NPS regulations.",
+    metaTitle: "Tennessee Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Tennessee — South Holston and Hiwassee tailwaters, Smoky Mountains wild brook trout, and some of the finest trout water in the American South.",
+    featured: false,
+  },
+  {
+    id: "dest-north-carolina",
+    slug: "north-carolina",
+    name: "North Carolina",
+    region: "Southern Appalachian",
+    country: "United States",
+    state: "North Carolina",
+    tagline: "Wild Brook Trout, Nantahala Gorge, and the Southern Appalachian Highlands",
+    description:
+      "Western North Carolina contains the most extensive wild trout habitat in the eastern United States, a landscape of steep river gorges, high-elevation balsam fir forests, and cold-water streams that drain the southern end of the Blue Ridge and Great Smoky Mountains. From the border of Georgia to the Virginia line, the mountain counties of WNC hold thousands of miles of publicly accessible trout water managed by the state, national forests, and the National Park Service.\n\nThe Nantahala River below Nantahala Lake is the region's signature tailwater — a steep, technical freestone flow that produces excellent rainbow and brown trout in one of the most dramatically beautiful gorges in the Appalachians. The Davidson River draining DuPont State Forest near Brevard is a celebrated wild trout stream known for its technical dry fly fishing and exceptional wild brown trout. The Chattooga River forming the Georgia-South Carolina border offers challenging wade fishing in remote wilderness terrain.\n\nAbove 4,000 feet, the streams of the Pisgah, Nantahala, and Cherokee national forests harbor native Southern Appalachian brook trout — a genetically distinct population that has occupied these streams for millennia and represents one of the most conservation-significant freshwater fish in the region. Sight-fishing to wild brookies in a moss-lined mountain stream, surrounded by the biodiversity that makes the southern Appalachians one of the most ecologically rich temperate forests on earth, is an experience that belongs entirely to this corner of America.",
+    heroImageUrl: "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=800&q=80",
+    latitude: 35.5001,
+    longitude: -83.0000,
+    bestMonths: ["April", "May", "June", "September", "October", "November"],
+    primarySpecies: ["Brook Trout", "Brown Trout", "Rainbow Trout"],
+    licenseInfo:
+      "North Carolina fishing license required for all anglers 16 and older. A Hatchery Supported Waters (HWS) license is required for stocked trout waters. Wild trout waters require only the base license. Available online through the NC Wildlife Resources Commission.",
+    elevationRange: "700 - 6,684 ft",
+    climateNotes:
+      "Highland climate with cool summers and cold winters at higher elevations. Spring runoff can raise streams significantly March through April. Prime fishing is April through June and September through November. Summer heat concentrates fish in cold headwater tributaries.",
+    regulationsSummary:
+      "NC WRC designates waters as Hatchery Supported, Wild Trout, Catch-and-Release, and Special regulation areas. Great Smoky Mountains National Park requires a park fishing permit (no state license needed within park boundaries). Davidson River has sections with specific slot limits and gear restrictions. Always consult current NC WRC regulations.",
+    metaTitle: "North Carolina Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in North Carolina — Nantahala tailwater, Davidson River wild trout, Smoky Mountains brook trout, and the heart of the Southern Appalachian highlands.",
+    featured: false,
+  },
+  {
+    id: "dest-west-virginia",
+    slug: "west-virginia",
+    name: "West Virginia",
+    region: "Appalachian",
+    country: "United States",
+    state: "West Virginia",
+    tagline: "Wild and Rugged — Seneca Rocks, the Elk, and Appalachian Wilderness Trout",
+    description:
+      "West Virginia's mountain streams are among the most underrated trout fisheries in the eastern United States — cold, clear, and largely unpressured, flowing through a landscape of forested ridges and remote hollows that sees a fraction of the angling attention directed at more famous Appalachian waters. The Monongahela National Forest alone encompasses over 900,000 acres of public land with hundreds of miles of native and wild trout streams, most accessible only by foot.\n\nThe Elk River headwaters above Slatyfork offer exceptional wild brown and rainbow trout fishing in one of the most scenic valleys in the state. The Cranberry River and its tributaries in the Cranberry Backcountry provide remote wild trout fishing in a roadless wilderness area. The Williams River, flowing through the Gauley Ranger District, is a designated West Virginia Scenic River with trophy trout sections managed under strict catch-and-release regulations. Near the Virginia border, the Greenbrier River and its headwater tributaries carry populations of wild brook trout in pristine freestone habitat.\n\nThe Seneca Rocks area in Pendleton County is a hub for visiting anglers, combining the dramatic quartzite formations of Seneca Rocks with the North Fork of the South Branch of the Potomac — a limestone-influenced stream known for selective rising trout and exceptional hatches including the green drake emergence that draws dry fly anglers from across the region every June.",
+    heroImageUrl: "https://images.unsplash.com/photo-1502635385003-6675045844ad?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1502635385003-6675045844ad?w=800&q=80",
+    latitude: 38.5976,
+    longitude: -80.4549,
+    bestMonths: ["April", "May", "June", "September", "October"],
+    primarySpecies: ["Brook Trout", "Brown Trout", "Rainbow Trout"],
+    licenseInfo:
+      "West Virginia fishing license required for all anglers 15 and older. A trout fishing license is required in addition to the base license to fish designated trout waters. Available online through the WV Division of Natural Resources.",
+    elevationRange: "500 - 4,863 ft",
+    climateNotes:
+      "Humid continental climate with cold winters and warm, humid summers. Spring runoff significant March through April. Prime trout fishing is April through June and September through November. High-elevation streams remain fishable through summer due to cold groundwater inputs.",
+    regulationsSummary:
+      "WV DNR designates special regulation waters throughout the Monongahela National Forest including catch-and-release, artificial lures only, and trophy trout sections. Always consult current WV DNR trout fishing regulations before fishing any designated special regulation water.",
+    metaTitle: "West Virginia Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in West Virginia — Elk River, Williams River, Seneca Rocks, and miles of wild Appalachian trout streams in the Monongahela National Forest.",
+    featured: false,
+  },
+  {
+    id: "dest-georgia",
+    slug: "georgia",
+    name: "Georgia",
+    region: "Southern Appalachian",
+    country: "United States",
+    state: "Georgia",
+    tagline: "Toccoa Tailwater, Blue Ridge Brook Trout, and Georgia's Mountain Trout Country",
+    description:
+      "North Georgia's Blue Ridge Mountains form the southernmost significant trout country in the eastern United States, a compact but productive fishing region anchored by the Toccoa River tailwater and dozens of smaller freestone streams draining the Chattahoochee National Forest. Georgia trout fishing operates in the shadow of Tennessee and North Carolina's more celebrated fisheries, but the state's best waters hold quality fish with a fraction of the pressure.\n\nThe Toccoa River below Blue Ridge Lake Dam is Georgia's premier tailwater — a cold, fertile release fishery that produces outstanding rainbow and brown trout year-round in the shadow of the Blue Ridge Mountains. The upper Toccoa above the reservoir is a freestone stream with wild trout and excellent access through state-managed public areas near Blue Ridge. The Chattahoochee River headwaters in the Chattahoochee National Forest provide wild rainbow and brook trout fishing in forested mountain terrain near Helen and Hiawassee.\n\nThe warm-water fisheries of central and south Georgia — large impoundments, Piedmont rivers, and coastal plain bass streams — offer a completely different fly fishing experience that is largely overlooked by the fly fishing community. Largemouth bass, striped bass, and redfish in the coastal marshes of the Georgia coast round out a surprisingly diverse statewide fly fishing portfolio.",
+    heroImageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    latitude: 34.5199,
+    longitude: -83.9207,
+    bestMonths: ["March", "April", "May", "October", "November", "December"],
+    primarySpecies: ["Brown Trout", "Rainbow Trout", "Brook Trout", "Largemouth Bass"],
+    licenseInfo:
+      "Georgia fishing license required for all anglers 16 and older. A trout license is required in addition to the base license to fish designated trout waters. Available online through the Georgia Department of Natural Resources.",
+    elevationRange: "Sea level - 4,784 ft",
+    climateNotes:
+      "Humid subtropical climate. Mountain streams fish best March through May and October through December. Tailwaters provide year-round cold water fishing. Summer heat makes lowland fishing uncomfortable; mountain streams remain productive through July at higher elevations.",
+    regulationsSummary:
+      "Georgia DNR manages designated trout streams with general and special regulations. The Toccoa River tailwater has specific regulations by section. Chattahoochee National Forest streams have a mix of stocked and wild trout management. Always consult current Georgia DNR Sport Fishing Regulations.",
+    metaTitle: "Georgia Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Georgia — Toccoa River tailwater, Chattahoochee National Forest trout streams, and North Georgia mountain fishing near Blue Ridge.",
+    featured: false,
+  },
+  {
+    id: "dest-arizona",
+    slug: "arizona",
+    name: "Arizona",
+    region: "Southwest",
+    country: "United States",
+    state: "Arizona",
+    tagline: "Desert Canyon Tailwaters and High-Country Apache Trout",
+    description:
+      "Arizona is the most surprising trout state in the American West — a desert landscape that hides exceptional cold-water fisheries in its canyon depths and mountain highlands. The Colorado River below Glen Canyon Dam at Lee's Ferry is the state's most famous fishery and one of the most productive tailwaters in North America, a cathedral of red sandstone walls and crystal-clear 47-degree water teeming with massive rainbow trout on year-round midge emergences. This is big-fish country: five-pound rainbows are common, ten-pound fish are caught regularly, and the occasional specimen approaches twenty pounds.\n\nThe White Mountains of eastern Arizona offer a completely different trout experience at elevations between 7,000 and 11,000 feet. The White Mountain Apache Tribe manages some of the most carefully maintained trout fisheries in the Southwest on their reservation lands — stocked heavily with trophy-sized fish and accessible only through tribal permits. The adjacent Arizona Game and Fish–managed waters of the Black River and Little Colorado headwaters hold native Apache trout, a species of conservation significance found naturally in only a small number of streams worldwide. The Salt River below Roosevelt Dam and the Verde River below Horseshoe Dam provide additional tailwater trout fishing within reach of Phoenix.",
+    heroImageUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=800&q=80",
+    latitude: 34.3853,
+    longitude: -111.7311,
+    bestMonths: ["March", "April", "May", "October", "November", "December", "January", "February"],
+    primarySpecies: ["Rainbow Trout", "Brown Trout", "Apache Trout", "Brook Trout"],
+    licenseInfo:
+      "Arizona fishing license required for all anglers 10 and older. A separate trout stamp is required to fish designated trout waters. White Mountain Apache Tribal waters require tribal recreation permits (separate from state license). Available through Arizona Game and Fish Department.",
+    elevationRange: "Sea level - 11,500 ft",
+    climateNotes:
+      "Highly variable by elevation. Lee's Ferry at 3,116 ft is fishable year-round with ideal conditions spring and fall. White Mountain streams at 7,000-9,000 ft peak May through October with monsoon season July-August causing periodic high water. Winter closures possible on high-elevation tribal waters.",
+    regulationsSummary:
+      "Arizona Game and Fish manages complex regulations that vary by water and species. Lee's Ferry is catch-and-release only for the first 15 miles below the dam. White Mountain Apache tribal waters require tribal permits and follow tribal regulations, not state regulations. Apache trout are a protected species with strict regulations on all waters where they occur. Always consult current AZGF and tribal regulations.",
+    metaTitle: "Arizona Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Arizona — Lee's Ferry Colorado River tailwater, White Mountain trout, and Apache trout in the desert Southwest. World-class fishing in canyon country.",
+    featured: false,
+  },
+  {
+    id: "dest-new-mexico",
+    slug: "new-mexico",
+    name: "New Mexico",
+    region: "Southwest",
+    country: "United States",
+    state: "New Mexico",
+    tagline: "Rio Grande Gorge, San Juan Tailwater, and High Desert Wild Trout",
+    description:
+      "New Mexico offers three distinct fly fishing experiences within a single state: the volcanic drama of the Rio Grande Gorge where brown and rainbow trout hold in the shadow of sheer basalt walls 800 feet deep; the world-class San Juan River tailwater below Navajo Lake where massive rainbows sip midges from clear runs just north of the Colorado border; and the high-elevation wilderness streams of the Sangre de Cristo and Jemez mountains where native Rio Grande cutthroat trout persist in cold, remote drainages that see virtually no angling pressure.\n\nThe San Juan River below Navajo Dam is consistently rated among the top five trout fisheries in North America — a cold, spring-like tailwater with exceptional clarity, consistent flows, and a population of rainbows that regularly exceed five pounds and occasionally break ten. The fishing demands technical nymphing with very small flies and refined presentations, but the reward for getting it right is hookups with some of the largest trout most anglers will ever encounter in moving water.\n\nThe Enchanted Circle area near Taos and Eagle Nest provides a completely different high-desert trout experience. The Red River tailwater, the Cimarron River, and the upper Rio Grande carry wild brown and rainbow trout through mountain terrain above 7,000 feet. The Pecos River draining the southern Sangre de Cristos is designated Wild and Scenic and holds native cutthroat trout in its upper reaches within the Pecos Wilderness.",
+    heroImageUrl: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?w=800&q=80",
+    latitude: 35.6870,
+    longitude: -105.9378,
+    bestMonths: ["March", "April", "May", "September", "October", "November"],
+    primarySpecies: ["Rainbow Trout", "Brown Trout", "Rio Grande Cutthroat Trout"],
+    licenseInfo:
+      "New Mexico fishing license required for all anglers 12 and older. A trout validation is required in addition to the base license. San Juan River special regulations require catch-and-release in quality waters. Tribal waters (Jicarilla Apache, other pueblos) require separate tribal permits. Available through New Mexico Department of Game and Fish.",
+    elevationRange: "2,800 - 13,161 ft",
+    climateNotes:
+      "High desert and mountain climate. San Juan tailwater fishes year-round with most stable conditions fall through spring. Mountain streams peak May through September with afternoon monsoon storms July-August. Rio Grande Gorge is accessible year-round but can be hot in summer.",
+    regulationsSummary:
+      "NMDGF designates quality waters, trophy waters, and special regulation zones on many key fisheries. The San Juan River has extensive catch-and-release quality waters below Navajo Dam. Rio Grande Gorge has specific regulations by reach. Native Rio Grande cutthroat management includes designated wild trout waters with special regulations. Always consult current NMDGF regulations.",
+    metaTitle: "New Mexico Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in New Mexico — San Juan River tailwater, Rio Grande Gorge, and high-country cutthroat trout in the Sangre de Cristo Mountains.",
+    featured: false,
+  },
+  {
+    id: "dest-texas",
+    slug: "texas",
+    name: "Texas",
+    region: "South Central",
+    country: "United States",
+    state: "Texas",
+    tagline: "Guadalupe River Tailwater and Texas Hill Country Fly Fishing",
+    description:
+      "Texas is not a state most anglers associate with fly fishing, but the Guadalupe River below Canyon Lake dam in the Hill Country northwest of San Antonio is the southernmost trout stream in the continental United States and one of the most consistently productive tailwaters in the South. Cold dam releases maintain water temperatures below 68°F year-round in a state where summer air temperatures regularly exceed 100°F, creating an improbable trout fishery in the cedar-studded limestone hills above New Braunfels.\n\nThe Guadalupe River Trout Unlimited chapter is one of the most active in the country and has worked for decades with Texas Parks and Wildlife to stock and manage the river as a put-and-take trout fishery during the winter season (November through March) and as a warmwater largemouth bass and Guadalupe bass fishery during the summer. The Guadalupe bass — Texas's state fish and found nowhere else on earth — is an ideal fly rod quarry that fights with the aggression of a smallmouth and takes poppers and streamers with enthusiasm on summer mornings.\n\nBeyond the Guadalupe, Texas offers saltwater fly fishing along the Gulf Coast that rivals any in the country. The Laguna Madre along the Lower Texas Coast and South Padre Island host large populations of redfish, speckled trout, and tarpon that provide world-class shallow-water saltwater fly fishing just over the state line from some of the most unusual trout water in America.",
+    heroImageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    latitude: 29.8849,
+    longitude: -98.0000,
+    bestMonths: ["November", "December", "January", "February", "March"],
+    primarySpecies: ["Rainbow Trout", "Brown Trout", "Guadalupe Bass", "Largemouth Bass", "Redfish"],
+    licenseInfo:
+      "Texas fishing license required for all anglers 17 and older. A freshwater fishing endorsement is required for most freshwater fishing. Available through Texas Parks and Wildlife Department online or at authorized retailers.",
+    elevationRange: "Sea level - 2,000 ft",
+    climateNotes:
+      "Subtropical climate. Trout season on the Guadalupe runs November through March when dam releases keep temperatures low enough. Summer brings largemouth and Guadalupe bass fishing. Coastal saltwater fly fishing is excellent year-round with spring and fall peaks for migratory species.",
+    regulationsSummary:
+      "Texas Parks and Wildlife manages the Guadalupe River with seasonal trout stocking (November-March) and standard warmwater regulations in summer. Specific catch limits and size regulations apply to stocked trout sections. Gulf Coast saltwater fishing has its own complex set of size and bag limits. Always consult current TPWD regulations.",
+    metaTitle: "Texas Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Texas — Guadalupe River tailwater trout, Guadalupe bass in the Hill Country, and Gulf Coast saltwater fly fishing near South Padre Island.",
+    featured: false,
+  },
+  {
+    id: "dest-kentucky",
+    slug: "kentucky",
+    name: "Kentucky",
+    region: "Mid-South",
+    country: "United States",
+    state: "Kentucky",
+    tagline: "Cumberland River Tailwater and the Bluegrass State's Trout Waters",
+    description:
+      "Kentucky's Cumberland River below Wolf Creek Dam in the Lake Cumberland region is the state's premier cold-water fly fishing destination — a powerful tailwater release fishery that produces trophy rainbow and brown trout in water that stays cold year-round despite the state's southern latitude. The tailwater section from the dam downstream to Burkesville is managed as a trophy trout fishery and draws serious anglers from across the mid-South who would otherwise have to travel to Tennessee or North Carolina to find comparable trout water.\n\nBeyond the Cumberland, Kentucky offers excellent warm-water fly fishing that is largely unexplored by the national fly fishing community. The Green River in Mammoth Cave National Park flows through a section of river that was closed to recreational fishing for decades, allowing bass, musky, and other species to achieve sizes rarely encountered elsewhere in the region. The river reopened to limited fishing and provides a unique opportunity to sight-fish to large, unpressured warm-water species in the underground karst landscape of the cave country. The Kentucky River and its tributaries in the Bluegrass Region offer seasonal smallmouth bass fishing in limestone-bedded streams.",
+    heroImageUrl: "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1559827291-72f30ef50ba0?w=800&q=80",
+    latitude: 36.8284,
+    longitude: -85.1587,
+    bestMonths: ["March", "April", "May", "October", "November"],
+    primarySpecies: ["Rainbow Trout", "Brown Trout", "Smallmouth Bass", "Largemouth Bass"],
+    licenseInfo:
+      "Kentucky fishing license required for all anglers 16 and older. A trout permit is required to fish designated trout waters. Available online through the Kentucky Department of Fish and Wildlife Resources.",
+    elevationRange: "250 - 1,300 ft",
+    climateNotes:
+      "Humid continental climate. Cumberland tailwater fishes year-round due to cold dam releases. Warm-water fishing peaks April through October. Spring and fall provide the most comfortable conditions for extended wading.",
+    regulationsSummary:
+      "Kentucky DFWR manages the Cumberland River tailwater with specific regulations for the trophy trout section below Wolf Creek Dam. Always consult current Kentucky DFWR regulations for trout and warm-water fisheries.",
+    metaTitle: "Kentucky Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Kentucky — Cumberland River tailwater trophy trout, Green River bass, and the Bluegrass State's underrated cold and warm-water fly fishing.",
+    featured: false,
+  },
+  {
+    id: "dest-utah",
+    slug: "utah",
+    name: "Utah",
+    region: "Mountain West",
+    country: "United States",
+    state: "Utah",
+    tagline: "Green River Tailwater, Provo River, and Utah's World-Class Trout Fisheries",
+    description:
+      "Utah punches well above its weight in the national fly fishing conversation, home to two of the most consistent and productive trout tailwaters in the American West — the Green River below Flaming Gorge Dam and the Provo River below Jordanelle and Deer Creek reservoirs. Both rivers combine cold, clear water, prolific insect hatches, and large populations of wild brown and rainbow trout in accessible, scenic settings that make Utah a legitimate destination for anglers who might otherwise assume the state's arid reputation translates to poor fishing.\n\nThe Green River below Flaming Gorge is the signature Utah fly fishing experience — a broad, spring-colored river flowing through the Canyon of Lodore and the Browns Park area with water temperatures that remain in the mid-40s to low-50s year-round. The river's three sections — A, B, and C — offer distinct fishing experiences ranging from wade-accessible trophy water to float-only canyon stretches. Brown trout exceeding 20 inches are common, and the five-fish-per-day limit on certain sections (unusual for a quality western tailwater) reflects the river's remarkable productivity.\n\nThe Provo River through Heber Valley and Provo Canyon is northern Utah's most accessible trophy fishery — a technical tailwater that rewards precise nymphing with brown trout in the 16-to-22-inch range. The Weber River, Ogden River, and Logan River tailwaters provide additional quality fishing within a day's drive of Salt Lake City, making Utah one of the most fly-fishing-rich urban corridors in the West.",
+    heroImageUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=1200&q=80",
+    thumbnailUrl: "https://images.unsplash.com/photo-1544551763-92ab472cad5d?w=800&q=80",
+    latitude: 39.5770,
+    longitude: -109.5498,
+    bestMonths: ["April", "May", "June", "September", "October", "November"],
+    primarySpecies: ["Brown Trout", "Rainbow Trout", "Cutthroat Trout"],
+    licenseInfo:
+      "Utah fishing license required for all anglers 12 and older. A separate Bonneville Unit (trout) license or combination license is required for some waters. Available online through the Utah Division of Wildlife Resources.",
+    elevationRange: "2,200 - 13,528 ft",
+    climateNotes:
+      "Semi-arid and mountain climate. Green River tailwater fishes year-round with most consistent conditions April through November. Provo River peaks spring and fall; winter midge fishing is excellent on warmwater days. Summer heat can reduce surface activity on lower-elevation tailwaters; fish early mornings.",
+    regulationsSummary:
+      "Utah DWR manages quality, trophy, and artificial-lures-only sections on key tailwaters. Green River below Flaming Gorge has specific regulations that vary by section (A, B, C). Provo River has artificial-lures, catch-and-release sections. Always consult current Utah DWR Fishing Guidebook before fishing any designated special regulation water.",
+    metaTitle: "Utah Fly Fishing Guide | Executive Angler",
+    metaDescription:
+      "Fly fishing in Utah — Green River tailwater below Flaming Gorge, Provo River trophy browns, and some of the most productive trout water in the American West.",
+    featured: false,
+  },
 ];
