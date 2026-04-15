@@ -1,4 +1,4 @@
-import type { FlyShop } from "@/types/entities";
+import type { FlyShop, GoogleReview } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
 
@@ -10,6 +10,9 @@ function mapRow(r: Record<string, unknown>): FlyShop {
     destinationId: (r.destination_id ?? "") as string,
     description: (r.description ?? "") as string,
     heroImageUrl: (r.hero_image_url ?? undefined) as string | undefined,
+    heroImageAlt: (r.hero_image_alt ?? undefined) as string | undefined,
+    heroImageCredit: (r.hero_image_credit ?? undefined) as string | undefined,
+    heroImageCreditUrl: (r.hero_image_credit_url ?? undefined) as string | undefined,
     address: (r.address ?? "") as string,
     latitude: r.latitude ? Number(r.latitude) : 0,
     longitude: r.longitude ? Number(r.longitude) : 0,
@@ -22,6 +25,7 @@ function mapRow(r: Record<string, unknown>): FlyShop {
     googleRating: r.google_rating ? Number(r.google_rating) : undefined,
     googleReviewCount: r.google_review_count ? Number(r.google_review_count) : undefined,
     googleReviewsUrl: (r.google_reviews_url ?? undefined) as string | undefined,
+    featuredReviews: (r.featured_reviews ?? undefined) as GoogleReview[] | undefined,
     metaTitle: (r.meta_title ?? undefined) as string | undefined,
     metaDescription: (r.meta_description ?? undefined) as string | undefined,
   };
