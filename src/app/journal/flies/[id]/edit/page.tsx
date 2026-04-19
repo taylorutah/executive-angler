@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Upload, Trash2, X } from "lucide-react";
+import { ArrowLeft, Upload, Trash2, X, Sparkles } from "lucide-react";
+import VariantModal from "@/components/flies/VariantModal";
 
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
 
@@ -44,6 +45,7 @@ export default function EditFlyPage() {
     bead_size: "", bead_color: "", fly_color: "",
     materials: "", description: "", video_url: "", tags: "",
   });
+  const [variantOpen, setVariantOpen] = useState(false);
 
   useEffect(() => {
     fetch(`/api/fishing/flies?id=${id}`)
@@ -105,7 +107,7 @@ export default function EditFlyPage() {
         });
       }
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
-      router.push(`/journal/flies`);
+      router.push(`/my-flies?tab=box`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setSaving(false);
@@ -116,7 +118,7 @@ export default function EditFlyPage() {
     if (!confirm("Delete this fly pattern permanently?")) return;
     setDeleting(true);
     const res = await fetch(`/api/fishing/flies?id=${id}`, { method: "DELETE" });
-    if (res.ok) router.push("/journal/flies");
+    if (res.ok) router.push("/my-flies?tab=box");
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
@@ -140,12 +142,31 @@ export default function EditFlyPage() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/journal/flies" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-            <ArrowLeft className="h-4 w-4" /> Fly Patterns
+          <Link href="/my-flies" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
+            <ArrowLeft className="h-4 w-4" /> My Flies
           </Link>
           <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Fly Pattern</h1>
-          <div className="w-24" />
+          <button
+            type="button"
+            onClick={() => setVariantOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-3 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Variant
+          </button>
         </div>
+
+        {variantOpen && (
+          <VariantModal
+            open={variantOpen}
+            onClose={() => setVariantOpen(false)}
+            parent={{
+              patternId: id,
+              name: form.name || "This pattern",
+              heroImageUrl: existingImage,
+            }}
+          />
+        )}
 
         {error && <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">{error}</div>}
 

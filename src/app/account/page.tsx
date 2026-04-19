@@ -36,7 +36,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
     .eq("user_id", user.id)
     .single();
 
@@ -99,6 +99,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         isPrivate: profile?.is_private ?? false,
       }}
       feedDisplay={(profile?.feed_display as "collage" | "map") || "collage"}
+      tiesOwnFlies={(profile as { ties_own_flies?: boolean })?.ties_own_flies !== false}
       stats={{
         totalSessions,
         totalFish,

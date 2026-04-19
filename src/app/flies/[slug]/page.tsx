@@ -20,6 +20,7 @@ import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
 import { checkPremium } from "@/lib/admin";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
+import CreateVariantButton from "@/components/flies/CreateVariantButton";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
@@ -359,6 +360,19 @@ export default async function FlyDetailPage({ params }: Props) {
               {/* Desktop: action buttons inline */}
               <div className="hidden sm:flex items-center gap-2 mt-4">
                 <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+                <CreateVariantButton
+                  compact
+                  parent={{
+                    canonicalId: fly.id,
+                    name: fly.name,
+                    heroImageUrl: fly.heroImageUrl ?? null,
+                    category: fly.category,
+                    defaultSize: fly.sizes?.[0] ?? null,
+                    defaultColor: fly.colors?.[0] ?? null,
+                    defaultBeadColor: fly.beadOptions?.[0] ?? null,
+                  }}
+                  redirectPath={`/flies/${fly.slug}`}
+                />
                 <FlyFavoriteButton canonicalFlyId={fly.id} compact />
               </div>
             </div>
@@ -821,6 +835,18 @@ export default async function FlyDetailPage({ params }: Props) {
             {/* Mobile action buttons */}
             <div className="space-y-2">
               <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
+              <CreateVariantButton
+                parent={{
+                  canonicalId: fly.id,
+                  name: fly.name,
+                  heroImageUrl: fly.heroImageUrl ?? null,
+                  category: fly.category,
+                  defaultSize: fly.sizes?.[0] ?? null,
+                  defaultColor: fly.colors?.[0] ?? null,
+                  defaultBeadColor: fly.beadOptions?.[0] ?? null,
+                }}
+                redirectPath={`/flies/${fly.slug}`}
+              />
               <FlyFavoriteButton canonicalFlyId={fly.id} />
             </div>
 

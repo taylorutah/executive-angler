@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard, Database, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -24,7 +24,7 @@ const AWARD_EMOJI_MAP: Record<string, string> = {
   streak_4: "⚡", streak_12: "💎",
 };
 
-type Section = "profile" | "subscription" | "notifications" | "security" | "connected";
+type Section = "profile" | "subscription" | "notifications" | "security" | "connected" | "data";
 
 interface Props {
   user: {
@@ -38,6 +38,7 @@ interface Props {
     isPrivate?: boolean;
   };
   feedDisplay: "collage" | "map";
+  tiesOwnFlies?: boolean;
   stats: {
     totalSessions: number;
     totalFish: number;
@@ -75,14 +76,14 @@ interface Props {
   hasStripeCustomer?: boolean;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, tiesOwnFlies: initialTiesOwnFlies = true, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false }: Props) {
   const router = useRouter();
 
   // Determine initial section from URL hash
   const getInitialSection = (): Section => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (["profile", "subscription", "notifications", "security", "connected"].includes(hash)) return hash as Section;
+      if (["profile", "subscription", "notifications", "security", "connected", "data"].includes(hash)) return hash as Section;
     }
     return "profile";
   };
@@ -94,6 +95,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const [homeLocation, setHomeLocation] = useState(user.homeLocation || "");
   const [isPrivate, setIsPrivate] = useState(user.isPrivate ?? false);
   const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
+  const [tiesOwnFlies, setTiesOwnFlies] = useState<boolean>(initialTiesOwnFlies);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
@@ -119,6 +121,60 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
 
   // Subscription portal
   const [portalLoading, setPortalLoading] = useState(false);
+
+  // Demo content state
+  const [demoProbed, setDemoProbed] = useState(false);
+  const [demoSessionCount, setDemoSessionCount] = useState(0);
+  const [demoCatchCount, setDemoCatchCount] = useState(0);
+  const [demoClearing, setDemoClearing] = useState(false);
+  const [demoCleared, setDemoCleared] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/user/demo-content");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!active) return;
+        setDemoSessionCount(data.sessionCount ?? 0);
+        setDemoCatchCount(data.catchCount ?? 0);
+      } finally {
+        if (active) setDemoProbed(true);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function handleClearDemoContent() {
+    const msg =
+      `This will permanently delete your ${demoSessionCount} sample session${demoSessionCount === 1 ? "" : "s"}` +
+      ` and ${demoCatchCount} associated catch${demoCatchCount === 1 ? "" : "es"}.` +
+      ` Your real sessions will not be touched. Continue?`;
+    if (!confirm(msg)) return;
+
+    setDemoClearing(true);
+    try {
+      const res = await fetch("/api/user/demo-content", { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to clear demo content");
+        return;
+      }
+      setDemoSessionCount(0);
+      setDemoCatchCount(0);
+      setDemoCleared(true);
+      setTimeout(() => setDemoCleared(false), 3000);
+      // Refresh stats/counts that server-rendered based on old totals.
+      router.refresh();
+    } catch {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setDemoClearing(false);
+    }
+  }
 
   async function handleManageSubscription() {
     setPortalLoading(true);
@@ -174,7 +230,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   // Handle hash navigation
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (["profile", "notifications", "security", "connected"].includes(hash)) {
+    if (["profile", "subscription", "notifications", "security", "connected", "data"].includes(hash)) {
       setActiveSection(hash as Section);
     }
   }, []);
@@ -220,7 +276,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
     const cleanUsername = username.trim().toLowerCase() || null;
     await supabase.auth.updateUser({ data: { display_name: displayName } });
     await supabase.from("profiles").upsert(
-      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, feed_display: feedDisplay },
+      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, feed_display: feedDisplay, ties_own_flies: tiesOwnFlies },
       { onConflict: "user_id" }
     );
     setSaving(false);
@@ -270,12 +326,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
   const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] transition-colors";
   const labelCls = "block text-sm font-medium text-[#A8B2BD] mb-1.5";
 
+  const hasDemoContent = demoSessionCount > 0 || demoCatchCount > 0;
+
   const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
     { key: "profile", icon: Settings, label: "Edit Profile" },
     { key: "subscription", icon: CreditCard, label: "Subscription" },
     { key: "notifications", icon: Bell, label: "Notifications" },
     { key: "security", icon: Key, label: "Security" },
     { key: "connected", icon: Link2, label: "Connected Accounts" },
+    ...(hasDemoContent ? [{ key: "data" as const, icon: Database, label: "Data" }] : []),
   ];
 
   // ─── Quick nav cards ───
@@ -457,6 +516,21 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                           Map
                         </button>
                       </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelCls}>Fly Tying Workbench</label>
+                    <p className="text-xs text-[#6E7681] mb-2">Hide the workbench and tie-next tabs if you don&apos;t tie your own flies. Your fly box and shared patterns still work normally.</p>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={() => setTiesOwnFlies(true)}
+                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${tiesOwnFlies ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                        I tie my own flies
+                      </button>
+                      <button type="button" onClick={() => setTiesOwnFlies(false)}
+                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!tiesOwnFlies ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                        I buy my flies
+                      </button>
                     </div>
                   </div>
 
@@ -692,6 +766,54 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, s
                     <span className="text-sm text-green-500 font-medium">Connected ✓</span>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* ═══════ DATA ═══════ */}
+            {activeSection === "data" && (
+              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Data</h2>
+                <p className="text-sm text-[#A8B2BD] mb-6">Manage sample content added to your account during onboarding.</p>
+
+                {demoProbed && !hasDemoContent ? (
+                  <div className="rounded-lg border border-[#21262D] bg-[#0D1117] p-4 text-sm text-[#A8B2BD]">
+                    No demo content on your account. Your journal is clean.
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-[#21262D] bg-[#0D1117] p-5">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="h-10 w-10 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
+                        <Database className="h-5 w-5 text-[#E8923A]" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-[#F0F6FC]">Sample sessions</p>
+                        <p className="text-xs text-[#A8B2BD] mt-0.5">
+                          {demoProbed
+                            ? `${demoSessionCount} session${demoSessionCount === 1 ? "" : "s"} · ${demoCatchCount} catch${demoCatchCount === 1 ? "" : "es"} were added to your journal to help you explore the app.`
+                            : "Checking for demo content…"}
+                        </p>
+                        <p className="text-xs text-[#6E7681] mt-1">
+                          Clearing won&apos;t touch any sessions you logged yourself.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 pt-2 border-t border-[#21262D]">
+                      <button
+                        type="button"
+                        onClick={handleClearDemoContent}
+                        disabled={demoClearing || !demoProbed || !hasDemoContent}
+                        className="inline-flex items-center gap-2 rounded-lg bg-red-900/30 border border-red-800/50 text-red-400 px-4 py-2 text-sm font-semibold hover:bg-red-900/50 hover:text-red-300 disabled:opacity-50 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        {demoClearing ? "Clearing…" : demoCleared ? "Cleared ✓" : "Clear demo content"}
+                      </button>
+                      {demoCleared && (
+                        <span className="text-xs text-[#2EA44F]">Your journal is empty and ready.</span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
