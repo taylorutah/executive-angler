@@ -6,6 +6,7 @@ import {
   BookOpen, Map, Wrench, Search as SearchIcon, Sparkles
 } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
 import { getFeaturedArticles } from "@/lib/db";
 import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
 
@@ -64,64 +65,79 @@ export default async function HomePage() {
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0BA5C7] opacity-10 blur-[120px] rounded-full" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#E8923A] opacity-10 blur-[120px] rounded-full" />
 
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center py-20">
-          <ScrollAnimation>
-            <div className="inline-flex items-center gap-2 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E8923A] animate-pulse" />
-              <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
-                Now on the App Store
-              </span>
-            </div>
-          </ScrollAnimation>
-          <ScrollAnimation delay={0.1}>
-            <h1 className="text-[#F0F6FC] font-['DM_Serif_Display'] font-normal leading-[1.05] mb-6" style={{ fontSize: "clamp(3rem, 8vw, 5rem)", letterSpacing: "-0.02em" }}>
-              Better data.<br />Better days on the water.
-            </h1>
-          </ScrollAnimation>
-          <ScrollAnimation delay={0.2}>
-            <p className="text-[#A8B2BD] text-lg max-w-xl mx-auto leading-relaxed mb-10">
-              The fly fishing intelligence platform. Journal every session, build fly recipes, track river conditions, and let your data show you what works.
-            </p>
-          </ScrollAnimation>
-
-          {/* CTA buttons */}
-          <ScrollAnimation delay={0.3}>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
-              <a
-                href={APP_STORE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors shadow-lg text-base"
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                </svg>
-                Download for iPhone
-              </a>
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-semibold rounded-xl hover:border-[#6E7681] transition-colors text-base"
-              >
-                Open Web App
-              </Link>
-            </div>
-          </ScrollAnimation>
-
-          {/* Pillar feature pills */}
-          <ScrollAnimation delay={0.35}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 max-w-2xl mx-auto">
-              {PILLAR_FEATURES.map((f) => (
-                <div key={f.text} className="flex items-center gap-2.5 bg-[#161B22] border border-[#21262D] rounded-xl px-4 py-3">
-                  <f.icon className="h-4 w-4 text-[#E8923A] flex-shrink-0" strokeWidth={1.5} />
-                  <span className="text-[#A8B2BD] text-xs text-left leading-snug">{f.text}</span>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-10 lg:gap-16 items-center">
+            {/* LEFT — Copy + CTAs */}
+            <div className="text-center lg:text-left">
+              <ScrollAnimation>
+                <div className="inline-flex items-center gap-2 mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E8923A] animate-pulse" />
+                  <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
+                    Now on the App Store
+                  </span>
                 </div>
-              ))}
-            </div>
-          </ScrollAnimation>
+              </ScrollAnimation>
+              <ScrollAnimation delay={0.1}>
+                <h1
+                  className="text-[#F0F6FC] font-['DM_Serif_Display'] font-normal leading-[1.05] mb-6"
+                  style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
+                >
+                  Better data.<br />Better days on the water.
+                </h1>
+              </ScrollAnimation>
+              <ScrollAnimation delay={0.2}>
+                <p className="text-[#A8B2BD] text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
+                  The fly fishing intelligence platform. Journal every session, build fly recipes, track river conditions, and let your data show you what works.
+                </p>
+              </ScrollAnimation>
 
-          {/* Four pillar nav cards */}
+              {/* CTA buttons */}
+              <ScrollAnimation delay={0.3}>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
+                  <a
+                    href={APP_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors shadow-lg text-base"
+                  >
+                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                    </svg>
+                    Download for iPhone
+                  </a>
+                  <Link
+                    href="/signup"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-semibold rounded-xl hover:border-[#6E7681] transition-colors text-base"
+                  >
+                    Open Web App
+                  </Link>
+                </div>
+              </ScrollAnimation>
+
+              {/* Feature bullets */}
+              <ScrollAnimation delay={0.35}>
+                <ul className="flex flex-col gap-2.5 mt-2 max-w-lg mx-auto lg:mx-0">
+                  {PILLAR_FEATURES.map((f) => (
+                    <li key={f.text} className="flex items-center gap-3 text-sm text-[#A8B2BD]">
+                      <f.icon className="h-4 w-4 text-[#E8923A] flex-shrink-0" strokeWidth={1.75} />
+                      <span className="text-left leading-snug">{f.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollAnimation>
+            </div>
+
+            {/* RIGHT — Phone mockup */}
+            <ScrollAnimation delay={0.2}>
+              <div className="flex justify-center lg:justify-end">
+                <PhoneHeroMockup />
+              </div>
+            </ScrollAnimation>
+          </div>
+
+          {/* Four pillar nav cards (full-width below the split) */}
           <ScrollAnimation delay={0.4}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mt-16">
               {[
                 { label: "Journal", desc: "Log sessions", href: "/journal", icon: Smartphone, color: "#E8923A" },
                 { label: "Flies", desc: "Patterns & recipes", href: "/flies", icon: Bug, color: "#E8923A" },
