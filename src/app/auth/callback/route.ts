@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { buildDemoRows } from "@/lib/demo-sessions";
 
 /**
  * GET /auth/callback
@@ -135,7 +136,9 @@ async function ensureProfile(
     .eq("user_id", user.id)
     .maybeSingle();
 
-  if (!profile) {
+  const isNewProfile = !profile;
+
+  if (isNewProfile) {
     const displayName =
       user.user_metadata?.full_name ||
       user.user_metadata?.display_name ||
@@ -153,5 +156,53 @@ async function ensureProfile(
       },
       { onConflict: "user_id" }
     );
+
+    // First-time OAuth signup — seed demo sessions so the journal isn't empty.
+    // Idempotency is also enforced at the query level (only seeds if no
+    // sessions exist), so double-calls are safe.
+    await seedDemoSessions(supabase, user.id);
+  }
+}
+
+async function seedDemoSessions(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+) {
+  try {
+    const { count } = await supabase
+      .from("fishing_sessions")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId);
+
+    if ((count ?? 0) > 0) return;
+
+    const rows = buildDemoRows(userId);
+    const { data: insertedSessions, error: sessionError } = await supabase
+      .from("fishing_sessions")
+      .insert(rows.map((r) => r.session))
+      .select("id, title");
+
+    if (sessionError || !insertedSessions) {
+      console.warn("[AUTH CALLBACK] Demo session seed failed:", sessionError?.message);
+      return;
+    }
+
+    const catchInserts = insertedSessions.flatMap((sess) => {
+      const source = rows.find((r) => r.session.title === sess.title);
+      if (!source) return [];
+      return source.catches.map((c) => ({ ...c, session_id: sess.id }));
+    });
+
+    if (catchInserts.length > 0) {
+      const { error: catchError } = await supabase
+        .from("catches")
+        .insert(catchInserts);
+      if (catchError) {
+        console.warn("[AUTH CALLBACK] Demo catches seed failed:", catchError.message);
+      }
+    }
+  } catch (err) {
+    // Never block login on seeding — a failed seed just means an empty journal.
+    console.warn("[AUTH CALLBACK] Demo seed exception:", err);
   }
 }

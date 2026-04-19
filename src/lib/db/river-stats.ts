@@ -29,11 +29,14 @@ export async function getRiverActivityStats(
     .toISOString()
     .split("T")[0];
 
-  // Fetch all sessions for this river
+  // Fetch all sessions for this river.
+  // Exclude onboarding demo sessions — they're personal sample data and
+  // must not inflate public river intel / leaderboards.
   const { data: sessions, error } = await supabase
     .from("fishing_sessions")
     .select("id, date, total_fish")
-    .eq("river_id", riverId);
+    .eq("river_id", riverId)
+    .eq("is_demo", false);
 
   if (error || !sessions || sessions.length === 0) {
     return null;

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin, checkPremium } from "@/lib/admin";
 
 export const metadata = { title: "My Account | Executive Angler" };
 
@@ -123,7 +123,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         emailDigestFrequency: (profile?.email_digest_frequency as "none" | "daily" | "weekly") ?? "weekly",
       }}
       isAdmin={isAdmin(user.email)}
-      isPremium={profile?.is_premium ?? false}
+      isPremium={await checkPremium(supabase, user.id, user.email)}
       subscription={subscription ? {
         source: subscription.source as "apple" | "google" | "stripe",
         plan: subscription.plan as "monthly" | "annual",

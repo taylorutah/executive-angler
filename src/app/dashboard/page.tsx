@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
+import { checkPremium } from "@/lib/admin";
 
 // Never cache — always fetch fresh data
 export const dynamic = "force-dynamic";
@@ -30,6 +31,11 @@ export default async function DashboardPage() {
     .select("username, display_name, avatar_url, home_location, is_premium")
     .eq("user_id", user.id)
     .single();
+
+  // Full 3-tier premium check (permanent-pro email → profiles.is_premium →
+  // active subscription). The banner logic reads this — using profile.is_premium
+  // alone misses permanent-pro emails whose profile flag isn't set.
+  const isPremium = await checkPremium(supabase, user.id, user.email);
 
   // Fetch user own sessions (last 5)
   const { data: mySessions } = await supabase
@@ -284,7 +290,7 @@ export default async function DashboardPage() {
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
       riverSlugMap={riverSlugMap}
-      isPremium={profile?.is_premium ?? false}
+      isPremium={isPremium}
       enhancedStats={{
         totalSessions,
         totalFish: totalFishAll,

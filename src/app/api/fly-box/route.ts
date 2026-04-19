@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkPremium } from "@/lib/admin";
 
 // GET — fetch user's fly box (canonical refs + custom flies)
 export async function GET() {
@@ -59,21 +60,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check fly box count for premium gating
-    const [{ count }, { data: profile }] = await Promise.all([
+    // Check fly box count for premium gating.
+    // Full 3-tier premium check covers permanent-pro emails + active subs.
+    const [{ count }, isPremium] = await Promise.all([
       supabase
         .from("user_fly_box")
         .select("id", { count: "exact", head: true })
         .eq("user_id", user.id),
-      supabase
-        .from("profiles")
-        .select("is_premium")
-        .eq("user_id", user.id)
-        .single(),
+      checkPremium(supabase, user.id, user.email),
     ]);
 
     // Free tier limit: 10 flies
-    const isPremium = profile?.is_premium ?? false;
     if (!isPremium && (count ?? 0) >= 10) {
       return NextResponse.json(
         { error: "Free tier limit reached. Upgrade to Pro for unlimited flies." },

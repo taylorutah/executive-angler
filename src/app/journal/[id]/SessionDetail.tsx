@@ -157,6 +157,7 @@ interface Props {
   catches: Catch[];
   flies: FlyPattern[];
   sessionPhotos?: SessionPhoto[];
+  isOwner?: boolean;
 }
 
 interface FishPhotoEntry {
@@ -278,7 +279,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   );
 }
 
-export default function SessionDetail({ session, catches, flies, sessionPhotos = [] }: Props) {
+export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Catch photo uploads — track all photos per catch (array)
@@ -490,11 +491,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               <ArrowLeft className="h-4 w-4" /> Back to Journal
             </Link>
             <div className="flex items-center gap-3">
-              {notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
-              <Link href={`/journal/${session.id}/edit`}
-                className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4822f] transition-colors shadow-sm">
-                <Pencil className="h-3.5 w-3.5" /> Edit Session
-              </Link>
+              {isOwner && notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
+              {isOwner && (
+                <Link href={`/journal/${session.id}/edit`}
+                  className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4822f] transition-colors shadow-sm">
+                  <Pencil className="h-3.5 w-3.5" /> Edit Session
+                </Link>
+              )}
             </div>
           </div>
 
@@ -515,9 +518,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {session.title || session.river_name || "Fishing Session"}
                 </h1>
 
-                {/* Inline-editable notes */}
+                {/* Inline-editable notes (read-only for non-owners) */}
                 <div className="mb-3 max-w-lg group/notes relative">
-                  {editingNotes ? (
+                  {!isOwner ? (
+                    notesValue ? (
+                      <p className="text-sm text-[#A8B2BD] leading-relaxed whitespace-pre-wrap">
+                        {notesValue}
+                      </p>
+                    ) : null
+                  ) : editingNotes ? (
                     <div>
                       <textarea
                         autoFocus
@@ -562,6 +571,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </div>
 
                 {/* Private memo — only visible to owner */}
+                {isOwner && (
                 <div className="mb-3 max-w-lg group/memo relative">
                   <div className="flex items-center gap-1.5 mb-1">
                     <Lock className="h-3 w-3 text-[#6E7681]" />
@@ -612,6 +622,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     </button>
                   )}
                 </div>
+                )}
 
                 {session.flies_notes && (
                   <div className="text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">

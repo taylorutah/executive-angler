@@ -22,14 +22,24 @@ export default async function SessionDetailPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/journal");
 
+  // Allow viewing if user owns it OR session is public.
+  // RLS already enforces this at the row level, so no extra filter is
+  // needed — but we fetch the row and then check ownership to render
+  // the right edit/share affordances in SessionDetail.
   const { data: session, error } = await supabase
     .from("fishing_sessions")
     .select("*")
     .eq("id", id)
-    .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
 
   if (error || !session) notFound();
+
+  const isOwner = session.user_id === user.id;
+  if (!isOwner && session.privacy !== "public") {
+    // Belt & suspenders: RLS would have already filtered, but if anything
+    // ever slips through, 404 rather than leak private data.
+    notFound();
+  }
 
   const { data: catches } = await supabase
     .from("catches")
@@ -58,6 +68,7 @@ export default async function SessionDetailPage({ params }: Props) {
       catches={(catches || []) as Parameters<typeof SessionDetail>[0]["catches"]}
       flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
       sessionPhotos={sessionPhotos ?? []}
+      isOwner={isOwner}
     />
   );
 }

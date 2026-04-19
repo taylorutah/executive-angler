@@ -18,6 +18,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
+import { checkPremium } from "@/lib/admin";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
@@ -101,17 +102,13 @@ export default async function FlyDetailPage({ params }: Props) {
       : fly.sizes[0];
 
   // Check premium status for gating tying steps 4+
+  // Full 3-tier check covers permanent-pro emails + active subscriptions,
+  // not just profiles.is_premium.
   const supabase = await createClient();
   const { data: { user: currentUser } } = await supabase.auth.getUser();
-  let isPremium = false;
-  if (currentUser) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("is_premium")
-      .eq("user_id", currentUser.id)
-      .single();
-    isPremium = profile?.is_premium ?? false;
-  }
+  const isPremium = currentUser
+    ? await checkPremium(supabase, currentUser.id, currentUser.email)
+    : false;
 
   // Fetch structured recipe ingredients if they exist
   const { data: recipeIngredients } = await supabase

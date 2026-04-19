@@ -103,6 +103,18 @@ export default function SignupPage() {
       );
     }
 
+    // Seed 3 demo sessions so the new user's journal isn't empty.
+    // Route is idempotent (no-ops if sessions already exist) and failures
+    // here shouldn't block signup — the worst case is an empty journal.
+    try {
+      await fetch("/api/onboarding/seed-demo", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+    } catch (seedError) {
+      console.warn("[SIGNUP] Demo seed skipped:", seedError);
+    }
+
     setSuccess(true);
     setLoading(false);
   }

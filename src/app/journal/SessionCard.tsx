@@ -46,6 +46,7 @@ interface FishingSession {
   latitude?: number;
   longitude?: number;
   privacy?: string;
+  is_demo?: boolean;
   gear_snapshot?: GearSnapshot;
 }
 
@@ -138,7 +139,15 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
                 {title}
               </h3>
               <div className="flex items-center gap-1.5 flex-shrink-0">
-                {session.privacy && session.privacy !== "public" && (
+                {session.is_demo && (
+                  <span
+                    title="Sample session — delete anytime from the edit screen"
+                    className="text-[9px] font-bold tracking-wider bg-[#0BA5C7]/15 text-[#0BA5C7] border border-[#0BA5C7]/30 rounded-full px-1.5 py-0.5 uppercase"
+                  >
+                    Sample
+                  </span>
+                )}
+                {session.privacy && session.privacy !== "public" && !session.is_demo && (
                   <Lock className="h-3 w-3 text-[#6E7681]" />
                 )}
                 {totalFish > 0 && (
