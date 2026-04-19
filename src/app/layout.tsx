@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AppBanner from "@/components/layout/AppBanner";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import { ThemeProvider } from "@/lib/theme-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
@@ -110,7 +109,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${dmSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
       <head>
-        {/* Apple native Smart App Banner — Safari iOS only, complements custom banner */}
+        {/* Apple native Smart App Banner — Safari iOS only. Auto-detects whether
+            the app is installed and shows "Open" vs "View" accordingly. We
+            prefer this over a custom banner because it's install-aware and
+            rendered natively by iOS above the page chrome. */}
         <meta name="apple-itunes-app" content="app-id=6760311036" />
         {/* Preconnect to critical third-party origins */}
         <link rel="preconnect" href="https://qlasxtfbodyxbcuchvxz.supabase.co" />
@@ -136,7 +138,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider>
-          <AppBanner />
           <Header />
           <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
           <Footer />
