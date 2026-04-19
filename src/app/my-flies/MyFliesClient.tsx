@@ -1,0 +1,632 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Layers,
+  Wrench,
+  ListChecks,
+  Share2,
+  Plus,
+  Sparkles,
+  Package,
+  FlaskConical,
+  ArrowRight,
+  Heart,
+  Feather,
+} from "lucide-react";
+import type { FlyPattern } from "@/types/fishing-log";
+import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
+import {
+  FlyBoxTabs,
+  type SerializedFlyPattern,
+  type SerializedFlyBoxEntry,
+} from "@/components/flies/FlyBoxTabs";
+
+type Tab = "box" | "workbench" | "tie-next" | "shared";
+
+const CATEGORY_TO_TYPE: Record<string, string> = {
+  dry: "Dry Fly",
+  nymph: "Nymph",
+  streamer: "Streamer",
+  emerger: "Emerger",
+  wet: "Wet Fly",
+  terrestrial: "Terrestrial",
+  egg: "Egg",
+  midge: "Midge",
+};
+
+const TYPE_ORDER = [
+  "Nymph",
+  "Dry Fly",
+  "Streamer",
+  "Wet Fly",
+  "Emerger",
+  "Terrestrial",
+  "Egg",
+  "Midge",
+  "Other",
+];
+
+interface Props {
+  initialTab?: string;
+  tiesOwnFlies: boolean;
+  myPatterns: FlyPattern[];
+  flyBoxEntries: FlyBoxEntry[];
+  tieNextPatterns: FlyPattern[];
+  tieNextBoxEntries: FlyBoxEntry[];
+  shared: FlyPattern[];
+  counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
+  canonicalNames: string[];
+}
+
+export default function MyFliesClient({
+  initialTab,
+  tiesOwnFlies,
+  myPatterns,
+  flyBoxEntries,
+  tieNextPatterns,
+  tieNextBoxEntries,
+  shared,
+  counts,
+  canonicalNames,
+}: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const normalized = normalizeTab(initialTab, tiesOwnFlies);
+  const [tab, setTab] = useState<Tab>(normalized);
+
+  function switchTab(next: Tab) {
+    setTab(next);
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    if (next === "box") params.delete("tab");
+    else params.set("tab", next);
+    const qs = params.toString();
+    router.replace(qs ? `/my-flies?${qs}` : "/my-flies", { scroll: false });
+  }
+
+  // Group for the Fly Box tab — reuses the existing FlyBoxTabs component
+  const flyBoxProps = useMemo(
+    () => buildFlyBoxProps(myPatterns, flyBoxEntries, counts),
+    [myPatterns, flyBoxEntries, counts]
+  );
+
+  const tabs: {
+    key: Tab;
+    label: string;
+    icon: React.ReactNode;
+    count?: number;
+    visible: boolean;
+  }[] = [
+    {
+      key: "box",
+      label: "Fly Box",
+      icon: <Layers className="h-4 w-4" />,
+      count: counts.box,
+      visible: true,
+    },
+    {
+      key: "workbench",
+      label: "Workbench",
+      icon: <Wrench className="h-4 w-4" />,
+      visible: tiesOwnFlies,
+    },
+    {
+      key: "tie-next",
+      label: "Tie Next",
+      icon: <ListChecks className="h-4 w-4" />,
+      count: counts.tieNext,
+      visible: tiesOwnFlies,
+    },
+    {
+      key: "shared",
+      label: "Shared",
+      icon: <Share2 className="h-4 w-4" />,
+      count: counts.sharedWithMe,
+      visible: true,
+    },
+  ];
+
+  const visibleTabs = tabs.filter((t) => t.visible);
+
+  return (
+    <div className="min-h-screen bg-[#0D1117]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">My Flies</h1>
+            <p className="mt-1 text-sm text-[#6E7681]">
+              {counts.box} in box · {counts.favorites} favorite
+              {counts.favorites === 1 ? "" : "s"} · {counts.tieNext} in tie-next
+              {counts.sharedWithMe > 0 ? ` · ${counts.sharedWithMe} shared with you` : ""}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/flies"
+              className="flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
+            >
+              Browse Library
+            </Link>
+            <Link
+              href="/journal/flies/new"
+              className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
+            >
+              <Plus className="h-4 w-4" /> New Pattern
+            </Link>
+          </div>
+        </header>
+
+        <div className="mb-6 flex flex-wrap gap-1 rounded-lg border border-[#21262D] bg-[#161B22] p-1">
+          {visibleTabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => switchTab(t.key)}
+              className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                tab === t.key
+                  ? "bg-[#E8923A] text-white"
+                  : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+              }`}
+            >
+              {t.icon}
+              {t.label}
+              {t.count !== undefined && t.count > 0 && (
+                <span
+                  className={`rounded-full px-1.5 text-[10px] ${
+                    tab === t.key ? "bg-white/20" : "bg-[#21262D]"
+                  }`}
+                >
+                  {t.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {tab === "box" && <FlyBoxPanel {...flyBoxProps} canonicalNames={canonicalNames} />}
+        {tab === "workbench" && <WorkbenchPanel />}
+        {tab === "tie-next" && (
+          <TieNextPanel patterns={tieNextPatterns} boxEntries={tieNextBoxEntries} />
+        )}
+        {tab === "shared" && <SharedPanel shared={shared} />}
+      </div>
+    </div>
+  );
+}
+
+function normalizeTab(raw: string | undefined, tiesOwnFlies: boolean): Tab {
+  const allowed: Tab[] = tiesOwnFlies
+    ? ["box", "workbench", "tie-next", "shared"]
+    : ["box", "shared"];
+  if (raw && (allowed as string[]).includes(raw)) return raw as Tab;
+  return "box";
+}
+
+/* ── Fly Box panel ───────────────────────────────────────────────── */
+
+type UnifiedFly =
+  | { source: "personal"; fly: SerializedFlyPattern }
+  | { source: "library"; entry: SerializedFlyBoxEntry };
+
+function buildFlyBoxProps(
+  myPatterns: FlyPattern[],
+  flyBoxEntries: FlyBoxEntry[],
+  counts: { favorites: number; tieNext: number }
+) {
+  const personalCards: UnifiedFly[] = myPatterns.map((fly) => ({
+    source: "personal" as const,
+    fly: {
+      id: fly.id,
+      name: fly.name,
+      type: fly.type,
+      size: fly.size,
+      hook: fly.hook,
+      bead_size: fly.bead_size,
+      bead_color: fly.bead_color,
+      fly_color: fly.fly_color,
+      image_url: fly.image_url ?? fly.my_tied_fly_photo_url ?? undefined,
+      tags: fly.tags,
+      description: fly.description,
+      is_favorite: fly.is_favorite,
+      is_tie_next: fly.is_tie_next,
+    },
+  }));
+
+  const libraryCards: UnifiedFly[] = flyBoxEntries
+    .filter((e) => e.canonical_fly)
+    .map((e) => ({
+      source: "library" as const,
+      entry: {
+        id: e.id,
+        canonical_fly_id: e.canonical_fly_id ?? "",
+        preferred_sizes: e.preferred_sizes,
+        personal_notes: e.personal_notes,
+        is_favorite: e.is_favorite,
+        is_tie_next: e.is_tie_next,
+        times_used: e.times_used,
+        canonical_fly: {
+          id: e.canonical_fly!.id,
+          slug: e.canonical_fly!.slug,
+          name: e.canonical_fly!.name,
+          category: e.canonical_fly!.category,
+          tagline: e.canonical_fly!.tagline ?? undefined,
+          sizes: e.canonical_fly!.sizes ?? undefined,
+          colors: e.canonical_fly!.colors ?? undefined,
+          bead_options: e.canonical_fly!.bead_options ?? undefined,
+          hook_styles: e.canonical_fly!.hook_styles ?? undefined,
+          hero_image_url: e.canonical_fly!.hero_image_url ?? undefined,
+        },
+      },
+    }));
+
+  const grouped: Record<string, UnifiedFly[]> = {};
+  for (const card of [...libraryCards, ...personalCards]) {
+    let type: string;
+    if (card.source === "library") {
+      type = CATEGORY_TO_TYPE[card.entry.canonical_fly.category] || "Other";
+    } else {
+      type = card.fly.type || "Other";
+    }
+    if (!grouped[type]) grouped[type] = [];
+    grouped[type].push(card);
+  }
+
+  const sortedTypes = [
+    ...TYPE_ORDER.filter((t) => grouped[t]?.length),
+    ...Object.keys(grouped).filter((t) => !TYPE_ORDER.includes(t) && grouped[t]?.length),
+  ];
+
+  return {
+    favCount: counts.favorites,
+    tieNextCount: counts.tieNext,
+    sortedTypes,
+    grouped,
+  };
+}
+
+function FlyBoxPanel({
+  favCount,
+  tieNextCount,
+  sortedTypes,
+  grouped,
+  canonicalNames,
+}: {
+  favCount: number;
+  tieNextCount: number;
+  sortedTypes: string[];
+  grouped: Record<string, UnifiedFly[]>;
+  canonicalNames: string[];
+}) {
+  const total = Object.values(grouped).reduce((n, arr) => n + arr.length, 0);
+  if (total === 0) {
+    return <EmptyBoxState />;
+  }
+  return (
+    <FlyBoxTabs
+      favCount={favCount}
+      tieNextCount={tieNextCount}
+      sortedTypes={sortedTypes}
+      grouped={grouped}
+      canonicalNames={canonicalNames}
+    />
+  );
+}
+
+function EmptyBoxState() {
+  return (
+    <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-6 py-14 text-center">
+      <Feather className="mx-auto h-10 w-10 text-[#6E7681]" />
+      <h2 className="mt-4 font-heading text-lg font-bold text-[#F0F6FC]">
+        Your fly box is empty
+      </h2>
+      <p className="mx-auto mt-1 max-w-md text-sm text-[#6E7681]">
+        Save patterns from the public library, or design your own in the Workbench.
+      </p>
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <Link
+          href="/flies"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40"
+        >
+          Browse Library
+        </Link>
+        <Link
+          href="/journal/flies/new"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A]"
+        >
+          <Plus className="h-4 w-4" /> New Pattern
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+/* ── Workbench panel ─────────────────────────────────────────────── */
+
+function WorkbenchPanel() {
+  return (
+    <div className="space-y-6">
+      <div className="rounded-xl border border-[#21262D] bg-gradient-to-br from-[#161B22] to-[#0D1117] p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="flex items-center gap-2 font-heading text-xl font-bold text-[#F0F6FC]">
+              <Wrench className="h-5 w-5 text-[#E8923A]" />
+              Workbench
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm text-[#A8B2BD]">
+              Where patterns are born. Design a new fly from scratch, spawn variants from an
+              existing pattern, or open your materials inventory to see what you can tie right now.
+            </p>
+          </div>
+          <Link
+            href="/journal/flies/new"
+            className="hidden flex-shrink-0 items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] sm:inline-flex"
+          >
+            <Plus className="h-4 w-4" /> New Pattern
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <WorkbenchCard
+          icon={<Feather className="h-5 w-5" />}
+          title="New Pattern"
+          body="Build a recipe from scratch with the structured builder or free-text notes."
+          href="/journal/flies/new"
+          cta="Open builder"
+        />
+        <WorkbenchCard
+          icon={<Package className="h-5 w-5" />}
+          title="Materials Inventory"
+          body="Track what you own. Threads, beads, dubbing, feathers — so suggestions know your stash."
+          href="/journal/flies/workbench"
+          cta="Open inventory"
+        />
+        <WorkbenchCard
+          icon={<FlaskConical className="h-5 w-5" />}
+          title="Materials Database"
+          body="500+ verified tying materials. Browse by brand, category, or search."
+          href="/flies/materials"
+          cta="Browse catalog"
+        />
+        <WorkbenchCard
+          icon={<Sparkles className="h-5 w-5" />}
+          title="AI Recipe Scaffolder"
+          body="Describe a pattern in plain English — we'll draft a structured recipe you can tweak."
+          href="/journal/flies/new?ai=1"
+          cta="Try it"
+          badge="Beta"
+        />
+      </div>
+
+      <div className="rounded-xl border border-dashed border-[#21262D] bg-[#0D1117] p-5 text-sm text-[#6E7681]">
+        <span className="font-semibold text-[#A8B2BD]">Tip:</span> Most flies you tie are
+        variations of proven patterns. Open any fly in your box and hit{" "}
+        <span className="rounded bg-[#161B22] px-1.5 py-0.5 text-xs text-[#E8923A]">
+          Create Variant
+        </span>{" "}
+        to fork it with one tap — perfect for sizes, colors, or bead swaps.
+      </div>
+    </div>
+  );
+}
+
+function WorkbenchCard({
+  icon,
+  title,
+  body,
+  href,
+  cta,
+  badge,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+  href: string;
+  cta: string;
+  badge?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col rounded-xl border border-[#21262D] bg-[#161B22] p-5 transition-colors hover:border-[#E8923A]/40"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E8923A]/10 text-[#E8923A]">
+          {icon}
+        </div>
+        {badge && (
+          <span className="rounded-full bg-[#0BA5C7]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0BA5C7]">
+            {badge}
+          </span>
+        )}
+      </div>
+      <h3 className="mt-4 font-heading text-base font-bold text-[#F0F6FC]">{title}</h3>
+      <p className="mt-1 text-sm text-[#A8B2BD]">{body}</p>
+      <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#E8923A] opacity-80 group-hover:opacity-100">
+        {cta}
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+      </div>
+    </Link>
+  );
+}
+
+/* ── Tie Next panel (list form for Phase 1; kanban comes in Phase 4) ─ */
+
+function TieNextPanel({
+  patterns,
+  boxEntries,
+}: {
+  patterns: FlyPattern[];
+  boxEntries: FlyBoxEntry[];
+}) {
+  const total = patterns.length + boxEntries.length;
+  if (total === 0) {
+    return (
+      <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-6 py-14 text-center">
+        <ListChecks className="mx-auto h-10 w-10 text-[#6E7681]" />
+        <h2 className="mt-4 font-heading text-lg font-bold text-[#F0F6FC]">
+          Nothing queued up
+        </h2>
+        <p className="mx-auto mt-1 max-w-md text-sm text-[#6E7681]">
+          Add flies to your Tie Next queue from any pattern card — tap the{" "}
+          <ListChecks className="inline h-3.5 w-3.5" /> icon to add.
+        </p>
+        <Link
+          href="/my-flies"
+          className="mt-6 inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC]"
+        >
+          Go to Fly Box
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-[#6E7681]">
+        Drag-and-drop kanban coming soon. For now, use the checkmark on each pattern card to mark as tied.
+      </p>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {patterns.map((p) => (
+          <TieNextCard
+            key={`p-${p.id}`}
+            href={`/journal/flies/${p.id}/edit`}
+            name={p.name}
+            subtitle={p.type || "Personal pattern"}
+            imageUrl={p.image_url ?? p.my_tied_fly_photo_url ?? null}
+            status={p.tie_next_status ?? "wanted"}
+            targetQty={p.tie_next_target_qty ?? null}
+            notes={p.tie_next_notes ?? null}
+          />
+        ))}
+        {boxEntries.map((e) => (
+          <TieNextCard
+            key={`b-${e.id}`}
+            href={e.canonical_fly ? `/flies/${e.canonical_fly.slug}` : "/my-flies"}
+            name={e.canonical_fly?.name ?? "Unknown fly"}
+            subtitle={CATEGORY_TO_TYPE[e.canonical_fly?.category ?? ""] ?? "Library"}
+            imageUrl={e.canonical_fly?.hero_image_url ?? null}
+            status={e.tie_next_status ?? "wanted"}
+            targetQty={e.tie_next_target_qty ?? null}
+            notes={e.tie_next_notes ?? null}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TieNextCard({
+  href,
+  name,
+  subtitle,
+  imageUrl,
+  status,
+  targetQty,
+  notes,
+}: {
+  href: string;
+  name: string;
+  subtitle: string;
+  imageUrl: string | null;
+  status: string;
+  targetQty: number | null;
+  notes: string | null;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-start gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-3 transition-colors hover:border-[#E8923A]/40"
+    >
+      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-[#0D1117]">
+        {imageUrl ? (
+          <Image src={imageUrl} alt={name} fill className="object-cover" sizes="64px" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-2xl">🪝</div>
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-semibold text-[#F0F6FC]">{name}</p>
+        <p className="truncate text-xs text-[#6E7681]">{subtitle}</p>
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+              status === "at_vise"
+                ? "bg-[#E8923A]/15 text-[#E8923A]"
+                : "bg-[#0BA5C7]/10 text-[#0BA5C7]"
+            }`}
+          >
+            {status === "at_vise" ? "At the vise" : "Want to tie"}
+          </span>
+          {targetQty ? (
+            <span className="rounded-full bg-[#21262D] px-2 py-0.5 text-[10px] text-[#A8B2BD]">
+              {targetQty} to tie
+            </span>
+          ) : null}
+        </div>
+        {notes ? (
+          <p className="mt-2 line-clamp-2 text-xs text-[#A8B2BD]">{notes}</p>
+        ) : null}
+      </div>
+    </Link>
+  );
+}
+
+/* ── Shared with me panel ────────────────────────────────────────── */
+
+function SharedPanel({ shared }: { shared: FlyPattern[] }) {
+  if (shared.length === 0) {
+    return (
+      <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-6 py-14 text-center">
+        <Share2 className="mx-auto h-10 w-10 text-[#6E7681]" />
+        <h2 className="mt-4 font-heading text-lg font-bold text-[#F0F6FC]">
+          Nothing shared with you yet
+        </h2>
+        <p className="mx-auto mt-1 max-w-md text-sm text-[#6E7681]">
+          When another angler shares a pattern with you directly, it shows up here.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {shared.map((p) => (
+        <div
+          key={p.id}
+          className="flex flex-col gap-2 rounded-xl border border-[#21262D] bg-[#161B22] p-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-[#0D1117]">
+              {p.image_url || p.my_tied_fly_photo_url ? (
+                <Image
+                  src={(p.image_url || p.my_tied_fly_photo_url) as string}
+                  alt={p.name}
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xl">🪝</div>
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-semibold text-[#F0F6FC]">{p.name}</p>
+              <p className="truncate text-xs text-[#6E7681]">{p.type ?? "Personal pattern"}</p>
+            </div>
+          </div>
+          {p.description ? (
+            <p className="line-clamp-2 text-xs text-[#A8B2BD]">{p.description}</p>
+          ) : null}
+          <div className="mt-1 flex items-center gap-2">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#0BA5C7]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0BA5C7]">
+              <Heart className="h-3 w-3" /> Shared
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -5,6 +5,9 @@
 // as of 2026-03-18 schema unification migration.
 // =============================================
 
+export type FlyVisibility = 'private' | 'shared' | 'public';
+export type TieNextStatus = 'none' | 'wanted' | 'at_vise' | 'done';
+
 export interface FlyPattern {
   id: string;
   user_id: string;
@@ -24,6 +27,23 @@ export interface FlyPattern {
   notion_id?: string;
   created_at: string;
   updated_at: string;
+  // Phase 1 workbench foundation
+  parent_pattern_id?: string | null;
+  parent_canonical_id?: string | null;
+  visibility?: FlyVisibility;
+  shared_with_user_ids?: string[];
+  tie_next_status?: TieNextStatus;
+  tie_next_target_qty?: number | null;
+  tie_next_notes?: string | null;
+  my_tied_fly_photo_url?: string | null;
+  vise_time_minutes?: number;
+  provenance_credit?: string | null;
+  is_favorite?: boolean;
+  is_tie_next?: boolean;
+  slug?: string | null;
+  is_public?: boolean;
+  imitates?: string[];
+  effective_species?: string[];
 }
 
 export interface FishingSession {
