@@ -128,9 +128,16 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * PATCH — Update tie-next entry (reorder or mark completed)
- * Body: { flyBoxId?: string, flyPatternId?: string, completed?: boolean, order?: number, notes?: string }
+ * PATCH — Update tie-next entry. Supports both legacy `completed` toggle and
+ * the new `status` state machine ("none" | "wanted" | "at_vise" | "done").
+ *
+ * Body: { flyBoxId?, flyPatternId?, status?, completed?, order?, notes?, targetQty? }
+ *
+ * When `status` is provided, it's written to `tie_next_status` and the legacy
+ * `is_tie_next` boolean is kept in sync for backward compat.
  */
+const VALID_STATUSES = new Set(["none", "wanted", "at_vise", "done"]);
+
 export async function PATCH(req: NextRequest) {
   try {
     const supabase = await createClient();
@@ -138,13 +145,27 @@ export async function PATCH(req: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
-    const { flyBoxId, flyPatternId, completed, order, notes } = body;
+    const { flyBoxId, flyPatternId, completed, order, notes, status, targetQty } = body;
+
+    if (status !== undefined && !VALID_STATUSES.has(status)) {
+      return NextResponse.json(
+        { error: `Invalid status. Must be one of: ${[...VALID_STATUSES].join(", ")}` },
+        { status: 400 }
+      );
+    }
 
     if (flyBoxId) {
       const updates: Record<string, unknown> = {};
-      if (typeof completed === "boolean") updates.is_tie_next = !completed;
+      if (typeof status === "string") {
+        updates.tie_next_status = status;
+        updates.is_tie_next = status === "wanted" || status === "at_vise";
+      } else if (typeof completed === "boolean") {
+        updates.is_tie_next = !completed;
+        updates.tie_next_status = completed ? "done" : "wanted";
+      }
       if (typeof order === "number") updates.tie_next_order = order;
-      if (notes !== undefined) updates.personal_notes = notes;
+      if (notes !== undefined) updates.tie_next_notes = notes;
+      if (typeof targetQty === "number") updates.tie_next_target_qty = targetQty;
 
       if (Object.keys(updates).length === 0) {
         return NextResponse.json({ error: "No update fields provided" }, { status: 400 });
@@ -165,7 +186,15 @@ export async function PATCH(req: NextRequest) {
 
     if (flyPatternId) {
       const updates: Record<string, unknown> = {};
-      if (typeof completed === "boolean") updates.is_tie_next = !completed;
+      if (typeof status === "string") {
+        updates.tie_next_status = status;
+        updates.is_tie_next = status === "wanted" || status === "at_vise";
+      } else if (typeof completed === "boolean") {
+        updates.is_tie_next = !completed;
+        updates.tie_next_status = completed ? "done" : "wanted";
+      }
+      if (notes !== undefined) updates.tie_next_notes = notes;
+      if (typeof targetQty === "number") updates.tie_next_target_qty = targetQty;
 
       if (Object.keys(updates).length === 0) {
         return NextResponse.json({ error: "No update fields provided" }, { status: 400 });

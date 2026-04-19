@@ -162,6 +162,11 @@ export default async function HatchInsectPage({ params }: Props) {
                     }
                     badges={[FLY_CATEGORY_LABELS[fly.category] || fly.category]}
                     iconOnly={!fly.heroImageUrl}
+                    actionSlot={{
+                      kind: "add-to-fly-box",
+                      canonicalFlyId: fly.id,
+                      flyName: fly.name,
+                    }}
                   />
                 </ScrollAnimation>
               ))}

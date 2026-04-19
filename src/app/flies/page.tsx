@@ -76,6 +76,11 @@ export default async function FliesPage() {
       featured: fly.featured,
       description: fly.description?.substring(0, 150),
       iconOnly: !fly.heroImageUrl,
+      actionSlot: {
+        kind: "add-to-fly-box" as const,
+        canonicalFlyId: fly.id,
+        flyName: fly.name,
+      },
       _filterValues: {
         category: fly.category || "",
         imitates: (fly.imitates || [])

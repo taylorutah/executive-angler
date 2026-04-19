@@ -163,6 +163,11 @@ export default async function FlyCategoryPage({ params }: Props) {
                         : undefined
                     }
                     iconOnly={!fly.heroImageUrl}
+                    actionSlot={{
+                      kind: "add-to-fly-box",
+                      canonicalFlyId: fly.id,
+                      flyName: fly.name,
+                    }}
                   />
                 </ScrollAnimation>
               ))}

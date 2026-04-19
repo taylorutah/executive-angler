@@ -37,6 +37,16 @@ export interface CardData {
   tags?: string[];
   /** Secondary line (e.g., daily rate, price) */
   accent?: string;
+  /**
+   * Optional inline action for the card. Serializable so it survives the
+   * server→client boundary of EntityListView. Currently only "add-to-fly-box"
+   * is supported; cards render a compact AddToFlyBoxButton overlay.
+   */
+  actionSlot?: {
+    kind: "add-to-fly-box";
+    canonicalFlyId: string;
+    flyName: string;
+  };
 }
 
 export interface EntityListConfig {

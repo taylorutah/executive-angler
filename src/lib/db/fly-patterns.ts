@@ -117,19 +117,23 @@ export async function getVariantsOfCanonical(canonicalId: string): Promise<FlyPa
   return (data ?? []) as FlyPattern[];
 }
 
-/** Tie-next kanban queue for a user (wanted + at_vise states only). */
+/** Tie-next kanban queue for a user — includes wanted, at_vise, and recent done. */
 export async function getTieNextQueue(userId: string): Promise<{
   patterns: FlyPattern[];
   boxEntries: FlyBoxEntry[];
 }> {
   const supabase = await createClient();
+  // "done" items are only surfaced from the last 14 days so the kanban doesn't
+  // grow unbounded. The done column shows recent wins.
+  const cutoff = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
 
   const [patternsRes, boxRes] = await Promise.all([
     supabase
       .from("fly_patterns")
       .select("*")
       .eq("user_id", userId)
-      .in("tie_next_status", ["wanted", "at_vise"])
+      .in("tie_next_status", ["wanted", "at_vise", "done"])
+      .or(`tie_next_status.neq.done,updated_at.gte.${cutoff}`)
       .order("updated_at", { ascending: false }),
     supabase
       .from("user_fly_box")
@@ -150,7 +154,8 @@ export async function getTieNextQueue(userId: string): Promise<{
       `
       )
       .eq("user_id", userId)
-      .in("tie_next_status", ["wanted", "at_vise"])
+      .in("tie_next_status", ["wanted", "at_vise", "done"])
+      .or(`tie_next_status.neq.done,added_at.gte.${cutoff}`)
       .order("added_at", { ascending: false }),
   ]);
 

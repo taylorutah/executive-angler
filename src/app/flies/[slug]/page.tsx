@@ -21,6 +21,7 @@ import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
 import { checkPremium } from "@/lib/admin";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import CreateVariantButton from "@/components/flies/CreateVariantButton";
+import VariantTree from "@/components/flies/VariantTree";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
@@ -680,7 +681,12 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* 10. Community Photos */}
+              {/* 10. Community Variants */}
+              <section>
+                <VariantTree canonicalId={fly.id} />
+              </section>
+
+              {/* 11. Community Photos */}
               <CommunityPhotos entityType="fly" entityId={fly.id} />
               <PhotoSubmissionForm entityType="fly" entityId={fly.id} entityName={fly.name} />
             </div>

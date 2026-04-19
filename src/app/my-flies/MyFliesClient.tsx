@@ -24,6 +24,7 @@ import {
   type SerializedFlyPattern,
   type SerializedFlyBoxEntry,
 } from "@/components/flies/FlyBoxTabs";
+import TieNextKanban from "@/components/flies/TieNextKanban";
 
 type Tab = "box" | "workbench" | "tie-next" | "shared";
 
@@ -188,7 +189,10 @@ export default function MyFliesClient({
         {tab === "box" && <FlyBoxPanel {...flyBoxProps} canonicalNames={canonicalNames} />}
         {tab === "workbench" && <WorkbenchPanel />}
         {tab === "tie-next" && (
-          <TieNextPanel patterns={tieNextPatterns} boxEntries={tieNextBoxEntries} />
+          <TieNextKanban
+            initialPatterns={tieNextPatterns}
+            initialBoxEntries={tieNextBoxEntries}
+          />
         )}
         {tab === "shared" && <SharedPanel shared={shared} />}
       </div>
@@ -447,128 +451,6 @@ function WorkbenchCard({
       <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#E8923A] opacity-80 group-hover:opacity-100">
         {cta}
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </div>
-    </Link>
-  );
-}
-
-/* ── Tie Next panel (list form for Phase 1; kanban comes in Phase 4) ─ */
-
-function TieNextPanel({
-  patterns,
-  boxEntries,
-}: {
-  patterns: FlyPattern[];
-  boxEntries: FlyBoxEntry[];
-}) {
-  const total = patterns.length + boxEntries.length;
-  if (total === 0) {
-    return (
-      <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-6 py-14 text-center">
-        <ListChecks className="mx-auto h-10 w-10 text-[#6E7681]" />
-        <h2 className="mt-4 font-heading text-lg font-bold text-[#F0F6FC]">
-          Nothing queued up
-        </h2>
-        <p className="mx-auto mt-1 max-w-md text-sm text-[#6E7681]">
-          Add flies to your Tie Next queue from any pattern card — tap the{" "}
-          <ListChecks className="inline h-3.5 w-3.5" /> icon to add.
-        </p>
-        <Link
-          href="/my-flies"
-          className="mt-6 inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC]"
-        >
-          Go to Fly Box
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      <p className="text-xs text-[#6E7681]">
-        Drag-and-drop kanban coming soon. For now, use the checkmark on each pattern card to mark as tied.
-      </p>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {patterns.map((p) => (
-          <TieNextCard
-            key={`p-${p.id}`}
-            href={`/journal/flies/${p.id}/edit`}
-            name={p.name}
-            subtitle={p.type || "Personal pattern"}
-            imageUrl={p.image_url ?? p.my_tied_fly_photo_url ?? null}
-            status={p.tie_next_status ?? "wanted"}
-            targetQty={p.tie_next_target_qty ?? null}
-            notes={p.tie_next_notes ?? null}
-          />
-        ))}
-        {boxEntries.map((e) => (
-          <TieNextCard
-            key={`b-${e.id}`}
-            href={e.canonical_fly ? `/flies/${e.canonical_fly.slug}` : "/my-flies"}
-            name={e.canonical_fly?.name ?? "Unknown fly"}
-            subtitle={CATEGORY_TO_TYPE[e.canonical_fly?.category ?? ""] ?? "Library"}
-            imageUrl={e.canonical_fly?.hero_image_url ?? null}
-            status={e.tie_next_status ?? "wanted"}
-            targetQty={e.tie_next_target_qty ?? null}
-            notes={e.tie_next_notes ?? null}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TieNextCard({
-  href,
-  name,
-  subtitle,
-  imageUrl,
-  status,
-  targetQty,
-  notes,
-}: {
-  href: string;
-  name: string;
-  subtitle: string;
-  imageUrl: string | null;
-  status: string;
-  targetQty: number | null;
-  notes: string | null;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-start gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-3 transition-colors hover:border-[#E8923A]/40"
-    >
-      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-[#0D1117]">
-        {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill className="object-cover" sizes="64px" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-2xl">🪝</div>
-        )}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-semibold text-[#F0F6FC]">{name}</p>
-        <p className="truncate text-xs text-[#6E7681]">{subtitle}</p>
-        <div className="mt-2 flex flex-wrap items-center gap-1">
-          <span
-            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-              status === "at_vise"
-                ? "bg-[#E8923A]/15 text-[#E8923A]"
-                : "bg-[#0BA5C7]/10 text-[#0BA5C7]"
-            }`}
-          >
-            {status === "at_vise" ? "At the vise" : "Want to tie"}
-          </span>
-          {targetQty ? (
-            <span className="rounded-full bg-[#21262D] px-2 py-0.5 text-[10px] text-[#A8B2BD]">
-              {targetQty} to tie
-            </span>
-          ) : null}
-        </div>
-        {notes ? (
-          <p className="mt-2 line-clamp-2 text-xs text-[#A8B2BD]">{notes}</p>
-        ) : null}
       </div>
     </Link>
   );

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Store } from "lucide-react";
+import type { CardData } from "@/types/list-config";
+import CardActionSlot from "@/components/flies/CardActionSlot";
 
 interface EntityCardProps {
   href: string;
@@ -22,6 +24,8 @@ interface EntityCardProps {
   accent?: string;
   /** Extra description text */
   description?: string;
+  /** Optional inline action overlay (e.g., AddToFlyBoxButton) */
+  actionSlot?: CardData["actionSlot"];
 }
 
 export default function EntityCard({
@@ -38,14 +42,21 @@ export default function EntityCard({
   tags,
   accent,
   description,
+  actionSlot,
 }: EntityCardProps) {
   // Text-only card when no image or iconOnly
   if (!imageUrl || iconOnly) {
     return (
       <Link
         href={href}
-        className="group block rounded-xl overflow-hidden bg-[#161B22] border-l-4 border-[#E8923A] shadow-md hover:bg-[#1C2128] hover:shadow-lg transition-all"
+        className="group relative block rounded-xl overflow-hidden bg-[#161B22] border-l-4 border-[#E8923A] shadow-md hover:bg-[#1C2128] hover:shadow-lg transition-all"
       >
+        {actionSlot?.kind === "add-to-fly-box" && (
+          <CardActionSlot
+            canonicalFlyId={actionSlot.canonicalFlyId}
+            flyName={actionSlot.flyName}
+          />
+        )}
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
@@ -96,7 +107,13 @@ export default function EntityCard({
   }
 
   return (
-    <Link href={href} className="group block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
+    <Link href={href} className="group relative block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
+      {actionSlot?.kind === "add-to-fly-box" && (
+        <CardActionSlot
+          canonicalFlyId={actionSlot.canonicalFlyId}
+          flyName={actionSlot.flyName}
+        />
+      )}
       {iconOnly ? (
         <div className="h-44 bg-[#161B22] flex flex-col items-center justify-center gap-2 border-b border-[#21262D]">
           <div className="w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center">

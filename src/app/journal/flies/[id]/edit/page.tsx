@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Upload, Trash2, X, Sparkles } from "lucide-react";
 import VariantModal from "@/components/flies/VariantModal";
+import VariantTree from "@/components/flies/VariantTree";
 
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
 
@@ -276,6 +277,11 @@ export default function EditFlyPage() {
           </div>
 
         </form>
+
+        {/* Variant lineage */}
+        <div className="mb-4">
+          <VariantTree patternId={id} />
+        </div>
 
         {/* Sticky save bar */}
         <div className="fixed bottom-0 left-0 right-0 bg-[#161B22] border-t border-[#21262D] px-4 py-3 flex gap-3 z-50 shadow-lg">

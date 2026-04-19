@@ -1,15 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CardData } from "@/types/list-config";
+import CardActionSlot from "@/components/flies/CardActionSlot";
 
-export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle, badges, tags, accent }: CardData) {
+export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle, badges, tags, accent, actionSlot }: CardData) {
   // Text-only compact card when no image
   if (!imageUrl) {
     return (
       <Link
         href={href}
-        className="group block rounded-lg overflow-hidden bg-[#161B22] border-l-4 border-[#E8923A] shadow-sm hover:bg-[#1C2128] transition-colors"
+        className="group relative block rounded-lg overflow-hidden bg-[#161B22] border-l-4 border-[#E8923A] shadow-sm hover:bg-[#1C2128] transition-colors"
       >
+        {actionSlot?.kind === "add-to-fly-box" && (
+          <CardActionSlot
+            canonicalFlyId={actionSlot.canonicalFlyId}
+            flyName={actionSlot.flyName}
+          />
+        )}
         <div className="p-4">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-heading text-sm font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors line-clamp-1">
@@ -48,7 +55,13 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
   }
 
   return (
-    <Link href={href} className="group block card-hover rounded-lg overflow-hidden bg-[#161B22] shadow-sm">
+    <Link href={href} className="group relative block card-hover rounded-lg overflow-hidden bg-[#161B22] shadow-sm">
+      {actionSlot?.kind === "add-to-fly-box" && (
+        <CardActionSlot
+          canonicalFlyId={actionSlot.canonicalFlyId}
+          flyName={actionSlot.flyName}
+        />
+      )}
       <div className="relative h-36 overflow-hidden">
         <Image
           src={imageUrl}

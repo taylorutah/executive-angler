@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CardData } from "@/types/list-config";
+import CardActionSlot from "@/components/flies/CardActionSlot";
 
 export default function ListCard({
   href,
@@ -14,6 +15,7 @@ export default function ListCard({
   iconOnly,
   tags,
   accent,
+  actionSlot,
 }: CardData) {
   // Text-only row when no image
   if (!imageUrl) {
@@ -55,9 +57,18 @@ export default function ListCard({
               )}
             </div>
           </div>
-          {accent && (
-            <span className="text-sm font-semibold text-[#E8923A] shrink-0">{accent}</span>
-          )}
+          <div className="flex items-center gap-3 shrink-0">
+            {accent && (
+              <span className="text-sm font-semibold text-[#E8923A]">{accent}</span>
+            )}
+            {actionSlot?.kind === "add-to-fly-box" && (
+              <CardActionSlot
+                canonicalFlyId={actionSlot.canonicalFlyId}
+                flyName={actionSlot.flyName}
+                placement="inline"
+              />
+            )}
+          </div>
         </div>
       </Link>
     );
@@ -85,9 +96,18 @@ export default function ListCard({
           <h3 className="font-heading text-base font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors line-clamp-1">
             {title}
           </h3>
-          {accent && (
-            <span className="text-sm font-semibold text-[#E8923A] shrink-0">{accent}</span>
-          )}
+          <div className="flex items-center gap-3 shrink-0">
+            {accent && (
+              <span className="text-sm font-semibold text-[#E8923A]">{accent}</span>
+            )}
+            {actionSlot?.kind === "add-to-fly-box" && (
+              <CardActionSlot
+                canonicalFlyId={actionSlot.canonicalFlyId}
+                flyName={actionSlot.flyName}
+                placement="inline"
+              />
+            )}
+          </div>
         </div>
         {subtitle && (
           <p className="text-sm text-[#A8B2BD] line-clamp-1 mt-0.5">{subtitle}</p>
