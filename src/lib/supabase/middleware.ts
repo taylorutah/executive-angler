@@ -31,15 +31,24 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Only redirect unauthenticated users from protected paths
+  const pathname = request.nextUrl.pathname;
+
+  // Redirect unauthenticated users from protected paths
   const isProtectedPath = PROTECTED_PATHS.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
+    pathname.startsWith(path)
   );
 
   if (!user && isProtectedPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("redirect", request.nextUrl.pathname);
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
+
+  // Logged-in users land on their dashboard instead of the marketing home
+  if (user && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 

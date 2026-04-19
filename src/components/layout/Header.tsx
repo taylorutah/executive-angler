@@ -8,7 +8,7 @@ import {
   Menu, X, ChevronDown, Search, User, Heart, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
   BookOpen, ShoppingBag, Newspaper, Bug, Wrench,
-  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles
+  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles, Home
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import { isPermanentPro } from "@/lib/admin";
@@ -179,6 +179,11 @@ export default function Header() {
 
               {/* ── Desktop Nav ── */}
               <nav className="hidden lg:flex items-center gap-0.5">
+                {user && (
+                  <Link href="/dashboard" className={navLinkClass(isActive("/dashboard"))}>
+                    Home
+                  </Link>
+                )}
                 {user && (
                   <Link href="/journal" className={navLinkClass(isActive("/journal") && !pathname.startsWith("/journal/flies/workbench"))}>
                     Journal
@@ -365,6 +370,17 @@ export default function Header() {
               </Link>
 
               {/* Core nav */}
+              {user && (
+                <Link
+                  href="/dashboard"
+                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    isActive("/dashboard") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                  }`}
+                >
+                  <Home className="h-5 w-5" />
+                  Home
+                </Link>
+              )}
               {user && (
                 <Link
                   href="/journal"
