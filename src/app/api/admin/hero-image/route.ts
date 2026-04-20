@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
+import { revalidateEntityPaths } from "@/lib/admin/revalidate";
 
 /**
  * PATCH /api/admin/hero-image
@@ -85,38 +86,7 @@ export async function PATCH(request: Request) {
   }
 
   if (error) {
-    // Column might not exist — progressively strip and retry
-    const cols = ["hero_image_credit_url", "hero_image_credit", "hero_image_alt"];
-    let retryUpdate = { ...update };
-    let lastErr = error;
-
-    for (const col of cols) {
-      if (lastErr.message?.includes(col)) {
-        delete retryUpdate[col];
-        const retry = await admin.from(table).update(retryUpdate).eq("id", entity_id).select("id").maybeSingle();
-        if (!retry.error) {
-          if (!retry.data) {
-            await admin.from(table).update(retryUpdate).eq("slug", entity_id);
-          }
-          await logAudit(admin, user, entity_type, entity_id, update);
-          return NextResponse.json({ success: true, note: `Column ${col} missing — run migration` });
-        }
-        lastErr = retry.error;
-      }
-    }
-
-    // Last resort: just the hero image field
-    if (hero_image_url) {
-      const minimalPayload = { [heroField]: hero_image_url };
-      const minimal = await admin.from(table).update(minimalPayload).eq("id", entity_id).select("id").maybeSingle();
-      if (!minimal.error) {
-        if (!minimal.data) await admin.from(table).update(minimalPayload).eq("slug", entity_id);
-        await logAudit(admin, user, entity_type, entity_id, minimalPayload);
-        return NextResponse.json({ success: true, note: "Only hero image updated" });
-      }
-    }
-
-    return NextResponse.json({ error: lastErr.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
   if (!data) {
@@ -124,6 +94,7 @@ export async function PATCH(request: Request) {
   }
 
   await logAudit(admin, user, entity_type, entity_id, update);
+  revalidateEntityPaths(table);
   return NextResponse.json({ success: true });
 }
 

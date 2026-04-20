@@ -13,6 +13,7 @@ interface EntityFormProps {
   mode: "create" | "edit";
   onSave: (data: Record<string, unknown>) => Promise<void>;
   relationOptions?: Record<string, { id: string; label: string }[]>;
+  submissionIdPrefix?: string;
 }
 
 function slugify(text: string): string {
@@ -31,6 +32,7 @@ export default function EntityForm({
   mode,
   onSave,
   relationOptions,
+  submissionIdPrefix,
 }: EntityFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -129,6 +131,8 @@ export default function EntityForm({
               value={formData[field.key]}
               onChange={handleFieldChange}
               relationOptions={relationOptions?.[field.key]}
+              formData={formData}
+              submissionIdPrefix={submissionIdPrefix}
             />
           ))}
       </div>

@@ -3,12 +3,15 @@
 import type { FieldConfig } from "@/lib/admin/field-types";
 import ArrayField from "./ArrayField";
 import JsonField from "./JsonField";
+import ImageField from "./ImageField";
 
 interface FieldRendererProps {
   field: FieldConfig;
   value: unknown;
   onChange: (key: string, value: unknown) => void;
   relationOptions?: { id: string; label: string }[];
+  formData?: Record<string, unknown>;
+  submissionIdPrefix?: string;
 }
 
 export default function FieldRenderer({
@@ -16,6 +19,8 @@ export default function FieldRenderer({
   value,
   onChange,
   relationOptions,
+  formData,
+  submissionIdPrefix,
 }: FieldRendererProps) {
   if (field.type === "hidden") return null;
 
@@ -165,6 +170,34 @@ export default function FieldRenderer({
             ))}
           </select>
         );
+
+      case "image": {
+        const altKey = field.altKey;
+        const creditKey = field.creditKey;
+        const creditUrlKey = field.creditUrlKey;
+        return (
+          <ImageField
+            urlValue={(value as string) ?? ""}
+            altValue={altKey ? (formData?.[altKey] as string | undefined) : undefined}
+            creditValue={creditKey ? (formData?.[creditKey] as string | undefined) : undefined}
+            creditUrlValue={
+              creditUrlKey ? (formData?.[creditUrlKey] as string | undefined) : undefined
+            }
+            aspectRatio={field.aspectRatio ?? 21 / 9}
+            showAlt={!!altKey}
+            showCredit={!!creditKey}
+            submissionIdPrefix={submissionIdPrefix ?? `admin-${field.key}`}
+            onChange={(patch) => {
+              if (patch.url !== undefined) onChange(field.key, patch.url);
+              if (patch.alt !== undefined && altKey) onChange(altKey, patch.alt);
+              if (patch.credit !== undefined && creditKey) onChange(creditKey, patch.credit);
+              if (patch.creditUrl !== undefined && creditUrlKey) {
+                onChange(creditUrlKey, patch.creditUrl);
+              }
+            }}
+          />
+        );
+      }
 
       default:
         return (

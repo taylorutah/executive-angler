@@ -1,4 +1,45 @@
-import type { EntityConfig } from "./field-types";
+import type { EntityConfig, FieldConfig } from "./field-types";
+
+// ---------------------------------------------------------------------------
+// Shared image-field builders — every table uses the same alt/credit columns,
+// only the primary URL column differs.
+// ---------------------------------------------------------------------------
+
+function heroImageField(urlColumn: string, opts: {
+  key?: string;
+  label?: string;
+  required?: boolean;
+  aspectRatio?: number;
+} = {}): FieldConfig {
+  return {
+    key: opts.key ?? "heroImageUrl",
+    dbColumn: urlColumn,
+    label: opts.label ?? "Hero Image",
+    type: "image",
+    required: opts.required,
+    fullWidth: true,
+    aspectRatio: opts.aspectRatio ?? 21 / 9,
+    altKey: "heroImageAlt",
+    creditKey: "heroImageCredit",
+    creditUrlKey: "heroImageCreditUrl",
+  };
+}
+
+const heroImageMetaHidden: FieldConfig[] = [
+  { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "hidden" },
+  { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "hidden" },
+  { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "hidden" },
+];
+
+function simpleImageField(key: string, dbColumn: string, label: string, aspectRatio = 1): FieldConfig {
+  return {
+    key,
+    dbColumn,
+    label,
+    type: "image",
+    aspectRatio,
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Destinations
@@ -17,11 +58,9 @@ const destinationsConfig: EntityConfig = {
     { key: "state", dbColumn: "state", label: "State", type: "text" },
     { key: "tagline", dbColumn: "tagline", label: "Tagline", type: "text" },
     { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
-    { key: "heroImageUrl", dbColumn: "hero_image_url", label: "Hero Image URL", type: "url", required: true },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
-    { key: "thumbnailUrl", dbColumn: "thumbnail_url", label: "Thumbnail URL", type: "url" },
+    heroImageField("hero_image_url", { required: true }),
+    ...heroImageMetaHidden,
+    simpleImageField("thumbnailUrl", "thumbnail_url", "Thumbnail"),
     { key: "latitude", dbColumn: "latitude", label: "Latitude", type: "number", required: true },
     { key: "longitude", dbColumn: "longitude", label: "Longitude", type: "number", required: true },
     { key: "bestMonths", dbColumn: "best_months", label: "Best Months", type: "string-array", placeholder: "e.g. June, July, August" },
@@ -52,11 +91,9 @@ const riversConfig: EntityConfig = {
     { key: "destinationId", dbColumn: "destination_id", label: "Destination", type: "relation", required: true, relationTable: "destinations", relationLabelKey: "name", tableColumn: true },
     { key: "additionalDestinationIds", dbColumn: "additional_destination_ids", label: "Additional Destinations", type: "string-array" },
     { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
-    { key: "heroImageUrl", dbColumn: "hero_image_url", label: "Hero Image URL", type: "url", required: true },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
-    { key: "thumbnailUrl", dbColumn: "thumbnail_url", label: "Thumbnail URL", type: "url" },
+    heroImageField("hero_image_url", { required: true }),
+    ...heroImageMetaHidden,
+    simpleImageField("thumbnailUrl", "thumbnail_url", "Thumbnail"),
     { key: "lengthMiles", dbColumn: "length_miles", label: "Length (miles)", type: "number" },
     { key: "flowType", dbColumn: "flow_type", label: "Flow Type", type: "select", required: true, options: ["freestone", "tailwater", "spring creek", "limestone"] },
     { key: "difficulty", dbColumn: "difficulty", label: "Difficulty", type: "select", required: true, options: ["beginner", "intermediate", "advanced"] },
@@ -91,11 +128,9 @@ const speciesConfig: EntityConfig = {
     { key: "scientificName", dbColumn: "scientific_name", label: "Scientific Name", type: "text" },
     { key: "family", dbColumn: "family", label: "Family", type: "select", options: ["trout", "salmon", "char", "grayling", "saltwater", "warmwater", "pike"], tableColumn: true },
     { key: "description", dbColumn: "description", label: "Description", type: "textarea", fullWidth: true },
-    { key: "imageUrl", dbColumn: "image_url", label: "Image URL", type: "url" },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
-    { key: "illustrationUrl", dbColumn: "illustration_url", label: "Illustration URL", type: "url" },
+    heroImageField("image_url", { key: "imageUrl", label: "Photo" }),
+    ...heroImageMetaHidden,
+    simpleImageField("illustrationUrl", "illustration_url", "Illustration"),
     { key: "nativeRange", dbColumn: "native_range", label: "Native Range", type: "text" },
     { key: "introducedRange", dbColumn: "introduced_range", label: "Introduced Range", type: "text" },
     { key: "averageSize", dbColumn: "average_size", label: "Average Size", type: "text" },
@@ -137,11 +172,9 @@ const lodgesConfig: EntityConfig = {
     { key: "name", dbColumn: "name", label: "Name", type: "text", required: true, tableColumn: true },
     { key: "destinationId", dbColumn: "destination_id", label: "Destination", type: "relation", required: true, relationTable: "destinations", relationLabelKey: "name", tableColumn: true },
     { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
-    { key: "heroImageUrl", dbColumn: "hero_image_url", label: "Hero Image URL", type: "url", required: true },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
-    { key: "thumbnailUrl", dbColumn: "thumbnail_url", label: "Thumbnail URL", type: "url" },
+    heroImageField("hero_image_url", { required: true }),
+    ...heroImageMetaHidden,
+    simpleImageField("thumbnailUrl", "thumbnail_url", "Thumbnail"),
     { key: "galleryUrls", dbColumn: "gallery_urls", label: "Gallery URLs", type: "string-array" },
     { key: "websiteUrl", dbColumn: "website_url", label: "Website URL", type: "url" },
     { key: "phone", dbColumn: "phone", label: "Phone", type: "text" },
@@ -185,10 +218,8 @@ const guidesConfig: EntityConfig = {
     { key: "bio", dbColumn: "bio", label: "Bio", type: "textarea", required: true, fullWidth: true },
     { key: "specialties", dbColumn: "specialties", label: "Specialties", type: "string-array", placeholder: "e.g. Dry Fly, Nymphing, Streamer" },
     { key: "yearsExperience", dbColumn: "years_experience", label: "Years Experience", type: "number" },
-    { key: "photoUrl", dbColumn: "photo_url", label: "Photo URL", type: "url" },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
+    heroImageField("photo_url", { key: "photoUrl", label: "Photo", aspectRatio: 4 / 5 }),
+    ...heroImageMetaHidden,
     { key: "websiteUrl", dbColumn: "website_url", label: "Website URL", type: "url" },
     { key: "phone", dbColumn: "phone", label: "Phone", type: "text" },
     { key: "email", dbColumn: "email", label: "Email", type: "email" },
@@ -219,10 +250,8 @@ const flyShopsConfig: EntityConfig = {
     { key: "name", dbColumn: "name", label: "Name", type: "text", required: true, tableColumn: true },
     { key: "destinationId", dbColumn: "destination_id", label: "Destination", type: "relation", required: true, relationTable: "destinations", relationLabelKey: "name", tableColumn: true },
     { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
-    { key: "heroImageUrl", dbColumn: "hero_image_url", label: "Hero Image URL", type: "url" },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
+    heroImageField("hero_image_url"),
+    ...heroImageMetaHidden,
     { key: "address", dbColumn: "address", label: "Address", type: "text", required: true },
     { key: "latitude", dbColumn: "latitude", label: "Latitude", type: "number", required: true },
     { key: "longitude", dbColumn: "longitude", label: "Longitude", type: "number", required: true },
@@ -256,11 +285,9 @@ const articlesConfig: EntityConfig = {
     { key: "subtitle", dbColumn: "subtitle", label: "Subtitle", type: "text" },
     { key: "author", dbColumn: "author", label: "Author", type: "text", required: true },
     { key: "category", dbColumn: "category", label: "Category", type: "select", required: true, options: ["technique", "destination", "gear", "conservation", "culture", "species"], tableColumn: true },
-    { key: "heroImageUrl", dbColumn: "hero_image_url", label: "Hero Image URL", type: "url", required: true },
-    { key: "heroImageAlt", dbColumn: "hero_image_alt", label: "Hero Image Alt", type: "text" },
-    { key: "heroImageCredit", dbColumn: "hero_image_credit", label: "Hero Image Credit", type: "text" },
-    { key: "heroImageCreditUrl", dbColumn: "hero_image_credit_url", label: "Hero Image Credit URL", type: "url" },
-    { key: "thumbnailUrl", dbColumn: "thumbnail_url", label: "Thumbnail URL", type: "url" },
+    heroImageField("hero_image_url", { required: true }),
+    ...heroImageMetaHidden,
+    simpleImageField("thumbnailUrl", "thumbnail_url", "Thumbnail"),
     { key: "excerpt", dbColumn: "excerpt", label: "Excerpt", type: "textarea", required: true, fullWidth: true },
     { key: "content", dbColumn: "content", label: "Content", type: "richtext", required: true, fullWidth: true },
     { key: "readingTimeMinutes", dbColumn: "reading_time_minutes", label: "Reading Time (min)", type: "number", required: true },

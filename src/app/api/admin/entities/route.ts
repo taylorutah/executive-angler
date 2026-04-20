@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
+import { revalidateEntityPaths } from "@/lib/admin/revalidate";
 
 const ALLOWED_TABLES = [
   "destinations",
@@ -151,5 +152,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  revalidateEntityPaths(table);
   return NextResponse.json(data, { status: 201 });
 }

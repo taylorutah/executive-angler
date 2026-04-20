@@ -191,6 +191,7 @@ export default function EditEntityClient({
             mode="edit"
             onSave={handleSave}
             relationOptions={relationOptions}
+            submissionIdPrefix={`admin-${table}-${entityId}`}
           />
         </div>
       </div>

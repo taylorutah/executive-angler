@@ -118,6 +118,7 @@ export default function CreateEntityClient({
             mode="create"
             onSave={handleSave}
             relationOptions={relationOptions}
+            submissionIdPrefix={`admin-${table}-new`}
           />
         </div>
       </div>
