@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
+import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 import { compressImage } from "@/lib/image-compress";
 import dynamic from "next/dynamic";
 
@@ -98,6 +99,8 @@ export default function EditSessionPage() {
   });
   // Simple mode fish count (total_fish direct entry, for drift sessions)
   const [simpleFishCount, setSimpleFishCount] = useState<string>("");
+  const [privacy, setPrivacy] = useState<SessionPrivacy>("public");
+  const [isPremium, setIsPremium] = useState(false);
 
   async function loadSpots() {
     const res = await fetch("/api/fishing/spots");
@@ -190,12 +193,13 @@ export default function EditSessionPage() {
 
   useEffect(() => {
     async function load() {
-      const [sessionRes, riversRes, locsRes, spotsRes, fliesRes] = await Promise.all([
+      const [sessionRes, riversRes, locsRes, spotsRes, fliesRes, premiumRes] = await Promise.all([
         fetch(`/api/fishing/session?id=${id}`, { cache: "no-store" }),
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
         fetch("/api/fishing/spots"),
         fetch("/api/fishing/flies?include_catalog=true"),
+        fetch("/api/user/premium-status"),
       ]);
 
       if (sessionRes.ok) {
@@ -213,6 +217,7 @@ export default function EditSessionPage() {
           private_memo: session.private_memo || "",
           trip_tags: (session.trip_tags || session.tags || []).join(", "),
         });
+        setPrivacy(session.privacy === "private" ? "private" : "public");
         const loadedCatches = (session.catches || []).map((c: any) => ({
             id: c.id,
             species: c.species || "",
@@ -265,6 +270,10 @@ export default function EditSessionPage() {
         else if (session.longitude != null) setLongitude(session.longitude);
       }
 
+      if (premiumRes.ok) {
+        const p = await premiumRes.json();
+        if (p?.isPremium) setIsPremium(true);
+      }
       if (riversRes.ok) setRivers(await riversRes.json());
       if (locsRes.ok) setLocations(await locsRes.json());
       if (spotsRes.ok) setSpots(await spotsRes.json());
@@ -369,6 +378,7 @@ export default function EditSessionPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formFields,
+          privacy,
           tags: form.trip_tags ? form.trip_tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
           ...(isSimpleMode
             ? { total_fish: simpleFishCount !== "" ? parseInt(simpleFishCount, 10) || 0 : null }
@@ -834,6 +844,11 @@ export default function EditSessionPage() {
           <div className={section}>
             <h2 className="text-sm font-bold text-[#A8B2BD] mb-3">📝 Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
+          </div>
+
+          {/* Privacy */}
+          <div className={section}>
+            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} isPremium={isPremium} />
           </div>
 
           {/* Private Memo */}

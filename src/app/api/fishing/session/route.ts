@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { checkPremium } from "@/lib/admin";
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -121,6 +122,20 @@ const stripNum = (v: unknown): number | null => {
   return isNaN(n) ? null : n;
 };
 
+/**
+ * Normalize/validate a `privacy` value from a request body.
+ *
+ * Returns:
+ *   - `{ value: 'public' | 'private' }` when present and valid
+ *   - `{ value: undefined }` when omitted (PATCH: leave DB as-is)
+ *   - `{ error: string }` when present but invalid
+ */
+function normalizePrivacy(raw: unknown): { value?: "public" | "private"; error?: string } {
+  if (raw === undefined) return { value: undefined };
+  if (raw === "public" || raw === "private") return { value: raw };
+  return { error: "privacy must be 'public' or 'private'" };
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -131,6 +146,22 @@ export async function POST(req: NextRequest) {
 
   // Sanitize numeric fields with unit suffixes
   if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
+
+  // Validate + premium-gate privacy
+  if ("privacy" in sessionData) {
+    const { value, error: pErr } = normalizePrivacy(sessionData.privacy);
+    if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
+    if (value === "private") {
+      const isPremium = await checkPremium(supabase, user.id, user.email);
+      if (!isPremium) {
+        return NextResponse.json(
+          { error: "Private sessions are a Pro feature. Upgrade to keep sessions private." },
+          { status: 403 }
+        );
+      }
+    }
+    sessionData.privacy = value;
+  }
 
   // Build gear snapshot before insert
   const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
@@ -178,6 +209,22 @@ export async function PATCH(req: NextRequest) {
 
   // Sanitize numeric fields with unit suffixes
   if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
+
+  // Validate + premium-gate privacy
+  if ("privacy" in sessionData) {
+    const { value, error: pErr } = normalizePrivacy(sessionData.privacy);
+    if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
+    if (value === "private") {
+      const isPremium = await checkPremium(supabase, user.id, user.email);
+      if (!isPremium) {
+        return NextResponse.json(
+          { error: "Private sessions are a Pro feature. Upgrade to keep sessions private." },
+          { status: 403 }
+        );
+      }
+    }
+    sessionData.privacy = value;
+  }
 
   // Only rebuild gear_snapshot when gear IDs are actually present in the payload.
   // A partial PATCH (e.g. notes-only) must NOT overwrite existing gear_snapshot with {}.

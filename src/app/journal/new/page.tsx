@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import GearPicker from "@/components/gear/GearPicker";
+import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 
 export default function NewSessionPage() {
   const router = useRouter();
@@ -18,15 +19,18 @@ export default function NewSessionPage() {
   const [riverOpen, setRiverOpen] = useState(false);
   const [riverFilter, setRiverFilter] = useState("");
   const [riverValue, setRiverValue] = useState("");
+  const [privacy, setPrivacy] = useState<SessionPrivacy>("public");
+  const [isPremium, setIsPremium] = useState(false);
 
-  // Fetch autocomplete data + gear defaults
+  // Fetch autocomplete data + gear defaults + premium status
   useEffect(() => {
     Promise.all([
       fetch("/api/fishing/session?autocomplete=rivers").then((r) => r.json()),
       fetch("/api/fishing/session?autocomplete=locations").then((r) => r.json()),
       fetch("/api/gear/defaults").then((r) => r.ok ? r.json() : null).catch(() => null),
+      fetch("/api/user/premium-status").then((r) => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([riversData, locationsData, defaults]) => {
+      .then(([riversData, locationsData, defaults, premium]) => {
         setRivers(riversData || []);
         setLocations(locationsData || []);
         if (defaults) {
@@ -36,6 +40,7 @@ export default function NewSessionPage() {
           if (defaults.leader) setGearLeaderId(defaults.leader);
           if (defaults.tippet) setGearTippetId(defaults.tippet);
         }
+        if (premium?.isPremium) setIsPremium(true);
       })
       .catch((err) => console.error("Failed to fetch autocomplete data:", err));
   }, []);
@@ -61,6 +66,7 @@ export default function NewSessionPage() {
             .filter(Boolean)
         : undefined,
       notes: formData.get("notes") || undefined,
+      privacy,
       gear_rod_id: gearRodId || undefined,
       gear_reel_id: gearReelId || undefined,
       gear_line_id: gearLineId || undefined,
@@ -300,6 +306,11 @@ export default function NewSessionPage() {
               rows={6}
               className="w-full px-4 py-3 border border-[#21262D] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
             />
+          </div>
+
+          {/* Privacy */}
+          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
+            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} isPremium={isPremium} />
           </div>
 
           {/* Gear */}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight,
-  Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2, Lock
+  Cloud, MapPin, Clock, Check, RotateCcw, Camera, Loader2, Lock, Globe
 } from "lucide-react";
 import { KudosButton } from "@/components/social/KudosButton";
 import { compressImage } from "@/lib/image-compress";
@@ -135,6 +135,7 @@ interface Session {
   trip_tags?: string[];
   tags?: string[];
   total_fish?: number;
+  privacy?: string;
   created_at?: string;
   latitude?: number;
   longitude?: number;
@@ -515,8 +516,27 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {!session.location && session.river_name && <> · {session.river_name}</>}
                 </p>
 
-                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-tight mb-3">
-                  {session.title || session.river_name || "Fishing Session"}
+                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-tight mb-3 flex items-center gap-2 flex-wrap">
+                  <span>{session.title || session.river_name || "Fishing Session"}</span>
+                  {isOwner && (
+                    session.privacy === "private" ? (
+                      <span
+                        title="Only you can see this session"
+                        className="inline-flex items-center gap-1 rounded-full border border-[#21262D] bg-[#0D1117] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#A8B2BD]"
+                      >
+                        <Lock className="h-3 w-3" />
+                        Private
+                      </span>
+                    ) : (
+                      <span
+                        title="Visible in the community feed"
+                        className="inline-flex items-center gap-1 rounded-full border border-[#21262D] bg-[#0D1117] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#A8B2BD]"
+                      >
+                        <Globe className="h-3 w-3" />
+                        Public
+                      </span>
+                    )
+                  )}
                 </h1>
 
                 {/* Inline-editable notes (read-only for non-owners) */}
