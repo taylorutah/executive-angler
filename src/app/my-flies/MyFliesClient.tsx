@@ -10,10 +10,6 @@ import {
   ListChecks,
   Share2,
   Plus,
-  Sparkles,
-  Package,
-  FlaskConical,
-  ArrowRight,
   Heart,
   Feather,
 } from "lucide-react";
@@ -25,6 +21,7 @@ import {
   type SerializedFlyBoxEntry,
 } from "@/components/flies/FlyBoxTabs";
 import TieNextKanban from "@/components/flies/TieNextKanban";
+import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 
 type Tab = "box" | "workbench" | "tie-next" | "shared";
 
@@ -187,7 +184,7 @@ export default function MyFliesClient({
         </div>
 
         {tab === "box" && <FlyBoxPanel {...flyBoxProps} canonicalNames={canonicalNames} />}
-        {tab === "workbench" && <WorkbenchPanel />}
+        {tab === "workbench" && <WorkbenchClient embedded />}
         {tab === "tie-next" && (
           <TieNextKanban
             initialPatterns={tieNextPatterns}
@@ -346,115 +343,6 @@ function EmptyBoxState() {
   );
 }
 
-/* ── Workbench panel ─────────────────────────────────────────────── */
-
-function WorkbenchPanel() {
-  return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-[#21262D] bg-gradient-to-br from-[#161B22] to-[#0D1117] p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="flex items-center gap-2 font-heading text-xl font-bold text-[#F0F6FC]">
-              <Wrench className="h-5 w-5 text-[#E8923A]" />
-              Workbench
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-[#A8B2BD]">
-              Where patterns are born. Design a new fly from scratch, spawn variants from an
-              existing pattern, or open your materials inventory to see what you can tie right now.
-            </p>
-          </div>
-          <Link
-            href="/journal/flies/new"
-            className="hidden flex-shrink-0 items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] sm:inline-flex"
-          >
-            <Plus className="h-4 w-4" /> New Pattern
-          </Link>
-        </div>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <WorkbenchCard
-          icon={<Feather className="h-5 w-5" />}
-          title="New Pattern"
-          body="Build a recipe from scratch with the structured builder or free-text notes."
-          href="/journal/flies/new"
-          cta="Open builder"
-        />
-        <WorkbenchCard
-          icon={<Package className="h-5 w-5" />}
-          title="Materials Inventory"
-          body="Track what you own. Threads, beads, dubbing, feathers — so suggestions know your stash."
-          href="/journal/flies/workbench"
-          cta="Open inventory"
-        />
-        <WorkbenchCard
-          icon={<FlaskConical className="h-5 w-5" />}
-          title="Materials Database"
-          body="500+ verified tying materials. Browse by brand, category, or search."
-          href="/flies/materials"
-          cta="Browse catalog"
-        />
-        <WorkbenchCard
-          icon={<Sparkles className="h-5 w-5" />}
-          title="AI Recipe Scaffolder"
-          body="Describe a pattern in plain English — we'll draft a structured recipe you can tweak."
-          href="/journal/flies/new?ai=1"
-          cta="Try it"
-          badge="Beta"
-        />
-      </div>
-
-      <div className="rounded-xl border border-dashed border-[#21262D] bg-[#0D1117] p-5 text-sm text-[#6E7681]">
-        <span className="font-semibold text-[#A8B2BD]">Tip:</span> Most flies you tie are
-        variations of proven patterns. Open any fly in your box and hit{" "}
-        <span className="rounded bg-[#161B22] px-1.5 py-0.5 text-xs text-[#E8923A]">
-          Create Variant
-        </span>{" "}
-        to fork it with one tap — perfect for sizes, colors, or bead swaps.
-      </div>
-    </div>
-  );
-}
-
-function WorkbenchCard({
-  icon,
-  title,
-  body,
-  href,
-  cta,
-  badge,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-  href: string;
-  cta: string;
-  badge?: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col rounded-xl border border-[#21262D] bg-[#161B22] p-5 transition-colors hover:border-[#E8923A]/40"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#E8923A]/10 text-[#E8923A]">
-          {icon}
-        </div>
-        {badge && (
-          <span className="rounded-full bg-[#0BA5C7]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0BA5C7]">
-            {badge}
-          </span>
-        )}
-      </div>
-      <h3 className="mt-4 font-heading text-base font-bold text-[#F0F6FC]">{title}</h3>
-      <p className="mt-1 text-sm text-[#A8B2BD]">{body}</p>
-      <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#E8923A] opacity-80 group-hover:opacity-100">
-        {cta}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </div>
-    </Link>
-  );
-}
 
 /* ── Shared with me panel ────────────────────────────────────────── */
 

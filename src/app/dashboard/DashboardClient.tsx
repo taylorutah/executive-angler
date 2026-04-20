@@ -7,7 +7,7 @@ import {
   Fish, MapPin, TrendingUp, Users,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
-  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles
+  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles, Wrench
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 import HelpHint from "@/components/ui/HelpHint";
@@ -364,6 +364,17 @@ export default function DashboardClient({
                   </div>
                   <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">{flyCount > 0 ? `${flyCount} patterns` : "Your patterns"}</p>
+                </Link>
+
+                <Link
+                  href="/my-flies?tab=workbench"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <Wrench className="h-5 w-5 text-[#E8923A]" />
+                  </div>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Workbench</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Inventory &amp; matches</p>
                 </Link>
               </div>
 

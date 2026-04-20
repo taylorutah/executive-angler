@@ -45,7 +45,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 // ─── Main Component ──────────────────────────────────────────────
 
-export default function WorkbenchClient() {
+export default function WorkbenchClient({ embedded = false }: { embedded?: boolean } = {}) {
   const [tab, setTab] = useState<Tab>('inventory');
   const [inventory, setInventory] = useState<UserMaterialInventory[]>([]);
   const [invLoading, setInvLoading] = useState(true);
@@ -174,36 +174,43 @@ export default function WorkbenchClient() {
 
   const ownedMaterialIds = new Set(inventory.map(i => i.material_id));
 
+  const Wrapper = embedded ? 'div' : 'div';
+  const wrapperClass = embedded ? '' : 'min-h-screen bg-bg text-text-primary';
+  const headerClass = embedded ? '' : 'border-b border-border';
+  const headerInnerClass = embedded ? 'pb-2' : 'max-w-6xl mx-auto px-4 py-6';
+
   return (
-    <div className="min-h-screen bg-bg text-text-primary">
+    <Wrapper className={wrapperClass}>
       {/* Header */}
-      <div className="border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2 text-text-muted text-sm mb-1">
-                <Link href="/journal/flies" className="hover:text-accent">Fly Box</Link>
-                <span>/</span>
-                <span>Tying Workbench</span>
+      <div className={headerClass}>
+        <div className={headerInnerClass}>
+          {!embedded && (
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-text-muted text-sm mb-1">
+                  <Link href="/journal/flies" className="hover:text-accent">Fly Box</Link>
+                  <span>/</span>
+                  <span>Tying Workbench</span>
+                </div>
+                <h1 className="font-[family-name:var(--font-heading)] text-2xl text-text-primary">
+                  Tying Workbench
+                </h1>
               </div>
-              <h1 className="font-[family-name:var(--font-heading)] text-2xl text-text-primary">
-                Tying Workbench
-              </h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <span className="font-mono text-2xl text-accent font-semibold">{inventory.length}</span>
-                <span className="text-text-muted text-sm ml-1">materials</span>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <span className="font-mono text-2xl text-accent font-semibold">{inventory.length}</span>
+                  <span className="text-text-muted text-sm ml-1">materials</span>
+                </div>
+                <Link
+                  href="/journal/flies/new"
+                  className="flex items-center gap-2 bg-accent text-bg px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <Plus size={16} />
+                  New Fly
+                </Link>
               </div>
-              <Link
-                href="/journal/flies/new"
-                className="flex items-center gap-2 bg-accent text-bg px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
-              >
-                <Plus size={16} />
-                New Fly
-              </Link>
             </div>
-          </div>
+          )}
 
           {/* Tabs */}
           <div className="flex gap-1 mt-4 items-center">
@@ -464,7 +471,7 @@ export default function WorkbenchClient() {
           </div>
         </div>
       )}
-    </div>
+    </Wrapper>
   );
 }
 

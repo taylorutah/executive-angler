@@ -185,7 +185,7 @@ export default function TieNextKanban({ initialPatterns, initialBoxEntries }: Pr
     <div className="space-y-3">
       <TipCard storageKey="tie-next-intro" title="Tie Next — your tying to-do list">
         <p>Drag cards between columns, or tap a status button to move them. Flies move <span className="text-[#F0F6FC] font-semibold">Want → Vise → Done</span> as you work through them.</p>
-        <p className="text-[#6E7681]">Add from any fly card with the <ListChecks className="inline h-3 w-3" /> button, or from recipes in <Link href="/journal/flies/workbench" className="text-[#00B4D8] hover:underline">Workbench</Link>.</p>
+        <p className="text-[#6E7681]">Add from any fly card with the <ListChecks className="inline h-3 w-3" /> button, or from recipes in <Link href="/my-flies?tab=workbench" className="text-[#00B4D8] hover:underline">Workbench</Link>.</p>
       </TipCard>
 
       <div className="grid gap-3 md:grid-cols-3">

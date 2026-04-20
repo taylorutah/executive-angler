@@ -234,7 +234,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               { icon: Bug, title: "Fly Library", desc: "120+ patterns with photos, tying steps, materials, and fishing tips. Nymphs, dries, streamers, emergers, and more.", href: "/flies", cta: "Browse Library", color: "#E8923A" },
-              { icon: Wrench, title: "Tying Workbench", desc: "Structured recipes with real materials from our database. Track your inventory. See what you can tie with what you own.", href: "/journal/flies/workbench", cta: "Open Workbench", color: "#E8923A" },
+              { icon: Wrench, title: "Tying Workbench", desc: "Structured recipes with real materials from our database. Track your inventory. See what you can tie with what you own.", href: "/my-flies?tab=workbench", cta: "Open Workbench", color: "#E8923A" },
               { icon: SearchIcon, title: "Materials Database", desc: "500+ hooks, beads, threads, dubbing, and feathers from brands like Tiemco, Semperfli, and Fulling Mill.", href: "/flies/materials", cta: "Browse Materials", color: "#0BA5C7" },
             ].map((item, i) => (
               <ScrollAnimation key={item.title} delay={i * 0.1}>
