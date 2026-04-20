@@ -44,18 +44,28 @@ export default function EntityForm({
     for (const field of fields) {
       if (initialData) {
         // Try key first, then dbColumn
-        data[field.key] =
+        const raw =
           initialData[field.key] !== undefined
             ? initialData[field.key]
-            : initialData[field.dbColumn] !== undefined
-            ? initialData[field.dbColumn]
-            : field.type === "boolean"
-            ? false
-            : field.type === "string-array"
-            ? []
-            : field.type === "json"
-            ? null
-            : "";
+            : initialData[field.dbColumn];
+        if (raw !== undefined) {
+          // <input type="date"> requires YYYY-MM-DD; DB often returns a full
+          // ISO timestamp. Trim to the date portion so the control renders
+          // the existing value instead of showing empty + failing required.
+          data[field.key] =
+            field.type === "date" && typeof raw === "string" && raw.length >= 10
+              ? raw.slice(0, 10)
+              : raw;
+        } else {
+          data[field.key] =
+            field.type === "boolean"
+              ? false
+              : field.type === "string-array"
+              ? []
+              : field.type === "json"
+              ? null
+              : "";
+        }
       } else {
         data[field.key] =
           field.type === "boolean"
