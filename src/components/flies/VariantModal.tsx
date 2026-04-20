@@ -55,6 +55,16 @@ const SUGGESTED_SIZES = ["10", "12", "14", "16", "18", "20", "22"];
 const SUGGESTED_COLORS = ["Olive", "Black", "Brown", "Tan", "Rust", "Orange", "Pink", "Purple"];
 const SUGGESTED_BEADS = ["Copper", "Gold", "Silver", "Black Nickel", "Tungsten"];
 
+const BEAD_MATERIALS = [
+  { value: "", label: "— inherit —" },
+  { value: "none", label: "None" },
+  { value: "brass", label: "Brass" },
+  { value: "tungsten", label: "Tungsten" },
+  { value: "slotted_tungsten", label: "Slotted tungsten" },
+  { value: "copper", label: "Copper" },
+];
+const COMMON_BEAD_SIZES_MM = ["2.0", "2.4", "2.8", "3.2", "3.5", "3.8", "4.0"];
+
 export default function VariantModal({
   parent,
   open,
@@ -73,10 +83,17 @@ export default function VariantModal({
     size: parent.defaultSize ?? "",
     fly_color: parent.defaultColor ?? "",
     bead_color: parent.defaultBeadColor ?? "",
+    bead_material: "",
+    bead_size_mm: "",
+    body_color: "",
+    tail_color: "",
+    thorax_color: "",
+    collar_color: "",
     hook: "",
     description: "",
     type: "",
   });
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Bulk mode state
   const [sizes, setSizes] = useState<string[]>([]);
@@ -115,7 +132,18 @@ export default function VariantModal({
   }
 
   async function submitSingle() {
-    if (!single.name.trim() && !single.size && !single.fly_color && !single.bead_color) {
+    const hasAnyChange =
+      single.name.trim() ||
+      single.size ||
+      single.fly_color ||
+      single.bead_color ||
+      single.bead_material ||
+      single.bead_size_mm ||
+      single.body_color ||
+      single.tail_color ||
+      single.thorax_color ||
+      single.collar_color;
+    if (!hasAnyChange) {
       setError("Give this variant a name or change at least one spec.");
       return;
     }
@@ -133,6 +161,12 @@ export default function VariantModal({
             size: single.size.trim() || undefined,
             fly_color: single.fly_color.trim() || undefined,
             bead_color: single.bead_color.trim() || undefined,
+            bead_material: single.bead_material || undefined,
+            bead_size_mm: single.bead_size_mm.trim() || undefined,
+            body_color: single.body_color.trim() || undefined,
+            tail_color: single.tail_color.trim() || undefined,
+            thorax_color: single.thorax_color.trim() || undefined,
+            collar_color: single.collar_color.trim() || undefined,
             hook: single.hook.trim() || undefined,
             description: single.description.trim() || undefined,
             type: single.type || undefined,
@@ -265,6 +299,8 @@ export default function VariantModal({
             <SingleForm
               value={single}
               onChange={(patch) => setSingle((s) => ({ ...s, ...patch }))}
+              showAdvanced={showAdvanced}
+              onToggleAdvanced={() => setShowAdvanced((v) => !v)}
             />
           ) : (
             <BulkForm
@@ -331,20 +367,32 @@ export default function VariantModal({
 }
 
 /* ─── Single form ─── */
+type SingleValue = {
+  name: string;
+  size: string;
+  fly_color: string;
+  bead_color: string;
+  bead_material: string;
+  bead_size_mm: string;
+  body_color: string;
+  tail_color: string;
+  thorax_color: string;
+  collar_color: string;
+  hook: string;
+  description: string;
+  type: string;
+};
+
 function SingleForm({
   value,
   onChange,
+  showAdvanced,
+  onToggleAdvanced,
 }: {
-  value: {
-    name: string;
-    size: string;
-    fly_color: string;
-    bead_color: string;
-    hook: string;
-    description: string;
-    type: string;
-  };
-  onChange: (patch: Partial<typeof value>) => void;
+  value: SingleValue;
+  onChange: (patch: Partial<SingleValue>) => void;
+  showAdvanced: boolean;
+  onToggleAdvanced: () => void;
 }) {
   const input =
     "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
@@ -412,6 +460,88 @@ function SingleForm({
           </select>
         </div>
       </div>
+
+      {/* Advanced nymph variation fields */}
+      <button
+        type="button"
+        onClick={onToggleAdvanced}
+        className="text-xs font-medium text-[#00B4D8] hover:text-[#E8923A] transition-colors"
+      >
+        {showAdvanced ? "– Hide bead + body variations" : "+ Vary bead material, body, tail, thorax…"}
+      </button>
+
+      {showAdvanced && (
+        <div className="space-y-3 rounded-lg border border-[#21262D] bg-[#0D1117] p-3">
+          <p className="text-[11px] text-[#6E7681] leading-snug">
+            Great for nymph riffs — same pattern, tungsten vs brass, or different body/thorax color.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={label}>Bead material</label>
+              <select
+                className={input}
+                value={value.bead_material}
+                onChange={(e) => onChange({ bead_material: e.target.value })}
+              >
+                {BEAD_MATERIALS.map((m) => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={label}>Bead size (mm)</label>
+              <input
+                className={input}
+                list="variant-bead-mm"
+                inputMode="decimal"
+                placeholder="3.2"
+                value={value.bead_size_mm}
+                onChange={(e) => onChange({ bead_size_mm: e.target.value })}
+              />
+              <datalist id="variant-bead-mm">
+                {COMMON_BEAD_SIZES_MM.map((s) => <option key={s} value={s} />)}
+              </datalist>
+            </div>
+            <div>
+              <label className={label}>Body color</label>
+              <input
+                className={input}
+                placeholder="Olive"
+                value={value.body_color}
+                onChange={(e) => onChange({ body_color: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className={label}>Tail color</label>
+              <input
+                className={input}
+                placeholder="CDL"
+                value={value.tail_color}
+                onChange={(e) => onChange({ tail_color: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className={label}>Thorax color</label>
+              <input
+                className={input}
+                placeholder="Black"
+                value={value.thorax_color}
+                onChange={(e) => onChange({ thorax_color: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className={label}>Collar color</label>
+              <input
+                className={input}
+                placeholder="Partridge"
+                value={value.collar_color}
+                onChange={(e) => onChange({ collar_color: e.target.value })}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
         <label className={label}>Tying notes (optional)</label>
         <textarea

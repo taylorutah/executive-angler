@@ -9,7 +9,16 @@ type RecipeLike = {
   hook?: string | null;
   bead_size?: string | null;
   bead_color?: string | null;
+  bead_material?: string | null;
+  bead_size_mm?: number | string | null;
   fly_color?: string | null;
+  body_color?: string | null;
+  body_material?: string | null;
+  tail_color?: string | null;
+  thorax_color?: string | null;
+  collar_color?: string | null;
+  rib_material?: string | null;
+  wing_material?: string | null;
   materials?: string | null;
   description?: string | null;
   video_url?: string | null;
@@ -31,9 +40,18 @@ const FIELD_LABELS: { key: keyof RecipeLike; label: string }[] = [
   { key: "type", label: "Type" },
   { key: "size", label: "Size" },
   { key: "hook", label: "Hook" },
+  { key: "bead_material", label: "Bead material" },
+  { key: "bead_size_mm", label: "Bead (mm)" },
   { key: "bead_size", label: "Bead size" },
   { key: "bead_color", label: "Bead color" },
   { key: "fly_color", label: "Fly color" },
+  { key: "body_color", label: "Body color" },
+  { key: "body_material", label: "Body material" },
+  { key: "tail_color", label: "Tail color" },
+  { key: "thorax_color", label: "Thorax color" },
+  { key: "collar_color", label: "Collar color" },
+  { key: "rib_material", label: "Rib material" },
+  { key: "wing_material", label: "Wing material" },
   { key: "materials", label: "Materials" },
   { key: "description", label: "Notes" },
   { key: "video_url", label: "Video" },

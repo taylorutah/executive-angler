@@ -17,7 +17,16 @@ export interface FlyPattern {
   hook?: string;
   bead_size?: string;
   bead_color?: string;
+  bead_material?: string;
+  bead_size_mm?: number | null;
   fly_color?: string;
+  body_color?: string;
+  body_material?: string;
+  tail_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
+  rib_material?: string;
+  wing_material?: string;
   materials?: string;
   description?: string;
   video_url?: string;

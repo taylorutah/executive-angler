@@ -9,6 +9,8 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import type { TyingMaterial, UserMaterialInventory, MaterialCategory } from '@/types/materials';
+import HelpHint from '@/components/ui/HelpHint';
+import TipCard from '@/components/ui/TipCard';
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -204,30 +206,42 @@ export default function WorkbenchClient() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-1 mt-4">
+          <div className="flex gap-1 mt-4 items-center">
             {([
-              { id: 'inventory' as Tab, label: 'My Inventory', icon: Package },
-              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles },
-              { id: 'browse' as Tab, label: 'Browse Materials', icon: Search },
-            ]).map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => setTab(id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  tab === id
-                    ? 'bg-accent text-bg'
-                    : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised'
-                }`}
-              >
-                <Icon size={16} />
-                {label}
-              </button>
+              { id: 'inventory' as Tab, label: 'My Inventory', icon: Package, hint: 'What you own at the vise. Tracked by category so we can match against recipes.' },
+              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Crosses your inventory against every fly recipe in the library and ranks them by % of materials you already have.' },
+              { id: 'browse' as Tab, label: 'Browse Materials', icon: Search, hint: 'Search the 500+ material catalog. One click adds it to your inventory.' },
+            ]).map(({ id, label, icon: Icon, hint }) => (
+              <div key={id} className="flex items-center">
+                <button
+                  onClick={() => setTab(id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    tab === id
+                      ? 'bg-accent text-bg'
+                      : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised'
+                  }`}
+                >
+                  <Icon size={16} />
+                  {label}
+                </button>
+                <HelpHint label={`About: ${label}`} className="ml-0.5">
+                  {hint}
+                </HelpHint>
+              </div>
             ))}
           </div>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="mb-4">
+          <TipCard storageKey="workbench-intro" title="New to the Workbench?">
+            <p><span className="text-[#F0F6FC] font-semibold">1.</span> Add materials you own to <em>My Inventory</em>.</p>
+            <p><span className="text-[#F0F6FC] font-semibold">2.</span> Tap <em>What Can I Tie?</em> — we rank every library recipe by % of your materials that match.</p>
+            <p><span className="text-[#F0F6FC] font-semibold">3.</span> Open a fly and hit <em>Variant</em> to fork your own version.</p>
+          </TipCard>
+        </div>
+
         {/* ─── Inventory Tab ──────────────────────────────────── */}
         {tab === 'inventory' && (
           <div>

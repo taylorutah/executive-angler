@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, ChevronRight, GitBranch, Sparkles, Plus } from "lucide-react";
 import RecipeDiff from "./RecipeDiff";
+import HelpHint from "@/components/ui/HelpHint";
 import type { FlyPattern } from "@/types/fishing-log";
 
 type CanonicalLite = {
@@ -234,9 +235,14 @@ function CanonicalTree({
 function Header({ title, createVariantHref }: { title: string; createVariantHref?: string }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
-      <h3 className="flex items-center gap-2 font-heading text-base font-bold text-[#F0F6FC]">
+      <h3 className="flex items-center gap-1.5 font-heading text-base font-bold text-[#F0F6FC]">
         <GitBranch className="h-4 w-4 text-[#00B4D8]" />
         {title}
+        <HelpHint label="About variant lineage">
+          <p className="text-[#F0F6FC] font-semibold">Variants are linked children of a parent pattern.</p>
+          <p>Forking a fly captures what&apos;s different (size, bead, color) and remembers where it came from — so you can tell <em>Frenchie #16 olive</em> from <em>Frenchie #14 red-collar</em> at a glance.</p>
+          <p className="text-[#6E7681] text-xs">Public canonical patterns also show community variants here.</p>
+        </HelpHint>
       </h3>
       {createVariantHref && (
         <Link

@@ -51,7 +51,16 @@ type Overrides = {
   hook?: string;
   bead_size?: string;
   bead_color?: string;
+  bead_material?: string;
+  bead_size_mm?: number | string;
   fly_color?: string;
+  body_color?: string;
+  body_material?: string;
+  tail_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
+  rib_material?: string;
+  wing_material?: string;
   description?: string;
   materials?: string;
   video_url?: string;
@@ -86,7 +95,16 @@ type PatternSource = {
   hook?: string | null;
   bead_size?: string | null;
   bead_color?: string | null;
+  bead_material?: string | null;
+  bead_size_mm?: number | null;
   fly_color?: string | null;
+  body_color?: string | null;
+  body_material?: string | null;
+  tail_color?: string | null;
+  thorax_color?: string | null;
+  collar_color?: string | null;
+  rib_material?: string | null;
+  wing_material?: string | null;
   materials?: string | null;
   description?: string | null;
   video_url?: string | null;
@@ -119,7 +137,7 @@ async function loadParent(
     const { data } = await supabase
       .from("fly_patterns")
       .select(
-        "id, user_id, name, type, size, hook, bead_size, bead_color, fly_color, materials, description, video_url, tags, image_url, provenance_credit, visibility, shared_with_user_ids"
+        "id, user_id, name, type, size, hook, bead_size, bead_color, bead_material, bead_size_mm, fly_color, body_color, body_material, tail_color, thorax_color, collar_color, rib_material, wing_material, materials, description, video_url, tags, image_url, provenance_credit, visibility, shared_with_user_ids"
       )
       .eq("id", spec.patternId)
       .maybeSingle();
@@ -160,7 +178,16 @@ function baseFromParent(
       hook: r.hook ?? null,
       bead_size: r.bead_size ?? null,
       bead_color: r.bead_color ?? null,
+      bead_material: r.bead_material ?? null,
+      bead_size_mm: r.bead_size_mm ?? null,
       fly_color: r.fly_color ?? null,
+      body_color: r.body_color ?? null,
+      body_material: r.body_material ?? null,
+      tail_color: r.tail_color ?? null,
+      thorax_color: r.thorax_color ?? null,
+      collar_color: r.collar_color ?? null,
+      rib_material: r.rib_material ?? null,
+      wing_material: r.wing_material ?? null,
       materials: r.materials ?? null,
       description: r.description ?? null,
       video_url: r.video_url ?? null,
@@ -179,7 +206,16 @@ function baseFromParent(
     hook: null,
     bead_size: null,
     bead_color: null,
+    bead_material: null,
+    bead_size_mm: null,
     fly_color: Array.isArray(r.colors) && r.colors.length > 0 ? r.colors[0] : null,
+    body_color: null,
+    body_material: null,
+    tail_color: null,
+    thorax_color: null,
+    collar_color: null,
+    rib_material: null,
+    wing_material: null,
     materials: null,
     description: r.description ?? r.tying_overview ?? null,
     video_url: null,

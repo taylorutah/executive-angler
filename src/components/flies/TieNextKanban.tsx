@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Check, ListChecks, Wrench, CheckCircle2, GripVertical } from "lucide-react";
 import type { FlyPattern, TieNextStatus } from "@/types/fishing-log";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
+import HelpHint from "@/components/ui/HelpHint";
+import TipCard from "@/components/ui/TipCard";
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -18,7 +20,7 @@ const CATEGORY_TO_TYPE: Record<string, string> = {
   midge: "Midge",
 };
 
-type Column = { key: TieNextStatus; label: string; accent: string; icon: React.ReactNode };
+type Column = { key: TieNextStatus; label: string; accent: string; icon: React.ReactNode; hint: string };
 
 const COLUMNS: Column[] = [
   {
@@ -26,18 +28,21 @@ const COLUMNS: Column[] = [
     label: "Want to tie",
     accent: "border-[#00B4D8]/30 bg-[#00B4D8]/[0.03]",
     icon: <ListChecks className="h-4 w-4 text-[#00B4D8]" />,
+    hint: "Patterns you want to sit down and tie — restock ideas, variants from the fly box, community patterns you saved.",
   },
   {
     key: "at_vise",
     label: "At the vise",
     accent: "border-[#E8923A]/30 bg-[#E8923A]/[0.03]",
     icon: <Wrench className="h-4 w-4 text-[#E8923A]" />,
+    hint: "Currently tying. Useful to pull up the recipe card on your phone without hunting through the library.",
   },
   {
     key: "done",
     label: "Done (last 14 days)",
     accent: "border-emerald-500/25 bg-emerald-500/[0.03]",
     icon: <CheckCircle2 className="h-4 w-4 text-emerald-400" />,
+    hint: "Auto-clears 14 days after you mark done — keeps the board focused on what's next.",
   },
 ];
 
@@ -178,11 +183,10 @@ export default function TieNextKanban({ initialPatterns, initialBoxEntries }: Pr
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <p className="text-xs text-[#6E7681]">
-          Drag a card between columns, or tap a status button. Done items auto-hide after 14 days.
-        </p>
-      </div>
+      <TipCard storageKey="tie-next-intro" title="Tie Next — your tying to-do list">
+        <p>Drag cards between columns, or tap a status button to move them. Flies move <span className="text-[#F0F6FC] font-semibold">Want → Vise → Done</span> as you work through them.</p>
+        <p className="text-[#6E7681]">Add from any fly card with the <ListChecks className="inline h-3 w-3" /> button, or from recipes in <Link href="/journal/flies/workbench" className="text-[#00B4D8] hover:underline">Workbench</Link>.</p>
+      </TipCard>
 
       <div className="grid gap-3 md:grid-cols-3">
         {COLUMNS.map((col) => (
@@ -211,11 +215,12 @@ export default function TieNextKanban({ initialPatterns, initialBoxEntries }: Pr
             }}
           >
             <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 {col.icon}
                 <span className="text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
                   {col.label}
                 </span>
+                <HelpHint label={`About ${col.label}`}>{col.hint}</HelpHint>
               </div>
               <span className="rounded-full bg-[#0D1117] px-2 py-0.5 text-[10px] font-semibold text-[#6E7681]">
                 {columns[col.key].length}

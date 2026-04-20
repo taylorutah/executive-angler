@@ -140,6 +140,12 @@ export async function POST(req: NextRequest) {
 
     const str = (v: unknown) => (v !== undefined && v !== null ? String(v) : undefined);
 
+    const num = (v: unknown) => {
+      if (v === undefined || v === null || v === "") return undefined;
+      const n = typeof v === "number" ? v : parseFloat(String(v));
+      return Number.isFinite(n) ? n : undefined;
+    };
+
     const row: Record<string, unknown> = {
       user_id: user.id,
       name: str(body.name),
@@ -148,7 +154,16 @@ export async function POST(req: NextRequest) {
       hook: str(body.hook),
       bead_size: str(body.bead_size),
       bead_color: parseArr(body.bead_color),
+      bead_material: str(body.bead_material),
+      bead_size_mm: num(body.bead_size_mm),
       fly_color: parseArr(body.fly_color),
+      body_color: str(body.body_color),
+      body_material: str(body.body_material),
+      tail_color: str(body.tail_color),
+      thorax_color: str(body.thorax_color),
+      collar_color: str(body.collar_color),
+      rib_material: str(body.rib_material),
+      wing_material: str(body.wing_material),
       materials: str(body.materials),
       description: str(body.description),
       video_url: str(body.video_url),
@@ -262,6 +277,12 @@ export async function PATCH(req: NextRequest) {
 
     const str = (v: unknown) => (v !== undefined ? String(v) : undefined);
 
+    const num = (v: unknown) => {
+      if (v === undefined || v === null || v === "") return undefined;
+      const n = typeof v === "number" ? v : parseFloat(String(v));
+      return Number.isFinite(n) ? n : undefined;
+    };
+
     const updates: Record<string, unknown> = {
       name: str(body.name),
       type: str(body.type),
@@ -269,7 +290,16 @@ export async function PATCH(req: NextRequest) {
       hook: str(body.hook),
       bead_size: str(body.bead_size),
       bead_color: parseArr(body.bead_color),
+      bead_material: str(body.bead_material),
+      bead_size_mm: num(body.bead_size_mm),
       fly_color: parseArr(body.fly_color),
+      body_color: str(body.body_color),
+      body_material: str(body.body_material),
+      tail_color: str(body.tail_color),
+      thorax_color: str(body.thorax_color),
+      collar_color: str(body.collar_color),
+      rib_material: str(body.rib_material),
+      wing_material: str(body.wing_material),
       materials: str(body.materials),
       description: str(body.description),
       video_url: str(body.video_url),
