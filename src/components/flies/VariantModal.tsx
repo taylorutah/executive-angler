@@ -15,7 +15,7 @@
  * Parent is passed in as `parent={{ patternId | canonicalId, name, heroImageUrl?, category? }}`.
  * On success, triggers onCreated() + optional redirect to /my-flies.
  */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,6 +102,38 @@ export default function VariantModal({
   const [sizeInput, setSizeInput] = useState("");
   const [colorInput, setColorInput] = useState("");
   const [beadInput, setBeadInput] = useState("");
+
+  // Track where mousedown originated so we only close on true backdrop clicks.
+  // Without this, clicking an input and dragging out (text selection, native
+  // <select>/<datalist> dropdowns that render outside the modal) would land
+  // mouseup on the backdrop and dismiss the modal mid-edit.
+  const mouseDownOnBackdropRef = useRef(false);
+
+  // Lock body scroll + close on Escape while modal is open.
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape" && !saving) onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, saving, onClose]);
+
+  function handleBackdropMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    mouseDownOnBackdropRef.current = e.target === e.currentTarget;
+  }
+  function handleBackdropMouseUp(e: React.MouseEvent<HTMLDivElement>) {
+    const wasBackdropDown = mouseDownOnBackdropRef.current;
+    mouseDownOnBackdropRef.current = false;
+    if (wasBackdropDown && e.target === e.currentTarget && !saving) {
+      onClose();
+    }
+  }
 
   const parentSpec =
     parent.patternId !== undefined
@@ -229,11 +261,15 @@ export default function VariantModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#0D1117]/80 backdrop-blur-sm"
-      onClick={onClose}
+      onMouseDown={handleBackdropMouseDown}
+      onMouseUp={handleBackdropMouseUp}
+      role="presentation"
     >
       <div
         className="w-full sm:max-w-xl bg-[#161B22] border border-[#21262D] sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-hidden flex flex-col"
-        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Create variant of ${parent.name}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#21262D]">
