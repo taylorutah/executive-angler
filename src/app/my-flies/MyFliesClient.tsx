@@ -22,6 +22,7 @@ import {
 } from "@/components/flies/FlyBoxTabs";
 import TieNextKanban from "@/components/flies/TieNextKanban";
 import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
+import HelpHint from "@/components/ui/HelpHint";
 
 type Tab = "box" | "workbench" | "tie-next" | "shared";
 
@@ -129,6 +130,27 @@ export default function MyFliesClient({
 
   const visibleTabs = tabs.filter((t) => t.visible);
 
+  const tabHelp: Partial<Record<Tab, React.ReactNode>> = {
+    "tie-next": (
+      <>
+        <p>
+          Your tying to-do list. Drag cards between <span className="text-[#F0F6FC] font-semibold">Want → Vise → Done</span> as you work through them.
+        </p>
+        <p className="text-[#6E7681]">
+          <span className="text-[#F0F6FC]">Add a fly:</span> tap the <ListChecks className="inline h-3 w-3" /> icon on any card in your Fly Box, Library, or Workbench.
+        </p>
+        <p className="text-[#6E7681]">
+          Done column auto-clears 14 days after you mark it — keeps focus on what&apos;s next.
+        </p>
+      </>
+    ),
+    workbench: (
+      <>
+        <p>Design personal patterns, pick from the Library, or see what you can tie from your materials on hand.</p>
+      </>
+    ),
+  };
+
   return (
     <div className="min-h-screen bg-[#0D1117]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
@@ -157,29 +179,35 @@ export default function MyFliesClient({
           </div>
         </header>
 
-        <div className="mb-6 flex flex-wrap gap-1 rounded-lg border border-[#21262D] bg-[#161B22] p-1">
+        <div className="mb-6 flex flex-wrap items-center gap-1 rounded-lg border border-[#21262D] bg-[#161B22] p-1">
           {visibleTabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => switchTab(t.key)}
-              className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-                tab === t.key
-                  ? "bg-[#E8923A] text-white"
-                  : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-              }`}
-            >
-              {t.icon}
-              {t.label}
-              {t.count !== undefined && t.count > 0 && (
-                <span
-                  className={`rounded-full px-1.5 text-[10px] ${
-                    tab === t.key ? "bg-white/20" : "bg-[#21262D]"
-                  }`}
-                >
-                  {t.count}
-                </span>
-              )}
-            </button>
+            <div key={t.key} className="flex items-center">
+              <button
+                onClick={() => switchTab(t.key)}
+                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                  tab === t.key
+                    ? "bg-[#E8923A] text-white"
+                    : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                }`}
+              >
+                {t.icon}
+                {t.label}
+                {t.count !== undefined && t.count > 0 && (
+                  <span
+                    className={`rounded-full px-1.5 text-[10px] ${
+                      tab === t.key ? "bg-white/20" : "bg-[#21262D]"
+                    }`}
+                  >
+                    {t.count}
+                  </span>
+                )}
+              </button>
+              {tabHelp[t.key] ? (
+                <HelpHint label={`About ${t.label}`} className="ml-0.5">
+                  {tabHelp[t.key]}
+                </HelpHint>
+              ) : null}
+            </div>
           ))}
         </div>
 

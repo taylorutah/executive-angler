@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { Heart, ListChecks, Layers, Check, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import HelpHint from '@/components/ui/HelpHint';
 
 type Tab = 'all' | 'favorites' | 'tie-next';
 
@@ -359,26 +360,58 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
 
   return (
     <div>
-      <div className="flex gap-1 mb-6 bg-[#161B22] border border-[#21262D] rounded-lg p-1">
+      <div className="flex items-center gap-1 mb-3 bg-[#161B22] border border-[#21262D] rounded-lg p-1">
         {tabs.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              tab === t.key
-                ? 'bg-[#E8923A] text-white'
-                : 'text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117]'
-            }`}
-          >
-            {t.icon}
-            {t.label}
-            {t.count !== undefined && t.count > 0 && (
-              <span className={`text-xs rounded-full px-1.5 ${tab === t.key ? 'bg-white/20' : 'bg-[#21262D]'}`}>
-                {t.count}
-              </span>
-            )}
-          </button>
+          <div key={t.key} className="flex items-center">
+            <button
+              onClick={() => setTab(t.key)}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                tab === t.key
+                  ? 'bg-[#E8923A] text-white'
+                  : 'text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117]'
+              }`}
+            >
+              {t.icon}
+              {t.label}
+              {t.count !== undefined && t.count > 0 && (
+                <span className={`text-xs rounded-full px-1.5 ${tab === t.key ? 'bg-white/20' : 'bg-[#21262D]'}`}>
+                  {t.count}
+                </span>
+              )}
+            </button>
+            {t.key === 'tie-next' ? (
+              <HelpHint label="About Tie Next" className="ml-0.5">
+                <p>A quick list of patterns queued for the vise.</p>
+                <p className="text-[#6E7681]">
+                  For drag-and-drop planning (Want → Vise → Done), open the full board:{' '}
+                  <Link href="/my-flies?tab=tie-next" className="text-[#00B4D8] hover:underline">
+                    Tie Next board
+                  </Link>
+                  .
+                </p>
+              </HelpHint>
+            ) : null}
+            {t.key === 'favorites' ? (
+              <HelpHint label="About Favorites" className="ml-0.5">
+                <p>Flies you&apos;ve starred for quick access. Tap the heart on any card to save.</p>
+              </HelpHint>
+            ) : null}
+          </div>
         ))}
+      </div>
+
+      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-[#6E7681]">
+        <span className="inline-flex items-center gap-1">
+          <Heart className="h-3 w-3" /> tap to favorite
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <ListChecks className="h-3 w-3" /> tap to queue for tying
+        </span>
+        {tab === 'tie-next' ? (
+          <span className="inline-flex items-center gap-1">
+            <Check className="h-3 w-3" /> mark as tied (removes from queue)
+          </span>
+        ) : null}
       </div>
 
       {!hasVisibleCards && (
@@ -394,7 +427,17 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
             <>
               <ListChecks className="h-10 w-10 mx-auto text-[#6E7681] mb-3" />
               <p className="text-[#A8B2BD] mb-1">Your tying queue is empty</p>
-              <p className="text-sm text-[#6E7681]">Add flies to your Tie Next queue to plan your next session at the vise</p>
+              <p className="text-sm text-[#6E7681] mb-4 max-w-md mx-auto">
+                Tap the <ListChecks className="inline h-3.5 w-3.5" /> icon on any fly card — here, in the{' '}
+                <Link href="/flies" className="text-[#00B4D8] hover:underline">Library</Link>, or in the{' '}
+                <Link href="/my-flies?tab=workbench" className="text-[#00B4D8] hover:underline">Workbench</Link>.
+              </p>
+              <Link
+                href="/my-flies?tab=tie-next"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-2 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40"
+              >
+                Open full Tie Next board →
+              </Link>
             </>
           )}
         </div>
