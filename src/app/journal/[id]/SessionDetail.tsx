@@ -12,6 +12,7 @@ import { compressImage } from "@/lib/image-compress";
 import { CommentsSection } from "@/components/social/CommentsSection";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
+import HelpHint from "@/components/ui/HelpHint";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -573,9 +574,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* Private memo — only visible to owner */}
                 {isOwner && (
                 <div className="mb-3 max-w-lg group/memo relative">
-                  <div className="flex items-center gap-1.5 mb-1">
+                  <div className="flex items-center gap-1 mb-1">
                     <Lock className="h-3 w-3 text-[#6E7681]" />
                     <span className="text-[10px] text-[#6E7681] uppercase tracking-wide font-semibold">Private Memo</span>
+                    <HelpHint label="Private Memo vs Notes">
+                      <p className="text-[#F0F6FC] font-semibold">Only you see this.</p>
+                      <p>Notes above are public — anyone with this session&apos;s link can read them. Memo is for yourself: what to try next, why a rig didn&apos;t work, stuff you don&apos;t want to share.</p>
+                    </HelpHint>
                     {memoSaved && <span className="text-[10px] text-green-400 ml-1">Saved</span>}
                   </div>
                   {editingMemo ? (
@@ -941,7 +946,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
               <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
                 <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
-                <span className="text-xs text-[#6E7681] bg-[#0D1117] rounded-full px-2 py-0.5">Drift mode</span>
+                <span className="inline-flex items-center gap-1 text-xs text-[#6E7681] bg-[#0D1117] rounded-full px-2 py-0.5">
+                  Drift mode
+                  <HelpHint label="About drift mode">
+                    <p className="text-[#F0F6FC] font-semibold">Total count, no per-catch details.</p>
+                    <p>You logged how many fish you caught without filling in each individual catch (species, length, fly). Tap <span className="text-[#E8923A]">Edit</span> to add details later.</p>
+                    <p className="text-[#6E7681] text-xs">Useful for fast days when you just want the count.</p>
+                  </HelpHint>
+                </span>
               </div>
               <div className="p-6 flex flex-col items-center text-center gap-3">
                 <div className="flex items-center gap-3">
@@ -1036,7 +1048,20 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Species</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Length</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Fly</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Position</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">
+                        <span className="inline-flex items-center gap-0.5">
+                          Position
+                          <HelpHint label="Fly position on the rig">
+                            <p className="text-[#F0F6FC] font-semibold">Where the fly rode on your line.</p>
+                            <ul className="text-xs space-y-0.5">
+                              <li><span className="text-[#E8923A]">Point</span> — bottom fly, closest to the weight</li>
+                              <li><span className="text-[#E8923A]">Dropper</span> — tied off a tag above the point</li>
+                              <li><span className="text-[#E8923A]">Tag</span> — a second dropper off a knot tag</li>
+                              <li><span className="text-[#E8923A]">Single</span> — the only fly on the line</li>
+                            </ul>
+                          </HelpHint>
+                        </span>
+                      </th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Size</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Time</th>
                       <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Weather</th>

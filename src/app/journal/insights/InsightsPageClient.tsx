@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
+import TipCard from "@/components/ui/TipCard";
 
 // =============================================
 // Types matching API response
@@ -142,6 +143,13 @@ export default function InsightsPageClient({ isPremium = true }: { isPremium?: b
           <p className="text-slate-400 mt-2">
             Data-driven patterns from your fishing journal.
           </p>
+        </div>
+
+        <div className="mb-6">
+          <TipCard storageKey="insights-intro" title="How these insights work" tone="premium">
+            <p>Everything here is computed from <span className="text-[#F0F6FC] font-semibold">your</span> logged sessions — time of day, weather, water temp, fly patterns, catch rates.</p>
+            <p className="text-[#6E7681]">Signal gets better with volume. Log water temp + weather to unlock the sharpest cards. Aim for 20+ sessions before trusting weather/temp correlations.</p>
+          </TipCard>
         </div>
 
         {/* AI Fishing Coach */}

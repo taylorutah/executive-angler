@@ -4,6 +4,7 @@ import { FishingSession } from "@/types/fishing-log";
 import { useState } from "react";
 import Link from "next/link";
 import { parseLocalDate, formatDate } from "@/lib/date";
+import HelpHint from "@/components/ui/HelpHint";
 
 interface SidebarFiltersProps {
   sessions: FishingSession[];
@@ -178,8 +179,13 @@ export function SidebarFilters({
       {/* Location Filter */}
       {locationOptions.length > 0 && (
         <div>
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
+          <h3 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
             Filter by Location
+            <HelpHint label="What Location filter pulls from">
+              <p className="text-[#F0F6FC] font-semibold">Venue-type tags you added to sessions.</p>
+              <p>Things like <span className="text-[#E8923A]">walk-in</span>, <span className="text-[#E8923A]">tailwater</span>, <span className="text-[#E8923A]">below-dam</span>, <span className="text-[#E8923A]">public</span>. We pull them from your session tags so you can filter down to a specific kind of water.</p>
+              <p className="text-[#6E7681] text-xs">Nothing here? Start tagging sessions with where you fished (not just the river).</p>
+            </HelpHint>
           </h3>
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">

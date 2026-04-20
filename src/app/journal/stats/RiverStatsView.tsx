@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { RiverStatsCard } from '@/components/stats/RiverStatsCard';
 import type { RiverStats } from '@/types/awards';
 import { Loader2, TrendingUp } from 'lucide-react';
+import HelpHint from '@/components/ui/HelpHint';
+import TipCard from '@/components/ui/TipCard';
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
@@ -60,6 +62,11 @@ export default function RiverStatsView() {
 
   return (
     <div className="space-y-6">
+      <TipCard storageKey="river-stats-intro" title="Your rivers at a glance">
+        <p>One card per river you&apos;ve logged sessions on — with total sessions, total fish, and your biggest catch there.</p>
+        <p className="text-[#6E7681]">Tap a card to drill into every session on that river.</p>
+      </TipCard>
+
       {/* Summary Header */}
       <div className="bg-gradient-to-r from-[#E8923A]/10 to-[#00B4D8]/10 border border-[#21262D] rounded-lg p-6">
         <h2 className="font-heading text-2xl text-cream mb-4 flex items-center gap-2">
@@ -67,7 +74,11 @@ export default function RiverStatsView() {
           Your River Stats
         </h2>
         <div className={`grid grid-cols-2 ${AWARDS_VISIBLE ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-4`}>
-          <SummaryBox label="Rivers Fished" value={stats.length} />
+          <SummaryBox
+            label="Rivers Fished"
+            value={stats.length}
+            hint="Unique rivers you've logged at least one session on."
+          />
           <SummaryBox label="Total Sessions" value={totalSessions} />
           <SummaryBox label="Total Fish" value={totalFish} />
         </div>
@@ -87,10 +98,13 @@ function SummaryBox({
   label,
   value,
   icon: Icon,
+  hint,
 }: {
   label: string;
   value: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: any;
+  hint?: string;
 }) {
   return (
     <div className="text-center">
@@ -98,7 +112,10 @@ function SummaryBox({
         {Icon && <Icon className="w-6 h-6 text-[#E8923A]" />}
         {value}
       </div>
-      <div className="text-sm text-slate-400">{label}</div>
+      <div className="flex items-center justify-center gap-0.5 text-sm text-slate-400">
+        {label}
+        {hint && <HelpHint label={label}>{hint}</HelpHint>}
+      </div>
     </div>
   );
 }

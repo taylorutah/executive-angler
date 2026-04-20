@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Trophy, Fish, Target, MapPin, Calendar, Star, Ruler, Camera, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import TipCard from '@/components/ui/TipCard';
 
 interface CatchRecord {
   id: string;
@@ -184,6 +185,11 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
   return (
     <div className="space-y-8">
+      <TipCard storageKey="trophy-wall-intro" title="Your personal bests">
+        <p>Every measured catch shows up here, with your biggest fish per species surfaced first. Tap any photo to open the lightbox.</p>
+        <p className="text-[#6E7681]">Only catches with a <span className="text-[#E8923A]">length</span> count — log inches on catches to see them on the wall.</p>
+      </TipCard>
+
       {/* Quick stats row */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">

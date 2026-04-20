@@ -8,6 +8,7 @@ import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
 import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles } from "lucide-react";
 import Link from "next/link";
+import TipCard from "@/components/ui/TipCard";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
@@ -459,6 +460,14 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             <p className="text-sm text-[#A8B2BD]">
               Showing {filteredSessions.length} session{filteredSessions.length !== 1 ? "s" : ""}
             </p>
+          </div>
+
+          {/* One-time intro */}
+          <div className="mb-4">
+            <TipCard storageKey="journal-feed-intro" title="Your fishing journal">
+              <p>Every logged session shows up here. Tap a card to dive in — catches, photos, weather, notes, and kudos from people you follow.</p>
+              <p className="text-[#6E7681]">Toggle <span className="text-[#F0F6FC] font-semibold">List</span> / <span className="text-[#F0F6FC] font-semibold">Calendar</span> above. Filter by river, year, or location tag in the sidebar.</p>
+            </TipCard>
           </div>
 
           {/* Content */}

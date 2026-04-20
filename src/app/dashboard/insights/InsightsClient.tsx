@@ -7,6 +7,7 @@ import {
   Thermometer, Cloud, Droplets, Timer, MapPin, Bug,
   BrainCircuit, Loader2, RefreshCw,
 } from "lucide-react";
+import TipCard from "@/components/ui/TipCard";
 
 interface Session {
   id: string;
@@ -361,9 +362,16 @@ export default function InsightsClient({
           </div>
         </div>
 
-        <p className="text-sm text-[#A8B2BD] mb-8">
+        <p className="text-sm text-[#A8B2BD] mb-4">
           Personalized analysis based on {sessions.length} sessions and {catches.length} catches.
         </p>
+
+        <TipCard storageKey="dashboard-insights-intro" title="How these insights work" tone="premium">
+          <p>Every insight is derived from <strong>your own logged sessions and catches</strong> — water temp buckets, time-of-day patterns, fly effectiveness, weather correlations.</p>
+          <p className="text-[#6E7681]">Insights unlock at 3+ sessions. Results sharpen as you log more — aim for 20+ sessions with catch details for the most reliable patterns.</p>
+        </TipCard>
+
+        <div className="h-8" />
 
         {/* AI Journal Summary */}
         <div className="bg-gradient-to-br from-[#161B22] to-[#1a1f2a] rounded-xl border border-purple-500/20 p-6 mb-8">

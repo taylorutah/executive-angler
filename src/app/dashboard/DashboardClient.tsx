@@ -10,6 +10,8 @@ import {
   BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
+import HelpHint from "@/components/ui/HelpHint";
+import TipCard from "@/components/ui/TipCard";
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
 
@@ -97,7 +99,14 @@ function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
             <Flame className={`h-3 w-3 ${es.weeklyStreak > 0 ? "text-orange-400" : "text-[#E8923A]/50"}`} />
             <span className="font-mono text-xl font-semibold text-[#F0F6FC]">{es.weeklyStreak}</span>
           </div>
-          <span className="text-[8px] font-bold text-[#A8B2BD] tracking-[0.08em] mt-0.5">WK STREAK</span>
+          <div className="flex items-center gap-0.5">
+            <span className="text-[8px] font-bold text-[#A8B2BD] tracking-[0.08em] mt-0.5">WK STREAK</span>
+            <HelpHint label="How weekly streak works">
+              <p className="text-[#F0F6FC] font-semibold">Weeks in a row with at least one logged session.</p>
+              <p>Calendar weeks (Mon–Sun). Miss a week and the streak resets.</p>
+              <p className="text-[#6E7681] text-xs">The flame turns orange once you&apos;re on a streak of one or more.</p>
+            </HelpHint>
+          </div>
         </div>
       </div>
 
@@ -415,9 +424,14 @@ export default function DashboardClient({
             {riverStats.length > 0 && (
               <section>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <TrendingUp className="h-5 w-5 text-[#E8923A]" />
                     <h2 className="font-serif text-xl text-[#F0F6FC]">Your Rivers</h2>
+                    <HelpHint label="About Your Rivers">
+                      <p className="text-[#F0F6FC] font-semibold">One card per river you&apos;ve logged sessions on.</p>
+                      <p>Shows your session count, total fish, and biggest catch on each — so you can see where you&apos;re actually putting in the reps.</p>
+                      {AWARDS_VISIBLE && <p className="text-[#6E7681] text-xs">Milestone badges unlock as you log more sessions and hit personal bests.</p>}
+                    </HelpHint>
                   </div>
                   <Link href="/journal/stats" className="text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
                     Full stats &rarr;

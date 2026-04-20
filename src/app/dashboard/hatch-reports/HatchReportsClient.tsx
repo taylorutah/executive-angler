@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { ChevronLeft, Bug, MapPin, Calendar, Thermometer } from "lucide-react";
+import TipCard from "@/components/ui/TipCard";
 
 interface Session {
   id: string;
@@ -138,6 +139,13 @@ export default function HatchReportsClient({
             <h1 className="font-serif text-2xl text-[#F0F6FC]">Hatch Reports</h1>
           </div>
         </div>
+
+        <TipCard storageKey="hatch-reports-intro" title="What's hatching on your rivers">
+          <p>We match the rivers you&apos;ve logged sessions on to our hatch database — by name — then show insects, sizes, and patterns for the month you pick.</p>
+          <p className="text-[#6E7681]">Your own catches for that month (across all years) appear below, so you can see which hatches you&apos;ve actually nailed.</p>
+        </TipCard>
+
+        <div className="h-6" />
 
         {/* Controls */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
