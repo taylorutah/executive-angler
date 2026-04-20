@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Fish, ArrowRight, Star } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
+import HeroCompact from "@/components/ui/HeroCompact";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
@@ -30,6 +31,7 @@ import {
   getFlyShopsByDestination,
   getSpeciesByCommonNames,
   getFliesForDestination,
+  getApprovedPhotosByEntity,
 } from "@/lib/db";
 
 interface Props {
@@ -91,7 +93,7 @@ export default async function DestinationPage({ params }: Props) {
   }
   const heroHeight = getHeroHeight("destination", heroTier);
 
-  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies] = await Promise.all([
+  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies, galleryPhotos] = await Promise.all([
     getRiversByDestination(dest.id),
     getLodgesByDestination(dest.id),
     getGuidesByDestination(dest.id),
@@ -99,6 +101,7 @@ export default async function DestinationPage({ params }: Props) {
     getFlyShopsByDestination(dest.id),
     getSpeciesByCommonNames(dest.primarySpecies || []),
     getFliesForDestination(dest.id),
+    getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
   const mapMarkers = [
@@ -157,29 +160,59 @@ export default async function DestinationPage({ params }: Props) {
         }}
       />
 
-      <div className="relative">
-        <HeroSection
-          imageUrl={dest.heroImageUrl}
-          imageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
-          title={dest.name}
-          subtitle={dest.tagline}
-          height={heroHeight}
-          imageCredit={dest.heroImageCredit}
-          imageCreditUrl={dest.heroImageCreditUrl}
-        />
-        {userIsAdmin && (
-          <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
-              entityType="destinations"
-              entityId={dest.id}
-              currentImageUrl={dest.heroImageUrl}
-              currentAlt={dest.heroImageAlt}
-              currentCredit={dest.heroImageCredit}
-              currentCreditUrl={dest.heroImageCreditUrl}
-            />
+      {heroTier === "anonymous" ? (
+        <div className="relative">
+          <HeroSection
+            imageUrl={dest.heroImageUrl}
+            imageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
+            title={dest.name}
+            subtitle={dest.tagline}
+            height={heroHeight}
+            imageCredit={dest.heroImageCredit}
+            imageCreditUrl={dest.heroImageCreditUrl}
+          />
+          {userIsAdmin && (
+            <div className="absolute top-4 right-4 z-20">
+              <HeroImageEditor
+                entityType="destinations"
+                entityId={dest.id}
+                currentImageUrl={dest.heroImageUrl}
+                currentAlt={dest.heroImageAlt}
+                currentCredit={dest.heroImageCredit}
+                currentCreditUrl={dest.heroImageCreditUrl}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-[#0D1117] pt-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <HeroCompact
+              heroImageUrl={dest.heroImageUrl}
+              heroImageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
+              heroImageCredit={dest.heroImageCredit}
+              title={dest.name}
+              subtitle={dest.tagline || undefined}
+              chips={[
+                dest.region,
+                ...(dest.primarySpecies ?? []),
+              ]}
+              galleryPhotos={galleryPhotos}
+            >
+              {userIsAdmin && (
+                <HeroImageEditor
+                  entityType="destinations"
+                  entityId={dest.id}
+                  currentImageUrl={dest.heroImageUrl}
+                  currentAlt={dest.heroImageAlt}
+                  currentCredit={dest.heroImageCredit}
+                  currentCreditUrl={dest.heroImageCreditUrl}
+                />
+              )}
+            </HeroCompact>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

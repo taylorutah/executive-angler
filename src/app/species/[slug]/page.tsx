@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Fish, MapPin, Droplets, Leaf, Bug } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
+import HeroCompact from "@/components/ui/HeroCompact";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
@@ -25,6 +26,7 @@ import {
   getDestinationsByIds,
   getRiversByIds,
   getFliesByEffectiveSpecies,
+  getApprovedPhotosByEntity,
 } from "@/lib/db";
 
 interface Props {
@@ -96,10 +98,11 @@ export default async function SpeciesDetailPage({ params }: Props) {
   }
   const heroHeight = getHeroHeight("species", heroTier);
 
-  const [relatedDests, relatedRivers, speciesFlies] = await Promise.all([
+  const [relatedDests, relatedRivers, speciesFlies, galleryPhotos] = await Promise.all([
     sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
     sp.relatedRiverIds ? getRiversByIds(sp.relatedRiverIds) : Promise.resolve([]),
     getFliesByEffectiveSpecies(sp.commonName),
+    getApprovedPhotosByEntity("species", sp.id),
   ]);
 
   const mapMarkers = sp.distributionCoordinates
@@ -157,31 +160,65 @@ export default async function SpeciesDetailPage({ params }: Props) {
         }}
       />
 
-      <div className="relative">
-        <HeroSection
-          imageUrl={
-            sp.imageUrl ||
-            "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
-          }
-          imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
-          title={sp.commonName}
-          subtitle={sp.scientificName || undefined}
-          height={heroHeight}
-          imageContain={true}
-        />
-        {userIsAdmin && (
-          <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
-              entityType="species"
-              entityId={sp.id}
-              currentImageUrl={sp.imageUrl || ""}
-              currentAlt={sp.heroImageAlt}
-              currentCredit={sp.heroImageCredit}
-              currentCreditUrl={sp.heroImageCreditUrl}
-            />
+      {heroTier === "anonymous" ? (
+        <div className="relative">
+          <HeroSection
+            imageUrl={
+              sp.imageUrl ||
+              "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
+            }
+            imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
+            title={sp.commonName}
+            subtitle={sp.scientificName || undefined}
+            height={heroHeight}
+            imageContain={true}
+          />
+          {userIsAdmin && (
+            <div className="absolute top-4 right-4 z-20">
+              <HeroImageEditor
+                entityType="species"
+                entityId={sp.id}
+                currentImageUrl={sp.imageUrl || ""}
+                currentAlt={sp.heroImageAlt}
+                currentCredit={sp.heroImageCredit}
+                currentCreditUrl={sp.heroImageCreditUrl}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-[#0D1117] pt-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <HeroCompact
+              heroImageUrl={
+                sp.imageUrl ||
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
+              }
+              heroImageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
+              heroImageCredit={sp.heroImageCredit}
+              title={sp.commonName}
+              subtitle={sp.scientificName || undefined}
+              chips={[
+                ...(sp.family ? [sp.family] : []),
+                ...(sp.averageSize ? [sp.averageSize] : []),
+              ]}
+              galleryPhotos={galleryPhotos}
+              imageContain={true}
+            >
+              {userIsAdmin && (
+                <HeroImageEditor
+                  entityType="species"
+                  entityId={sp.id}
+                  currentImageUrl={sp.imageUrl || ""}
+                  currentAlt={sp.heroImageAlt}
+                  currentCredit={sp.heroImageCredit}
+                  currentCreditUrl={sp.heroImageCreditUrl}
+                />
+              )}
+            </HeroCompact>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

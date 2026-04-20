@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
+import HeroCompact from "@/components/ui/HeroCompact";
 import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -40,6 +41,7 @@ import {
   getSpeciesByCommonNames,
   getFliesForRiver,
   getAllCanonicalFlies,
+  getApprovedPhotosByEntity,
 } from "@/lib/db";
 
 
@@ -98,7 +100,7 @@ export default async function RiverPage({ params }: Props) {
   }
   const heroHeight = getHeroHeight("river", heroTier);
 
-  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies] = await Promise.all([
+  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies, galleryPhotos] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     Promise.all((river.additionalDestinationIds ?? []).map((id) => getDestinationById(id))),
     getLodgesByRiver(river.id),
@@ -109,6 +111,7 @@ export default async function RiverPage({ params }: Props) {
     getSpeciesByCommonNames(river.primarySpecies || []),
     getFliesForRiver(river.id),
     getAllCanonicalFlies(),
+    getApprovedPhotosByEntity("river", river.id),
   ]);
 
   const flyByName = new Map(allFlies.map(f => [f.name.toLowerCase(), f]));
@@ -178,29 +181,59 @@ export default async function RiverPage({ params }: Props) {
         }}
       />
 
-      <div className="relative">
-        <HeroSection
-          imageUrl={river.heroImageUrl}
-          imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
-          title={river.name}
-          subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
-          height={heroHeight}
-          imageCredit={river.heroImageCredit}
-          imageCreditUrl={river.heroImageCreditUrl}
-        />
-        {userIsAdmin && (
-          <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
-              entityType="rivers"
-              entityId={river.id}
-              currentImageUrl={river.heroImageUrl}
-              currentAlt={river.heroImageAlt}
-              currentCredit={river.heroImageCredit}
-              currentCreditUrl={river.heroImageCreditUrl}
-            />
+      {heroTier === "anonymous" ? (
+        <div className="relative">
+          <HeroSection
+            imageUrl={river.heroImageUrl}
+            imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
+            title={river.name}
+            subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
+            height={heroHeight}
+            imageCredit={river.heroImageCredit}
+            imageCreditUrl={river.heroImageCreditUrl}
+          />
+          {userIsAdmin && (
+            <div className="absolute top-4 right-4 z-20">
+              <HeroImageEditor
+                entityType="rivers"
+                entityId={river.id}
+                currentImageUrl={river.heroImageUrl}
+                currentAlt={river.heroImageAlt}
+                currentCredit={river.heroImageCredit}
+                currentCreditUrl={river.heroImageCreditUrl}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-[#0D1117] pt-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <HeroCompact
+              heroImageUrl={river.heroImageUrl}
+              heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
+              heroImageCredit={river.heroImageCredit}
+              title={river.name}
+              subtitle={allDests.length > 0 ? allDests.map((d) => d!.name).join(" · ") : undefined}
+              chips={[
+                river.flowType,
+                ...(river.primarySpecies ?? []),
+              ]}
+              galleryPhotos={galleryPhotos}
+            >
+              {userIsAdmin && (
+                <HeroImageEditor
+                  entityType="rivers"
+                  entityId={river.id}
+                  currentImageUrl={river.heroImageUrl}
+                  currentAlt={river.heroImageAlt}
+                  currentCredit={river.heroImageCredit}
+                  currentCreditUrl={river.heroImageCreditUrl}
+                />
+              )}
+            </HeroCompact>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 

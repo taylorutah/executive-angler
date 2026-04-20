@@ -61,3 +61,6 @@ export {
   getFliesByImitates,
   getFliesByEffectiveSpecies,
 } from "./flies";
+
+export { getApprovedPhotosByEntity } from "./photos";
+export type { ApprovedPhoto } from "./photos";
