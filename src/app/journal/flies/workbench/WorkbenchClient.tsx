@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {
   Package, Search, Plus, Trash2, ChevronDown, ChevronUp,
   Sparkles, AlertCircle, Check, X, Loader2, Wrench, Layers,
-  ArrowRight,
+  ArrowRight, Target,
 } from 'lucide-react';
 import type { TyingMaterial, UserMaterialInventory, MaterialCategory } from '@/types/materials';
 import HelpHint from '@/components/ui/HelpHint';
@@ -27,7 +27,40 @@ interface MatchResult {
   match_percentage: number;
 }
 
-type Tab = 'inventory' | 'whatCanITie' | 'browse';
+type Tab = 'pickFly' | 'inventory' | 'whatCanITie' | 'browse';
+
+interface FlyBrowseItem {
+  id: string;
+  slug: string;
+  name: string;
+  category: string;
+  hero_image_url?: string;
+  tagline?: string;
+  ingredient_count: number;
+  required_count: number;
+  owned_required_count: number;
+  coverage_percentage: number;
+}
+
+interface FlyRequirementIngredient {
+  id: string;
+  role: string;
+  material_id?: string;
+  material_name?: string;
+  material?: { id: string; name: string; brand?: string; category?: string; colors?: string[]; sizes?: string[] };
+  is_optional: boolean;
+  quantity?: string;
+  color_choice?: string;
+  size_choice?: string;
+  owned: boolean;
+}
+
+interface FlyRequirementsResponse {
+  fly: { id: string; slug: string; name: string; category: string; hero_image_url?: string; tagline?: string };
+  ingredients: FlyRequirementIngredient[];
+  summary: { total: number; required: number; owned_required: number; coverage_percentage: number };
+  is_authenticated: boolean;
+}
 
 const CATEGORIES: MaterialCategory[] = [
   'hook', 'bead', 'thread', 'dubbing', 'feather', 'flash',
@@ -46,7 +79,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 // ─── Main Component ──────────────────────────────────────────────
 
 export default function WorkbenchClient({ embedded = false }: { embedded?: boolean } = {}) {
-  const [tab, setTab] = useState<Tab>('inventory');
+  const [tab, setTab] = useState<Tab>('pickFly');
   const [inventory, setInventory] = useState<UserMaterialInventory[]>([]);
   const [invLoading, setInvLoading] = useState(true);
   const [matches, setMatches] = useState<MatchResult[]>([]);
@@ -59,6 +92,15 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   const [browseSearch, setBrowseSearch] = useState('');
   const [browseLoading, setBrowseLoading] = useState(false);
   const [browseTotal, setBrowseTotal] = useState(0);
+
+  // Pick-a-Fly state
+  const [flyList, setFlyList] = useState<FlyBrowseItem[]>([]);
+  const [flyListLoading, setFlyListLoading] = useState(false);
+  const [flyQuery, setFlyQuery] = useState('');
+  const [flyCategory, setFlyCategory] = useState('');
+  const [expandedFlySlug, setExpandedFlySlug] = useState<string | null>(null);
+  const [flyRequirements, setFlyRequirements] = useState<Record<string, FlyRequirementsResponse>>({});
+  const [flyReqLoading, setFlyReqLoading] = useState<string | null>(null);
 
   // Add to inventory modal
   const [addingMaterial, setAddingMaterial] = useState<TyingMaterial | null>(null);
@@ -133,6 +175,62 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
     if (tab === 'whatCanITie') fetchMatches();
   }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ─── Fetch Fly List (Pick a Pattern) ─────────────────────────
+  const fetchFlyList = useCallback(async (q: string, cat: string) => {
+    setFlyListLoading(true);
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (cat) params.set('category', cat);
+    try {
+      const res = await fetch(`/api/materials/browse-flies?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setFlyList(data.flies || []);
+      }
+    } catch { /* ignore */ }
+    setFlyListLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (tab === 'pickFly') fetchFlyList(flyQuery, flyCategory);
+  }, [tab, flyCategory, fetchFlyList]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ─── Fetch Fly Requirements (on expand) ──────────────────────
+  const fetchFlyRequirements = useCallback(async (slug: string) => {
+    if (flyRequirements[slug]) return;
+    setFlyReqLoading(slug);
+    try {
+      const res = await fetch(`/api/materials/fly-requirements?slug=${encodeURIComponent(slug)}`);
+      if (res.ok) {
+        const data: FlyRequirementsResponse = await res.json();
+        setFlyRequirements(prev => ({ ...prev, [slug]: data }));
+      }
+    } catch { /* ignore */ }
+    setFlyReqLoading(null);
+  }, [flyRequirements]);
+
+  const toggleFlyExpanded = (slug: string) => {
+    if (expandedFlySlug === slug) {
+      setExpandedFlySlug(null);
+    } else {
+      setExpandedFlySlug(slug);
+      fetchFlyRequirements(slug);
+    }
+  };
+
+  // After adding a material, refresh the expanded fly's owned flags + the list coverage
+  const refreshFlyAfterAdd = async () => {
+    if (expandedFlySlug) {
+      setFlyRequirements(prev => {
+        const next = { ...prev };
+        delete next[expandedFlySlug];
+        return next;
+      });
+      await fetchFlyRequirements(expandedFlySlug);
+    }
+    fetchFlyList(flyQuery, flyCategory);
+  };
+
   // ─── Add to Inventory ────────────────────────────────────────
   const addToInventory = async (material: TyingMaterial) => {
     try {
@@ -152,6 +250,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
         setAddSize('');
         setAddQty('');
         fetchInventory();
+        // Also refresh the fly-requirements view so owned flags update live
+        if (tab === 'pickFly') refreshFlyAfterAdd();
       }
     } catch { /* ignore */ }
   };
@@ -213,10 +313,11 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
           )}
 
           {/* Tabs */}
-          <div className="flex gap-1 mt-4 items-center">
+          <div className="flex gap-1 mt-4 items-center flex-wrap">
             {([
-              { id: 'inventory' as Tab, label: 'My Inventory', icon: Package, hint: 'What you own at the vise. Tracked by category so we can match against recipes.' },
-              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Crosses your inventory against every fly recipe in the library and ranks them by % of materials you already have.' },
+              { id: 'pickFly' as Tab, label: 'Pick a Pattern', icon: Target, hint: 'Start from a fly you want to tie — we’ll show every material needed and flag what you already own vs. still need to pick up. No inventory required to begin.' },
+              { id: 'inventory' as Tab, label: 'My Inventory', icon: Package, hint: 'Track what you own at the vise. Optional — add materials whenever you want, not required before tying your first fly.' },
+              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Reverse lookup (Pro): crosses your inventory against every fly recipe and ranks them by % of materials you already have.' },
               { id: 'browse' as Tab, label: 'Browse Materials', icon: Search, hint: 'Search the 500+ material catalog. One click adds it to your inventory.' },
             ]).map(({ id, label, icon: Icon, hint }) => (
               <div key={id} className="flex items-center">
@@ -242,12 +343,84 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         <div className="mb-4">
-          <TipCard storageKey="workbench-intro" title="New to the Workbench?">
-            <p><span className="text-[#F0F6FC] font-semibold">1.</span> Add materials you own to <em>My Inventory</em>.</p>
-            <p><span className="text-[#F0F6FC] font-semibold">2.</span> Tap <em>What Can I Tie?</em> — we rank every library recipe by % of your materials that match.</p>
-            <p><span className="text-[#F0F6FC] font-semibold">3.</span> Open a fly and hit <em>Variant</em> to fork your own version.</p>
+          <TipCard storageKey="workbench-intro-v2" title="Two ways to start — no inventory required">
+            <p><span className="text-[#F0F6FC] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
+            <p><span className="text-[#F0F6FC] font-semibold">Or start with your box →</span> Drop what you already own into <em>My Inventory</em>, then flip to <em>What Can I Tie?</em> to see recipes ranked by the % of materials you have.</p>
+            <p className="text-[#6E7681]">Add materials as you go — the Workbench works either direction.</p>
           </TipCard>
         </div>
+
+        {/* ─── Pick a Pattern Tab ─────────────────────────────── */}
+        {tab === 'pickFly' && (
+          <div>
+            {/* Filters */}
+            <div className="flex flex-wrap gap-3 mb-6">
+              <div className="relative flex-1 min-w-[200px]">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                <input
+                  type="text"
+                  placeholder="Search patterns (Perdigon, Pheasant Tail...)"
+                  value={flyQuery}
+                  onChange={e => setFlyQuery(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') fetchFlyList(flyQuery, flyCategory); }}
+                  className="w-full bg-surface border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+                />
+              </div>
+              <select
+                value={flyCategory}
+                onChange={e => setFlyCategory(e.target.value)}
+                className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
+              >
+                <option value="">All Types</option>
+                <option value="nymph">Nymph</option>
+                <option value="dry">Dry Fly</option>
+                <option value="streamer">Streamer</option>
+                <option value="wet">Wet Fly</option>
+                <option value="emerger">Emerger</option>
+                <option value="terrestrial">Terrestrial</option>
+              </select>
+              <button
+                onClick={() => fetchFlyList(flyQuery, flyCategory)}
+                className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+              >
+                Search
+              </button>
+            </div>
+
+            {flyListLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 size={24} className="animate-spin text-accent" />
+              </div>
+            ) : flyList.length === 0 ? (
+              <div className="text-center py-16">
+                <Target size={48} className="mx-auto mb-4 text-text-muted" />
+                <p className="text-text-secondary">No patterns match that search.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-text-muted text-sm mb-1">
+                  Pick a fly to see the material list — green checks mean you already own it, orange pluses add it to your inventory.
+                </p>
+                {flyList.map(fly => (
+                  <PickFlyCard
+                    key={fly.id}
+                    fly={fly}
+                    expanded={expandedFlySlug === fly.slug}
+                    loading={flyReqLoading === fly.slug}
+                    requirements={flyRequirements[fly.slug]}
+                    onToggle={() => toggleFlyExpanded(fly.slug)}
+                    onAddMaterial={(material) => {
+                      setAddingMaterial(material);
+                      setAddColor('');
+                      setAddSize('');
+                      setAddQty('');
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ─── Inventory Tab ──────────────────────────────────── */}
         {tab === 'inventory' && (
@@ -257,18 +430,28 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                 <Loader2 size={24} className="animate-spin text-accent" />
               </div>
             ) : inventory.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-16 max-w-md mx-auto">
                 <Package size={48} className="mx-auto mb-4 text-text-muted" />
-                <h2 className="font-[family-name:var(--font-heading)] text-xl mb-2">No materials yet</h2>
+                <h2 className="font-[family-name:var(--font-heading)] text-xl mb-2">No materials tracked yet</h2>
                 <p className="text-text-secondary mb-6">
-                  Browse the materials catalog and add what you own to your inventory.
+                  You don’t need an inventory to start — pick a fly and add materials as you go. Or browse the catalog and log what you already own.
                 </p>
-                <button
-                  onClick={() => setTab('browse')}
-                  className="bg-accent text-bg px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-                >
-                  Browse Materials
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                  <button
+                    onClick={() => setTab('pickFly')}
+                    className="flex items-center justify-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90"
+                  >
+                    <Target size={16} />
+                    Pick a Pattern to Tie
+                  </button>
+                  <button
+                    onClick={() => setTab('browse')}
+                    className="flex items-center justify-center gap-2 bg-surface border border-border text-text-primary px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-surface-raised"
+                  >
+                    <Search size={16} />
+                    Browse Materials
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-6">
@@ -307,18 +490,28 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                 <p className="text-text-secondary">{matchesError}</p>
               </div>
             ) : matches.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-16 max-w-md mx-auto">
                 <Wrench size={48} className="mx-auto mb-4 text-text-muted" />
                 <h2 className="font-[family-name:var(--font-heading)] text-xl mb-2">No matches yet</h2>
                 <p className="text-text-secondary mb-6">
-                  Add materials to your inventory, then check back to see what you can tie.
+                  This tab ranks recipes once you’ve logged some materials. Don’t want to build an inventory first? Start from a pattern instead — the Workbench will tell you what you need.
                 </p>
-                <button
-                  onClick={() => setTab('inventory')}
-                  className="bg-accent text-bg px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-                >
-                  Manage Inventory
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                  <button
+                    onClick={() => setTab('pickFly')}
+                    className="flex items-center justify-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90"
+                  >
+                    <Target size={16} />
+                    Pick a Pattern
+                  </button>
+                  <button
+                    onClick={() => setTab('inventory')}
+                    className="flex items-center justify-center gap-2 bg-surface border border-border text-text-primary px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-surface-raised"
+                  >
+                    <Package size={16} />
+                    Manage Inventory
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-3">
@@ -599,6 +792,119 @@ function MatchCard({ match }: { match: MatchResult }) {
           >
             View pattern & tying steps <ArrowRight size={12} />
           </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PickFlyCard({
+  fly,
+  expanded,
+  loading,
+  requirements,
+  onToggle,
+  onAddMaterial,
+}: {
+  fly: FlyBrowseItem;
+  expanded: boolean;
+  loading: boolean;
+  requirements?: FlyRequirementsResponse;
+  onToggle: () => void;
+  onAddMaterial: (material: TyingMaterial) => void;
+}) {
+  const pct = fly.coverage_percentage;
+  const pctColor = pct === 100 ? 'text-success' : pct >= 50 ? 'text-accent' : 'text-text-muted';
+
+  return (
+    <div className="bg-surface rounded-xl border border-border overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-surface-raised transition-colors"
+      >
+        {fly.hero_image_url && (
+          <div className="w-12 h-12 rounded-lg overflow-hidden bg-surface-raised flex-shrink-0">
+            <Image src={fly.hero_image_url} alt={fly.name} width={48} height={48} className="w-full h-full object-cover" />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-text-primary text-sm font-medium truncate">{fly.name}</p>
+          <p className="text-text-muted text-xs capitalize">
+            {fly.category} · {fly.required_count} material{fly.required_count === 1 ? '' : 's'} needed
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {fly.required_count > 0 && (
+            <div className={`font-mono text-sm font-semibold ${pctColor}`}>
+              {fly.owned_required_count}/{fly.required_count}
+            </div>
+          )}
+          {expanded
+            ? <ChevronUp size={14} className="text-text-muted" />
+            : <ChevronDown size={14} className="text-text-muted" />}
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="px-4 pb-4 border-t border-border pt-3">
+          {loading ? (
+            <div className="flex items-center justify-center py-6">
+              <Loader2 size={18} className="animate-spin text-accent" />
+            </div>
+          ) : !requirements ? (
+            <p className="text-text-muted text-xs py-4">Unable to load materials.</p>
+          ) : requirements.ingredients.length === 0 ? (
+            <p className="text-text-muted text-xs py-4">No structured recipe yet for this pattern — open the fly page for the full write-up.</p>
+          ) : (
+            <>
+              <p className="text-text-muted text-[11px] uppercase tracking-wider mb-2">Materials</p>
+              <div className="space-y-1.5">
+                {requirements.ingredients.map(ing => (
+                  <div key={ing.id} className="flex items-center gap-2 text-sm">
+                    {ing.owned ? (
+                      <Check size={14} className="text-success flex-shrink-0" />
+                    ) : (
+                      <div className="w-[14px] h-[14px] rounded-full border border-border flex-shrink-0" />
+                    )}
+                    <span className="text-text-muted capitalize text-xs w-20 flex-shrink-0">{ing.role}</span>
+                    <span className="text-text-primary flex-1 truncate">
+                      {ing.material?.name || ing.material_name || '—'}
+                      {ing.is_optional && <span className="text-text-muted text-xs ml-1">(optional)</span>}
+                    </span>
+                    {!ing.owned && ing.material && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddMaterial(ing.material as TyingMaterial);
+                        }}
+                        className="flex items-center gap-1 text-accent text-xs font-medium hover:underline flex-shrink-0"
+                      >
+                        <Plus size={12} /> Add
+                      </button>
+                    )}
+                    {!ing.owned && !ing.material && (
+                      <span className="text-text-muted text-[11px] flex-shrink-0">free-text</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-3 mt-4 pt-3 border-t border-border">
+                <Link
+                  href={`/flies/${requirements.fly.slug}`}
+                  className="flex items-center gap-1 text-signal text-xs hover:underline"
+                >
+                  View pattern & tying steps <ArrowRight size={12} />
+                </Link>
+                <Link
+                  href={`/journal/flies/new?pattern=${encodeURIComponent(requirements.fly.slug)}`}
+                  className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
+                >
+                  Start tying this <ArrowRight size={12} />
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
