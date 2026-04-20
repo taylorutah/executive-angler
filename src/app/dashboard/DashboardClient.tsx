@@ -327,32 +327,19 @@ export default function DashboardClient({
               </Link>
             )}
 
-            {/* Quick Actions Grid — matches iOS Dashboard */}
+            {/* Quick Actions Grid — single 3-col grid, ordered by daily use */}
             <section>
-              {/* Top row: 3 cards */}
-              <div className="grid grid-cols-3 gap-3 mb-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {/* Row 1 — daily drivers */}
                 <Link
-                  href="/dashboard/analytics"
+                  href="/my-flies?tab=workbench"
                   className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <BarChart3 className="h-5 w-5 text-[#E8923A]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    <Wrench className="h-5 w-5 text-[#E8923A]" />
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends & stats</p>
-                </Link>
-
-                <Link
-                  href="/dashboard/export"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#0BA5C7] transition-all"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <BookOpen className="h-5 w-5 text-[#0BA5C7]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
-                  </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#0BA5C7] transition-colors">Export</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">CSV & PDF</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Workbench</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Inventory &amp; matches</p>
                 </Link>
 
                 <Link
@@ -367,19 +354,18 @@ export default function DashboardClient({
                 </Link>
 
                 <Link
-                  href="/my-flies?tab=workbench"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
+                  href="/account/gear"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A8B2BD] transition-all"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <Wrench className="h-5 w-5 text-[#E8923A]" />
+                    <Package className="h-5 w-5 text-[#A8B2BD]" />
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Workbench</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Inventory &amp; matches</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels &amp; more</p>
                 </Link>
-              </div>
 
-              {/* Bottom row: 4 cards */}
-              <div className="grid grid-cols-2 gap-3">
+                {/* Row 2 — intelligence */}
                 <Link
                   href="/dashboard/insights"
                   className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A855F7] transition-all"
@@ -405,27 +391,41 @@ export default function DashboardClient({
                 </Link>
 
                 <Link
-                  href="/account/gear"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A8B2BD] transition-all"
+                  href="/dashboard/analytics"
+                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <Package className="h-5 w-5 text-[#A8B2BD]" />
+                    <BarChart3 className="h-5 w-5 text-[#E8923A]" />
                     <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels & more</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends &amp; stats</p>
+                </Link>
+              </div>
+
+              {/* Row 3 — secondary utilities (smaller, muted) */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+                <Link
+                  href="/dashboard/export"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
+                >
+                  <BookOpen className="h-4 w-4 text-[#0BA5C7] shrink-0" />
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Export data</span>
+                  <span className="ml-auto text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
                 </Link>
 
                 {AWARDS_VISIBLE && (
                 <Link
                   href="/journal/stats"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#FFD700] transition-all"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#FFD700]/60 transition-all"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <Trophy className="h-5 w-5 text-[#FFD700]" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#FFD700] transition-colors">River Milestones</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">{riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)} earned</p>
+                  <Trophy className="h-4 w-4 text-[#FFD700] shrink-0" />
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">
+                    Milestones
+                  </span>
+                  <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">
+                    {riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)}
+                  </span>
                 </Link>
                 )}
               </div>
