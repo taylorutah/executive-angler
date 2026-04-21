@@ -120,6 +120,8 @@ export default function MaterialsBrowserClient({
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef(0);
 
   // Check auth on mount
   useEffect(() => {
@@ -143,9 +145,18 @@ export default function MaterialsBrowserClient({
     });
   }, []);
 
-  // Debounced search
+  // Debounced search with race-condition protection via request id + AbortController.
+  // During an active search we DON'T wipe the grid — previous results stay visible
+  // (slightly faded) and swap in when the new ones arrive. Spinner lives inside the
+  // search input so there's no jarring center-of-page replacement.
   const fetchMaterials = useCallback(
     async (query: string, category: string | null, reset = true) => {
+      // Cancel any in-flight request
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+      const myRequestId = ++requestIdRef.current;
+
       if (reset) {
         setLoading(true);
       } else {
@@ -159,9 +170,14 @@ export default function MaterialsBrowserClient({
         params.set("limit", String(PAGE_SIZE));
         if (!reset) params.set("offset", String(offset));
 
-        const res = await fetch(`/api/materials/search?${params.toString()}`);
+        const res = await fetch(`/api/materials/search?${params.toString()}`, {
+          signal: controller.signal,
+        });
         const data = await res.json();
         const results = Array.isArray(data) ? data : [];
+
+        // Drop results if a newer request has started since
+        if (myRequestId !== requestIdRef.current) return;
 
         if (reset) {
           setMaterials(results);
@@ -171,30 +187,35 @@ export default function MaterialsBrowserClient({
           setOffset((prev) => prev + results.length);
         }
         setHasMore(results.length >= PAGE_SIZE);
-      } catch {
-        // Silently fail
+      } catch (err) {
+        // AbortError is expected when a newer keystroke fires — ignore silently
+        if ((err as { name?: string })?.name === "AbortError") return;
       } finally {
-        setLoading(false);
-        setLoadingMore(false);
+        if (myRequestId === requestIdRef.current) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
       }
     },
     [offset]
   );
 
-  // When search or category changes, refetch
+  // When search or category changes, refetch (debounced 150ms for snappier feel)
   useEffect(() => {
-    // Skip initial render with no filters
+    // Empty filters — show server-rendered initial set, no fetch needed
     if (!searchQuery && !activeCategory) {
+      abortRef.current?.abort();
       setMaterials(initialMaterials);
       setOffset(initialMaterials.length);
       setHasMore(initialMaterials.length >= PAGE_SIZE);
+      setLoading(false);
       return;
     }
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       fetchMaterials(searchQuery, activeCategory, true);
-    }, 300);
+    }, 150);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -327,32 +348,38 @@ export default function MaterialsBrowserClient({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search materials by name or brand..."
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && searchQuery) handleClearSearch();
+            }}
+            placeholder="Search by name, brand, or color — results appear as you type"
+            autoComplete="off"
+            spellCheck={false}
             className="w-full rounded-lg border border-[#21262D] bg-[#161B22] py-3 pl-11 pr-10 text-[#F0F6FC] placeholder-[#6E7681] outline-none transition-colors focus:border-[#E8923A]/50 focus:ring-1 focus:ring-[#E8923A]/30"
           />
-          {searchQuery && (
+          {/* Right side: spinner while searching, X when idle with a query */}
+          {loading && (searchQuery || activeCategory) ? (
+            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#E8923A]" />
+          ) : searchQuery ? (
             <button
               onClick={handleClearSearch}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#F0F6FC]"
+              title="Clear (Esc)"
             >
               <X className="h-4 w-4" />
             </button>
-          )}
+          ) : null}
         </div>
 
-        {/* Active filter + result count */}
+        {/* Active filter + result count (grid stays visible; spinner lives in search input) */}
         <div className="mb-4 flex items-center gap-3">
           <p className="text-sm text-[#6E7681]">
-            {loading ? (
-              "Searching..."
-            ) : (
+            Showing{" "}
+            <span className="text-[#A8B2BD]">{materials.length}</span>
+            {visibleCount > materials.length && <> of {visibleCount}</>}{" "}
+            materials
+            {searchQuery && (
               <>
-                Showing{" "}
-                <span className="text-[#A8B2BD]">{materials.length}</span>
-                {visibleCount > materials.length && (
-                  <> of {visibleCount}</>
-                )}{" "}
-                materials
+                {" "}for <span className="text-[#F0F6FC]">“{searchQuery}”</span>
               </>
             )}
           </p>
@@ -367,14 +394,7 @@ export default function MaterialsBrowserClient({
           )}
         </div>
 
-        {/* Loading state */}
-        {loading && (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-[#E8923A]" />
-          </div>
-        )}
-
-        {/* Empty state */}
+        {/* Empty state — only when we finished loading AND have no results */}
         {!loading && materials.length === 0 && (
           <div className="flex flex-col items-center justify-center rounded-lg border border-[#21262D] bg-[#161B22] py-20">
             <Package className="mb-4 h-12 w-12 text-[#6E7681]" />
@@ -396,9 +416,13 @@ export default function MaterialsBrowserClient({
           </div>
         )}
 
-        {/* Materials grid */}
-        {!loading && materials.length > 0 && (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {/* Materials grid — stays mounted during search, just fades slightly */}
+        {materials.length > 0 && (
+          <div
+            className={`grid gap-3 transition-opacity duration-150 sm:grid-cols-2 xl:grid-cols-3 ${
+              loading ? "opacity-50" : "opacity-100"
+            }`}
+          >
             {materials.map((mat) => (
               <MaterialCard
                 key={mat.id}
