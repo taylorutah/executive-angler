@@ -690,7 +690,7 @@ function BulkForm({
             className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[#21262D] bg-[#0D1117] px-3 py-2 text-xs text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A]/40 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add another axis
+            Vary another material (bead, body, thread, rib, tail, wing, hot spot…)
           </button>
           {addAxisOpen && (
             <div className="absolute z-10 mt-1 w-full sm:w-80 rounded-lg border border-[#21262D] bg-[#161B22] shadow-2xl max-h-72 overflow-y-auto">
