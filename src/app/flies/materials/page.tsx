@@ -35,7 +35,7 @@ export default async function MaterialsPage() {
   const isPremium = user ? await checkPremium(supabase, user.id, user.email) : false;
   const isAuthenticated = !!user;
 
-  // Fetch initial materials (first 60 by popularity)
+  // Fetch initial materials (first 60 by popularity, then newest first as tiebreaker)
   const { data: materials } = await supabase
     .from("tying_materials")
     .select(
@@ -43,6 +43,7 @@ export default async function MaterialsPage() {
     )
     .eq("is_verified", true)
     .order("popularity", { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(60);
 
   // Fetch category counts using a raw count per category

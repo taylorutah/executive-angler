@@ -17,6 +17,7 @@ export async function GET(request: Request) {
     .select('*', { count: 'exact' })
     .eq('is_verified', true)
     .order('popularity', { ascending: false })
+    .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
 
   if (category) query = query.eq('category', category);

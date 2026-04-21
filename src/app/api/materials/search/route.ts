@@ -16,6 +16,7 @@ export async function GET(request: Request) {
     .select('id, slug, name, brand, category, subcategory, sizes, colors, material_type, weight, finish, description, image_url, vendor_url, popularity')
     .eq('is_verified', true)
     .order('popularity', { ascending: false })
+    .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
 
   if (q) {

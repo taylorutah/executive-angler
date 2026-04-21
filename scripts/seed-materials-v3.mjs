@@ -313,6 +313,7 @@ const allMaterials = [
 ];
 
 // Normalize: add slug, ensure required fields, strip blanks
+// popularity=5 surfaces these curated additions above legacy popularity=0 items
 const records = allMaterials.map((m) => ({
   slug: slugify(m.brand, m.name),
   name: m.name,
@@ -326,6 +327,7 @@ const records = allMaterials.map((m) => ({
   finish: m.finish || null,
   description: m.description || null,
   is_verified: true,
+  popularity: 5,
 }));
 
 // Deduplicate by slug (safety)
