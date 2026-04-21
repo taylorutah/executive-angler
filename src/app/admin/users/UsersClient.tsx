@@ -5,7 +5,8 @@ import Link from "next/link";
 import {
   ChevronLeft, Shield, Search, Crown, Ban,
   Loader2, Fish, Calendar, StickyNote,
-  ChevronDown, ChevronUp, User
+  ChevronDown, ChevronUp, User, Feather, LogIn, Mail,
+  MapPin, Camera, MessageSquare, TicketPercent, Activity,
 } from "lucide-react";
 
 interface UserProfile {
@@ -21,33 +22,69 @@ interface UserProfile {
   banned_at: string | null;
   banned_by: string | null;
   created_at: string;
+  home_state: string | null;
+  home_location: string | null;
+  email: string | null;
+  last_sign_in_at: string | null;
+  last_session_at: string | null;
   session_count: number;
   catch_count: number;
+  fly_box_count: number;
+  photo_count: number;
+  review_count: number;
+  active_promo: { code: string; until: string } | null;
 }
 
 export default function UsersClient({ users, adminId, adminEmail }: { users: UserProfile[]; adminId: string; adminEmail: string }) {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "premium" | "banned">("all");
+  const [filter, setFilter] = useState<"all" | "premium" | "banned" | "promo" | "active" | "inactive">("all");
+  const [sortBy, setSortBy] = useState<"recent" | "activity" | "power">("recent");
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [noteText, setNoteText] = useState<Record<string, string>>({});
   const [banReason, setBanReason] = useState<Record<string, string>>({});
 
+  const THIRTY_DAYS = 30 * 86400000;
+
   const filtered = users.filter(u => {
     if (filter === "premium" && !u.is_premium) return false;
     if (filter === "banned" && !u.is_banned) return false;
+    if (filter === "promo" && !u.active_promo) return false;
+    if (filter === "active" && !(u.last_session_at && Date.now() - new Date(u.last_session_at).getTime() < THIRTY_DAYS)) return false;
+    if (filter === "inactive" && u.last_session_at && Date.now() - new Date(u.last_session_at).getTime() < THIRTY_DAYS) return false;
     if (search) {
       const q = search.toLowerCase();
-      return (u.username?.toLowerCase().includes(q) || u.display_name?.toLowerCase().includes(q) || u.user_id.includes(q));
+      return (
+        u.username?.toLowerCase().includes(q) ||
+        u.display_name?.toLowerCase().includes(q) ||
+        u.email?.toLowerCase().includes(q) ||
+        u.home_state?.toLowerCase().includes(q) ||
+        u.home_location?.toLowerCase().includes(q) ||
+        u.user_id.includes(q)
+      );
     }
     return true;
+  }).sort((a, b) => {
+    if (sortBy === "activity") {
+      const aT = a.last_session_at ? new Date(a.last_session_at).getTime() : 0;
+      const bT = b.last_session_at ? new Date(b.last_session_at).getTime() : 0;
+      return bT - aT;
+    }
+    if (sortBy === "power") {
+      const score = (u: UserProfile) =>
+        u.session_count + u.catch_count + u.fly_box_count * 2 + u.photo_count * 3 + u.review_count * 2;
+      return score(b) - score(a);
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
   const totalUsers = users.length;
   const proUsers = users.filter(u => u.is_premium).length;
   const bannedUsers = users.filter(u => u.is_banned).length;
   const newThisWeek = users.filter(u => (Date.now() - new Date(u.created_at).getTime()) < 7 * 86400000).length;
+  const activeThisMonth = users.filter(u => u.last_session_at && (Date.now() - new Date(u.last_session_at).getTime()) < THIRTY_DAYS).length;
+  const promoUsers = users.filter(u => u.active_promo).length;
 
   async function adminAction(action: string, userId: string, extra: Record<string, string> = {}) {
     setActionLoading(`${action}-${userId}`);
@@ -95,15 +132,17 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
           {[
             { val: totalUsers, label: "Total", color: "text-[#F0F6FC]" },
             { val: proUsers, label: "Pro", color: "text-[#E8923A]" },
+            { val: activeThisMonth, label: "Active 30d", color: "text-[#2EA44F]" },
+            { val: newThisWeek, label: "New 7d", color: "text-[#0BA5C7]" },
+            { val: promoUsers, label: "Promo", color: "text-[#E8923A]" },
             { val: bannedUsers, label: "Banned", color: "text-red-400" },
-            { val: newThisWeek, label: "New (7d)", color: "text-[#2EA44F]" },
           ].map(s => (
-            <div key={s.label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
-              <p className={`text-2xl font-bold font-mono ${s.color}`}>{s.val}</p>
+            <div key={s.label} className="bg-[#161B22] border border-[#21262D] rounded-xl p-3 text-center">
+              <p className={`text-xl font-bold font-mono ${s.color}`}>{s.val}</p>
               <p className="text-[10px] text-[#A8B2BD] uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
@@ -116,17 +155,33 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
         )}
 
         {/* Search + filter */}
-        <div className="flex gap-3 mb-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
-            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, name, or ID..."
-              className="w-full pl-10 pr-4 py-2.5 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
+        <div className="flex flex-col gap-3 mb-4">
+          <div className="flex gap-3">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+              <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, state, or ID..."
+                className="w-full pl-10 pr-4 py-2.5 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]" />
+            </div>
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as "recent" | "activity" | "power")}
+              className="px-3 py-2 bg-[#161B22] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] focus:outline-none focus:border-[#E8923A]"
+            >
+              <option value="recent">Newest signup</option>
+              <option value="activity">Last activity</option>
+              <option value="power">Power users</option>
+            </select>
           </div>
-          <div className="flex gap-1">
-            {(["all", "premium", "banned"] as const).map(f => (
+          <div className="flex flex-wrap gap-1">
+            {(["all", "premium", "promo", "active", "inactive", "banned"] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
-                className={`px-3 py-2 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#A8B2BD]"}`}>
-                {f === "all" ? "All" : f === "premium" ? "Pro" : "Banned"}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#A8B2BD]"}`}>
+                {f === "all" ? "All" :
+                 f === "premium" ? "Pro" :
+                 f === "promo" ? "Promo" :
+                 f === "active" ? "Active 30d" :
+                 f === "inactive" ? "Lapsed" :
+                 "Banned"}
               </button>
             ))}
           </div>
@@ -148,13 +203,46 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-bold text-[#F0F6FC] truncate">{u.display_name || u.username || "No name"}</span>
                       {u.is_premium && <Crown className="h-3.5 w-3.5 text-[#E8923A]" />}
                       {u.is_banned && <Ban className="h-3.5 w-3.5 text-red-400" />}
+                      {u.active_promo && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E8923A]/15 text-[#E8923A]">
+                          <TicketPercent className="h-2.5 w-2.5" /> {u.active_promo.code}
+                        </span>
+                      )}
+                      {u.fly_box_count > 0 && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#0BA5C7]/15 text-[#0BA5C7]">
+                          <Feather className="h-2.5 w-2.5" /> {u.fly_box_count}
+                        </span>
+                      )}
+                      {u.home_state && (
+                        <span className="inline-flex items-center gap-1 text-[10px] text-[#A8B2BD]">
+                          <MapPin className="h-2.5 w-2.5" /> {u.home_state}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-[#6E7681]">
-                      @{u.username || "—"} · {u.session_count}s · {u.catch_count}f · {formatDate(u.created_at)}
+                    <p className="text-xs text-[#6E7681] truncate">
+                      @{u.username || "—"}{u.email ? ` · ${u.email}` : ""}
+                    </p>
+                    <p className="text-[11px] text-[#6E7681] mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar className="h-3 w-3" /> joined {formatDate(u.created_at)}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <LogIn className="h-3 w-3" /> {u.last_sign_in_at ? `last login ${formatRelative(u.last_sign_in_at)}` : "never signed in"}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Activity className="h-3 w-3" /> {u.last_session_at ? `fished ${formatRelative(u.last_session_at)}` : "no sessions"}
+                      </span>
+                    </p>
+                    <p className="text-[11px] text-[#6E7681] mt-0.5">
+                      <span>{u.session_count} sessions</span>
+                      <span> · {u.catch_count} catches</span>
+                      <span> · {u.fly_box_count} flies</span>
+                      {u.photo_count > 0 && <span> · {u.photo_count} photos</span>}
+                      {u.review_count > 0 && <span> · {u.review_count} reviews</span>}
                     </p>
                   </div>
                   {isExpanded ? <ChevronUp className="h-4 w-4 text-[#6E7681]" /> : <ChevronDown className="h-4 w-4 text-[#6E7681]" />}
@@ -162,9 +250,41 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
 
                 {isExpanded && (
                   <div className="px-5 pb-4 border-t border-[#21262D] pt-4 space-y-3">
-                    <p className="text-xs text-[#6E7681] font-mono break-all">ID: {u.user_id}</p>
+                    <div className="space-y-1 text-xs text-[#A8B2BD]">
+                      <p className="font-mono break-all text-[#6E7681]">ID: {u.user_id}</p>
+                      {u.email && (
+                        <p className="flex items-center gap-1.5">
+                          <Mail className="h-3 w-3 text-[#6E7681]" />
+                          <span className="break-all">{u.email}</span>
+                        </p>
+                      )}
+                      <p className="flex items-center gap-1.5">
+                        <Calendar className="h-3 w-3 text-[#6E7681]" />
+                        Signed up {formatDate(u.created_at)}
+                      </p>
+                      <p className="flex items-center gap-1.5">
+                        <LogIn className="h-3 w-3 text-[#6E7681]" />
+                        Last sign-in {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "never"}
+                      </p>
+                      <p className="flex items-center gap-1.5">
+                        <Activity className="h-3 w-3 text-[#6E7681]" />
+                        Last session {u.last_session_at ? formatDate(u.last_session_at) : "none logged"}
+                      </p>
+                      {(u.home_state || u.home_location) && (
+                        <p className="flex items-center gap-1.5">
+                          <MapPin className="h-3 w-3 text-[#6E7681]" />
+                          {u.home_location || u.home_state}
+                        </p>
+                      )}
+                      {u.active_promo && (
+                        <p className="flex items-center gap-1.5">
+                          <TicketPercent className="h-3 w-3 text-[#E8923A]" />
+                          Promo <span className="font-mono text-[#E8923A]">{u.active_promo.code}</span> — expires {formatDate(u.active_promo.until)}
+                        </p>
+                      )}
+                    </div>
 
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
                       <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
                         <Calendar className="h-4 w-4 text-[#E8923A] mx-auto mb-1" />
                         <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.session_count}</p>
@@ -174,6 +294,21 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                         <Fish className="h-4 w-4 text-[#0BA5C7] mx-auto mb-1" />
                         <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.catch_count}</p>
                         <p className="text-[9px] text-[#6E7681] uppercase">Catches</p>
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
+                        <Feather className="h-4 w-4 text-[#0BA5C7] mx-auto mb-1" />
+                        <p className={`text-lg font-bold font-mono ${u.fly_box_count > 0 ? "text-[#0BA5C7]" : "text-[#6E7681]"}`}>{u.fly_box_count}</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Fly Box</p>
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
+                        <Camera className="h-4 w-4 text-[#2EA44F] mx-auto mb-1" />
+                        <p className={`text-lg font-bold font-mono ${u.photo_count > 0 ? "text-[#2EA44F]" : "text-[#6E7681]"}`}>{u.photo_count}</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Photos</p>
+                      </div>
+                      <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
+                        <MessageSquare className="h-4 w-4 text-[#A8B2BD] mx-auto mb-1" />
+                        <p className={`text-lg font-bold font-mono ${u.review_count > 0 ? "text-[#F0F6FC]" : "text-[#6E7681]"}`}>{u.review_count}</p>
+                        <p className="text-[9px] text-[#6E7681] uppercase">Reviews</p>
                       </div>
                       <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
                         <Crown className="h-4 w-4 text-[#E8923A] mx-auto mb-1" />
@@ -250,4 +385,28 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
 
 function formatDate(d: string): string {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function formatDateTime(d: string): string {
+  const dt = new Date(d);
+  return (
+    dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) +
+    " " +
+    dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
+  );
+}
+
+function formatRelative(d: string): string {
+  const diffMs = Date.now() - new Date(d).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  const years = Math.floor(days / 365);
+  return `${years}y ago`;
 }

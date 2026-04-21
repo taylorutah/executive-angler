@@ -10,6 +10,13 @@ import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
+// Prevents open-redirect: only allow same-origin path redirects.
+function safeNext(raw: string | null): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
+  return raw;
+}
+
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +25,12 @@ function LoginForm() {
   const [captchaToken, setCaptchaToken] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/dashboard";
+  // `next` is the canonical name (matches auth/callback); `redirect` kept as
+  // a legacy fallback so existing links don't break.
+  const redirect =
+    safeNext(searchParams.get("next")) ??
+    safeNext(searchParams.get("redirect")) ??
+    "/dashboard";
   const authError = searchParams.get("error");
 
   // Show OAuth callback errors
@@ -111,7 +123,12 @@ function LoginForm() {
 
           <p className="text-center text-sm text-[#A8B2BD]">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#E8923A] font-medium hover:text-[#E8923A]">Create one</Link>
+            <Link
+              href={redirect !== "/dashboard" ? `/signup?next=${encodeURIComponent(redirect)}` : "/signup"}
+              className="text-[#E8923A] font-medium hover:text-[#E8923A]"
+            >
+              Create one
+            </Link>
           </p>
         </div>
       </div>

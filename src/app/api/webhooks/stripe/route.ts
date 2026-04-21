@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * POST /api/webhooks/stripe
@@ -56,11 +56,21 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        // Branch on mode. A single `checkout.session.completed` event covers
+        // both subscription checkouts (web Pro plan) and one-time payments
+        // (Founding Member).
         if (session.mode === "subscription" && session.subscription && session.metadata?.user_id) {
           const subscription = await getStripe().subscriptions.retrieve(
             session.subscription as string
           );
           await upsertSubscription(supabase, session.metadata.user_id, subscription);
+        } else if (
+          session.mode === "payment" &&
+          session.metadata?.founding_member === "true" &&
+          session.metadata?.user_id
+        ) {
+          await handleFoundingPayment(supabase, session);
         }
         break;
       }
@@ -161,6 +171,79 @@ async function upsertSubscription(
   }
 
   console.log(`Subscription synced: user=${userId} status=${subscription.status}`);
+}
+
+/**
+ * Founding Member one-time payment handler.
+ *
+ * Called from `checkout.session.completed` when mode=payment and metadata
+ * flags founding_member=true. Delegates seat assignment to the
+ * `claim_founding_seat` DB function, which atomically picks the next
+ * available seat (1..50) under an EXCLUSIVE lock. If all 50 are taken, the
+ * function returns NULL — we refund the charge and log. The RPC is also
+ * idempotent on session_id, so Stripe retries are safe.
+ */
+async function handleFoundingPayment(
+  supabase: SupabaseClient,
+  session: Stripe.Checkout.Session
+) {
+  const userId = session.metadata?.user_id;
+  if (!userId) {
+    console.error("[founding webhook] session missing user_id metadata:", session.id);
+    return;
+  }
+
+  const paymentIntentId =
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : session.payment_intent?.id ?? null;
+  const amountCents = session.amount_total ?? 0;
+
+  // Atomic seat claim
+  const { data: seatNumber, error: claimError } = await supabase.rpc(
+    "claim_founding_seat",
+    {
+      p_user_id: userId,
+      p_session_id: session.id,
+      p_payment_intent_id: paymentIntentId,
+      p_amount_cents: amountCents,
+    }
+  );
+
+  if (claimError) {
+    console.error(
+      `[founding webhook] claim_founding_seat RPC failed for session ${session.id}:`,
+      claimError.message
+    );
+    throw claimError;
+  }
+
+  if (seatNumber == null) {
+    // Race: 50 seats filled between checkout start and webhook. Refund.
+    console.warn(
+      `[founding webhook] SOLD OUT race — refunding user=${userId} session=${session.id}`
+    );
+    if (paymentIntentId) {
+      try {
+        await getStripe().refunds.create({
+          payment_intent: paymentIntentId,
+          reason: "requested_by_customer",
+          metadata: { reason: "founding_sold_out", user_id: userId },
+        });
+        console.log(`[founding webhook] refunded pi=${paymentIntentId}`);
+      } catch (refundErr) {
+        console.error(
+          `[founding webhook] REFUND FAILED for pi=${paymentIntentId} — MANUAL ACTION REQUIRED:`,
+          refundErr
+        );
+      }
+    }
+    return;
+  }
+
+  console.log(
+    `[founding webhook] Seat #${seatNumber} assigned to user=${userId} session=${session.id}`
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

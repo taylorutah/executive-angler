@@ -25,41 +25,37 @@ export function isPermanentPro(email: string | null | undefined): boolean {
 /**
  * Check if a user has premium access.
  *
- * Checks in order:
- *   1. Permanent pro email whitelist (admin bypass)
- *   2. profiles.is_premium flag (set by DB trigger from subscriptions table,
- *      or admin-granted)
- *   3. Direct subscriptions table check (belt and suspenders — catches any
- *      race where the trigger hasn't fired yet)
- *
- * The subscriptions table is the source of truth. It's populated by:
- *   - Stripe webhook (web purchases)
- *   - iOS PremiumStore (Apple IAP)
- *   - Android PremiumManager (Google Play)
- *   - The DB trigger auto-updates profiles.is_premium
+ * Order:
+ *   1. Permanent Pro email whitelist (admin bypass)
+ *   2. profiles.is_premium flag (set by DB triggers on subscriptions or
+ *      admin-granted)
+ *   3. Direct subscriptions table check — catches the ~ms race where a
+ *      webhook just wrote a row but the trigger hasn't propagated yet, and
+ *      filters out stale rows whose current_period_end has passed.
  */
 export async function checkPremium(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: { from: (table: string) => any },
   userId: string,
   email?: string | null
 ): Promise<boolean> {
   if (isPermanentPro(email)) return true;
 
-  // Fast path: profiles.is_premium (updated by DB trigger)
   const { data: profile } = await supabase
     .from("profiles")
     .select("is_premium")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
   if (profile?.is_premium) return true;
 
-  // Belt and suspenders: check subscriptions table directly
+  const nowIso = new Date().toISOString();
   const { data: sub } = await supabase
     .from("subscriptions")
     .select("id")
     .eq("user_id", userId)
     .in("status", ["active", "trialing"])
+    .or(`current_period_end.is.null,current_period_end.gt.${nowIso}`)
     .limit(1)
-    .single();
+    .maybeSingle();
   return !!sub;
 }

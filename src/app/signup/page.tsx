@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { Suspense, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
@@ -11,7 +12,19 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 type UsernameStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
-export default function SignupPage() {
+// Prevents open-redirect: only allow same-origin path redirects.
+function safeNext(raw: string | null): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
+  return raw;
+}
+
+function SignupForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = safeNext(searchParams.get("next"));
+  const postSignupRedirect = next || "/journal";
+
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [usernameEdited, setUsernameEdited] = useState(false);
@@ -75,11 +88,17 @@ export default function SignupPage() {
     const name = fullName.trim();
     const cleanUsername = username.trim().toLowerCase();
 
+    // Thread `next` through email confirmation: Supabase will append `code` to
+    // emailRedirectTo, so the query string we set is preserved.
+    const emailRedirectTo = next
+      ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+      : `${window.location.origin}/auth/callback`;
+
     const { data: authData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo,
         captchaToken,
         data: { display_name: name },
       },
@@ -113,6 +132,13 @@ export default function SignupPage() {
       });
     } catch (seedError) {
       console.warn("[SIGNUP] Demo seed skipped:", seedError);
+    }
+
+    // If the user was mid-flow on another page (e.g. /redeem?code=REDDIT30),
+    // jump them straight back rather than showing the generic welcome card.
+    if (next) {
+      router.push(postSignupRedirect);
+      return;
     }
 
     setSuccess(true);
@@ -172,7 +198,7 @@ export default function SignupPage() {
 
         <div className="bg-[#161B22] rounded-xl shadow-md p-8 space-y-5">
           {/* OAuth — fastest path for new users */}
-          <OAuthButtons redirectTo="/journal" />
+          <OAuthButtons redirectTo={postSignupRedirect} />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -311,12 +337,29 @@ export default function SignupPage() {
 
           <p className="text-center text-sm text-[#A8B2BD]">
             Already have an account?{" "}
-            <Link href="/login" className="text-[#E8923A] font-medium hover:text-[#cf7d30]">
+            <Link
+              href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"}
+              className="text-[#E8923A] font-medium hover:text-[#cf7d30]"
+            >
               Sign in
             </Link>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+          <div className="animate-pulse text-[#E8923A]">Loading…</div>
+        </div>
+      }
+    >
+      <SignupForm />
+    </Suspense>
   );
 }

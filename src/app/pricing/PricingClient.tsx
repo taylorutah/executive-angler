@@ -11,7 +11,11 @@ import {
 interface Props {
   isLoggedIn: boolean;
   isPremium: boolean;
+  isFounder?: boolean;
+  foundingSeats?: { total: number; sold: number; remaining: number };
 }
+
+const FOUNDING_PRICE = 150;
 
 const MONTHLY_PRICE = 4.99;
 const ANNUAL_PRICE = 29.99;
@@ -45,9 +49,42 @@ const FREE_FEATURES = [
   "Basic stats",
 ];
 
-export default function PricingClient({ isLoggedIn, isPremium }: Props) {
+export default function PricingClient({
+  isLoggedIn,
+  isPremium,
+  isFounder = false,
+  foundingSeats = { total: 50, sold: 0, remaining: 50 },
+}: Props) {
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
   const [isLoading, setIsLoading] = useState(false);
+  const [foundingLoading, setFoundingLoading] = useState(false);
+  const soldOut = foundingSeats.remaining <= 0;
+
+  const handleFoundingCheckout = async () => {
+    if (!isLoggedIn) {
+      window.location.href = "/signup?redirect=/pricing";
+      return;
+    }
+    setFoundingLoading(true);
+    try {
+      const res = await fetch("/api/checkout/founding", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.error === "sold_out") {
+        alert(data.message || "All 50 founding seats have been claimed.");
+      } else if (data.error === "already_founder") {
+        alert(data.message || "You're already a founding member.");
+      } else {
+        alert(`Checkout error: ${data.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      console.error("Founding checkout error:", err);
+      alert("Network error. Please check your connection and try again.");
+    } finally {
+      setFoundingLoading(false);
+    }
+  };
 
   const handleCheckout = async () => {
     if (!isLoggedIn) {
@@ -112,6 +149,84 @@ export default function PricingClient({ isLoggedIn, isPremium }: Props) {
 
       {/* Pricing Cards */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+        {/* Founding 50 band — limited scarcity CTA. Hidden if the user is
+            already a founder (they'd see it as a confusing duplicate). */}
+        {!isFounder && (
+          <div className="mb-10 rounded-2xl border border-[#E8923A]/40 bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Crown className="h-4 w-4 text-[#E8923A]" />
+                  <span className="text-[10px] font-bold tracking-widest text-[#E8923A] uppercase">
+                    Founding 50 · Limited
+                  </span>
+                </div>
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC] mb-1.5">
+                  Lifetime Pro for ${FOUNDING_PRICE}
+                </h3>
+                <p className="text-sm text-[#A8B2BD]">
+                  One payment. Every Pro feature, forever. Only 50 spots — then it&apos;s gone.
+                </p>
+
+                {/* Scarcity counter */}
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="flex-1 h-1.5 rounded-full bg-[#21262D] overflow-hidden max-w-xs">
+                    <div
+                      className="h-full bg-[#E8923A] transition-all"
+                      style={{
+                        width: `${Math.min(100, (foundingSeats.sold / foundingSeats.total) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-xs font-mono text-[#A8B2BD] whitespace-nowrap">
+                    {soldOut ? (
+                      <span className="text-red-400 font-semibold">Sold out</span>
+                    ) : (
+                      <>
+                        <span className="text-[#F0F6FC] font-semibold">{foundingSeats.remaining}</span>
+                        <span className="text-[#6E7681]"> of {foundingSeats.total} left</span>
+                      </>
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0">
+                {soldOut ? (
+                  <button
+                    disabled
+                    className="px-6 py-3 rounded-lg bg-[#21262D] text-[#6E7681] font-bold cursor-not-allowed"
+                  >
+                    Sold Out
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleFoundingCheckout}
+                    disabled={foundingLoading}
+                    className="px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {foundingLoading ? "Loading…" : isLoggedIn ? `Claim for $${FOUNDING_PRICE}` : `Sign Up & Claim`}
+                  </button>
+                )}
+                <p className="text-[10px] text-[#6E7681] text-center mt-2">
+                  One-time payment · No renewals
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Founder badge — shown to existing founders */}
+        {isFounder && (
+          <div className="mb-10 rounded-2xl border border-[#E8923A]/50 bg-gradient-to-br from-[#E8923A]/15 via-[#E8923A]/5 to-transparent p-6 text-center">
+            <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-3" />
+            <h3 className="font-serif text-2xl text-[#F0F6FC] mb-1">You&apos;re a Founding Member</h3>
+            <p className="text-sm text-[#A8B2BD]">
+              You have lifetime Pro access. Thank you for being in the first 50.
+            </p>
+          </div>
+        )}
 
         {isPremium ? (
           /* Already premium */

@@ -7,6 +7,10 @@ export const metadata = {
   description: "Unlock advanced analytics, AI insights, hatch reports, and more with Executive Angler Pro.",
 };
 
+// Revalidate the seat counter at most once per minute. Founding seats are a
+// long-tail 50-total scarcity signal; we don't need it real-time.
+export const revalidate = 60;
+
 export default async function PricingPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -15,5 +19,33 @@ export default async function PricingPage() {
   // subscriptions, not just profiles.is_premium.
   const isPremium = user ? await checkPremium(supabase, user.id, user.email) : false;
 
-  return <PricingClient isLoggedIn={!!user} isPremium={isPremium} />;
+  // Founding-seat availability — public aggregate view, no PII.
+  const { data: seats } = await supabase
+    .from("founding_seats_remaining")
+    .select("total_seats, remaining_seats, sold_seats")
+    .single();
+
+  // Is the current user already a founder? (Shows a "You're a founder" state.)
+  let isFounder = false;
+  if (user) {
+    const { data: member } = await supabase
+      .from("founding_members")
+      .select("seat_number")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    isFounder = !!member;
+  }
+
+  return (
+    <PricingClient
+      isLoggedIn={!!user}
+      isPremium={isPremium}
+      isFounder={isFounder}
+      foundingSeats={{
+        total: seats?.total_seats ?? 50,
+        sold: seats?.sold_seats ?? 0,
+        remaining: seats?.remaining_seats ?? 50,
+      }}
+    />
+  );
 }

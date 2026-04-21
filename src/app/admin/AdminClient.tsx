@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Database,
   Send,
+  TicketPercent,
 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -121,6 +122,14 @@ export default function AdminClient({
                 <p className="text-[11px] text-[#6E7681]">Manage accounts, Pro & bans</p>
               </div>
               <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#0BA5C7]" />
+            </Link>
+            <Link href="/admin/promo-codes" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#E8923A] transition-colors">
+              <TicketPercent className="h-5 w-5 text-[#E8923A]" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Promo Codes</p>
+                <p className="text-[11px] text-[#6E7681]">Track redemptions & active Pro users</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A]" />
             </Link>
             <Link href="/admin/submissions" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-purple-400 transition-colors">
               <Send className="h-5 w-5 text-purple-400" />

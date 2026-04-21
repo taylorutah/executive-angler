@@ -9,10 +9,17 @@ import { buildDemoRows } from "@/lib/demo-sessions";
  * After Supabase processes the provider's response, it redirects
  * here with a `code` query param for PKCE exchange.
  */
+// Prevents open-redirect: only allow same-origin path redirects.
+function safeNext(raw: string | null): string {
+  if (!raw) return "/dashboard";
+  if (!raw.startsWith("/") || raw.startsWith("//")) return "/dashboard";
+  return raw;
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const next = safeNext(searchParams.get("next"));
   const error = searchParams.get("error");
   const errorDescription = searchParams.get("error_description");
 
