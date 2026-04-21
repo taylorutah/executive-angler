@@ -3,23 +3,19 @@
 /**
  * VariantModal — unified creator for single and bulk fly variants.
  *
- * Opens from a "Create Variant" CTA on:
- *   - /flies/[slug]         (canonical fly detail)
- *   - /journal/flies/[id]/edit (personal pattern detail) — future
- *   - MyFliesClient fly cards
+ * Every flat material role on fly_patterns is variantable: hook, bead
+ * (including "no bead"), thread, body, rib, tail, thorax, collar, wing,
+ * hot spot, plus the cosmetic axes size/type/fly_color. Bulk mode exposes
+ * a dynamic axis picker; single mode exposes sectioned overrides.
  *
- * Modes:
- *   - "single" — name + per-axis overrides, inserts one variant
- *   - "bulk"   — axis chips (sizes × colors × bead_colors), inserts many
- *
- * Parent is passed in as `parent={{ patternId | canonicalId, name, heroImageUrl?, category? }}`.
- * On success, triggers onCreated() + optional redirect to /my-flies.
+ * Parent is passed in as `parent={{ patternId | canonicalId, name, ... }}`.
+ * On success, triggers onCreated() + redirect to /my-flies.
  */
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Loader2, Plus, Sparkles, Wand2 } from "lucide-react";
+import { X, Loader2, Plus, Sparkles, Wand2, Trash2 } from "lucide-react";
 
 export type VariantParentSpec = {
   patternId?: string;
@@ -40,6 +36,37 @@ type Props = {
   initialMode?: "single" | "bulk";
 };
 
+/* ─── Field catalog: every role a variant can override ─── */
+
+type FieldKey =
+  | "size"
+  | "type"
+  | "hook"
+  | "fly_color"
+  | "bead_material"
+  | "bead_color"
+  | "bead_size"
+  | "bead_size_mm"
+  | "body_material"
+  | "body_color"
+  | "thread_color"
+  | "tail_color"
+  | "thorax_color"
+  | "collar_color"
+  | "rib_material"
+  | "rib_color"
+  | "wing_material"
+  | "wing_color"
+  | "hot_spot_color";
+
+type FieldDef = {
+  key: FieldKey;
+  label: string;
+  placeholder: string;
+  suggestions: string[];
+  group: "core" | "bead" | "body" | "tail" | "wing" | "accent";
+};
+
 const FLY_TYPES = [
   "Nymph",
   "Dry Fly",
@@ -51,19 +78,36 @@ const FLY_TYPES = [
   "Midge",
 ];
 
-const SUGGESTED_SIZES = ["10", "12", "14", "16", "18", "20", "22"];
-const SUGGESTED_COLORS = ["Olive", "Black", "Brown", "Tan", "Rust", "Orange", "Pink", "Purple"];
-const SUGGESTED_BEADS = ["Copper", "Gold", "Silver", "Black Nickel", "Tungsten"];
+const FIELDS: Record<FieldKey, FieldDef> = {
+  size:            { key: "size",            label: "Size",            placeholder: "14, 16, 18…",          suggestions: ["10", "12", "14", "16", "18", "20", "22"], group: "core" },
+  type:            { key: "type",            label: "Type",            placeholder: "Nymph / Dry Fly…",     suggestions: FLY_TYPES,                                 group: "core" },
+  hook:            { key: "hook",            label: "Hook",            placeholder: "Hanak 300, TMC 2488…", suggestions: ["Hanak 300", "Hanak 400", "Firehole 516", "TMC 2488", "TMC 100", "Gamakatsu C12-BM", "Fulling Mill Jig Force"], group: "core" },
+  fly_color:       { key: "fly_color",       label: "Fly color",       placeholder: "Olive, black, rust…",  suggestions: ["Olive", "Black", "Brown", "Tan", "Rust", "Orange", "Pink", "Purple", "Chartreuse"], group: "core" },
 
-const BEAD_MATERIALS = [
-  { value: "", label: "— inherit —" },
-  { value: "none", label: "None" },
-  { value: "brass", label: "Brass" },
-  { value: "tungsten", label: "Tungsten" },
-  { value: "slotted_tungsten", label: "Slotted tungsten" },
-  { value: "copper", label: "Copper" },
-];
-const COMMON_BEAD_SIZES_MM = ["2.0", "2.4", "2.8", "3.2", "3.5", "3.8", "4.0"];
+  bead_material:   { key: "bead_material",   label: "Bead material",   placeholder: "tungsten, brass, none", suggestions: ["tungsten", "slotted_tungsten", "brass", "copper", "none"], group: "bead" },
+  bead_color:      { key: "bead_color",      label: "Bead color",      placeholder: "Copper, gold, silver", suggestions: ["Copper", "Gold", "Silver", "Black Nickel", "Tungsten", "Rainbow"], group: "bead" },
+  bead_size:       { key: "bead_size",       label: "Bead size (#)",   placeholder: "S, M, L",             suggestions: ["XS", "S", "M", "L", "XL"],              group: "bead" },
+  bead_size_mm:    { key: "bead_size_mm",    label: "Bead size (mm)",  placeholder: "2.8, 3.2, 3.8",       suggestions: ["2.0", "2.4", "2.8", "3.2", "3.5", "3.8", "4.0"], group: "bead" },
+
+  body_material:   { key: "body_material",   label: "Body material",   placeholder: "pheasant tail, dubbing", suggestions: ["pheasant_tail", "dubbing", "biot", "tinsel", "hare's_ear"], group: "body" },
+  body_color:      { key: "body_color",      label: "Body color",      placeholder: "Olive, tan, orange",  suggestions: ["Olive", "Tan", "Black", "Brown", "Orange", "Pink"], group: "body" },
+  thread_color:    { key: "thread_color",    label: "Thread color",    placeholder: "Black, olive, red",   suggestions: ["Black", "Olive", "Red", "White", "Brown", "Orange", "Fluorescent Pink"], group: "body" },
+  rib_material:    { key: "rib_material",    label: "Rib material",    placeholder: "wire, tinsel, mono",  suggestions: ["copper_wire", "gold_wire", "tinsel", "mono"], group: "body" },
+  rib_color:       { key: "rib_color",       label: "Rib color",       placeholder: "Copper, gold, red",   suggestions: ["Copper", "Gold", "Silver", "Red", "Black"], group: "body" },
+
+  tail_color:      { key: "tail_color",      label: "Tail color",      placeholder: "CDL, brown, black",    suggestions: ["CDL", "Brown", "Black", "Olive", "White"], group: "tail" },
+  thorax_color:    { key: "thorax_color",    label: "Thorax color",    placeholder: "Black, peacock, UV",   suggestions: ["Black", "Peacock", "UV Tan", "Orange"], group: "tail" },
+  collar_color:    { key: "collar_color",    label: "Collar color",    placeholder: "Partridge, starling",  suggestions: ["Partridge", "Starling", "CDC", "Hungarian Partridge"], group: "tail" },
+
+  wing_material:   { key: "wing_material",   label: "Wing material",   placeholder: "CDC, elk, polyyarn",   suggestions: ["CDC", "Elk", "Deer", "Poly Yarn", "Z-Lon"], group: "wing" },
+  wing_color:      { key: "wing_color",      label: "Wing color",      placeholder: "Natural, white, tan",  suggestions: ["Natural", "White", "Tan", "Grey", "Black"], group: "wing" },
+
+  hot_spot_color:  { key: "hot_spot_color",  label: "Hot spot color",  placeholder: "Fl. pink, red, chartreuse", suggestions: ["Fl. Pink", "Fl. Orange", "Red", "Chartreuse", "UV"], group: "accent" },
+};
+
+const ALL_FIELD_KEYS = Object.keys(FIELDS) as FieldKey[];
+
+/* ─── Component ─── */
 
 export default function VariantModal({
   parent,
@@ -77,39 +121,37 @@ export default function VariantModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Single mode state
-  const [single, setSingle] = useState({
-    name: "",
-    size: parent.defaultSize ?? "",
-    fly_color: parent.defaultColor ?? "",
-    bead_color: parent.defaultBeadColor ?? "",
-    bead_material: "",
-    bead_size_mm: "",
-    body_color: "",
-    tail_color: "",
-    thorax_color: "",
-    collar_color: "",
-    hook: "",
-    description: "",
-    type: "",
+  // Single mode: every field lives in one flat map; empty string = inherit.
+  const makeBlank = (): Record<FieldKey, string> =>
+    ALL_FIELD_KEYS.reduce(
+      (acc, k) => ({ ...acc, [k]: "" }),
+      {} as Record<FieldKey, string>
+    );
+  const [single, setSingle] = useState<Record<FieldKey, string>>(() => {
+    const b = makeBlank();
+    b.size = parent.defaultSize ?? "";
+    b.fly_color = parent.defaultColor ?? "";
+    b.bead_color = parent.defaultBeadColor ?? "";
+    return b;
   });
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [singleName, setSingleName] = useState("");
+  const [singleNotes, setSingleNotes] = useState("");
+  const [singleNoBead, setSingleNoBead] = useState(false);
+  const [showAllMaterials, setShowAllMaterials] = useState(false);
 
-  // Bulk mode state
-  const [sizes, setSizes] = useState<string[]>([]);
-  const [colors, setColors] = useState<string[]>([]);
-  const [beads, setBeads] = useState<string[]>([]);
-  const [sizeInput, setSizeInput] = useState("");
-  const [colorInput, setColorInput] = useState("");
-  const [beadInput, setBeadInput] = useState("");
+  // Bulk mode: ordered list of axes.
+  const [bulkAxes, setBulkAxes] = useState<Array<{ field: FieldKey; values: string[]; input: string }>>(
+    [
+      { field: "size", values: [], input: "" },
+      { field: "fly_color", values: [], input: "" },
+      { field: "bead_color", values: [], input: "" },
+    ]
+  );
+  const [addAxisOpen, setAddAxisOpen] = useState(false);
 
-  // Track where mousedown originated so we only close on true backdrop clicks.
-  // Without this, clicking an input and dragging out (text selection, native
-  // <select>/<datalist> dropdowns that render outside the modal) would land
-  // mouseup on the backdrop and dismiss the modal mid-edit.
+  // Backdrop close via mousedown+mouseup on backdrop only.
   const mouseDownOnBackdropRef = useRef(false);
 
-  // Lock body scroll + close on Escape while modal is open.
   useEffect(() => {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
@@ -140,70 +182,36 @@ export default function VariantModal({
       ? { patternId: parent.patternId }
       : { canonicalId: parent.canonicalId };
 
-  const bulkCount = Math.max(
-    (sizes.length || 1) * (colors.length || 1) * (beads.length || 1),
-    sizes.length + colors.length + beads.length > 0 ? 1 : 0
+  const bulkCount = bulkAxes.reduce(
+    (acc, a) => (a.values.length > 0 ? acc * a.values.length : acc),
+    bulkAxes.some((a) => a.values.length > 0) ? 1 : 0
   );
-  const overLimit = bulkCount > 48;
-
-  function chipAdd(
-    value: string,
-    list: string[],
-    setList: (v: string[]) => void,
-    setInput: (v: string) => void
-  ) {
-    const v = value.trim();
-    if (!v) return;
-    if (list.includes(v)) return setInput("");
-    setList([...list, v]);
-    setInput("");
-  }
-
-  function chipRemove(value: string, list: string[], setList: (v: string[]) => void) {
-    setList(list.filter((x) => x !== value));
-  }
+  const overLimit = bulkCount > 64;
+  const usedAxisKeys = new Set(bulkAxes.map((a) => a.field));
+  const availableAxisKeys = ALL_FIELD_KEYS.filter((k) => !usedAxisKeys.has(k));
 
   async function submitSingle() {
-    const hasAnyChange =
-      single.name.trim() ||
-      single.size ||
-      single.fly_color ||
-      single.bead_color ||
-      single.bead_material ||
-      single.bead_size_mm ||
-      single.body_color ||
-      single.tail_color ||
-      single.thorax_color ||
-      single.collar_color;
-    if (!hasAnyChange) {
+    const anyFieldSet = ALL_FIELD_KEYS.some((k) => single[k] && single[k].trim() !== "");
+    if (!singleName.trim() && !anyFieldSet && !singleNoBead && !singleNotes.trim()) {
       setError("Give this variant a name or change at least one spec.");
       return;
     }
     setSaving(true);
     setError(null);
     try {
+      const overrides: Record<string, unknown> = {};
+      for (const k of ALL_FIELD_KEYS) {
+        const v = single[k]?.trim();
+        if (v) overrides[k] = v;
+      }
+      if (singleName.trim()) overrides.name = singleName.trim();
+      if (singleNotes.trim()) overrides.description = singleNotes.trim();
+      if (singleNoBead) overrides.no_bead = true;
+
       const res = await fetch("/api/fishing/flies/variant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          parent: parentSpec,
-          mode: "single",
-          overrides: {
-            name: single.name.trim() || undefined,
-            size: single.size.trim() || undefined,
-            fly_color: single.fly_color.trim() || undefined,
-            bead_color: single.bead_color.trim() || undefined,
-            bead_material: single.bead_material || undefined,
-            bead_size_mm: single.bead_size_mm.trim() || undefined,
-            body_color: single.body_color.trim() || undefined,
-            tail_color: single.tail_color.trim() || undefined,
-            thorax_color: single.thorax_color.trim() || undefined,
-            collar_color: single.collar_color.trim() || undefined,
-            hook: single.hook.trim() || undefined,
-            description: single.description.trim() || undefined,
-            type: single.type || undefined,
-          },
-        }),
+        body: JSON.stringify({ parent: parentSpec, mode: "single", overrides }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to create variant");
@@ -220,28 +228,23 @@ export default function VariantModal({
 
   async function submitBulk() {
     if (bulkCount === 0) {
-      setError("Add at least one size, color, or bead color.");
+      setError("Add at least one value to one axis.");
       return;
     }
     if (overLimit) {
-      setError("Too many variants — keep it under 48.");
+      setError(`Too many variants (${bulkCount}) — cap is 64. Trim an axis.`);
       return;
     }
     setSaving(true);
     setError(null);
     try {
+      const custom = bulkAxes
+        .filter((a) => a.values.length > 0)
+        .map((a) => ({ field: a.field, values: a.values }));
       const res = await fetch("/api/fishing/flies/variant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          parent: parentSpec,
-          mode: "bulk",
-          axes: {
-            sizes: sizes.length ? sizes : undefined,
-            colors: colors.length ? colors : undefined,
-            bead_colors: beads.length ? beads : undefined,
-          },
-        }),
+        body: JSON.stringify({ parent: parentSpec, mode: "bulk", axes: { custom } }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to spawn variants");
@@ -266,7 +269,7 @@ export default function VariantModal({
       role="presentation"
     >
       <div
-        className="w-full sm:max-w-xl bg-[#161B22] border border-[#21262D] sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-hidden flex flex-col"
+        className="w-full sm:max-w-2xl bg-[#161B22] border border-[#21262D] sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label={`Create variant of ${parent.name}`}
@@ -333,28 +336,24 @@ export default function VariantModal({
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {mode === "single" ? (
             <SingleForm
-              value={single}
-              onChange={(patch) => setSingle((s) => ({ ...s, ...patch }))}
-              showAdvanced={showAdvanced}
-              onToggleAdvanced={() => setShowAdvanced((v) => !v)}
+              single={single}
+              setSingle={setSingle}
+              name={singleName}
+              setName={setSingleName}
+              notes={singleNotes}
+              setNotes={setSingleNotes}
+              noBead={singleNoBead}
+              setNoBead={setSingleNoBead}
+              showAll={showAllMaterials}
+              setShowAll={setShowAllMaterials}
             />
           ) : (
             <BulkForm
-              sizes={sizes}
-              colors={colors}
-              beads={beads}
-              sizeInput={sizeInput}
-              colorInput={colorInput}
-              beadInput={beadInput}
-              setSizeInput={setSizeInput}
-              setColorInput={setColorInput}
-              setBeadInput={setBeadInput}
-              onAddSize={(v) => chipAdd(v, sizes, setSizes, setSizeInput)}
-              onAddColor={(v) => chipAdd(v, colors, setColors, setColorInput)}
-              onAddBead={(v) => chipAdd(v, beads, setBeads, setBeadInput)}
-              onRemoveSize={(v) => chipRemove(v, sizes, setSizes)}
-              onRemoveColor={(v) => chipRemove(v, colors, setColors)}
-              onRemoveBead={(v) => chipRemove(v, beads, setBeads)}
+              axes={bulkAxes}
+              setAxes={setBulkAxes}
+              addAxisOpen={addAxisOpen}
+              setAddAxisOpen={setAddAxisOpen}
+              availableAxisKeys={availableAxisKeys}
               parentName={parent.name}
               count={bulkCount}
               overLimit={overLimit}
@@ -403,267 +402,323 @@ export default function VariantModal({
 }
 
 /* ─── Single form ─── */
-type SingleValue = {
-  name: string;
-  size: string;
-  fly_color: string;
-  bead_color: string;
-  bead_material: string;
-  bead_size_mm: string;
-  body_color: string;
-  tail_color: string;
-  thorax_color: string;
-  collar_color: string;
-  hook: string;
-  description: string;
-  type: string;
-};
 
 function SingleForm({
-  value,
-  onChange,
-  showAdvanced,
-  onToggleAdvanced,
+  single,
+  setSingle,
+  name,
+  setName,
+  notes,
+  setNotes,
+  noBead,
+  setNoBead,
+  showAll,
+  setShowAll,
 }: {
-  value: SingleValue;
-  onChange: (patch: Partial<SingleValue>) => void;
-  showAdvanced: boolean;
-  onToggleAdvanced: () => void;
+  single: Record<FieldKey, string>;
+  setSingle: React.Dispatch<React.SetStateAction<Record<FieldKey, string>>>;
+  name: string;
+  setName: (v: string) => void;
+  notes: string;
+  setNotes: (v: string) => void;
+  noBead: boolean;
+  setNoBead: (v: boolean) => void;
+  showAll: boolean;
+  setShowAll: (v: boolean) => void;
 }) {
-  const input =
+  function patch(k: FieldKey, v: string) {
+    setSingle((s) => ({ ...s, [k]: v }));
+  }
+  const coreKeys: FieldKey[] = ["size", "fly_color", "hook", "type"];
+  const advancedKeys = ALL_FIELD_KEYS.filter((k) => !coreKeys.includes(k));
+  const beadKeys = advancedKeys.filter((k) => FIELDS[k].group === "bead");
+  const bodyKeys = advancedKeys.filter((k) => FIELDS[k].group === "body");
+  const tailKeys = advancedKeys.filter((k) => FIELDS[k].group === "tail");
+  const wingKeys = advancedKeys.filter((k) => FIELDS[k].group === "wing");
+  const accentKeys = advancedKeys.filter((k) => FIELDS[k].group === "accent");
+
+  const inputCls =
     "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
-  const label = "block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1";
+  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1";
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      {/* Name */}
       <div>
-        <label className={label}>Name (optional)</label>
+        <label className={labelCls}>Name (optional)</label>
         <input
-          className={input}
+          className={inputCls}
           placeholder="Leave blank to auto-name from changes"
-          value={value.name}
-          onChange={(e) => onChange({ name: e.target.value })}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
+
+      {/* Core (always visible) */}
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className={label}>Size</label>
-          <input
-            className={input}
-            placeholder="#16"
-            value={value.size}
-            onChange={(e) => onChange({ size: e.target.value })}
+        {coreKeys.map((k) => (
+          <VariantFieldInput
+            key={k}
+            def={FIELDS[k]}
+            value={single[k]}
+            onChange={(v) => patch(k, v)}
           />
-        </div>
-        <div>
-          <label className={label}>Fly color</label>
-          <input
-            className={input}
-            placeholder="Olive"
-            value={value.fly_color}
-            onChange={(e) => onChange({ fly_color: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className={label}>Bead color</label>
-          <input
-            className={input}
-            placeholder="Copper"
-            value={value.bead_color}
-            onChange={(e) => onChange({ bead_color: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className={label}>Hook</label>
-          <input
-            className={input}
-            placeholder="Hanak 300"
-            value={value.hook}
-            onChange={(e) => onChange({ hook: e.target.value })}
-          />
-        </div>
-        <div className="col-span-2">
-          <label className={label}>Type (optional override)</label>
-          <select
-            className={input}
-            value={value.type}
-            onChange={(e) => onChange({ type: e.target.value })}
-          >
-            <option value="">— inherit from parent —</option>
-            {FLY_TYPES.map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-        </div>
+        ))}
       </div>
 
-      {/* Advanced nymph variation fields */}
+      {/* No-bead toggle — above bead section so its intent is clear */}
+      <label className="flex items-start gap-2.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 cursor-pointer hover:border-[#E8923A]/40 transition-colors">
+        <input
+          type="checkbox"
+          checked={noBead}
+          onChange={(e) => setNoBead(e.target.checked)}
+          className="mt-0.5 accent-[#E8923A]"
+        />
+        <span className="text-sm">
+          <span className="font-medium text-[#F0F6FC]">Tie this variant without a bead</span>
+          <span className="block text-xs text-[#6E7681] mt-0.5">
+            Forces bead_material = none and clears bead color/size. Useful for a stillwater or swinging riff.
+          </span>
+        </span>
+      </label>
+
+      {/* Material groups */}
       <button
         type="button"
-        onClick={onToggleAdvanced}
+        onClick={() => setShowAll(!showAll)}
         className="text-xs font-medium text-[#00B4D8] hover:text-[#E8923A] transition-colors"
       >
-        {showAdvanced ? "– Hide bead + body variations" : "+ Vary bead material, body, tail, thorax…"}
+        {showAll
+          ? "– Hide material fields"
+          : "+ Vary every material (bead, body, thread, rib, tail, wing, hot spot…)"}
       </button>
 
-      {showAdvanced && (
-        <div className="space-y-3 rounded-lg border border-[#21262D] bg-[#0D1117] p-3">
-          <p className="text-[11px] text-[#6E7681] leading-snug">
-            Great for nymph riffs — same pattern, tungsten vs brass, or different body/thorax color.
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className={label}>Bead material</label>
-              <select
-                className={input}
-                value={value.bead_material}
-                onChange={(e) => onChange({ bead_material: e.target.value })}
-              >
-                {BEAD_MATERIALS.map((m) => (
-                  <option key={m.value} value={m.value}>{m.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={label}>Bead size (mm)</label>
-              <input
-                className={input}
-                list="variant-bead-mm"
-                inputMode="decimal"
-                placeholder="3.2"
-                value={value.bead_size_mm}
-                onChange={(e) => onChange({ bead_size_mm: e.target.value })}
-              />
-              <datalist id="variant-bead-mm">
-                {COMMON_BEAD_SIZES_MM.map((s) => <option key={s} value={s} />)}
-              </datalist>
-            </div>
-            <div>
-              <label className={label}>Body color</label>
-              <input
-                className={input}
-                placeholder="Olive"
-                value={value.body_color}
-                onChange={(e) => onChange({ body_color: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className={label}>Tail color</label>
-              <input
-                className={input}
-                placeholder="CDL"
-                value={value.tail_color}
-                onChange={(e) => onChange({ tail_color: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className={label}>Thorax color</label>
-              <input
-                className={input}
-                placeholder="Black"
-                value={value.thorax_color}
-                onChange={(e) => onChange({ thorax_color: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className={label}>Collar color</label>
-              <input
-                className={input}
-                placeholder="Partridge"
-                value={value.collar_color}
-                onChange={(e) => onChange({ collar_color: e.target.value })}
-              />
-            </div>
-          </div>
+      {showAll && (
+        <div className="space-y-4">
+          <FieldGroup label="Bead" disabled={noBead} keys={beadKeys} single={single} patch={patch} />
+          <FieldGroup label="Body / thread / rib" keys={bodyKeys} single={single} patch={patch} />
+          <FieldGroup label="Tail, thorax, collar" keys={tailKeys} single={single} patch={patch} />
+          <FieldGroup label="Wing" keys={wingKeys} single={single} patch={patch} />
+          <FieldGroup label="Hot spot & accent" keys={accentKeys} single={single} patch={patch} />
         </div>
       )}
 
+      {/* Notes */}
       <div>
-        <label className={label}>Tying notes (optional)</label>
+        <label className={labelCls}>Tying notes (optional)</label>
         <textarea
           rows={2}
-          className={input}
+          className={inputCls}
           placeholder="What's different about this variant…"
-          value={value.description}
-          onChange={(e) => onChange({ description: e.target.value })}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
         />
       </div>
     </div>
   );
 }
 
+function FieldGroup({
+  label,
+  keys,
+  single,
+  patch,
+  disabled,
+}: {
+  label: string;
+  keys: FieldKey[];
+  single: Record<FieldKey, string>;
+  patch: (k: FieldKey, v: string) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className={`rounded-lg border border-[#21262D] bg-[#0D1117] p-3 ${disabled ? "opacity-40 pointer-events-none" : ""}`}>
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-[#6E7681] mb-2">{label}</div>
+      <div className="grid grid-cols-2 gap-3">
+        {keys.map((k) => (
+          <VariantFieldInput
+            key={k}
+            def={FIELDS[k]}
+            value={single[k]}
+            onChange={(v) => patch(k, v)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VariantFieldInput({
+  def,
+  value,
+  onChange,
+}: {
+  def: FieldDef;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const inputCls =
+    "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
+  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1";
+  const listId = `variant-dl-${def.key}`;
+
+  // Type gets a select since we have an enumerated list
+  if (def.key === "type") {
+    return (
+      <div>
+        <label className={labelCls}>{def.label}</label>
+        <select
+          className={inputCls}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          <option value="">— inherit —</option>
+          {FLY_TYPES.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <label className={labelCls}>{def.label}</label>
+      <input
+        className={inputCls}
+        list={listId}
+        placeholder={def.placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {def.suggestions.length > 0 && (
+        <datalist id={listId}>
+          {def.suggestions.map((s) => (
+            <option key={s} value={s} />
+          ))}
+        </datalist>
+      )}
+    </div>
+  );
+}
+
 /* ─── Bulk form ─── */
+
 function BulkForm({
-  sizes,
-  colors,
-  beads,
-  sizeInput,
-  colorInput,
-  beadInput,
-  setSizeInput,
-  setColorInput,
-  setBeadInput,
-  onAddSize,
-  onAddColor,
-  onAddBead,
-  onRemoveSize,
-  onRemoveColor,
-  onRemoveBead,
+  axes,
+  setAxes,
+  addAxisOpen,
+  setAddAxisOpen,
+  availableAxisKeys,
   parentName,
   count,
   overLimit,
 }: {
-  sizes: string[];
-  colors: string[];
-  beads: string[];
-  sizeInput: string;
-  colorInput: string;
-  beadInput: string;
-  setSizeInput: (v: string) => void;
-  setColorInput: (v: string) => void;
-  setBeadInput: (v: string) => void;
-  onAddSize: (v: string) => void;
-  onAddColor: (v: string) => void;
-  onAddBead: (v: string) => void;
-  onRemoveSize: (v: string) => void;
-  onRemoveColor: (v: string) => void;
-  onRemoveBead: (v: string) => void;
+  axes: Array<{ field: FieldKey; values: string[]; input: string }>;
+  setAxes: React.Dispatch<React.SetStateAction<Array<{ field: FieldKey; values: string[]; input: string }>>>;
+  addAxisOpen: boolean;
+  setAddAxisOpen: (v: boolean) => void;
+  availableAxisKeys: FieldKey[];
   parentName: string;
   count: number;
   overLimit: boolean;
 }) {
+  function updateAxis(idx: number, patch: Partial<{ values: string[]; input: string }>) {
+    setAxes((list) => list.map((a, i) => (i === idx ? { ...a, ...patch } : a)));
+  }
+  function addValue(idx: number, raw: string) {
+    const v = raw.trim();
+    if (!v) return;
+    setAxes((list) =>
+      list.map((a, i) =>
+        i === idx
+          ? { ...a, values: a.values.includes(v) ? a.values : [...a.values, v], input: "" }
+          : a
+      )
+    );
+  }
+  function removeValue(idx: number, v: string) {
+    setAxes((list) =>
+      list.map((a, i) => (i === idx ? { ...a, values: a.values.filter((x) => x !== v) } : a))
+    );
+  }
+  function removeAxis(idx: number) {
+    setAxes((list) => list.filter((_, i) => i !== idx));
+  }
+  function addAxis(field: FieldKey) {
+    setAxes((list) => [...list, { field, values: [], input: "" }]);
+    setAddAxisOpen(false);
+  }
+
+  const sampleBits: string[] = [parentName];
+  for (const a of axes) {
+    if (a.values.length > 0) {
+      if (a.field === "size") sampleBits.push(`#${a.values[0]}`);
+      else if (a.field === "bead_material" && a.values[0] === "none") sampleBits.push("no bead");
+      else sampleBits.push(a.values[0]);
+    }
+  }
+
   return (
-    <div className="space-y-4">
-      <AxisField
-        label="Sizes"
-        placeholder="14, 16, 18…"
-        values={sizes}
-        input={sizeInput}
-        setInput={setSizeInput}
-        onAdd={onAddSize}
-        onRemove={onRemoveSize}
-        suggestions={SUGGESTED_SIZES}
-      />
-      <AxisField
-        label="Colors"
-        placeholder="Olive, black, rust…"
-        values={colors}
-        input={colorInput}
-        setInput={setColorInput}
-        onAdd={onAddColor}
-        onRemove={onRemoveColor}
-        suggestions={SUGGESTED_COLORS}
-      />
-      <AxisField
-        label="Bead colors"
-        placeholder="Copper, gold, silver…"
-        values={beads}
-        input={beadInput}
-        setInput={setBeadInput}
-        onAdd={onAddBead}
-        onRemove={onRemoveBead}
-        suggestions={SUGGESTED_BEADS}
-      />
+    <div className="space-y-3">
+      <p className="text-xs text-[#6E7681] leading-snug">
+        Pick one or more material dimensions, add the values you want, and we'll spawn every
+        combination. Every material role can be an axis — hook, bead (including
+        <span className="text-[#E8923A]">&nbsp;"none"</span> for no-bead), thread, body, rib, tail,
+        thorax, collar, wing, hot spot.
+      </p>
+
+      {axes.map((axis, idx) => (
+        <AxisRow
+          key={`${axis.field}-${idx}`}
+          def={FIELDS[axis.field]}
+          values={axis.values}
+          input={axis.input}
+          onInputChange={(v) => updateAxis(idx, { input: v })}
+          onAdd={(v) => addValue(idx, v)}
+          onRemove={(v) => removeValue(idx, v)}
+          onRemoveAxis={() => removeAxis(idx)}
+        />
+      ))}
+
+      {/* Add axis picker */}
+      {availableAxisKeys.length > 0 && (
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setAddAxisOpen(!addAxisOpen)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[#21262D] bg-[#0D1117] px-3 py-2 text-xs text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A]/40 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add another axis
+          </button>
+          {addAxisOpen && (
+            <div className="absolute z-10 mt-1 w-full sm:w-80 rounded-lg border border-[#21262D] bg-[#161B22] shadow-2xl max-h-72 overflow-y-auto">
+              {(["core", "bead", "body", "tail", "wing", "accent"] as const).map((g) => {
+                const inGroup = availableAxisKeys.filter((k) => FIELDS[k].group === g);
+                if (inGroup.length === 0) return null;
+                return (
+                  <div key={g} className="py-1.5">
+                    <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-[#6E7681]">
+                      {groupLabel(g)}
+                    </div>
+                    {inGroup.map((k) => (
+                      <button
+                        key={k}
+                        type="button"
+                        onClick={() => addAxis(k)}
+                        className="w-full text-left px-3 py-1.5 text-sm text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+                      >
+                        {FIELDS[k].label}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-xs text-[#A8B2BD]">
         <p className="font-medium text-[#F0F6FC] mb-0.5">
@@ -671,57 +726,59 @@ function BulkForm({
           {count === 1 ? "" : "s"}
         </p>
         <p className="text-[#6E7681]">
-          Example name:{" "}
-          <span className="text-[#A8B2BD]">
-            {parentName}
-            {sizes[0] ? ` #${sizes[0]}` : ""}
-            {colors[0] ? ` ${colors[0]}` : ""}
-            {beads[0] ? ` · ${beads[0]} bead` : ""}
-          </span>
+          Example name: <span className="text-[#A8B2BD]">{sampleBits.join(" ")}</span>
         </p>
         {overLimit && (
-          <p className="mt-1 text-red-400">
-            Cap is 48 per batch. Trim one of the axes.
-          </p>
+          <p className="mt-1 text-red-400">Cap is 64 per batch — trim an axis.</p>
         )}
       </div>
     </div>
   );
 }
 
-function AxisField({
-  label,
-  placeholder,
+function AxisRow({
+  def,
   values,
   input,
-  setInput,
+  onInputChange,
   onAdd,
   onRemove,
-  suggestions,
+  onRemoveAxis,
 }: {
-  label: string;
-  placeholder: string;
+  def: FieldDef;
   values: string[];
   input: string;
-  setInput: (v: string) => void;
+  onInputChange: (v: string) => void;
   onAdd: (v: string) => void;
   onRemove: (v: string) => void;
-  suggestions: string[];
+  onRemoveAxis: () => void;
 }) {
   const inputCls =
     "flex-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
+  const listId = `variant-axis-dl-${def.key}`;
 
   return (
-    <div>
-      <label className="block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1.5">
-        {label}
-      </label>
+    <div className="rounded-lg border border-[#21262D] bg-[#0D1117]/60 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-[#A8B2BD]">
+          {def.label}
+        </span>
+        <button
+          type="button"
+          onClick={onRemoveAxis}
+          className="text-[#6E7681] hover:text-red-400 transition-colors"
+          aria-label={`Remove ${def.label} axis`}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      </div>
       <div className="flex gap-2">
         <input
           className={inputCls}
-          placeholder={placeholder}
+          list={listId}
+          placeholder={def.placeholder}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === ",") {
               e.preventDefault();
@@ -737,6 +794,13 @@ function AxisField({
           Add
         </button>
       </div>
+      {def.suggestions.length > 0 && (
+        <datalist id={listId}>
+          {def.suggestions.map((s) => (
+            <option key={s} value={s} />
+          ))}
+        </datalist>
+      )}
       {values.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2">
           {values.map((v) => (
@@ -746,17 +810,17 @@ function AxisField({
               onClick={() => onRemove(v)}
               className="group inline-flex items-center gap-1 rounded-full border border-[#E8923A]/30 bg-[#E8923A]/10 px-2.5 py-1 text-xs text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
             >
-              {v}
+              {v === "none" ? "no bead" : v}
               <X className="h-3 w-3 opacity-60 group-hover:opacity-100" />
             </button>
           ))}
         </div>
       )}
-      {suggestions.length > 0 && (
+      {def.suggestions.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2">
-          {suggestions
+          {def.suggestions
             .filter((s) => !values.includes(s))
-            .slice(0, 7)
+            .slice(0, 8)
             .map((s) => (
               <button
                 key={s}
@@ -764,11 +828,22 @@ function AxisField({
                 onClick={() => onAdd(s)}
                 className="rounded-full border border-[#21262D] bg-[#161B22] px-2 py-0.5 text-[11px] text-[#6E7681] hover:text-[#E8923A] hover:border-[#E8923A]/30 transition-colors"
               >
-                + {s}
+                + {s === "none" ? "no bead" : s}
               </button>
             ))}
         </div>
       )}
     </div>
   );
+}
+
+function groupLabel(g: FieldDef["group"]): string {
+  switch (g) {
+    case "core": return "Core";
+    case "bead": return "Bead";
+    case "body": return "Body / thread / rib";
+    case "tail": return "Tail, thorax, collar";
+    case "wing": return "Wing";
+    case "accent": return "Hot spot";
+  }
 }

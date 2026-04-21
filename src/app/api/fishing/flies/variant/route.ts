@@ -4,17 +4,27 @@
  * POST /api/fishing/flies/variant
  *   Single variant:
  *     { parent: { patternId?: string, canonicalId?: string },
- *       overrides: { name, size?, hook?, bead_size?, bead_color?, fly_color?,
- *                    type?, description?, materials?, video_url?, tags? } }
+ *       mode: "single",
+ *       overrides: Overrides }
  *
- *   Bulk variants (sizes × colors × bead_colors):
+ *   Bulk variants (cartesian product of axes):
  *     { parent: { patternId?: string, canonicalId?: string },
  *       mode: "bulk",
- *       axes: { sizes?: string[], colors?: string[], bead_colors?: string[] },
- *       nameTemplate?: string,        // e.g. "{base} #{size} {color}"
- *       base: { name: string, type?: string, hook?: string, ... } }
+ *       axes: {
+ *         // Either / both styles — legacy named axes OR generic list.
+ *         sizes?: string[],                            // → size axis
+ *         colors?: string[],                           // → fly_color axis
+ *         bead_colors?: string[],                      // → bead_color axis
+ *         custom?: Array<{ field: string, values: string[] }>
+ *       },
+ *       base?: Partial<Overrides>                      // shared overrides applied to every variant
+ *     }
  *
- * Returns: { created: FlyPattern[] }
+ * "No bead" semantics: pass `overrides.no_bead = true` (single) or include
+ * `{ field: "bead_material", values: [..., "none", ...] }` in bulk. When
+ * bead_material is "none" the API zeroes bead_color/bead_size/bead_size_mm.
+ *
+ * Returns: { created: FlyPattern[], count: number }
  */
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
@@ -44,34 +54,51 @@ async function createClient() {
 
 type ParentSpec = { patternId?: string; canonicalId?: string };
 
-type Overrides = {
-  name?: string;
-  type?: string;
-  size?: string;
-  hook?: string;
-  bead_size?: string;
-  bead_color?: string;
-  bead_material?: string;
-  bead_size_mm?: number | string;
-  fly_color?: string;
-  body_color?: string;
-  body_material?: string;
-  tail_color?: string;
-  thorax_color?: string;
-  collar_color?: string;
-  rib_material?: string;
-  wing_material?: string;
-  description?: string;
-  materials?: string;
-  video_url?: string;
-  tags?: string[];
-  provenance_credit?: string;
+/**
+ * Every flat column on fly_patterns that a variant can override.
+ * Keep this list in sync with VARIANT_FIELDS below — it's the single source
+ * of truth for what the modal is allowed to vary.
+ */
+const VARIANT_FIELDS = [
+  "name",
+  "type",
+  "size",
+  "hook",
+  "bead_size",
+  "bead_color",
+  "bead_material",
+  "bead_size_mm",
+  "fly_color",
+  "body_color",
+  "body_material",
+  "thread_color",
+  "tail_color",
+  "thorax_color",
+  "collar_color",
+  "rib_material",
+  "rib_color",
+  "wing_material",
+  "wing_color",
+  "hot_spot_color",
+  "description",
+  "materials",
+  "video_url",
+  "tags",
+  "provenance_credit",
+] as const;
+type VariantField = (typeof VARIANT_FIELDS)[number];
+
+type Overrides = Partial<Record<VariantField, string | number | string[] | null>> & {
+  no_bead?: boolean;
 };
 
 type BulkAxes = {
+  // Legacy friendly names (still supported by older clients)
   sizes?: string[];
   colors?: string[];
   bead_colors?: string[];
+  // New: arbitrary axis list. Each `field` must be a column in VARIANT_FIELDS.
+  custom?: Array<{ field: string; values: string[] }>;
 };
 
 type CanonicalSource = {
@@ -100,11 +127,15 @@ type PatternSource = {
   fly_color?: string | null;
   body_color?: string | null;
   body_material?: string | null;
+  thread_color?: string | null;
   tail_color?: string | null;
   thorax_color?: string | null;
   collar_color?: string | null;
   rib_material?: string | null;
+  rib_color?: string | null;
   wing_material?: string | null;
+  wing_color?: string | null;
+  hot_spot_color?: string | null;
   materials?: string | null;
   description?: string | null;
   video_url?: string | null;
@@ -137,12 +168,11 @@ async function loadParent(
     const { data } = await supabase
       .from("fly_patterns")
       .select(
-        "id, user_id, name, type, size, hook, bead_size, bead_color, bead_material, bead_size_mm, fly_color, body_color, body_material, tail_color, thorax_color, collar_color, rib_material, wing_material, materials, description, video_url, tags, image_url, provenance_credit, visibility, shared_with_user_ids"
+        "id, user_id, name, type, size, hook, bead_size, bead_color, bead_material, bead_size_mm, fly_color, body_color, body_material, thread_color, tail_color, thorax_color, collar_color, rib_material, rib_color, wing_material, wing_color, hot_spot_color, materials, description, video_url, tags, image_url, provenance_credit, visibility, shared_with_user_ids"
       )
       .eq("id", spec.patternId)
       .maybeSingle();
     if (!data) return { kind: "missing" };
-    // Allow forking own pattern, public, or explicitly shared with user
     const visibility = (data as { visibility?: string }).visibility ?? "private";
     const sharedWith =
       ((data as { shared_with_user_ids?: string[] }).shared_with_user_ids ?? []) as string[];
@@ -183,11 +213,15 @@ function baseFromParent(
       fly_color: r.fly_color ?? null,
       body_color: r.body_color ?? null,
       body_material: r.body_material ?? null,
+      thread_color: r.thread_color ?? null,
       tail_color: r.tail_color ?? null,
       thorax_color: r.thorax_color ?? null,
       collar_color: r.collar_color ?? null,
       rib_material: r.rib_material ?? null,
+      rib_color: r.rib_color ?? null,
       wing_material: r.wing_material ?? null,
+      wing_color: r.wing_color ?? null,
+      hot_spot_color: r.hot_spot_color ?? null,
       materials: r.materials ?? null,
       description: r.description ?? null,
       video_url: r.video_url ?? null,
@@ -211,11 +245,15 @@ function baseFromParent(
     fly_color: Array.isArray(r.colors) && r.colors.length > 0 ? r.colors[0] : null,
     body_color: null,
     body_material: null,
+    thread_color: null,
     tail_color: null,
     thorax_color: null,
     collar_color: null,
     rib_material: null,
+    rib_color: null,
     wing_material: null,
+    wing_color: null,
+    hot_spot_color: null,
     materials: null,
     description: r.description ?? r.tying_overview ?? null,
     video_url: null,
@@ -226,31 +264,115 @@ function baseFromParent(
   };
 }
 
+/**
+ * Apply overrides onto a base row. Only known VARIANT_FIELDS are copied; any
+ * stray keys are ignored. Empty strings are treated as "inherit from base"
+ * (the form uses "" to mean unset), so callers should send `null` explicitly
+ * if they want to blank a field.
+ *
+ * Special case: `no_bead: true` forces the bead_* set to a cleared state.
+ */
 function applyOverrides(
   base: Record<string, unknown>,
   overrides: Overrides | undefined
 ): Record<string, unknown> {
   if (!overrides) return base;
-  const out = { ...base };
-  for (const k of Object.keys(overrides) as (keyof Overrides)[]) {
+  const out: Record<string, unknown> = { ...base };
+  for (const k of VARIANT_FIELDS) {
     const v = overrides[k];
-    if (v !== undefined && v !== "") (out as Record<string, unknown>)[k] = v;
+    if (v === undefined) continue;
+    if (typeof v === "string" && v === "") continue;
+    out[k] = v;
+  }
+  if (overrides.no_bead === true) {
+    out.bead_material = "none";
+    out.bead_color = null;
+    out.bead_size = null;
+    out.bead_size_mm = null;
+  }
+  // Also honor bead_material="none" even without the explicit no_bead flag
+  if (out.bead_material === "none") {
+    out.bead_color = null;
+    out.bead_size = null;
+    out.bead_size_mm = null;
   }
   return out;
 }
 
-function renderName(
-  template: string,
-  base: string,
-  axis: { size?: string; color?: string; bead_color?: string }
-) {
-  return template
-    .replace(/{base}/gi, base)
-    .replace(/{size}/gi, axis.size ?? "")
-    .replace(/{color}/gi, axis.color ?? "")
-    .replace(/{bead_color}/gi, axis.bead_color ?? "")
-    .replace(/\s+/g, " ")
-    .trim();
+/**
+ * Build an ordered list of axes from both the legacy named axes and the new
+ * `custom` array. De-duplicates by field (custom wins over legacy if both
+ * reference the same column).
+ */
+function resolveAxes(axes: BulkAxes | undefined): Array<{ field: VariantField; values: string[] }> {
+  if (!axes) return [];
+  const out = new Map<VariantField, string[]>();
+  if (axes.sizes && axes.sizes.length > 0) out.set("size", axes.sizes);
+  if (axes.colors && axes.colors.length > 0) out.set("fly_color", axes.colors);
+  if (axes.bead_colors && axes.bead_colors.length > 0) out.set("bead_color", axes.bead_colors);
+  for (const c of axes.custom ?? []) {
+    if (!VARIANT_FIELDS.includes(c.field as VariantField)) continue;
+    const vals = (c.values ?? []).map((s) => String(s).trim()).filter(Boolean);
+    if (vals.length > 0) out.set(c.field as VariantField, vals);
+  }
+  return Array.from(out.entries()).map(([field, values]) => ({ field, values }));
+}
+
+/**
+ * Cartesian product over the axes. Each result is a Record mapping field →
+ * chosen value for that variant.
+ */
+function cartesian(
+  axes: Array<{ field: VariantField; values: string[] }>
+): Array<Record<string, string>> {
+  if (axes.length === 0) return [];
+  let acc: Array<Record<string, string>> = [{}];
+  for (const axis of axes) {
+    const next: Array<Record<string, string>> = [];
+    for (const row of acc) {
+      for (const val of axis.values) {
+        next.push({ ...row, [axis.field]: val });
+      }
+    }
+    acc = next;
+  }
+  return acc;
+}
+
+/**
+ * Auto-name a bulk variant from its varying axis values.
+ * Example: "Walt's Worm #16 Tan · Copper bead"
+ */
+function synthesizeName(baseName: string, cell: Record<string, string>): string {
+  const bits: string[] = [baseName];
+  if (cell.size) bits.push(`#${cell.size}`);
+  if (cell.fly_color) bits.push(cell.fly_color);
+  if (cell.body_color && cell.body_color !== cell.fly_color) bits.push(`${cell.body_color} body`);
+  if (cell.tail_color) bits.push(`${cell.tail_color} tail`);
+  if (cell.thorax_color) bits.push(`${cell.thorax_color} thorax`);
+  if (cell.collar_color) bits.push(`${cell.collar_color} collar`);
+  if (cell.rib_color) bits.push(`${cell.rib_color} rib`);
+  if (cell.rib_material) bits.push(`${cell.rib_material} rib`);
+  if (cell.wing_color) bits.push(`${cell.wing_color} wing`);
+  if (cell.wing_material) bits.push(`${cell.wing_material} wing`);
+  if (cell.hot_spot_color) bits.push(`${cell.hot_spot_color} hot spot`);
+  if (cell.thread_color) bits.push(`${cell.thread_color} thread`);
+  if (cell.bead_material === "none") {
+    bits.push("no bead");
+  } else if (cell.bead_color || cell.bead_material || cell.bead_size || cell.bead_size_mm) {
+    const beadBits = [
+      cell.bead_color,
+      cell.bead_material,
+      cell.bead_size_mm ? `${cell.bead_size_mm}mm` : "",
+      cell.bead_size ? `#${cell.bead_size}` : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    bits.push(`· ${beadBits} bead`);
+  }
+  if (cell.hook) bits.push(cell.hook);
+  if (cell.type) bits.push(`(${cell.type})`);
+  return bits.join(" ").replace(/\s+/g, " ").trim();
 }
 
 export async function POST(req: NextRequest) {
@@ -266,7 +388,6 @@ export async function POST(req: NextRequest) {
       mode?: "single" | "bulk";
       overrides?: Overrides;
       axes?: BulkAxes;
-      nameTemplate?: string;
       base?: Overrides;
     };
 
@@ -286,66 +407,44 @@ export async function POST(req: NextRequest) {
     const rowsToInsert: Record<string, unknown>[] = [];
 
     if (body.mode === "bulk") {
-      const axes: BulkAxes = body.axes ?? {};
-      const sizes = axes.sizes && axes.sizes.length > 0 ? axes.sizes : [undefined];
-      const colors = axes.colors && axes.colors.length > 0 ? axes.colors : [undefined];
-      const beads =
-        axes.bead_colors && axes.bead_colors.length > 0 ? axes.bead_colors : [undefined];
-
-      if (sizes.length * colors.length * beads.length > 48) {
-        return NextResponse.json({ error: "Refusing to create more than 48 variants at once" }, { status: 400 });
+      const axes = resolveAxes(body.axes);
+      if (axes.length === 0) {
+        return NextResponse.json({ error: "Add at least one axis of values to vary." }, { status: 400 });
+      }
+      const cells = cartesian(axes);
+      if (cells.length > 64) {
+        return NextResponse.json({ error: "Refusing to create more than 64 variants at once" }, { status: 400 });
       }
 
-      const template =
-        body.nameTemplate?.trim() ||
-        "{base}{size? #{size}}{color? {color}}{bead_color? · {bead_color} bead}";
-      const safeTemplate = template
-        .replace(/\{size\?\s*([^}]+)\}/g, "{_sizeBlock}")
-        .replace(/\{color\?\s*([^}]+)\}/g, "{_colorBlock}")
-        .replace(/\{bead_color\?\s*([^}]+)\}/g, "{_beadBlock}");
-
-      for (const size of sizes) {
-        for (const color of colors) {
-          for (const beadColor of beads) {
-            // expand optional blocks manually
-            const sizeBlock = size ? ` #${size}` : "";
-            const colorBlock = color ? ` ${color}` : "";
-            const beadBlock = beadColor ? ` · ${beadColor} bead` : "";
-            const name = safeTemplate
-              .replace(/{base}/gi, String(baseWithOverrides.name ?? parent.row.name))
-              .replace(/{size}/gi, size ?? "")
-              .replace(/{color}/gi, color ?? "")
-              .replace(/{bead_color}/gi, beadColor ?? "")
-              .replace("{_sizeBlock}", sizeBlock)
-              .replace("{_colorBlock}", colorBlock)
-              .replace("{_beadBlock}", beadBlock)
-              .replace(/\s+/g, " ")
-              .trim();
-
-            rowsToInsert.push({
-              ...baseWithOverrides,
-              name,
-              size: size ?? baseWithOverrides.size ?? null,
-              fly_color: color ?? baseWithOverrides.fly_color ?? null,
-              bead_color: beadColor ?? baseWithOverrides.bead_color ?? null,
-              user_id: user.id,
-              visibility: "private",
-              tie_next_status: "none",
-              source: "tied",
-            });
-          }
+      const baseName = String(baseWithOverrides.name ?? parent.row.name);
+      for (const cell of cells) {
+        // Treat each cell's values as a per-variant override payload
+        const cellOverrides: Overrides = {};
+        for (const [field, val] of Object.entries(cell)) {
+          (cellOverrides as Record<string, string>)[field] = val;
         }
+        const row = applyOverrides(baseWithOverrides, cellOverrides);
+        row.name = synthesizeName(baseName, cell);
+        rowsToInsert.push({
+          ...row,
+          user_id: user.id,
+          visibility: "private",
+          tie_next_status: "none",
+          source: "tied",
+        });
       }
     } else {
       // single variant — overrides take precedence on top of base
       const overrides = body.overrides ?? {};
       const withOverrides = applyOverrides(baseWithOverrides, overrides);
       // Keep explicit name change; if missing, derive a reasonable default
-      if (!overrides.name) {
+      if (!overrides.name || overrides.name === "") {
         const baseName = (baseWithOverrides.name as string) ?? parent.row.name;
         const suffixBits = [
           overrides.size ? `#${overrides.size}` : null,
           overrides.fly_color ?? null,
+          overrides.bead_material === "none" || overrides.no_bead === true ? "no bead" : null,
+          overrides.body_color ?? null,
         ].filter(Boolean);
         (withOverrides as Record<string, unknown>).name =
           suffixBits.length > 0 ? `${baseName} — ${suffixBits.join(" ")}` : `${baseName} (variant)`;
