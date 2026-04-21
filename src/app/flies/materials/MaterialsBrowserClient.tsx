@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import {
   Search,
   X,
@@ -11,8 +12,10 @@ import {
   Check,
   Loader2,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { SubmitMaterialForm } from "@/components/flies/SubmitMaterialForm";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -43,6 +46,8 @@ interface Props {
   initialMaterials: Material[];
   categoryCounts: CategoryCount[];
   totalCount: number;
+  isPremium: boolean;
+  isAuthenticated: boolean;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -97,6 +102,8 @@ export default function MaterialsBrowserClient({
   initialMaterials,
   categoryCounts,
   totalCount,
+  isPremium,
+  isAuthenticated,
 }: Props) {
   const [materials, setMaterials] = useState<Material[]>(initialMaterials);
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,6 +116,7 @@ export default function MaterialsBrowserClient({
   const [userId, setUserId] = useState<string | null>(null);
   const [inventoryIds, setInventoryIds] = useState<Set<string>>(new Set());
   const [addingId, setAddingId] = useState<string | null>(null);
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -280,6 +288,37 @@ export default function MaterialsBrowserClient({
 
       {/* ── Main Content ────────────────────────────────────────────────── */}
       <div className="min-w-0 flex-1">
+        {/* Submit Material button row — Pro-only */}
+        <div className="mb-4 flex items-center justify-end gap-2">
+          {isPremium ? (
+            <button
+              onClick={() => setSubmitModalOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#d17d28]"
+              title="Submit a new material to the community catalog"
+            >
+              <Plus className="h-4 w-4" />
+              Submit Material
+            </button>
+          ) : isAuthenticated ? (
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 px-4 py-2 text-sm font-medium text-[#E8923A] transition-colors hover:bg-[#E8923A]/20"
+              title="Submitting new materials is a Pro feature"
+            >
+              <Sparkles className="h-4 w-4" />
+              Submit Material (Pro)
+            </Link>
+          ) : (
+            <Link
+              href="/login?next=/flies/materials"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-2 text-sm font-medium text-[#A8B2BD] transition-colors hover:border-[#E8923A]/40 hover:text-[#F0F6FC]"
+            >
+              <Plus className="h-4 w-4" />
+              Sign in to Submit
+            </Link>
+          )}
+        </div>
+
         {/* Search bar */}
         <div className="relative mb-6">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6E7681]" />
@@ -397,6 +436,45 @@ export default function MaterialsBrowserClient({
           </div>
         )}
       </div>
+
+      {/* Submit Material modal — Pro-gated above */}
+      {submitModalOpen && isPremium && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:pt-24"
+          onClick={() => setSubmitModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-lg rounded-xl border border-[#21262D] bg-[#161B22] p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSubmitModalOpen(false)}
+              className="absolute right-4 top-4 text-[#6E7681] hover:text-[#F0F6FC]"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="mb-4">
+              <h2 className="font-heading text-xl font-semibold text-[#F0F6FC]">
+                Submit a New Material
+              </h2>
+              <p className="mt-1 text-sm text-[#A8B2BD]">
+                Add a material that&apos;s missing from the catalog. Submissions are
+                reviewed before appearing in search.
+              </p>
+            </div>
+
+            <SubmitMaterialForm
+              onSuccess={() => {
+                // Close after a short delay so the user sees the success state
+                setTimeout(() => setSubmitModalOpen(false), 1500);
+              }}
+              onCancel={() => setSubmitModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
