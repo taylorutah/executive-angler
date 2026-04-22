@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { sendBrandedEmail } from "@/lib/email/client";
+import { buildAccountDeleted } from "@/lib/email/senders";
 
 /**
  * POST /api/account/delete
@@ -51,6 +53,20 @@ export async function POST(req: NextRequest) {
     }
 
     const admin = getSupabaseAdmin();
+
+    // Capture email + display_name BEFORE any deletes — after auth.admin.deleteUser()
+    // runs we can't look this up. We send the farewell as the last step.
+    let farewellEmail: string | null = null;
+    let farewellDisplayName: string | null = null;
+    try {
+      const { data: authUser } = await admin.auth.admin.getUserById(userId);
+      farewellEmail = authUser?.user?.email ?? null;
+      farewellDisplayName =
+        ((authUser?.user?.user_metadata as Record<string, unknown> | null)
+          ?.display_name as string | undefined) ?? null;
+    } catch (e) {
+      console.error("[ACCOUNT DELETE] failed to resolve email for farewell:", e);
+    }
 
     console.log(`[ACCOUNT DELETE] Starting deletion for user ${userId}`);
 
@@ -199,7 +215,14 @@ export async function POST(req: NextRequest) {
       .eq("user_id", userId);
     if (profileErr) console.error("[ACCOUNT DELETE] profiles:", profileErr.message);
 
-    // 16. Delete the auth user itself (this is the final step)
+    // 16. Send farewell email BEFORE auth.admin.deleteUser — after deletion
+    // Supabase removes the auth record and we lose the address. Fire-and-forget;
+    // email failure must not block the user's explicit delete request.
+    if (farewellEmail) {
+      void sendAccountDeletedEmail(farewellEmail, farewellDisplayName);
+    }
+
+    // 17. Delete the auth user itself (this is the final step)
     const { error: authDeleteErr } = await admin.auth.admin.deleteUser(userId);
     if (authDeleteErr) {
       console.error("[ACCOUNT DELETE] auth user deletion failed:", authDeleteErr.message);
@@ -220,4 +243,12 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+async function sendAccountDeletedEmail(
+  email: string,
+  displayName: string | null
+) {
+  const content = buildAccountDeleted({ displayName });
+  await sendBrandedEmail({ tag: "account_deleted", to: email, ...content });
 }

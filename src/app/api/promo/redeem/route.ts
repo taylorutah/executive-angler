@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { sendBrandedEmail } from "@/lib/email/client";
+import { buildPromoRedeemed } from "@/lib/email/senders";
 
 /**
  * POST /api/promo/redeem
@@ -69,6 +71,17 @@ export async function POST(req: NextRequest) {
 
   switch (row.status) {
     case "ok":
+      // Fire-and-forget confirmation email
+      if (user.email) {
+        void sendPromoRedeemedEmail(
+          user.email,
+          (user.user_metadata as Record<string, unknown> | null)?.display_name as
+            | string
+            | undefined,
+          row.premium_until,
+          trimmed
+        );
+      }
       return NextResponse.json({
         success: true,
         premium_until: row.premium_until,
@@ -89,4 +102,18 @@ export async function POST(req: NextRequest) {
       console.error("[promo/redeem] unknown status:", row.status);
       return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
+}
+
+async function sendPromoRedeemedEmail(
+  email: string,
+  displayName: string | undefined,
+  premiumUntil: string | null,
+  code: string
+) {
+  const content = buildPromoRedeemed({
+    displayName,
+    code,
+    premiumUntilIso: premiumUntil,
+  });
+  await sendBrandedEmail({ tag: "promo_redeemed", to: email, ...content });
 }

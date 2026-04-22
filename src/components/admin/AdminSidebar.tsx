@@ -12,6 +12,7 @@ import {
   ShoppingBag,
   FileText,
   Camera,
+  Mail,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -41,6 +42,12 @@ const photosLink: NavItem = {
   href: "/admin/photos",
   label: "Photos",
   icon: <Camera className="h-4 w-4" />,
+};
+
+const emailPreviewLink: NavItem = {
+  href: "/admin/email-preview",
+  label: "Email Preview",
+  icon: <Mail className="h-4 w-4" />,
 };
 
 function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
@@ -94,6 +101,14 @@ export default function AdminSidebar() {
           Moderation
         </p>
         <NavLink item={photosLink} pathname={pathname} />
+      </div>
+
+      {/* Tools */}
+      <div>
+        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+          Tools
+        </p>
+        <NavLink item={emailPreviewLink} pathname={pathname} />
       </div>
     </aside>
   );

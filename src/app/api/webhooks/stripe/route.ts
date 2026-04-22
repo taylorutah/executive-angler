@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { sendBrandedEmail } from "@/lib/email/client";
+import {
+  buildProWelcome,
+  buildPaymentFailed,
+  buildSubscriptionCanceled,
+  buildFoundingConfirmation,
+} from "@/lib/email/senders";
 
 /**
  * POST /api/webhooks/stripe
@@ -10,11 +17,15 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  * updates `profiles.is_premium`, so iOS/Android pick it up on next
  * entitlement check.
  *
+ * Also sends user-facing emails on key lifecycle events (Pro welcome,
+ * payment failure, cancellation, founding confirmation) via Resend.
+ *
  * Required env vars:
  *   STRIPE_SECRET_KEY
  *   STRIPE_WEBHOOK_SECRET
  *   NEXT_PUBLIC_SUPABASE_URL
  *   SUPABASE_SERVICE_ROLE_KEY
+ *   RESEND_API_KEY (optional — emails silently skipped if absent)
  */
 
 function getStripe() {
@@ -57,14 +68,13 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        // Branch on mode. A single `checkout.session.completed` event covers
-        // both subscription checkouts (web Pro plan) and one-time payments
-        // (Founding Member).
         if (session.mode === "subscription" && session.subscription && session.metadata?.user_id) {
           const subscription = await getStripe().subscriptions.retrieve(
             session.subscription as string
           );
           await upsertSubscription(supabase, session.metadata.user_id, subscription);
+          // Fire-and-forget Pro welcome
+          void sendProWelcomeEmail(supabase, session.metadata.user_id, subscription);
         } else if (
           session.mode === "payment" &&
           session.metadata?.founding_member === "true" &&
@@ -90,6 +100,21 @@ export async function POST(req: NextRequest) {
         break;
       }
 
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const invoiceSub = (invoice as any).subscription;
+        if (invoiceSub) {
+          const subscription = await getStripe().subscriptions.retrieve(
+            typeof invoiceSub === "string" ? invoiceSub : invoiceSub.id
+          );
+          const userId = subscription.metadata?.user_id;
+          if (userId) {
+            void sendPaymentFailedEmail(supabase, userId, invoice, subscription);
+          }
+        }
+        break;
+      }
+
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
         const userId = subscription.metadata?.user_id;
@@ -104,6 +129,7 @@ export async function POST(req: NextRequest) {
         const userId = subscription.metadata?.user_id;
         if (userId) {
           await expireSubscription(supabase, userId, subscription.id);
+          void sendSubscriptionCanceledEmail(supabase, userId, subscription);
         }
         break;
       }
@@ -244,6 +270,9 @@ async function handleFoundingPayment(
   console.log(
     `[founding webhook] Seat #${seatNumber} assigned to user=${userId} session=${session.id}`
   );
+
+  // Fire-and-forget founding confirmation email
+  void sendFoundingConfirmationEmail(supabase, userId, seatNumber as number);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -268,4 +297,120 @@ async function expireSubscription(
   }
 
   console.log(`Subscription expired: user=${userId} sub=${stripeSubId}`);
+}
+
+// ── Email senders ──
+
+async function resolveUserEmail(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<{ email: string | null; displayName: string | null }> {
+  try {
+    const { data } = await supabase.auth.admin.getUserById(userId);
+    const email = data?.user?.email ?? null;
+    const displayName =
+      (data?.user?.user_metadata as Record<string, unknown> | null)?.display_name as
+        | string
+        | undefined ?? null;
+    return { email, displayName: displayName ?? null };
+  } catch (err) {
+    console.error(`[resolveUserEmail] failed for user=${userId}:`, err);
+    return { email: null, displayName: null };
+  }
+}
+
+function formatPriceLabel(subscription: Stripe.Subscription): string | undefined {
+  const item = subscription.items.data[0];
+  const amount = item?.price?.unit_amount;
+  const interval = item?.price?.recurring?.interval;
+  if (amount == null || !interval) return undefined;
+  const dollars = (amount / 100).toFixed(2);
+  return interval === "year" ? `$${dollars}/year` : `$${dollars}/month`;
+}
+
+async function sendProWelcomeEmail(
+  supabase: SupabaseClient,
+  userId: string,
+  subscription: Stripe.Subscription
+) {
+  const { email, displayName } = await resolveUserEmail(supabase, userId);
+  if (!email) return;
+
+  const content = buildProWelcome({
+    displayName,
+    planLabel: mapStripePlan(subscription) === "annual" ? "Annual" : "Monthly",
+    priceLabel: formatPriceLabel(subscription),
+    nextBillIso: subscription.items.data[0]?.current_period_end ?? null,
+  });
+
+  await sendBrandedEmail({ tag: "pro_welcome", to: email, ...content });
+}
+
+async function sendPaymentFailedEmail(
+  supabase: SupabaseClient,
+  userId: string,
+  invoice: Stripe.Invoice,
+  subscription: Stripe.Subscription
+) {
+  const { email, displayName } = await resolveUserEmail(supabase, userId);
+  if (!email) return;
+
+  // One-click Stripe billing portal link so users can update their card.
+  let portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.executiveangler.com"}/account#subscription`;
+  try {
+    const customerId = subscription.customer as string;
+    if (customerId) {
+      const portal = await getStripe().billingPortal.sessions.create({
+        customer: customerId,
+        return_url: portalUrl,
+      });
+      portalUrl = portal.url;
+    }
+  } catch (err) {
+    console.error("[payment_failed] billing portal create failed:", err);
+  }
+
+  const amountDue = (invoice as any).amount_due as number | undefined;
+  const content = buildPaymentFailed({
+    displayName,
+    amountLabel:
+      amountDue != null ? `$${(amountDue / 100).toFixed(2)}` : undefined,
+    nextAttemptIso: ((invoice as any).next_payment_attempt ?? null) as
+      | number
+      | null,
+    portalUrl,
+  });
+
+  await sendBrandedEmail({ tag: "payment_failed", to: email, ...content });
+}
+
+async function sendSubscriptionCanceledEmail(
+  supabase: SupabaseClient,
+  userId: string,
+  subscription: Stripe.Subscription
+) {
+  const { email, displayName } = await resolveUserEmail(supabase, userId);
+  if (!email) return;
+
+  const content = buildSubscriptionCanceled({
+    displayName,
+    endedOnIso:
+      (subscription as any).ended_at ??
+      subscription.items.data[0]?.current_period_end ??
+      Math.floor(Date.now() / 1000),
+  });
+
+  await sendBrandedEmail({ tag: "subscription_canceled", to: email, ...content });
+}
+
+async function sendFoundingConfirmationEmail(
+  supabase: SupabaseClient,
+  userId: string,
+  seatNumber: number
+) {
+  const { email, displayName } = await resolveUserEmail(supabase, userId);
+  if (!email) return;
+
+  const content = buildFoundingConfirmation({ displayName, seatNumber });
+  await sendBrandedEmail({ tag: "founding_confirmation", to: email, ...content });
 }
