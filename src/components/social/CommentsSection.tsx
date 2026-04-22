@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MessageCircle, Send, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getSessionOwnerId(supabase: any, sessionId: string): Promise<string | null> {
@@ -186,48 +187,74 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
             <div className="text-xs text-[#6E7681]">Loading comments...</div>
           )}
 
-          {comments.map((comment) => (
-            <div key={comment.id} className="flex gap-2 group">
-              {/* Avatar */}
-              <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 mt-0.5">
-                {comment.profile?.avatar_url ? (
-                  <Image
-                    src={comment.profile.avatar_url}
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="object-cover w-full h-full"
-                  />
+          {comments.map((comment) => {
+            const profileHref = comment.profile?.username
+              ? `/anglers/${comment.profile.username}`
+              : null;
+            const nameLabel =
+              comment.profile?.display_name || comment.profile?.username || "Angler";
+            const avatar = comment.profile?.avatar_url ? (
+              <Image
+                src={comment.profile.avatar_url}
+                alt=""
+                width={24}
+                height={24}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <span className="text-[10px] font-bold text-[#A8B2BD]">
+                {(comment.profile?.display_name || "A").charAt(0).toUpperCase()}
+              </span>
+            );
+            return (
+              <div key={comment.id} className="flex gap-2 group">
+                {/* Avatar — tap-through to profile */}
+                {profileHref ? (
+                  <Link
+                    href={profileHref}
+                    className="h-6 w-6 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 mt-0.5 hover:ring-1 hover:ring-[#E8923A] transition-all"
+                  >
+                    {avatar}
+                  </Link>
                 ) : (
-                  <span className="text-[10px] font-bold text-[#A8B2BD]">
-                    {(comment.profile?.display_name || "A").charAt(0).toUpperCase()}
-                  </span>
+                  <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    {avatar}
+                  </div>
                 )}
-              </div>
 
-              {/* Comment body */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-[#F0F6FC]">
-                    {comment.profile?.display_name || comment.profile?.username || "Angler"}
-                  </span>
-                  <span className="text-[10px] text-[#6E7681]">
-                    {timeAgo(comment.created_at)}
-                  </span>
-                  {comment.user_id === userId && (
-                    <button
-                      onClick={() => deleteComment(comment.id)}
-                      className="opacity-0 group-hover:opacity-100 text-[#6E7681] hover:text-[#DA3633] transition-all ml-auto"
-                      aria-label="Delete comment"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  )}
+                {/* Comment body */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    {profileHref ? (
+                      <Link
+                        href={profileHref}
+                        className="text-xs font-semibold text-[#F0F6FC] hover:text-[#E8923A] transition-colors"
+                      >
+                        {nameLabel}
+                      </Link>
+                    ) : (
+                      <span className="text-xs font-semibold text-[#F0F6FC]">
+                        {nameLabel}
+                      </span>
+                    )}
+                    <span className="text-[10px] text-[#6E7681]">
+                      {timeAgo(comment.created_at)}
+                    </span>
+                    {comment.user_id === userId && (
+                      <button
+                        onClick={() => deleteComment(comment.id)}
+                        className="opacity-0 group-hover:opacity-100 text-[#6E7681] hover:text-[#DA3633] transition-all ml-auto"
+                        aria-label="Delete comment"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#A8B2BD] leading-relaxed">{comment.body}</p>
                 </div>
-                <p className="text-xs text-[#A8B2BD] leading-relaxed">{comment.body}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* New comment input */}
           {userId && (

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Fish,
   MapPin,
@@ -86,33 +87,66 @@ function FeedCard({ session }: { session: FeedSession }) {
     <article className="bg-[#161B22] rounded-lg border border-[#21262D] overflow-hidden hover:border-[#6E7681] transition-colors duration-200">
       {/* User header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <div className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0">
-          {profile?.avatar_url ? (
-            <Image
-              src={profile.avatar_url}
-              alt={displayName}
-              width={36}
-              height={36}
-              className="object-cover w-full h-full"
-            />
-          ) : (
-            <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
-              {avatarInitials(
-                profile?.display_name ?? null,
-                profile?.username ?? null
-              )}
-            </span>
-          )}
-        </div>
+        {username ? (
+          <Link
+            href={`/anglers/${username}`}
+            className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 hover:ring-1 hover:ring-[#E8923A] transition-all"
+          >
+            {profile?.avatar_url ? (
+              <Image
+                src={profile.avatar_url}
+                alt={displayName}
+                width={36}
+                height={36}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
+                {avatarInitials(
+                  profile?.display_name ?? null,
+                  profile?.username ?? null
+                )}
+              </span>
+            )}
+          </Link>
+        ) : (
+          <div className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0">
+            {profile?.avatar_url ? (
+              <Image
+                src={profile.avatar_url}
+                alt={displayName}
+                width={36}
+                height={36}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
+                {avatarInitials(
+                  profile?.display_name ?? null,
+                  profile?.username ?? null
+                )}
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm font-semibold text-[#F0F6FC] truncate">
-              {displayName}
-            </span>
-            {username && (
-              <span className="text-xs text-[#6E7681] truncate">
-                @{username}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {username ? (
+              <Link
+                href={`/anglers/${username}`}
+                className="flex items-center gap-1.5 flex-wrap hover:text-[#E8923A] transition-colors"
+              >
+                <span className="text-sm font-semibold text-[#F0F6FC] truncate hover:text-[#E8923A] transition-colors">
+                  {displayName}
+                </span>
+                <span className="text-xs text-[#6E7681] truncate">
+                  @{username}
+                </span>
+              </Link>
+            ) : (
+              <span className="text-sm font-semibold text-[#F0F6FC] truncate">
+                {displayName}
               </span>
             )}
           </div>
