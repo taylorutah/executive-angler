@@ -87,7 +87,12 @@ export default function TurnstileWidget({
     s.defer = true;
     s.onload = () => setScriptReady(true);
     s.onerror = () => {
+      // Content blockers (uBlock, 1Blocker) and some iOS Safari Private
+      // Browsing sessions outright block challenges.cloudflare.com. Flip to
+      // fail-open immediately so the user isn't forced to stare at a dead
+      // widget for 6 seconds.
       console.warn("[TurnstileWidget] script load failed");
+      setFailedOpen(true);
     };
     document.head.appendChild(s);
   }, []);
