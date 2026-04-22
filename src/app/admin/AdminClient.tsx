@@ -98,7 +98,7 @@ export default function AdminClient({
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
             Manage
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <Link href="/admin/users" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#E8923A] transition-colors">
               <Users className="h-5 w-5 text-[#E8923A]" />
               <div className="flex-1">
@@ -131,13 +131,11 @@ export default function AdminClient({
               </div>
               <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-purple-400" />
             </Link>
-            <Link href="/admin/setup" className="group flex items-center gap-3 rounded-xl border border-[#21262D] bg-[#161B22] p-4 hover:border-[#2EA44F] transition-colors">
-              <Database className="h-5 w-5 text-[#2EA44F]" />
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Database Setup</p>
-                <p className="text-[11px] text-[#6E7681]">Schema status & migrations</p>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#2EA44F]" />
+          </div>
+          <div className="mt-3">
+            <Link href="/admin/setup" className="group inline-flex items-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2 text-xs text-[#A8B2BD] hover:border-[#2EA44F] hover:text-[#2EA44F] transition-colors">
+              <Database className="h-3.5 w-3.5 text-[#2EA44F]" />
+              <span>Database Setup · schema & migrations</span>
             </Link>
           </div>
         </section>
