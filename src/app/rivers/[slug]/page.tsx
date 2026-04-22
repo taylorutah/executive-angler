@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
+import { MapPin, Fish, Waves, AlertTriangle, Bug, Map as MapIcon } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import HeroCompact from "@/components/ui/HeroCompact";
 import ReportButton from "@/components/ui/ReportButton";
@@ -23,6 +23,7 @@ import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
 import FlowChart from "@/components/rivers/FlowChart";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
+import CollapsibleSection from "@/components/rivers/CollapsibleSection";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
@@ -265,7 +266,28 @@ export default async function RiverPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-10">
-              {/* Angler Intel — live data from app sessions (top billing) */}
+              {/* 1. Fishability / live conditions — mobile-only inline from sidebar */}
+              <div className="lg:hidden space-y-6">
+                <RiverSidebarLive
+                  riverId={river.id}
+                  riverLatitude={river.latitude}
+                  riverLongitude={river.longitude}
+                />
+              </div>
+
+              {/* 2. Flow history chart (7D/30D/6M/1Y toggles built-in) */}
+              <ScrollAnimation>
+                <FlowChart
+                  usgsGaugeId={river.usgsGaugeId ?? null}
+                  riverName={river.name}
+                  riverId={river.id}
+                />
+              </ScrollAnimation>
+
+              {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
+              <PersonalFlowOverlay riverId={river.id} />
+
+              {/* 3. Angler Intel — live "What's Working" + session stats */}
               <ScrollAnimation>
                 <div>
                   <div className="flex items-center justify-between mb-5">
@@ -281,19 +303,94 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
-              {/* 30-Day USGS Flow Chart with session overlay */}
-              <ScrollAnimation>
-                <FlowChart
-                  usgsGaugeId={river.usgsGaugeId ?? null}
-                  riverName={river.name}
-                  riverId={river.id}
-                />
-              </ScrollAnimation>
+              {/* 4. Hatch Chart — collapsed by default (matches native) */}
+              {river.hatchChart && river.hatchChart.length > 0 && (
+                <ScrollAnimation>
+                  <CollapsibleSection
+                    title="Hatch Chart"
+                    subtitle={`${river.hatchChart.length} mo`}
+                    icon={Bug}
+                    defaultOpen={false}
+                  >
+                    <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="bg-[#E8923A] text-white">
+                              <th className="px-4 py-3 text-left font-semibold">
+                                Month
+                              </th>
+                              <th className="px-4 py-3 text-left font-semibold">
+                                Insect
+                              </th>
+                              <th className="px-4 py-3 text-left font-semibold">
+                                Size
+                              </th>
+                              <th className="px-4 py-3 text-left font-semibold">
+                                Pattern
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {river.hatchChart.map((month) =>
+                              month.hatches.map((hatch, hi) => (
+                                <tr
+                                  key={`${month.month}-${hi}`}
+                                  className="border-b border-[#21262D] hover:bg-[#0D1117]/50"
+                                >
+                                  {hi === 0 && (
+                                    <td
+                                      className="px-4 py-3 font-medium text-[#E8923A] align-top"
+                                      rowSpan={month.hatches.length}
+                                    >
+                                      {month.month}
+                                    </td>
+                                  )}
+                                  <td className="px-4 py-3 text-[#A8B2BD]">
+                                    {hatch.insect}
+                                  </td>
+                                  <td className="px-4 py-3 text-[#A8B2BD]">
+                                    {hatch.size}
+                                  </td>
+                                  <td className="px-4 py-3 text-[#A8B2BD]">
+                                    {(() => {
+                                      const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
+                                      return matchedFly ? (
+                                        <Link href={`/flies/${matchedFly.slug}`} className="text-[#E8923A] hover:underline">
+                                          {hatch.pattern}
+                                        </Link>
+                                      ) : (
+                                        hatch.pattern
+                                      );
+                                    })()}
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </CollapsibleSection>
+                </ScrollAnimation>
+              )}
 
-              {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
-              <PersonalFlowOverlay riverId={river.id} />
+              {/* 5. Trip Reports / live river activity — mobile-only inline */}
+              <div className="lg:hidden space-y-6">
+                <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
+              </div>
 
-              {/* Overview — collapsible, full text in DOM for SEO */}
+              {/* 6. Community Photos — mobile-only inline */}
+              <div className="lg:hidden">
+                <RiverSidebarPhotoWidget riverId={river.id} riverSlug={river.slug} />
+              </div>
+
+              {/* 7. Quick Facts — mobile-only inline */}
+              <div className="lg:hidden">
+                <QuickFacts facts={quickFacts} />
+              </div>
+
+              {/* 8. Overview — collapsible, full text in DOM for SEO */}
               <ScrollAnimation>
                 <div>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
@@ -330,7 +427,7 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
-              {/* Regulations */}
+              {/* 9. Regulations */}
               {river.regulations && (
                 <ScrollAnimation>
                   <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6">
@@ -349,122 +446,62 @@ export default async function RiverPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Interactive Map */}
+              {/* 10. Access Points & Map — collapsed by default (matches native) */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
-                  Access Points & Map
-                </h2>
-                <MapView
-                  latitude={river.latitude}
-                  longitude={river.longitude}
-                  zoom={9}
-                  markers={mapMarkers}
-                  bounds={river.mapBounds}
-                  className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
-                />
-                {/* Access Point List */}
-                <div className="mt-6 space-y-3">
-                  {(river.accessPoints || []).map((ap, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start gap-3 p-4 bg-[#161B22] rounded-xl shadow-sm"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#E8923A] text-white flex items-center justify-center text-sm font-bold shrink-0">
-                        {i + 1}
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-[#E8923A]">
-                          {ap.name}
-                        </h4>
-                        {ap.description && (
-                          <p className="text-sm text-[#A8B2BD] mt-0.5">
-                            {ap.description}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-3 mt-1.5 text-xs text-[#A8B2BD]">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
-                          </span>
-                          {ap.parking && (
-                            <span className="text-[#E8923A] font-medium">
-                              Parking available
-                            </span>
+                <CollapsibleSection
+                  title="Access Points & Map"
+                  subtitle={
+                    (river.accessPoints?.length ?? 0) > 0
+                      ? `${river.accessPoints!.length} points`
+                      : undefined
+                  }
+                  icon={MapIcon}
+                  defaultOpen={false}
+                >
+                  <MapView
+                    latitude={river.latitude}
+                    longitude={river.longitude}
+                    zoom={9}
+                    markers={mapMarkers}
+                    bounds={river.mapBounds}
+                    className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
+                  />
+                  {/* Access Point List */}
+                  <div className="mt-6 space-y-3">
+                    {(river.accessPoints || []).map((ap, i) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-3 p-4 bg-[#161B22] rounded-xl shadow-sm"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#E8923A] text-white flex items-center justify-center text-sm font-bold shrink-0">
+                          {i + 1}
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-[#E8923A]">
+                            {ap.name}
+                          </h4>
+                          {ap.description && (
+                            <p className="text-sm text-[#A8B2BD] mt-0.5">
+                              {ap.description}
+                            </p>
                           )}
+                          <div className="flex items-center gap-3 mt-1.5 text-xs text-[#A8B2BD]">
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
+                            </span>
+                            {ap.parking && (
+                              <span className="text-[#E8923A] font-medium">
+                                Parking available
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollAnimation>
-
-              {/* Hatch Chart */}
-              {river.hatchChart && river.hatchChart.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
-                    Hatch Chart
-                  </h2>
-                  <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="bg-[#E8923A] text-white">
-                            <th className="px-4 py-3 text-left font-semibold">
-                              Month
-                            </th>
-                            <th className="px-4 py-3 text-left font-semibold">
-                              Insect
-                            </th>
-                            <th className="px-4 py-3 text-left font-semibold">
-                              Size
-                            </th>
-                            <th className="px-4 py-3 text-left font-semibold">
-                              Pattern
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {river.hatchChart.map((month) =>
-                            month.hatches.map((hatch, hi) => (
-                              <tr
-                                key={`${month.month}-${hi}`}
-                                className="border-b border-[#21262D] hover:bg-[#0D1117]/50"
-                              >
-                                {hi === 0 && (
-                                  <td
-                                    className="px-4 py-3 font-medium text-[#E8923A] align-top"
-                                    rowSpan={month.hatches.length}
-                                  >
-                                    {month.month}
-                                  </td>
-                                )}
-                                <td className="px-4 py-3 text-[#A8B2BD]">
-                                  {hatch.insect}
-                                </td>
-                                <td className="px-4 py-3 text-[#A8B2BD]">
-                                  {hatch.size}
-                                </td>
-                                <td className="px-4 py-3 text-[#A8B2BD]">
-                                  {(() => {
-                                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
-                                    return matchedFly ? (
-                                      <Link href={`/flies/${matchedFly.slug}`} className="text-[#E8923A] hover:underline">
-                                        {hatch.pattern}
-                                      </Link>
-                                    ) : (
-                                      hatch.pattern
-                                    );
-                                  })()}
-                                </td>
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
+                    ))}
                   </div>
-                </ScrollAnimation>
-              )}
+                </CollapsibleSection>
+              </ScrollAnimation>
 
               {/* Nearby Lodges */}
               {nearbyLodges.length > 0 && (
@@ -554,21 +591,32 @@ export default async function RiverPage({ params }: Props) {
 
             </div>
 
-            {/* Sidebar */}
+            {/* Sidebar — on mobile this stacks below the main column. The widgets
+                that are mirrored inline above (RiverSidebarLive, QuickFacts,
+                RiverRealtimeActivity, RiverSidebarPhotoWidget) are hidden on
+                mobile to avoid double-rendering; the remaining extras
+                (BestWindow, ActivityPulse, Season, Guides, Articles) still
+                appear after the main column on mobile. */}
             <div className="space-y-6 lg:sticky lg:top-24">
-              <RiverSidebarLive
-                riverId={river.id}
-                riverLatitude={river.latitude}
-                riverLongitude={river.longitude}
-              />
+              <div className="hidden lg:block space-y-6">
+                <RiverSidebarLive
+                  riverId={river.id}
+                  riverLatitude={river.latitude}
+                  riverLongitude={river.longitude}
+                />
+              </div>
 
               <BestWindowCalculator riverId={river.id} />
 
-              <QuickFacts facts={quickFacts} />
+              <div className="hidden lg:block">
+                <QuickFacts facts={quickFacts} />
+              </div>
 
               <RiverActivityPulse riverId={river.id} />
 
-              <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
+              <div className="hidden lg:block">
+                <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
+              </div>
 
               {/* Season Calendar */}
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
@@ -604,7 +652,9 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </div>
 
-              <RiverSidebarPhotoWidget riverId={river.id} riverSlug={river.slug} />
+              <div className="hidden lg:block">
+                <RiverSidebarPhotoWidget riverId={river.id} riverSlug={river.slug} />
+              </div>
 
               {/* Nearby Guides */}
               {nearbyGuides.length > 0 && (
