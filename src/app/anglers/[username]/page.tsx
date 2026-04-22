@@ -1,0 +1,170 @@
+import { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
+import ProfileClient from "./ProfileClient";
+
+// Never cache — always fetch fresh follow state and sessions
+export const dynamic = "force-dynamic";
+
+interface Props {
+  params: Promise<{ username: string }>;
+}
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username } = await params;
+  return {
+    title: `@${username} — Executive Angler`,
+    description: `View @${username}'s fishing sessions and river reports on Executive Angler.`,
+  };
+}
+
+export default async function AnglerProfilePage({ params }: Props) {
+  const { username: rawUsername } = await params;
+  const supabase = await createClient();
+
+  // The route segment is usually a username, but AccountClient falls back to
+  // user.id when the viewer has no handle set — so accept either shape.
+  const looksLikeUuid = UUID_RE.test(rawUsername);
+  const profileQuery = supabase
+    .from("profiles")
+    .select(
+      "user_id, username, display_name, bio, avatar_url, home_location, is_private"
+    );
+
+  const { data: profile } = looksLikeUuid
+    ? await profileQuery.eq("user_id", rawUsername).maybeSingle()
+    : await profileQuery
+        .eq("username", rawUsername.toLowerCase())
+        .maybeSingle();
+
+  if (!profile) notFound();
+
+  const {
+    data: { user: viewer },
+  } = await supabase.auth.getUser();
+
+  const isOwnProfile = !!viewer && viewer.id === profile.user_id;
+
+  // Follow status — only relevant when a viewer is signed in and it's not
+  // their own profile.
+  let followStatus: "not_following" | "pending" | "following" =
+    "not_following";
+  if (viewer && !isOwnProfile) {
+    const { data: follow } = await supabase
+      .from("follows")
+      .select("status")
+      .eq("follower_id", viewer.id)
+      .eq("following_id", profile.user_id)
+      .maybeSingle();
+
+    if (follow?.status === "accepted") followStatus = "following";
+    else if (follow?.status === "pending") followStatus = "pending";
+  }
+
+  // Follower/following counts
+  const [{ count: followerCount }, { count: followingCount }] =
+    await Promise.all([
+      supabase
+        .from("follows")
+        .select("id", { count: "exact", head: true })
+        .eq("following_id", profile.user_id)
+        .eq("status", "accepted"),
+      supabase
+        .from("follows")
+        .select("id", { count: "exact", head: true })
+        .eq("follower_id", profile.user_id)
+        .eq("status", "accepted"),
+    ]);
+
+  // Aggregate stats + sessions. For private profiles, RLS will already
+  // prevent a non-follower from reading rows — this mirrors the iOS gate so
+  // we show the lock card instead of an empty list.
+  const canSeeSessions =
+    !profile.is_private || isOwnProfile || followStatus === "following";
+
+  let sessions: Array<{
+    id: string;
+    river_name: string | null;
+    date: string | null;
+    total_fish: number | null;
+    created_at: string | null;
+  }> = [];
+  let totalSessions = 0;
+  let totalFish = 0;
+  let totalRivers = 0;
+
+  if (canSeeSessions) {
+    // Pull the user's public sessions (viewing own profile sees all).
+    const sessionQuery = supabase
+      .from("fishing_sessions")
+      .select("id, river_name, date, total_fish, created_at, privacy")
+      .eq("user_id", profile.user_id)
+      .order("date", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    const { data: sessionRows } = isOwnProfile
+      ? await sessionQuery
+      : await sessionQuery.eq("privacy", "public");
+
+    const allSessions = sessionRows || [];
+    sessions = allSessions.slice(0, 10).map((s) => ({
+      id: s.id,
+      river_name: s.river_name,
+      date: s.date,
+      total_fish: s.total_fish,
+      created_at: s.created_at,
+    }));
+    totalSessions = allSessions.length;
+    totalFish = allSessions.reduce(
+      (sum, s) => sum + (s.total_fish || 0),
+      0
+    );
+    totalRivers = new Set(
+      allSessions.map((s) => s.river_name).filter(Boolean)
+    ).size;
+  }
+
+  // Kudos counts for the 10 most recent visible sessions.
+  const sessionIds = sessions.map((s) => s.id);
+  const kudosCounts: Record<string, number> = {};
+  if (sessionIds.length > 0) {
+    const { data: kudos } = await supabase
+      .from("session_likes")
+      .select("session_id")
+      .in("session_id", sessionIds);
+    (kudos || []).forEach((k) => {
+      kudosCounts[k.session_id] =
+        (kudosCounts[k.session_id] || 0) + 1;
+    });
+  }
+
+  return (
+    <ProfileClient
+      profile={{
+        userId: profile.user_id,
+        username: profile.username,
+        displayName: profile.display_name,
+        bio: profile.bio,
+        avatarUrl: profile.avatar_url,
+        homeLocation: profile.home_location,
+        isPrivate: !!profile.is_private,
+      }}
+      stats={{
+        sessions: totalSessions,
+        fish: totalFish,
+        rivers: totalRivers,
+        followers: followerCount ?? 0,
+        following: followingCount ?? 0,
+      }}
+      sessions={sessions}
+      kudosCounts={kudosCounts}
+      canSeeSessions={canSeeSessions}
+      initialFollowStatus={followStatus}
+      isOwnProfile={isOwnProfile}
+      viewerId={viewer?.id ?? null}
+    />
+  );
+}
