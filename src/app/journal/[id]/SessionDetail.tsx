@@ -154,12 +154,19 @@ interface SessionPhoto {
   created_at: string;
 }
 
+interface OwnerProfile {
+  display_name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+}
+
 interface Props {
   session: Session;
   catches: Catch[];
   flies: FlyPattern[];
   sessionPhotos?: SessionPhoto[];
   isOwner?: boolean;
+  ownerProfile?: OwnerProfile | null;
 }
 
 interface FishPhotoEntry {
@@ -281,7 +288,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   );
 }
 
-export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true }: Props) {
+export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true, ownerProfile = null }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Catch photo uploads — track all photos per catch (array)
@@ -515,6 +522,34 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {session.location && <> · <MapPin className="h-3 w-3 inline -mt-0.5" /> {session.river_name ? `${session.river_name}, ` : ""}{session.location}</>}
                   {!session.location && session.river_name && <> · {session.river_name}</>}
                 </p>
+
+                {/* Session owner chip — only when viewing someone else's session. */}
+                {/* Mirrors iOS SessionDetailView (avatar + @username tap through to profile). */}
+                {!isOwner && ownerProfile && (ownerProfile.username || ownerProfile.display_name) && (
+                  <Link
+                    href={ownerProfile.username ? `/anglers/${ownerProfile.username}` : "#"}
+                    className="inline-flex items-center gap-2 mb-2 group/owner"
+                  >
+                    <span className="h-7 w-7 rounded-full overflow-hidden bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0 group-hover/owner:ring-1 group-hover/owner:ring-[#E8923A] transition-all">
+                      {ownerProfile.avatar_url ? (
+                        <Image
+                          src={ownerProfile.avatar_url}
+                          alt={ownerProfile.display_name || ownerProfile.username || "Angler"}
+                          width={28}
+                          height={28}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <span className="text-xs font-bold text-[#E8923A]">
+                          {(ownerProfile.display_name || ownerProfile.username || "A").charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-sm font-semibold text-[#E8923A] group-hover/owner:underline">
+                      {ownerProfile.username ? `@${ownerProfile.username}` : (ownerProfile.display_name || "Angler")}
+                    </span>
+                  </Link>
+                )}
 
                 <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-tight mb-3 flex items-center gap-2 flex-wrap">
                   <span>{session.title || session.river_name || "Fishing Session"}</span>

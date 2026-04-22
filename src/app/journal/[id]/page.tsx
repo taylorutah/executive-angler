@@ -62,6 +62,19 @@ export default async function SessionDetailPage({ params }: Props) {
     .eq("session_id", id)
     .order("created_at", { ascending: true });
 
+  // When a non-owner is viewing, fetch the owner's profile so we can render
+  // an identity chip (avatar + @username) above the session title. Mirrors
+  // iOS SessionDetailView lines 35-75.
+  let ownerProfile: { display_name: string | null; username: string | null; avatar_url: string | null } | null = null;
+  if (!isOwner && session.user_id) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name, username, avatar_url")
+      .eq("user_id", session.user_id)
+      .maybeSingle();
+    ownerProfile = profile ?? null;
+  }
+
   return (
     <SessionDetail
       session={session}
@@ -69,6 +82,7 @@ export default async function SessionDetailPage({ params }: Props) {
       flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
       sessionPhotos={sessionPhotos ?? []}
       isOwner={isOwner}
+      ownerProfile={ownerProfile}
     />
   );
 }
