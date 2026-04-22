@@ -12,6 +12,8 @@ interface Props {
   isLoggedIn: boolean;
   isPremium: boolean;
   isFounder?: boolean;
+  subscriptionSource?: "apple" | "google" | "stripe" | "promo" | null;
+  subscriptionExpiresAt?: string | null;
   foundingSeats?: { total: number; sold: number; remaining: number };
 }
 
@@ -53,12 +55,25 @@ export default function PricingClient({
   isLoggedIn,
   isPremium,
   isFounder = false,
+  subscriptionSource = null,
+  subscriptionExpiresAt = null,
   foundingSeats = { total: 50, sold: 0, remaining: 50 },
 }: Props) {
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
   const [isLoading, setIsLoading] = useState(false);
   const [foundingLoading, setFoundingLoading] = useState(false);
   const soldOut = foundingSeats.remaining <= 0;
+
+  // Promo users are "premium" but have no Stripe customer and a hard expiry
+  // date. They need the upgrade CTA, not the "Manage Subscription" button.
+  const isPromoPremium = isPremium && subscriptionSource === "promo";
+  const promoExpiryLabel = subscriptionExpiresAt
+    ? new Date(subscriptionExpiresAt).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
 
   const handleFoundingCheckout = async () => {
     if (!isLoggedIn) {
@@ -228,8 +243,8 @@ export default function PricingClient({
           </div>
         )}
 
-        {isPremium ? (
-          /* Already premium */
+        {isPremium && !isPromoPremium ? (
+          /* Already premium (real subscription — Stripe/Apple/Google/founder) */
           <div className="max-w-md mx-auto text-center mb-16">
             <div className="p-8 bg-[#161B22] rounded-2xl border border-[#E8923A]/30">
               <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-4" />
@@ -237,18 +252,42 @@ export default function PricingClient({
               <p className="text-sm text-[#A8B2BD] mb-6">
                 You have full access to all Executive Angler features.
               </p>
-              <button
-                onClick={handlePortal}
-                disabled={isLoading}
-                className="w-full py-3 rounded-lg bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-medium hover:border-[#E8923A] transition-colors disabled:opacity-50"
-              >
-                {isLoading ? "Loading..." : "Manage Subscription"}
-              </button>
+              {subscriptionSource === "stripe" && (
+                <button
+                  onClick={handlePortal}
+                  disabled={isLoading}
+                  className="w-full py-3 rounded-lg bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-medium hover:border-[#E8923A] transition-colors disabled:opacity-50"
+                >
+                  {isLoading ? "Loading..." : "Manage Subscription"}
+                </button>
+              )}
+              {(subscriptionSource === "apple" || subscriptionSource === "google") && (
+                <p className="text-xs text-[#6E7681]">
+                  Manage your subscription in the {subscriptionSource === "apple" ? "App Store" : "Google Play Store"}.
+                </p>
+              )}
             </div>
           </div>
         ) : (
-          /* Plan selector + CTA */
+          /* Plan selector + CTA (also shown for promo users — they need to upgrade) */
           <div className="max-w-3xl mx-auto mb-16">
+            {isPromoPremium && promoExpiryLabel && (
+              <div className="mb-8 rounded-2xl border border-[#E8923A]/40 bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="h-5 w-5 text-[#E8923A] shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-lg text-[#F0F6FC] mb-1">
+                      Promo Pro active — expires {promoExpiryLabel}
+                    </h3>
+                    <p className="text-sm text-[#A8B2BD]">
+                      Lock in paid access so you don&apos;t lose catch overlays,
+                      AI insights, or your fly workbench when the promo ends.
+                      Your journal data stays yours either way.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             {/* Toggle */}
             <div className="flex items-center justify-center gap-3 mb-8">
               <button

@@ -36,11 +36,33 @@ export default async function PricingPage() {
     isFounder = !!member;
   }
 
+  // Active subscription source + expiry — promo users need a distinct
+  // upgrade path (their access ends on a hard date; they aren't renewable
+  // via the Stripe portal because they have no customer there).
+  let subscriptionSource: "apple" | "google" | "stripe" | "promo" | null = null;
+  let subscriptionExpiresAt: string | null = null;
+  if (user) {
+    const { data: sub } = await supabase
+      .from("subscriptions")
+      .select("source, current_period_end")
+      .eq("user_id", user.id)
+      .in("status", ["active", "trialing"])
+      .order("current_period_end", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (sub) {
+      subscriptionSource = sub.source as typeof subscriptionSource;
+      subscriptionExpiresAt = sub.current_period_end;
+    }
+  }
+
   return (
     <PricingClient
       isLoggedIn={!!user}
       isPremium={isPremium}
       isFounder={isFounder}
+      subscriptionSource={subscriptionSource}
+      subscriptionExpiresAt={subscriptionExpiresAt}
       foundingSeats={{
         total: seats?.total_seats ?? 50,
         sold: seats?.sold_seats ?? 0,
