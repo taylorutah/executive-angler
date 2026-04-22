@@ -70,7 +70,7 @@ export default async function JournalPage() {
   // Fetch feed display preference + profile
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url")
+    .select("feed_display, display_name, avatar_url, username")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -91,6 +91,7 @@ export default async function JournalPage() {
     feedDisplay={feedDisplay}
     userProfile={{
       displayName: profile?.display_name || user.user_metadata?.display_name || "",
+      username: profile?.username || "",
       email: user.email || "",
       avatarUrl: profile?.avatar_url || "",
     }}

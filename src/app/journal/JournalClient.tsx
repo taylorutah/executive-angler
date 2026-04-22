@@ -24,14 +24,14 @@ function AvatarImage({ url, name, size = 56 }: { url?: string; name: string; siz
 
   if (!url || failed) {
     return (
-      <div className={`h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center`}>
+      <div className={`h-14 w-14 rounded-xl border-[3px] border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center`}>
         <span className="text-lg font-bold text-[#E8923A]">{initial}</span>
       </div>
     );
   }
 
   return (
-    <div className="h-14 w-14 rounded-xl border-3 border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
+    <div className="h-14 w-14 rounded-xl border-[3px] border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={url}
@@ -48,6 +48,7 @@ function AvatarImage({ url, name, size = 56 }: { url?: string; name: string; siz
 
 interface UserProfile {
   displayName?: string;
+  username?: string;
   email?: string;
   avatarUrl?: string;
 }
@@ -110,6 +111,11 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
   const totalSessions = sessions.length;
   const totalFish = sessions.reduce((sum, s) => sum + (s.total_fish || 0), 0);
   const riversFished = new Set(sessions.map((s) => s.river_name).filter(Boolean)).size;
+  const biggestFish = Math.round(catches.reduce((best, c) => {
+    const raw = c.length_inches;
+    const len = typeof raw === "number" ? raw : parseFloat(String(raw ?? "0"));
+    return Number.isFinite(len) && len > best ? len : best;
+  }, 0) * 10) / 10;
 
   // Find best session
   const bestSession = sessions.reduce(
@@ -324,8 +330,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           <div className="sticky top-[4rem] flex flex-col gap-4 max-h-[calc(100vh-5rem)] overflow-y-auto pt-2 pb-4 pr-1">
 
             {/* Profile card */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
-              <div className="h-16 bg-gradient-to-br from-forest to-forest-dark" />
+            <div className="bg-[#161B22] rounded-xl border border-[#21262D]">
+              <div className="h-16 bg-gradient-to-br from-forest to-forest-dark rounded-t-xl" />
               <div className="px-4 pb-4">
                 <Link href="/account" className="-mt-8 mb-3 block w-fit">
                   <AvatarImage
@@ -334,9 +340,13 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                     size={56}
                   />
                 </Link>
-                <p className="font-bold text-[#F0F6FC] text-sm leading-tight">{userProfile?.displayName || "Angler"}</p>
-                <p className="text-xs text-[#6E7681] mt-0.5 mb-3 truncate">{userProfile?.email || ""}</p>
-                <div className="grid grid-cols-3 gap-1 text-center border-t border-[#21262D] pt-3">
+                <p className="font-bold text-[#F0F6FC] text-sm leading-tight">
+                  {(userProfile?.displayName || "Angler").trim().split(/\s+/)[0]}
+                </p>
+                {userProfile?.username && (
+                  <p className="text-xs text-[#6E7681] mt-0.5 mb-3 truncate">@{userProfile.username}</p>
+                )}
+                <div className={`grid grid-cols-3 gap-1 text-center border-t border-[#21262D] pt-3 ${userProfile?.username ? "" : "mt-3"}`}>
                   <div>
                     <p className="text-base font-bold text-[#F0F6FC]">{totalSessions}</p>
                     <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Sessions</p>
@@ -346,8 +356,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                     <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Fish</p>
                   </div>
                   <div>
-                    <p className="text-base font-bold text-[#F0F6FC]">{riversFished}</p>
-                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Rivers</p>
+                    <p className="text-base font-bold text-[#F0F6FC]">{biggestFish > 0 ? `${biggestFish}"` : "—"}</p>
+                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Biggest</p>
                   </div>
                 </div>
               </div>
