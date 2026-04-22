@@ -36,6 +36,11 @@ function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
+  // Turnstile "fail-open" signal: true when the widget has produced a token
+  // OR enough time has passed that we've decided verification is unavailable
+  // (network block, flaky script, etc). Either way, unlock the submit button
+  // so legitimate users aren't stuck. Supabase still validates server-side.
+  const [captchaResolved, setCaptchaResolved] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   async function triggerUsernameCheck(value: string) {
@@ -75,7 +80,7 @@ function SignupForm() {
     fullName.trim() !== "" &&
     email.trim() !== "" &&
     password.length >= 8 &&
-    captchaToken !== "" &&
+    captchaResolved &&
     (username.trim() === "" || usernameStatus === "available") &&
     !loading;
 
@@ -318,7 +323,17 @@ function SignupForm() {
               />
             </div>
 
-            <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} />
+            <TurnstileWidget
+              siteKey={TURNSTILE_SITE_KEY}
+              onToken={setCaptchaToken}
+              onAvailabilityChange={(available) => {
+                // Unlock submit as soon as we have EITHER a real token
+                // (available=true) OR the fail-open timer fires
+                // (called with false after the timeout expires).
+                setCaptchaResolved(true);
+                if (!available) setCaptchaToken("");
+              }}
+            />
 
             {error && (
               <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">

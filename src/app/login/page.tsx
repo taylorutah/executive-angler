@@ -23,6 +23,8 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
+  // See signup/page.tsx for the fail-open rationale.
+  const [captchaResolved, setCaptchaResolved] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   // `next` is the canonical name (matches auth/callback); `redirect` kept as
@@ -111,10 +113,17 @@ function LoginForm() {
                 placeholder="Your password"
               />
             </div>
-            <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} />
+            <TurnstileWidget
+              siteKey={TURNSTILE_SITE_KEY}
+              onToken={setCaptchaToken}
+              onAvailabilityChange={(available) => {
+                setCaptchaResolved(true);
+                if (!available) setCaptchaToken("");
+              }}
+            />
             {error && <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">{error}</p>}
             <button
-              type="submit" disabled={loading || !captchaToken}
+              type="submit" disabled={loading || !captchaResolved}
               className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50"
             >
               {loading ? "Signing in…" : "Sign In with Email"}

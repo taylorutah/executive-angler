@@ -1,19 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * Cloudflare Turnstile invisible/managed CAPTCHA widget.
- * Renders the challenge and calls onToken with the verification token.
+ * Cloudflare Turnstile CAPTCHA widget — resilient build.
  *
- * Usage:
- *   <TurnstileWidget siteKey="0x4AAA..." onToken={setToken} />
+ * - Loads the Turnstile script manually (next/script with afterInteractive
+ *   has been flaky under Turbopack dev; this direct append is deterministic).
+ * - Renders explicitly once the script is ready; retries on script-load
+ *   failures (e.g. slow networks, flaky third-party DNS).
+ * - Fail-open: if no token after `failOpenAfterMs`, signals parent via
+ *   `onAvailabilityChange(false)` so callers can unlock the submit button
+ *   rather than trapping legitimate users behind a broken CAPTCHA.
  */
 
 interface Props {
   siteKey: string;
   onToken: (token: string) => void;
   onExpire?: () => void;
+  /**
+   * Called with `true` once the widget has a token, `false` if the widget
+   * never produces one within `failOpenAfterMs`. Callers can use this to
+   * enable "submit anyway" fallbacks.
+   */
+  onAvailabilityChange?: (available: boolean) => void;
+  /** ms to wait before declaring the widget broken. Default 6000. */
+  failOpenAfterMs?: number;
 }
 
 declare global {
@@ -25,6 +37,7 @@ declare global {
           sitekey: string;
           callback: (token: string) => void;
           "expired-callback"?: () => void;
+          "error-callback"?: () => void;
           theme?: "dark" | "light" | "auto";
           size?: "normal" | "compact" | "flexible";
         }
@@ -35,54 +48,117 @@ declare global {
   }
 }
 
-export default function TurnstileWidget({ siteKey, onToken, onExpire }: Props) {
+const TURNSTILE_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+export default function TurnstileWidget({
+  siteKey,
+  onToken,
+  onExpire,
+  onAvailabilityChange,
+  failOpenAfterMs = 6000,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const scriptLoadedRef = useRef(false);
+  const [scriptReady, setScriptReady] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
+  const [failedOpen, setFailedOpen] = useState(false);
 
-  const renderWidget = useCallback(() => {
-    if (!containerRef.current || !window.turnstile || widgetIdRef.current) return;
-    widgetIdRef.current = window.turnstile.render(containerRef.current, {
-      sitekey: siteKey,
-      callback: onToken,
-      "expired-callback": onExpire || (() => onToken("")),
-      theme: "dark",
-      size: "flexible",
-    });
-  }, [siteKey, onToken, onExpire]);
+  // Load the Turnstile script manually. next/script under Turbopack dev
+  // has been flaky (emits only a preload link in some cases), so we inject
+  // the <script> tag directly to guarantee a deterministic load.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.turnstile) {
+      setScriptReady(true);
+      return;
+    }
+    const existing = document.querySelector<HTMLScriptElement>(
+      `script[src^="${TURNSTILE_SRC.split("?")[0]}"]`
+    );
+    if (existing) {
+      existing.addEventListener("load", () => setScriptReady(true));
+      if (window.turnstile) setScriptReady(true);
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = TURNSTILE_SRC;
+    s.async = true;
+    s.defer = true;
+    s.onload = () => setScriptReady(true);
+    s.onerror = () => {
+      console.warn("[TurnstileWidget] script load failed");
+    };
+    document.head.appendChild(s);
+  }, []);
 
   useEffect(() => {
-    // Load Turnstile script if not already loaded
-    if (!scriptLoadedRef.current && !document.querySelector('script[src*="turnstile"]')) {
-      scriptLoadedRef.current = true;
-      const script = document.createElement("script");
-      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-      script.async = true;
-      script.onload = () => renderWidget();
-      document.head.appendChild(script);
-    } else if (window.turnstile) {
-      renderWidget();
-    } else {
-      // Script is loading, wait for it
-      const interval = setInterval(() => {
-        if (window.turnstile) {
-          clearInterval(interval);
-          renderWidget();
-        }
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, [renderWidget]);
+    if (!scriptReady || !containerRef.current) return;
+    if (widgetIdRef.current) return;
+    if (!window.turnstile) return;
 
-  // Cleanup on unmount
+    try {
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => {
+          setHasToken(true);
+          onToken(token);
+        },
+        "expired-callback": () => {
+          setHasToken(false);
+          onToken("");
+          onExpire?.();
+        },
+        "error-callback": () => {
+          setHasToken(false);
+          onToken("");
+        },
+        theme: "dark",
+        size: "flexible",
+      });
+    } catch (err) {
+      console.warn("[TurnstileWidget] render failed:", err);
+    }
+  }, [scriptReady, siteKey, onToken, onExpire]);
+
+  // Notify parent when token state changes.
+  useEffect(() => {
+    onAvailabilityChange?.(hasToken);
+  }, [hasToken, onAvailabilityChange]);
+
+  // Fail-open timer: if no token after N ms, signal parent to unblock.
+  useEffect(() => {
+    if (hasToken || failedOpen) return;
+    const t = setTimeout(() => {
+      setFailedOpen(true);
+      onAvailabilityChange?.(false);
+    }, failOpenAfterMs);
+    return () => clearTimeout(t);
+  }, [hasToken, failedOpen, failOpenAfterMs, onAvailabilityChange]);
+
+  // Cleanup on unmount.
   useEffect(() => {
     return () => {
       if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch {
+          /* ignore */
+        }
         widgetIdRef.current = null;
       }
     };
   }, []);
 
-  return <div ref={containerRef} className="mt-2" />;
+  return (
+    <>
+      <div ref={containerRef} className="mt-2" />
+      {failedOpen && !hasToken && (
+        <p className="mt-2 text-xs text-[#6E7681]">
+          Having trouble with verification? You can still submit — we&apos;ll
+          verify on the server.
+        </p>
+      )}
+    </>
+  );
 }

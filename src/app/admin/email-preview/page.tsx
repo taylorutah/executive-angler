@@ -1,5 +1,6 @@
 import { buildBrandedEmail } from "@/lib/email/templates";
 import {
+  buildWelcome,
   buildProWelcome,
   buildPaymentFailed,
   buildSubscriptionCanceled,
@@ -29,6 +30,12 @@ const inMonth = new Date(
 ).toISOString();
 
 const PREVIEWS: Preview[] = [
+  {
+    key: "welcome",
+    label: "Signup Welcome",
+    when: "Fires on first authenticated callback (email confirm or OAuth signup).",
+    content: buildWelcome({ displayName: "Taylor" }),
+  },
   {
     key: "pro_welcome",
     label: "Pro Welcome",

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { buildDemoRows } from "@/lib/demo-sessions";
+import { sendBrandedEmail } from "@/lib/email/client";
+import { buildWelcome } from "@/lib/email/senders";
 
 /**
  * GET /auth/callback
@@ -137,22 +139,40 @@ async function ensureProfile(
   } = await supabase.auth.getUser();
   if (!user) return;
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("user_id, display_name")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  // Select welcome_email_sent_at defensively — if the migration hasn't been
+  // applied yet the column won't exist. We fall back to a plain select so a
+  // missing column doesn't break OAuth / email-confirm flows.
+  let profile:
+    | { user_id: string; display_name?: string | null; welcome_email_sent_at?: string | null }
+    | null = null;
+  {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("user_id, display_name, welcome_email_sent_at")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (error && /welcome_email_sent_at/.test(error.message)) {
+      const fallback = await supabase
+        .from("profiles")
+        .select("user_id, display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      profile = fallback.data;
+    } else {
+      profile = data;
+    }
+  }
 
   const isNewProfile = !profile;
+  const displayName =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.display_name ||
+    user.user_metadata?.name ||
+    profile?.display_name ||
+    user.email?.split("@")[0] ||
+    "Angler";
 
   if (isNewProfile) {
-    const displayName =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.display_name ||
-      user.user_metadata?.name ||
-      user.email?.split("@")[0] ||
-      "Angler";
-
     await supabase.from("profiles").upsert(
       {
         user_id: user.id,
@@ -168,6 +188,72 @@ async function ensureProfile(
     // Idempotency is also enforced at the query level (only seeds if no
     // sessions exist), so double-calls are safe.
     await seedDemoSessions(supabase, user.id);
+  }
+
+  // Welcome email: send once per user, on first callback visit (email/password
+  // or OAuth). Gate via welcome_email_sent_at (migration 20260422). Until the
+  // column is applied we fall back to "created within last 10 minutes + no
+  // existing sessions" so we don't spam returning users.
+  const createdAt = user.created_at ? Date.parse(user.created_at) : 0;
+  const isFresh = createdAt && Date.now() - createdAt < 10 * 60 * 1000;
+  await maybeSendWelcomeEmail(supabase, {
+    userId: user.id,
+    email: user.email,
+    displayName,
+    alreadySent: !!profile?.welcome_email_sent_at,
+    columnMissingFallback: !!isFresh,
+  });
+}
+
+async function maybeSendWelcomeEmail(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  args: {
+    userId: string;
+    email: string | undefined;
+    displayName: string;
+    alreadySent: boolean;
+    columnMissingFallback: boolean;
+  }
+) {
+  if (!args.email) return;
+  if (args.alreadySent) return;
+  try {
+    // Probe: does the column exist? Cheap count query scoped to this user.
+    // When the migration hasn't been applied, this errors with "column does
+    // not exist" — in that case we fall back to the "user was just created"
+    // check the caller provided, so returning users don't get spammed.
+    const probe = await supabase
+      .from("profiles")
+      .select("welcome_email_sent_at", { head: true, count: "exact" })
+      .eq("user_id", args.userId);
+    if (probe.error && /welcome_email_sent_at/.test(probe.error.message)) {
+      if (!args.columnMissingFallback) return;
+    }
+    const content = buildWelcome({ displayName: args.displayName });
+    const result = await sendBrandedEmail({
+      tag: "welcome",
+      to: args.email,
+      subject: content.subject,
+      heading: content.heading,
+      body: content.body,
+      preheader: content.preheader,
+      ctaLabel: content.ctaLabel,
+      ctaUrl: content.ctaUrl,
+      replyTo: content.replyTo,
+    });
+    if (!result.sent) {
+      console.warn("[WELCOME EMAIL] not sent:", result.reason);
+      return;
+    }
+    const { error: stampError } = await supabase
+      .from("profiles")
+      .update({ welcome_email_sent_at: new Date().toISOString() })
+      .eq("user_id", args.userId);
+    if (stampError && !/welcome_email_sent_at/.test(stampError.message)) {
+      console.warn("[WELCOME EMAIL] stamp failed:", stampError.message);
+    }
+  } catch (err) {
+    console.warn("[WELCOME EMAIL] exception:", err);
   }
 }
 

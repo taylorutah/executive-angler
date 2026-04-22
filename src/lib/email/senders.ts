@@ -42,6 +42,66 @@ const formatDate = (iso: string | number | null | undefined): string => {
   });
 };
 
+/* ─────────────────── Signup Welcome ─────────────────── */
+
+export function buildWelcome(args: {
+  displayName?: string | null;
+}): BrandedEmailContent {
+  const { displayName } = args;
+  const greeting = displayName
+    ? `Welcome aboard, ${displayName}.`
+    : "Welcome aboard.";
+
+  const body = `
+    <p style="margin:0 0 16px;">
+      Your Executive Angler account is live. This is the place your fishing actually compounds &mdash; every session, every fish, every fly you tie, stacked up in one journal that gets smarter the more you use it.
+    </p>
+    <p style="margin:0 0 20px;">
+      Here's the fastest path to getting something useful out of it today.
+    </p>
+    ${buildSectionLabel("Start here")}
+    ${buildFeatureList([
+      {
+        title: "Log your next session",
+        body:
+          "Weather, water, flies, fish landed. Two minutes on the drive home beats a notebook that never gets opened.",
+      },
+      {
+        title: "Build your fly box",
+        body:
+          "Catalog the patterns you actually fish. Browse 120+ canonical recipes or build your own from 1,100+ tying materials.",
+      },
+      {
+        title: "Explore rivers you fish",
+        body:
+          "Live USGS flow, hatch charts, access points, and regs for 138 rivers across the West &mdash; plus community photos from anglers who've been there.",
+      },
+      {
+        title: "Unlock Pro when you're ready",
+        body:
+          "Catch overlays on flow charts, unlimited fly recipes, trophy wall, and full CSV export &mdash; $4.99/month or $29.99/year.",
+      },
+    ])}
+    ${DIVIDER_HTML}
+    <p style="margin:0 0 12px;font-size:13px;color:#A8B2BD;">
+      <strong style="color:#F0F6FC;">On the go?</strong> We have a native iOS app that syncs everything. <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#E8923A;text-decoration:none;">Get it on the App Store &rarr;</a>
+    </p>
+    <p style="margin:0;font-size:13px;color:#6E7681;">
+      Questions, bugs, feature ideas? Just reply to this email &mdash; a real human reads every one.
+    </p>
+  `;
+
+  return {
+    subject: "Welcome to Executive Angler",
+    heading: greeting,
+    preheader: "Log sessions, tie flies, read rivers — your fishing, compounded.",
+    body,
+    ctaLabel: "Open your journal",
+    ctaUrl: `${SITE_URL}/journal`,
+    replyTo: "taylor.warnick@gmail.com",
+  };
+}
+
 /* ─────────────────── Pro Welcome (Stripe sub) ─────────────────── */
 
 export function buildProWelcome(args: {
