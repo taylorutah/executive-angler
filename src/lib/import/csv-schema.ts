@@ -53,7 +53,7 @@ export const PRIVACY_VALUES = ["public", "private"] as const;
  * (so users can leave the example row in place without accidentally
  * importing it as real data).
  */
-export const EXAMPLE_ROW_SENTINEL = "⚠ EXAMPLE ROW — delete or replace before uploading";
+export const EXAMPLE_ROW_SENTINEL = "!! EXAMPLE ROW -- delete or replace before uploading";
 
 export function isExampleRowTitle(title: string | null | undefined): boolean {
   if (!title) return false;

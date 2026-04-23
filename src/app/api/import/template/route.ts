@@ -15,7 +15,8 @@ export async function GET() {
   const exampleLine = COLUMNS.map((c) => escapeCsv(EXAMPLE_ROW[c.key] || "")).join(",");
   const emptyLine = COLUMNS.map(() => "").join(",");
 
-  const csv = [headerLine, exampleLine, emptyLine].join("\n");
+  // UTF-8 BOM so Excel opens the file with correct encoding
+  const csv = "\uFEFF" + [headerLine, exampleLine, emptyLine].join("\n");
 
   return new NextResponse(csv, {
     headers: {

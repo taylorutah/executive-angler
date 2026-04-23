@@ -81,7 +81,8 @@ export async function GET(request: Request) {
       }
     }
 
-    const csvContent = [
+    // UTF-8 BOM so Excel opens the file with correct encoding
+    const csvContent = '\uFEFF' + [
       HEADERS.map(escapeCsv).join(','),
       ...rows.map((row) => row.map(escapeCsv).join(',')),
     ].join('\n');
