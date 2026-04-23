@@ -1,6 +1,19 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { checkPremium } from '@/lib/admin';
+import { COLUMNS, HEADERS, formatForExport } from '@/lib/import/csv-schema';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyRec = Record<string, any>;
+
+function escapeCsv(val: string): string {
+  if (val === null || val === undefined) return '';
+  const s = String(val);
+  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -23,7 +36,6 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch sessions
     let sessionsQuery = supabase
       .from('fishing_sessions')
       .select('*')
@@ -36,8 +48,7 @@ export async function GET(request: Request) {
     const { data: sessions, error: sessionsError } = await sessionsQuery;
     if (sessionsError) throw sessionsError;
 
-    // Fetch all catches for these sessions
-    const sessionIds = (sessions || []).map((s) => s.id);
+    const sessionIds = (sessions || []).map((s: AnyRec) => s.id);
     const { data: catches, error: catchesError } = sessionIds.length > 0
       ? await supabase
           .from('catches')
@@ -48,79 +59,30 @@ export async function GET(request: Request) {
 
     if (catchesError) throw catchesError;
 
-    // Build CSV — one row per catch, with session context
-    const headers = [
-      'Date',
-      'Title',
-      'River',
-      'Location',
-      'Water Temp (°F)',
-      'Weather',
-      'Clarity',
-      'Flow',
-      'Species',
-      'Length (in)',
-      'Fly Pattern',
-      'Fly Size',
-      'Fly Position',
-      'Bead Size',
-      'Quantities',
-      'Notes',
-    ];
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const catchesBySession = new Map<string, any[]>();
-    (catches || []).forEach((c: any) => {
+    const catchesBySession = new Map<string, AnyRec[]>();
+    (catches || []).forEach((c: AnyRec) => {
       if (!catchesBySession.has(c.session_id)) catchesBySession.set(c.session_id, []);
       catchesBySession.get(c.session_id)!.push(c);
     });
 
+    // Build value lookup per column key, one row per catch (or empty catch row).
     const rows: string[][] = [];
 
-    for (const session of sessions || []) {
+    for (const session of (sessions || []) as AnyRec[]) {
       const sessionCatches = catchesBySession.get(session.id) || [];
-      const sessionBase = [
-        session.date || '',
-        session.title || '',
-        session.river_name || '',
-        session.location || session.section || '',
-        session.water_temp_f?.toString() || '',
-        session.weather || '',
-        session.water_clarity || '',
-        session.river_flow_cfs?.toString() || '',
-      ];
+      const sessionValues = buildSessionValues(session);
 
       if (sessionCatches.length === 0) {
-        // Session with no individual catches — one row with empty catch columns
-        rows.push([...sessionBase, '', '', '', '', '', '', '', session.notes || '']);
+        rows.push(rowToCells(sessionValues, buildCatchValues(null)));
       } else {
         for (const c of sessionCatches) {
-          const flyName = c.fly_pattern?.name || c.fly_name || '';
-          rows.push([
-            ...sessionBase,
-            c.species || '',
-            c.length_inches?.toString() || '',
-            flyName,
-            c.fly_size || '',
-            c.fly_position || '',
-            c.bead_size || '',
-            c.quantities?.toString() || '1',
-            session.notes || '',
-          ]);
+          rows.push(rowToCells(sessionValues, buildCatchValues(c)));
         }
       }
     }
 
-    // Escape CSV values
-    const escapeCsv = (val: string) => {
-      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
-        return `"${val.replace(/"/g, '""')}"`;
-      }
-      return val;
-    };
-
     const csvContent = [
-      headers.map(escapeCsv).join(','),
+      HEADERS.map(escapeCsv).join(','),
       ...rows.map((row) => row.map(escapeCsv).join(',')),
     ].join('\n');
 
@@ -138,4 +100,65 @@ export async function GET(request: Request) {
     console.error('CSV export error:', error);
     return NextResponse.json({ error: 'Export failed' }, { status: 500 });
   }
+}
+
+function buildSessionValues(session: AnyRec): Record<string, unknown> {
+  return {
+    session_date: session.date,
+    session_title: session.title,
+    river_name: session.river_name,
+    location: session.location,
+    section: session.section,
+    session_notes: session.notes,
+    weather: session.weather,
+    water_temp_f: session.water_temp_f,
+    water_clarity: session.water_clarity,
+    river_flow_cfs: session.river_flow_cfs,
+    session_tags: session.tags,
+    trip_tags: session.trip_tags,
+    privacy: session.privacy,
+    latitude: session.latitude,
+    longitude: session.longitude,
+  };
+}
+
+function buildCatchValues(c: AnyRec | null): Record<string, unknown> {
+  if (!c) {
+    return {
+      species: null,
+      length_inches: null,
+      fly_pattern_name: null,
+      fly_size: null,
+      fly_position: null,
+      bead_size: null,
+      quantities: null,
+      catch_notes: null,
+      catch_tags: null,
+      time_caught: null,
+      catch_latitude: null,
+      catch_longitude: null,
+    };
+  }
+  return {
+    species: c.species,
+    length_inches: c.length_inches,
+    fly_pattern_name: c.fly_pattern?.name || c.fly_name || null,
+    fly_size: c.fly_size,
+    fly_position: c.fly_position,
+    bead_size: c.bead_size,
+    quantities: c.quantities,
+    catch_notes: c.catch_note ?? c.notes,
+    catch_tags: c.catch_tags,
+    time_caught: c.time_caught ?? c.time,
+    catch_latitude: c.latitude,
+    catch_longitude: c.longitude,
+  };
+}
+
+function rowToCells(
+  sessionValues: Record<string, unknown>,
+  catchValues: Record<string, unknown>
+): string[] {
+  const merged = { ...sessionValues, ...catchValues };
+  return COLUMNS.map((col) => formatForExport(merged[col.key], col));
 }
