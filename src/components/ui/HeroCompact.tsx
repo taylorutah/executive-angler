@@ -79,11 +79,16 @@ export default function HeroCompact({
             </p>
           )}
           {visibleChips.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
+            // Horizontal scroller (matches iOS CompactRiverHero) so long
+            // species chips (e.g. "Bonneville Cutthroat Trout") can't clip
+            // the hero or wrap onto a second line.
+            <div
+              className="mt-2 flex gap-1.5 overflow-x-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
               {visibleChips.map((chip) => (
                 <span
                   key={chip}
-                  className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#0D1117] border border-[#30363D] text-xs text-[#A8B2BD]"
+                  className="inline-flex shrink-0 items-center px-2 py-0.5 rounded-full bg-[#0D1117] border border-[#30363D] text-xs text-[#A8B2BD] whitespace-nowrap"
                 >
                   {chip}
                 </span>

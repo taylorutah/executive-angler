@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Loader2, Droplets, ChevronDown } from "lucide-react";
 
 /* ── Types ─────────────────────────────────────────────── */
@@ -88,7 +89,24 @@ const PLOT_H = CHART_HEIGHT - PADDING.top - PADDING.bottom;
 export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const gauges = useMemo(() => parseGauges(usgsGaugeId), [usgsGaugeId]);
 
-  const [activeSiteId, setActiveSiteId] = useState(gauges[0]?.site_id || "");
+  // Shared URL state with <RiverSectionPills> at the top of the river page.
+  // When the angler picks a section up top, FlowChart switches gauges too —
+  // matching iOS, where one picker drives Fishability + Flow chart.
+  const searchParams = useSearchParams();
+  const sectionFromUrl = searchParams?.get("section") || "";
+  const defaultSiteId =
+    gauges.find((g) => g.site_id === sectionFromUrl)?.site_id ||
+    gauges[0]?.site_id ||
+    "";
+
+  const [activeSiteId, setActiveSiteId] = useState(defaultSiteId);
+
+  // Sync when the URL param changes (pill tap elsewhere on the page).
+  useEffect(() => {
+    if (sectionFromUrl && gauges.some((g) => g.site_id === sectionFromUrl)) {
+      setActiveSiteId(sectionFromUrl);
+    }
+  }, [sectionFromUrl, gauges]);
   const [flowData, setFlowData] = useState<FlowPoint[]>([]);
   const [sessions, setSessions] = useState<SessionMarker[]>([]);
   const [loading, setLoading] = useState(true);

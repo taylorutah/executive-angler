@@ -21,6 +21,7 @@ import RiverRealtimeActivity from "./RiverRealtimeActivity";
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
 import FlowChart from "@/components/rivers/FlowChart";
+import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import CollapsibleSection from "@/components/rivers/CollapsibleSection";
@@ -235,6 +236,11 @@ export default async function RiverPage({ params }: Props) {
           </div>
         </div>
       )}
+
+      {/* iOS/Android parity: section pills for multi-gauge rivers. Renders
+          nothing when the river has ≤ 1 gauge, so single-gauge rivers keep
+          the existing layout untouched. */}
+      <RiverSectionPills riverId={river.id} />
 
       <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 

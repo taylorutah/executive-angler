@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle,
   Lock, Smartphone, Wind, Droplets, Gauge
@@ -108,6 +109,20 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
   const [loadingWeather, setLoadingWeather] = useState(true);
   const [conditionsError, setConditionsError] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  // Shared URL state with <RiverSectionPills> — pill taps at the top of
+  // the page update this card's selected section too. Keeps Fishability /
+  // Flow / Conditions all pointing at the same section (iOS parity).
+  const searchParams = useSearchParams();
+  const sectionFromUrl = searchParams?.get("section") || "";
+  useEffect(() => {
+    if (!sectionFromUrl || gauges.length === 0) return;
+    const idx = gauges.findIndex((g) => g.siteId === sectionFromUrl);
+    if (idx >= 0 && idx !== selectedIdx) {
+      setSelectedIdx(idx);
+      onSectionChange?.(gauges[idx].siteId, gauges[idx].section);
+    }
+  }, [sectionFromUrl, gauges, selectedIdx, onSectionChange]);
 
   // Auth check
   useEffect(() => {
