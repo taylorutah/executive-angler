@@ -84,10 +84,18 @@ export async function generateStaticParams() {
   return allRivers.map((r) => ({ slug: r.slug }));
 }
 
+const PLACEHOLDER_RIVER_IMAGE =
+  "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=1600&q=80";
+
 export default async function RiverPage({ params }: Props) {
   const { slug } = await params;
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
+
+  const safeHeroUrl =
+    river.heroImageUrl && river.heroImageUrl.length > 0
+      ? river.heroImageUrl
+      : PLACEHOLDER_RIVER_IMAGE;
 
   // Check if current user is admin (for hero image editor)
   const supabase = await createClient();
@@ -165,7 +173,7 @@ export default async function RiverPage({ params }: Props) {
             latitude: river.latitude,
             longitude: river.longitude,
           },
-          image: river.heroImageUrl,
+          image: safeHeroUrl,
           ...(dest
             ? {
                 containedInPlace: {
@@ -186,7 +194,7 @@ export default async function RiverPage({ params }: Props) {
       {heroTier === "anonymous" ? (
         <div className="relative">
           <HeroSection
-            imageUrl={river.heroImageUrl}
+            imageUrl={safeHeroUrl}
             imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
             title={river.name}
             subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
@@ -211,7 +219,7 @@ export default async function RiverPage({ params }: Props) {
         <div className="bg-[#0D1117] pt-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <HeroCompact
-              heroImageUrl={river.heroImageUrl}
+              heroImageUrl={safeHeroUrl}
               heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
               heroImageCredit={river.heroImageCredit}
               title={river.name}
@@ -315,7 +323,7 @@ export default async function RiverPage({ params }: Props) {
                   <CollapsibleSection
                     title="Hatch Chart"
                     subtitle={`${river.hatchChart.length} mo`}
-                    icon={Bug}
+                    icon={<Bug className="h-5 w-5" />}
                     defaultOpen={false}
                   >
                     <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
@@ -461,7 +469,7 @@ export default async function RiverPage({ params }: Props) {
                       ? `${river.accessPoints!.length} points`
                       : undefined
                   }
-                  icon={MapIcon}
+                  icon={<MapIcon className="h-5 w-5" />}
                   defaultOpen={false}
                 >
                   <MapView

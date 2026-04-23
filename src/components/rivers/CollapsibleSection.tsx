@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { ChevronDown, LucideIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface Props {
   title: string;
   subtitle?: string;
-  icon?: LucideIcon;
+  icon?: ReactNode;
   defaultOpen?: boolean;
   children: ReactNode;
   className?: string;
@@ -21,7 +21,7 @@ interface Props {
 export default function CollapsibleSection({
   title,
   subtitle,
-  icon: Icon,
+  icon,
   defaultOpen = false,
   children,
   className = "",
@@ -37,7 +37,7 @@ export default function CollapsibleSection({
         aria-expanded={open}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          {Icon && <Icon className="h-5 w-5 text-[#E8923A] shrink-0" />}
+          {icon && <span className="shrink-0 text-[#E8923A]">{icon}</span>}
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] text-left">
             {title}
           </h2>
