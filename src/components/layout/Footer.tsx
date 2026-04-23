@@ -7,7 +7,7 @@ const footerColumns = {
     { label: "Rivers", href: "/rivers" },
     { label: "Fly Workbench", href: "/journal/flies" },
     { label: "Fly Library", href: "/flies" },
-    { label: "Data Export", href: "/journal/export" },
+    { label: "Import & Export", href: "/journal/import" },
     { label: "Pricing", href: "/pricing" },
   ],
   Explore: [
