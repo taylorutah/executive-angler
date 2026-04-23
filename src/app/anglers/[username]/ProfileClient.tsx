@@ -6,8 +6,6 @@ import Image from "next/image";
 import {
   Lock,
   UserPlus,
-  UserCheck,
-  Clock,
   MoreHorizontal,
   Flag,
   Ban,
@@ -18,8 +16,10 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { formatDate } from "@/lib/date";
-
-type FollowStatus = "not_following" | "pending" | "following";
+import {
+  FollowButton,
+  type FollowStatus,
+} from "@/components/social/FollowButton";
 
 interface ProfileClientProps {
   profile: {
@@ -52,6 +52,35 @@ interface ProfileClientProps {
   viewerId: string | null;
 }
 
+type ReportReason =
+  | "spam"
+  | "harassment"
+  | "inappropriate"
+  | "impersonation"
+  | "off_topic"
+  | "other";
+
+const REPORT_REASONS: Array<{ value: ReportReason; label: string; hint: string }> = [
+  { value: "spam", label: "Spam", hint: "Repetitive or promotional content" },
+  {
+    value: "harassment",
+    label: "Harassment or bullying",
+    hint: "Targeting or threatening another angler",
+  },
+  {
+    value: "inappropriate",
+    label: "Inappropriate content",
+    hint: "Explicit, hateful, or unsafe material",
+  },
+  {
+    value: "impersonation",
+    label: "Impersonation",
+    hint: "Pretending to be someone else",
+  },
+  { value: "off_topic", label: "Off-topic", hint: "Not about fishing" },
+  { value: "other", label: "Something else", hint: "Describe below" },
+];
+
 export default function ProfileClient({
   profile,
   stats,
@@ -72,7 +101,6 @@ export default function ProfileClient({
   );
   const [reportOpen, setReportOpen] = useState(false);
   const [blockOpen, setBlockOpen] = useState(false);
-  const [unfollowOpen, setUnfollowOpen] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const [blockedNotice, setBlockedNotice] = useState(false);
 
@@ -87,6 +115,23 @@ export default function ProfileClient({
   const sessionsVisible =
     canSeeSessions &&
     (!profile.isPrivate || isOwnProfile || followStatus === "following");
+
+  // Keep the Followers count in sync with the button. We use the *previous*
+  // status to decide the delta so flipping pending ⇄ following doesn't
+  // double-count.
+  const handleStatusChange = useCallback(
+    (next: FollowStatus) => {
+      setFollowStatus((prev) => {
+        if (prev !== "following" && next === "following") {
+          setFollowerCount((c) => c + 1);
+        } else if (prev === "following" && next !== "following") {
+          setFollowerCount((c) => Math.max(0, c - 1));
+        }
+        return next;
+      });
+    },
+    []
+  );
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
@@ -207,23 +252,10 @@ export default function ProfileClient({
                 Edit profile
               </Link>
             ) : viewerId ? (
-              <FollowActionButton
+              <FollowButton
                 targetUserId={profile.userId}
-                status={followStatus}
-                setStatus={(next) => {
-                  // Keep follower count tracked client-side so the stats row
-                  // is immediately consistent with the button.
-                  setFollowStatus(next);
-                  if (next === "following") {
-                    setFollowerCount((c) => c + 1);
-                  } else if (next === "not_following") {
-                    setFollowerCount((c) =>
-                      followStatus === "following" ? Math.max(0, c - 1) : c
-                    );
-                  }
-                }}
-                isPrivateTarget={profile.isPrivate}
-                onRequestUnfollow={() => setUnfollowOpen(true)}
+                targetIsPrivate={profile.isPrivate}
+                onStatusChange={handleStatusChange}
               />
             ) : (
               <Link
@@ -332,235 +364,76 @@ export default function ProfileClient({
         />
       )}
 
-      {/* Unfollow confirm */}
-      {unfollowOpen && (
-        <ConfirmDialog
-          title={`Unfollow ${displayName}?`}
-          body="You will no longer see their sessions in your feed."
-          confirmLabel="Unfollow"
-          destructive
-          onCancel={() => setUnfollowOpen(false)}
-          onConfirm={async () => {
-            setUnfollowOpen(false);
-            const supabase = createClient();
-            if (viewerId) {
-              await supabase
-                .from("follows")
-                .delete()
-                .eq("follower_id", viewerId)
-                .eq("following_id", profile.userId);
-            }
-            setFollowStatus("not_following");
-            setFollowerCount((c) =>
-              Math.max(0, c - 1)
-            );
-          }}
-        />
-      )}
-
-      {/* Report dialog */}
+      {/* Report dialog — Strava-style reason categories */}
       {reportOpen && (
-        <ConfirmDialog
-          title="Report User"
-          body="Report this user for inappropriate content? Our team will review."
-          confirmLabel="Report"
-          destructive
+        <ReportDialog
+          targetName={displayName}
           onCancel={() => setReportOpen(false)}
-          onConfirm={async () => {
+          onSubmitted={() => {
             setReportOpen(false);
-            try {
-              await fetch("/api/moderation/report", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  type: "user",
-                  targetId: profile.userId,
-                  reason: "Reported by user",
-                }),
-              });
-            } catch {
-              /* swallow — show confirmation regardless */
-            }
             setReportSubmitted(true);
+          }}
+          onSubmit={async (reasonCategory, reasonText) => {
+            const res = await fetch("/api/moderation/report", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contentType: "user",
+                targetId: profile.userId,
+                reasonCategory,
+                reasonText: reasonText || null,
+              }),
+            });
+            if (!res.ok) {
+              const { error } = await res
+                .json()
+                .catch(() => ({ error: "Report failed" }));
+              throw new Error(error || "Report failed");
+            }
           }}
         />
       )}
       {reportSubmitted && (
         <NoticeDialog
           title="Report submitted"
-          body="Thank you. Our team will review this report."
+          body="Thank you. Our team will review this report within 24 hours."
           onClose={() => setReportSubmitted(false)}
         />
       )}
 
-      {/* Block dialog */}
+      {/* Block dialog — calls the real API and surfaces errors */}
       {blockOpen && (
-        <ConfirmDialog
-          title="Block User"
-          body="Block this user? You won't see their content and they won't be able to follow you."
-          confirmLabel="Block"
-          destructive
+        <BlockDialog
+          targetName={displayName}
           onCancel={() => setBlockOpen(false)}
-          onConfirm={async () => {
+          onBlocked={() => {
             setBlockOpen(false);
-            try {
-              await fetch("/api/moderation/block", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ targetId: profile.userId }),
-              });
-            } catch {
-              /* swallow */
-            }
-            // Also drop any existing follow edge between viewer + target so
-            // the UI state is consistent even without a server-side block
-            // pipeline yet.
-            if (viewerId) {
-              const supabase = createClient();
-              await supabase
-                .from("follows")
-                .delete()
-                .or(
-                  `and(follower_id.eq.${viewerId},following_id.eq.${profile.userId}),and(follower_id.eq.${profile.userId},following_id.eq.${viewerId})`
-                );
-            }
             setFollowStatus("not_following");
             setBlockedNotice(true);
+          }}
+          onBlock={async () => {
+            const res = await fetch("/api/moderation/block", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ targetId: profile.userId }),
+            });
+            if (!res.ok) {
+              const { error } = await res
+                .json()
+                .catch(() => ({ error: "Block failed" }));
+              throw new Error(error || "Block failed");
+            }
           }}
         />
       )}
       {blockedNotice && (
         <NoticeDialog
           title="User blocked"
-          body="You won't see their content in your feed anymore."
+          body={`${displayName} is blocked. You won't see their content in your feed anymore.`}
           onClose={() => setBlockedNotice(false)}
         />
       )}
     </div>
-  );
-}
-
-/* ─────────────── Follow button ─────────────── */
-
-function FollowActionButton({
-  targetUserId,
-  status,
-  setStatus,
-  isPrivateTarget,
-  onRequestUnfollow,
-}: {
-  targetUserId: string;
-  status: FollowStatus;
-  setStatus: (s: FollowStatus) => void;
-  isPrivateTarget: boolean;
-  onRequestUnfollow: () => void;
-}) {
-  const [loading, setLoading] = useState(false);
-
-  async function handleClick() {
-    if (loading) return;
-
-    // Tapping "Following" prompts an unfollow confirm; parent handles it.
-    if (status === "following") {
-      onRequestUnfollow();
-      return;
-    }
-
-    setLoading(true);
-    const supabase = createClient();
-    const { data: auth } = await supabase.auth.getUser();
-    const me = auth.user?.id;
-    if (!me) {
-      setLoading(false);
-      return;
-    }
-
-    if (status === "pending") {
-      // Cancel pending request.
-      await supabase
-        .from("follows")
-        .delete()
-        .eq("follower_id", me)
-        .eq("following_id", targetUserId);
-      setStatus("not_following");
-      setLoading(false);
-      return;
-    }
-
-    // Fresh follow. Public → accepted immediately. Private → pending +
-    // follow_request notification.
-    const nextStatus: "accepted" | "pending" = isPrivateTarget
-      ? "pending"
-      : "accepted";
-
-    const { error } = await supabase.from("follows").insert({
-      follower_id: me,
-      following_id: targetUserId,
-      status: nextStatus,
-    });
-
-    if (error) {
-      console.error("Follow insert error:", error);
-      setLoading(false);
-      return;
-    }
-
-    await supabase.from("notifications").insert({
-      recipient_id: targetUserId,
-      actor_id: me,
-      type: nextStatus === "pending" ? "follow_request" : "follow_accepted",
-    });
-
-    // Fire-and-forget email notification — same contract as shared button.
-    fetch("/api/notifications/email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "follow",
-        recipientId: targetUserId,
-        actorId: me,
-      }),
-    }).catch(() => {});
-
-    setStatus(nextStatus === "accepted" ? "following" : "pending");
-    setLoading(false);
-  }
-
-  const config = {
-    not_following: {
-      icon: UserPlus,
-      label: "Follow",
-      className:
-        "bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A050] border border-transparent",
-    },
-    pending: {
-      icon: Clock,
-      label: "Requested",
-      className:
-        "bg-[#21262D] text-[#A8B2BD] hover:bg-[#2D333B] border border-[#21262D]",
-    },
-    following: {
-      icon: UserCheck,
-      label: "Following",
-      className:
-        "bg-transparent text-[#F0F6FC] hover:bg-[#21262D] border border-[#21262D]",
-    },
-  } as const;
-
-  const { icon: Icon, label, className } = config[status];
-
-  return (
-    <button
-      type="button"
-      onClick={handleClick}
-      disabled={loading}
-      className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${className} ${
-        loading ? "opacity-60" : ""
-      }`}
-    >
-      <Icon className="h-4 w-4" />
-      {label}
-    </button>
   );
 }
 
@@ -738,52 +611,202 @@ function FollowListDialog({
   );
 }
 
-/* ─────────────── Dialog primitives ─────────────── */
+/* ─────────────── Report dialog ─────────────── */
 
-function ConfirmDialog({
-  title,
-  body,
-  confirmLabel,
-  destructive,
-  onConfirm,
+function ReportDialog({
+  targetName,
+  onSubmit,
+  onSubmitted,
   onCancel,
 }: {
-  title: string;
-  body: string;
-  confirmLabel: string;
-  destructive?: boolean;
-  onConfirm: () => void;
+  targetName: string;
+  onSubmit: (reason: ReportReason, text: string) => Promise<void>;
+  onSubmitted: () => void;
   onCancel: () => void;
 }) {
+  const [reason, setReason] = useState<ReportReason>("spam");
+  const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function handleSubmit() {
+    setSubmitting(true);
+    setErr(null);
+    try {
+      await onSubmit(reason, text.trim());
+      onSubmitted();
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Report failed";
+      setErr(message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm rounded-xl bg-[#161B22] border border-[#21262D] p-5">
-        <h3 className="text-base font-semibold text-[#F0F6FC]">{title}</h3>
-        <p className="text-sm text-[#A8B2BD] mt-2">{body}</p>
+      <div className="w-full max-w-md rounded-xl bg-[#161B22] border border-[#21262D] p-5 max-h-[90vh] overflow-y-auto">
+        <h3 className="text-base font-semibold text-[#F0F6FC]">
+          Report {targetName}
+        </h3>
+        <p className="text-xs text-[#A8B2BD] mt-1">
+          Only our moderators see this. Reports are anonymous.
+        </p>
+
+        <fieldset className="mt-4 space-y-2">
+          <legend className="text-xs font-semibold uppercase tracking-wider text-[#6E7681] mb-2">
+            Reason
+          </legend>
+          {REPORT_REASONS.map((opt) => {
+            const selected = reason === opt.value;
+            return (
+              <label
+                key={opt.value}
+                className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                  selected
+                    ? "border-[#E8923A]/60 bg-[#E8923A]/10"
+                    : "border-[#21262D] bg-[#0D1117] hover:border-[#21262D]/70"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="report-reason"
+                  value={opt.value}
+                  checked={selected}
+                  onChange={() => setReason(opt.value)}
+                  className="mt-0.5 accent-[#E8923A]"
+                />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#F0F6FC]">
+                    {opt.label}
+                  </p>
+                  <p className="text-xs text-[#A8B2BD] mt-0.5">{opt.hint}</p>
+                </div>
+              </label>
+            );
+          })}
+        </fieldset>
+
+        <label className="block mt-4">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#6E7681]">
+            Details {reason === "other" ? "(required)" : "(optional)"}
+          </span>
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value.slice(0, 500))}
+            rows={3}
+            placeholder="Anything else our team should know?"
+            className="mt-1.5 w-full rounded-lg bg-[#0D1117] border border-[#21262D] p-2.5 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:border-[#E8923A]/60 focus:outline-none resize-none"
+          />
+          <span className="mt-1 block text-[10px] text-[#6E7681] text-right">
+            {text.length}/500
+          </span>
+        </label>
+
+        {err && (
+          <p role="alert" className="mt-3 text-xs text-red-400">
+            {err}
+          </p>
+        )}
+
         <div className="mt-5 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+            disabled={submitting}
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="button"
-            onClick={onConfirm}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              destructive
-                ? "bg-red-900/40 border border-red-800/60 text-red-300 hover:bg-red-900/60"
-                : "bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A050]"
-            }`}
+            onClick={handleSubmit}
+            disabled={
+              submitting || (reason === "other" && text.trim().length === 0)
+            }
+            className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-900/40 border border-red-800/60 text-red-300 hover:bg-red-900/60 disabled:opacity-50 transition-colors"
           >
-            {confirmLabel}
+            {submitting ? "Submitting…" : "Submit report"}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
+/* ─────────────── Block dialog ─────────────── */
+
+function BlockDialog({
+  targetName,
+  onBlock,
+  onBlocked,
+  onCancel,
+}: {
+  targetName: string;
+  onBlock: () => Promise<void>;
+  onBlocked: () => void;
+  onCancel: () => void;
+}) {
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function handleConfirm() {
+    setSubmitting(true);
+    setErr(null);
+    try {
+      await onBlock();
+      onBlocked();
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Block failed";
+      setErr(message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+      <div className="w-full max-w-sm rounded-xl bg-[#161B22] border border-[#21262D] p-5">
+        <h3 className="text-base font-semibold text-[#F0F6FC]">
+          Block {targetName}?
+        </h3>
+        <ul className="text-xs text-[#A8B2BD] mt-2 space-y-1 list-disc pl-4">
+          <li>They won&apos;t be able to follow you or see your sessions</li>
+          <li>You won&apos;t see their content anywhere in the app</li>
+          <li>Any existing follow between you will be removed</li>
+          <li>You can unblock from Settings</li>
+        </ul>
+
+        {err && (
+          <p role="alert" className="mt-3 text-xs text-red-400">
+            {err}
+          </p>
+        )}
+
+        <div className="mt-5 flex items-center justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={submitting}
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={submitting}
+            className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-900/40 border border-red-800/60 text-red-300 hover:bg-red-900/60 disabled:opacity-50 transition-colors"
+          >
+            {submitting ? "Blocking…" : "Block"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────── Notice dialog ─────────────── */
 
 function NoticeDialog({
   title,
