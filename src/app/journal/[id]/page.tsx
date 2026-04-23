@@ -54,9 +54,35 @@ export default async function SessionDetailPage({ params }: Props) {
   // Belt & suspenders: RLS would have already filtered, but if anything
   // ever slips through, 404 rather than leak private data. This also
   // covers the anonymous-visitor case (user === null) when the link
-  // points at a private session — we never want to show the lock card
-  // because the URL itself was leaked.
+  // points at a private session.
   if (!isOwner && session.privacy !== "public") {
+    notFound();
+  }
+
+  // If the session owner has profile_visibility = 'private', even direct
+  // session links are owner-only. RLS already blocks the DB read, but we
+  // check explicitly here so we can 404 cleanly without leaking any info.
+  // For 'followers_only', direct links remain accessible (Strava parity —
+  // you can share a specific session URL with anyone).
+  let ownerProfile: {
+    display_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+    profile_visibility?: string;
+  } | null = null;
+  if (session.user_id) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name, username, avatar_url, profile_visibility")
+      .eq("user_id", session.user_id)
+      .maybeSingle();
+    ownerProfile = profile ?? null;
+  }
+
+  // Hard block: profile_visibility = 'private' means owner-only, even for
+  // sessions that are marked 'public' at the session level.
+  const ownerVisibility = ownerProfile?.profile_visibility ?? "public";
+  if (!isOwner && ownerVisibility === "private") {
     notFound();
   }
 
@@ -81,18 +107,15 @@ export default async function SessionDetailPage({ params }: Props) {
     .eq("session_id", id)
     .order("created_at", { ascending: true });
 
-  // When a non-owner is viewing, fetch the owner's profile so we can render
-  // an identity chip (avatar + @username) above the session title. Mirrors
-  // iOS SessionDetailView lines 35-75.
-  let ownerProfile: { display_name: string | null; username: string | null; avatar_url: string | null } | null = null;
-  if (!isOwner && session.user_id) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("display_name, username, avatar_url")
-      .eq("user_id", session.user_id)
-      .maybeSingle();
-    ownerProfile = profile ?? null;
-  }
+  // Normalise: strip profile_visibility from the ownerProfile shape
+  // before passing to SessionDetail (it only needs display fields).
+  const ownerProfileForDetail = ownerProfile
+    ? {
+        display_name: ownerProfile.display_name,
+        username: ownerProfile.username,
+        avatar_url: ownerProfile.avatar_url,
+      }
+    : null;
 
   return (
     <SessionDetail
@@ -101,7 +124,7 @@ export default async function SessionDetailPage({ params }: Props) {
       flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
       sessionPhotos={sessionPhotos ?? []}
       isOwner={isOwner}
-      ownerProfile={ownerProfile}
+      ownerProfile={ownerProfileForDetail}
       isAnonymous={isAnonymous}
     />
   );

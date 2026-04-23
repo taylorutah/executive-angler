@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const looksLikeUuid = UUID_RE.test(rawUsername);
   const profileQuery = supabase
     .from("profiles")
-    .select("is_private, searchable, username");
+    .select("profile_visibility, searchable, username");
   const { data: profile } = looksLikeUuid
     ? await profileQuery.eq("user_id", rawUsername).maybeSingle()
     : await profileQuery
@@ -38,11 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .maybeSingle();
 
   const displayHandle = profile?.username || rawUsername;
-  const isPrivate = !!profile?.is_private;
-  // `searchable` column defaults true, so treat a missing row (profile
-  // doesn't exist) as "don't index" — no point indexing a 404.
+  // Only fully-public profiles are indexable; followers_only and private
+  // both warrant noindex (nothing useful to index, and it respects the
+  // intent of the visibility setting).
   const isSearchable = profile ? profile.searchable !== false : false;
-  const blockIndex = isPrivate || !isSearchable;
+  const blockIndex = (profile?.profile_visibility ?? "public") !== "public" || !isSearchable;
 
   return {
     title: `@${displayHandle} — Executive Angler`,
@@ -63,7 +63,7 @@ export default async function AnglerProfilePage({ params }: Props) {
   const profileQuery = supabase
     .from("profiles")
     .select(
-      "user_id, username, display_name, bio, avatar_url, home_location, is_private"
+      "user_id, username, display_name, bio, avatar_url, home_location, is_private, profile_visibility"
     );
 
   const { data: profile } = looksLikeUuid
@@ -121,11 +121,17 @@ export default async function AnglerProfilePage({ params }: Props) {
         .eq("status", "accepted"),
     ]);
 
-  // Aggregate stats + sessions. For private profiles, RLS will already
-  // prevent a non-follower from reading rows — this mirrors the iOS gate so
-  // we show the lock card instead of an empty list.
+  // Resolve profile_visibility with a safe fallback for legacy rows.
+  const visibility = (profile as { profile_visibility?: string }).profile_visibility ?? "public";
+
+  // Three-way gate:
+  //   public        → anyone can see sessions
+  //   followers_only → only accepted followers (+ owner)
+  //   private       → owner only
   const canSeeSessions =
-    !profile.is_private || isOwnProfile || followStatus === "following";
+    isOwnProfile ||
+    visibility === "public" ||
+    (visibility === "followers_only" && followStatus === "following");
 
   let sessions: Array<{
     id: string;
@@ -192,7 +198,9 @@ export default async function AnglerProfilePage({ params }: Props) {
         bio: profile.bio,
         avatarUrl: profile.avatar_url,
         homeLocation: profile.home_location,
-        isPrivate: !!profile.is_private,
+        // isPrivate = true whenever the profile isn't fully public, so
+        // ProfileClient shows the lock banner for both followers_only and private.
+        isPrivate: visibility !== "public",
       }}
       stats={{
         sessions: totalSessions,

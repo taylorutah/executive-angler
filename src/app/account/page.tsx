@@ -36,7 +36,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, searchable, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, profile_visibility, searchable, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
     .eq("user_id", user.id)
     .single();
 
@@ -97,6 +97,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         bio: profile?.bio || undefined,
         homeLocation: profile?.home_location || undefined,
         isPrivate: profile?.is_private ?? false,
+        // profile_visibility supersedes the binary is_private flag.
+        // Falls back to deriving from is_private for legacy rows.
+        profileVisibility: ((profile as { profile_visibility?: string })?.profile_visibility as "public" | "followers_only" | "private" | undefined) ?? undefined,
         // `searchable` defaults to true in the DB; treat a missing value
         // as opt-in for legacy rows that predate the column.
         searchable: (profile as { searchable?: boolean })?.searchable !== false,

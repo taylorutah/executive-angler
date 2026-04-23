@@ -35,7 +35,9 @@ interface Props {
     username?: string;
     bio?: string;
     homeLocation?: string;
+    // Legacy boolean kept for backward compat; superseded by profileVisibility.
     isPrivate?: boolean;
+    profileVisibility?: "public" | "followers_only" | "private";
     searchable?: boolean;
   };
   feedDisplay: "collage" | "map";
@@ -94,7 +96,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
   const [username, setUsername] = useState(user.username || "");
   const [bio, setBio] = useState(user.bio || "");
   const [homeLocation, setHomeLocation] = useState(user.homeLocation || "");
-  const [isPrivate, setIsPrivate] = useState(user.isPrivate ?? false);
+  // Three-way profile visibility (supersedes the binary isPrivate toggle).
+  // Default from profileVisibility; fall back to deriving from isPrivate for
+  // legacy rows that predate the column.
+  const deriveVisibility = (): "public" | "followers_only" | "private" => {
+    if (user.profileVisibility) return user.profileVisibility;
+    return (user.isPrivate ?? false) ? "followers_only" : "public";
+  };
+  const [profileVisibility, setProfileVisibility] = useState<"public" | "followers_only" | "private">(deriveVisibility);
   // Default to true (indexable) so legacy accounts stay in discovery surfaces
   // until the angler explicitly opts out — matches the DB column default.
   const [searchable, setSearchable] = useState(user.searchable ?? true);
@@ -280,7 +289,19 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     const cleanUsername = username.trim().toLowerCase() || null;
     await supabase.auth.updateUser({ data: { display_name: displayName } });
     await supabase.from("profiles").upsert(
-      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, searchable, feed_display: feedDisplay, ties_own_flies: tiesOwnFlies },
+      {
+        user_id: user.id,
+        display_name: displayName,
+        username: cleanUsername,
+        bio: bio || null,
+        home_location: homeLocation || null,
+        // profile_visibility is the source of truth; is_private is synced by
+        // the DB trigger (sync_is_private_from_visibility) for old clients.
+        profile_visibility: profileVisibility,
+        searchable,
+        feed_display: feedDisplay,
+        ties_own_flies: tiesOwnFlies,
+      },
       { onConflict: "user_id" }
     );
     setSaving(false);
@@ -497,15 +518,29 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelCls}>Profile Visibility</label>
-                      <div className="flex gap-2">
-                        <button type="button" onClick={() => setIsPrivate(false)}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
-                          Public
-                        </button>
-                        <button type="button" onClick={() => setIsPrivate(true)}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${isPrivate ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
-                          Private
-                        </button>
+                      <p className="text-xs text-[#6E7681] mb-2 -mt-1">
+                        {profileVisibility === "public" && "Anyone can see your session feed."}
+                        {profileVisibility === "followers_only" && "Only accepted followers see your session feed."}
+                        {profileVisibility === "private" && "Only you can see your session feed and sessions."}
+                      </p>
+                      <div className="flex gap-1.5">
+                        {(["public", "followers_only", "private"] as const).map((v) => {
+                          const labels = { public: "Public", followers_only: "Followers", private: "Private" };
+                          return (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() => setProfileVisibility(v)}
+                              className={`flex-1 rounded-lg border py-2 text-xs font-medium transition-colors ${
+                                profileVisibility === v
+                                  ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]"
+                                  : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"
+                              }`}
+                            >
+                              {labels[v]}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                     <div>
@@ -524,16 +559,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   </div>
 
                   {/* Search & Discovery — Strava's "Show profile in search results"
-                      toggle. Off means the public profile page emits
-                      `noindex, nofollow` and the angler is hidden from in-app
-                      search/suggested-anglers surfaces. Private profiles are
-                      already hidden from search regardless, so we disable
-                      the toggle (and visually dim it) when isPrivate is on. */}
+                      toggle. Only meaningful for public profiles; followers_only
+                      and private are never indexed regardless, so we disable
+                      the toggle (and visually dim it) for those. */}
                   <div>
                     <label className={labelCls}>Search &amp; Discovery</label>
                     <div
                       className={`flex items-center justify-between rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 ${
-                        isPrivate ? "opacity-60" : ""
+                        profileVisibility !== "public" ? "opacity-60" : ""
                       }`}
                     >
                       <div className="min-w-0 pr-4">
@@ -541,24 +574,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                           Show my profile in search results
                         </p>
                         <p className="text-xs text-[#6E7681] mt-0.5">
-                          {isPrivate
-                            ? "Private profiles are never indexed — turn off Private to make this toggle active."
+                          {profileVisibility !== "public"
+                            ? "Non-public profiles are never indexed by search engines."
                             : "Allow search engines to index your profile and include you in Executive Angler\u2019s angler search."}
                         </p>
                       </div>
                       <button
                         type="button"
-                        onClick={() => !isPrivate && setSearchable(!searchable)}
-                        disabled={isPrivate}
-                        aria-pressed={!isPrivate && searchable}
+                        onClick={() => profileVisibility === "public" && setSearchable(!searchable)}
+                        disabled={profileVisibility !== "public"}
+                        aria-pressed={profileVisibility === "public" && searchable}
                         aria-label="Show my profile in search results"
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 disabled:cursor-not-allowed ${
-                          !isPrivate && searchable ? "bg-[#E8923A]" : "bg-[#21262D]"
+                          profileVisibility === "public" && searchable ? "bg-[#E8923A]" : "bg-[#21262D]"
                         }`}
                       >
                         <span
                           className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
-                            !isPrivate && searchable ? "translate-x-6" : "translate-x-1"
+                            profileVisibility === "public" && searchable ? "translate-x-6" : "translate-x-1"
                           }`}
                         />
                       </button>
