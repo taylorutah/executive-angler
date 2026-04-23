@@ -50,6 +50,18 @@ interface ProfileClientProps {
   initialFollowStatus: FollowStatus;
   isOwnProfile: boolean;
   viewerId: string | null;
+  /**
+   * True when no viewer is signed in. Strava parity: anonymous visitors can
+   * see the profile header + 3-session teaser but every interactive control
+   * (follow, report, block, followers/following drill-in) routes to login.
+   */
+  isAnonymous: boolean;
+  /**
+   * True when the server truncated the session list (typically because the
+   * viewer is anonymous and hit the 3-session teaser cap). Controls whether
+   * we render the "Sign in to see more" CTA.
+   */
+  hasMoreSessions: boolean;
 }
 
 type ReportReason =
@@ -90,7 +102,15 @@ export default function ProfileClient({
   initialFollowStatus,
   isOwnProfile,
   viewerId,
+  isAnonymous,
+  hasMoreSessions,
 }: ProfileClientProps) {
+  // Every "sign in" CTA on this page routes the angler back to the profile
+  // they were looking at — matches iOS's "continue where you were" behavior
+  // after auth and the generic Strava pattern.
+  const loginHref = `/login?redirect=/anglers/${
+    profile.username || profile.userId
+  }`;
   const [followStatus, setFollowStatus] = useState<FollowStatus>(
     initialFollowStatus
   );
@@ -282,13 +302,17 @@ export default function ProfileClient({
           <StatCell
             value={followerCount}
             label="Followers"
-            onClick={() => setListMode("followers")}
+            // Anonymous viewers get an auth wall for the follower list
+            // because it's a user-discovery surface — Strava gates this too.
+            href={isAnonymous ? loginHref : undefined}
+            onClick={isAnonymous ? undefined : () => setListMode("followers")}
           />
           <StatDivider />
           <StatCell
             value={stats.following}
             label="Following"
-            onClick={() => setListMode("following")}
+            href={isAnonymous ? loginHref : undefined}
+            onClick={isAnonymous ? undefined : () => setListMode("following")}
           />
         </div>
 
@@ -315,42 +339,64 @@ export default function ProfileClient({
               </p>
             </div>
           ) : (
-            <ul className="space-y-2">
-              {sessions.map((s) => (
-                <li key={s.id}>
-                  <Link
-                    href={`/journal/${s.id}`}
-                    className="flex items-center gap-3 rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-3 hover:border-[#E8923A]/40 transition-colors"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-[#F0F6FC] truncate">
-                        {s.river_name || "Unknown river"}
-                      </p>
-                      <div className="flex items-center gap-2 mt-0.5 text-xs text-[#6E7681]">
-                        {s.date && <span>{formatDate(s.date)}</span>}
-                        {s.total_fish != null && s.total_fish > 0 && (
-                          <>
-                            <span>·</span>
-                            <span className="text-[#E8923A] font-mono">
-                              {s.total_fish} fish
-                            </span>
-                          </>
-                        )}
+            <>
+              <ul className="space-y-2">
+                {sessions.map((s) => (
+                  <li key={s.id}>
+                    <Link
+                      href={`/journal/${s.id}`}
+                      className="flex items-center gap-3 rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-3 hover:border-[#E8923A]/40 transition-colors"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-[#F0F6FC] truncate">
+                          {s.river_name || "Unknown river"}
+                        </p>
+                        <div className="flex items-center gap-2 mt-0.5 text-xs text-[#6E7681]">
+                          {s.date && <span>{formatDate(s.date)}</span>}
+                          {s.total_fish != null && s.total_fish > 0 && (
+                            <>
+                              <span>·</span>
+                              <span className="text-[#E8923A] font-mono">
+                                {s.total_fish} fish
+                              </span>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    {(kudosCounts[s.id] ?? 0) > 0 && (
-                      <div className="flex items-center gap-1 text-xs text-[#6E7681]">
-                        <Heart className="h-3.5 w-3.5" />
-                        <span className="font-mono">
-                          {kudosCounts[s.id]}
-                        </span>
-                      </div>
-                    )}
-                    <ChevronRight className="h-4 w-4 text-[#6E7681]" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                      {(kudosCounts[s.id] ?? 0) > 0 && (
+                        <div className="flex items-center gap-1 text-xs text-[#6E7681]">
+                          <Heart className="h-3.5 w-3.5" />
+                          <span className="font-mono">
+                            {kudosCounts[s.id]}
+                          </span>
+                        </div>
+                      )}
+                      <ChevronRight className="h-4 w-4 text-[#6E7681]" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Strava-style teaser CTA for anonymous viewers. Only renders
+                  when the feed was truncated by the teaser cap — logged-in
+                  users already see the full window. */}
+              {isAnonymous && hasMoreSessions && (
+                <Link
+                  href={loginHref}
+                  className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-[#161B22] border border-[#E8923A]/40 px-4 py-4 hover:bg-[#E8923A]/10 transition-colors"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-[#F0F6FC]">
+                      Sign in to see every session
+                    </p>
+                    <p className="text-xs text-[#A8B2BD] mt-0.5">
+                      Unlock the full feed, kudos, comments, and follow {displayName}.
+                    </p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-[#E8923A]" />
+                </Link>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -443,10 +489,16 @@ function StatCell({
   value,
   label,
   onClick,
+  href,
 }: {
   value: number;
   label: string;
   onClick?: () => void;
+  /**
+   * When set, the cell renders as a link instead of a button. Used to route
+   * anonymous viewers to /login rather than opening an interactive dialog.
+   */
+  href?: string;
 }) {
   const inner = (
     <div className="flex flex-col items-center py-3">
@@ -458,6 +510,16 @@ function StatCell({
       </span>
     </div>
   );
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className="hover:bg-[#21262D]/60 transition-colors"
+      >
+        {inner}
+      </Link>
+    );
+  }
   if (onClick) {
     return (
       <button

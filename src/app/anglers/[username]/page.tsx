@@ -14,10 +14,31 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { username } = await params;
+  const { username: rawUsername } = await params;
+  const supabase = await createClient();
+
+  // Peek at the profile so private accounts stay out of search indexes.
+  // We mirror Strava here: public profiles are indexable, private ones emit
+  // `noindex, nofollow` so crawlers skip them entirely. When we ship the
+  // per-profile `searchable` toggle (Enhanced Privacy Mode equivalent) this
+  // same hook will honor it.
+  const looksLikeUuid = UUID_RE.test(rawUsername);
+  const profileQuery = supabase.from("profiles").select("is_private, username");
+  const { data: profile } = looksLikeUuid
+    ? await profileQuery.eq("user_id", rawUsername).maybeSingle()
+    : await profileQuery
+        .eq("username", rawUsername.toLowerCase())
+        .maybeSingle();
+
+  const displayHandle = profile?.username || rawUsername;
+  const isPrivate = !!profile?.is_private;
+
   return {
-    title: `@${username} — Executive Angler`,
-    description: `View @${username}'s fishing sessions and river reports on Executive Angler.`,
+    title: `@${displayHandle} — Executive Angler`,
+    description: `View @${displayHandle}'s fishing sessions and river reports on Executive Angler.`,
+    robots: isPrivate
+      ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+      : undefined,
   };
 }
 
@@ -47,6 +68,16 @@ export default async function AnglerProfilePage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const isOwnProfile = !!viewer && viewer.id === profile.user_id;
+  const isAnonymous = !viewer;
+
+  // Strava parity: anonymous visitors see a 3-session teaser before being
+  // prompted to sign in for the full feed. Logged-in viewers see the normal
+  // 10-session window.
+  const SESSION_TEASER_LIMIT = 3;
+  const SESSION_DEFAULT_LIMIT = 10;
+  const visibleSessionLimit = isAnonymous
+    ? SESSION_TEASER_LIMIT
+    : SESSION_DEFAULT_LIMIT;
 
   // Follow status — only relevant when a viewer is signed in and it's not
   // their own profile.
@@ -110,7 +141,7 @@ export default async function AnglerProfilePage({ params }: Props) {
       : await sessionQuery.eq("privacy", "public");
 
     const allSessions = sessionRows || [];
-    sessions = allSessions.slice(0, 10).map((s) => ({
+    sessions = allSessions.slice(0, visibleSessionLimit).map((s) => ({
       id: s.id,
       river_name: s.river_name,
       date: s.date,
@@ -165,6 +196,8 @@ export default async function AnglerProfilePage({ params }: Props) {
       initialFollowStatus={followStatus}
       isOwnProfile={isOwnProfile}
       viewerId={viewer?.id ?? null}
+      isAnonymous={isAnonymous}
+      hasMoreSessions={totalSessions > sessions.length}
     />
   );
 }
