@@ -79,7 +79,9 @@ export default async function DashboardPage() {
 
   const followingIds = (follows || []).map((f) => f.following_id);
 
-  // Suggested anglers — active users the current user doesn't follow (exclude self)
+  // Suggested anglers — active users the current user doesn't follow (exclude self).
+  // Discovery surface, so also filter out anglers who opted out of search
+  // (NULL = opt-in because the column default is true).
   const excludeIds = [...followingIds, user.id];
   const { data: suggestedAnglers } = await supabase
     .from("profiles")
@@ -87,6 +89,7 @@ export default async function DashboardPage() {
     .not("user_id", "in", `(${excludeIds.join(",")})`)
     .not("username", "is", null)
     .or("is_private.is.null,is_private.eq.false")
+    .or("searchable.is.null,searchable.eq.true")
     .limit(5);
 
   const { data: followingFeed } = followingIds.length > 0

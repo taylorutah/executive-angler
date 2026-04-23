@@ -167,6 +167,14 @@ interface Props {
   sessionPhotos?: SessionPhoto[];
   isOwner?: boolean;
   ownerProfile?: OwnerProfile | null;
+  /**
+   * True when no viewer is signed in. Strava parity: anonymous visitors
+   * can view any public session (shareable URLs) but every mutation
+   * surface — photo upload/delete, notes, memo, kudos, comment — routes
+   * them to /login?redirect=/journal/<id>. Authenticated non-owners see
+   * the same read-only layout minus the sign-in CTAs.
+   */
+  isAnonymous?: boolean;
 }
 
 interface FishPhotoEntry {
@@ -236,7 +244,11 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   photos: SessionPhoto[];
   initialIndex: number;
   onClose: () => void;
-  onDelete: (id: string) => void;
+  /**
+   * Owner-only. When absent (non-owner viewing a public session) the
+   * delete button is hidden — the lightbox becomes read-only.
+   */
+  onDelete?: (id: string) => void;
 }) {
   const [idx, setIdx] = useState(initialIndex);
   const photo = photos[idx];
@@ -257,16 +269,18 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
       <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
-      <button
-        onClick={() => {
-          onDelete(photo.id);
-          if (photos.length === 1) onClose();
-          else if (idx >= photos.length - 1) setIdx(0);
-        }}
-        className="absolute top-4 right-16 p-2 rounded-full bg-red-600/80 text-white hover:bg-red-600"
-      >
-        Delete
-      </button>
+      {onDelete && (
+        <button
+          onClick={() => {
+            onDelete(photo.id);
+            if (photos.length === 1) onClose();
+            else if (idx >= photos.length - 1) setIdx(0);
+          }}
+          className="absolute top-4 right-16 p-2 rounded-full bg-red-600/80 text-white hover:bg-red-600"
+        >
+          Delete
+        </button>
+      )}
       {photos.length > 1 && (
         <>
           <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
@@ -288,7 +302,10 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   );
 }
 
-export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true, ownerProfile = null }: Props) {
+export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true, ownerProfile = null, isAnonymous = false }: Props) {
+  // Login return path — anon viewers who tap any signed-in-only surface
+  // (kudos CTA, comment CTA, follow button) come back to this session.
+  const loginHref = `/login?redirect=/journal/${session.id}`;
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Catch photo uploads — track all photos per catch (array)
@@ -486,7 +503,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           photos={allSessionPhotos}
           initialIndex={sessionPhotoLightboxIdx}
           onClose={() => setSessionPhotoLightboxIdx(null)}
-          onDelete={handleSessionPhotoDelete}
+          // Only owners get the delete affordance inside the lightbox.
+          onDelete={isOwner ? handleSessionPhotoDelete : undefined}
         />
       )}
 
@@ -494,11 +512,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 pb-6">
 
-          {/* Breadcrumb + Edit */}
+          {/* Breadcrumb + Edit. Anonymous visitors landed here via a
+              shareable link, so "Back to Journal" (which requires auth)
+              would be a dead end — route them to the session owner's
+              public profile instead, matching Strava-style share flows. */}
           <div className="flex items-center justify-between mb-4">
-            <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-              <ArrowLeft className="h-4 w-4" /> Back to Journal
-            </Link>
+            {isAnonymous && ownerProfile?.username ? (
+              <Link
+                href={`/anglers/${ownerProfile.username}`}
+                className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" /> @{ownerProfile.username}
+              </Link>
+            ) : (
+              <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
+                <ArrowLeft className="h-4 w-4" /> Back to Journal
+              </Link>
+            )}
             <div className="flex items-center gap-3">
               {isOwner && notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               {isOwner && (
@@ -739,11 +769,22 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   )}
                 </div>
 
-                {/* ---- SOCIAL: Kudos & Comments (prominent, not buried) ---- */}
+                {/* ---- SOCIAL: Kudos & Comments (prominent, not buried) ----
+                    Anonymous viewers get a sign-in CTA wired through both
+                    controls; authenticated viewers (owner or not) get the
+                    normal interactive UI. */}
                 <div className="mt-4 pt-4 border-t border-[#21262D]">
                   <div className="flex items-center gap-6">
-                    <KudosButton sessionId={session.id} initialCount={0} />
-                    <CommentsSection sessionId={session.id} initialCount={0} />
+                    <KudosButton
+                      sessionId={session.id}
+                      initialCount={0}
+                      loginHref={isAnonymous ? loginHref : undefined}
+                    />
+                    <CommentsSection
+                      sessionId={session.id}
+                      initialCount={0}
+                      loginHref={isAnonymous ? loginHref : undefined}
+                    />
                   </div>
                 </div>
 
@@ -940,12 +981,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <button onClick={() => setSessionPhotoLightboxIdx(i)} className="w-full h-full">
                         <Image src={photo.url} alt={photo.caption || "Session photo"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
                       </button>
-                      <button
-                        onClick={() => handleSessionPhotoDelete(photo.id)}
-                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-600 transition-all"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
+                      {isOwner && (
+                        <button
+                          onClick={() => handleSessionPhotoDelete(photo.id)}
+                          className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-600 transition-all"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
                       {photo.caption && (
                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
                           <p className="text-white text-xs truncate">{photo.caption}</p>
@@ -955,30 +998,33 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   ))}
                 </div>
 
-                {/* Add Photo Button */}
-                <label className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-4 py-3 cursor-pointer transition-colors">
-                  {uploadingSessionPhoto ? (
-                    <>
-                      <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
-                      <span className="text-sm text-[#A8B2BD]">Uploading…</span>
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="h-4 w-4 text-[#6E7681]" />
-                      <span className="text-sm text-[#6E7681] hover:text-[#E8923A] transition-colors">Add photo</span>
-                    </>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    disabled={uploadingSessionPhoto}
-                    onChange={e => {
-                      const file = e.target.files?.[0];
-                      if (file) handleSessionPhotoUpload(file);
-                    }}
-                  />
-                </label>
+                {/* Add Photo Button — owner-only. Non-owners (including
+                    anonymous visitors) see the gallery read-only. */}
+                {isOwner && (
+                  <label className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-4 py-3 cursor-pointer transition-colors">
+                    {uploadingSessionPhoto ? (
+                      <>
+                        <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                        <span className="text-sm text-[#A8B2BD]">Uploading…</span>
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="h-4 w-4 text-[#6E7681]" />
+                        <span className="text-sm text-[#6E7681] hover:text-[#E8923A] transition-colors">Add photo</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={uploadingSessionPhoto}
+                      onChange={e => {
+                        const file = e.target.files?.[0];
+                        if (file) handleSessionPhotoUpload(file);
+                      }}
+                    />
+                  </label>
+                )}
               </div>
           </div>
 
@@ -1040,7 +1086,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   const isUploading = uploadingCatch === c.id;
                   return (
                     <div key={c.id} className="flex gap-3 px-4 py-3">
-                      {/* Photo / upload */}
+                      {/* Photo / upload. Non-owners (anon or authed) see a
+                          read-only placeholder when no photo is present. */}
                       <div className="flex-shrink-0">
                         {photoUrl ? (
                           <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))} className="block">
@@ -1048,7 +1095,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                               <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                             </div>
                           </button>
-                        ) : (
+                        ) : isOwner ? (
                           <label className="h-12 w-12 rounded-lg bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors">
                             {isUploading ? (
                               <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
@@ -1058,6 +1105,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             <input type="file" accept="image/*" className="hidden" disabled={isUploading}
                               onChange={e => { const file = e.target.files?.[0]; if (file) handleCatchPhotoUpload(c.id, file); }} />
                           </label>
+                        ) : (
+                          <div className="h-12 w-12 rounded-lg bg-[#1F2937] flex items-center justify-center">
+                            <Fish className="h-4 w-4 text-[#6E7681]" />
+                          </div>
                         )}
                       </div>
                       {/* Details */}
@@ -1137,20 +1188,22 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                     <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
                                   </div>
                                 </button>
-                                <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer flex items-center justify-center">
-                                  <Camera className="h-3.5 w-3.5 text-white" />
-                                  <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={e => {
-                                      const file = e.target.files?.[0];
-                                      if (file) handleCatchPhotoUpload(c.id, file);
-                                    }}
-                                  />
-                                </label>
+                                {isOwner && (
+                                  <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer flex items-center justify-center">
+                                    <Camera className="h-3.5 w-3.5 text-white" />
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      className="hidden"
+                                      onChange={e => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleCatchPhotoUpload(c.id, file);
+                                      }}
+                                    />
+                                  </label>
+                                )}
                               </div>
-                            ) : (
+                            ) : isOwner ? (
                               <label className="h-8 w-8 rounded bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors group/upload">
                                 {isUploading ? (
                                   <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
@@ -1168,6 +1221,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                   }}
                                 />
                               </label>
+                            ) : (
+                              <div className="h-8 w-8 rounded bg-[#1F2937] flex items-center justify-center">
+                                <Fish className="h-3.5 w-3.5 text-[#6E7681]" />
+                              </div>
                             )}
                           </td>
                           <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">

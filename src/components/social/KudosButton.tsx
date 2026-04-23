@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Heart } from "lucide-react";
 
@@ -20,6 +21,13 @@ interface KudosButtonProps {
   initialLiked?: boolean;
   compact?: boolean;
   sessionOwnerId?: string;
+  /**
+   * Where to send anonymous viewers who tap the heart. When provided,
+   * the read-only count renders as a Link back to the auth flow (Strava
+   * parity: "to kudos, sign in"). When absent we fall back to the
+   * previous static, non-interactive display.
+   */
+  loginHref?: string;
 }
 
 export function KudosButton({
@@ -28,6 +36,7 @@ export function KudosButton({
   initialLiked = false,
   compact = false,
   sessionOwnerId,
+  loginHref,
 }: KudosButtonProps) {
   const [liked, setLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
@@ -103,15 +112,35 @@ export function KudosButton({
   }
 
   if (!userId) {
-    // Not logged in — show static count only
-    return (
-      <div className="flex items-center gap-1 text-[#6E7681]">
+    // Not logged in. When a loginHref is provided we render the heart as
+    // a link that bounces to /login and returns the visitor to this
+    // session — Strava-style "to kudos, sign in" flow. Otherwise fall
+    // back to the static non-interactive display (used in places like
+    // the profile feed where the whole row already links elsewhere).
+    const inner = (
+      <>
         <Heart className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
         {count > 0 && (
           <span className={`font-['IBM_Plex_Mono'] ${compact ? "text-[10px]" : "text-xs"}`}>
             {count}
           </span>
         )}
+      </>
+    );
+    if (loginHref) {
+      return (
+        <Link
+          href={loginHref}
+          aria-label="Sign in to give kudos"
+          className="flex items-center gap-1 text-[#6E7681] hover:text-[#DA3633] transition-colors"
+        >
+          {inner}
+        </Link>
+      );
+    }
+    return (
+      <div className="flex items-center gap-1 text-[#6E7681]">
+        {inner}
       </div>
     );
   }

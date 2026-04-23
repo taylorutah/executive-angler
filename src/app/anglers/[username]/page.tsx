@@ -17,13 +17,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username: rawUsername } = await params;
   const supabase = await createClient();
 
-  // Peek at the profile so private accounts stay out of search indexes.
-  // We mirror Strava here: public profiles are indexable, private ones emit
-  // `noindex, nofollow` so crawlers skip them entirely. When we ship the
-  // per-profile `searchable` toggle (Enhanced Privacy Mode equivalent) this
-  // same hook will honor it.
+  // Peek at the profile so private + opted-out accounts stay out of search
+  // indexes. We mirror Strava here: public, searchable profiles are
+  // indexable; everyone else emits `noindex, nofollow` so crawlers skip
+  // them entirely.
+  //
+  //   is_private  → sessions are hidden from non-followers; the profile
+  //                 itself is still viewable but there's nothing useful to
+  //                 index, so noindex.
+  //   !searchable → user explicitly opted out of search indexing (Strava's
+  //                 "Show profile in search results" toggle, off).
   const looksLikeUuid = UUID_RE.test(rawUsername);
-  const profileQuery = supabase.from("profiles").select("is_private, username");
+  const profileQuery = supabase
+    .from("profiles")
+    .select("is_private, searchable, username");
   const { data: profile } = looksLikeUuid
     ? await profileQuery.eq("user_id", rawUsername).maybeSingle()
     : await profileQuery
@@ -32,11 +39,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const displayHandle = profile?.username || rawUsername;
   const isPrivate = !!profile?.is_private;
+  // `searchable` column defaults true, so treat a missing row (profile
+  // doesn't exist) as "don't index" — no point indexing a 404.
+  const isSearchable = profile ? profile.searchable !== false : false;
+  const blockIndex = isPrivate || !isSearchable;
 
   return {
     title: `@${displayHandle} — Executive Angler`,
     description: `View @${displayHandle}'s fishing sessions and river reports on Executive Angler.`,
-    robots: isPrivate
+    robots: blockIndex
       ? { index: false, follow: false, googleBot: { index: false, follow: false } }
       : undefined,
   };

@@ -36,6 +36,7 @@ interface Props {
     bio?: string;
     homeLocation?: string;
     isPrivate?: boolean;
+    searchable?: boolean;
   };
   feedDisplay: "collage" | "map";
   tiesOwnFlies?: boolean;
@@ -94,6 +95,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
   const [bio, setBio] = useState(user.bio || "");
   const [homeLocation, setHomeLocation] = useState(user.homeLocation || "");
   const [isPrivate, setIsPrivate] = useState(user.isPrivate ?? false);
+  // Default to true (indexable) so legacy accounts stay in discovery surfaces
+  // until the angler explicitly opts out — matches the DB column default.
+  const [searchable, setSearchable] = useState(user.searchable ?? true);
   const [feedDisplay, setFeedDisplay] = useState<"collage" | "map">(initialFeedDisplay);
   const [tiesOwnFlies, setTiesOwnFlies] = useState<boolean>(initialTiesOwnFlies);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
@@ -276,7 +280,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     const cleanUsername = username.trim().toLowerCase() || null;
     await supabase.auth.updateUser({ data: { display_name: displayName } });
     await supabase.from("profiles").upsert(
-      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, feed_display: feedDisplay, ties_own_flies: tiesOwnFlies },
+      { user_id: user.id, display_name: displayName, username: cleanUsername, bio: bio || null, home_location: homeLocation || null, is_private: isPrivate, searchable, feed_display: feedDisplay, ties_own_flies: tiesOwnFlies },
       { onConflict: "user_id" }
     );
     setSaving(false);
@@ -516,6 +520,48 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                           Map
                         </button>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Search & Discovery — Strava's "Show profile in search results"
+                      toggle. Off means the public profile page emits
+                      `noindex, nofollow` and the angler is hidden from in-app
+                      search/suggested-anglers surfaces. Private profiles are
+                      already hidden from search regardless, so we disable
+                      the toggle (and visually dim it) when isPrivate is on. */}
+                  <div>
+                    <label className={labelCls}>Search &amp; Discovery</label>
+                    <div
+                      className={`flex items-center justify-between rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 ${
+                        isPrivate ? "opacity-60" : ""
+                      }`}
+                    >
+                      <div className="min-w-0 pr-4">
+                        <p className="text-sm font-medium text-[#F0F6FC]">
+                          Show my profile in search results
+                        </p>
+                        <p className="text-xs text-[#6E7681] mt-0.5">
+                          {isPrivate
+                            ? "Private profiles are never indexed — turn off Private to make this toggle active."
+                            : "Allow search engines to index your profile and include you in Executive Angler\u2019s angler search."}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => !isPrivate && setSearchable(!searchable)}
+                        disabled={isPrivate}
+                        aria-pressed={!isPrivate && searchable}
+                        aria-label="Show my profile in search results"
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 disabled:cursor-not-allowed ${
+                          !isPrivate && searchable ? "bg-[#E8923A]" : "bg-[#21262D]"
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                            !isPrivate && searchable ? "translate-x-6" : "translate-x-1"
+                          }`}
+                        />
+                      </button>
                     </div>
                   </div>
 

@@ -33,6 +33,12 @@ interface CommentsSectionProps {
   sessionId: string;
   initialCount: number;
   sessionOwnerId?: string;
+  /**
+   * When provided, anonymous viewers who expand the comment list see a
+   * sign-in CTA instead of the blank input row. Mirrors the Strava
+   * pattern of "read freely, sign in to join the conversation."
+   */
+  loginHref?: string;
 }
 
 function timeAgo(dateStr: string): string {
@@ -59,7 +65,7 @@ export function CommentCount({ count }: { count: number }) {
   );
 }
 
-export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: CommentsSectionProps) {
+export function CommentsSection({ sessionId, initialCount, sessionOwnerId, loginHref }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [expanded, setExpanded] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -256,8 +262,10 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
             );
           })}
 
-          {/* New comment input */}
-          {userId && (
+          {/* New comment input (signed in) / sign-in CTA (anonymous).
+              Non-owners who are signed in still get the input row —
+              anyone with an account can comment. */}
+          {userId ? (
             <div className="flex gap-2 mt-2">
               <input
                 ref={inputRef}
@@ -278,7 +286,15 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId }: Com
                 <Send className="h-4 w-4" />
               </button>
             </div>
-          )}
+          ) : loginHref ? (
+            <Link
+              href={loginHref}
+              className="flex items-center justify-center gap-2 mt-2 rounded-lg border border-dashed border-[#E8923A]/40 bg-[#E8923A]/5 px-3 py-2 text-xs text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              Sign in to join the conversation
+            </Link>
+          ) : null}
         </div>
       )}
     </div>

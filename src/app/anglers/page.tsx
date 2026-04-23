@@ -15,10 +15,14 @@ export default async function AnglersPage() {
   const awardsVisible = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
   const supabase = await createClient();
 
+  // Directory is a discovery surface: hide private profiles *and* anyone
+  // who flipped off "Show my profile in search results" (column default
+  // true, so NULL is treated as opt-in).
   const { data: anglers } = await supabase
     .from("profiles")
     .select("user_id, username, display_name, home_location, bio, avatar_url")
     .or("is_private.is.null,is_private.eq.false")
+    .or("searchable.is.null,searchable.eq.true")
     .order("created_at", { ascending: false })
     .limit(50);
 

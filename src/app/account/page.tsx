@@ -36,7 +36,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, searchable, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
     .eq("user_id", user.id)
     .single();
 
@@ -97,6 +97,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         bio: profile?.bio || undefined,
         homeLocation: profile?.home_location || undefined,
         isPrivate: profile?.is_private ?? false,
+        // `searchable` defaults to true in the DB; treat a missing value
+        // as opt-in for legacy rows that predate the column.
+        searchable: (profile as { searchable?: boolean })?.searchable !== false,
       }}
       feedDisplay={(profile?.feed_display as "collage" | "map") || "collage"}
       tiesOwnFlies={(profile as { ties_own_flies?: boolean })?.ties_own_flies !== false}

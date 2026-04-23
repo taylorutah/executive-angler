@@ -65,10 +65,13 @@ function NewMessageModal({
     const timer = setTimeout(async () => {
       setSearching(true);
       const supabase = createClient();
+      // Discovery surface — respect the "show profile in search" opt-out
+      // (treat NULL as opt-in, matching the column default).
       const { data } = await supabase
         .from("profiles")
         .select("user_id, display_name, username, avatar_url")
         .or(`display_name.ilike.%${query}%,username.ilike.%${query}%`)
+        .or("searchable.is.null,searchable.eq.true")
         .neq("user_id", currentUserId)
         .limit(10);
       setResults(data || []);
