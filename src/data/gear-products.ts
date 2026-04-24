@@ -19,7 +19,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Sage's flagship freshwater fast-action rod, built on the company's Revolution 8 (R8) graphite platform. The R8 Core is Sage's high-performance trout rod for anglers who want maximum feel, accuracy, and line-speed across a broad range of dry-fly, nymph, and streamer presentations. Built and assembled on Bainbridge Island, Washington.",
-    heroImageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/sage-r8-core.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Dry Fly", "Nymphing", "Streamer"],
@@ -39,7 +39,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Sage's high-density saltwater rod engineered for tough saltwater conditions and larger species. The Salt HD is built to handle wind, heavy flies, and big fish — a go-to for flats, tarpon, permit, and offshore work. Built and assembled on Bainbridge Island, Washington.",
-    heroImageUrl: "https://images.unsplash.com/photo-1508034993544-f376fe2bf47e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/sage-salt-hd.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Saltwater", "Flats", "Tarpon", "Permit"],
@@ -56,7 +56,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Sage's extra-fast-action rod built for anglers who need maximum line speed — long casts, big water, and heavy wind. The Igniter rewards a fast casting stroke and is widely used by competitive casters and anglers chasing distance.",
-    heroImageUrl: "https://images.unsplash.com/photo-1503756234508-e32369269deb?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/sage-igniter.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Big Water", "Wind", "Distance Casting"],
@@ -73,7 +73,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Sage's approachable entry-to-mid-tier fly rod, designed to deliver the Sage feel at a more accessible price. A popular choice for new anglers stepping up from beginner outfits and for trout-focused anglers who want a dependable all-purpose rod.",
-    heroImageUrl: "https://images.unsplash.com/photo-1505731132164-7f69ab2bca43?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/sage-foundation.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around", "Starter"],
@@ -92,7 +92,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "The Helios is Orvis's flagship performance fly rod platform and one of the most recognized premium rod families in American fly fishing. Helios rods are built to deliver high accuracy and line-speed across freshwater and saltwater applications, and are a common choice for destination trips and guides.",
-    heroImageUrl: "https://images.unsplash.com/photo-1559127452-d1a3e0a94fc1?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-helios.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "Big Game"],
@@ -109,7 +109,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's mid-tier all-purpose fly rod, built as a versatile, fast-action rod for anglers who want high performance without stepping up to the flagship Helios. The Recon is widely used as a trout-to-salt crossover rod and a durable travel companion.",
-    heroImageUrl: "https://images.unsplash.com/photo-1542044801-30d3e45ae49a?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-recon.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around", "Travel"],
@@ -126,7 +126,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "The Clearwater is Orvis's long-running entry-level fly rod, offered as a rod and as a full outfit (rod, reel, line). One of the most widely carried beginner-to-intermediate rods in American fly shops.",
-    heroImageUrl: "https://images.unsplash.com/photo-1465153690352-10c1b29577f8?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-clearwater.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Starter", "Trout", "Outfit"],
@@ -143,7 +143,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Orvis's flagship sealed-drag fly reel line. The Mirage is built around a sealed carbon drag system and is commonly used from trout sizes up through saltwater, with a finish and machining quality that rank it among Orvis's highest-tier reels.",
-    heroImageUrl: "https://images.unsplash.com/photo-1453872302180-16abfbe5e10e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-mirage.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "Travel"],
@@ -160,7 +160,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Orvis's technical flagship wader. The PRO line is built with a reinforced multi-layer fabric construction and feature set aimed at guides and anglers who spend significant time on the water.",
-    heroImageUrl: "https://images.unsplash.com/photo-1527767654427-f7c37ae6ed22?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-pro-waders.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Guide-Grade", "All-Season"],
@@ -177,7 +177,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Orvis's long-standing mid-tier wader, built with sonic-welded seams for a lightweight, breathable stockingfoot wader suitable for most trout and freshwater applications.",
-    heroImageUrl: "https://images.unsplash.com/photo-1445112098124-3e76dd67d6b7?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/orvis-silver-sonic.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Travel"],
@@ -196,7 +196,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's high-performance premium trout rod, known for the smooth, progressive feel Winston is famous for — updated with a faster, more modern action than the original Air. Handcrafted in Twin Bridges, Montana.",
-    heroImageUrl: "https://images.unsplash.com/photo-1500994340878-40ce894df491?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/winston-air-2.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Dry Fly", "Presentation"],
@@ -213,7 +213,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's dedicated presentation trout rod — softer, slower, and tuned specifically for delicate dry-fly work on small and mid-sized streams. Handcrafted in Twin Bridges, Montana.",
-    heroImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/winston-pure.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Dry Fly", "Small Streams", "Presentation"],
@@ -230,7 +230,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's more accessible all-around trout rod — a faster, more modern action at a lower price than the flagship Air 2. Handcrafted in Twin Bridges, Montana.",
-    heroImageUrl: "https://images.unsplash.com/photo-1503756234508-e32369269deb?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/winston-nexus.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around"],
@@ -249,7 +249,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's flagship all-around freshwater rod platform. The Centric is a modern, faster-than-medium action rod designed for trout fishing across the full range of presentations, from small dries to heavy streamers. Handmade in Montrose, Colorado.",
-    heroImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/scott-centric.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around", "Dry Fly", "Streamer"],
@@ -266,7 +266,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's saltwater flagship — a fast, powerful rod platform built to handle wind, heavy flies, and strong saltwater species from bonefish up through tarpon and offshore work. Handmade in Montrose, Colorado.",
-    heroImageUrl: "https://images.unsplash.com/photo-1508034993544-f376fe2bf47e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/scott-sector.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Saltwater", "Tarpon", "Permit", "Bonefish"],
@@ -283,7 +283,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's modern trout rod platform, positioned as a medium-fast action rod that balances accuracy at close range with reserve power for longer casts. Handmade in Montrose, Colorado.",
-    heroImageUrl: "https://images.unsplash.com/photo-1505731132164-7f69ab2bca43?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/scott-session.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Dry Fly", "Presentation"],
@@ -300,7 +300,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "One of Scott's longest-running rod families — a medium-action trout rod favored by small-stream and spring-creek anglers who prioritize delicate presentation. Handmade in Montrose, Colorado.",
-    heroImageUrl: "https://images.unsplash.com/photo-1542044801-30d3e45ae49a?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/scott-g-series.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Small Streams", "Dry Fly", "Presentation"],
@@ -319,7 +319,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "G. Loomis's premium collaboration rod platform, a high-performance fly rod built on the company's proprietary Spiral X core technology. The Asquith is a top-tier freshwater-to-saltwater rod aimed at anglers who want maximum line speed and power.",
-    heroImageUrl: "https://images.unsplash.com/photo-1490682143684-14369e18dce8?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/g-loomis-asquith.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "Big Water"],
@@ -336,7 +336,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "The NRX+ is G. Loomis's core premium fly rod platform — fast-action, high-modulus rods built for performance across trout, Spey, and saltwater applications. A long-running flagship for the brand.",
-    heroImageUrl: "https://images.unsplash.com/photo-1505471768190-275e2ad7b3f9?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/g-loomis-nrx-plus.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "Spey"],
@@ -353,7 +353,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "G. Loomis's mid-tier workhorse rod family — high-performance graphite rods at a lower price than the NRX+, widely used by guides and anglers who want a dependable daily rod.",
-    heroImageUrl: "https://images.unsplash.com/photo-1465153690352-10c1b29577f8?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/g-loomis-imx-pro.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around", "Guide-Grade"],
@@ -372,7 +372,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's dedicated Euro-nymphing and competition-style rod platform, designed with a long, soft tip and a balanced action well suited to tight-line nymph presentations. One of the most accessible price points for a purpose-built Euro rod.",
-    heroImageUrl: "https://images.unsplash.com/photo-1513039464477-4b28bfe9bb1d?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/echo-shadow-x.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Euro Nymphing", "Trout", "Competition"],
@@ -389,7 +389,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's popular budget-friendly all-around fly rod. A common recommendation as a second rod, travel rod, or starter rod for anglers who want a well-built entry-level option without stepping up to premium pricing.",
-    heroImageUrl: "https://images.unsplash.com/photo-1500994340878-40ce894df491?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/echo-carbon-xl.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Starter", "Travel"],
@@ -406,7 +406,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's mid-tier fast-action rod platform. The Boost family is a common guide-grade rod at a mid-market price, available in freshwater, saltwater, and Spey configurations.",
-    heroImageUrl: "https://images.unsplash.com/photo-1503756234508-e32369269deb?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/echo-boost.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "Guide-Grade"],
@@ -425,7 +425,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Redington's long-running entry-level fly rod, offered as a rod and as a complete outfit. Widely carried as a starter package by fly shops and a common first fly rod for new anglers.",
-    heroImageUrl: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/redington-path.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Starter", "Trout", "Outfit"],
@@ -442,7 +442,7 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Redington's switch-rod platform, built to bridge between single-hand and two-hand casting. Commonly used for swinging streamers and light Spey work on mid-sized rivers.",
-    heroImageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/redington-dually.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Switch", "Spey", "Streamer", "Steelhead"],
@@ -459,7 +459,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Redington's long-running mid-tier wader, built with sonic-welded seams for a lightweight, breathable stockingfoot wader at an accessible price.",
-    heroImageUrl: "https://images.unsplash.com/photo-1527767654427-f7c37ae6ed22?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/redington-sonic-pro.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Travel"],
@@ -476,7 +476,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Redington's machined aluminum large-arbor fly reel line — a mid-tier reel commonly spec'd on outfit packages and a popular trout-to-saltwater crossover reel at its price point.",
-    heroImageUrl: "https://images.unsplash.com/photo-1453872302180-16abfbe5e10e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/redington-rise.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "All-Around"],
@@ -495,7 +495,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Simms's waterproof-zipper flagship wader. The G4Z pairs Gore-Tex Pro fabric with a fully waterproof front zip for fast on/off. Built in Bozeman, Montana.",
-    heroImageUrl: "https://images.unsplash.com/photo-1527767654427-f7c37ae6ed22?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/simms-g4z.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Guide-Grade", "All-Season"],
@@ -512,7 +512,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Simms's long-running guide-grade stockingfoot wader. The G3 Guide is one of the most widely used premium waders in American fly fishing, built in Bozeman, Montana with a Gore-Tex fabric system.",
-    heroImageUrl: "https://images.unsplash.com/photo-1445112098124-3e76dd67d6b7?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/simms-g3-guide.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Guide-Grade", "All-Season"],
@@ -529,7 +529,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Simms's accessible entry-to-mid-tier stockingfoot wader. The Freestone is a common first Simms wader and a widely carried outfit-tier option at fly shops.",
-    heroImageUrl: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/simms-freestone-waders.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Starter"],
@@ -548,7 +548,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's long-running flagship large-arbor reel platform. The Litespeed has been one of the most recognizable American-made fly reels for decades. Machined by Waterworks-Lamson in Boise, Idaho.",
-    heroImageUrl: "https://images.unsplash.com/photo-1453872302180-16abfbe5e10e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/lamson-litespeed-m.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater", "All-Around"],
@@ -565,7 +565,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's mid-tier machined reel, built with a sealed conical drag and a large-arbor design. A popular trout-to-light-saltwater reel at a mid-market price.",
-    heroImageUrl: "https://images.unsplash.com/photo-1513039464477-4b28bfe9bb1d?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/lamson-guru-s.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "Saltwater"],
@@ -582,7 +582,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's accessible die-cast reel. The Liquid is one of the most widely recommended budget-tier fly reels in American fly shops, offering Lamson's design language and sealed drag at a starter price.",
-    heroImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/lamson-liquid.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Starter", "Trout", "Outfit"],
@@ -599,7 +599,7 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's oversized-arbor reel, built with a larger spool diameter for faster line pickup — a reel commonly chosen for streamer fishing, steelhead work, and saltwater applications.",
-    heroImageUrl: "https://images.unsplash.com/photo-1508034993544-f376fe2bf47e?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/lamson-speedster-s.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Streamer", "Steelhead", "Saltwater"],
@@ -618,7 +618,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's core stockingfoot wader line, built with recycled-fabric construction and a feature set designed around Patagonia's durability and repairability commitments.",
-    heroImageUrl: "https://images.unsplash.com/photo-1445112098124-3e76dd67d6b7?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/patagonia-swiftcurrent-waders.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Trout", "All-Around"],
@@ -635,7 +635,7 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's premium expedition-tier wader — built for tough, extended use and colder conditions, with a reinforced fabric package and guide-grade feature set.",
-    heroImageUrl: "https://images.unsplash.com/photo-1527767654427-f7c37ae6ed22?w=1600&q=80",
+    heroImageUrl: "/images/gear/products/patagonia-swiftcurrent-expedition.jpg",
     galleryUrls: [],
     specs: {},
     useCases: ["Guide-Grade", "Cold Weather", "Expedition"],

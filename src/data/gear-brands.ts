@@ -9,7 +9,7 @@ export const gearBrands: GearBrand[] = [
     description:
       "Sage is an American fly rod maker founded in 1980 by Don Green on Bainbridge Island, Washington. For more than four decades Sage has designed and built high-performance fly rods in the Pacific Northwest, with a reputation for fast-action graphite blanks favored by trout, saltwater, and Spey anglers. Every Sage rod is designed and assembled in Bainbridge Island.\n\nThe brand is part of Far Bank Enterprises alongside Rio Products and Redington. Sage rods are sold through a global network of authorized fly shops and guides, and the company's lineup spans freshwater single-hand rods, saltwater rods, and two-hand Spey and switch rods.",
     logoUrl: undefined,
-    heroImageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/sage-hero.jpg",
     websiteUrl: "https://www.sageflyfish.com",
     country: "United States",
     foundedYear: 1980,
@@ -28,7 +28,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "America's oldest fly fishing outfitter.",
     description:
       "Founded in 1856 in Manchester, Vermont, Orvis is the oldest continuously operating mail-order retailer in the United States and one of the most recognizable names in fly fishing. The company sells rods, reels, waders, apparel, and travel across an extensive retail and ecommerce network, and operates the Orvis Fly Fishing Schools at locations nationwide.\n\nOrvis is privately held and family owned. The brand's conservation arm supports wild-trout, cold-water, and coastal habitat initiatives, and a portion of pre-tax profits is directed to conservation and community programs each year.",
-    heroImageUrl: "https://images.unsplash.com/photo-1559127452-d1a3e0a94fc1?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/orvis-hero.jpg",
     websiteUrl: "https://www.orvis.com",
     country: "United States",
     foundedYear: 1856,
@@ -47,7 +47,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Handcrafted fly rods from Twin Bridges, Montana.",
     description:
       "R.L. Winston Rod Company, commonly known simply as Winston, was founded in 1929 in San Francisco and relocated to Twin Bridges, Montana in 1976. Winston rods are built by hand in Twin Bridges, with a long-standing reputation for smooth, progressive actions preferred by dry-fly and presentation-focused anglers.\n\nWinston is privately held and continues to source boron and graphite blanks built on-site in Montana. The brand's lineup spans freshwater trout rods, saltwater rods, and Spey rods, with a small-batch, craftsman-oriented production approach.",
-    heroImageUrl: "https://images.unsplash.com/photo-1500994340878-40ce894df491?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/winston-hero.jpg",
     websiteUrl: "https://www.winstonrods.com",
     country: "United States",
     foundedYear: 1929,
@@ -66,7 +66,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Handmade fly rods from Montrose, Colorado.",
     description:
       "Scott Fly Rod Company was founded by Harry Wilson in 1974 in San Francisco and has been based in Montrose, Colorado since 1995. Every Scott fly rod is designed, built, and assembled in Montrose, with the company maintaining vertical integration from blank rolling to final wrap.\n\nScott is privately owned and known for a lineup that spans freshwater single-hand, saltwater, and Spey rods. The brand is widely carried in destination fly shops across the American West and has long been a fixture on western trout streams.",
-    heroImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/scott-hero.jpg",
     websiteUrl: "https://www.scottflyrod.com",
     country: "United States",
     foundedYear: 1974,
@@ -85,7 +85,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "High-performance rods from Woodland, Washington.",
     description:
       "G. Loomis was founded by Gary Loomis in 1982 in Woodland, Washington, where all G. Loomis rods are still designed and built today. The company originally rose to prominence for its steelhead and Pacific Northwest rods and has since expanded to cover the full range of fly, bass, and saltwater rod applications.\n\nG. Loomis is a subsidiary of Shimano. The fly rod lineup covers freshwater trout, saltwater, and two-hand Spey rods, built alongside the broader Loomis conventional and spinning rod families in the Woodland facility.",
-    heroImageUrl: "https://images.unsplash.com/photo-1490682143684-14369e18dce8?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/g-loomis-hero.jpg",
     websiteUrl: "https://www.gloomis.com",
     country: "United States",
     foundedYear: 1982,
@@ -104,7 +104,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Accessible, high-value fly rods designed by Tim Rajeff.",
     description:
       "Echo Fly Fishing is a fly rod and gear brand founded by casting legend Tim Rajeff and based in Vancouver, Washington. Echo's lineup focuses on approachable pricing across a wide range of trout, saltwater, Spey, switch, and specialty rods, and the brand has built a strong following among guides and anglers looking for high-performance rods at mid-market price points.\n\nEcho rods are designed in the United States and are widely carried by destination fly shops and outfitters. The brand's lineup includes kids' and beginner setups alongside premium-tier freshwater and saltwater offerings.",
-    heroImageUrl: "https://images.unsplash.com/photo-1513039464477-4b28bfe9bb1d?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/echo-hero.jpg",
     websiteUrl: "https://echoflyfishing.com",
     country: "United States",
     foundedYear: 2006,
@@ -123,7 +123,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Approachable fly fishing gear for anglers of every level.",
     description:
       "Redington is a fly fishing brand founded in 1992 and now part of Far Bank Enterprises, alongside Sage and Rio Products. Redington offers a broad lineup of fly rods, reels, waders, and apparel aimed at the accessible-to-mid tier of the market, and is widely carried by fly shops across the country.\n\nThe brand is headquartered on Bainbridge Island, Washington. Redington's outfit-focused offerings — rods, reels, waders, and apparel — make it one of the most common starter and intermediate brands in American fly fishing.",
-    heroImageUrl: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/redington-hero.jpg",
     websiteUrl: "https://www.redington.com",
     country: "United States",
     foundedYear: 1992,
@@ -142,7 +142,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Technical waders and fishing apparel from Bozeman, Montana.",
     description:
       "Simms Fishing Products is an American manufacturer of waders, wading boots, and fishing apparel founded in 1980 and headquartered in Bozeman, Montana. Simms is one of the few wader brands still producing premium Gore-Tex waders in the United States, with its flagship waders built in the Bozeman factory.\n\nThe company was an early licensee of W.L. Gore for breathable wader fabrics and remains closely associated with Gore-Tex Pro products. Simms sells through a global network of fly shops and outfitters and is consistently one of the most widely used wader brands on western trout water.",
-    heroImageUrl: "https://images.unsplash.com/photo-1527767654427-f7c37ae6ed22?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/simms-hero.jpg",
     websiteUrl: "https://www.simmsfishing.com",
     country: "United States",
     foundedYear: 1980,
@@ -161,7 +161,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Machined fly reels from Boise, Idaho.",
     description:
       "Lamson is a fly reel brand owned by Waterworks-Lamson and based in Boise, Idaho. The company is known for machined aluminum fly reels with conical drag systems and design-forward aesthetics, with a lineup that spans budget-friendly entry reels through premium saltwater-ready options.\n\nWaterworks-Lamson has been building reels under the Lamson and Waterworks names since the 1990s and is a recognized American reel manufacturer. The reel lineup covers freshwater trout sizes up through saltwater and Spey-scale reels.",
-    heroImageUrl: "https://images.unsplash.com/photo-1453872302180-16abfbe5e10e?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/lamson-hero.jpg",
     websiteUrl: "https://www.lamson.com",
     country: "United States",
     foundedYear: 1991,
@@ -180,7 +180,7 @@ export const gearBrands: GearBrand[] = [
     tagline: "Fishing waders and apparel from an environmentally focused outdoor brand.",
     description:
       "Patagonia, the Ventura, California-based outdoor company founded by Yvon Chouinard in 1973, has made fly fishing products for more than three decades. The fly fishing line includes stockingfoot waders, wading boots, vests, and technical apparel, with a strong emphasis on environmental responsibility and long product life.\n\nPatagonia is privately held and in 2022 transferred ownership to a trust and nonprofit structure that directs company profits to climate and conservation efforts. The fly fishing line continues to emphasize durable, repairable, and responsibly sourced waders and apparel.",
-    heroImageUrl: "https://images.unsplash.com/photo-1445112098124-3e76dd67d6b7?w=1920&q=80",
+    heroImageUrl: "/images/gear/brands/patagonia-hero.jpg",
     websiteUrl: "https://www.patagonia.com/fly-fishing/",
     country: "United States",
     foundedYear: 1973,
