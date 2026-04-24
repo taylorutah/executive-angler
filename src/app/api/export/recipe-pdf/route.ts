@@ -1,12 +1,10 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { jsPDF } from 'jspdf';
-import { checkPremium } from '@/lib/admin';
 
 /**
  * GET /api/export/recipe-pdf?flyId=<canonical_fly_id>
  * Generates a one-page printable recipe card PDF for a canonical fly pattern.
- * Premium-gated.
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -21,12 +19,6 @@ export async function GET(request: Request) {
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Premium check
-  const isPremium = await checkPremium(supabase, user.id, user.email || '');
-  if (!isPremium) {
-    return NextResponse.json({ error: 'Premium subscription required' }, { status: 403 });
   }
 
   try {

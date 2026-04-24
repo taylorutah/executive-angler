@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import type { MaterialCategory } from '@/types/materials';
-import { checkPremium } from '@/lib/admin';
 
 const VALID_CATEGORIES: MaterialCategory[] = [
   'hook', 'bead', 'thread', 'dubbing', 'feather', 'flash',
@@ -16,15 +15,6 @@ export async function POST(request: Request) {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-  }
-
-  // Pro-only: submitting new materials is a premium feature
-  const premium = await checkPremium(supabase, user.id, user.email);
-  if (!premium) {
-    return NextResponse.json(
-      { error: 'Submitting new materials is a Pro feature. Upgrade to submit to the community catalog.' },
-      { status: 403 },
-    );
   }
 
   let body: {

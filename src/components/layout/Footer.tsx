@@ -24,6 +24,8 @@ const footerColumns = {
     { label: "Search", href: "/search" },
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
+    { label: "Refund Policy", href: "/refund-policy" },
+    { label: "For Guides", href: "/for-guides" },
   ],
 };
 

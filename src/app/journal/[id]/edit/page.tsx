@@ -100,7 +100,6 @@ export default function EditSessionPage() {
   // Simple mode fish count (total_fish direct entry, for drift sessions)
   const [simpleFishCount, setSimpleFishCount] = useState<string>("");
   const [privacy, setPrivacy] = useState<SessionPrivacy>("public");
-  const [isPremium, setIsPremium] = useState(false);
 
   async function loadSpots() {
     const res = await fetch("/api/fishing/spots");
@@ -193,13 +192,12 @@ export default function EditSessionPage() {
 
   useEffect(() => {
     async function load() {
-      const [sessionRes, riversRes, locsRes, spotsRes, fliesRes, premiumRes] = await Promise.all([
+      const [sessionRes, riversRes, locsRes, spotsRes, fliesRes] = await Promise.all([
         fetch(`/api/fishing/session?id=${id}`, { cache: "no-store" }),
         fetch("/api/fishing/session?autocomplete=rivers"),
         fetch("/api/fishing/session?autocomplete=locations"),
         fetch("/api/fishing/spots"),
         fetch("/api/fishing/flies?include_catalog=true"),
-        fetch("/api/user/premium-status"),
       ]);
 
       if (sessionRes.ok) {
@@ -270,10 +268,6 @@ export default function EditSessionPage() {
         else if (session.longitude != null) setLongitude(session.longitude);
       }
 
-      if (premiumRes.ok) {
-        const p = await premiumRes.json();
-        if (p?.isPremium) setIsPremium(true);
-      }
       if (riversRes.ok) setRivers(await riversRes.json());
       if (locsRes.ok) setLocations(await locsRes.json());
       if (spotsRes.ok) setSpots(await spotsRes.json());
@@ -848,7 +842,7 @@ export default function EditSessionPage() {
 
           {/* Privacy */}
           <div className={section}>
-            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} isPremium={isPremium} />
+            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} />
           </div>
 
           {/* Private Memo */}

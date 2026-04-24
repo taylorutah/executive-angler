@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { checkPremium } from '@/lib/admin';
 
 // GET /api/materials — list materials with optional category/brand filters
 export async function GET(request: Request) {
@@ -39,15 +38,6 @@ export async function POST(request: Request) {
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Pro-only: submitting new materials is a premium feature
-  const premium = await checkPremium(supabase, user.id, user.email);
-  if (!premium) {
-    return NextResponse.json(
-      { error: 'Submitting new materials is a Pro feature. Upgrade to submit to the community catalog.' },
-      { status: 403 },
-    );
   }
 
   const body = await request.json();

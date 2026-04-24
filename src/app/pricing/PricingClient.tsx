@@ -3,69 +3,56 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  Check, X, Sparkles, BarChart3, Clock, Leaf, Camera,
-  Wrench, Lock, FileText, Brain, Waves, Bug, Cloud,
-  CalendarRange, Crown, Zap
+  Check, Sparkles, Crown,
+  BarChart3, Trophy, Award, Waves, Target, CalendarRange, Flame, Wrench, Gift,
 } from "lucide-react";
 
 interface Props {
   isLoggedIn: boolean;
   isPremium: boolean;
-  isFounder?: boolean;
   subscriptionSource?: "apple" | "google" | "stripe" | "promo" | null;
   subscriptionExpiresAt?: string | null;
-  foundingSeats?: { total: number; sold: number; remaining: number };
 }
 
-const FOUNDING_PRICE = 150;
-
-const MONTHLY_PRICE = 4.99;
-const ANNUAL_PRICE = 29.99;
+const MONTHLY_PRICE = 2.99;
+const ANNUAL_PRICE = 19.99;
 const ANNUAL_MONTHLY = (ANNUAL_PRICE / 12).toFixed(2);
 const SAVINGS_PCT = Math.round(((MONTHLY_PRICE * 12 - ANNUAL_PRICE) / (MONTHLY_PRICE * 12)) * 100);
 
-const FEATURES = [
-  { icon: Waves, label: "Live river conditions", desc: "USGS flow, gage height, water temp — updated every 15 min", free: false, pro: true },
-  { icon: Clock, label: "Full session history", desc: "Free: 90 days. Pro: unlimited all-time access", free: "90 days", pro: "Unlimited" },
-  { icon: BarChart3, label: "Advanced analytics", desc: "Catch trends, fly effectiveness, time-of-day, size trends", free: false, pro: true },
-  { icon: Brain, label: "AI insights", desc: "Personalized recommendations from your fishing data", free: false, pro: true },
-  { icon: Bug, label: "Hatch reports", desc: "What's hatching now across your rivers", free: false, pro: true },
-  { icon: Cloud, label: "Conditions match", desc: "Know when your ideal conditions are happening", free: false, pro: true },
-  { icon: CalendarRange, label: "Year vs year", desc: "Compare seasons side by side", free: false, pro: true },
-  { icon: Leaf, label: "Fly patterns", desc: "Free: 10 patterns. Pro: unlimited", free: "10", pro: "Unlimited" },
-  { icon: Camera, label: "Multi-photo catches", desc: "Add multiple photos to each catch", free: "1 photo", pro: "Unlimited" },
-  { icon: Wrench, label: "Gear tracking", desc: "Track rods, reels, lines, and leader builds", free: false, pro: true },
-  { icon: Lock, label: "Private sessions", desc: "Keep sessions visible only to you", free: false, pro: true },
-  { icon: FileText, label: "Data export", desc: "CSV & PDF trip reports", free: false, pro: true },
-  { icon: Wrench, label: "Fly Tying Workbench", desc: "Structured recipe builder, 500+ materials, PDF export", free: false, pro: true },
+const PRO_FEATURES = [
+  { icon: BarChart3, label: "Insights Dashboard", desc: "Your best flies, times, weather, rivers, and species — computed from your sessions." },
+  { icon: Award, label: "Awards & Badges", desc: "Per-river progression: Regular → Veteran → Legend → Centurion → Master Angler." },
+  { icon: Trophy, label: "River Intel Leaderboards", desc: "River Champion, Biggest Fish Ever, Hot Hand, top flies, best sections." },
+  { icon: Waves, label: "Best Window Calculator", desc: "Your catch history overlaid on live USGS flow — know when to fish." },
+  { icon: Target, label: "Trophy Wall+", desc: "Biggest per species, per river, top 5 sessions, most-species day." },
+  { icon: CalendarRange, label: "Year-over-Year", desc: "\"Last April: 12 fish. This April: 18.\" Seasonal overlays." },
+  { icon: Flame, label: "Streak Stats", desc: "Current and longest fishing streaks. Habit-forming." },
+  { icon: Wrench, label: "Gear Stats", desc: "\"Your Sage has caught 3x more than your Winston.\"" },
+  { icon: Crown, label: "Pro Badge", desc: "A small, tasteful marker on your profile." },
+  { icon: Sparkles, label: "Early Access", desc: "New features for Pro first." },
 ];
 
 const FREE_FEATURES = [
-  "Log sessions & catches",
-  "Photo uploads",
-  "Explore rivers & destinations",
-  "Fly library access",
-  "Community feed",
-  "Follow anglers",
-  "Achievements & badges",
-  "Basic stats",
+  "Log unlimited sessions and catches",
+  "Unlimited fly box + photos per catch",
+  "Full Fly Tying Workbench + \"What Can I Tie?\" matcher",
+  "500+ materials database + community submissions",
+  "138 rivers with live USGS flow + hatch charts",
+  "Full directory: lodges, guides, fly shops, destinations, species, articles",
+  "Private sessions, CSV import/export, PDF trip reports",
+  "Community feed, follows, kudos, comments, DMs",
+  "Basic stats, calendar view, trophy wall highlight",
 ];
 
 export default function PricingClient({
   isLoggedIn,
   isPremium,
-  isFounder = false,
   subscriptionSource = null,
   subscriptionExpiresAt = null,
-  foundingSeats = { total: 50, sold: 0, remaining: 50 },
 }: Props) {
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
   const [isLoading, setIsLoading] = useState(false);
-  const [foundingLoading, setFoundingLoading] = useState(false);
-  const soldOut = foundingSeats.remaining <= 0;
 
-  // Promo users are "premium" but have no Stripe customer and a hard expiry
-  // date. They need the upgrade CTA, not the "Manage Subscription" button.
   const isPromoPremium = isPremium && subscriptionSource === "promo";
   const promoExpiryLabel = subscriptionExpiresAt
     ? new Date(subscriptionExpiresAt).toLocaleDateString(undefined, {
@@ -74,32 +61,6 @@ export default function PricingClient({
         day: "numeric",
       })
     : null;
-
-  const handleFoundingCheckout = async () => {
-    if (!isLoggedIn) {
-      window.location.href = "/signup?redirect=/pricing";
-      return;
-    }
-    setFoundingLoading(true);
-    try {
-      const res = await fetch("/api/checkout/founding", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else if (data.error === "sold_out") {
-        alert(data.message || "All 50 founding seats have been claimed.");
-      } else if (data.error === "already_founder") {
-        alert(data.message || "You're already a founding member.");
-      } else {
-        alert(`Checkout error: ${data.error || "Unknown error"}`);
-      }
-    } catch (err) {
-      console.error("Founding checkout error:", err);
-      alert("Network error. Please check your connection and try again.");
-    } finally {
-      setFoundingLoading(false);
-    }
-  };
 
   const handleCheckout = async () => {
     if (!isLoggedIn) {
@@ -154,103 +115,23 @@ export default function PricingClient({
             <span className="text-xs font-semibold text-[#E8923A] tracking-wide">EXECUTIVE ANGLER PRO</span>
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl text-[#F0F6FC] mb-4">
-            Fish smarter, not harder
+            See the patterns. $2.99.
           </h1>
           <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto">
-            Unlock analytics, insights, and tools that turn your fishing data into an unfair advantage.
+            Every session you log makes your insights sharper. Pro turns your fishing data
+            into the kind of awareness that changes how you fish.
           </p>
         </div>
       </div>
 
-      {/* Pricing Cards */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-
-        {/* Founding 50 band — limited scarcity CTA. Hidden if the user is
-            already a founder (they'd see it as a confusing duplicate). */}
-        {!isFounder && (
-          <div className="mb-10 rounded-2xl border border-[#E8923A]/40 bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Crown className="h-4 w-4 text-[#E8923A]" />
-                  <span className="text-[10px] font-bold tracking-widest text-[#E8923A] uppercase">
-                    Founding 50 · Limited
-                  </span>
-                </div>
-                <h3 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC] mb-1.5">
-                  Lifetime Pro for ${FOUNDING_PRICE}
-                </h3>
-                <p className="text-sm text-[#A8B2BD]">
-                  One payment. Every Pro feature, forever. Only 50 spots — then it&apos;s gone.
-                </p>
-
-                {/* Scarcity counter */}
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="flex-1 h-1.5 rounded-full bg-[#21262D] overflow-hidden max-w-xs">
-                    <div
-                      className="h-full bg-[#E8923A] transition-all"
-                      style={{
-                        width: `${Math.min(100, (foundingSeats.sold / foundingSeats.total) * 100)}%`,
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs font-mono text-[#A8B2BD] whitespace-nowrap">
-                    {soldOut ? (
-                      <span className="text-red-400 font-semibold">Sold out</span>
-                    ) : (
-                      <>
-                        <span className="text-[#F0F6FC] font-semibold">{foundingSeats.remaining}</span>
-                        <span className="text-[#6E7681]"> of {foundingSeats.total} left</span>
-                      </>
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex-shrink-0">
-                {soldOut ? (
-                  <button
-                    disabled
-                    className="px-6 py-3 rounded-lg bg-[#21262D] text-[#6E7681] font-bold cursor-not-allowed"
-                  >
-                    Sold Out
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleFoundingCheckout}
-                    disabled={foundingLoading}
-                    className="px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors disabled:opacity-50 whitespace-nowrap"
-                  >
-                    {foundingLoading ? "Loading…" : isLoggedIn ? `Claim for $${FOUNDING_PRICE}` : `Sign Up & Claim`}
-                  </button>
-                )}
-                <p className="text-[10px] text-[#6E7681] text-center mt-2">
-                  One-time payment · No renewals
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Founder badge — shown to existing founders */}
-        {isFounder && (
-          <div className="mb-10 rounded-2xl border border-[#E8923A]/50 bg-gradient-to-br from-[#E8923A]/15 via-[#E8923A]/5 to-transparent p-6 text-center">
-            <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-3" />
-            <h3 className="font-serif text-2xl text-[#F0F6FC] mb-1">You&apos;re a Founding Member</h3>
-            <p className="text-sm text-[#A8B2BD]">
-              You have lifetime Pro access. Thank you for being in the first 50.
-            </p>
-          </div>
-        )}
-
         {isPremium && !isPromoPremium ? (
-          /* Already premium (real subscription — Stripe/Apple/Google/founder) */
           <div className="max-w-md mx-auto text-center mb-16">
             <div className="p-8 bg-[#161B22] rounded-2xl border border-[#E8923A]/30">
               <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-4" />
               <h2 className="font-serif text-2xl text-[#F0F6FC] mb-2">You&apos;re a Pro</h2>
               <p className="text-sm text-[#A8B2BD] mb-6">
-                You have full access to all Executive Angler features.
+                You have full access to every Pro feature.
               </p>
               {subscriptionSource === "stripe" && (
                 <button
@@ -269,8 +150,7 @@ export default function PricingClient({
             </div>
           </div>
         ) : (
-          /* Plan selector + CTA (also shown for promo users — they need to upgrade) */
-          <div className="max-w-3xl mx-auto mb-16">
+          <div className="max-w-4xl mx-auto mb-12">
             {isPromoPremium && promoExpiryLabel && (
               <div className="mb-8 rounded-2xl border border-[#E8923A]/40 bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent p-5 sm:p-6">
                 <div className="flex items-start gap-3">
@@ -280,15 +160,16 @@ export default function PricingClient({
                       Promo Pro active — expires {promoExpiryLabel}
                     </h3>
                     <p className="text-sm text-[#A8B2BD]">
-                      Lock in paid access so you don&apos;t lose catch overlays,
-                      AI insights, or your fly workbench when the promo ends.
-                      Your journal data stays yours either way.
+                      Lock in paid access so you don&apos;t lose awards, leaderboards,
+                      or the best-window calculator when the promo ends. Your journal
+                      data stays yours either way.
                     </p>
                   </div>
                 </div>
               </div>
             )}
-            {/* Toggle */}
+
+            {/* Billing toggle */}
             <div className="flex items-center justify-center gap-3 mb-8">
               <button
                 onClick={() => setPlan("monthly")}
@@ -315,7 +196,7 @@ export default function PricingClient({
               </button>
             </div>
 
-            {/* Cards: Free vs Pro side-by-side */}
+            {/* Two columns */}
             <div className="grid md:grid-cols-2 gap-6">
               {/* Free */}
               <div className="p-6 bg-[#161B22] rounded-2xl border border-[#21262D]">
@@ -323,12 +204,12 @@ export default function PricingClient({
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="font-mono text-4xl font-bold text-[#F0F6FC]">$0</span>
                 </div>
-                <p className="text-xs text-[#6E7681] mb-6">Forever free</p>
+                <p className="text-xs text-[#6E7681] mb-6">Generous. Forever.</p>
 
                 <ul className="space-y-3 mb-6">
                   {FREE_FEATURES.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-[#2EA44F] shrink-0" />
+                    <li key={f} className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-[#2EA44F] shrink-0 mt-0.5" />
                       <span className="text-sm text-[#A8B2BD]">{f}</span>
                     </li>
                   ))}
@@ -348,7 +229,7 @@ export default function PricingClient({
               <div className="p-6 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/50 relative">
                 <div className="absolute -top-3 left-6">
                   <span className="text-[10px] font-bold tracking-wider bg-[#E8923A] text-[#0D1117] px-3 py-1 rounded-full uppercase">
-                    Best Value
+                    See the Patterns
                   </span>
                 </div>
                 <h3 className="text-sm font-bold text-[#E8923A] tracking-wider uppercase mb-1">Pro</h3>
@@ -365,14 +246,17 @@ export default function PricingClient({
                 </p>
 
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center gap-2.5">
-                    <Check className="h-4 w-4 text-[#2EA44F] shrink-0" />
+                  <li className="flex items-start gap-2.5">
+                    <Check className="h-4 w-4 text-[#2EA44F] shrink-0 mt-0.5" />
                     <span className="text-sm text-[#F0F6FC] font-medium">Everything in Free, plus:</span>
                   </li>
-                  {FEATURES.filter(f => f.pro === true || typeof f.pro === "string").map((f) => (
-                    <li key={f.label} className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-[#E8923A] shrink-0" />
-                      <span className="text-sm text-[#A8B2BD]">{f.label}</span>
+                  {PRO_FEATURES.map((f) => (
+                    <li key={f.label} className="flex items-start gap-2.5">
+                      <f.icon className="h-4 w-4 text-[#E8923A] shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <div className="text-sm text-[#F0F6FC]">{f.label}</div>
+                        <p className="text-[11px] text-[#6E7681] leading-snug">{f.desc}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -384,91 +268,39 @@ export default function PricingClient({
                 >
                   {isLoading ? "Loading..." : isLoggedIn ? "Subscribe Now" : "Sign Up & Subscribe"}
                 </button>
+              </div>
+            </div>
 
-                <p className="text-[10px] text-[#6E7681] text-center mt-3">
-                  Cancel anytime. 7-day free trial included.
-                </p>
+            {/* Trust footer */}
+            <div className="mt-8 rounded-2xl border border-[#21262D] bg-[#161B22]/60 p-5 text-center">
+              <p className="text-xs text-[#A8B2BD] leading-relaxed">
+                <span className="text-[#F0F6FC] font-semibold">30-day money-back guarantee.</span>{" "}
+                Cancel anytime. Annual members get a renewal reminder 30 days before we charge again.
+                Same price on iOS and web — your subscription works everywhere.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-[#6E7681]">
+                <Link href="/refund-policy" className="hover:text-[#E8923A] transition-colors">
+                  Refund Policy
+                </Link>
+                <span>•</span>
+                <span>
+                  Licensed guide? <Link href="/for-guides" className="underline hover:text-[#E8923A]">Get Pro free, forever.</Link>
+                </span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Feature comparison table */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-2xl text-[#F0F6FC] text-center mb-8">Full Feature Comparison</h2>
-
-          <div className="bg-[#161B22] rounded-2xl border border-[#21262D] overflow-hidden">
-            {/* Table header */}
-            <div className="flex items-center px-4 sm:px-6 py-3 border-b border-[#21262D] bg-[#0D1117]/50">
-              <span className="flex-1 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">Feature</span>
-              <span className="w-20 sm:w-24 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase text-center">Free</span>
-              <span className="w-20 sm:w-24 text-[10px] font-bold text-[#E8923A] tracking-wider uppercase text-center">Pro</span>
-            </div>
-
-            {/* Free tier basics */}
-            {FREE_FEATURES.map((f, i) => (
-              <div key={f} className={`flex items-center px-4 sm:px-6 py-3 ${i > 0 ? "border-t border-[#21262D]/50" : ""}`}>
-                <span className="flex-1 text-sm text-[#A8B2BD]">{f}</span>
-                <div className="w-20 sm:w-24 flex justify-center"><Check className="h-4 w-4 text-[#2EA44F]" /></div>
-                <div className="w-20 sm:w-24 flex justify-center"><Check className="h-4 w-4 text-[#E8923A]" /></div>
-              </div>
-            ))}
-
-            {/* Divider */}
-            <div className="h-px bg-[#21262D]" />
-
-            {/* Pro features */}
-            {FEATURES.map((f) => (
-              <div key={f.label} className="flex items-center px-4 sm:px-6 py-3 border-t border-[#21262D]/50">
-                <div className="flex-1 flex items-center gap-2.5 min-w-0">
-                  <f.icon className="h-4 w-4 text-[#6E7681] shrink-0 hidden sm:block" />
-                  <div className="min-w-0">
-                    <span className="text-sm text-[#F0F6FC]">{f.label}</span>
-                    <p className="text-[11px] text-[#6E7681] mt-0.5 hidden sm:block">{f.desc}</p>
-                  </div>
-                </div>
-                <div className="w-20 sm:w-24 flex justify-center items-center shrink-0">
-                  {f.free === false ? (
-                    <X className="h-4 w-4 text-[#6E7681]/40" />
-                  ) : (
-                    <span className="text-xs text-[#A8B2BD] font-mono">{f.free}</span>
-                  )}
-                </div>
-                <div className="w-20 sm:w-24 flex justify-center items-center shrink-0">
-                  {f.pro === true ? (
-                    <Check className="h-4 w-4 text-[#E8923A]" />
-                  ) : (
-                    <span className="text-xs text-[#E8923A] font-mono font-semibold">{f.pro}</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Gift CTA */}
+        <div className="max-w-md mx-auto text-center mt-12">
+          <Link
+            href="/gift"
+            className="inline-flex items-center gap-2 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+          >
+            <Gift className="h-4 w-4 text-[#E8923A]" />
+            <span>Gift a year of Pro to a fishing buddy — $19.99</span>
+          </Link>
         </div>
-
-        {/* Bottom CTA */}
-        {!isPremium && (
-          <div className="max-w-md mx-auto text-center mt-16">
-            <Zap className="h-8 w-8 text-[#E8923A] mx-auto mb-4" />
-            <h2 className="font-serif text-2xl text-[#F0F6FC] mb-2">Ready to level up?</h2>
-            <p className="text-sm text-[#A8B2BD] mb-6">
-              Same price on iOS, Android, and web. Your subscription works everywhere.
-            </p>
-            <button
-              onClick={handleCheckout}
-              disabled={isLoading}
-              className="px-8 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors disabled:opacity-50"
-            >
-              {isLoading ? "Loading..." : `Start Pro — $${plan === "annual" ? ANNUAL_PRICE + "/yr" : MONTHLY_PRICE + "/mo"}`}
-            </button>
-          </div>
-        )}
-
-        {/* Platform note */}
-        <p className="text-center text-[11px] text-[#6E7681] mt-12 max-w-md mx-auto">
-          Already subscribed via the iOS or Android app? Your Pro access syncs automatically.
-          Just sign in with the same account.
-        </p>
       </div>
     </div>
   );

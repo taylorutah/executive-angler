@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { checkPremium } from "@/lib/admin";
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -147,19 +146,9 @@ export async function POST(req: NextRequest) {
   // Sanitize numeric fields with unit suffixes
   if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
 
-  // Validate + premium-gate privacy
   if ("privacy" in sessionData) {
     const { value, error: pErr } = normalizePrivacy(sessionData.privacy);
     if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
-    if (value === "private") {
-      const isPremium = await checkPremium(supabase, user.id, user.email);
-      if (!isPremium) {
-        return NextResponse.json(
-          { error: "Private sessions are a Pro feature. Upgrade to keep sessions private." },
-          { status: 403 }
-        );
-      }
-    }
     sessionData.privacy = value;
   }
 
@@ -210,19 +199,9 @@ export async function PATCH(req: NextRequest) {
   // Sanitize numeric fields with unit suffixes
   if ("water_temp_f" in sessionData) sessionData.water_temp_f = stripNum(sessionData.water_temp_f);
 
-  // Validate + premium-gate privacy
   if ("privacy" in sessionData) {
     const { value, error: pErr } = normalizePrivacy(sessionData.privacy);
     if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
-    if (value === "private") {
-      const isPremium = await checkPremium(supabase, user.id, user.email);
-      if (!isPremium) {
-        return NextResponse.json(
-          { error: "Private sessions are a Pro feature. Upgrade to keep sessions private." },
-          { status: 403 }
-        );
-      }
-    }
     sessionData.privacy = value;
   }
 

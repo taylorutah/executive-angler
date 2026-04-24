@@ -20,17 +20,15 @@ export default function NewSessionPage() {
   const [riverFilter, setRiverFilter] = useState("");
   const [riverValue, setRiverValue] = useState("");
   const [privacy, setPrivacy] = useState<SessionPrivacy>("public");
-  const [isPremium, setIsPremium] = useState(false);
 
-  // Fetch autocomplete data + gear defaults + premium status
+  // Fetch autocomplete data + gear defaults
   useEffect(() => {
     Promise.all([
       fetch("/api/fishing/session?autocomplete=rivers").then((r) => r.json()),
       fetch("/api/fishing/session?autocomplete=locations").then((r) => r.json()),
       fetch("/api/gear/defaults").then((r) => r.ok ? r.json() : null).catch(() => null),
-      fetch("/api/user/premium-status").then((r) => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([riversData, locationsData, defaults, premium]) => {
+      .then(([riversData, locationsData, defaults]) => {
         setRivers(riversData || []);
         setLocations(locationsData || []);
         if (defaults) {
@@ -40,7 +38,6 @@ export default function NewSessionPage() {
           if (defaults.leader) setGearLeaderId(defaults.leader);
           if (defaults.tippet) setGearTippetId(defaults.tippet);
         }
-        if (premium?.isPremium) setIsPremium(true);
       })
       .catch((err) => console.error("Failed to fetch autocomplete data:", err));
   }, []);
@@ -310,7 +307,7 @@ export default function NewSessionPage() {
 
           {/* Privacy */}
           <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
-            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} isPremium={isPremium} />
+            <SessionPrivacyToggle value={privacy} onChange={setPrivacy} />
           </div>
 
           {/* Gear */}

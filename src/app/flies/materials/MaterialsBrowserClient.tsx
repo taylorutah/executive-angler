@@ -12,7 +12,6 @@ import {
   Check,
   Loader2,
   ExternalLink,
-  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { SubmitMaterialForm } from "@/components/flies/SubmitMaterialForm";
@@ -46,7 +45,6 @@ interface Props {
   initialMaterials: Material[];
   categoryCounts: CategoryCount[];
   totalCount: number;
-  isPremium: boolean;
   isAuthenticated: boolean;
 }
 
@@ -102,7 +100,6 @@ export default function MaterialsBrowserClient({
   initialMaterials,
   categoryCounts,
   totalCount,
-  isPremium,
   isAuthenticated,
 }: Props) {
   const [materials, setMaterials] = useState<Material[]>(initialMaterials);
@@ -309,9 +306,9 @@ export default function MaterialsBrowserClient({
 
       {/* ── Main Content ────────────────────────────────────────────────── */}
       <div className="min-w-0 flex-1">
-        {/* Submit Material button row — Pro-only */}
+        {/* Submit Material button row */}
         <div className="mb-4 flex items-center justify-end gap-2">
-          {isPremium ? (
+          {isAuthenticated ? (
             <button
               onClick={() => setSubmitModalOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#d17d28]"
@@ -320,15 +317,6 @@ export default function MaterialsBrowserClient({
               <Plus className="h-4 w-4" />
               Submit Material
             </button>
-          ) : isAuthenticated ? (
-            <Link
-              href="/pricing"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 px-4 py-2 text-sm font-medium text-[#E8923A] transition-colors hover:bg-[#E8923A]/20"
-              title="Submitting new materials is a Pro feature"
-            >
-              <Sparkles className="h-4 w-4" />
-              Submit Material (Pro)
-            </Link>
           ) : (
             <Link
               href="/login?next=/flies/materials"
@@ -461,8 +449,8 @@ export default function MaterialsBrowserClient({
         )}
       </div>
 
-      {/* Submit Material modal — Pro-gated above */}
-      {submitModalOpen && isPremium && (
+      {/* Submit Material modal */}
+      {submitModalOpen && isAuthenticated && (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:pt-24"
           onClick={() => setSubmitModalOpen(false)}

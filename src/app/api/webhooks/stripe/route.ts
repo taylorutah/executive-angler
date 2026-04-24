@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import crypto from "crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { sendBrandedEmail } from "@/lib/email/client";
 import {
@@ -7,7 +8,9 @@ import {
   buildPaymentFailed,
   buildSubscriptionCanceled,
   buildFoundingConfirmation,
+  buildGiftReceived,
 } from "@/lib/email/senders";
+import { SITE_URL } from "@/lib/email/client";
 
 /**
  * POST /api/webhooks/stripe
@@ -81,6 +84,12 @@ export async function POST(req: NextRequest) {
           session.metadata?.user_id
         ) {
           await handleFoundingPayment(supabase, session);
+        } else if (
+          session.mode === "payment" &&
+          session.metadata?.gift === "true" &&
+          session.metadata?.recipient_email
+        ) {
+          await handleGiftPayment(supabase, session);
         }
         break;
       }
@@ -273,6 +282,84 @@ async function handleFoundingPayment(
 
   // Fire-and-forget founding confirmation email
   void sendFoundingConfirmationEmail(supabase, userId, seatNumber as number);
+}
+
+/**
+ * Gift Pro one-time payment handler.
+ *
+ * Called from `checkout.session.completed` when mode=payment and metadata
+ * flags gift=true. Inserts a gift_redemptions row with a fresh 32-byte URL
+ * token (idempotent on stripe_session_id for Stripe retries), then emails the
+ * recipient a /redeem/[token] link.
+ */
+async function handleGiftPayment(
+  supabase: SupabaseClient,
+  session: Stripe.Checkout.Session
+) {
+  const recipientEmail = (session.metadata?.recipient_email ?? "").toLowerCase();
+  if (!recipientEmail) {
+    console.error("[gift webhook] session missing recipient_email:", session.id);
+    return;
+  }
+
+  const purchaserUserId = session.metadata?.purchaser_user_id ?? null;
+  const purchaserEmail = session.metadata?.purchaser_email ?? null;
+  const purchaserDisplayName = session.metadata?.purchaser_display_name ?? null;
+  const recipientMessage = session.metadata?.recipient_message || null;
+  const paymentIntentId =
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : session.payment_intent?.id ?? null;
+  const amountCents = session.amount_total ?? 0;
+
+  // Idempotency: if we already provisioned this session, re-use the row.
+  const { data: existing } = await supabase
+    .from("gift_redemptions")
+    .select("token, recipient_email")
+    .eq("stripe_session_id", session.id)
+    .maybeSingle();
+
+  let token = existing?.token as string | undefined;
+
+  if (!token) {
+    token = crypto.randomBytes(24).toString("base64url");
+    const { error: insertError } = await supabase.from("gift_redemptions").insert({
+      token,
+      purchaser_user_id: purchaserUserId,
+      purchaser_email: purchaserEmail,
+      purchaser_display_name: purchaserDisplayName,
+      recipient_email: recipientEmail,
+      recipient_message: recipientMessage,
+      stripe_session_id: session.id,
+      stripe_payment_intent_id: paymentIntentId,
+      amount_cents: amountCents,
+    });
+    if (insertError) {
+      console.error("[gift webhook] insert failed:", insertError.message);
+      throw insertError;
+    }
+    console.log(`[gift webhook] provisioned gift token for session ${session.id}`);
+  } else {
+    console.log(`[gift webhook] session already provisioned, reusing token ${token}`);
+  }
+
+  // Send the recipient their redeem email.
+  try {
+    const redeemUrl = `${SITE_URL}/redeem/${token}`;
+    const content = buildGiftReceived({
+      purchaserDisplayName,
+      purchaserEmail,
+      recipientMessage,
+      redeemUrl,
+    });
+    await sendBrandedEmail({
+      tag: "gift_received",
+      to: recipientEmail,
+      ...content,
+    });
+  } catch (err) {
+    console.error("[gift webhook] recipient email failed:", err);
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

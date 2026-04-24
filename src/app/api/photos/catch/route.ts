@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     const existingUrls: string[] = existingCatch?.fish_image_urls
       || (existingCatch?.fish_image_url ? [existingCatch.fish_image_url] : []);
-    const updatedUrls = [...existingUrls, publicUrl].slice(0, 3); // max 3 photos
+    const updatedUrls = [...existingUrls, publicUrl];
 
     // Update catches table — both singular (primary) and array (all photos)
     const { error: updateError } = await supabase

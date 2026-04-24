@@ -298,22 +298,22 @@ export default async function HomePage() {
               <div className="inline-flex items-center gap-2 mb-6">
                 <Sparkles className="h-4 w-4 text-[#E8923A]" />
                 <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
-                  Pro &mdash; $4.99/mo
+                  Pro &mdash; $2.99/mo
                 </span>
               </div>
               <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
-                Unlock Intelligence
+                See the Patterns
               </h2>
               <p className="text-[#A8B2BD] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-                AI journal analysis, advanced analytics, full history, data export, and the complete tying workbench. Your data, amplified.
+                Your own analytics engine: which flies work where, your best rivers, per-river Awards, live leaderboards, and the flow ranges where you actually catch fish.
               </p>
             </ScrollAnimation>
             <ScrollAnimation delay={0.15}>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
                 {[
-                  { title: "AI Insights", desc: "Natural-language analysis of your catch patterns, conditions, and fly effectiveness" },
-                  { title: "Full History", desc: "Unlimited session history with year-over-year trends and personal bests" },
-                  { title: "Data Export", desc: "CSV and PDF exports of every session, catch, and fly in your journal" },
+                  { title: "Insights Dashboard", desc: "Fly effectiveness, best rivers, time-of-day and weather correlations &mdash; straight from your sessions" },
+                  { title: "Awards & Leaderboards", desc: "Per-river progression from Regular to Master Angler, plus where you rank on your home water" },
+                  { title: "Best Window Calculator", desc: "Your personal catch history overlaid on live USGS flow &mdash; know when to drop everything and go" },
                 ].map((f) => (
                   <div key={f.title} className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 text-left">
                     <h4 className="text-[#F0F6FC] font-semibold text-sm mb-1">{f.title}</h4>

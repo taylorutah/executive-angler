@@ -46,7 +46,7 @@ const PREVIEWS: Preview[] = [
     content: buildProWelcome({
       displayName: "Taylor",
       planLabel: "Annual",
-      priceLabel: "$29.99/year",
+      priceLabel: "$19.99/year",
       nextBillIso: inYear,
     }),
   },
@@ -56,7 +56,7 @@ const PREVIEWS: Preview[] = [
     when: "Fires on invoice.payment_failed — declined or expired card.",
     content: buildPaymentFailed({
       displayName: "Taylor",
-      amountLabel: "$4.99",
+      amountLabel: "$2.99",
       nextAttemptIso: inThreeDays,
       portalUrl: "https://billing.stripe.com/p/session/live_xyz",
     }),

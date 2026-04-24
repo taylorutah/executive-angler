@@ -79,7 +79,7 @@ export function buildWelcome(args: {
       {
         title: "Unlock Pro when you're ready",
         body:
-          "Catch overlays on flow charts, unlimited fly recipes, trophy wall, and full CSV export &mdash; $4.99/month or $29.99/year.",
+          "Personal insights, per-river Awards, leaderboards, best-window calculator, and trophy wall &mdash; $2.99/month or $19.99/year.",
       },
     ])}
     ${DIVIDER_HTML}
@@ -107,7 +107,7 @@ export function buildWelcome(args: {
 export function buildProWelcome(args: {
   displayName?: string | null;
   planLabel: "Monthly" | "Annual";
-  priceLabel?: string; // e.g. "$4.99/month"
+  priceLabel?: string; // e.g. "$2.99/month"
   nextBillIso?: string | number | null;
 }): BrandedEmailContent {
   const { displayName, planLabel, priceLabel, nextBillIso } = args;
@@ -121,24 +121,24 @@ export function buildProWelcome(args: {
     ${buildSectionLabel("What's unlocked")}
     ${buildFeatureList([
       {
-        title: "Catch overlays on live flow charts",
+        title: "Insights Dashboard",
         body:
-          "Every fish you've landed, plotted against USGS streamflow at the moment of the catch.",
+          "Fly effectiveness, time-of-day, weather correlations, best rivers &mdash; all pulled from your sessions.",
       },
       {
-        title: "Unlimited fly patterns + PDF export",
+        title: "Awards & River Leaderboards",
         body:
-          "Build as many recipes as you want. Export a clean PDF for any pattern &mdash; print at the vise.",
+          "Per-river progression (Regular &rarr; Master Angler) and where you rank on your home water.",
       },
       {
-        title: "Trophy wall &amp; personal bests",
+        title: "Best Window Calculator",
         body:
-          "Your biggest fish by species and river, with the photo gallery to prove it.",
+          "Your personal catch history overlaid on live USGS flow. Know when to drop everything and go.",
       },
       {
-        title: "Full CSV export",
+        title: "Trophy Wall+ and Year-over-Year",
         body:
-          "Every session, every catch, every variable. Your data is yours.",
+          "Biggest by species, per river, top sessions. Last April vs. this April at a glance.",
       },
     ])}
     ${DIVIDER_HTML}
@@ -152,7 +152,7 @@ export function buildProWelcome(args: {
   return {
     subject: "You're in. Welcome to Pro.",
     heading: `${greeting} Welcome to Pro.`,
-    preheader: "Catch overlays, unlimited fly recipes, and full exports are unlocked.",
+    preheader: "Insights, Awards, leaderboards, and the Best Window Calculator are unlocked.",
     body,
     ctaLabel: "Manage subscription",
     ctaUrl: `${SITE_URL}/account#subscription`,
@@ -163,7 +163,7 @@ export function buildProWelcome(args: {
 
 export function buildPaymentFailed(args: {
   displayName?: string | null;
-  amountLabel?: string; // e.g. "$4.99"
+  amountLabel?: string; // e.g. "$2.99"
   nextAttemptIso?: string | number | null;
   portalUrl: string;
 }): BrandedEmailContent {
@@ -362,10 +362,10 @@ export function buildExpiringSoon(args: {
       Your promotional Pro access is wrapping up. Pro features will lock on <strong style="color:#E8923A;">${expiryLabel}</strong> unless you upgrade to a paid plan.
     </p>
     <p style="margin:0 0 16px;">
-      <strong style="color:#F0F6FC;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (catch overlays, unlimited patterns, PDF &amp; CSV export) will pause.
+      <strong style="color:#F0F6FC;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Insights Dashboard, Awards, River Leaderboards, Best Window Calculator) will pause.
     </p>
     <p style="margin:0;">
-      Three more days of Pro at the price of a good leader: $4.99/month or $29.99/year.
+      Three more days of Pro for less than a coffee: $2.99/month or $19.99/year.
     </p>
   `;
 
@@ -376,6 +376,118 @@ export function buildExpiringSoon(args: {
     body,
     ctaLabel: "Keep Pro going",
     ctaUrl: `${SITE_URL}/pricing`,
+  };
+}
+
+/* ─────────── Annual Renewal Reminder (30 days out) ─────────── */
+
+export function buildAnnualRenewalReminder(args: {
+  displayName?: string | null;
+  renewalIso: string;
+  amountLabel?: string; // e.g. "$19.99"
+  portalUrl: string;
+}): BrandedEmailContent {
+  const { displayName, renewalIso, amountLabel, portalUrl } = args;
+  const renewalLabel = formatDate(renewalIso);
+  const greeting = displayName ? `Hi ${displayName},` : "Hi there,";
+
+  const body = `
+    <p style="margin:0 0 16px;">${greeting}</p>
+    <p style="margin:0 0 16px;">
+      A courtesy heads-up: your Executive Angler Pro annual plan renews on <strong style="color:#F0F6FC;">${renewalLabel}</strong>${
+        amountLabel ? ` for <strong style="color:#F0F6FC;">${amountLabel}</strong>` : ""
+      }. No action needed if you want to continue &mdash; we'll charge the card on file.
+    </p>
+    <p style="margin:0 0 16px;">
+      If you&apos;d rather cancel or switch to monthly, you can do it in under a minute
+      through the billing portal. Your journal, flies, and photos stay with you
+      either way.
+    </p>
+    <p style="margin:0 0 16px;font-size:13px;color:#6E7681;">
+      We send this reminder 30 days before every annual renewal because getting
+      auto-billed with no warning feels lousy, and we&apos;re not going to be that app.
+    </p>
+    <p style="margin:0;font-size:13px;color:#A8B2BD;">
+      Manage your subscription: <a href="${portalUrl}" style="color:#E8923A;text-decoration:none;">${portalUrl}</a>
+    </p>
+  `;
+
+  return {
+    subject: "Your Pro annual plan renews in 30 days",
+    heading: "Renewal coming up in 30 days.",
+    preheader: `Your annual Pro renews on ${renewalLabel}. Cancel or switch anytime before then.`,
+    body,
+    ctaLabel: "Manage subscription",
+    ctaUrl: portalUrl,
+  };
+}
+
+/* ─────────────────── Gift Received ─────────────────── */
+
+export function buildGiftReceived(args: {
+  purchaserDisplayName?: string | null;
+  purchaserEmail?: string | null;
+  recipientMessage?: string | null;
+  redeemUrl: string;
+}): BrandedEmailContent {
+  const { purchaserDisplayName, purchaserEmail, recipientMessage, redeemUrl } = args;
+  const fromLabel =
+    purchaserDisplayName ||
+    (purchaserEmail ? purchaserEmail.split("@")[0] : "A fellow angler");
+
+  const messageBlock = recipientMessage
+    ? `
+      <div style="margin:0 0 20px;padding:16px;border-left:3px solid #E8923A;background:#0D1117;border-radius:4px;">
+        <p style="margin:0;font-size:14px;color:#A8B2BD;font-style:italic;">&ldquo;${recipientMessage
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")}&rdquo;</p>
+        <p style="margin:8px 0 0;font-size:12px;color:#6E7681;">&mdash; ${fromLabel}</p>
+      </div>
+    `
+    : "";
+
+  const body = `
+    <p style="margin:0 0 16px;">
+      <strong style="color:#F0F6FC;">${fromLabel}</strong> just gifted you a year of Executive Angler Pro.
+    </p>
+    ${messageBlock}
+    ${buildSectionLabel("What you get with Pro")}
+    ${buildFeatureList([
+      {
+        title: "Insights Dashboard",
+        body:
+          "Your best flies, times, weather, rivers, and species &mdash; computed from every session you log.",
+      },
+      {
+        title: "Awards &amp; Badges",
+        body:
+          "Per-river progression: Regular &rarr; Veteran &rarr; Legend &rarr; Centurion &rarr; Master Angler.",
+      },
+      {
+        title: "Best Window Calculator",
+        body:
+          "Your catch history overlaid on live USGS flow &mdash; know when to fish.",
+      },
+      {
+        title: "Trophy Wall+",
+        body:
+          "Biggest per species, per river, top 5 sessions, most-species day.",
+      },
+    ])}
+    <p style="margin:20px 0 0;font-size:13px;color:#6E7681;">
+      Click the button to claim your gift. You&apos;ll need an Executive Angler
+      account &mdash; free to sign up, and your gift adds a full year of Pro on top.
+    </p>
+  `;
+
+  return {
+    subject: `${fromLabel} gifted you Executive Angler Pro`,
+    heading: "You've been gifted Pro.",
+    preheader: `A full year of Executive Angler Pro from ${fromLabel}. Claim your gift.`,
+    body,
+    ctaLabel: "Claim your gift",
+    ctaUrl: redeemUrl,
   };
 }
 

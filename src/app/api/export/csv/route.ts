@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { checkPremium } from '@/lib/admin';
 import { COLUMNS, HEADERS, formatForExport } from '@/lib/import/csv-schema';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,11 +27,6 @@ export async function GET(request: Request) {
 
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const premium = await checkPremium(supabase, user.id, user.email);
-  if (!premium) {
-    return NextResponse.json({ error: 'Premium required' }, { status: 403 });
   }
 
   try {

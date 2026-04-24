@@ -9,9 +9,10 @@ const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true'
 interface RiverStatsCardProps {
   stats: RiverStats;
   compact?: boolean;
+  isPremium?: boolean;
 }
 
-export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) {
+export function RiverStatsCard({ stats, compact = false, isPremium = false }: RiverStatsCardProps) {
   if (compact) {
     return (
       <div className="bg-[#161B22] border border-[#21262D] rounded-lg p-4">
@@ -22,7 +23,7 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
               {stats.total_sessions} {stats.total_sessions === 1 ? 'session' : 'sessions'}
             </div>
           </div>
-          {AWARDS_VISIBLE && stats.awards.length > 0 && (
+          {AWARDS_VISIBLE && isPremium && stats.awards.length > 0 && (
             <div className="flex gap-1">
               {stats.awards.slice(0, 3).map((award) => (
                 <AwardBadge key={award.id} award={award} size="sm" />
@@ -123,8 +124,8 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
         </div>
       </div>
 
-      {/* Awards Section — hidden when FEATURE_AWARDS_VISIBLE is false */}
-      {AWARDS_VISIBLE && stats.awards.length > 0 && (
+      {/* Awards Section — requires Pro + FEATURE_AWARDS_VISIBLE */}
+      {AWARDS_VISIBLE && isPremium && stats.awards.length > 0 && (
         <div className="mt-6 pt-6 border-t border-[#21262D]">
           <h4 className="font-heading text-lg text-cream mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-[#E8923A]" />

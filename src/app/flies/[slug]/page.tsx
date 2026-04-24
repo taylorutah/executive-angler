@@ -18,14 +18,13 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
 import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
-import { checkPremium } from "@/lib/admin";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import CreateVariantButton from "@/components/flies/CreateVariantButton";
 import VariantTree from "@/components/flies/VariantTree";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
-import { ExternalLink, Lock } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 86400;
@@ -103,14 +102,7 @@ export default async function FlyDetailPage({ params }: Props) {
       ? `${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`
       : fly.sizes[0];
 
-  // Check premium status for gating tying steps 4+
-  // Full 3-tier check covers permanent-pro emails + active subscriptions,
-  // not just profiles.is_premium.
   const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const isPremium = currentUser
-    ? await checkPremium(supabase, currentUser.id, currentUser.email)
-    : false;
 
   // Fetch structured recipe ingredients if they exist
   const { data: recipeIngredients } = await supabase
@@ -395,7 +387,7 @@ export default async function FlyDetailPage({ params }: Props) {
                     <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
                       Tying Recipe
                     </h2>
-                    <RecipePdfButton flyId={fly.id} flyName={fly.name} isPremium={isPremium} />
+                    <RecipePdfButton flyId={fly.id} flyName={fly.name} />
                   </div>
                   <RecipeCard
                     flyName={fly.name}
@@ -492,7 +484,7 @@ export default async function FlyDetailPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* 4. Tying Steps — steps 4+ gated behind premium */}
+              {/* 4. Tying Steps */}
               {fly.tyingSteps && fly.tyingSteps.length > 0 && (
                 <ScrollAnimation>
                   <div>
@@ -500,9 +492,7 @@ export default async function FlyDetailPage({ params }: Props) {
                       Tying Steps
                     </h2>
                     <div className="space-y-3">
-                      {fly.tyingSteps
-                        .filter((step) => isPremium || step.step <= 3)
-                        .map((step) => (
+                      {fly.tyingSteps.map((step) => (
                         <div
                           key={step.step}
                           className="bg-[#161B22] rounded-xl border border-[#21262D] p-5"
@@ -524,23 +514,6 @@ export default async function FlyDetailPage({ params }: Props) {
                           </div>
                         </div>
                       ))}
-                      {!isPremium && fly.tyingSteps.length > 3 && (
-                        <div className="bg-[#161B22] rounded-xl border border-[#E8923A]/30 p-6 text-center">
-                          <Lock className="h-6 w-6 text-[#E8923A] mx-auto mb-3" />
-                          <p className="text-sm font-semibold text-[#F0F6FC] mb-1">
-                            Premium Required
-                          </p>
-                          <p className="text-xs text-[#A8B2BD] mb-4">
-                            Steps 4&ndash;{fly.tyingSteps.length} are available to Pro members.
-                          </p>
-                          <Link
-                            href="/pricing"
-                            className="inline-block px-5 py-2 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#D4801F] transition-colors"
-                          >
-                            Upgrade to Pro
-                          </Link>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </ScrollAnimation>

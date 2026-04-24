@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import SessionDetail from "./SessionDetail";
+import { checkPremium } from "@/lib/admin";
 
 // Never cache — always fetch fresh data from Supabase
 export const dynamic = "force-dynamic";
@@ -126,6 +127,7 @@ export default async function SessionDetailPage({ params }: Props) {
       isOwner={isOwner}
       ownerProfile={ownerProfileForDetail}
       isAnonymous={isAnonymous}
+      isPremium={user ? await checkPremium(supabase, user.id, user.email) : false}
     />
   );
 }

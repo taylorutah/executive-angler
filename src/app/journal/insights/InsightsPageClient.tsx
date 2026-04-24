@@ -152,10 +152,12 @@ export default function InsightsPageClient({ isPremium = true }: { isPremium?: b
           </TipCard>
         </div>
 
-        {/* AI Fishing Coach */}
-        <div className="mb-8">
-          <AIInsightsCard isPremium={isPremium} />
-        </div>
+        {/* AI Fishing Coach — paused until re-enabled via NEXT_PUBLIC_FEATURE_AI_INSIGHTS */}
+        {process.env.NEXT_PUBLIC_FEATURE_AI_INSIGHTS === "true" && (
+          <div className="mb-8">
+            <AIInsightsCard isPremium={isPremium} />
+          </div>
+        )}
 
         {/* Loading */}
         {loading && (

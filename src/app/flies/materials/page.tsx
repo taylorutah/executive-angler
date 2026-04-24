@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { SITE_URL } from "@/lib/constants";
-import { checkPremium } from "@/lib/admin";
 import MaterialsBrowserClient from "./MaterialsBrowserClient";
 
 export const revalidate = 3600;
@@ -30,9 +29,7 @@ interface CategoryCount {
 export default async function MaterialsPage() {
   const supabase = await createClient();
 
-  // Auth-aware: determine Pro status for Submit Material button
   const { data: { user } } = await supabase.auth.getUser();
-  const isPremium = user ? await checkPremium(supabase, user.id, user.email) : false;
   const isAuthenticated = !!user;
 
   // Fetch initial materials (first 60 by popularity, then newest first as tiebreaker)
@@ -95,7 +92,6 @@ export default async function MaterialsPage() {
           initialMaterials={materials || []}
           categoryCounts={categoryCounts}
           totalCount={totalCount}
-          isPremium={isPremium}
           isAuthenticated={isAuthenticated}
         />
       </div>

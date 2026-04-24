@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import RiverStatsView from './RiverStatsView';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { checkPremium } from '@/lib/admin';
 
 export const metadata = {
   title: 'River Stats | Executive Angler',
@@ -18,6 +19,8 @@ export default async function StatsPage() {
   if (!user) {
     redirect('/login?redirect=/journal/stats');
   }
+
+  const isPremium = await checkPremium(supabase, user.id, user.email);
 
   return (
     <div className="min-h-screen bg-[#0D1117] pt-4 pb-8">
@@ -38,7 +41,7 @@ export default async function StatsPage() {
         </div>
 
         {/* Stats View */}
-        <RiverStatsView />
+        <RiverStatsView isPremium={isPremium} />
       </div>
     </div>
   );

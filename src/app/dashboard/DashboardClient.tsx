@@ -320,8 +320,8 @@ export default function DashboardClient({
                   <Sparkles className="h-5 w-5 text-[#E8923A]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Upgrade to Pro</h3>
-                  <p className="text-[11px] text-[#A8B2BD] truncate">Analytics, AI insights, hatch reports, and more — $2.50/mo</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">See the patterns &mdash; Pro $2.99/mo</h3>
+                  <p className="text-[11px] text-[#A8B2BD] truncate">Insights, Awards, leaderboards, and the Best Window Calculator</p>
                 </div>
                 <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors shrink-0" />
               </Link>
@@ -470,7 +470,7 @@ export default function DashboardClient({
                               <span>Last: {timeAgo(rs.last_session)}</span>
                             </div>
                           </div>
-                          {AWARDS_VISIBLE && rs.awards.length > 0 && (
+                          {AWARDS_VISIBLE && isPremium && rs.awards.length > 0 && (
                             <div className="flex gap-1.5 shrink-0">
                               {rs.awards.slice(0, 4).map((a) => {
                                 const EMOJI_MAP: Record<string, string> = {

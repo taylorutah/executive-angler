@@ -9,7 +9,7 @@ import TipCard from '@/components/ui/TipCard';
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
-export default function RiverStatsView() {
+export default function RiverStatsView({ isPremium = false }: { isPremium?: boolean }) {
   const [stats, setStats] = useState<RiverStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export default function RiverStatsView() {
           <TrendingUp className="w-6 h-6" />
           Your River Stats
         </h2>
-        <div className={`grid grid-cols-2 ${AWARDS_VISIBLE ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-4`}>
+        <div className={`grid grid-cols-2 ${AWARDS_VISIBLE && isPremium ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-4`}>
           <SummaryBox
             label="Rivers Fished"
             value={stats.length}
@@ -87,7 +87,7 @@ export default function RiverStatsView() {
       {/* River Stats Cards */}
       <div className="space-y-4">
         {stats.map((riverStats) => (
-          <RiverStatsCard key={riverStats.river_name} stats={riverStats} />
+          <RiverStatsCard key={riverStats.river_name} stats={riverStats} isPremium={isPremium} />
         ))}
       </div>
     </div>

@@ -10,9 +10,10 @@ const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true'
 
 interface RiverStatsWidgetProps {
   riverName: string;
+  isPremium?: boolean;
 }
 
-export function RiverStatsWidget({ riverName }: RiverStatsWidgetProps) {
+export function RiverStatsWidget({ riverName, isPremium = false }: RiverStatsWidgetProps) {
   const [stats, setStats] = useState<RiverStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -80,8 +81,8 @@ export function RiverStatsWidget({ riverName }: RiverStatsWidgetProps) {
         </div>
       </div>
 
-      {/* Awards — hidden when feature flag is off */}
-      {AWARDS_VISIBLE && stats.awards.length > 0 && (
+      {/* Awards — requires Pro + FEATURE_AWARDS_VISIBLE */}
+      {AWARDS_VISIBLE && isPremium && stats.awards.length > 0 && (
         <div>
           <div className="text-xs text-[#A8B2BD] uppercase tracking-wide mb-2">
             River Milestones ({stats.awards.length})

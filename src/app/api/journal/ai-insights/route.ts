@@ -17,6 +17,12 @@ export interface AIInsight {
  * Auth required, premium-gated.
  */
 export async function POST() {
+  // AI Insights paused — rule-based insights at /api/journal/insights power the Pro experience.
+  // Re-enable by setting NEXT_PUBLIC_FEATURE_AI_INSIGHTS=true (and providing ANTHROPIC_API_KEY).
+  if (process.env.NEXT_PUBLIC_FEATURE_AI_INSIGHTS !== "true") {
+    return NextResponse.json({ error: "AI insights are currently unavailable." }, { status: 503 });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json(

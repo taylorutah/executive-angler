@@ -1,19 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, Lock } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 interface RecipePdfButtonProps {
   flyId: string;
   flyName: string;
-  isPremium: boolean;
 }
 
-export function RecipePdfButton({ flyId, flyName, isPremium }: RecipePdfButtonProps) {
+export function RecipePdfButton({ flyId, flyName }: RecipePdfButtonProps) {
   const [downloading, setDownloading] = useState(false);
 
   async function handleDownload() {
-    if (!isPremium) return;
     setDownloading(true);
     try {
       const res = await fetch(`/api/export/recipe-pdf?flyId=${flyId}`);
@@ -36,19 +34,6 @@ export function RecipePdfButton({ flyId, flyName, isPremium }: RecipePdfButtonPr
     } finally {
       setDownloading(false);
     }
-  }
-
-  if (!isPremium) {
-    return (
-      <button
-        disabled
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#161B22] border border-[#21262D] text-[#6E7681] cursor-not-allowed"
-        title="Premium feature — upgrade to download recipe PDFs"
-      >
-        <Lock className="h-3.5 w-3.5" />
-        Download PDF
-      </button>
-    );
   }
 
   return (
