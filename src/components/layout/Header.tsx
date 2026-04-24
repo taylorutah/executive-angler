@@ -45,6 +45,19 @@ const EXPLORE_SECTIONS = [
     viewAll: { label: "All Species", href: "/species" },
   },
   {
+    title: "Gear",
+    icon: ShoppingBag,
+    links: [
+      { label: "Fly Rods", href: "/gear/category/rod" },
+      { label: "Fly Reels", href: "/gear/category/reel" },
+      { label: "Waders", href: "/gear/category/waders" },
+      { label: "Sage", href: "/gear/sage" },
+      { label: "Orvis", href: "/gear/orvis" },
+      { label: "Simms", href: "/gear/simms" },
+    ],
+    viewAll: { label: "All Brands", href: "/gear" },
+  },
+  {
     title: "Directory",
     icon: Building2,
     links: [
@@ -144,7 +157,7 @@ export default function Header() {
   }, []);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
-  const isExploreActive = ["/destinations", "/species", "/lodges", "/guides", "/fly-shops", "/articles"].some(p => pathname.startsWith(p));
+  const isExploreActive = ["/destinations", "/species", "/gear", "/lodges", "/guides", "/fly-shops", "/articles"].some(p => pathname.startsWith(p));
 
   const navLinkClass = (active: boolean) =>
     `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active ? "text-[#F0F6FC] bg-[#F0F6FC]/5" : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#F0F6FC]/5"}`;
@@ -228,30 +241,32 @@ export default function Header() {
 
                   {exploreOpen && (
                     <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
-                      <div className="bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden w-[560px]">
+                      <div className="bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden w-[760px]">
                         <div className="h-0.5 bg-gradient-to-r from-[#E8923A] via-[#0BA5C7] to-[#E8923A]" />
-                        <div className="grid grid-cols-4 gap-0 p-4">
+                        <div className="grid grid-cols-5 gap-1 p-4">
                           {EXPLORE_SECTIONS.map((section) => {
                             const Icon = section.icon;
                             return (
-                              <div key={section.title}>
+                              <div key={section.title} className="flex flex-col">
                                 <div className="flex items-center gap-1.5 mb-2">
                                   <Icon className="h-3.5 w-3.5 text-[#E8923A]" />
                                   <span className="text-[10px] font-bold text-[#6E7681] uppercase tracking-widest">{section.title}</span>
                                 </div>
-                                {section.links.map((link) => (
-                                  <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className="block px-2 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
-                                  >
-                                    {link.label}
-                                  </Link>
-                                ))}
+                                <div className="space-y-0.5">
+                                  {section.links.map((link) => (
+                                    <Link
+                                      key={link.href}
+                                      href={link.href}
+                                      className="block px-2 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  ))}
+                                </div>
                                 {section.viewAll && (
                                   <Link
                                     href={section.viewAll.href}
-                                    className="block px-2 py-1 mt-1 text-xs font-medium text-[#0BA5C7] hover:text-[#F0F6FC] transition-colors"
+                                    className="mt-auto pt-2 block px-2 py-1 text-xs font-medium text-[#0BA5C7] hover:text-[#F0F6FC] transition-colors"
                                   >
                                     {section.viewAll.label} &rarr;
                                   </Link>

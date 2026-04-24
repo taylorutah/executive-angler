@@ -1,10 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Lock } from "lucide-react";
 import type { GearItem, GearType, RodSpecs, ReelSpecs, LineSpecs, LeaderSpecs, TippetSpecs } from "@/types/gear";
 import EuroLeaderBuilder from "./EuroLeaderBuilder";
 import type { EuroLeaderSection } from "@/types/gear";
+import MakerCombobox from "./MakerCombobox";
+
+export interface PresetProduct {
+  productId: string;
+  category: GearType;
+  brandName: string;
+  modelName: string;  // brand-stripped, e.g. "R8 Core" when brand is "Sage"
+  defaultName: string; // e.g. "Sage R8 Core"
+}
 
 interface Props {
   open: boolean;
@@ -13,6 +22,7 @@ interface Props {
   initialType?: GearType;
   editItem?: GearItem | null;
   isFirstOfType?: boolean;
+  presetProduct?: PresetProduct | null;
 }
 
 const TYPE_LABELS: Record<GearType, string> = {
@@ -31,7 +41,7 @@ const inputCls =
 const labelCls = "block text-xs font-semibold text-[#A8B2BD] mb-1 uppercase tracking-wide";
 const selectCls = inputCls;
 
-export default function GearForm({ open, onClose, onSaved, initialType = "rod", editItem = null, isFirstOfType = false }: Props) {
+export default function GearForm({ open, onClose, onSaved, initialType = "rod", editItem = null, isFirstOfType = false, presetProduct = null }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -107,6 +117,19 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
         setTippetX(ts.x_size || "");
         setTippetDiameter(ts.diameter_mm?.toString() || "");
       }
+    } else if (presetProduct) {
+      // Seeded from catalog product — pre-fill identity, leave SKU specs for user
+      setType(presetProduct.category);
+      setName(presetProduct.defaultName);
+      setMaker(presetProduct.brandName);
+      setModel(presetProduct.modelName);
+      setNotes("");
+      setIsDefault(isFirstOfType);
+      setRodLength(""); setRodWeight(""); setRodAction(""); setRodPieces("");
+      setReelSize(""); setReelDrag("");
+      setLineWeight(""); setLineTaper(""); setLineDensity("");
+      setLeaderLength(""); setLeaderTippetX(""); setLeaderStyle(""); setEuroSections([]);
+      setTippetMaterial(""); setTippetX(""); setTippetDiameter("");
     } else {
       // Reset form
       setType(initialType);
@@ -119,7 +142,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
       setTippetMaterial(""); setTippetX(""); setTippetDiameter("");
     }
     setError("");
-  }, [open, editItem, initialType, isFirstOfType]);
+  }, [open, editItem, initialType, isFirstOfType, presetProduct]);
 
   function buildSpecs() {
     if (type === "rod") {
@@ -177,6 +200,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
       specs: buildSpecs(),
       is_default: isDefault,
       notes: notes.trim() || undefined,
+      gear_product_id: presetProduct?.productId,
     };
 
     try {
@@ -213,7 +237,11 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D] sticky top-0 bg-[#161B22] z-10">
           <h2 className="font-heading font-bold text-[#F0F6FC] text-lg">
-            {editItem ? `Edit ${TYPE_LABELS[type]}` : `Add ${TYPE_LABELS[initialType]}`}
+            {editItem
+              ? `Edit ${TYPE_LABELS[type]}`
+              : presetProduct
+                ? `Add ${presetProduct.brandName} ${presetProduct.modelName}`
+                : `Add ${TYPE_LABELS[initialType]}`}
           </h2>
           <button onClick={onClose} className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
             <X className="h-5 w-5" />
@@ -221,8 +249,19 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
-          {/* Type (only show if adding, not editing) */}
-          {!editItem && (
+          {/* Catalog context banner */}
+          {presetProduct && !editItem && (
+            <div className="rounded-lg bg-[#E8923A]/10 border border-[#E8923A]/20 px-3 py-2.5 flex items-start gap-2.5">
+              <Lock className="h-3.5 w-3.5 text-[#E8923A] mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-[#A8B2BD] leading-relaxed">
+                From the <span className="text-[#F0F6FC] font-semibold">{presetProduct.brandName} {presetProduct.modelName}</span> catalog page.
+                Fill in <span className="text-[#F0F6FC] font-semibold">your</span> SKU&apos;s length, weight, and pieces below so we can track it with your sessions.
+              </p>
+            </div>
+          )}
+
+          {/* Type (only show if adding, not editing, and not preset from catalog) */}
+          {!editItem && !presetProduct && (
             <div>
               <label className={labelCls}>Type</label>
               <select value={type} onChange={(e) => setType(e.target.value as GearType)} className={selectCls}>
@@ -250,11 +289,23 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelCls}>Maker</label>
-              <input type="text" value={maker} onChange={(e) => setMaker(e.target.value)} className={inputCls} placeholder="e.g. Sage" />
+              <MakerCombobox
+                value={maker}
+                onChange={setMaker}
+                disabled={!!presetProduct}
+                placeholder="e.g. Sage"
+              />
             </div>
             <div>
               <label className={labelCls}>Model</label>
-              <input type="text" value={model} onChange={(e) => setModel(e.target.value)} className={inputCls} placeholder="e.g. R8" />
+              <input
+                type="text"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                disabled={!!presetProduct}
+                className={`${inputCls} ${presetProduct ? "opacity-60 cursor-not-allowed" : ""}`}
+                placeholder="e.g. R8"
+              />
             </div>
           </div>
 

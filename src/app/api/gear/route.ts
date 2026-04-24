@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
-    const { type, name, maker, model, specs, is_default, notes } = body;
+    const { type, name, maker, model, specs, is_default, notes, gear_product_id } = body;
 
     if (!type || !name) {
       return NextResponse.json({ error: "type and name are required" }, { status: 400 });
@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
         specs: specs ?? {},
         is_default: is_default ?? false,
         notes: notes ?? null,
+        gear_product_id: gear_product_id ?? null,
       })
       .select()
       .single();
