@@ -36,15 +36,32 @@ export default function CommunityPhotos({
     async function fetchPhotos() {
       const supabase = createClient();
 
-      const { data, error } = await supabase
+      // Pull banned user ids first so we can hide their photos. Legacy
+      // uploads with a NULL user_id stay visible (the `.is.null` branch).
+      const { data: bannedRows } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .eq("is_banned", true);
+      const bannedIds = (bannedRows ?? []).map((r) => r.user_id as string);
+
+      let query = supabase
         .from("photo_submissions")
         .select(
           "id, photo_url, caption, submitter_name, camera_body, lens, aperture, shutter_speed, iso, submitted_at"
         )
         .eq("entity_type", entityType)
         .eq("entity_id", entityId)
-        .eq("status", "approved")
-        .order("submitted_at", { ascending: false });
+        .eq("status", "approved");
+
+      if (bannedIds.length > 0) {
+        query = query.or(
+          `user_id.is.null,user_id.not.in.(${bannedIds.join(",")})`
+        );
+      }
+
+      const { data, error } = await query.order("submitted_at", {
+        ascending: false,
+      });
 
       if (error) {
         console.error("Error fetching photos:", error);

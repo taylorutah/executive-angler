@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export interface FlyReport {
   flyName: string;
@@ -107,12 +108,27 @@ export async function GET(
 
   const ago90 = new Date(now.getTime() - 90 * 86400000).toISOString().split("T")[0];
 
-  // All public sessions for this river
-  const { data: sessions } = await supabase
+  // All public sessions for this river — banned users are excluded here,
+  // which cascades through every downstream aggregate (leaderboard, trip
+  // reports, catches joined by session_id, etc.) because those use the
+  // filtered session list.
+  const bannedUserIds = await getBannedUserIds();
+
+  let sessionsQuery = supabase
     .from("fishing_sessions")
     .select("id, date, total_fish, notes, water_temp_f, water_clarity, weather, user_id, gear_rod_id, gear_leader_id, gear_tippet_id, created_at, section")
     .eq("river_id", riverId)
-    .eq("privacy", "public")
+    .eq("privacy", "public");
+
+  if (bannedUserIds.length > 0) {
+    sessionsQuery = sessionsQuery.not(
+      "user_id",
+      "in",
+      `(${bannedUserIds.join(",")})`
+    );
+  }
+
+  const { data: sessions } = await sessionsQuery
     .order("date", { ascending: false })
     .order("created_at", { ascending: false });
 

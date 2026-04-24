@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -34,26 +35,43 @@ export async function GET(req: NextRequest) {
   }
 
   const supabase = await createClient();
-  const { data: reviews, error } = await supabase
+  const bannedUserIds = await getBannedUserIds();
+
+  let reviewsQuery = supabase
     .from("reviews")
     .select("*")
     .eq("entity_type", entityType)
-    .eq("entity_id", entityId)
-    .order("created_at", { ascending: false });
+    .eq("entity_id", entityId);
+
+  if (bannedUserIds.length > 0) {
+    reviewsQuery = reviewsQuery.not(
+      "user_id",
+      "in",
+      `(${bannedUserIds.join(",")})`
+    );
+  }
+
+  const { data: reviews, error } = await reviewsQuery.order("created_at", {
+    ascending: false,
+  });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Resolve display names from angler_profiles
+  // Resolve display names from the canonical `profiles` table (the legacy
+  // `angler_profiles` table is only referenced here; migrated in this edit).
   const userIds = [...new Set((reviews ?? []).map((r: Record<string, unknown>) => r.user_id as string))];
-  let profileMap: Record<string, { display_name: string; avatar_url?: string }> = {};
+  const profileMap: Record<string, { display_name: string; avatar_url?: string }> = {};
   if (userIds.length > 0) {
     const { data: profiles } = await supabase
-      .from("angler_profiles")
+      .from("profiles")
       .select("user_id, display_name, avatar_url")
       .in("user_id", userIds);
     if (profiles) {
       for (const p of profiles) {
-        profileMap[p.user_id] = { display_name: p.display_name, avatar_url: p.avatar_url };
+        profileMap[p.user_id] = {
+          display_name: p.display_name,
+          avatar_url: p.avatar_url,
+        };
       }
     }
   }

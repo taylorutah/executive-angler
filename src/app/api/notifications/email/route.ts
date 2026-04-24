@@ -216,12 +216,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Fetch actor display name
+    // Fetch actor display name + ban state — banned actors' activity must
+    // not leak via notification emails ("X liked your session" where X is
+    // banned would re-surface the hidden activity).
     const { data: actor } = await supabaseAdmin
       .from("profiles")
-      .select("display_name, username")
+      .select("display_name, username, is_banned")
       .eq("user_id", actorId)
       .single();
+
+    if (actor?.is_banned) {
+      return NextResponse.json({
+        sent: false,
+        reason: "Actor is banned; notification suppressed",
+      });
+    }
 
     const actorName = actor?.display_name || actor?.username || "Someone";
 

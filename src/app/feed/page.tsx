@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ActivityFeed } from "@/components/feed/ActivityFeed";
 import Link from "next/link";
 import { APP_STORE_URL } from "@/lib/constants";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata: Metadata = {
   title: "River Activity | Executive Angler",
@@ -169,8 +170,10 @@ export default async function FeedPage() {
 
   /* ── Authenticated: show the feed ── */
 
+  const bannedUserIds = await getBannedUserIds();
+
   // Fetch 30 most recent public sessions with profile data
-  const { data: sessions, error } = await supabase
+  let sessionQuery = supabase
     .from("fishing_sessions")
     .select(
       `
@@ -197,7 +200,17 @@ export default async function FeedPage() {
       )
     `
     )
-    .eq("privacy", "public")
+    .eq("privacy", "public");
+
+  if (bannedUserIds.length > 0) {
+    sessionQuery = sessionQuery.not(
+      "user_id",
+      "in",
+      `(${bannedUserIds.join(",")})`
+    );
+  }
+
+  const { data: sessions, error } = await sessionQuery
     .order("date", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(30);

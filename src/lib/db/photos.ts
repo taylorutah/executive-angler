@@ -1,5 +1,6 @@
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { getBannedUserIds } from "./banned-users";
 
 export interface ApprovedPhoto {
   id: string;
@@ -20,15 +21,28 @@ export async function getApprovedPhotosByEntity(
 ): Promise<ApprovedPhoto[]> {
   return withRetry(async () => {
     const supabase = createStaticClient();
-    const { data, error } = await supabase
+    const bannedUserIds = await getBannedUserIds();
+
+    let query = supabase
       .from("photo_submissions")
       .select(
         "id, photo_url, caption, submitter_name, camera_body, lens, aperture, shutter_speed, iso, submitted_at"
       )
       .eq("entity_type", entityType)
       .eq("entity_id", entityId)
-      .eq("status", "approved")
-      .order("submitted_at", { ascending: false });
+      .eq("status", "approved");
+
+    // Exclude photos uploaded by banned users. Pre-auth legacy uploads have
+    // a NULL user_id and are kept visible via the `.is.null` branch.
+    if (bannedUserIds.length > 0) {
+      query = query.or(
+        `user_id.is.null,user_id.not.in.(${bannedUserIds.join(",")})`
+      );
+    }
+
+    const { data, error } = await query.order("submitted_at", {
+      ascending: false,
+    });
 
     if (error) {
       console.error("[getApprovedPhotosByEntity] Supabase error:", error);

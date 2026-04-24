@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 // Never cache — always fetch fresh data
 export const dynamic = "force-dynamic";
@@ -71,18 +72,22 @@ export default async function DashboardPage() {
     : { data: [] };
 
   // Following feed — public sessions from people you follow (last 10)
+  const bannedUserIds = await getBannedUserIds();
+
   const { data: follows } = await supabase
     .from("follows")
     .select("following_id")
     .eq("follower_id", user.id)
     .eq("status", "active");
 
-  const followingIds = (follows || []).map((f) => f.following_id);
+  const followingIds = (follows || [])
+    .map((f) => f.following_id)
+    .filter((id) => !bannedUserIds.includes(id));
 
   // Suggested anglers — active users the current user doesn't follow (exclude self).
   // Discovery surface, so also filter out anglers who opted out of search
-  // (NULL = opt-in because the column default is true).
-  const excludeIds = [...followingIds, user.id];
+  // (NULL = opt-in because the column default is true) and banned users.
+  const excludeIds = [...followingIds, user.id, ...bannedUserIds];
   const { data: suggestedAnglers } = await supabase
     .from("profiles")
     .select("user_id, username, display_name, avatar_url, is_private")
@@ -103,11 +108,21 @@ export default async function DashboardPage() {
         .limit(10)
     : { data: [] };
 
-  // Community explore feed — latest public sessions from anyone
-  const { data: exploreFeed } = await supabase
+  // Community explore feed — latest public sessions from anyone (minus banned)
+  let exploreQuery = supabase
     .from("fishing_sessions")
     .select("id, date, river_name, total_fish, notes, privacy, user_id, profiles(username, avatar_url, display_name)")
-    .eq("privacy", "public")
+    .eq("privacy", "public");
+
+  if (bannedUserIds.length > 0) {
+    exploreQuery = exploreQuery.not(
+      "user_id",
+      "in",
+      `(${bannedUserIds.join(",")})`
+    );
+  }
+
+  const { data: exploreFeed } = await exploreQuery
     .order("date", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(10);

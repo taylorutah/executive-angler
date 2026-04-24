@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
 import { isAdmin, checkPremium } from "@/lib/admin";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata = { title: "My Account | Executive Angler" };
 
@@ -57,18 +58,31 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     .eq("user_id", user.id)
     .order("awarded_at", { ascending: false });
 
-  // Fetch follower/following counts
-  const { count: followerCount } = await supabase
+  // Fetch follower/following counts — exclude banned users from both sides
+  // so the viewer's own counts don't reflect ghost accounts.
+  const bannedUserIds = await getBannedUserIds();
+  const bannedFilter =
+    bannedUserIds.length > 0 ? `(${bannedUserIds.join(",")})` : null;
+
+  const followerCountQuery = supabase
     .from("follows")
     .select("id", { count: "exact", head: true })
     .eq("following_id", user.id)
     .eq("status", "accepted");
 
-  const { count: followingCount } = await supabase
+  const followingCountQuery = supabase
     .from("follows")
     .select("id", { count: "exact", head: true })
     .eq("follower_id", user.id)
     .eq("status", "accepted");
+
+  const { count: followerCount } = await (bannedFilter
+    ? followerCountQuery.not("follower_id", "in", bannedFilter)
+    : followerCountQuery);
+
+  const { count: followingCount } = await (bannedFilter
+    ? followingCountQuery.not("following_id", "in", bannedFilter)
+    : followingCountQuery);
 
   const totalSessions = sessions?.length || 0;
   // Sum total_fish from sessions (includes drift-mode sessions with count-only data)

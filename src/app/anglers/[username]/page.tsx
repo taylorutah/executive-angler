@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import ProfileClient from "./ProfileClient";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 // Never cache — always fetch fresh follow state and sessions
 export const dynamic = "force-dynamic";
@@ -63,7 +64,7 @@ export default async function AnglerProfilePage({ params }: Props) {
   const profileQuery = supabase
     .from("profiles")
     .select(
-      "user_id, username, display_name, bio, avatar_url, home_location, is_private, profile_visibility"
+      "user_id, username, display_name, bio, avatar_url, home_location, is_private, profile_visibility, is_banned"
     );
 
   const { data: profile } = looksLikeUuid
@@ -79,6 +80,14 @@ export default async function AnglerProfilePage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const isOwnProfile = !!viewer && viewer.id === profile.user_id;
+
+  // Banned users' public profile returns 404 for everyone except the owner
+  // (so they can still manage their own account at /account) and admins
+  // (who should investigate via /admin/users). Indistinguishable from a
+  // deleted account, which is the intent — don't leak ban status.
+  if ((profile as { is_banned?: boolean }).is_banned && !isOwnProfile) {
+    notFound();
+  }
   const isAnonymous = !viewer;
 
   // Strava parity: anonymous visitors see a 3-session teaser before being
@@ -106,19 +115,33 @@ export default async function AnglerProfilePage({ params }: Props) {
     else if (follow?.status === "pending") followStatus = "pending";
   }
 
-  // Follower/following counts
+  // Follower/following counts — banned users are excluded so counts don't
+  // stay inflated after a ban. We filter by user_id NOT IN banned on the
+  // opposite side of each edge.
+  const bannedUserIds = await getBannedUserIds();
+  const bannedFilter =
+    bannedUserIds.length > 0 ? `(${bannedUserIds.join(",")})` : null;
+
+  const followerQuery = supabase
+    .from("follows")
+    .select("id", { count: "exact", head: true })
+    .eq("following_id", profile.user_id)
+    .eq("status", "accepted");
+
+  const followingQuery = supabase
+    .from("follows")
+    .select("id", { count: "exact", head: true })
+    .eq("follower_id", profile.user_id)
+    .eq("status", "accepted");
+
   const [{ count: followerCount }, { count: followingCount }] =
     await Promise.all([
-      supabase
-        .from("follows")
-        .select("id", { count: "exact", head: true })
-        .eq("following_id", profile.user_id)
-        .eq("status", "accepted"),
-      supabase
-        .from("follows")
-        .select("id", { count: "exact", head: true })
-        .eq("follower_id", profile.user_id)
-        .eq("status", "accepted"),
+      bannedFilter
+        ? followerQuery.not("follower_id", "in", bannedFilter)
+        : followerQuery,
+      bannedFilter
+        ? followingQuery.not("following_id", "in", bannedFilter)
+        : followingQuery,
     ]);
 
   // Resolve profile_visibility with a safe fallback for legacy rows.

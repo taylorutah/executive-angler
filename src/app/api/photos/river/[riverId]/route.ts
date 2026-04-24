@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export type RiverPhoto = {
   id: string;
@@ -19,18 +20,31 @@ export async function GET(
 ) {
   const { riverId } = await params;
   const supabase = await createClient();
+  const bannedUserIds = await getBannedUserIds();
+  const bannedFilter =
+    bannedUserIds.length > 0 ? `(${bannedUserIds.join(",")})` : null;
 
-  // Community submissions
-  const { data: submissions } = await supabase
+  // Community submissions — legacy uploads with a NULL user_id stay visible.
+  let submissionsQuery = supabase
     .from("photo_submissions")
     .select("id, photo_url, caption, submitter_name, submitted_at")
     .eq("entity_type", "river")
     .eq("entity_id", riverId)
-    .eq("status", "approved")
-    .order("submitted_at", { ascending: false });
+    .eq("status", "approved");
 
-  // App catches (public sessions only)
-  const { data: catches } = await supabase
+  if (bannedFilter) {
+    submissionsQuery = submissionsQuery.or(
+      `user_id.is.null,user_id.not.in.${bannedFilter}`
+    );
+  }
+
+  const { data: submissions } = await submissionsQuery.order("submitted_at", {
+    ascending: false,
+  });
+
+  // App catches (public sessions only) — filter through the embedded session
+  // join so banned users' catches drop from the list.
+  let catchesQuery = supabase
     .from("catches")
     .select(`
       id,
@@ -38,12 +52,22 @@ export async function GET(
       species,
       length_inches,
       created_at,
-      fishing_sessions!inner(river_id, privacy),
+      fishing_sessions!inner(river_id, privacy, user_id),
       profiles(username)
     `)
     .eq("fishing_sessions.river_id", riverId)
     .eq("fishing_sessions.privacy", "public")
-    .not("fish_image_url", "is", null)
+    .not("fish_image_url", "is", null);
+
+  if (bannedFilter) {
+    catchesQuery = catchesQuery.not(
+      "fishing_sessions.user_id",
+      "in",
+      bannedFilter
+    );
+  }
+
+  const { data: catches } = await catchesQuery
     .order("created_at", { ascending: false })
     .limit(50);
 

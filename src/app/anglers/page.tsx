@@ -17,12 +17,13 @@ export default async function AnglersPage() {
 
   // Directory is a discovery surface: hide private profiles *and* anyone
   // who flipped off "Show my profile in search results" (column default
-  // true, so NULL is treated as opt-in).
+  // true, so NULL is treated as opt-in). Banned users are always excluded.
   const { data: anglers } = await supabase
     .from("profiles")
     .select("user_id, username, display_name, home_location, bio, avatar_url")
     .or("is_private.is.null,is_private.eq.false")
     .or("searchable.is.null,searchable.eq.true")
+    .or("is_banned.is.null,is_banned.eq.false")
     .order("created_at", { ascending: false })
     .limit(50);
 
