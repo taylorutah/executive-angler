@@ -20,6 +20,8 @@ import { guides } from "../src/data/guides";
 import { flyShops } from "../src/data/fly-shops";
 import { articles } from "../src/data/articles";
 import { species } from "../src/data/species";
+import { gearBrands } from "../src/data/gear-brands";
+import { gearProducts } from "../src/data/gear-products";
 
 // ---------------------------------------------------------------------------
 // Supabase client (service role — bypasses RLS)
@@ -99,7 +101,7 @@ async function upsertTable(
 async function main() {
   console.log("🐟 Executive Angler — Seeding Supabase\n");
   console.log(`   URL: ${supabaseUrl}`);
-  console.log(`   Tables: destinations, rivers, lodges, guides, fly_shops, articles, species\n`);
+  console.log(`   Tables: destinations, rivers, lodges, guides, fly_shops, articles, species, gear_brands, gear_products\n`);
 
   const start = Date.now();
 
@@ -111,11 +113,13 @@ async function main() {
   await upsertTable("fly_shops", flyShops);
   await upsertTable("articles", articles);
   await upsertTable("species", species);
+  await upsertTable("gear_brands", gearBrands);
+  await upsertTable("gear_products", gearProducts);
 
   const elapsed = ((Date.now() - start) / 1000).toFixed(1);
   console.log(`\n🎣 Seeding complete in ${elapsed}s`);
   console.log(
-    `   Total: ${destinations.length} destinations, ${rivers.length} rivers, ${lodges.length} lodges, ${guides.length} guides, ${flyShops.length} fly shops, ${articles.length} articles, ${species.length} species`
+    `   Total: ${destinations.length} destinations, ${rivers.length} rivers, ${lodges.length} lodges, ${guides.length} guides, ${flyShops.length} fly shops, ${articles.length} articles, ${species.length} species, ${gearBrands.length} gear brands, ${gearProducts.length} gear products`
   );
 }
 

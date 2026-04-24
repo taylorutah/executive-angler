@@ -11,6 +11,8 @@ import {
   User,
   ShoppingBag,
   FileText,
+  Award,
+  Package,
   Camera,
   Mail,
 } from "lucide-react";
@@ -36,6 +38,8 @@ const contentLinks: NavItem[] = [
   { href: "/admin/content/guides", label: "Guides", icon: <User className="h-4 w-4" /> },
   { href: "/admin/content/fly-shops", label: "Fly Shops", icon: <ShoppingBag className="h-4 w-4" /> },
   { href: "/admin/content/articles", label: "Articles", icon: <FileText className="h-4 w-4" /> },
+  { href: "/admin/content/gear-brands", label: "Gear Brands", icon: <Award className="h-4 w-4" /> },
+  { href: "/admin/content/gear-products", label: "Gear Products", icon: <Package className="h-4 w-4" /> },
 ];
 
 const photosLink: NavItem = {

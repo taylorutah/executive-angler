@@ -302,6 +302,65 @@ const articlesConfig: EntityConfig = {
 };
 
 // ---------------------------------------------------------------------------
+// Gear Brands
+// ---------------------------------------------------------------------------
+const gearBrandsConfig: EntityConfig = {
+  table: "gear_brands",
+  label: "Gear Brands",
+  labelSingular: "Gear Brand",
+  slug: "gear-brands",
+  fields: [
+    { key: "id", dbColumn: "id", label: "ID", type: "hidden" },
+    { key: "slug", dbColumn: "slug", label: "Slug", type: "text", required: true, tableColumn: true },
+    { key: "name", dbColumn: "name", label: "Name", type: "text", required: true, tableColumn: true },
+    { key: "tagline", dbColumn: "tagline", label: "Tagline", type: "text" },
+    { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
+    simpleImageField("logoUrl", "logo_url", "Logo"),
+    heroImageField("hero_image_url"),
+    ...heroImageMetaHidden,
+    { key: "websiteUrl", dbColumn: "website_url", label: "Website URL", type: "url" },
+    { key: "country", dbColumn: "country", label: "Country", type: "text" },
+    { key: "foundedYear", dbColumn: "founded_year", label: "Founded Year", type: "number" },
+    { key: "headquarters", dbColumn: "headquarters", label: "Headquarters", type: "text" },
+    { key: "specialties", dbColumn: "specialties", label: "Specialties", type: "string-array", placeholder: "e.g. Fly Rods, Reels, Waders" },
+    { key: "sortOrder", dbColumn: "sort_order", label: "Sort Order", type: "number" },
+    { key: "metaTitle", dbColumn: "meta_title", label: "Meta Title", type: "text" },
+    { key: "metaDescription", dbColumn: "meta_description", label: "Meta Description", type: "textarea", fullWidth: true },
+    { key: "featured", dbColumn: "featured", label: "Featured", type: "boolean", tableColumn: true },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Gear Products
+// ---------------------------------------------------------------------------
+const gearProductsConfig: EntityConfig = {
+  table: "gear_products",
+  label: "Gear Products",
+  labelSingular: "Gear Product",
+  slug: "gear-products",
+  fields: [
+    { key: "id", dbColumn: "id", label: "ID", type: "hidden" },
+    { key: "slug", dbColumn: "slug", label: "Slug", type: "text", required: true, tableColumn: true },
+    { key: "name", dbColumn: "name", label: "Name", type: "text", required: true, tableColumn: true },
+    { key: "brandId", dbColumn: "brand_id", label: "Brand", type: "relation", required: true, relationTable: "gear_brands", relationLabelKey: "name", tableColumn: true },
+    { key: "category", dbColumn: "category", label: "Category", type: "select", required: true, options: ["rod", "reel", "waders"], tableColumn: true },
+    { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
+    heroImageField("hero_image_url"),
+    ...heroImageMetaHidden,
+    { key: "galleryUrls", dbColumn: "gallery_urls", label: "Gallery URLs", type: "string-array" },
+    { key: "msrpUsd", dbColumn: "msrp_usd", label: "MSRP (USD)", type: "number" },
+    { key: "specs", dbColumn: "specs", label: "Specs (JSON)", type: "json", fullWidth: true },
+    { key: "useCases", dbColumn: "use_cases", label: "Use Cases", type: "string-array", placeholder: "e.g. Trout, Saltwater, Dry Fly" },
+    { key: "relatedRiverIds", dbColumn: "related_river_ids", label: "Related River IDs", type: "string-array" },
+    { key: "relatedSpeciesIds", dbColumn: "related_species_ids", label: "Related Species IDs", type: "string-array" },
+    { key: "productUrl", dbColumn: "product_url", label: "Product URL", type: "url" },
+    { key: "metaTitle", dbColumn: "meta_title", label: "Meta Title", type: "text" },
+    { key: "metaDescription", dbColumn: "meta_description", label: "Meta Description", type: "textarea", fullWidth: true },
+    { key: "featured", dbColumn: "featured", label: "Featured", type: "boolean", tableColumn: true },
+  ],
+};
+
+// ---------------------------------------------------------------------------
 // Registry
 // ---------------------------------------------------------------------------
 export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
@@ -312,6 +371,8 @@ export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
   guides: guidesConfig,
   "fly-shops": flyShopsConfig,
   articles: articlesConfig,
+  "gear-brands": gearBrandsConfig,
+  "gear-products": gearProductsConfig,
 };
 
 export function getEntityConfig(slug: string): EntityConfig | undefined {

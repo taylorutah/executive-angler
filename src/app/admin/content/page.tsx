@@ -9,6 +9,8 @@ import {
   User,
   ShoppingBag,
   FileText,
+  Award,
+  Package,
   ChevronRight,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -26,6 +28,8 @@ const ENTITY_ICONS: Record<string, ReactNode> = {
   guides: <User className="h-6 w-6" />,
   "fly-shops": <ShoppingBag className="h-6 w-6" />,
   articles: <FileText className="h-6 w-6" />,
+  "gear-brands": <Award className="h-6 w-6" />,
+  "gear-products": <Package className="h-6 w-6" />,
 };
 
 export default function AdminContentPage() {

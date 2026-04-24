@@ -8,13 +8,15 @@ import {
   getAllFlyShops,
   getAllSpecies,
   getAllCanonicalFlies,
+  getAllGearBrands,
+  getAllGearProducts,
 } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies] =
+  const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies, gearBrands, gearProducts] =
     await Promise.all([
       getAllDestinations(),
       getAllRivers(),
@@ -24,6 +26,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getAllGuides(),
       getAllFlyShops(),
       getAllCanonicalFlies(),
+      getAllGearBrands(),
+      getAllGearProducts(),
     ]);
   const staticPages = [
     { url: SITE_URL, lastModified: new Date(), priority: 1 },
@@ -82,6 +86,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const brandById = new Map(gearBrands.map((b) => [b.id, b]));
+
+  const gearCategoryPages = ["rod", "reel", "waders"].map((cat) => ({
+    url: `${SITE_URL}/gear/category/${cat}`,
+    lastModified: new Date(),
+    priority: 0.7,
+  }));
+
+  const gearBrandPages = gearBrands.map((b) => ({
+    url: `${SITE_URL}/gear/${b.slug}`,
+    lastModified: new Date(),
+    priority: 0.7,
+  }));
+
+  const gearProductPages = gearProducts
+    .map((p) => {
+      const brand = brandById.get(p.brandId);
+      if (!brand) return null;
+      return {
+        url: `${SITE_URL}/gear/${brand.slug}/${p.slug}`,
+        lastModified: new Date(),
+        priority: 0.6,
+      };
+    })
+    .filter((entry): entry is { url: string; lastModified: Date; priority: number } => entry !== null);
+
   const flyPages = canonicalFlies.map((f) => ({
     url: `${SITE_URL}/flies/${f.slug}`,
     lastModified: new Date(),
@@ -125,6 +155,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     { url: `${SITE_URL}/flies`, lastModified: new Date(), priority: 0.9 },
+    { url: `${SITE_URL}/gear`, lastModified: new Date(), priority: 0.9 },
     ...destinationPages,
     ...riverPages,
     ...speciesPages,
@@ -136,5 +167,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...flyCategoryPages,
     ...flyForRiverPages,
     ...flyHatchPages,
+    ...gearCategoryPages,
+    ...gearBrandPages,
+    ...gearProductPages,
   ];
 }

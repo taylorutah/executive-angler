@@ -54,6 +54,8 @@ export const NAV_LINKS: NavLink[] = [
       { label: "Lodges", href: "/lodges" },
       { label: "Guides", href: "/guides" },
       { label: "Fly Shops", href: "/fly-shops" },
+      { label: "Gear", href: "", isSection: true },
+      { label: "All Brands", href: "/gear" },
       { label: "Articles", href: "", isSection: true },
       { label: "All Articles", href: "/articles" },
     ],

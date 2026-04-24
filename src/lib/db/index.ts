@@ -64,3 +64,19 @@ export {
 
 export { getApprovedPhotosByEntity } from "./photos";
 export type { ApprovedPhoto } from "./photos";
+
+export {
+  getAllGearBrands,
+  getGearBrandBySlug,
+  getFeaturedGearBrands,
+  getGearBrandById,
+} from "./gear-brands";
+
+export {
+  getAllGearProducts,
+  getGearProductBySlug,
+  getGearProductsByBrand,
+  getGearProductsByCategory,
+  getFeaturedGearProducts,
+  getGearProductById,
+} from "./gear-products";
