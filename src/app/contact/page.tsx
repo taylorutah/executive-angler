@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { SITE_NAME } from "@/lib/constants";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
+
+const SUBJECT_OPTIONS = [
+  "General Inquiry",
+  "Pro Refund Request",
+  "Guide Pro Claim",
+  "Content Correction",
+  "Lodge or Guide Listing",
+  "Partnership",
+  "Advertising",
+  "Technical Issue",
+] as const;
 
 declare global {
   interface Window {
@@ -20,6 +32,20 @@ declare global {
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function ContactPage() {
+  return (
+    <Suspense fallback={null}>
+      <ContactPageInner />
+    </Suspense>
+  );
+}
+
+function ContactPageInner() {
+  const searchParams = useSearchParams();
+  const requestedSubject = searchParams.get("subject") ?? "";
+  const initialSubject = SUBJECT_OPTIONS.find(
+    (s) => s.toLowerCase() === requestedSubject.toLowerCase()
+  ) ?? "";
+
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -148,17 +174,15 @@ export default function ContactPage() {
                   id="subject"
                   name="subject"
                   required
+                  defaultValue={initialSubject}
                   className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
                 >
                   <option value="">Select a topic</option>
-                  <option value="General Inquiry">General Inquiry</option>
-                  <option value="Content Correction">Content Correction</option>
-                  <option value="Lodge or Guide Listing">
-                    Lodge or Guide Listing
-                  </option>
-                  <option value="Partnership">Partnership</option>
-                  <option value="Advertising">Advertising</option>
-                  <option value="Technical Issue">Technical Issue</option>
+                  {SUBJECT_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
                 </select>
               </div>
 

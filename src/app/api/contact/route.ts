@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     if (resend) {
       await resend.emails.send({
         from: "Executive Angler <noreply@executiveangler.com>",
-        to: "taylor.warnick@gmail.com",
+        to: "hello@executiveangler.com",
         replyTo: email,
         subject: `Contact Form: ${escapeHtml(subject)}`,
         html: `
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       data.append("subject", subject);
       data.append("message", message);
       data.append("_captcha", "false");
-      await fetch("https://formsubmit.co/ajax/taylor.warnick@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/hello@executiveangler.com", {
         method: "POST",
         headers: { Accept: "application/json" },
         body: data,

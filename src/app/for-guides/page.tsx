@@ -58,14 +58,14 @@ export default function ForGuidesPage() {
               using the email you want Pro tied to.
             </li>
             <li>
-              Email{" "}
-              <a
-                href="mailto:taylor.warnick@gmail.com?subject=Guide%20Pro%20claim"
+              Submit your claim through our{" "}
+              <Link
+                href="/contact?subject=Guide%20Pro%20Claim"
                 className="text-[#E8923A] hover:underline"
               >
-                taylor.warnick@gmail.com
-              </a>{" "}
-              with:
+                Contact page
+              </Link>{" "}
+              &mdash; choose <em>&ldquo;Guide Pro Claim&rdquo;</em> as the subject and include:
               <ul className="list-disc pl-6 mt-2 space-y-1">
                 <li>Your name and the email on your account</li>
                 <li>Your guide license / outfitter number (state + number is fine)</li>
@@ -93,7 +93,14 @@ export default function ForGuidesPage() {
           <p>
             This offer is capped at <strong className="text-[#F0F6FC]">one comp per guide</strong>,
             not per outfitter &mdash; though if you run a shop and want your full staff on
-            Pro, email us and we&apos;ll sort it out.
+            Pro,{" "}
+            <Link
+              href="/contact?subject=Guide%20Pro%20Claim"
+              className="text-[#E8923A] hover:underline"
+            >
+              reach out
+            </Link>{" "}
+            and we&apos;ll sort it out.
           </p>
 
           <div className="rounded-xl border border-[#E8923A]/30 bg-[#E8923A]/5 p-6 mt-10">
@@ -101,14 +108,14 @@ export default function ForGuidesPage() {
               Already have an account and want to claim?
             </p>
             <p className="text-[#A8B2BD] mb-4">
-              Send one email. We handle the rest.
+              One short message. We handle the rest.
             </p>
-            <a
-              href="mailto:taylor.warnick@gmail.com?subject=Guide%20Pro%20claim"
+            <Link
+              href="/contact?subject=Guide%20Pro%20Claim"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors"
             >
-              Email to claim
-            </a>
+              Submit your claim
+            </Link>
           </div>
 
           <div className="pt-8">

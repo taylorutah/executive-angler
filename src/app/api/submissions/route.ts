@@ -122,7 +122,7 @@ async function sendAdminNotification(name: string, type: string, submitterEmail:
       },
       body: JSON.stringify({
         from: "Executive Angler <noreply@executiveangler.com>",
-        to: [process.env.ADMIN_EMAIL || "taylor@executiveangler.com"],
+        to: [process.env.ADMIN_EMAIL || "hello@executiveangler.com"],
         subject: `New ${type} submission: ${name}`,
         html: `
           <h2>New Community Submission</h2>

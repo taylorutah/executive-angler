@@ -122,7 +122,7 @@ export async function PATCH(
           headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
           body: JSON.stringify({
             from: "Executive Angler <noreply@executiveangler.com>",
-            to: [process.env.ADMIN_EMAIL || "taylor@executiveangler.com"],
+            to: [process.env.ADMIN_EMAIL || "hello@executiveangler.com"],
             subject: `Resubmission: ${current.name} (${current.entity_type})`,
             html: `<p>${user.email} resubmitted their ${current.entity_type}: <strong>${current.name}</strong></p>
                    <p><a href="https://www.executiveangler.com/admin/submissions/${id}">Review →</a></p>`,

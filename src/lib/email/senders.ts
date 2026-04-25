@@ -98,7 +98,7 @@ export function buildWelcome(args: {
     body,
     ctaLabel: "Open your journal",
     ctaUrl: `${SITE_URL}/journal`,
-    replyTo: "taylor.warnick@gmail.com",
+    replyTo: "hello@executiveangler.com",
   };
 }
 
@@ -523,6 +523,6 @@ export function buildAccountDeleted(args: {
     hideFooterPreferences: true,
     footerNote:
       "Didn't mean to delete? Reply to this email &mdash; we read every one.",
-    replyTo: "taylor.warnick@gmail.com",
+    replyTo: "hello@executiveangler.com",
   };
 }

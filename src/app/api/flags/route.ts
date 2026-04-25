@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           from: "Executive Angler <noreply@executiveangler.com>",
-          to: [process.env.ADMIN_EMAIL || "taylor@executiveangler.com"],
+          to: [process.env.ADMIN_EMAIL || "hello@executiveangler.com"],
           subject: `Flag: ${reason} on ${entity_type} (${entity_id})`,
           html: `<p>A user flagged a ${entity_type} as <strong>${reason}</strong>.</p>
                  <p>Entity: ${entity_id}</p>

@@ -29,17 +29,17 @@ export default function RefundPolicyPage() {
             How to request a refund
           </h2>
           <p>
-            Email{" "}
-            <a
-              href="mailto:taylor.warnick@gmail.com?subject=Pro%20refund%20request"
+            Visit our{" "}
+            <Link
+              href="/contact?subject=Pro%20Refund%20Request"
               className="text-[#E8923A] hover:underline"
             >
-              taylor.warnick@gmail.com
-            </a>{" "}
-            with the subject line <em>&ldquo;Pro refund request&rdquo;</em> and the email address
-            on your account. A real human (Taylor) reads every message and will
-            process your refund through Stripe, typically within one business day.
-            You don&apos;t need to explain why.
+              Contact page
+            </Link>{" "}
+            and choose <em>&ldquo;Pro Refund Request&rdquo;</em> as the subject. Include
+            the email address on your account in the message. A real human (Taylor)
+            reads every message and will process your refund through Stripe, typically
+            within one business day. You don&apos;t need to explain why.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
@@ -86,8 +86,11 @@ export default function RefundPolicyPage() {
             </li>
           </ul>
           <p>
-            If you have trouble with an Apple or Google refund, email us anyway &mdash;
-            we&apos;ll help you through it.
+            If you have trouble with an Apple or Google refund,{" "}
+            <Link href="/contact" className="text-[#E8923A] hover:underline">
+              reach out anyway
+            </Link>{" "}
+            &mdash; we&apos;ll help you through it.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
@@ -103,13 +106,10 @@ export default function RefundPolicyPage() {
             Questions
           </h2>
           <p>
-            Anything unclear? Reach out directly at{" "}
-            <a
-              href="mailto:taylor.warnick@gmail.com"
-              className="text-[#E8923A] hover:underline"
-            >
-              taylor.warnick@gmail.com
-            </a>
+            Anything unclear?{" "}
+            <Link href="/contact" className="text-[#E8923A] hover:underline">
+              Reach out through our Contact page
+            </Link>
             .
           </p>
 

@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "taylor@executiveangler.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@executiveangler.com";
 
 function getClient() {
   return createClient(
