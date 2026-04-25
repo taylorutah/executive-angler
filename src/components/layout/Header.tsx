@@ -8,7 +8,7 @@ import {
   Menu, X, ChevronDown, Search, User, Heart, Package, Bell,
   MessageSquare, Map, Mountain, Fish, Building2, Compass,
   BookOpen, ShoppingBag, Newspaper, Bug, Wrench,
-  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles, Home
+  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles, Home, Gift
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import { isPermanentPro } from "@/lib/admin";
@@ -363,6 +363,11 @@ export default function Header() {
                             <Bug className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
                             New Fly Recipe
                           </Link>
+                          <div className="h-px bg-[#21262D] mx-4" />
+                          <Link href="/gift" className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
+                            <Gift className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                            Gift a Year of Pro
+                          </Link>
                         </div>
                       </div>
                     )}
@@ -539,6 +544,9 @@ export default function Header() {
                     </Link>
                     <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <User className="h-5 w-5" /> Account
+                    </Link>
+                    <Link href="/gift" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                      <Gift className="h-5 w-5" /> Gift Pro
                     </Link>
                   </>
                 ) : (

@@ -26,6 +26,7 @@ const footerColumns = {
     { label: "Terms", href: "/terms" },
     { label: "Refund Policy", href: "/refund-policy" },
     { label: "For Guides", href: "/for-guides" },
+    { label: "Gift Pro", href: "/gift" },
   ],
 };
 

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard, Database, Trash2 } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard, Database, Trash2, Gift } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -708,6 +708,23 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <p className="text-[11px] text-[#6E7681]">
                       Your Pro access syncs across iOS, Android, and web — regardless of where you subscribed.
                     </p>
+
+                    {/* Gift CTA — visible to existing Pro users (their main path to /gift) */}
+                    <Link
+                      href="/gift"
+                      className="block rounded-xl border border-[#E8923A]/20 bg-gradient-to-br from-[#E8923A]/5 to-transparent hover:border-[#E8923A]/40 transition-colors p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
+                          <Gift className="h-4 w-4 text-[#E8923A]" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-[#F0F6FC]">Gift a year of Pro</p>
+                          <p className="text-[11px] text-[#A8B2BD]">$19.99 — send a fishing buddy 12 months of Pro.</p>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
+                      </div>
+                    </Link>
                   </div>
                 ) : (
                   /* Not premium — upgrade CTA */
