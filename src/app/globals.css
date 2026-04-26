@@ -783,19 +783,204 @@
 .light-mode [class*="bg-[#161B22]"] .text-white\/80,
 .light-mode [class*="bg-[#1F2937]"] .text-white\/70 { color: #4B5563 !important; }
 
+/* Exception: explicit text-white on elements (typically photo-overlay text)
+   must stay white in light mode. Higher specificity than the bg-* p rules
+   above so they win the cascade. */
+.light-mode [class*="bg-[#0D1117]"] p.text-white,
+.light-mode [class*="bg-[#0D1117]"] .text-white,
+.light-mode [class*="bg-[#161B22]"] p.text-white,
+.light-mode [class*="bg-[#161B22]"] .text-white,
+.light-mode [class*="bg-[#1F2937]"] p.text-white,
+.light-mode [class*="bg-[#1F2937]"] .text-white,
+.light-mode .bg-\[\#0D1117\] .text-white,
+.light-mode .bg-\[\#161B22\] .text-white,
+.light-mode .bg-\[\#1F2937\] .text-white { color: #FFFFFF !important; }
+
+/* ── Tailwind v4 token classes — light-mode overrides ──
+   With `@theme inline` Tailwind bakes hex values into utilities at build
+   time, so redefining --color-bg etc. under .light-mode doesn't reach
+   bg-bg / bg-surface / text-text-primary token classes. We override them
+   explicitly here, mirroring the hex-selector overrides above. */
+
+.light-mode .bg-bg { background-color: #F7F3EC !important; }
+.light-mode .bg-surface { background-color: #FFFFFF !important; }
+.light-mode .bg-surface-raised { background-color: #EDE8DF !important; }
+.light-mode .bg-dusk { background-color: #F5EFE5 !important; }
+.light-mode .bg-border { background-color: #D4CBB8 !important; }
+
+.light-mode .hover\:bg-bg:hover { background-color: #F0ECE4 !important; }
+.light-mode .hover\:bg-surface:hover { background-color: #FAF7F2 !important; }
+.light-mode .hover\:bg-surface-raised:hover { background-color: #E5DDD0 !important; }
+
+.light-mode .text-text-primary { color: #111827 !important; }
+.light-mode .text-text-secondary { color: #4B5563 !important; }
+.light-mode .text-text-muted { color: #6B7280 !important; }
+.light-mode .hover\:text-text-primary:hover { color: #111827 !important; }
+.light-mode .hover\:text-text-secondary:hover { color: #4B5563 !important; }
+
+.light-mode .border-border { border-color: #D4CBB8 !important; }
+.light-mode .hover\:border-border:hover { border-color: #C4B9A4 !important; }
+
+/* Accent / signal tokens — use darker variants for AA contrast on cream */
+.light-mode .bg-accent { background-color: #D4751F !important; }
+.light-mode .text-accent { color: #D4751F !important; }
+.light-mode .border-accent { border-color: #D4751F !important; }
+.light-mode .hover\:bg-accent:hover { background-color: #B86417 !important; }
+.light-mode .hover\:text-accent:hover { color: #B86417 !important; }
+.light-mode .hover\:border-accent:hover { border-color: #B86417 !important; }
+
+.light-mode .bg-signal { background-color: #0090A8 !important; }
+.light-mode .text-signal { color: #0090A8 !important; }
+.light-mode .border-signal { border-color: #0090A8 !important; }
+.light-mode .bg-signal-pip { background-color: #00B4D8 !important; } /* indicator dots stay vivid */
+
+.light-mode .text-success { color: #16A34A !important; }
+.light-mode .bg-success { background-color: #16A34A !important; }
+.light-mode .text-danger { color: #DC2626 !important; }
+.light-mode .bg-danger { background-color: #DC2626 !important; }
+
+/* placeholder color in form inputs that use text-text-muted */
+.light-mode .placeholder\:text-text-muted::placeholder { color: #9CA3AF !important; }
+
 /* ── Article body — light-mode overrides ── */
 .light-mode .article-body { color: #374151 !important; }
 .light-mode .article-body h2 { color: #111827 !important; }
 .light-mode .article-body h3 { color: #111827 !important; }
 .light-mode .article-body h4 { color: #4B5563 !important; }
 .light-mode .article-body strong { color: #111827 !important; }
-.light-mode .article-body blockquote { color: #6B7280 !important; background: rgba(212, 117, 31, 0.06) !important; }
+.light-mode .article-body blockquote { color: #374151 !important; background: rgba(212, 117, 31, 0.06) !important; border-left-color: #D4751F !important; }
+.light-mode .article-body blockquote p,
+.light-mode .article-body blockquote { color: #1F2937 !important; }
+.light-mode .article-body a { color: #0090A8 !important; text-decoration-color: rgba(0, 144, 168, 0.4) !important; }
+.light-mode .article-body a:hover { color: #D4751F !important; text-decoration-color: rgba(212, 117, 31, 0.4) !important; }
 .light-mode .article-body td { color: #374151 !important; }
 .light-mode .article-body th { background: #EDE8DF !important; color: #111827 !important; }
 .light-mode .article-body table { border-color: #D4CBB8 !important; }
 .light-mode .article-body td { border-color: #D4CBB8 !important; }
 .light-mode .article-body h2 { border-color: #D4CBB8 !important; }
 .light-mode .article-body tr:nth-child(even) td { background: rgba(237, 232, 223, 0.5) !important; }
+
+/* ── Article callouts — light-mode overrides ──
+   Articles were authored with light-friendly Tailwind classes (bg-slate-50,
+   text-slate-700, etc). Dark mode repaints those to dark surfaces / light text
+   via the rules above (lines 444-542). In light mode we need to repaint them
+   BACK to actual light surfaces with dark legible text. */
+
+/* Slate text → readable dark on light */
+.light-mode .article-body .text-slate-400 { color: #6B7280 !important; }
+.light-mode .article-body .text-slate-500 { color: #6B7280 !important; }
+.light-mode .article-body .text-slate-600 { color: #4B5563 !important; }
+.light-mode .article-body .text-slate-700 { color: #374151 !important; }
+.light-mode .article-body .text-slate-800 { color: #1F2937 !important; }
+.light-mode .article-body .text-slate-900 { color: #111827 !important; }
+.light-mode .article-body .text-gray-400 { color: #6B7280 !important; }
+.light-mode .article-body .text-gray-500 { color: #6B7280 !important; }
+.light-mode .article-body .text-gray-600 { color: #4B5563 !important; }
+.light-mode .article-body .text-gray-700 { color: #374151 !important; }
+.light-mode .article-body .text-gray-800 { color: #1F2937 !important; }
+.light-mode .article-body .text-gray-900 { color: #111827 !important; }
+.light-mode .article-body .text-forest-dark { color: #111827 !important; }
+
+/* Amber-toned text — darker copper on cream for legibility */
+.light-mode .article-body .text-amber-600 { color: #B45309 !important; }
+.light-mode .article-body .text-amber-700 { color: #92400E !important; }
+.light-mode .article-body .text-amber-800 { color: #78350F !important; }
+.light-mode .article-body .text-amber-900 { color: #451A03 !important; }
+
+/* Red-toned text — darker crimson */
+.light-mode .article-body .text-red-600 { color: #B91C1C !important; }
+.light-mode .article-body .text-red-700 { color: #991B1B !important; }
+.light-mode .article-body .text-red-800 { color: #7F1D1D !important; }
+
+/* Slate / gray callout backgrounds → restore to white-on-cream surfaces */
+.light-mode .article-body .bg-slate-50,
+.light-mode .article-body .bg-gray-50 {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D4CBB8 !important;
+  color: #1F2937 !important;
+}
+.light-mode .article-body .bg-slate-100,
+.light-mode .article-body .bg-gray-100 {
+  background-color: #FAF7F2 !important;
+  border: 1px solid #D4CBB8 !important;
+  color: #1F2937 !important;
+}
+
+/* Amber callout backgrounds → soft cream-amber */
+.light-mode .article-body .bg-amber-50 {
+  background-color: #FFFBEB !important;
+  color: #78350F !important;
+}
+.light-mode .article-body .bg-amber-100 {
+  background-color: #FEF3C7 !important;
+  color: #78350F !important;
+}
+
+/* Red callout backgrounds → soft pink */
+.light-mode .article-body .bg-red-50 {
+  background-color: #FEF2F2 !important;
+  color: #7F1D1D !important;
+}
+.light-mode .article-body .bg-red-100 {
+  background-color: #FEE2E2 !important;
+  color: #7F1D1D !important;
+}
+
+/* Forest-tinted callout backgrounds → soft cream */
+.light-mode .article-body .bg-forest\/5,
+.light-mode .article-body [class*="bg-forest"] {
+  background-color: rgba(212, 117, 31, 0.06) !important;
+}
+
+/* Borders → cream stone */
+.light-mode .article-body .border-slate-100,
+.light-mode .article-body .border-slate-200,
+.light-mode .article-body .border-gray-100,
+.light-mode .article-body .border-gray-200 {
+  border-color: #D4CBB8 !important;
+}
+.light-mode .article-body .border-amber-400 {
+  border-color: #D4751F !important;
+}
+.light-mode .article-body .border-forest {
+  border-color: #D4751F !important;
+}
+
+/* Inside slate/gray callouts — restore high-contrast headings + strong */
+.light-mode .article-body .bg-slate-50 strong,
+.light-mode .article-body .bg-slate-100 strong,
+.light-mode .article-body .bg-gray-50 strong,
+.light-mode .article-body .bg-gray-100 strong,
+.light-mode .article-body .bg-slate-50 h2,
+.light-mode .article-body .bg-slate-50 h3,
+.light-mode .article-body .bg-slate-50 h4,
+.light-mode .article-body .bg-slate-100 h2,
+.light-mode .article-body .bg-slate-100 h3,
+.light-mode .article-body .bg-slate-100 h4,
+.light-mode .article-body .bg-gray-50 h2,
+.light-mode .article-body .bg-gray-50 h3,
+.light-mode .article-body .bg-gray-50 h4,
+.light-mode .article-body .bg-gray-100 h2,
+.light-mode .article-body .bg-gray-100 h3,
+.light-mode .article-body .bg-gray-100 h4 {
+  color: #111827 !important;
+}
+
+/* Inside amber callouts — darker copper headings + strong */
+.light-mode .article-body .bg-amber-50 strong,
+.light-mode .article-body .bg-amber-100 strong,
+.light-mode .article-body .bg-amber-50 h2,
+.light-mode .article-body .bg-amber-50 h3,
+.light-mode .article-body .bg-amber-50 h4,
+.light-mode .article-body .bg-amber-100 h2,
+.light-mode .article-body .bg-amber-100 h3,
+.light-mode .article-body .bg-amber-100 h4 {
+  color: #78350F !important;
+}
+
+/* ── Destination + River body — light-mode overrides ── */
+.light-mode .destination-body p,
+.light-mode .river-body p { color: #374151 !important; }
 
 /* ── Logo swap: dark/light mode ── */
 .light-mode .dark-logo { display: none !important; }
