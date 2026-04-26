@@ -978,6 +978,63 @@
   color: #78350F !important;
 }
 
+/* ── Article body — hardcoded hex Tailwind classes baked into article HTML ──
+   Articles in src/data/articles.ts use explicit Tailwind hex utilities
+   (e.g. `text-[#D8DEE4]`, `text-[#F0F6FC]`, `bg-[#1F1610]`) for body text,
+   strong tags, and warning callouts. In dark mode these render correctly.
+   In light mode they need to flip to dark text on light surfaces. */
+
+/* Body / list text inside articles */
+.light-mode .article-body .text-\[\#D8DEE4\] { color: #374151 !important; }
+.light-mode .article-body [class*="text-[#D8DEE4]"] { color: #374151 !important; }
+
+/* Strong / heading text inside articles */
+.light-mode .article-body .text-\[\#F0F6FC\] { color: #111827 !important; }
+.light-mode .article-body [class*="text-[#F0F6FC]"] { color: #111827 !important; }
+
+/* Forest-dark text → dark slate for headings on cream */
+.light-mode .article-body .text-forest-dark { color: #111827 !important; }
+
+/* Copper-toned text inside warning/note callouts → deeper copper for AA on cream */
+.light-mode .article-body .text-\[\#F4B26B\] { color: #92400E !important; }
+.light-mode .article-body [class*="text-[#F4B26B]"] { color: #92400E !important; }
+.light-mode .article-body .text-\[\#F8D7A8\] { color: #78350F !important; }
+.light-mode .article-body [class*="text-[#F8D7A8]"] { color: #78350F !important; }
+
+/* Coral/red text inside error/warning callouts → deeper red */
+.light-mode .article-body .text-\[\#FCA5A5\] { color: #991B1B !important; }
+.light-mode .article-body [class*="text-[#FCA5A5]"] { color: #991B1B !important; }
+
+/* Dark warning callout backgrounds → soft cream-amber */
+.light-mode .article-body .bg-\[\#1F1610\] {
+  background-color: #FFFBEB !important;
+  border-left-color: #D4751F !important;
+}
+.light-mode .article-body [class*="bg-[#1F1610]"] {
+  background-color: #FFFBEB !important;
+  border-left-color: #D4751F !important;
+}
+
+/* Dark red-warning circle backgrounds (numbered "wrong way" callouts) */
+.light-mode .article-body .bg-\[\#1F1115\] {
+  background-color: #FEE2E2 !important;
+}
+.light-mode .article-body [class*="bg-[#1F1115]"] {
+  background-color: #FEE2E2 !important;
+}
+
+/* Forest-tinted callouts (success / pro-tip) → soft cream-green */
+.light-mode .article-body .bg-forest\/5 {
+  background-color: rgba(22, 163, 74, 0.06) !important;
+  border-left-color: #16A34A !important;
+}
+.light-mode .article-body .border-forest {
+  border-color: #16A34A !important;
+}
+.light-mode .article-body .bg-forest {
+  background-color: #16A34A !important;
+}
+
 /* ── Destination + River body — light-mode overrides ── */
 .light-mode .destination-body p,
 .light-mode .river-body p { color: #374151 !important; }
