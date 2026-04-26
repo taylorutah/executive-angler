@@ -12,7 +12,7 @@ import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} — Fly Fishing Intelligence: Journal, Flies, Rivers`,
-  description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and get AI-powered insights. Free fly fishing app — now on the App Store.",
+  description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and see the patterns in your fishing. Free fly fishing app — now on the App Store.",
   openGraph: {
     title: `${SITE_NAME} — Log Catches, Tie Better Flies, Fish Smarter`,
     description: "The fly fishing intelligence platform. Journal your sessions, build fly recipes, track river conditions, and analyze patterns. Free on iPhone and web.",
@@ -41,7 +41,7 @@ const RIVERS = [
 const PILLAR_FEATURES = [
   { icon: Activity, text: "Log sessions with GPS, weather, and gear — automatically" },
   { icon: Bug, text: "Build fly recipes, browse 500+ materials, track your tying" },
-  { icon: BarChart3, text: "AI-powered insights from your catch history and conditions" },
+  { icon: BarChart3, text: "Insights from your catch history — best flies, peak hours, conditions" },
 ];
 
 export default async function HomePage() {
@@ -202,7 +202,7 @@ export default async function HomePage() {
               <div className="space-y-3 mb-8">
                 {[
                   "GPS-tracked sessions with weather and water conditions",
-                  "AI-powered insights: best fly, peak hour, optimal conditions",
+                  "Insights from your data: best fly, peak hour, optimal conditions",
                   "Trophy wall, river stats, and year-over-year trends",
                 ].map((line) => (
                   <div key={line} className="flex items-start gap-3">

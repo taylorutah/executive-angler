@@ -358,7 +358,7 @@ export default function InsightsClient({
           </Link>
           <div className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-[#E8923A]" />
-            <h1 className="font-serif text-2xl text-[#F0F6FC]">AI Insights</h1>
+            <h1 className="font-serif text-2xl text-[#F0F6FC]">Insights</h1>
           </div>
         </div>
 
@@ -440,7 +440,7 @@ export default function InsightsClient({
             <Sparkles className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Not enough data yet</h2>
             <p className="text-sm text-[#A8B2BD]">
-              Log at least 3 sessions with catch details to unlock AI-powered insights.
+              Log at least 3 sessions with catch details to unlock your insights.
             </p>
           </div>
         ) : (

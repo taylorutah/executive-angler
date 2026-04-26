@@ -82,7 +82,7 @@ export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
       <div className="bg-[#161B22] rounded-2xl border border-[#21262D] p-6">
         <div className="flex items-center gap-2 mb-4">
           <Sparkles className="h-5 w-5 text-[#E8923A]" />
-          <h2 className="text-base font-bold text-[#F0F6FC]">AI Fishing Coach</h2>
+          <h2 className="text-base font-bold text-[#F0F6FC]">Fishing Insights</h2>
           <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">
             PRO
           </span>
@@ -91,8 +91,8 @@ export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
         <div className="flex flex-col items-center text-center py-6">
           <Lock className="h-10 w-10 text-[#6E7681] mb-3" />
           <p className="text-sm text-[#A8B2BD] mb-4 max-w-xs">
-            Unlock AI-powered fishing insights that analyze your patterns, identify what
-            flies and conditions work best, and recommend how to catch more fish.
+            Unlock personal insights that surface your patterns, identify which
+            flies and conditions work best, and show you how to catch more fish.
           </p>
           <Link
             href="/pricing"
@@ -111,7 +111,7 @@ export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-[#E8923A]" />
-          <h2 className="text-base font-bold text-[#F0F6FC]">AI Fishing Coach</h2>
+          <h2 className="text-base font-bold text-[#F0F6FC]">Fishing Insights</h2>
           <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">
             PRO
           </span>

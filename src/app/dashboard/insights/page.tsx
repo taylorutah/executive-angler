@@ -7,8 +7,8 @@ import { checkPremium } from "@/lib/admin";
 import InsightsClient from "./InsightsClient";
 
 export const metadata: Metadata = {
-  title: "AI Insights — Executive Angler",
-  description: "AI-powered analysis of your fishing patterns and personalized recommendations.",
+  title: "Insights — Executive Angler",
+  description: "Personal insights into your fishing patterns: best flies, peak conditions, and where you fish best.",
 };
 
 export default async function InsightsPage() {
@@ -24,7 +24,7 @@ export default async function InsightsPage() {
           <Lock className="h-12 w-12 text-[#E8923A] mx-auto mb-4" />
           <h1 className="text-xl font-bold text-[#F0F6FC] mb-2">Pro Feature</h1>
           <p className="text-sm text-[#A8B2BD] mb-6">
-            AI Insights analyzes your fishing history to find patterns,
+            Insights analyzes your fishing history to surface patterns,
             recommend optimal conditions, and help you catch more fish.
           </p>
           <Link

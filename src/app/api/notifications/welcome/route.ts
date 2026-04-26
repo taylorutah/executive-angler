@@ -105,9 +105,9 @@ function buildWelcomeHtml(displayName?: string) {
             <tr><td style="border-top:1px solid #21262D;"></td></tr>
           </table>
           <p style="margin:20px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
-            <strong style="color:#A8B2BD;">Unlock Pro</strong> for AI-powered journal insights,
-            personal catch overlays on flow charts, unlimited fly patterns, PDF recipe export,
-            and full data export.
+            <strong style="color:#A8B2BD;">Unlock Pro</strong> for personal Insights, per-river Awards,
+            River Intel leaderboards, the Best Window Calculator on live flow, and Trophy Wall+.
+            <strong style="color:#A8B2BD;">$2.99/mo or $19.99/yr.</strong>
             <a href="${SITE_URL}/pricing" style="color:#E8923A;text-decoration:none;font-weight:600;">See plans &rarr;</a>
           </p>
 

@@ -7,7 +7,8 @@ import {
   Fish, MapPin, TrendingUp, Users,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
-  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles, Wrench
+  BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles, Wrench,
+  Upload
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 import HelpHint from "@/components/ui/HelpHint";
@@ -359,7 +360,6 @@ export default function DashboardClient({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <Package className="h-5 w-5 text-[#A8B2BD]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                   </div>
                   <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels &amp; more</p>
@@ -374,8 +374,8 @@ export default function DashboardClient({
                     <Lightbulb className="h-5 w-5 text-[#A855F7]" />
                     <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">AI Insights</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Smart patterns</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">Insights</h3>
+                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Patterns in your data</p>
                 </Link>
 
                 <Link
@@ -404,14 +404,21 @@ export default function DashboardClient({
               </div>
 
               {/* Row 3 — secondary utilities (smaller, muted) */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                 <Link
                   href="/dashboard/export"
                   className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
                 >
                   <BookOpen className="h-4 w-4 text-[#0BA5C7] shrink-0" />
                   <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Export data</span>
-                  <span className="ml-auto text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
+                </Link>
+
+                <Link
+                  href="/journal/import"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#2EA44F]/60 transition-all"
+                >
+                  <Upload className="h-4 w-4 text-[#2EA44F] shrink-0" />
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Import data</span>
                 </Link>
 
                 {AWARDS_VISIBLE && (
@@ -426,6 +433,7 @@ export default function DashboardClient({
                   <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">
                     {riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)}
                   </span>
+                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
                 </Link>
                 )}
               </div>
