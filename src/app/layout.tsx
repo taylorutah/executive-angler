@@ -109,6 +109,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${dmSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
       <head>
+        {/* Theme bootstrap — runs synchronously before paint to prevent FOUC.
+            Reads saved preference from localStorage; falls back to system
+            preference (prefers-color-scheme), defaulting to light. The
+            ThemeProvider hydrates from this same source after mount. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('ea-theme');var l;if(s==='light'||s==='dark'){l=s==='light';}else{l=!window.matchMedia('(prefers-color-scheme: dark)').matches;}if(l){document.documentElement.classList.add('light-mode');}}catch(e){}})();`,
+          }}
+        />
         {/* Apple native Smart App Banner — Safari iOS only. Auto-detects whether
             the app is installed and shows "Open" vs "View" accordingly. We
             prefer this over a custom banner because it's install-aware and
