@@ -705,11 +705,38 @@
 .light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
 .light-mode .text-\[\#A8B2BD\] { color: #4B5563 !important; }
 .light-mode .text-\[\#6E7681\] { color: #6B7280 !important; }
+.light-mode .text-\[\#8B949E\] { color: #6B7280 !important; }
+.light-mode .text-\[\#C9D1D9\] { color: #374151 !important; }
+.light-mode .text-\[\#D8DEE4\] { color: #374151 !important; }
 
-/* ── Text colors — attribute contains (Safari iOS fallback, bulletproof) ── */
-.light-mode [class*="F0F6FC"] { color: #111827 !important; }
+/* Note: NOT inverting [class*="F0F6FC"] globally because that pattern
+   matches both text-[#F0F6FC] (should flip) and bg-[#F0F6FC] (light surface,
+   should NOT flip). We rely on the escaped-selector rule above plus an
+   article-body specific override for text-only contexts. */
 .light-mode [class*="A8B2BD"] { color: #4B5563 !important; }
 .light-mode [class*="6E7681"] { color: #6B7280 !important; }
+.light-mode [class*="8B949E"] { color: #6B7280 !important; }
+.light-mode [class*="C9D1D9"] { color: #374151 !important; }
+.light-mode [class*="D8DEE4"] { color: #374151 !important; }
+
+/* ── Additional dark surface variants ── */
+.light-mode .bg-\[\#0A0D11\] { background-color: #F0ECE4 !important; }
+.light-mode .bg-\[\#1C2028\] { background-color: #F5F1EB !important; }
+.light-mode .bg-\[\#1C2128\] { background-color: #F5F1EB !important; }
+.light-mode .bg-\[\#2D333B\] { background-color: #E5DDD0 !important; }
+.light-mode [class*="bg-[#0A0D11]"] { background-color: #F0ECE4 !important; }
+.light-mode [class*="bg-[#1C2028]"] { background-color: #F5F1EB !important; }
+.light-mode [class*="bg-[#1C2128]"] { background-color: #F5F1EB !important; }
+.light-mode [class*="bg-[#2D333B]"] { background-color: #E5DDD0 !important; }
+
+/* Light copper hover/highlight variants — shift to deeper copper for AA on cream */
+.light-mode .text-\[\#F0A65A\] { color: #B86417 !important; }
+.light-mode .hover\:text-\[\#F0A65A\]:hover { color: #B86417 !important; }
+.light-mode .bg-\[\#F0A65A\] { background-color: #D4751F !important; }
+.light-mode .hover\:bg-\[\#F0A65A\]:hover { background-color: #B86417 !important; }
+
+/* Gold (Awards / Trophy Wall) — leave pip golden but darken text on cream */
+.light-mode .text-\[\#FFD700\] { color: #B8860B !important; }
 
 /* ── Hover text ── */
 .light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
