@@ -12,6 +12,9 @@ const ALLOWED_TABLES = [
   "guides",
   "fly_shops",
   "articles",
+  "canonical_flies",
+  "gear_brands",
+  "gear_products",
 ] as const;
 
 type AllowedTable = (typeof ALLOWED_TABLES)[number];

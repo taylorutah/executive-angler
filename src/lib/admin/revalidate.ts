@@ -8,6 +8,7 @@ const PATHS_BY_TABLE: Record<string, string[]> = {
   lodges: ["/", "/lodges", "/lodges/[slug]"],
   guides: ["/", "/guides", "/guides/[slug]"],
   fly_shops: ["/", "/fly-shops", "/fly-shops/[slug]"],
+  canonical_flies: ["/", "/flies", "/flies/[slug]"],
 };
 
 export function revalidateEntityPaths(table: string): void {

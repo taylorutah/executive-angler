@@ -361,6 +361,55 @@ const gearProductsConfig: EntityConfig = {
 };
 
 // ---------------------------------------------------------------------------
+// Canonical Flies (The Trout Fly Library)
+// ---------------------------------------------------------------------------
+const canonicalFliesConfig: EntityConfig = {
+  table: "canonical_flies",
+  label: "Flies (Trout Fly Library)",
+  labelSingular: "Fly",
+  slug: "flies",
+  fields: [
+    { key: "id", dbColumn: "id", label: "ID", type: "hidden" },
+    { key: "slug", dbColumn: "slug", label: "Slug", type: "text", required: true, tableColumn: true },
+    { key: "name", dbColumn: "name", label: "Name", type: "text", required: true, tableColumn: true },
+    { key: "category", dbColumn: "category", label: "Category", type: "select", required: true, options: ["dry", "nymph", "streamer", "emerger", "wet", "terrestrial", "egg", "midge"], tableColumn: true },
+    { key: "tagline", dbColumn: "tagline", label: "Tagline", type: "text" },
+    { key: "description", dbColumn: "description", label: "Description", type: "textarea", required: true, fullWidth: true },
+    { key: "history", dbColumn: "history", label: "History", type: "textarea", fullWidth: true },
+    { key: "tyingOverview", dbColumn: "tying_overview", label: "Tying Overview", type: "textarea", fullWidth: true },
+    { key: "tyingSteps", dbColumn: "tying_steps", label: "Tying Steps", type: "json", fullWidth: true },
+    { key: "materialsList", dbColumn: "materials_list", label: "Materials List", type: "json", fullWidth: true },
+    { key: "fishingTips", dbColumn: "fishing_tips", label: "Fishing Tips", type: "textarea", fullWidth: true },
+    { key: "whenToUse", dbColumn: "when_to_use", label: "When to Use", type: "textarea", fullWidth: true },
+    { key: "imitates", dbColumn: "imitates", label: "Imitates", type: "string-array", placeholder: "e.g. mayflies, midges" },
+    { key: "effectiveSpecies", dbColumn: "effective_species", label: "Effective Species", type: "string-array", placeholder: "e.g. Rainbow Trout, Brown Trout" },
+    { key: "waterTypes", dbColumn: "water_types", label: "Water Types", type: "string-array", placeholder: "e.g. tailwater, freestone, spring creek" },
+    { key: "sizes", dbColumn: "sizes", label: "Sizes", type: "string-array", required: true, placeholder: "e.g. #14, #16, #18" },
+    { key: "colors", dbColumn: "colors", label: "Colors", type: "string-array" },
+    { key: "beadOptions", dbColumn: "bead_options", label: "Bead Options", type: "string-array" },
+    { key: "hookStyles", dbColumn: "hook_styles", label: "Hook Styles", type: "string-array" },
+    { key: "keyVariations", dbColumn: "key_variations", label: "Key Variations", type: "json", fullWidth: true },
+    simpleImageField("heroImageUrl", "hero_image_url", "Hero Image"),
+    { key: "galleryUrls", dbColumn: "gallery_urls", label: "Gallery URLs", type: "string-array" },
+    simpleImageField("iconUrl", "icon_url", "Icon"),
+    { key: "videoUrl", dbColumn: "video_url", label: "Primary Video URL", type: "url" },
+    { key: "additionalVideos", dbColumn: "additional_videos", label: "Additional Videos", type: "json", fullWidth: true },
+    { key: "relatedFlyIds", dbColumn: "related_fly_ids", label: "Related Fly IDs", type: "string-array" },
+    { key: "relatedRiverIds", dbColumn: "related_river_ids", label: "Related River IDs", type: "string-array" },
+    { key: "relatedDestinationIds", dbColumn: "related_destination_ids", label: "Related Destination IDs", type: "string-array" },
+    { key: "hatchAssociations", dbColumn: "hatch_associations", label: "Hatch Associations", type: "json", fullWidth: true },
+    { key: "affiliateLinks", dbColumn: "affiliate_links", label: "Affiliate Links", type: "json", fullWidth: true },
+    { key: "flyShopIds", dbColumn: "fly_shop_ids", label: "Fly Shop IDs", type: "string-array" },
+    { key: "originCredit", dbColumn: "origin_credit", label: "Origin Credit", type: "text" },
+    { key: "metaTitle", dbColumn: "meta_title", label: "Meta Title", type: "text" },
+    { key: "metaDescription", dbColumn: "meta_description", label: "Meta Description", type: "textarea", fullWidth: true },
+    { key: "rank", dbColumn: "rank", label: "Display Rank", type: "number" },
+    { key: "featured", dbColumn: "featured", label: "Featured", type: "boolean", tableColumn: true },
+    { key: "isHeroPattern", dbColumn: "is_hero_pattern", label: "Hero Pattern", type: "boolean" },
+  ],
+};
+
+// ---------------------------------------------------------------------------
 // Registry
 // ---------------------------------------------------------------------------
 export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
@@ -371,6 +420,7 @@ export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
   guides: guidesConfig,
   "fly-shops": flyShopsConfig,
   articles: articlesConfig,
+  flies: canonicalFliesConfig,
   "gear-brands": gearBrandsConfig,
   "gear-products": gearProductsConfig,
 };
