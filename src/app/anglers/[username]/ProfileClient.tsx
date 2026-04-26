@@ -291,23 +291,21 @@ export default function ProfileClient({
           </div>
         </div>
 
-        {/* Stats row */}
-        <div className="mt-8 grid grid-cols-5 rounded-xl border border-[#21262D] bg-[#161B22] overflow-hidden">
+        {/* Stats row — primary */}
+        <div className="mt-8 grid grid-cols-3 rounded-xl border border-[#21262D] bg-[#161B22] divide-x divide-[#21262D] overflow-hidden">
           <StatCell value={stats.sessions} label="Sessions" />
-          <StatDivider />
           <StatCell value={stats.fish} label="Fish" />
-          <StatDivider />
           <StatCell value={stats.rivers} label="Rivers" />
-          <StatDivider />
+        </div>
+
+        {/* Stats row — social */}
+        <div className="mt-3 grid grid-cols-2 rounded-xl border border-[#21262D] bg-[#161B22] divide-x divide-[#21262D] overflow-hidden">
           <StatCell
             value={followerCount}
             label="Followers"
-            // Anonymous viewers get an auth wall for the follower list
-            // because it's a user-discovery surface — Strava gates this too.
             href={isAnonymous ? loginHref : undefined}
             onClick={isAnonymous ? undefined : () => setListMode("followers")}
           />
-          <StatDivider />
           <StatCell
             value={stats.following}
             label="Following"
@@ -532,10 +530,6 @@ function StatCell({
     );
   }
   return inner;
-}
-
-function StatDivider() {
-  return <div className="w-px bg-[#21262D]" aria-hidden />;
 }
 
 /* ─────────────── Follow list dialog ─────────────── */
