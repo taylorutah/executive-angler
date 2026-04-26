@@ -24,29 +24,23 @@ export const authors: Author[] = [
     name: "Taylor Warnick",
     articleAuthorName: "Executive Angler Staff",
     role: "Founder & Editor-in-Chief",
-    bio: `Taylor Warnick is the founder of Executive Angler and a lifelong fly fisher who grew up chasing cutthroat trout in the mountain streams of Utah. With over two decades on the water — from spring creeks in the Intermountain West to saltwater flats in the Caribbean — Taylor combines deep angling experience with a background in software engineering and product design.
+    bio: `Taylor Warnick is the founder of Executive Angler, a fly fishing intelligence platform built for serious anglers. He designed and built the product himself — web, iOS, and the data systems behind it — out of a simple idea: the things anglers actually care about (flows, hatches, sessions, flies) deserve to be treated as data worth keeping.
 
-After building technology products for Fortune 500 companies, Taylor launched Executive Angler to create the definitive digital resource for serious fly fishers. His approach merges data-driven analysis with the kind of hard-won, on-the-water insight that only comes from thousands of hours spent reading currents, matching hatches, and refining technique.
-
-Taylor holds certifications in fly casting instruction and is an active member of Trout Unlimited. When he's not writing or building the Executive Angler platform, you'll find him waist-deep in a freestone river somewhere in the Rocky Mountain West, probably euro nymphing.`,
+He lives in Sandy, Utah, and spends most of his time on the water euro nymphing the region's rivers. Executive Angler is the tool he wished existed.`,
     shortBio:
-      "Founder of Executive Angler. Fly fisher, software engineer, and conservation advocate based in the Rocky Mountain West.",
+      "Founder of Executive Angler. Based in Sandy, Utah — mostly on regional rivers, mostly euro nymphing.",
     // imageUrl intentionally unset — AuthorAvatar renders initials fallback until a real photo is uploaded
     imageUrl: undefined,
     expertise: [
       "Euro Nymphing",
       "Western Trout Fishing",
       "Fly Fishing Technology",
-      "Destination Planning",
-      "Gear Reviews",
-      "Conservation",
+      "Product Design & Engineering",
     ],
     credentials: [
-      "20+ years fly fishing experience",
-      "Certified fly casting instructor",
-      "Trout Unlimited member",
-      "Software engineer & product designer",
-      "Fished 15+ U.S. states and 4 countries",
+      "Founder of Executive Angler",
+      "Designed and built the web, iOS, and data platform",
+      "Based in Sandy, Utah",
     ],
     socialLinks: {
       website: "https://www.executiveangler.com",
