@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getAllAuthors } from "@/data/authors";
 
@@ -49,12 +49,11 @@ export default function AuthorsPage() {
               className="group flex gap-5 bg-[#161B22] rounded-xl border border-[#21262D] p-5 hover:border-[#E8923A]/30 hover:shadow-md transition-all"
             >
               <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#E8923A]/30 flex-shrink-0">
-                <Image
-                  src={author.imageUrl}
-                  alt={author.name}
-                  fill
-                  className="object-cover"
+                <AuthorAvatar
+                  name={author.name}
+                  imageUrl={author.imageUrl}
                   sizes="80px"
+                  fallbackTextClass="text-2xl"
                 />
               </div>
               <div className="flex-1 min-w-0">

@@ -434,12 +434,26 @@
   color: #E0E6EC !important;
 }
 
-/* Override light-themed Tailwind classes embedded in article HTML content */
-.article-body .text-slate-600,
-.article-body .text-slate-500,
+/* =============================================
+   Override light-themed Tailwind classes baked into legacy article HTML.
+   Articles were authored in light mode; site is now dark (#0D1117).
+   These overrides repaint light callout boxes / dark text as dark-mode
+   surfaces and light text — all targets clear WCAG AAA (≥7:1) on #0D1117.
+   ============================================= */
+
+/* Text colors — recolor "dark on light" Tailwind classes to readable light */
 .article-body .text-slate-400,
+.article-body .text-slate-500,
+.article-body .text-slate-600,
+.article-body .text-slate-700,
+.article-body .text-slate-800,
+.article-body .text-slate-900,
+.article-body .text-gray-400,
+.article-body .text-gray-500,
 .article-body .text-gray-600,
-.article-body .text-gray-500 {
+.article-body .text-gray-700,
+.article-body .text-gray-800,
+.article-body .text-gray-900 {
   color: #D8DEE4 !important;
 }
 
@@ -447,13 +461,84 @@
   color: #F0F6FC !important;
 }
 
+/* Amber-toned text (used inside Pro-tip callouts) → warm light copper */
+.article-body .text-amber-600,
+.article-body .text-amber-700,
+.article-body .text-amber-800,
+.article-body .text-amber-900 {
+  color: #F4B26B !important;
+}
+
+/* Red-toned text → readable coral */
+.article-body .text-red-600,
+.article-body .text-red-700,
+.article-body .text-red-800 {
+  color: #FCA5A5 !important;
+}
+
+/* Background callouts — repaint near-white surfaces as dark-mode panels */
+.article-body .bg-slate-50,
+.article-body .bg-slate-100,
+.article-body .bg-gray-50,
+.article-body .bg-gray-100 {
+  background-color: #161B22 !important;
+  border: 1px solid #21262D;
+  color: #D8DEE4 !important;
+}
+
+.article-body .bg-amber-50,
+.article-body .bg-amber-100 {
+  background-color: rgba(232, 146, 58, 0.08) !important;
+  color: #F4B26B !important;
+}
+
+.article-body .bg-red-50,
+.article-body .bg-red-100 {
+  background-color: rgba(252, 165, 165, 0.08) !important;
+  color: #FCA5A5 !important;
+}
+
 .article-body .bg-forest\/5,
 .article-body [class*="bg-forest"] {
   background-color: rgba(232, 146, 58, 0.06) !important;
 }
 
+/* Border classes — light slate borders → dark mode dividers */
+.article-body .border-slate-100,
+.article-body .border-slate-200,
+.article-body .border-gray-100,
+.article-body .border-gray-200 {
+  border-color: #21262D !important;
+}
+
+.article-body .border-amber-400 {
+  border-color: #E8923A !important;
+}
+
 .article-body .border-forest {
   border-color: #E8923A !important;
+}
+
+/* Inside callout boxes, ensure headings and strong tags pick up high-contrast light */
+.article-body .bg-slate-50 strong,
+.article-body .bg-slate-100 strong,
+.article-body .bg-gray-50 strong,
+.article-body .bg-gray-100 strong,
+.article-body .bg-slate-50 h2,
+.article-body .bg-slate-50 h3,
+.article-body .bg-slate-50 h4,
+.article-body .bg-slate-100 h2,
+.article-body .bg-slate-100 h3,
+.article-body .bg-slate-100 h4 {
+  color: #F0F6FC !important;
+}
+
+.article-body .bg-amber-50 strong,
+.article-body .bg-amber-100 strong,
+.article-body .bg-amber-50 h2,
+.article-body .bg-amber-50 h3,
+.article-body .bg-amber-50 h4 {
+  color: #F8D7A8 !important;
 }
 
 .article-body table {

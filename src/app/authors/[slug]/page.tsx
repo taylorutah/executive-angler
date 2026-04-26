@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Globe, Instagram, Twitter, Linkedin, Youtube, BookOpen, Award, ChevronRight } from "lucide-react";
+import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { getAuthorBySlug, getAllAuthors } from "@/data/authors";
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${author.name} — ${author.role} | ${SITE_NAME}`,
       description: author.shortBio,
-      images: [author.imageUrl],
+      ...(author.imageUrl ? { images: [author.imageUrl] } : {}),
       type: "profile",
     },
     alternates: {
@@ -56,9 +57,13 @@ export default async function AuthorPage({ params }: Props) {
           name: author.name,
           url: `${SITE_URL}/authors/${author.slug}`,
           description: author.shortBio,
-          image: author.imageUrl.startsWith("/")
-            ? `${SITE_URL}${author.imageUrl}`
-            : author.imageUrl,
+          ...(author.imageUrl
+            ? {
+                image: author.imageUrl.startsWith("/")
+                  ? `${SITE_URL}${author.imageUrl}`
+                  : author.imageUrl,
+              }
+            : {}),
           jobTitle: author.role,
           sameAs: sameAsLinks,
           worksFor: {
@@ -88,12 +93,11 @@ export default async function AuthorPage({ params }: Props) {
           {/* Author header */}
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start mb-12">
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-[#E8923A]/40 flex-shrink-0">
-              <Image
-                src={author.imageUrl}
-                alt={author.name}
-                fill
-                className="object-cover"
+              <AuthorAvatar
+                name={author.name}
+                imageUrl={author.imageUrl}
                 sizes="144px"
+                fallbackTextClass="text-4xl sm:text-5xl"
               />
             </div>
             <div className="flex-1">

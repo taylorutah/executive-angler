@@ -8,6 +8,7 @@ import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
@@ -106,9 +107,13 @@ export default async function ArticlePage({ params }: Props) {
               "@type": "Person",
               name: authorData.name,
               url: `${SITE_URL}/authors/${authorData.slug}`,
-              image: authorData.imageUrl.startsWith("/")
-                ? `${SITE_URL}${authorData.imageUrl}`
-                : authorData.imageUrl,
+              ...(authorData.imageUrl
+                ? {
+                    image: authorData.imageUrl.startsWith("/")
+                      ? `${SITE_URL}${authorData.imageUrl}`
+                      : authorData.imageUrl,
+                  }
+                : {}),
               jobTitle: authorData.role,
               sameAs: Object.values(authorData.socialLinks).filter(Boolean),
             }
@@ -303,12 +308,11 @@ export default async function ArticlePage({ params }: Props) {
                   className="group flex gap-5 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A]/30 p-5 transition-all"
                 >
                   <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#E8923A]/30 flex-shrink-0">
-                    <Image
-                      src={authorData.imageUrl}
-                      alt={authorData.name}
-                      fill
-                      className="object-cover"
+                    <AuthorAvatar
+                      name={authorData.name}
+                      imageUrl={authorData.imageUrl}
                       sizes="64px"
+                      fallbackTextClass="text-xl"
                     />
                   </div>
                   <div className="flex-1 min-w-0">

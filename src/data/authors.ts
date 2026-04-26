@@ -4,7 +4,7 @@ export interface Author {
   role: string;
   bio: string;
   shortBio: string;
-  imageUrl: string;
+  imageUrl?: string;
   expertise: string[];
   credentials: string[];
   socialLinks: {
@@ -31,7 +31,8 @@ After building technology products for Fortune 500 companies, Taylor launched Ex
 Taylor holds certifications in fly casting instruction and is an active member of Trout Unlimited. When he's not writing or building the Executive Angler platform, you'll find him waist-deep in a freestone river somewhere in the Rocky Mountain West, probably euro nymphing.`,
     shortBio:
       "Founder of Executive Angler. Fly fisher, software engineer, and conservation advocate based in the Rocky Mountain West.",
-    imageUrl: "/images/authors/taylor-warnick.jpg",
+    // imageUrl intentionally unset — AuthorAvatar renders initials fallback until a real photo is uploaded
+    imageUrl: undefined,
     expertise: [
       "Euro Nymphing",
       "Western Trout Fishing",
