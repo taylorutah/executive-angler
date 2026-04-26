@@ -783,18 +783,22 @@
 .light-mode [class*="bg-[#161B22]"] .text-white\/80,
 .light-mode [class*="bg-[#1F2937]"] .text-white\/70 { color: #4B5563 !important; }
 
-/* Exception: explicit text-white on elements (typically photo-overlay text)
-   must stay white in light mode. Higher specificity than the bg-* p rules
-   above so they win the cascade. */
-.light-mode [class*="bg-[#0D1117]"] p.text-white,
-.light-mode [class*="bg-[#0D1117]"] .text-white,
-.light-mode [class*="bg-[#161B22]"] p.text-white,
-.light-mode [class*="bg-[#161B22]"] .text-white,
-.light-mode [class*="bg-[#1F2937]"] p.text-white,
-.light-mode [class*="bg-[#1F2937]"] .text-white,
-.light-mode .bg-\[\#0D1117\] .text-white,
-.light-mode .bg-\[\#161B22\] .text-white,
-.light-mode .bg-\[\#1F2937\] .text-white { color: #FFFFFF !important; }
+/* Photo-overlay exception: text-white must stay white in light mode when
+   it's actually overlaying a photograph (photo cards, hero sections with
+   background imagery). Detected via :has(img) — Next.js Image renders an
+   <img> element so this matches the real photo-card pattern, not generic
+   "text-white inside a dark section" cases (those should flip to dark). */
+.light-mode .relative:has(img) .text-white,
+.light-mode .relative:has(img) .text-white\/70,
+.light-mode .relative:has(img) .text-white\/80,
+.light-mode .relative:has(img) .text-white\/90,
+.light-mode [class*="overflow-hidden"]:has(img) .text-white,
+.light-mode [class*="overflow-hidden"]:has(img) .text-white\/70,
+.light-mode [class*="overflow-hidden"]:has(img) .text-white\/80,
+.light-mode [class*="overflow-hidden"]:has(img) .text-white\/90 { color: #FFFFFF !important; }
+.light-mode .relative:has(img) .text-white\/70 { color: rgba(255, 255, 255, 0.7) !important; }
+.light-mode .relative:has(img) .text-white\/80 { color: rgba(255, 255, 255, 0.8) !important; }
+.light-mode .relative:has(img) .text-white\/90 { color: rgba(255, 255, 255, 0.9) !important; }
 
 /* ── Tailwind v4 token classes — light-mode overrides ──
    With `@theme inline` Tailwind bakes hex values into utilities at build
