@@ -199,7 +199,10 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
   const flow = active.discharge ? getFlowLabel(active.discharge.value) : null;
   const hasMultipleSections = gauges.length > 1;
   const weather = matchWeather(active.section, weatherSections);
-  const showLiveData = isAuthenticated;
+  // Conditions (USGS flow + weather) are free for everyone per the
+  // 2026-04-24 freemium plan. The Pro feature is the Best Window
+  // Calculator on the flow chart, not the conditions panel.
+  const showLiveData = true;
 
   return (
     <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
