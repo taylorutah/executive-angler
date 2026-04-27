@@ -55,7 +55,25 @@ const CATEGORY_LABELS = {
   rod: "Fly Rods",
   reel: "Fly Reels",
   waders: "Waders",
+  "wading-boots": "Wading Boots",
+  line: "Fly Lines",
+  leader: "Leaders",
+  tippet: "Tippet",
+  pack: "Packs, Vests & Bags",
+  net: "Landing Nets",
 } as const;
+
+const CATEGORY_ORDER = [
+  "rod",
+  "reel",
+  "waders",
+  "wading-boots",
+  "line",
+  "leader",
+  "tippet",
+  "pack",
+  "net",
+] as const;
 
 export default async function BrandPage({ params }: Props) {
   const { brandSlug } = await params;
@@ -64,11 +82,10 @@ export default async function BrandPage({ params }: Props) {
 
   const products = await getGearProductsByBrand(brand.id);
 
-  const byCategory: Record<string, typeof products> = {
-    rod: products.filter((p) => p.category === "rod"),
-    reel: products.filter((p) => p.category === "reel"),
-    waders: products.filter((p) => p.category === "waders"),
-  };
+  const byCategory: Record<string, typeof products> = {};
+  for (const cat of CATEGORY_ORDER) {
+    byCategory[cat] = products.filter((p) => p.category === cat);
+  }
 
   return (
     <>
@@ -138,7 +155,7 @@ export default async function BrandPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {(["rod", "reel", "waders"] as const).map((cat) => {
+              {CATEGORY_ORDER.map((cat) => {
                 const catProducts = byCategory[cat];
                 if (!catProducts || catProducts.length === 0) return null;
                 return (

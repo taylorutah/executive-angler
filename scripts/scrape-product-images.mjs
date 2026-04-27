@@ -261,6 +261,86 @@ const JSON_HOSTS = [
   { brand: "g-loomis", host: "www.gloomis.com" },
 ];
 
+/**
+ * Major fly shop retailers — these typically run Shopify and carry
+ * dozens of brands, so scraping their /products.json gives broad
+ * coverage for brands whose own sites block automation. The brand for
+ * each scraped product is detected from the title via BRAND_KEYWORDS
+ * below.
+ */
+const SHOP_HOSTS = [
+  "tridentflyfishing.com",
+  "www.tridentflyfishing.com",
+  "tacticalflyfisher.com",
+  "www.tacticalflyfisher.com",
+  "flyfishfood.com",
+  "www.flyfishfood.com",
+  "redsflyshop.com",
+  "www.redsflyshop.com",
+  "avidmax.com",
+  "www.avidmax.com",
+  "drcflyshop.com",
+  "www.drcflyshop.com",
+  "madisonriveroutfitters.com",
+  "www.madisonriveroutfitters.com",
+];
+
+/**
+ * Brand keyword patterns for auto-detecting brand from a fly-shop product
+ * title. Order matters — longer/more-specific keywords come first.
+ */
+const BRAND_KEYWORDS = [
+  { brand: "thomas-thomas", patterns: [/thomas\s*&\s*thomas/i, /\bt&t\b/i, /\btnt\b/i] },
+  { brand: "scientific-anglers", patterns: [/scientific\s*anglers?/i, /\bsa\b\s*amplitude/i, /\bsa\b\s*mastery/i] },
+  { brand: "frogg-toggs", patterns: [/frogg\s*toggs/i] },
+  { brand: "ll-bean", patterns: [/l\.?l\.?\s*bean/i] },
+  { brand: "g-loomis", patterns: [/g\.?\s*loomis/i] },
+  { brand: "st-croix", patterns: [/st\.?\s*croix/i] },
+  { brand: "trouthunter", patterns: [/trout\s*hunter/i] },
+  { brand: "thomas-thomas", patterns: [/\bt\s+&\s+t\b/i] },
+  { brand: "cheeky", patterns: [/\bcheeky\b/i] },
+  { brand: "winston", patterns: [/\bwinston\b/i, /\br\.?l\.?\s*winston\b/i] },
+  { brand: "scott", patterns: [/\bscott\s+(centric|session|swing|sector|g\s*series|radian|flex)/i, /\bscott\s+fly\s+rod/i] },
+  { brand: "orvis", patterns: [/\borvis\b/i] },
+  { brand: "sage", patterns: [/\bsage\b/i] },
+  { brand: "redington", patterns: [/\bredington\b/i] },
+  { brand: "rio", patterns: [/\brio\s+(elite|gold|grand|powerflex|fluoroflex|outbound|skagit|scandi|saltwater|leader|tippet|fluoro)/i, /\brio\s+products/i] },
+  { brand: "simms", patterns: [/\bsimms\b/i] },
+  { brand: "patagonia", patterns: [/\bpatagonia\b/i] },
+  { brand: "lamson", patterns: [/\blamson\b/i, /\bwaterworks[-\s]?lamson\b/i] },
+  { brand: "echo", patterns: [/\becho\b/i] },
+  { brand: "hatch", patterns: [/\bhatch\b\s+(?:iconic|finatic)/i, /\bhatch\s+outdoors\b/i] },
+  { brand: "tibor", patterns: [/\btibor\b/i] },
+  { brand: "abel", patterns: [/\babel\b\s+(?:sds|sdf|vaya|rove|super|reels?)/i] },
+  { brand: "ross", patterns: [/\bross\s+(?:reels?|animas|evolution|colorado|san\s+miguel)/i] },
+  { brand: "nautilus", patterns: [/\bnautilus\b/i] },
+  { brand: "galvan", patterns: [/\bgalvan\b/i] },
+  { brand: "bauer", patterns: [/\bbauer\b/i] },
+  { brand: "hardy", patterns: [/\bhardy\b/i] },
+  { brand: "douglas", patterns: [/\bdouglas\b\s+(?:sky|dxf|era|upstream|outdoors)/i] },
+  { brand: "tfo", patterns: [/\btfo\b/i, /\btemple\s*fork\b/i] },
+  { brand: "beulah", patterns: [/\bbeulah\b/i] },
+  { brand: "skwala", patterns: [/\bskwala\b/i] },
+  { brand: "grundens", patterns: [/\bgrund(?:é|e)ns\b/i] },
+  { brand: "filson", patterns: [/\bfilson\b/i] },
+  { brand: "korkers", patterns: [/\bkorkers\b/i] },
+  { brand: "fishpond", patterns: [/\bfishpond\b/i] },
+  { brand: "umpqua", patterns: [/\bumpqua\b/i] },
+  { brand: "brodin", patterns: [/\bbrodin\b/i] },
+  { brand: "airflo", patterns: [/\bairflo\b/i] },
+  { brand: "cortland", patterns: [/\bcortland\b/i] },
+];
+
+function detectBrand(title) {
+  if (!title) return null;
+  for (const { brand, patterns } of BRAND_KEYWORDS) {
+    for (const p of patterns) {
+      if (p.test(title)) return brand;
+    }
+  }
+  return null;
+}
+
 async function main() {
   const allResults = {};
 
@@ -273,6 +353,26 @@ async function main() {
       const key = `${j.brand}::${item.handle}`;
       allResults[key] = { ...item, brand: j.brand, source: `${j.host}/products.json` };
     }
+  }
+
+  // Phase 1b: Major fly shop retailers — auto-detect brand from product title
+  const seenHosts = new Set(JSON_HOSTS.map((j) => j.host));
+  for (const host of SHOP_HOSTS) {
+    if (seenHosts.has(host)) continue;
+    seenHosts.add(host);
+    process.stdout.write(`shop  ${host} ... `);
+    const items = await fetchShopifyJson(host);
+    let tagged = 0;
+    for (const item of items) {
+      const brand = detectBrand(item.title);
+      if (!brand) continue;
+      const key = `${brand}::${host}::${item.handle}`;
+      if (!allResults[key]) {
+        allResults[key] = { ...item, brand, source: `${host}/products.json` };
+        tagged++;
+      }
+    }
+    console.log(`${items.length} items, ${tagged} tagged to known brands`);
   }
 
   // Phase 2: HTML scrape for collection-specific filtering

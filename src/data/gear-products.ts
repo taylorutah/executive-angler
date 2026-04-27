@@ -70,8 +70,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Sage's extra-fast-action rod for anglers who need maximum line speed — long casts, heavy wind, big flies. Widely used by competitive casters and anglers chasing distance on big water.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/SageApparel10.jpg?v=1771530897",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/SageApparel10.jpg?v=1771530897",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-sage-igniter-spey-and-switch-13ft-6in-8wt-fly-rod-8136-4-1227426514.jpg?v=1773688029",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-sage-igniter-spey-and-switch-13ft-6in-8wt-fly-rod-8136-4-1227426514.jpg?v=1773688029",
     galleryUrls: [],
     specs: { action: "extra-fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8, 9, 10] },
@@ -110,8 +110,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Sage's medium-action presentation rod for technical dry-fly fishing. The Trout LL is built around a softer, slower hand than the R8 Core, designed for short to mid-range accuracy with light tippets and small flies.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/Product_Sage_Rods_TROUTSPEYHD_cbdd4a9c-f799-4c54-9271-aa5c6141aadd.jpg?v=1691431260",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/Product_Sage_Rods_TROUTSPEYHD_cbdd4a9c-f799-4c54-9271-aa5c6141aadd.jpg?v=1691431260",
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/SageTroutLLFlyRod1.jpg?v=1591812125",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/SageTroutLLFlyRod1.jpg?v=1591812125",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6] },
@@ -150,8 +150,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Sage's heavy-fly streamer rod, built to throw articulated streamers, large dries, and weighted rigs. A purpose-built tool for big-fish trout, smallmouth, pike, and bass on the fly.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/SageApparel10.jpg?v=1771530897",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/SageApparel10.jpg?v=1771530897",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/PAYLOAD_Angle.jpg?v=1575427350",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/PAYLOAD_Angle.jpg?v=1575427350",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10] },
@@ -291,6 +291,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's flagship distance-and-power rod, built on the Helios 4 platform. The 4D is the faster, more powerful build in the Helios 4 line — designed for anglers who want maximum line speed and accuracy at distance.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-4d-10ft-4wt-fly-rod-4100-4-1232584383.jpg?v=1776363095",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-4d-10ft-4wt-fly-rod-4100-4-1232584383.jpg?v=1776363095",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8, 9, 10, 11, 12] },
@@ -308,6 +311,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's flagship feel-and-finesse rod, built on the Helios 4 platform. The 4F is the smoother, more presentation-oriented build in the Helios 4 line — designed for accuracy at short to mid range with light tippets.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-4f-10ft-3wt-fly-rod-3100-4-1232584371.jpg?v=1776362798",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-4f-10ft-3wt-fly-rod-3100-4-1232584371.jpg?v=1776362798",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -325,6 +331,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's mid-tier all-around rod, sitting just below the Helios in the lineup. Built in the United States, the Recon covers the full range of trout, saltwater, and Spey applications and is a frequent step-up rod for anglers moving past the Clearwater.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-recon-3-9ft-8wt-fly-rod-890-4-1233422557.jpg?v=1777154859",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-recon-3-9ft-8wt-fly-rod-890-4-1233422557.jpg?v=1777154859",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8, 9, 10] },
@@ -342,6 +351,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's long-running entry-level rod, one of the most heavily stocked starter rods in fly shops. Wide line-weight selection covers trout, warmwater, and saltwater applications at an accessible price.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4, 5, 6, 7, 8, 9, 10] },
@@ -359,6 +371,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's most accessible rod, often sold as a complete outfit with reel and line. A common first-fly-rod choice for anglers entering the sport.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-encounter-outfit-9ft-6wt-fly-rod-690-4-1232571706.jpg?v=1776355057",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-encounter-outfit-9ft-6wt-fly-rod-690-4-1232571706.jpg?v=1776355057",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 8] },
@@ -376,6 +391,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Limited-edition blackout cosmetic build of the Helios 4F. Same taper and feel as the standard 4F with a stealth black finish and matte hardware.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-3-blackout-9ft-5in-5wt-fly-rod-595-4-1233415345.jpg?v=1776800709",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-helios-3-blackout-9ft-5in-5wt-fly-rod-595-4-1233415345.jpg?v=1776800709",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -393,6 +411,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's fiberglass small-stream rod. Slow, soft action well-suited to short casts, light tippets, and the kind of brookie/cutthroat water where graphite would overpower the fish.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-rods-orvis-superfine-bamboo-fly-rod-1216575250.webp?v=1768413550",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-rods-orvis-superfine-bamboo-fly-rod-1216575250.webp?v=1768413550",
     galleryUrls: [],
     specs: { action: "slow", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4, 5] },
@@ -410,6 +431,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Orvis's two-handed Spey and switch rod platform. Covers traditional Spey, Skagit, and Scandi applications for steelhead and salmon work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-mission-switch-11ft-4in-3wt-fly-rod-3114-4-1230333196.jpg?v=1774893670",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-mission-switch-11ft-4in-3wt-fly-rod-3114-4-1230333196.jpg?v=1774893670",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9, 10] },
@@ -429,6 +453,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's flagship dry-fly trout rod. The Air 2 carries the Winston smooth, progressive feel into a modern light-hand trout rod aimed at anglers who prioritize presentation and accuracy over distance.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-air-2-9ft-4wt-fly-rod-490-4-1227880074.jpg?v=1773865631",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-air-2-9ft-4wt-fly-rod-490-4-1227880074.jpg?v=1773865631",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6] },
@@ -446,6 +473,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "The faster, more powerful build in the Air 2 family. Designed for big-fish trout work and heavier-line saltwater applications while preserving Winston feel.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Sections-removebg_1.png?v=1707248504",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Sections-removebg_1.png?v=1707248504",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9, 10] },
@@ -463,6 +493,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's classic medium-action presentation rod. Built around a softer hand than most modern fast-action rods, the Pure is aimed at dry-fly and light-line anglers who want the traditional Winston feel.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-pure-2-fly-rod-9ft-4wt-fly-rod-490-4-1232571722.jpg?v=1776355463",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-pure-2-fly-rod-9ft-4wt-fly-rod-490-4-1232571722.jpg?v=1776355463",
     galleryUrls: [],
     specs: { action: "medium", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4, 5] },
@@ -480,6 +513,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's boron-graphite presentation rod. The Boron III LS is one of the longest-running rods in the Winston catalog and remains a benchmark for medium-action dry-fly anglers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-boron-iii-th-13ft-6in-8wt-fly-rod-8136-4-1227426549.jpg?v=1773688569",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-boron-iii-th-13ft-6in-8wt-fly-rod-8136-4-1227426549.jpg?v=1773688569",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6] },
@@ -514,6 +550,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's dedicated saltwater rod on the Air platform. Saltwater-specific componentry, fast taper, and the Winston touch in the upper sections — designed for flats and inshore work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-air-2-9ft-4wt-fly-rod-490-4-1227880074.jpg?v=1773865631",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-winston-air-2-9ft-4wt-fly-rod-490-4-1227880074.jpg?v=1773865631",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10, 11, 12] },
@@ -531,6 +570,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Winston's compact two-handed and switch rod platform. Lighter line weights for trout Spey, swung wets, and small-river two-hand work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/STRAIGHT-ON.png?v=1686074758",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/STRAIGHT-ON.png?v=1686074758",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4, 5] },
@@ -550,6 +592,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's flagship freshwater rod. The Centric is built around a fast, recoverable taper aimed at all-around trout work — dries, nymphs, and streamers across the typical trout range.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -567,6 +612,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's medium-fast presentation rod. Smoother and more forgiving than the Centric, the Session is aimed at dry-fly and light-tippet anglers who want a softer Scott in the hand.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-session-fly-rod-9ft-5wt-fly-rod-590-4-1231552153.jpg?v=1775672949",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-session-fly-rod-9ft-5wt-fly-rod-590-4-1231552153.jpg?v=1775672949",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6] },
@@ -584,6 +632,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's longstanding light-line trout rod. The G Series is one of the most respected presentation rods in American fly fishing, aimed at anglers fishing 2- through 5-weight tackle on technical water.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4, 5] },
@@ -601,6 +652,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's saltwater rod. Built around a fast, powerful taper engineered for wind, big flies, and saltwater fish from bonefish through tarpon and bigger.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-sector-9ft-11wt-fly-rod-1190-4-1232584335.jpg?v=1776361839",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-sector-9ft-11wt-fly-rod-1190-4-1232584335.jpg?v=1776361839",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10, 11, 12] },
@@ -618,6 +672,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's two-handed Spey rod. Built for steelhead and salmon work across Skagit, Scandi, and traditional Spey applications.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9] },
@@ -635,6 +692,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's previous flagship freshwater rod, still in many fly shop racks. Fast, recoverable taper with a feel that earned a long-running following before the Centric replaced it as the company flagship.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -652,6 +712,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Scott's youth and starter rod. Shorter lengths and lighter line weights aimed at younger anglers and small-water learners.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-scott-centric-10ft-4wt-fly-rod-4100-4-1233422545.jpg?v=1777154497",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5] },
@@ -672,8 +735,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "G. Loomis's flagship rod, built in collaboration with Shimano using Spiral X core technology. Fast, light, and powerful — aimed at anglers who want top-tier performance across freshwater and saltwater applications.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/2300/2297/files/jfgdvbkolrgupq4taaje.png?v=1777273878",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/2300/2297/files/jfgdvbkolrgupq4taaje.png?v=1777273878",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-asquith-saltwater-9ft-7wt-fly-rod-790-4-1232571702.jpg?v=1776354936",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-asquith-saltwater-9ft-7wt-fly-rod-790-4-1232571702.jpg?v=1776354936",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8, 9, 10, 11, 12] },
@@ -692,8 +755,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Loomis's mid-tier all-around rod. IMX-Pro covers the full freshwater and saltwater range with a fast, modern taper.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/2300/2297/files/wtdcym00jlkzfejup0mo.png?v=1777273983",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/2300/2297/files/wtdcym00jlkzfejup0mo.png?v=1777273983",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8, 9, 10] },
@@ -732,8 +795,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Streamer-specific build in the IMX-Pro family. Heavier, faster taper engineered to throw articulated streamers, big trout flies, and weighted rigs.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/2300/2297/files/wtdcym00jlkzfejup0mo.png?v=1777273983",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/2300/2297/files/wtdcym00jlkzfejup0mo.png?v=1777273983",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8] },
@@ -751,6 +814,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Short-bodied saltwater rod for tight-quarters casting in the salt — boats, mangroves, and pickup-friendly setups for tarpon, permit, and bonefish.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-g-loomis-imx-pro-creek-7ft-9in-4wt-fly-rod-479-4-1231544231.jpg?v=1775665118",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [8, 9, 10, 11, 12] },
@@ -770,6 +836,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's affordable all-purpose freshwater rod. A common starter or second-rod pick at fly shops thanks to broad line-weight coverage and approachable pricing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -787,6 +856,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's affordable Euro-nymphing rod. Long, light, and tip-sensitive at a price point that has made it a default Euro starter rod.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4], lengths: ["10'", "10'6\"", "11'"] },
@@ -804,6 +876,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's saltwater rod. Fast taper, saltwater componentry, and a price point well below most premium saltwater offerings.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10, 11, 12] },
@@ -821,6 +896,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's all-around freshwater rod in the Boost line. Faster than the Carbon XL with a step up in components, aimed at the mid-tier of the freshwater market.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8, 9, 10] },
@@ -838,6 +916,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's travel-focused multi-piece rod. Higher piece count for packing in luggage without sacrificing the in-hand feel anglers expect from a working rod.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-echo-boost-beach-12ft-2in-9wt-fly-rod-9122-4-1233422638.jpg?v=1777157111",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 8 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -872,6 +953,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Echo's two-handed Spey rod platform. Approachable pricing across Skagit, Scandi, and traditional Spey lengths and weights for steelhead and salmon work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/gs_handles-only-980x223.png?v=1748643068",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/gs_handles-only-980x223.png?v=1748643068",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9, 10] },
@@ -1136,8 +1220,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's premium freshwater rod. Built around a fast taper with the British rod-making heritage Hardy is known for — refined componentry and a step up from the brand's mid-tier offerings.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-marksman-z-9ft-11wt-fly-rod-1190-4-1232584395.jpg?v=1776363339",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-marksman-z-9ft-11wt-fly-rod-1190-4-1232584395.jpg?v=1776363339",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -1156,8 +1240,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's saltwater rod platform. Fast, powerful tapers built for wind, big flies, and saltwater fish from bonefish through tarpon.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-zane-pro-9ft-8wt-fly-rod-890-4-1231544322.jpg?v=1775666378",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-zane-pro-9ft-8wt-fly-rod-890-4-1231544322.jpg?v=1775666378",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [7, 8, 9, 10, 11, 12] },
@@ -1176,8 +1260,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's lightweight presentation rod. Smooth, light hand designed for dry-fly anglers who prioritize feel and accuracy over distance.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/Hardy_Ultralite_LL_Rod_RHW_alt3.jpg?v=1725971411",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/Hardy_Ultralite_LL_Rod_RHW_alt3.jpg?v=1725971411",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-ultralite-ll-10ft-8in-otherwt-fly-rod-other108-4-1233422541.jpg?v=1777154392",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-ultralite-ll-10ft-8in-otherwt-fly-rod-other108-4-1233422541.jpg?v=1777154392",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6] },
@@ -1195,6 +1279,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Hardy's travel-focused multi-piece rod. Higher piece count for packing in luggage without sacrificing the modern fast-action feel anglers expect from a working travel rod.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-demon-smuggler-6pc-9ft-6in-7wt-fly-rod-796-6-1233422630.jpg?v=1777156870",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-demon-smuggler-6pc-9ft-6in-7wt-fly-rod-796-6-1233422630.jpg?v=1777156870",
     galleryUrls: [],
     specs: { action: "fast", pieces: 6 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9] },
@@ -1213,8 +1300,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's mid-tier all-around rod. Fast taper with British componentry at a price point below the Marksman.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/Hardy_AydonSingleHandedFlyRod_RHW_alt1.webp?v=1761084649",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/Hardy_AydonSingleHandedFlyRod_RHW_alt1.webp?v=1761084649",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -1234,6 +1321,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Douglas's flagship freshwater rod. The Sky G is aimed at anglers who want a fast, recoverable taper at a price point well below the bigger-name flagships, and has a strong following at Tactical Fly Fisher.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -1251,6 +1341,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Douglas's mid-tier freshwater rod. Fast taper at a working-rod price, aimed at the all-around freshwater angler.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -1268,6 +1361,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Douglas's medium-action presentation rod. Smoother and softer than the Sky G — aimed at dry-fly and light-line anglers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5] },
@@ -1285,6 +1381,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Douglas's small-stream and headwater rod. Shorter lengths, lighter line weights, and a softer hand for tight-cast small-water fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4] },
@@ -1302,6 +1401,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Euro-nymphing build in the Sky G family. Long, light, and tip-sensitive for tight-line nymphing presentations.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-douglas-sky-g-8ft-6in-4wt-fly-rod-486-4-1233422585.jpg?v=1777155577",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4], lengths: ["10'", "10'6\"", "11'"] },
@@ -1321,6 +1423,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's third-generation Pro Series rod. Fast taper, broad line-weight coverage, and the kind of value-tier price that has made the Pro family one of the most heavily stocked guide rods in the country.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/ProlllHandles.jpg?v=1768601667",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/ProlllHandles.jpg?v=1768601667",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8, 9, 10] },
@@ -1338,6 +1443,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's long-running BVK series, designed in collaboration with the late Lefty Kreh. Light, fast, and a default mid-tier choice across freshwater and saltwater.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-tfo-bvk-sd-i-lhw-fly-reel-1227896882.png?v=1773872230",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-tfo-bvk-sd-i-lhw-fly-reel-1227896882.png?v=1773872230",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8, 9, 10, 12] },
@@ -1355,6 +1463,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's saltwater-focused rod. Faster taper and saltwater componentry aimed at flats and inshore work at a value-tier price.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tfo-rods-tfo-mangrove-coast-fly-rod-1199937521.jpg?v=1761909487",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tfo-rods-tfo-mangrove-coast-fly-rod-1199937521.jpg?v=1761909487",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10, 11, 12] },
@@ -1372,6 +1483,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's Euro-nymphing and indicator rod. Long, light, tip-sensitive — aimed at anglers who want a dedicated nymph rod without flagship pricing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-tfo-hayden-reels-nsi-8weight-lhw-fly-reel-1233422650.png?v=1777157468",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-tfo-hayden-reels-nsi-8weight-lhw-fly-reel-1233422650.png?v=1777157468",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4], lengths: ["10'", "10'6\"", "11'"] },
@@ -1389,6 +1503,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's mid-tier Euro-nymphing rod. Refined hand and tip sensitivity aimed at competitive and Euro-curious nymphers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_59f4cd8e-268c-4079-8dec-981a4524f703.jpg?v=1680673526",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_59f4cd8e-268c-4079-8dec-981a4524f703.jpg?v=1680673526",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [2, 3, 4], lengths: ["10'", "10'6\"", "11'"] },
@@ -1406,6 +1523,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's heavier-action rod for streamers, big flies, and saltwater. Faster taper and more lifting power than the Pro III.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-tfo-axiom-9ft-5wt-fly-rod-590-4-1233422666.jpg?v=1777157950",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-tfo-axiom-9ft-5wt-fly-rod-590-4-1233422666.jpg?v=1777157950",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9, 10] },
@@ -1423,6 +1543,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's previous-generation Pro series, still in many fly shop racks. Same value-driven proposition as the Pro III with the older taper.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-temple-fork-outfitters-tfo-mk-ii-lhw-fly-reel-1227896878.png?v=1773872169",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-temple-fork-outfitters-tfo-mk-ii-lhw-fly-reel-1227896878.png?v=1773872169",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8, 9, 10] },
@@ -1440,6 +1563,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "TFO's affordable trout outfit rod. Aimed at new anglers and a common pick for fly shop starter packages.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tfo-rods-tfo-blue-ribbon-fly-rod-1199954125.jpg?v=1761618481",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tfo-rods-tfo-blue-ribbon-fly-rod-1199954125.jpg?v=1761618481",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 8] },
@@ -1476,6 +1602,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "St. Croix's American-made flagship fly rod. Built in Park Falls, Wisconsin — a step up from the imported series with refined componentry and the SCV graphite blank.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/IMPERIAL_SALT-IS908.4-ROD_IMAGE_SIDE_VIEW.webp?v=1774412767",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/IMPERIAL_SALT-IS908.4-ROD_IMAGE_SIDE_VIEW.webp?v=1774412767",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -1493,6 +1622,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "St. Croix's mid-tier trout rod. Approachable pricing and a fast taper for the all-around freshwater angler.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-st-croix-connect-8ft-4in-4wt-fly-rod-484-4-1227879954.jpg?v=1773863109",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-st-croix-connect-8ft-4in-4wt-fly-rod-484-4-1227879954.jpg?v=1773863109",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -1510,6 +1642,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "St. Croix's accessible all-around fly rod. Designed as a step into the brand's American rod-making approach at an entry price point.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-st-croix-connect-8ft-4in-4wt-fly-rod-484-4-1227879954.jpg?v=1773863109",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-st-croix-connect-8ft-4in-4wt-fly-rod-484-4-1227879954.jpg?v=1773863109",
     galleryUrls: [],
     specs: { action: "medium-fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 8] },
@@ -1529,6 +1664,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Beulah's flagship two-handed Spey rod. Built around a fast taper for steelhead and salmon work across Skagit, Scandi, and traditional Spey lines.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [5, 6, 7, 8, 9, 10] },
@@ -1563,6 +1701,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Beulah's single-hand trout rod platform. Built for guide use across the typical western trout range.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -1580,6 +1721,9 @@ export const gearProducts: GearProduct[] = [
     category: "rod",
     description:
       "Beulah's switch rod platform. Lighter than full Spey, suited to trout Spey, swung wets, and small-river two-hand work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/updated_photo_1.webp?v=1736444526",
     galleryUrls: [],
     specs: { action: "fast", pieces: 4 },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8] },
@@ -1665,6 +1809,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Orvis's flagship American-made reel. Machined in the United States with a sealed disc drag — Orvis's premium reel platform across freshwater and saltwater sizes.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-orvis-mirage-usa-vi-11-13-wt-pewter-rhw-fly-reel-1227896904.png?v=1773872631",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-orvis-mirage-usa-vi-11-13-wt-pewter-rhw-fly-reel-1227896904.png?v=1773872631",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["I", "II", "III", "IV", "V", "VI"] },
@@ -1682,6 +1829,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Orvis's mid-tier sealed-drag reel. Machined construction at a more accessible price than the Mirage, covering freshwater and light-saltwater sizes.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-orvis-hydros-size-iv-black-lhw-fly-reel-1231544309.png?v=1775666186",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-orvis-hydros-size-iv-black-lhw-fly-reel-1231544309.png?v=1775666186",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["II", "III", "IV", "V"] },
@@ -1699,6 +1849,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Orvis's classic click-pawl reel. A long-running design aimed at trout-stream anglers who prefer the traditional reel sound and feel of a click-pawl drag.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-battenkill-bamboo-7ft-6in-6wt-fly-rod-676-2-1227435793.jpg?v=1773690397",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-battenkill-bamboo-7ft-6in-6wt-fly-rod-676-2-1227435793.jpg?v=1773690397",
     galleryUrls: [],
     specs: { dragType: "click-pawl", arbor: "standard", material: "Cast aluminum" },
     variantSummary: { sizes: ["I", "II", "III", "IV"] },
@@ -1716,6 +1869,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Orvis's entry-level large-arbor reel, often paired with the Clearwater rod in outfit packages.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3FT610FS26_W.webp?v=1770444486",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3FT610FS26_W.webp?v=1770444486",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Cast aluminum" },
     variantSummary: { sizes: ["II", "III", "IV", "V"] },
@@ -1752,6 +1908,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Echo's accessible cast reel. Sealed drag and large-arbor geometry at an entry price.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_c115ebc6-9f39-464b-9147-abf334725eb8.jpg?v=1680676090",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Cast aluminum" },
     variantSummary: { sizes: ["3/4", "5/6", "7/8", "9/10"] },
@@ -1772,8 +1931,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Redington's premium machined reel platform. Sealed drag and large-arbor geometry across freshwater and saltwater sizes.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/RedingtonApparel14.jpg?v=1771531485",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/RedingtonApparel14.jpg?v=1771531485",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/RUN_Black_Back.jpg?v=1617634871",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/RUN_Black_Back.jpg?v=1617634871",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3/4", "5/6", "7/8", "9/10", "11/12"] },
@@ -1853,6 +2012,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's flagship machined reel. Conical drag, light hand, and the design language Lamson is best known for. Built in Boise, Idaho.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/LSM8REEL_RIV_HERO_FR-WEB.webp?v=1764810128",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/LSM8REEL_RIV_HERO_FR-WEB.webp?v=1764810128",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["-2", "-3", "-4", "-5", "-7", "-9"] },
@@ -1870,6 +2032,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's accessible pressure-cast reel. Same conical drag philosophy as the machined Lamson reels at a price point that has made it a default starter pick.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/lamson-reels-lamson-liquid-s-hd-fly-reel-1199959748.jpg?v=1761816139",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/lamson-reels-lamson-liquid-s-hd-fly-reel-1199959748.jpg?v=1761816139",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Pressure-cast aluminum" },
     variantSummary: { sizes: ["-3", "-5", "-7", "-9", "-11"] },
@@ -1887,6 +2052,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's mid-tier reel built with reused machined components from earlier production runs — a sustainability-focused offering.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/lamson-reels-lamson-remix-s-hd-fly-reel-3-pack-1199959717.jpg?v=1761819124",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/lamson-reels-lamson-remix-s-hd-fly-reel-3-pack-1199959717.jpg?v=1761819124",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["-3", "-5", "-7", "-9"] },
@@ -1904,6 +2072,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's longstanding mid-tier machined reel. Conical drag, large-arbor geometry, freshwater and light-saltwater sizes.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["-3", "-5", "-7", "-9"] },
@@ -1921,6 +2092,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's narrow-spool, fast-retrieve reel. Machined aluminum with the company's conical drag, in a frame designed for line pickup speed.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-speedster-s-lhw-fly-reel-1225731879.png?v=1772735747",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-speedster-s-lhw-fly-reel-1225731879.png?v=1772735747",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["-3", "-5", "-7", "-9"] },
@@ -1938,6 +2112,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's heavy-saltwater reel platform. Machined construction and a saltwater-grade conical drag for tarpon, permit, and offshore work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["-8", "-10", "-12"] },
@@ -1955,6 +2132,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Lamson's classic narrow-spool light reel. A long-running platform that remains in many dry-fly anglers' rotation.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-lamson-guru-series-ii-legacy-2-0-lhw-fly-reel-1233422634.png?v=1777156989",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "mid", material: "Machined aluminum" },
     variantSummary: { sizes: ["-2", "-3", "-4"] },
@@ -1975,9 +2155,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hatch's flagship reel platform. Machined and assembled in San Clemente, California, with a sealed multi-disc drag designed around saltwater use.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0112/7579/6576/products/Iconic7PlusReel_GreyBlack_LargeArbor_Back.jpg?v=1621621238",
-    sourceImageUrl:
-      "https://cdn.shopify.com/s/files/1/0112/7579/6576/products/Iconic7PlusReel_GreyBlack_LargeArbor_Back.jpg?v=1621621238",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/hatch-reels-custom-hatch-iconic-dark-matter-large-arbor-fly-reel-1216594300.jpg?v=1768427469",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/hatch-reels-custom-hatch-iconic-dark-matter-large-arbor-fly-reel-1216594300.jpg?v=1768427469",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3 Plus", "4 Plus", "5 Plus", "7 Plus", "9 Plus", "11 Plus"] },
@@ -2032,8 +2211,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Tibor's light-saltwater reel. Hand-built in Florida by Ted Juracsik with the company's signature cork drag — a long-running default pick for bonefish and light tarpon.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0373/9349/8243/files/preview_file.png?v=1763568805",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0373/9349/8243/files/preview_file.png?v=1763568805",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tibor-reels-tibor-everglades-fly-reel-1199953918.jpg?v=1761616090",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/tibor-reels-tibor-everglades-fly-reel-1199953918.jpg?v=1761616090",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["7-9 wt"] },
@@ -2052,8 +2231,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Tibor's mid-saltwater reel. Larger spool capacity than the Everglades — built for tarpon, permit, and offshore work.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0373/9349/8243/files/preview_file.png?v=1763568805",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0373/9349/8243/files/preview_file.png?v=1763568805",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/CZ6qnhug.jpg?v=1640216501",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/CZ6qnhug.jpg?v=1640216501",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["10-12 wt"] },
@@ -2130,6 +2309,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Abel's premium sealed-drag saltwater reel. Machined in the United States, with a sealed multi-disc drag built around heavy saltwater use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/abelsds78deyoungmissilelock.png?v=1760561726",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/abelsds78deyoungmissilelock.png?v=1760561726",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["7/8", "9/10", "11/12"] },
@@ -2147,6 +2329,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Abel's sealed-drag freshwater reel. Same drag philosophy as the SDS in a frame sized for trout and light-saltwater work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-rove-5-7-lhw-fly-reel-1233422553.png?v=1777154737",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-rove-5-7-lhw-fly-reel-1233422553.png?v=1777154737",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3/4", "4/5", "5/6", "7/8"] },
@@ -2164,6 +2349,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Abel's design-forward freshwater reel. Built around Abel's premium machined construction with a refined cosmetic palette.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/satinreelablevayaflyreel.jpg?v=1669590730",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/satinreelablevayaflyreel.jpg?v=1669590730",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3/4", "4/5", "5/6"] },
@@ -2181,6 +2369,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Abel's accessible American-machined reel. The Rove brings the Abel build philosophy into a more approachable price tier.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-rove-5-7-lhw-fly-reel-1233422553.png?v=1777154737",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-rove-5-7-lhw-fly-reel-1233422553.png?v=1777154737",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3/4", "4/5", "5/6", "7/8"] },
@@ -2198,6 +2389,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Abel's classic Super Series. A long-running cork-drag platform that has been one of the most recognizable American fly reels for decades.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-super-3-lhw-fly-reel-1219058308.jpg?v=1770055150",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-abel-super-3-lhw-fly-reel-1219058308.jpg?v=1770055150",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["4N", "5N", "6N", "7/8N", "9/10", "11/12"] },
@@ -2217,6 +2411,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Ross's longstanding machined trout reel. Made in Montrose, Colorado, with a sealed disc drag — a default mid-tier American reel choice for many fly shops.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/ross-reels-ross-animas-fly-reel-1210902109.jpg?v=1765468440",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/ross-reels-ross-animas-fly-reel-1210902109.jpg?v=1765468440",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["4/5", "5/6", "7/8", "9/10"] },
@@ -2234,6 +2431,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Ross's premium freshwater reel. Lightweight machined frame with a sealed disc drag.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/chartreuse-evolution-ltx-reel_jpg.webp?v=1776904208",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/chartreuse-evolution-ltx-reel_jpg.webp?v=1776904208",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3/4", "4/5", "5/6", "7/8"] },
@@ -2251,6 +2451,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Ross's saltwater reel platform. Built on the Evolution R frame with saltwater-grade sealing for tarpon, permit, and offshore work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-ross-evolution-fs-7-8-matte-black-lhw-fly-reel-1233422577.png?v=1777155386",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-ross-evolution-fs-7-8-matte-black-lhw-fly-reel-1233422577.png?v=1777155386",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["7/8", "9/10", "11/12"] },
@@ -2268,6 +2471,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Ross's light click-pawl trout reel. Made in Montrose, Colorado, sized for 3- to 5-weight setups, and aimed at dry-fly anglers who want the click.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/coors_light_ross_cimarron_lt_studio_2026_1.webp?v=1773381366",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/coors_light_ross_cimarron_lt_studio_2026_1.webp?v=1773381366",
     galleryUrls: [],
     specs: { dragType: "click-pawl", arbor: "standard", material: "Machined aluminum" },
     variantSummary: { sizes: ["2/3", "4/5"] },
@@ -2285,6 +2491,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Ross's premium click-pawl reel. Hand-tuned, made in Montrose, and aimed at anglers fishing the lightest line weights with traditional reels.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_5c3d098e-98b9-417a-94a2-c06545c7f1e3.jpg?v=1680670513",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_5c3d098e-98b9-417a-94a2-c06545c7f1e3.jpg?v=1680670513",
     galleryUrls: [],
     specs: { dragType: "click-pawl", arbor: "standard", material: "Machined aluminum" },
     variantSummary: { sizes: ["2/3", "4/5"] },
@@ -2374,6 +2583,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Galvan's machined large-arbor reel. Made in Sonora, California, with a robust sealed-drag system across freshwater and saltwater sizes.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/s-l1600_6096dd11-d898-428e-9ee1-981e6c17180c.webp?v=1770153514",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/s-l1600_6096dd11-d898-428e-9ee1-981e6c17180c.webp?v=1770153514",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-10", "T-12"] },
@@ -2391,6 +2603,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Galvan's small-stream click-pawl reel. Made in California for anglers fishing the lightest line weights on small water.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/Brookie.jpg?v=1661805276",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/Brookie.jpg?v=1661805276",
     galleryUrls: [],
     specs: { dragType: "click-pawl", arbor: "standard", material: "Machined aluminum" },
     variantSummary: { sizes: ["B-1", "B-2", "B-3"] },
@@ -2408,6 +2623,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Galvan's lightweight machined trout reel. Sealed drag in a frame designed for the typical 3- to 6-weight trout setup.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-galvan-rush-lt-3-lhw-fly-reel-1231544257.png?v=1775665509",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-galvan-rush-lt-3-lhw-fly-reel-1231544257.png?v=1775665509",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["R-3", "R-4", "R-5", "R-6"] },
@@ -2427,6 +2645,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Bauer's flagship machined reel. American-made with a sealed disc drag — a longstanding premium reel platform.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["1", "2", "3", "4", "5", "6"] },
@@ -2445,8 +2666,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Bauer's lightweight freshwater reel. Lighter spool architecture than the RX in a similar machined frame.",
     heroImageUrl:
-      "https://bauerflyreel.com/cdn/shop/files/WINSTON2-14-220264.jpg?crop=region&amp;crop_height=3869&amp;crop_left=73&amp;crop_top=0&amp;crop_width=3869&amp;v=1728669259&amp;width=340",
-    sourceImageUrl: "https://bauerflyreel.com/cdn/shop/files/WINSTON2-14-220264.jpg?crop=region&amp;crop_height=3869&amp;crop_left=73&amp;crop_top=0&amp;crop_width=3869&amp;v=1728669259&amp;width=340",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["1", "2", "3", "4"] },
@@ -2464,6 +2685,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Bauer's saltwater reel platform. Heavier construction, sealed drag, and saltwater-grade sealing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-bauer-m-4-lhw-fly-reel-1227896870.png?v=1773871991",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["5", "6", "7", "8"] },
@@ -2546,8 +2770,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's iconic click-pawl reel — a design that has been in continuous production in various forms since the late 1800s. A traditional reel still fished by anglers who want the original Hardy character.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_TU1912PerfectReel_1649394_alt1.jpg?v=1771016095",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_TU1912PerfectReel_1649394_alt1.jpg?v=1771016095",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Hardy_1912PerfectFlyReel_HREPER1912RH050_alt1.webp?v=1746811989",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Hardy_1912PerfectFlyReel_HREPER1912RH050_alt1.webp?v=1746811989",
     galleryUrls: [],
     specs: { dragType: "click-pawl", arbor: "standard", material: "Machined aluminum" },
     variantSummary: { sizes: ['2 7/8"', '3"', '3 1/8"', '3 3/8"', '3 5/8"'] },
@@ -2565,6 +2789,9 @@ export const gearProducts: GearProduct[] = [
     category: "reel",
     description:
       "Hardy's premium saltwater reel. Sealed drag and machined construction for the demands of saltwater work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-hardy-fortuna-regent-10000-silver-lhw-fly-reel-1231552161.png?v=1775673129",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-reels-used-hardy-fortuna-regent-10000-silver-lhw-fly-reel-1231552161.png?v=1775673129",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["7000", "9000", "11000", "13000"] },
@@ -2583,8 +2810,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Hardy's lightweight modern reel platform. Sealed disc drag in a frame designed around contemporary trout and light-saltwater fishing.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0325/2073/2810/files/HAR_HouseofHardyGraphicTee_1651425_SlateBlue_Flat_alt1.jpg?v=1762533022",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-ultralite-ll-10ft-8in-otherwt-fly-rod-other108-4-1233422541.jpg?v=1777154392",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-hardy-ultralite-ll-10ft-8in-otherwt-fly-rod-other108-4-1233422541.jpg?v=1777154392",
     galleryUrls: [],
     specs: { dragType: "disc", arbor: "large", material: "Machined aluminum" },
     variantSummary: { sizes: ["3000", "4000", "5000", "6000", "8000"] },
@@ -2609,8 +2836,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's flagship Gore-Tex Pro stockingfoot wader. Built in Bozeman, Montana, the G3 Guide is one of the most fished premium waders in the American West.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14323-800-M-s-G3-Jacket-Mannequin-S26-Front.jpg?v=1772494615",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14323-800-M-s-G3-Jacket-Mannequin-S26-Front.jpg?v=1772494615",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-clothing-simms-women-s-g3-guide-fishing-jacket-1218004004.jpg?v=1769205037",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-clothing-simms-women-s-g3-guide-fishing-jacket-1218004004.jpg?v=1769205037",
     galleryUrls: [],
     specs: { material: "Gore-Tex Pro", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL", "MK", "LK", "XLK", "MS", "LS", "XLS"] },
@@ -2629,8 +2856,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's premium zippered Gore-Tex Pro wader. Front zip for ease of entry/exit, with the same flagship-grade fabric and build as the G3 Guide.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot2023-12-15093245.png?v=1702662048",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot2023-12-15093245.png?v=1702662048",
     galleryUrls: [],
     specs: { material: "Gore-Tex Pro", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2649,8 +2876,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's heavier-duty guide wader. Built around Gore-Tex Pro fabric with reinforced construction for daily guide use.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/2023AwardWinner_G4PowerlockVibram.jpg?v=1703514057",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/2023AwardWinner_G4PowerlockVibram.jpg?v=1703514057",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-footwear-simms-g4-pro-wading-boots-size-11-felt-pre-owned-1232584329.jpg?v=1776361658",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-footwear-simms-g4-pro-wading-boots-size-11-felt-pre-owned-1232584329.jpg?v=1776361658",
     galleryUrls: [],
     specs: { material: "Gore-Tex Pro", layers: "5-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2669,8 +2896,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's mid-tier breathable wader. A long-running working wader that has been a default fly shop pick for years.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-clothing-simms-freestone-foldover-mitt-1218780554.jpg?v=1769795888",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-clothing-simms-freestone-foldover-mitt-1218780554.jpg?v=1769795888",
     galleryUrls: [],
     specs: { material: "Toray QuadraLam", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL", "MK", "LK", "XLK"] },
@@ -2689,8 +2916,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's accessible breathable wader. Designed as a step into the Simms wader line at the company's lowest price point.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13922-1235-W-S-SIMMS-SKORT-Flatlay-S26-Front.jpg?v=1769787920",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-vests-simms-tributary-vest-1199955193.jpg?v=1761627001",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-vests-simms-tributary-vest-1199955193.jpg?v=1761627001",
     galleryUrls: [],
     specs: { material: "Toray QuadraLam", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2708,6 +2935,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Simms's mid-premium wader. Sits between the Freestone and the G3 Guide in materials and construction.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-footwear-simms-g4-pro-wading-boots-size-11-felt-pre-owned-1232584329.jpg?v=1776361658",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-footwear-simms-g4-pro-wading-boots-size-11-felt-pre-owned-1232584329.jpg?v=1776361658",
     galleryUrls: [],
     specs: { material: "Gore-Tex", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2747,6 +2977,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's flagship zippered breathable wader. Heavy-duty construction with a front zip for ease of entry, designed for guides and all-season anglers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2764,6 +2997,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's premium pull-on wader. Same heavy-duty fabric and construction as the zippered model in a more traditional pull-on configuration.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2781,6 +3017,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's wading pants — waist-high stockingfoot waders for low-water and warm-weather use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/82460_BSNG.webp?v=1770147528",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/82460_BSNG.webp?v=1770147528",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2798,6 +3037,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Patagonia's lightest packable wader. Sub-three-pound construction designed for hike-in and travel use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-waders-patagonia-women-s-swiftcurrent-expedition-zip-front-waders-1199935823.jpg?v=1761939602",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "3-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2817,6 +3059,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Orvis's flagship wader. Heavy-duty construction with reinforced legs and seat for daily guide use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
     galleryUrls: [],
     specs: { material: "Cordura nylon", layers: "5-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2834,6 +3079,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Orvis's lighter premium wader. Less material than the PRO, designed for warm-weather and travel use without sacrificing durability where it counts.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot_2024-09-10_092445.png?v=1725986190",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot_2024-09-10_092445.png?v=1725986190",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2851,6 +3099,9 @@ export const gearProducts: GearProduct[] = [
     category: "waders",
     description:
       "Orvis's accessible breathable wader. A common starter pick at fly shops, often paired with the Clearwater rod and reel in outfit packages.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
     galleryUrls: [],
     specs: { material: "Polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2871,8 +3122,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Redington's mid-tier breathable wader. Sonic-welded seams in place of stitching, with a focus on durability at a more accessible price.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/products/RDT_Boots_Prowler_Side_Rubbber.jpg?v=1643144115",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/products/RDT_Boots_Prowler_Side_Rubbber.jpg?v=1643144115",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/redington-waders-redington-sonic-pro-waders-1231460794.webp?v=1775598070",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/redington-waders-redington-sonic-pro-waders-1231460794.webp?v=1775598070",
     galleryUrls: [],
     specs: { material: "Polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL", "MK", "LK"] },
@@ -2930,8 +3181,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Skwala's flagship wader. Modern cut, premium breathable laminate, and a fresh take on the wader silhouette from the Bozeman-based newcomer.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0599/3771/8444/products/rs-wader-385804.jpg?v=1667950838",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0599/3771/8444/products/rs-wader-385804.jpg?v=1667950838",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/skwalarswader.png?v=1676479717",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/skwalarswader.png?v=1676479717",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "4-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -2950,8 +3201,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Skwala's lightweight wader. Lighter material weight than the RS in a similar modern cut.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0599/3771/8444/products/CarbonWader1.jpg?v=1644869559",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0599/3771/8444/products/CarbonWader1.jpg?v=1644869559",
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/CarbonWader1_900x_d62b67b4-e4fd-4f10-8828-b22d1610af3a.webp?v=1770257406",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/CarbonWader1_900x_d62b67b4-e4fd-4f10-8828-b22d1610af3a.webp?v=1770257406",
     galleryUrls: [],
     specs: { material: "Recycled polyester laminate", layers: "3-layer", footType: "stockingfoot" },
     variantSummary: { sizes: ["S", "M", "L", "XL", "XXL"] },
@@ -3140,8 +3391,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's longstanding guide wading boot. A workhorse boot that has been a default fly shop pick for years, available in rubber or felt.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14154-096-G3-Guide-Boa-Boot-Felt-Tabletop-S25-Lateral-award-winner.jpg?v=1734027084",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14154-096-G3-Guide-Boa-Boot-Felt-Tabletop-S25-Lateral-award-winner.jpg?v=1734027084",
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/g3-guide-boot-felt-steel-grey_s18_felt.jpg?v=1520694708",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/g3-guide-boot-felt-steel-grey_s18_felt.jpg?v=1520694708",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic and leather" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"], notes: "Vibram or felt sole options" },
@@ -3160,8 +3411,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's mid-tier wading boot. A common fly shop pick paired with the Freestone wader.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13939-1150-Simms-Challenger-7inch-Boot-Tabletop-3.jpg?v=1703194808",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13939-1150-Simms-Challenger-7inch-Boot-Tabletop-3.jpg?v=1703194808",
+      "https://cdn.shopify.com/s/files/1/1193/3666/files/SimmsFreestoneWadingBootFelt-Women_s1.jpg?v=1713895842",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/files/SimmsFreestoneWadingBootFelt-Women_s1.jpg?v=1713895842",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"], notes: "Vibram or felt sole options" },
@@ -3180,8 +3431,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's accessible wading boot. The brand's entry-tier boot, designed to pair with the Tributary wader.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13939-1150-Simms-Challenger-7inch-Boot-Tabletop-3.jpg?v=1703194808",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13939-1150-Simms-Challenger-7inch-Boot-Tabletop-3.jpg?v=1703194808",
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/M_sTributaryBoot-Rubber13271-1034-tributary-boot-rubber-360spin-s23_1-500x401-8ead9cf9-d86d-4217-b6fe-363366306c6c.png?v=1679511117",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/M_sTributaryBoot-Rubber13271-1034-tributary-boot-rubber-360spin-s23_1-500x401-8ead9cf9-d86d-4217-b6fe-363366306c6c.png?v=1679511117",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3200,8 +3451,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's lightweight hike-in wading boot. Lower weight construction designed for backcountry walks into headwater fishing.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14313-781-M-S-ACCESS-BOOT-Tabletop-S26-Detail-1.jpg?v=1767816454",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14313-781-M-S-ACCESS-BOOT-Tabletop-S26-Detail-1.jpg?v=1767816454",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-footwear-simms-men-s-access-wading-boot-1218780540.jpg?v=1769796097",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-footwear-simms-men-s-access-wading-boot-1218780540.jpg?v=1769796097",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3221,6 +3472,9 @@ export const gearProducts: GearProduct[] = [
     category: "wading-boots",
     description:
       "Patagonia's flagship wading boot, built in collaboration with Danner. Heavy-duty leather and synthetic uppers with rebuildable construction.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-footwear-patagonia-river-salt-ii-wading-boots-1218683030.jpg?v=1769730428",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-footwear-patagonia-river-salt-ii-wading-boots-1218683030.jpg?v=1769730428",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Leather and synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"], notes: "Aluminum bar or sticky rubber sole options" },
@@ -3238,6 +3492,9 @@ export const gearProducts: GearProduct[] = [
     category: "wading-boots",
     description:
       "Patagonia's mid-premium wading boot. Lighter than the Foot Tractor, designed for the typical trout-stream day.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-footwear-patagonia-river-salt-ii-wading-boots-1218683030.jpg?v=1769730428",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/patagonia-footwear-patagonia-river-salt-ii-wading-boots-1218683030.jpg?v=1769730428",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3257,6 +3514,9 @@ export const gearProducts: GearProduct[] = [
     category: "wading-boots",
     description:
       "Orvis's flagship wading boot. Built around a Michelin sole and reinforced uppers for daily guide use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f43dffc0-7b53-467a-baac-e3c93504457b.jpg?v=1680678256",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f43dffc0-7b53-467a-baac-e3c93504457b.jpg?v=1680678256",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic and leather" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3274,6 +3534,9 @@ export const gearProducts: GearProduct[] = [
     category: "wading-boots",
     description:
       "Orvis's lightweight wading boot. Lower-weight construction for warm weather and travel use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f43dffc0-7b53-467a-baac-e3c93504457b.jpg?v=1680678256",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f43dffc0-7b53-467a-baac-e3c93504457b.jpg?v=1680678256",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3291,6 +3554,9 @@ export const gearProducts: GearProduct[] = [
     category: "wading-boots",
     description:
       "Orvis's accessible wading boot, often paired with the Clearwater wader in outfit packages.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trident-rods-used-orvis-clearwater-10ft-8wt-fly-rod-8100-4-1233422646.jpg?v=1777157352",
     galleryUrls: [],
     specs: { soleType: "rubber", upperMaterial: "Synthetic" },
     variantSummary: { sizes: ["8", "9", "10", "11", "12", "13"] },
@@ -3453,8 +3719,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Rio's all-purpose floating trout line. A slightly heavier, more aggressive taper than the Gold for anglers fishing larger flies and longer casts.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/MDC_VersiTip_Render.jpg?v=1753745814",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0596/6138/5892/files/MDC_VersiTip_Render.jpg?v=1753745814",
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/RIOEliteGrandFlyLine1.jpg?v=1616540661",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/RIOEliteGrandFlyLine1.jpg?v=1616540661",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -3634,6 +3900,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's premium all-purpose trout line. Half-size heavy taper for fast modern rods, with the Amplitude family's textured coating.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/Amplitude-Textured-MPX.jpg?v=1767119793",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/Amplitude-Textured-MPX.jpg?v=1767119793",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -3651,6 +3920,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's true-to-weight trout line. Standard taper for medium-action rods and traditional presentations.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/Amplitude-Textured-MPX.jpg?v=1767119793",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/Amplitude-Textured-MPX.jpg?v=1767119793",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7] },
@@ -3668,6 +3940,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's heavier all-purpose line. Slightly more weight up front than the MPX for larger flies and modern fast rods.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/scientific-anglers-line-scientific-anglers-amplitude-smooth-infinity-fly-line-1199940664.jpg?v=1761935884",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/scientific-anglers-line-scientific-anglers-amplitude-smooth-infinity-fly-line-1199940664.jpg?v=1761935884",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around" },
     variantSummary: { lineWeights: [4, 5, 6, 7, 8, 9, 10] },
@@ -3685,6 +3960,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's mid-tier MPX taper. Same half-size-heavy front taper as the Amplitude in a smooth-coating non-textured build.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/mastery-mpx.jpg?v=1575427307",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/mastery-mpx.jpg?v=1575427307",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -3702,6 +3980,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's mid-tier trout line. Standard taper, smooth coating, the working everyday line for most American trout fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/image-4-680x680_ceb88808-73e2-430c-9c45-ff7ba007f905.jpg?v=1772978406",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/image-4-680x680_ceb88808-73e2-430c-9c45-ff7ba007f905.jpg?v=1772978406",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7] },
@@ -3719,6 +4000,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's bonefish line. Stiff core and tropical coating designed for warm-water flats fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Amplitude-Smooth-Bonefish-1.jpg?v=1688849284",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Amplitude-Smooth-Bonefish-1.jpg?v=1688849284",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "Saltwater flats" },
     variantSummary: { lineWeights: [6, 7, 8, 9, 10] },
@@ -3736,6 +4020,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's tarpon line. Heavy front taper and tropical coating designed for big saltwater fish and weighted flies.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Amplitude-Textured-Tarpon.jpg?v=1688925542",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Amplitude-Textured-Tarpon.jpg?v=1688925542",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "Saltwater" },
     variantSummary: { lineWeights: [10, 11, 12] },
@@ -3753,6 +4040,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's sink-tip streamer line. Floating running line with a 10- or 15-foot sinking tip for streamer fishing on rivers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/sonar-titan-sink-tip-1.jpg?v=1774283746",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/sonar-titan-sink-tip-1.jpg?v=1774283746",
     galleryUrls: [],
     specs: { taper: "WF", density: "sink-tip", application: "Streamer" },
     variantSummary: { lineWeights: [5, 6, 7, 8] },
@@ -3770,6 +4060,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "SA's full sinking line. Multiple sink rates available for stillwater and deep water fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/scientific-anglers-line-scientific-anglers-sonar-stillwater-5ft-booby-tip-1199936604.jpg?v=1761924001",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/scientific-anglers-line-scientific-anglers-sonar-stillwater-5ft-booby-tip-1199936604.jpg?v=1761924001",
     galleryUrls: [],
     specs: { taper: "WF", density: "sinking", application: "Stillwater" },
     variantSummary: { lineWeights: [5, 6, 7, 8] },
@@ -3789,6 +4082,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "Airflo's all-purpose trout line. Polyurethane coating that holds its hand in cold conditions, with a versatile taper for dries, nymphs, and small streamers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/airflo-line-airflo-superflo-max-universal-taper-fly-line-1214667939.jpg?v=1767724777",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/airflo-line-airflo-superflo-max-universal-taper-fly-line-1214667939.jpg?v=1767724777",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -3840,6 +4136,9 @@ export const gearProducts: GearProduct[] = [
     category: "line",
     description:
       "Airflo's Skagit head for two-handed and switch rods. Polyurethane coating and a short, heavy head designed for sink-tip and big-fly Spey fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/airflo-line-airflo-skagit-comp-f-i-s-t-shooting-head-1214667923.jpg?v=1767724510",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/airflo-line-airflo-skagit-comp-f-i-s-t-shooting-head-1214667923.jpg?v=1767724510",
     galleryUrls: [],
     specs: { taper: "Skagit", density: "floating", application: "Spey/switch" },
     variantSummary: { notes: "Multiple grain weights available" },
@@ -3860,8 +4159,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Cortland's heritage trout line. The 444 has been one of the most fished American fly lines for over half a century — a default mid-tier choice for generations of anglers.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/1410/4056/files/NEWHATDIGICAMO.jpg?v=1747150074",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1410/4056/files/NEWHATDIGICAMO.jpg?v=1747150074",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/cortland-line-cortland-444-classic-intermediate-fly-line-1228720535.webp?v=1774287728",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/cortland-line-cortland-444-classic-intermediate-fly-line-1228720535.webp?v=1774287728",
     galleryUrls: [],
     specs: { taper: "WF", density: "floating", application: "All-around trout" },
     variantSummary: { lineWeights: [3, 4, 5, 6, 7, 8] },
@@ -4003,6 +4302,9 @@ export const gearProducts: GearProduct[] = [
     category: "leader",
     description:
       "SA's flagship nylon trout leader. Knotless tapered design in a wide range of sizes — one of the default fly shop leader picks.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/absolute-creek-trout.jpg?v=1758298754",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/absolute-creek-trout.jpg?v=1758298754",
     galleryUrls: [],
     specs: { style: "knotless", material: "monofilament" },
     variantSummary: { sizes: ["7.5'", "9'", "12'"], notes: "0X through 7X" },
@@ -4020,6 +4322,9 @@ export const gearProducts: GearProduct[] = [
     category: "leader",
     description:
       "SA's fluorocarbon trout leader. Lower visibility for clear-water fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot_2025-01-17_145321.png?v=1737154434",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Screenshot_2025-01-17_145321.png?v=1737154434",
     galleryUrls: [],
     specs: { style: "knotless", material: "fluorocarbon" },
     variantSummary: { sizes: ["7.5'", "9'", "10'"], notes: "0X through 6X" },
@@ -4037,6 +4342,9 @@ export const gearProducts: GearProduct[] = [
     category: "leader",
     description:
       "TroutHunter's Japanese-sourced nylon leader. Soft hand and consistent diameter — a favorite among western spring-creek and tailwater anglers.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-leader-trouthunter-nylon-leader-1199953687.jpg?v=1761615014",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-leader-trouthunter-nylon-leader-1199953687.jpg?v=1761615014",
     galleryUrls: [],
     specs: { style: "knotless", material: "monofilament" },
     variantSummary: { sizes: ["10'", "12'", "15'"], notes: "0X through 8X" },
@@ -4054,6 +4362,9 @@ export const gearProducts: GearProduct[] = [
     category: "leader",
     description:
       "TroutHunter's Japanese-sourced fluorocarbon leader. Low visibility and soft hand for selective fish on clear water.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-leader-trouthunter-fluorocarbon-leader-1199953688.jpg?v=1761950886",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-leader-trouthunter-fluorocarbon-leader-1199953688.jpg?v=1761950886",
     galleryUrls: [],
     specs: { style: "knotless", material: "fluorocarbon" },
     variantSummary: { sizes: ["10'", "12'"], notes: "0X through 7X" },
@@ -4071,6 +4382,9 @@ export const gearProducts: GearProduct[] = [
     category: "leader",
     description:
       "Orvis's mid-tier nylon trout leader. Knotless tapered build in a wide range of sizes.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3J0N10RF25_W.webp?v=1774075806",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3J0N10RF25_W.webp?v=1774075806",
     galleryUrls: [],
     specs: { style: "knotless", material: "monofilament" },
     variantSummary: { sizes: ["7.5'", "9'", "12'"], notes: "0X through 7X" },
@@ -4152,6 +4466,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "SA's nylon trout tippet. Wide X-size range covering technical trout work through bigger-fish applications.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_90775fd3-c1b7-4125-ad1b-01498615fdc8.jpg?v=1680674382",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_90775fd3-c1b7-4125-ad1b-01498615fdc8.jpg?v=1680674382",
     galleryUrls: [],
     specs: { material: "nylon", spoolFt: 30 },
     variantSummary: { notes: "0X through 7X" },
@@ -4169,6 +4486,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "SA's fluorocarbon trout tippet. Low visibility for clear-water and selective fish.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_90775fd3-c1b7-4125-ad1b-01498615fdc8.jpg?v=1680674382",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_90775fd3-c1b7-4125-ad1b-01498615fdc8.jpg?v=1680674382",
     galleryUrls: [],
     specs: { material: "fluorocarbon", spoolFt: 30 },
     variantSummary: { notes: "0X through 7X" },
@@ -4186,6 +4506,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "TroutHunter's Japanese-sourced nylon tippet. Cult favorite among western spring-creek anglers for its soft hand and consistent diameter.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-tippet-trouthunter-evo-nylon-tippet-1199953692.jpg?v=1761950775",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-tippet-trouthunter-evo-nylon-tippet-1199953692.jpg?v=1761950775",
     galleryUrls: [],
     specs: { material: "nylon", spoolFt: 50 },
     variantSummary: { notes: "0X through 8X" },
@@ -4203,6 +4526,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "TroutHunter's Japanese-sourced fluorocarbon tippet. Low visibility and consistent strength across the X-range.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-tippet-trouthunter-fluorocarbon-tippet-1199953683.jpg?v=1761958810",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/trouthunter-tippet-trouthunter-fluorocarbon-tippet-1199953683.jpg?v=1761958810",
     galleryUrls: [],
     specs: { material: "fluorocarbon", spoolFt: 50 },
     variantSummary: { notes: "0X through 7X" },
@@ -4220,6 +4546,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "Cortland's nylon trout tippet. American-made tippet at a competitive price point.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/5x_30yd_SuperSuppleTippet.webp?v=1770408924",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/files/5x_30yd_SuperSuppleTippet.webp?v=1770408924",
     galleryUrls: [],
     specs: { material: "nylon", spoolFt: 30 },
     variantSummary: { notes: "0X through 7X" },
@@ -4237,6 +4566,9 @@ export const gearProducts: GearProduct[] = [
     category: "tippet",
     description:
       "Orvis's mid-tier nylon trout tippet. Standard X-range coverage for everyday trout fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3J0N10RF25_W.webp?v=1774075806",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/3J0N10RF25_W.webp?v=1774075806",
     galleryUrls: [],
     specs: { material: "nylon", spoolFt: 30 },
     variantSummary: { notes: "0X through 7X" },
@@ -4261,8 +4593,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Fishpond's flagship submersible sling pack. TPU-coated waterproof construction for full immersion — a default sling pick for guides and anglers fishing serious water.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0593/9586/6784/products/Thunderhead_sling_zipper.jpg?v=1645039208",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0593/9586/6784/products/Thunderhead_sling_zipper.jpg?v=1645039208",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/Sling_back_1.jpg?v=1668970815",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/Sling_back_1.jpg?v=1668970815",
     galleryUrls: [],
     specs: { type: "sling", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Sling", "Waterproof", "Guide"],
@@ -4280,8 +4612,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Fishpond's submersible roll-top backpack. Welded-seam waterproof construction designed for boat travel and full-immersion conditions.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/BTT_Cutbank_Mangroves_Studio_e14ab410-5654-4d76-9342-fe1dd746f8d3.jpg?v=1744835361",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/BTT_Cutbank_Mangroves_Studio_e14ab410-5654-4d76-9342-fe1dd746f8d3.jpg?v=1744835361",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/windriver_front_2800_2.jpg?v=1645384070",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/windriver_front_2800_2.jpg?v=1645384070",
     galleryUrls: [],
     specs: { type: "backpack", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Backpack", "Waterproof", "Boat"],
@@ -4298,6 +4630,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Fishpond's modular wading system. Combines a chest pack with a hip pack and includes integrated rod-tube and net carrying.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Switchback_back_no_net.jpg?v=1698876843",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/Switchback_back_no_net.jpg?v=1698876843",
     galleryUrls: [],
     specs: { type: "chest", material: "Recycled fabric" },
     useCases: ["Chest Pack", "Modular"],
@@ -4315,8 +4650,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Fishpond's wader and boot bag. Sized to carry a full wader/boot setup with separate compartments for wet and dry gear.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0593/9586/6784/products/bwb.jpg?v=1639047498",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0593/9586/6784/products/bwb.jpg?v=1639047498",
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_66517c48-b888-473a-b652-e00c21d861ab.jpg?v=1680677900",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_66517c48-b888-473a-b652-e00c21d861ab.jpg?v=1680677900",
     galleryUrls: [],
     specs: { type: "wader-bag", material: "Recycled fabric" },
     useCases: ["Wader Bag", "Boat"],
@@ -4349,6 +4684,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Fishpond's slim sling pack. A minimal-volume sling for short outings and anglers who prefer to carry only the essentials.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_74f63058-3e4f-44ee-8a4e-e94467ac4b40.jpg?v=1680676444",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_74f63058-3e4f-44ee-8a4e-e94467ac4b40.jpg?v=1680676444",
     galleryUrls: [],
     specs: { type: "sling", material: "Recycled fabric" },
     useCases: ["Sling", "Day Trip"],
@@ -4366,8 +4704,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Fishpond's submersible boat tote. Same TPU-coated construction as the Thunderhead sling in a tote configuration for boat use.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/Backpack_POW.jpg?v=1758214203",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/Backpack_POW.jpg?v=1758214203",
+      "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f465b106-225d-4222-bb88-d0eed0bc2a23.jpg?v=1680676471",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0740/8104/2720/products/img_proxy_f465b106-225d-4222-bb88-d0eed0bc2a23.jpg?v=1680676471",
     galleryUrls: [],
     specs: { type: "boat-bag", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Boat", "Waterproof"],
@@ -4385,8 +4723,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Fishpond's soft-sided cooler. Built for the boat or shore lunch with welded-seam waterproof construction.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/Blizzard_Duskwood_1.jpg?v=1761674956",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0593/9586/6784/files/Blizzard_Duskwood_1.jpg?v=1761674956",
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/Blizzard_Duskwood_1_1100x_f71c0516-2a8d-4456-a740-2cda24125a1b.webp?v=1764810009",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/Blizzard_Duskwood_1_1100x_f71c0516-2a8d-4456-a740-2cda24125a1b.webp?v=1764810009",
     galleryUrls: [],
     specs: { type: "boat-bag", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Boat", "Cooler"],
@@ -4406,8 +4744,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's mid-tier sling pack. A common fly shop default — sized for a working day on the water.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14308-1398-TRIBUTARY-SLING-PACK-Tabletop-S26-Front.jpg?v=1766513510",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14308-1398-TRIBUTARY-SLING-PACK-Tabletop-S26-Front.jpg?v=1766513510",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14308-1398-TRIBUTARY-SLING-PACK-Tabletop-S26-Front.jpg?v=1767991775",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14308-1398-TRIBUTARY-SLING-PACK-Tabletop-S26-Front.jpg?v=1767991775",
     galleryUrls: [],
     specs: { type: "sling", material: "Recycled nylon" },
     useCases: ["Sling", "Trout"],
@@ -4425,8 +4763,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's compact chest pack. Sized for the essentials — fly box, tippet, nippers — without the bulk of a sling or vest.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14309-1398-TRIBUTARY-CHEST-PACK-Tabletop-S26-Front.jpg?v=1766513509",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14309-1398-TRIBUTARY-CHEST-PACK-Tabletop-S26-Front.jpg?v=1766513509",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14309-1398-TRIBUTARY-CHEST-PACK-Tabletop-S26-Front.webp?v=1767991562",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14309-1398-TRIBUTARY-CHEST-PACK-Tabletop-S26-Front.webp?v=1767991562",
     galleryUrls: [],
     specs: { type: "chest", material: "Recycled nylon" },
     useCases: ["Chest Pack", "Trout"],
@@ -4444,8 +4782,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's accessible hip pack. Designed for anglers who prefer to keep weight off the chest and shoulders.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14307-1398-TRIBUTARY-HIP-PACK-Tabletop-S26-Front.jpg?v=1766513509",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14307-1398-TRIBUTARY-HIP-PACK-Tabletop-S26-Front.jpg?v=1766513509",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14307-1398-TRIBUTARY-HIP-PACK-Tabletop-S26-Front.webp?v=1768507817",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/14307-1398-TRIBUTARY-HIP-PACK-Tabletop-S26-Front.webp?v=1768507817",
     galleryUrls: [],
     specs: { type: "hip", material: "Recycled nylon" },
     useCases: ["Hip Pack", "Trout"],
@@ -4479,8 +4817,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's traditional fishing vest. A long-running staple for anglers who prefer the classic vest configuration over a sling or chest pack.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14284-216-HEADWATERS-VEST-Pinboard-S26-Front.jpg?v=1766521711",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/14284-216-HEADWATERS-VEST-Pinboard-S26-Front.jpg?v=1766521711",
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-vests-simms-headwaters-vest-1218780549.jpg?v=1769795556",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/simms-vests-simms-headwaters-vest-1218780549.jpg?v=1769795556",
     galleryUrls: [],
     specs: { type: "vest", material: "Recycled nylon" },
     useCases: ["Vest", "Trout"],
@@ -4498,8 +4836,8 @@ export const gearProducts: GearProduct[] = [
     description:
       "Simms's submersible backpack. Welded-seam waterproof construction with a Tizip waterproof zipper for full-immersion conditions.",
     heroImageUrl:
-      "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13464-309-Dry-Creek-Z-Backpack-Tabletop-F23-front_EDIT_LOWRES.jpg?v=1747086328",
-    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0580/9596/0254/files/13464-309-Dry-Creek-Z-Backpack-Tabletop-F23-front_EDIT_LOWRES.jpg?v=1747086328",
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/13463-800-dry-creek-rolltop-backpack-simms-orange_s22-001-front_1680x_20f417e7-eb6b-434d-8657-db6622220bf8.jpg?v=1701189474",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/products/13463-800-dry-creek-rolltop-backpack-simms-orange_s22-001-front_1680x_20f417e7-eb6b-434d-8657-db6622220bf8.jpg?v=1701189474",
     galleryUrls: [],
     specs: { type: "backpack", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Backpack", "Waterproof"],
@@ -4518,6 +4856,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Patagonia's submersible sling pack. Welded-seam waterproof construction designed for full immersion.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/81635_BCBN.webp?v=1770145216",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/81635_BCBN.webp?v=1770145216",
     galleryUrls: [],
     specs: { type: "sling", waterproof: true, material: "Recycled TPU-coated nylon" },
     useCases: ["Sling", "Waterproof"],
@@ -4534,6 +4875,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Patagonia's submersible hip pack. Same waterproof construction as the Stealth sling in a hip-pack configuration.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/Patagonia_Stealth_Hip_Pack_10L_Forged_Grey_1.jpg?v=1584392656",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/Patagonia_Stealth_Hip_Pack_10L_Forged_Grey_1.jpg?v=1584392656",
     galleryUrls: [],
     specs: { type: "hip", waterproof: true, material: "Recycled TPU-coated nylon" },
     useCases: ["Hip Pack", "Waterproof"],
@@ -4550,6 +4894,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Patagonia's small wader belt pack. Designed to carry the essentials without the bulk of a hip pack.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/1193/3666/products/PatagoniaFrictionBeltPOS-WBF20_59179_BLK.jpg?v=1648744748",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/1193/3666/products/PatagoniaFrictionBeltPOS-WBF20_59179_BLK.jpg?v=1648744748",
     galleryUrls: [],
     specs: { type: "hip", material: "Recycled nylon" },
     useCases: ["Wader Belt"],
@@ -4566,6 +4913,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Patagonia's submersible backpack. Welded-seam waterproof construction with a roll-top closure.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/81635_BCBN.webp?v=1770145216",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0491/9984/1445/files/81635_BCBN.webp?v=1770145216",
     galleryUrls: [],
     specs: { type: "backpack", waterproof: true, material: "Recycled TPU-coated nylon" },
     useCases: ["Backpack", "Waterproof"],
@@ -4584,6 +4934,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Orvis's premium sling pack. Designed for guides and anglers who want a heavy-duty sling for daily use.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
     galleryUrls: [],
     specs: { type: "sling", material: "Recycled nylon" },
     useCases: ["Sling", "Guide"],
@@ -4600,6 +4953,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Orvis's fly fishing backpack. Sized for backcountry walks and travel days.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/orvis-packs-orvis-pro-waterproof-backpack-1199958458.jpg?v=1761643693",
     galleryUrls: [],
     specs: { type: "backpack", material: "Recycled nylon" },
     useCases: ["Backpack", "Hike-In"],
@@ -4634,6 +4990,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Umpqua's flagship modular sling-and-chest-pack system. Built around the ZS2 frame with magnetic accessory attachment points.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-overlook-chest-pack-1230323371.jpg?v=1774885536",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-overlook-chest-pack-1230323371.jpg?v=1774885536",
     galleryUrls: [],
     specs: { type: "sling", material: "Recycled nylon" },
     useCases: ["Sling", "Chest Pack", "Modular"],
@@ -4650,6 +5009,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Umpqua's submersible backpack. Welded-seam waterproof construction sized for full days of boat or wading work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-accessories-umpqua-upg-silicone-waterproof-walkabout-fly-box-1199953350.jpg?v=1761912370",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-accessories-umpqua-upg-silicone-waterproof-walkabout-fly-box-1199953350.jpg?v=1761912370",
     galleryUrls: [],
     specs: { type: "backpack", waterproof: true, material: "TPU-coated nylon" },
     useCases: ["Backpack", "Waterproof"],
@@ -4666,6 +5028,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Umpqua's boat bag. Sized for a full day of float fishing with multiple internal compartments and rod-tube attachment.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-steamboat-sling-pack-1230323370.jpg?v=1774885597",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-steamboat-sling-pack-1230323370.jpg?v=1774885597",
     galleryUrls: [],
     specs: { type: "boat-bag", material: "Nylon" },
     useCases: ["Boat"],
@@ -4682,6 +5047,9 @@ export const gearProducts: GearProduct[] = [
     category: "pack",
     description:
       "Umpqua's slim sling pack. Minimal-volume design for short outings and anglers who prefer to carry only the essentials.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-steamboat-sling-pack-1230323370.jpg?v=1774885597",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0749/1846/1673/files/umpqua-packs-umpqua-swiftlink-steamboat-sling-pack-1230323370.jpg?v=1774885597",
     galleryUrls: [],
     specs: { type: "sling", material: "Recycled nylon" },
     useCases: ["Sling", "Day Trip"],
@@ -4883,6 +5251,9 @@ export const gearProducts: GearProduct[] = [
     category: "net",
     description:
       "Orvis's compact hand net. Wide-mouth hoop and rubber bag for wading anglers and small-stream fishing.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/29FG2123XFAlt1_W.webp?v=1741368868",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/29FG2123XFAlt1_W.webp?v=1741368868",
     galleryUrls: [],
     specs: { hoopMaterial: "Wood", bagMaterial: "rubber" },
     useCases: ["Trout", "Wading"],
@@ -4899,6 +5270,9 @@ export const gearProducts: GearProduct[] = [
     category: "net",
     description:
       "Orvis's long-handle boat net. Oversized hoop and rubber bag for drift boat and big-fish landing work.",
+    heroImageUrl:
+      "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/29FG2123XFAlt1_W.webp?v=1741368868",
+    sourceImageUrl: "https://cdn.shopify.com/s/files/1/0022/3854/5969/files/29FG2123XFAlt1_W.webp?v=1741368868",
     galleryUrls: [],
     specs: { hoopMaterial: "Aluminum", bagMaterial: "rubber" },
     useCases: ["Boat", "Big Trout"],
