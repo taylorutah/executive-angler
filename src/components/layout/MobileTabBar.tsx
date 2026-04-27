@@ -96,7 +96,7 @@ export default function MobileTabBar() {
           >
             {user.avatarUrl ? (
               <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[#E8923A]" : "ring-transparent"}`}>
-                <Image src={user.avatarUrl} alt="" width={24} height={24} className="object-cover w-full h-full" />
+                <Image src={user.avatarUrl} alt={`${user.displayName || "Your"} avatar`} width={24} height={24} className="object-cover w-full h-full" />
               </div>
             ) : (
               <div className={`h-6 w-6 rounded-full bg-[#1F2937] flex items-center justify-center ring-2 ${accountActive ? "ring-[#E8923A]" : "ring-transparent"}`}>

@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: var(--font-dm-serif), Georgia, serif;
+  --font-heading: var(--font-dm-serif), Georgia, serif;
   --font-mono: var(--font-ibm-plex-mono), monospace;
 
   /* Brand Colors — Abyss Dark Palette (v1.1) */
@@ -35,7 +36,6 @@
   :root {
     --background: #0D1117;
     --foreground: #F0F6FC;
-    --font-heading: 'DM Serif Display', Georgia, serif;
     --font-body: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 

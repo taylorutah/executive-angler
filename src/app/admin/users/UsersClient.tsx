@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ChevronLeft, Shield, Search, Crown, Ban,
   Loader2, Fish, Calendar, StickyNote,
@@ -196,8 +197,7 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
                 <div className="px-5 py-3 flex items-center gap-3 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
                   <div className="w-10 h-10 rounded-full bg-[#E8923A]/15 flex items-center justify-center shrink-0 overflow-hidden">
                     {u.avatar_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={u.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                      <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" unoptimized />
                     ) : (
                       <User className="h-5 w-5 text-[#E8923A]" />
                     )}

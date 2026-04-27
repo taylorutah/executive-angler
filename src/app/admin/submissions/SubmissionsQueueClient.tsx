@@ -152,8 +152,9 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                     <div className="px-5 pb-4 border-t border-[#21262D] pt-4 space-y-3">
                       {s.hero_image_url && (
                         <div className="rounded-lg overflow-hidden border border-[#21262D]">
+                          {/* User-supplied URL — host may not be in next/image allowlist */}
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={s.hero_image_url} alt="" className="w-full h-40 object-cover" />
+                          <img src={s.hero_image_url} alt={`${s.name} hero photo`} className="w-full h-40 object-cover" />
                         </div>
                       )}
 

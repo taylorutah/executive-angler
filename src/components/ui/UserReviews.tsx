@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { Star, Trash2, Edit3, User } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -278,8 +279,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   {review.author_avatar ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={review.author_avatar} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    <Image src={review.author_avatar} alt={`${review.author_name} avatar`} width={32} height={32} className="w-8 h-8 rounded-full object-cover" unoptimized />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-[#21262D] flex items-center justify-center">
                       <User className="h-4 w-4 text-[#6E7681]" />

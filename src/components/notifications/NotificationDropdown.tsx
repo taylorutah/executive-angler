@@ -223,7 +223,7 @@ export function NotificationBell() {
                     {n.actor_profile?.avatar_url ? (
                       <Image
                         src={n.actor_profile.avatar_url}
-                        alt=""
+                        alt={`${n.actor_profile.display_name || n.actor_profile.username || "User"} avatar`}
                         width={32}
                         height={32}
                         className="object-cover w-full h-full"

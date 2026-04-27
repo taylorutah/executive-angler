@@ -218,7 +218,7 @@ function FishLightbox({ photos, initialIndex, onClose }: {
       <div className="max-w-2xl w-full mx-16" onClick={e => e.stopPropagation()}>
         {imageUrl ? (
           <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-            <Image src={imageUrl} alt={c.species || "Fish"} fill className="object-cover" />
+            <Image src={imageUrl} alt={c.species || "Fish"} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
           </div>
         ) : (
           <div className="w-full aspect-[4/3] rounded-xl bg-[#1F2937] flex items-center justify-center">
@@ -290,7 +290,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
       )}
       <div className="max-w-3xl w-full mx-16" onClick={e => e.stopPropagation()}>
         <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-          <Image src={photo.url} alt={photo.caption || "Session photo"} fill className="object-cover" />
+          <Image src={photo.url} alt={photo.caption || "Session photo"} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
         </div>
         {photo.caption && (
           <div className="mt-4 text-center">
@@ -738,7 +738,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#E8923A]/20 px-3 py-2 hover:border-[#E8923A]/40 transition-colors">
                           {f.image ? (
                             <div className="relative h-9 w-9 rounded overflow-hidden flex-shrink-0">
-                              <Image src={f.image} alt={f.name} fill className="object-cover" />
+                              <Image src={f.image} alt={f.name} fill sizes="36px" className="object-cover" />
                             </div>
                           ) : (
                             <span className="text-lg flex-shrink-0">🪰</span>
@@ -800,7 +800,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           {photoUrl ? (
                             <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))}
                               className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
-                              <Image src={photoUrl} alt={c.species || "Fish"} fill className="object-cover" />
+                              <Image src={photoUrl} alt={c.species || "Fish"} fill sizes="32px" className="object-cover" />
                             </button>
                           ) : (
                             <Fish className="h-4 w-4 text-[#E8923A] flex-shrink-0" />
@@ -968,7 +968,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     return (
                       <div key={`fish-${c.id}-${i}`} className="relative group aspect-square rounded-lg overflow-hidden">
                         <button onClick={() => setLightboxIdx(i)} className="w-full h-full">
-                          <Image src={entry.url} alt={c.species || "Fish"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                          <Image src={entry.url} alt={c.species || "Fish"} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px" className="object-cover group-hover:scale-105 transition-transform duration-200" />
                         </button>
                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
                           <p className="text-white text-xs font-medium truncate">{c.species || "Fish"}</p>
@@ -980,7 +980,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {allSessionPhotos.map((photo, i) => (
                     <div key={photo.id} className="relative group aspect-square rounded-lg overflow-hidden">
                       <button onClick={() => setSessionPhotoLightboxIdx(i)} className="w-full h-full">
-                        <Image src={photo.url} alt={photo.caption || "Session photo"} fill className="object-cover group-hover:scale-105 transition-transform duration-200" />
+                        <Image src={photo.url} alt={photo.caption || "Session photo"} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px" className="object-cover group-hover:scale-105 transition-transform duration-200" />
                       </button>
                       {isOwner && (
                         <button
@@ -1093,7 +1093,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         {photoUrl ? (
                           <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))} className="block">
                             <div className="relative h-12 w-12 rounded-lg overflow-hidden">
-                              <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
+                              <Image src={photoUrl} alt={c.species || "Catch photo"} fill sizes="48px" className="object-cover" />
                             </div>
                           </button>
                         ) : isOwner ? (
@@ -1186,7 +1186,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                               <div className="relative group/photo">
                                 <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))} className="block">
                                   <div className="relative h-8 w-8 rounded overflow-hidden">
-                                    <Image src={photoUrl} alt={c.species || "Catch photo"} fill className="object-cover" />
+                                    <Image src={photoUrl} alt={c.species || "Catch photo"} fill sizes="32px" className="object-cover" />
                                   </div>
                                 </button>
                                 {isOwner && (
@@ -1279,7 +1279,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   <div key={fly.id} className="flex items-center gap-2 bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D]">
                     {fly.image_url ? (
                       <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
-                        <Image src={fly.image_url} alt={fly.name} fill className="object-cover" />
+                        <Image src={fly.image_url} alt={fly.name} fill sizes="32px" className="object-cover" />
                       </div>
                     ) : (
                       <span className="text-base flex-shrink-0">🪰</span>

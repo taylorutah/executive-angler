@@ -17,6 +17,7 @@ import {
   DIVIDER_HTML,
 } from "./templates";
 import { SITE_URL } from "./client";
+import { APP_STORE_URL } from "@/lib/constants";
 
 export type BrandedEmailContent = {
   subject: string;
@@ -84,7 +85,7 @@ export function buildWelcome(args: {
     ])}
     ${DIVIDER_HTML}
     <p style="margin:0 0 12px;font-size:13px;color:#4B5563;">
-      <strong style="color:#111827;">On the go?</strong> We have a native iOS app that syncs everything. <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#D4751F;text-decoration:none;">Get it on the App Store &rarr;</a>
+      <strong style="color:#111827;">On the go?</strong> We have a native iOS app that syncs everything. <a href="${APP_STORE_URL}" style="color:#D4751F;text-decoration:none;">Get it on the App Store &rarr;</a>
     </p>
     <p style="margin:0;font-size:13px;color:#6B7280;">
       Questions, bugs, feature ideas? Just reply to this email &mdash; a real human reads every one.
