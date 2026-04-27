@@ -186,6 +186,26 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.shopify.com",
       },
+      {
+        protocol: "https",
+        hostname: "bauerflyreel.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.cheekyfishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cheekyfishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.cortlandline.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cortlandline.com",
+      },
     ],
   },
 };
