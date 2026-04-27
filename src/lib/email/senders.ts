@@ -83,10 +83,10 @@ export function buildWelcome(args: {
       },
     ])}
     ${DIVIDER_HTML}
-    <p style="margin:0 0 12px;font-size:13px;color:#A8B2BD;">
-      <strong style="color:#F0F6FC;">On the go?</strong> We have a native iOS app that syncs everything. <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#E8923A;text-decoration:none;">Get it on the App Store &rarr;</a>
+    <p style="margin:0 0 12px;font-size:13px;color:#4B5563;">
+      <strong style="color:#111827;">On the go?</strong> We have a native iOS app that syncs everything. <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#D4751F;text-decoration:none;">Get it on the App Store &rarr;</a>
     </p>
-    <p style="margin:0;font-size:13px;color:#6E7681;">
+    <p style="margin:0;font-size:13px;color:#6B7280;">
       Questions, bugs, feature ideas? Just reply to this email &mdash; a real human reads every one.
     </p>
   `;
@@ -142,8 +142,8 @@ export function buildProWelcome(args: {
       },
     ])}
     ${DIVIDER_HTML}
-    <p style="margin:0 0 8px;font-size:13px;color:#6E7681;">
-      <strong style="color:#A8B2BD;">Plan:</strong> ${planLabel}${
+    <p style="margin:0 0 8px;font-size:13px;color:#6B7280;">
+      <strong style="color:#4B5563;">Plan:</strong> ${planLabel}${
         priceLabel ? ` &middot; ${priceLabel}` : ""
       }${nextBill ? ` &middot; next bill ${nextBill}` : ""}
     </p>
@@ -176,14 +176,14 @@ export function buildPaymentFailed(args: {
     <p style="margin:0 0 16px;">
       We couldn't process your renewal${
         amountLabel
-          ? ` of <strong style=\"color:#F0F6FC;\">${amountLabel}</strong>`
+          ? ` of <strong style=\"color:#111827;\">${amountLabel}</strong>`
           : ""
       } for Executive Angler Pro. Your card was declined or has expired.
     </p>
     <p style="margin:0 0 16px;">
       No action is critical yet &mdash; Stripe will automatically retry${
         nextAttempt
-          ? ` on <strong style=\"color:#F0F6FC;\">${nextAttempt}</strong>`
+          ? ` on <strong style=\"color:#111827;\">${nextAttempt}</strong>`
           : " over the next few days"
       }. But updating your payment method now keeps Pro active without interruption.
     </p>
@@ -214,12 +214,12 @@ export function buildSubscriptionCanceled(args: {
     <p style="margin:0 0 16px;">
       Your Executive Angler Pro subscription ended${
         endedOn
-          ? ` on <strong style=\"color:#F0F6FC;\">${endedOn}</strong>`
+          ? ` on <strong style=\"color:#111827;\">${endedOn}</strong>`
           : ""
       }. Your account has reverted to the Free tier.
     </p>
     <p style="margin:0 0 16px;">
-      <strong style="color:#F0F6FC;">Your data is safe.</strong> Every session, catch, photo, and fly recipe is still there. Only Pro features (catch overlays, unlimited patterns, PDF &amp; CSV export) are paused.
+      <strong style="color:#111827;">Your data is safe.</strong> Every session, catch, photo, and fly recipe is still there. Only Pro features (catch overlays, unlimited patterns, PDF &amp; CSV export) are paused.
     </p>
     <p style="margin:0 0 8px;">
       If this wasn't intentional, one click restores everything.
@@ -249,7 +249,7 @@ export function buildFoundingConfirmation(args: {
   const body = `
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">
-      You're one of only <strong style="color:#F0F6FC;">50 Founding Members</strong> &mdash; and your seat is <strong style="color:#E8923A;">#${seatNumber}</strong>.
+      You're one of only <strong style="color:#111827;">50 Founding Members</strong> &mdash; and your seat is <strong style="color:#D4751F;">#${seatNumber}</strong>.
     </p>
     <p style="margin:0 0 20px;">
       This is lifetime Pro. No renewals, no rate hikes, no expiration. Ever.
@@ -303,9 +303,9 @@ export function buildPromoRedeemed(args: {
   const body = `
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 20px;">
-      Code <strong style="color:#F0F6FC;">${code.toUpperCase()}</strong> is applied. Pro is active${
+      Code <strong style="color:#111827;">${code.toUpperCase()}</strong> is applied. Pro is active${
         expiryLabel
-          ? ` until <strong style=\"color:#E8923A;\">${expiryLabel}</strong>`
+          ? ` until <strong style=\"color:#D4751F;\">${expiryLabel}</strong>`
           : ""
       }.
     </p>
@@ -359,10 +359,10 @@ export function buildExpiringSoon(args: {
   const body = `
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">
-      Your promotional Pro access is wrapping up. Pro features will lock on <strong style="color:#E8923A;">${expiryLabel}</strong> unless you upgrade to a paid plan.
+      Your promotional Pro access is wrapping up. Pro features will lock on <strong style="color:#D4751F;">${expiryLabel}</strong> unless you upgrade to a paid plan.
     </p>
     <p style="margin:0 0 16px;">
-      <strong style="color:#F0F6FC;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Insights Dashboard, Awards, River Leaderboards, Best Window Calculator) will pause.
+      <strong style="color:#111827;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Insights Dashboard, Awards, River Leaderboards, Best Window Calculator) will pause.
     </p>
     <p style="margin:0;">
       Three more days of Pro for less than a coffee: $2.99/month or $19.99/year.
@@ -394,8 +394,8 @@ export function buildAnnualRenewalReminder(args: {
   const body = `
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">
-      A courtesy heads-up: your Executive Angler Pro annual plan renews on <strong style="color:#F0F6FC;">${renewalLabel}</strong>${
-        amountLabel ? ` for <strong style="color:#F0F6FC;">${amountLabel}</strong>` : ""
+      A courtesy heads-up: your Executive Angler Pro annual plan renews on <strong style="color:#111827;">${renewalLabel}</strong>${
+        amountLabel ? ` for <strong style="color:#111827;">${amountLabel}</strong>` : ""
       }. No action needed if you want to continue &mdash; we'll charge the card on file.
     </p>
     <p style="margin:0 0 16px;">
@@ -403,12 +403,12 @@ export function buildAnnualRenewalReminder(args: {
       through the billing portal. Your journal, flies, and photos stay with you
       either way.
     </p>
-    <p style="margin:0 0 16px;font-size:13px;color:#6E7681;">
+    <p style="margin:0 0 16px;font-size:13px;color:#6B7280;">
       We send this reminder 30 days before every annual renewal because getting
       auto-billed with no warning feels lousy, and we&apos;re not going to be that app.
     </p>
-    <p style="margin:0;font-size:13px;color:#A8B2BD;">
-      Manage your subscription: <a href="${portalUrl}" style="color:#E8923A;text-decoration:none;">${portalUrl}</a>
+    <p style="margin:0;font-size:13px;color:#4B5563;">
+      Manage your subscription: <a href="${portalUrl}" style="color:#D4751F;text-decoration:none;">${portalUrl}</a>
     </p>
   `;
 
@@ -437,19 +437,19 @@ export function buildGiftReceived(args: {
 
   const messageBlock = recipientMessage
     ? `
-      <div style="margin:0 0 20px;padding:16px;border-left:3px solid #E8923A;background:#0D1117;border-radius:4px;">
-        <p style="margin:0;font-size:14px;color:#A8B2BD;font-style:italic;">&ldquo;${recipientMessage
+      <div style="margin:0 0 20px;padding:16px;border-left:3px solid #D4751F;background:#F7F3EC;border-radius:4px;">
+        <p style="margin:0;font-size:14px;color:#4B5563;font-style:italic;">&ldquo;${recipientMessage
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")}&rdquo;</p>
-        <p style="margin:8px 0 0;font-size:12px;color:#6E7681;">&mdash; ${fromLabel}</p>
+        <p style="margin:8px 0 0;font-size:12px;color:#6B7280;">&mdash; ${fromLabel}</p>
       </div>
     `
     : "";
 
   const body = `
     <p style="margin:0 0 16px;">
-      <strong style="color:#F0F6FC;">${fromLabel}</strong> just gifted you a year of Executive Angler Pro.
+      <strong style="color:#111827;">${fromLabel}</strong> just gifted you a year of Executive Angler Pro.
     </p>
     ${messageBlock}
     ${buildSectionLabel("What you get with Pro")}
@@ -475,7 +475,7 @@ export function buildGiftReceived(args: {
           "Biggest per species, per river, top 5 sessions, most-species day.",
       },
     ])}
-    <p style="margin:20px 0 0;font-size:13px;color:#6E7681;">
+    <p style="margin:20px 0 0;font-size:13px;color:#6B7280;">
       Click the button to claim your gift. You&apos;ll need an Executive Angler
       account &mdash; free to sign up, and your gift adds a full year of Pro on top.
     </p>

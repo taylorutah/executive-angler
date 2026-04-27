@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { buildBrandedEmail } from "@/lib/email/templates";
+import { buildWelcome } from "@/lib/email/senders";
 
 /**
  * POST /api/notifications/welcome
@@ -14,7 +16,6 @@ import { Resend } from "resend";
  */
 
 const FROM_EMAIL = "Executive Angler <noreply@executiveangler.com>";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
 
 let _resend: Resend | null = null;
 function getResend() {
@@ -24,121 +25,6 @@ function getResend() {
     _resend = new Resend(key);
   }
   return _resend;
-}
-
-function buildWelcomeHtml(displayName?: string) {
-  const greeting = displayName ? `Welcome, ${displayName}` : "Welcome to Executive Angler";
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background-color:#0D1117;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0D1117;padding:40px 0;">
-    <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
-        <!-- Logo -->
-        <tr><td style="padding:0 24px 32px;" align="center">
-          <img src="${SITE_URL}/images/logo-email.png" alt="Executive Angler" width="240" style="display:block;margin:0 auto;" />
-        </td></tr>
-        <!-- Card -->
-        <tr><td style="background-color:#161B22;border-radius:12px;border:1px solid #21262D;padding:32px 28px;">
-          <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#F0F6FC;line-height:1.3;">
-            ${greeting}
-          </h1>
-          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A8B2BD;">
-            Your fishing just got smarter. Executive Angler is the intelligence platform
-            built for serious fly anglers &mdash; log every session, build fly recipes,
-            track live river conditions, and let your data reveal what actually works.
-          </p>
-
-          <!-- Divider -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-            <tr><td style="border-top:1px solid #21262D;"></td></tr>
-          </table>
-
-          <p style="margin:0 0 20px;font-size:13px;font-weight:600;color:#E8923A;text-transform:uppercase;letter-spacing:0.1em;">
-            What you can do right now
-          </p>
-
-          <!-- Features -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-            <tr>
-              <td style="padding:8px 0;vertical-align:top;width:32px;">
-                <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">1</span>
-              </td>
-              <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Log your first session</strong> &mdash; GPS, weather, water conditions, and catch details are captured automatically. Every outing builds your personal fishing intelligence.
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:8px 0;vertical-align:top;width:32px;">
-                <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">2</span>
-              </td>
-              <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Browse the fly library</strong> &mdash; 120+ patterns with structured recipes, 500+ tying materials, and a workbench to build and organize your own.
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:8px 0;vertical-align:top;width:32px;">
-                <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">3</span>
-              </td>
-              <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Explore 138 rivers</strong> &mdash; live USGS flow data, hatch charts, access points, and conditions reports from the community.
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:8px 0;vertical-align:top;width:32px;">
-                <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background-color:#E8923A;color:#ffffff;font-size:13px;font-weight:700;line-height:24px;text-align:center;">4</span>
-              </td>
-              <td style="padding:8px 0 8px 12px;font-size:14px;color:#C9D1D9;line-height:1.5;">
-                <strong style="color:#F0F6FC;">Discover lodges, guides, and fly shops</strong> &mdash; curated directory with Google Reviews across 31 destinations.
-              </td>
-            </tr>
-          </table>
-
-          <a href="${SITE_URL}/journal" style="display:inline-block;background-color:#E8923A;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:8px;">
-            Start Your Journal
-          </a>
-
-          <!-- Pro teaser -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;">
-            <tr><td style="border-top:1px solid #21262D;"></td></tr>
-          </table>
-          <p style="margin:20px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
-            <strong style="color:#A8B2BD;">Unlock Pro</strong> for personal Insights, per-river Awards,
-            River Intel leaderboards, the Best Window Calculator on live flow, and Trophy Wall+.
-            <strong style="color:#A8B2BD;">$2.99/mo or $19.99/yr.</strong>
-            <a href="${SITE_URL}/pricing" style="color:#E8923A;text-decoration:none;font-weight:600;">See plans &rarr;</a>
-          </p>
-
-          <!-- Mobile app -->
-          <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6E7681;">
-            <span style="color:#2EA44F;">&#9679;</span>&nbsp;
-            <strong style="color:#A8B2BD;">The iPhone app is live.</strong>
-            <a href="https://apps.apple.com/us/app/executive-angler/id6760311036" style="color:#E8923A;text-decoration:none;font-weight:600;">Download from the App Store &rarr;</a>
-            <br>Log sessions on the water, sync to your account, and pick up where you left off on the web. Android is on the way.
-          </p>
-        </td></tr>
-        <!-- Footer -->
-        <tr><td style="padding:24px 24px 0;text-align:center;">
-          <p style="margin:0;font-size:12px;color:#6E7681;line-height:1.5;">
-            Tight lines,<br>
-            <strong style="color:#A8B2BD;">The Executive Angler Team</strong>
-          </p>
-          <p style="margin:12px 0 0;font-size:11px;color:#6E7681;">
-            <a href="${SITE_URL}/account#notifications" style="color:#6E7681;text-decoration:underline;">Manage email preferences</a>
-            &nbsp;&middot;&nbsp;
-            <a href="${SITE_URL}/privacy" style="color:#6E7681;text-decoration:underline;">Privacy Policy</a>
-          </p>
-          <p style="margin:8px 0 0;font-size:11px;color:#6E7681;">
-            &copy; ${new Date().getFullYear()} Executive Angler
-          </p>
-        </td></tr>
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
 }
 
 export async function POST(req: NextRequest) {
@@ -168,13 +54,15 @@ export async function POST(req: NextRequest) {
     }
 
     const resend = getResend();
-    const html = buildWelcomeHtml(displayName);
+    const content = buildWelcome({ displayName });
+    const html = buildBrandedEmail(content);
 
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: "Welcome to Executive Angler",
+      subject: content.subject,
       html,
+      ...(content.replyTo ? { replyTo: content.replyTo } : {}),
     });
 
     if (error) {

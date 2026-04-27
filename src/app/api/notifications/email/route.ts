@@ -52,8 +52,8 @@ function buildEmailHtml({
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background-color:#0D1117;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0D1117;padding:40px 0;">
+<body style="margin:0;padding:0;background-color:#F7F3EC;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F7F3EC;padding:40px 0;">
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
         <!-- Logo -->
@@ -61,25 +61,25 @@ function buildEmailHtml({
           <img src="${SITE_URL}/logo-email.png" alt="Executive Angler" width="180" style="display:block;" />
         </td></tr>
         <!-- Card -->
-        <tr><td style="background-color:#161B22;border-radius:12px;border:1px solid #21262D;padding:32px 28px;">
-          <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#F0F6FC;line-height:1.3;">
+        <tr><td style="background-color:#FFFFFF;border-radius:12px;border:1px solid #D4CBB8;padding:32px 28px;">
+          <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#111827;line-height:1.3;">
             ${heading}
           </h1>
-          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A8B2BD;">
+          <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#4B5563;">
             ${body}
           </p>
           ${ctaLabel && ctaUrl ? `
-          <a href="${ctaUrl}" style="display:inline-block;background-color:#E8923A;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:8px;">
+          <a href="${ctaUrl}" style="display:inline-block;background-color:#D4751F;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:8px;">
             ${ctaLabel}
           </a>` : ""}
         </td></tr>
         <!-- Footer -->
         <tr><td style="padding:24px 24px 0;text-align:center;">
-          <p style="margin:0;font-size:12px;color:#6E7681;line-height:1.5;">
+          <p style="margin:0;font-size:12px;color:#6B7280;line-height:1.5;">
             You received this because of your notification settings.
-            <a href="${SITE_URL}/account#notifications" style="color:#6E7681;text-decoration:underline;">Manage preferences</a>
+            <a href="${SITE_URL}/account#notifications" style="color:#6B7280;text-decoration:underline;">Manage preferences</a>
           </p>
-          <p style="margin:8px 0 0;font-size:11px;color:#6E7681;">
+          <p style="margin:8px 0 0;font-size:11px;color:#6B7280;">
             &copy; ${new Date().getFullYear()} Executive Angler
           </p>
         </td></tr>
@@ -100,7 +100,7 @@ function getNotificationContent(
       return {
         subject: `${actorName} started following you`,
         heading: "New Follower",
-        body: `<strong style="color:#F0F6FC;">${actorName}</strong> is now following you on Executive Angler. Check out their profile and recent sessions.`,
+        body: `<strong style="color:#111827;">${actorName}</strong> is now following you on Executive Angler. Check out their profile and recent sessions.`,
         ctaLabel: "View Profile",
         ctaUrl: `${SITE_URL}/feed`,
       };
@@ -108,7 +108,7 @@ function getNotificationContent(
       return {
         subject: `${actorName} commented on your session`,
         heading: "New Comment",
-        body: `<strong style="color:#F0F6FC;">${actorName}</strong> left a comment on your fishing session.`,
+        body: `<strong style="color:#111827;">${actorName}</strong> left a comment on your fishing session.`,
         ctaLabel: "View Comment",
         ctaUrl: sessionId ? `${SITE_URL}/feed` : `${SITE_URL}/feed`,
       };
@@ -116,7 +116,7 @@ function getNotificationContent(
       return {
         subject: `${actorName} gave kudos on your session`,
         heading: "New Kudos",
-        body: `<strong style="color:#F0F6FC;">${actorName}</strong> gave kudos on your fishing session. Nice work on the water!`,
+        body: `<strong style="color:#111827;">${actorName}</strong> gave kudos on your fishing session. Nice work on the water!`,
         ctaLabel: "View Session",
         ctaUrl: sessionId ? `${SITE_URL}/feed` : `${SITE_URL}/feed`,
       };
