@@ -35,14 +35,33 @@ export async function GET(request: Request) {
     .eq('canonical_fly_id', fly.id)
     .order('step_position', { ascending: true });
 
-  let owned = new Set<string>();
+  // Build owned-by-material map carrying each entry's color + size, so we can
+  // match the recipe's required size/color exactly. An entry with size_owned=null
+  // is treated as "any size" (back-compat for older inventory rows).
+  const ownedByMaterial = new Map<string, Array<{ size: string | null; color: string | null }>>();
   if (user) {
     const { data: inv } = await supabase
       .from('user_materials_inventory')
-      .select('material_id')
+      .select('material_id, size_owned, color_owned')
       .eq('user_id', user.id);
-    owned = new Set((inv || []).map(i => i.material_id as string));
+    for (const row of inv || []) {
+      const mid = row.material_id as string;
+      const list = ownedByMaterial.get(mid) || [];
+      list.push({ size: (row.size_owned as string | null) ?? null, color: (row.color_owned as string | null) ?? null });
+      ownedByMaterial.set(mid, list);
+    }
   }
+
+  const matchOwned = (materialId: string | null | undefined, sizeChoice: string | null | undefined, colorChoice: string | null | undefined): boolean => {
+    if (!materialId) return false;
+    const entries = ownedByMaterial.get(materialId);
+    if (!entries || entries.length === 0) return false;
+    return entries.some(e => {
+      const sizeOk = !sizeChoice || e.size === null || e.size === sizeChoice;
+      const colorOk = !colorChoice || e.color === null || e.color === colorChoice;
+      return sizeOk && colorOk;
+    });
+  };
 
   const enriched = (ingredients || []).map(ing => ({
     id: ing.id,
@@ -56,7 +75,7 @@ export async function GET(request: Request) {
     color_choice: ing.color_choice,
     size_choice: ing.size_choice,
     notes: ing.notes,
-    owned: !!(ing.material_id && owned.has(ing.material_id as string)),
+    owned: matchOwned(ing.material_id as string | null, ing.size_choice as string | null, ing.color_choice as string | null),
   }));
 
   const required = enriched.filter(i => !i.is_optional);

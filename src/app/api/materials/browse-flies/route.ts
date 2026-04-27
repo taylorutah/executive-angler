@@ -32,21 +32,37 @@ export async function GET(request: Request) {
     return NextResponse.json({ flies: [] });
   }
 
-  // Fetch ingredients for all returned flies in one query
+  // Fetch ingredients for all returned flies in one query (include size/color so we can match exactly)
   const { data: ingredients } = await supabase
     .from('fly_recipe_ingredients')
-    .select('canonical_fly_id, material_id, is_optional')
+    .select('canonical_fly_id, material_id, is_optional, size_choice, color_choice')
     .in('canonical_fly_id', flyIds);
 
-  // Owned material ids (if logged in)
-  let owned = new Set<string>();
+  // Owned entries grouped by material — preserves size + color so coverage respects recipe specifics
+  const ownedByMaterial = new Map<string, Array<{ size: string | null; color: string | null }>>();
   if (user) {
     const { data: inv } = await supabase
       .from('user_materials_inventory')
-      .select('material_id')
+      .select('material_id, size_owned, color_owned')
       .eq('user_id', user.id);
-    owned = new Set((inv || []).map(i => i.material_id as string));
+    for (const row of inv || []) {
+      const mid = row.material_id as string;
+      const list = ownedByMaterial.get(mid) || [];
+      list.push({ size: (row.size_owned as string | null) ?? null, color: (row.color_owned as string | null) ?? null });
+      ownedByMaterial.set(mid, list);
+    }
   }
+
+  const matchesIngredient = (materialId: string | null | undefined, sizeChoice: string | null | undefined, colorChoice: string | null | undefined): boolean => {
+    if (!materialId) return false;
+    const entries = ownedByMaterial.get(materialId);
+    if (!entries) return false;
+    return entries.some(e => {
+      const sizeOk = !sizeChoice || e.size === null || e.size === sizeChoice;
+      const colorOk = !colorChoice || e.color === null || e.color === colorChoice;
+      return sizeOk && colorOk;
+    });
+  };
 
   const countsByFly = new Map<string, { total: number; required: number; ownedRequired: number }>();
   for (const ing of ingredients || []) {
@@ -58,7 +74,9 @@ export async function GET(request: Request) {
     c.total++;
     if (!ing.is_optional) {
       c.required++;
-      if (ing.material_id && owned.has(ing.material_id as string)) c.ownedRequired++;
+      if (matchesIngredient(ing.material_id as string | null, ing.size_choice as string | null, ing.color_choice as string | null)) {
+        c.ownedRequired++;
+      }
     }
   }
 

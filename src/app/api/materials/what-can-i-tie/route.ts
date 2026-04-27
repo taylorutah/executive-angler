@@ -23,20 +23,37 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // 1. Fetch user's material inventory (material_ids they own)
+  // 1. Fetch user's material inventory with size + color so matching can respect recipe specifics
   const { data: inventory } = await supabase
     .from('user_materials_inventory')
-    .select('material_id')
+    .select('material_id, size_owned, color_owned')
     .eq('user_id', user.id);
 
-  const ownedMaterialIds = new Set((inventory || []).map(i => i.material_id));
+  const ownedByMaterial = new Map<string, Array<{ size: string | null; color: string | null }>>();
+  for (const row of inventory || []) {
+    const mid = row.material_id as string;
+    const list = ownedByMaterial.get(mid) || [];
+    list.push({ size: (row.size_owned as string | null) ?? null, color: (row.color_owned as string | null) ?? null });
+    ownedByMaterial.set(mid, list);
+  }
 
-  if (ownedMaterialIds.size === 0) {
+  if (ownedByMaterial.size === 0) {
     return NextResponse.json({
       matches: [],
       message: 'Add materials to your inventory first',
     });
   }
+
+  const matchesIngredient = (materialId: string | null | undefined, sizeChoice: string | null | undefined, colorChoice: string | null | undefined): boolean => {
+    if (!materialId) return false;
+    const entries = ownedByMaterial.get(materialId);
+    if (!entries) return false;
+    return entries.some(e => {
+      const sizeOk = !sizeChoice || e.size === null || e.size === sizeChoice;
+      const colorOk = !colorChoice || e.color === null || e.color === colorChoice;
+      return sizeOk && colorOk;
+    });
+  };
 
   // 2. Fetch all recipes (canonical + user's own patterns with structured recipes)
   const { data: allIngredients } = await supabase
@@ -90,7 +107,7 @@ export async function GET() {
     let matched = 0;
 
     for (const ing of recipe.ingredients) {
-      if (ing.material_id && ownedMaterialIds.has(ing.material_id)) {
+      if (matchesIngredient(ing.material_id, ing.size_choice, ing.color_choice)) {
         matched++;
       } else if (!ing.is_optional) {
         missing.push({
@@ -122,6 +139,6 @@ export async function GET() {
 
   return NextResponse.json({
     matches,
-    inventory_size: ownedMaterialIds.size,
+    inventory_size: ownedByMaterial.size,
   });
 }

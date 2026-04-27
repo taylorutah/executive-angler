@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -107,8 +107,9 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   // Add to inventory modal
   const [addingMaterial, setAddingMaterial] = useState<TyingMaterial | null>(null);
   const [addColor, setAddColor] = useState('');
-  const [addSize, setAddSize] = useState('');
-  const [addQty, setAddQty] = useState('');
+  const [addQty, setAddQty] = useState(''); // for materials without sizes
+  const [sizeRows, setSizeRows] = useState<Record<string, { checked: boolean; quantity: string; existingId?: string }>>({});
+  const [savingInventory, setSavingInventory] = useState(false);
 
   // ─── Fetch Inventory ─────────────────────────────────────────
   const fetchInventory = useCallback(async () => {
@@ -230,29 +231,114 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
     fetchFlyList(flyQuery, flyCategory);
   };
 
-  // ─── Add to Inventory ────────────────────────────────────────
-  const addToInventory = async (material: TyingMaterial) => {
+  // ─── Build per-size rows for a given material+color ────────
+  const buildSizeRows = useCallback((material: TyingMaterial, color: string, preselectedSize?: string) => {
+    const rows: Record<string, { checked: boolean; quantity: string; existingId?: string }> = {};
+    const sizes = material.sizes || [];
+    for (const size of sizes) {
+      const existing = inventory.find(
+        i => i.material_id === material.id
+          && i.size_owned === size
+          && (i.color_owned || '') === color
+      );
+      rows[size] = {
+        checked: !!existing || preselectedSize === size,
+        quantity: existing?.quantity || '',
+        existingId: existing?.id,
+      };
+    }
+    return rows;
+  }, [inventory]);
+
+  // ─── Open Inventory Modal ───────────────────────────────────
+  const openInventoryModal = useCallback((material: TyingMaterial, opts?: { preselectedSize?: string }) => {
+    // Default the color picker to whatever color the user already owns this material in (if any)
+    const existingColor = inventory.find(i => i.material_id === material.id)?.color_owned || '';
+    setAddingMaterial(material);
+    setAddColor(existingColor);
+
+    if (material.sizes && material.sizes.length > 0) {
+      setSizeRows(buildSizeRows(material, existingColor, opts?.preselectedSize));
+      setAddQty('');
+    } else {
+      setSizeRows({});
+      // Pre-populate quantity from existing single-row record, if any
+      const existing = inventory.find(
+        i => i.material_id === material.id
+          && (i.color_owned || '') === existingColor
+          && !i.size_owned
+      );
+      setAddQty(existing?.quantity || '');
+    }
+  }, [inventory, buildSizeRows]);
+
+  // When color changes inside the modal, re-derive size rows for that color
+  const handleColorChange = (color: string) => {
+    setAddColor(color);
+    if (!addingMaterial) return;
+    if (addingMaterial.sizes && addingMaterial.sizes.length > 0) {
+      setSizeRows(buildSizeRows(addingMaterial, color));
+    } else {
+      const existing = inventory.find(
+        i => i.material_id === addingMaterial.id
+          && (i.color_owned || '') === color
+          && !i.size_owned
+      );
+      setAddQty(existing?.quantity || '');
+    }
+  };
+
+  // ─── Save Inventory Changes (batched) ──────────────────────
+  const saveInventoryChanges = async () => {
+    if (!addingMaterial) return;
+    setSavingInventory(true);
+    const colorVal = addColor || null;
+    const isSized = !!(addingMaterial.sizes && addingMaterial.sizes.length > 0);
+
     try {
-      const res = await fetch('/api/materials/inventory', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          material_id: material.id,
-          color_owned: addColor || null,
-          size_owned: addSize || null,
-          quantity: addQty || null,
-        }),
-      });
-      if (res.ok) {
-        setAddingMaterial(null);
-        setAddColor('');
-        setAddSize('');
-        setAddQty('');
-        fetchInventory();
-        // Also refresh the fly-requirements view so owned flags update live
-        if (tab === 'pickFly') refreshFlyAfterAdd();
+      const ops: Promise<unknown>[] = [];
+
+      if (isSized) {
+        for (const [size, row] of Object.entries(sizeRows)) {
+          if (row.checked) {
+            ops.push(fetch('/api/materials/inventory', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                material_id: addingMaterial.id,
+                color_owned: colorVal,
+                size_owned: size,
+                quantity: row.quantity || null,
+              }),
+            }));
+          } else if (row.existingId) {
+            ops.push(fetch(`/api/materials/inventory?id=${row.existingId}`, { method: 'DELETE' }));
+          }
+        }
+      } else {
+        ops.push(fetch('/api/materials/inventory', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            material_id: addingMaterial.id,
+            color_owned: colorVal,
+            size_owned: null,
+            quantity: addQty || null,
+          }),
+        }));
       }
+
+      await Promise.all(ops);
+
+      setAddingMaterial(null);
+      setAddColor('');
+      setAddQty('');
+      setSizeRows({});
+      await fetchInventory();
+      if (tab === 'pickFly') refreshFlyAfterAdd();
     } catch { /* ignore */ }
+
+    setSavingInventory(false);
   };
 
   // ─── Remove from Inventory ───────────────────────────────────
@@ -271,7 +357,12 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
     return acc;
   }, {});
 
-  const ownedMaterialIds = new Set(inventory.map(i => i.material_id));
+  // Count of distinct (color+size) entries per material — surfaces "Owned · 3 sizes" in the catalog
+  const ownedCountByMaterial = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const item of inventory) m[item.material_id] = (m[item.material_id] || 0) + 1;
+    return m;
+  }, [inventory]);
 
   const Wrapper = embedded ? 'div' : 'div';
   const wrapperClass = embedded ? '' : 'min-h-screen bg-bg text-text-primary';
@@ -408,12 +499,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     loading={flyReqLoading === fly.slug}
                     requirements={flyRequirements[fly.slug]}
                     onToggle={() => toggleFlyExpanded(fly.slug)}
-                    onAddMaterial={(material) => {
-                      setAddingMaterial(material);
-                      setAddColor('');
-                      setAddSize('');
-                      setAddQty('');
-                    }}
+                    onAddMaterial={(material, size) => openInventoryModal(material, { preselectedSize: size })}
                   />
                 ))}
               </div>
@@ -575,13 +661,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     <MaterialCard
                       key={material.id}
                       material={material}
-                      isOwned={ownedMaterialIds.has(material.id)}
-                      onAdd={() => {
-                        setAddingMaterial(material);
-                        setAddColor('');
-                        setAddSize('');
-                        setAddQty('');
-                      }}
+                      ownedCount={ownedCountByMaterial[material.id] || 0}
+                      onOpen={() => openInventoryModal(material)}
                     />
                   ))}
                 </div>
@@ -654,79 +735,121 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       </div>
 
       {/* ─── Add to Inventory Modal ─────────────────────────────── */}
-      {addingMaterial && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-surface rounded-xl border border-border p-6 max-w-md w-full">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-[family-name:var(--font-heading)] text-lg">Add to Inventory</h3>
-              <button onClick={() => setAddingMaterial(null)} className="text-text-muted hover:text-text-primary">
-                <X size={20} />
-              </button>
-            </div>
+      {addingMaterial && (() => {
+        const isSized = !!(addingMaterial.sizes && addingMaterial.sizes.length > 0);
+        const checkedCount = isSized
+          ? Object.values(sizeRows).filter(r => r.checked).length
+          : 0;
+        return (
+          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+            <div className="bg-surface rounded-xl border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-[family-name:var(--font-heading)] text-lg">
+                  {isSized ? 'Inventory by Size' : 'Add to Inventory'}
+                </h3>
+                <button onClick={() => setAddingMaterial(null)} className="text-text-muted hover:text-text-primary">
+                  <X size={20} />
+                </button>
+              </div>
 
-            <p className="text-text-secondary text-sm mb-1">{addingMaterial.brand}</p>
-            <p className="text-text-primary font-medium mb-4">{addingMaterial.name}</p>
+              <p className="text-text-secondary text-sm mb-1">{addingMaterial.brand}</p>
+              <p className="text-text-primary font-medium mb-4">{addingMaterial.name}</p>
 
-            <div className="space-y-3">
-              {addingMaterial.colors && addingMaterial.colors.length > 0 && (
-                <div>
-                  <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Color</label>
-                  <select
-                    value={addColor}
-                    onChange={e => setAddColor(e.target.value)}
-                    className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary"
-                  >
-                    <option value="">Any / Not specified</option>
-                    {addingMaterial.colors.map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              {addingMaterial.sizes && addingMaterial.sizes.length > 0 && (
-                <div>
-                  <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Size</label>
-                  <select
-                    value={addSize}
-                    onChange={e => setAddSize(e.target.value)}
-                    className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary"
-                  >
-                    <option value="">Any / Not specified</option>
-                    {addingMaterial.sizes.map(s => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              <div>
-                <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Quantity (optional)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. 1 spool, 3 packs"
-                  value={addQty}
-                  onChange={e => setAddQty(e.target.value)}
-                  className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted"
-                />
+              <div className="space-y-3">
+                {addingMaterial.colors && addingMaterial.colors.length > 0 && (
+                  <div>
+                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Color</label>
+                    <select
+                      value={addColor}
+                      onChange={e => handleColorChange(e.target.value)}
+                      className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary"
+                    >
+                      <option value="">Any / Not specified</option>
+                      {addingMaterial.colors.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {isSized ? (
+                  <div>
+                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-2">
+                      Sizes you have on hand
+                    </label>
+                    <div className="border border-border rounded-lg divide-y divide-border overflow-hidden">
+                      {addingMaterial.sizes!.map(size => {
+                        const row = sizeRows[size] || { checked: false, quantity: '' };
+                        return (
+                          <div key={size} className="flex items-center gap-3 px-3 py-2 bg-surface-raised">
+                            <label className="flex items-center gap-2 cursor-pointer min-w-[70px]">
+                              <input
+                                type="checkbox"
+                                checked={row.checked}
+                                onChange={e => setSizeRows(prev => ({
+                                  ...prev,
+                                  [size]: { ...prev[size], checked: e.target.checked, quantity: prev[size]?.quantity || '' },
+                                }))}
+                                className="accent-accent w-4 h-4"
+                              />
+                              <span className="text-text-primary text-sm font-mono">Size {size}</span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="qty (e.g. 1 pack)"
+                              value={row.quantity}
+                              disabled={!row.checked}
+                              onChange={e => setSizeRows(prev => ({
+                                ...prev,
+                                [size]: { ...prev[size], checked: prev[size]?.checked ?? true, quantity: e.target.value },
+                              }))}
+                              className="flex-1 bg-surface border border-border rounded px-2 py-1 text-sm text-text-primary placeholder:text-text-muted disabled:opacity-40"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <p className="text-text-muted text-[11px] mt-2">
+                      Tick each size you stock and (optionally) jot quantity. Leave unchecked to remove it.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Quantity (optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 1 spool, 3 packs"
+                      value={addQty}
+                      onChange={e => setAddQty(e.target.value)}
+                      className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setAddingMaterial(null)}
+                  disabled={savingInventory}
+                  className="flex-1 bg-surface-raised text-text-secondary px-4 py-2 rounded-lg text-sm hover:text-text-primary disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveInventoryChanges}
+                  disabled={savingInventory}
+                  className="flex-1 bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {savingInventory && <Loader2 size={14} className="animate-spin" />}
+                  {isSized
+                    ? (checkedCount === 0 ? 'Save (clear all)' : `Save ${checkedCount} size${checkedCount === 1 ? '' : 's'}`)
+                    : 'Save'}
+                </button>
               </div>
             </div>
-
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setAddingMaterial(null)}
-                className="flex-1 bg-surface-raised text-text-secondary px-4 py-2 rounded-lg text-sm hover:text-text-primary"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => addToInventory(addingMaterial)}
-                className="flex-1 bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-              >
-                Add to Inventory
-              </button>
-            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </Wrapper>
   );
 }
@@ -874,7 +997,7 @@ function PickFlyCard({
   loading: boolean;
   requirements?: FlyRequirementsResponse;
   onToggle: () => void;
-  onAddMaterial: (material: TyingMaterial) => void;
+  onAddMaterial: (material: TyingMaterial, size?: string) => void;
 }) {
   const pct = fly.coverage_percentage;
   const pctColor = pct === 100 ? 'text-success' : pct >= 50 ? 'text-accent' : 'text-text-muted';
@@ -938,7 +1061,7 @@ function PickFlyCard({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onAddMaterial(ing.material as TyingMaterial);
+                          onAddMaterial(ing.material as TyingMaterial, ing.size_choice);
                         }}
                         className="flex items-center gap-1 text-accent text-xs font-medium hover:underline flex-shrink-0"
                       >
@@ -976,13 +1099,15 @@ function PickFlyCard({
 
 function MaterialCard({
   material,
-  isOwned,
-  onAdd,
+  ownedCount,
+  onOpen,
 }: {
   material: TyingMaterial;
-  isOwned: boolean;
-  onAdd: () => void;
+  ownedCount: number;
+  onOpen: () => void;
 }) {
+  const isOwned = ownedCount > 0;
+  const hasSizes = !!(material.sizes && material.sizes.length > 0);
   return (
     <div className="bg-surface rounded-xl border border-border p-4 flex items-start justify-between">
       <div className="flex-1 min-w-0">
@@ -999,18 +1124,24 @@ function MaterialCard({
           </p>
         )}
       </div>
-      {isOwned ? (
-        <span className="flex items-center gap-1 text-success text-xs font-medium ml-2">
-          <Check size={12} /> Owned
-        </span>
-      ) : (
-        <button
-          onClick={onAdd}
-          className="flex items-center gap-1 text-accent text-xs font-medium ml-2 hover:underline"
-        >
-          <Plus size={12} /> Add
-        </button>
-      )}
+      <button
+        onClick={onOpen}
+        className={`flex items-center gap-1 text-xs font-medium ml-2 hover:underline whitespace-nowrap ${
+          isOwned ? 'text-success' : 'text-accent'
+        }`}
+        title={isOwned ? 'Manage sizes' : 'Add to inventory'}
+      >
+        {isOwned ? (
+          <>
+            <Check size={12} />
+            Owned{hasSizes ? ` · ${ownedCount} ${ownedCount === 1 ? 'size' : 'sizes'}` : ''}
+          </>
+        ) : (
+          <>
+            <Plus size={12} /> Add
+          </>
+        )}
+      </button>
     </div>
   );
 }
