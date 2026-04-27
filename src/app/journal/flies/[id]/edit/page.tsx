@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, Upload, Trash2, X, Sparkles } from "lucide-react";
+import { ArrowLeft, Trash2, Sparkles } from "lucide-react";
 import VariantModal from "@/components/flies/VariantModal";
 import VariantTree from "@/components/flies/VariantTree";
+import FlyImageUploader from "@/components/flies/FlyImageUploader";
 import HelpHint from "@/components/ui/HelpHint";
 
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
@@ -49,10 +49,8 @@ export default function EditFlyPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
-  const [preview, setPreview] = useState<string | null>(null);
   const [existingImage, setExistingImage] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [form, setForm] = useState({
     name: "", type: "", size: "", hook: "",
@@ -102,29 +100,16 @@ export default function EditFlyPage() {
     setForm(prev => ({ ...prev, [field]: value }));
   }
 
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    setFile(f);
-    setPreview(URL.createObjectURL(f));
-  }
-
-  function removeImage() {
-    setFile(null);
-    setPreview(null);
-    setExistingImage(null);
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError("");
     try {
       let res: Response;
-      if (file) {
+      if (imageFile) {
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-        fd.append("image", file);
+        fd.append("image", imageFile);
         res = await fetch(`/api/fishing/flies?id=${id}`, { method: "PATCH", body: fd });
       } else {
         res = await fetch(`/api/fishing/flies?id=${id}`, {
@@ -153,7 +138,6 @@ export default function EditFlyPage() {
   const label = "flex items-center gap-1 text-xs font-semibold text-[#A8B2BD] uppercase tracking-wide mb-1";
   const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5";
   const sectionTitle = "flex items-center gap-2 text-sm font-bold text-[#F0F6FC] mb-4";
-  const displayImage = preview || existingImage;
   const isNymphLike = form.type === "Nymph" || form.type === "Wet Fly" || form.type === "Emerger" || form.type === "";
 
   if (loading) return (
@@ -407,31 +391,13 @@ export default function EditFlyPage() {
             {/* Photo */}
             <div className={section}>
               <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wide mb-3">Photo</h2>
-              {displayImage ? (
-                <div className="space-y-3">
-                  <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-[#21262D]">
-                    <Image src={displayImage} alt="Fly" fill className="object-cover" sizes="340px" />
-                  </div>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => fileRef.current?.click()}
-                      className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-[#E8923A] border border-[#E8923A]/30 rounded-lg px-3 py-2 hover:bg-[#E8923A]/10 transition-colors">
-                      <Upload className="h-3.5 w-3.5" /> Replace
-                    </button>
-                    <button type="button" onClick={removeImage}
-                      className="flex items-center justify-center gap-1.5 text-xs font-medium text-red-400 border border-red-500/30 rounded-lg px-3 py-2 hover:bg-red-500/10 transition-colors">
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button type="button" onClick={() => fileRef.current?.click()}
-                  className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#21262D] rounded-xl py-10 text-[#6E7681] hover:border-[#E8923A]/40 hover:text-[#E8923A] transition-colors">
-                  <Upload className="h-6 w-6" />
-                  <span className="text-sm font-medium">Upload fly photo</span>
-                  <span className="text-xs">JPG, PNG — 1:1 looks best</span>
-                </button>
-              )}
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+              <FlyImageUploader
+                existingUrl={existingImage}
+                onFileChange={(f) => {
+                  setImageFile(f);
+                  if (f === null) setExistingImage(null);
+                }}
+              />
             </div>
 
             {/* Variant tree — lineage + children */}

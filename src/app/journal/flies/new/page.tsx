@@ -4,7 +4,8 @@ import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { RecipeBuilder, type RecipeStep } from '@/components/flies/RecipeBuilder'
-import { ChevronDown, ArrowLeft, Camera } from 'lucide-react'
+import FlyImageUploader from '@/components/flies/FlyImageUploader'
+import { ChevronDown, ArrowLeft } from 'lucide-react'
 
 const FLY_TYPES = [
   'Nymph',
@@ -23,23 +24,10 @@ export default function NewFlyPatternPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>([])
   const [source, setSource] = useState<typeof FLY_SOURCES[number]>('tied')
   const [useSimpleMode, setUseSimpleMode] = useState(false)
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setImagePreview(null)
-    }
-  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -48,6 +36,12 @@ export default function NewFlyPatternPage() {
 
     const formElement = e.currentTarget
     const formData = new FormData(formElement)
+
+    if (imageFile) {
+      formData.set('image', imageFile)
+    } else {
+      formData.delete('image')
+    }
 
     // Add recipe steps if using structured builder
     if (!useSimpleMode && recipeSteps.length > 0) {
@@ -279,27 +273,7 @@ export default function NewFlyPatternPage() {
           {/* ── Photo ── */}
           <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
             <h2 className="text-xs font-semibold text-[#E8923A] uppercase tracking-wider mb-3">Photo</h2>
-            <label
-              htmlFor="image"
-              className="flex flex-col items-center justify-center border-2 border-dashed border-[#21262D] rounded-lg p-6 cursor-pointer hover:border-[#E8923A]/40 transition-colors"
-            >
-              {imagePreview ? (
-                <img src={imagePreview} alt="Preview" className="max-h-48 rounded-lg" />
-              ) : (
-                <>
-                  <Camera className="w-8 h-8 text-[#6E7681] mb-2" />
-                  <span className="text-sm text-[#6E7681]">Tap to add a photo</span>
-                </>
-              )}
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-            </label>
+            <FlyImageUploader onFileChange={setImageFile} />
           </div>
 
           {/* ── Actions ── */}
