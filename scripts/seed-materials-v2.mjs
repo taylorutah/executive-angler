@@ -92,7 +92,7 @@ const fullingMill = [
   { name: 'Grab Gape Heavy FM5027', brand: 'Fulling Mill', category: 'hook', subcategory: 'nymph', sizes: ['8','10','12','14','16'], finish: 'barbless', description: 'Heavy-wire wide-gape variant for deep nymphing.' },
   { name: 'Heavyweight Champ FM5005', brand: 'Fulling Mill', category: 'hook', subcategory: 'nymph', sizes: ['10','12','14','16'], finish: 'barbless', description: 'Heavy-wire competition barbless nymph, wide gape.' },
   { name: 'Competition Heavyweight FM5095', brand: 'Fulling Mill', category: 'hook', subcategory: 'nymph', sizes: ['6','8','10','12'], finish: 'barbless', description: 'Competition heavyweight nymph hook for big stoneflies and weighted patterns.' },
-  { name: 'Czech Nymph FM5065', brand: 'Fulling Mill', category: 'hook', subcategory: 'czech', sizes: ['10','12','14','16'], finish: 'barbless', description: 'Curved shank Czech nymph barbless, standard wire.' },
+  { name: 'Czech Nymph FM5065', brand: 'Fulling Mill', category: 'hook', subcategory: 'czech', sizes: ['10','12','14','16','18','20'], finish: 'barbless', description: 'Curved shank Czech nymph barbless, standard wire.' },
   { name: 'Czech Nymph Heavy FM5067', brand: 'Fulling Mill', category: 'hook', subcategory: 'czech', sizes: ['10','12','14','16'], finish: 'barbless', description: 'Heavy-wire Czech nymph for faster sinking.' },
   { name: 'Nymph FM5085', brand: 'Fulling Mill', category: 'hook', subcategory: 'nymph', sizes: ['8','10','12','14','16'], finish: 'barbless', description: 'Standard barbless nymph, all-purpose.' },
   { name: 'Heavyweight Grub FM5115', brand: 'Fulling Mill', category: 'hook', subcategory: 'nymph', sizes: ['8','10','12','14','16'], finish: 'barbless', description: 'Heavy-wire grub-curve barbless.' },
@@ -163,6 +163,13 @@ const fullingMill = [
   { name: 'Shrimp Eyes', brand: 'Fulling Mill', category: 'eye', sizes: ['small','medium','large'], colors: ['black'], material_type: 'dumbbell shrimp eye', description: 'Dumbbell shrimp eyes for saltwater patterns.' },
   { name: 'Changer Chenille', brand: 'Fulling Mill', category: 'chenille', colors: ['black','white','olive','tan','brown','chartreuse','pink','purple'], material_type: 'articulated-streamer chenille', description: 'Articulated-streamer chenille body material.' },
   { name: 'Extra Small Cactus Chenille', brand: 'Fulling Mill', category: 'chenille', sizes: ['extra small'], colors: ['pearl','olive','black','red','chartreuse','copper'], material_type: 'cactus chenille', description: 'Fine cactus chenille for small Euro nymphs and egg patterns.' },
+];
+
+// =============================================================================
+// UMPQUA — hooks Taylor uses regularly (not in seed-confidence-materials)
+// =============================================================================
+const umpqua = [
+  { name: 'Perdi-Jig', brand: 'Umpqua', category: 'hook', subcategory: 'jig', sizes: ['12','14','16','18','20'], finish: 'barbless', description: 'Umpqua tactical jig hook for perdigon-style nymphs — slotted-tungsten-bead compatible, 60-degree jig profile, designed for Euro-nymphing.' },
 ];
 
 // =============================================================================
@@ -382,7 +389,7 @@ const jsFeatherCraft = [
 // =============================================================================
 // MAIN
 // =============================================================================
-const all = [...hanak, ...fullingMill, ...fffVendors, ...tff, ...jsFeatherCraft];
+const all = [...hanak, ...fullingMill, ...umpqua, ...fffVendors, ...tff, ...jsFeatherCraft];
 
 // Generate slugs and dedupe within this batch
 const seen = new Set();
