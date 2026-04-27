@@ -1,13 +1,14 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-// GET /api/materials — list materials with optional category/brand filters
+// GET /api/materials — list materials with optional category/brand/search filters
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get('category');
   const brand = searchParams.get('brand');
-  const limit = parseInt(searchParams.get('limit') || '50', 10);
-  const offset = parseInt(searchParams.get('offset') || '0', 10);
+  const q = (searchParams.get('q') || '').trim();
+  const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '50', 10), 1), 100);
+  const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10), 0);
 
   const supabase = await createClient();
 
@@ -21,6 +22,25 @@ export async function GET(request: Request) {
 
   if (category) query = query.eq('category', category);
   if (brand) query = query.ilike('brand', brand);
+
+  if (q) {
+    // Escape PostgREST `or` filter reserved chars: , ( ) and unbalanced quotes
+    const safe = q.replace(/[,()]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (safe) {
+      const pattern = `%${safe}%`;
+      query = query.or(
+        [
+          `name.ilike.${pattern}`,
+          `brand.ilike.${pattern}`,
+          `subcategory.ilike.${pattern}`,
+          `material_type.ilike.${pattern}`,
+          `weight.ilike.${pattern}`,
+          `finish.ilike.${pattern}`,
+          `description.ilike.${pattern}`,
+        ].join(',')
+      );
+    }
+  }
 
   const { data, error, count } = await query;
 

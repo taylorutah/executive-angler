@@ -92,6 +92,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   const [browseSearch, setBrowseSearch] = useState('');
   const [browseLoading, setBrowseLoading] = useState(false);
   const [browseTotal, setBrowseTotal] = useState(0);
+  const [browsePage, setBrowsePage] = useState(0);
+  const BROWSE_PAGE_SIZE = 50;
 
   // Pick-a-Fly state
   const [flyList, setFlyList] = useState<FlyBrowseItem[]>([]);
@@ -144,23 +146,20 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   };
 
   // ─── Browse Materials ────────────────────────────────────────
-  const fetchBrowse = useCallback(async (cat: string, search: string) => {
+  const fetchBrowse = useCallback(async (cat: string, search: string, page: number) => {
     setBrowseLoading(true);
-    const params = new URLSearchParams({ limit: '50' });
+    const offset = page * BROWSE_PAGE_SIZE;
+    const params = new URLSearchParams({
+      limit: String(BROWSE_PAGE_SIZE),
+      offset: String(offset),
+    });
     if (cat) params.set('category', cat);
+    if (search.trim()) params.set('q', search.trim());
     try {
       const res = await fetch(`/api/materials?${params}`);
       if (res.ok) {
         const data = await res.json();
-        let mats = data.materials || [];
-        if (search) {
-          const q = search.toLowerCase();
-          mats = mats.filter((m: TyingMaterial) =>
-            m.name.toLowerCase().includes(q) ||
-            (m.brand && m.brand.toLowerCase().includes(q))
-          );
-        }
-        setBrowseMaterials(mats);
+        setBrowseMaterials(data.materials || []);
         setBrowseTotal(data.total || 0);
       }
     } catch { /* ignore */ }
@@ -168,8 +167,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   }, []);
 
   useEffect(() => {
-    if (tab === 'browse') fetchBrowse(browseCategory, browseSearch);
-  }, [tab, browseCategory, fetchBrowse]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (tab === 'browse') fetchBrowse(browseCategory, browseSearch, browsePage);
+  }, [tab, browseCategory, browsePage, fetchBrowse]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (tab === 'whatCanITie') fetchMatches();
@@ -535,16 +534,16 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                 <input
                   type="text"
-                  placeholder="Search materials..."
+                  placeholder="Search by name, brand, type..."
                   value={browseSearch}
                   onChange={e => setBrowseSearch(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') fetchBrowse(browseCategory, browseSearch); }}
+                  onKeyDown={e => { if (e.key === 'Enter') { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); } }}
                   className="w-full bg-surface border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
                 />
               </div>
               <select
                 value={browseCategory}
-                onChange={e => setBrowseCategory(e.target.value)}
+                onChange={e => { setBrowsePage(0); setBrowseCategory(e.target.value); }}
                 className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
               >
                 <option value="">All Categories</option>
@@ -553,7 +552,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                 ))}
               </select>
               <button
-                onClick={() => fetchBrowse(browseCategory, browseSearch)}
+                onClick={() => { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); }}
                 className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
               >
                 Search
@@ -567,7 +566,9 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
             ) : (
               <>
                 <p className="text-text-muted text-sm mb-4">
-                  Showing {browseMaterials.length} of {browseTotal} materials
+                  {browseTotal === 0
+                    ? 'No materials found'
+                    : `Showing ${browsePage * BROWSE_PAGE_SIZE + 1}–${browsePage * BROWSE_PAGE_SIZE + browseMaterials.length} of ${browseTotal} materials`}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {browseMaterials.map(material => (
@@ -584,6 +585,68 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     />
                   ))}
                 </div>
+
+                {/* Pagination */}
+                {browseTotal > BROWSE_PAGE_SIZE && (() => {
+                  const totalPages = Math.ceil(browseTotal / BROWSE_PAGE_SIZE);
+                  const currentPage = browsePage;
+                  const goTo = (p: number) => {
+                    setBrowsePage(p);
+                    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                  };
+                  // Build a compact page list with ellipses
+                  const pages: (number | '…')[] = [];
+                  const push = (p: number | '…') => { if (pages[pages.length - 1] !== p) pages.push(p); };
+                  push(0);
+                  for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                    if (i > 0 && i < totalPages - 1) {
+                      if (i > 1 && pages[pages.length - 1] !== '…' && pages[pages.length - 1] !== 0) push('…');
+                      else if (i > 1 && pages[pages.length - 1] === 0) push('…');
+                      push(i);
+                    }
+                  }
+                  if (totalPages > 1) {
+                    if (pages[pages.length - 1] !== totalPages - 2 && pages[pages.length - 1] !== '…' && totalPages - 1 - (pages[pages.length - 1] as number) > 1) push('…');
+                    push(totalPages - 1);
+                  }
+
+                  return (
+                    <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+                      <button
+                        onClick={() => goTo(Math.max(0, currentPage - 1))}
+                        disabled={currentPage === 0}
+                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-sm text-text-primary disabled:opacity-40 disabled:cursor-not-allowed hover:border-accent"
+                      >
+                        Previous
+                      </button>
+                      {pages.map((p, i) => (
+                        p === '…' ? (
+                          <span key={`e-${i}`} className="px-2 text-text-muted text-sm">…</span>
+                        ) : (
+                          <button
+                            key={p}
+                            onClick={() => goTo(p)}
+                            aria-current={p === currentPage ? 'page' : undefined}
+                            className={`min-w-[36px] px-3 py-1.5 rounded-lg border text-sm ${
+                              p === currentPage
+                                ? 'bg-accent text-bg border-accent font-medium'
+                                : 'bg-surface text-text-primary border-border hover:border-accent'
+                            }`}
+                          >
+                            {p + 1}
+                          </button>
+                        )
+                      ))}
+                      <button
+                        onClick={() => goTo(Math.min(totalPages - 1, currentPage + 1))}
+                        disabled={currentPage >= totalPages - 1}
+                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-sm text-text-primary disabled:opacity-40 disabled:cursor-not-allowed hover:border-accent"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  );
+                })()}
               </>
             )}
           </div>
