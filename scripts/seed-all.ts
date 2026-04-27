@@ -56,11 +56,14 @@ function toSnake(str: string): string {
  */
 const INTERNAL_FIELDS = new Set(["sourceImageUrl"]);
 
-/** Deep-transform object keys from camelCase to snake_case */
+/** Deep-transform object keys from camelCase to snake_case. Omits
+ *  undefined values so column DEFAULTs apply rather than getting overridden
+ *  with NULL (matters for NOT NULL DEFAULT columns like variant_summary). */
 function keysToSnake(obj: Record<string, unknown>): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
     if (INTERNAL_FIELDS.has(key)) continue;
+    if (value === undefined) continue;
     const snakeKey = toSnake(key);
     // Don't recurse into arrays or nested objects that are stored as jsonb
     result[snakeKey] = value;
