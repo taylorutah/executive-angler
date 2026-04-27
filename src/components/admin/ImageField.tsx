@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 import {
@@ -306,17 +306,7 @@ export default function ImageField({
               <Type className="h-3 w-3" />
               Alt Text
             </label>
-            <div className="group relative">
-              <Info className="h-3.5 w-3.5 text-[#6E7681] cursor-help" />
-              <div className="absolute right-0 top-5 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#A8B2BD] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
-                <p className="font-bold text-[#F0F6FC] mb-1">SEO alt text tips:</p>
-                <ul className="space-y-0.5">
-                  <li>• Describe the scene: river, location, season</li>
-                  <li>• Include keywords: &quot;fly fishing&quot;, river name, state</li>
-                  <li>• 80–125 characters is ideal for Google</li>
-                </ul>
-              </div>
-            </div>
+            <AltTextTipsPopover />
           </div>
           <input
             type="text"
@@ -393,6 +383,61 @@ export default function ImageField({
           {error}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function AltTextTipsPopover() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        aria-label={open ? "Hide alt text tips" : "Show alt text tips"}
+        aria-expanded={open}
+        className="text-[#6E7681] hover:text-[#F0F6FC] transition-colors p-0.5 -m-0.5"
+      >
+        <Info className="h-3.5 w-3.5" />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-6 w-64 p-3 bg-[#0D1117] border border-[#21262D] rounded-lg text-[10px] text-[#A8B2BD] z-20 shadow-xl">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <p className="font-bold text-[#F0F6FC]">SEO alt text tips:</p>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close tips"
+              className="text-[#6E7681] hover:text-[#F0F6FC] -mt-0.5 -mr-0.5 p-0.5"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+          <ul className="space-y-0.5">
+            <li>• Describe the scene: river, location, season</li>
+            <li>• Include keywords: &quot;fly fishing&quot;, river name, state</li>
+            <li>• 80–125 characters is ideal for Google</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
