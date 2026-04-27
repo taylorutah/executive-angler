@@ -5,6 +5,7 @@ import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
 import { getBannedUserIds } from "@/lib/db/banned-users";
+import { getMyFliesCounts } from "@/lib/db/fly-patterns";
 
 // Never cache — always fetch fresh data
 export const dynamic = "force-dynamic";
@@ -150,11 +151,10 @@ export default async function DashboardPage() {
     });
   }
 
-  // Fly Box count
-  const { count: flyCount } = await supabase
-    .from("fly_patterns")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", user.id);
+  // Fly Box count — sum of personal patterns (fly_patterns) and saved
+  // canonical entries (user_fly_box). Reuses the same source of truth as
+  // /my-flies so the dashboard stays in sync when the definition evolves.
+  const { box: flyCount } = await getMyFliesCounts(user.id);
 
   // Gear count
   const { count: gearCount } = await supabase
