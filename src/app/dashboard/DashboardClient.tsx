@@ -410,10 +410,10 @@ export default function DashboardClient({
               </div>
 
               {/* Row 3 — secondary utilities (smaller, muted) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
                 <Link
                   href="/dashboard/export"
-                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
+                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
                 >
                   <BookOpen className="h-4 w-4 text-[#0BA5C7] shrink-0" />
                   <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Export data</span>
@@ -421,7 +421,7 @@ export default function DashboardClient({
 
                 <Link
                   href="/journal/import"
-                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#2EA44F]/60 transition-all"
+                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#2EA44F]/60 transition-all"
                 >
                   <Upload className="h-4 w-4 text-[#2EA44F] shrink-0" />
                   <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Import data</span>
@@ -430,7 +430,7 @@ export default function DashboardClient({
                 {AWARDS_VISIBLE && (
                 <Link
                   href="/journal/stats"
-                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#FFD700]/60 transition-all"
+                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#FFD700]/60 transition-all"
                 >
                   <Trophy className="h-4 w-4 text-[#FFD700] shrink-0" />
                   <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">
