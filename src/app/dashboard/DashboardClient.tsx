@@ -372,7 +372,9 @@ export default function DashboardClient({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <Lightbulb className="h-5 w-5 text-[#A855F7]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    {!isPremium && (
+                      <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    )}
                   </div>
                   <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">Insights</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">Patterns in your data</p>
@@ -384,7 +386,9 @@ export default function DashboardClient({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <Leaf className="h-5 w-5 text-[#14B8A6]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    {!isPremium && (
+                      <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    )}
                   </div>
                   <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#14B8A6] transition-colors">Hatch Reports</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">What&apos;s hatching</p>
@@ -396,7 +400,9 @@ export default function DashboardClient({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <BarChart3 className="h-5 w-5 text-[#E8923A]" />
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    {!isPremium && (
+                      <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                    )}
                   </div>
                   <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
                   <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends &amp; stats</p>
@@ -433,7 +439,9 @@ export default function DashboardClient({
                   <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">
                     {riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)}
                   </span>
-                  <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
+                  {!isPremium && (
+                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
+                  )}
                 </Link>
                 )}
               </div>
