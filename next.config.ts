@@ -125,6 +125,67 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.wherewisemenfish.com",
       },
+      // Gear brand image domains
+      {
+        protocol: "https",
+        hostname: "farbank.com",
+      },
+      {
+        protocol: "https",
+        hostname: "winstonrods.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.winstonrods.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.scottflyrod.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.simmsfishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tiborreel.com",
+      },
+      {
+        protocol: "https",
+        hostname: "fishpondusa.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.fishpondusa.com",
+      },
+      {
+        protocol: "https",
+        hostname: "thomasandthomas.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.hardyfishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "echoflyfishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "skwalafishing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "korkers.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.korkers.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+      },
     ],
   },
 };

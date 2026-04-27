@@ -50,10 +50,17 @@ function toSnake(str: string): string {
   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 }
 
+/**
+ * Internal field names that exist on TypeScript data records but should
+ * not be seeded to the database (e.g. ingest-pipeline metadata).
+ */
+const INTERNAL_FIELDS = new Set(["sourceImageUrl"]);
+
 /** Deep-transform object keys from camelCase to snake_case */
 function keysToSnake(obj: Record<string, unknown>): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
+    if (INTERNAL_FIELDS.has(key)) continue;
     const snakeKey = toSnake(key);
     // Don't recurse into arrays or nested objects that are stored as jsonb
     result[snakeKey] = value;

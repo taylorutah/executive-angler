@@ -9,15 +9,15 @@ import { SITE_URL } from "@/lib/constants";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Fly Fishing Gear — Rods, Reels & Waders by Brand | Executive Angler",
+  title: "Fly Fishing Gear — Rods, Reels, Waders, Lines & More by Brand | Executive Angler",
   description:
-    "Browse fly fishing gear by brand. Sage, Orvis, Winston, Scott, G. Loomis, Echo, Redington, Simms, Lamson, and Patagonia — rods, reels, and waders.",
+    "Browse fly fishing gear by brand. Sage, Orvis, Winston, Scott, Hatch, Tibor, Abel, Simms, Patagonia, Rio, Scientific Anglers, Fishpond, and more.",
   alternates: { canonical: `${SITE_URL}/gear` },
   openGraph: {
     title: "Fly Fishing Gear by Brand | Executive Angler",
     description:
-      "Rods, reels, and waders from the top American fly fishing brands. Browse by brand or category.",
-    images: ["/api/og?title=Gear&subtitle=Rods%2C%20Reels%20%26%20Waders&type=default"],
+      "Rods, reels, waders, wading boots, lines, leaders, tippet, packs, and nets from the brands that make them.",
+    images: ["/api/og?title=Gear&subtitle=Browse%20by%20Brand%20%26%20Category&type=default"],
   },
 };
 
@@ -25,17 +25,47 @@ const CATEGORY_TILES = [
   {
     slug: "rod",
     label: "Fly Rods",
-    blurb: "Trout, saltwater, Spey — rods from every major American maker.",
+    blurb: "Trout, saltwater, Spey, and Euro — rods from every major maker.",
   },
   {
     slug: "reel",
     label: "Fly Reels",
-    blurb: "Sealed-drag, large-arbor, and machined aluminum reels.",
+    blurb: "Sealed-drag, click-pawl, and machined aluminum reels.",
   },
   {
     slug: "waders",
     label: "Waders",
     blurb: "Gore-Tex, breathable, and guide-grade stockingfoot waders.",
+  },
+  {
+    slug: "wading-boots",
+    label: "Wading Boots",
+    blurb: "Felt, rubber, studded, and interchangeable-sole wading boots.",
+  },
+  {
+    slug: "line",
+    label: "Fly Lines",
+    blurb: "Floating, intermediate, sinking, and Spey heads.",
+  },
+  {
+    slug: "leader",
+    label: "Leaders",
+    blurb: "Knotless, knotted, furled, and Euro leaders.",
+  },
+  {
+    slug: "tippet",
+    label: "Tippet",
+    blurb: "Fluorocarbon, nylon, and copolymer tippet from 8X to 0X.",
+  },
+  {
+    slug: "pack",
+    label: "Packs, Vests & Bags",
+    blurb: "Slings, vests, chest packs, hip packs, and boat bags.",
+  },
+  {
+    slug: "net",
+    label: "Landing Nets",
+    blurb: "Wood, carbon-fiber, and rubber-bag fish-friendly nets.",
   },
 ] as const;
 
@@ -48,10 +78,16 @@ export default async function GearLandingPage() {
   const featuredBrands = brands.filter((b) => b.featured);
   const otherBrands = brands.filter((b) => !b.featured);
 
-  const counts = {
+  const counts: Record<string, number> = {
     rod: products.filter((p) => p.category === "rod").length,
     reel: products.filter((p) => p.category === "reel").length,
     waders: products.filter((p) => p.category === "waders").length,
+    "wading-boots": products.filter((p) => p.category === "wading-boots").length,
+    line: products.filter((p) => p.category === "line").length,
+    leader: products.filter((p) => p.category === "leader").length,
+    tippet: products.filter((p) => p.category === "tippet").length,
+    pack: products.filter((p) => p.category === "pack").length,
+    net: products.filter((p) => p.category === "net").length,
   };
 
   return (
@@ -66,9 +102,9 @@ export default async function GearLandingPage() {
             Fly Fishing Gear, By Brand
           </h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
-            Rods, reels, and waders from the American brands that make them. Browse by brand
-            or by category, add what you own to your gear locker, and see it flow into your
-            session log.
+            Rods, reels, waders, wading boots, lines, leaders, tippet, packs, and nets — from
+            the brands that make them. Browse by brand or by category, add what you own to
+            your gear locker, and see it flow into your session log.
           </p>
         </div>
       </section>
@@ -79,7 +115,7 @@ export default async function GearLandingPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-6">
             Browse by Category
           </p>
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {CATEGORY_TILES.map((tile, i) => (
               <ScrollAnimation key={tile.slug} delay={i * 0.08}>
                 <Link

@@ -29,6 +29,12 @@ const CATEGORY_LABELS = {
   rod: "Fly Rod",
   reel: "Fly Reel",
   waders: "Waders",
+  "wading-boots": "Wading Boots",
+  line: "Fly Line",
+  leader: "Leader",
+  tippet: "Tippet",
+  pack: "Pack / Vest",
+  net: "Landing Net",
 } as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

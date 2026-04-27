@@ -6,12 +6,35 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import GearForm, { type PresetProduct } from "@/components/gear/GearForm";
 import type { GearType } from "@/types/gear";
+import type { GearProductCategory } from "@/types/gear-catalog";
 
 interface AddToGearButtonProps {
   productId: string;
   productName: string;
   brandName: string;
-  category: "rod" | "reel" | "waders";
+  category: GearProductCategory;
+}
+
+/**
+ * Map catalog categories (9 total) onto the user-locker GearType enum (8
+ * total). Categories that don't have a direct user-locker equivalent
+ * (wading-boots, pack) collapse to "other".
+ */
+function catalogToGearType(category: GearProductCategory): GearType {
+  switch (category) {
+    case "rod":
+    case "reel":
+    case "line":
+    case "leader":
+    case "tippet":
+    case "net":
+    case "waders":
+      return category;
+    case "wading-boots":
+    case "pack":
+    default:
+      return "other";
+  }
 }
 
 function stripBrandPrefix(productName: string, brandName: string): string {
@@ -99,7 +122,7 @@ export default function AddToGearButton({
 
   const presetProduct: PresetProduct = {
     productId,
-    category: category as GearType,
+    category: catalogToGearType(category),
     brandName,
     modelName: stripBrandPrefix(productName, brandName),
     defaultName: productName,

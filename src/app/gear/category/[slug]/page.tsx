@@ -20,30 +20,88 @@ const CATEGORY_META: Record<
   rod: {
     title: "Fly Rods — Browse by Brand | Executive Angler",
     description:
-      "Fly rods from Sage, Orvis, Winston, Scott, G. Loomis, Echo, and Redington — trout, saltwater, and Spey.",
+      "Fly rods from Sage, Orvis, Winston, Scott, Thomas & Thomas, Hardy, G. Loomis, and more — trout, saltwater, Spey, and Euro.",
     heading: "Fly Rods",
     blurb:
-      "Trout, saltwater, Spey — rods from every major American maker, organized by brand.",
+      "Trout, saltwater, Spey, and Euro — rods from every major American and import maker, organized by brand.",
   },
   reel: {
     title: "Fly Reels — Browse by Brand | Executive Angler",
     description:
-      "Fly reels from Lamson, Orvis, Sage, Redington, and Echo — sealed-drag, large-arbor, machined aluminum.",
+      "Fly reels from Hatch, Tibor, Abel, Lamson, Ross, Galvan, Nautilus, Bauer, and more — sealed-drag, large-arbor, machined aluminum.",
     heading: "Fly Reels",
     blurb:
-      "Sealed-drag, large-arbor, and machined aluminum reels from the makers that define the category.",
+      "Sealed-drag, click-pawl, large-arbor, and machined aluminum reels from the makers that define the category.",
   },
   waders: {
     title: "Waders — Browse by Brand | Executive Angler",
     description:
-      "Waders from Simms, Orvis, Redington, and Patagonia — breathable Gore-Tex, guide-grade stockingfoot.",
+      "Waders from Simms, Patagonia, Orvis, Skwala, Redington, and more — breathable Gore-Tex and guide-grade stockingfoot.",
     heading: "Waders",
     blurb:
       "Gore-Tex, breathable, and guide-grade stockingfoot waders from the brands that live on the water.",
   },
+  "wading-boots": {
+    title: "Wading Boots — Browse by Brand | Executive Angler",
+    description:
+      "Wading boots from Simms, Patagonia, Orvis, Korkers, and Redington — felt, rubber, studded, and interchangeable soles.",
+    heading: "Wading Boots",
+    blurb:
+      "Felt, rubber, studded, and interchangeable-sole wading boots built for the wet rocks and long days of trout country.",
+  },
+  line: {
+    title: "Fly Lines — Browse by Brand | Executive Angler",
+    description:
+      "Fly lines from Rio, Scientific Anglers, Airflo, and Cortland — floating, intermediate, sinking, and Spey heads.",
+    heading: "Fly Lines",
+    blurb:
+      "Floating, intermediate, sinking, sink-tip, and Spey lines from the line-makers anglers and guides actually fish.",
+  },
+  leader: {
+    title: "Leaders — Browse by Brand | Executive Angler",
+    description:
+      "Knotless, knotted, furled, and Euro leaders from Rio, Scientific Anglers, Trouthunter, and more.",
+    heading: "Leaders",
+    blurb:
+      "Knotless, knotted, furled, and Euro leaders, sized from spring-creek light to saltwater heavy.",
+  },
+  tippet: {
+    title: "Tippet — Browse by Brand | Executive Angler",
+    description:
+      "Fluorocarbon, nylon, and copolymer tippet from Rio, Scientific Anglers, Trouthunter, Maxima, and Seaguar.",
+    heading: "Tippet",
+    blurb:
+      "Fluorocarbon, nylon, and copolymer tippet — the working end of every leader, sized from 8X spring creek to 0X salt.",
+  },
+  pack: {
+    title: "Packs, Vests & Bags — Browse by Brand | Executive Angler",
+    description:
+      "Slings, vests, chest packs, hip packs, backpacks, and boat bags from Fishpond, Simms, Patagonia, Orvis, and Umpqua.",
+    heading: "Packs, Vests & Bags",
+    blurb:
+      "Slings, vests, chest packs, hip packs, backpacks, and boat bags built for fly fishing — from day-on-the-water to backcountry traverses.",
+  },
+  net: {
+    title: "Landing Nets — Browse by Brand | Executive Angler",
+    description:
+      "Landing nets from Fishpond, Brodin, Orvis, and more — wood, carbon-fiber, ghost, and rubber bag styles.",
+    heading: "Landing Nets",
+    blurb:
+      "Wood, carbon-fiber, and lightweight composite nets with rubber, ghost, and knotless bags — fish-friendly landing nets for trout to salt.",
+  },
 };
 
-const VALID_CATEGORIES: GearProductCategory[] = ["rod", "reel", "waders"];
+const VALID_CATEGORIES: GearProductCategory[] = [
+  "rod",
+  "reel",
+  "waders",
+  "wading-boots",
+  "line",
+  "leader",
+  "tippet",
+  "pack",
+  "net",
+];
 
 export async function generateStaticParams() {
   return VALID_CATEGORIES.map((slug) => ({ slug }));
