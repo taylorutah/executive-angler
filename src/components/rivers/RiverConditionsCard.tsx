@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle,
   Lock, Smartphone, Wind, Droplets, Gauge
@@ -104,25 +104,39 @@ interface Props {
 export default function RiverConditionsCard({ riverId, riverLatitude, riverLongitude, onSectionChange }: Props) {
   const [gauges, setGauges] = useState<GaugeReading[]>([]);
   const [weatherSections, setWeatherSections] = useState<WeatherSection[]>([]);
-  const [selectedIdx, setSelectedIdx] = useState(0);
   const [loadingConditions, setLoadingConditions] = useState(true);
   const [loadingWeather, setLoadingWeather] = useState(true);
   const [conditionsError, setConditionsError] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  // Shared URL state with <RiverSectionPills> — pill taps at the top of
-  // the page update this card's selected section too. Keeps Fishability /
-  // Flow / Conditions all pointing at the same section (iOS parity).
+  // URL is the single source of truth for section selection — both this card
+  // and <RiverSectionPills> read/write `?section=<siteId>`, keeping FlowChart,
+  // Fishability, and Conditions pinned to the same gauge (iOS parity).
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const sectionFromUrl = searchParams?.get("section") || "";
-  useEffect(() => {
-    if (!sectionFromUrl || gauges.length === 0) return;
-    const idx = gauges.findIndex((g) => g.siteId === sectionFromUrl);
-    if (idx >= 0 && idx !== selectedIdx) {
-      setSelectedIdx(idx);
-      onSectionChange?.(gauges[idx].siteId, gauges[idx].section);
+
+  const selectedIdx = useMemo(() => {
+    if (sectionFromUrl && gauges.length > 0) {
+      const idx = gauges.findIndex((g) => g.siteId === sectionFromUrl);
+      if (idx >= 0) return idx;
     }
-  }, [sectionFromUrl, gauges, selectedIdx, onSectionChange]);
+    return 0;
+  }, [sectionFromUrl, gauges]);
+
+  // Notify parent (drives WaterLevelChart) whenever the active gauge changes.
+  useEffect(() => {
+    if (gauges.length === 0) return;
+    const g = gauges[selectedIdx];
+    if (g) onSectionChange?.(g.siteId, g.section);
+  }, [selectedIdx, gauges, onSectionChange]);
+
+  const setSection = (siteId: string) => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("section", siteId);
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+  };
 
   // Auth check
   useEffect(() => {
@@ -140,9 +154,6 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
         const data = await res.json();
         if (!cancelled && data.gauges) {
           setGauges(data.gauges);
-          if (data.gauges.length > 0) {
-            onSectionChange?.(data.gauges[0].siteId, data.gauges[0].section);
-          }
         }
       } catch {
         if (!cancelled) setConditionsError(true);
@@ -230,7 +241,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           {gauges.map((g, idx) => (
             <button
               key={g.siteId}
-              onClick={() => { setSelectedIdx(idx); onSectionChange?.(g.siteId, g.section); }}
+              onClick={() => setSection(g.siteId)}
               className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
                 idx === selectedIdx
                   ? "bg-[#E8923A] text-white"
