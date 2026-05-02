@@ -116,7 +116,7 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const startLon = session.longitude ?? firstRoutePoint?.[1];
   const hasMapThumb = startLat != null && startLon != null && mapToken;
   const mapThumbUrl = hasMapThumb
-    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${startLon},${startLat})/${startLon},${startLat},11,0/128x160@2x?access_token=${mapToken}`
+    ? `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s+E8923A(${startLon},${startLat})/${startLon},${startLat},13,0/128x160@2x?access_token=${mapToken}&attribution=false&logo=false`
     : null;
 
   return (

@@ -16,7 +16,35 @@ import HelpHint from "@/components/ui/HelpHint";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; className?: string }) {
+interface MapCatchPin {
+  id: string;
+  latitude: number;
+  longitude: number;
+  species?: string;
+  length_inches?: string;
+}
+
+/** Renders the start pin, every catch pin, and the GPS route polyline (when present).
+ *  Used for both the inline mini-map and the fullscreen modal — `interactive` toggles
+ *  pan/zoom and `fitToBounds` makes the view auto-frame all features.
+ */
+function SessionMap({
+  lat,
+  lng,
+  catches = [],
+  routePoints = [],
+  interactive = false,
+  fitToBounds = true,
+  className,
+}: {
+  lat: number;
+  lng: number;
+  catches?: MapCatchPin[];
+  routePoints?: number[][];
+  interactive?: boolean;
+  fitToBounds?: boolean;
+  className?: string;
+}) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -44,34 +72,158 @@ function SessionMiniMap({ lat, lng, className }: { lat: number; lng: number; cla
         container: mapContainer.current,
         style: prefersDark
           ? "mapbox://styles/mapbox/dark-v11"
-          : "mapbox://styles/mapbox/outdoors-v12",
+          : "mapbox://styles/mapbox/light-v11",
         center: [lng, lat],
         zoom: 12,
-        interactive: false, // Disable all interactions
+        interactive,
       });
 
-      // Add orange marker
-      new mapboxgl.Marker({ color: "#E8923A" })
+      map.on("load", () => {
+        // Route polyline (Strava-style track)
+        if (routePoints.length >= 2) {
+          const coords = routePoints.map((p) => [p[1], p[0]]); // [lat, lon] -> [lon, lat]
+          map.addSource("route", {
+            type: "geojson",
+            data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } },
+          });
+          map.addLayer({
+            id: "route-line",
+            type: "line",
+            source: "route",
+            layout: { "line-join": "round", "line-cap": "round" },
+            paint: {
+              "line-color": "#E8923A",
+              "line-width": 4,
+              "line-opacity": 0.85,
+            },
+          });
+        }
+
+        // Auto-frame all features
+        if (fitToBounds) {
+          const bounds = new mapboxgl.LngLatBounds();
+          bounds.extend([lng, lat]);
+          for (const c of catches) bounds.extend([c.longitude, c.latitude]);
+          for (const p of routePoints) bounds.extend([p[1], p[0]]);
+          if (!bounds.isEmpty()) {
+            map.fitBounds(bounds, { padding: 40, maxZoom: 15, animate: false });
+          }
+        }
+      });
+
+      // Start pin (orange dot)
+      const startEl = document.createElement("div");
+      startEl.style.cssText =
+        "width:14px;height:14px;border-radius:50%;background:#E8923A;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);";
+      new mapboxgl.Marker({ element: startEl })
         .setLngLat([lng, lat])
+        .setPopup(new mapboxgl.Popup({ offset: 12 }).setText("Start"))
         .addTo(map);
+
+      // Catch pins (orange fish circles)
+      for (const c of catches) {
+        const el = document.createElement("div");
+        el.style.cssText =
+          "width:24px;height:24px;border-radius:50%;background:#E8923A;border:2px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.4);cursor:pointer;";
+        el.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#fff"><path d="M22 12c-1-3-4-5-7-5s-6 2-7 5c1 3 4 5 7 5s6-2 7-5zm-7 1.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM2 12c1.5 0 3 .5 4 1.5l-2 2.5 2-2.5L4 11l2 2.5C5 14.5 3.5 15 2 15v-3z"/></svg>';
+        const label = c.length_inches
+          ? `${c.species || "Fish"} · ${c.length_inches}"`
+          : c.species || "Fish";
+        new mapboxgl.Marker({ element: el })
+          .setLngLat([c.longitude, c.latitude])
+          .setPopup(new mapboxgl.Popup({ offset: 14 }).setText(label))
+          .addTo(map);
+      }
 
       return () => {
         map.remove();
       };
     } catch (e) {
-      console.error("Mapbox mini-map failed:", e);
+      console.error("Mapbox failed:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
           '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;">Map unavailable</div>';
       }
     }
-  }, [mounted, lat, lng]);
+  }, [mounted, lat, lng, catches, routePoints, interactive, fitToBounds]);
 
   if (!mounted) {
     return <div className={`${className} bg-gray-100 dark:bg-[#161B22]`} />;
   }
 
   return <div ref={mapContainer} className={className} />;
+}
+
+/** Inline map that opens a fullscreen interactive view on click. */
+function SessionMiniMap({
+  lat,
+  lng,
+  catches = [],
+  routePoints = [],
+  className,
+}: {
+  lat: number;
+  lng: number;
+  catches?: MapCatchPin[];
+  routePoints?: number[][];
+  className?: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setExpanded(true)}
+        className={`${className} relative group cursor-zoom-in block`}
+        aria-label="Expand map"
+      >
+        <SessionMap
+          lat={lat}
+          lng={lng}
+          catches={catches}
+          routePoints={routePoints}
+          interactive={false}
+          className="absolute inset-0"
+        />
+        <span className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          Click to expand
+        </span>
+      </button>
+
+      {expanded && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4"
+          onClick={() => setExpanded(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative w-full h-full max-w-6xl max-h-[90vh] rounded-xl overflow-hidden bg-[#0D1117]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SessionMap
+              lat={lat}
+              lng={lng}
+              catches={catches}
+              routePoints={routePoints}
+              interactive={true}
+              className="w-full h-full"
+            />
+            <button
+              type="button"
+              onClick={() => setExpanded(false)}
+              className="absolute top-3 right-3 z-10 rounded-full bg-black/70 hover:bg-black/90 text-white p-2 transition-colors"
+              aria-label="Close map"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 interface Catch {
@@ -83,6 +235,8 @@ interface Catch {
   fly_size?: string;
   bead_size?: string;
   time_caught?: string;
+  latitude?: number | null;
+  longitude?: number | null;
   fish_image_url?: string;
   fish_image_urls?: string[];
   fish_location_image_url?: string;
@@ -139,6 +293,7 @@ interface Session {
   created_at?: string;
   latitude?: number;
   longitude?: number;
+  route_points?: number[][];
   gear_snapshot?: GearSnapshot;
   gear_rod?: { name: string; maker?: string } | null;
   gear_reel?: { name: string; maker?: string } | null;
@@ -824,7 +979,21 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               <div className="hidden sm:block sm:w-72 flex-shrink-0">
                 {/* Session map */}
                 {session.latitude && session.longitude && (
-                  <SessionMiniMap lat={session.latitude} lng={session.longitude} className="w-full aspect-square rounded-xl overflow-hidden mb-4" />
+                  <SessionMiniMap
+                    lat={session.latitude}
+                    lng={session.longitude}
+                    catches={catches
+                      .filter((c) => c.latitude != null && c.longitude != null)
+                      .map((c) => ({
+                        id: c.id,
+                        latitude: c.latitude as number,
+                        longitude: c.longitude as number,
+                        species: c.species,
+                        length_inches: c.length_inches,
+                      }))}
+                    routePoints={session.route_points || []}
+                    className="w-full aspect-square rounded-xl overflow-hidden mb-4"
+                  />
                 )}
 
                 {/* 4 big stats */}
@@ -1032,7 +1201,21 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           {/* ---- MOBILE-ONLY: Map (compact, below photos) ---- */}
           {session.latitude && session.longitude && (
             <div className="sm:hidden mb-5">
-              <SessionMiniMap lat={session.latitude} lng={session.longitude} className="w-full aspect-[2/1] rounded-xl overflow-hidden" />
+              <SessionMiniMap
+                lat={session.latitude}
+                lng={session.longitude}
+                catches={catches
+                  .filter((c) => c.latitude != null && c.longitude != null)
+                  .map((c) => ({
+                    id: c.id,
+                    latitude: c.latitude as number,
+                    longitude: c.longitude as number,
+                    species: c.species,
+                    length_inches: c.length_inches,
+                  }))}
+                routePoints={session.route_points || []}
+                className="w-full aspect-[2/1] rounded-xl overflow-hidden"
+              />
             </div>
           )}
 
