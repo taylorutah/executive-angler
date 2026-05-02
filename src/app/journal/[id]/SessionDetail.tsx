@@ -625,7 +625,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveNotes} disabled={notesSaving}
-                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 hover:bg-[#0D1117] disabled:opacity-60">
+                          className="flex items-center gap-1 text-xs font-bold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 shadow-sm hover:bg-[#C97A1F] disabled:opacity-60 transition-colors">
                           <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
@@ -682,7 +682,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveMemo} disabled={memoSaving}
-                          className="flex items-center gap-1 text-xs font-semibold text-white bg-[#6E7681] rounded-lg px-3 py-1.5 hover:bg-[#A8B2BD] disabled:opacity-60">
+                          className="flex items-center gap-1 text-xs font-bold text-white bg-[#525B65] rounded-lg px-3 py-1.5 shadow-sm hover:bg-[#3D454D] disabled:opacity-60 transition-colors">
                           <Check className="h-3 w-3" /> {memoSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setMemoValue(session.private_memo || ""); setEditingMemo(false); }}

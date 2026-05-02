@@ -45,6 +45,7 @@ interface FishingSession {
   catches?: Catch[];
   latitude?: number;
   longitude?: number;
+  route_points?: number[][];
   privacy?: string;
   is_demo?: boolean;
   gear_snapshot?: GearSnapshot;
@@ -106,14 +107,16 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
   const accent = accentColor(session.river_name);
 
-  // Build static map URL if coordinates exist
+  // Build static map URL if coordinates exist. Fall back to the first GPS track
+  // point so sessions that started before GPS locked (cold start, indoors) still
+  // get a thumbnail rendered.
   const mapToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-  const hasMapThumb =
-    session.latitude != null &&
-    session.longitude != null &&
-    mapToken;
+  const firstRoutePoint = session.route_points?.[0];
+  const startLat = session.latitude ?? firstRoutePoint?.[0];
+  const startLon = session.longitude ?? firstRoutePoint?.[1];
+  const hasMapThumb = startLat != null && startLon != null && mapToken;
   const mapThumbUrl = hasMapThumb
-    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${session.longitude},${session.latitude})/${session.longitude},${session.latitude},11,0/128x160@2x?access_token=${mapToken}`
+    ? `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-s+E8923A(${startLon},${startLat})/${startLon},${startLat},11,0/128x160@2x?access_token=${mapToken}`
     : null;
 
   return (
