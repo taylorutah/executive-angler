@@ -155,7 +155,11 @@ function SessionMap({
   return <div ref={mapContainer} className={className} />;
 }
 
-/** Inline map that opens a fullscreen interactive view on click. */
+/** Inline map that opens a fullscreen interactive view on click.
+ *  Note: uses a plain div (not button) so aspect-ratio/inset-0 pairing computes
+ *  the inner map's height correctly — Mapbox refuses to render in 0-height
+ *  containers and silently leaves the map blank.
+ */
 function SessionMiniMap({
   lat,
   lng,
@@ -173,10 +177,17 @@ function SessionMiniMap({
 
   return (
     <>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setExpanded(true)}
-        className={`${className} relative group cursor-zoom-in block`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setExpanded(true);
+          }
+        }}
+        className={`${className} relative group cursor-zoom-in`}
         aria-label="Expand map"
       >
         <SessionMap
@@ -185,12 +196,12 @@ function SessionMiniMap({
           catches={catches}
           routePoints={routePoints}
           interactive={false}
-          className="absolute inset-0"
+          className="w-full h-full"
         />
-        <span className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity z-10">
           Click to expand
         </span>
-      </button>
+      </div>
 
       {expanded && (
         <div
