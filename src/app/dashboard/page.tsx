@@ -4,8 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
-import { getBannedUserIds } from "@/lib/db/banned-users";
-import { getMyFliesCounts } from "@/lib/db/fly-patterns";
+import { getMyFliesCounts, getTieNextQueue, getMyFlyBox } from "@/lib/db/fly-patterns";
+import type { MyFliesItem } from "@/components/dashboard/MyFliesWidget";
 
 // Never cache — always fetch fresh data
 export const dynamic = "force-dynamic";
@@ -72,84 +72,52 @@ export default async function DashboardPage() {
         .in("id", favDestIds)
     : { data: [] };
 
-  // Following feed — public sessions from people you follow (last 10)
-  const bannedUserIds = await getBannedUserIds();
+  // Privacy overhaul: dashboard is owner-only. Following/explore/suggested feeds
+  // are removed — community activity is no longer surfaced here. The "My Flies"
+  // widget below replaces them with the user's own Tie Next + Favorites.
 
-  const { data: follows } = await supabase
-    .from("follows")
-    .select("following_id")
-    .eq("follower_id", user.id)
-    .eq("status", "active");
+  // Tie Next queue — wanted + at_vise items only (filter out done in the widget)
+  const tieNextQueue = await getTieNextQueue(user.id);
+  const tieNextItems: MyFliesItem[] = [
+    ...tieNextQueue.boxEntries
+      .filter((b) => b.tie_next_status === "wanted" || b.tie_next_status === "at_vise" || b.is_tie_next)
+      .map<MyFliesItem>((b) => ({
+        key: `box-${b.id}`,
+        flyBoxId: b.id,
+        name: b.canonical_fly?.name ?? "Untitled fly",
+        imageUrl: b.canonical_fly?.hero_image_url ?? null,
+        size: b.preferred_sizes?.[0] ?? null,
+        category: b.canonical_fly?.category ?? null,
+        status: (b.tie_next_status as MyFliesItem["status"]) ?? (b.is_tie_next ? "wanted" : null),
+        href: b.canonical_fly?.slug ? `/flies/${b.canonical_fly.slug}` : "/my-flies?tab=box",
+      })),
+    ...tieNextQueue.patterns
+      .filter((p) => (p.tie_next_status === "wanted" || p.tie_next_status === "at_vise" || p.is_tie_next))
+      .map<MyFliesItem>((p) => ({
+        key: `pattern-${p.id}`,
+        flyPatternId: p.id,
+        name: p.name,
+        imageUrl: p.image_url ?? null,
+        size: p.size ?? null,
+        category: p.type ?? null,
+        status: (p.tie_next_status as MyFliesItem["status"]) ?? (p.is_tie_next ? "wanted" : null),
+        href: `/journal/flies/${p.id}/edit`,
+      })),
+  ];
 
-  const followingIds = (follows || [])
-    .map((f) => f.following_id)
-    .filter((id) => !bannedUserIds.includes(id));
-
-  // Suggested anglers — active users the current user doesn't follow (exclude self).
-  // Discovery surface, so also filter out anglers who opted out of search
-  // (NULL = opt-in because the column default is true) and banned users.
-  const excludeIds = [...followingIds, user.id, ...bannedUserIds];
-  const { data: suggestedAnglers } = await supabase
-    .from("profiles")
-    .select("user_id, username, display_name, avatar_url, is_private")
-    .not("user_id", "in", `(${excludeIds.join(",")})`)
-    .not("username", "is", null)
-    .or("is_private.is.null,is_private.eq.false")
-    .or("searchable.is.null,searchable.eq.true")
-    .limit(5);
-
-  const { data: followingFeed } = followingIds.length > 0
-    ? await supabase
-        .from("fishing_sessions")
-        .select("id, date, river_name, total_fish, notes, privacy, user_id, profiles(username, avatar_url)")
-        .in("user_id", followingIds)
-        .eq("privacy", "public")
-        .order("date", { ascending: false })
-        .order("created_at", { ascending: false })
-        .limit(10)
-    : { data: [] };
-
-  // Community explore feed — latest public sessions from anyone (minus banned)
-  let exploreQuery = supabase
-    .from("fishing_sessions")
-    .select("id, date, river_name, total_fish, notes, privacy, user_id, profiles(username, avatar_url, display_name)")
-    .eq("privacy", "public");
-
-  if (bannedUserIds.length > 0) {
-    exploreQuery = exploreQuery.not(
-      "user_id",
-      "in",
-      `(${bannedUserIds.join(",")})`
-    );
-  }
-
-  const { data: exploreFeed } = await exploreQuery
-    .order("date", { ascending: false })
-    .order("created_at", { ascending: false })
-    .limit(10);
-
-  // River activity intel for favorited rivers (recent catch stats)
-  const riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }> = {};
-  if (favRiverIds.length > 0) {
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split("T")[0];
-    const { data: riverSessions } = await supabase
-      .from("fishing_sessions")
-      .select("river_id, date, id")
-      .in("river_id", favRiverIds)
-      .eq("privacy", "public")
-      .order("date", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    favRiverIds.forEach((rid) => {
-      const rs = (riverSessions || []).filter((s) => s.river_id === rid);
-      const recent = rs.filter((s) => s.date >= thirtyDaysAgo);
-      riverIntel[rid] = {
-        lastDate: rs[0]?.date ?? null,
-        sessions30d: recent.length,
-        topFly: null,
-      };
-    });
-  }
+  // Favorites — pulled from full fly box, filtered to is_favorite=true
+  const flyBox = await getMyFlyBox(user.id);
+  const favoriteItems: MyFliesItem[] = flyBox
+    .filter((b) => b.is_favorite)
+    .map<MyFliesItem>((b) => ({
+      key: `fav-box-${b.id}`,
+      flyBoxId: b.id,
+      name: b.canonical_fly?.name ?? "Untitled fly",
+      imageUrl: b.canonical_fly?.hero_image_url ?? null,
+      size: b.preferred_sizes?.[0] ?? null,
+      category: b.canonical_fly?.category ?? null,
+      href: b.canonical_fly?.slug ? `/flies/${b.canonical_fly.slug}` : "/my-flies?tab=box",
+    }));
 
   // Fly Box count — sum of personal patterns (fly_patterns) and saved
   // canonical entries (user_fly_box). Reuses the same source of truth as
@@ -299,10 +267,8 @@ export default async function DashboardPage() {
       mySessions={mySessions || []}
       favRivers={favRivers || []}
       favDests={favDests || []}
-      followingFeed={(followingFeed || []) as any}
-      suggestedAnglers={suggestedAnglers || []}
-      exploreFeed={(exploreFeed || []) as any}
-      riverIntel={riverIntel}
+      tieNextItems={tieNextItems}
+      favoriteItems={favoriteItems}
       totalFavorites={(favorites || []).length}
       flyCount={flyCount ?? 0}
       gearCount={gearCount ?? 0}

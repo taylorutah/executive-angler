@@ -19,7 +19,7 @@ export default function NewSessionPage() {
   const [riverOpen, setRiverOpen] = useState(false);
   const [riverFilter, setRiverFilter] = useState("");
   const [riverValue, setRiverValue] = useState("");
-  const [privacy, setPrivacy] = useState<SessionPrivacy>("public");
+  const [privacy, setPrivacy] = useState<SessionPrivacy>("private");
 
   // Fetch autocomplete data + gear defaults
   useEffect(() => {

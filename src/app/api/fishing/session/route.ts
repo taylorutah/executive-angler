@@ -135,6 +135,23 @@ function normalizePrivacy(raw: unknown): { value?: "public" | "private"; error?:
   return { error: "privacy must be 'public' or 'private'" };
 }
 
+/**
+ * Decide the broadcast_presence flag from request body. Prefers the new
+ * explicit `broadcast_presence` boolean; falls back to mapping the legacy
+ * `privacy` text field so old iOS/Android clients keep working until they
+ * ship the new toggle. Either way: opting in shares ONLY presence-feed
+ * fields (river, section, weather). Catches, counts, GPS, and notes stay
+ * owner-only via RLS regardless of this flag.
+ */
+function resolveBroadcast(
+  body: Record<string, unknown>
+): boolean | undefined {
+  if (typeof body.broadcast_presence === "boolean") return body.broadcast_presence;
+  if (body.privacy === "public") return true;
+  if (body.privacy === "private") return false;
+  return undefined;
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -151,6 +168,12 @@ export async function POST(req: NextRequest) {
     if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
     sessionData.privacy = value;
   }
+
+  // Privacy overhaul: broadcast_presence is the new opt-in field. Default
+  // false — sessions never appear on the presence feed unless the user
+  // explicitly toggles it on.
+  const broadcast = resolveBroadcast(sessionData);
+  sessionData.broadcast_presence = broadcast === true;
 
   // Build gear snapshot before insert
   const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
@@ -203,6 +226,13 @@ export async function PATCH(req: NextRequest) {
     const { value, error: pErr } = normalizePrivacy(sessionData.privacy);
     if (pErr) return NextResponse.json({ error: pErr }, { status: 400 });
     sessionData.privacy = value;
+  }
+
+  // Mirror PATCH-time privacy/broadcast_presence updates onto the new field.
+  // undefined → leave DB as-is (matches surrounding PATCH semantics).
+  const broadcastPatch = resolveBroadcast(sessionData);
+  if (broadcastPatch !== undefined) {
+    sessionData.broadcast_presence = broadcastPatch;
   }
 
   // Only rebuild gear_snapshot when gear IDs are actually present in the payload.

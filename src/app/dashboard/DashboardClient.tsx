@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Fish, MapPin, TrendingUp, Users,
+  Fish, MapPin, TrendingUp,
   ChevronRight, BookOpen, Compass, Star,
   Feather, Package, Trophy, Target, Flame,
   BarChart3, Leaf, Ruler, Calendar, Plus, Lightbulb, Sparkles, Wrench,
@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { RiverStats } from "@/types/awards";
 import HelpHint from "@/components/ui/HelpHint";
-import TipCard from "@/components/ui/TipCard";
+import MyFliesWidget, { type MyFliesItem } from "@/components/dashboard/MyFliesWidget";
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
 
@@ -22,11 +22,8 @@ interface DashboardProps {
   mySessions: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string }>;
   favRivers: Array<{ id: string; name: string; slug: string; hero_image_url: string; primary_species: string[] }>;
   favDests: Array<{ id: string; name: string; slug: string; hero_image_url: string }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  followingFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string; user_id: string; profiles: any }>;
-  suggestedAnglers: Array<{ user_id: string; username: string | null; display_name: string | null; avatar_url: string | null }>;
-  exploreFeed: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; user_id: string; profiles: any }>;
-  riverIntel: Record<string, { lastDate: string | null; sessions30d: number; topFly: string | null }>;
+  tieNextItems: MyFliesItem[];
+  favoriteItems: MyFliesItem[];
   totalFavorites: number;
   flyCount: number;
   gearCount: number;
@@ -183,7 +180,7 @@ function Divider() {
 /* ─── Main Component ─── */
 
 export default function DashboardClient({
-  user, profile, mySessions, favRivers, favDests, followingFeed, suggestedAnglers, exploreFeed, riverIntel, totalFavorites, flyCount, gearCount, isPremium, riverStats, riverSlugMap, enhancedStats
+  user, profile, mySessions, favRivers, favDests, tieNextItems, favoriteItems, totalFavorites, flyCount, gearCount, isPremium, riverStats, riverSlugMap, enhancedStats
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const es = enhancedStats;
@@ -267,49 +264,10 @@ export default function DashboardClient({
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
 
-            {/* ─── MOBILE-ONLY: Recent Activity (shown early, before rivers) ─── */}
-            {exploreFeed.length > 0 && (
-              <section className="lg:hidden">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Compass className="h-4 w-4 text-[#0BA5C7]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Recent Activity</h2>
-                  </div>
-                  <Link href="/feed" className="text-xs text-[#A8B2BD] hover:text-[#0BA5C7] transition-colors">
-                    See all &rarr;
-                  </Link>
-                </div>
-                <div className="space-y-2">
-                  {exploreFeed.slice(0, 4).map((session) => {
-                    const ep = session.profiles as { username: string | null; avatar_url: string | null; display_name: string | null } | null;
-                    return (
-                      <Link
-                        key={session.id}
-                        href={`/journal/${session.id}`}
-                        className="flex items-start gap-3 p-3 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#0BA5C7]/40 transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-full bg-[#0BA5C7]/10 flex items-center justify-center shrink-0 text-xs font-bold text-[#0BA5C7]">
-                          {String(ep?.username?.charAt(0) ?? "A").toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <span className="font-medium text-[#F0F6FC]">@{ep?.username ?? "angler"}</span>
-                            <span className="text-[#6E7681]">&middot;</span>
-                            <span className="text-[#0BA5C7] truncate">{session.river_name ?? "river"}</span>
-                          </div>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {session.total_fish != null && session.total_fish > 0 && (
-                              <span className="text-[10px] text-[#E8923A] font-mono">{session.total_fish} fish</span>
-                            )}
-                            <span className="text-[10px] text-[#6E7681]">{timeAgo(session.date)}</span>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+            {/* MOBILE-ONLY: My Flies (Tie Next + Favorites) — replaces old Recent Activity */}
+            <div className="lg:hidden">
+              <MyFliesWidget tieNext={tieNextItems} favorites={favoriteItems} />
+            </div>
 
             {/* Upgrade Banner (free users only) */}
             {!isPremium && (
@@ -623,95 +581,10 @@ export default function DashboardClient({
           {/* ─── Right Column (sidebar) ─── */}
           <div className="space-y-8 mt-8 lg:mt-0">
 
-            {/* Following Feed */}
-            {followingFeed.length > 0 && (
-              <section>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-[#E8923A]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Following</h2>
-                  </div>
-                  <Link href="/anglers" className="text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-                    Find anglers &rarr;
-                  </Link>
-                </div>
-                <div className="space-y-2">
-                  {followingFeed.slice(0, 6).map((session) => {
-                    const ap = session.profiles as { username: string | null; avatar_url: string | null } | null;
-                    return (
-                      <Link
-                        key={session.id}
-                        href={`/journal/${session.id}`}
-                        className="flex items-start gap-3 p-3 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#E8923A]/50 transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 text-xs font-bold text-[#E8923A]">
-                          {String(ap?.username?.charAt(0) ?? "A").toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <span className="font-medium text-[#F0F6FC]">{ap?.username ?? "Angler"}</span>
-                            <span className="text-[#6E7681]">&middot;</span>
-                            <span className="text-[#E8923A] truncate">{session.river_name ?? "river"}</span>
-                          </div>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {session.total_fish != null && session.total_fish > 0 && (
-                              <span className="text-[10px] text-[#00B4D8] font-mono">{session.total_fish} fish</span>
-                            )}
-                            <span className="text-[10px] text-[#6E7681]">{timeAgo(session.date)}</span>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* Recent Activity (desktop sidebar only — mobile version is above) */}
-            {exploreFeed.length > 0 && (
-              <section className="hidden lg:block">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Compass className="h-4 w-4 text-[#0BA5C7]" />
-                    <h2 className="font-serif text-lg text-[#F0F6FC]">Recent Activity</h2>
-                  </div>
-                  <Link href="/feed" className="text-xs text-[#A8B2BD] hover:text-[#0BA5C7] transition-colors">
-                    See all &rarr;
-                  </Link>
-                </div>
-                <div className="space-y-2">
-                  {exploreFeed.slice(0, 6).map((session) => {
-                    const ep = session.profiles as { username: string | null; avatar_url: string | null; display_name: string | null } | null;
-                    return (
-                      <Link
-                        key={session.id}
-                        href={`/journal/${session.id}`}
-                        className="flex items-start gap-3 p-3 bg-[#161B22] rounded-lg border border-[#21262D] hover:border-[#0BA5C7]/40 transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-full bg-[#0BA5C7]/10 flex items-center justify-center shrink-0 text-xs font-bold text-[#0BA5C7]">
-                          {String(ep?.username?.charAt(0) ?? "A").toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <span className="font-medium text-[#F0F6FC]">@{ep?.username ?? "angler"}</span>
-                            <span className="text-[#6E7681]">&middot;</span>
-                            <span className="text-[#0BA5C7] truncate">{session.river_name ?? "river"}</span>
-                          </div>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {session.total_fish != null && session.total_fish > 0 && (
-                              <span className="text-[10px] text-[#E8923A] font-mono">{session.total_fish} fish</span>
-                            )}
-                            <span className="text-[10px] text-[#6E7681]">{timeAgo(session.date)}</span>
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* Suggested Anglers — hidden per pivot (social discovery is noise) */}
+            {/* DESKTOP-ONLY: My Flies (mobile version is in left column above) */}
+            <div className="hidden lg:block">
+              <MyFliesWidget tieNext={tieNextItems} favorites={favoriteItems} />
+            </div>
 
             {/* Followed Rivers */}
             {favRivers.length > 0 && (
@@ -726,23 +599,17 @@ export default function DashboardClient({
                   </Link>
                 </div>
                 <div className="space-y-2">
-                  {favRivers.map((river) => {
-                    const intel = riverIntel[river.id];
-                    return (
-                      <Link key={river.id} href={`/rivers/${river.slug}`} className="group block">
-                        <div className="relative h-24 rounded-lg overflow-hidden border border-[#21262D] group-hover:border-[#E8923A] transition-all">
-                          <Image src={river.hero_image_url} alt={river.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="340px" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                          <div className="absolute bottom-2 left-3 right-3">
-                            <p className="text-white text-xs font-bold">{river.name}</p>
-                            {intel && intel.sessions30d > 0 && (
-                              <p className="text-[10px] text-[#00B4D8] font-mono mt-0.5">{intel.sessions30d} trips (30d)</p>
-                            )}
-                          </div>
+                  {favRivers.map((river) => (
+                    <Link key={river.id} href={`/rivers/${river.slug}`} className="group block">
+                      <div className="relative h-24 rounded-lg overflow-hidden border border-[#21262D] group-hover:border-[#E8923A] transition-all">
+                        <Image src={river.hero_image_url} alt={river.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="340px" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                        <div className="absolute bottom-2 left-3 right-3">
+                          <p className="text-white text-xs font-bold">{river.name}</p>
                         </div>
-                      </Link>
-                    );
-                  })}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </section>
             )}
@@ -776,19 +643,19 @@ export default function DashboardClient({
         </div>
 
         {/* Empty state CTA */}
-        {favRivers.length === 0 && favDests.length === 0 && followingFeed.length === 0 && (
+        {favRivers.length === 0 && favDests.length === 0 && (
           <section className="bg-[#161B22] rounded-xl border border-[#21262D] p-8 text-center mt-8">
             <Star className="h-10 w-10 text-[#E8923A] mx-auto mb-3" />
             <h3 className="font-serif text-lg text-[#F0F6FC] mb-2">Personalize Your Dashboard</h3>
             <p className="text-sm text-[#A8B2BD] mb-6 max-w-md mx-auto">
-              Favorite rivers and destinations to see live Angler Intel here. Follow other anglers to see their sessions in your feed.
+              Favorite rivers and destinations so they show up here for quick access.
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <Link href="/rivers" className="px-4 py-2 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors">
                 Explore Rivers
               </Link>
-              <Link href="/anglers" className="px-4 py-2 border border-[#21262D] text-[#A8B2BD] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
-                Find Anglers
+              <Link href="/destinations" className="px-4 py-2 border border-[#21262D] text-[#A8B2BD] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors">
+                Browse Destinations
               </Link>
             </div>
           </section>

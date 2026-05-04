@@ -6,9 +6,9 @@ import { APP_STORE_URL } from "@/lib/constants";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata: Metadata = {
-  title: "River Activity | Executive Angler",
+  title: "On The Water | Executive Angler",
   description:
-    "Recent fishing sessions, catches, and river conditions reported by anglers. Browse river intel from waterways everywhere.",
+    "Anglers currently on the water. Locations and fish counts stay private — only general river, section, and weather are shown.",
 };
 
 export interface FeedSession {
@@ -16,21 +16,10 @@ export interface FeedSession {
   user_id: string;
   river_name: string | null;
   section: string | null;
-  location: string | null;
   date: string;
-  total_fish: number;
   weather: string | null;
-  water_temp_f: number | null;
-  water_clarity: string | null;
-  tags: string[] | null;
-  trip_tags: string[] | null;
-  latitude: number | null;
-  longitude: number | null;
-  notes: string | null;
   created_at: string;
-  catch_count: number;
   like_count: number;
-  comment_count: number;
   profile: {
     display_name: string | null;
     username: string | null;
@@ -67,11 +56,13 @@ export default async function FeedPage() {
           </div>
 
           <h1 className="text-3xl font-bold text-[#F0F6FC] mb-3">
-            River Activity
+            On The Water
           </h1>
-          <p className="text-[#A8B2BD] text-lg mb-10 max-w-md mx-auto">
-            Sign in to browse recent river conditions, catch reports,
-            and session data from anglers on your rivers.
+          <p className="text-[#A8B2BD] text-lg mb-3 max-w-md mx-auto">
+            See who&apos;s fishing right now — river, section, and weather only.
+          </p>
+          <p className="text-[#6E7681] text-sm mb-10 max-w-md mx-auto">
+            We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
 
           {/* Sign-in CTA */}
@@ -98,28 +89,24 @@ export default async function FeedPage() {
             <ul className="space-y-3">
               {[
                 {
-                  icon: "📍",
-                  text: "River activity data — sessions, catches, and conditions reported from waterways worldwide",
+                  icon: "📓",
+                  text: "Private fishing journal — your sessions, catches, GPS, and notes stay yours",
                 },
                 {
-                  icon: "🐟",
-                  text: "Log every fish with species, size, fly pattern, and GPS coordinates",
+                  icon: "🪶",
+                  text: "Fly tying workbench with 500+ materials and recipe matcher",
                 },
                 {
                   icon: "📊",
-                  text: "Personal dashboard with stats, personal bests, and achievement badges",
+                  text: "Personal stats, trophy wall, and trends across your seasons",
                 },
                 {
-                  icon: "💬",
-                  text: "Annotate sessions and compare notes with anglers you follow",
+                  icon: "🌊",
+                  text: "Browse rivers, hatch charts, regulations, and access points",
                 },
                 {
-                  icon: "🗺️",
-                  text: "Explore 1,000+ rivers, fly shops, guides, and lodges",
-                },
-                {
-                  icon: "📓",
-                  text: "Private fishing journal — your complete catch history in one place",
+                  icon: "👥",
+                  text: "Optional: appear on the presence feed when you head out (river + weather only)",
                 },
               ].map((item) => (
                 <li
@@ -168,132 +155,67 @@ export default async function FeedPage() {
     );
   }
 
-  /* ── Authenticated: show the feed ── */
+  /* ── Authenticated: presence feed ──
+     Reads from session_presence VIEW, not fishing_sessions table.
+     The view is the only path that exposes other users' sessions and
+     it projects only safe columns (river, section, weather, profile).
+     Catches and counts are unreachable from this surface by design. */
 
   const bannedUserIds = await getBannedUserIds();
 
-  // Fetch 30 most recent public sessions with profile data
-  let sessionQuery = supabase
-    .from("fishing_sessions")
+  let presenceQuery = supabase
+    .from("session_presence")
     .select(
-      `
-      id,
-      user_id,
-      river_name,
-      section,
-      location,
-      date,
-      total_fish,
-      weather,
-      water_temp_f,
-      water_clarity,
-      tags,
-      trip_tags,
-      latitude,
-      longitude,
-      notes,
-      created_at,
-      profile:profiles!fishing_sessions_user_id_profiles_fkey(
-        display_name,
-        username,
-        avatar_url
-      )
-    `
-    )
-    .eq("privacy", "public");
+      `id, user_id, river_name, section, date, weather, created_at, username, display_name, avatar_url`
+    );
 
   if (bannedUserIds.length > 0) {
-    sessionQuery = sessionQuery.not(
+    presenceQuery = presenceQuery.not(
       "user_id",
       "in",
       `(${bannedUserIds.join(",")})`
     );
   }
 
-  const { data: sessions, error } = await sessionQuery
-    .order("date", { ascending: false })
+  const { data: rows, error } = await presenceQuery
     .order("created_at", { ascending: false })
     .limit(30);
 
   if (error) {
-    console.error("Error fetching feed:", error);
+    console.error("Error fetching presence feed:", error);
   }
 
-  // Fetch catch counts per session
-  const sessionIds = (sessions || []).map((s) => s.id);
-  let catchCounts: Record<string, number> = {};
+  const sessionIds = (rows || []).map((r) => r.id);
+  let likeCounts: Record<string, number> = {};
 
   if (sessionIds.length > 0) {
-    const { data: counts } = await supabase
-      .from("catches")
+    const { data: likes } = await supabase
+      .from("session_likes")
       .select("session_id")
       .in("session_id", sessionIds);
 
-    if (counts) {
-      catchCounts = counts.reduce<Record<string, number>>((acc, c) => {
-        acc[c.session_id] = (acc[c.session_id] || 0) + 1;
-        return acc;
-      }, {});
-    }
-  }
-
-  // Fetch like counts per session
-  let likeCounts: Record<string, number> = {};
-  let commentCounts: Record<string, number> = {};
-
-  if (sessionIds.length > 0) {
-    const [likesRes, commentsRes] = await Promise.all([
-      supabase
-        .from("session_likes")
-        .select("session_id")
-        .in("session_id", sessionIds),
-      supabase
-        .from("session_comments")
-        .select("session_id")
-        .in("session_id", sessionIds),
-    ]);
-
-    if (likesRes.data) {
-      likeCounts = likesRes.data.reduce<Record<string, number>>((acc, l) => {
+    if (likes) {
+      likeCounts = likes.reduce<Record<string, number>>((acc, l) => {
         acc[l.session_id] = (acc[l.session_id] || 0) + 1;
         return acc;
       }, {});
     }
-    if (commentsRes.data) {
-      commentCounts = commentsRes.data.reduce<Record<string, number>>(
-        (acc, c) => {
-          acc[c.session_id] = (acc[c.session_id] || 0) + 1;
-          return acc;
-        },
-        {}
-      );
-    }
   }
 
-  const feedSessions: FeedSession[] = (sessions || []).map((s) => ({
-    id: s.id,
-    user_id: s.user_id,
-    river_name: s.river_name,
-    section: s.section,
-    location: s.location,
-    date: s.date,
-    total_fish: s.total_fish,
-    weather: s.weather,
-    water_temp_f: s.water_temp_f,
-    water_clarity: s.water_clarity,
-    tags: s.tags,
-    trip_tags: s.trip_tags,
-    latitude: s.latitude,
-    longitude: s.longitude,
-    notes: s.notes,
-    created_at: s.created_at,
-    catch_count: catchCounts[s.id] || 0,
-    like_count: likeCounts[s.id] || 0,
-    comment_count: commentCounts[s.id] || 0,
-    // Supabase returns joined single row as object, array, or null
-    profile: Array.isArray(s.profile)
-      ? s.profile[0] ?? null
-      : s.profile ?? null,
+  const feedSessions: FeedSession[] = (rows || []).map((r) => ({
+    id: r.id,
+    user_id: r.user_id,
+    river_name: r.river_name,
+    section: r.section,
+    date: r.date,
+    weather: r.weather,
+    created_at: r.created_at,
+    like_count: likeCounts[r.id] || 0,
+    profile: {
+      display_name: r.display_name,
+      username: r.username,
+      avatar_url: r.avatar_url,
+    },
   }));
 
   return (
@@ -301,10 +223,13 @@ export default async function FeedPage() {
       <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-[#F0F6FC] mb-1">
-            River Activity
+            On The Water
           </h1>
-          <p className="text-sm text-[#A8B2BD]">
-            Recent sessions and river conditions reported by anglers
+          <p className="text-sm text-[#A8B2BD] mb-1">
+            Anglers currently fishing — river, section, and weather only.
+          </p>
+          <p className="text-xs text-[#6E7681]">
+            We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
         </header>
 
