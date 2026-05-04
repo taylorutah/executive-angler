@@ -290,6 +290,7 @@ export interface CanonicalFly {
   affiliateLinks?: { label: string; url: string }[];
   flyShopIds: string[];
   originCredit?: string;
+  contributedByUserId?: string;
 
   // SEO
   metaTitle?: string;

@@ -1,4 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+// Permissive client alias — these helpers operate against the service-role
+// client created in publishSubmission, which has full table access.
+type AdminClient = SupabaseClient;
 
 /**
  * Publish a community submission to the appropriate entity table.
@@ -144,7 +148,7 @@ export async function publishSubmission(submission: Record<string, unknown>): Pr
       }
 
       case "fly_pattern": {
-        const flySlug = generateSlug(submission.name as string);
+        const flySlug = await ensureUniqueSlug(supabase, "canonical_flies", generateSlug(submission.name as string));
         const rawMaterials = (entityData.materials_list as string) || "";
         const materialsList = rawMaterials
           .split("\n")
@@ -163,44 +167,66 @@ export async function publishSubmission(submission: Record<string, unknown>): Pr
           return [];
         };
 
-        const { error: flyError } = await supabase.from("canonical_flies").insert({
-          slug: flySlug,
-          name: submission.name,
-          category: entityData.category || "nymph",
-          tagline: entityData.tagline || null,
-          description: submission.description,
-          history: null,
-          tying_overview: entityData.tying_overview || null,
-          tying_steps: [],
-          materials_list: materialsList,
-          fishing_tips: entityData.fishing_tips || null,
-          when_to_use: entityData.when_to_use || null,
-          imitates: parseTags(entityData.imitates),
-          effective_species: parseTags(entityData.effective_species),
-          water_types: parseTags(entityData.water_types),
-          sizes: parseTags(entityData.sizes),
-          colors: parseTags(entityData.colors),
-          bead_options: parseTags(entityData.bead_options),
-          hook_styles: parseTags(entityData.hook_styles),
-          key_variations: [],
-          hero_image_url: (submission.hero_image_url as string) || null,
-          gallery_urls: [],
-          video_url: entityData.video_url || null,
-          additional_videos: [],
-          related_fly_ids: [],
-          related_river_ids: [],
-          related_destination_ids: [],
-          hatch_associations: [],
-          affiliate_links: [],
-          fly_shop_ids: [],
-          origin_credit: entityData.origin_credit || null,
-          meta_title: `${submission.name as string} — Fly Pattern | Executive Angler`,
-          meta_description: ((submission.description as string) || "").slice(0, 160),
-          rank: 50,
-          featured: false,
-          is_hero_pattern: false,
-        });
-        if (flyError) return { slug: flySlug, error: flyError.message };
+        const submitterId = submission.user_id as string;
+        const sourceFlyPatternId = entityData.source_fly_pattern_id as string | undefined;
+
+        const { data: insertedFly, error: flyError } = await supabase
+          .from("canonical_flies")
+          .insert({
+            slug: flySlug,
+            name: submission.name,
+            category: entityData.category || "nymph",
+            tagline: entityData.tagline || null,
+            description: submission.description,
+            history: null,
+            tying_overview: entityData.tying_overview || null,
+            tying_steps: [],
+            materials_list: materialsList,
+            fishing_tips: entityData.fishing_tips || null,
+            when_to_use: entityData.when_to_use || null,
+            imitates: parseTags(entityData.imitates),
+            effective_species: parseTags(entityData.effective_species),
+            water_types: parseTags(entityData.water_types),
+            sizes: parseTags(entityData.sizes),
+            colors: parseTags(entityData.colors),
+            bead_options: parseTags(entityData.bead_options),
+            hook_styles: parseTags(entityData.hook_styles),
+            key_variations: [],
+            hero_image_url: (submission.hero_image_url as string) || null,
+            gallery_urls: [],
+            video_url: entityData.video_url || null,
+            additional_videos: [],
+            related_fly_ids: [],
+            related_river_ids: [],
+            related_destination_ids: [],
+            hatch_associations: [],
+            affiliate_links: [],
+            fly_shop_ids: [],
+            origin_credit: entityData.origin_credit || null,
+            contributed_by_user_id: submitterId,
+            meta_title: `${submission.name as string} — Fly Pattern | Executive Angler`,
+            meta_description: ((submission.description as string) || "").slice(0, 160),
+            rank: 50,
+            featured: false,
+            is_hero_pattern: false,
+          })
+          .select("id")
+          .single();
+        if (flyError || !insertedFly) return { slug: flySlug, error: flyError?.message ?? "Insert returned no row" };
+
+        const newCanonicalId = insertedFly.id as string;
+
+        // If this submission originated from a personal fly pattern, migrate
+        // its catches, mark it promoted (so /anglers/.../flies/[slug] can 301
+        // forever), and seed a user_fly_box row for the submitter so the new
+        // canonical lands in their box automatically.
+        if (sourceFlyPatternId) {
+          await migrateSourcePattern(supabase, sourceFlyPatternId, newCanonicalId, submitterId);
+        }
+
+        // Even without a source pattern, the submitter should have the new
+        // canonical in their fly box on day one. Idempotent upsert.
+        await ensureFlyBoxEntry(supabase, submitterId, newCanonicalId, sourceFlyPatternId);
         break;
       }
 
@@ -264,4 +290,101 @@ function generateSlug(name: string): string {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
+}
+
+/**
+ * Find the next available slug by appending -2, -3, ... if the base collides.
+ * Caps at 100 attempts to avoid infinite loops on degenerate input.
+ */
+async function ensureUniqueSlug(
+  supabase: AdminClient,
+  table: string,
+  baseSlug: string
+): Promise<string> {
+  const base = baseSlug || "untitled-fly";
+  for (let i = 1; i < 100; i++) {
+    const candidate = i === 1 ? base : `${base}-${i}`;
+    const { data } = await supabase.from(table).select("id").eq("slug", candidate).maybeSingle();
+    if (!data) return candidate;
+  }
+  return `${base}-${Date.now()}`;
+}
+
+/**
+ * When a personal fly_pattern is promoted to canonical: mark the source row
+ * with promoted_to_canonical_id (preserves URL redirects + lineage), and
+ * point the submitter's existing catches at the new canonical so their
+ * catch counts roll up to the library entry instead of dangling.
+ */
+async function migrateSourcePattern(
+  supabase: AdminClient,
+  sourceFlyPatternId: string,
+  newCanonicalId: string,
+  submitterId: string
+): Promise<void> {
+  const { error: markErr } = await supabase
+    .from("fly_patterns")
+    .update({ promoted_to_canonical_id: newCanonicalId })
+    .eq("id", sourceFlyPatternId)
+    .eq("user_id", submitterId);
+  if (markErr) console.error("[migrateSourcePattern] mark error:", markErr);
+
+  const { error: catchErr } = await supabase
+    .from("catches")
+    .update({ canonical_fly_id: newCanonicalId, fly_pattern_id: null })
+    .eq("fly_pattern_id", sourceFlyPatternId)
+    .eq("user_id", submitterId);
+  if (catchErr) console.error("[migrateSourcePattern] catch migration error:", catchErr);
+}
+
+/**
+ * Idempotently put the new canonical into the submitter's user_fly_box.
+ * If they had a source pattern, copy its specs into personalizations so
+ * their preferred bead/hook/thread carry over.
+ */
+async function ensureFlyBoxEntry(
+  supabase: AdminClient,
+  userId: string,
+  canonicalFlyId: string,
+  sourceFlyPatternId?: string
+): Promise<void> {
+  const personalizations: Record<string, unknown> = {};
+  let preferredSizes: string[] | null = null;
+
+  if (sourceFlyPatternId) {
+    const { data: src } = await supabase
+      .from("fly_patterns")
+      .select("hook, bead_size, bead_color, fly_color, size, materials, image_url")
+      .eq("id", sourceFlyPatternId)
+      .maybeSingle();
+    if (src) {
+      if (src.hook) personalizations.hook = { style: src.hook };
+      if (src.bead_size || src.bead_color) {
+        personalizations.bead = {
+          ...(src.bead_size ? { size: src.bead_size } : {}),
+          ...(src.bead_color ? { color: src.bead_color } : {}),
+        };
+      }
+      if (src.fly_color) personalizations.body = { color: src.fly_color };
+      if (typeof src.size === "string") {
+        preferredSizes = src.size.split(",").map((s: string) => s.trim()).filter(Boolean);
+      } else if (Array.isArray(src.size)) {
+        preferredSizes = src.size.filter(Boolean);
+      }
+    }
+  }
+
+  const { error } = await supabase
+    .from("user_fly_box")
+    .upsert(
+      {
+        user_id: userId,
+        canonical_fly_id: canonicalFlyId,
+        personalizations,
+        preferred_sizes: preferredSizes,
+        is_favorite: false,
+      },
+      { onConflict: "user_id,canonical_fly_id" }
+    );
+  if (error) console.error("[ensureFlyBoxEntry] error:", error);
 }

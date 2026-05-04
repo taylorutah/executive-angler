@@ -48,6 +48,7 @@ function mapRow(row: Record<string, unknown>): CanonicalFly {
     affiliateLinks: (row.affiliate_links as CanonicalFly["affiliateLinks"]) ?? undefined,
     flyShopIds: (row.fly_shop_ids as string[]) ?? [],
     originCredit: row.origin_credit as string | undefined,
+    contributedByUserId: row.contributed_by_user_id as string | undefined,
 
     // SEO
     metaTitle: row.meta_title as string | undefined,

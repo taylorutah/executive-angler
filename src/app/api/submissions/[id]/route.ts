@@ -194,11 +194,24 @@ async function handleAdminAction(
       await updateContributorStats(supabase, submission.user_id as string, "approve");
       await notifySubmitter(submission.user_id as string, submission.name as string, submission.entity_type as string, "approved", supabase);
 
-      // Publish to the actual entity table
+      // Publish to the actual entity table. If this fails, roll the submission
+      // back to in_review so the admin can see the failure and retry — silently
+      // returning success would let the submitter believe their fly went live
+      // when it didn't.
       const publishResult = await publishSubmission(submission);
       if (publishResult.error) {
         console.error("[Publish] Failed:", publishResult.error);
-        return NextResponse.json({ success: true, slug, publishWarning: publishResult.error });
+        await supabase
+          .from("community_submissions")
+          .update({
+            status: "in_review",
+            moderation_notes: `Publish failed: ${publishResult.error}`,
+          })
+          .eq("id", id);
+        return NextResponse.json(
+          { error: `Publish failed: ${publishResult.error}` },
+          { status: 500 }
+        );
       }
 
       return NextResponse.json({ success: true, slug: publishResult.slug || slug });

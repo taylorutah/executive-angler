@@ -107,6 +107,23 @@ export default async function FlyDetailPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   const viewerIsAdmin = isAdmin(user?.email);
 
+  // Resolve the contributor's profile if this fly was submitted by an angler.
+  let contributor: { username?: string; displayName?: string; avatarUrl?: string } | null = null;
+  if (fly.contributedByUserId) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username, display_name, avatar_url")
+      .eq("user_id", fly.contributedByUserId)
+      .maybeSingle();
+    if (profile) {
+      contributor = {
+        username: profile.username ?? undefined,
+        displayName: profile.display_name ?? undefined,
+        avatarUrl: profile.avatar_url ?? undefined,
+      };
+    }
+  }
+
   // Fetch structured recipe ingredients if they exist
   const { data: recipeIngredients } = await supabase
     .from('fly_recipe_ingredients')
@@ -337,6 +354,27 @@ export default async function FlyDetailPage({ params }: Props) {
               </h1>
               {fly.tagline && (
                 <p className="text-base text-[#A8B2BD] mb-3">{fly.tagline}</p>
+              )}
+              {contributor && (
+                <Link
+                  href={contributor.username ? `/anglers/${contributor.username}` : "#"}
+                  className="inline-flex items-center gap-1.5 mb-3 text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+                >
+                  {contributor.avatarUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={contributor.avatarUrl}
+                      alt=""
+                      className="h-4 w-4 rounded-full object-cover"
+                    />
+                  )}
+                  <span>
+                    Contributed by{" "}
+                    <span className="font-semibold text-[#F0F6FC]">
+                      {contributor.displayName || (contributor.username ? `@${contributor.username}` : "an angler")}
+                    </span>
+                  </span>
+                </Link>
               )}
 
               {/* Inline spec chips */}
