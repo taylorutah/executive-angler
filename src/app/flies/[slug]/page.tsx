@@ -17,9 +17,8 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import Image from "next/image";
-import AddToFlyBoxButton from "@/components/flies/AddToFlyBoxButton";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
-import CreateVariantButton from "@/components/flies/CreateVariantButton";
+import InYourBoxStrip from "@/components/flies/InYourBoxStrip";
 import VariantTree from "@/components/flies/VariantTree";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
@@ -401,25 +400,27 @@ export default async function FlyDetailPage({ params }: Props) {
                 )}
               </div>
 
-              {/* Desktop: action buttons inline */}
+              {/* Desktop: small favorite icon — main In-Your-Box surface lives below */}
               <div className="hidden sm:flex items-center gap-2 mt-4">
-                <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
-                <CreateVariantButton
-                  compact
-                  parent={{
-                    canonicalId: fly.id,
-                    name: fly.name,
-                    heroImageUrl: fly.heroImageUrl ?? null,
-                    category: fly.category,
-                    defaultSize: fly.sizes?.[0] ?? null,
-                    defaultColor: fly.colors?.[0] ?? null,
-                    defaultBeadColor: fly.beadOptions?.[0] ?? null,
-                  }}
-                  redirectPath={`/flies/${fly.slug}`}
-                />
                 <FlyFavoriteButton canonicalFlyId={fly.id} compact />
               </div>
             </div>
+          </div>
+
+          {/* In Your Box strip — Spotify-style personal layer */}
+          <div className="mt-5">
+            <InYourBoxStrip
+              fly={{
+                id: fly.id,
+                name: fly.name,
+                category: fly.category,
+                sizes: fly.sizes,
+                colors: fly.colors,
+                beadOptions: fly.beadOptions,
+                hookStyles: fly.hookStyles,
+                materialsList: fly.materialsList,
+              }}
+            />
           </div>
         </div>
       </section>
@@ -841,24 +842,7 @@ export default async function FlyDetailPage({ params }: Props) {
 
           {/* ─── Mobile: sidebar content below main ─── */}
           <div className="lg:hidden mt-8 space-y-6">
-            {/* Mobile action buttons */}
-            <div className="space-y-2">
-              <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
-              <CreateVariantButton
-                parent={{
-                  canonicalId: fly.id,
-                  name: fly.name,
-                  heroImageUrl: fly.heroImageUrl ?? null,
-                  category: fly.category,
-                  defaultSize: fly.sizes?.[0] ?? null,
-                  defaultColor: fly.colors?.[0] ?? null,
-                  defaultBeadColor: fly.beadOptions?.[0] ?? null,
-                }}
-                redirectPath={`/flies/${fly.slug}`}
-              />
-              <FlyFavoriteButton canonicalFlyId={fly.id} />
-            </div>
-
+            <FlyFavoriteButton canonicalFlyId={fly.id} />
             <QuickFacts title="Pattern Details" facts={quickFacts} />
 
             {fly.effectiveSpecies.length > 0 && (
@@ -933,15 +917,6 @@ export default async function FlyDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Sticky mobile CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D1117]/95 backdrop-blur-sm border-t border-[#21262D] px-4 py-3 safe-area-bottom">
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <AddToFlyBoxButton canonicalFlyId={fly.id} flyName={fly.name} />
-          </div>
-          <FlyFavoriteButton canonicalFlyId={fly.id} compact />
-        </div>
-      </div>
     </>
   );
 }

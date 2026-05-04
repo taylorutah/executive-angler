@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
-    const { canonical_fly_id, preferred_sizes, personal_notes } = body;
+    const { canonical_fly_id, preferred_sizes, personal_notes, personalizations } = body;
 
     if (!canonical_fly_id) {
       return NextResponse.json(
@@ -59,17 +59,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const upsertRow: Record<string, unknown> = {
+      user_id: user.id,
+      canonical_fly_id,
+      preferred_sizes: preferred_sizes || null,
+      personal_notes: personal_notes || null,
+    };
+    if (personalizations && typeof personalizations === "object") {
+      upsertRow.personalizations = personalizations;
+    }
+
     const { data, error } = await supabase
       .from("user_fly_box")
-      .upsert(
-        {
-          user_id: user.id,
-          canonical_fly_id,
-          preferred_sizes: preferred_sizes || null,
-          personal_notes: personal_notes || null,
-        },
-        { onConflict: "user_id,canonical_fly_id" }
-      )
+      .upsert(upsertRow, { onConflict: "user_id,canonical_fly_id" })
       .select()
       .single();
 
@@ -85,6 +87,49 @@ export async function POST(request: Request) {
       { error: "Internal server error" },
       { status: 500 }
     );
+  }
+}
+
+// PATCH — update personalizations / preferred_sizes / notes on an existing
+// fly box entry. Identified by canonical_fly_id (per-user uniqueness via the
+// user_id, canonical_fly_id composite). Used by the PersonalizeSheet drawer.
+export async function PATCH(request: Request) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const body = await request.json();
+    const { canonical_fly_id, personalizations, preferred_sizes, personal_notes } = body;
+    if (!canonical_fly_id) {
+      return NextResponse.json({ error: "canonical_fly_id is required" }, { status: 400 });
+    }
+
+    const updates: Record<string, unknown> = {};
+    if (personalizations !== undefined) updates.personalizations = personalizations;
+    if (preferred_sizes !== undefined) updates.preferred_sizes = preferred_sizes;
+    if (personal_notes !== undefined) updates.personal_notes = personal_notes;
+
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+    }
+
+    const { data, error } = await supabase
+      .from("user_fly_box")
+      .update(updates)
+      .eq("user_id", user.id)
+      .eq("canonical_fly_id", canonical_fly_id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("[fly-box PATCH] Error:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error("[fly-box PATCH]", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
