@@ -85,7 +85,7 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
           <option value="">— None —</option>
           {items.map((item) => (
             <option key={item.id} value={item.id}>
-              {[item.maker, item.name].filter(Boolean).join(" · ")}
+              {item.name}
               {item.is_default ? " ⭐" : ""}
             </option>
           ))}

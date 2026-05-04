@@ -219,9 +219,9 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               const snap = session.gear_snapshot;
               if (!snap) return null;
               const parts: string[] = [];
-              if (snap.rod) parts.push([snap.rod.maker, snap.rod.name].filter(Boolean).join(" "));
-              if (snap.reel) parts.push([snap.reel.maker, snap.reel.name].filter(Boolean).join(" "));
-              if (snap.line) parts.push([snap.line.maker, snap.line.name].filter(Boolean).join(" "));
+              if (snap.rod?.name) parts.push(snap.rod.name);
+              if (snap.reel?.name) parts.push(snap.reel.name);
+              if (snap.line?.name) parts.push(snap.line.name);
               if (!parts.length) return null;
               return (
                 <div className="flex items-center gap-1.5 mb-2 text-[10px] text-[#6E7681]">

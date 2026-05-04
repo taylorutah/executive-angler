@@ -1115,9 +1115,9 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   const leader = session.gear_leader || snap.leader;
                   const tippet = session.gear_tippet || snap.tippet;
                   const gearParts = [
-                    rod && `🎣 ${[rod.maker, rod.name].filter(Boolean).join(" ")}`,
-                    reel && `🪝 ${[reel.maker, reel.name].filter(Boolean).join(" ")}`,
-                    line && `〰️ ${[line.maker, line.name].filter(Boolean).join(" ")}`,
+                    rod?.name && `🎣 ${rod.name}`,
+                    reel?.name && `🪝 ${reel.name}`,
+                    line?.name && `〰️ ${line.name}`,
                     leader && `📏 Leader: ${leader.name}`,
                     tippet && `🧵 ${tippet.name}`,
                   ].filter(Boolean);
