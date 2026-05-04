@@ -24,8 +24,9 @@ import VariantTree from "@/components/flies/VariantTree";
 import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
-import { ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
+import { toYouTubeEmbedUrl } from "@/lib/video-embed";
 
 export const revalidate = 86400;
 
@@ -103,6 +104,8 @@ export default async function FlyDetailPage({ params }: Props) {
       : fly.sizes[0];
 
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const viewerIsAdmin = isAdmin(user?.email);
 
   // Fetch structured recipe ingredients if they exist
   const { data: recipeIngredients } = await supabase
@@ -219,13 +222,14 @@ export default async function FlyDetailPage({ params }: Props) {
     },
   ];
 
-  if (fly.videoUrl) {
+  const videoEmbedUrl = toYouTubeEmbedUrl(fly.videoUrl);
+  if (fly.videoUrl && videoEmbedUrl) {
     schemaGraph.push({
       "@type": "VideoObject",
       name: `How to Tie a ${fly.name}`,
       description: fly.tyingOverview || `Learn to tie the ${fly.name}.`,
       contentUrl: fly.videoUrl,
-      embedUrl: fly.videoUrl.replace("watch?v=", "embed/"),
+      embedUrl: videoEmbedUrl,
       uploadDate: "2024-01-01",
     });
   }
@@ -293,7 +297,7 @@ export default async function FlyDetailPage({ params }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row gap-6 items-start">
             {/* Compact fly image — product card style */}
-            <div className="shrink-0 w-full sm:w-40 h-40 rounded-xl overflow-hidden bg-[#161B22] border border-[#21262D]">
+            <div className="relative shrink-0 w-full sm:w-40 h-40 rounded-xl overflow-hidden bg-[#161B22] border border-[#21262D]">
               {fly.heroImageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -305,6 +309,15 @@ export default async function FlyDetailPage({ params }: Props) {
                 <div className="w-full h-full flex items-center justify-center">
                   <Image src={categoryIcon} alt={categoryLabel} width={56} height={56} className="opacity-40" />
                 </div>
+              )}
+              {viewerIsAdmin && (
+                <Link
+                  href={`/admin/content/flies/${fly.id}#field-heroImageUrl`}
+                  className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 text-white text-[11px] font-semibold py-1.5 hover:bg-[#E8923A] transition-colors"
+                  title="Upload or replace this fly's hero image"
+                >
+                  {fly.heroImageUrl ? "Replace image" : "Upload image"}
+                </Link>
               )}
             </div>
 
@@ -434,7 +447,7 @@ export default async function FlyDetailPage({ params }: Props) {
               )}
 
               {/* 3. Tying Video */}
-              {fly.videoUrl && (
+              {videoEmbedUrl && (
                 <ScrollAnimation>
                   <div>
                     <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
@@ -443,7 +456,7 @@ export default async function FlyDetailPage({ params }: Props) {
                     <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
                       <div className="relative w-full aspect-video">
                         <iframe
-                          src={fly.videoUrl.replace("watch?v=", "embed/")}
+                          src={videoEmbedUrl}
                           title={`How to tie a ${fly.name}`}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
@@ -669,27 +682,6 @@ export default async function FlyDetailPage({ params }: Props) {
               {/* Pattern Details */}
               <QuickFacts title="Pattern Details" facts={quickFacts} />
 
-              {/* Buy This Fly */}
-              {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
-                <div className="space-y-2">
-                  <h3 className="font-heading uppercase tracking-wider text-xs text-slate-400">
-                    Buy This Fly
-                  </h3>
-                  {fly.affiliateLinks.map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      className="flex items-center justify-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold hover:bg-gold/20 transition-colors"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-              )}
-
               {/* Target Species */}
               {fly.effectiveSpecies.length > 0 && (
                 <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
@@ -830,27 +822,6 @@ export default async function FlyDetailPage({ params }: Props) {
             </div>
 
             <QuickFacts title="Pattern Details" facts={quickFacts} />
-
-            {/* Buy This Fly */}
-            {fly.affiliateLinks && fly.affiliateLinks.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="font-heading uppercase tracking-wider text-xs text-slate-400">
-                  Buy This Fly
-                </h3>
-                {fly.affiliateLinks.map((link, i) => (
-                  <a
-                    key={i}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="flex items-center justify-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold hover:bg-gold/20 transition-colors"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
 
             {fly.effectiveSpecies.length > 0 && (
               <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
