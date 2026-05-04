@@ -42,7 +42,7 @@ export default async function DashboardPage() {
   // Fetch user own sessions (last 5)
   const { data: mySessions } = await supabase
     .from("fishing_sessions")
-    .select("id, date, river_name, total_fish, notes, privacy")
+    .select("id, date, river_name, total_fish, notes, broadcast_presence")
     .eq("user_id", user.id)
     .order("date", { ascending: false })
     .order("created_at", { ascending: false })

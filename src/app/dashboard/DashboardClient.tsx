@@ -19,7 +19,7 @@ const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true"
 interface DashboardProps {
   user: { id: string; email: string };
   profile: { username: string | null; display_name: string | null; avatar_url: string | null; home_location: string | null } | null;
-  mySessions: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; privacy: string }>;
+  mySessions: Array<{ id: string; date: string; river_name: string | null; total_fish: number | null; notes: string | null; broadcast_presence: boolean }>;
   favRivers: Array<{ id: string; name: string; slug: string; hero_image_url: string; primary_species: string[] }>;
   favDests: Array<{ id: string; name: string; slug: string; hero_image_url: string }>;
   tieNextItems: MyFliesItem[];
@@ -566,7 +566,10 @@ export default function DashboardClient({
                         <p className="text-xs text-[#A8B2BD]">{formatDate(session.date)}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        {session.privacy === "private" && (
+                        {/* Lock pill when this session isn't broadcast to the
+                            feed. Default state (broadcast_presence=false) is
+                            "private" per the 2026-05-04 privacy overhaul. */}
+                        {session.broadcast_presence !== true && (
                           <span className="text-[10px] bg-[#21262D] text-[#6E7681] px-1.5 py-0.5 rounded">Private</span>
                         )}
                         <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors" />
