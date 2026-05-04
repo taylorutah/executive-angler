@@ -213,8 +213,7 @@ export async function GET(request: NextRequest) {
                 </div>
                 ` : ""}
                 <p style="color: #475569; font-size: 14px; line-height: 1.6; margin-top: 16px;">
-                  Tight lines,<br/>
-                  The Executive Angler Team
+                  &mdash; The Executive Angler Team
                 </p>
               </div>
             </div>

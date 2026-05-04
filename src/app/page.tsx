@@ -12,7 +12,7 @@ import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} — Fly Fishing Intelligence: Journal, Flies, Rivers`,
-  description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and see the patterns in your fishing. Free fly fishing app — now on the App Store.",
+  description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and see your own patterns across seasons. Private by default — we never publish locations or fish counts. Free fly fishing app — now on the App Store.",
   openGraph: {
     title: `${SITE_NAME} — Log Catches, Tie Better Flies, Fish Smarter`,
     description: "The fly fishing intelligence platform. Journal your sessions, build fly recipes, track river conditions, and analyze patterns. Free on iPhone and web.",

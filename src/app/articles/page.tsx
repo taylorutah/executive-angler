@@ -57,7 +57,7 @@ export default async function ArticlesPage() {
             Insights &amp; Stories
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-            Tight Lines, Wide Horizons
+            Stories from the Water
           </h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
             Expert instruction, destination dispatches, and stories from the world's greatest
