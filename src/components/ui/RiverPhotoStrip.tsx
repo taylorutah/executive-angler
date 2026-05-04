@@ -40,7 +40,7 @@ export default function RiverPhotoStrip({
     id: p.id,
     photoUrl: p.photoUrl,
     caption: p.caption,
-    submitterName: p.submitterName || p.username || "Angler",
+    submitterName: p.submitterName || "Angler",
     submittedAt: p.submittedAt,
   }));
 
@@ -66,15 +66,11 @@ export default function RiverPhotoStrip({
                     >
                       <Image
                         src={photo.photoUrl}
-                        alt={photo.caption || photo.species || "River photo"}
+                        alt={photo.caption || "River photo"}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-300"
                         sizes="64px"
                       />
-                      {/* Type badge */}
-                      <span className="absolute top-0.5 right-0.5 text-[10px] leading-none">
-                        {photo.type === "catch" ? "🐟" : "📷"}
-                      </span>
                     </button>
                   ))}
             </div>

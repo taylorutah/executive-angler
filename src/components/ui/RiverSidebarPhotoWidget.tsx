@@ -68,14 +68,11 @@ export default function RiverSidebarPhotoWidget({
               >
                 <Image
                   src={photo.photoUrl}
-                  alt={photo.caption || photo.species || "River photo"}
+                  alt={photo.caption || "River photo"}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="120px"
                 />
-                <span className="absolute top-1 right-1 text-[10px]">
-                  {photo.type === "catch" ? "🐟" : "📷"}
-                </span>
               </Link>
             ))}
           </div>

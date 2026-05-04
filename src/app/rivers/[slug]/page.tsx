@@ -16,10 +16,14 @@ import MapView from "@/components/maps/DynamicMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
-import RiverActivityPulse from "@/components/rivers/RiverActivityPulse";
-import RiverRealtimeActivity from "./RiverRealtimeActivity";
+// Privacy overhaul: RiverActivityPulse + RiverRealtimeActivity removed.
+// They surfaced active-session counts and per-event "X started fishing"
+// notifications across the community — both leak presence-style intel
+// at a level the new model doesn't allow. Personal pulse for the
+// signed-in user lives in the Pro PersonalRiverScorecard instead.
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
+import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
 import FlowChart from "@/components/rivers/FlowChart";
 import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
@@ -301,20 +305,12 @@ export default async function RiverPage({ params }: Props) {
               {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
               <PersonalFlowOverlay riverId={river.id} />
 
-              {/* 3. Angler Intel — live "What's Working" + session stats */}
+              {/* Personal River Scorecard — your patterns on THIS river (premium) */}
+              <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
+
+              {/* 3. Recent Fly Choices — community fly pulse (names only, no counts) */}
               <ScrollAnimation>
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
-                      Angler Intel
-                    </h2>
-                    <span className="flex items-center gap-1.5 text-[10px] text-[#00B4D8] bg-[#00B4D8]/10 px-2.5 py-1 rounded-full font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00B4D8] animate-pulse inline-block" />
-                      Live from the App
-                    </span>
-                  </div>
-                  <RiverAnglerIntel riverId={river.id} riverName={river.name} />
-                </div>
+                <RiverAnglerIntel riverId={river.id} riverName={river.name} />
               </ScrollAnimation>
 
               {/* 4. Hatch Chart — collapsed by default (matches native) */}
@@ -388,11 +384,6 @@ export default async function RiverPage({ params }: Props) {
                   </CollapsibleSection>
                 </ScrollAnimation>
               )}
-
-              {/* 5. Trip Reports / live river activity — mobile-only inline */}
-              <div className="lg:hidden space-y-6">
-                <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
-              </div>
 
               {/* 6. Community Photos — mobile-only inline */}
               <div className="lg:hidden">
@@ -607,10 +598,8 @@ export default async function RiverPage({ params }: Props) {
 
             {/* Sidebar — on mobile this stacks below the main column. The widgets
                 that are mirrored inline above (RiverSidebarLive, QuickFacts,
-                RiverRealtimeActivity, RiverSidebarPhotoWidget) are hidden on
-                mobile to avoid double-rendering; the remaining extras
-                (BestWindow, ActivityPulse, Season, Guides, Articles) still
-                appear after the main column on mobile. */}
+                RiverSidebarPhotoWidget) are hidden on mobile to avoid
+                double-rendering. */}
             <div className="space-y-6 lg:sticky lg:top-24">
               <div className="hidden lg:block space-y-6">
                 <RiverSidebarLive
@@ -624,12 +613,6 @@ export default async function RiverPage({ params }: Props) {
 
               <div className="hidden lg:block">
                 <QuickFacts facts={quickFacts} />
-              </div>
-
-              <RiverActivityPulse riverId={river.id} />
-
-              <div className="hidden lg:block">
-                <RiverRealtimeActivity riverId={river.id} riverName={river.name} />
               </div>
 
               {/* Season Calendar */}
