@@ -127,13 +127,18 @@ export async function getTieNextQueue(userId: string): Promise<{
   // grow unbounded. The done column shows recent wins.
   const cutoff = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
 
+  // Match either the new state-machine column OR the legacy is_tie_next bool —
+  // they should stay in sync, but we defend against drift so a fly never
+  // silently disappears from the queue. Done items are only kept for `cutoff`.
+  const queueOr = `is_tie_next.eq.true,tie_next_status.in.(wanted,at_vise),and(tie_next_status.eq.done,updated_at.gte.${cutoff})`;
+  const queueOrBox = `is_tie_next.eq.true,tie_next_status.in.(wanted,at_vise),and(tie_next_status.eq.done,added_at.gte.${cutoff})`;
+
   const [patternsRes, boxRes] = await Promise.all([
     supabase
       .from("fly_patterns")
       .select("*")
       .eq("user_id", userId)
-      .in("tie_next_status", ["wanted", "at_vise", "done"])
-      .or(`tie_next_status.neq.done,updated_at.gte.${cutoff}`)
+      .or(queueOr)
       .order("updated_at", { ascending: false }),
     supabase
       .from("user_fly_box")
@@ -154,8 +159,7 @@ export async function getTieNextQueue(userId: string): Promise<{
       `
       )
       .eq("user_id", userId)
-      .in("tie_next_status", ["wanted", "at_vise", "done"])
-      .or(`tie_next_status.neq.done,added_at.gte.${cutoff}`)
+      .or(queueOrBox)
       .order("added_at", { ascending: false }),
   ]);
 
@@ -242,11 +246,11 @@ export async function getMyFliesCounts(userId: string): Promise<{
   const [patternsRes, boxRes, sharedRes] = await Promise.all([
     supabase
       .from("fly_patterns")
-      .select("id, is_favorite, tie_next_status", { count: "exact" })
+      .select("id, is_favorite, tie_next_status, is_tie_next", { count: "exact" })
       .eq("user_id", userId),
     supabase
       .from("user_fly_box")
-      .select("id, is_favorite, tie_next_status", { count: "exact" })
+      .select("id, is_favorite, tie_next_status, is_tie_next", { count: "exact" })
       .eq("user_id", userId),
     supabase
       .from("fly_patterns")
@@ -255,16 +259,16 @@ export async function getMyFliesCounts(userId: string): Promise<{
       .contains("shared_with_user_ids", [userId]),
   ]);
 
-  const personal = (patternsRes.data ?? []) as { is_favorite?: boolean; tie_next_status?: TieNextStatus }[];
-  const box = (boxRes.data ?? []) as { is_favorite?: boolean; tie_next_status?: TieNextStatus }[];
+  type CountRow = { is_favorite?: boolean; tie_next_status?: TieNextStatus; is_tie_next?: boolean };
+  const personal = (patternsRes.data ?? []) as CountRow[];
+  const box = (boxRes.data ?? []) as CountRow[];
 
   const favorites =
     personal.filter((p) => p.is_favorite).length +
     box.filter((b) => b.is_favorite).length;
-  const tieNext =
-    personal.filter((p) => p.tie_next_status === "wanted" || p.tie_next_status === "at_vise")
-      .length +
-    box.filter((b) => b.tie_next_status === "wanted" || b.tie_next_status === "at_vise").length;
+  const inQueue = (r: CountRow) =>
+    r.tie_next_status === "wanted" || r.tie_next_status === "at_vise" || r.is_tie_next === true;
+  const tieNext = personal.filter(inQueue).length + box.filter(inQueue).length;
 
   return {
     box: (patternsRes.count ?? 0) + (boxRes.count ?? 0),

@@ -65,7 +65,10 @@ export async function POST(req: NextRequest) {
 
     // Add canonical fly to tie-next queue (upsert into fly box)
     if (canonicalFlyId) {
-      const updateFields: Record<string, unknown> = { is_tie_next: true };
+      const updateFields: Record<string, unknown> = {
+        is_tie_next: true,
+        tie_next_status: "wanted",
+      };
       if (notes) updateFields.personal_notes = notes;
 
       const { data, error } = await supabase
@@ -86,7 +89,10 @@ export async function POST(req: NextRequest) {
 
     // Toggle existing fly box entry
     if (flyBoxId) {
-      const updateFields: Record<string, unknown> = { is_tie_next: true };
+      const updateFields: Record<string, unknown> = {
+        is_tie_next: true,
+        tie_next_status: "wanted",
+      };
       if (notes) updateFields.personal_notes = notes;
 
       const { error } = await supabase
@@ -106,7 +112,7 @@ export async function POST(req: NextRequest) {
     if (flyPatternId) {
       const { error } = await supabase
         .from("fly_patterns")
-        .update({ is_tie_next: true })
+        .update({ is_tie_next: true, tie_next_status: "wanted" })
         .eq("id", flyPatternId)
         .eq("user_id", user.id);
 
@@ -239,7 +245,7 @@ export async function DELETE(req: NextRequest) {
     if (flyBoxId) {
       const { error } = await supabase
         .from("user_fly_box")
-        .update({ is_tie_next: false, tie_next_order: null })
+        .update({ is_tie_next: false, tie_next_order: null, tie_next_status: "none" })
         .eq("id", flyBoxId)
         .eq("user_id", user.id);
 
@@ -253,7 +259,7 @@ export async function DELETE(req: NextRequest) {
     if (flyPatternId) {
       const { error } = await supabase
         .from("fly_patterns")
-        .update({ is_tie_next: false })
+        .update({ is_tie_next: false, tie_next_status: "none" })
         .eq("id", flyPatternId)
         .eq("user_id", user.id);
 
