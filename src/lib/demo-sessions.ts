@@ -467,7 +467,8 @@ export function buildDemoRows(userId: string, now = new Date()) {
         trip_tags: session.trip_tags,
         latitude: session.latitude,
         longitude: session.longitude,
-        privacy: "private" as const,
+        // privacy column dropped 2026-05-04 — demo sessions don't broadcast
+        broadcast_presence: false,
         is_demo: true,
       },
       catches,

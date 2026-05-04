@@ -151,7 +151,9 @@ export async function POST(request: NextRequest) {
       notes: s.session_notes,
       tags: s.session_tags,
       trip_tags: s.trip_tags,
-      privacy: s.privacy,
+      // privacy column dropped in phase 6 of the privacy overhaul.
+      // Imported sessions don't broadcast — user can opt in per session.
+      broadcast_presence: false,
       latitude: s.latitude,
       longitude: s.longitude,
     };

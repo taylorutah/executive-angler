@@ -111,7 +111,9 @@ function buildSessionValues(session: AnyRec): Record<string, unknown> {
     river_flow_cfs: session.river_flow_cfs,
     session_tags: session.tags,
     trip_tags: session.trip_tags,
-    privacy: session.privacy,
+    // Privacy overhaul 2026-05-04: legacy `privacy` column dropped. Export
+    // the new boolean instead (true = opted into the presence feed).
+    broadcast_presence: session.broadcast_presence === true,
     latitude: session.latitude,
     longitude: session.longitude,
   };

@@ -174,6 +174,11 @@ export async function POST(req: NextRequest) {
   // explicitly toggles it on.
   const broadcast = resolveBroadcast(sessionData);
   sessionData.broadcast_presence = broadcast === true;
+  // The legacy `privacy` column was dropped in phase 6 of the overhaul.
+  // Old mobile clients still send it in JSON bodies; we map it via
+  // resolveBroadcast() above and then strip it before the insert reaches
+  // Postgres (the column no longer exists).
+  delete sessionData.privacy;
 
   // Build gear snapshot before insert
   const gear_snapshot = await buildGearSnapshot(supabase, sessionData);
@@ -234,6 +239,8 @@ export async function PATCH(req: NextRequest) {
   if (broadcastPatch !== undefined) {
     sessionData.broadcast_presence = broadcastPatch;
   }
+  // Legacy column was dropped in phase 6 — strip the field before update.
+  delete sessionData.privacy;
 
   // Only rebuild gear_snapshot when gear IDs are actually present in the payload.
   // A partial PATCH (e.g. notes-only) must NOT overwrite existing gear_snapshot with {}.

@@ -215,7 +215,9 @@ export default function EditSessionPage() {
           private_memo: session.private_memo || "",
           trip_tags: (session.trip_tags || session.tags || []).join(", "),
         });
-        setPrivacy(session.privacy === "private" ? "private" : "public");
+        // privacy column dropped in phase 6 — read broadcast_presence instead.
+        // Default to "private" (UI label "Keep Private") when neither is set.
+        setPrivacy(session.broadcast_presence === true ? "public" : "private");
         const loadedCatches = (session.catches || []).map((c: any) => ({
             id: c.id,
             species: c.species || "",
