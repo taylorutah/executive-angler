@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Heart, ListChecks, Layers, Check, Loader2 } from 'lucide-react';
+import { Heart, ListChecks, Layers, Check, Loader2, Plus } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import HelpHint from '@/components/ui/HelpHint';
 
 type Tab = 'all' | 'favorites' | 'tie-next';
@@ -89,46 +90,88 @@ interface FlyBoxTabsProps {
   canonicalNames: string[];
 }
 
-// Toggle button for favorite/tie-next actions on a card. Heart stays as a
-// compact icon; Tie Next is a labeled pill so its toggled state is obvious.
-function CardActions({
+// Compact favorite toggle (icon-only, fixed width on the left of the footer).
+function FavoriteToggle({
   card,
-  onToggleFavorite,
-  onToggleTieNext,
+  onToggle,
 }: {
   card: UnifiedFly;
-  onToggleFavorite: (card: UnifiedFly) => void;
-  onToggleTieNext: (card: UnifiedFly) => void;
+  onToggle: (card: UnifiedFly) => void;
 }) {
   const isFav = card.source === 'library' ? card.entry.is_favorite : card.fly.is_favorite;
-  const isTie = card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
-
   return (
-    <div className="flex items-center gap-1.5">
-      <button
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(card); }}
-        title={isFav ? "Remove from Favorites" : "Add to Favorites"}
-        className={`p-1 rounded transition-colors ${
-          isFav
-            ? 'text-red-400 hover:text-red-300'
-            : 'text-[#6E7681] hover:text-red-400'
-        }`}
-      >
-        <Heart className={`h-3.5 w-3.5 ${isFav ? 'fill-red-400' : ''}`} />
-      </button>
-      <button
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleTieNext(card); }}
-        title={isTie ? "Remove from Tie Next queue" : "Add to Tie Next queue"}
-        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-colors ${
-          isTie
-            ? 'bg-[#E8923A] text-white hover:bg-[#F0A65A] shadow-sm shadow-[#E8923A]/30'
-            : 'bg-[#21262D] text-[#A8B2BD] hover:bg-[#E8923A]/15 hover:text-[#E8923A]'
-        }`}
-      >
-        {isTie ? <Check className="h-3 w-3" /> : <ListChecks className="h-3 w-3" />}
-        <span>{isTie ? 'Queued' : 'Tie Next'}</span>
-      </button>
+    <button
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggle(card); }}
+      title={isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+      aria-label={isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+      aria-pressed={isFav}
+      className={`flex-shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors ${
+        isFav
+          ? 'text-red-400 bg-red-500/10 hover:bg-red-500/20'
+          : 'text-[#6E7681] hover:text-red-400 hover:bg-[#21262D]'
+      }`}
+    >
+      <Heart className={`h-4 w-4 ${isFav ? 'fill-red-400' : ''}`} />
+    </button>
+  );
+}
+
+// Tie Next toggle pill — fills remaining footer width, never wraps.
+function TieNextToggle({
+  card,
+  onToggle,
+}: {
+  card: UnifiedFly;
+  onToggle: (card: UnifiedFly) => void;
+}) {
+  const isTie = card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
+  return (
+    <button
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggle(card); }}
+      title={isTie ? 'Remove from Tie Next queue' : 'Add to Tie Next queue'}
+      aria-pressed={isTie}
+      className={`flex-1 min-w-0 inline-flex items-center justify-center gap-1 h-7 px-2 rounded-md text-[10px] font-semibold uppercase tracking-wider whitespace-nowrap transition-colors ${
+        isTie
+          ? 'bg-[#E8923A] text-white hover:bg-[#F0A65A] shadow-sm shadow-[#E8923A]/30'
+          : 'bg-[#21262D] text-[#A8B2BD] hover:bg-[#E8923A]/15 hover:text-[#E8923A]'
+      }`}
+    >
+      {isTie ? <Check className="h-3 w-3 flex-shrink-0" /> : <ListChecks className="h-3 w-3 flex-shrink-0" />}
+      <span className="truncate">{isTie ? 'Queued' : 'Tie Next'}</span>
+    </button>
+  );
+}
+
+// Subtle "In Library" indicator overlaid on the image — informational only.
+function InLibraryBadge() {
+  return (
+    <div
+      className="absolute bottom-1.5 left-1.5 z-10 inline-flex items-center gap-1 rounded-full bg-black/55 backdrop-blur-sm px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/95 ring-1 ring-white/15 shadow-sm shadow-black/30"
+      title="This pattern matches one in the library"
+    >
+      <Check className="h-2.5 w-2.5" />
+      <span>In Library</span>
     </div>
+  );
+}
+
+// Submit-to-library CTA on the image — clickable, never nests anchors.
+function SubmitBadge({ flyId }: { flyId: string }) {
+  const router = useRouter();
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        router.push(`/contribute/fly_pattern?from_fly_box=${flyId}`);
+      }}
+      title="Submit this pattern to the library"
+      className="absolute bottom-1.5 left-1.5 z-10 inline-flex items-center gap-1 rounded-full bg-[#E8923A] hover:bg-[#F0A65A] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow-sm shadow-black/30 ring-1 ring-white/20 transition-colors"
+    >
+      <Plus className="h-2.5 w-2.5" />
+      <span>Submit</span>
+    </button>
   );
 }
 
@@ -143,8 +186,8 @@ function TieNextRibbon() {
   );
 }
 
-// Completion checkbox for tie-next cards
-function TieNextCheckbox({
+// Completion button for tie-next cards — mark as tied (clears from queue).
+function TieNextDone({
   card,
   onComplete,
   loading,
@@ -158,14 +201,14 @@ function TieNextCheckbox({
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onComplete(card); }}
       title="Mark as tied"
       disabled={loading}
-      className="flex items-center gap-1 px-2 py-1 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20 text-[10px] font-semibold transition-colors"
+      className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 h-7 px-2 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20 text-[10px] font-semibold uppercase tracking-wider whitespace-nowrap transition-colors disabled:opacity-50"
     >
       {loading ? (
-        <Loader2 className="h-3 w-3 animate-spin" />
+        <Loader2 className="h-3 w-3 flex-shrink-0 animate-spin" />
       ) : (
-        <Check className="h-3 w-3" />
+        <Check className="h-3 w-3 flex-shrink-0" />
       )}
-      Done
+      <span className="truncate">Done</span>
     </button>
   );
 }
@@ -481,53 +524,55 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                 <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
                 <span className="text-xs text-[#6E7681] ml-1">{filteredCards.length}</span>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {filteredCards.map(card => {
                   if (card.source === 'library') {
                     const cf = card.entry.canonical_fly;
                     const queued = !!card.entry.is_tie_next;
+                    const detailHref = `/flies/${cf.slug}`;
                     return (
-                      <div key={card.entry.id} className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
-                        queued
-                          ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
-                          : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
-                      }`}>
-                        <Link href={`/flies/${cf.slug}`}>
-                          <div className="relative aspect-square bg-white overflow-hidden">
-                            {queued && <TieNextRibbon />}
+                      <div
+                        key={card.entry.id}
+                        className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
+                          queued
+                            ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
+                            : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
+                        }`}
+                      >
+                        <div className="relative aspect-square bg-white overflow-hidden">
+                          <Link href={detailHref} className="block w-full h-full">
                             {cf.hero_image_url ? (
                               <img
                                 src={cf.hero_image_url}
                                 alt={cf.name}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
                               />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center bg-[#0D1117]">
                                 <span className="text-3xl">{TYPE_ICONS[type] || "\uD83E\uDEB0"}</span>
                               </div>
                             )}
-                          </div>
-                          <div className="p-2">
-                            <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{cf.name}</p>
-                            {cf.sizes && cf.sizes.length > 0 && (
-                              <p className="text-[10px] text-[#6E7681] mt-0.5">
-                                <span className="text-[#A8B2BD]">Sizes:</span> {cf.sizes.slice(0, 3).join(", ")}
-                              </p>
-                            )}
-                          </div>
-                        </Link>
-                        <div className="mt-auto px-2 pb-2 flex items-center justify-between">
-                          <CardActions card={card} onToggleFavorite={toggleFavorite} onToggleTieNext={toggleTieNext} />
-                          {tab === 'tie-next' && (
-                            <TieNextCheckbox card={card} onComplete={completeTieNext} loading={completingIds.has(card.entry.id)} />
+                          </Link>
+                          {queued && <TieNextRibbon />}
+                        </div>
+                        <Link href={detailHref} className="block px-2.5 pt-2 pb-1.5">
+                          <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{cf.name}</p>
+                          {cf.sizes && cf.sizes.length > 0 && (
+                            <p className="text-[10px] text-[#6E7681] mt-0.5 truncate">
+                              <span className="text-[#A8B2BD]">Sizes</span> &middot; {cf.sizes.slice(0, 4).join(", ")}
+                            </p>
                           )}
-                          {tab !== 'tie-next' && (
-                            <Link
-                              href={`/flies/${cf.slug}`}
-                              className="flex items-center justify-center gap-1 py-1 px-2 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#A8B2BD] hover:bg-[#2D333B] transition-colors"
-                            >
-                              View
-                            </Link>
+                        </Link>
+                        <div className="mt-auto px-2 pb-2 pt-1 flex items-center gap-1.5 border-t border-[#21262D]/60">
+                          <FavoriteToggle card={card} onToggle={toggleFavorite} />
+                          {tab === 'tie-next' ? (
+                            <TieNextDone
+                              card={card}
+                              onComplete={completeTieNext}
+                              loading={completingIds.has(card.entry.id)}
+                            />
+                          ) : (
+                            <TieNextToggle card={card} onToggle={toggleTieNext} />
                           )}
                         </div>
                       </div>
@@ -537,65 +582,66 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                   // Personal fly
                   const fly = card.fly;
                   const queued = !!fly.is_tie_next;
+                  const inLibrary = canonicalNameSet.has(fly.name.toLowerCase().trim());
+                  const detailHref = `/journal/flies/${fly.id}/edit`;
+                  const bead = parseArrayField(fly.bead_size);
+                  const sizes = parseArrayField(fly.size);
                   return (
-                    <div key={fly.id} className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
-                      queued
-                        ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
-                        : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
-                    }`}>
-                      <Link href={`/journal/flies/${fly.id}/edit`}>
-                        <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
-                          {queued && <TieNextRibbon />}
+                    <div
+                      key={fly.id}
+                      className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
+                        queued
+                          ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
+                          : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
+                      }`}
+                    >
+                      <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
+                        <Link href={detailHref} className="block w-full h-full">
                           {fly.image_url ? (
                             <Image
                               src={fly.image_url}
                               alt={fly.name}
                               fill
-                              className="object-cover group-hover:scale-105 transition-transform duration-200"
-                              sizes="140px"
+                              className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                              sizes="(min-width: 1280px) 200px, (min-width: 768px) 25vw, 50vw"
                             />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center">
                               <span className="text-3xl">{TYPE_ICONS[fly.type || "Other"] || "\uD83E\uDEB0"}</span>
                             </div>
                           )}
-                        </div>
-                        <div className="p-2">
-                          <p className="text-xs font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {(() => {
-                              const bead = parseArrayField(fly.bead_size);
-                              return bead ? (
-                                <span className="text-[10px] text-[#6E7681] truncate"><span className="text-[#A8B2BD]">Bead:</span> {bead}</span>
-                              ) : null;
-                            })()}
-                            {(() => {
-                              const sizes = parseArrayField(fly.size);
-                              return sizes ? (
-                                <span className="text-[10px] text-[#6E7681]"><span className="text-[#A8B2BD]">Size:</span> {sizes}</span>
-                              ) : null;
-                            })()}
-                          </div>
-                        </div>
-                      </Link>
-                      <div className="mt-auto px-2 pb-2 flex items-center justify-between">
-                        <CardActions card={card} onToggleFavorite={toggleFavorite} onToggleTieNext={toggleTieNext} />
-                        {tab === 'tie-next' && (
-                          <TieNextCheckbox card={card} onComplete={completeTieNext} loading={completingIds.has(fly.id)} />
+                        </Link>
+                        {queued && <TieNextRibbon />}
+                        {inLibrary ? <InLibraryBadge /> : <SubmitBadge flyId={fly.id} />}
+                      </div>
+                      <Link href={detailHref} className="block px-2.5 pt-2 pb-1.5">
+                        <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
+                        {(bead || sizes) && (
+                          <p className="text-[10px] text-[#6E7681] mt-0.5 truncate">
+                            {sizes && (
+                              <>
+                                <span className="text-[#A8B2BD]">Sizes</span> &middot; {sizes}
+                              </>
+                            )}
+                            {sizes && bead ? <span className="px-1 text-[#30363D]">&middot;</span> : null}
+                            {bead && (
+                              <>
+                                <span className="text-[#A8B2BD]">Bead</span> &middot; {bead}
+                              </>
+                            )}
+                          </p>
                         )}
-                        {tab !== 'tie-next' && (
-                          canonicalNameSet.has(fly.name.toLowerCase().trim()) ? (
-                            <span className="flex items-center gap-1 py-1 px-2 rounded-md bg-[#21262D] text-[10px] font-semibold text-[#6E7681]">
-                              In Library
-                            </span>
-                          ) : (
-                            <Link
-                              href={`/contribute/fly_pattern?from_fly_box=${fly.id}`}
-                              className="flex items-center gap-1 py-1 px-2 rounded-md bg-[#E8923A]/10 text-[10px] font-semibold text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                            >
-                              Submit
-                            </Link>
-                          )
+                      </Link>
+                      <div className="mt-auto px-2 pb-2 pt-1 flex items-center gap-1.5 border-t border-[#21262D]/60">
+                        <FavoriteToggle card={card} onToggle={toggleFavorite} />
+                        {tab === 'tie-next' ? (
+                          <TieNextDone
+                            card={card}
+                            onComplete={completeTieNext}
+                            loading={completingIds.has(fly.id)}
+                          />
+                        ) : (
+                          <TieNextToggle card={card} onToggle={toggleTieNext} />
                         )}
                       </div>
                     </div>
