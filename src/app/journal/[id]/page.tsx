@@ -14,20 +14,20 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClient();
-  // Keep private sessions out of search indexes. Public sessions are
-  // shareable (Strava parity) so we leave robots at the default.
+  // Privacy overhaul 2026-05-04: session detail pages are owner-only by RLS.
+  // Even broadcast-presence sessions don't have a public detail view (presence
+  // is feed-only — river/section/weather, not catches/notes/GPS). So robots
+  // get noindex regardless.
   const { data: session } = await supabase
     .from("fishing_sessions")
-    .select("privacy")
+    .select("broadcast_presence")
     .eq("id", id)
     .maybeSingle();
-  const isPublic = session?.privacy === "public";
+  void session; // schema sanity check; we always noindex now
   return {
     title: "Session | Executive Angler",
     description: `Fishing session ${id.slice(0, 8)}`,
-    robots: isPublic
-      ? undefined
-      : { index: false, follow: false, googleBot: { index: false, follow: false } },
+    robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
   };
 }
 
@@ -52,11 +52,12 @@ export default async function SessionDetailPage({ params }: Props) {
   const isOwner = !!user && session.user_id === user.id;
   const isAnonymous = !user;
 
-  // Belt & suspenders: RLS would have already filtered, but if anything
-  // ever slips through, 404 rather than leak private data. This also
-  // covers the anonymous-visitor case (user === null) when the link
-  // points at a private session.
-  if (!isOwner && session.privacy !== "public") {
+  // Privacy overhaul 2026-05-04: session detail is owner-only by design.
+  // RLS on fishing_sessions is `auth.uid() = user_id` — non-owners receive
+  // null at the SELECT above and 404 at line 50. The check below is dead
+  // code under current RLS but stays as belt-and-suspenders against any
+  // future RLS loosening.
+  if (!isOwner) {
     notFound();
   }
 

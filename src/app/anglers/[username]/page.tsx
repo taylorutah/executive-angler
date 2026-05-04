@@ -168,17 +168,19 @@ export default async function AnglerProfilePage({ params }: Props) {
   let totalRivers = 0;
 
   if (canSeeSessions) {
-    // Pull the user's public sessions (viewing own profile sees all).
+    // Pull the user's broadcast-presence sessions (viewing own profile sees all).
+    // Note: even when broadcasting, only river/section/weather is meaningful for
+    // non-owners — fish counts and other fields are owner-only at the RLS layer.
     const sessionQuery = supabase
       .from("fishing_sessions")
-      .select("id, river_name, date, total_fish, created_at, privacy")
+      .select("id, river_name, date, total_fish, created_at, broadcast_presence")
       .eq("user_id", profile.user_id)
       .order("date", { ascending: false })
       .order("created_at", { ascending: false });
 
     const { data: sessionRows } = isOwnProfile
       ? await sessionQuery
-      : await sessionQuery.eq("privacy", "public");
+      : await sessionQuery.eq("broadcast_presence", true);
 
     const allSessions = sessionRows || [];
     sessions = allSessions.slice(0, visibleSessionLimit).map((s) => ({
