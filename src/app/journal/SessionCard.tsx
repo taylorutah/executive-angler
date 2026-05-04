@@ -46,7 +46,9 @@ interface FishingSession {
   latitude?: number;
   longitude?: number;
   route_points?: number[][];
-  privacy?: string;
+  // privacy column dropped 2026-05-04. Field replaced by broadcast_presence
+  // (boolean — true means the session appears on the presence feed).
+  broadcast_presence?: boolean;
   is_demo?: boolean;
   gear_snapshot?: GearSnapshot;
 }
@@ -150,7 +152,10 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
                     Sample
                   </span>
                 )}
-                {session.privacy && session.privacy !== "public" && !session.is_demo && (
+                {/* Lock icon when this session is NOT broadcast to the feed.
+                    Default state (broadcast_presence undefined or false) is
+                    "private" per the 2026-05-04 privacy overhaul. */}
+                {session.broadcast_presence !== true && !session.is_demo && (
                   <Lock className="h-3 w-3 text-[#6E7681]" />
                 )}
                 {totalFish > 0 && (

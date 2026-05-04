@@ -881,7 +881,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </div>
                 )}
 
-                {session.flies_notes && (
+                {/* Defense-in-depth: rig notes are owner-only per privacy ethic.
+                    The page-level guard at journal/[id]/page.tsx already 404s
+                    non-owners; this guard is the second layer. */}
+                {isOwner && session.flies_notes && (
                   <div className="text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
                     <span className="font-medium text-[#A8B2BD]">Rig: </span>{session.flies_notes}
                   </div>
@@ -928,7 +931,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Biggest</p>
                     </div>
                   )}
-                  {session.water_clarity && (
+                  {isOwner && session.water_clarity && (
                     <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
                       <p className="text-lg font-bold text-[#E8923A] leading-none mt-0.5">{session.water_clarity}</p>
                       <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Clarity</p>
@@ -988,8 +991,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
               {/* RIGHT: Strava-style big stats (hidden on mobile — stats shown in left column) */}
               <div className="hidden sm:block sm:w-72 flex-shrink-0">
-                {/* Session map */}
-                {session.latitude && session.longitude && (
+                {/* Session map — owner-only per privacy ethic (lat/lng/route_points
+                    are forbidden on public surfaces). Page-level guard already
+                    enforces this; isOwner here is belt-and-suspenders. */}
+                {isOwner && session.latitude && session.longitude && (
                   <SessionMiniMap
                     lat={session.latitude}
                     lng={session.longitude}
@@ -1013,7 +1018,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
                     <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
-                  {session.water_temp_f && (
+                  {isOwner && session.water_temp_f && (
                     <div>
                       <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{session.water_temp_f}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Water Temp</p>
@@ -1037,7 +1042,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
-                  {session.water_clarity && (
+                  {isOwner && session.water_clarity && (
                     <div>
                       <p className="text-xl font-bold font-mono text-[#E8923A] leading-none">{session.water_clarity}</p>
                       <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Clarity</p>
@@ -1101,8 +1106,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </div>
                 )}
 
-                {/* Gear row */}
-                {(() => {
+                {/* Gear row — owner-only per privacy ethic. */}
+                {isOwner && (() => {
                   const snap = session.gear_snapshot || {};
                   const rod = session.gear_rod || snap.rod;
                   const reel = session.gear_reel || snap.reel;
@@ -1209,8 +1214,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               </div>
           </div>
 
-          {/* ---- MOBILE-ONLY: Map (compact, below photos) ---- */}
-          {session.latitude && session.longitude && (
+          {/* ---- MOBILE-ONLY: Map (compact, below photos) — owner-only ---- */}
+          {isOwner && session.latitude && session.longitude && (
             <div className="sm:hidden mb-5">
               <SessionMiniMap
                 lat={session.latitude}

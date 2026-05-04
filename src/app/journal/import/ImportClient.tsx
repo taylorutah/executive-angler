@@ -36,7 +36,9 @@ type PreviewSession = {
   water_temp_f: number | null;
   water_clarity: string | null;
   weather: string | null;
-  privacy: "public" | "private";
+  // Imported sessions never broadcast — owner can opt in per session
+  // after import. Field kept on the type for transitional safety; the
+  // import route ignores it and always writes broadcast_presence=false.
   duplicate: boolean;
   rowIndices: number[];
   catches: PreviewCatch[];
@@ -91,7 +93,6 @@ Rules:
 - For sessions with no fish caught, leave all catch columns blank
 - water_clarity: one of ${WATER_CLARITY_VALUES.map((v) => `"${v}"`).join(", ")}
 - fly_position: one of ${FLY_POSITION_VALUES.map((v) => `"${v}"`).join(", ")}
-- privacy: "private" (recommended), or "public"
 - Skip any field you don't have — all are optional except session_date
 - Use consistent river names ("Madison River" not "Madison")
 - Wrap values containing commas in double quotes

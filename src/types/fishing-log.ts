@@ -72,7 +72,10 @@ export interface FishingSession {
   flies_notes?: string;
   tags?: string[];
   trip_tags?: string[];            // Trip categorization tags
-  privacy?: 'public' | 'private'; // Default: private
+  // privacy column was dropped in the 2026-05-04 privacy overhaul. The new
+  // field controls whether the session appears on the presence feed (river +
+  // section + weather only — never fish counts, GPS, or notes).
+  broadcast_presence?: boolean;
   // GPS data (from iOS session tracking)
   latitude?: number;
   longitude?: number;
