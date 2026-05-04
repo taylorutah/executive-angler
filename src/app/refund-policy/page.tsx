@@ -47,7 +47,7 @@ export default function RefundPolicyPage() {
           </h2>
           <p>
             Your journal, fly patterns, photos, and history stay untouched. A refund
-            just pauses Pro features (insights, Awards, leaderboards, Best Window
+            just pauses Pro features (personal insights, per-river scorecard, Best Window
             Calculator). Your free account remains fully yours forever, with
             unlimited sessions, unlimited flies, unlimited photos, and the full Fly
             Tying Workbench.

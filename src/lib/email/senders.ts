@@ -80,7 +80,7 @@ export function buildWelcome(args: {
       {
         title: "Unlock Pro when you're ready",
         body:
-          "Personal insights, per-river Awards, leaderboards, best-window calculator, and trophy wall &mdash; $2.99/month or $19.99/year.",
+          "Personal insights, per-river scorecard, best-window calculator, and trophy wall &mdash; built from your own data, never crowdsourced. $2.99/month or $19.99/year.",
       },
     ])}
     ${DIVIDER_HTML}
@@ -127,9 +127,9 @@ export function buildProWelcome(args: {
           "Fly effectiveness, time-of-day, weather correlations, best rivers &mdash; all pulled from your sessions.",
       },
       {
-        title: "Awards & River Leaderboards",
+        title: "Per-River Scorecard",
         body:
-          "Per-river progression (Regular &rarr; Master Angler) and where you rank on your home water.",
+          "Your sessions, top fly, best section, best month, gear &mdash; for every river you log. Visible only to you.",
       },
       {
         title: "Best Window Calculator",
@@ -153,7 +153,7 @@ export function buildProWelcome(args: {
   return {
     subject: "You're in. Welcome to Pro.",
     heading: `${greeting} Welcome to Pro.`,
-    preheader: "Insights, Awards, leaderboards, and the Best Window Calculator are unlocked.",
+    preheader: "Personal insights, per-river scorecard, and the Best Window Calculator are unlocked.",
     body,
     ctaLabel: "Manage subscription",
     ctaUrl: `${SITE_URL}/account#subscription`,
@@ -363,7 +363,7 @@ export function buildExpiringSoon(args: {
       Your promotional Pro access is wrapping up. Pro features will lock on <strong style="color:#D4751F;">${expiryLabel}</strong> unless you upgrade to a paid plan.
     </p>
     <p style="margin:0 0 16px;">
-      <strong style="color:#111827;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Insights Dashboard, Awards, River Leaderboards, Best Window Calculator) will pause.
+      <strong style="color:#111827;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Personal Insights, Per-River Scorecard, Best Window Calculator) will pause.
     </p>
     <p style="margin:0;">
       Three more days of Pro for less than a coffee: $2.99/month or $19.99/year.

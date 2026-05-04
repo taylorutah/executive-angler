@@ -732,9 +732,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <div className="h-14 w-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center mx-auto mb-4">
                       <Sparkles className="h-7 w-7 text-[#E8923A]" />
                     </div>
-                    <h3 className="font-serif text-xl text-[#F0F6FC] mb-2">See the patterns in your fishing</h3>
+                    <h3 className="font-serif text-xl text-[#F0F6FC] mb-2">See <em>your</em> patterns</h3>
                     <p className="text-sm text-[#A8B2BD] max-w-sm mx-auto mb-6">
-                      Insights, per-river Awards, leaderboards, and the Best Window Calculator &mdash; Pro is $2.99/mo or $19.99/yr.
+                      Personal insights, per-river scorecard, and the Best Window Calculator &mdash; built from your own data. Pro is $2.99/mo or $19.99/yr.
                     </p>
                     <Link
                       href="/pricing"

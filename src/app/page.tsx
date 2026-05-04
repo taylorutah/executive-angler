@@ -302,18 +302,21 @@ export default async function HomePage() {
                 </span>
               </div>
               <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
-                See the Patterns
+                See <em>your</em> patterns
               </h2>
-              <p className="text-[#A8B2BD] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-                Your own analytics engine: which flies work where, your best rivers, per-river Awards, live leaderboards, and the flow ranges where you actually catch fish.
+              <p className="text-[#A8B2BD] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
+                Your private intelligence layer: which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers.
+              </p>
+              <p className="text-[#6E7681] text-sm mb-10 max-w-xl mx-auto">
+                We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
               </p>
             </ScrollAnimation>
             <ScrollAnimation delay={0.15}>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
                 {[
-                  { title: "Insights Dashboard", desc: "Fly effectiveness, best rivers, time-of-day and weather correlations &mdash; straight from your sessions" },
-                  { title: "Awards & Leaderboards", desc: "Per-river progression from Regular to Master Angler, plus where you rank on your home water" },
-                  { title: "Best Window Calculator", desc: "Your personal catch history overlaid on live USGS flow &mdash; know when to drop everything and go" },
+                  { title: "Per-river Scorecard", desc: "Your sessions, top fly, best section, best month, gear &mdash; for every river you log" },
+                  { title: "Best Window Calculator", desc: "Your catch history overlaid on live USGS flow &mdash; know when to drop everything and go" },
+                  { title: "Personal Insights", desc: "Time-of-day, weather, and hatch correlations across your full journal &mdash; export anytime" },
                 ].map((f) => (
                   <div key={f.title} className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 text-left">
                     <h4 className="text-[#F0F6FC] font-semibold text-sm mb-1">{f.title}</h4>

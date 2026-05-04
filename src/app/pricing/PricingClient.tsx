@@ -20,28 +20,28 @@ const ANNUAL_MONTHLY = (ANNUAL_PRICE / 12).toFixed(2);
 const SAVINGS_PCT = Math.round(((MONTHLY_PRICE * 12 - ANNUAL_PRICE) / (MONTHLY_PRICE * 12)) * 100);
 
 const PRO_FEATURES = [
-  { icon: BarChart3, label: "Insights Dashboard", desc: "Your best flies, times, weather, rivers, and species — computed from your sessions." },
-  { icon: Award, label: "Awards & Badges", desc: "Per-river progression: Regular → Veteran → Legend → Centurion → Master Angler." },
-  { icon: Trophy, label: "River Intel Leaderboards", desc: "River Champion, Biggest Fish Ever, Hot Hand, top flies, best sections." },
+  { icon: BarChart3, label: "Personal Insights Dashboard", desc: "Your best flies, times, weather, rivers, and species — computed from your sessions only." },
   { icon: Waves, label: "Best Window Calculator", desc: "Your catch history overlaid on live USGS flow — know when to fish." },
-  { icon: Target, label: "Trophy Wall+", desc: "Biggest per species, per river, top 5 sessions, most-species day." },
-  { icon: CalendarRange, label: "Year-over-Year", desc: "\"Last April: 12 fish. This April: 18.\" Seasonal overlays." },
+  { icon: Target, label: "Per-River Scorecard", desc: "Your sessions, top fly, best section, best month, gear — for every river you log." },
+  { icon: Trophy, label: "Trophy Wall+", desc: "Biggest per species, per river, top 5 sessions, most-species day." },
+  { icon: CalendarRange, label: "Year-over-Year", desc: "\"Last April: 12 fish. This April: 18.\" Seasonal overlays on your own data." },
   { icon: Flame, label: "Streak Stats", desc: "Current and longest fishing streaks. Habit-forming." },
-  { icon: Wrench, label: "Gear Stats", desc: "\"Your Sage has caught 3x more than your Winston.\"" },
+  { icon: Wrench, label: "Gear Stats", desc: "\"Your Sage has caught 3x more than your Winston.\" — for your eyes only." },
+  { icon: Award, label: "Personal Bests Badges", desc: "Per-river progression markers from your own logs (private to you)." },
   { icon: Crown, label: "Pro Badge", desc: "A small, tasteful marker on your profile." },
   { icon: Sparkles, label: "Early Access", desc: "New features for Pro first." },
 ];
 
 const FREE_FEATURES = [
-  "Log unlimited sessions and catches",
+  "Log unlimited sessions and catches (private by default)",
   "Unlimited fly box + photos per catch",
   "Full Fly Tying Workbench + \"What Can I Tie?\" matcher",
   "500+ materials database + community submissions",
-  "138 rivers with live USGS flow + hatch charts",
+  "200+ rivers with live USGS flow + hatch charts",
   "Full directory: lodges, guides, fly shops, destinations, species, articles",
-  "Private sessions, CSV import/export, PDF trip reports",
-  "Community feed, follows, kudos, comments, DMs",
-  "Basic stats, calendar view, trophy wall highlight",
+  "Recent Fly Choices on every river page (community fly pulse, no fish counts)",
+  "Optional presence broadcast on the feed (river + weather only)",
+  "Basic personal stats, calendar view, trophy wall highlight",
 ];
 
 export default function PricingClient({
@@ -115,11 +115,13 @@ export default function PricingClient({
             <span className="text-xs font-semibold text-[#E8923A] tracking-wide">EXECUTIVE ANGLER PRO</span>
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl text-[#F0F6FC] mb-4">
-            See the patterns. $2.99.
+            See <em>your</em> patterns. $2.99.
           </h1>
-          <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto">
-            Every session you log makes your insights sharper. Pro turns your fishing data
-            into the kind of awareness that changes how you fish.
+          <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto mb-3">
+            Every session you log makes Pro sharper for you specifically. Your private intelligence layer — never crowdsourced from other anglers.
+          </p>
+          <p className="text-sm text-[#6E7681] max-w-2xl mx-auto">
+            We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
           </p>
         </div>
       </div>
@@ -160,7 +162,7 @@ export default function PricingClient({
                       Promo Pro active — expires {promoExpiryLabel}
                     </h3>
                     <p className="text-sm text-[#A8B2BD]">
-                      Lock in paid access so you don&apos;t lose awards, leaderboards,
+                      Lock in paid access so you don&apos;t lose your scorecard, insights,
                       or the best-window calculator when the promo ends. Your journal
                       data stays yours either way.
                     </p>
@@ -229,7 +231,7 @@ export default function PricingClient({
               <div className="p-6 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/50 relative">
                 <div className="absolute -top-3 left-6">
                   <span className="text-[10px] font-bold tracking-wider bg-[#E8923A] text-[#0D1117] px-3 py-1 rounded-full uppercase">
-                    See the Patterns
+                    Your Private Layer
                   </span>
                 </div>
                 <h3 className="text-sm font-bold text-[#E8923A] tracking-wider uppercase mb-1">Pro</h3>

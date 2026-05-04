@@ -5,7 +5,7 @@ import { checkPremium } from "@/lib/admin";
 export const metadata = {
   title: "Pricing — Executive Angler Pro",
   description:
-    "See the patterns in your fishing. Pro is $2.99/mo or $19.99/yr — insights, awards, leaderboards, and more. 30-day money-back guarantee.",
+    "See your patterns. Pro is $2.99/mo or $19.99/yr — your private intelligence layer. We never publish locations or fish counts. 30-day money-back guarantee.",
 };
 
 export default async function PricingPage() {

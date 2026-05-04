@@ -279,8 +279,8 @@ export default function DashboardClient({
                   <Sparkles className="h-5 w-5 text-[#E8923A]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">See the patterns &mdash; Pro $2.99/mo</h3>
-                  <p className="text-[11px] text-[#A8B2BD] truncate">Insights, Awards, leaderboards, and the Best Window Calculator</p>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">See <em>your</em> patterns &mdash; Pro $2.99/mo</h3>
+                  <p className="text-[11px] text-[#A8B2BD] truncate">Per-river scorecard, personal insights, Best Window — your data, never crowdsourced</p>
                 </div>
                 <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors shrink-0" />
               </Link>

@@ -4,7 +4,7 @@ import { SITE_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Pro is Free for Guides",
-  description: `If you're a licensed fly fishing guide, ${SITE_NAME} Pro is free for you &mdash; forever. Claim your directory profile and get access to insights, Awards, leaderboards, and the Best Window Calculator at no cost.`,
+  description: `If you're a licensed fly fishing guide, ${SITE_NAME} Pro is free for you &mdash; forever. Claim your directory profile and get access to personal insights, per-river scorecard, and the Best Window Calculator at no cost.`,
 };
 
 export default function ForGuidesPage() {
@@ -40,7 +40,7 @@ export default function ForGuidesPage() {
             What you get
           </h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Everything in Pro: Insights Dashboard, per-river Awards, River Intel Leaderboards, Best Window Calculator, Trophy Wall+, year-over-year, streak stats, gear stats.</li>
+            <li>Everything in Pro: Personal Insights Dashboard, Per-River Scorecard, Best Window Calculator, Trophy Wall+, year-over-year, streak stats, gear stats &mdash; all built from your own data, never crowdsourced.</li>
             <li>A claimed directory profile at <code className="text-[#E8923A]">{`/guides/your-name`}</code> with your bio, specialties, rivers you guide, rates, and contact info.</li>
             <li>A subtle <em>Pro</em> badge on your profile &mdash; clients can see you&apos;re serious about your craft.</li>
             <li>Early access to new features before public launch.</li>
