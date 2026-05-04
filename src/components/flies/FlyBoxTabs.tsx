@@ -89,7 +89,8 @@ interface FlyBoxTabsProps {
   canonicalNames: string[];
 }
 
-// Toggle button for favorite/tie-next actions on a card
+// Toggle button for favorite/tie-next actions on a card. Heart stays as a
+// compact icon; Tie Next is a labeled pill so its toggled state is obvious.
 function CardActions({
   card,
   onToggleFavorite,
@@ -103,7 +104,7 @@ function CardActions({
   const isTie = card.source === 'library' ? card.entry.is_tie_next : card.fly.is_tie_next;
 
   return (
-    <div className="flex gap-1">
+    <div className="flex items-center gap-1.5">
       <button
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(card); }}
         title={isFav ? "Remove from Favorites" : "Add to Favorites"}
@@ -113,19 +114,31 @@ function CardActions({
             : 'text-[#6E7681] hover:text-red-400'
         }`}
       >
-        <Heart className={`h-3 w-3 ${isFav ? 'fill-red-400' : ''}`} />
+        <Heart className={`h-3.5 w-3.5 ${isFav ? 'fill-red-400' : ''}`} />
       </button>
       <button
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleTieNext(card); }}
-        title={isTie ? "Remove from Tie Next" : "Add to Tie Next"}
-        className={`p-1 rounded transition-colors ${
+        title={isTie ? "Remove from Tie Next queue" : "Add to Tie Next queue"}
+        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-colors ${
           isTie
-            ? 'text-[#E8923A] hover:text-[#F0A65A]'
-            : 'text-[#6E7681] hover:text-[#E8923A]'
+            ? 'bg-[#E8923A] text-white hover:bg-[#F0A65A] shadow-sm shadow-[#E8923A]/30'
+            : 'bg-[#21262D] text-[#A8B2BD] hover:bg-[#E8923A]/15 hover:text-[#E8923A]'
         }`}
       >
-        <ListChecks className={`h-3 w-3`} />
+        {isTie ? <Check className="h-3 w-3" /> : <ListChecks className="h-3 w-3" />}
+        <span>{isTie ? 'Queued' : 'Tie Next'}</span>
       </button>
+    </div>
+  );
+}
+
+// Corner ribbon overlaid on the card photo when queued — the strongest
+// at-a-glance signal in a dense card grid.
+function TieNextRibbon() {
+  return (
+    <div className="absolute top-1.5 right-1.5 z-10 inline-flex items-center gap-1 rounded-full bg-[#E8923A] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow-md shadow-black/30 ring-1 ring-white/30">
+      <ListChecks className="h-2.5 w-2.5" />
+      <span>Tie Next</span>
     </div>
   );
 }
@@ -405,7 +418,10 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
           <Heart className="h-3 w-3" /> tap to favorite
         </span>
         <span className="inline-flex items-center gap-1">
-          <ListChecks className="h-3 w-3" /> tap to queue for tying
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#21262D] text-[9px] font-semibold uppercase tracking-wider text-[#A8B2BD]">
+            <ListChecks className="h-2.5 w-2.5" /> Tie Next
+          </span>
+          tap to queue for the vise
         </span>
         {tab === 'tie-next' ? (
           <span className="inline-flex items-center gap-1">
@@ -469,10 +485,16 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                 {filteredCards.map(card => {
                   if (card.source === 'library') {
                     const cf = card.entry.canonical_fly;
+                    const queued = !!card.entry.is_tie_next;
                     return (
-                      <div key={card.entry.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                      <div key={card.entry.id} className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
+                        queued
+                          ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
+                          : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
+                      }`}>
                         <Link href={`/flies/${cf.slug}`}>
                           <div className="relative aspect-square bg-white overflow-hidden">
+                            {queued && <TieNextRibbon />}
                             {cf.hero_image_url ? (
                               <img
                                 src={cf.hero_image_url}
@@ -514,10 +536,16 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
 
                   // Personal fly
                   const fly = card.fly;
+                  const queued = !!fly.is_tie_next;
                   return (
-                    <div key={fly.id} className="group flex flex-col bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden hover:shadow-md hover:border-[#E8923A]/30 transition-all">
+                    <div key={fly.id} className={`group flex flex-col bg-[#161B22] rounded-xl border overflow-hidden transition-all ${
+                      queued
+                        ? 'border-[#E8923A]/60 shadow-md shadow-[#E8923A]/10 hover:border-[#E8923A]'
+                        : 'border-[#21262D] hover:shadow-md hover:border-[#E8923A]/30'
+                    }`}>
                       <Link href={`/journal/flies/${fly.id}/edit`}>
                         <div className="relative aspect-square bg-[#0D1117] overflow-hidden">
+                          {queued && <TieNextRibbon />}
                           {fly.image_url ? (
                             <Image
                               src={fly.image_url}
