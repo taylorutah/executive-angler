@@ -4417,4 +4417,179 @@ export const articles: Article[] = [
       "Learn catch and release best practices to maximize fish survival. Covers barbless hooks, proper handling, landing techniques, and warm-water considerations.",
     featured: false,
   },
+  {
+    id: "article-fly-box-tier-system",
+    slug: "fly-box-tier-system",
+    title: "The Fly Box Tier System: How I Actually Organize My Boxes",
+    subtitle: "A 3-tier setup built around probability of use, not pattern type",
+    author: "Taylor Warnick",
+    category: "gear",
+    heroImageUrl: "/images/articles/essential-fly-box-20-patterns-hero.jpg",
+    thumbnailUrl: "/images/articles/essential-fly-box-20-patterns-hero.jpg",
+    excerpt:
+      "Most anglers organize fly boxes by pattern type — dries here, nymphs there, streamers in the back. That's wrong. Here's the 3-tier system I actually run, built around probability of use under real fishing pressure.",
+    content: `<h2>Most anglers organize their fly boxes wrong</h2>
+
+<p>Walk into any fly shop and look at how the bins are organized: dries, nymphs, streamers, terrestrials. That's how shops sell flies. It's not how you should fish them.</p>
+
+<p>Organizing your fly boxes by pattern type is a static, inventory-style system. It tells you what you own. It doesn't tell you what to tie on at 9 AM on a cold tailwater when fish are eating midges and you're trying to rig fast.</p>
+
+<p>The system I run is built around a different question: <em>under real fishing pressure, what's the probability I'll actually use this fly today?</em> That question forces you to build three tiers, and the tiers are what make the whole thing work.</p>
+
+<h2>Tier 1 — The Kill Box (on your chest)</h2>
+
+<p>This is a single medium CF Design insert that lives on a lanyard or in a chest pack. It is the only box you should be able to access without taking your pack off.</p>
+
+<p>The Kill Box contains the flies I <em>expect</em> to fish every outing. Patterns I have full confidence in. Patterns I can pick without thinking. The whole point of this tier is to eliminate decision friction at the moment of contact with the water.</p>
+
+<p>Contents look like this:</p>
+
+<ul>
+<li><strong>Top 2–3 confidence patterns per category</strong> — not the whole spread, just the killers</li>
+<li><strong>Euro nymph anchors</strong> — Perdigons and jig bombs in the weights I trust</li>
+<li><strong>Tag nymphs</strong> — smaller, slimmer profiles for the dropper position</li>
+<li><strong>1–2 confidence dries</strong> — enough to run a dry-dropper without switching boxes</li>
+<li><strong>A couple problem solvers</strong> — worm, mop, junk patterns for when the technical game isn't working</li>
+</ul>
+
+<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-forest-dark mb-1">The Kill Box rule</p>
+  <p class="text-[#D8DEE4] text-sm">If you hesitate whether a fly belongs here, it doesn't. Hesitation is the signal. Confidence patterns don't generate doubt — they generate "tie it on, move on."</p>
+</div>
+
+<p>Most anglers carry fifty or more flies on their chest. I carry twelve to twenty. The reduction isn't restraint — it's the entire mechanism. A smaller, sharper Kill Box forces you to actually <em>fish</em> instead of standing in the water shopping through patterns.</p>
+
+<h2>Tier 2 — The Support Box (in pack/vest)</h2>
+
+<p>Another medium CF insert, or a small one if you're trying to keep weight down. Lives in your pack or vest. You access it after you've already diagnosed the water and decided the Kill Box needs reinforcement.</p>
+
+<p>The Support Box is not a duplicate of the Kill Box. It's the variation layer. Same flies, different parameters:</p>
+
+<ul>
+<li><strong>Size changes</strong> — same pattern, smaller and larger than the Kill Box version</li>
+<li><strong>Weight variations</strong> — same bug, different bead. Tungsten 3.5 mm vs 2.8 mm vs 2.0 mm. The water decides.</li>
+<li><strong>Slight color shifts</strong> — olive vs brown vs black on the same Perdigon profile</li>
+<li><strong>A few specialty patterns</strong> — situational stuff that comes out when the day calls for it</li>
+</ul>
+
+<p>This is the box you reach for after the first hour, once you've watched the water, taken a temp reading, looked at what's coming off, and need to dial. It's not for the cold-start of the day. It's for the adjustment.</p>
+
+<h2>Tier 3 — The Archive (your big storage box)</h2>
+
+<p>This is where most anglers mess up. They treat their large box as a fishing box — a slightly bigger Kill Box. It's not. It should never come to the river.</p>
+
+<p>The Archive is a modular inventory system. It lives in your truck, your garage, or the trunk of your vehicle. It's not for fishing. It's for <em>resupply and curation</em>.</p>
+
+<p>I run a large CF Design storage box with multiple inserts, and the inserts are organized by <em>function</em>, not by pattern name.</p>
+
+<h2>Organize the Archive by function, not by pattern name</h2>
+
+<p>Pattern-name organization (a Perdigon insert, a Pheasant Tail insert) is convenient for tying. It is useless for fishing. When you reach into the Archive before a trip, you're not asking "do I have Perdigons?" — you're asking "do I have what I need for cold, low, technical water?"</p>
+
+<p>Organize the inserts to match how you'll actually deploy them.</p>
+
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-sm border-collapse">
+    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Insert</th><th class="text-left p-3">Role</th><th class="text-left p-3">Contents</th></tr></thead>
+    <tbody>
+      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Deep / Fast Water Ammo</td><td class="p-3">Get down, get down hard</td><td class="p-3">Heavy anchors, oversized tungsten, weird profiles you don't fish often</td></tr>
+      <tr class="border-b border-[#21262D] bg-[#161B22]"><td class="p-3 font-semibold">Low / Clear Water</td><td class="p-3">When fish are spooky</td><td class="p-3">Micro nymphs, sparse patterns, tiny profiles</td></tr>
+      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Weird / Experimental</td><td class="p-3">Testing ground</td><td class="p-3">Bugs you tied or bought but don't trust yet</td></tr>
+      <tr class="border-b border-[#21262D] bg-[#161B22]"><td class="p-3 font-semibold">Hatch-Specific / Seasonal</td><td class="p-3">Match the calendar</td><td class="p-3">BWO, PMD, caddis, stones — only when the season demands it</td></tr>
+      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Dry Fly Reserve</td><td class="p-3">Surface options</td><td class="p-3">Extras and patterns you don't run often, kept ready</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>Each insert has one role. You don't mix roles within an insert. That's the whole point — when you're loading out for a trip, you reach for the role, not the pattern.</p>
+
+<h2>You're managing transfers, not flies</h2>
+
+<p>The system only works if flies move between tiers <em>intentionally</em>. The Kill Box, Support Box, and Archive aren't static. They breathe.</p>
+
+<p><strong>Before a trip:</strong></p>
+<ul>
+<li>Pull from Tier 3 → Tier 2 if conditions suggest specialty patterns will matter</li>
+<li>Refine Tier 1 based on the expected water — swap a 3.0 mm anchor for a 2.5 mm if you're fishing slower water than usual</li>
+</ul>
+
+<p><strong>After a trip:</strong></p>
+<ul>
+<li>Promote anything that produced — if a fly caught fish you didn't expect, it earns a spot in Tier 1</li>
+<li>Demote anything that sat untouched for multiple trips — back to the Archive, or out of the Kill Box and into Support</li>
+</ul>
+
+<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-forest-dark mb-1">This is the edge</p>
+  <p class="text-[#D8DEE4] text-sm">A static fly box stays the same season after season. A tier system that breathes evolves into a personal record of what actually works on your water. After a year of intentional transfers, your Kill Box is a curated weapon — not a generic loadout.</p>
+</div>
+
+<h2>Insert strategy: treat them like magazines</h2>
+
+<p>Inserts matter more than people realize. Use them like interchangeable magazines — each one has a defined role, and you swap them in and out depending on the day.</p>
+
+<ul>
+<li><strong>Label or mentally assign each insert a role</strong> — never let them drift into mixed-purpose</li>
+<li><strong>Don't mix categories within an insert</strong> — visual clarity is performance</li>
+<li><strong>Keep density high but not cluttered</strong> — full slits, not crammed slits. You should be able to see every fly at a glance</li>
+</ul>
+
+<p>The visual layout of an insert is a tactical asset. When you flip open the Kill Box at 6 AM, you should see the answer, not have to search for it.</p>
+
+<h2>The competitive mindset shift</h2>
+
+<p>Before every trip, ask yourself one question:</p>
+
+<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
+  <p class="font-semibold text-[#E8923A] mb-1">The thirty-second rule</p>
+  <p class="text-[#D8DEE4] text-sm italic">If I had thirty seconds to rig for money, what flies would I want directly in front of me?</p>
+</div>
+
+<p>That answer is your Kill Box. Everything else is support.</p>
+
+<p>This question forces clarity. The flies you'd actually want in your hands under pressure are almost never the ones you've been carrying out of habit. They're a smaller list. They're more specific. And they change based on the water you're about to fish.</p>
+
+<h2>The mistake to avoid</h2>
+
+<p>Most anglers carry too many flies, make too many decisions, and stack redundancy in the wrong tier — five different Pheasant Tails on their chest, but no specialty patterns in the pack when conditions shift.</p>
+
+<p>What you actually want:</p>
+
+<ul>
+<li><strong>Low decision friction</strong> — fewer flies in the Kill Box, picked faster</li>
+<li><strong>High confidence density</strong> — every fly on your chest is a killer, not a maybe</li>
+<li><strong>Fast pattern iteration</strong> — when the first two flies don't work, the third is in the Support Box, not buried in a compartment somewhere</li>
+</ul>
+
+<h2>My loadout right now</h2>
+
+<p>For context — here's what I'm actually running today:</p>
+
+<p><strong>Chest box (medium CF insert):</strong> twelve to twenty flies, max. Heavily biased toward Perdigons in olive, black, and red-hot-spot in sizes 14, 16, and 18, with a mix of 2.8 and 3.5 mm tungsten beads. A handful of Walt's Worm variants for tag droppers. A couple of simple attractor patterns for prospecting. One or two confidence dries — usually a Parachute Adams and a small Chubby Chernobyl for dry-dropper days. That's it.</p>
+
+<p><strong>Pack box (medium CF insert):</strong> same fly families, but the variation layer. Lighter and heavier beads on the same Perdigon profiles. Smaller and larger sizes. Olive Walt's, brown Walt's, black Walt's. A few BWO emergers for shoulder-season tailwater days. Specialty stuff like a hot-bead Frenchie for when fish want some flash.</p>
+
+<p><strong>Large CF Archive:</strong> five inserts organized by function. Cold weeks before a trip, I pull from the Archive into the Pack box. Hot weeks where I know exactly what's working, I don't even open it.</p>
+
+<p>That's the system. It's not complicated. The work is in the discipline of not letting it drift back into a giant pile of flies you sort of trust. Three tiers. Defined roles. Intentional transfers. Everything else takes care of itself.</p>`,
+    readingTimeMinutes: 9,
+    tags: [
+      "fly box",
+      "organization",
+      "euro nymphing",
+      "competitive",
+      "gear",
+      "perdigons",
+      "dry-dropper",
+      "tactics",
+    ],
+    relatedDestinationIds: ["dest-utah"],
+    relatedRiverIds: ["provo-river"],
+    publishedAt: "2026-05-05T08:00:00Z",
+    metaTitle:
+      "The Fly Box Tier System: How I Actually Organize My Boxes | Executive Angler",
+    metaDescription:
+      "A 3-tier fly box system built for performance fishing. Kill Box on your chest, Support Box in your pack, Archive at home — organized by probability of use.",
+    featured: true,
+  },
 ];
