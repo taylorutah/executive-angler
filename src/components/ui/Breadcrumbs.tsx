@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import { SITE_URL } from "@/lib/constants";
 
 interface BreadcrumbItem {
@@ -31,15 +31,33 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     ],
   };
 
+  // Mobile shows only "← <parent>" (the most recent ancestor with an href).
+  // If no item has an href, fall back to "← Home".
+  const parent = [...items].reverse().find((it) => it.href);
+  const mobileBack = parent ?? { label: "Home", href: "/" };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Mobile: compact back link only */}
+      <nav aria-label="Breadcrumb" className="sm:hidden">
+        <Link
+          href={mobileBack.href ?? "/"}
+          className="inline-flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-accent transition-colors"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          <span className="truncate max-w-[55vw]">{mobileBack.label}</span>
+        </Link>
+      </nav>
+
+      {/* Desktop: full chain */}
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="hidden sm:flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         <Link
           href="/"

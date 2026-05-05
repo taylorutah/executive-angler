@@ -436,16 +436,16 @@ export default function DashboardClient({
                             <Link href={riverHref} className="font-serif text-lg text-[#F0F6FC] hover:text-[#E8923A] transition-colors">
                               {rs.river_name}
                             </Link>
-                            <div className="flex items-center gap-3 text-xs text-[#A8B2BD] mt-1">
-                              <span>{rs.total_sessions} session{rs.total_sessions !== 1 ? "s" : ""}</span>
-                              <span className="text-[#21262D]">|</span>
-                              <span>{rs.total_fish} fish</span>
-                              <span className="text-[#21262D]">|</span>
-                              <span>Last: {timeAgo(rs.last_session)}</span>
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[#A8B2BD] mt-1">
+                              <span className="whitespace-nowrap">{rs.total_sessions} session{rs.total_sessions !== 1 ? "s" : ""}</span>
+                              <span className="text-[#21262D]">·</span>
+                              <span className="whitespace-nowrap">{rs.total_fish} fish</span>
+                              <span className="text-[#21262D]">·</span>
+                              <span className="whitespace-nowrap">Last {timeAgo(rs.last_session)}</span>
                             </div>
                           </div>
                           {AWARDS_VISIBLE && isPremium && rs.awards.length > 0 && (
-                            <div className="flex gap-1.5 shrink-0">
+                            <div className="hidden sm:flex gap-1.5 shrink-0">
                               {rs.awards.slice(0, 4).map((a) => {
                                 const EMOJI_MAP: Record<string, string> = {
                                   first_timer: "🪝", sessions_10: "🪝",
