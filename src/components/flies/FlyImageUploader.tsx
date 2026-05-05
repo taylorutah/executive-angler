@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 import Image from "next/image";
@@ -105,84 +106,91 @@ export default function FlyImageUploader({
     onFileChange(null);
   }
 
-  if (cropMode && rawImageUrl) {
-    return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 bg-[#161B22] border-b border-[#21262D]">
-          <div className="flex items-center gap-2">
-            <Crop className="h-5 w-5 text-[#E8923A]" />
-            <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
-            <span className="text-[10px] text-[#6E7681] ml-2">
-              Drag to reposition · Scroll to zoom
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={handleCropCancel}
-            className="text-[#6E7681] hover:text-[#F0F6FC]"
-            aria-label="Cancel crop"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex-1 relative">
-          <Cropper
-            image={rawImageUrl}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
-            showGrid
-            cropShape="rect"
-            style={{
-              containerStyle: { background: "#000" },
-              cropAreaStyle: { border: "2px solid #E8923A" },
-            }}
-          />
-        </div>
-        <div className="px-6 py-4 bg-[#161B22] border-t border-[#21262D]">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-xs text-[#A8B2BD]">Zoom</span>
-            <input
-              type="range"
-              min={1}
-              max={3}
-              step={0.05}
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1 accent-[#E8923A]"
-              aria-label="Zoom level"
-            />
-            <span className="text-xs text-[#A8B2BD] font-mono w-10 text-right">
-              {zoom.toFixed(1)}×
-            </span>
-          </div>
-          <div className="flex gap-3">
+  if (cropMode && rawImageUrl && typeof document !== "undefined") {
+    // Render through a portal at document.body so the modal isn't trapped
+    // inside any ancestor that creates a containing block for fixed
+    // positioning (transforms, sticky parents, etc.) — that's what was
+    // making it spill into the page flow with the header still visible.
+    return createPortal(
+      <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-xl max-h-[calc(100vh-2rem)] flex flex-col bg-[#161B22] rounded-2xl overflow-hidden border border-[#21262D] shadow-2xl">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#21262D] flex-shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <Crop className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+              <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
+              <span className="text-[10px] text-[#6E7681] ml-2 hidden sm:inline">
+                Drag · Scroll to zoom
+              </span>
+            </div>
             <button
               type="button"
               onClick={handleCropCancel}
-              className="flex-1 px-4 py-3 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+              className="text-[#6E7681] hover:text-[#F0F6FC] flex-shrink-0"
+              aria-label="Cancel crop"
             >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleCropConfirm}
-              disabled={cropProcessing || !croppedAreaPixels}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
-            >
-              {cropProcessing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <CheckCircle className="h-4 w-4" />
-              )}
-              {cropProcessing ? "Processing..." : "Apply Crop"}
+              <X className="h-5 w-5" />
             </button>
           </div>
+          <div className="relative w-full aspect-square bg-black flex-shrink-0">
+            <Cropper
+              image={rawImageUrl}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+              showGrid
+              cropShape="rect"
+              style={{
+                containerStyle: { background: "#000" },
+                cropAreaStyle: { border: "2px solid #E8923A" },
+              }}
+            />
+          </div>
+          <div className="px-4 py-3 border-t border-[#21262D] flex-shrink-0">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-xs text-[#A8B2BD]">Zoom</span>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.05}
+                value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                className="flex-1 accent-[#E8923A]"
+                aria-label="Zoom level"
+              />
+              <span className="text-xs text-[#A8B2BD] font-mono w-10 text-right">
+                {zoom.toFixed(1)}×
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleCropCancel}
+                className="flex-1 px-4 py-2.5 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCropConfirm}
+                disabled={cropProcessing || !croppedAreaPixels}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+              >
+                {cropProcessing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4" />
+                )}
+                {cropProcessing ? "Processing..." : "Apply Crop"}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </div>,
+      document.body,
     );
   }
 
