@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
+import FlyPicker from "@/components/flies/FlyPicker";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 import { compressImage } from "@/lib/image-compress";
 import dynamic from "next/dynamic";
@@ -20,6 +21,8 @@ interface Catch {
   length_inches: string;
   quantities: number;
   fly_pattern_id?: string;
+  canonical_fly_id?: string;
+  fly_name?: string;
   fly_position: string;
   fly_size: string;
   bead_size: string;
@@ -359,6 +362,8 @@ export default function EditSessionPage() {
           length_inches: c.length_inches ?? null,
           quantities: c.quantities ?? 1,
           fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+          canonical_fly_id: c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null,
+          fly_name: c.fly_name || null,
           fly_position: c.fly_position || null,
           fly_size: c.fly_size || null,
           bead_size: c.bead_size || null,
@@ -716,30 +721,42 @@ export default function EditSessionPage() {
                       </div>
                       <div className="col-span-2">
                         <label className={label}>Fly Pattern</label>
-                        <select className={input} value={c.fly_pattern_id || ""} onChange={(e) => {
-                          if (e.target.value === "__NEW__") {
+                        <FlyPicker
+                          value={
+                            c.fly_pattern_id
+                              ? { source: "personal", id: c.fly_pattern_id, name: c.fly_name || flies.find((f) => f.id === c.fly_pattern_id)?.name || "Selected fly" }
+                              : c.canonical_fly_id
+                                ? { source: "canonical", id: c.canonical_fly_id, name: c.fly_name || catalogFlies.find((f) => f.id === c.canonical_fly_id)?.name || "Selected fly" }
+                                : null
+                          }
+                          onChange={(sel) => {
+                            if (!sel) {
+                              updateCatch(i, "fly_pattern_id", "");
+                              updateCatch(i, "canonical_fly_id", "");
+                              updateCatch(i, "fly_name", "");
+                            } else if (sel.source === "personal") {
+                              updateCatch(i, "fly_pattern_id", sel.id);
+                              updateCatch(i, "canonical_fly_id", "");
+                              updateCatch(i, "fly_name", sel.name);
+                            } else {
+                              updateCatch(i, "canonical_fly_id", sel.id);
+                              updateCatch(i, "fly_pattern_id", "");
+                              updateCatch(i, "fly_name", sel.name);
+                            }
+                          }}
+                          placeholder="Search your flies and the library…"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
                             setNewFlyCatchIdx(i);
                             setNewFlyForm({ name: "", type: "", size: "" });
                             setShowNewFly(true);
-                            // Reset the select back so it doesn't stick on "__NEW__"
-                            e.target.value = c.fly_pattern_id || "";
-                          } else {
-                            updateCatch(i, "fly_pattern_id", e.target.value);
-                          }
-                        }}>
-                          <option value="">— Select fly —</option>
-                          {flies.length > 0 && (
-                            <optgroup label="My Fly Box">
-                              {flies.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
-                            </optgroup>
-                          )}
-                          {catalogFlies.length > 0 && (
-                            <optgroup label="Fly Library">
-                              {catalogFlies.map(f => <option key={`cat-${f.id}`} value={f.id}>{f.name}{f.category ? ` (${f.category})` : ""}</option>)}
-                            </optgroup>
-                          )}
-                          <option value="__NEW__">+ Add New Fly</option>
-                        </select>
+                          }}
+                          className="mt-1 text-[10px] text-[#6E7681] hover:text-[#E8923A]"
+                        >
+                          + Add a new pattern
+                        </button>
                       </div>
                       <div>
                         <label className={label}>Position</label>

@@ -198,6 +198,7 @@ export async function POST(req: NextRequest) {
         session_id: session.id,
         user_id: user.id,
         fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
+        canonical_fly_id: c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null,
         length_inches: stripNum(c.length_inches) ?? null,
         quantities: c.quantities ? Number(c.quantities) || null : null,
       };
@@ -299,6 +300,9 @@ export async function PATCH(req: NextRequest) {
           fly_pattern_id: c.fly_pattern_id !== undefined
             ? (c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null)
             : (existing?.fly_pattern_id ?? null),
+          canonical_fly_id: c.canonical_fly_id !== undefined
+            ? (c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null)
+            : (existing?.canonical_fly_id ?? null),
           fly_position: v("fly_position"),
           fly_size: v("fly_size"),
           bead_size: v("bead_size"),
