@@ -220,7 +220,9 @@ export default function FlyImageUploader({
           </div>
         </div>
       ) : (
-        <label
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
           className="flex flex-col items-center justify-center w-full aspect-square bg-[#0D1117] border-2 border-dashed border-[#21262D] rounded-xl cursor-pointer hover:border-[#E8923A]/40 transition-colors"
           onDragOver={(e) => {
             e.preventDefault();
@@ -236,16 +238,6 @@ export default function FlyImageUploader({
             if (f) handleFileSelect(f);
           }}
         >
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleFileSelect(f);
-              e.target.value = "";
-            }}
-          />
           <Camera className="h-8 w-8 text-[#6E7681] mb-2" />
           <span className="text-sm text-[#A8B2BD] font-medium">
             Drop photo here or click to browse
@@ -253,7 +245,7 @@ export default function FlyImageUploader({
           <span className="text-[10px] text-[#6E7681] mt-1">
             Crop & zoom · 1:1 · JPEG/PNG/WebP · 15 MB max
           </span>
-        </label>
+        </button>
       )}
 
       <input
