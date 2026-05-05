@@ -16,6 +16,7 @@ import {
   Camera,
   Mail,
   Feather,
+  Wrench,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -101,12 +102,16 @@ export default function AdminSidebar() {
         </nav>
       </div>
 
-      {/* Photos */}
+      {/* Moderation */}
       <div>
         <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
           Moderation
         </p>
         <NavLink item={photosLink} pathname={pathname} />
+        <NavLink
+          item={{ href: "/admin/content/materials", label: "Materials Queue", icon: <Wrench className="h-4 w-4" /> }}
+          pathname={pathname}
+        />
       </div>
 
       {/* Tools */}

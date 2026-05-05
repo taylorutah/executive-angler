@@ -11,6 +11,8 @@ import {
 import type { TyingMaterial, UserMaterialInventory, MaterialCategory } from '@/types/materials';
 import HelpHint from '@/components/ui/HelpHint';
 import TipCard from '@/components/ui/TipCard';
+import { SubmitMaterialForm } from '@/components/flies/SubmitMaterialForm';
+import { QuickVariantModal } from '@/components/flies/QuickVariantModal';
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -111,6 +113,23 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   const [sizeRows, setSizeRows] = useState<Record<string, { checked: boolean; quantity: string; existingId?: string }>>({});
   const [savingInventory, setSavingInventory] = useState(false);
 
+  // Submit-new-material modal (workbench inline)
+  const [showSubmitMaterial, setShowSubmitMaterial] = useState(false);
+  const [submitInitialCategory, setSubmitInitialCategory] = useState<MaterialCategory | undefined>(undefined);
+
+  // Quick-variant modal (own new color/size, extend arrays on own pending, or clone).
+  // RLS ensures the only pending materials we see are ones we submitted, so
+  // isOwnPending is just material.is_verified === false.
+  const [variantMaterial, setVariantMaterial] = useState<TyingMaterial | null>(null);
+
+  // Toast / banner feedback (replaces silent error catches)
+  const [toast, setToast] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   // ─── Fetch Inventory ─────────────────────────────────────────
   const fetchInventory = useCallback(async () => {
     setInvLoading(true);
@@ -119,8 +138,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       if (res.ok) {
         const data = await res.json();
         setInventory(data.inventory || []);
+      } else if (res.status !== 401) {
+        const data = await res.json().catch(() => ({}));
+        setToast({ kind: 'error', message: data.error || `Failed to load inventory (${res.status})` });
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Network error loading inventory' });
+    }
     setInvLoading(false);
   }, []);
 
@@ -162,8 +186,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
         const data = await res.json();
         setBrowseMaterials(data.materials || []);
         setBrowseTotal(data.total || 0);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setToast({ kind: 'error', message: data.error || `Search failed (${res.status})` });
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Network error' });
+    }
     setBrowseLoading(false);
   }, []);
 
@@ -186,8 +215,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       if (res.ok) {
         const data = await res.json();
         setFlyList(data.flies || []);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setToast({ kind: 'error', message: data.error || `Failed to load patterns (${res.status})` });
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Network error loading patterns' });
+    }
     setFlyListLoading(false);
   }, []);
 
@@ -204,8 +238,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       if (res.ok) {
         const data: FlyRequirementsResponse = await res.json();
         setFlyRequirements(prev => ({ ...prev, [slug]: data }));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setToast({ kind: 'error', message: data.error || `Failed to load fly requirements (${res.status})` });
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Network error' });
+    }
     setFlyReqLoading(null);
   }, [flyRequirements]);
 
@@ -296,7 +335,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
     const isSized = !!(addingMaterial.sizes && addingMaterial.sizes.length > 0);
 
     try {
-      const ops: Promise<unknown>[] = [];
+      const ops: Promise<Response>[] = [];
 
       if (isSized) {
         for (const [size, row] of Object.entries(sizeRows)) {
@@ -328,7 +367,18 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
         }));
       }
 
-      await Promise.all(ops);
+      const results = await Promise.all(ops);
+      const failures = results.filter(r => !r.ok);
+      if (failures.length) {
+        const first = failures[0];
+        const data = await first.json().catch(() => ({}));
+        setToast({
+          kind: 'error',
+          message: `Inventory save failed (${failures.length}/${results.length}): ${data.error || `HTTP ${first.status}`}`,
+        });
+        setSavingInventory(false);
+        return;
+      }
 
       setAddingMaterial(null);
       setAddColor('');
@@ -336,7 +386,10 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       setSizeRows({});
       await fetchInventory();
       if (tab === 'pickFly') refreshFlyAfterAdd();
-    } catch { /* ignore */ }
+      setToast({ kind: 'success', message: 'Inventory updated.' });
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Failed to save inventory' });
+    }
 
     setSavingInventory(false);
   };
@@ -344,9 +397,16 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   // ─── Remove from Inventory ───────────────────────────────────
   const removeFromInventory = async (id: string) => {
     try {
-      await fetch(`/api/materials/inventory?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/materials/inventory?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setToast({ kind: 'error', message: data.error || `Remove failed (${res.status})` });
+        return;
+      }
       setInventory(prev => prev.filter(i => i.id !== id));
-    } catch { /* ignore */ }
+    } catch (err) {
+      setToast({ kind: 'error', message: err instanceof Error ? err.message : 'Failed to remove' });
+    }
   };
 
   // ─── Grouped Inventory ───────────────────────────────────────
@@ -557,6 +617,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     label={CATEGORY_LABELS[cat] || cat}
                     items={groupedInventory[cat]}
                     onRemove={removeFromInventory}
+                    onAddVariant={(material) => setVariantMaterial(material)}
                   />
                 ))}
                 {groupedInventory['other'] && (
@@ -565,6 +626,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     label="Other"
                     items={groupedInventory['other']}
                     onRemove={removeFromInventory}
+                    onAddVariant={(material) => setVariantMaterial(material)}
                   />
                 )}
               </div>
@@ -653,6 +715,16 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
               >
                 Search
               </button>
+              <button
+                onClick={() => {
+                  setSubmitInitialCategory((browseCategory as MaterialCategory) || undefined);
+                  setShowSubmitMaterial(true);
+                }}
+                className="flex items-center gap-1.5 bg-surface border border-border text-text-primary px-3 py-2 rounded-lg text-sm font-medium hover:border-accent"
+                title="Add a material that's missing from the catalog"
+              >
+                <Plus size={14} /> New Material
+              </button>
             </div>
 
             {browseLoading ? (
@@ -673,6 +745,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                       material={material}
                       ownedCount={ownedCountByMaterial[material.id] || 0}
                       onOpen={() => openInventoryModal(material)}
+                      onVariant={() => setVariantMaterial(material)}
+                      isPending={material.is_verified === false}
                     />
                   ))}
                 </div>
@@ -860,6 +934,71 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
           </div>
         );
       })()}
+
+      {/* ─── Quick Variant Modal ────────────────────────────────── */}
+      {variantMaterial && (
+        <QuickVariantModal
+          material={variantMaterial}
+          isOwnPending={variantMaterial.is_verified === false}
+          onClose={() => setVariantMaterial(null)}
+          onSaved={(msg) => {
+            setVariantMaterial(null);
+            setToast({ kind: 'success', message: msg });
+            fetchInventory();
+            fetchBrowse(browseCategory, browseSearch, browsePage);
+          }}
+        />
+      )}
+
+      {/* ─── Submit New Material Modal ──────────────────────────── */}
+      {showSubmitMaterial && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-surface rounded-xl border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-[family-name:var(--font-heading)] text-lg">Add New Material</h3>
+              <button onClick={() => setShowSubmitMaterial(false)} className="text-text-muted hover:text-text-primary">
+                <X size={20} />
+              </button>
+            </div>
+            <p className="text-text-muted text-xs mb-4">
+              It&apos;s available to you immediately. We&apos;ll review and promote good submissions to the public catalog.
+            </p>
+            <SubmitMaterialForm
+              initialCategory={submitInitialCategory}
+              onSuccess={() => {
+                setShowSubmitMaterial(false);
+                setToast({ kind: 'success', message: 'Material added — it&apos;s in your catalog now.' });
+                setBrowsePage(0);
+                fetchBrowse(browseCategory, browseSearch, 0);
+              }}
+              onCancel={() => setShowSubmitMaterial(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ─── Toast / banner ─────────────────────────────────────── */}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed bottom-4 right-4 z-[60] max-w-sm px-4 py-3 rounded-lg shadow-lg border text-sm font-medium ${
+            toast.kind === 'success'
+              ? 'bg-[#0d2d1f] border-[#2EA44F] text-[#7EE2A8]'
+              : 'bg-[#2d0d0d] border-[#DA3633] text-[#FFA8A8]'
+          }`}
+        >
+          <div className="flex items-start gap-2">
+            {toast.kind === 'success'
+              ? <Check size={16} className="mt-0.5 flex-shrink-0" />
+              : <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />}
+            <span className="flex-1">{toast.message}</span>
+            <button onClick={() => setToast(null)} className="opacity-60 hover:opacity-100 flex-shrink-0">
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
     </Wrapper>
   );
 }
@@ -871,13 +1010,27 @@ function InventoryGroup({
   label,
   items,
   onRemove,
+  onAddVariant,
 }: {
   category: string;
   label: string;
   items: UserMaterialInventory[];
   onRemove: (id: string) => void;
+  onAddVariant?: (material: TyingMaterial) => void;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+
+  // Group by material_id so "UTC 70 — 5 colors" shows once, not 5 times.
+  const byMaterial = items.reduce<Record<string, { material?: TyingMaterial; rows: UserMaterialInventory[] }>>(
+    (acc, item) => {
+      const key = item.material_id;
+      if (!acc[key]) acc[key] = { material: item.material, rows: [] };
+      acc[key].rows.push(item);
+      return acc;
+    },
+    {},
+  );
+  const groups = Object.values(byMaterial);
 
   return (
     <div className="bg-surface rounded-xl border border-border overflow-hidden">
@@ -890,32 +1043,59 @@ function InventoryGroup({
           <span className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
             {label}
           </span>
-          <span className="text-text-muted text-xs font-mono">({items.length})</span>
+          <span className="text-text-muted text-xs font-mono">
+            ({groups.length} {groups.length === 1 ? 'product' : 'products'} · {items.length} {items.length === 1 ? 'variant' : 'variants'})
+          </span>
         </div>
         {collapsed ? <ChevronDown size={16} className="text-text-muted" /> : <ChevronUp size={16} className="text-text-muted" />}
       </button>
       {!collapsed && (
         <div className="divide-y divide-border">
-          {items.map(item => (
-            <div key={item.id} className="flex items-center justify-between px-4 py-3">
-              <div className="flex-1 min-w-0">
-                <p className="text-text-primary text-sm font-medium truncate">
-                  {item.material?.name || 'Unknown'}
-                </p>
-                <div className="flex gap-3 text-text-muted text-xs mt-0.5">
-                  {item.material?.brand && <span>{item.material.brand}</span>}
-                  {item.color_owned && <span className="text-signal">{item.color_owned}</span>}
-                  {item.size_owned && <span>Size {item.size_owned}</span>}
-                  {item.quantity && <span>Qty: {item.quantity}</span>}
+          {groups.map(({ material, rows }) => (
+            <div key={rows[0].material_id} className="px-4 py-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="text-text-primary text-sm font-medium truncate">
+                    {material?.name || 'Unknown'}
+                  </p>
+                  {material?.brand && (
+                    <p className="text-text-muted text-xs">{material.brand}</p>
+                  )}
                 </div>
+                {material && onAddVariant && (
+                  <button
+                    onClick={() => onAddVariant(material)}
+                    className="text-text-muted hover:text-accent text-[11px] flex items-center gap-1 flex-shrink-0"
+                    title="Add another color/size to your inventory"
+                  >
+                    <Plus size={10} /> Variant
+                  </button>
+                )}
               </div>
-              <button
-                onClick={() => onRemove(item.id)}
-                className="text-text-muted hover:text-danger p-1 ml-2"
-                title="Remove from inventory"
-              >
-                <Trash2 size={14} />
-              </button>
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {rows.map(row => {
+                  const chipText = [row.color_owned, row.size_owned ? `Size ${row.size_owned}` : null]
+                    .filter(Boolean).join(' · ') || (row.quantity ? `Qty: ${row.quantity}` : '—');
+                  return (
+                    <span
+                      key={row.id}
+                      className="inline-flex items-center gap-1 bg-surface-raised border border-border rounded px-2 py-0.5 text-[11px] text-text-secondary"
+                    >
+                      {row.color_owned && <span className="text-signal">{row.color_owned}</span>}
+                      {row.size_owned && <span className="font-mono">Size {row.size_owned}</span>}
+                      {!row.color_owned && !row.size_owned && row.quantity && <span>{row.quantity}</span>}
+                      {!row.color_owned && !row.size_owned && !row.quantity && <span>{chipText}</span>}
+                      <button
+                        onClick={() => onRemove(row.id)}
+                        className="text-text-muted hover:text-danger ml-0.5"
+                        title="Remove this variant"
+                      >
+                        <X size={10} />
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
@@ -1111,17 +1291,29 @@ function MaterialCard({
   material,
   ownedCount,
   onOpen,
+  onVariant,
+  isPending = false,
 }: {
   material: TyingMaterial;
   ownedCount: number;
   onOpen: () => void;
+  onVariant?: () => void;
+  isPending?: boolean;
 }) {
   const isOwned = ownedCount > 0;
   const hasSizes = !!(material.sizes && material.sizes.length > 0);
   return (
-    <div className="bg-surface rounded-xl border border-border p-4 flex items-start justify-between">
+    <div className={`bg-surface rounded-xl border p-4 flex flex-col ${isPending ? 'border-[#E8923A]/40' : 'border-border'}`}>
+      <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
-        <p className="text-text-primary text-sm font-medium truncate">{material.name}</p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-text-primary text-sm font-medium truncate">{material.name}</p>
+          {isPending && (
+            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#E8923A]/15 text-[#E8923A] font-semibold flex-shrink-0">
+              Pending
+            </span>
+          )}
+        </div>
         <div className="flex gap-2 mt-1">
           {material.brand && (
             <span className="text-text-muted text-xs">{material.brand}</span>
@@ -1152,6 +1344,16 @@ function MaterialCard({
           </>
         )}
       </button>
+      </div>
+      {onVariant && (
+        <button
+          onClick={onVariant}
+          className="text-text-muted hover:text-accent text-[11px] mt-2 self-start flex items-center gap-1"
+          title="Add a new color, size, or clone this material"
+        >
+          <Plus size={10} /> Variant
+        </button>
+      )}
     </div>
   );
 }

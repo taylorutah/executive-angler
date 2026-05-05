@@ -8,10 +8,11 @@ const VALID_CATEGORIES: MaterialCategory[] = [
   'tail', 'wing', 'ribbing', 'chenille', 'body', 'eye',
 ];
 
+// POST /api/materials/submit — submit a new material; lands as is_verified=false (visible to
+// submitter via RLS until promoted). Slug collisions retry once with a per-user suffix.
 export async function POST(request: Request) {
   const supabase = await createClient();
 
-  // Verify authenticated user
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
@@ -35,7 +36,6 @@ export async function POST(request: Request) {
 
   const { name, brand, category, subcategory, sizes, colors, description } = body;
 
-  // Validate required fields
   if (!name || typeof name !== 'string' || name.trim().length < 2) {
     return NextResponse.json({ error: 'Name is required (min 2 characters)' }, { status: 400 });
   }
@@ -44,32 +44,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Category must be one of: ${VALID_CATEGORIES.join(', ')}` }, { status: 400 });
   }
 
-  // Generate slug from name
-  const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const baseSlug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-  const { data, error } = await supabase
+  const insertRow = (slug: string) => ({
+    name: name.trim(),
+    slug,
+    brand: brand?.trim() || null,
+    category,
+    subcategory: subcategory?.trim() || null,
+    sizes: sizes || [],
+    colors: colors || [],
+    description: description?.trim() || null,
+    is_verified: false,
+    submitted_by: user.id,
+    popularity: 0,
+  });
+
+  let { data, error } = await supabase
     .from('tying_materials')
-    .insert({
-      name: name.trim(),
-      slug,
-      brand: brand?.trim() || null,
-      category,
-      subcategory: subcategory?.trim() || null,
-      sizes: sizes || [],
-      colors: colors || [],
-      description: description?.trim() || null,
-      is_verified: false,
-      submitted_by: user.id,
-      popularity: 0,
-    })
+    .insert(insertRow(baseSlug))
     .select()
     .single();
 
+  if (error?.code === '23505') {
+    const retrySlug = `${baseSlug}-${user.id.slice(0, 6)}`;
+    ({ data, error } = await supabase
+      .from('tying_materials')
+      .insert(insertRow(retrySlug))
+      .select()
+      .single());
+  }
+
   if (error) {
-    // Duplicate slug
-    if (error.code === '23505') {
-      return NextResponse.json({ error: 'A material with this name already exists' }, { status: 409 });
-    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
 // GET /api/materials/search?q=semperfli&category=thread&limit=10&offset=0
+// Visibility filtering is enforced by RLS — anonymous/other users see verified rows;
+// the submitter additionally sees their own pending submissions.
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q') || '';
@@ -10,17 +12,23 @@ export async function GET(request: Request) {
   const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10), 0);
 
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   let query = supabase
     .from('tying_materials')
-    .select('id, slug, name, brand, category, subcategory, sizes, colors, material_type, weight, finish, description, image_url, vendor_url, popularity')
-    .eq('is_verified', true)
+    .select('id, slug, name, brand, category, subcategory, sizes, colors, material_type, weight, finish, description, image_url, vendor_url, popularity, is_verified, submitted_by')
     .order('popularity', { ascending: false })
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
 
+  // Defense-in-depth: mirror the personal-visibility RLS policy at the route level
+  if (user) {
+    query = query.or(`is_verified.eq.true,submitted_by.eq.${user.id}`);
+  } else {
+    query = query.eq('is_verified', true);
+  }
+
   if (q) {
-    // Search name and brand using ilike
     query = query.or(`name.ilike.%${q}%,brand.ilike.%${q}%`);
   }
 
