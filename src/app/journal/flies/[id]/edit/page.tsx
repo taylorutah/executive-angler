@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Trash2, Sparkles } from "lucide-react";
+import { ArrowLeft, Trash2, Sparkles, Printer } from "lucide-react";
 import VariantModal from "@/components/flies/VariantModal";
 import VariantTree from "@/components/flies/VariantTree";
 import FlyImageUploader from "@/components/flies/FlyImageUploader";
+import FlyCardModal from "@/components/flies/FlyCardModal";
 import HelpHint from "@/components/ui/HelpHint";
 
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
@@ -62,6 +63,7 @@ export default function EditFlyPage() {
     materials: "", description: "", video_url: "", tags: "",
   });
   const [variantOpen, setVariantOpen] = useState(false);
+  const [cardOpen, setCardOpen] = useState(false);
 
   useEffect(() => {
     fetch(`/api/fishing/flies?id=${id}`)
@@ -162,6 +164,15 @@ export default function EditFlyPage() {
           <div className="flex items-center gap-1.5">
             <button
               type="button"
+              onClick={() => setCardOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#D4751F]/40 bg-[#D4751F]/10 px-3 py-1.5 text-xs font-medium text-[#D4751F] hover:bg-[#D4751F]/20 transition-colors"
+              aria-label="Open recipe card"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              Card
+            </button>
+            <button
+              type="button"
               onClick={() => setVariantOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-lg border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-3 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors"
             >
@@ -187,6 +198,13 @@ export default function EditFlyPage() {
             }}
           />
         )}
+
+        <FlyCardModal
+          open={cardOpen}
+          onClose={() => setCardOpen(false)}
+          fly={{ ...form, id, image_url: existingImage }}
+          imageUrl={existingImage}
+        />
 
         {error && <div className="mb-4 rounded-lg bg-red-500/10 border border-red-500/30 px-4 py-3 text-red-400 text-sm">{error}</div>}
 
