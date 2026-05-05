@@ -170,7 +170,7 @@ export default function FlyImageUploader({
             <button
               type="button"
               onClick={handleCropConfirm}
-              disabled={cropProcessing}
+              disabled={cropProcessing || !croppedAreaPixels}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
             >
               {cropProcessing ? (

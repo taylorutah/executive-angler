@@ -119,12 +119,15 @@ export async function POST(req: NextRequest) {
 
         if (uploadError) {
           console.error("Image upload error:", uploadError);
-        } else {
-          const { data: { publicUrl } } = getServiceClient().storage
-            .from("fly-pattern-images")
-            .getPublicUrl(path);
-          imageUrl = publicUrl;
+          return NextResponse.json(
+            { error: `Image upload failed: ${uploadError.message}` },
+            { status: 500 },
+          );
         }
+        const { data: { publicUrl } } = getServiceClient().storage
+          .from("fly-pattern-images")
+          .getPublicUrl(path);
+        imageUrl = publicUrl;
       }
 
       for (const [key, value] of formData.entries()) {
@@ -255,13 +258,18 @@ export async function PATCH(req: NextRequest) {
           .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
 
         if (uploadError) {
+          // Surface the failure — silently dropping image_url here was making
+          // edits look successful while the photo never made it through.
           console.error("Image upload error:", uploadError);
-        } else {
-          const { data: { publicUrl } } = getServiceClient().storage
-            .from("fly-pattern-images")
-            .getPublicUrl(path);
-          imageUrl = publicUrl;
+          return NextResponse.json(
+            { error: `Image upload failed: ${uploadError.message}` },
+            { status: 500 },
+          );
         }
+        const { data: { publicUrl } } = getServiceClient().storage
+          .from("fly-pattern-images")
+          .getPublicUrl(path);
+        imageUrl = publicUrl;
       }
 
       for (const [key, value] of formData.entries()) {
