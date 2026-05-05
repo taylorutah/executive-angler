@@ -258,20 +258,22 @@ export default async function RiverPage({ params }: Props) {
 
       <div className="bg-[#0D1117]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Rivers", href: "/rivers" },
-                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                ...(additionalDests && additionalDests.length > 0
-                  ? additionalDests
-                      .filter(Boolean)
-                      .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
-                  : []),
-                { label: river.name },
-              ]}
-            />
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <Breadcrumbs
+                items={[
+                  { label: "Rivers", href: "/rivers" },
+                  ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                  ...(additionalDests && additionalDests.length > 0
+                    ? additionalDests
+                        .filter(Boolean)
+                        .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
+                    : []),
+                  { label: river.name },
+                ]}
+              />
+            </div>
+            <div className="shrink-0 flex items-center gap-2 sm:gap-3">
               <ReportButton entityType="river" entityId={river.id} />
               <FavoriteButton entityType="river" entityId={river.id} />
             </div>
@@ -323,7 +325,53 @@ export default async function RiverPage({ params }: Props) {
                     defaultOpen={false}
                   >
                     <div className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden">
-                      <div className="overflow-x-auto">
+                      {/* Mobile: stacked card layout grouped by month */}
+                      <div className="sm:hidden divide-y divide-[#21262D]">
+                        {river.hatchChart.map((month) => (
+                          <div key={month.month} className="p-4">
+                            <h3 className="text-sm font-semibold uppercase tracking-wider text-[#E8923A] mb-3">
+                              {month.month}
+                            </h3>
+                            <ul className="space-y-3">
+                              {month.hatches.map((hatch, hi) => {
+                                const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
+                                return (
+                                  <li
+                                    key={`${month.month}-${hi}`}
+                                    className="rounded-lg bg-[#0D1117] border border-[#21262D] p-3"
+                                  >
+                                    <div className="flex items-start justify-between gap-3">
+                                      <p className="font-medium text-[#F0F6FC] text-[15px] leading-snug">
+                                        {hatch.insect}
+                                      </p>
+                                      <span className="shrink-0 inline-flex items-center rounded-full bg-[#21262D] px-2 py-0.5 text-xs font-medium text-[#A8B2BD] whitespace-nowrap">
+                                        {hatch.size}
+                                      </span>
+                                    </div>
+                                    {hatch.pattern && (
+                                      <p className="mt-1.5 text-[13px] text-[#A8B2BD]">
+                                        {matchedFly ? (
+                                          <Link
+                                            href={`/flies/${matchedFly.slug}`}
+                                            className="text-[#E8923A] hover:underline"
+                                          >
+                                            {hatch.pattern}
+                                          </Link>
+                                        ) : (
+                                          hatch.pattern
+                                        )}
+                                      </p>
+                                    )}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Desktop: table */}
+                      <div className="hidden sm:block overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
                             <tr className="bg-[#E8923A] text-white">
@@ -359,7 +407,7 @@ export default async function RiverPage({ params }: Props) {
                                   <td className="px-4 py-3 text-[#A8B2BD]">
                                     {hatch.insect}
                                   </td>
-                                  <td className="px-4 py-3 text-[#A8B2BD]">
+                                  <td className="px-4 py-3 text-[#A8B2BD] whitespace-nowrap">
                                     {hatch.size}
                                   </td>
                                   <td className="px-4 py-3 text-[#A8B2BD]">

@@ -45,12 +45,12 @@ export default function HeroCompact({
 
   return (
     <>
-      <div className="group relative flex items-stretch gap-4 bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-lg">
+      <div className="group relative flex items-stretch gap-3 sm:gap-4 bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-lg">
         {/* Thumbnail — clickable to open gallery */}
         <button
           type="button"
           onClick={() => setLightboxOpen(true)}
-          className="relative shrink-0 w-[160px] sm:w-[200px] h-[120px] bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-inset"
+          className="relative shrink-0 w-[112px] sm:w-[200px] h-[112px] sm:h-[120px] bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-inset"
           aria-label={`View ${totalCount} photo${totalCount === 1 ? "" : "s"} of ${title}`}
         >
           <Image
@@ -58,23 +58,23 @@ export default function HeroCompact({
             alt={heroImageAlt}
             fill
             className={`${imageContain ? "object-contain" : "object-cover"} transition-transform duration-300 group-hover:scale-105`}
-            sizes="200px"
+            sizes="(max-width: 640px) 112px, 200px"
             priority
           />
           {/* Gallery count badge */}
-          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-medium">
+          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium">
             <Images className="h-3 w-3" />
             {totalCount}
           </div>
         </button>
 
         {/* Text block */}
-        <div className="flex-1 min-w-0 py-3 pr-4 flex flex-col justify-center">
-          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-white tracking-tight truncate">
+        <div className={`flex-1 min-w-0 py-2.5 sm:py-3 pr-3 sm:pr-4 flex flex-col justify-center ${children ? "pt-9 sm:pt-3" : ""}`}>
+          <h1 className="font-heading text-lg sm:text-3xl font-bold text-white tracking-tight leading-tight line-clamp-2 sm:truncate">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-1 text-sm sm:text-base text-[#A8B2BD] truncate">
+            <p className="mt-0.5 sm:mt-1 text-xs sm:text-base text-[#A8B2BD] truncate">
               {subtitle}
             </p>
           )}
@@ -83,12 +83,12 @@ export default function HeroCompact({
             // species chips (e.g. "Bonneville Cutthroat Trout") can't clip
             // the hero or wrap onto a second line.
             <div
-              className="mt-2 flex gap-1.5 overflow-x-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              className="mt-1.5 sm:mt-2 flex gap-1.5 overflow-x-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             >
               {visibleChips.map((chip) => (
                 <span
                   key={chip}
-                  className="inline-flex shrink-0 items-center px-2 py-0.5 rounded-full bg-[#0D1117] border border-[#30363D] text-xs text-[#A8B2BD] whitespace-nowrap"
+                  className="inline-flex shrink-0 items-center px-2 py-0.5 rounded-full bg-[#0D1117] border border-[#30363D] text-[11px] sm:text-xs text-[#A8B2BD] whitespace-nowrap"
                 >
                   {chip}
                 </span>
@@ -109,9 +109,10 @@ export default function HeroCompact({
           </button>
         </div>
 
-        {/* Admin editor slot */}
+        {/* Admin editor slot — positioned over the image on mobile so it
+            doesn't crowd the title; sits at top-right on desktop */}
         {children && (
-          <div className="absolute top-2 right-2 z-10">{children}</div>
+          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10">{children}</div>
         )}
       </div>
 

@@ -37,30 +37,40 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm font-medium">
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
         <Link
           href="/"
-          className="text-text-secondary hover:text-accent transition-colors"
+          className="shrink-0 text-text-secondary hover:text-accent transition-colors"
         >
           Home
         </Link>
-        {items.map((item, i) => (
-          <span key={i} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-text-muted" aria-hidden="true" />
-            {item.href ? (
-              <Link
-                href={item.href}
-                className="text-text-secondary hover:text-accent transition-colors"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <span className="text-text-primary" aria-current="page">
-                {item.label}
-              </span>
-            )}
-          </span>
-        ))}
+        {items.map((item, i) => {
+          const isLast = i === items.length - 1;
+          return (
+            <span key={i} className="flex items-center gap-1.5 min-w-0">
+              <ChevronRight className="shrink-0 h-3.5 w-3.5 text-text-muted" aria-hidden="true" />
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  className="shrink-0 text-text-secondary hover:text-accent transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span
+                  className={`text-text-primary ${isLast ? "truncate" : "shrink-0"}`}
+                  aria-current="page"
+                  title={item.label}
+                >
+                  {item.label}
+                </span>
+              )}
+            </span>
+          );
+        })}
       </nav>
     </>
   );

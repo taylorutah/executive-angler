@@ -154,61 +154,69 @@ export default function MyFliesClient({
   return (
     <div className="min-h-screen bg-[#0D1117]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">My Flies</h1>
-            <p className="mt-1 text-sm text-[#6E7681]">
-              {counts.box} in box · {counts.favorites} favorite
-              {counts.favorites === 1 ? "" : "s"} · {counts.tieNext} in tie-next
-              {counts.sharedWithMe > 0 ? ` · ${counts.sharedWithMe} shared with you` : ""}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
+        <header className="mb-5 sm:mb-6">
+          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC]">My Flies</h1>
+          <p className="mt-1 text-sm text-[#6E7681]">
+            {counts.box} in box · {counts.favorites} favorite
+            {counts.favorites === 1 ? "" : "s"} · {counts.tieNext} in tie-next
+            {counts.sharedWithMe > 0 ? ` · ${counts.sharedWithMe} shared with you` : ""}
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2">
             <Link
               href="/flies"
-              className="flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
             >
               Browse Library
             </Link>
             <Link
               href="/journal/flies/new"
-              className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
             >
               <Plus className="h-4 w-4" /> New Pattern
             </Link>
           </div>
         </header>
 
-        <div className="mb-6 flex flex-wrap items-center gap-1 rounded-lg border border-[#21262D] bg-[#161B22] p-1">
-          {visibleTabs.map((t) => (
-            <div key={t.key} className="flex items-center">
-              <button
-                onClick={() => switchTab(t.key)}
-                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-                  tab === t.key
-                    ? "bg-[#E8923A] text-white"
-                    : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                }`}
-              >
-                {t.icon}
-                {t.label}
-                {t.count !== undefined && t.count > 0 && (
-                  <span
-                    className={`rounded-full px-1.5 text-[10px] ${
-                      tab === t.key ? "bg-white/20" : "bg-[#21262D]"
-                    }`}
-                  >
-                    {t.count}
+        <div
+          role="tablist"
+          aria-label="Fly views"
+          className="mb-6 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1 sm:flex-wrap overflow-x-auto sm:overflow-visible [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div className="flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#161B22] p-1 min-w-max sm:min-w-0">
+            {visibleTabs.map((t) => (
+              <div key={t.key} className="flex items-center">
+                <button
+                  onClick={() => switchTab(t.key)}
+                  role="tab"
+                  aria-selected={tab === t.key}
+                  className={`flex shrink-0 items-center gap-2 rounded-md px-3 sm:px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                    tab === t.key
+                      ? "bg-[#E8923A] text-white"
+                      : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                  }`}
+                >
+                  {t.icon}
+                  {t.label}
+                  {t.count !== undefined && t.count > 0 && (
+                    <span
+                      className={`rounded-full px-1.5 text-[10px] ${
+                        tab === t.key ? "bg-white/20" : "bg-[#21262D]"
+                      }`}
+                    >
+                      {t.count}
+                    </span>
+                  )}
+                </button>
+                {tabHelp[t.key] ? (
+                  <span className="hidden sm:inline-flex">
+                    <HelpHint label={`About ${t.label}`} className="ml-0.5">
+                      {tabHelp[t.key]}
+                    </HelpHint>
                   </span>
-                )}
-              </button>
-              {tabHelp[t.key] ? (
-                <HelpHint label={`About ${t.label}`} className="ml-0.5">
-                  {tabHelp[t.key]}
-                </HelpHint>
-              ) : null}
-            </div>
-          ))}
+                ) : null}
+              </div>
+            ))}
+          </div>
         </div>
 
         {tab === "box" && <FlyBoxPanel {...flyBoxProps} canonicalNames={canonicalNames} />}

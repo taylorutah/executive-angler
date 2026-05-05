@@ -416,19 +416,25 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
 
   return (
     <div>
-      <div className="flex items-center gap-1 mb-3 bg-[#161B22] border border-[#21262D] rounded-lg p-1">
+      <div
+        role="tablist"
+        aria-label="Filter fly box"
+        className="grid grid-cols-3 items-center gap-1 mb-3 bg-[#161B22] border border-[#21262D] rounded-lg p-1"
+      >
         {tabs.map((t) => (
-          <div key={t.key} className="flex items-center">
+          <div key={t.key} className="flex items-center justify-center">
             <button
               onClick={() => setTab(t.key)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              role="tab"
+              aria-selected={tab === t.key}
+              className={`flex w-full items-center justify-center gap-1.5 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
                 tab === t.key
                   ? 'bg-[#E8923A] text-white'
                   : 'text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117]'
               }`}
             >
               {t.icon}
-              {t.label}
+              <span>{t.label}</span>
               {t.count !== undefined && t.count > 0 && (
                 <span className={`text-xs rounded-full px-1.5 ${tab === t.key ? 'bg-white/20' : 'bg-[#21262D]'}`}>
                   {t.count}
@@ -436,21 +442,25 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
               )}
             </button>
             {t.key === 'tie-next' ? (
-              <HelpHint label="About Tie Next" className="ml-0.5">
-                <p>A quick list of patterns queued for the vise.</p>
-                <p className="text-[#6E7681]">
-                  For drag-and-drop planning (Want → Vise → Done), open the full board:{' '}
-                  <Link href="/my-flies?tab=tie-next" className="text-[#00B4D8] hover:underline">
-                    Tie Next board
-                  </Link>
-                  .
-                </p>
-              </HelpHint>
+              <span className="hidden sm:inline-flex">
+                <HelpHint label="About Tie Next" className="ml-0.5">
+                  <p>A quick list of patterns queued for the vise.</p>
+                  <p className="text-[#6E7681]">
+                    For drag-and-drop planning (Want → Vise → Done), open the full board:{' '}
+                    <Link href="/my-flies?tab=tie-next" className="text-[#00B4D8] hover:underline">
+                      Tie Next board
+                    </Link>
+                    .
+                  </p>
+                </HelpHint>
+              </span>
             ) : null}
             {t.key === 'favorites' ? (
-              <HelpHint label="About Favorites" className="ml-0.5">
-                <p>Flies you&apos;ve starred for quick access. Tap the heart on any card to save.</p>
-              </HelpHint>
+              <span className="hidden sm:inline-flex">
+                <HelpHint label="About Favorites" className="ml-0.5">
+                  <p>Flies you&apos;ve starred for quick access. Tap the heart on any card to save.</p>
+                </HelpHint>
+              </span>
             ) : null}
           </div>
         ))}

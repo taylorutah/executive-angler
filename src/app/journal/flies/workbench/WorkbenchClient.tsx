@@ -402,18 +402,24 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
             </div>
           )}
 
-          {/* Tabs */}
-          <div className="flex gap-1 mt-4 items-center flex-wrap">
+          {/* Tabs — horizontal scroll on mobile, wrap on desktop */}
+          <div
+            role="tablist"
+            aria-label="Workbench mode"
+            className="mt-4 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1.5 overflow-x-auto sm:flex-wrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
             {([
               { id: 'pickFly' as Tab, label: 'Pick a Pattern', icon: Target, hint: 'Start from a fly you want to tie — we’ll show every material needed and flag what you already own vs. still need to pick up. No inventory required to begin.' },
               { id: 'inventory' as Tab, label: 'My Inventory', icon: Package, hint: 'Track what you own at the vise. Optional — add materials whenever you want, not required before tying your first fly.' },
               { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Reverse lookup (Pro): crosses your inventory against every fly recipe and ranks them by % of materials you already have.' },
               { id: 'browse' as Tab, label: 'Browse Materials', icon: Search, hint: 'Search the 500+ material catalog. One click adds it to your inventory.' },
             ]).map(({ id, label, icon: Icon, hint }) => (
-              <div key={id} className="flex items-center">
+              <div key={id} className="flex shrink-0 items-center">
                 <button
                   onClick={() => setTab(id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  role="tab"
+                  aria-selected={tab === id}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                     tab === id
                       ? 'bg-accent text-bg'
                       : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised'
@@ -422,9 +428,11 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                   <Icon size={16} />
                   {label}
                 </button>
-                <HelpHint label={`About: ${label}`} className="ml-0.5">
-                  {hint}
-                </HelpHint>
+                <span className="hidden sm:inline-flex">
+                  <HelpHint label={`About: ${label}`} className="ml-0.5">
+                    {hint}
+                  </HelpHint>
+                </span>
               </div>
             ))}
           </div>
@@ -444,8 +452,8 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
         {tab === 'pickFly' && (
           <div>
             {/* Filters */}
-            <div className="flex flex-wrap gap-3 mb-6">
-              <div className="relative flex-1 min-w-[200px]">
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-2 sm:gap-3 mb-6">
+              <div className="relative">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                 <input
                   type="text"
@@ -456,25 +464,27 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                   className="w-full bg-surface border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
                 />
               </div>
-              <select
-                value={flyCategory}
-                onChange={e => setFlyCategory(e.target.value)}
-                className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
-              >
-                <option value="">All Types</option>
-                <option value="nymph">Nymph</option>
-                <option value="dry">Dry Fly</option>
-                <option value="streamer">Streamer</option>
-                <option value="wet">Wet Fly</option>
-                <option value="emerger">Emerger</option>
-                <option value="terrestrial">Terrestrial</option>
-              </select>
-              <button
-                onClick={() => fetchFlyList(flyQuery, flyCategory)}
-                className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-              >
-                Search
-              </button>
+              <div className="grid grid-cols-[1fr_auto] gap-2 sm:contents">
+                <select
+                  value={flyCategory}
+                  onChange={e => setFlyCategory(e.target.value)}
+                  className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
+                >
+                  <option value="">All Types</option>
+                  <option value="nymph">Nymph</option>
+                  <option value="dry">Dry Fly</option>
+                  <option value="streamer">Streamer</option>
+                  <option value="wet">Wet Fly</option>
+                  <option value="emerger">Emerger</option>
+                  <option value="terrestrial">Terrestrial</option>
+                </select>
+                <button
+                  onClick={() => fetchFlyList(flyQuery, flyCategory)}
+                  className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 whitespace-nowrap"
+                >
+                  Search
+                </button>
+              </div>
             </div>
 
             {flyListLoading ? (
