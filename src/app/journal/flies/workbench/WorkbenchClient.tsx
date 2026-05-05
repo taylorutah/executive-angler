@@ -196,9 +196,20 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
     setBrowseLoading(false);
   }, []);
 
+  // Initial / category / page load — fires immediately
   useEffect(() => {
     if (tab === 'browse') fetchBrowse(browseCategory, browseSearch, browsePage);
   }, [tab, browseCategory, browsePage, fetchBrowse]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Real-time search: debounce keystrokes, reset to page 0
+  useEffect(() => {
+    if (tab !== 'browse') return;
+    const t = setTimeout(() => {
+      setBrowsePage(0);
+      fetchBrowse(browseCategory, browseSearch, 0);
+    }, 200);
+    return () => clearTimeout(t);
+  }, [browseSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (tab === 'whatCanITie') fetchMatches();
@@ -228,6 +239,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   useEffect(() => {
     if (tab === 'pickFly') fetchFlyList(flyQuery, flyCategory);
   }, [tab, flyCategory, fetchFlyList]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Real-time pattern search: debounce keystrokes
+  useEffect(() => {
+    if (tab !== 'pickFly') return;
+    const t = setTimeout(() => fetchFlyList(flyQuery, flyCategory), 200);
+    return () => clearTimeout(t);
+  }, [flyQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Fetch Fly Requirements (on expand) ──────────────────────
   const fetchFlyRequirements = useCallback(async (slug: string) => {
