@@ -1,5 +1,7 @@
 # Executive Angler — Project Documentation
 
+> ⚠️ **Vault writes:** Before writing any file to `~/Documents/Taylor's Vault/`, read `~/Documents/Taylor's Vault/VAULT_STANDARDS.md`. Required: `## See Also` wikilinks + `## Timeline` on every file. Run `qmd update -c ea` after every vault write.
+
 ## Quick Reference
 - **URL:** https://www.executiveangler.com (Vercel, auto-deploy from `main`)
 - **Repo:** github.com/taylorutah/executive-angler

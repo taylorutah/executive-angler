@@ -1,895 +1,771 @@
-# Executive Angler
+# Executive Angler AI-Discoverable Content Index
+# Last updated: 2026-05-04 (live Supabase data)
 
-> The definitive fly fishing intelligence platform — destinations, rivers, lodges, guides, fly shops, species, and fly patterns from around the world. Plus a Strava-style fishing journal for tracking sessions, catches, and patterns.
+## Fly Shops
+- Alaska Drift Away Fishing: /fly-shops/alaska-drift-away-fishing
+- Alaska Fly Fishing Goods: /fly-shops/alaska-fly-fishing-goods
+- Alaska Wilderness Outfitting: /fly-shops/alaska-wilderness-outfitting
+- Allenberry Resort Fly Fishing: /fly-shops/allenberry-resort
+- Angler's White River Resort: /fly-shops/anglers-white-river-resort
+- Anglers Choice: /fly-shops/anglers-choice
+- Anglers Den: /fly-shops/anglers-den
+- Appalachian Trout Outfitters: /fly-shops/appalachian-trout-outfitters
+- Arizona Flyfishing: /fly-shops/arizona-flyfishing
+- Arrick's Fly Shop: /fly-shops/arricks-fly-shop
+- Artful Angler: /fly-shops/artful-angler
+- Ashland Fly Shop: /fly-shops/ashland-fly-shop
+- AuSable River Two Fly Shop: /fly-shops/ausable-river-two-fly-shop
+- Avid Angler: /fly-shops/avid-angler
+- Backwater Angler: /fly-shops/backwater-angler
+- Basin & Range Outfitters: /fly-shops/basin-range-outfitters
+- Basin Fly Shop: /fly-shops/basin-fly-shop
+- Battenkill Anglers: /fly-shops/battenkill-anglers
+- Beartooth Flyfishing: /fly-shops/beartooth-flyfishing
+- Beaverkill Angler: /fly-shops/beaverkill-angler
+- Belize River Lodge Shop: /fly-shops/belize-river-lodge-shop
+- Big Sky Anglers: /fly-shops/big-sky-anglers
+- Big Y Fly Co.: /fly-shops/big-y-fly-co
+- Bighorn Angler: /fly-shops/bighorn-angler
+- Bighorn Fly & Tackle: /fly-shops/bighorn-fly-and-tackle
+- Bitterroot Fly Company: /fly-shops/bitterroot-fly-company
+- Blue Quill Angler: /fly-shops/blue-quill-angler
+- Blue Ribbon Flies: /fly-shops/blue-ribbon-flies
+- Blue Ribbon Fly Shop: /fly-shops/blue-ribbon-fly-shop-arkansas
+- Blue Ridge Angler: /fly-shops/blue-ridge-angler
+- Blue Ridge Mountain Adventures: /fly-shops/blue-ridge-mountain-adventures
+- Boise Anglers: /fly-shops/boise-anglers
+- Brule River Classics: /fly-shops/brule-river-classics
+- Bucking Rainbow Outfitters: /fly-shops/bucking-rainbow-outfitters
+- Campfire Lodge Fly Shop: /fly-shops/campfire-lodge-fly-shop
+- Caney Fork Fly Shop: /fly-shops/caney-fork-fly-shop
+- Cascade Guides & Outfitters: /fly-shops/cascade-guides-outfitters
+- Catskill Flies: /fly-shops/catskill-flies
+- Chama River Fly Fishing: /fly-shops/chama-river-fly-fishing
+- Chattahoochee Outfitters: /fly-shops/chattahoochee-outfitters
+- Clinch River Company: /fly-shops/clinch-river-company
+- Cohutta Fishing Company: /fly-shops/cohutta-fishing-company
+- Confluence Outfitters: /fly-shops/confluence-outfitters-ca
+- Cross Current Guide Services & Outfitters: /fly-shops/cross-current-guide-service
+- CrossCurrents Fly Shop: /fly-shops/crosscurrents-fly-shop
+- Cutthroat Anglers: /fly-shops/cutthroat-anglers
+- Davidson River Outfitters: /fly-shops/davidson-river-outfitters
+- Delaware River Club: /fly-shops/delaware-river-club
+- Dette Trout Flies: /fly-shops/dette-flies
+- Dragonfly Anglers: /fly-shops/dragonfly-anglers
+- Drift Lodge & Fly Shop: /fly-shops/drift-lodge-fly-shop
+- Driftless Angler: /fly-shops/driftless-angler
+- Duranglers Flies & Supplies: /fly-shops/duranglers-flies-supplies
+- East Rosebud Fly & Tackle: /fly-shops/east-rosebud-fly-and-tackle
+- Eastern Oregon River Outfitters: /fly-shops/eastern-oregon-river-outfitters
+- Elk River Touring Company: /fly-shops/elk-river-touring-company
+- Emerald Water Anglers: /fly-shops/emerald-water-anglers
+- Fips-Mouche Pro Shop: /fly-shops/fips-mouche-pro-shop
+- Fish Heads Fly Shop: /fly-shops/fish-heads-fly-shop
+- Fish On NZ: /fly-shops/fish-on-nz
+- Fish Tech Outfitters: /fly-shops/fish-tech-outfitters
+- Fishin' Factory: /fly-shops/fishin-factory
+- Flagstaff Fly Fishing: /fly-shops/flagstaff-fly-fishing
+- Fly & Field Outfitters: /fly-shops/fly-and-field-outfitters
+- Fly Fish Food: /fly-shops/fly-fish-food
+- Fly Fishing Outfitters: /fly-shops/fly-fishing-outfitters
+- Fly Fishing the Smokies: /fly-shops/fly-fishing-the-smokies
+- Fly Shop at Seneca Rocks: /fly-shops/fly-shop-at-seneca-rocks
+- Fly South Outfitters: /fly-shops/fly-south-outfitters
+- FlyFish Oregon: /fly-shops/flyfish-oregon
+- Frontier Anglers: /fly-shops/frontier-anglers
+- Frontiers Travel: /fly-shops/frontiers-travel
+- Galloup's Slide Inn: /fly-shops/galloups-slide-inn
+- Gates Au Sable Lodge: /fly-shops/gates-au-sable-lodge
+- Gear Colorado Fly Fishing: /fly-shops/gear-colorado-fly-fishing
+- Golden Stone Outfitters: /fly-shops/golden-stone-outfitters
+- Grand Teton Fly Fishing: /fly-shops/grand-teton-fly-fishing
+- Grizzly Hackle Fly Shop: /fly-shops/grizzly-hackle-fly-shop
+- Gruene Outfitters: /fly-shops/gruene-outfitters
+- Headwaters Outfitters: /fly-shops/headwaters-outfitters
+- Heber Fly Shop: /fly-shops/heber-fly-shop
+- Henry's Fork Anglers: /fly-shops/henrys-fork-anglers
+- High Desert Angler: /fly-shops/high-desert-angler
+- Hiwassee Outfitters: /fly-shops/hiwassee-outfitters
+- Hunter Banks Company: /fly-shops/hunter-banks
+- Hunter Banks Fly Fishing: /fly-shops/hunter-banks-fly-fishing
+- Hyde Outfitters: /fly-shops/hyde-outfitters
+- Idaho Angling Service: /fly-shops/idaho-angling-service
+- Idaho Troutfitters: /fly-shops/idaho-troutfitters
+- JD High Country Outfitters: /fly-shops/jd-high-country-outfitters
+- Jack Dennis Outdoor Shop: /fly-shops/jack-dennis-outdoor-shop
+- Jack Trout Fly Fishing: /fly-shops/jack-trout-fly-fishing
+- Jacklin's Fly Shop: /fly-shops/jacklins-fly-shop
+- Jackson Hole Fly Company: /fly-shops/jackson-hole-fly-company
+- James River Fly Shop: /fly-shops/james-river-fly-shop
+- Kachemak Bay Fly Shop: /fly-shops/kachemak-bay-fly-shop
+- Kirk's Fly Shop: /fly-shops/kirks-fly-shop
+- La Ribera Lodge Pro Shop: /fly-shops/la-ribera-lodge-pro-shop
+- Lakeside Bait & Tackle: /fly-shops/lakeside-bait-tackle
+- Lakestream Fly Shop: /fly-shops/lakestream-fly-shop
+- Lakewood Camps: /fly-shops/lakewood-camps
+- Lee's Ferry Anglers: /fly-shops/lees-ferry-anglers
+- Libby Camps: /fly-shops/libby-camps
+- Lost Coast Outfitters: /fly-shops/lost-coast-outfitters
+- Lost River Outfitters: /fly-shops/lost-river-outfitters
+- Madison River Fishing Company: /fly-shops/madison-river-fishing-company
+- Madison River Outfitters: /fly-shops/madison-river-outfitters
+- Marble Canyon Outfitters: /fly-shops/marble-canyon-outfitters
+- Minturn Anglers: /fly-shops/minturn-anglers
+- Montana Angler Fly Fishing: /fly-shops/montana-angler-fly-fishing
+- Montana Angler Fly Fishing: /fly-shops/montana-angler
+- Montana Fly Goods: /fly-shops/montana-fly-goods
+- Montana Troutfitters: /fly-shops/montana-troutfitters-shop
+- Mossy Creek Fly Fishing: /fly-shops/mossy-creek-fly-fishing
+- Mountain Angler: /fly-shops/mountain-angler
+- Murray's Fly Shop: /fly-shops/murrays-fly-shop
+- Muskegon River Fly Shop: /fly-shops/muskegon-river-fly-shop
+- NM Fly Fishing Guides: /fly-shops/nm-fly-fishing-guides
+- Nantahala Fly Fishing Company: /fly-shops/nantahala-fly-fishing-company
+- Nervous Waters Fly Shop: /fly-shops/nervous-waters-fly-shop
+- North Fork Anglers: /fly-shops/north-fork-anglers-cody
+- North Platte Lodge: /fly-shops/north-platte-lodge
+- Off the Hook Fly Fishing: /fly-shops/off-the-hook-fly-fishing
+- Ogden Fly Fishing: /fly-shops/ogden-fly-fishing
+- Orange Bus Fly Fishing: /fly-shops/orange-bus-fly-fishing
+- Orvis Bozeman: /fly-shops/orvis-bozeman
+- Orvis Doylestown: /fly-shops/orvis-doylestown
+- Orvis Jackson Hole: /fly-shops/orvis-jackson-hole
+- Orvis Knoxville: /fly-shops/orvis-knoxville
+- Orvis Manchester: /fly-shops/orvis-manchester
+- Orvis Traverse City: /fly-shops/orvis-traverse-city
+- Pacific Angler: /fly-shops/pacific-angler
+- Pacific Fly Fishers: /fly-shops/pacific-fly-fishers
+- Paducah Fly Shop: /fly-shops/paducah-fly-shop
+- Pat Dorsey Fly Fishing: /fly-shops/pat-dorsey-fly-fishing
+- Patient Angler: /fly-shops/patient-angler
+- Pecos River Outfitters: /fly-shops/pecos-river-outfitters
+- Pere Marquette River Lodge: /fly-shops/pere-marquette-river-lodge
+- Picabo Angler Fly Shop: /fly-shops/picabo-angler
+- Pinetop Sporting Goods: /fly-shops/pinetop-sporting-goods
+- Platte River Fly Shop: /fly-shops/platte-river-fly-shop
+- RIGS Fly Shop & Guide Service: /fly-shops/rigs-fly-shop
+- RIGS Fly Shop & Guide Service: /fly-shops/rigs-fly-shop-guide-service
+- Reds Fly Shop: /fly-shops/reds-fly-shop
+- Reno Fly Shop: /fly-shops/reno-fly-shop
+- Rio Grande Anglers: /fly-shops/rio-grande-anglers
+- Rise Beyond Fly Fishing: /fly-shops/rise-beyond-fly-fishing
+- Rising Fish Fly Shop: /fly-shops/rising-fish-fly-shop
+- RiverBend Fly Shop: /fly-shops/riverbend-fly-shop
+- Russ Maddin's Streamside Orvis: /fly-shops/russ-maddins-streamside-orvis
+- Sandy Moret's Florida Keys Outfitters: /fly-shops/florida-keys-outfitters
+- Sierra Fly Fisher: /fly-shops/sierra-fly-fisher
+- Silver Creek Outfitters: /fly-shops/silver-creek-outfitters
+- Snake River Angler: /fly-shops/snake-river-angler
+- Snake River Fly: /fly-shops/snake-river-fly-pocatello
+- Solitude River Trips: /fly-shops/solitude-river-trips
+- South Branch Outfitters: /fly-shops/south-branch-outfitters
+- South Fork Lodge: /fly-shops/south-fork-lodge
+- South Holston River Fly Shop: /fly-shops/south-holston-river-fly-shop
+- South Platte Fly Shop: /fly-shops/south-platte-fly-shop
+- Speywater Lodge: /fly-shops/speywater-lodge
+- Spinner Fall Fly Shop: /fly-shops/spinner-fall-fly-shop
+- Spinner Fall Guide Service: /fly-shops/spinner-fall-guide-service
+- St. Peter's Fly Shop: /fly-shops/st-peters-fly-shop
+- Steamboat Flyfisher: /fly-shops/steamboat-flyfisher
+- Steamboat Flyfishing: /fly-shops/steamboat-flyfishing
+- Stillwater Fly Shop: /fly-shops/stillwater-fly-shop
+- Stoner Fly Fishing: /fly-shops/stoner-fly-fishing
+- Sun Valley Outfitters: /fly-shops/sun-valley-outfitters
+- Sweetgrass Rods: /fly-shops/sweetgrass-rods
+- Sweetwater Fly Shop: /fly-shops/sweetwater-fly-shop
+- TCO Fly Shop: /fly-shops/tco-fly-shop
+- TCO Fly Shop — Cockeysville: /fly-shops/tco-fly-shop-cockeysville
+- TRR Outfitters / Island Park Fly Shop: /fly-shops/trr-outfitters
+- TRR Outfitters — Ashton: /fly-shops/trr-outfitters-ashton
+- TRR Outfitters — Island Park: /fly-shops/trr-outfitters-island-park
+- Tahoe Fly Fishing Outfitters: /fly-shops/tahoe-fly-fishing-outfitters
+- Tangent Outfitters: /fly-shops/tangent-outfitters
+- Taos Fly Shop: /fly-shops/taos-fly-shop
+- Taylor Creek Fly Shops: /fly-shops/taylor-creek-fly-shops
+- Ted Fay Fly Shop: /fly-shops/ted-fay-fly-shop
+- Teton Fly Fishing: /fly-shops/teton-fly-fishing
+- The Confluence Fly Shop: /fly-shops/the-confluence-fly-shop-wa
+- The Evening Hatch: /fly-shops/the-evening-hatch
+- The Fish Hawk: /fly-shops/the-fish-hawk
+- The Fly Fisher: /fly-shops/the-fly-fisher-scotland
+- The Fly Fishers Place: /fly-shops/the-fly-fishers-place
+- The Fly Shop: /fly-shops/the-fly-shop-bend
+- The Fly Shop: /fly-shops/the-fly-shop-redding
+- The Fly Stop: /fly-shops/the-fly-stop
+- The Gorge Fly Shop: /fly-shops/the-gorge-fly-shop
+- The Hungry Trout Fly Shop: /fly-shops/hungry-trout-fly-shop
+- The Kingfisher Fly Shop: /fly-shops/the-kingfisher-fly-shop
+- The Missoulian Angler Fly Shop: /fly-shops/the-missoulian-angler-fly-shop
+- The Reel Fly Shop: /fly-shops/the-reel-fly-shop
+- The Sporting Gentleman: /fly-shops/the-sporting-gentleman
+- The Sporting Life: /fly-shops/the-sporting-life-greenfield
+- The Steamboat Inn: /fly-shops/the-steamboat-inn
+- The Tackle Shop: /fly-shops/tackle-shop-ennis
+- Three Rivers Ranch Fly Shop: /fly-shops/three-rivers-ranch-fly-shop
+- Tight Lines Fly Fishing: /fly-shops/tight-lines-fly-fishing
+- Toccoa River Outfitters: /fly-shops/toccoa-river-outfitters
+- Trout Bum 2 Fly Shop: /fly-shops/trout-bum-2
+- Trout Creek Flies: /fly-shops/trout-creek-flies-driggs
+- Trout Creek Flies: /fly-shops/trout-creek-flies
+- Trout Stalkers Fly Shop: /fly-shops/trout-stalkers-fly-shop
+- TroutHunter: /fly-shops/trouthunter-fly-shop
+- TroutHunter: /fly-shops/trouthunter
+- True Water Fly Shop: /fly-shops/true-water-fly-shop
+- UpCountry Sportfishing: /fly-shops/upcountry-sportfishing
+- Vail Valley Anglers: /fly-shops/vail-valley-anglers
+- WMAT Outdoor Recreation: /fly-shops/wmat-outdoor-recreation
+- West Branch Angler & Resort: /fly-shops/west-branch-angler
+- West Fork Sports: /fly-shops/west-fork-sports
+- Westbank Anglers: /fly-shops/westbank-anglers
+- Western Rivers Flyfisher: /fly-shops/western-rivers-flyfisher
+- Western Rivers Flyfisher (Green River): /fly-shops/western-rivers-green-river
+- White Mountain Fly Shop: /fly-shops/white-mountain-fly-shop
+- Williams River Outfitters: /fly-shops/williams-river-outfitters
+- Williamson River Anglers: /fly-shops/williamson-river-anglers
+- Wind River Outfitters: /fly-shops/wind-river-outfitters
+- World Cast Anglers: /fly-shops/world-cast-anglers
+- Worley Bugger Fly Co.: /fly-shops/worley-bugger-fly-co
+- Wyoming Fly Fishing: /fly-shops/wyoming-fly-fishing
+- Wyoming Trout Guides: /fly-shops/wyoming-trout-guides
+- Wyoming Trout Guides Fly Shop: /fly-shops/wyoming-trout-guides-fly-shop
+- Yellow Breeches Outfitters: /fly-shops/yellow-breeches-outfitters
+- Yellowstone Fly Shop: /fly-shops/yellowstone-fly-shop-idaho
+- Yellowstone Fly Shop: /fly-shops/yellowstone-fly-shop
+- Zoar Outdoor: /fly-shops/zoar-outdoor
 
-## About
+## Destinations
+- Alaska: /destinations/alaska
+- Arizona: /destinations/arizona
+- Arkansas: /destinations/arkansas
+- Bahamas: /destinations/bahamas
+- Belize: /destinations/belize
+- British Columbia, Canada: /destinations/british-columbia
+- California: /destinations/california
+- Chile: /destinations/chile
+- Christmas Island (Kiritimati): /destinations/christmas-island
+- Colorado: /destinations/colorado
+- Connecticut: /destinations/connecticut
+- Cuba: /destinations/cuba
+- Florida Keys: /destinations/florida-keys
+- Georgia: /destinations/georgia
+- Iceland: /destinations/iceland
+- Idaho: /destinations/idaho
+- Ireland: /destinations/ireland
+- Japan: /destinations/japan
+- Kamchatka: /destinations/kamchatka
+- Kentucky: /destinations/kentucky
+- Kola Peninsula: /destinations/kola-peninsula
+- Maine: /destinations/maine
+- Maldives: /destinations/maldives
+- Maryland: /destinations/maryland
+- Massachusetts: /destinations/massachusetts
+- Michigan: /destinations/michigan
+- Minnesota — Driftless: /destinations/minnesota
+- Mongolia: /destinations/mongolia
+- Montana: /destinations/montana
+- Nevada: /destinations/nevada
+- New Jersey: /destinations/new-jersey
+- New Mexico: /destinations/new-mexico
+- New York — Catskills: /destinations/new-york
+- New Zealand: /destinations/new-zealand
+- North Carolina: /destinations/north-carolina
+- Oregon: /destinations/oregon
+- Patagonia, Argentina: /destinations/patagonia
+- Pennsylvania: /destinations/pennsylvania
+- Scotland: /destinations/scotland
+- Seychelles: /destinations/seychelles
+- Slovenia: /destinations/slovenia
+- Tasmania: /destinations/tasmania
+- Tennessee: /destinations/tennessee
+- Texas: /destinations/texas
+- Tierra del Fuego: /destinations/tierra-del-fuego
+- Utah: /destinations/utah
+- Vermont: /destinations/vermont
+- Virginia: /destinations/virginia
+- Washington: /destinations/washington
+- West Virginia: /destinations/west-virginia
+- Wisconsin — Driftless: /destinations/wisconsin
+- Wyoming: /destinations/wyoming
 
-Executive Angler is a comprehensive fly fishing resource and platform covering every major fly fishing destination, river, lodge, guide service, fly shop, and fish species. Editorial content includes technique articles, destination guides, species profiles, and conservation coverage.
+## Rivers
+- Animas River: /rivers/animas-river
+- Arkansas River (Colorado): /rivers/arkansas-river-colorado
+- Au Sable River: /rivers/au-sable-river
+- Ausable River: /rivers/ausable-river-new-york
+- Batten Kill: /rivers/batten-kill-vermont
+- Beaverhead River: /rivers/beaverhead-river-montana
+- Beaverkill River: /rivers/beaverkill-river
+- Big Cottonwood Creek: /rivers/big-cottonwood-creek
+- Big Gunpowder Falls River: /rivers/big-gunpowder-falls-river
+- Big Hole River: /rivers/big-hole-river
+- Big Spring Creek: /rivers/big-spring-creek
+- Big Wood River: /rivers/big-wood-river-idaho
+- Bighorn River: /rivers/bighorn-river-montana
+- Bighorn River (Wyoming): /rivers/bighorn-river-wyoming
+- Bitterroot River: /rivers/bitterroot-river-montana
+- Blackfoot River: /rivers/blackfoot-river-montana
+- Blue River: /rivers/blue-river-colorado
+- Boardman River: /rivers/boardman-river
+- Boulder River: /rivers/boulder-river-montana
+- Bristol Bay Rivers: /rivers/bristol-bay
+- Brule River (Wisconsin): /rivers/brule-river-wisconsin
+- Cache La Poudre River: /rivers/cache-la-poudre-river
+- Caney Fork River: /rivers/caney-fork-river
+- Chattahoochee River: /rivers/chattahoochee-river-ga
+- Chattooga River: /rivers/chattooga-river
+- Chena River (Alaska): /rivers/chena-river
+- Clark Fork River: /rivers/clark-fork-river-montana
+- Clearwater River: /rivers/clearwater-river-idaho
+- Clinch River: /rivers/clinch-river-tennessee
+- Colorado River (Grand County): /rivers/colorado-river-colorado
+- Copper River: /rivers/copper-river-alaska
+- Cranberry River: /rivers/cranberry-river-wv
+- Cumberland River: /rivers/cumberland-river-ky
+- Davidson River: /rivers/davidson-river-nc
+- Deerfield River: /rivers/deerfield-river
+- Delaware River East Branch: /rivers/delaware-river-east-branch
+- Delaware River West Branch: /rivers/delaware-river-west-branch
+- Deschutes River: /rivers/deschutes-river
+- Eagle River: /rivers/eagle-river-colorado
+- Eg-Uur River: /rivers/eg-uur-river
+- Elk River: /rivers/elk-river-tennessee
+- Elk River: /rivers/elk-river-wv
+- Fall River: /rivers/fall-river-california
+- Firehole River: /rivers/firehole-river
+- Florida Keys Flats: /rivers/florida-keys-flats
+- Frying Pan River: /rivers/frying-pan-river
+- Gallatin River: /rivers/gallatin-river
+- Gibbon River: /rivers/river-gibbon
+- Grande Ronde River: /rivers/grande-ronde-river
+- Green River: /rivers/green-river
+- Guadalupe River (Texas): /rivers/guadalupe-river-texas
+- Gunnison River (Black Canyon): /rivers/gunnison-river
+- Ham's Fork: /rivers/hams-fork
+- Hat Creek: /rivers/hat-creek-california
+- Henry's Fork of the Snake River: /rivers/henrys-fork
+- Hiwassee River: /rivers/hiwassee-river
+- James River: /rivers/james-river-va
+- Jardines de la Reina: /rivers/jardines-de-la-reina
+- John Day River: /rivers/john-day-river
+- Kenai River: /rivers/kenai-river
+- Kickapoo River: /rivers/kickapoo-river
+- Klickitat River: /rivers/klickitat-river
+- Lamar River: /rivers/lamar-river-yellowstone
+- Lee''s Ferry: /rivers/lees-ferry-arizona
+- Letort Spring Run: /rivers/letort-spring-run
+- Little Cottonwood Creek: /rivers/little-cottonwood-creek
+- Little Red River: /rivers/little-red-river
+- Lochsa River: /rivers/lochsa-river-idaho
+- Logan River: /rivers/logan-river
+- Madison River: /rivers/madison-river
+- Manistee River: /rivers/manistee-river
+- McCloud River: /rivers/mccloud-river
+- McKenzie River: /rivers/mckenzie-river
+- Methow River: /rivers/methow-river
+- Metolius River: /rivers/metolius-river
+- Missouri River: /rivers/missouri-river
+- Muskegon River: /rivers/muskegon-river
+- Nantahala River: /rivers/nantahala-river
+- Neversink River: /rivers/neversink-river
+- New River: /rivers/new-river-va
+- Norfork River: /rivers/norfork-river
+- North Branch Potomac River: /rivers/north-branch-potomac-river
+- North Malé Atoll: /rivers/north-male-atoll
+- North Platte River (Wyoming): /rivers/north-platte-wyoming
+- North Umpqua River: /rivers/north-umpqua-river
+- Pecos River: /rivers/pecos-river-new-mexico
+- Penns Creek: /rivers/penns-creek
+- Pere Marquette River: /rivers/pere-marquette-river
+- Ponoi River: /rivers/ponoi-river
+- Provo River: /rivers/provo-river
+- Rapid River: /rivers/rapid-river-maine
+- Rapidan River: /rivers/rapidan-river
+- Rio Chama: /rivers/rio-chama-new-mexico
+- Rio Grande (Colorado): /rivers/rio-grande-colorado
+- Rio Grande — Taos Box: /rivers/rio-grande-new-mexico
+- River Moy: /rivers/river-moy
+- Roaring Fork River: /rivers/roaring-fork-river
+- Rock Creek: /rivers/rock-creek
+- Rogue River: /rivers/rogue-river
+- Ruby River: /rivers/ruby-river-montana
+- Russian River (Alaska): /rivers/russian-river-alaska
+- Salmon River: /rivers/salmon-river-idaho
+- San Juan River: /rivers/san-juan-river
+- Selway River: /rivers/selway-river-idaho
+- Silver Creek: /rivers/silver-creek
+- Skagit River: /rivers/skagit-river
+- Slough Creek: /rivers/slough-creek-yellowstone
+- Smith and Morehouse Creek: /rivers/smith-morehouse-creek
+- Snake River (Wyoming): /rivers/snake-river-wyoming
+- South Fork Snake River: /rivers/south-fork-snake-river-idaho
+- South Fork of the Boise River: /rivers/south-fork-boise
+- South Holston River: /rivers/south-holston-river
+- South Platte River: /rivers/south-platte-river
+- Spokane River: /rivers/spokane-river
+- Spring River (Arkansas): /rivers/spring-river-arkansas
+- St. Joe River: /rivers/st-joe-river-idaho
+- Strawberry River: /rivers/strawberry-river-utah
+- Swift River: /rivers/swift-river-massachusetts
+- Teton River (Idaho): /rivers/teton-river-idaho
+- Toccoa River: /rivers/toccoa-river-ga
+- Truckee River: /rivers/truckee-river
+- Truckee River (Nevada): /rivers/truckee-river-nevada
+- Tuckasegee River: /rivers/tuckasegee-river
+- Two-Hearted River: /rivers/two-hearted-river
+- Upper Sacramento River: /rivers/upper-sacramento-river
+- Watauga River: /rivers/watauga-river-tennessee
+- Weber River: /rivers/weber-river-utah
+- West Branch Farmington River: /rivers/west-branch-farmington-river
+- West Branch Penobscot River: /rivers/west-branch-penobscot
+- White River (Arkansas): /rivers/white-river-arkansas
+- White River — White Mountains: /rivers/white-river-arizona
+- Williamson River: /rivers/williamson-river-oregon
+- Willowemoc Creek: /rivers/willowemoc-creek
+- Wind River: /rivers/wind-river-wyoming
+- Yakima River: /rivers/yakima-river
+- Yampa River: /rivers/yampa-river
+- Yellow Breeches Creek: /rivers/yellow-breeches-creek
+- Yellowstone River: /rivers/yellowstone-river
 
-The platform includes a personal fishing journal where anglers log sessions, track catches, record flies used, and analyze their performance over time.
+## Lodges
+- Alphonse Island Lodge: /lodges/alphonse-island-lodge
+- Andros South Bonefish Lodge: /lodges/andros-south-bonefish-lodge
+- Avalon Fleet — Jardines de la Reina: /lodges/avalon-jardines-de-la-reina
+- Baker Lodge Patagonia: /lodges/baker-lodge-patagonia
+- Bristol Bay Sportfishing Lodge: /lodges/bristol-bay-sportfishing
+- Christmas Island Outfitters Lodge: /lodges/christmas-island-outfitters
+- Craig Montana Lodge: /lodges/craig-montana-lodge
+- Craigellachie House: /lodges/craigellachie-house
+- Dean River Lodge: /lodges/dean-river-lodge
+- Estancia Rio Grande: /lodges/estancia-rio-grande
+- Firehole Ranch: /lodges/firehole-ranch
+- Henry's Fork Lodge: /lodges/henrys-fork-lodge
+- Islamorada Flats Lodge: /lodges/islamorada-flats-lodge
+- Kamchatka River Camp: /lodges/kamchatka-river-camp
+- Kau Tapen Lodge: /lodges/kau-tapen-lodge
+- Laxa i Myvatn Lodge: /lodges/laxa-myvatn-lodge
+- Limestone Springs Inn: /lodges/limestone-springs-inn
+- Lone Mountain Ranch: /lodges/lone-mountain-ranch
+- Maldives Flyfish Explorer: /lodges/maldives-flyfish-explorer
+- Mount Falcon Estate: /lodges/mount-falcon-estate
+- Nagara River Ryokan: /lodges/nagara-river-ryokan
+- Pere Marquette River Lodge: /lodges/pere-marquette-river-lodge
+- Ponoi River Camp: /lodges/ponoi-river-camp
+- Snake River Sporting Club Lodge: /lodges/snake-river-sporting-club
+- Soca Valley Lodge: /lodges/soca-valley-lodge
+- Steamboat Inn: /lodges/steamboat-inn
+- Sweetwater Travel Mongolia Camp: /lodges/sweetwater-travel-mongolia
+- Taylor Creek Lodge: /lodges/taylor-creek-lodge
+- Tongariro River Lodge: /lodges/tongariro-river-lodge
+- Turneffe Flats Resort: /lodges/turneffe-flats-resort
+- Western Lakes Lodge: /lodges/western-lakes-lodge
+- White River Trout Lodge: /lodges/white-river-trout-lodge
 
-Website: https://www.executiveangler.com
+## Guides
+- Alejandro Fernandez — Rio Grande Sea Trout: /guides/tierra-del-fuego-guide
+- Alexei Volkov — Ponoi River Guide: /guides/alexei-volkov-ponoi-guide
+- Artful Angler Guide Service: /guides/artful-angler
+- Backwater Angler Guide Service: /guides/backwater-angler-guides
+- Big Y Fly Co. Guides: /guides/big-y-fly-co-klickitat
+- Bighorn Angler Guide Service: /guides/bighorn-angler-guide-service
+- Blue Ridge Mountain Adventures Guides: /guides/blue-ridge-mountain-adventures-guides
+- Bold Batbayar — Mongolia Taimen Specialist: /guides/bold-batbayar-mongolia-guide
+- Brad Burden: /guides/brad-burden
+- Bucking Rainbow Outfitters: /guides/bucking-rainbow-outfitters
+- Bud Lilly's Trout Shop Guide Service: /guides/bud-lillys-guide-service
+- Caney Fork River Guide Service: /guides/caney-fork-river-guide-service
+- Captain Luis Cabrera — Islamorada Flats: /guides/islamorada-flats-guide
+- Carlos Garcia — Cuban Saltwater Specialist: /guides/carlos-garcia-cuba-guide
+- Chama River Fly Fishing: /guides/chama-river-fly-fishing
+- Chattahoochee Outfitters Guides: /guides/chattahoochee-outfitters-guides
+- Classic Journey Outfitters: /guides/classic-journey-outfitters
+- Clinch River Company Guides: /guides/clinch-river-company-guides
+- Cody Lazenby — White River Fly Fishing: /guides/white-river-fly-fishing
+- Cohutta Fishing Company Guides: /guides/cohutta-fishing-company-guides
+- Confluence Outfitters Guides: /guides/confluence-outfitters-ca
+- Cumberland River Fly Fishing Guide Service: /guides/cumberland-river-fly-fishing-guide-service
+- Cutthroat Anglers Guide Service: /guides/cutthroat-anglers
+- Dale Pearson — Henry's Fork Anglers: /guides/henrys-fork-anglers
+- Daniel Hackett — Tasmania Highland Fly Fishing: /guides/tasmania-highland-guide
+- Davidson River Outfitters Guide Staff: /guides/davidson-river-outfitters-guides
+- Domenick Swentosky — Troutbitten: /guides/domenick-swentosky-troutbitten
+- Dragonfly Anglers: /guides/dragonfly-anglers
+- Driftless Angler Guide Service: /guides/driftless-angler-guides
+- Duranglers Guide Service: /guides/duranglers-flies-supplies
+- Ed Shenk III — Cumberland Valley Anglers: /guides/cumberland-valley-anglers
+- Elk River Touring Company Guides: /guides/elk-river-touring-company-guides
+- Elton Garbutt — Belize Saltwater Fly Fishing: /guides/belize-flats-guide
+- Emerald Water Anglers — Skagit Guides: /guides/emerald-water-anglers-skagit
+- Fin and Fire Fly Fishing: /guides/fin-and-fire-fly-fishing
+- Fly Fishing the Smokies Guide Team: /guides/fly-fishing-the-smokies-guides
+- Four Rivers Fishing Company: /guides/four-rivers-fishing-company
+- Frontier Anglers Guide Service: /guides/frontier-anglers-guide-service
+- Full Swing Outfitters: /guides/full-swing-outfitters
+- Gone Fishing Oregon: /guides/gone-fishing-oregon
+- Grey Reef Outfitters: /guides/grey-reef-outfitters
+- Grizzly Hackle Guide Service: /guides/grizzly-hackle-guide-service
+- Gudmundur Sigurdsson — Iceland Fly Fishing: /guides/iceland-salmon-guide
+- Hamish McLeod — NZ Backcountry Fly Fishing: /guides/nz-backcountry-fly-fishing
+- High Desert Angler Guide Service: /guides/high-desert-angler
+- Ibrahim Naseem — Maldives GT Specialist: /guides/ibrahim-naseem-maldives-guide
+- Jack Trout: /guides/jack-trout
+- James River Fly Shop Guide Team: /guides/james-river-fly-shop-guides
+- Jim Navarre — Au Sable River Guides: /guides/au-sable-river-guides
+- Joe Demalderis — Cross Current Guide Services: /guides/joe-demalderis-cross-current
+- Keith Rose-Innes — Alphonse Flats Guide: /guides/seychelles-flats-guide
+- Kenai River Drifters Lodge: /guides/kenai-river-drifters-lodge
+- Lakewood Camps Registered Maine Guides: /guides/maine-registered-guide-lakewood
+- Lee's Ferry Anglers Guide Service: /guides/lees-ferry-anglers
+- Loup Loup Guide Service: /guides/loup-loup-guide-service
+- Luka Zupancic — Soca Valley Fly Fishing: /guides/soca-marble-trout-guide
+- Marble Canyon Outfitters: /guides/marble-canyon-outfitters
+- Matias Orellana — Patagonia Trout Adventures: /guides/patagonia-trout-adventures
+- Miguel Vasquez — Frying Pan Anglers: /guides/frying-pan-anglers
+- Missoulian Angler Guide Service: /guides/missoulian-angler-guide-service
+- Moamoa Teata — Kiritimati Flats Guide: /guides/christmas-island-guide
+- Montana Angler Guide Service: /guides/montana-angler-guide-service
+- Montana Trout on the Fly: /guides/montana-trout-on-the-fly
+- Montana Troutfitters: /guides/montana-troutfitters
+- Mossy Creek Fly Fishing Guides: /guides/mossy-creek-fly-fishing-guides
+- Nantahala Fly Fishing Company Guide Team: /guides/nantahala-fly-fishing-co-guides
+- Nate Runyan — Bristol Bay Fly Fishing: /guides/bristol-bay-fly-fishing
+- Off the Hook Fly Fishing Guides: /guides/off-the-hook-fly-fishing
+- Owen Blackwater — Skeena Steelhead Adventures: /guides/skeena-steelhead-guide
+- Pacific Crest Fly Fishing: /guides/pacific-crest-fly-fishing
+- Paddy McDonnell — Moy Ghillie Service: /guides/paddy-mcdonnell-moy-ghillie
+- Pat Dorsey Fly Fishing: /guides/pat-dorsey-fly-fishing
+- Prescott Rolle — Andros Island Bonefishing: /guides/andros-bonefish-guide
+- RIGS Fly Shop & Guide Service: /guides/rigs-fly-shop-guide-service
+- Reds Fly Shop Guides: /guides/reds-fly-shop-yakima
+- Richard Garfield — Fly Fish the Adirondacks: /guides/fly-fish-the-adirondacks
+- Rise Beyond Fly Fishing: /guides/rise-beyond-fly-fishing
+- River Drifters: /guides/river-drifters
+- Riverdog Outfitters: /guides/riverdog-outfitters
+- Rodrigo Sandoval — Patagonia Chile Fly Fishing: /guides/chile-patagonia-guide
+- Rolling Waters Guide Service: /guides/rolling-waters-guide-service
+- Russell Blessing Guide Service: /guides/russell-blessing-guide-service
+- Salmon River Outfitters: /guides/salmon-river-outfitters
+- Sarah Whitfield — Deschutes River Outfitters: /guides/deschutes-river-outfitters
+- Scott ODonnell — Speywater Lodge: /guides/scott-odonnell-speywater
+- Sergei Volkov — Kamchatka Wilderness Fishing: /guides/kamchatka-wilderness-guide
+- Sierra Fly Fisher Guides: /guides/sierra-fly-fisher-guides
+- South Fork Snake River Guides: /guides/south-fork-snake-guides
+- Spinner Fall Fly Shop Guide Service: /guides/spinner-fall-fly-shop
+- St. Peter's Fly Shop Guide Service: /guides/st-peters-fly-shop
+- Stillwater Fly Shop Guide Service: /guides/stillwater-fly-shop
+- Stoner Fly Fishing Guide: /guides/stoner-fly-fishing-guides
+- Stotts Guides: /guides/stotts-guides
+- Takeshi Yamamoto — Japan Tenkara Fly Fishing: /guides/japan-tenkara-guide
+- Tangent Outfitters Guide Team: /guides/tangent-outfitters-guides
+- Taos Fly Shop Guide Service: /guides/taos-fly-shop
+- Taylor Creek Fly Shops Guide Service: /guides/taylor-creek-fly-shops
+- Ted Fay Fly Shop Guides: /guides/ted-fay
+- Tennessee Trout Guide Service: /guides/tennessee-trout-guide-service
+- The Fly Shop Guide Team: /guides/the-fly-shop-guides
+- Trent Kirkpatrick — Jackson Hole Anglers: /guides/jackson-hole-anglers
+- UpCountry Sportfishing Guide Service: /guides/upcountry-farmington-guides
+- Vail Valley Anglers Guide Service: /guides/vail-valley-anglers
+- White Mountain Fly Shop Guide Service: /guides/white-mountain-fly-shop
+- Williams River Outfitters Guides: /guides/williams-river-outfitters-guides
+- Wind River Canyon Guides: /guides/wind-river-canyon-guides
 
----
+## Articles
+- A First Timer's Guide to Patagonia: /articles/first-timers-guide-to-patagonia
+- Catch and Release Best Practices: /articles/catch-and-release-best-practices
+- Conservation and the Future of Wild Trout: /articles/conservation-future-wild-trout
+- Fly Fishing Photography: Capturing the Moment: /articles/fly-fishing-photography-capturing-the-moment
+- Iceland's Arctic Char and Atlantic Salmon: /articles/icelands-arctic-char-atlantic-salmon
+- Introduction to Euro Nymphing: /articles/introduction-to-euro-nymphing
+- Introduction to Tenkara Fishing: /articles/introduction-to-tenkara-fishing
+- Montana's Best Fly Fishing Waters: /articles/montanas-best-fly-fishing-waters
+- Reading Water: A Complete Guide: /articles/reading-water-complete-guide
+- Saltwater Fly Fishing: Chasing the Grand Slam: /articles/saltwater-fly-fishing-chasing-grand-slam
+- Streamer Fishing Mastery: /articles/streamer-fishing-mastery
+- The Complete Guide to Fly Rod Selection: /articles/complete-guide-fly-rod-selection
+- The Dry Fly Angler's Guide to Matching the Hatch: /articles/dry-fly-anglers-guide-matching-the-hatch
+- The Essential Fly Box: 20 Patterns Every Angler Needs: /articles/essential-fly-box-20-patterns
+- Understanding Trout Behavior Through the Seasons: /articles/understanding-trout-behavior-through-seasons
+- Women in Fly Fishing: Breaking the Current: /articles/women-in-fly-fishing-breaking-the-current
 
-## Content Overview
+## Species
+- Arctic Char (Salvelinus alpinus): /species/arctic-char
+- Arctic Grayling (Thymallus arcticus): /species/arctic-grayling
+- Atlantic Salmon (Salmo salar): /species/atlantic-salmon
+- Barracuda (Sphyraena barracuda): /species/barracuda
+- Bonefish (Albula vulpes): /species/bonefish
+- Brook Trout (Salvelinus fontinalis): /species/brook-trout
+- Brown Trout (Salmo trutta): /species/brown-trout
+- Bull Trout (Salvelinus confluentus): /species/bull-trout
+- Carp (Cyprinus carpio): /species/carp
+- Chain Pickerel (Esox niger): /species/chain-pickerel
+- Chinook Salmon (Oncorhynchus tshawytscha): /species/chinook-salmon
+- Chum Salmon (Oncorhynchus keta): /species/chum-salmon
+- Coho Salmon (Oncorhynchus kisutch): /species/coho-salmon
+- Cutthroat Trout (Oncorhynchus clarkii): /species/cutthroat-trout
+- Giant Trevally (GT) (Caranx ignobilis): /species/giant-trevally
+- Golden Trout (Oncorhynchus aguabonita): /species/golden-trout
+- Lake Trout (Salvelinus namaycush): /species/lake-trout
+- Largemouth Bass (Micropterus salmoides): /species/largemouth-bass
+- Marble Trout (Salmo marmoratus): /species/marble-trout
+- Mountain Whitefish (Prosopium williamsoni): /species/mountain-whitefish
+- Musky (Esox masquinongy): /species/musky
+- Northern Pike (Esox lucius): /species/northern-pike
+- Peacock Bass (Cichla temensis): /species/peacock-bass
+- Permit (Trachinotus falcatus): /species/permit
+- Pink Salmon (Oncorhynchus gorbuscha): /species/pink-salmon
+- Rainbow Trout (Oncorhynchus mykiss): /species/rainbow-trout
+- Redfish (Sciaenops ocellatus): /species/redfish
+- Roosterfish (Nematistius pectoralis): /species/roosterfish
+- Smallmouth Bass (Micropterus dolomieu): /species/smallmouth-bass
+- Snook (Centropomus undecimalis): /species/snook
+- Sockeye Salmon (Oncorhynchus nerka): /species/sockeye-salmon
+- Steelhead (Oncorhynchus mykiss (anadromous)): /species/steelhead
+- Striped Bass (Morone saxatilis): /species/striped-bass
+- Tarpon (Megalops atlanticus): /species/tarpon
+- Tiger Musky (Esox masquinongy × Esox lucius): /species/tiger-musky
 
-| Content Type | Count | Description |
-|---|---|---|
-| Destinations | 52 | Geographic fly fishing regions worldwide |
-| Rivers & Waters | 138 | Individual waterways with maps, hatch charts, USGS flow data |
-| Species | 35 | Fish species profiles with tactics and fly recommendations |
-| Lodges | 32 | Fly fishing lodges with pricing, amenities, seasons |
-| Guides | 106 | Professional guide services with specialties and rates |
-| Fly Shops | 230 | Local fly shops with hours, services, and brands |
-| Articles | 16 | Long-form editorial: techniques, destinations, gear, conservation |
-| Fly Library | 120 | Canonical fly patterns with tying guides and river matches |
-| Fly Categories | 8 | Dry, Nymph, Streamer, Emerger, Wet, Terrestrial, Egg, Midge |
-| Flies by River | 138 | Best patterns matched to each river's hatches |
-
----
-
-## Destinations (52)
-
-Each destination page includes: overview, best fishing months, target species, rivers, lodges, guides, fly shops, interactive maps, and community photos.
-
-- /destinations/alaska — Alaska
-- /destinations/arizona — Arizona
-- /destinations/arkansas — Arkansas
-- /destinations/bahamas — Bahamas
-- /destinations/belize — Belize
-- /destinations/british-columbia — British Columbia, Canada
-- /destinations/california — California
-- /destinations/chile — Chile
-- /destinations/christmas-island — Christmas Island (Kiritimati)
-- /destinations/colorado — Colorado
-- /destinations/connecticut — Connecticut
-- /destinations/cuba — Cuba
-- /destinations/florida-keys — Florida Keys
-- /destinations/georgia — Georgia
-- /destinations/iceland — Iceland
-- /destinations/idaho — Idaho
-- /destinations/ireland — Ireland
-- /destinations/japan — Japan
-- /destinations/kamchatka — Kamchatka
-- /destinations/kentucky — Kentucky
-- /destinations/kola-peninsula — Kola Peninsula
-- /destinations/maine — Maine
-- /destinations/maldives — Maldives
-- /destinations/maryland — Maryland
-- /destinations/massachusetts — Massachusetts
-- /destinations/michigan — Michigan
-- /destinations/minnesota — Minnesota — Driftless
-- /destinations/mongolia — Mongolia
-- /destinations/montana — Montana
-- /destinations/nevada — Nevada
-- /destinations/new-jersey — New Jersey
-- /destinations/new-mexico — New Mexico
-- /destinations/new-york — New York — Catskills
-- /destinations/new-zealand — New Zealand
-- /destinations/north-carolina — North Carolina
-- /destinations/oregon — Oregon
-- /destinations/patagonia — Patagonia, Argentina
-- /destinations/pennsylvania — Pennsylvania
-- /destinations/scotland — Scotland
-- /destinations/seychelles — Seychelles
-- /destinations/slovenia — Slovenia
-- /destinations/tasmania — Tasmania
-- /destinations/tennessee — Tennessee
-- /destinations/texas — Texas
-- /destinations/tierra-del-fuego — Tierra del Fuego
-- /destinations/utah — Utah
-- /destinations/vermont — Vermont
-- /destinations/virginia — Virginia
-- /destinations/washington — Washington
-- /destinations/west-virginia — West Virginia
-- /destinations/wisconsin — Wisconsin — Driftless
-- /destinations/wyoming — Wyoming
-
----
-
-## Rivers & Waters (138)
-
-Each river page includes: description, species, flow type, access points, hatch chart, interactive Mapbox map, nearby lodges, guides, fly shops, and live USGS flow conditions.
-
-- /rivers/animas-river — Animas River
-- /rivers/arkansas-river-colorado — Arkansas River (Colorado)
-- /rivers/au-sable-river — Au Sable River
-- /rivers/ausable-river-new-york — Ausable River
-- /rivers/batten-kill-vermont — Batten Kill
-- /rivers/beaverhead-river-montana — Beaverhead River
-- /rivers/beaverkill-river — Beaverkill River
-- /rivers/big-cottonwood-creek — Big Cottonwood Creek
-- /rivers/big-gunpowder-falls-river — Big Gunpowder Falls River
-- /rivers/big-hole-river — Big Hole River
-- /rivers/big-spring-creek — Big Spring Creek
-- /rivers/big-wood-river-idaho — Big Wood River
-- /rivers/bighorn-river-montana — Bighorn River
-- /rivers/bighorn-river-wyoming — Bighorn River (Wyoming)
-- /rivers/bitterroot-river-montana — Bitterroot River
-- /rivers/blackfoot-river-montana — Blackfoot River
-- /rivers/blue-river-colorado — Blue River
-- /rivers/boardman-river — Boardman River
-- /rivers/boulder-river-montana — Boulder River
-- /rivers/bristol-bay — Bristol Bay Rivers
-- /rivers/brule-river-wisconsin — Brule River (Wisconsin)
-- /rivers/cache-la-poudre-river — Cache La Poudre River
-- /rivers/caney-fork-river — Caney Fork River
-- /rivers/chattahoochee-river-ga — Chattahoochee River
-- /rivers/chattooga-river — Chattooga River
-- /rivers/chena-river — Chena River (Alaska)
-- /rivers/clark-fork-river-montana — Clark Fork River
-- /rivers/clearwater-river-idaho — Clearwater River
-- /rivers/clinch-river-tennessee — Clinch River
-- /rivers/colorado-river-colorado — Colorado River (Grand County)
-- /rivers/copper-river-alaska — Copper River
-- /rivers/cranberry-river-wv — Cranberry River
-- /rivers/cumberland-river-ky — Cumberland River
-- /rivers/davidson-river-nc — Davidson River
-- /rivers/deerfield-river — Deerfield River
-- /rivers/delaware-river-east-branch — Delaware River East Branch
-- /rivers/delaware-river-west-branch — Delaware River West Branch
-- /rivers/deschutes-river — Deschutes River
-- /rivers/eagle-river-colorado — Eagle River
-- /rivers/eg-uur-river — Eg-Uur River
-- /rivers/elk-river-tennessee — Elk River
-- /rivers/elk-river-wv — Elk River
-- /rivers/fall-river-california — Fall River
-- /rivers/firehole-river — Firehole River
-- /rivers/florida-keys-flats — Florida Keys Flats
-- /rivers/frying-pan-river — Frying Pan River
-- /rivers/gallatin-river — Gallatin River
-- /rivers/river-gibbon — Gibbon River
-- /rivers/grande-ronde-river — Grande Ronde River
-- /rivers/green-river — Green River
-- /rivers/guadalupe-river-texas — Guadalupe River (Texas)
-- /rivers/gunnison-river — Gunnison River (Black Canyon)
-- /rivers/hams-fork — Ham's Fork
-- /rivers/hat-creek-california — Hat Creek
-- /rivers/henrys-fork — Henry's Fork of the Snake River
-- /rivers/hiwassee-river — Hiwassee River
-- /rivers/james-river-va — James River
-- /rivers/jardines-de-la-reina — Jardines de la Reina
-- /rivers/john-day-river — John Day River
-- /rivers/kenai-river — Kenai River
-- /rivers/kickapoo-river — Kickapoo River
-- /rivers/klickitat-river — Klickitat River
-- /rivers/lamar-river-yellowstone — Lamar River
-- /rivers/lees-ferry-arizona — Lee''s Ferry
-- /rivers/letort-spring-run — Letort Spring Run
-- /rivers/little-cottonwood-creek — Little Cottonwood Creek
-- /rivers/little-red-river — Little Red River
-- /rivers/lochsa-river-idaho — Lochsa River
-- /rivers/logan-river — Logan River
-- /rivers/madison-river — Madison River
-- /rivers/manistee-river — Manistee River
-- /rivers/mccloud-river — McCloud River
-- /rivers/mckenzie-river — McKenzie River
-- /rivers/methow-river — Methow River
-- /rivers/metolius-river — Metolius River
-- /rivers/missouri-river — Missouri River
-- /rivers/muskegon-river — Muskegon River
-- /rivers/nantahala-river — Nantahala River
-- /rivers/neversink-river — Neversink River
-- /rivers/new-river-va — New River
-- /rivers/norfork-river — Norfork River
-- /rivers/north-branch-potomac-river — North Branch Potomac River
-- /rivers/north-male-atoll — North Malé Atoll
-- /rivers/north-platte-wyoming — North Platte River (Wyoming)
-- /rivers/north-umpqua-river — North Umpqua River
-- /rivers/pecos-river-new-mexico — Pecos River
-- /rivers/penns-creek — Penns Creek
-- /rivers/pere-marquette-river — Pere Marquette River
-- /rivers/ponoi-river — Ponoi River
-- /rivers/provo-river — Provo River
-- /rivers/rapid-river-maine — Rapid River
-- /rivers/rapidan-river — Rapidan River
-- /rivers/rio-chama-new-mexico — Rio Chama
-- /rivers/rio-grande-colorado — Rio Grande (Colorado)
-- /rivers/rio-grande-new-mexico — Rio Grande — Taos Box
-- /rivers/river-moy — River Moy
-- /rivers/roaring-fork-river — Roaring Fork River
-- /rivers/rock-creek — Rock Creek
-- /rivers/rogue-river — Rogue River
-- /rivers/ruby-river-montana — Ruby River
-- /rivers/russian-river-alaska — Russian River (Alaska)
-- /rivers/salmon-river-idaho — Salmon River
-- /rivers/san-juan-river — San Juan River
-- /rivers/selway-river-idaho — Selway River
-- /rivers/silver-creek — Silver Creek
-- /rivers/skagit-river — Skagit River
-- /rivers/slough-creek-yellowstone — Slough Creek
-- /rivers/smith-morehouse-creek — Smith and Morehouse Creek
-- /rivers/snake-river-wyoming — Snake River (Wyoming)
-- /rivers/south-fork-snake-river-idaho — South Fork Snake River
-- /rivers/south-fork-boise — South Fork of the Boise River
-- /rivers/south-holston-river — South Holston River
-- /rivers/south-platte-river — South Platte River
-- /rivers/spokane-river — Spokane River
-- /rivers/spring-river-arkansas — Spring River (Arkansas)
-- /rivers/st-joe-river-idaho — St. Joe River
-- /rivers/strawberry-river-utah — Strawberry River
-- /rivers/swift-river-massachusetts — Swift River
-- /rivers/teton-river-idaho — Teton River (Idaho)
-- /rivers/toccoa-river-ga — Toccoa River
-- /rivers/truckee-river — Truckee River
-- /rivers/truckee-river-nevada — Truckee River (Nevada)
-- /rivers/tuckasegee-river — Tuckasegee River
-- /rivers/two-hearted-river — Two-Hearted River
-- /rivers/upper-sacramento-river — Upper Sacramento River
-- /rivers/watauga-river-tennessee — Watauga River
-- /rivers/weber-river-utah — Weber River
-- /rivers/west-branch-farmington-river — West Branch Farmington River
-- /rivers/west-branch-penobscot — West Branch Penobscot River
-- /rivers/white-river-arkansas — White River (Arkansas)
-- /rivers/white-river-arizona — White River — White Mountains
-- /rivers/williamson-river-oregon — Williamson River
-- /rivers/willowemoc-creek — Willowemoc Creek
-- /rivers/wind-river-wyoming — Wind River
-- /rivers/yakima-river — Yakima River
-- /rivers/yampa-river — Yampa River
-- /rivers/yellow-breeches-creek — Yellow Breeches Creek
-- /rivers/yellowstone-river — Yellowstone River
-
----
-
-## Species (35)
-
-Each species page includes: description, taxonomy, habitat, spawning calendar, conservation status, recommended fly patterns, tackle tips, related destinations, related rivers, and FAQ.
-
-- /species/arctic-char — Arctic Char (Salvelinus alpinus)
-- /species/arctic-grayling — Arctic Grayling (Thymallus arcticus)
-- /species/atlantic-salmon — Atlantic Salmon (Salmo salar)
-- /species/barracuda — Barracuda (Sphyraena barracuda)
-- /species/bonefish — Bonefish (Albula vulpes)
-- /species/brook-trout — Brook Trout (Salvelinus fontinalis)
-- /species/brown-trout — Brown Trout (Salmo trutta)
-- /species/bull-trout — Bull Trout (Salvelinus confluentus)
-- /species/carp — Carp (Cyprinus carpio)
-- /species/chain-pickerel — Chain Pickerel (Esox niger)
-- /species/chinook-salmon — Chinook Salmon (Oncorhynchus tshawytscha)
-- /species/chum-salmon — Chum Salmon (Oncorhynchus keta)
-- /species/coho-salmon — Coho Salmon (Oncorhynchus kisutch)
-- /species/cutthroat-trout — Cutthroat Trout (Oncorhynchus clarkii)
-- /species/giant-trevally — Giant Trevally (GT) (Caranx ignobilis)
-- /species/golden-trout — Golden Trout (Oncorhynchus aguabonita)
-- /species/lake-trout — Lake Trout (Salvelinus namaycush)
-- /species/largemouth-bass — Largemouth Bass (Micropterus salmoides)
-- /species/marble-trout — Marble Trout (Salmo marmoratus)
-- /species/mountain-whitefish — Mountain Whitefish (Prosopium williamsoni)
-- /species/musky — Musky (Esox masquinongy)
-- /species/northern-pike — Northern Pike (Esox lucius)
-- /species/peacock-bass — Peacock Bass (Cichla temensis)
-- /species/permit — Permit (Trachinotus falcatus)
-- /species/pink-salmon — Pink Salmon (Oncorhynchus gorbuscha)
-- /species/rainbow-trout — Rainbow Trout (Oncorhynchus mykiss)
-- /species/redfish — Redfish (Sciaenops ocellatus)
-- /species/roosterfish — Roosterfish (Nematistius pectoralis)
-- /species/smallmouth-bass — Smallmouth Bass (Micropterus dolomieu)
-- /species/snook — Snook (Centropomus undecimalis)
-- /species/sockeye-salmon — Sockeye Salmon (Oncorhynchus nerka)
-- /species/steelhead — Steelhead (Oncorhynchus mykiss (anadromous))
-- /species/striped-bass — Striped Bass (Morone saxatilis)
-- /species/tarpon — Tarpon (Megalops atlanticus)
-- /species/tiger-musky — Tiger Musky (Esox masquinongy × Esox lucius)
-
----
-
-## Lodges (32)
-
-Each lodge page includes: description, amenities, pricing, season dates, capacity, nearby rivers, interactive map, and booking links.
-
-- /lodges/alphonse-island-lodge — Alphonse Island Lodge
-- /lodges/andros-south-bonefish-lodge — Andros South Bonefish Lodge
-- /lodges/avalon-jardines-de-la-reina — Avalon Fleet — Jardines de la Reina
-- /lodges/baker-lodge-patagonia — Baker Lodge Patagonia
-- /lodges/bristol-bay-sportfishing — Bristol Bay Sportfishing Lodge
-- /lodges/christmas-island-outfitters — Christmas Island Outfitters Lodge
-- /lodges/craig-montana-lodge — Craig Montana Lodge
-- /lodges/craigellachie-house — Craigellachie House
-- /lodges/dean-river-lodge — Dean River Lodge
-- /lodges/estancia-rio-grande — Estancia Rio Grande
-- /lodges/firehole-ranch — Firehole Ranch
-- /lodges/henrys-fork-lodge — Henry's Fork Lodge
-- /lodges/islamorada-flats-lodge — Islamorada Flats Lodge
-- /lodges/kamchatka-river-camp — Kamchatka River Camp
-- /lodges/kau-tapen-lodge — Kau Tapen Lodge
-- /lodges/laxa-myvatn-lodge — Laxa i Myvatn Lodge
-- /lodges/limestone-springs-inn — Limestone Springs Inn
-- /lodges/lone-mountain-ranch — Lone Mountain Ranch
-- /lodges/maldives-flyfish-explorer — Maldives Flyfish Explorer
-- /lodges/mount-falcon-estate — Mount Falcon Estate
-- /lodges/nagara-river-ryokan — Nagara River Ryokan
-- /lodges/pere-marquette-river-lodge — Pere Marquette River Lodge
-- /lodges/ponoi-river-camp — Ponoi River Camp
-- /lodges/snake-river-sporting-club — Snake River Sporting Club Lodge
-- /lodges/soca-valley-lodge — Soca Valley Lodge
-- /lodges/steamboat-inn — Steamboat Inn
-- /lodges/sweetwater-travel-mongolia — Sweetwater Travel Mongolia Camp
-- /lodges/taylor-creek-lodge — Taylor Creek Lodge
-- /lodges/tongariro-river-lodge — Tongariro River Lodge
-- /lodges/turneffe-flats-resort — Turneffe Flats Resort
-- /lodges/western-lakes-lodge — Western Lakes Lodge
-- /lodges/white-river-trout-lodge — White River Trout Lodge
-
----
-
-## Guides (106)
-
-Each guide page includes: bio, specialties, years of experience, daily rates, rivers covered, and direct contact information.
-
-- /guides/tierra-del-fuego-guide — Alejandro Fernandez — Rio Grande Sea Trout
-- /guides/alexei-volkov-ponoi-guide — Alexei Volkov — Ponoi River Guide
-- /guides/artful-angler — Artful Angler Guide Service
-- /guides/backwater-angler-guides — Backwater Angler Guide Service
-- /guides/big-y-fly-co-klickitat — Big Y Fly Co. Guides
-- /guides/bighorn-angler-guide-service — Bighorn Angler Guide Service
-- /guides/blue-ridge-mountain-adventures-guides — Blue Ridge Mountain Adventures Guides
-- /guides/bold-batbayar-mongolia-guide — Bold Batbayar — Mongolia Taimen Specialist
-- /guides/brad-burden — Brad Burden
-- /guides/bucking-rainbow-outfitters — Bucking Rainbow Outfitters
-- /guides/bud-lillys-guide-service — Bud Lilly's Trout Shop Guide Service
-- /guides/caney-fork-river-guide-service — Caney Fork River Guide Service
-- /guides/islamorada-flats-guide — Captain Luis Cabrera — Islamorada Flats
-- /guides/carlos-garcia-cuba-guide — Carlos Garcia — Cuban Saltwater Specialist
-- /guides/chama-river-fly-fishing — Chama River Fly Fishing
-- /guides/chattahoochee-outfitters-guides — Chattahoochee Outfitters Guides
-- /guides/classic-journey-outfitters — Classic Journey Outfitters
-- /guides/clinch-river-company-guides — Clinch River Company Guides
-- /guides/white-river-fly-fishing — Cody Lazenby — White River Fly Fishing
-- /guides/cohutta-fishing-company-guides — Cohutta Fishing Company Guides
-- /guides/confluence-outfitters-ca — Confluence Outfitters Guides
-- /guides/cumberland-river-fly-fishing-guide-service — Cumberland River Fly Fishing Guide Service
-- /guides/cutthroat-anglers — Cutthroat Anglers Guide Service
-- /guides/henrys-fork-anglers — Dale Pearson — Henry's Fork Anglers
-- /guides/tasmania-highland-guide — Daniel Hackett — Tasmania Highland Fly Fishing
-- /guides/davidson-river-outfitters-guides — Davidson River Outfitters Guide Staff
-- /guides/domenick-swentosky-troutbitten — Domenick Swentosky — Troutbitten
-- /guides/dragonfly-anglers — Dragonfly Anglers
-- /guides/driftless-angler-guides — Driftless Angler Guide Service
-- /guides/duranglers-flies-supplies — Duranglers Guide Service
-- /guides/cumberland-valley-anglers — Ed Shenk III — Cumberland Valley Anglers
-- /guides/elk-river-touring-company-guides — Elk River Touring Company Guides
-- /guides/belize-flats-guide — Elton Garbutt — Belize Saltwater Fly Fishing
-- /guides/emerald-water-anglers-skagit — Emerald Water Anglers — Skagit Guides
-- /guides/fin-and-fire-fly-fishing — Fin and Fire Fly Fishing
-- /guides/fly-fishing-the-smokies-guides — Fly Fishing the Smokies Guide Team
-- /guides/four-rivers-fishing-company — Four Rivers Fishing Company
-- /guides/frontier-anglers-guide-service — Frontier Anglers Guide Service
-- /guides/full-swing-outfitters — Full Swing Outfitters
-- /guides/gone-fishing-oregon — Gone Fishing Oregon
-- /guides/grey-reef-outfitters — Grey Reef Outfitters
-- /guides/grizzly-hackle-guide-service — Grizzly Hackle Guide Service
-- /guides/iceland-salmon-guide — Gudmundur Sigurdsson — Iceland Fly Fishing
-- /guides/nz-backcountry-fly-fishing — Hamish McLeod — NZ Backcountry Fly Fishing
-- /guides/high-desert-angler — High Desert Angler Guide Service
-- /guides/ibrahim-naseem-maldives-guide — Ibrahim Naseem — Maldives GT Specialist
-- /guides/jack-trout — Jack Trout
-- /guides/james-river-fly-shop-guides — James River Fly Shop Guide Team
-- /guides/au-sable-river-guides — Jim Navarre — Au Sable River Guides
-- /guides/joe-demalderis-cross-current — Joe Demalderis — Cross Current Guide Services
-- /guides/seychelles-flats-guide — Keith Rose-Innes — Alphonse Flats Guide
-- /guides/kenai-river-drifters-lodge — Kenai River Drifters Lodge
-- /guides/maine-registered-guide-lakewood — Lakewood Camps Registered Maine Guides
-- /guides/lees-ferry-anglers — Lee's Ferry Anglers Guide Service
-- /guides/loup-loup-guide-service — Loup Loup Guide Service
-- /guides/soca-marble-trout-guide — Luka Zupancic — Soca Valley Fly Fishing
-- /guides/marble-canyon-outfitters — Marble Canyon Outfitters
-- /guides/patagonia-trout-adventures — Matias Orellana — Patagonia Trout Adventures
-- /guides/frying-pan-anglers — Miguel Vasquez — Frying Pan Anglers
-- /guides/missoulian-angler-guide-service — Missoulian Angler Guide Service
-- /guides/christmas-island-guide — Moamoa Teata — Kiritimati Flats Guide
-- /guides/montana-angler-guide-service — Montana Angler Guide Service
-- /guides/montana-trout-on-the-fly — Montana Trout on the Fly
-- /guides/montana-troutfitters — Montana Troutfitters
-- /guides/mossy-creek-fly-fishing-guides — Mossy Creek Fly Fishing Guides
-- /guides/nantahala-fly-fishing-co-guides — Nantahala Fly Fishing Company Guide Team
-- /guides/bristol-bay-fly-fishing — Nate Runyan — Bristol Bay Fly Fishing
-- /guides/off-the-hook-fly-fishing — Off the Hook Fly Fishing Guides
-- /guides/skeena-steelhead-guide — Owen Blackwater — Skeena Steelhead Adventures
-- /guides/pacific-crest-fly-fishing — Pacific Crest Fly Fishing
-- /guides/paddy-mcdonnell-moy-ghillie — Paddy McDonnell — Moy Ghillie Service
-- /guides/pat-dorsey-fly-fishing — Pat Dorsey Fly Fishing
-- /guides/andros-bonefish-guide — Prescott Rolle — Andros Island Bonefishing
-- /guides/rigs-fly-shop-guide-service — RIGS Fly Shop & Guide Service
-- /guides/reds-fly-shop-yakima — Reds Fly Shop Guides
-- /guides/fly-fish-the-adirondacks — Richard Garfield — Fly Fish the Adirondacks
-- /guides/rise-beyond-fly-fishing — Rise Beyond Fly Fishing
-- /guides/river-drifters — River Drifters
-- /guides/riverdog-outfitters — Riverdog Outfitters
-- /guides/chile-patagonia-guide — Rodrigo Sandoval — Patagonia Chile Fly Fishing
-- /guides/rolling-waters-guide-service — Rolling Waters Guide Service
-- /guides/russell-blessing-guide-service — Russell Blessing Guide Service
-- /guides/salmon-river-outfitters — Salmon River Outfitters
-- /guides/deschutes-river-outfitters — Sarah Whitfield — Deschutes River Outfitters
-- /guides/scott-odonnell-speywater — Scott ODonnell — Speywater Lodge
-- /guides/kamchatka-wilderness-guide — Sergei Volkov — Kamchatka Wilderness Fishing
-- /guides/sierra-fly-fisher-guides — Sierra Fly Fisher Guides
-- /guides/south-fork-snake-guides — South Fork Snake River Guides
-- /guides/spinner-fall-fly-shop — Spinner Fall Fly Shop Guide Service
-- /guides/st-peters-fly-shop — St. Peter's Fly Shop Guide Service
-- /guides/stillwater-fly-shop — Stillwater Fly Shop Guide Service
-- /guides/stoner-fly-fishing-guides — Stoner Fly Fishing Guide
-- /guides/stotts-guides — Stotts Guides
-- /guides/japan-tenkara-guide — Takeshi Yamamoto — Japan Tenkara Fly Fishing
-- /guides/tangent-outfitters-guides — Tangent Outfitters Guide Team
-- /guides/taos-fly-shop — Taos Fly Shop Guide Service
-- /guides/taylor-creek-fly-shops — Taylor Creek Fly Shops Guide Service
-- /guides/ted-fay — Ted Fay Fly Shop Guides
-- /guides/tennessee-trout-guide-service — Tennessee Trout Guide Service
-- /guides/the-fly-shop-guides — The Fly Shop Guide Team
-- /guides/jackson-hole-anglers — Trent Kirkpatrick — Jackson Hole Anglers
-- /guides/upcountry-farmington-guides — UpCountry Sportfishing Guide Service
-- /guides/vail-valley-anglers — Vail Valley Anglers Guide Service
-- /guides/white-mountain-fly-shop — White Mountain Fly Shop Guide Service
-- /guides/williams-river-outfitters-guides — Williams River Outfitters Guides
-- /guides/wind-river-canyon-guides — Wind River Canyon Guides
-
----
-
-## Fly Shops (230)
-
-Each fly shop page includes: location, hours, services offered, brands carried, nearby rivers, and contact information.
-
-- /fly-shops/alaska-drift-away-fishing — Alaska Drift Away Fishing
-- /fly-shops/alaska-fly-fishing-goods — Alaska Fly Fishing Goods
-- /fly-shops/alaska-wilderness-outfitting — Alaska Wilderness Outfitting
-- /fly-shops/allenberry-resort — Allenberry Resort Fly Fishing
-- /fly-shops/anglers-white-river-resort — Angler's White River Resort
-- /fly-shops/anglers-choice — Anglers Choice
-- /fly-shops/anglers-den — Anglers Den
-- /fly-shops/appalachian-trout-outfitters — Appalachian Trout Outfitters
-- /fly-shops/arizona-flyfishing — Arizona Flyfishing
-- /fly-shops/arricks-fly-shop — Arrick's Fly Shop
-- /fly-shops/artful-angler — Artful Angler
-- /fly-shops/ashland-fly-shop — Ashland Fly Shop
-- /fly-shops/ausable-river-two-fly-shop — AuSable River Two Fly Shop
-- /fly-shops/avid-angler — Avid Angler
-- /fly-shops/backwater-angler — Backwater Angler
-- /fly-shops/basin-range-outfitters — Basin & Range Outfitters
-- /fly-shops/basin-fly-shop — Basin Fly Shop
-- /fly-shops/battenkill-anglers — Battenkill Anglers
-- /fly-shops/beartooth-flyfishing — Beartooth Flyfishing
-- /fly-shops/beaverkill-angler — Beaverkill Angler
-- /fly-shops/belize-river-lodge-shop — Belize River Lodge Shop
-- /fly-shops/big-sky-anglers — Big Sky Anglers
-- /fly-shops/big-y-fly-co — Big Y Fly Co.
-- /fly-shops/bighorn-angler — Bighorn Angler
-- /fly-shops/bighorn-fly-and-tackle — Bighorn Fly & Tackle
-- /fly-shops/bitterroot-fly-company — Bitterroot Fly Company
-- /fly-shops/blue-quill-angler — Blue Quill Angler
-- /fly-shops/blue-ribbon-flies — Blue Ribbon Flies
-- /fly-shops/blue-ribbon-fly-shop-arkansas — Blue Ribbon Fly Shop
-- /fly-shops/blue-ridge-angler — Blue Ridge Angler
-- /fly-shops/blue-ridge-mountain-adventures — Blue Ridge Mountain Adventures
-- /fly-shops/boise-anglers — Boise Anglers
-- /fly-shops/brule-river-classics — Brule River Classics
-- /fly-shops/bucking-rainbow-outfitters — Bucking Rainbow Outfitters
-- /fly-shops/campfire-lodge-fly-shop — Campfire Lodge Fly Shop
-- /fly-shops/caney-fork-fly-shop — Caney Fork Fly Shop
-- /fly-shops/cascade-guides-outfitters — Cascade Guides & Outfitters
-- /fly-shops/catskill-flies — Catskill Flies
-- /fly-shops/chama-river-fly-fishing — Chama River Fly Fishing
-- /fly-shops/chattahoochee-outfitters — Chattahoochee Outfitters
-- /fly-shops/clinch-river-company — Clinch River Company
-- /fly-shops/cohutta-fishing-company — Cohutta Fishing Company
-- /fly-shops/confluence-outfitters-ca — Confluence Outfitters
-- /fly-shops/cross-current-guide-service — Cross Current Guide Services & Outfitters
-- /fly-shops/crosscurrents-fly-shop — CrossCurrents Fly Shop
-- /fly-shops/cutthroat-anglers — Cutthroat Anglers
-- /fly-shops/davidson-river-outfitters — Davidson River Outfitters
-- /fly-shops/delaware-river-club — Delaware River Club
-- /fly-shops/dette-flies — Dette Trout Flies
-- /fly-shops/dragonfly-anglers — Dragonfly Anglers
-- /fly-shops/drift-lodge-fly-shop — Drift Lodge & Fly Shop
-- /fly-shops/driftless-angler — Driftless Angler
-- /fly-shops/duranglers-flies-supplies — Duranglers Flies & Supplies
-- /fly-shops/east-rosebud-fly-and-tackle — East Rosebud Fly & Tackle
-- /fly-shops/eastern-oregon-river-outfitters — Eastern Oregon River Outfitters
-- /fly-shops/elk-river-touring-company — Elk River Touring Company
-- /fly-shops/emerald-water-anglers — Emerald Water Anglers
-- /fly-shops/fips-mouche-pro-shop — Fips-Mouche Pro Shop
-- /fly-shops/fish-heads-fly-shop — Fish Heads Fly Shop
-- /fly-shops/fish-on-nz — Fish On NZ
-- /fly-shops/fish-tech-outfitters — Fish Tech Outfitters
-- /fly-shops/fishin-factory — Fishin' Factory
-- /fly-shops/flagstaff-fly-fishing — Flagstaff Fly Fishing
-- /fly-shops/fly-and-field-outfitters — Fly & Field Outfitters
-- /fly-shops/fly-fish-food — Fly Fish Food
-- /fly-shops/fly-fishing-outfitters — Fly Fishing Outfitters
-- /fly-shops/fly-fishing-the-smokies — Fly Fishing the Smokies
-- /fly-shops/fly-shop-at-seneca-rocks — Fly Shop at Seneca Rocks
-- /fly-shops/fly-south-outfitters — Fly South Outfitters
-- /fly-shops/flyfish-oregon — FlyFish Oregon
-- /fly-shops/frontier-anglers — Frontier Anglers
-- /fly-shops/frontiers-travel — Frontiers Travel
-- /fly-shops/galloups-slide-inn — Galloup's Slide Inn
-- /fly-shops/gates-au-sable-lodge — Gates Au Sable Lodge
-- /fly-shops/gear-colorado-fly-fishing — Gear Colorado Fly Fishing
-- /fly-shops/golden-stone-outfitters — Golden Stone Outfitters
-- /fly-shops/grand-teton-fly-fishing — Grand Teton Fly Fishing
-- /fly-shops/grizzly-hackle-fly-shop — Grizzly Hackle Fly Shop
-- /fly-shops/gruene-outfitters — Gruene Outfitters
-- /fly-shops/headwaters-outfitters — Headwaters Outfitters
-- /fly-shops/heber-fly-shop — Heber Fly Shop
-- /fly-shops/henrys-fork-anglers — Henry's Fork Anglers
-- /fly-shops/high-desert-angler — High Desert Angler
-- /fly-shops/hiwassee-outfitters — Hiwassee Outfitters
-- /fly-shops/hunter-banks — Hunter Banks Company
-- /fly-shops/hunter-banks-fly-fishing — Hunter Banks Fly Fishing
-- /fly-shops/hyde-outfitters — Hyde Outfitters
-- /fly-shops/idaho-angling-service — Idaho Angling Service
-- /fly-shops/idaho-troutfitters — Idaho Troutfitters
-- /fly-shops/jd-high-country-outfitters — JD High Country Outfitters
-- /fly-shops/jack-dennis-outdoor-shop — Jack Dennis Outdoor Shop
-- /fly-shops/jack-trout-fly-fishing — Jack Trout Fly Fishing
-- /fly-shops/jacklins-fly-shop — Jacklin's Fly Shop
-- /fly-shops/jackson-hole-fly-company — Jackson Hole Fly Company
-- /fly-shops/james-river-fly-shop — James River Fly Shop
-- /fly-shops/kachemak-bay-fly-shop — Kachemak Bay Fly Shop
-- /fly-shops/kirks-fly-shop — Kirk's Fly Shop
-- /fly-shops/la-ribera-lodge-pro-shop — La Ribera Lodge Pro Shop
-- /fly-shops/lakeside-bait-tackle — Lakeside Bait & Tackle
-- /fly-shops/lakestream-fly-shop — Lakestream Fly Shop
-- /fly-shops/lakewood-camps — Lakewood Camps
-- /fly-shops/lees-ferry-anglers — Lee's Ferry Anglers
-- /fly-shops/libby-camps — Libby Camps
-- /fly-shops/lost-coast-outfitters — Lost Coast Outfitters
-- /fly-shops/lost-river-outfitters — Lost River Outfitters
-- /fly-shops/madison-river-fishing-company — Madison River Fishing Company
-- /fly-shops/madison-river-outfitters — Madison River Outfitters
-- /fly-shops/marble-canyon-outfitters — Marble Canyon Outfitters
-- /fly-shops/minturn-anglers — Minturn Anglers
-- /fly-shops/montana-angler-fly-fishing — Montana Angler Fly Fishing
-- /fly-shops/montana-angler — Montana Angler Fly Fishing
-- /fly-shops/montana-fly-goods — Montana Fly Goods
-- /fly-shops/montana-troutfitters-shop — Montana Troutfitters
-- /fly-shops/mossy-creek-fly-fishing — Mossy Creek Fly Fishing
-- /fly-shops/mountain-angler — Mountain Angler
-- /fly-shops/murrays-fly-shop — Murray's Fly Shop
-- /fly-shops/muskegon-river-fly-shop — Muskegon River Fly Shop
-- /fly-shops/nm-fly-fishing-guides — NM Fly Fishing Guides
-- /fly-shops/nantahala-fly-fishing-company — Nantahala Fly Fishing Company
-- /fly-shops/nervous-waters-fly-shop — Nervous Waters Fly Shop
-- /fly-shops/north-fork-anglers-cody — North Fork Anglers
-- /fly-shops/north-platte-lodge — North Platte Lodge
-- /fly-shops/off-the-hook-fly-fishing — Off the Hook Fly Fishing
-- /fly-shops/ogden-fly-fishing — Ogden Fly Fishing
-- /fly-shops/orange-bus-fly-fishing — Orange Bus Fly Fishing
-- /fly-shops/orvis-bozeman — Orvis Bozeman
-- /fly-shops/orvis-doylestown — Orvis Doylestown
-- /fly-shops/orvis-jackson-hole — Orvis Jackson Hole
-- /fly-shops/orvis-knoxville — Orvis Knoxville
-- /fly-shops/orvis-manchester — Orvis Manchester
-- /fly-shops/orvis-traverse-city — Orvis Traverse City
-- /fly-shops/pacific-angler — Pacific Angler
-- /fly-shops/pacific-fly-fishers — Pacific Fly Fishers
-- /fly-shops/paducah-fly-shop — Paducah Fly Shop
-- /fly-shops/pat-dorsey-fly-fishing — Pat Dorsey Fly Fishing
-- /fly-shops/patient-angler — Patient Angler
-- /fly-shops/pecos-river-outfitters — Pecos River Outfitters
-- /fly-shops/pere-marquette-river-lodge — Pere Marquette River Lodge
-- /fly-shops/picabo-angler — Picabo Angler Fly Shop
-- /fly-shops/pinetop-sporting-goods — Pinetop Sporting Goods
-- /fly-shops/platte-river-fly-shop — Platte River Fly Shop
-- /fly-shops/rigs-fly-shop-guide-service — RIGS Fly Shop & Guide Service
-- /fly-shops/rigs-fly-shop — RIGS Fly Shop & Guide Service
-- /fly-shops/reds-fly-shop — Reds Fly Shop
-- /fly-shops/reno-fly-shop — Reno Fly Shop
-- /fly-shops/rio-grande-anglers — Rio Grande Anglers
-- /fly-shops/rise-beyond-fly-fishing — Rise Beyond Fly Fishing
-- /fly-shops/rising-fish-fly-shop — Rising Fish Fly Shop
-- /fly-shops/riverbend-fly-shop — RiverBend Fly Shop
-- /fly-shops/russ-maddins-streamside-orvis — Russ Maddin's Streamside Orvis
-- /fly-shops/florida-keys-outfitters — Sandy Moret's Florida Keys Outfitters
-- /fly-shops/sierra-fly-fisher — Sierra Fly Fisher
-- /fly-shops/silver-creek-outfitters — Silver Creek Outfitters
-- /fly-shops/snake-river-angler — Snake River Angler
-- /fly-shops/snake-river-fly-pocatello — Snake River Fly
-- /fly-shops/solitude-river-trips — Solitude River Trips
-- /fly-shops/south-branch-outfitters — South Branch Outfitters
-- /fly-shops/south-fork-lodge — South Fork Lodge
-- /fly-shops/south-holston-river-fly-shop — South Holston River Fly Shop
-- /fly-shops/south-platte-fly-shop — South Platte Fly Shop
-- /fly-shops/speywater-lodge — Speywater Lodge
-- /fly-shops/spinner-fall-fly-shop — Spinner Fall Fly Shop
-- /fly-shops/spinner-fall-guide-service — Spinner Fall Guide Service
-- /fly-shops/st-peters-fly-shop — St. Peter's Fly Shop
-- /fly-shops/steamboat-flyfisher — Steamboat Flyfisher
-- /fly-shops/steamboat-flyfishing — Steamboat Flyfishing
-- /fly-shops/stillwater-fly-shop — Stillwater Fly Shop
-- /fly-shops/stoner-fly-fishing — Stoner Fly Fishing
-- /fly-shops/sun-valley-outfitters — Sun Valley Outfitters
-- /fly-shops/sweetgrass-rods — Sweetgrass Rods
-- /fly-shops/sweetwater-fly-shop — Sweetwater Fly Shop
-- /fly-shops/tco-fly-shop — TCO Fly Shop
-- /fly-shops/tco-fly-shop-cockeysville — TCO Fly Shop — Cockeysville
-- /fly-shops/trr-outfitters — TRR Outfitters / Island Park Fly Shop
-- /fly-shops/trr-outfitters-ashton — TRR Outfitters — Ashton
-- /fly-shops/trr-outfitters-island-park — TRR Outfitters — Island Park
-- /fly-shops/tahoe-fly-fishing-outfitters — Tahoe Fly Fishing Outfitters
-- /fly-shops/tangent-outfitters — Tangent Outfitters
-- /fly-shops/taos-fly-shop — Taos Fly Shop
-- /fly-shops/taylor-creek-fly-shops — Taylor Creek Fly Shops
-- /fly-shops/ted-fay-fly-shop — Ted Fay Fly Shop
-- /fly-shops/teton-fly-fishing — Teton Fly Fishing
-- /fly-shops/the-confluence-fly-shop-wa — The Confluence Fly Shop
-- /fly-shops/the-evening-hatch — The Evening Hatch
-- /fly-shops/the-fish-hawk — The Fish Hawk
-- /fly-shops/the-fly-fisher-scotland — The Fly Fisher
-- /fly-shops/the-fly-fishers-place — The Fly Fishers Place
-- /fly-shops/the-fly-shop-redding — The Fly Shop
-- /fly-shops/the-fly-shop-bend — The Fly Shop
-- /fly-shops/the-fly-stop — The Fly Stop
-- /fly-shops/the-gorge-fly-shop — The Gorge Fly Shop
-- /fly-shops/hungry-trout-fly-shop — The Hungry Trout Fly Shop
-- /fly-shops/the-kingfisher-fly-shop — The Kingfisher Fly Shop
-- /fly-shops/the-missoulian-angler-fly-shop — The Missoulian Angler Fly Shop
-- /fly-shops/the-reel-fly-shop — The Reel Fly Shop
-- /fly-shops/the-sporting-gentleman — The Sporting Gentleman
-- /fly-shops/the-sporting-life-greenfield — The Sporting Life
-- /fly-shops/the-steamboat-inn — The Steamboat Inn
-- /fly-shops/tackle-shop-ennis — The Tackle Shop
-- /fly-shops/three-rivers-ranch-fly-shop — Three Rivers Ranch Fly Shop
-- /fly-shops/tight-lines-fly-fishing — Tight Lines Fly Fishing
-- /fly-shops/toccoa-river-outfitters — Toccoa River Outfitters
-- /fly-shops/trout-bum-2 — Trout Bum 2 Fly Shop
-- /fly-shops/trout-creek-flies — Trout Creek Flies
-- /fly-shops/trout-creek-flies-driggs — Trout Creek Flies
-- /fly-shops/trout-stalkers-fly-shop — Trout Stalkers Fly Shop
-- /fly-shops/trouthunter-fly-shop — TroutHunter
-- /fly-shops/trouthunter — TroutHunter
-- /fly-shops/true-water-fly-shop — True Water Fly Shop
-- /fly-shops/upcountry-sportfishing — UpCountry Sportfishing
-- /fly-shops/vail-valley-anglers — Vail Valley Anglers
-- /fly-shops/wmat-outdoor-recreation — WMAT Outdoor Recreation
-- /fly-shops/west-branch-angler — West Branch Angler & Resort
-- /fly-shops/west-fork-sports — West Fork Sports
-- /fly-shops/westbank-anglers — Westbank Anglers
-- /fly-shops/western-rivers-flyfisher — Western Rivers Flyfisher
-- /fly-shops/western-rivers-green-river — Western Rivers Flyfisher (Green River)
-- /fly-shops/white-mountain-fly-shop — White Mountain Fly Shop
-- /fly-shops/williams-river-outfitters — Williams River Outfitters
-- /fly-shops/williamson-river-anglers — Williamson River Anglers
-- /fly-shops/wind-river-outfitters — Wind River Outfitters
-- /fly-shops/world-cast-anglers — World Cast Anglers
-- /fly-shops/worley-bugger-fly-co — Worley Bugger Fly Co.
-- /fly-shops/wyoming-fly-fishing — Wyoming Fly Fishing
-- /fly-shops/wyoming-trout-guides — Wyoming Trout Guides
-- /fly-shops/wyoming-trout-guides-fly-shop — Wyoming Trout Guides Fly Shop
-- /fly-shops/yellow-breeches-outfitters — Yellow Breeches Outfitters
-- /fly-shops/yellowstone-fly-shop-idaho — Yellowstone Fly Shop
-- /fly-shops/yellowstone-fly-shop — Yellowstone Fly Shop
-- /fly-shops/zoar-outdoor — Zoar Outdoor
-
----
-
-## Articles (16)
-
-Long-form editorial: expert technique instruction, destination guides, gear reviews, and conservation coverage.
-
-- /articles/first-timers-guide-to-patagonia — A First Timer's Guide to Patagonia
-- /articles/catch-and-release-best-practices — Catch and Release Best Practices
-- /articles/conservation-future-wild-trout — Conservation and the Future of Wild Trout
-- /articles/fly-fishing-photography-capturing-the-moment — Fly Fishing Photography: Capturing the Moment
-- /articles/icelands-arctic-char-atlantic-salmon — Iceland's Arctic Char and Atlantic Salmon
-- /articles/introduction-to-euro-nymphing — Introduction to Euro Nymphing
-- /articles/introduction-to-tenkara-fishing — Introduction to Tenkara Fishing
-- /articles/montanas-best-fly-fishing-waters — Montana's Best Fly Fishing Waters
-- /articles/reading-water-complete-guide — Reading Water: A Complete Guide
-- /articles/saltwater-fly-fishing-chasing-grand-slam — Saltwater Fly Fishing: Chasing the Grand Slam
-- /articles/streamer-fishing-mastery — Streamer Fishing Mastery
-- /articles/complete-guide-fly-rod-selection — The Complete Guide to Fly Rod Selection
-- /articles/dry-fly-anglers-guide-matching-the-hatch — The Dry Fly Angler's Guide to Matching the Hatch
-- /articles/essential-fly-box-20-patterns — The Essential Fly Box: 20 Patterns Every Angler Needs
-- /articles/understanding-trout-behavior-through-seasons — Understanding Trout Behavior Through the Seasons
-- /articles/women-in-fly-fishing-breaking-the-current — Women in Fly Fishing: Breaking the Current
-
----
-
-## Fly Library (120 Patterns)
-
-Each pattern page includes: description, category, size range, variations, tying instructions, what it imitates, effective species, best rivers, and related patterns.
-
-### Browse by Category
-- /flies/category/dry — Dry Flies
-- /flies/category/nymph — Nymph Flies
-- /flies/category/streamer — Streamer Flies
-- /flies/category/emerger — Emerger Flies
-- /flies/category/wet — Wet Flies
-- /flies/category/terrestrial — Terrestrial Flies
-- /flies/category/egg — Egg Flies
-- /flies/category/midge — Midge Flies
-
-### Browse by Hatch/Insect
-- /flies/hatch/mayfly — Mayfly Imitations
-- /flies/hatch/caddis — Caddis Imitations
-- /flies/hatch/stonefly — Stonefly Imitations
-- /flies/hatch/midge — Midge Imitations
-- /flies/hatch/terrestrial — Terrestrial Imitations
-- /flies/hatch/baitfish — Baitfish Imitations
-
-### Best Flies by River (138 rivers)
-- /flies/for/[river-slug] — one page per river
-
-### All Patterns
-
-**Drys** (25)
-- /flies/adams — Adams
-- /flies/bwo-parachute — BWO Parachute
-- /flies/blue-dun — Blue Dun
-- /flies/blue-winged-olive-comparadun — Blue-Winged Olive Comparadun
-- /flies/cdc-blue-winged-olive — CDC Blue-Winged Olive
-- /flies/callibaetis-cripple — Callibaetis Cripple
-- /flies/comparadun — Comparadun
-- /flies/elk-hair-caddis — Elk Hair Caddis
-- /flies/goddard-caddis — Goddard Caddis
-- /flies/green-drake — Green Drake
-- /flies/griffiths-gnat — Griffith's Gnat
-- /flies/henrys-fork-hopper — Henry's Fork Hopper
-- /flies/humpy — Humpy
-- /flies/march-brown — March Brown
-- /flies/olive-thorax-dun — Olive Thorax Dun
-- /flies/pale-morning-dun — Pale Morning Dun
-- /flies/parachute-adams — Parachute Adams
-- /flies/quill-gordon — Quill Gordon
-- /flies/royal-wulff — Royal Wulff
-- /flies/rusty-spinner — Rusty Spinner
-- /flies/sparkle-dun — Sparkle Dun
-- /flies/stimulator — Stimulator
-- /flies/sulphur-dun — Sulphur Dun
-- /flies/trico-spinner — Trico Spinner
-- /flies/x-caddis — X-Caddis
-
-**Nymphs** (38)
-- /flies/bead-head-caddis-pupa — Beadhead Caddis Pupa
-- /flies/blowtorch — Blowtorch
-- /flies/cdc-pheasant-tail — CDC Pheasant Tail
-- /flies/copper-john — Copper John
-- /flies/czech-nymph — Czech Nymph
-- /flies/deep-sparrow-nymph — Deep Sparrow Nymph
-- /flies/duracell-jig — Duracell Jig
-- /flies/flashback-hares-ear — Flashback Hare's Ear
-- /flies/frenchie — Frenchie
-- /flies/caddis-larva-green-rock-worm — Green Rock Worm
-- /flies/hares-ear-nymph — Hare's Ear Nymph
-- /flies/iron-lotus — Iron Lotus
-- /flies/jig-perdigon — Jig Perdigon
-- /flies/jig-ptn — Jig Pheasant Tail
-- /flies/juju-baetis — Juju Baetis
-- /flies/lightning-bug — Lightning Bug
-- /flies/micro-mayfly — Micro Mayfly
-- /flies/mop-fly — Mop Fly
-- /flies/soft-hackle-partridge-and-orange — Partridge and Orange
-- /flies/stonefly-nymph — Pat's Rubber Legs
-- /flies/perdigon — Perdigon
-- /flies/pheasant-tail-nymph — Pheasant Tail Nymph
-- /flies/polish-woven-nymph — Polish Woven Nymph
-- /flies/prince-nymph — Prince Nymph
-- /flies/quasimodo-pheasant-tail — Quasimodo Pheasant Tail
-- /flies/rainbow-warrior — Rainbow Warrior
-- /flies/san-juan-worm — San Juan Worm
-- /flies/scud-pattern — Scud
-- /flies/sexy-walts-worm — Sexy Walt's Worm
-- /flies/sow-bug — Sow Bug
-- /flies/squirmy-wormy — Squirmy Wormy
-- /flies/squirrel-nymph — Squirrel Nymph
-- /flies/surveyor — Surveyor
-- /flies/tungsten-jig-hares-ear — Tungsten Jig Hares Ear
-- /flies/tungsten-torpedo — Tungsten Torpedo
-- /flies/twenty-incher — Twenty Incher
-- /flies/two-bit-hooker — Two Bit Hooker
-- /flies/walt-s-worm — Walt's Worm
-
-**Streamers** (15)
-- /flies/autumn-splendor — Autumn Splendor
-- /flies/barely-legal — Barely Legal
-- /flies/circus-peanut — Circus Peanut
-- /flies/clouser-minnow-trout — Clouser Minnow (Trout)
-- /flies/double-bunny — Double Bunny
-- /flies/home-invader — Home Invader
-- /flies/kreelex — Kreelex
-- /flies/meat-whistle — Meat Whistle
-- /flies/muddler-minnow — Muddler Minnow
-- /flies/olive-bugger — Olive Woolly Bugger
-- /flies/sculpzilla — Sculpzilla
-- /flies/sex-dungeon — Sex Dungeon
-- /flies/slumpbuster — Slumpbuster
-- /flies/woolly-bugger — Woolly Bugger
-- /flies/zonker — Zonker
-
-**Emergers** (14)
-- /flies/bwo-loop-wing-emerger — BWO Loop Wing Emerger
-- /flies/barrs-emerger — Barr's Emerger
-- /flies/cdc-emerger — CDC Emerger
-- /flies/emerging-caddis-pupa — Emerging Caddis Pupa
-- /flies/film-critic — Film Critic
-- /flies/klinkhammer-special — Klinkhammer Special
-- /flies/last-chance-cripple — Last Chance Cripple
-- /flies/pmd-emerger — PMD Emerger
-- /flies/quigley-cripple — Quigley Cripple
-- /flies/rs2 — RS2
-- /flies/snowshoe-baetis-emerger — Snowshoe Baetis Emerger
-- /flies/snowshoe-emerger — Snowshoe Emerger
-- /flies/matthews-sparkle-emerger — Sparkle Pupa
-- /flies/spotlight-emerger — Spotlight Emerger
-
-**Wets** (10)
-- /flies/black-spider — Black Spider
-- /flies/carey-special — Carey Special
-- /flies/leadwing-coachman — Leadwing Coachman
-- /flies/march-brown-wet — March Brown Wet
-- /flies/partridge-and-green — Partridge and Green
-- /flies/picket-pin — Picket Pin
-- /flies/soft-hackle-hares-ear — Soft Hackle Hare's Ear
-- /flies/soft-hackle-pheasant-tail — Soft Hackle Pheasant Tail
-- /flies/starling-and-herl — Starling and Herl
-- /flies/woolly-worm — Woolly Worm
-
-**Terrestrials** (8)
-- /flies/chernobyl-ant — Chernobyl Ant
-- /flies/daves-hopper — Dave's Hopper
-- /flies/flying-ant — Flying Ant
-- /flies/foam-ant — Foam Ant
-- /flies/foam-beetle — Foam Beetle
-- /flies/inchworm — Inchworm
-- /flies/letort-cricket — Letort Cricket
-- /flies/parachute-hopper — Parachute Hopper
-
-**Eggs** (6)
-- /flies/blood-dot-egg — Blood Dot Egg
-- /flies/egg-pattern — Egg Pattern
-- /flies/glo-bug — Glo Bug
-- /flies/nuke-egg — Nuke Egg
-- /flies/sucker-spawn — Sucker Spawn
-- /flies/y2k-bug — Y2K Bug
-
-**Midges** (4)
-- /flies/midge-larva — Midge Larva
-- /flies/thread-midge — Thread Midge
-- /flies/top-secret-midge — Top Secret Midge
-- /flies/zebra-midge — Zebra Midge
-
----
-
-## Key Pages
-
-- / — Homepage
-- /destinations — All 52 destinations
-- /rivers — All 138 rivers and waters
-- /species — All 35 species
-- /lodges — 32 lodges
-- /guides — 106 guide services
-- /fly-shops — 230 fly shops
-- /articles — 16 editorial articles
-- /flies — Fly Library (120 patterns)
-- /search — Full-text search across all content
-- /about — About Executive Angler
-- /contact — Contact form
-- /sitemap.xml — XML sitemap
-
----
-
-## Fishing Journal (App Feature)
-
-A Strava-style fishing journal where authenticated users can log sessions, record catches, track flies used, and analyze performance over time. Journal data powers real-time community activity widgets on public river pages (aggregated, anonymous).
-
----
-
-## Technical Details
-
-- Built with Next.js 15 (App Router), hosted on Vercel
-- 729+ statically generated content pages
-- Interactive maps: Mapbox GL JS
-- Database: Supabase (PostgreSQL)
-- Live USGS river flow data on river pages
-- Schema.org: WebSite, BreadcrumbList, Article, TouristDestination, BodyOfWater, LodgingBusiness, ProfessionalService, SportingGoodsStore, FAQPage, CollectionPage, HowTo, Speakable
-- Dynamic sitemap at /sitemap.xml
-- Google Analytics 4 + Google Search Console verified
-
----
-
-## Contact
-
-Website: https://www.executiveangler.com
-Contact: https://www.executiveangler.com/contact
+## Flies
+- Adams [dry]: /flies/adams
+- Autumn Splendor [streamer]: /flies/autumn-splendor
+- BWO Loop Wing Emerger [emerger]: /flies/bwo-loop-wing-emerger
+- BWO Parachute [dry]: /flies/bwo-parachute
+- Backflop Jig [streamer]: /flies/backflop-jig
+- Barely Legal [streamer]: /flies/barely-legal
+- Barr's Emerger [emerger]: /flies/barrs-emerger
+- Beadhead Caddis Pupa [nymph]: /flies/bead-head-caddis-pupa
+- Black Spider [wet]: /flies/black-spider
+- Blood Dot Egg [egg]: /flies/blood-dot-egg
+- Blowtorch [nymph]: /flies/blowtorch
+- Blue Dun [dry]: /flies/blue-dun
+- Blue-Winged Olive Comparadun [dry]: /flies/blue-winged-olive-comparadun
+- CDC Blue-Winged Olive [dry]: /flies/cdc-blue-winged-olive
+- CDC Emerger [emerger]: /flies/cdc-emerger
+- CDC Pheasant Tail [nymph]: /flies/cdc-pheasant-tail
+- Callibaetis Cripple [dry]: /flies/callibaetis-cripple
+- Carey Special [wet]: /flies/carey-special
+- Chernobyl Ant [terrestrial]: /flies/chernobyl-ant
+- Circus Peanut [streamer]: /flies/circus-peanut
+- Clouser Minnow (Trout) [streamer]: /flies/clouser-minnow-trout
+- Comparadun [dry]: /flies/comparadun
+- Copper John [nymph]: /flies/copper-john
+- Czech Nymph [nymph]: /flies/czech-nymph
+- Dave's Hopper [terrestrial]: /flies/daves-hopper
+- Deep Sparrow Nymph [nymph]: /flies/deep-sparrow-nymph
+- Double Bunny [streamer]: /flies/double-bunny
+- Duracell Jig [nymph]: /flies/duracell-jig
+- Egan's Bionic Ant 2.0 [terrestrial]: /flies/egans-bionic-ant-2
+- Egan's Corn-Fed Caddis [dry]: /flies/egans-corn-fed-caddis
+- Egan's GTi Caddis [nymph]: /flies/egans-gti-caddis
+- Egan's Iron Lotus [nymph]: /flies/egans-iron-lotus
+- Egan's Poacher — Olive [streamer]: /flies/egans-poacher-olive
+- Egan's Rainbow Warrior Perdigon [nymph]: /flies/egans-rainbow-warrior-perdigon
+- Egan's Red Dart [nymph]: /flies/egans-red-dart
+- Egan's Thread Frenchie [nymph]: /flies/egans-thread-frenchie
+- Egan's Tungsten Surveyor [nymph]: /flies/egans-tungsten-surveyor
+- Egg Pattern [egg]: /flies/egg-pattern
+- Elk Hair Caddis [dry]: /flies/elk-hair-caddis
+- Emerging Caddis Pupa [emerger]: /flies/emerging-caddis-pupa
+- Film Critic [emerger]: /flies/film-critic
+- Flashback Hare's Ear [nymph]: /flies/flashback-hares-ear
+- Flying Ant [terrestrial]: /flies/flying-ant
+- Foam Ant [terrestrial]: /flies/foam-ant
+- Foam Beetle [terrestrial]: /flies/foam-beetle
+- Frenchie [nymph]: /flies/frenchie
+- Front End Loader Caddis [dry]: /flies/front-end-loader-caddis
+- Glo Bug [egg]: /flies/glo-bug
+- Goddard Caddis [dry]: /flies/goddard-caddis
+- Green Drake [dry]: /flies/green-drake
+- Green Rock Worm [nymph]: /flies/caddis-larva-green-rock-worm
+- Griffith's Gnat [dry]: /flies/griffiths-gnat
+- Hare's Ear Nymph [nymph]: /flies/hares-ear-nymph
+- Henry's Fork Hopper [dry]: /flies/henrys-fork-hopper
+- Home Invader [streamer]: /flies/home-invader
+- Humpy [dry]: /flies/humpy
+- Inchworm [terrestrial]: /flies/inchworm
+- Iron Lotus [nymph]: /flies/iron-lotus
+- Jig Perdigon [nymph]: /flies/jig-perdigon
+- Jig Pheasant Tail [nymph]: /flies/jig-ptn
+- Juju Baetis [nymph]: /flies/juju-baetis
+- Klinkhammer Special [emerger]: /flies/klinkhammer-special
+- Kreelex [streamer]: /flies/kreelex
+- Last Chance Cripple [emerger]: /flies/last-chance-cripple
+- Leadwing Coachman [wet]: /flies/leadwing-coachman
+- Letort Cricket [terrestrial]: /flies/letort-cricket
+- Lickety Split [nymph]: /flies/lickety-split
+- Lightning Bug [nymph]: /flies/lightning-bug
+- Lite Brite Perdigon [nymph]: /flies/lite-brite-perdigon
+- March Brown [dry]: /flies/march-brown
+- March Brown Wet [wet]: /flies/march-brown-wet
+- Mayday Mayfly [nymph]: /flies/mayday-mayfly
+- Meat Whistle [streamer]: /flies/meat-whistle
+- Micro Mayfly [nymph]: /flies/micro-mayfly
+- Midge Larva [midge]: /flies/midge-larva
+- Monster Dry [dry]: /flies/monster-dry
+- Monster Midge [dry]: /flies/monster-midge
+- Mop Fly [nymph]: /flies/mop-fly
+- Muddler Minnow [streamer]: /flies/muddler-minnow
+- Nuke Egg [egg]: /flies/nuke-egg
+- Olive Thorax Dun [dry]: /flies/olive-thorax-dun
+- Olive Woolly Bugger [streamer]: /flies/olive-bugger
+- Olsen's CDC Midge [dry]: /flies/olsens-cdc-midge
+- PMD Emerger [emerger]: /flies/pmd-emerger
+- Pale Morning Dun [dry]: /flies/pale-morning-dun
+- Parachute Adams [dry]: /flies/parachute-adams
+- Parachute Hopper [terrestrial]: /flies/parachute-hopper
+- Partridge and Green [wet]: /flies/partridge-and-green
+- Partridge and Orange [nymph]: /flies/soft-hackle-partridge-and-orange
+- Pat's Rubber Legs [nymph]: /flies/stonefly-nymph
+- Perdigon [nymph]: /flies/perdigon
+- Pheasant Tail Nymph [nymph]: /flies/pheasant-tail-nymph
+- Picket Pin [wet]: /flies/picket-pin
+- Pliva Perdigon [nymph]: /flies/pliva-perdigon
+- Polish Woven Nymph [nymph]: /flies/polish-woven-nymph
+- Prince Nymph [nymph]: /flies/prince-nymph
+- Quasimodo Pheasant Tail [nymph]: /flies/quasimodo-pheasant-tail
+- Quigley Cripple [emerger]: /flies/quigley-cripple
+- Quill Gordon [dry]: /flies/quill-gordon
+- Quilldigon [nymph]: /flies/olsen-quilldigon
+- RS2 [emerger]: /flies/rs2
+- Rainbow Warrior [nymph]: /flies/rainbow-warrior
+- Rowley Stone [nymph]: /flies/rowley-stone
+- Rowley's PW Nymph [nymph]: /flies/rowleys-pw-nymph
+- Royal Wulff [dry]: /flies/royal-wulff
+- Rusty Spinner [dry]: /flies/rusty-spinner
+- San Juan Worm [nymph]: /flies/san-juan-worm
+- Scud [nymph]: /flies/scud-pattern
+- Sculpzilla [streamer]: /flies/sculpzilla
+- Sex Dungeon [streamer]: /flies/sex-dungeon
+- Sexy Walt's Worm [nymph]: /flies/sexy-walts-worm
+- Silver Bullet Baetis [nymph]: /flies/silver-bullet-baetis
+- Slumpbuster [streamer]: /flies/slumpbuster
+- Snowshoe Baetis Emerger [emerger]: /flies/snowshoe-baetis-emerger
+- Snowshoe Emerger [emerger]: /flies/snowshoe-emerger
+- Soft Hackle Carrot [nymph]: /flies/soft-hackle-carrot
+- Soft Hackle Hare's Ear [wet]: /flies/soft-hackle-hares-ear
+- Soft Hackle Pheasant Tail [wet]: /flies/soft-hackle-pheasant-tail
+- Sow Bug [nymph]: /flies/sow-bug
+- Sparkle Dun [dry]: /flies/sparkle-dun
+- Sparkle Pupa [emerger]: /flies/matthews-sparkle-emerger
+- Spotlight Emerger [emerger]: /flies/spotlight-emerger
+- Squirmy Wormy [nymph]: /flies/squirmy-wormy
+- Squirrel Nymph [nymph]: /flies/squirrel-nymph
+- Starling and Herl [wet]: /flies/starling-and-herl
+- Stimulator [dry]: /flies/stimulator
+- Sucker Spawn [egg]: /flies/sucker-spawn
+- Sulphur Dun [dry]: /flies/sulphur-dun
+- Surveyor [nymph]: /flies/surveyor
+- Thread Midge [midge]: /flies/thread-midge
+- Top Secret Midge [midge]: /flies/top-secret-midge
+- Trico Spinner [dry]: /flies/trico-spinner
+- Tungsten Jig Hares Ear [nymph]: /flies/tungsten-jig-hares-ear
+- Tungsten Torpedo [nymph]: /flies/tungsten-torpedo
+- Twenty Incher [nymph]: /flies/twenty-incher
+- Two Bit Hooker [nymph]: /flies/two-bit-hooker
+- Walt's Worm [nymph]: /flies/walt-s-worm
+- Woolly Bugger [streamer]: /flies/woolly-bugger
+- Woolly Worm [wet]: /flies/woolly-worm
+- X-Caddis [dry]: /flies/x-caddis
+- Y2K Bug [egg]: /flies/y2k-bug
+- Zebra Midge [midge]: /flies/zebra-midge
+- ZebraGon [nymph]: /flies/zebragon
+- Zonker [streamer]: /flies/zonker
