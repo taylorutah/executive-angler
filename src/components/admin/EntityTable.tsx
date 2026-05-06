@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, ChevronUp, ChevronDown, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronUp, ChevronDown, Pencil, Trash2, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface Column {
   key: string;
@@ -17,7 +17,10 @@ interface EntityTableProps {
   onDelete: (id: string) => void;
 }
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE_OPTIONS = [25, 50, 100, 250, 500];
+const DEFAULT_PAGE_SIZE = 25;
+// Columns whose distinct value count is ≤ this threshold get a filter dropdown.
+const FILTER_CARDINALITY_LIMIT = 20;
 
 /**
  * Returns true if `a` and `b` differ by at most one edit (insert, delete,
@@ -104,6 +107,57 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
+  // Per-column filter values. Empty string / null = no filter.
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+
+  // Auto-detect which columns should get a filter dropdown: those with at
+  // least 2 and at most FILTER_CARDINALITY_LIMIT distinct non-empty values.
+  // Each entry = { key, label, options: [{ value, count }] }.
+  const filterableColumns = useMemo(() => {
+    const out: Array<{ key: string; label: string; options: { value: string; count: number }[] }> = [];
+    for (const col of columns) {
+      const counts = new Map<string, number>();
+      for (const row of rows) {
+        const v = row[col.key];
+        if (v == null || v === "") continue;
+        // Skip arrays/objects — render-only complex types don't filter well.
+        if (typeof v === "object") continue;
+        const key = typeof v === "boolean" ? (v ? "Yes" : "No") : String(v);
+        counts.set(key, (counts.get(key) ?? 0) + 1);
+      }
+      const distinct = counts.size;
+      if (distinct >= 2 && distinct <= FILTER_CARDINALITY_LIMIT) {
+        const options = Array.from(counts.entries())
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+        out.push({ key: col.key, label: col.label, options });
+      }
+    }
+    return out;
+  }, [columns, rows]);
+
+  // Apply column filters first, then text search.
+  const afterColumnFilters = useMemo(() => {
+    const activeKeys = Object.entries(columnFilters)
+      .filter(([, v]) => v && v.trim() !== "")
+      .map(([k, v]) => [k, v] as const);
+    if (activeKeys.length === 0) return rows;
+    return rows.filter((row) =>
+      activeKeys.every(([key, value]) => {
+        const cell = row[key];
+        const cellStr =
+          typeof cell === "boolean"
+            ? cell
+              ? "Yes"
+              : "No"
+            : cell == null
+              ? ""
+              : String(cell);
+        return cellStr === value;
+      }),
+    );
+  }, [rows, columnFilters]);
 
   // Filter rows by search across all string values.
   // Strategy:
@@ -116,11 +170,11 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
   //      false positives on short tokens.
   const filtered = useMemo(() => {
     const trimmed = search.trim().toLowerCase();
-    if (!trimmed) return rows;
+    if (!trimmed) return afterColumnFilters;
     const queryWords = trimmed.split(/\s+/).filter(Boolean);
-    if (queryWords.length === 0) return rows;
-    return rows.filter((row) => rowMatchesQuery(row, queryWords));
-  }, [rows, search]);
+    if (queryWords.length === 0) return afterColumnFilters;
+    return afterColumnFilters.filter((row) => rowMatchesQuery(row, queryWords));
+  }, [afterColumnFilters, search]);
 
   // Sort filtered rows
   const sorted = useMemo(() => {
@@ -141,9 +195,30 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
   }, [filtered, sortKey, sortDir]);
 
   // Paginate
-  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
   const currentPage = Math.min(page, totalPages - 1);
-  const paged = sorted.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
+  const paged = sorted.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+
+  const activeFilterCount = Object.values(columnFilters).filter(
+    (v) => v && v.trim() !== "",
+  ).length;
+  const hasSearch = search.trim() !== "";
+
+  function setColumnFilter(key: string, value: string) {
+    setColumnFilters((prev) => {
+      const next = { ...prev };
+      if (!value) delete next[key];
+      else next[key] = value;
+      return next;
+    });
+    setPage(0);
+  }
+
+  function clearAllFilters() {
+    setColumnFilters({});
+    setSearch("");
+    setPage(0);
+  }
 
   function handleSort(key: string) {
     if (sortKey === key) {
@@ -167,10 +242,74 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             setSearch(e.target.value);
             setPage(0);
           }}
-          placeholder="Search..."
+          placeholder="Search… (typo-tolerant — try 'wolly bugger')"
           className="w-full pl-10 pr-4 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
         />
       </div>
+
+      {/* Filters + page size + clear */}
+      {(filterableColumns.length > 0 || rows.length > DEFAULT_PAGE_SIZE) && (
+        <div className="flex items-center gap-2 flex-wrap">
+          {filterableColumns.map((col) => {
+            const active = columnFilters[col.key] ?? "";
+            return (
+              <div key={col.key} className="relative inline-flex">
+                <select
+                  value={active}
+                  onChange={(e) => setColumnFilter(col.key, e.target.value)}
+                  className={`appearance-none pl-3 pr-8 py-1.5 text-xs rounded-lg border transition-colors cursor-pointer ${
+                    active
+                      ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A] font-semibold"
+                      : "border-[#21262D] bg-[#0D1117] text-[#A8B2BD] hover:border-[#E8923A]/40"
+                  }`}
+                  title={`Filter by ${col.label}`}
+                >
+                  <option value="">All {col.label.toLowerCase()}</option>
+                  {col.options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.value} ({opt.count})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-[#6E7681] pointer-events-none" />
+              </div>
+            );
+          })}
+          {(activeFilterCount > 0 || hasSearch) && (
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+              title="Clear all filters and search"
+            >
+              <X className="h-3 w-3" /> Clear
+              {activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+            </button>
+          )}
+          <div className="ml-auto inline-flex items-center gap-2">
+            <span className="text-xs text-[#6E7681]">
+              {sorted.length === rows.length
+                ? `${rows.length} ${rows.length === 1 ? "record" : "records"}`
+                : `${sorted.length} of ${rows.length}`}
+            </span>
+            <select
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(parseInt(e.target.value, 10));
+                setPage(0);
+              }}
+              className="text-xs px-2 py-1 rounded-lg border border-[#21262D] bg-[#0D1117] text-[#A8B2BD] focus:outline-none focus:border-[#E8923A] cursor-pointer"
+              title="Rows per page"
+            >
+              {PAGE_SIZE_OPTIONS.map((n) => (
+                <option key={n} value={n}>
+                  {n}/page
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       {paged.length === 0 ? (
