@@ -8,8 +8,12 @@ import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import { createClient } from "@/lib/supabase/server";
 
-export const revalidate = 3600;
+// Per-request render: must read auth + the viewer's favorites. Cached
+// canonical_flies queries inside getAllCanonicalFlies still benefit from
+// Next's data cache.
+export const dynamic = "force-dynamic";
 
 const FLY_CATEGORY_LABELS: Record<string, string> = {
   dry: "Dry Fly",
@@ -33,7 +37,9 @@ const CATEGORY_ICONS: Record<string, string> = {
   midge: "/images/fly-icons/midge.svg",
 };
 
-const SPOTLIGHT_SLUGS = [
+// Final fallback if no flies are flagged `featured` in the admin AND the
+// viewer has no favorites. Keeps the page presentable on a fresh DB.
+const FALLBACK_SPOTLIGHT_SLUGS = [
   "parachute-adams",
   "pheasant-tail-nymph",
   "elk-hair-caddis",
@@ -41,6 +47,8 @@ const SPOTLIGHT_SLUGS = [
   "rs2",
   "copper-john",
 ];
+
+const SPOTLIGHT_LIMIT = 6;
 
 export const metadata: Metadata = {
   title: "Trout Fly Library — 120+ Proven Patterns & Tying Guides",
@@ -60,9 +68,53 @@ export const metadata: Metadata = {
 export default async function FliesPage() {
   const allFlies = await getAllCanonicalFlies();
 
-  const spotlightFlies = SPOTLIGHT_SLUGS.map((s) =>
-    allFlies.find((f) => f.slug === s)
-  ).filter(Boolean);
+  // Resolve the spotlight list with this priority:
+  //   1. Logged-in viewer with favorites → their favorited canonical flies
+  //   2. Admin-flagged `featured` flies (sortable by rank then name)
+  //   3. Hardcoded fallback slugs (fresh-DB safety net)
+  let spotlightFlies: typeof allFlies = [];
+  let spotlightLabel = "Essential Patterns";
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data: favRows } = await supabase
+        .from("user_fly_box")
+        .select("canonical_fly_id")
+        .eq("user_id", user.id)
+        .eq("is_favorite", true)
+        .not("canonical_fly_id", "is", null);
+      const favIds = new Set(
+        (favRows ?? [])
+          .map((r) => (r as { canonical_fly_id?: string | null }).canonical_fly_id)
+          .filter((id): id is string => !!id),
+      );
+      if (favIds.size > 0) {
+        spotlightFlies = allFlies
+          .filter((f) => favIds.has(f.id))
+          .slice(0, SPOTLIGHT_LIMIT);
+        spotlightLabel = "Your Favorites";
+      }
+    }
+  } catch (e) {
+    // Auth/network failure shouldn't break the public library. Fall through
+    // to the featured/fallback path.
+    console.warn("[/flies] favorite lookup failed:", e);
+  }
+
+  if (spotlightFlies.length === 0) {
+    const featured = allFlies.filter((f) => f.featured);
+    if (featured.length > 0) {
+      spotlightFlies = featured.slice(0, SPOTLIGHT_LIMIT);
+    } else {
+      spotlightFlies = FALLBACK_SPOTLIGHT_SLUGS.map((s) =>
+        allFlies.find((f) => f.slug === s),
+      ).filter((f): f is NonNullable<typeof f> => !!f);
+    }
+  }
 
   const items: (CardData & { _filterValues: Record<string, string> })[] =
     allFlies.map((fly) => ({
@@ -113,7 +165,7 @@ export default async function FliesPage() {
         <section className="bg-[#0D1117] pt-2 pb-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
-              Essential Patterns
+              {spotlightLabel}
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {spotlightFlies.map((fly, i) => (
