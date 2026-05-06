@@ -206,14 +206,22 @@ export default function Header() {
                   Rivers
                 </Link>
                 {user ? (
-                  <Link
-                    href="/my-flies"
-                    className={navLinkClass(
-                      isActive("/my-flies") || pathname.startsWith("/journal/flies")
-                    )}
-                  >
-                    My Flies
-                  </Link>
+                  <>
+                    <Link
+                      href="/my-boxes"
+                      className={navLinkClass(isActive("/my-boxes"))}
+                    >
+                      My Boxes
+                    </Link>
+                    <Link
+                      href="/my-flies"
+                      className={navLinkClass(
+                        isActive("/my-flies") || pathname.startsWith("/journal/flies")
+                      )}
+                    >
+                      My Flies
+                    </Link>
+                  </>
                 ) : (
                   <Link href="/flies" className={navLinkClass(isActive("/flies"))}>
                     Flies
@@ -431,16 +439,28 @@ export default function Header() {
                 Rivers
               </Link>
               {user ? (
-                <Link
-                  href="/my-flies"
-                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/my-flies") || pathname.startsWith("/journal/flies")
-                      ? "bg-[#0D1117] text-[#F0F6FC]"
-                      : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  My Flies
-                </Link>
+                <>
+                  <Link
+                    href="/my-boxes"
+                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                      isActive("/my-boxes")
+                        ? "bg-[#0D1117] text-[#F0F6FC]"
+                        : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    }`}
+                  >
+                    My Boxes
+                  </Link>
+                  <Link
+                    href="/my-flies"
+                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                      isActive("/my-flies") || pathname.startsWith("/journal/flies")
+                        ? "bg-[#0D1117] text-[#F0F6FC]"
+                        : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    }`}
+                  >
+                    My Flies
+                  </Link>
+                </>
               ) : (
                 <Link
                   href="/flies"
