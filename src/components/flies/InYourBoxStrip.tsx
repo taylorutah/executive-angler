@@ -23,6 +23,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Plus,
   Edit3,
+  Layers,
   Loader2,
   Check,
   ListChecks,
@@ -33,6 +34,7 @@ import PersonalizeSheet, {
   type PersonalizeSheetCanonicalFly,
 } from "./PersonalizeSheet";
 import FlyCardModal from "./FlyCardModal";
+import ManageMembershipSheet from "./ManageMembershipSheet";
 import {
   summarizePersonalization,
   type FlyBoxRow,
@@ -72,6 +74,7 @@ export default function InYourBoxStrip({
   const [sheetMode, setSheetMode] = useState<"create" | "edit">("edit");
   const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [cardOpen, setCardOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState<string | null>(null);
 
   const activeRow: FlyBoxRow | null =
     variants.find((v) => v.id === initialActiveVariantId) ??
@@ -301,6 +304,13 @@ export default function InYourBoxStrip({
               <CreditCard className="h-3.5 w-3.5" /> Card
             </button>
             <button
+              onClick={() => setMembershipOpen(activeRow.id)}
+              title="Add or remove from boxes"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#21262D] bg-[#161B22] text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 text-xs font-semibold transition-colors"
+            >
+              <Layers className="h-3.5 w-3.5" /> Boxes
+            </button>
+            <button
               onClick={() => openEditSheet(activeRow.id)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20 text-xs font-semibold transition-colors"
             >
@@ -353,6 +363,25 @@ export default function InYourBoxStrip({
         imageUrl={resolved.heroImageUrl.value ?? null}
         username={username ?? null}
       />
+
+      {membershipOpen && (
+        <ManageMembershipSheet
+          userFlyBoxId={membershipOpen}
+          flyName={
+            (activeRow && resolveVariantLabel({
+              variantLabel: activeRow.variant_label ?? undefined,
+              preferredColors: activeRow.preferred_colors ?? undefined,
+              preferredSizes: activeRow.preferred_sizes ?? undefined,
+              personalizations: activeRow.personalizations ?? undefined,
+            })) || fly.name
+          }
+          onClose={() => setMembershipOpen(null)}
+          onChange={() => {
+            // Refresh page-level data after box membership changes.
+            if (typeof window !== "undefined") window.location.reload();
+          }}
+        />
+      )}
     </>
   );
 

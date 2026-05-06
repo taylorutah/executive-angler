@@ -172,6 +172,55 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Auto-assign new entry to one or more boxes:
+    //   - body.box_ids[]: explicit list (multi-select on the canonical page)
+    //   - else: the user's default box (or first available)
+    // Fail silently — the entry is created either way; missing membership is
+    // visible in /my-flies and the user can manage it via /my-boxes/[id].
+    try {
+      const boxIdsRaw = (body as { box_ids?: unknown }).box_ids;
+      const boxIds: string[] = Array.isArray(boxIdsRaw)
+        ? boxIdsRaw.filter((x): x is string => typeof x === "string")
+        : [];
+
+      let targetBoxIds: string[] = boxIds;
+      if (targetBoxIds.length === 0) {
+        const { data: defaultBox } = await supabase
+          .from("fly_boxes")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("is_default", true)
+          .maybeSingle();
+        if (defaultBox?.id) {
+          targetBoxIds = [defaultBox.id];
+        } else {
+          // No default box — pick the first one if any exist.
+          const { data: anyBox } = await supabase
+            .from("fly_boxes")
+            .select("id")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: true })
+            .limit(1)
+            .maybeSingle();
+          if (anyBox?.id) targetBoxIds = [anyBox.id];
+        }
+      }
+
+      if (targetBoxIds.length > 0 && data?.id) {
+        const memberships = targetBoxIds.map((boxId) => ({
+          box_id: boxId,
+          user_fly_box_id: data.id,
+        }));
+        await supabase
+          .from("fly_box_membership")
+          .upsert(memberships, { onConflict: "box_id,user_fly_box_id" });
+      }
+    } catch (membershipErr) {
+      // Don't fail the create — the entry exists, only the box assignment
+      // failed. Log and move on.
+      console.warn("[fly-box POST] membership assign failed:", membershipErr);
+    }
+
     return NextResponse.json(data, { status: 201 });
   } catch (err) {
     console.error("[fly-box POST]", err);
