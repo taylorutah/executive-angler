@@ -22,29 +22,45 @@ export default function AddToFlyBoxButton({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     async function checkStatus() {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
 
-      if (!user) {
-        setChecking(false);
-        return;
+        if (!user) {
+          if (!cancelled) setChecking(false);
+          return;
+        }
+        if (!cancelled) setIsAuthenticated(true);
+
+        // After the multi-variant migration there can be 2+ rows per
+        // (user_id, canonical_fly_id), so `.maybeSingle()` would throw and
+        // leave the spinner spinning forever. Use `.limit(1)` instead and
+        // treat any row as "in box".
+        const { data } = await supabase
+          .from("user_fly_box")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("canonical_fly_id", canonicalFlyId)
+          .limit(1);
+
+        if (!cancelled) {
+          setIsInBox((data?.length ?? 0) > 0);
+        }
+      } catch (e) {
+        // Network or schema error — don't leave the spinner hanging.
+        console.warn("[AddToFlyBoxButton] status check failed:", e);
+      } finally {
+        if (!cancelled) setChecking(false);
       }
-      setIsAuthenticated(true);
-
-      const { data } = await supabase
-        .from("user_fly_box")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("canonical_fly_id", canonicalFlyId)
-        .maybeSingle();
-
-      setIsInBox(!!data);
-      setChecking(false);
     }
     checkStatus();
+    return () => {
+      cancelled = true;
+    };
   }, [canonicalFlyId]);
 
   async function handleAdd() {

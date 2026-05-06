@@ -21,6 +21,7 @@ import {
 import type { FlyBox } from "@/lib/db/fly-boxes";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import QuickAddFliesSheet from "@/components/flies/QuickAddFliesSheet";
+import EditBoxDialog from "@/components/flies/EditBoxDialog";
 
 const TIER_META = {
   kill: { label: "Tier 1 · Kill", icon: Crosshair, accent: "text-[#E8923A]", border: "border-[#E8923A]/30" },
@@ -40,6 +41,7 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
   const [removing, setRemoving] = useState<string | null>(null);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   async function downloadInventoryPdf() {
     setDownloadingPdf(true);
@@ -199,11 +201,7 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
             </button>
             <button
               type="button"
-              onClick={() =>
-                alert(
-                  "Edit box settings coming next — for now, /api/fly-boxes PATCH supports name/tier/description/icon updates.",
-                )
-              }
+              onClick={() => setEditOpen(true)}
               className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
             >
               <Pencil className="h-3.5 w-3.5" /> Edit box
@@ -247,6 +245,22 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
             // we'd need to merge new entries into the grid manually.
             void count;
             if (typeof window !== "undefined") window.location.reload();
+          }}
+        />
+      )}
+
+      {editOpen && (
+        <EditBoxDialog
+          box={box}
+          onClose={() => setEditOpen(false)}
+          onSaved={() => {
+            setEditOpen(false);
+            if (typeof window !== "undefined") window.location.reload();
+          }}
+          onDeleted={() => {
+            setEditOpen(false);
+            // After delete, navigate back to the boxes index.
+            if (typeof window !== "undefined") window.location.href = "/my-boxes";
           }}
         />
       )}
