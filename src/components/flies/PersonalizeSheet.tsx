@@ -26,6 +26,36 @@ import { X, Loader2, Plus, Check, RotateCcw, Lock, Star, Trash2 } from "lucide-r
 import { deriveSlotKey, type Personalizations } from "@/lib/flies/resolveFlyForViewer";
 import { suggestVariantLabel } from "@/lib/flies/variantLabel";
 import PromoteToPatternPrompt from "./PromoteToPatternPrompt";
+import { MaterialAutocomplete } from "./MaterialAutocomplete";
+import type { MaterialCategory, TyingMaterial } from "@/types/materials";
+
+// Maps a slot key (lowercased) to a MaterialCategory for autocomplete searching.
+// Returns undefined for slots that don't map cleanly to a single material category;
+// those slots continue to use the free-text inputs.
+function slotToMaterialCategory(slot: string): MaterialCategory | undefined {
+  const map: Record<string, MaterialCategory> = {
+    hook: "hook",
+    bead: "bead",
+    thread: "thread",
+    body: "body",
+    abdomen: "dubbing",
+    thorax: "dubbing",
+    dubbing: "dubbing",
+    tail: "tail",
+    wing: "wing",
+    rib: "ribbing",
+    ribbing: "ribbing",
+    collar: "feather",
+    hackle: "feather",
+    hot_spot: "flash",
+    hotspot: "flash",
+    flash: "flash",
+    eye: "eye",
+    foam: "foam",
+    wire: "wire",
+  };
+  return map[slot.toLowerCase()];
+}
 
 export interface PersonalizeSheetCanonicalFly {
   id: string;
@@ -94,6 +124,8 @@ export default function PersonalizeSheet({
   const [variantLabel, setVariantLabel] = useState("");
   const [tieNextTargetQty, setTieNextTargetQty] = useState<number | "">("");
   const [tiedCount, setTiedCount] = useState<number | "">("");
+  // Per-size stock: { "16": 4, "18": 4 } — how many of each size are tied/in box.
+  const [quantityBySize, setQuantityBySize] = useState<Record<string, number>>({});
   const [isPrimary, setIsPrimary] = useState(false);
   const [wasPrimary, setWasPrimary] = useState(false);
   const [extraSlots, setExtraSlots] = useState<SlotRowDef[]>([]);
@@ -120,7 +152,7 @@ export default function PersonalizeSheet({
           const userRes = await supabase
             .from("user_fly_box")
             .select(
-              "personalizations, preferred_sizes, preferred_colors, personal_notes, custom_name, variant_label, is_primary, tie_next_status, tie_next_target_qty, tied_count",
+              "personalizations, preferred_sizes, preferred_colors, personal_notes, custom_name, variant_label, is_primary, tie_next_status, tie_next_target_qty, tied_count, quantity_by_size",
             )
             .eq("id", variantId)
             .maybeSingle();
@@ -201,6 +233,7 @@ export default function PersonalizeSheet({
           is_primary?: boolean | null;
           tie_next_target_qty?: number | null;
           tied_count?: number | null;
+          quantity_by_size?: Record<string, number> | null;
         } | null;
         const savedPersonalizations = saved?.personalizations ?? {};
         setPersonalizations(savedPersonalizations);
@@ -215,6 +248,7 @@ export default function PersonalizeSheet({
           typeof saved?.tie_next_target_qty === "number" ? saved.tie_next_target_qty : "",
         );
         setTiedCount(typeof saved?.tied_count === "number" ? saved.tied_count : "");
+        setQuantityBySize(saved?.quantity_by_size ?? {});
 
         // Surface any "extra" slots the user has saved that aren't in
         // canonical's recipe — keeps reopens stable for power users.
@@ -322,6 +356,20 @@ export default function PersonalizeSheet({
           personalizations,
         });
 
+      // Drop zero-quantity entries so the jsonb stays small.
+      const cleanedQuantityBySize: Record<string, number> = {};
+      for (const [size, n] of Object.entries(quantityBySize)) {
+        if (typeof n === "number" && n > 0) cleanedQuantityBySize[size] = n;
+      }
+      const totalFromSizes = Object.values(cleanedQuantityBySize).reduce(
+        (sum, n) => sum + n,
+        0,
+      );
+      // tied_count syncs from the per-size sum when the user provided sizes;
+      // otherwise it falls back to the single-input "you have" value.
+      const finalTiedCount =
+        Object.keys(cleanedQuantityBySize).length > 0 ? totalFromSizes : tiedSoFar;
+
       const payload: Record<string, unknown> = {
         canonical_fly_id: fly.id,
         personalizations,
@@ -331,7 +379,9 @@ export default function PersonalizeSheet({
         custom_name: customName.trim() || null,
         variant_label: labelToSave || null,
         tie_next_target_qty: targetQty,
-        tied_count: tiedSoFar,
+        tied_count: finalTiedCount,
+        quantity_by_size:
+          Object.keys(cleanedQuantityBySize).length > 0 ? cleanedQuantityBySize : null,
       };
       if (tieNextStatus) payload.tie_next_status = tieNextStatus;
       // Only send is_primary when it changed — server demotes the prior primary.
@@ -601,44 +651,144 @@ export default function PersonalizeSheet({
                 <div className="flex items-center gap-2">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#0BA5C7]" />
                   <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[#0BA5C7]">
-                    Quantity & Tying
+                    Stock & Tying Queue
                   </h3>
+                  {(() => {
+                    const total = Object.values(quantityBySize).reduce(
+                      (sum, n) => sum + (typeof n === "number" ? n : 0),
+                      0,
+                    );
+                    if (total > 0) {
+                      return (
+                        <span className="ml-auto text-[10px] font-semibold text-[#0BA5C7]">
+                          {total} fl{total === 1 ? "y" : "ies"}
+                        </span>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
-                      You have
-                    </label>
-                    <input
-                      type="number"
-                      min={0}
-                      value={tiedCount === "" ? "" : String(tiedCount)}
-                      onChange={(e) =>
-                        setTiedCount(e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value, 10)))
-                      }
-                      placeholder="0"
-                      className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#0BA5C7]/50"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
-                      You want
-                    </label>
-                    <input
-                      type="number"
-                      min={0}
-                      value={tieNextTargetQty === "" ? "" : String(tieNextTargetQty)}
-                      onChange={(e) =>
-                        setTieNextTargetQty(e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value, 10)))
-                      }
-                      placeholder="3"
-                      className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#0BA5C7]/50"
-                    />
-                  </div>
+
+                {/* Per-size quantity grid — one row per size in preferred_sizes
+                    (or canonical sizes if no preferences saved). */}
+                {(() => {
+                  const sizesToShow =
+                    preferredSizes.length > 0
+                      ? preferredSizes
+                      : fly.sizes && fly.sizes.length > 0
+                      ? fly.sizes
+                      : [];
+                  if (sizesToShow.length === 0) {
+                    // Fallback: single tied_count input when no sizes available.
+                    return (
+                      <div>
+                        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                          You have
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={tiedCount === "" ? "" : String(tiedCount)}
+                          onChange={(e) =>
+                            setTiedCount(
+                              e.target.value === ""
+                                ? ""
+                                : Math.max(0, parseInt(e.target.value, 10)),
+                            )
+                          }
+                          placeholder="0"
+                          className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#0BA5C7]/50"
+                        />
+                        <p className="mt-1 text-[10px] text-[#6E7681]">
+                          Pick sizes above to track count per size.
+                        </p>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div>
+                      <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                        Stock by size
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {sizesToShow.map((size) => {
+                          const n = quantityBySize[size] ?? 0;
+                          return (
+                            <div
+                              key={size}
+                              className="flex items-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-2 py-1.5"
+                            >
+                              <span className="flex-shrink-0 inline-flex items-center justify-center min-w-[2.25rem] rounded-md bg-[#0D1117] px-1.5 py-0.5 text-[11px] font-semibold text-[#0BA5C7]">
+                                #{size}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setQuantityBySize((prev) => ({
+                                    ...prev,
+                                    [size]: Math.max(0, (prev[size] ?? 0) - 1),
+                                  }))
+                                }
+                                aria-label={`Decrease #${size}`}
+                                className="inline-flex h-6 w-6 items-center justify-center rounded text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] disabled:opacity-30"
+                                disabled={n === 0}
+                              >
+                                −
+                              </button>
+                              <input
+                                type="number"
+                                min={0}
+                                value={n}
+                                onChange={(e) => {
+                                  const v = e.target.value === "" ? 0 : parseInt(e.target.value, 10);
+                                  setQuantityBySize((prev) => ({
+                                    ...prev,
+                                    [size]: Math.max(0, isNaN(v) ? 0 : v),
+                                  }));
+                                }}
+                                className="w-10 bg-transparent text-center text-sm text-[#F0F6FC] focus:outline-none"
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setQuantityBySize((prev) => ({
+                                    ...prev,
+                                    [size]: (prev[size] ?? 0) + 1,
+                                  }))
+                                }
+                                aria-label={`Increase #${size}`}
+                                className="inline-flex h-6 w-6 items-center justify-center rounded text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D]"
+                              >
+                                +
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                    Tie-next target (optional)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={tieNextTargetQty === "" ? "" : String(tieNextTargetQty)}
+                    onChange={(e) =>
+                      setTieNextTargetQty(
+                        e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value, 10)),
+                      )
+                    }
+                    placeholder="e.g. 8"
+                    className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#0BA5C7]/50"
+                  />
+                  <p className="mt-1 text-[10px] text-[#6E7681] leading-relaxed">
+                    Auto-queues this variant. When stock ≥ target, it moves to Done.
+                  </p>
                 </div>
-                <p className="text-[10px] text-[#6E7681] leading-relaxed">
-                  &ldquo;You want&rdquo; auto-queues this variant for tying. When you have ≥ what you want, it moves to Done.
-                </p>
               </section>
 
               {/* Slot rows */}
@@ -830,22 +980,64 @@ function SlotRow({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
-        <input
-          type="text"
-          placeholder="brand"
-          value={value.brand ?? ""}
-          onChange={(e) => onUpdate("brand", e.target.value)}
-          className="bg-[#161B22] border border-[#21262D] rounded px-2 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
-        />
-        <input
-          type="text"
-          placeholder={detailPlaceholder}
-          value={value[detailKey] ?? value.model ?? value.size ?? value.denier ?? ""}
-          onChange={(e) => onUpdate(detailKey, e.target.value)}
-          className="bg-[#161B22] border border-[#21262D] rounded px-2 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
-        />
-      </div>
+      {(() => {
+        const category = slotToMaterialCategory(slot);
+        if (category) {
+          // Reconstruct an existing-selection display label from saved fields.
+          const savedLabel = [value.brand, value.model].filter(Boolean).join(" ");
+          return (
+            <div className="space-y-2">
+              <MaterialAutocomplete
+                category={category}
+                value={null}
+                freeText={savedLabel || undefined}
+                onSelect={(material: TyingMaterial | null, freeText?: string) => {
+                  if (material) {
+                    onUpdate("brand", material.brand ?? "");
+                    onUpdate("model", material.name);
+                  } else if (typeof freeText === "string" && freeText.trim()) {
+                    onUpdate("brand", "");
+                    onUpdate("model", freeText.trim());
+                  } else {
+                    onUpdate("brand", "");
+                    onUpdate("model", "");
+                  }
+                }}
+                placeholder={`Search ${category}…`}
+              />
+              {/* Optional secondary detail (size for bead, denier for thread) */}
+              {(slot === "bead" || slot === "thread") && (
+                <input
+                  type="text"
+                  placeholder={detailPlaceholder}
+                  value={value[detailKey] ?? ""}
+                  onChange={(e) => onUpdate(detailKey, e.target.value)}
+                  className="w-full bg-[#161B22] border border-[#21262D] rounded px-2 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                />
+              )}
+            </div>
+          );
+        }
+        // Slots that don't map to a single material category — keep free-text fallback.
+        return (
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="text"
+              placeholder="brand"
+              value={value.brand ?? ""}
+              onChange={(e) => onUpdate("brand", e.target.value)}
+              className="bg-[#161B22] border border-[#21262D] rounded px-2 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+            />
+            <input
+              type="text"
+              placeholder={detailPlaceholder}
+              value={value[detailKey] ?? value.model ?? value.size ?? value.denier ?? ""}
+              onChange={(e) => onUpdate(detailKey, e.target.value)}
+              className="bg-[#161B22] border border-[#21262D] rounded px-2 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+            />
+          </div>
+        );
+      })()}
 
       {/* Free-text color when canonical doesn't list options */}
       {!colors?.length && (

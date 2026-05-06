@@ -252,21 +252,12 @@ function buildFlyBoxProps(
   flyBoxEntries: FlyBoxEntry[],
   counts: { favorites: number; tieNext: number }
 ) {
-  // Suppress personal patterns that are already represented as canonical box entries.
-  // When a fly_patterns row has parent_canonical_id matching an existing user_fly_box
-  // canonical_fly_id, both would appear as separate tiles — show only the box entry.
-  const boxedCanonicalIds = new Set(
-    flyBoxEntries
-      .map((e) => e.canonical_fly_id)
-      .filter((id): id is string => !!id)
-  );
-  const deduplicatedPatterns = myPatterns.filter(
-    (fly) =>
-      !fly.parent_canonical_id ||
-      !boxedCanonicalIds.has(fly.parent_canonical_id)
-  );
-
-  const personalCards: UnifiedFly[] = deduplicatedPatterns.map((fly) => ({
+  // Personal patterns and canonical box entries are different things. We render both
+  // and let the tile badges distinguish them ("PERSONAL PATTERN" vs "IN YOUR FLY BOX").
+  // Suppressing personal patterns whose parent_canonical_id matches a box entry was
+  // hiding legitimately-created variants — see VariantModal flow that creates personal
+  // patterns with parent_canonical_id pointing at canonical flies the user has saved.
+  const personalCards: UnifiedFly[] = myPatterns.map((fly) => ({
     source: "personal" as const,
     fly: {
       id: fly.id,
@@ -282,6 +273,7 @@ function buildFlyBoxProps(
       description: fly.description,
       is_favorite: fly.is_favorite,
       is_tie_next: fly.is_tie_next,
+      parent_canonical_id: fly.parent_canonical_id ?? undefined,
     },
   }));
 

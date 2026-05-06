@@ -58,6 +58,7 @@ export interface SerializedFlyPattern {
   description?: string;
   is_favorite?: boolean;
   is_tie_next?: boolean;
+  parent_canonical_id?: string;
 }
 
 export interface SerializedCanonicalFly {
