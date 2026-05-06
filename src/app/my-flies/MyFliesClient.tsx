@@ -252,7 +252,21 @@ function buildFlyBoxProps(
   flyBoxEntries: FlyBoxEntry[],
   counts: { favorites: number; tieNext: number }
 ) {
-  const personalCards: UnifiedFly[] = myPatterns.map((fly) => ({
+  // Suppress personal patterns that are already represented as canonical box entries.
+  // When a fly_patterns row has parent_canonical_id matching an existing user_fly_box
+  // canonical_fly_id, both would appear as separate tiles — show only the box entry.
+  const boxedCanonicalIds = new Set(
+    flyBoxEntries
+      .map((e) => e.canonical_fly_id)
+      .filter((id): id is string => !!id)
+  );
+  const deduplicatedPatterns = myPatterns.filter(
+    (fly) =>
+      !fly.parent_canonical_id ||
+      !boxedCanonicalIds.has(fly.parent_canonical_id)
+  );
+
+  const personalCards: UnifiedFly[] = deduplicatedPatterns.map((fly) => ({
     source: "personal" as const,
     fly: {
       id: fly.id,
