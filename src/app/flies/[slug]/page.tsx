@@ -535,6 +535,7 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
               activeVariantId={flyBox?.id ?? null}
               isPro={isPro}
               username={username}
+              viewerSignedIn={!!user}
             />
           </div>
         </div>

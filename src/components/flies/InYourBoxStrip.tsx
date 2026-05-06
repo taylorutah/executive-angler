@@ -54,6 +54,13 @@ interface Props {
   isPro: boolean;
   /** Username for Card footer credit. */
   username?: string | null;
+  /**
+   * Whether the viewer is signed in. Authoritative — the page knows from
+   * its server-side `user` object. Without this, we can't tell "logged in
+   * with 0 variants" apart from "anonymous", and the strip shows the wrong
+   * empty state.
+   */
+  viewerSignedIn?: boolean;
 }
 
 export default function InYourBoxStrip({
@@ -63,12 +70,21 @@ export default function InYourBoxStrip({
   activeVariantId: initialActiveVariantId,
   isPro,
   username,
+  viewerSignedIn,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(initialVariants === undefined);
-  const [authed, setAuthed] = useState((initialVariants?.length ?? 0) > 0);
+  // When the page told us auth state, trust it. Otherwise infer from variants
+  // (back-compat) and call refresh() to detect.
+  const initialAuthed =
+    typeof viewerSignedIn === "boolean"
+      ? viewerSignedIn
+      : (initialVariants?.length ?? 0) > 0;
+  const [loading, setLoading] = useState(
+    initialVariants === undefined && viewerSignedIn === undefined,
+  );
+  const [authed, setAuthed] = useState(initialAuthed);
   const [variants, setVariants] = useState<FlyBoxRow[]>(initialVariants ?? []);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetMode, setSheetMode] = useState<"create" | "edit">("edit");
@@ -149,10 +165,16 @@ export default function InYourBoxStrip({
   useEffect(() => {
     if (initialVariants !== undefined) {
       setVariants(initialVariants);
-      setAuthed(initialVariants.length > 0 ? true : authed);
+      // Auth state: prefer the explicit viewerSignedIn signal from the page;
+      // fall back to "has variants" only when no signal was provided.
+      if (typeof viewerSignedIn === "boolean") {
+        setAuthed(viewerSignedIn);
+      } else {
+        setAuthed(initialVariants.length > 0 ? true : authed);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialVariants]);
+  }, [initialVariants, viewerSignedIn]);
 
   if (loading) {
     return (
