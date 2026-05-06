@@ -4,16 +4,18 @@ import { jsPDF } from 'jspdf';
 import type { Personalizations } from '@/lib/flies/resolveFlyForViewer';
 
 /**
- * GET /api/export/recipe-pdf?flyId=<canonical_fly_id>&view=yours|library
+ * GET /api/export/recipe-pdf?flyId=<canonical_fly_id>&view=yours|library&variant=<id>
  *
  * Default: when the fly is in the user's box, exports the viewer's resolved
  * recipe (custom name, preferred sizes, per-slot personalizations apply). The
- * user can pass `?view=library` to export the canonical reference instead.
+ * user can pass `?view=library` to export the canonical reference instead, or
+ * `?variant=<id>` to target a specific variant (otherwise targets primary).
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const flyId = searchParams.get('flyId');
   const viewParam = searchParams.get('view');
+  const variantParam = searchParams.get('variant');
 
   if (!flyId) {
     return NextResponse.json({ error: 'Missing flyId parameter' }, { status: 400 });
@@ -27,16 +29,42 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch canonical + the user's fly box row in parallel.
-    const [{ data: fly, error: flyError }, { data: flyBox }] = await Promise.all([
-      supabase.from('canonical_flies').select('*').eq('id', flyId).single(),
-      supabase
-        .from('user_fly_box')
-        .select('id, personalizations, preferred_sizes, personal_notes, custom_image_url, custom_name')
-        .eq('user_id', user.id)
-        .eq('canonical_fly_id', flyId)
-        .maybeSingle(),
-    ]);
+    // Fetch canonical first.
+    const { data: fly, error: flyError } = await supabase
+      .from('canonical_flies')
+      .select('*')
+      .eq('id', flyId)
+      .single();
+
+    // Then resolve the variant — explicit ?variant=<id>, else primary, else
+    // the only row, else null. We always scope to the requesting user.
+    let flyBoxQuery = supabase
+      .from('user_fly_box')
+      .select('id, personalizations, preferred_sizes, preferred_colors, personal_notes, custom_image_url, custom_name, variant_label')
+      .eq('user_id', user.id)
+      .eq('canonical_fly_id', flyId);
+    if (variantParam) {
+      flyBoxQuery = flyBoxQuery.eq('id', variantParam);
+    } else {
+      flyBoxQuery = flyBoxQuery
+        .order('is_primary', { ascending: false })
+        .order('variant_sort_order', { ascending: true })
+        .order('added_at', { ascending: true })
+        .limit(1);
+    }
+    const { data: flyBoxRows } = await flyBoxQuery;
+    const flyBox = (flyBoxRows && flyBoxRows.length > 0 ? flyBoxRows[0] : null) as
+      | {
+          id: string;
+          personalizations?: Record<string, Record<string, string | undefined>> | null;
+          preferred_sizes?: string[] | null;
+          preferred_colors?: string[] | null;
+          personal_notes?: string | null;
+          custom_image_url?: string | null;
+          custom_name?: string | null;
+          variant_label?: string | null;
+        }
+      | null;
 
     if (flyError || !fly) {
       return NextResponse.json({ error: 'Fly pattern not found' }, { status: 404 });
@@ -103,18 +131,21 @@ export async function GET(request: Request) {
     doc.text(displayName, margin, y);
     y += 8;
 
-    // "YOUR RECIPE" / "LIBRARY REFERENCE" eyebrow + canonical name when custom_name diverges
+    // "YOUR RECIPE" / "LIBRARY REFERENCE" eyebrow + variant label + canonical name
     if (showYours) {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(8);
       doc.setTextColor(...copper);
-      doc.text('YOUR RECIPE', margin, y);
+      const eyebrow = flyBox?.variant_label
+        ? `YOUR RECIPE — ${flyBox.variant_label.toUpperCase()}`
+        : 'YOUR RECIPE';
+      doc.text(eyebrow, margin, y);
       if (displayName !== fly.name) {
-        const yoursWidth = doc.getTextWidth('YOUR RECIPE');
+        const eyebrowWidth = doc.getTextWidth(eyebrow);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.setTextColor(110, 118, 129);
-        doc.text(`  ·  based on the ${fly.name}`, margin + yoursWidth, y);
+        doc.text(`  ·  based on the ${fly.name}`, margin + eyebrowWidth, y);
       }
       y += 5;
     } else if (flyBox) {
@@ -349,7 +380,10 @@ export async function GET(request: Request) {
     const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
     const fileBaseName = (showYours && flyBox?.custom_name?.trim()) ? flyBox.custom_name : fly.name;
     const safeName = fileBaseName.replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '-');
-    const fileSuffix = showYours ? '-yours' : '';
+    const variantSuffix = showYours && flyBox?.variant_label
+      ? `-${flyBox.variant_label.replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '-')}`
+      : '';
+    const fileSuffix = showYours ? `-yours${variantSuffix}` : '';
 
     return new NextResponse(pdfBuffer, {
       status: 200,

@@ -16,11 +16,13 @@ export function RecipePdfButton({ flyId, flyName }: RecipePdfButtonProps) {
   async function handleDownload() {
     setDownloading(true);
     try {
-      // Forward the current view param so the PDF matches what the user is
-      // looking at — Yours by default, Library reference when explicitly toggled.
+      // Forward view + variant params so the PDF matches what the user is
+      // looking at — Yours by default, the active variant when multiple exist.
       const view = searchParams?.get('view');
+      const variant = searchParams?.get('variant');
       const qs = new URLSearchParams({ flyId });
       if (view === 'library') qs.set('view', 'library');
+      if (variant) qs.set('variant', variant);
       const res = await fetch(`/api/export/recipe-pdf?${qs.toString()}`);
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Download failed' }));

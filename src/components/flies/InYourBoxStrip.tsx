@@ -2,14 +2,19 @@
 
 /**
  * InYourBoxStrip — the identity strip pinned to the top of every canonical
- * fly page. Three states:
- *   1. Anonymous — sign-in prompt.
- *   2. Signed in, not in box — "Add to Fly Box" button → opens PersonalizeSheet.
- *   3. Signed in, in box — Yours/Library view toggle + Card + Edit + summary.
+ * fly page.
+ *
+ * States:
+ *   1. Anonymous            — sign-in prompt.
+ *   2. Signed in, 0 variants — "Add to Fly Box" CTA → opens PersonalizeSheet.
+ *   3. Signed in, 1 variant  — full strip with Card + Edit; "+ Add variant"
+ *                              link in the footer.
+ *   4. Signed in, 2+ variants — variant chip strip above the strip; the
+ *                               active variant drives the body content.
  *
  * The component does NOT decide what the recipe rows show — that's the job of
- * resolveFlyForViewer + the page. This component owns the action surface
- * (toggle, edit, card, summary badge) only.
+ * resolveFlyForViewer + the page. This component owns the variant selector,
+ * action surface (Card/Edit), and the "view library reference" affordance.
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -30,40 +35,49 @@ import PersonalizeSheet, {
 import FlyCardModal from "./FlyCardModal";
 import {
   summarizePersonalization,
-  type Personalizations,
+  type FlyBoxRow,
   type ResolvedFly,
 } from "@/lib/flies/resolveFlyForViewer";
+import { resolveVariantLabel } from "@/lib/flies/variantLabel";
 
 interface Props {
   fly: PersonalizeSheetCanonicalFly;
   /** Resolved view from the server — drives the Card payload + view toggle. */
   resolved: ResolvedFly;
+  /** All variants the user has of this canonical fly, primary first. */
+  variants?: FlyBoxRow[];
+  /** The active variant's id (the one currently driving the page). */
+  activeVariantId?: string | null;
   /** Whether the viewer has Pro — passed to PersonalizeSheet. */
   isPro: boolean;
   /** Username for Card footer credit. */
   username?: string | null;
 }
 
-interface BoxRow {
-  id: string;
-  personalizations: Personalizations | null;
-  preferred_sizes: string[] | null;
-  personal_notes: string | null;
-  custom_image_url: string | null;
-  custom_name: string | null;
-  is_favorite: boolean | null;
-  is_tie_next: boolean | null;
-}
-
-export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props) {
+export default function InYourBoxStrip({
+  fly,
+  resolved,
+  variants: initialVariants,
+  activeVariantId: initialActiveVariantId,
+  isPro,
+  username,
+}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [authed, setAuthed] = useState(false);
-  const [row, setRow] = useState<BoxRow | null>(null);
+  const [loading, setLoading] = useState(initialVariants === undefined);
+  const [authed, setAuthed] = useState((initialVariants?.length ?? 0) > 0);
+  const [variants, setVariants] = useState<FlyBoxRow[]>(initialVariants ?? []);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetMode, setSheetMode] = useState<"create" | "edit">("edit");
+  const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [cardOpen, setCardOpen] = useState(false);
+
+  const activeRow: FlyBoxRow | null =
+    variants.find((v) => v.id === initialActiveVariantId) ??
+    variants.find((v) => v.is_primary === true) ??
+    variants[0] ??
+    null;
 
   function flipView(next: "yours" | "library") {
     const params = new URLSearchParams(searchParams?.toString() ?? "");
@@ -73,6 +87,25 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
     router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
   }
 
+  function selectVariant(variantId: string) {
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    params.set("variant", variantId);
+    const qs = params.toString();
+    router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
+  }
+
+  function openCreateSheet() {
+    setSheetMode("create");
+    setEditingVariantId(null);
+    setSheetOpen(true);
+  }
+
+  function openEditSheet(variantId: string) {
+    setSheetMode("edit");
+    setEditingVariantId(variantId);
+    setSheetOpen(true);
+  }
+
   const refresh = useCallback(async () => {
     const supabase = createClient();
     const {
@@ -80,7 +113,7 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
     } = await supabase.auth.getUser();
     if (!user) {
       setAuthed(false);
-      setRow(null);
+      setVariants([]);
       setLoading(false);
       return;
     }
@@ -88,18 +121,35 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
     const { data } = await supabase
       .from("user_fly_box")
       .select(
-        "id, personalizations, preferred_sizes, personal_notes, custom_image_url, custom_name, is_favorite, is_tie_next",
+        "id, personalizations, preferred_sizes, preferred_colors, personal_notes, custom_image_url, custom_name, is_favorite, is_tie_next, variant_label, is_primary, variant_sort_order, tied_count, tie_next_status, tie_next_target_qty, tie_next_notes",
       )
       .eq("user_id", user.id)
       .eq("canonical_fly_id", fly.id)
-      .maybeSingle();
-    setRow((data as BoxRow | null) ?? null);
+      .order("is_primary", { ascending: false })
+      .order("variant_sort_order", { ascending: true })
+      .order("added_at", { ascending: true });
+    setVariants(((data as FlyBoxRow[] | null) ?? []));
     setLoading(false);
   }, [fly.id]);
 
   useEffect(() => {
+    // Skip the initial fetch when the server already supplied variants —
+    // saves a roundtrip and prevents a flash of "checking your fly box…".
+    if (initialVariants !== undefined) {
+      setLoading(false);
+      return;
+    }
     refresh();
-  }, [refresh]);
+  }, [refresh, initialVariants]);
+
+  // Sync state when server props change (e.g. after a hard refresh)
+  useEffect(() => {
+    if (initialVariants !== undefined) {
+      setVariants(initialVariants);
+      setAuthed(initialVariants.length > 0 ? true : authed);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialVariants]);
 
   if (loading) {
     return (
@@ -125,15 +175,16 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
     );
   }
 
-  if (!row) {
+  // Empty box — first-time add prompt.
+  if (variants.length === 0 || !activeRow) {
     return (
       <>
         <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <p className="text-sm text-[#A8B2BD]">
-            Save this fly with your specs — hook, bead, thread, the sizes you tie.
+            Save this fly with your specs — color, size, hook, bead, thread.
           </p>
           <button
-            onClick={() => setSheetOpen(true)}
+            onClick={openCreateSheet}
             className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#E8923A] text-[#0D1117] text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
           >
             <Plus className="h-4 w-4" /> Add to Fly Box
@@ -142,28 +193,24 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
         <PersonalizeSheet
           open={sheetOpen}
           fly={fly}
-          isInBox={false}
+          mode="create"
+          variantId={null}
           isPro={isPro}
           onClose={() => setSheetOpen(false)}
-          onSaved={() => {
-            refresh();
-            // Re-render the canonical page so resolved view reflects new state.
-            // (router.refresh would be cleaner here, but the strip itself
-            // remounts via refresh() and the page already revalidates on focus
-            // in dev — production users see new data on next interaction.)
-          }}
+          onSaved={onSheetSaved}
         />
       </>
     );
   }
 
-  // In box — show identity strip with Card + Edit; "view library reference" is a quiet text link.
+  // In box — possibly with multiple variants.
+  const isLibraryView = resolved.viewMode === "library";
   const summary = summarizePersonalization(
-    row.personalizations ?? {},
-    row.preferred_sizes ?? null,
+    activeRow.personalizations ?? {},
+    activeRow.preferred_sizes ?? null,
   );
   const flyForCard = buildFlyForCard(resolved);
-  const isLibraryView = resolved.viewMode === "library";
+  const showChipStrip = variants.length >= 2;
 
   return (
     <>
@@ -171,7 +218,11 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
         <div className="mb-3 rounded-xl border border-[#0BA5C7]/30 bg-[#0BA5C7]/5 px-4 py-2.5 flex items-center gap-3 text-xs">
           <Library className="h-4 w-4 text-[#0BA5C7] shrink-0" />
           <p className="text-[#A8B2BD] flex-1">
-            You&rsquo;re viewing the <span className="font-semibold text-[#F0F6FC]">library reference</span>. Your version of this fly has been hidden.
+            You&rsquo;re viewing the{" "}
+            <span className="font-semibold text-[#F0F6FC]">library reference</span>.
+            {variants.length > 1
+              ? " Your variants have been hidden."
+              : " Your version of this fly has been hidden."}
           </p>
           <button
             type="button"
@@ -183,6 +234,36 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
         </div>
       )}
 
+      {showChipStrip && !isLibraryView && (
+        <div className="mb-3 rounded-xl border border-[#21262D] bg-[#161B22] px-3 py-2.5">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#A8B2BD]">
+              Your Variants
+            </span>
+            <span className="text-[10px] text-[#6E7681]">
+              · {variants.length} in your box
+            </span>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            {variants.map((v) => (
+              <VariantChip
+                key={v.id}
+                variant={v}
+                active={v.id === activeRow.id}
+                onClick={() => selectVariant(v.id)}
+              />
+            ))}
+            <button
+              type="button"
+              onClick={openCreateSheet}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-dashed border-[#21262D] text-xs text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A]/40 transition-colors"
+            >
+              <Plus className="h-3 w-3" /> Add variant
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="rounded-xl border border-[#E8923A]/30 bg-[#E8923A]/5 px-4 py-3">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0 flex-1">
@@ -190,21 +271,22 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
               <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#E8923A]">
                 <Check className="h-3 w-3" /> In your fly box
               </span>
-              {row.is_tie_next && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#0BA5C7]">
-                  <ListChecks className="h-3 w-3" /> Queued to tie
-                </span>
-              )}
+              {activeRow.tie_next_status &&
+                activeRow.tie_next_status !== "none" &&
+                activeRow.tie_next_status !== "done" && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#0BA5C7]">
+                    <ListChecks className="h-3 w-3" />
+                    {tieNextLabel(activeRow)}
+                  </span>
+                )}
               {resolved.deviationCount > 0 && (
                 <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-wider text-[#A8B2BD]">
-                  · {resolved.deviationCount} {resolved.deviationCount === 1 ? "tweak" : "tweaks"}
+                  · {resolved.deviationCount}{" "}
+                  {resolved.deviationCount === 1 ? "tweak" : "tweaks"}
                 </span>
               )}
             </div>
-            <p
-              className="text-sm text-[#F0F6FC] truncate"
-              title={summary || undefined}
-            >
+            <p className="text-sm text-[#F0F6FC] truncate" title={summary || undefined}>
               {summary ||
                 "No specs saved yet — tap Edit to record your hook, bead, thread."}
             </p>
@@ -219,7 +301,7 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
               <CreditCard className="h-3.5 w-3.5" /> Card
             </button>
             <button
-              onClick={() => setSheetOpen(true)}
+              onClick={() => openEditSheet(activeRow.id)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20 text-xs font-semibold transition-colors"
             >
               <Edit3 className="h-3.5 w-3.5" /> Edit
@@ -227,7 +309,20 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
           </div>
         </div>
         {!isLibraryView && (
-          <div className="mt-2 pt-2 border-t border-[#E8923A]/15 flex justify-end">
+          <div className="mt-2 pt-2 border-t border-[#E8923A]/15 flex items-center justify-between gap-2 flex-wrap">
+            {!showChipStrip ? (
+              <button
+                type="button"
+                onClick={openCreateSheet}
+                className="inline-flex items-center gap-1 text-[10px] text-[#6E7681] hover:text-[#E8923A] transition-colors"
+                title="Add another color/size variant"
+              >
+                <Plus className="h-3 w-3" />
+                Add another variant
+              </button>
+            ) : (
+              <span />
+            )}
             <button
               type="button"
               onClick={() => flipView("library")}
@@ -244,19 +339,11 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
       <PersonalizeSheet
         open={sheetOpen}
         fly={fly}
-        isInBox={true}
+        mode={sheetMode}
+        variantId={editingVariantId}
         isPro={isPro}
         onClose={() => setSheetOpen(false)}
-        onSaved={() => {
-          refresh();
-          // Force the server component to re-render with the new fly box row
-          // so resolved data reflects saved overrides.
-          if (typeof window !== "undefined") {
-            // Soft reload to re-resolve the page (router.refresh equivalent
-            // without importing the hook in this small component).
-            window.location.reload();
-          }
-        }}
+        onSaved={onSheetSaved}
       />
 
       <FlyCardModal
@@ -268,7 +355,122 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
       />
     </>
   );
+
+  function onSheetSaved() {
+    // Hard-reload so the server component re-resolves with the latest
+    // variants and the chip strip + recipe + Pattern Details all update
+    // together. Soft router.refresh() doesn't re-run the page's data
+    // fetch reliably on Next 16 in this layout.
+    if (typeof window !== "undefined") window.location.reload();
+  }
 }
+
+interface VariantChipProps {
+  variant: FlyBoxRow;
+  active: boolean;
+  onClick: () => void;
+}
+
+function VariantChip({ variant, active, onClick }: VariantChipProps) {
+  const label =
+    resolveVariantLabel({
+      variantLabel: variant.variant_label,
+      preferredColors: variant.preferred_colors ?? null,
+      preferredSizes: variant.preferred_sizes ?? null,
+      personalizations: variant.personalizations ?? {},
+    }) || "Untitled";
+
+  const tieNext = tieNextLabel(variant);
+  const swatchColor = colorSwatchFromVariant(variant);
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
+        active
+          ? "bg-[#E8923A] text-[#0D1117] border-[#E8923A]"
+          : "bg-[#161B22] text-[#A8B2BD] border-[#21262D] hover:text-[#F0F6FC] hover:border-[#E8923A]/40"
+      }`}
+    >
+      {swatchColor && (
+        <span
+          aria-hidden
+          className="inline-block h-2.5 w-2.5 rounded-full border border-[#21262D]"
+          style={{ backgroundColor: swatchColor }}
+        />
+      )}
+      <span className="truncate max-w-[14rem]">{label}</span>
+      {tieNext && (
+        <span
+          className={`inline-flex items-center text-[10px] uppercase tracking-wider ${
+            active ? "text-[#0D1117]/70" : "text-[#0BA5C7]"
+          }`}
+        >
+          · {tieNext}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function tieNextLabel(row: FlyBoxRow): string | null {
+  const status = row.tie_next_status;
+  if (!status || status === "none") return null;
+  if (status === "done") return null;
+  const target = row.tie_next_target_qty ?? 0;
+  const tied = row.tied_count ?? 0;
+  if (target > 0) {
+    if (tied >= target) return "Done";
+    if (tied > 0) return `Tied ${tied}/${target}`;
+    return `Tie ${target}`;
+  }
+  return status === "wanted" ? "Queued" : status === "at_vise" ? "At vise" : null;
+}
+
+/**
+ * Map a variant's color choice to a CSS color for the chip swatch. Best-effort
+ * — covers common fly colors but falls through to no swatch when unrecognised.
+ */
+function colorSwatchFromVariant(row: FlyBoxRow): string | null {
+  const candidates = [
+    row.preferred_colors?.[0],
+    row.personalizations?.body?.color,
+    row.personalizations?.body?.material,
+    row.personalizations?.thread?.color,
+  ].filter((s): s is string => Boolean(s && s.trim()));
+  for (const c of candidates) {
+    const swatch = NAMED_COLORS[c.toLowerCase().trim()];
+    if (swatch) return swatch;
+  }
+  return null;
+}
+
+const NAMED_COLORS: Record<string, string> = {
+  black: "#0F0F0F",
+  white: "#F4F4F4",
+  cream: "#E9D9B8",
+  tan: "#C9A06A",
+  brown: "#5C3B1F",
+  rust: "#A24E22",
+  red: "#9C1A1A",
+  pink: "#D984A6",
+  orange: "#E8923A",
+  copper: "#B87333",
+  yellow: "#E8C547",
+  chartreuse: "#A8D85F",
+  olive: "#6B7A3C",
+  green: "#4A6B3A",
+  blue: "#2F5D8A",
+  purple: "#5E3F73",
+  grey: "#7A7A7A",
+  gray: "#7A7A7A",
+  silver: "#C0C0C0",
+  gold: "#D4AF37",
+  natural: "#D9C9A8",
+  bleached: "#EFE6CF",
+};
 
 /**
  * Flatten a ResolvedFly into the FlyCardModal's expected shape. Pulls hook,
@@ -308,7 +510,7 @@ function buildFlyForCard(resolved: ResolvedFly): {
     type: resolved.category,
     size: resolved.sizes.value.join(", "),
     hook: slotMap.hook,
-    bead_size: slotMap.bead, // The Card formats bead from material+size+color string
+    bead_size: slotMap.bead,
     body_color: slotMap.body,
     tail_color: slotMap.tail,
     thorax_color: slotMap.thorax,

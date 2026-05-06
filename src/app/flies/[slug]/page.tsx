@@ -59,7 +59,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams?: Promise<{ view?: string }>;
+  searchParams?: Promise<{ view?: string; variant?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -116,20 +116,26 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   const viewerIsAdmin = isAdmin(user?.email);
 
-  // Load viewer's fly box row + Pro status + username (for Card credit).
+  // Load viewer's fly box variants + Pro status + username (for Card credit).
+  // The user can have multiple variants of the same canonical fly — each a
+  // separate row. We fetch them all and pick an "active" one based on the
+  // ?variant search param (or the primary, or the first by sort order).
+  let variants: FlyBoxRow[] = [];
   let flyBox: FlyBoxRow | null = null;
   let isPro = false;
   let username: string | null = null;
   if (user) {
-    const [{ data: boxRow }, premium, { data: profileRow }] = await Promise.all([
+    const [{ data: boxRows }, premium, { data: profileRow }] = await Promise.all([
       supabase
         .from("user_fly_box")
         .select(
-          "id, personalizations, preferred_sizes, personal_notes, custom_image_url, custom_name, is_favorite, is_tie_next",
+          "id, personalizations, preferred_sizes, preferred_colors, personal_notes, custom_image_url, custom_name, is_favorite, is_tie_next, variant_label, is_primary, variant_sort_order, tied_count, tie_next_status, tie_next_target_qty, tie_next_notes",
         )
         .eq("user_id", user.id)
         .eq("canonical_fly_id", fly.id)
-        .maybeSingle(),
+        .order("is_primary", { ascending: false })
+        .order("variant_sort_order", { ascending: true })
+        .order("added_at", { ascending: true }),
       checkPremium(supabase, user.id, user.email),
       supabase
         .from("profiles")
@@ -137,7 +143,16 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
         .eq("user_id", user.id)
         .maybeSingle(),
     ]);
-    flyBox = (boxRow as FlyBoxRow | null) ?? null;
+    variants = ((boxRows as FlyBoxRow[] | null) ?? []);
+    // Active variant: ?variant=<id> wins, else primary, else first.
+    const requestedVariantId = sp.variant;
+    flyBox =
+      (requestedVariantId
+        ? variants.find((v) => v.id === requestedVariantId)
+        : undefined) ??
+      variants.find((v) => v.is_primary === true) ??
+      variants[0] ??
+      null;
     isPro = premium;
     username = (profileRow?.username as string | null) ?? null;
   }
@@ -502,7 +517,7 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
             </div>
           </div>
 
-          {/* In Your Box strip — identity strip with view toggle, Card, Edit */}
+          {/* In Your Box strip — identity strip + variant chips when 2+ variants */}
           <div className="mt-5">
             <InYourBoxStrip
               fly={{
@@ -516,6 +531,8 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
                 materialsList: fly.materialsList,
               }}
               resolved={resolved}
+              variants={variants}
+              activeVariantId={flyBox?.id ?? null}
               isPro={isPro}
               username={username}
             />

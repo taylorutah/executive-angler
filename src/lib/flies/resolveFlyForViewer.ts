@@ -15,11 +15,20 @@ export interface FlyBoxRow {
   id: string;
   personalizations: Personalizations | null;
   preferred_sizes: string[] | null;
+  preferred_colors?: string[] | null;
   personal_notes: string | null;
   custom_image_url: string | null;
   custom_name: string | null;
   is_favorite?: boolean | null;
   is_tie_next?: boolean | null;
+  /** Variant identity (post-2026-05-07 multi-variant migration) */
+  variant_label?: string | null;
+  is_primary?: boolean | null;
+  variant_sort_order?: number | null;
+  tied_count?: number | null;
+  tie_next_status?: string | null;
+  tie_next_target_qty?: number | null;
+  tie_next_notes?: string | null;
 }
 
 export interface Personalizations {
