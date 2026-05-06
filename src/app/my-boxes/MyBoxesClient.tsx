@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Plus, Layers, Crosshair, Backpack, Archive, Folder, MoreHorizontal } from "lucide-react";
+import { Plus, Layers, Crosshair, Backpack, Archive, Folder, MoreHorizontal, Wrench } from "lucide-react";
 import type { FlyBoxWithStats, FlyBoxTier } from "@/lib/db/fly-boxes";
 import CreateBoxDialog from "@/components/flies/CreateBoxDialog";
 
@@ -115,12 +115,21 @@ export default function MyBoxesClient({ initialBoxes }: Props) {
               live in multiple boxes — counts and recipe stay synced.
             </p>
           </div>
-          <button
-            onClick={() => setCreateOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
-          >
-            <Plus className="h-4 w-4" /> New Box
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Link
+              href="/journal/flies/workbench"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
+              title="Tie flies to fill your boxes"
+            >
+              <Wrench className="h-4 w-4" /> Workbench
+            </Link>
+            <button
+              onClick={() => setCreateOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-3 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
+            >
+              <Plus className="h-4 w-4" /> New Box
+            </button>
+          </div>
         </header>
 
         {totalBoxes === 0 ? (

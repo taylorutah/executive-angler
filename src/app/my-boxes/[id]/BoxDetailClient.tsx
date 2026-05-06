@@ -15,9 +15,12 @@ import {
   Pencil,
   Loader2,
   Printer,
+  Sparkles,
+  Wrench,
 } from "lucide-react";
 import type { FlyBox } from "@/lib/db/fly-boxes";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
+import QuickAddFliesSheet from "@/components/flies/QuickAddFliesSheet";
 
 const TIER_META = {
   kill: { label: "Tier 1 · Kill", icon: Crosshair, accent: "text-[#E8923A]", border: "border-[#E8923A]/30" },
@@ -36,6 +39,7 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
   const [entries, setEntries] = useState(initialEntries);
   const [removing, setRemoving] = useState<string | null>(null);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
 
   async function downloadInventoryPdf() {
     setDownloadingPdf(true);
@@ -158,11 +162,26 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
             </div>
           </div>
           <div className="mt-3 flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setQuickAddOpen(true)}
+              className="inline-flex items-center gap-1 rounded-lg bg-[#E8923A] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#F0A65A] transition-colors"
+              title="Quickly add personal flies in bulk"
+            >
+              <Sparkles className="h-3.5 w-3.5" /> Quick add
+            </button>
             <Link
               href="/flies"
-              className="inline-flex items-center gap-1 rounded-lg bg-[#E8923A] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#F0A65A] transition-colors"
+              className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
             >
-              <Plus className="h-3.5 w-3.5" /> Add fly from library
+              <Plus className="h-3.5 w-3.5" /> From library
+            </Link>
+            <Link
+              href="/journal/flies/workbench"
+              className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
+              title="Tie flies for your boxes"
+            >
+              <Wrench className="h-3.5 w-3.5" /> Workbench
             </Link>
             <button
               type="button"
@@ -216,6 +235,21 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
           </div>
         )}
       </div>
+
+      {quickAddOpen && (
+        <QuickAddFliesSheet
+          boxId={box.id}
+          boxName={box.name}
+          onClose={() => setQuickAddOpen(false)}
+          onSuccess={(count) => {
+            setQuickAddOpen(false);
+            // Hard reload to re-fetch entries server-side; otherwise client-side
+            // we'd need to merge new entries into the grid manually.
+            void count;
+            if (typeof window !== "undefined") window.location.reload();
+          }}
+        />
+      )}
     </div>
   );
 }
