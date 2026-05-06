@@ -106,9 +106,12 @@ export default function EntityListView({ items, config, storageKey }: EntityList
   // Filter items
   const filteredItems = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
+    const queryWords = q ? q.split(/\s+/).filter(Boolean) : [];
     return items.filter((item) => {
-      // Text search
-      if (q) {
+      // Text search — typo-tolerant. Each query word must match somewhere
+      // in the haystack as a substring OR (length >= 4) within edit
+      // distance 1 of any whitespace token. Handles "wolly" → "Woolly".
+      if (queryWords.length > 0) {
         const haystack = [
           item.title,
           item.subtitle,
@@ -120,7 +123,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
-        if (!haystack.includes(q)) return false;
+        if (!haystackMatchesQuery(haystack, queryWords)) return false;
       }
 
       // Each CardData item has a _filterValues map injected by the page
@@ -266,4 +269,47 @@ export default function EntityListView({ items, config, storageKey }: EntityList
       </AnimatePresence>
     </>
   );
+}
+
+/**
+ * Edit distance ≤ 1 check (insert/delete/substitute one character). Linear
+ * time, no DP. Used for typo-tolerant search ("wolly" matches "woolly").
+ */
+function withinOneEdit(a: string, b: string): boolean {
+  if (Math.abs(a.length - b.length) > 1) return false;
+  if (a === b) return true;
+  if (a.length > b.length) {
+    const tmp = a;
+    a = b;
+    b = tmp;
+  }
+  let i = 0;
+  let j = 0;
+  let edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++;
+      j++;
+      continue;
+    }
+    if (++edits > 1) return false;
+    if (a.length === b.length) {
+      i++;
+      j++;
+    } else {
+      j++;
+    }
+  }
+  return true;
+}
+
+function haystackMatchesQuery(haystack: string, queryWords: string[]): boolean {
+  // Tokenize haystack once for fuzzy comparisons.
+  const tokens = haystack.split(/[^a-z0-9]+/).filter((t) => t.length >= 3);
+  for (const q of queryWords) {
+    if (haystack.includes(q)) continue;
+    if (q.length >= 4 && tokens.some((t) => withinOneEdit(t, q))) continue;
+    return false;
+  }
+  return true;
 }

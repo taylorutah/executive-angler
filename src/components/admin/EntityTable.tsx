@@ -19,21 +19,107 @@ interface EntityTableProps {
 
 const PAGE_SIZE = 25;
 
+/**
+ * Returns true if `a` and `b` differ by at most one edit (insert, delete,
+ * or substitute one character). Linear-time, no DP table needed since we
+ * only care about distance ≤ 1.
+ */
+function withinOneEdit(a: string, b: string): boolean {
+  if (Math.abs(a.length - b.length) > 1) return false;
+  if (a === b) return true;
+  // Ensure a is the shorter (or equal-length).
+  if (a.length > b.length) {
+    const tmp = a;
+    a = b;
+    b = tmp;
+  }
+  let i = 0;
+  let j = 0;
+  let edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++;
+      j++;
+      continue;
+    }
+    if (++edits > 1) return false;
+    if (a.length === b.length) {
+      // substitution
+      i++;
+      j++;
+    } else {
+      // insertion in b — advance b only
+      j++;
+    }
+  }
+  // Any leftover char in b counts as one more edit; fine if total is ≤ 1.
+  return true;
+}
+
+/**
+ * Test whether a row matches every word in the query. Each query word can
+ * match either as a substring of any field, or fuzzily (≤ 1 edit) against
+ * any word inside any field.
+ */
+function rowMatchesQuery(
+  row: Record<string, unknown>,
+  queryWords: string[],
+): boolean {
+  // Pre-flatten all string values once per row.
+  const fieldsLower: string[] = [];
+  for (const v of Object.values(row)) {
+    if (typeof v === "string" && v.length > 0) fieldsLower.push(v.toLowerCase());
+  }
+  if (fieldsLower.length === 0) return false;
+
+  // Pre-tokenize for fuzzy comparisons.
+  const tokenSets: string[][] = fieldsLower.map((f) =>
+    f.split(/[^a-z0-9]+/).filter((t) => t.length >= 3),
+  );
+
+  for (const q of queryWords) {
+    let matched = false;
+    for (let i = 0; i < fieldsLower.length; i++) {
+      if (fieldsLower[i].includes(q)) {
+        matched = true;
+        break;
+      }
+      if (q.length >= 4) {
+        for (const tok of tokenSets[i]) {
+          if (withinOneEdit(tok, q)) {
+            matched = true;
+            break;
+          }
+        }
+        if (matched) break;
+      }
+    }
+    if (!matched) return false;
+  }
+  return true;
+}
+
 export default function EntityTable({ columns, rows, entitySlug, onDelete }: EntityTableProps) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(0);
 
-  // Filter rows by search across all string values
+  // Filter rows by search across all string values.
+  // Strategy:
+  //   1) Split the query into words (whitespace-separated). Match requires
+  //      every query word to appear somewhere in the row's text.
+  //   2) Each word matches if (a) it's a substring of any field value, OR
+  //      (b) any whitespace-tokenized word in any field is within edit
+  //      distance 1 of the query word — handles typos like "wolly" → "woolly".
+  //   3) Fuzzy fallback only fires for query words of length >= 4 to avoid
+  //      false positives on short tokens.
   const filtered = useMemo(() => {
-    if (!search.trim()) return rows;
-    const q = search.toLowerCase();
-    return rows.filter((row) =>
-      Object.values(row).some(
-        (val) => typeof val === "string" && val.toLowerCase().includes(q)
-      )
-    );
+    const trimmed = search.trim().toLowerCase();
+    if (!trimmed) return rows;
+    const queryWords = trimmed.split(/\s+/).filter(Boolean);
+    if (queryWords.length === 0) return rows;
+    return rows.filter((row) => rowMatchesQuery(row, queryWords));
   }, [rows, search]);
 
   // Sort filtered rows
