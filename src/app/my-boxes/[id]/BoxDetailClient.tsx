@@ -14,6 +14,7 @@ import {
   Trash2,
   Pencil,
   Loader2,
+  Printer,
 } from "lucide-react";
 import type { FlyBox } from "@/lib/db/fly-boxes";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
@@ -34,6 +35,33 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
   const router = useRouter();
   const [entries, setEntries] = useState(initialEntries);
   const [removing, setRemoving] = useState<string | null>(null);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  async function downloadInventoryPdf() {
+    setDownloadingPdf(true);
+    try {
+      const res = await fetch(`/api/export/box-inventory-pdf?boxId=${box.id}`);
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        alert(data.error || "Failed to generate PDF");
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const safe = box.name.replace(/[^a-zA-Z0-9-_ ]/g, "").replace(/\s+/g, "-");
+      a.download = `${safe}-inventory.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("Failed to download inventory PDF");
+    } finally {
+      setDownloadingPdf(false);
+    }
+  }
 
   const meta = TIER_META[box.tier];
   const Icon = meta.icon;
@@ -129,13 +157,27 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
               )}
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2 flex-wrap">
             <Link
               href="/flies"
               className="inline-flex items-center gap-1 rounded-lg bg-[#E8923A] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#F0A65A] transition-colors"
             >
               <Plus className="h-3.5 w-3.5" /> Add fly from library
             </Link>
+            <button
+              type="button"
+              onClick={downloadInventoryPdf}
+              disabled={downloadingPdf || entries.length === 0}
+              className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors disabled:opacity-50"
+              title={entries.length === 0 ? "Add some flies first" : "Download a printable inventory PDF"}
+            >
+              {downloadingPdf ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Printer className="h-3.5 w-3.5" />
+              )}
+              Print inventory
+            </button>
             <button
               type="button"
               onClick={() =>
