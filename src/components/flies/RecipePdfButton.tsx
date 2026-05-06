@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Download } from 'lucide-react';
 
 interface RecipePdfButtonProps {
@@ -10,11 +11,17 @@ interface RecipePdfButtonProps {
 
 export function RecipePdfButton({ flyId, flyName }: RecipePdfButtonProps) {
   const [downloading, setDownloading] = useState(false);
+  const searchParams = useSearchParams();
 
   async function handleDownload() {
     setDownloading(true);
     try {
-      const res = await fetch(`/api/export/recipe-pdf?flyId=${flyId}`);
+      // Forward the current view param so the PDF matches what the user is
+      // looking at — Yours by default, Library reference when explicitly toggled.
+      const view = searchParams?.get('view');
+      const qs = new URLSearchParams({ flyId });
+      if (view === 'library') qs.set('view', 'library');
+      const res = await fetch(`/api/export/recipe-pdf?${qs.toString()}`);
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Download failed' }));
         alert(err.error || 'Failed to download recipe PDF');

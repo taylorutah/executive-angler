@@ -192,10 +192,20 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
   const displayName = resolved.displayName.value;
   const displayImage = resolved.heroImageUrl.value;
   const displaySizes = resolved.sizes.value;
+  // When the user has an explicit list of preferred sizes, render them
+  // literally ("20, 18, 16") — that's how an angler thinks about their box.
+  // Only render as a continuous range ("14–22") when the canonical declares it.
+  const sizesAreCustomList = resolved.sizes.source === "yours";
   const sizeRange =
     displaySizes.length > 1
-      ? `${displaySizes[0]}–${displaySizes[displaySizes.length - 1]}`
+      ? sizesAreCustomList
+        ? displaySizes.join(", ")
+        : `${displaySizes[0]}–${displaySizes[displaySizes.length - 1]}`
       : (displaySizes[0] ?? sizeRangeCanonical);
+
+  // The whole page reads as Yours when in box + Yours mode — recipe heading,
+  // materials heading, etc.
+  const ownsView = resolved.viewMode === "yours" && resolved.isInBox;
 
   // Build substitution map: collect all substitute_ids across ingredients, fetch in one query
   let substitutionMap: Record<string, { id: string; slug: string; name: string; brand?: string; category: string }> = {};
@@ -525,9 +535,9 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
-                      Tying Recipe
+                      {ownsView ? "Your Recipe" : "Tying Recipe"}
                     </h2>
-                    <RecipePdfButton flyId={fly.id} flyName={fly.name} />
+                    <RecipePdfButton flyId={fly.id} flyName={displayName} />
                   </div>
                   <RecipeCard
                     flyName={displayName}
@@ -550,7 +560,7 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
                 fly.materialsList && fly.materialsList.length > 0 && (
                 <div>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
-                    Materials
+                    {ownsView ? "Your Materials" : "Materials"}
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
                     <dl className="divide-y divide-[#21262D]">
@@ -678,15 +688,26 @@ export default async function FlyDetailPage({ params, searchParams }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* 5. Description (moved below tying content) */}
+              {/* 5. Description / personal notes — yours when present, library otherwise */}
               <ScrollAnimation>
                 <div>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
-                    About This Pattern
+                    {ownsView && resolved.personalNotes ? "Your Notes" : "About This Pattern"}
                   </h2>
-                  <p className="text-[#D8DEE4] text-base leading-relaxed">
-                    {fly.description}
+                  <p className="text-[#D8DEE4] text-base leading-relaxed whitespace-pre-line">
+                    {ownsView && resolved.personalNotes ? resolved.personalNotes : fly.description}
                   </p>
+                  {ownsView && resolved.personalNotes && fly.description && (
+                    <details className="mt-4 group">
+                      <summary className="text-xs text-[#6E7681] hover:text-[#A8B2BD] cursor-pointer inline-flex items-center gap-1.5">
+                        <span className="group-open:hidden">View library description</span>
+                        <span className="hidden group-open:inline">Hide library description</span>
+                      </summary>
+                      <p className="mt-3 text-sm text-[#A8B2BD] leading-relaxed">
+                        {fly.description}
+                      </p>
+                    </details>
+                  )}
                 </div>
               </ScrollAnimation>
 

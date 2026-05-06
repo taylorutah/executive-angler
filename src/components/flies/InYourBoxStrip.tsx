@@ -14,6 +14,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Plus,
   Edit3,
@@ -21,11 +22,11 @@ import {
   Check,
   ListChecks,
   CreditCard,
+  Library,
 } from "lucide-react";
 import PersonalizeSheet, {
   type PersonalizeSheetCanonicalFly,
 } from "./PersonalizeSheet";
-import ViewModeToggle from "./ViewModeToggle";
 import FlyCardModal from "./FlyCardModal";
 import {
   summarizePersonalization,
@@ -55,11 +56,22 @@ interface BoxRow {
 }
 
 export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [authed, setAuthed] = useState(false);
   const [row, setRow] = useState<BoxRow | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [cardOpen, setCardOpen] = useState(false);
+
+  function flipView(next: "yours" | "library") {
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    if (next === "library") params.set("view", "library");
+    else params.delete("view");
+    const qs = params.toString();
+    router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
+  }
 
   const refresh = useCallback(async () => {
     const supabase = createClient();
@@ -145,15 +157,32 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
     );
   }
 
-  // In box — show identity strip with view toggle, Card button, summary.
+  // In box — show identity strip with Card + Edit; "view library reference" is a quiet text link.
   const summary = summarizePersonalization(
     row.personalizations ?? {},
     row.preferred_sizes ?? null,
   );
   const flyForCard = buildFlyForCard(resolved);
+  const isLibraryView = resolved.viewMode === "library";
 
   return (
     <>
+      {isLibraryView && (
+        <div className="mb-3 rounded-xl border border-[#0BA5C7]/30 bg-[#0BA5C7]/5 px-4 py-2.5 flex items-center gap-3 text-xs">
+          <Library className="h-4 w-4 text-[#0BA5C7] shrink-0" />
+          <p className="text-[#A8B2BD] flex-1">
+            You&rsquo;re viewing the <span className="font-semibold text-[#F0F6FC]">library reference</span>. Your version of this fly has been hidden.
+          </p>
+          <button
+            type="button"
+            onClick={() => flipView("yours")}
+            className="text-[#0BA5C7] font-semibold hover:underline shrink-0"
+          >
+            Back to your version
+          </button>
+        </div>
+      )}
+
       <div className="rounded-xl border border-[#E8923A]/30 bg-[#E8923A]/5 px-4 py-3">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0 flex-1">
@@ -181,7 +210,6 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <ViewModeToggle current={resolved.viewMode} />
             <button
               type="button"
               onClick={() => setCardOpen(true)}
@@ -198,6 +226,19 @@ export default function InYourBoxStrip({ fly, resolved, isPro, username }: Props
             </button>
           </div>
         </div>
+        {!isLibraryView && (
+          <div className="mt-2 pt-2 border-t border-[#E8923A]/15 flex justify-end">
+            <button
+              type="button"
+              onClick={() => flipView("library")}
+              className="inline-flex items-center gap-1 text-[10px] text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+              title="View the original library recipe"
+            >
+              <Library className="h-3 w-3" />
+              View library reference
+            </button>
+          </div>
+        )}
       </div>
 
       <PersonalizeSheet
