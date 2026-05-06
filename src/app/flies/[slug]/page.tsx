@@ -24,8 +24,14 @@ import { RecipeCard } from "@/components/flies/RecipeCard";
 import { RecipePdfButton } from "@/components/flies/RecipePdfButton";
 import HashScroller from "@/components/ui/HashScroller";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin, checkPremium } from "@/lib/admin";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
+import {
+  resolveFlyForViewer,
+  type FlyBoxRow,
+  type ViewMode,
+} from "@/lib/flies/resolveFlyForViewer";
+import CustomFlyImageDropzone from "@/components/flies/CustomFlyImageDropzone";
 
 export const revalidate = 86400;
 
@@ -51,7 +57,10 @@ const CATEGORY_ICONS: Record<string, string> = {
   midge: "/images/fly-icons/midge.svg",
 };
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ view?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -90,14 +99,15 @@ export async function generateStaticParams() {
   return allFlies.map((f) => ({ slug: f.slug }));
 }
 
-export default async function FlyDetailPage({ params }: Props) {
+export default async function FlyDetailPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const sp = (await searchParams) ?? {};
   const fly = await getCanonicalFlyBySlug(slug);
   if (!fly) notFound();
 
   const categoryLabel = CATEGORY_LABELS[fly.category] || fly.category;
   const categoryIcon = CATEGORY_ICONS[fly.category] || CATEGORY_ICONS.dry;
-  const sizeRange =
+  const sizeRangeCanonical =
     fly.sizes.length > 1
       ? `${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`
       : fly.sizes[0];
@@ -105,6 +115,40 @@ export default async function FlyDetailPage({ params }: Props) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const viewerIsAdmin = isAdmin(user?.email);
+
+  // Load viewer's fly box row + Pro status + username (for Card credit).
+  let flyBox: FlyBoxRow | null = null;
+  let isPro = false;
+  let username: string | null = null;
+  if (user) {
+    const [{ data: boxRow }, premium, { data: profileRow }] = await Promise.all([
+      supabase
+        .from("user_fly_box")
+        .select(
+          "id, personalizations, preferred_sizes, personal_notes, custom_image_url, custom_name, is_favorite, is_tie_next",
+        )
+        .eq("user_id", user.id)
+        .eq("canonical_fly_id", fly.id)
+        .maybeSingle(),
+      checkPremium(supabase, user.id, user.email),
+      supabase
+        .from("profiles")
+        .select("username")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
+    flyBox = (boxRow as FlyBoxRow | null) ?? null;
+    isPro = premium;
+    username = (profileRow?.username as string | null) ?? null;
+  }
+
+  // Determine view mode. ?view=library forces canonical; ?view=yours forces
+  // personalized (only useful when in box). Otherwise default = yours-when-in-box.
+  const viewMode: ViewMode = (() => {
+    if (sp.view === "library") return "library";
+    if (sp.view === "yours") return "yours";
+    return flyBox ? "yours" : "library";
+  })();
 
   // Resolve the contributor's profile if this fly was submitted by an angler.
   let contributor: { username?: string; displayName?: string; avatarUrl?: string } | null = null;
@@ -129,6 +173,29 @@ export default async function FlyDetailPage({ params }: Props) {
     .select('*, material:tying_materials(*)')
     .eq('canonical_fly_id', fly.id)
     .order('step_position', { ascending: true });
+
+  // Build the resolved view — single source of truth for "Yours vs Library"
+  // for every component on the page.
+  const resolved = resolveFlyForViewer({
+    canonical: fly,
+    flyBox,
+    ingredients: recipeIngredients ?? undefined,
+    viewMode,
+  });
+
+  // Map resolved recipe rows by lower-snake slot so RecipeCard can swap text +
+  // render provenance per row.
+  const resolvedBySlot: Record<string, typeof resolved.recipe[number]> = {};
+  for (const r of resolved.recipe) resolvedBySlot[r.slot] = r;
+
+  // Display values driven by the resolver — Yours when overridden + in yours view.
+  const displayName = resolved.displayName.value;
+  const displayImage = resolved.heroImageUrl.value;
+  const displaySizes = resolved.sizes.value;
+  const sizeRange =
+    displaySizes.length > 1
+      ? `${displaySizes[0]}–${displaySizes[displaySizes.length - 1]}`
+      : (displaySizes[0] ?? sizeRangeCanonical);
 
   // Build substitution map: collect all substitute_ids across ingredients, fetch in one query
   let substitutionMap: Record<string, { id: string; slug: string; name: string; brand?: string; category: string }> = {};
@@ -314,11 +381,11 @@ export default async function FlyDetailPage({ params }: Props) {
           <div className="flex flex-col sm:flex-row gap-6 items-start">
             {/* Compact fly image — product card style */}
             <div className="relative shrink-0 w-full sm:w-40 h-40 rounded-xl overflow-hidden bg-[#161B22] border border-[#21262D]">
-              {fly.heroImageUrl ? (
+              {displayImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={fly.heroImageUrl}
-                  alt={`${fly.name} fly pattern`}
+                  src={displayImage}
+                  alt={`${displayName} fly pattern`}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -326,13 +393,26 @@ export default async function FlyDetailPage({ params }: Props) {
                   <Image src={categoryIcon} alt={categoryLabel} width={56} height={56} className="opacity-40" />
                 </div>
               )}
-              {viewerIsAdmin && (
+              {/*
+                Image overlay logic:
+                  - Yours view + in box → personal photo dropzone (Pro-gated).
+                  - Library view + admin → canonical hero edit link.
+                The two never collide, fixing the old "Replace image" confusion.
+              */}
+              {resolved.viewMode === "yours" && resolved.isInBox && (
+                <CustomFlyImageDropzone
+                  canonicalFlyId={fly.id}
+                  isPro={isPro}
+                  hasCustomPhoto={!!flyBox?.custom_image_url}
+                />
+              )}
+              {resolved.viewMode === "library" && viewerIsAdmin && (
                 <Link
                   href={`/admin/content/flies/${fly.id}#field-heroImageUrl`}
                   className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 text-white text-[11px] font-semibold py-1.5 hover:bg-[#E8923A] transition-colors"
-                  title="Upload or replace this fly's hero image"
+                  title="Upload or replace the library's hero image"
                 >
-                  {fly.heroImageUrl ? "Replace image" : "Upload image"}
+                  {fly.heroImageUrl ? "Replace library image" : "Upload library image"}
                 </Link>
               )}
             </div>
@@ -348,8 +428,13 @@ export default async function FlyDetailPage({ params }: Props) {
                   <span className="text-xs text-[#6E7681]">by {fly.originCredit}</span>
                 )}
               </div>
-              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-2">
-                {fly.name}
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-2 flex flex-wrap items-center gap-2">
+                <span>{displayName}</span>
+                {resolved.displayName.source === "yours" && resolved.viewMode === "yours" && (
+                  <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#E8923A] border border-[#E8923A]/30 bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full">
+                    Yours
+                  </span>
+                )}
               </h1>
               {fly.tagline && (
                 <p className="text-base text-[#A8B2BD] mb-3">{fly.tagline}</p>
@@ -407,7 +492,7 @@ export default async function FlyDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* In Your Box strip — Spotify-style personal layer */}
+          {/* In Your Box strip — identity strip with view toggle, Card, Edit */}
           <div className="mt-5">
             <InYourBoxStrip
               fly={{
@@ -420,6 +505,9 @@ export default async function FlyDetailPage({ params }: Props) {
                 hookStyles: fly.hookStyles,
                 materialsList: fly.materialsList,
               }}
+              resolved={resolved}
+              isPro={isPro}
+              username={username}
             />
           </div>
         </div>
@@ -442,7 +530,7 @@ export default async function FlyDetailPage({ params }: Props) {
                     <RecipePdfButton flyId={fly.id} flyName={fly.name} />
                   </div>
                   <RecipeCard
-                    flyName={fly.name}
+                    flyName={displayName}
                     flyType={categoryLabel}
                     flySize={sizeRange}
                     ingredients={recipeIngredients.map(ing => ({
@@ -450,36 +538,55 @@ export default async function FlyDetailPage({ params }: Props) {
                       material: ing.material || undefined,
                     }))}
                     substitutionMap={substitutionMap}
+                    resolvedBySlot={resolvedBySlot}
                   />
                 </div>
               )}
 
-              {/* 2. Materials List */}
-              {fly.materialsList && fly.materialsList.length > 0 && (
+              {/* 2. Materials List — only render when there's no structured
+                  recipe above. When Yours has overrides on this older list,
+                  swap the description text and append a "Yours" badge per row. */}
+              {(!recipeIngredients || recipeIngredients.length === 0) &&
+                fly.materialsList && fly.materialsList.length > 0 && (
                 <div>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Materials
                   </h2>
                   <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
                     <dl className="divide-y divide-[#21262D]">
-                      {fly.materialsList.map((m) => (
-                        <div
-                          key={m.material}
-                          className="flex justify-between items-start gap-4 px-6 py-3"
-                        >
-                          <dt className="text-sm font-medium text-[#A8B2BD] shrink-0 w-24">
-                            {m.material}
-                          </dt>
-                          <dd className="text-sm text-[#F0F6FC] text-right font-mono">
-                            {m.description}
-                            {m.substitute && (
-                              <span className="block text-xs text-[#6E7681] mt-0.5">
-                                Alt: {m.substitute}
-                              </span>
-                            )}
-                          </dd>
-                        </div>
-                      ))}
+                      {fly.materialsList.map((m) => {
+                        const slotKey = m.material.toLowerCase().split(/\s+/)[0];
+                        const r = resolvedBySlot[slotKey];
+                        const isYours = r?.source === "yours";
+                        return (
+                          <div
+                            key={m.material}
+                            className={`flex justify-between items-start gap-4 px-6 py-3 ${isYours ? "bg-[#E8923A]/[0.04]" : ""}`}
+                          >
+                            <dt className="text-sm font-medium text-[#A8B2BD] shrink-0 w-24 flex items-center gap-1.5">
+                              {m.material}
+                              {isYours && (
+                                <span className="text-[8.5px] font-bold uppercase tracking-[0.12em] text-[#E8923A] border border-[#E8923A]/30 bg-[#E8923A]/10 px-1 py-px rounded-full">
+                                  Yours
+                                </span>
+                              )}
+                            </dt>
+                            <dd className={`text-sm text-right font-mono ${isYours ? "text-[#E8923A]" : "text-[#F0F6FC]"}`}>
+                              {isYours ? r.text : m.description}
+                              {!isYours && m.substitute && (
+                                <span className="block text-xs text-[#6E7681] mt-0.5">
+                                  Alt: {m.substitute}
+                                </span>
+                              )}
+                              {isYours && r.canonicalText && r.canonicalText !== r.text && (
+                                <span className="block text-[10px] text-[#6E7681] mt-0.5 line-through" title="Library default">
+                                  {r.canonicalText}
+                                </span>
+                              )}
+                            </dd>
+                          </div>
+                        );
+                      })}
                     </dl>
                   </div>
                 </div>

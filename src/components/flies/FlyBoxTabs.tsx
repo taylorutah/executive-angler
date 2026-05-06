@@ -1,11 +1,17 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Heart, ListChecks, Layers, Check, Loader2, Plus } from 'lucide-react';
+import { Heart, ListChecks, Layers, Check, Loader2, Plus, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import HelpHint from '@/components/ui/HelpHint';
+import FlyCardModal from '@/components/flies/FlyCardModal';
+import {
+  resolveFlyForViewer,
+  type Personalizations,
+} from '@/lib/flies/resolveFlyForViewer';
+import type { CanonicalFly } from '@/types/entities';
 
 type Tab = 'all' | 'favorites' | 'tie-next';
 
@@ -65,6 +71,7 @@ export interface SerializedCanonicalFly {
   bead_options?: string[];
   hook_styles?: string[];
   hero_image_url?: string;
+  materials_list?: { material: string; description?: string }[];
 }
 
 export interface SerializedFlyBoxEntry {
@@ -72,6 +79,9 @@ export interface SerializedFlyBoxEntry {
   canonical_fly_id: string;
   preferred_sizes?: string[] | null;
   personal_notes?: string | null;
+  custom_image_url?: string | null;
+  custom_name?: string | null;
+  personalizations?: Record<string, Record<string, string | undefined> | undefined> | null;
   is_favorite?: boolean;
   is_tie_next?: boolean;
   times_used?: number;
@@ -219,6 +229,7 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
   const [favCount, setFavCount] = useState(initialFavCount);
   const [tieNextCount, setTieNextCount] = useState(initialTieNextCount);
   const [completingIds, setCompletingIds] = useState<Set<string>>(new Set());
+  const [cardOpen, setCardOpen] = useState<UnifiedFly | null>(null);
 
   const canonicalNameSet = new Set(canonicalNames);
 
@@ -540,6 +551,16 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                     const cf = card.entry.canonical_fly;
                     const queued = !!card.entry.is_tie_next;
                     const detailHref = `/flies/${cf.slug}`;
+                    // Prefer the user's personal photo + custom name when set \u2014
+                    // makes My Flies feel like "your" library rather than a
+                    // generic catalog.
+                    const displayImage = card.entry.custom_image_url || cf.hero_image_url;
+                    const displayName = card.entry.custom_name || cf.name;
+                    const hasPersonalisation =
+                      !!card.entry.custom_image_url ||
+                      !!card.entry.custom_name ||
+                      (card.entry.preferred_sizes?.length ?? 0) > 0 ||
+                      Object.keys((card.entry.personalizations ?? {}) as Record<string, unknown>).length > 0;
                     return (
                       <div
                         key={card.entry.id}
@@ -551,10 +572,10 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                       >
                         <div className="relative aspect-square bg-white overflow-hidden">
                           <Link href={detailHref} className="block w-full h-full">
-                            {cf.hero_image_url ? (
+                            {displayImage ? (
                               <img
-                                src={cf.hero_image_url}
-                                alt={cf.name}
+                                src={displayImage}
+                                alt={displayName}
                                 className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
                               />
                             ) : (
@@ -564,17 +585,31 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                             )}
                           </Link>
                           {queued && <TieNextRibbon />}
+                          {hasPersonalisation && (
+                            <span className="absolute top-1.5 left-1.5 z-10 inline-flex items-center gap-0.5 rounded-full bg-[#E8923A] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#0D1117] shadow-sm shadow-black/30">
+                              Yours
+                            </span>
+                          )}
                         </div>
                         <Link href={detailHref} className="block px-2.5 pt-2 pb-1.5">
-                          <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{cf.name}</p>
+                          <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{displayName}</p>
                           {cf.sizes && cf.sizes.length > 0 && (
                             <p className="text-[10px] text-[#6E7681] mt-0.5 truncate">
-                              <span className="text-[#A8B2BD]">Sizes</span> &middot; {cf.sizes.slice(0, 4).join(", ")}
+                              <span className="text-[#A8B2BD]">Sizes</span> &middot; {(card.entry.preferred_sizes?.length ? card.entry.preferred_sizes : cf.sizes).slice(0, 4).join(", ")}
                             </p>
                           )}
                         </Link>
                         <div className="mt-auto px-2 pb-2 pt-1 flex items-center gap-1.5 border-t border-[#21262D]/60">
                           <FavoriteToggle card={card} onToggle={toggleFavorite} />
+                          <button
+                            type="button"
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCardOpen(card); }}
+                            title="Open recipe card"
+                            aria-label="Open recipe card"
+                            className="flex-shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-md text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors"
+                          >
+                            <CreditCard className="h-3.5 w-3.5" />
+                          </button>
                           {tab === 'tie-next' ? (
                             <TieNextDone
                               card={card}
@@ -644,6 +679,15 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                       </Link>
                       <div className="mt-auto px-2 pb-2 pt-1 flex items-center gap-1.5 border-t border-[#21262D]/60">
                         <FavoriteToggle card={card} onToggle={toggleFavorite} />
+                        <button
+                          type="button"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCardOpen(card); }}
+                          title="Open recipe card"
+                          aria-label="Open recipe card"
+                          className="flex-shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-md text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors"
+                        >
+                          <CreditCard className="h-3.5 w-3.5" />
+                        </button>
                         {tab === 'tie-next' ? (
                           <TieNextDone
                             card={card}
@@ -662,6 +706,136 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
           );
         })}
       </div>
+
+      {cardOpen && (
+        <FlyCardModal
+          open={true}
+          onClose={() => setCardOpen(null)}
+          fly={buildFlyForCardFromUnified(cardOpen)}
+          imageUrl={getCardImage(cardOpen)}
+          username={null}
+        />
+      )}
     </div>
   );
+}
+
+function getCardImage(card: UnifiedFly): string | null {
+  if (card.source === 'library') {
+    return card.entry.custom_image_url || card.entry.canonical_fly.hero_image_url || null;
+  }
+  return card.fly.image_url ?? null;
+}
+
+/**
+ * Map a UnifiedFly into the FlyCardModal's expected shape. For library entries
+ * we run the canonical+personalisation through resolveFlyForViewer so the card
+ * reflects the user's overrides; for personal patterns we copy fields directly.
+ */
+function buildFlyForCardFromUnified(card: UnifiedFly): {
+  id: string;
+  name: string;
+  type: string;
+  size: string;
+  hook?: string;
+  bead_size?: string;
+  bead_color?: string;
+  body_color?: string;
+  body_material?: string;
+  tail_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
+  rib_material?: string;
+  wing_material?: string;
+  fly_color?: string;
+  materials?: string;
+  description?: string;
+  tags?: string;
+  image_url?: string | null;
+} {
+  if (card.source === 'personal') {
+    const f = card.fly;
+    return {
+      id: f.id,
+      name: f.name,
+      type: f.type ?? '',
+      size: parseArrayField(f.size),
+      hook: f.hook,
+      bead_size: f.bead_size,
+      bead_color: f.bead_color,
+      fly_color: f.fly_color,
+      materials: f.description,
+      description: f.description,
+      tags: Array.isArray(f.tags) ? f.tags.join(', ') : '',
+      image_url: f.image_url ?? null,
+    };
+  }
+
+  // Library — resolve through the merge layer so Yours overrides apply.
+  const entry = card.entry;
+  const cf = entry.canonical_fly;
+  const canonicalShape: CanonicalFly = {
+    id: cf.id,
+    slug: cf.slug,
+    name: cf.name,
+    category: cf.category as CanonicalFly['category'],
+    description: cf.tagline ?? '',
+    imitates: [],
+    effectiveSpecies: [],
+    waterTypes: [],
+    sizes: cf.sizes ?? [],
+    colors: cf.colors ?? [],
+    beadOptions: cf.bead_options ?? [],
+    hookStyles: cf.hook_styles ?? [],
+    heroImageUrl: cf.hero_image_url ?? undefined,
+    galleryUrls: [],
+    relatedFlyIds: [],
+    relatedRiverIds: [],
+    relatedDestinationIds: [],
+    flyShopIds: [],
+    materialsList: cf.materials_list?.map((m) => ({
+      material: m.material,
+      description: m.description ?? '',
+    })),
+    featured: false,
+    isHeroPattern: false,
+  };
+
+  const resolved = resolveFlyForViewer({
+    canonical: canonicalShape,
+    flyBox: {
+      id: entry.id,
+      personalizations: (entry.personalizations as Personalizations | null) ?? null,
+      preferred_sizes: entry.preferred_sizes ?? null,
+      personal_notes: entry.personal_notes ?? null,
+      custom_image_url: entry.custom_image_url ?? null,
+      custom_name: entry.custom_name ?? null,
+      is_favorite: entry.is_favorite ?? null,
+      is_tie_next: entry.is_tie_next ?? null,
+    },
+    viewMode: 'yours',
+  });
+
+  const slotMap: Record<string, string> = {};
+  for (const r of resolved.recipe) {
+    if (r.text) slotMap[r.slot] = r.text;
+  }
+
+  return {
+    id: cf.id,
+    name: resolved.displayName.value,
+    type: cf.category,
+    size: (entry.preferred_sizes?.length ? entry.preferred_sizes : cf.sizes ?? []).join(', '),
+    hook: slotMap.hook,
+    bead_size: slotMap.bead,
+    body_color: slotMap.body,
+    tail_color: slotMap.tail,
+    thorax_color: slotMap.thorax,
+    collar_color: slotMap.collar,
+    rib_material: slotMap.rib,
+    wing_material: slotMap.wing,
+    materials: resolved.recipe.filter((r) => r.text).map((r) => `${r.label}: ${r.text}`).join('\n'),
+    description: resolved.personalNotes || cf.tagline,
+    image_url: resolved.heroImageUrl.value ?? null,
+  };
 }

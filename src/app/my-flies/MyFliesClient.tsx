@@ -280,6 +280,9 @@ function buildFlyBoxProps(
         canonical_fly_id: e.canonical_fly_id ?? "",
         preferred_sizes: e.preferred_sizes,
         personal_notes: e.personal_notes,
+        custom_image_url: e.custom_image_url,
+        custom_name: e.custom_name,
+        personalizations: e.personalizations,
         is_favorite: e.is_favorite,
         is_tie_next: e.is_tie_next,
         times_used: e.times_used,
@@ -294,6 +297,7 @@ function buildFlyBoxProps(
           bead_options: e.canonical_fly!.bead_options ?? undefined,
           hook_styles: e.canonical_fly!.hook_styles ?? undefined,
           hero_image_url: e.canonical_fly!.hero_image_url ?? undefined,
+          materials_list: e.canonical_fly!.materials_list ?? undefined,
         },
       },
     }));

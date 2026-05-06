@@ -102,6 +102,18 @@ export async function POST(req: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const contentType = req.headers.get("content-type") || "";
+
+    // Personalization-fork path: clone canonical + the user's personalizations
+    // into a fresh fly_patterns row owned by the user. Used by
+    // PromoteToPatternPrompt when a user's overrides have grown beyond what
+    // a simple personalization should hold.
+    if (contentType.includes("application/json")) {
+      const peek = (await req.clone().json()) as Record<string, unknown>;
+      if (peek.source === "personalization" && peek.canonical_fly_id) {
+        return forkPersonalizationToPattern(supabase, user.id, peek);
+      }
+    }
+
     let body: Record<string, unknown> = {};
     let imageUrl: string | undefined;
 
@@ -333,6 +345,171 @@ export async function PATCH(req: NextRequest) {
     console.error("Fly patterns PATCH error:", err);
     return NextResponse.json({ error: "Failed to update fly pattern" }, { status: 500 });
   }
+}
+
+// Map canonical category → fly_patterns.type label.
+const CATEGORY_TO_TYPE: Record<string, string> = {
+  dry: "Dry Fly",
+  nymph: "Nymph",
+  streamer: "Streamer",
+  emerger: "Emerger",
+  wet: "Wet Fly",
+  terrestrial: "Terrestrial",
+  egg: "Egg",
+  midge: "Midge",
+};
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80) || "fly";
+}
+
+async function ensureUniquePatternSlug(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  userId: string,
+  baseSlug: string,
+): Promise<string> {
+  const base = baseSlug || "fly";
+  for (let i = 1; i < 100; i++) {
+    const candidate = i === 1 ? base : `${base}-${i}`;
+    const { data } = await supabase
+      .from("fly_patterns")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("slug", candidate)
+      .maybeSingle();
+    if (!data) return candidate;
+  }
+  return `${base}-${Date.now()}`;
+}
+
+function pickPersonal(
+  personalizations: Record<string, Record<string, string | undefined> | undefined>,
+  slot: string,
+  key: string,
+): string | undefined {
+  const s = personalizations[slot];
+  if (!s) return undefined;
+  const v = s[key];
+  return v && String(v).trim() !== "" ? String(v).trim() : undefined;
+}
+
+async function forkPersonalizationToPattern(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  userId: string,
+  body: Record<string, unknown>,
+): Promise<NextResponse> {
+  const canonicalId = String(body.canonical_fly_id || "");
+  const personalizations = ((body.personalizations as Record<string, Record<string, string | undefined> | undefined>) || {});
+
+  // Load canonical so we can copy its content into the new fly_pattern row.
+  const { data: canonical, error: canonicalError } = await supabase
+    .from("canonical_flies")
+    .select(
+      "id, name, slug, category, sizes, colors, materials_list, description, tagline, hero_image_url, video_url, imitates, effective_species, water_types",
+    )
+    .eq("id", canonicalId)
+    .maybeSingle();
+
+  if (canonicalError || !canonical) {
+    return NextResponse.json({ error: "Canonical fly not found" }, { status: 404 });
+  }
+
+  // Pull the user's preferred image / sizes from their fly box, if present.
+  const { data: flyBox } = await supabase
+    .from("user_fly_box")
+    .select("custom_image_url, custom_name, preferred_sizes, personal_notes")
+    .eq("user_id", userId)
+    .eq("canonical_fly_id", canonicalId)
+    .maybeSingle();
+
+  const baseName = (flyBox?.custom_name as string | undefined) || `${canonical.name} — Yours`;
+  const slug = await ensureUniquePatternSlug(
+    supabase,
+    userId,
+    slugify(baseName),
+  );
+
+  // Flatten canonical materials into the legacy `materials` text column so
+  // existing pattern UIs can render. Override individual fields from
+  // personalizations where available.
+  const materialsText = Array.isArray(canonical.materials_list)
+    ? (canonical.materials_list as { material: string; description?: string }[])
+        .map((m) => `${m.material}: ${m.description || ""}`)
+        .join("\n")
+    : "";
+
+  const sizes = (flyBox?.preferred_sizes as string[] | null) || canonical.sizes || [];
+  const beadSize =
+    pickPersonal(personalizations, "bead", "size") ||
+    pickPersonal(personalizations, "bead", "model") ||
+    "";
+  const beadColor = pickPersonal(personalizations, "bead", "color") || "";
+  const hookText =
+    [
+      pickPersonal(personalizations, "hook", "brand"),
+      pickPersonal(personalizations, "hook", "style"),
+      pickPersonal(personalizations, "hook", "model"),
+      pickPersonal(personalizations, "hook", "size"),
+    ]
+      .filter(Boolean)
+      .join(" ") || "";
+  const threadColor = pickPersonal(personalizations, "thread", "color") || "";
+  const bodyColor = pickPersonal(personalizations, "body", "color") || "";
+  const bodyMaterial =
+    pickPersonal(personalizations, "body", "model") ||
+    pickPersonal(personalizations, "body", "brand") ||
+    "";
+  const tailColor = pickPersonal(personalizations, "tail", "color") || "";
+
+  const row: Record<string, unknown> = {
+    user_id: userId,
+    name: baseName,
+    slug,
+    type: CATEGORY_TO_TYPE[canonical.category as string] || canonical.category,
+    size: Array.isArray(sizes) && sizes.length ? sizes.join(", ") : "",
+    hook: hookText,
+    bead_size: beadSize,
+    bead_color: beadColor ? [beadColor] : null,
+    thread_color: threadColor || null,
+    body_color: bodyColor,
+    body_material: bodyMaterial,
+    tail_color: tailColor,
+    materials: materialsText,
+    description: canonical.description || "",
+    image_url: (flyBox?.custom_image_url as string | undefined) || canonical.hero_image_url || null,
+    video_url: canonical.video_url || null,
+    parent_canonical_id: canonical.id,
+    visibility: "private",
+    source: "tied",
+    notes: (flyBox?.personal_notes as string | undefined) || null,
+  };
+
+  Object.keys(row).forEach((k) => {
+    const v = row[k];
+    if (v === undefined || v === "") delete row[k];
+  });
+
+  const { data, error } = await supabase
+    .from("fly_patterns")
+    .insert(row)
+    .select("id, slug, name")
+    .single();
+
+  if (error) {
+    console.error("[forkPersonalizationToPattern] Insert error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ pattern_id: data.id, slug: data.slug, name: data.name }, { status: 201 });
 }
 
 export async function DELETE(req: NextRequest) {

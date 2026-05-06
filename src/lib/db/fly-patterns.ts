@@ -19,6 +19,7 @@ type FlyBoxCanonicalJoin = {
   bead_options?: string[] | null;
   hook_styles?: string[] | null;
   hero_image_url?: string | null;
+  materials_list?: { material: string; description?: string }[] | null;
 };
 
 export interface FlyBoxEntry {
@@ -27,6 +28,9 @@ export interface FlyBoxEntry {
   fly_pattern_id: string | null;
   preferred_sizes?: string[] | null;
   personal_notes?: string | null;
+  custom_image_url?: string | null;
+  custom_name?: string | null;
+  personalizations?: Record<string, Record<string, string | undefined> | undefined> | null;
   is_favorite?: boolean;
   is_tie_next?: boolean;
   tie_next_status?: TieNextStatus;
@@ -66,6 +70,9 @@ export async function getMyFlyBox(userId: string): Promise<FlyBoxEntry[]> {
       fly_pattern_id,
       preferred_sizes,
       personal_notes,
+      custom_image_url,
+      custom_name,
+      personalizations,
       is_favorite,
       is_tie_next,
       tie_next_status,
@@ -75,7 +82,7 @@ export async function getMyFlyBox(userId: string): Promise<FlyBoxEntry[]> {
       quantity_by_size,
       last_loss_at,
       added_at,
-      canonical_fly:canonical_flies(id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url)
+      canonical_fly:canonical_flies(id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url, materials_list)
     `
     )
     .eq("user_id", userId)

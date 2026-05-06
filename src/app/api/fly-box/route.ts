@@ -1,5 +1,20 @@
 import { NextResponse } from "next/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { checkPremium } from "@/lib/admin";
+
+// Service-role client for storage uploads (bypasses RLS). Lazy so the build
+// doesn't fail when SUPABASE_SERVICE_ROLE_KEY is absent.
+let _serviceClient: ReturnType<typeof createServiceClient> | null = null;
+function getServiceClient() {
+  if (!_serviceClient) {
+    _serviceClient = createServiceClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+  }
+  return _serviceClient;
+}
 
 // GET — fetch user's fly box (canonical refs + custom flies)
 export async function GET() {
@@ -90,25 +105,84 @@ export async function POST(request: Request) {
   }
 }
 
-// PATCH — update personalizations / preferred_sizes / notes on an existing
-// fly box entry. Identified by canonical_fly_id (per-user uniqueness via the
-// user_id, canonical_fly_id composite). Used by the PersonalizeSheet drawer.
+// PATCH — update personalizations / preferred_sizes / notes / image / name on
+// an existing fly box entry. Identified by canonical_fly_id (per-user uniqueness
+// via the user_id, canonical_fly_id composite). Used by the PersonalizeSheet
+// drawer and the CustomFlyImageDropzone.
+//
+// Two transports:
+//   - JSON body (default): updates personalizations / preferred_sizes / personal_notes / custom_name
+//   - multipart/form-data: photo upload — sets custom_image_url after writing
+//     the file to fly-pattern-images/{user_id}/canonical-{flyId}/{uuid}.{ext}.
+//     Photo upload is Pro-only (server-side enforced).
 export async function PATCH(request: Request) {
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const body = await request.json();
-    const { canonical_fly_id, personalizations, preferred_sizes, personal_notes } = body;
-    if (!canonical_fly_id) {
-      return NextResponse.json({ error: "canonical_fly_id is required" }, { status: 400 });
-    }
-
+    const contentType = request.headers.get("content-type") || "";
     const updates: Record<string, unknown> = {};
-    if (personalizations !== undefined) updates.personalizations = personalizations;
-    if (preferred_sizes !== undefined) updates.preferred_sizes = preferred_sizes;
-    if (personal_notes !== undefined) updates.personal_notes = personal_notes;
+    let canonical_fly_id: string | undefined;
+
+    if (contentType.includes("multipart/form-data")) {
+      // Pro gate — personal photo on canonical flies is a Pro feature.
+      const isPro = await checkPremium(supabase, user.id, user.email);
+      if (!isPro) {
+        return NextResponse.json(
+          { error: "Personal photos on canonical flies require Pro." },
+          { status: 403 },
+        );
+      }
+
+      const formData = await request.formData();
+      canonical_fly_id = String(formData.get("canonical_fly_id") || "");
+      if (!canonical_fly_id) {
+        return NextResponse.json({ error: "canonical_fly_id is required" }, { status: 400 });
+      }
+      const file = formData.get("image") as File | null;
+      if (!file || file.size === 0) {
+        return NextResponse.json({ error: "image file is required" }, { status: 400 });
+      }
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const path = `${user.id}/canonical-${canonical_fly_id}/${crypto.randomUUID()}.${ext}`;
+      const arrayBuffer = await file.arrayBuffer();
+      const { error: uploadError } = await getServiceClient().storage
+        .from("fly-pattern-images")
+        .upload(path, arrayBuffer, { contentType: file.type, upsert: true });
+      if (uploadError) {
+        console.error("[fly-box PATCH] image upload error:", uploadError);
+        return NextResponse.json(
+          { error: `Image upload failed: ${uploadError.message}` },
+          { status: 500 },
+        );
+      }
+      const { data: { publicUrl } } = getServiceClient().storage
+        .from("fly-pattern-images")
+        .getPublicUrl(path);
+      updates.custom_image_url = publicUrl;
+    } else {
+      const body = await request.json();
+      canonical_fly_id = body.canonical_fly_id;
+      if (!canonical_fly_id) {
+        return NextResponse.json({ error: "canonical_fly_id is required" }, { status: 400 });
+      }
+      const {
+        personalizations,
+        preferred_sizes,
+        personal_notes,
+        custom_name,
+        custom_image_url,
+      } = body;
+      if (personalizations !== undefined) updates.personalizations = personalizations;
+      if (preferred_sizes !== undefined) updates.preferred_sizes = preferred_sizes;
+      if (personal_notes !== undefined) updates.personal_notes = personal_notes;
+      if (custom_name !== undefined) updates.custom_name = custom_name;
+      // Allow clearing a personal photo via JSON null without re-checking Pro
+      // (downgrade flow: lose the perk's edit privileges, but keep the right
+      // to remove a photo you previously uploaded).
+      if (custom_image_url === null) updates.custom_image_url = null;
+    }
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json({ error: "No fields to update" }, { status: 400 });

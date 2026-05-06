@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { RecipeIngredient } from '@/types/materials';
 import { ArrowRightLeft } from 'lucide-react';
+import type { ResolvedRecipeRow } from '@/lib/flies/resolveFlyForViewer';
+import ProvenanceBadge from './ProvenanceBadge';
 
 /** Minimal material info needed for substitution display */
 export interface SubstituteMaterial {
@@ -19,10 +21,16 @@ interface RecipeCardProps {
   ingredients: RecipeIngredient[];
   /** Pre-resolved substitution materials keyed by material ID */
   substitutionMap?: Record<string, SubstituteMaterial>;
+  /**
+   * When the canonical fly is in the viewer's box, this carries the resolved
+   * (yours-or-canonical) row data — keyed by lower-snake slot. Each
+   * IngredientRow uses it to swap text + render a "Yours" badge.
+   */
+  resolvedBySlot?: Record<string, ResolvedRecipeRow>;
   className?: string;
 }
 
-export function RecipeCard({ flyName, flyType, flySize, ingredients, substitutionMap, className = '' }: RecipeCardProps) {
+export function RecipeCard({ flyName, flyType, flySize, ingredients, substitutionMap, resolvedBySlot, className = '' }: RecipeCardProps) {
   if (ingredients.length === 0) return null;
 
   const sorted = [...ingredients].sort((a, b) => a.step_position - b.step_position);
@@ -49,6 +57,7 @@ export function RecipeCard({ flyName, flyType, flySize, ingredients, substitutio
             ingredient={ing}
             index={idx}
             substitutionMap={substitutionMap}
+            resolved={resolvedBySlot?.[String(ing.role || '').toLowerCase()]}
           />
         ))}
       </div>
@@ -60,10 +69,12 @@ function IngredientRow({
   ingredient: ing,
   index: idx,
   substitutionMap,
+  resolved,
 }: {
   ingredient: RecipeIngredient;
   index: number;
   substitutionMap?: Record<string, SubstituteMaterial>;
+  resolved?: ResolvedRecipeRow;
 }) {
   const [showSubs, setShowSubs] = useState(false);
 
@@ -77,9 +88,20 @@ function IngredientRow({
   }
 
   const hasSubs = substitutes.length > 0;
+  const isYours = resolved?.source === 'yours';
+  const yoursDetails = resolved?.yoursDetails;
+
+  // Choose the headline material name. When Yours, prefer the user's brand+model
+  // if they supplied one; otherwise stick with the canonical material name.
+  const yoursName = isYours
+    ? [yoursDetails?.brand, yoursDetails?.style, yoursDetails?.model].filter(Boolean).join(' ').trim()
+    : '';
+  const headline = (isYours && yoursName)
+    ? yoursName
+    : (ing.material?.name || ing.material_name || 'Not specified');
 
   return (
-    <div className="px-5 py-3 flex items-start gap-4">
+    <div className={`px-5 py-3 flex items-start gap-4 ${isYours ? 'bg-[#E8923A]/[0.04]' : ''}`}>
       {/* Step number */}
       <div className="w-6 h-6 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0 mt-0.5">
         <span className="text-xs font-bold text-[#E8923A]">{idx + 1}</span>
@@ -87,14 +109,15 @@ function IngredientRow({
 
       <div className="flex-1 min-w-0">
         {/* Role */}
-        <div className="text-[10px] text-[#6E7681] uppercase tracking-wide mb-0.5">
-          {ing.role}
-          {ing.is_optional && <span className="ml-1 text-[#E8923A]">(optional)</span>}
+        <div className="text-[10px] text-[#6E7681] uppercase tracking-wide mb-0.5 flex items-center gap-1.5">
+          <span>{ing.role}</span>
+          {ing.is_optional && <span className="text-[#E8923A]">(optional)</span>}
+          {isYours && <ProvenanceBadge size="xs" />}
         </div>
 
         {/* Material name */}
-        <div className="text-sm text-[#F0F6FC] font-medium flex items-center gap-2">
-          <span>{ing.material?.name || ing.material_name || 'Not specified'}</span>
+        <div className={`text-sm font-medium flex items-center gap-2 ${isYours ? 'text-[#E8923A]' : 'text-[#F0F6FC]'}`}>
+          <span>{headline}</span>
           {hasSubs && (
             <button
               onClick={() => setShowSubs(!showSubs)}
@@ -109,10 +132,26 @@ function IngredientRow({
 
         {/* Details */}
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#A8B2BD]">
-          {ing.material?.brand && <span>{ing.material.brand}</span>}
-          {ing.size_choice && <span>Size: {ing.size_choice}</span>}
-          {ing.color_choice && <span>Color: {ing.color_choice}</span>}
-          {ing.quantity && <span>Qty: {ing.quantity}</span>}
+          {isYours ? (
+            <>
+              {yoursDetails?.size && <span>Size: {yoursDetails.size}</span>}
+              {yoursDetails?.color && <span>Color: {yoursDetails.color}</span>}
+              {yoursDetails?.denier && <span>{yoursDetails.denier}</span>}
+              {/* Show canonical default in muted strikethrough so the user sees what they replaced. */}
+              {resolved?.canonicalText && resolved.canonicalText !== headline && (
+                <span className="text-[#6E7681] line-through" title="Library default">
+                  {resolved.canonicalText}
+                </span>
+              )}
+            </>
+          ) : (
+            <>
+              {ing.material?.brand && <span>{ing.material.brand}</span>}
+              {ing.size_choice && <span>Size: {ing.size_choice}</span>}
+              {ing.color_choice && <span>Color: {ing.color_choice}</span>}
+              {ing.quantity && <span>Qty: {ing.quantity}</span>}
+            </>
+          )}
         </div>
 
         {/* Notes */}
