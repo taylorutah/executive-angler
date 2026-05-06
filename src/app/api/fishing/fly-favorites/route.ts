@@ -79,32 +79,91 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, flyBoxId, is_favorite: favorite });
     }
 
-    // Toggle by canonical_fly_id (finds or creates the fly box entry)
+    // Toggle by canonical_fly_id. After the multi-variant migration, there
+    // can be 2+ rows per (user, canonical_fly), so the previous upsert with
+    // onConflict on (user_id, canonical_fly_id) no longer works (the unique
+    // constraint was dropped). Strategy:
+    //   favorite=true   → if any rows exist, set is_favorite=true on all of
+    //                     them. Otherwise insert one new row (primary).
+    //   favorite=false  → set is_favorite=false on all matching rows.
     if (canonicalFlyId) {
+      const { data: existingRows, error: queryErr } = await supabase
+        .from("user_fly_box")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("canonical_fly_id", canonicalFlyId);
+      if (queryErr) {
+        console.error("[fly-favorites POST] query error:", queryErr);
+        return NextResponse.json({ error: queryErr.message }, { status: 500 });
+      }
+
       if (favorite) {
-        // Upsert into fly box with is_favorite = true
-        const { data, error } = await supabase
+        if (existingRows && existingRows.length > 0) {
+          const { error } = await supabase
+            .from("user_fly_box")
+            .update({ is_favorite: true })
+            .eq("user_id", user.id)
+            .eq("canonical_fly_id", canonicalFlyId);
+          if (error) {
+            console.error("[fly-favorites POST] update error:", error);
+            return NextResponse.json({ error: error.message }, { status: 500 });
+          }
+          return NextResponse.json({
+            success: true,
+            flyBoxId: existingRows[0].id,
+            is_favorite: true,
+          });
+        }
+        // No rows exist — insert a new primary entry. Also auto-add to default
+        // box for consistency with /api/fly-box POST behavior.
+        const { data: inserted, error: insErr } = await supabase
           .from("user_fly_box")
-          .upsert(
-            { user_id: user.id, canonical_fly_id: canonicalFlyId, is_favorite: true },
-            { onConflict: "user_id,canonical_fly_id" }
-          )
+          .insert({
+            user_id: user.id,
+            canonical_fly_id: canonicalFlyId,
+            is_favorite: true,
+            is_primary: true,
+          })
           .select("id")
           .single();
-
-        if (error) {
-          console.error("[fly-favorites POST] upsert error:", error);
-          return NextResponse.json({ error: error.message }, { status: 500 });
+        if (insErr || !inserted) {
+          console.error("[fly-favorites POST] insert error:", insErr);
+          return NextResponse.json(
+            { error: insErr?.message ?? "Insert failed" },
+            { status: 500 },
+          );
         }
-        return NextResponse.json({ success: true, flyBoxId: data?.id, is_favorite: true });
+        // Auto-membership in default box (best-effort).
+        try {
+          const { data: defaultBox } = await supabase
+            .from("fly_boxes")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("is_default", true)
+            .maybeSingle();
+          if (defaultBox?.id) {
+            await supabase
+              .from("fly_box_membership")
+              .upsert(
+                { box_id: defaultBox.id, user_fly_box_id: inserted.id },
+                { onConflict: "box_id,user_fly_box_id" },
+              );
+          }
+        } catch (membershipErr) {
+          console.warn("[fly-favorites POST] membership warn:", membershipErr);
+        }
+        return NextResponse.json({
+          success: true,
+          flyBoxId: inserted.id,
+          is_favorite: true,
+        });
       } else {
-        // Set is_favorite = false
+        // Unfavorite — clear flag on all matching rows.
         const { error } = await supabase
           .from("user_fly_box")
           .update({ is_favorite: false })
           .eq("user_id", user.id)
           .eq("canonical_fly_id", canonicalFlyId);
-
         if (error) {
           console.error("[fly-favorites POST] unfavorite error:", error);
           return NextResponse.json({ error: error.message }, { status: 500 });

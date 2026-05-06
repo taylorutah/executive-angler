@@ -19,27 +19,42 @@ export default function FlyFavoriteButton({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     async function checkStatus() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
-        setChecking(false);
-        return;
+        if (!user) {
+          if (!cancelled) setChecking(false);
+          return;
+        }
+        if (!cancelled) setIsAuthenticated(true);
+
+        // Multi-variant: 2+ rows possible per (user, canonical_fly). Use limit
+        // and treat "any row is_favorite=true" as favorite. Wrap in try/catch/
+        // finally so a thrown error doesn't leave the spinner running forever.
+        const { data } = await supabase
+          .from("user_fly_box")
+          .select("is_favorite")
+          .eq("user_id", user.id)
+          .eq("canonical_fly_id", canonicalFlyId)
+          .limit(10);
+
+        const anyFavorited = (data ?? []).some(
+          (r) => (r as { is_favorite?: boolean }).is_favorite === true,
+        );
+        if (!cancelled) setIsFavorite(anyFavorited);
+      } catch (e) {
+        console.warn("[FlyFavoriteButton] status check failed:", e);
+      } finally {
+        if (!cancelled) setChecking(false);
       }
-      setIsAuthenticated(true);
-
-      const { data } = await supabase
-        .from("user_fly_box")
-        .select("id, is_favorite")
-        .eq("user_id", user.id)
-        .eq("canonical_fly_id", canonicalFlyId)
-        .maybeSingle();
-
-      setIsFavorite(!!data?.is_favorite);
-      setChecking(false);
     }
     checkStatus();
+    return () => {
+      cancelled = true;
+    };
   }, [canonicalFlyId]);
 
   async function handleToggle() {
