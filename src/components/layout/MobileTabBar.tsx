@@ -1,17 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Mountain, Bug, User as UserIcon } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-
-type TabUser = {
-  avatarUrl?: string;
-  displayName?: string;
-  email?: string;
-} | null;
+import { Home, BookOpen, Mountain, Bug } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 const TABS = [
   { href: "/dashboard", label: "Home", icon: Home, match: (p: string) => p === "/dashboard" || p.startsWith("/dashboard/") },
@@ -22,41 +15,9 @@ const TABS = [
 
 export default function MobileTabBar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<TabUser>(null);
-  const [ready, setReady] = useState(false);
+  const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    const supabase = createClient();
-
-    async function load() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (!authUser) { setUser(null); setReady(true); return; }
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("avatar_url, display_name")
-        .eq("user_id", authUser.id)
-        .maybeSingle();
-
-      setUser({
-        email: authUser.email ?? undefined,
-        avatarUrl: profile?.avatar_url || undefined,
-        displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
-      });
-      setReady(true);
-    }
-
-    load();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_OUT") { setUser(null); return; }
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") load();
-    });
-
-    return () => { subscription.unsubscribe(); };
-  }, []);
-
-  if (!ready || !user) return null;
+  if (isLoading || !user) return null;
 
   // Hide on deep-create flows where bottom chrome fights a form
   if (pathname === "/journal/new" || pathname === "/journal/flies/new") return null;
