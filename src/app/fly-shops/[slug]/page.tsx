@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${shop.name} — ${shop.address}. ${servicesList ? servicesList + ". " : ""}${brandCount > 0 ? `${brandCount} brands carried. ` : ""}${hasHours ? "Hours & directions. " : ""}Visit your local fly fishing pro shop.`;
 
   return {
-    title: shop.metaTitle || fallbackTitle,
+    title: { absolute: shop.metaTitle || fallbackTitle },
     description: shop.metaDescription || fallbackDesc,
     openGraph: {
       title: shop.metaTitle || shop.name,

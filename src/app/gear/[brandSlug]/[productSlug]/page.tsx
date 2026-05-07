@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${product.name} — ${CATEGORY_LABELS[product.category]}${brand ? ` by ${brand.name}` : ""}.`;
 
   return {
-    title: product.metaTitle || fallbackTitle,
+    title: { absolute: product.metaTitle || fallbackTitle },
     description: product.metaDescription || fallbackDesc,
     alternates: { canonical: `${SITE_URL}/gear/${brandSlug}/${productSlug}` },
     openGraph: {

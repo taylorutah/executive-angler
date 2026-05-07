@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${SITE_URL}/api/og?title=${encodeURIComponent(article.title)}&subtitle=${encodeURIComponent(article.excerpt || "")}&type=article`;
 
   return {
-    title: article.metaTitle || fallbackTitle,
+    title: { absolute: article.metaTitle || fallbackTitle },
     description: article.metaDescription || fallbackDesc,
     openGraph: {
       title: article.title,

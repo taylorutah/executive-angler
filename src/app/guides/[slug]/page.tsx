@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `Book ${guide.name} — expert fly fishing guide. ${expStr}${rateStr}Specialties: ${(guide.specialties || []).slice(0, 3).join(", ") || "all methods"}.${riverCount > 0 ? ` Access to ${riverCount} rivers.` : ""} Read reviews & book direct.`;
 
   return {
-    title: guide.metaTitle || fallbackTitle,
+    title: { absolute: guide.metaTitle || fallbackTitle },
     description:
       guide.metaDescription || fallbackDesc,
     openGraph: {
