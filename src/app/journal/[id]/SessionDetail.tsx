@@ -748,7 +748,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </Link>
                 )}
 
-                <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#F0F6FC] leading-tight mb-3 flex items-center gap-2 flex-wrap">
+                <h1 className="font-heading text-xl sm:text-2xl font-semibold text-[#F0F6FC] leading-tight mb-3 flex items-center gap-2 flex-wrap">
                   <span>{session.title || session.river_name || "Fishing Session"}</span>
                   {isOwner && (
                     session.privacy === "private" ? (
@@ -939,24 +939,27 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   )}
                 </div>
 
-                {/* ---- SOCIAL: Kudos & Comments (prominent, not buried) ----
-                    Anonymous viewers get a sign-in CTA wired through both
-                    controls; authenticated viewers (owner or not) get the
-                    normal interactive UI. */}
-                <div className="mt-4 pt-4 border-t border-[#21262D]">
-                  <div className="flex items-center gap-6">
-                    <KudosButton
-                      sessionId={session.id}
-                      initialCount={0}
-                      loginHref={isAnonymous ? loginHref : undefined}
-                    />
-                    <CommentsSection
-                      sessionId={session.id}
-                      initialCount={0}
-                      loginHref={isAnonymous ? loginHref : undefined}
-                    />
+                {/* ---- SOCIAL: Kudos & Comments ----
+                    Hidden when session.privacy === "private" (the default
+                    after the 2026-05-04 privacy overhaul). Kept wired so
+                    any future shared/public session restores them with no
+                    code changes. */}
+                {session.privacy !== "private" && (
+                  <div className="mt-4 pt-4 border-t border-[#21262D]">
+                    <div className="flex items-center gap-6">
+                      <KudosButton
+                        sessionId={session.id}
+                        initialCount={0}
+                        loginHref={isAnonymous ? loginHref : undefined}
+                      />
+                      <CommentsSection
+                        sessionId={session.id}
+                        initialCount={0}
+                        loginHref={isAnonymous ? loginHref : undefined}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Fish caught summary — compact cards under description */}
                 {catches.filter(c => c.species).length > 0 && (
