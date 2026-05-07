@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Fish, Waves, AlertTriangle, Bug, Map as MapIcon } from "lucide-react";
-import HeroSection from "@/components/ui/HeroSection";
-import HeroCompact from "@/components/ui/HeroCompact";
+import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
@@ -33,8 +32,6 @@ import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin, checkPremium } from "@/lib/admin";
-import { getHeroHeight } from "@/lib/hero-height";
-import type { HeroTier } from "@/lib/hero-height";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -106,13 +103,6 @@ export default async function RiverPage({ params }: Props) {
   const { data: { user: currentUser } } = await supabase.auth.getUser();
   const userIsAdmin = isAdmin(currentUser?.email);
 
-  // Auth-aware hero height
-  let heroTier: HeroTier = "anonymous";
-  if (currentUser) {
-    const isPro = await checkPremium(supabase, currentUser.id, currentUser.email);
-    heroTier = isPro ? "pro" : "free";
-  }
-  const heroHeight = getHeroHeight("river", heroTier);
 
   const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies, galleryPhotos] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
@@ -195,91 +185,79 @@ export default async function RiverPage({ params }: Props) {
         }}
       />
 
-      {heroTier === "anonymous" ? (
-        <div className="relative">
-          <HeroSection
-            imageUrl={safeHeroUrl}
-            imageAlt={river.heroImageAlt || `${river.name} fly fishing`}
-            title={river.name}
-            subtitle={`${allDests.length > 0 ? allDests.map((d) => d!.name).join(" & ") + " · " : ""}${river.flowType} · ${(river.primarySpecies || []).join(", ")}`}
-            height={heroHeight}
-            imageCredit={river.heroImageCredit}
-            imageCreditUrl={river.heroImageCreditUrl}
+      {/* Narrow panoramic hero — pure image, no text overlay */}
+      <RiverHeroImage
+        heroImageUrl={safeHeroUrl}
+        heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
+        heroImageCredit={river.heroImageCredit}
+        heroImageCreditUrl={river.heroImageCreditUrl}
+        galleryPhotos={galleryPhotos}
+      >
+        {userIsAdmin && (
+          <HeroImageEditor
+            entityType="rivers"
+            entityId={river.id}
+            currentImageUrl={river.heroImageUrl}
+            currentAlt={river.heroImageAlt}
+            currentCredit={river.heroImageCredit}
+            currentCreditUrl={river.heroImageCreditUrl}
           />
-          {userIsAdmin && (
-            <div className="absolute top-4 right-4 z-20">
-              <HeroImageEditor
-                entityType="rivers"
-                entityId={river.id}
-                currentImageUrl={river.heroImageUrl}
-                currentAlt={river.heroImageAlt}
-                currentCredit={river.heroImageCredit}
-                currentCreditUrl={river.heroImageCreditUrl}
-              />
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="bg-[#0D1117] pt-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <HeroCompact
-              heroImageUrl={safeHeroUrl}
-              heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
-              heroImageCredit={river.heroImageCredit}
-              title={river.name}
-              subtitle={allDests.length > 0 ? allDests.map((d) => d!.name).join(" · ") : undefined}
-              chips={[
-                river.flowType,
-                ...(river.primarySpecies ?? []),
-              ]}
-              galleryPhotos={galleryPhotos}
-            >
-              {userIsAdmin && (
-                <HeroImageEditor
-                  entityType="rivers"
-                  entityId={river.id}
-                  currentImageUrl={river.heroImageUrl}
-                  currentAlt={river.heroImageAlt}
-                  currentCredit={river.heroImageCredit}
-                  currentCreditUrl={river.heroImageCreditUrl}
-                />
+        )}
+      </RiverHeroImage>
+
+      {/* Title block — identity + navigation, all below the image */}
+      <div className="bg-[#0D1117] border-b border-[#21262D]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-5 pb-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white leading-tight">
+                {river.name}
+              </h1>
+              {allDests.length > 0 && (
+                <p className="mt-1 text-sm text-[#A8B2BD]">
+                  {allDests.map((d) => d!.name).join(" · ")}
+                </p>
               )}
-            </HeroCompact>
-          </div>
-        </div>
-      )}
-
-      {/* iOS/Android parity: section pills for multi-gauge rivers. Renders
-          nothing when the river has ≤ 1 gauge, so single-gauge rivers keep
-          the existing layout untouched. */}
-      <RiverSectionPills riverId={river.id} />
-
-      <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
-
-      <div className="bg-[#0D1117]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <Breadcrumbs
-                items={[
-                  { label: "Rivers", href: "/rivers" },
-                  ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                  ...(additionalDests && additionalDests.length > 0
-                    ? additionalDests
-                        .filter(Boolean)
-                        .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
-                    : []),
-                  { label: river.name },
-                ]}
-              />
+              {/* Species + flow type chips */}
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {[river.flowType, ...(river.primarySpecies ?? [])]
+                  .filter(Boolean)
+                  .map((chip) => (
+                    <span
+                      key={chip}
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full border border-[#30363D] bg-[#161B22] text-[12px] text-[#A8B2BD]"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+              </div>
             </div>
-            <div className="shrink-0 flex items-center gap-2 sm:gap-3">
+            {/* Actions */}
+            <div className="shrink-0 flex items-center gap-2 mt-1">
               <ReportButton entityType="river" entityId={river.id} />
               <FavoriteButton entityType="river" entityId={river.id} />
             </div>
           </div>
+          {/* Breadcrumbs */}
+          <div className="mt-3">
+            <Breadcrumbs
+              items={[
+                { label: "Rivers", href: "/rivers" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                ...(additionalDests && additionalDests.length > 0
+                  ? additionalDests
+                      .filter(Boolean)
+                      .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
+                  : []),
+                { label: river.name },
+              ]}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Section pills — sub-navigation for multi-gauge rivers */}
+      <RiverSectionPills riverId={river.id} />
 
       <section className="bg-[#0D1117] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -309,6 +287,9 @@ export default async function RiverPage({ params }: Props) {
 
               {/* Personal River Scorecard — your patterns on THIS river (premium) */}
               <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
+
+              {/* Community photo strip — moved here from above the grid */}
+              <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 
               {/* 3. Recent Fly Choices — community fly pulse (names only, no counts) */}
               <ScrollAnimation>
