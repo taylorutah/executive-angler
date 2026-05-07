@@ -390,11 +390,27 @@
   margin-bottom: 1rem;
 }
 
-.article-body ul,
-.article-body ol {
+.article-body ul {
+  list-style-type: disc;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   padding-left: 1.5rem;
+}
+
+.article-body ol {
+  list-style-type: decimal;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.article-body ul ul {
+  list-style-type: circle;
+}
+
+.article-body ul > li::marker,
+.article-body ol > li::marker {
+  color: #E8923A;
 }
 
 .article-body li {
