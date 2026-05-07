@@ -11,9 +11,8 @@ import {
   Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles, Home, Gift
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
-import { isPermanentPro } from "@/lib/admin";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
 
@@ -83,56 +82,13 @@ export default function Header() {
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
-  const [user, setUser] = useState<{ email?: string; avatarUrl?: string; displayName?: string; isPremium?: boolean } | null>(null);
+  const { user, isLoading } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
   const exploreRef = useRef<HTMLDivElement>(null);
   const exploreTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => { setMobileOpen(false); setPlusOpen(false); setExploreOpen(false); }, [pathname]);
-
-  useEffect(() => {
-    const supabase = createClient();
-
-    async function fetchUserProfile() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (!authUser) { setUser(null); return; }
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("avatar_url, display_name, is_premium")
-        .eq("user_id", authUser.id)
-        .maybeSingle();
-
-      let premium = isPermanentPro(authUser.email);
-      if (!premium) premium = profile?.is_premium === true;
-      if (!premium) {
-        const { data: sub } = await supabase
-          .from("subscriptions")
-          .select("status")
-          .eq("user_id", authUser.id)
-          .in("status", ["active", "trialing"])
-          .maybeSingle();
-        if (sub) premium = true;
-      }
-
-      setUser({
-        email: authUser.email ?? undefined,
-        avatarUrl: profile?.avatar_url || undefined,
-        displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
-        isPremium: premium,
-      });
-    }
-
-    fetchUserProfile();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_OUT") setUser(null);
-      else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") fetchUserProfile();
-    });
-
-    return () => { subscription.unsubscribe(); };
-  }, []);
 
   // Cmd+K shortcut
   useEffect(() => {
@@ -329,17 +285,21 @@ export default function Header() {
                   <Search className="h-4.5 w-4.5" />
                 </Link>
 
-                {user ? (
+                {isLoading ? (
+                  <div className="hidden sm:flex items-center ml-2">
+                    <div className="h-8 w-8 rounded-full bg-[#1F2937] animate-pulse" />
+                  </div>
+                ) : user ? (
                   <div className="hidden sm:flex items-center gap-0.5">
                     <NotificationBell />
                     <MessageIcon />
                     <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors ml-1">
                       <div className="h-8 w-8 rounded-full overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0 ring-2 ring-transparent hover:ring-[#E8923A]/40 transition-all">
-                        {user?.avatarUrl ? (
+                        {user.avatarUrl ? (
                           <Image src={user.avatarUrl} alt="Profile" width={32} height={32} className="object-cover w-full h-full" />
                         ) : (
                           <span className="text-xs font-bold text-[#A8B2BD]">
-                            {(user?.displayName || user?.email || "A")[0].toUpperCase()}
+                            {(user.displayName || user.email || "A")[0].toUpperCase()}
                           </span>
                         )}
                       </div>

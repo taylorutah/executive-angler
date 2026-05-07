@@ -1,20 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 
 export function MessageIcon() {
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUserId(data.user.id);
-    });
-  }, []);
+  const { user } = useAuth();
+  const userId = user?.id ?? null;
 
   const { unreadCount } = useUnreadMessages(userId);
 

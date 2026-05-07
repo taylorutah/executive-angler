@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 
 interface FavoriteButtonProps {
   entityType: string;
@@ -13,38 +14,31 @@ interface FavoriteButtonProps {
 export default function FavoriteButton({ entityType, entityId }: FavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    checkFavorite();
-  }, [entityType, entityId]);
+    if (isLoading || !user) return;
 
-  async function checkFavorite() {
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data } = await supabase
+    supabase
       .from("user_favorites")
       .select("id")
       .eq("user_id", user.id)
       .eq("entity_type", entityType)
       .eq("entity_id", entityId)
-      .maybeSingle();
-
-    setIsFavorite(!!data);
-  }
+      .maybeSingle()
+      .then(({ data }) => setIsFavorite(!!data));
+  }, [isLoading, user, entityType, entityId]);
 
   async function toggleFavorite() {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
       router.push(`/login?redirect=${window.location.pathname}`);
       return;
     }
 
     setLoading(true);
+    const supabase = createClient();
 
     if (isFavorite) {
       await supabase

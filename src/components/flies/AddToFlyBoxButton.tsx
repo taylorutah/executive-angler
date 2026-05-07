@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Plus, Check, Loader2 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 interface AddToFlyBoxButtonProps {
   canonicalFlyId: string;
@@ -19,23 +20,24 @@ export default function AddToFlyBoxButton({
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, isLoading } = useAuth();
+  const isAuthenticated = !!user;
 
   useEffect(() => {
+    // While auth is still resolving, keep the spinner up.
+    if (isLoading) return;
+
+    // No user — nothing to check.
+    if (!user) {
+      setChecking(false);
+      return;
+    }
+
+    const uid = user.id;
     let cancelled = false;
     async function checkStatus() {
       try {
         const supabase = createClient();
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (!user) {
-          if (!cancelled) setChecking(false);
-          return;
-        }
-        if (!cancelled) setIsAuthenticated(true);
-
         // After the multi-variant migration there can be 2+ rows per
         // (user_id, canonical_fly_id), so `.maybeSingle()` would throw and
         // leave the spinner spinning forever. Use `.limit(1)` instead and
@@ -43,7 +45,7 @@ export default function AddToFlyBoxButton({
         const { data } = await supabase
           .from("user_fly_box")
           .select("id")
-          .eq("user_id", user.id)
+          .eq("user_id", uid)
           .eq("canonical_fly_id", canonicalFlyId)
           .limit(1);
 
@@ -61,7 +63,7 @@ export default function AddToFlyBoxButton({
     return () => {
       cancelled = true;
     };
-  }, [canonicalFlyId]);
+  }, [isLoading, user, canonicalFlyId]);
 
   async function handleAdd() {
     if (!isAuthenticated) {

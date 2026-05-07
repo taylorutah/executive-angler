@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Bell, Check, CheckCheck, UserPlus, Heart, MessageCircle, AtSign } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import type { AppNotification, NotificationType } from "@/types/fishing-log";
-import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 
 function timeAgo(dateStr: string): string {
   const now = Date.now();
@@ -131,16 +131,10 @@ function FollowRequestActions({
 }
 
 export function NotificationBell() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const { user } = useAuth();
+  const userId = user?.id ?? null;
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUserId(data.user.id);
-    });
-  }, []);
 
   const { notifications, unreadCount, markAsRead, markAllAsRead, refetch } =
     useNotifications(userId);

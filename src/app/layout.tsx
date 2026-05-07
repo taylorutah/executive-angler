@@ -7,6 +7,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import { ThemeProvider } from "@/lib/theme-context";
+import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import "./globals.css";
 
@@ -146,12 +147,14 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <ThemeProvider>
-          <Header />
-          <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
-          <Footer />
-          <MobileTabBar />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <Header />
+            <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
+            <Footer />
+            <MobileTabBar />
+          </ThemeProvider>
+        </AuthProvider>
         <Analytics />
         <SpeedInsights />
       </body>
