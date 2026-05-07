@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `Complete guide to the ${fly.name}: ${fly.keyVariations?.length || 0} variations, ${sizeRange.toLowerCase()}, materials list, tying video, and where to fish it. ${fly.tagline || ""}`.trim();
 
   return {
-    title: fly.metaTitle || fallbackTitle,
+    title: { absolute: fly.metaTitle || fallbackTitle },
     description: fly.metaDescription || fallbackDesc,
     openGraph: {
       title: fly.metaTitle || `${fly.name} — Trout Fly Pattern Guide`,

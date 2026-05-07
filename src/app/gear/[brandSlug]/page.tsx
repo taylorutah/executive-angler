@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${brand.name} — ${brand.specialties.join(", ")}${brand.headquarters ? ` from ${brand.headquarters}` : ""}.`;
 
   return {
-    title: brand.metaTitle || fallbackTitle,
+    title: { absolute: brand.metaTitle || fallbackTitle },
     description: brand.metaDescription || fallbackDesc,
     alternates: { canonical: `${SITE_URL}/gear/${brandSlug}` },
     openGraph: {

@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${river.name}: ${river.lengthMiles ? river.lengthMiles + " miles, " : ""}${river.difficulty || "all-level"} ${river.flowType || ""} water.${speciesList ? ` Target ${speciesList}.` : ""}${accessCount > 0 ? ` ${accessCount} access points.` : ""} Hatch charts, guides & trip planning.`;
 
   return {
-    title: river.metaTitle || fallbackTitle,
+    title: { absolute: river.metaTitle || fallbackTitle },
     description:
       river.metaDescription || fallbackDesc,
     openGraph: {

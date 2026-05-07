@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${lodge.name}${lodge.priceRange ? ` — ${lodge.priceRange}` : ""}. ${capacityStr}${amenityHighlights ? amenityHighlights + ". " : ""}${nearbyCount > 0 ? `${nearbyCount} nearby rivers. ` : ""}Book direct and read reviews.`;
 
   return {
-    title: lodge.metaTitle || fallbackTitle,
+    title: { absolute: lodge.metaTitle || fallbackTitle },
     description:
       lodge.metaDescription || fallbackDesc,
     openGraph: {

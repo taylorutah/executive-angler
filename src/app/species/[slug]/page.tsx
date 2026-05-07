@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${sp.commonName} fly fishing guide. ${sizeStr}${habitatStr}${flyCount > 0 ? `${flyCount} proven fly patterns. ` : ""}${destCount > 0 ? `${destCount} top destinations. ` : ""}Tactics, gear & where to catch them.`;
 
   return {
-    title: sp.metaTitle || fallbackTitle,
+    title: { absolute: sp.metaTitle || fallbackTitle },
     description:
       sp.metaDescription || fallbackDesc,
     openGraph: {
