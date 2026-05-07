@@ -13,6 +13,8 @@ interface HeroImageEditorProps {
   currentAlt?: string;
   currentCredit?: string;
   currentCreditUrl?: string;
+  /** Crop aspect ratio passed to ImageField. Defaults to 21/9. */
+  aspectRatio?: number;
 }
 
 export default function HeroImageEditor({
@@ -22,6 +24,7 @@ export default function HeroImageEditor({
   currentAlt,
   currentCredit,
   currentCreditUrl,
+  aspectRatio = 21 / 9,
 }: HeroImageEditorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState(currentImageUrl);
@@ -124,7 +127,7 @@ export default function HeroImageEditor({
             creditUrlValue={creditUrl}
             onChange={applyPatch}
             submissionIdPrefix={`hero-${entityType}-${entityId}`}
-            aspectRatio={21 / 9}
+            aspectRatio={aspectRatio}
           />
 
           {error ? (

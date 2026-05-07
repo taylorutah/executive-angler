@@ -201,6 +201,7 @@ export default async function RiverPage({ params }: Props) {
             currentAlt={river.heroImageAlt}
             currentCredit={river.heroImageCredit}
             currentCreditUrl={river.heroImageCreditUrl}
+            aspectRatio={16 / 3}
           />
         )}
       </RiverHeroImage>
