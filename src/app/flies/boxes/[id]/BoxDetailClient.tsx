@@ -106,7 +106,7 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
     <div className="min-h-screen bg-[#0D1117]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
         <Link
-          href="/my-boxes"
+          href="/flies?tab=boxes"
           className="inline-flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors mb-4"
         >
           <ArrowLeft className="h-4 w-4" /> All boxes
@@ -173,13 +173,13 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
               <Sparkles className="h-3.5 w-3.5" /> Quick add
             </button>
             <Link
-              href="/flies"
+              href="/flies/library"
               className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
             >
               <Plus className="h-3.5 w-3.5" /> From library
             </Link>
             <Link
-              href="/journal/flies/workbench"
+              href="/flies?tab=workbench"
               className="inline-flex items-center gap-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-1.5 text-xs font-medium text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
               title="Tie flies for your boxes"
             >
@@ -260,7 +260,7 @@ export default function BoxDetailClient({ box, initialEntries }: Props) {
           onDeleted={() => {
             setEditOpen(false);
             // After delete, navigate back to the boxes index.
-            if (typeof window !== "undefined") window.location.href = "/my-boxes";
+            if (typeof window !== "undefined") window.location.href = "/flies?tab=boxes";
           }}
         />
       )}

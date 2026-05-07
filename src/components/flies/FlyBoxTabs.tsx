@@ -541,10 +541,10 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
           if (filteredCards.length === 0) return null;
           return (
             <section key={type}>
-              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#21262D]">
-                <span className="text-lg">{TYPE_ICONS[type] || "\uD83E\uDEB0"}</span>
-                <h2 className="font-heading text-base font-bold text-[#F0F6FC]">{type}</h2>
-                <span className="text-xs text-[#6E7681] ml-1">{filteredCards.length}</span>
+              <div className="flex items-center gap-2 mb-3 pb-1.5 border-b border-[#21262D]">
+                <span className="text-base">{TYPE_ICONS[type] || "\uD83E\uDEB0"}</span>
+                <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-[#F0F6FC]">{type}</h2>
+                <span className="text-[11px] font-[var(--font-mono)] tabular-nums text-[#6E7681] ml-1">{filteredCards.length}</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {filteredCards.map(card => {
@@ -595,7 +595,7 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                         <Link href={detailHref} className="block px-2.5 pt-2 pb-1.5">
                           <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{displayName}</p>
                           {cf.sizes && cf.sizes.length > 0 && (
-                            <p className="text-[10px] text-[#6E7681] mt-0.5 truncate">
+                            <p className="text-[10px] font-[var(--font-mono)] tabular-nums text-[#6E7681] mt-0.5 truncate">
                               <span className="text-[#A8B2BD]">Sizes</span> &middot; {(card.entry.preferred_sizes?.length ? card.entry.preferred_sizes : cf.sizes).slice(0, 4).join(", ")}
                             </p>
                           )}
@@ -663,7 +663,7 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                       <Link href={detailHref} className="block px-2.5 pt-2 pb-1.5">
                         <p className="text-[13px] font-semibold text-[#F0F6FC] leading-tight truncate">{fly.name}</p>
                         {(bead || sizes) && (
-                          <p className="text-[10px] text-[#6E7681] mt-0.5 truncate">
+                          <p className="text-[10px] font-[var(--font-mono)] tabular-nums text-[#6E7681] mt-0.5 truncate">
                             {sizes && (
                               <>
                                 <span className="text-[#A8B2BD]">Sizes</span> &middot; {sizes}
