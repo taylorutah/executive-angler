@@ -110,6 +110,10 @@ export async function POST(request: Request) {
       tie_next_target_qty,
       tie_next_notes,
       tied_count,
+      bead_weight_mm,
+      bead_material,
+      hook_size,
+      target_count,
     } = body;
 
     if (!canonical_fly_id) {
@@ -117,6 +121,15 @@ export async function POST(request: Request) {
         { error: "canonical_fly_id is required" },
         { status: 400 },
       );
+    }
+
+    const variantValidation = validateVariantFields({
+      bead_weight_mm,
+      bead_material,
+      target_count,
+    });
+    if (variantValidation) {
+      return NextResponse.json({ error: variantValidation }, { status: 400 });
     }
 
     // Auto-promote to primary when no other variant of this canonical exists.
@@ -160,6 +173,10 @@ export async function POST(request: Request) {
       insertRow.tie_next_target_qty = tie_next_target_qty;
     if (tie_next_notes !== undefined) insertRow.tie_next_notes = tie_next_notes;
     if (tied_count !== undefined) insertRow.tied_count = tied_count;
+    if (bead_weight_mm !== undefined) insertRow.bead_weight_mm = bead_weight_mm;
+    if (bead_material !== undefined) insertRow.bead_material = bead_material;
+    if (hook_size !== undefined) insertRow.hook_size = hook_size;
+    if (target_count !== undefined) insertRow.target_count = target_count;
 
     const { data, error } = await supabase
       .from("user_fly_box")
@@ -324,23 +341,43 @@ export async function PATCH(request: Request) {
         custom_image_url,
         variant_label,
         is_primary,
+        variant_sort_order,
         tie_next_status,
         tie_next_target_qty,
         tie_next_notes,
         tied_count,
+        bead_weight_mm,
+        bead_material,
+        hook_size,
+        target_count,
       } = body;
+      const variantValidation = validateVariantFields({
+        bead_weight_mm,
+        bead_material,
+        target_count,
+        tied_count,
+      });
+      if (variantValidation) {
+        return NextResponse.json({ error: variantValidation }, { status: 400 });
+      }
       if (personalizations !== undefined) updates.personalizations = personalizations;
       if (preferred_sizes !== undefined) updates.preferred_sizes = preferred_sizes;
       if (preferred_colors !== undefined) updates.preferred_colors = preferred_colors;
       if (personal_notes !== undefined) updates.personal_notes = personal_notes;
       if (custom_name !== undefined) updates.custom_name = custom_name;
       if (variant_label !== undefined) updates.variant_label = variant_label;
+      if (variant_sort_order !== undefined)
+        updates.variant_sort_order = variant_sort_order;
       if (custom_image_url === null) updates.custom_image_url = null;
       if (tie_next_status !== undefined) updates.tie_next_status = tie_next_status;
       if (tie_next_target_qty !== undefined)
         updates.tie_next_target_qty = tie_next_target_qty;
       if (tie_next_notes !== undefined) updates.tie_next_notes = tie_next_notes;
       if (tied_count !== undefined) updates.tied_count = tied_count;
+      if (bead_weight_mm !== undefined) updates.bead_weight_mm = bead_weight_mm;
+      if (bead_material !== undefined) updates.bead_material = bead_material;
+      if (hook_size !== undefined) updates.hook_size = hook_size;
+      if (target_count !== undefined) updates.target_count = target_count;
       // is_primary is handled separately (must demote prior primary).
       if (is_primary === true) {
         // Resolve target row first to find canonical_fly_id for demotion scope.
@@ -510,6 +547,42 @@ async function resolveTargetRow(
       .eq("is_primary", true)
       .maybeSingle();
     return (data as { id: string; canonical_fly_id: string | null; fly_pattern_id: string | null } | null) ?? null;
+  }
+  return null;
+}
+
+const BEAD_MATERIALS = new Set(["tungsten", "brass", "glass", "none"]);
+
+function validateVariantFields(input: {
+  bead_weight_mm?: unknown;
+  bead_material?: unknown;
+  target_count?: unknown;
+  tied_count?: unknown;
+}): string | null {
+  if (
+    input.bead_weight_mm !== undefined &&
+    input.bead_weight_mm !== null
+  ) {
+    const n = Number(input.bead_weight_mm);
+    if (!Number.isFinite(n) || n < 0.5 || n > 5.0) {
+      return "bead_weight_mm must be a number between 0.5 and 5.0";
+    }
+  }
+  if (
+    input.bead_material !== undefined &&
+    input.bead_material !== null &&
+    !BEAD_MATERIALS.has(String(input.bead_material))
+  ) {
+    return "bead_material must be tungsten, brass, glass, or none";
+  }
+  for (const key of ["target_count", "tied_count"] as const) {
+    const v = input[key];
+    if (v !== undefined && v !== null) {
+      const n = Number(v);
+      if (!Number.isInteger(n) || n < 0) {
+        return `${key} must be a non-negative integer`;
+      }
+    }
   }
   return null;
 }

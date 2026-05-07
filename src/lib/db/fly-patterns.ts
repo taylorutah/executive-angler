@@ -22,6 +22,8 @@ type FlyBoxCanonicalJoin = {
   materials_list?: { material: string; description?: string }[] | null;
 };
 
+export type BeadMaterial = "tungsten" | "brass" | "glass" | "none";
+
 export interface FlyBoxEntry {
   id: string;
   canonical_fly_id: string | null;
@@ -41,6 +43,16 @@ export interface FlyBoxEntry {
   last_loss_at?: string | null;
   added_at?: string;
   canonical_fly?: FlyBoxCanonicalJoin | null;
+  // Variant identity (migration 20260507)
+  variant_label?: string | null;
+  is_primary?: boolean;
+  variant_sort_order?: number;
+  tied_count?: number;
+  // Variant detail + MRP target (migration 20260509)
+  bead_weight_mm?: number | null;
+  bead_material?: BeadMaterial | null;
+  hook_size?: string | null;
+  target_count?: number;
 }
 
 /** User's personal fly patterns (authored or forked from canonical). */
@@ -82,6 +94,14 @@ export async function getMyFlyBox(userId: string): Promise<FlyBoxEntry[]> {
       quantity_by_size,
       last_loss_at,
       added_at,
+      variant_label,
+      is_primary,
+      variant_sort_order,
+      tied_count,
+      bead_weight_mm,
+      bead_material,
+      hook_size,
+      target_count,
       canonical_fly:canonical_flies(id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url, materials_list)
     `
     )
