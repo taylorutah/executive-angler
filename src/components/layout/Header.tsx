@@ -154,44 +154,23 @@ export default function Header() {
                   </Link>
                 )}
                 {user && (
-                  <Link href="/journal" className={navLinkClass(isActive("/journal") && !pathname.startsWith("/journal/flies/workbench"))}>
+                  <Link href="/journal" className={navLinkClass(isActive("/journal") && !pathname.startsWith("/journal/flies"))}>
                     Journal
                   </Link>
                 )}
                 <Link href="/rivers" className={navLinkClass(isActive("/rivers"))}>
                   Rivers
                 </Link>
-                {user ? (
-                  <>
-                    <Link
-                      href="/my-boxes"
-                      className={navLinkClass(isActive("/my-boxes"))}
-                    >
-                      My Boxes
-                    </Link>
-                    <Link
-                      href="/my-flies"
-                      className={navLinkClass(
-                        isActive("/my-flies") &&
-                          !pathname.startsWith("/journal/flies/workbench")
-                      )}
-                    >
-                      My Flies
-                    </Link>
-                    <Link
-                      href="/journal/flies/workbench"
-                      className={navLinkClass(
-                        pathname.startsWith("/journal/flies/workbench")
-                      )}
-                    >
-                      Workbench
-                    </Link>
-                  </>
-                ) : (
-                  <Link href="/flies" className={navLinkClass(isActive("/flies"))}>
-                    Flies
-                  </Link>
-                )}
+                <Link
+                  href={user ? "/flies" : "/flies/library"}
+                  className={navLinkClass(
+                    pathname === "/flies" ||
+                      pathname.startsWith("/flies/boxes") ||
+                      (pathname.startsWith("/flies/library") && !user)
+                  )}
+                >
+                  Flies
+                </Link>
 
                 {/* Explore dropdown */}
                 <div
@@ -407,50 +386,16 @@ export default function Header() {
               >
                 Rivers
               </Link>
-              {user ? (
-                <>
-                  <Link
-                    href="/my-boxes"
-                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                      isActive("/my-boxes")
-                        ? "bg-[#0D1117] text-[#F0F6FC]"
-                        : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                    }`}
-                  >
-                    My Boxes
-                  </Link>
-                  <Link
-                    href="/my-flies"
-                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                      (isActive("/my-flies") &&
-                        !pathname.startsWith("/journal/flies/workbench"))
-                        ? "bg-[#0D1117] text-[#F0F6FC]"
-                        : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                    }`}
-                  >
-                    My Flies
-                  </Link>
-                  <Link
-                    href="/journal/flies/workbench"
-                    className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                      pathname.startsWith("/journal/flies/workbench")
-                        ? "bg-[#0D1117] text-[#F0F6FC]"
-                        : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                    }`}
-                  >
-                    Workbench
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  href="/flies"
-                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/flies") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  Flies
-                </Link>
-              )}
+              <Link
+                href={user ? "/flies" : "/flies/library"}
+                className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                  pathname === "/flies" || pathname.startsWith("/flies/boxes") || (pathname.startsWith("/flies/library") && !user)
+                    ? "bg-[#0D1117] text-[#F0F6FC]"
+                    : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                }`}
+              >
+                Flies
+              </Link>
               {user && (
                 <Link
                   href="/feed"
