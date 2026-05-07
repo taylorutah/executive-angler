@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   const buffer = await file.arrayBuffer();
 
   const { error: uploadError } = await adminSupabase.storage
-    .from("community-images")
+    .from("photo-submissions")
     .upload(path, buffer, {
       contentType: file.type,
       upsert: false,
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   if (uploadError) {
     // If bucket doesn't exist, try creating it
     if (uploadError.message?.includes("not found") || uploadError.message?.includes("Bucket")) {
-      await adminSupabase.storage.createBucket("community-images", {
+      await adminSupabase.storage.createBucket("photo-submissions", {
         public: true,
         fileSizeLimit: 10 * 1024 * 1024,
         allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/avif"],
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
       // Retry upload
       const { error: retryError } = await adminSupabase.storage
-        .from("community-images")
+        .from("photo-submissions")
         .upload(path, buffer, {
           contentType: file.type,
           upsert: false,
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/community-images/${path}`;
+  const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/photo-submissions/${path}`;
 
   return NextResponse.json({ url: publicUrl });
 }
