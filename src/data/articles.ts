@@ -962,7 +962,7 @@ export const articles: Article[] = [
     metaTitle:
       "Montana's Best Fly Fishing Waters | Executive Angler",
     metaDescription:
-      "Explore Montana's best fly fishing rivers. Detailed guide to the Madison, Gallatin, Yellowstone, Missouri, and Big Hole rivers with seasonal advice and access information.",
+      "Explore Montana's best fly fishing rivers — Madison, Gallatin, Yellowstone, Missouri, and Big Hole — with seasonal tactics and access tips.",
     featured: false,
   },
   {
@@ -1301,7 +1301,7 @@ export const articles: Article[] = [
     metaTitle:
       "Matching the Hatch: A Dry Fly Guide | Executive Angler",
     metaDescription:
-      "Master the art of matching the hatch for dry fly fishing. Identify mayflies, caddis, stoneflies, and midges, and choose the right fly patterns for selective trout.",
+      "Master matching the hatch for dry fly fishing. Identify mayflies, caddis, stoneflies, and midges, then choose the right pattern for selective trout.",
     featured: true,
   },
   {
@@ -1606,7 +1606,7 @@ export const articles: Article[] = [
     relatedRiverIds: [],
     publishedAt: "2025-07-15T08:00:00Z",
     metaTitle:
-      "Introduction to Tenkara Fishing: Japanese Fixed-Line Fly Fishing | Executive Angler",
+      "Tenkara Fishing: A Complete Beginner's Guide | Executive Angler",
     metaDescription:
       "Discover tenkara, the centuries-old Japanese method of fly fishing. Learn about rods, lines, flies, and techniques for this elegant minimalist approach.",
     featured: false,
@@ -1969,7 +1969,7 @@ export const articles: Article[] = [
     metaTitle:
       "Streamer Fishing Mastery: Tactics for Big Trout | Executive Angler",
     metaDescription:
-      "Master streamer fishing techniques for targeting the biggest trout in the river. Learn retrieves, fly selection, timing, and bank fishing strategies for trophy trout.",
+      "Master streamer fishing for big trout. Learn retrieves, fly selection, timing, and bank strategies to target trophy browns and rainbows.",
     featured: false,
   },
   {
@@ -2291,7 +2291,7 @@ export const articles: Article[] = [
     metaTitle:
       "A First Timer's Guide to Patagonia Fly Fishing | Executive Angler",
     metaDescription:
-      "Plan your first fly fishing trip to Patagonia. Comprehensive guide covering when to go, what to bring, choosing a region, guided vs. independent fishing, and conservation.",
+      "Plan your first Patagonia fly fishing trip. When to go, what to bring, guided vs. DIY fishing, region selection, and conservation essentials.",
     featured: true,
   },
   {
@@ -2675,9 +2675,9 @@ export const articles: Article[] = [
     relatedRiverIds: [],
     publishedAt: "2025-04-05T08:00:00Z",
     metaTitle:
-      "The Essential Fly Box: 20 Patterns Every Angler Needs | Executive Angler",
+      "20 Essential Fly Patterns Every Angler Needs | Executive Angler",
     metaDescription:
-      "Build the perfect fly box with these 20 essential fly patterns. Covers dry flies, nymphs, emergers, streamers, and terrestrials for every trout fishing situation.",
+      "Build the perfect fly box with 20 essential patterns — dry flies, nymphs, emergers, streamers, and terrestrials for every trout fishing situation.",
     featured: false,
   },
   {
@@ -2875,7 +2875,7 @@ export const articles: Article[] = [
     metaTitle:
       "Conservation and the Future of Wild Trout | Executive Angler",
     metaDescription:
-      "Explore the threats facing wild trout populations including climate change and habitat loss, and learn what anglers can do to protect coldwater fisheries for future generations.",
+      "Explore the threats facing wild trout — climate change, habitat loss, and water demand — and learn what anglers can do to protect coldwater fisheries.",
     featured: false,
   },
   {
@@ -3274,7 +3274,7 @@ export const articles: Article[] = [
     metaTitle:
       "Fly Fishing Photography: Capturing the Moment | Executive Angler",
     metaDescription:
-      "Learn fly fishing photography techniques including camera selection, lighting, composition, and ethical fish photography practices for stunning images on the water.",
+      "Learn fly fishing photography: camera choice, lighting, composition, and ethical fish handling practices for stunning images on the water.",
     featured: false,
   },
   {
@@ -3744,7 +3744,7 @@ export const articles: Article[] = [
     relatedRiverIds: [],
     publishedAt: "2025-01-20T08:00:00Z",
     metaTitle:
-      "Iceland's Arctic Char and Atlantic Salmon: A Fly Fishing Guide | Executive Angler",
+      "Fly Fishing Iceland: Salmon & Arctic Char Guide | Executive Angler",
     metaDescription:
       "Plan a fly fishing trip to Iceland. Comprehensive guide to Atlantic salmon and Arctic char fishing, including rivers, seasons, tackle, and trip planning advice.",
     featured: false,
@@ -4187,7 +4187,7 @@ export const articles: Article[] = [
     metaTitle:
       "Fly Rod Selection Guide — 3wt to 12wt Compared (2025)",
     metaDescription:
-      "Pick the right fly rod with our weight-by-weight breakdown. Line weights, actions, rod lengths, and 1-to-4 rod quiver builds. Free printable chart inside.",
+      "Pick the right fly rod with our weight-by-weight breakdown. Line weights, actions, rod lengths, and recommended 1-to-4 rod quiver builds.",
     featured: false,
   },
   {
@@ -4587,7 +4587,7 @@ export const articles: Article[] = [
     relatedRiverIds: ["provo-river"],
     publishedAt: "2026-05-05T08:00:00Z",
     metaTitle:
-      "The Fly Box Tier System: How I Actually Organize My Boxes | Executive Angler",
+      "How to Organize Your Fly Box: The 3-Tier System | Executive Angler",
     metaDescription:
       "A 3-tier fly box system built for performance fishing. Kill Box on your chest, Support Box in your pack, Archive at home — organized by probability of use.",
     featured: true,

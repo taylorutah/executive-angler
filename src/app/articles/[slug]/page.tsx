@@ -27,10 +27,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article Not Found" };
+  const authorData = getAuthorByArticleName(article.author);
   const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
   const readTime = article.readingTimeMinutes ? `${article.readingTimeMinutes} min read. ` : "";
   const fallbackTitle = `${article.title} | Expert Fly Fishing ${categoryLabel} | Executive Angler`;
   const fallbackDesc = `${readTime}${article.excerpt ? article.excerpt.substring(0, 140) : `Expert fly fishing ${categoryLabel.toLowerCase()} guide.`}${article.excerpt && article.excerpt.length > 140 ? "..." : ""} Read now.`;
+
+  const ogImage =
+    article.heroImageUrl ||
+    `${SITE_URL}/api/og?title=${encodeURIComponent(article.title)}&subtitle=${encodeURIComponent(article.excerpt || "")}&type=article`;
 
   return {
     title: article.metaTitle || fallbackTitle,
@@ -38,11 +43,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: article.title,
       description: article.excerpt,
-      images: [
-        article.heroImageUrl ||
-          `${SITE_URL}/api/og?title=${encodeURIComponent(article.title)}&subtitle=${encodeURIComponent(article.excerpt || "")}&type=article`,
-      ],
+      images: [ogImage],
       type: "article",
+      publishedTime: article.publishedAt,
+      authors: authorData ? [`${SITE_URL}/authors/${authorData.slug}`] : undefined,
+      section: categoryLabel,
+      tags: article.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.metaTitle || fallbackTitle,
+      description: article.metaDescription || fallbackDesc,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
     alternates: {
       canonical: `${SITE_URL}/articles/${slug}`,
@@ -68,6 +90,7 @@ export default async function ArticlePage({ params }: Props) {
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
   const authorData = getAuthorByArticleName(article.author);
+  const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
 
   // Map article topics to fly categories for cross-linking
   const ARTICLE_FLY_MAP: Record<string, string | null> = {
@@ -102,6 +125,8 @@ export default async function ArticlePage({ params }: Props) {
         "@type": "Article",
         headline: article.title,
         description: article.excerpt,
+        articleSection: categoryLabel,
+        keywords: article.tags?.join(", "),
         author: authorData
           ? {
               "@type": "Person",
