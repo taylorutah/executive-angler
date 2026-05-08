@@ -26,7 +26,7 @@ interface Props {
 
 function formatBead(row: VariantRow): string {
   if (!row.bead_material || row.bead_material === "none") return "—";
-  const parts = [row.bead_material];
+  const parts: string[] = [row.bead_material];
   if (row.bead_weight_mm) parts.push(`${row.bead_weight_mm}mm`);
   if (row.bead_color) parts.push(row.bead_color);
   return parts.join(" · ");

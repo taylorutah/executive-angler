@@ -93,6 +93,21 @@ export async function uploadVariantPhotoAction(formData: FormData): Promise<{
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "You must be signed in to upload." };
 
+  // Photos can only be attached to variants the user created. Canonical
+  // variants (created_by_user_id null) are admin-curated; user-uploaded
+  // photos on them would otherwise leak across the public library and
+  // could even be set is_primary by accident, hijacking the canonical
+  // display image for everyone.
+  const { data: variantOwner, error: vErr } = await supabase
+    .from("fly_variants")
+    .select("created_by_user_id")
+    .eq("id", variantId)
+    .maybeSingle();
+  if (vErr || !variantOwner) return { ok: false, error: "Variant not found." };
+  if (variantOwner.created_by_user_id !== user.id) {
+    return { ok: false, error: "Photos can only be added to variants you created. Add your own variant from the pattern detail page first." };
+  }
+
   // Build storage path: <user>/<variant>/<random>.<ext>
   const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
   const photoId = crypto.randomUUID();
