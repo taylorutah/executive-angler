@@ -302,6 +302,57 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
 // Boxes
 // ────────────────────────────────────────────────────────────────────────────
 
+export type FlyBoxTier = "kill" | "support" | "archive" | "custom";
+
+export interface FlyBoxV2 {
+  id: string;
+  user_id: string;
+  name: string;
+  tier: FlyBoxTier;
+  description: string | null;
+  icon: string | null;
+  cover_image_url: string | null;
+  sort_order: number;
+  is_default: boolean;
+  total_capacity: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** All boxes for the current user, ordered by tier then sort_order. */
+export async function listMyBoxes(): Promise<FlyBoxV2[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from("fly_boxes")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("tier")
+    .order("sort_order")
+    .order("created_at");
+  if (error) {
+    console.error("[listMyBoxes]", error);
+    return [];
+  }
+  return (data ?? []) as FlyBoxV2[];
+}
+
+/** Single box by id (RLS gates access to own boxes only). */
+export async function getBoxById(id: string): Promise<FlyBoxV2 | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("fly_boxes")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) {
+    console.error("[getBoxById]", error);
+    return null;
+  }
+  return (data ?? null) as FlyBoxV2 | null;
+}
+
 /** Get the user's default fly_box id (creates one named "My Fly Box" if missing). */
 export async function getDefaultFlyBoxId(): Promise<string | null> {
   const supabase = await createClient();
