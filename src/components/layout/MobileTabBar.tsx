@@ -3,14 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Mountain, Bug } from "lucide-react";
+import { LayoutDashboard, BookOpen, Leaf, Map } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
 const TABS = [
-  { href: "/dashboard", label: "Home", icon: Home, match: (p: string) => p === "/dashboard" || p.startsWith("/dashboard/") },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p === "/dashboard" || p.startsWith("/dashboard/") },
   { href: "/journal", label: "Journal", icon: BookOpen, match: (p: string) => p === "/journal" || p.startsWith("/journal/") },
-  { href: "/rivers", label: "Rivers", icon: Mountain, match: (p: string) => p === "/rivers" || p.startsWith("/rivers/") },
-  { href: "/flies", label: "Flies", icon: Bug, match: (p: string) => p === "/flies" || p.startsWith("/flies/") },
+  { href: "/flies", label: "Flies", icon: Leaf, match: (p: string) => p === "/flies" || p.startsWith("/flies/") },
+  { href: "/rivers", label: "Explore", icon: Map, match: (p: string) => p === "/rivers" || p.startsWith("/rivers/") },
 ] as const;
 
 export default function MobileTabBar() {

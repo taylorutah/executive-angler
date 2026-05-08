@@ -12,6 +12,7 @@ import {
   createUserVariant,
   addVariantsToBox,
   softDeleteVariants,
+  updateVariant,
 } from "@/lib/db/fly-v2";
 
 export interface UpdateStockInput {
@@ -168,6 +169,44 @@ export async function addToBoxAction(input: AddToBoxInput): Promise<{ ok: boolea
   revalidatePath(`/flies/${input.pattern_slug}`);
   revalidatePath(`/flies/boxes`);
   return { ok: true, added };
+}
+
+export interface UpdateVariantInput {
+  variant_id: string;
+  pattern_slug: string;
+  size?: string;
+  bead_material?: "tungsten" | "brass" | "glass" | "none" | null;
+  bead_weight_mm?: number | null;
+  bead_color?: string | null;
+  body_color?: string | null;
+  rib_color?: string | null;
+  hook_style?: string | null;
+  hook_brand?: string | null;
+  display_name?: string | null;
+  notes?: string | null;
+}
+
+/** Edit a single variant. Creator-only (admin can edit any). */
+export async function updateVariantAction(input: UpdateVariantInput): Promise<{ ok: boolean; error?: string }> {
+  if (input.size !== undefined && !input.size.trim()) {
+    return { ok: false, error: "Size cannot be empty." };
+  }
+  const result = await updateVariant(input.variant_id, {
+    size: input.size?.trim(),
+    bead_material: input.bead_material === "none" ? null : input.bead_material,
+    bead_weight_mm: input.bead_weight_mm,
+    bead_color: input.bead_color,
+    body_color: input.body_color,
+    rib_color: input.rib_color,
+    hook_style: input.hook_style,
+    hook_brand: input.hook_brand,
+    display_name: input.display_name,
+    notes: input.notes,
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
+  revalidatePath(`/flies/boxes`, "layout");
+  return { ok: true };
 }
 
 export interface DeleteVariantsInput {

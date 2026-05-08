@@ -15,6 +15,7 @@ import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
+import EditVariantModal from "@/components/flies-v2/EditVariantModal";
 import { updateStockAction, addToBoxAction, deleteVariantsAction } from "@/app/flies/v2/actions";
 
 interface Props {
@@ -58,6 +59,9 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
     toastTimer.current = setTimeout(() => setToast(null), tone === "error" ? 4500 : 2500);
   };
   useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
+
+  // Edit modal — bulk action only opens when exactly one row is selected.
+  const [editing, setEditing] = useState<VariantRow | null>(null);
 
   const saveStock = (variantId: string, field: "tied_count" | "bought_count" | "target_count") =>
     (next: number) => updateStockAction({
@@ -204,6 +208,15 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
           {toast.msg}
         </div>
       )}
+      {editing && (
+        <EditVariantModal
+          variant={editing}
+          patternSlug={patternSlug}
+          open={true}
+          onClose={() => setEditing(null)}
+          onSaved={() => showToast("Variant saved.")}
+        />
+      )}
     <DataTable<VariantRow>
       rows={variants}
       columns={columns}
@@ -211,6 +224,17 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
       density="compact"
       defaultSort={{ key: "size", dir: "asc" }}
       bulkActions={[
+        {
+          label: "Edit",
+          variant: "default" as const,
+          onClick: (rows: VariantRow[]) => {
+            if (rows.length !== 1) {
+              showToast("Select exactly one variant to edit.", "error");
+              return;
+            }
+            setEditing(rows[0]);
+          },
+        },
         ...(defaultBoxId
           ? [
               {

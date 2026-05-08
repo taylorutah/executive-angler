@@ -86,7 +86,7 @@ export default function Header() {
                   </Link>
                 )}
                 <Link href="/rivers" className={navLinkClass(isActive("/rivers"))}>
-                  Rivers
+                  Explore
                 </Link>
                 <Link
                   href={user ? "/flies" : "/flies/library"}
@@ -249,7 +249,7 @@ export default function Header() {
                   isActive("/rivers") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
                 }`}
               >
-                Rivers
+                Explore
               </Link>
               <Link
                 href={user ? "/flies" : "/flies/library"}

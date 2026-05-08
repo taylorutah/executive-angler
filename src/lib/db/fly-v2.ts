@@ -499,6 +499,68 @@ export async function addVariantsToBox(
 }
 
 /**
+ * Update a variant's spec fields (size / bead / colors / hook / display_name /
+ * notes). Creator can update their own variants; admin can update any
+ * (canonical or anyone's user variant). Returns the updated row, or null +
+ * error on permission/db failure.
+ */
+export async function updateVariant(
+  variantId: string,
+  fields: {
+    size?: string;
+    bead_material?: Variant["bead_material"] | null;
+    bead_weight_mm?: number | null;
+    bead_color?: string | null;
+    body_color?: string | null;
+    rib_color?: string | null;
+    hook_style?: string | null;
+    hook_brand?: string | null;
+    display_name?: string | null;
+    notes?: string | null;
+  },
+): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You must be signed in." };
+
+  const { data: row, error: loadErr } = await supabase
+    .from("fly_variants")
+    .select("id, created_by_user_id")
+    .eq("id", variantId)
+    .maybeSingle();
+  if (loadErr) return { ok: false, error: loadErr.message };
+  if (!row) return { ok: false, error: "Variant not found." };
+  const isCreator = (row as { created_by_user_id: string | null }).created_by_user_id === user.id;
+  if (!isCreator && !isAdmin(user.email ?? null)) {
+    return { ok: false, error: "You can only edit variants you created. Canonical variants require admin." };
+  }
+
+  const updates: Record<string, unknown> = {};
+  if (fields.size !== undefined) updates.size = fields.size;
+  if (fields.bead_material !== undefined) updates.bead_material = fields.bead_material;
+  if (fields.bead_weight_mm !== undefined) updates.bead_weight_mm = fields.bead_weight_mm;
+  if (fields.bead_color !== undefined) updates.bead_color = fields.bead_color;
+  if (fields.body_color !== undefined) updates.body_color = fields.body_color;
+  if (fields.rib_color !== undefined) updates.rib_color = fields.rib_color;
+  if (fields.hook_style !== undefined) updates.hook_style = fields.hook_style;
+  if (fields.hook_brand !== undefined) updates.hook_brand = fields.hook_brand;
+  if (fields.display_name !== undefined) updates.display_name = fields.display_name;
+  if (fields.notes !== undefined) updates.notes = fields.notes;
+
+  const { data: updated, error: updErr } = await supabase
+    .from("fly_variants")
+    .update(updates)
+    .eq("id", variantId)
+    .select()
+    .single();
+  if (updErr) {
+    console.error("[updateVariant]", updErr);
+    return { ok: false, error: updErr.message };
+  }
+  return { ok: true, variant: updated as Variant };
+}
+
+/**
  * Soft-delete a batch of variants. Rules:
  *   - Creator (`created_by_user_id = auth.uid()`) can delete their own variants.
  *   - Admin (per `isAdmin(email)`) can delete canonical variants
