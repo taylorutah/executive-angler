@@ -96,10 +96,59 @@ export default async function SessionDetailPage({ params }: Props) {
     .eq("session_id", id)
     .order("created_at", { ascending: true });
 
+  // Phase 3 catch logger writes variant_id + denormalized fly_name/fly_size,
+  // but no fly_pattern_id (the legacy FK). For those rows, look up the
+  // pattern from fly_patterns_v2 via the variant so the legacy display
+  // (`c.fly_pattern.name`) renders something instead of blank.
+  type CatchRow = {
+    fly_pattern_id?: string | null;
+    fly_pattern?: { name: string; type?: string; image_url?: string } | null;
+    variant_id?: string | null;
+    fly_name?: string | null;
+  };
+  const catchesArr = (catches ?? []) as CatchRow[];
+  const variantIdsNeedingLookup = catchesArr
+    .filter((c) => !c.fly_pattern_id && c.variant_id)
+    .map((c) => c.variant_id as string);
+  if (variantIdsNeedingLookup.length > 0) {
+    const { data: variantPatterns } = await supabase
+      .from("fly_variants")
+      .select("id, pattern:fly_patterns_v2(name, category, hero_image_url)")
+      .in("id", variantIdsNeedingLookup);
+    type V = {
+      id: string;
+      pattern?: { name?: string; category?: string; hero_image_url?: string }
+        | { name?: string; category?: string; hero_image_url?: string }[]
+        | null;
+    };
+    const patternByVariant = new Map<string, { name: string; type?: string; image_url?: string }>();
+    for (const row of (variantPatterns ?? []) as V[]) {
+      const p = Array.isArray(row.pattern) ? row.pattern[0] : row.pattern;
+      if (p?.name) {
+        patternByVariant.set(row.id, {
+          name: p.name,
+          type: p.category,
+          image_url: p.hero_image_url,
+        });
+      }
+    }
+    for (const c of catchesArr) {
+      if (!c.fly_pattern && c.variant_id) {
+        const synth = patternByVariant.get(c.variant_id);
+        if (synth) c.fly_pattern = synth;
+        else if (c.fly_name) c.fly_pattern = { name: c.fly_name };
+      }
+    }
+  } else {
+    for (const c of catchesArr) {
+      if (!c.fly_pattern && c.fly_name) c.fly_pattern = { name: c.fly_name };
+    }
+  }
+
   // Flies used in this session (from fly_patterns table, matched by catch)
-  const flyPatternIds = (catches || [])
-    .map((c: { fly_pattern_id?: string }) => c.fly_pattern_id)
-    .filter(Boolean);
+  const flyPatternIds = catchesArr
+    .map((c) => c.fly_pattern_id)
+    .filter((v): v is string => !!v);
 
   const { data: flies } = flyPatternIds.length > 0
     ? await supabase.from("fly_patterns").select("id, name, type, image_url").in("id", flyPatternIds)
