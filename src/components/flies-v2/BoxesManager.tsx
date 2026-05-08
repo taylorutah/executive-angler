@@ -9,7 +9,7 @@
  */
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X } from "lucide-react";
 import type { FlyBoxV2, FlyBoxTier } from "@/lib/db/fly-v2";
 
@@ -54,6 +54,26 @@ export default function BoxesManager({ initialBoxes }: { initialBoxes: FlyBoxV2[
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  // Close any open kebab menu on outside click or Escape.
+  useEffect(() => {
+    if (!openMenuId) return;
+    const onClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenMenuId(null);
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openMenuId]);
 
   const groups: Record<FlyBoxTier, FlyBoxV2[]> = {
     kill: [], support: [], archive: [], custom: [],
@@ -219,7 +239,10 @@ export default function BoxesManager({ initialBoxes }: { initialBoxes: FlyBoxV2[
                       </div>
                     </Link>
 
-                    <div className="absolute top-2 right-2">
+                    <div
+                      className="absolute top-2 right-2"
+                      ref={openMenuId === b.id ? menuRef : null}
+                    >
                       <button
                         type="button"
                         aria-label="Box actions"
