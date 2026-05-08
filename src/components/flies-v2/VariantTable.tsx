@@ -14,7 +14,7 @@ import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
-import { updateStockAction, addToBoxAction } from "@/app/flies/v2/actions";
+import { updateStockAction, addToBoxAction, deleteVariantsAction } from "@/app/flies/v2/actions";
 
 interface Props {
   variants: VariantRow[];
@@ -182,13 +182,13 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
       rowKey={(v) => v.id}
       density="compact"
       defaultSort={{ key: "size", dir: "asc" }}
-      bulkActions={
-        defaultBoxId
+      bulkActions={[
+        ...(defaultBoxId
           ? [
               {
                 label: "Add to my box",
-                variant: "primary",
-                onClick: async (rows) => {
+                variant: "primary" as const,
+                onClick: async (rows: VariantRow[]) => {
                   await addToBoxAction({
                     pattern_slug: patternSlug,
                     box_id: defaultBoxId,
@@ -197,8 +197,24 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
                 },
               },
             ]
-          : []
-      }
+          : []),
+        {
+          label: "Delete",
+          variant: "danger" as const,
+          onClick: async (rows: VariantRow[]) => {
+            const n = rows.length;
+            const msg = `Delete ${n} variant${n === 1 ? "" : "s"}? Catches that referenced ${n === 1 ? "it" : "them"} will keep their history, but ${n === 1 ? "it" : "they"} will be hidden from this table.`;
+            if (!confirm(msg)) return;
+            const result = await deleteVariantsAction({
+              pattern_slug: patternSlug,
+              variant_ids: rows.map((r) => r.id),
+            });
+            if (!result.ok && result.error) {
+              alert(result.error);
+            }
+          },
+        },
+      ]}
       empty={
         <div className="flex flex-col items-center gap-2">
           <p className="text-[#A8B2BD]">No variants yet.</p>

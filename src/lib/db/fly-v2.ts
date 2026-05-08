@@ -11,6 +11,7 @@
  */
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
+import { isAdmin } from "@/lib/admin";
 import type {
   Pattern,
   Variant,
@@ -96,7 +97,9 @@ export async function listMyPatterns(): Promise<Pattern[]> {
  *   - Canonical-curated variants (created_by_user_id is null) — visible to all
  *   - Plus current user's own variants on this pattern
  *
- * RLS handles the filter. We just sort.
+ * RLS handles the visibility filter. Soft-deleted rows are filtered here
+ * (the read policy stays open so historical catch detail can still resolve
+ * a deleted variant's spec).
  */
 export async function listVariantsForPattern(patternId: string): Promise<Variant[]> {
   const supabase = await createClient();
@@ -104,6 +107,7 @@ export async function listVariantsForPattern(patternId: string): Promise<Variant
     .from("fly_variants")
     .select("*")
     .eq("pattern_id", patternId)
+    .is("deleted_at", null)
     .order("sort_order")
     .order("size");
   if (error) {
@@ -487,6 +491,62 @@ export async function addVariantsToBox(
     return 0;
   }
   return count ?? variantIds.length;
+}
+
+/**
+ * Soft-delete a batch of variants. Rules:
+ *   - Creator (`created_by_user_id = auth.uid()`) can delete their own variants.
+ *   - Admin (per `isAdmin(email)`) can delete canonical variants
+ *     (`created_by_user_id IS NULL`) and anyone else's user variants.
+ *   - The whole batch is rejected if any single row fails the permission check —
+ *     no partial deletes.
+ *
+ * Catches that referenced these variants are unaffected: their `variant_id`
+ * still resolves to the (now-flagged) row, so catch history continues to show
+ * the spec used.
+ */
+export async function softDeleteVariants(
+  variantIds: string[],
+): Promise<{ deleted: number; error?: string }> {
+  if (variantIds.length === 0) return { deleted: 0, error: "No variants supplied." };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { deleted: 0, error: "You must be signed in." };
+
+  const { data: rows, error: loadErr } = await supabase
+    .from("fly_variants")
+    .select("id, created_by_user_id")
+    .in("id", variantIds)
+    .is("deleted_at", null);
+  if (loadErr) {
+    console.error("[softDeleteVariants] load", loadErr);
+    return { deleted: 0, error: loadErr.message };
+  }
+  if (!rows || rows.length === 0) return { deleted: 0 };
+
+  const admin = isAdmin(user.email ?? null);
+  for (const row of rows as { id: string; created_by_user_id: string | null }[]) {
+    const isCreator = row.created_by_user_id === user.id;
+    if (!isCreator && !admin) {
+      return {
+        deleted: 0,
+        error: "You can only delete variants you created. Canonical variants require admin.",
+      };
+    }
+  }
+
+  const ids = (rows as { id: string }[]).map((r) => r.id);
+  const { error: updateErr, count } = await supabase
+    .from("fly_variants")
+    .update({ deleted_at: new Date().toISOString() }, { count: "exact" })
+    .in("id", ids)
+    .is("deleted_at", null);
+  if (updateErr) {
+    console.error("[softDeleteVariants] update", updateErr);
+    return { deleted: 0, error: updateErr.message };
+  }
+  return { deleted: count ?? ids.length };
 }
 
 /** Remove a variant from a box. */

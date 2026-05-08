@@ -11,6 +11,7 @@ import {
   upsertVariantStock,
   createUserVariant,
   addVariantsToBox,
+  softDeleteVariants,
 } from "@/lib/db/fly-v2";
 
 export interface UpdateStockInput {
@@ -167,4 +168,23 @@ export async function addToBoxAction(input: AddToBoxInput): Promise<{ ok: boolea
   revalidatePath(`/flies/${input.pattern_slug}`);
   revalidatePath(`/flies/boxes`);
   return { ok: true, added };
+}
+
+export interface DeleteVariantsInput {
+  pattern_slug: string;
+  variant_ids: string[];
+}
+
+/**
+ * Bulk action: soft-delete variants (sets `deleted_at`). Catches that
+ * referenced these variants keep their FK link and continue to display
+ * the spec — only the pattern detail table hides the rows.
+ */
+export async function deleteVariantsAction(input: DeleteVariantsInput): Promise<{ ok: boolean; deleted?: number; error?: string }> {
+  if (input.variant_ids.length === 0) return { ok: false, error: "No variants selected." };
+  const result = await softDeleteVariants(input.variant_ids);
+  if (result.error) return { ok: false, error: result.error };
+  if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
+  revalidatePath(`/flies/boxes`, "layout");
+  return { ok: true, deleted: result.deleted };
 }

@@ -94,6 +94,20 @@ export async function PATCH(req: NextRequest) {
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
   if ("total_capacity" in body) updates.total_capacity = body.total_capacity ?? null;
 
+  // Promoting a box to default: unset the previous default first so we don't
+  // end up with two. (The user can also flip the current default off without
+  // designating a replacement; we don't enforce always-one-default here.)
+  if (body.is_default === true) {
+    updates.is_default = true;
+    await supabase
+      .from("fly_boxes")
+      .update({ is_default: false })
+      .eq("user_id", user.id)
+      .neq("id", id);
+  } else if (body.is_default === false) {
+    updates.is_default = false;
+  }
+
   const { data, error } = await supabase
     .from("fly_boxes")
     .update(updates)
