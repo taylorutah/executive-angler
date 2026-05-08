@@ -21,6 +21,28 @@ export type FlyVisibility = "private" | "shared" | "public";
 export type BeadMaterial = "tungsten" | "brass" | "glass" | "none";
 export type TieNextStatus = "none" | "wanted" | "at_vise" | "done";
 
+/** Tier of a fly_box (kill / support / archive / custom). Source of truth lives
+ *  with the table schema in supabase/migrations/20260508_fly_boxes.sql. */
+export type FlyBoxTier = "kill" | "support" | "archive" | "custom";
+
+/** A user's fly_box row — the named tiered container. Mirrors the runtime
+ *  type in src/lib/db/fly-v2.ts (server-only module); duplicated here so
+ *  client components can `import type` without pulling server code. */
+export interface FlyBoxV2 {
+  id: string;
+  user_id: string;
+  name: string;
+  tier: FlyBoxTier;
+  description: string | null;
+  icon: string | null;
+  cover_image_url: string | null;
+  sort_order: number;
+  is_default: boolean;
+  total_capacity: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
 /** A fly recipe — canonical (library) or personal (user-authored or forked). */
 export interface Pattern {
   id: string;
