@@ -1,12 +1,13 @@
 "use client";
 /**
- * CatchLoggerEntry — banner + button + sheet, rendered above the legacy
- * Session detail content. Handles picking the active fly box and opening
- * the CatchLogger sheet.
+ * CatchLoggerEntry — banner + button + sheet + undo toast, rendered above
+ * the legacy Session detail content. Handles picking the active fly box,
+ * opening the CatchLogger sheet, and showing the Undo toast on success.
  */
 import { useState, useTransition } from "react";
 import { Box, Plus } from "lucide-react";
 import CatchLogger from "@/components/catch-logger/CatchLogger";
+import UndoToast, { type UndoToastInfo } from "@/components/catch-logger/UndoToast";
 import type { VariantRow } from "@/types/fly-v2";
 import { setActiveBoxAction } from "@/app/journal/[id]/actions";
 
@@ -38,6 +39,7 @@ export default function CatchLoggerEntry({
 }: CatchLoggerEntryProps) {
   const [open, setOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [toast, setToast] = useState<UndoToastInfo | null>(null);
   const [pending, startTransition] = useTransition();
 
   const pickBox = (boxId: string) => {
@@ -126,7 +128,10 @@ export default function CatchLoggerEntry({
         defaultSpecies={defaultSpecies}
         open={open}
         onClose={() => setOpen(false)}
+        onLogged={(info) => setToast(info)}
       />
+
+      <UndoToast sessionId={sessionId} info={toast} onDone={() => setToast(null)} />
     </div>
   );
 }

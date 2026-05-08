@@ -23,6 +23,13 @@ import { ChevronLeft, Repeat, Search } from "lucide-react";
 import type { VariantRow } from "@/types/fly-v2";
 import { logCatchAction } from "@/app/journal/[id]/actions";
 
+/** Light haptic on supported browsers (mobile Safari + Chrome Android). */
+function haptic() {
+  if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+    try { navigator.vibrate(15); } catch { /* noop */ }
+  }
+}
+
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   "https://qlasxtfbodyxbcuchvxz.supabase.co";
@@ -46,6 +53,8 @@ interface Props {
   /** Whether the sheet is open. */
   open: boolean;
   onClose: () => void;
+  /** Called after a successful log so the parent can show an Undo toast. */
+  onLogged?: (info: { catchId: string; flyName: string; size: string; species: string }) => void;
 }
 
 const COMMON_SPECIES = ["Rainbow", "Brown", "Cutthroat", "Brook", "Bluegill", "Bass"];
@@ -63,12 +72,14 @@ export default function CatchLogger({
   defaultSpecies = "",
   open,
   onClose,
+  onLogged,
 }: Props) {
   const [species, setSpecies] = useState(defaultSpecies || lastCatch?.species || "Rainbow");
   const [length, setLength] = useState<string>(
     lastCatch?.length_inches != null ? String(lastCatch.length_inches) : ""
   );
   const [filter, setFilter] = useState("");
+  const [lost, setLost] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [committingId, setCommittingId] = useState<string | null>(null);
@@ -94,12 +105,14 @@ export default function CatchLogger({
     setError(null);
     setCommittingId(variantId);
     const lengthN = length ? parseFloat(length) : undefined;
+    const variant = activeBoxVariants.find((v) => v.id === variantId);
     startTransition(async () => {
       const r = await logCatchAction({
         session_id: sessionId,
         variant_id: variantId,
         species: species.trim() || undefined,
         length_inches: lengthN && Number.isFinite(lengthN) ? lengthN : undefined,
+        lost,
       });
       setCommittingId(null);
       if (!r.ok) {
@@ -107,8 +120,16 @@ export default function CatchLogger({
         setTimeout(() => setError(null), 3000);
         return;
       }
-      // Soft reset: keep species/length so next catch is fast
+      haptic();
+      onLogged?.({
+        catchId: r.catchId ?? "",
+        flyName: variant?.pattern?.name ?? "fly",
+        size: variant?.size ?? "",
+        species: species.trim() || "fish",
+      });
+      // Soft reset: keep species/length so next catch is fast; clear "lost"
       setFilter("");
+      setLost(false);
       onClose();
     });
   };
@@ -164,6 +185,17 @@ export default function CatchLogger({
               />
             </div>
           </div>
+
+          {/* Lost-the-fly toggle */}
+          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+            <input
+              type="checkbox"
+              checked={lost}
+              onChange={(e) => setLost(e.target.checked)}
+              className="h-3.5 w-3.5 cursor-pointer accent-[#E8923A]"
+            />
+            <span>I lost the fly on this catch (decrement stock)</span>
+          </label>
 
           {/* Repeat last fly */}
           {lastCatch?.variant_id && (
