@@ -3,11 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Check, Smartphone, Activity, BarChart3, Bug, Droplets,
-  BookOpen, Map, Wrench, Search as SearchIcon, Sparkles
+  Wrench, Search as SearchIcon, Sparkles
 } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
-import { getFeaturedArticles } from "@/lib/db";
 import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -44,9 +43,7 @@ const PILLAR_FEATURES = [
   { icon: BarChart3, text: "Insights from your catch history — best flies, peak hours, conditions" },
 ];
 
-export default async function HomePage() {
-  const featuredArticles = await getFeaturedArticles().then((a) => a.slice(0, 3));
-
+export default function HomePage() {
   return (
     <>
       {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
@@ -337,78 +334,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. DISCOVER — Directory ──────────────────────────────────── */}
-      <section className="bg-[#161B22] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollAnimation>
-            <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
-              Discover
-            </h2>
-            <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
-              Destinations, lodges, guides, fly shops, species, and expert resources.
-            </p>
-          </ScrollAnimation>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { icon: Map, label: "Destinations", count: "30", href: "/destinations" },
-              { icon: Droplets, label: "Rivers", count: "200+", href: "/rivers" },
-              { icon: Bug, label: "Species", count: "35", href: "/species" },
-              { icon: "🏨", label: "Lodges", count: "32", href: "/lodges" },
-              { icon: "🎣", label: "Guides", count: "31", href: "/guides" },
-              { icon: "🏪", label: "Fly Shops", count: "27", href: "/fly-shops" },
-            ].map((item, i) => (
-              <ScrollAnimation key={item.label} delay={i * 0.05}>
-                <Link href={item.href} className="group block bg-[#1F2937] border border-[#21262D] rounded-xl p-4 hover:border-[#6E7681] transition-colors text-center">
-                  {typeof item.icon === "string" ? (
-                    <span className="text-2xl mb-2 block">{item.icon}</span>
-                  ) : (
-                    <item.icon className="h-6 w-6 mx-auto mb-2 text-[#0BA5C7]" strokeWidth={1.5} />
-                  )}
-                  <p className="text-[#F0F6FC] text-sm font-semibold group-hover:text-[#E8923A] transition-colors">{item.label}</p>
-                  <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs">{item.count}</p>
-                </Link>
-              </ScrollAnimation>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 7. ARTICLES ──────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollAnimation>
-            <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
-              From the Water
-            </h2>
-            <p className="text-[#A8B2BD] text-center mb-12 max-w-2xl mx-auto">
-              Dispatches, technique, and destination guides from serious anglers.
-            </p>
-          </ScrollAnimation>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredArticles.map((article, i) => (
-              <ScrollAnimation key={article.id} delay={i * 0.1}>
-                <Link href={`/articles/${article.slug}`} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden hover:border-[#6E7681] transition-colors">
-                  <div className="p-6">
-                    <div className="text-[#0BA5C7] text-xs uppercase tracking-wider mb-3 font-['IBM_Plex_Mono']">{article.category}</div>
-                    <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors mb-2 leading-tight">{article.title}</h3>
-                    <p className="text-[#A8B2BD] text-sm line-clamp-2 mb-4">{article.excerpt}</p>
-                    <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs">{article.readingTimeMinutes} min &bull; {article.author}</p>
-                  </div>
-                </Link>
-              </ScrollAnimation>
-            ))}
-          </div>
-          <ScrollAnimation delay={0.3}>
-            <div className="mt-10 text-center">
-              <Link href="/articles" className="inline-flex items-center gap-2 text-[#0BA5C7] hover:text-[#E8923A] font-medium transition-colors">
-                Read all articles &rarr;
-              </Link>
-            </div>
-          </ScrollAnimation>
-        </div>
-      </section>
-
-      {/* ── 8. FINAL CTA ─────────────────────────────────────────────── */}
+      {/* ── 6. FINAL CTA ─────────────────────────────────────────────── */}
       <section className="relative bg-[#0D1117] border-t border-[#21262D] py-24 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
         <div className="relative mx-auto max-w-3xl px-4 text-center">

@@ -5,20 +5,27 @@ const footerColumns = {
   Product: [
     { label: "Journal", href: "/journal" },
     { label: "Rivers", href: "/rivers" },
-    { label: "Fly Workbench", href: "/journal/flies" },
-    { label: "Fly Library", href: "/flies" },
-    { label: "Import & Export", href: "/journal/import" },
+    { label: "Flies", href: "/flies" },
+    { label: "Gear Locker", href: "/account/gear" },
+    { label: "Feed", href: "/feed" },
     { label: "Pricing", href: "/pricing" },
+    { label: "Import & Export", href: "/journal/import" },
   ],
-  Explore: [
+  Discover: [
     { label: "Destinations", href: "/destinations" },
     { label: "Species", href: "/species" },
+    { label: "Articles", href: "/articles" },
+    { label: "Techniques", href: "/articles?category=technique" },
+    { label: "Gear Reviews", href: "/articles?category=gear" },
+    { label: "Conservation", href: "/articles?category=conservation" },
+  ],
+  Directory: [
     { label: "Lodges", href: "/lodges" },
     { label: "Guides", href: "/guides" },
     { label: "Fly Shops", href: "/fly-shops" },
-    { label: "Articles", href: "/articles" },
+    { label: "Gear Catalog", href: "/gear" },
   ],
-  Resources: [
+  Company: [
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
     { label: "Search", href: "/search" },
@@ -34,9 +41,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#0D1117] text-[#A8B2BD] border-t border-[#21262D]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Brand Column */}
-          <div className="col-span-2 lg:col-span-4">
+          <div className="col-span-2 lg:col-span-3">
             <Link href="/" className="inline-block">
               <span className="text-[#F0F6FC] font-['DM_Serif_Display'] text-xl tracking-tight">
                 Executive Angler
@@ -111,7 +118,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link Columns */}
+          {/* Link Columns — 4 columns × 2 wide each = 8 cols, total 12 with brand */}
           {Object.entries(footerColumns).map(([title, links]) => (
             <div key={title} className="lg:col-span-2">
               <h3 className="text-[11px] font-semibold text-[#8B949E] uppercase tracking-[0.12em] mb-4">
@@ -133,7 +140,7 @@ export default function Footer() {
           ))}
 
           {/* Connect Column */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-1">
             <h3 className="text-[11px] font-semibold text-[#8B949E] uppercase tracking-[0.12em] mb-4">
               Connect
             </h3>

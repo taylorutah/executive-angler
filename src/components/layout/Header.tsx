@@ -5,90 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Menu, X, ChevronDown, Search, User, Heart, Package, Bell,
-  MessageSquare, Map, Mountain, Fish, Building2, Compass,
-  BookOpen, ShoppingBag, Newspaper, Bug, Wrench,
-  Plus, FishSymbol, Lightbulb, GitPullRequest, Sparkles, Home, Gift
+  Menu, X, Search, User, Heart, Bell,
+  MessageSquare, Bug, FishSymbol, Sparkles, Gift, Package
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
-
-/* ── Explore mega-menu sections ── */
-const EXPLORE_SECTIONS = [
-  {
-    title: "Destinations",
-    icon: Mountain,
-    links: [
-      { label: "Montana", href: "/destinations/montana" },
-      { label: "Wyoming", href: "/destinations/wyoming" },
-      { label: "Colorado", href: "/destinations/colorado" },
-      { label: "Idaho", href: "/destinations/idaho" },
-      { label: "Alaska", href: "/destinations/alaska" },
-      { label: "New Zealand", href: "/destinations/new-zealand" },
-    ],
-    viewAll: { label: "All Destinations", href: "/destinations" },
-  },
-  {
-    title: "Species",
-    icon: Fish,
-    links: [
-      { label: "Rainbow Trout", href: "/species/rainbow-trout" },
-      { label: "Brown Trout", href: "/species/brown-trout" },
-      { label: "Cutthroat Trout", href: "/species/cutthroat-trout" },
-      { label: "Brook Trout", href: "/species/brook-trout" },
-      { label: "Steelhead", href: "/species/steelhead" },
-    ],
-    viewAll: { label: "All Species", href: "/species" },
-  },
-  {
-    title: "Gear",
-    icon: ShoppingBag,
-    links: [
-      { label: "Fly Rods", href: "/gear/category/rod" },
-      { label: "Fly Reels", href: "/gear/category/reel" },
-      { label: "Waders", href: "/gear/category/waders" },
-      { label: "Sage", href: "/gear/sage" },
-      { label: "Orvis", href: "/gear/orvis" },
-      { label: "Simms", href: "/gear/simms" },
-    ],
-    viewAll: { label: "All Brands", href: "/gear" },
-  },
-  {
-    title: "Directory",
-    icon: Building2,
-    links: [
-      { label: "Lodges", href: "/lodges" },
-      { label: "Guides", href: "/guides" },
-      { label: "Fly Shops", href: "/fly-shops" },
-    ],
-  },
-  {
-    title: "Learn",
-    icon: Newspaper,
-    links: [
-      { label: "All Articles", href: "/articles" },
-      { label: "Techniques", href: "/articles?category=technique" },
-      { label: "Gear Reviews", href: "/articles?category=gear" },
-      { label: "Conservation", href: "/articles?category=conservation" },
-    ],
-  },
-];
+import { Plus } from "lucide-react";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
-  const exploreRef = useRef<HTMLDivElement>(null);
-  const exploreTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  useEffect(() => { setMobileOpen(false); setPlusOpen(false); setExploreOpen(false); }, [pathname]);
+  useEffect(() => { setMobileOpen(false); setPlusOpen(false); }, [pathname]);
 
   // Cmd+K shortcut
   useEffect(() => {
@@ -106,14 +40,12 @@ export default function Header() {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (plusRef.current && !plusRef.current.contains(e.target as Node)) setPlusOpen(false);
-      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) setExploreOpen(false);
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
-  const isExploreActive = ["/destinations", "/species", "/gear", "/lodges", "/guides", "/fly-shops", "/articles"].some(p => pathname.startsWith(p));
 
   const navLinkClass = (active: boolean) =>
     `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active ? "text-[#F0F6FC] bg-[#F0F6FC]/5" : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#F0F6FC]/5"}`;
@@ -125,7 +57,7 @@ export default function Header() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-14 items-center justify-between">
               {/* Logo */}
-              <Link href="/" className="flex-shrink-0 cursor-pointer select-none">
+              <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 cursor-pointer select-none">
                 <Image
                   src="/images/logo-horizontal-white.svg"
                   alt="Executive Angler"
@@ -149,11 +81,6 @@ export default function Header() {
               {/* ── Desktop Nav ── */}
               <nav className="hidden lg:flex items-center gap-0.5">
                 {user && (
-                  <Link href="/dashboard" className={navLinkClass(isActive("/dashboard"))}>
-                    Home
-                  </Link>
-                )}
-                {user && (
                   <Link href="/journal" className={navLinkClass(isActive("/journal") && !pathname.startsWith("/journal/flies"))}>
                     Journal
                   </Link>
@@ -166,72 +93,21 @@ export default function Header() {
                   className={navLinkClass(
                     pathname === "/flies" ||
                       pathname.startsWith("/flies/boxes") ||
-                      (pathname.startsWith("/flies/library") && !user)
+                      pathname.startsWith("/flies/library") ||
+                      pathname.startsWith("/flies/category") ||
+                      pathname.startsWith("/flies/materials")
                   )}
                 >
                   Flies
                 </Link>
-
-                {/* Explore dropdown */}
-                <div
-                  ref={exploreRef}
-                  className="relative"
-                  onMouseEnter={() => { clearTimeout(exploreTimeout.current); setExploreOpen(true); }}
-                  onMouseLeave={() => { exploreTimeout.current = setTimeout(() => setExploreOpen(false), 200); }}
-                >
-                  <button
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      isExploreActive || exploreOpen
-                        ? "text-[#F0F6FC] bg-[#F0F6FC]/5"
-                        : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#F0F6FC]/5"
-                    }`}
-                    onClick={() => setExploreOpen(!exploreOpen)}
+                {user && (
+                  <Link
+                    href="/account/gear"
+                    className={navLinkClass(isActive("/account/gear") || pathname === "/gear")}
                   >
-                    Explore
-                    <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${exploreOpen ? "rotate-180" : ""}`} />
-                  </button>
-
-                  {exploreOpen && (
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
-                      <div className="bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden w-[760px]">
-                        <div className="h-0.5 bg-gradient-to-r from-[#E8923A] via-[#0BA5C7] to-[#E8923A]" />
-                        <div className="grid grid-cols-5 gap-1 p-4">
-                          {EXPLORE_SECTIONS.map((section) => {
-                            const Icon = section.icon;
-                            return (
-                              <div key={section.title} className="flex flex-col">
-                                <div className="flex items-center gap-1.5 mb-2">
-                                  <Icon className="h-3.5 w-3.5 text-[#E8923A]" />
-                                  <span className="text-[10px] font-bold text-[#6E7681] uppercase tracking-widest">{section.title}</span>
-                                </div>
-                                <div className="space-y-0.5">
-                                  {section.links.map((link) => (
-                                    <Link
-                                      key={link.href}
-                                      href={link.href}
-                                      className="block px-2 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
-                                    >
-                                      {link.label}
-                                    </Link>
-                                  ))}
-                                </div>
-                                {section.viewAll && (
-                                  <Link
-                                    href={section.viewAll.href}
-                                    className="mt-auto pt-2 block px-2 py-1 text-xs font-medium text-[#0BA5C7] hover:text-[#F0F6FC] transition-colors"
-                                  >
-                                    {section.viewAll.label} &rarr;
-                                  </Link>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
+                    Gear
+                  </Link>
+                )}
                 {user && (
                   <Link href="/feed" className={navLinkClass(isActive("/feed"))}>
                     Feed
@@ -359,17 +235,6 @@ export default function Header() {
               {/* Core nav */}
               {user && (
                 <Link
-                  href="/dashboard"
-                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/dashboard") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  <Home className="h-5 w-5" />
-                  Home
-                </Link>
-              )}
-              {user && (
-                <Link
                   href="/journal"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
                     isActive("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
@@ -389,13 +254,24 @@ export default function Header() {
               <Link
                 href={user ? "/flies" : "/flies/library"}
                 className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                  pathname === "/flies" || pathname.startsWith("/flies/boxes") || (pathname.startsWith("/flies/library") && !user)
+                  pathname === "/flies" || pathname.startsWith("/flies/")
                     ? "bg-[#0D1117] text-[#F0F6FC]"
                     : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
                 }`}
               >
                 Flies
               </Link>
+              {user && (
+                <Link
+                  href="/account/gear"
+                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    isActive("/account/gear") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                  }`}
+                >
+                  <Package className="h-5 w-5" />
+                  Gear
+                </Link>
+              )}
               {user && (
                 <Link
                   href="/feed"
@@ -413,53 +289,6 @@ export default function Header() {
                   Pro
                 </Link>
               )}
-
-              {/* Explore accordion */}
-              <div className="mt-4 pt-4 border-t border-[#21262D]">
-                <button
-                  onClick={() => setMobileExploreOpen(!mobileExploreOpen)}
-                  className="flex items-center justify-between w-full px-4 py-3 text-base font-medium text-[#E8923A] rounded-lg hover:bg-[#0D1117] transition-colors"
-                >
-                  <span className="flex items-center gap-2">
-                    <Compass className="h-5 w-5" />
-                    Explore
-                  </span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${mobileExploreOpen ? "rotate-180" : ""}`} />
-                </button>
-
-                {mobileExploreOpen && (
-                  <div className="mt-1 space-y-3 pb-2">
-                    {EXPLORE_SECTIONS.map((section) => {
-                      const Icon = section.icon;
-                      return (
-                        <div key={section.title} className="px-4">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Icon className="h-3.5 w-3.5 text-[#E8923A]" />
-                            <span className="text-[10px] font-bold text-[#6E7681] uppercase tracking-widest">{section.title}</span>
-                          </div>
-                          {section.links.map((link) => (
-                            <Link
-                              key={link.href + link.label}
-                              href={link.href}
-                              className="block px-3 py-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] rounded transition-colors"
-                            >
-                              {link.label}
-                            </Link>
-                          ))}
-                          {section.viewAll && (
-                            <Link
-                              href={section.viewAll.href}
-                              className="block px-3 py-1.5 text-xs font-medium text-[#0BA5C7] hover:text-[#F0F6FC] transition-colors"
-                            >
-                              {section.viewAll.label} &rarr;
-                            </Link>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
 
               {/* Quick actions — mobile */}
               {user && (
