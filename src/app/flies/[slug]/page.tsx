@@ -33,7 +33,7 @@ import {
 } from "@/lib/flies/resolveFlyForViewer";
 import CustomFlyImageDropzone from "@/components/flies/CustomFlyImageDropzone";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 const CATEGORY_LABELS: Record<string, string> = {
   dry: "Dry Flies",
