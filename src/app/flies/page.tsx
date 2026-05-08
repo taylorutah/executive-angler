@@ -11,7 +11,7 @@
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { listMyBoxes } from "@/lib/db/fly-v2";
+import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
 import {
   getMyPatterns,
   getMyFlyBox,
@@ -51,13 +51,14 @@ export default async function FliesHubPage({
 
   const { tab } = await searchParams;
 
-  const [boxes, myPatterns, flyBoxEntries, tieNext, shared, counts] = await Promise.all([
-    listMyBoxes(),
+  const boxes = await listMyBoxes();
+  const [myPatterns, flyBoxEntries, tieNext, shared, counts, boxStats] = await Promise.all([
     getMyPatterns(user.id),
     getMyFlyBox(user.id),
     getTieNextQueue(user.id),
     getSharedWithMe(user.id),
     getMyFliesCounts(user.id),
+    listBoxStats(boxes.map((b) => b.id)),
   ]);
 
   const { data: canonicalNamesData } = await supabase
@@ -72,6 +73,7 @@ export default async function FliesHubPage({
       initialTab={tab}
       tiesOwnFlies={tiesOwnFlies}
       boxes={boxes}
+      boxStats={boxStats}
       myPatterns={myPatterns}
       flyBoxEntries={flyBoxEntries}
       tieNextPatterns={tieNext.patterns}

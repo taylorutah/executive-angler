@@ -11,7 +11,7 @@ import {
   Share2,
   Plus,
 } from "lucide-react";
-import type { FlyBoxV2 } from "@/lib/db/fly-v2";
+import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
 import TieNextKanban from "@/components/flies/TieNextKanban";
@@ -27,6 +27,7 @@ interface Props {
   initialTab?: string;
   tiesOwnFlies: boolean;
   boxes: FlyBoxV2[];
+  boxStats: Record<string, BoxStats>;
   myPatterns: FlyPattern[];
   flyBoxEntries: FlyBoxEntry[];
   tieNextPatterns: FlyPattern[];
@@ -40,6 +41,7 @@ export default function FliesHubClient({
   initialTab,
   tiesOwnFlies,
   boxes,
+  boxStats,
   myPatterns,
   flyBoxEntries,
   tieNextPatterns,
@@ -153,7 +155,7 @@ export default function FliesHubClient({
         </div>
 
         {tab === "boxes" && (
-          <BoxesManager initialBoxes={boxes} />
+          <BoxesManager initialBoxes={boxes} initialStats={boxStats} />
         )}
         {tab === "patterns" && (
           <PatternsTab

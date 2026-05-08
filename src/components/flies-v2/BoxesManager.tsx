@@ -11,7 +11,36 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X } from "lucide-react";
-import type { FlyBoxV2, FlyBoxTier } from "@/lib/db/fly-v2";
+import type { FlyBoxV2, FlyBoxTier, BoxStats } from "@/lib/db/fly-v2";
+
+const CATEGORY_SHORT: Record<string, string> = {
+  dry: "Dry",
+  nymph: "Nymph",
+  streamer: "Streamer",
+  emerger: "Emerger",
+  wet: "Wet",
+  terrestrial: "Terres.",
+  egg: "Egg",
+  midge: "Midge",
+  other: "Other",
+};
+
+function BoxStatLine({ stats }: { stats?: BoxStats }) {
+  if (!stats || stats.total === 0) return null;
+  const top = Object.entries(stats.byCategory)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+  return (
+    <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[#484F58]">
+      <span className="text-[#6E7681]">{stats.total} flies</span>
+      {top.map(([cat, count]) => (
+        <span key={cat}>
+          {count} {CATEGORY_SHORT[cat] ?? cat}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 const TIER_LABELS: Record<FlyBoxTier, string> = {
   kill: "Kill",
@@ -46,9 +75,16 @@ const EMPTY_FORM: FormState = {
   total_capacity: "",
 };
 
-export default function BoxesManager({ initialBoxes }: { initialBoxes: FlyBoxV2[] }) {
+export default function BoxesManager({
+  initialBoxes,
+  initialStats,
+}: {
+  initialBoxes: FlyBoxV2[];
+  initialStats: Record<string, BoxStats>;
+}) {
   const router = useRouter();
   const [boxes, setBoxes] = useState<FlyBoxV2[]>(initialBoxes);
+  const [stats] = useState<Record<string, BoxStats>>(initialStats);
   const [editor, setEditor] = useState<EditorMode>({ kind: "closed" });
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
@@ -235,6 +271,7 @@ export default function BoxesManager({ initialBoxes }: { initialBoxes: FlyBoxV2[
                               {b.description}
                             </p>
                           )}
+                          <BoxStatLine stats={stats[b.id]} />
                         </div>
                       </div>
                     </Link>

@@ -360,6 +360,53 @@ export async function getBoxById(id: string): Promise<FlyBoxV2 | null> {
   return (data ?? null) as FlyBoxV2 | null;
 }
 
+export interface BoxStats {
+  total: number;
+  byCategory: Record<string, number>;
+}
+
+/** Variant counts per box, grouped by pattern category. 3 queries total (no N+1). */
+export async function listBoxStats(boxIds: string[]): Promise<Record<string, BoxStats>> {
+  if (boxIds.length === 0) return {};
+  const supabase = await createClient();
+
+  const { data: memberships } = await supabase
+    .from("fly_variant_in_box")
+    .select("box_id, variant_id")
+    .in("box_id", boxIds);
+  if (!memberships || memberships.length === 0) return {};
+
+  const variantIds = Array.from(new Set(memberships.map((m: { variant_id: string }) => m.variant_id)));
+  const { data: variantRows } = await supabase
+    .from("fly_variants")
+    .select("id, pattern_id")
+    .in("id", variantIds);
+  const variantToPattern = new Map<string, string>();
+  for (const v of (variantRows ?? []) as { id: string; pattern_id: string }[]) {
+    variantToPattern.set(v.id, v.pattern_id);
+  }
+
+  const patternIds = Array.from(new Set(Array.from(variantToPattern.values())));
+  const { data: patternRows } = await supabase
+    .from("fly_patterns_v2")
+    .select("id, category")
+    .in("id", patternIds);
+  const patternCategory = new Map<string, string>();
+  for (const p of (patternRows ?? []) as { id: string; category: string | null }[]) {
+    if (p.category) patternCategory.set(p.id, p.category);
+  }
+
+  const result: Record<string, BoxStats> = {};
+  for (const m of memberships as { box_id: string; variant_id: string }[]) {
+    if (!result[m.box_id]) result[m.box_id] = { total: 0, byCategory: {} };
+    result[m.box_id].total++;
+    const pid = variantToPattern.get(m.variant_id);
+    const cat = pid ? (patternCategory.get(pid) ?? "other") : "other";
+    result[m.box_id].byCategory[cat] = (result[m.box_id].byCategory[cat] ?? 0) + 1;
+  }
+  return result;
+}
+
 /** Get the user's default fly_box id (creates one named "My Fly Box" if missing). */
 export async function getDefaultFlyBoxId(): Promise<string | null> {
   const supabase = await createClient();
