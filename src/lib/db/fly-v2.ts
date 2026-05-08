@@ -386,7 +386,7 @@ export async function listBoxStats(boxIds: string[]): Promise<Record<string, Box
 
   const { data: memberships } = await supabase
     .from("fly_variant_in_box")
-    .select("box_id, variant_id")
+    .select("box_id, variant_id, quantity")
     .in("box_id", boxIds);
   if (!memberships || memberships.length === 0) return {};
 
@@ -411,12 +411,13 @@ export async function listBoxStats(boxIds: string[]): Promise<Record<string, Box
   }
 
   const result: Record<string, BoxStats> = {};
-  for (const m of memberships as { box_id: string; variant_id: string }[]) {
+  for (const m of memberships as { box_id: string; variant_id: string; quantity?: number }[]) {
+    const qty = m.quantity ?? 1;
     if (!result[m.box_id]) result[m.box_id] = { total: 0, byCategory: {} };
-    result[m.box_id].total++;
+    result[m.box_id].total += qty;
     const pid = variantToPattern.get(m.variant_id);
     const cat = pid ? (patternCategory.get(pid) ?? "other") : "other";
-    result[m.box_id].byCategory[cat] = (result[m.box_id].byCategory[cat] ?? 0) + 1;
+    result[m.box_id].byCategory[cat] = (result[m.box_id].byCategory[cat] ?? 0) + qty;
   }
   return result;
 }
