@@ -231,7 +231,7 @@ export default function CatchLogger({
             <div className="py-12 text-center text-sm text-[#A8B2BD]">
               <p>No variants in your active box.</p>
               <p className="text-xs text-[#6E7681] mt-1">
-                <Link href="/flies/boxes" className="text-[#0BA5C7] hover:text-[#E8923A]">
+                <Link href="/flies?tab=boxes" className="text-[#0BA5C7] hover:text-[#E8923A]">
                   Pick a box
                 </Link>{" "}
                 or{" "}

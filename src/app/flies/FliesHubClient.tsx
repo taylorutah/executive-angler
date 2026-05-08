@@ -11,14 +11,14 @@ import {
   Share2,
   Plus,
 } from "lucide-react";
-import type { FlyBoxWithStats } from "@/lib/db/fly-boxes";
+import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
 import TieNextKanban from "@/components/flies/TieNextKanban";
 import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 import HelpHint from "@/components/ui/HelpHint";
 import PatternsTab from "./tabs/PatternsTab";
-import BoxesTab from "./tabs/BoxesTab";
+import BoxesManager from "@/components/flies-v2/BoxesManager";
 import SharedPanel from "./tabs/SharedPanel";
 
 type Tab = "boxes" | "patterns" | "workbench" | "tie-next" | "shared";
@@ -26,7 +26,7 @@ type Tab = "boxes" | "patterns" | "workbench" | "tie-next" | "shared";
 interface Props {
   initialTab?: string;
   tiesOwnFlies: boolean;
-  boxes: FlyBoxWithStats[];
+  boxes: FlyBoxV2[];
   myPatterns: FlyPattern[];
   flyBoxEntries: FlyBoxEntry[];
   tieNextPatterns: FlyPattern[];
@@ -153,7 +153,7 @@ export default function FliesHubClient({
         </div>
 
         {tab === "boxes" && (
-          <BoxesTab boxes={boxes} />
+          <BoxesManager initialBoxes={boxes} />
         )}
         {tab === "patterns" && (
           <PatternsTab

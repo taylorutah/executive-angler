@@ -38,7 +38,7 @@ export default async function BoxDetailV2({ params }: Props) {
       <header className="border-b border-[#21262D] bg-[#161B22]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
           <Link
-            href="/flies/boxes"
+            href="/flies?tab=boxes"
             className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#0BA5C7] transition-colors mb-2"
           >
             <ChevronLeft className="h-3 w-3" /> All boxes

@@ -11,7 +11,7 @@
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { getMyBoxes } from "@/lib/db/fly-boxes";
+import { listMyBoxes } from "@/lib/db/fly-v2";
 import {
   getMyPatterns,
   getMyFlyBox,
@@ -52,7 +52,7 @@ export default async function FliesHubPage({
   const { tab } = await searchParams;
 
   const [boxes, myPatterns, flyBoxEntries, tieNext, shared, counts] = await Promise.all([
-    getMyBoxes(user.id),
+    listMyBoxes(),
     getMyPatterns(user.id),
     getMyFlyBox(user.id),
     getTieNextQueue(user.id),
