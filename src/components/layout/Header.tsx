@@ -81,13 +81,15 @@ export default function Header() {
               {/* ── Desktop Nav ── */}
               <nav className="hidden lg:flex items-center gap-0.5">
                 {user && (
+                  <Link href="/dashboard" className={navLinkClass(isActive("/dashboard"))}>
+                    Dashboard
+                  </Link>
+                )}
+                {user && (
                   <Link href="/journal" className={navLinkClass(isActive("/journal") && !pathname.startsWith("/journal/flies"))}>
                     Journal
                   </Link>
                 )}
-                <Link href="/rivers" className={navLinkClass(isActive("/rivers"))}>
-                  Explore
-                </Link>
                 <Link
                   href={user ? "/flies" : "/flies/library"}
                   className={navLinkClass(
@@ -235,6 +237,16 @@ export default function Header() {
               {/* Core nav */}
               {user && (
                 <Link
+                  href="/dashboard"
+                  className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    isActive("/dashboard") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              )}
+              {user && (
+                <Link
                   href="/journal"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
                     isActive("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
@@ -243,14 +255,6 @@ export default function Header() {
                   Journal
                 </Link>
               )}
-              <Link
-                href="/rivers"
-                className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                  isActive("/rivers") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
-                }`}
-              >
-                Explore
-              </Link>
               <Link
                 href={user ? "/flies" : "/flies/library"}
                 className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
