@@ -470,14 +470,16 @@ export async function upsertVariantStock(input: {
   return data as VariantStock;
 }
 
-/** Add a variant to one or more boxes (bulk). */
+/** Add a variant to one or more boxes (bulk). Returns null on auth/db failure,
+ *  number of rows touched on success (0 means all variants already in the box). */
 export async function addVariantsToBox(
   boxId: string,
   variantIds: string[],
-): Promise<number> {
+): Promise<number | null> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || variantIds.length === 0) return 0;
+  if (!user) return null;
+  if (variantIds.length === 0) return 0;
 
   const rows = variantIds.map<VariantInBox>((vid) => ({
     box_id: boxId,
@@ -491,7 +493,7 @@ export async function addVariantsToBox(
     .upsert(rows, { onConflict: "box_id,variant_id", count: "exact" });
   if (error) {
     console.error("[addVariantsToBox]", error);
-    return 0;
+    return null;
   }
   return count ?? variantIds.length;
 }

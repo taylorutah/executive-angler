@@ -189,11 +189,19 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
                 label: "Add to my box",
                 variant: "primary" as const,
                 onClick: async (rows: VariantRow[]) => {
-                  await addToBoxAction({
+                  const result = await addToBoxAction({
                     pattern_slug: patternSlug,
                     box_id: defaultBoxId,
                     variant_ids: rows.map((r) => r.id),
                   });
+                  if (!result.ok) {
+                    alert(result.error ?? "Failed to add to box.");
+                  } else if (result.added === 0) {
+                    alert("Already in your default box.");
+                  } else {
+                    const n = result.added ?? rows.length;
+                    alert(`Added ${n} variant${n === 1 ? "" : "s"} to your default box.`);
+                  }
                 },
               },
             ]
@@ -209,8 +217,8 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
               pattern_slug: patternSlug,
               variant_ids: rows.map((r) => r.id),
             });
-            if (!result.ok && result.error) {
-              alert(result.error);
+            if (!result.ok) {
+              alert(result.error ?? "Failed to delete.");
             }
           },
         },

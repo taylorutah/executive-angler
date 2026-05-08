@@ -164,7 +164,7 @@ export interface AddToBoxInput {
 export async function addToBoxAction(input: AddToBoxInput): Promise<{ ok: boolean; added?: number; error?: string }> {
   if (input.variant_ids.length === 0) return { ok: false, error: "No variants selected." };
   const added = await addVariantsToBox(input.box_id, input.variant_ids);
-  if (added === 0) return { ok: false, error: "Failed to add variants. Are you signed in?" };
+  if (added === null) return { ok: false, error: "Failed to add variants. Are you signed in?" };
   revalidatePath(`/flies/${input.pattern_slug}`);
   revalidatePath(`/flies/boxes`);
   return { ok: true, added };
