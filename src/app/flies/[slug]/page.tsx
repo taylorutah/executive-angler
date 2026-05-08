@@ -14,7 +14,7 @@ import {
   getCanonicalPatternBySlug,
   listCanonicalPatterns,
   listVariantRowsForPattern,
-  getDefaultFlyBoxId,
+  listMyBoxes,
 } from "@/lib/db/fly-v2";
 import { SITE_URL } from "@/lib/constants";
 import JsonLd from "@/components/seo/JsonLd";
@@ -59,9 +59,9 @@ export default async function PatternDetail({ params }: Props) {
   const pattern = await getCanonicalPatternBySlug(slug);
   if (!pattern) notFound();
 
-  const [variants, defaultBoxId] = await Promise.all([
+  const [variants, userBoxes] = await Promise.all([
     listVariantRowsForPattern(pattern.id),
-    getDefaultFlyBoxId(),
+    listMyBoxes(),
   ]);
 
   return (
@@ -135,7 +135,7 @@ export default async function PatternDetail({ params }: Props) {
           <VariantTable
             variants={variants}
             patternSlug={pattern.slug ?? ""}
-            defaultBoxId={defaultBoxId}
+            userBoxes={userBoxes}
           />
         </div>
       </section>

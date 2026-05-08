@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
 import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
+import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
@@ -22,8 +23,8 @@ interface Props {
   variants: VariantRow[];
   /** Pattern slug — needed by stock-update action for revalidation. */
   patternSlug: string;
-  /** User's default fly_box id (used by "Add to Kill Box" bulk action). null = signed out. */
-  defaultBoxId: string | null;
+  /** User's fly boxes. Empty array = signed out. */
+  userBoxes: FlyBoxV2[];
 }
 
 function formatBead(row: VariantRow): string {
@@ -46,7 +47,7 @@ function formatLastUsed(row: VariantRow): string {
   return `${Math.floor(days / 365)}y ago`;
 }
 
-export default function VariantTable({ variants, patternSlug, defaultBoxId }: Props) {
+export default function VariantTable({ variants, patternSlug, userBoxes }: Props) {
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
@@ -62,6 +63,9 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
 
   // Edit modal — bulk action only opens when exactly one row is selected.
   const [editing, setEditing] = useState<VariantRow | null>(null);
+
+  // Box-picker state — pending rows waiting for the user to choose a box.
+  const [boxPicker, setBoxPicker] = useState<{ rows: VariantRow[] } | null>(null);
 
   const saveStock = (variantId: string, field: "tied_count" | "bought_count" | "target_count") =>
     (next: number) => updateStockAction({
@@ -217,6 +221,30 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
           onSaved={() => showToast("Variant saved.")}
         />
       )}
+      {boxPicker && (
+        <BoxPickerDialog
+          boxes={userBoxes}
+          variantCount={boxPicker.rows.length}
+          onSelect={async (boxId) => {
+            const rows = boxPicker.rows;
+            setBoxPicker(null);
+            const result = await addToBoxAction({
+              pattern_slug: patternSlug,
+              box_id: boxId,
+              variant_ids: rows.map((r) => r.id),
+            });
+            if (!result.ok) {
+              showToast(result.error ?? "Failed to add to box.", "error");
+            } else if (result.added === 0) {
+              showToast("Already in that box.");
+            } else {
+              const n = result.added ?? rows.length;
+              showToast(`Added ${n} variant${n === 1 ? "" : "s"} to box.`);
+            }
+          }}
+          onCancel={() => setBoxPicker(null)}
+        />
+      )}
     <DataTable<VariantRow>
       rows={variants}
       columns={columns}
@@ -235,25 +263,13 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
             setEditing(rows[0]);
           },
         },
-        ...(defaultBoxId
+        ...(userBoxes.length > 0
           ? [
               {
                 label: "Add to my box",
                 variant: "primary" as const,
-                onClick: async (rows: VariantRow[]) => {
-                  const result = await addToBoxAction({
-                    pattern_slug: patternSlug,
-                    box_id: defaultBoxId,
-                    variant_ids: rows.map((r) => r.id),
-                  });
-                  if (!result.ok) {
-                    showToast(result.error ?? "Failed to add to box.", "error");
-                  } else if (result.added === 0) {
-                    showToast("Already in your default box.");
-                  } else {
-                    const n = result.added ?? rows.length;
-                    showToast(`Added ${n} variant${n === 1 ? "" : "s"} to your default box.`);
-                  }
+                onClick: (rows: VariantRow[]) => {
+                  setBoxPicker({ rows });
                 },
               },
             ]
@@ -289,5 +305,64 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
       }
     />
     </>
+  );
+}
+
+function BoxPickerDialog({
+  boxes,
+  variantCount,
+  onSelect,
+  onCancel,
+}: {
+  boxes: FlyBoxV2[];
+  variantCount: number;
+  onSelect: (boxId: string) => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      onClick={onCancel}
+    >
+      <div
+        className="bg-[#161B22] border border-[#30363D] rounded-xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="px-5 py-4 border-b border-[#21262D]">
+          <h2 className="text-[#F0F6FC] font-semibold text-sm">
+            Add {variantCount === 1 ? "variant" : `${variantCount} variants`} to box
+          </h2>
+          <p className="text-[#6E7681] text-xs mt-0.5">Choose which box to add to</p>
+        </div>
+        <ul className="max-h-72 overflow-y-auto divide-y divide-[#21262D]">
+          {boxes.map((box) => (
+            <li key={box.id}>
+              <button
+                className="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-[#21262D] transition-colors"
+                onClick={() => onSelect(box.id)}
+              >
+                <span className="flex-1 min-w-0">
+                  <span className="block text-[#F0F6FC] text-sm truncate">{box.name}</span>
+                  {box.description && (
+                    <span className="block text-[#6E7681] text-xs truncate">{box.description}</span>
+                  )}
+                </span>
+                <span className="text-[#484F58] text-xs font-['IBM_Plex_Mono'] shrink-0">
+                  {box.tier}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="px-5 py-3 border-t border-[#21262D]">
+          <button
+            className="w-full text-center text-sm text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

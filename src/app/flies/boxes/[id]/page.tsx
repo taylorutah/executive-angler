@@ -8,7 +8,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getBoxById, listVariantsInBox } from "@/lib/db/fly-v2";
+import { getBoxById, listVariantsInBox, listMyBoxes } from "@/lib/db/fly-v2";
 import VariantTable from "@/components/flies-v2/VariantTable";
 
 interface Props {
@@ -31,7 +31,10 @@ export default async function BoxDetailV2({ params }: Props) {
   const box = await getBoxById(id);
   if (!box) notFound();
 
-  const variants = await listVariantsInBox(id);
+  const [variants, userBoxes] = await Promise.all([
+    listVariantsInBox(id),
+    listMyBoxes(),
+  ]);
 
   return (
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
@@ -72,7 +75,7 @@ export default async function BoxDetailV2({ params }: Props) {
           <VariantTable
             variants={variants}
             patternSlug=""
-            defaultBoxId={null}
+            userBoxes={userBoxes}
           />
         </div>
         {variants.length === 0 && (
