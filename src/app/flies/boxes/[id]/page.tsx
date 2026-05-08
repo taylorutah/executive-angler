@@ -76,6 +76,7 @@ export default async function BoxDetailV2({ params }: Props) {
             variants={variants}
             patternSlug=""
             userBoxes={userBoxes}
+            boxId={id}
           />
         </div>
         {variants.length === 0 && (

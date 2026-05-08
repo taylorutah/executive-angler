@@ -13,6 +13,7 @@ import {
   addVariantsToBox,
   softDeleteVariants,
   updateVariant,
+  updateBoxVariantQuantity,
 } from "@/lib/db/fly-v2";
 
 export interface UpdateStockInput {
@@ -226,4 +227,27 @@ export async function deleteVariantsAction(input: DeleteVariantsInput): Promise<
   if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
   revalidatePath(`/flies/boxes`, "layout");
   return { ok: true, deleted: result.deleted };
+}
+
+export interface UpdateBoxQuantityInput {
+  box_id: string;
+  variant_id: string;
+  quantity: number;
+}
+
+/** Update how many physical flies of a variant are in a specific box. */
+export async function updateBoxQuantityAction(
+  input: UpdateBoxQuantityInput,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!Number.isFinite(input.quantity) || input.quantity < 0) {
+    return { ok: false, error: "Quantity must be a non-negative number." };
+  }
+  const ok = await updateBoxVariantQuantity(
+    input.box_id,
+    input.variant_id,
+    Math.floor(input.quantity),
+  );
+  if (!ok) return { ok: false, error: "Failed to update quantity." };
+  revalidatePath(`/flies/boxes/${input.box_id}`);
+  return { ok: true };
 }

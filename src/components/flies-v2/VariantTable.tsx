@@ -17,7 +17,7 @@ import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
-import { updateStockAction, addToBoxAction, deleteVariantsAction } from "@/app/flies/v2/actions";
+import { updateStockAction, addToBoxAction, deleteVariantsAction, updateBoxQuantityAction } from "@/app/flies/v2/actions";
 
 interface Props {
   variants: VariantRow[];
@@ -25,6 +25,8 @@ interface Props {
   patternSlug: string;
   /** User's fly boxes. Empty array = signed out. */
   userBoxes: FlyBoxV2[];
+  /** When set, shows a "Qty" column for per-box quantity tracking. */
+  boxId?: string;
 }
 
 function formatBead(row: VariantRow): string {
@@ -47,7 +49,7 @@ function formatLastUsed(row: VariantRow): string {
   return `${Math.floor(days / 365)}y ago`;
 }
 
-export default function VariantTable({ variants, patternSlug, userBoxes }: Props) {
+export default function VariantTable({ variants, patternSlug, userBoxes, boxId }: Props) {
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
@@ -74,6 +76,14 @@ export default function VariantTable({ variants, patternSlug, userBoxes }: Props
       field,
       value: next,
     });
+
+  const saveBoxQty = (variantId: string) =>
+    (next: number) => updateBoxQuantityAction({
+      box_id: boxId!,
+      variant_id: variantId,
+      quantity: next,
+    });
+
   const columns: DataTableColumn<VariantRow>[] = [
     {
       key: "photo",
@@ -97,6 +107,22 @@ export default function VariantTable({ variants, patternSlug, userBoxes }: Props
       accessor: (row) => row.size,
       render: (row) => <span className="text-[#F0F6FC]">{row.size}</span>,
     },
+    ...(boxId ? [{
+      key: "box_qty" as keyof VariantRow,
+      label: "In box",
+      width: "72px",
+      mono: true,
+      align: "center" as const,
+      accessor: (row: VariantRow) => row.box_quantity ?? 1,
+      render: (row: VariantRow) => (
+        <InlineNumberCell
+          value={row.box_quantity ?? 1}
+          onSave={saveBoxQty(row.id)}
+          title="How many of this fly are in this box"
+          align="center"
+        />
+      ),
+    }] : []),
     {
       key: "bead",
       label: "Bead",

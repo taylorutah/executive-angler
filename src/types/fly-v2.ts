@@ -167,6 +167,7 @@ export interface VariantInBox {
   variant_id: string;
   user_id: string;
   sort_order: number;
+  quantity: number;
   added_at: string;
 }
 
@@ -189,6 +190,8 @@ export interface VariantRow extends Variant {
   stock: VariantStock | null;
   primary_photo: VariantPhoto | null;
   box_count: number;
+  /** Quantity in the specific box being viewed (only populated on box detail). */
+  box_quantity: number | null;
 }
 
 /** Inventory math helpers — single source of truth for stock readouts. */

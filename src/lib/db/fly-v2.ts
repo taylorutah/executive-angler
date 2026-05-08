@@ -172,6 +172,7 @@ export async function listVariantRowsForPattern(patternId: string): Promise<Vari
     stock: stockByVariant.get(v.id) ?? null,
     primary_photo: photoByVariant.get(v.id) ?? null,
     box_count: boxCountByVariant.get(v.id) ?? 0,
+    box_quantity: null,
   }));
 }
 
@@ -230,6 +231,7 @@ export async function listMyStockedVariants(): Promise<VariantRow[]> {
         stock: s,
         primary_photo: photoByVariant.get(s.variant_id) ?? null,
         box_count: 0,
+        box_quantity: null,
       };
     })
     .filter((r): r is VariantRow => r !== null);
@@ -247,11 +249,16 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
 
   const { data: memberships } = await supabase
     .from("fly_variant_in_box")
-    .select("variant_id, sort_order")
+    .select("variant_id, sort_order, quantity")
     .eq("box_id", boxId)
     .order("sort_order");
   const variantIds = (memberships ?? []).map((m: { variant_id: string }) => m.variant_id);
   if (variantIds.length === 0) return [];
+
+  const quantityByVariant = new Map<string, number>();
+  for (const m of (memberships ?? []) as { variant_id: string; quantity?: number }[]) {
+    quantityByVariant.set(m.variant_id, m.quantity ?? 1);
+  }
 
   const { data: variantRows } = await supabase
     .from("fly_variants")
@@ -300,6 +307,7 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
         stock: stockByVariant.get(id) ?? null,
         primary_photo: photoByVariant.get(id) ?? null,
         box_count: 1,
+        box_quantity: quantityByVariant.get(id) ?? 1,
       };
     })
     .filter((r): r is VariantRow => r !== null);
@@ -533,6 +541,7 @@ export async function addVariantsToBox(
     variant_id: vid,
     user_id: user.id,
     sort_order: 0,
+    quantity: 1,
     added_at: new Date().toISOString(),
   }));
   const { error, count } = await supabase
@@ -543,6 +552,25 @@ export async function addVariantsToBox(
     return null;
   }
   return count ?? variantIds.length;
+}
+
+/** Update how many physical flies of a variant are in a specific box. */
+export async function updateBoxVariantQuantity(
+  boxId: string,
+  variantId: string,
+  quantity: number,
+): Promise<boolean> {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("fly_variant_in_box")
+    .update({ quantity })
+    .eq("box_id", boxId)
+    .eq("variant_id", variantId);
+  if (error) {
+    console.error("[updateBoxVariantQuantity]", error);
+    return false;
+  }
+  return true;
 }
 
 /**
