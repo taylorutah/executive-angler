@@ -299,6 +299,35 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// Boxes
+// ────────────────────────────────────────────────────────────────────────────
+
+/** Get the user's default fly_box id (creates one named "My Fly Box" if missing). */
+export async function getDefaultFlyBoxId(): Promise<string | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data } = await supabase
+    .from("fly_boxes")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("is_default", true)
+    .maybeSingle();
+  if (data?.id) return data.id as string;
+  // Lazy-create — keeps the UX of "always a place for new variants" working.
+  const { data: created, error } = await supabase
+    .from("fly_boxes")
+    .insert({ user_id: user.id, name: "My Fly Box", tier: "custom", is_default: true })
+    .select("id")
+    .single();
+  if (error) {
+    console.error("[getDefaultFlyBoxId] create", error);
+    return null;
+  }
+  return (created?.id ?? null) as string | null;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // Mutations: create variant, upsert stock, add to box
 // ────────────────────────────────────────────────────────────────────────────
 

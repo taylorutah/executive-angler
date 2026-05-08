@@ -12,8 +12,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getCanonicalPatternBySlug, listCanonicalPatterns, listVariantRowsForPattern } from "@/lib/db/fly-v2";
+import { getCanonicalPatternBySlug, listCanonicalPatterns, listVariantRowsForPattern, getDefaultFlyBoxId } from "@/lib/db/fly-v2";
 import VariantTable from "@/components/flies-v2/VariantTable";
+import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
 
 export const revalidate = 3600;
 
@@ -33,7 +34,10 @@ export default async function PatternDetailV2({ params }: Props) {
   const pattern = await getCanonicalPatternBySlug(slug);
   if (!pattern) notFound();
 
-  const variants = await listVariantRowsForPattern(pattern.id);
+  const [variants, defaultBoxId] = await Promise.all([
+    listVariantRowsForPattern(pattern.id),
+    getDefaultFlyBoxId(),
+  ]);
 
   return (
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
@@ -79,15 +83,10 @@ export default async function PatternDetailV2({ params }: Props) {
               tap any cell to edit · multi-select for bulk actions
             </p>
           </div>
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#d17d28] transition-colors"
-          >
-            + New Variant
-          </button>
+          <PatternHeaderActions patternId={pattern.id} patternSlug={pattern.slug ?? ""} />
         </div>
         <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">
-          <VariantTable variants={variants} />
+          <VariantTable variants={variants} patternSlug={pattern.slug ?? ""} defaultBoxId={defaultBoxId} />
         </div>
       </section>
 

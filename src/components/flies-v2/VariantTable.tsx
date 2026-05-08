@@ -5,17 +5,23 @@
  * Used on the v2 Pattern detail page and (later) on Box detail. Columns:
  * Photo · Size · Bead · Body · Rib · Tied · Bought · Target · Boxes · Last used.
  *
- * Inline editing for tied/bought/target lands in a follow-on commit — for now
- * the table is read-only display, with bulk-action hooks ready (Add to Box,
- * Tie Next, etc.).
+ * Tied / Bought / Target cells are inline-editable via InlineNumberCell.
+ * Edits go through the updateStockAction server action and revalidate the
+ * page automatically.
  */
 import Image from "next/image";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
-import { totalOwned, deficit, isLowStock } from "@/types/fly-v2";
+import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
+import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
+import { updateStockAction, addToBoxAction } from "@/app/flies/v2/actions";
 
 interface Props {
   variants: VariantRow[];
+  /** Pattern slug — needed by stock-update action for revalidation. */
+  patternSlug: string;
+  /** User's default fly_box id (used by "Add to Kill Box" bulk action). null = signed out. */
+  defaultBoxId: string | null;
 }
 
 const SUPABASE_URL =
@@ -47,7 +53,14 @@ function formatLastUsed(row: VariantRow): string {
   return `${Math.floor(days / 365)}y ago`;
 }
 
-export default function VariantTable({ variants }: Props) {
+export default function VariantTable({ variants, patternSlug, defaultBoxId }: Props) {
+  const saveStock = (variantId: string, field: "tied_count" | "bought_count" | "target_count") =>
+    (next: number) => updateStockAction({
+      variant_id: variantId,
+      pattern_slug: patternSlug,
+      field,
+      value: next,
+    });
   const columns: DataTableColumn<VariantRow>[] = [
     {
       key: "photo",
@@ -101,43 +114,55 @@ export default function VariantTable({ variants }: Props) {
     {
       key: "tied",
       label: "Tied",
-      width: "60px",
+      width: "70px",
       mono: true,
       align: "right",
       accessor: (row) => row.stock?.tied_count ?? 0,
-      render: (row) => {
-        const n = row.stock?.tied_count ?? 0;
-        return n > 0 ? <span className="text-[#F0F6FC]">{n}</span> : <span className="text-[#484F58]">0</span>;
-      },
+      render: (row) => (
+        <InlineNumberCell
+          value={row.stock?.tied_count ?? 0}
+          onSave={saveStock(row.id, "tied_count")}
+          title="Tied flies in inventory"
+        />
+      ),
     },
     {
       key: "bought",
       label: "Bought",
-      width: "60px",
+      width: "70px",
       mono: true,
       align: "right",
       accessor: (row) => row.stock?.bought_count ?? 0,
-      render: (row) => {
-        const n = row.stock?.bought_count ?? 0;
-        return n > 0 ? <span className="text-[#F0F6FC]">{n}</span> : <span className="text-[#484F58]">0</span>;
-      },
+      render: (row) => (
+        <InlineNumberCell
+          value={row.stock?.bought_count ?? 0}
+          onSave={saveStock(row.id, "bought_count")}
+          title="Purchased flies in inventory"
+        />
+      ),
     },
     {
       key: "target",
       label: "Target",
-      width: "60px",
+      width: "90px",
       mono: true,
       align: "right",
       accessor: (row) => row.stock?.target_count ?? 0,
       render: (row) => {
         const n = row.stock?.target_count ?? 0;
+        const owned = totalOwned(row.stock);
         const low = isLowStock(row.stock);
-        return n > 0 ? (
-          <span className={low ? "text-[#E8923A] font-medium" : "text-[#F0F6FC]"}>
-            {totalOwned(row.stock)}/{n}
-          </span>
-        ) : (
-          <span className="text-[#484F58]">—</span>
+        return (
+          <div className="flex items-center justify-end gap-1 w-full">
+            <span className={`font-['IBM_Plex_Mono'] text-[13px] ${low ? "text-[#E8923A]" : owned > 0 ? "text-[#F0F6FC]" : "text-[#484F58]"}`}>
+              {owned}/
+            </span>
+            <InlineNumberCell
+              value={n}
+              onSave={saveStock(row.id, "target_count")}
+              title="Target tied count (deficit lights up amber when below)"
+            />
+          </div>
         );
       },
     },
@@ -174,21 +199,23 @@ export default function VariantTable({ variants }: Props) {
       rowKey={(v) => v.id}
       density="compact"
       defaultSort={{ key: "size", dir: "asc" }}
-      bulkActions={[
-        {
-          label: "Add to Kill Box",
-          variant: "primary",
-          onClick: (rows) => {
-            console.log("[VariantTable] add to kill box (TODO):", rows.length);
-          },
-        },
-        {
-          label: "Mark to tie",
-          onClick: (rows) => {
-            console.log("[VariantTable] mark to tie (TODO):", rows.length);
-          },
-        },
-      ]}
+      bulkActions={
+        defaultBoxId
+          ? [
+              {
+                label: "Add to my box",
+                variant: "primary",
+                onClick: async (rows) => {
+                  await addToBoxAction({
+                    pattern_slug: patternSlug,
+                    box_id: defaultBoxId,
+                    variant_ids: rows.map((r) => r.id),
+                  });
+                },
+              },
+            ]
+          : []
+      }
       empty={
         <div className="flex flex-col items-center gap-2">
           <p className="text-[#A8B2BD]">No variants yet.</p>
