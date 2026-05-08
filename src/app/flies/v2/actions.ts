@@ -30,8 +30,10 @@ export async function updateStockAction(input: UpdateStockInput): Promise<{ ok: 
     [input.field]: Math.floor(input.value),
   });
   if (!result) return { ok: false, error: "Failed to update stock." };
-  revalidatePath(`/flies/v2/${input.pattern_slug}`);
-  revalidatePath(`/flies/v2`);
+  if (input.pattern_slug) revalidatePath(`/flies/v2/${input.pattern_slug}`);
+  // Box detail pages display this stock too — revalidate the layout so all
+  // /flies/boxes/v2/[id] pages see the change.
+  revalidatePath(`/flies/boxes/v2`, "layout");
   return { ok: true };
 }
 
