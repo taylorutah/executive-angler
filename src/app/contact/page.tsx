@@ -2,9 +2,9 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Script from "next/script";
 import { SITE_NAME } from "@/lib/constants";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
   "General Inquiry",
@@ -17,19 +17,7 @@ const SUBJECT_OPTIONS = [
   "Technical Issue",
 ] as const;
 
-declare global {
-  interface Window {
-    grecaptcha: {
-      ready: (cb: () => void) => void;
-      execute: (
-        siteKey: string,
-        options: { action: string }
-      ) => Promise<string>;
-    };
-  }
-}
-
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 export default function ContactPage() {
   return (
@@ -49,6 +37,8 @@ function ContactPageInner() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaResolved, setCaptchaResolved] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,22 +53,10 @@ function ContactPageInner() {
     const message = formData.get("message") as string;
 
     try {
-      // Get reCAPTCHA v3 token (invisible — no user interaction required)
-      let token: string | undefined;
-      if (RECAPTCHA_SITE_KEY && typeof window !== "undefined" && window.grecaptcha) {
-        token = await new Promise<string>((resolve) => {
-          window.grecaptcha.ready(() => {
-            window.grecaptcha
-              .execute(RECAPTCHA_SITE_KEY, { action: "contact" })
-              .then(resolve);
-          });
-        });
-      }
-
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message, token }),
+        body: JSON.stringify({ name, email, subject, message, token: captchaToken }),
       });
 
       const data = await res.json();
@@ -98,14 +76,6 @@ function ContactPageInner() {
 
   return (
     <>
-      {/* Load reCAPTCHA v3 script — invisible, no checkbox */}
-      {RECAPTCHA_SITE_KEY && (
-        <Script
-          src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
-          strategy="lazyOnload"
-        />
-      )}
-
       <div className="pt-8 pb-20">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-4">
@@ -203,6 +173,15 @@ function ContactPageInner() {
                 />
               </div>
 
+              <TurnstileWidget
+                siteKey={TURNSTILE_SITE_KEY}
+                onToken={(t) => {
+                  setCaptchaToken(t);
+                  setCaptchaResolved(t !== "" || captchaResolved);
+                }}
+                onAvailabilityChange={setCaptchaResolved}
+              />
+
               {/* Error message */}
               {error && (
                 <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
@@ -214,36 +193,12 @@ function ContactPageInner() {
               <div className="flex items-center justify-between">
                 <button
                   type="submit"
-                  disabled={sending}
+                  disabled={sending || !captchaResolved}
                   className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-3 text-base font-medium text-white hover:bg-[#E8923A]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
                   {sending ? "Sending..." : "Send Message"}
                 </button>
-
-                {/* reCAPTCHA attribution (required by Google TOS when badge is hidden) */}
-                {RECAPTCHA_SITE_KEY && (
-                  <p className="text-xs text-[#6E7681] max-w-[200px] text-right leading-relaxed">
-                    Protected by{" "}
-                    <a
-                      href="https://policies.google.com/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-[#A8B2BD]"
-                    >
-                      reCAPTCHA
-                    </a>
-                    {" · "}
-                    <a
-                      href="https://policies.google.com/terms"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-[#A8B2BD]"
-                    >
-                      Terms
-                    </a>
-                  </p>
-                )}
               </div>
             </form>
           )}

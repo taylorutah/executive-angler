@@ -7,19 +7,24 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-async function verifyRecaptcha(token: string): Promise<boolean> {
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+async function verifyTurnstile(token: string, ip: string | null): Promise<boolean> {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY;
   if (!secretKey) return true; // gracefully skip if not configured
 
-  const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret: secretKey, response: token }),
-  });
+  const body = new URLSearchParams({ secret: secretKey, response: token });
+  if (ip) body.set("remoteip", ip);
+
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    }
+  );
 
   const data = await res.json();
-  // success=true and score >= 0.5 means likely human
-  return data.success === true && (data.score ?? 1) >= 0.5;
+  return data.success === true;
 }
 
 export async function POST(request: NextRequest) {
@@ -34,12 +39,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify reCAPTCHA token
-    if (token) {
-      const isHuman = await verifyRecaptcha(token);
+    // Verify Turnstile token. If the secret is configured, a token is required
+    // and must validate. We deliberately do NOT fail open server-side — the
+    // widget already fail-opens on the client for users behind blockers, and
+    // those submissions will simply lack a token (rejected here).
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!token) {
+        return NextResponse.json(
+          { error: "Verification missing. Please complete the challenge and try again." },
+          { status: 400 }
+        );
+      }
+      const ip =
+        request.headers.get("cf-connecting-ip") ??
+        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+        null;
+      const isHuman = await verifyTurnstile(token, ip);
       if (!isHuman) {
         return NextResponse.json(
-          { error: "reCAPTCHA verification failed. Please try again." },
+          { error: "Verification failed. Please try again." },
           { status: 400 }
         );
       }
