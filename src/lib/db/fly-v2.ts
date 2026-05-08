@@ -249,15 +249,21 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
 
   const { data: memberships } = await supabase
     .from("fly_variant_in_box")
-    .select("variant_id, sort_order, quantity")
+    .select("variant_id, sort_order")
     .eq("box_id", boxId)
     .order("sort_order");
   const variantIds = (memberships ?? []).map((m: { variant_id: string }) => m.variant_id);
   if (variantIds.length === 0) return [];
 
+  // Fetch quantities separately so a missing column (pre-migration) degrades
+  // gracefully to 1 instead of breaking the whole query.
   const quantityByVariant = new Map<string, number>();
-  for (const m of (memberships ?? []) as { variant_id: string; quantity?: number }[]) {
-    quantityByVariant.set(m.variant_id, m.quantity ?? 1);
+  const { data: qtyRows } = await supabase
+    .from("fly_variant_in_box")
+    .select("variant_id, quantity")
+    .eq("box_id", boxId);
+  for (const r of (qtyRows ?? []) as { variant_id: string; quantity?: number }[]) {
+    if (r.quantity != null) quantityByVariant.set(r.variant_id, r.quantity);
   }
 
   const { data: variantRows } = await supabase
