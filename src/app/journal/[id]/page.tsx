@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import SessionDetail from "./SessionDetail";
 import { checkPremium } from "@/lib/admin";
+import CatchLoggerEntry from "@/components/catch-logger/CatchLoggerEntry";
+import { listMyBoxes, listVariantsInBox } from "@/lib/db/fly-v2";
 
 // Never cache — always fetch fresh data from Supabase
 export const dynamic = "force-dynamic";
@@ -119,16 +121,69 @@ export default async function SessionDetailPage({ params }: Props) {
       }
     : null;
 
+  // Phase 3 catch logger data — only fetched for owners.
+  let myBoxes: { id: string; name: string; tier: string; is_default: boolean }[] = [];
+  let activeBoxVariants: Awaited<ReturnType<typeof listVariantsInBox>> = [];
+  let activeBoxName: string | null = null;
+  let lastCatch: Parameters<typeof CatchLoggerEntry>[0]["lastCatch"] = null;
+  if (isOwner) {
+    const allBoxes = await listMyBoxes();
+    myBoxes = allBoxes.map((b) => ({ id: b.id, name: b.name, tier: b.tier, is_default: b.is_default }));
+    const activeId = (session as { active_box_id?: string | null }).active_box_id ?? null;
+    if (activeId) {
+      activeBoxVariants = await listVariantsInBox(activeId);
+      activeBoxName = allBoxes.find((b) => b.id === activeId)?.name ?? null;
+    } else {
+      // Fall back to default box if no explicit active_box_id set.
+      const def = allBoxes.find((b) => b.is_default);
+      if (def) {
+        activeBoxVariants = await listVariantsInBox(def.id);
+        activeBoxName = def.name;
+      }
+    }
+    if (catches && catches.length > 0) {
+      const last = catches[catches.length - 1] as {
+        variant_id?: string | null;
+        fly_name?: string | null;
+        fly_size?: string | null;
+        species?: string | null;
+        length_inches?: number | null;
+      };
+      lastCatch = {
+        variant_id: last.variant_id ?? null,
+        fly_name: last.fly_name ?? null,
+        fly_size: last.fly_size ?? null,
+        species: last.species ?? null,
+        length_inches: last.length_inches ?? null,
+      };
+    }
+  }
+
   return (
-    <SessionDetail
-      session={session}
-      catches={(catches || []) as Parameters<typeof SessionDetail>[0]["catches"]}
-      flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
-      sessionPhotos={sessionPhotos ?? []}
-      isOwner={isOwner}
-      ownerProfile={ownerProfileForDetail}
-      isAnonymous={isAnonymous}
-      isPremium={user ? await checkPremium(supabase, user.id, user.email) : false}
-    />
+    <>
+      {isOwner && (
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20">
+          <CatchLoggerEntry
+            sessionId={id}
+            myBoxes={myBoxes}
+            activeBoxId={(session as { active_box_id?: string | null }).active_box_id ?? null}
+            activeBoxName={activeBoxName}
+            activeBoxVariants={activeBoxVariants}
+            lastCatch={lastCatch}
+            defaultSpecies={lastCatch?.species ?? "Rainbow"}
+          />
+        </div>
+      )}
+      <SessionDetail
+        session={session}
+        catches={(catches || []) as Parameters<typeof SessionDetail>[0]["catches"]}
+        flies={(flies || []) as Parameters<typeof SessionDetail>[0]["flies"]}
+        sessionPhotos={sessionPhotos ?? []}
+        isOwner={isOwner}
+        ownerProfile={ownerProfileForDetail}
+        isAnonymous={isAnonymous}
+        isPremium={user ? await checkPremium(supabase, user.id, user.email) : false}
+      />
+    </>
   );
 }
