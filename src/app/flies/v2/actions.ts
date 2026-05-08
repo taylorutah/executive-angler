@@ -30,10 +30,10 @@ export async function updateStockAction(input: UpdateStockInput): Promise<{ ok: 
     [input.field]: Math.floor(input.value),
   });
   if (!result) return { ok: false, error: "Failed to update stock." };
-  if (input.pattern_slug) revalidatePath(`/flies/v2/${input.pattern_slug}`);
+  if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
   // Box detail pages display this stock too — revalidate the layout so all
-  // /flies/boxes/v2/[id] pages see the change.
-  revalidatePath(`/flies/boxes/v2`, "layout");
+  // /flies/boxes/[id] pages see the change.
+  revalidatePath(`/flies/boxes`, "layout");
   return { ok: true };
 }
 
@@ -65,7 +65,7 @@ export async function createVariantAction(input: CreateVariantInput): Promise<{ 
     notes: input.notes,
   });
   if (!variant) return { ok: false, error: "Failed to create variant. Are you signed in?" };
-  revalidatePath(`/flies/v2/${input.pattern_slug}`);
+  revalidatePath(`/flies/${input.pattern_slug}`);
   return { ok: true, variantId: variant.id };
 }
 
@@ -134,7 +134,7 @@ export async function uploadVariantPhotoAction(formData: FormData): Promise<{
     return { ok: false, error: insertErr.message };
   }
 
-  if (patternSlug) revalidatePath(`/flies/v2/${patternSlug}`);
+  if (patternSlug) revalidatePath(`/flies/${patternSlug}`);
   return { ok: true, storagePath };
 }
 
@@ -149,7 +149,7 @@ export async function addToBoxAction(input: AddToBoxInput): Promise<{ ok: boolea
   if (input.variant_ids.length === 0) return { ok: false, error: "No variants selected." };
   const added = await addVariantsToBox(input.box_id, input.variant_ids);
   if (added === 0) return { ok: false, error: "Failed to add variants. Are you signed in?" };
-  revalidatePath(`/flies/v2/${input.pattern_slug}`);
+  revalidatePath(`/flies/${input.pattern_slug}`);
   revalidatePath(`/flies/boxes`);
   return { ok: true, added };
 }
