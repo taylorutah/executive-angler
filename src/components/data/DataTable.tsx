@@ -187,6 +187,14 @@ export function DataTable<T>({
   const rowPadY = density === "compact" ? "py-1.5" : "py-2.5";
   const cellTextSize = "text-[13px]";
 
+  // Sticky-top must match the toolbar's actual rendered height (40px) or zero
+  // when it's hidden — position:sticky inside an overflow:hidden parent stops
+  // acting like static-at-rest and offsets the header *down* by `top`, which
+  // makes the header overlap the first data row. Repro: pattern detail with
+  // rows and nothing selected — first row was occluded by the header.
+  const showToolbar = !!(toolbar || (bulkActions && selected.size > 0));
+  const headerStickyTop = showToolbar ? "top-[40px]" : "top-0";
+
   return (
     <div
       className={`relative w-full ${className}`}
@@ -194,7 +202,7 @@ export function DataTable<T>({
       onKeyDown={handleKey}
     >
       {/* Toolbar */}
-      {(toolbar || (bulkActions && selected.size > 0)) && (
+      {showToolbar && (
         <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-[#21262D] bg-[#0D1117] px-3 py-2">
           <div className="flex items-center gap-3">
             {selected.size > 0 && (
@@ -230,7 +238,7 @@ export function DataTable<T>({
 
       {/* Header */}
       <div
-        className="sticky top-[40px] z-10 grid items-center gap-0 border-b border-[#30363D] bg-[#161B22] text-[10px] font-bold uppercase tracking-widest text-[#6E7681]"
+        className={`sticky ${headerStickyTop} z-10 grid items-center gap-0 border-b border-[#30363D] bg-[#161B22] text-[10px] font-bold uppercase tracking-widest text-[#6E7681]`}
         style={{
           gridTemplateColumns: [
             selectable ? "32px" : "",
