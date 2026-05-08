@@ -1,232 +1,195 @@
+/**
+ * Gear catalog — dense single-list view with inline "Add to Locker".
+ *
+ * Replaces the legacy multi-page browse (deep brand and product pages
+ * collected SEO impressions but didn't drive product value). Now: pick a
+ * category tab, scan a row, click "Add" — done. Manufacturer detail lives
+ * on the brand's own site, one Google away.
+ *
+ * Deep paths (/gear/[brand], /gear/[brand]/[product], /gear/category/[slug])
+ * 308-redirect to this page (with category query when applicable).
+ */
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, MapPin } from "lucide-react";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { getAllGearBrands, getAllGearProducts } from "@/lib/db";
-import { SITE_URL } from "@/lib/constants";
+import { getAllGearProducts } from "@/lib/db/gear-products";
+import { getAllGearBrands } from "@/lib/db/gear-brands";
+import { createClient } from "@/lib/supabase/server";
+import AddToLockerButton from "@/components/gear-v2/AddToLockerButton";
+import GearCategoryTabs from "@/components/gear-v2/GearCategoryTabs";
+
+export const metadata: Metadata = {
+  title: "Gear — Executive Angler",
+  description: "Fly fishing gear catalog: rods, reels, waders, lines, leaders, tippet, packs. Add to your locker in one click.",
+};
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Fly Fishing Gear — Rods, Reels, Waders, Lines & More by Brand | Executive Angler",
-  description:
-    "Browse fly fishing gear by brand. Sage, Orvis, Winston, Scott, Hatch, Tibor, Abel, Simms, Patagonia, Rio, Scientific Anglers, Fishpond, and more.",
-  alternates: { canonical: `${SITE_URL}/gear` },
-  openGraph: {
-    title: "Fly Fishing Gear by Brand | Executive Angler",
-    description:
-      "Rods, reels, waders, wading boots, lines, leaders, tippet, packs, and nets from the brands that make them.",
-    images: ["/api/og?title=Gear&subtitle=Browse%20by%20Brand%20%26%20Category&type=default"],
-  },
+const CATEGORY_LABELS: Record<string, string> = {
+  rod: "Rods",
+  reel: "Reels",
+  line: "Lines",
+  leader: "Leaders",
+  tippet: "Tippet",
+  waders: "Waders",
+  "wading-boots": "Boots",
+  pack: "Packs",
+  net: "Nets",
 };
 
-const CATEGORY_TILES = [
-  {
-    slug: "rod",
-    label: "Fly Rods",
-    blurb: "Trout, saltwater, Spey, and Euro — rods from every major maker.",
-  },
-  {
-    slug: "reel",
-    label: "Fly Reels",
-    blurb: "Sealed-drag, click-pawl, and machined aluminum reels.",
-  },
-  {
-    slug: "waders",
-    label: "Waders",
-    blurb: "Gore-Tex, breathable, and guide-grade stockingfoot waders.",
-  },
-  {
-    slug: "wading-boots",
-    label: "Wading Boots",
-    blurb: "Felt, rubber, studded, and interchangeable-sole wading boots.",
-  },
-  {
-    slug: "line",
-    label: "Fly Lines",
-    blurb: "Floating, intermediate, sinking, and Spey heads.",
-  },
-  {
-    slug: "leader",
-    label: "Leaders",
-    blurb: "Knotless, knotted, furled, and Euro leaders.",
-  },
-  {
-    slug: "tippet",
-    label: "Tippet",
-    blurb: "Fluorocarbon, nylon, and copolymer tippet from 8X to 0X.",
-  },
-  {
-    slug: "pack",
-    label: "Packs, Vests & Bags",
-    blurb: "Slings, vests, chest packs, hip packs, and boat bags.",
-  },
-  {
-    slug: "net",
-    label: "Landing Nets",
-    blurb: "Wood, carbon-fiber, and rubber-bag fish-friendly nets.",
-  },
-] as const;
+interface Props {
+  searchParams: Promise<{ category?: string }>;
+}
 
-export default async function GearLandingPage() {
-  const [brands, products] = await Promise.all([
-    getAllGearBrands(),
+function specSummary(category: string, specs: Record<string, unknown>): string {
+  if (!specs || typeof specs !== "object") return "";
+  switch (category) {
+    case "rod": {
+      const len = specs.lengthFt as number | undefined;
+      const wt = specs.lineWeight as number | undefined;
+      const pcs = specs.pieces as number | undefined;
+      return [len && `${len}'`, wt && `${wt}wt`, pcs && `${pcs}pc`].filter(Boolean).join(" · ");
+    }
+    case "reel": {
+      const size = specs.size as string | undefined;
+      const drag = specs.dragType as string | undefined;
+      return [size, drag].filter(Boolean).join(" · ");
+    }
+    case "line": {
+      const wt = specs.weight as number | undefined;
+      const taper = specs.taper as string | undefined;
+      const dens = specs.density as string | undefined;
+      return [wt && `${wt}wt`, taper, dens].filter(Boolean).join(" · ");
+    }
+    case "waders":
+    case "wading-boots": {
+      const mat = specs.material as string | undefined;
+      const ft = specs.footType as string | undefined;
+      return [mat, ft].filter(Boolean).join(" · ");
+    }
+    default:
+      return "";
+  }
+}
+
+export default async function GearCatalogPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const activeCategory = sp.category ?? "all";
+
+  const [products, brands] = await Promise.all([
     getAllGearProducts(),
+    getAllGearBrands(),
   ]);
+  const brandById = new Map(brands.map((b) => [b.id, b]));
 
-  const featuredBrands = brands.filter((b) => b.featured);
-  const otherBrands = brands.filter((b) => !b.featured);
+  // Which products are already in this user's locker?
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  let inLockerIds = new Set<string>();
+  if (user) {
+    const { data: items } = await supabase
+      .from("gear_items")
+      .select("gear_product_id")
+      .eq("user_id", user.id)
+      .eq("is_active", true)
+      .not("gear_product_id", "is", null);
+    inLockerIds = new Set(
+      (items ?? [])
+        .map((i: { gear_product_id: string | null }) => i.gear_product_id)
+        .filter((v): v is string => !!v)
+    );
+  }
 
-  const counts: Record<string, number> = {
-    rod: products.filter((p) => p.category === "rod").length,
-    reel: products.filter((p) => p.category === "reel").length,
-    waders: products.filter((p) => p.category === "waders").length,
-    "wading-boots": products.filter((p) => p.category === "wading-boots").length,
-    line: products.filter((p) => p.category === "line").length,
-    leader: products.filter((p) => p.category === "leader").length,
-    tippet: products.filter((p) => p.category === "tippet").length,
-    pack: products.filter((p) => p.category === "pack").length,
-    net: products.filter((p) => p.category === "net").length,
-  };
+  // Tab counts
+  const counts = new Map<string, number>();
+  for (const p of products) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+  const tabs = Object.keys(CATEGORY_LABELS)
+    .filter((c) => (counts.get(c) ?? 0) > 0)
+    .map((c) => ({ slug: c, label: CATEGORY_LABELS[c], count: counts.get(c) ?? 0 }));
+
+  // Filter
+  const visible = activeCategory === "all"
+    ? products
+    : products.filter((p) => p.category === activeCategory);
 
   return (
-    <>
-      {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
-            The Gear Directory
-          </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-            Fly Fishing Gear, By Brand
+    <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
+      <header className="border-b border-[#21262D] bg-[#161B22]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
+          <h1 className="font-['DM_Serif_Display'] text-3xl text-[#F0F6FC] tracking-tight">
+            Gear
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
-            Rods, reels, waders, wading boots, lines, leaders, tippet, packs, and nets — from
-            the brands that make them. Browse by brand or by category, add what you own to
-            your gear locker, and see it flow into your session log.
+          <p className="mt-1 text-sm text-[#A8B2BD]">
+            {products.length} products · click <span className="text-[#F0F6FC]">Add</span> on any row to drop it into your{" "}
+            <a href="/account/gear" className="text-[#0BA5C7] hover:text-[#E8923A]">locker</a>.
           </p>
         </div>
-      </section>
+      </header>
 
-      {/* ── Category Tiles ───────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-2 pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-6">
-            Browse by Category
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CATEGORY_TILES.map((tile, i) => (
-              <ScrollAnimation key={tile.slug} delay={i * 0.08}>
-                <Link
-                  href={`/gear/category/${tile.slug}`}
-                  className="group block bg-[#161B22] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-[#21262D] hover:border-[#E8923A]/40"
-                >
-                  <h3 className="font-heading text-xl font-bold text-[#E8923A]">
-                    {tile.label}
-                  </h3>
-                  <p className="mt-2 text-sm text-[#A8B2BD] leading-relaxed">
-                    {tile.blurb}
-                  </p>
-                  <p className="mt-4 text-xs font-semibold text-[#6E7681]">
-                    {counts[tile.slug]} products
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
-                    Browse {tile.label} <ChevronRight className="h-3.5 w-3.5" />
-                  </span>
-                </Link>
-              </ScrollAnimation>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <GearCategoryTabs categories={tabs} />
 
-      {/* ── Featured Brands ──────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-6">
-            Featured Brands
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredBrands.map((brand, i) => {
-              const brandProducts = products.filter((p) => p.brandId === brand.id);
-              return (
-                <ScrollAnimation key={brand.id} delay={i * 0.05}>
-                  <Link
-                    href={`/gear/${brand.slug}`}
-                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
+        <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">
+          {visible.length === 0 ? (
+            <div className="px-4 py-12 text-center text-sm text-[#6E7681]">
+              No products in this category yet.
+            </div>
+          ) : (
+            <div className="divide-y divide-[#21262D]">
+              {/* Header row */}
+              <div className="hidden sm:grid grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 bg-[#161B22] px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+                <span></span>
+                <span>Product</span>
+                <span>Spec</span>
+                <span>Category</span>
+                <span className="text-right">MSRP</span>
+                <span></span>
+              </div>
+              {visible.map((p) => {
+                const brand = brandById.get(p.brandId);
+                return (
+                  <div
+                    key={p.id}
+                    className="grid grid-cols-[40px_1fr] sm:grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 px-3 py-2 hover:bg-[#161B22] transition-colors"
                   >
-                    {brand.heroImageUrl && (
-                      <div className="relative h-40">
-                        <Image
-                          src={brand.heroImageUrl}
-                          alt={brand.name}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0D1117]/80 to-transparent" />
-                      </div>
-                    )}
-                    <div className="p-5 flex flex-col">
-                      <h3 className="font-heading text-xl font-bold text-[#E8923A]">
-                        {brand.name}
-                      </h3>
-                      {brand.tagline && (
-                        <p className="mt-1 text-sm text-[#A8B2BD] line-clamp-2">
-                          {brand.tagline}
-                        </p>
-                      )}
-                      {brand.headquarters && (
-                        <div className="mt-2 flex items-center gap-1 text-xs text-[#6E7681]">
-                          <MapPin className="h-3 w-3" />
-                          <span>{brand.headquarters}</span>
+                    <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded bg-[#161B22]">
+                      {p.heroImageUrl ? (
+                        <Image src={p.heroImageUrl} alt="" fill sizes="36px" className="object-cover" />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-[#484F58] text-[10px]">
+                          —
                         </div>
                       )}
-                      <p className="mt-3 text-xs font-semibold text-[#6E7681]">
-                        {brandProducts.length} products
-                      </p>
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
-                        View Brand <ChevronRight className="h-3.5 w-3.5" />
-                      </span>
                     </div>
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── All Brands A–Z ───────────────────────────────────────────────── */}
-      {otherBrands.length > 0 && (
-        <section className="bg-[#161B22] border-t border-[#21262D] py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
-              All Brands
-            </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {brands.map((brand) => {
-                const brandProducts = products.filter((p) => p.brandId === brand.id);
-                return (
-                  <Link
-                    key={brand.id}
-                    href={`/gear/${brand.slug}`}
-                    className="flex items-center justify-between p-4 bg-[#0D1117] rounded-lg border border-[#21262D] hover:border-[#E8923A]/40 transition-colors"
-                  >
-                    <span className="font-heading font-semibold text-[#E8923A]">
-                      {brand.name}
+                    <div className="min-w-0">
+                      <p className="text-[#F0F6FC] text-sm font-medium truncate">
+                        {p.name}
+                      </p>
+                      <p className="text-[#6E7681] text-[11px] truncate">
+                        {brand?.name ?? "—"}
+                      </p>
+                    </div>
+                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[#A8B2BD] text-[12px] truncate">
+                      {specSummary(p.category, p.specs as Record<string, unknown>) || "—"}
+                    </p>
+                    <span className="hidden sm:inline-block rounded bg-[#1F2937] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD] w-fit">
+                      {CATEGORY_LABELS[p.category] ?? p.category}
                     </span>
-                    <span className="text-xs text-[#6E7681]">
-                      {brandProducts.length}
-                    </span>
-                  </Link>
+                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[#A8B2BD] text-[12px] text-right">
+                      {p.msrpUsd ? `$${p.msrpUsd}` : "—"}
+                    </p>
+                    <div className="col-start-2 sm:col-auto justify-self-start sm:justify-self-end">
+                      <AddToLockerButton
+                        productId={p.id}
+                        initiallyInLocker={inLockerIds.has(p.id)}
+                      />
+                    </div>
+                  </div>
                 );
               })}
             </div>
-          </div>
-        </section>
-      )}
-    </>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }
