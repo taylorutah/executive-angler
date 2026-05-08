@@ -9,11 +9,11 @@
  * Edits go through the updateStockAction server action and revalidate the
  * page automatically.
  */
-import Image from "next/image";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
 import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
+import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import { updateStockAction, addToBoxAction } from "@/app/flies/v2/actions";
 
 interface Props {
@@ -22,15 +22,6 @@ interface Props {
   patternSlug: string;
   /** User's default fly_box id (used by "Add to Kill Box" bulk action). null = signed out. */
   defaultBoxId: string | null;
-}
-
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  "https://qlasxtfbodyxbcuchvxz.supabase.co";
-
-function variantPhotoUrl(row: VariantRow): string | null {
-  if (!row.primary_photo) return null;
-  return `${SUPABASE_URL}/storage/v1/object/public/variant-photos/${row.primary_photo.storage_path}`;
 }
 
 function formatBead(row: VariantRow): string {
@@ -67,21 +58,13 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
       label: "",
       width: "48px",
       sortable: false,
-      render: (row) => {
-        const url = variantPhotoUrl(row);
-        if (url) {
-          return (
-            <div className="relative h-8 w-8 overflow-hidden rounded bg-[#161B22]">
-              <Image src={url} alt="" fill sizes="32px" className="object-cover" />
-            </div>
-          );
-        }
-        return (
-          <div className="h-8 w-8 rounded bg-[#161B22] flex items-center justify-center text-[10px] text-[#484F58]">
-            +
-          </div>
-        );
-      },
+      render: (row) => (
+        <VariantPhotoCell
+          variantId={row.id}
+          patternSlug={patternSlug}
+          storagePath={row.primary_photo?.storage_path ?? null}
+        />
+      ),
     },
     {
       key: "size",
