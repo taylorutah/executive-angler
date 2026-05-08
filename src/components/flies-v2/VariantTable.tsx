@@ -9,6 +9,7 @@
  * Edits go through the updateStockAction server action and revalidate the
  * page automatically.
  */
+import { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
 import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
@@ -45,6 +46,19 @@ function formatLastUsed(row: VariantRow): string {
 }
 
 export default function VariantTable({ variants, patternSlug, defaultBoxId }: Props) {
+  // Inline toast — the bulk-action server actions can't directly trigger UI,
+  // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
+  // testing). A 2.5s auto-dismissing pill gives the user feedback without
+  // freezing the page.
+  const [toast, setToast] = useState<{ msg: string; tone: "info" | "error" } | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showToast = (msg: string, tone: "info" | "error" = "info") => {
+    setToast({ msg, tone });
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), tone === "error" ? 4500 : 2500);
+  };
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
+
   const saveStock = (variantId: string, field: "tied_count" | "bought_count" | "target_count") =>
     (next: number) => updateStockAction({
       variant_id: variantId,
@@ -176,6 +190,20 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
   ];
 
   return (
+    <>
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-md px-4 py-2 text-sm font-medium shadow-lg ${
+            toast.tone === "error"
+              ? "bg-[#7F1D1D] text-white"
+              : "bg-[#0BA5C7] text-white"
+          }`}
+        >
+          {toast.msg}
+        </div>
+      )}
     <DataTable<VariantRow>
       rows={variants}
       columns={columns}
@@ -195,12 +223,12 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
                     variant_ids: rows.map((r) => r.id),
                   });
                   if (!result.ok) {
-                    alert(result.error ?? "Failed to add to box.");
+                    showToast(result.error ?? "Failed to add to box.", "error");
                   } else if (result.added === 0) {
-                    alert("Already in your default box.");
+                    showToast("Already in your default box.");
                   } else {
                     const n = result.added ?? rows.length;
-                    alert(`Added ${n} variant${n === 1 ? "" : "s"} to your default box.`);
+                    showToast(`Added ${n} variant${n === 1 ? "" : "s"} to your default box.`);
                   }
                 },
               },
@@ -212,13 +240,17 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
           onClick: async (rows: VariantRow[]) => {
             const n = rows.length;
             const msg = `Delete ${n} variant${n === 1 ? "" : "s"}? Catches that referenced ${n === 1 ? "it" : "them"} will keep their history, but ${n === 1 ? "it" : "they"} will be hidden from this table.`;
-            if (!confirm(msg)) return;
+            // confirm() is acceptable here — destructive action, intentional block
+            if (!window.confirm(msg)) return;
             const result = await deleteVariantsAction({
               pattern_slug: patternSlug,
               variant_ids: rows.map((r) => r.id),
             });
             if (!result.ok) {
-              alert(result.error ?? "Failed to delete.");
+              showToast(result.error ?? "Failed to delete.", "error");
+            } else {
+              const d = result.deleted ?? rows.length;
+              showToast(`Deleted ${d} variant${d === 1 ? "" : "s"}.`);
             }
           },
         },
@@ -232,5 +264,6 @@ export default function VariantTable({ variants, patternSlug, defaultBoxId }: Pr
         </div>
       }
     />
+    </>
   );
 }
