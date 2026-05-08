@@ -191,10 +191,10 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
                 {/* Diameter mm */}
                 <div className="flex items-center gap-1">
                   <input
-                    type="number" step="0.01" min="0" placeholder="mm"
+                    type="number" step="0.001" min="0" placeholder="mm"
                     value={sec.diameter_mm || ""}
                     onChange={(e) => update(idx, { diameter_mm: parseFloat(e.target.value) || undefined })}
-                    className={cls + " w-[55px]"}
+                    className={cls + " w-[72px]"}
                   />
                   <span className={lbl}>mm</span>
                 </div>
