@@ -97,9 +97,11 @@ export async function listMyPatterns(): Promise<Pattern[]> {
  *   - Canonical-curated variants (created_by_user_id is null) — visible to all
  *   - Plus current user's own variants on this pattern
  *
- * RLS handles the visibility filter. Soft-deleted rows are filtered here
- * (the read policy stays open so historical catch detail can still resolve
- * a deleted variant's spec).
+ * RLS handles the visibility filter. Soft-deleted rows are filtered in JS
+ * so this works whether or not the deleted_at migration has been applied
+ * yet (a `.is("deleted_at", null)` predicate would error against a missing
+ * column). The read policy stays open so historical catch detail can still
+ * resolve a deleted variant's spec.
  */
 export async function listVariantsForPattern(patternId: string): Promise<Variant[]> {
   const supabase = await createClient();
@@ -107,14 +109,15 @@ export async function listVariantsForPattern(patternId: string): Promise<Variant
     .from("fly_variants")
     .select("*")
     .eq("pattern_id", patternId)
-    .is("deleted_at", null)
     .order("sort_order")
     .order("size");
   if (error) {
     console.error("[listVariantsForPattern]", error);
     return [];
   }
-  return (data ?? []) as Variant[];
+  return ((data ?? []) as Variant[]).filter(
+    (v) => !(v as unknown as { deleted_at?: string | null }).deleted_at,
+  );
 }
 
 /** Variant rows for a pattern, joined with stock + primary photo + box count. */
