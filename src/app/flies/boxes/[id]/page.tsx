@@ -39,16 +39,45 @@ export default async function BoxDetailV2({ params }: Props) {
   return (
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
       <header className="border-b border-[#21262D] bg-[#161B22]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex items-start gap-6">
+          <div className="min-w-0 flex-1">
+            <Link
+              href="/flies?tab=boxes"
+              className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#0BA5C7] transition-colors mb-2"
+            >
+              <ChevronLeft className="h-3 w-3" /> All boxes
+            </Link>
+            <div className="flex items-baseline gap-3">
+              <h1 className="font-['DM_Serif_Display'] text-3xl text-[#F0F6FC] tracking-tight">
+                {box.name}
+              </h1>
+              <span className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[#0BA5C7]">
+                {TIER_LABELS[box.tier]}
+              </span>
+              {box.is_default && (
+                <span className="rounded bg-[#0BA5C7]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#0BA5C7]">
+                  Default
+                </span>
+              )}
+            </div>
+            {box.description && (
+              <p className="mt-2 text-sm text-[#A8B2BD] max-w-2xl">{box.description}</p>
+            )}
+            <p className="mt-3 font-['IBM_Plex_Mono'] text-[11px] text-[#6E7681]">
+              {variants.length} {variants.length === 1 ? "variant" : "variants"} ·
+              {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
+              tap any cell to edit
+            </p>
+          </div>
           {userBoxes.length > 1 && (
-            <div className="-mx-1 mb-3 flex gap-2 overflow-x-auto px-1 pb-1">
+            <div className="hidden md:flex flex-wrap justify-end gap-2 max-w-[50%] flex-shrink-0">
               {userBoxes.map((b) => {
                 const isActive = b.id === id;
                 return (
                   <Link
                     key={b.id}
                     href={`/flies/boxes/${b.id}`}
-                    className={`group flex flex-shrink-0 items-center gap-2 rounded-lg border px-3 py-2 transition-colors ${
+                    className={`group flex items-center gap-2 rounded-lg border px-3 py-2 transition-colors ${
                       isActive
                         ? "border-[#E8923A] bg-[#E8923A]/10"
                         : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
@@ -74,33 +103,6 @@ export default async function BoxDetailV2({ params }: Props) {
               })}
             </div>
           )}
-          <Link
-            href="/flies?tab=boxes"
-            className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#0BA5C7] transition-colors mb-2"
-          >
-            <ChevronLeft className="h-3 w-3" /> All boxes
-          </Link>
-          <div className="flex items-baseline gap-3">
-            <h1 className="font-['DM_Serif_Display'] text-3xl text-[#F0F6FC] tracking-tight">
-              {box.name}
-            </h1>
-            <span className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[#0BA5C7]">
-              {TIER_LABELS[box.tier]}
-            </span>
-            {box.is_default && (
-              <span className="rounded bg-[#0BA5C7]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#0BA5C7]">
-                Default
-              </span>
-            )}
-          </div>
-          {box.description && (
-            <p className="mt-2 text-sm text-[#A8B2BD] max-w-2xl">{box.description}</p>
-          )}
-          <p className="mt-3 font-['IBM_Plex_Mono'] text-[11px] text-[#6E7681]">
-            {variants.length} {variants.length === 1 ? "variant" : "variants"} ·
-            {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
-            tap any cell to edit
-          </p>
         </div>
       </header>
 
