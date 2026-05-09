@@ -12,6 +12,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
 import { isAdmin } from "@/lib/admin";
+import { assertCanEditPattern } from "@/lib/flies/permissions";
 import type {
   Pattern,
   Variant,
@@ -19,6 +20,9 @@ import type {
   VariantInBox,
   VariantPhoto,
   VariantRow,
+  MaterialSlot,
+  TyingStep,
+  BeadMaterial,
 } from "@/types/fly-v2";
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -696,6 +700,282 @@ export async function softDeleteVariants(
     return { deleted: 0, error: updateErr.message };
   }
   return { deleted: count ?? ids.length };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Pattern editing — full pattern fetch, update, slug-redirect
+// ────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Fetch a pattern with every editable field hydrated. Used by the edit
+ * drawer to seed initial state without a second round-trip.
+ */
+export async function getPatternForEdit(patternId: string): Promise<Pattern | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("fly_patterns_v2")
+    .select("*")
+    .eq("id", patternId)
+    .maybeSingle();
+  if (error) {
+    console.error("[getPatternForEdit]", error);
+    return null;
+  }
+  return (data ?? null) as Pattern | null;
+}
+
+export interface PatternUpdateFields {
+  name?: string;
+  slug?: string | null;
+  category?: string | null;
+  hook_style?: string | null;
+  description?: string | null;
+  history?: string | null;
+  tying_overview?: string | null;
+  fishing_tips?: string | null;
+  base_materials?: MaterialSlot[];
+  tying_steps?: TyingStep[];
+  hero_image_url?: string | null;
+}
+
+/**
+ * Update a pattern. Permission is enforced both here (assertCanEditPattern)
+ * and at the RLS layer — defence in depth. Returns the updated row, or
+ * { ok: false } with status (401/403/404/500) so the server action can
+ * relay to the UI.
+ *
+ * If `slug` changes on a canonical pattern, caller is responsible for
+ * inserting a fly_pattern_redirects row to keep the old URL alive.
+ */
+export async function updatePattern(
+  patternId: string,
+  fields: PatternUpdateFields,
+): Promise<
+  | { ok: true; pattern: Pattern; slugChanged: boolean; oldSlug: string | null }
+  | { ok: false; error: string; status: 401 | 403 | 404 | 500 }
+> {
+  const supabase = await createClient();
+  const guard = await assertCanEditPattern(supabase, patternId);
+  if (!guard.ok) return { ok: false, error: guard.error, status: guard.status };
+
+  const oldSlug = guard.pattern.slug;
+  const updates: Record<string, unknown> = {};
+  if (fields.name !== undefined) updates.name = fields.name;
+  if (fields.slug !== undefined) updates.slug = fields.slug;
+  if (fields.category !== undefined) updates.category = fields.category;
+  if (fields.hook_style !== undefined) updates.hook_style = fields.hook_style;
+  if (fields.description !== undefined) updates.description = fields.description;
+  if (fields.history !== undefined) updates.history = fields.history;
+  if (fields.tying_overview !== undefined) updates.tying_overview = fields.tying_overview;
+  if (fields.fishing_tips !== undefined) updates.fishing_tips = fields.fishing_tips;
+  if (fields.base_materials !== undefined) updates.base_materials = fields.base_materials;
+  if (fields.tying_steps !== undefined) updates.tying_steps = fields.tying_steps;
+  if (fields.hero_image_url !== undefined) updates.hero_image_url = fields.hero_image_url;
+
+  if (Object.keys(updates).length === 0) {
+    // No-op save — return the row as-is so the caller's revalidate still fires.
+    const current = await getPatternForEdit(patternId);
+    if (!current) return { ok: false, error: "Pattern vanished mid-update.", status: 404 };
+    return { ok: true, pattern: current, slugChanged: false, oldSlug };
+  }
+
+  const { data, error } = await supabase
+    .from("fly_patterns_v2")
+    .update(updates)
+    .eq("id", patternId)
+    .select()
+    .single();
+  if (error) {
+    console.error("[updatePattern]", error);
+    return { ok: false, error: error.message, status: 500 };
+  }
+  const updated = data as Pattern;
+  return {
+    ok: true,
+    pattern: updated,
+    slugChanged: fields.slug !== undefined && fields.slug !== oldSlug,
+    oldSlug,
+  };
+}
+
+/**
+ * Cartesian product → batch insert. Each row in the matrix becomes one
+ * fly_variants row owned by the current user (created_by_user_id = auth.uid()).
+ *
+ * Permission: any signed-in user can create user-owned variants on a
+ * pattern — RLS on fly_variants gates this. Admin can create canonical
+ * variants by passing `as_canonical: true` (created_by_user_id null), but
+ * only if assertCanEditPattern passes for the parent pattern.
+ */
+export interface BulkCreateVariantsInput {
+  pattern_id: string;
+  sizes: string[];
+  bead_colors?: string[];
+  body_colors?: string[];
+  bead_weights_mm?: number[];
+  bead_materials?: BeadMaterial[];
+  /** Admin-only: create canonical variants visible to all users. */
+  as_canonical?: boolean;
+}
+
+export async function bulkCreateVariants(
+  input: BulkCreateVariantsInput,
+): Promise<
+  | { ok: true; variants: Variant[] }
+  | { ok: false; error: string; status: 400 | 401 | 403 | 404 | 500 }
+> {
+  if (input.sizes.length === 0) {
+    return { ok: false, error: "At least one size is required.", status: 400 };
+  }
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You must be signed in.", status: 401 };
+
+  if (input.as_canonical) {
+    const guard = await assertCanEditPattern(supabase, input.pattern_id);
+    if (!guard.ok) return { ok: false, error: guard.error, status: guard.status };
+  }
+
+  // Cartesian product. Empty optional axes → [undefined] so the loop runs once.
+  const beadColors = input.bead_colors?.length ? input.bead_colors : [undefined];
+  const bodyColors = input.body_colors?.length ? input.body_colors : [undefined];
+  const beadWeights = input.bead_weights_mm?.length ? input.bead_weights_mm : [undefined];
+  const beadMaterials = input.bead_materials?.length ? input.bead_materials : [undefined];
+
+  const rows: Record<string, unknown>[] = [];
+  for (const size of input.sizes) {
+    for (const beadColor of beadColors) {
+      for (const bodyColor of bodyColors) {
+        for (const beadWeight of beadWeights) {
+          for (const beadMaterial of beadMaterials) {
+            rows.push({
+              pattern_id: input.pattern_id,
+              created_by_user_id: input.as_canonical ? null : user.id,
+              size,
+              bead_color: beadColor ?? null,
+              body_color: bodyColor ?? null,
+              bead_weight_mm: beadWeight ?? null,
+              bead_material: beadMaterial ?? null,
+              materials_override: {},
+            });
+          }
+        }
+      }
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("fly_variants")
+    .insert(rows)
+    .select();
+  if (error) {
+    console.error("[bulkCreateVariants]", error);
+    return { ok: false, error: error.message, status: 500 };
+  }
+  return { ok: true, variants: (data ?? []) as Variant[] };
+}
+
+/**
+ * Add a list of variants to a box with a per-variant target_count seeded
+ * into fly_variant_stock so the deficit calculation lights up immediately.
+ * Composes addVariantsToBox + upsertVariantStock in a way the UI can call
+ * as one click.
+ */
+export async function addVariantsToBoxWithQty(
+  boxId: string,
+  items: { variant_id: string; quantity: number }[],
+): Promise<
+  | { ok: true; addedToBox: number; stockRows: number }
+  | { ok: false; error: string }
+> {
+  if (items.length === 0) return { ok: true, addedToBox: 0, stockRows: 0 };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You must be signed in." };
+
+  const variantIds = items.map((i) => i.variant_id);
+  const boxRows = items.map<VariantInBox>((i) => ({
+    box_id: boxId,
+    variant_id: i.variant_id,
+    user_id: user.id,
+    sort_order: 0,
+    quantity: Math.max(1, Math.floor(i.quantity || 1)),
+    added_at: new Date().toISOString(),
+  }));
+  const { error: boxErr, count } = await supabase
+    .from("fly_variant_in_box")
+    .upsert(boxRows, { onConflict: "box_id,variant_id", count: "exact" });
+  if (boxErr) {
+    console.error("[addVariantsToBoxWithQty] box", boxErr);
+    return { ok: false, error: boxErr.message };
+  }
+
+  const stockRows = items.map((i) => ({
+    user_id: user.id,
+    variant_id: i.variant_id,
+    target_count: Math.max(0, Math.floor(i.quantity || 0)),
+  }));
+  const { error: stockErr } = await supabase
+    .from("fly_variant_stock")
+    .upsert(stockRows, { onConflict: "user_id,variant_id" });
+  if (stockErr) {
+    // Box-add already succeeded — surface the error but don't roll back.
+    // The user can correct target counts manually from the variant table.
+    console.error("[addVariantsToBoxWithQty] stock", stockErr);
+    return { ok: false, error: `Added to box, but target counts failed: ${stockErr.message}` };
+  }
+
+  return { ok: true, addedToBox: count ?? variantIds.length, stockRows: stockRows.length };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Slug redirects (canonical rename safety)
+// ────────────────────────────────────────────────────────────────────────────
+
+export interface PatternRedirectHit {
+  pattern_id: string;
+  current_slug: string | null;
+}
+
+/**
+ * If `slug` matches a row in fly_pattern_redirects, return the current slug
+ * to redirect to. Returns null when no redirect is registered.
+ */
+export async function lookupPatternRedirect(slug: string): Promise<PatternRedirectHit | null> {
+  const supabase = createStaticClient();
+  const { data: redirect, error } = await supabase
+    .from("fly_pattern_redirects")
+    .select("pattern_id")
+    .eq("old_slug", slug)
+    .maybeSingle();
+  if (error || !redirect) return null;
+
+  const { data: pattern } = await supabase
+    .from("fly_patterns_v2")
+    .select("slug")
+    .eq("id", (redirect as { pattern_id: string }).pattern_id)
+    .maybeSingle();
+
+  return {
+    pattern_id: (redirect as { pattern_id: string }).pattern_id,
+    current_slug: ((pattern as { slug: string | null } | null)?.slug) ?? null,
+  };
+}
+
+/** Insert a redirect row when an admin renames a canonical pattern's slug. */
+export async function insertPatternRedirect(oldSlug: string, patternId: string): Promise<boolean> {
+  if (!oldSlug) return true;
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("fly_pattern_redirects")
+    .upsert({ old_slug: oldSlug, pattern_id: patternId }, { onConflict: "old_slug" });
+  if (error) {
+    console.error("[insertPatternRedirect]", error);
+    return false;
+  }
+  return true;
 }
 
 /** Remove a variant from a box. */

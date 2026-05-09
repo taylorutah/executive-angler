@@ -14,7 +14,14 @@ import {
   softDeleteVariants,
   updateVariant,
   updateBoxVariantQuantity,
+  updatePattern,
+  bulkCreateVariants,
+  addVariantsToBoxWithQty,
+  insertPatternRedirect,
+  type PatternUpdateFields,
 } from "@/lib/db/fly-v2";
+import { assertCanEditPattern } from "@/lib/flies/permissions";
+import type { BeadMaterial } from "@/types/fly-v2";
 
 export interface UpdateStockInput {
   variant_id: string;
@@ -233,6 +240,201 @@ export interface UpdateBoxQuantityInput {
   box_id: string;
   variant_id: string;
   quantity: number;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Pattern editing — name/recipe/steps/editorial/hero
+// ────────────────────────────────────────────────────────────────────────────
+
+export interface UpdatePatternInput {
+  pattern_id: string;
+  /** Current slug — used to revalidate the existing URL even if slug changes. */
+  pattern_slug: string;
+  fields: PatternUpdateFields;
+}
+
+/**
+ * Edit any subset of a pattern's editable fields. Permission is enforced
+ * inside updatePattern (assertCanEditPattern + RLS). When the slug changes
+ * on a canonical pattern, an automatic redirect row keeps the old URL
+ * 301-ing to the new one.
+ */
+export async function updatePatternAction(
+  input: UpdatePatternInput,
+): Promise<{ ok: boolean; error?: string; newSlug?: string | null }> {
+  const result = await updatePattern(input.pattern_id, input.fields);
+  if (!result.ok) return { ok: false, error: result.error };
+
+  if (result.slugChanged && result.oldSlug && result.pattern.owner_user_id === null) {
+    // Canonical rename — preserve old URL.
+    await insertPatternRedirect(result.oldSlug, result.pattern.id);
+  }
+
+  if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
+  if (result.pattern.slug && result.pattern.slug !== input.pattern_slug) {
+    revalidatePath(`/flies/${result.pattern.slug}`);
+  }
+  // Catalog pages list pattern names/categories — refresh.
+  revalidatePath("/flies");
+  revalidatePath("/flies/library");
+
+  return { ok: true, newSlug: result.pattern.slug };
+}
+
+/**
+ * Upload a hero image for a pattern. Storage path:
+ *   personal: <user_id>/<pattern_id>/<photo_id>.<ext>
+ *   canonical (admin): admin/<pattern_id>/<photo_id>.<ext>
+ * On success, sets pattern.hero_image_url to the public URL.
+ */
+export async function uploadPatternHeroAction(
+  formData: FormData,
+): Promise<{ ok: boolean; error?: string; url?: string }> {
+  const file = formData.get("file");
+  const patternId = formData.get("pattern_id");
+  const patternSlug = formData.get("pattern_slug");
+
+  if (!(file instanceof File)) return { ok: false, error: "No file provided." };
+  if (typeof patternId !== "string" || !patternId) return { ok: false, error: "Missing pattern_id." };
+  if (typeof patternSlug !== "string") return { ok: false, error: "Missing pattern_slug." };
+  if (file.size > 5 * 1024 * 1024) return { ok: false, error: "File over 5 MB." };
+
+  const supabase = await createClient();
+  const guard = await assertCanEditPattern(supabase, patternId);
+  if (!guard.ok) return { ok: false, error: guard.error };
+
+  const folderPrefix = guard.pattern.owner_user_id === null ? "admin" : guard.user.id;
+  const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+  const photoId = crypto.randomUUID();
+  const storagePath = `${folderPrefix}/${patternId}/${photoId}.${ext}`;
+
+  const arrayBuf = await file.arrayBuffer();
+  const { error: uploadErr } = await supabase.storage
+    .from("pattern-hero-photos")
+    .upload(storagePath, new Uint8Array(arrayBuf), {
+      contentType: file.type || "image/jpeg",
+      upsert: false,
+    });
+  if (uploadErr) {
+    console.error("[uploadPatternHeroAction] storage", uploadErr);
+    return { ok: false, error: uploadErr.message };
+  }
+
+  const { data: pub } = supabase.storage.from("pattern-hero-photos").getPublicUrl(storagePath);
+  const publicUrl = pub.publicUrl;
+
+  const writeResult = await updatePattern(patternId, { hero_image_url: publicUrl });
+  if (!writeResult.ok) {
+    // Best-effort cleanup if the metadata write failed.
+    await supabase.storage.from("pattern-hero-photos").remove([storagePath]);
+    return { ok: false, error: writeResult.error };
+  }
+
+  if (patternSlug) revalidatePath(`/flies/${patternSlug}`);
+  return { ok: true, url: publicUrl };
+}
+
+/**
+ * Upload a single tying-step photo. Returns the public URL — the client
+ * writes it back into the appropriate `tying_steps[i].image_url` and saves
+ * the whole steps array via updatePatternAction.
+ */
+export async function uploadTyingStepPhotoAction(
+  formData: FormData,
+): Promise<{ ok: boolean; error?: string; url?: string }> {
+  const file = formData.get("file");
+  const patternId = formData.get("pattern_id");
+
+  if (!(file instanceof File)) return { ok: false, error: "No file provided." };
+  if (typeof patternId !== "string" || !patternId) return { ok: false, error: "Missing pattern_id." };
+  if (file.size > 5 * 1024 * 1024) return { ok: false, error: "File over 5 MB." };
+
+  const supabase = await createClient();
+  const guard = await assertCanEditPattern(supabase, patternId);
+  if (!guard.ok) return { ok: false, error: guard.error };
+
+  const folderPrefix = guard.pattern.owner_user_id === null ? "admin" : guard.user.id;
+  const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+  const photoId = crypto.randomUUID();
+  const storagePath = `${folderPrefix}/${patternId}/${photoId}.${ext}`;
+
+  const arrayBuf = await file.arrayBuffer();
+  const { error: uploadErr } = await supabase.storage
+    .from("pattern-step-photos")
+    .upload(storagePath, new Uint8Array(arrayBuf), {
+      contentType: file.type || "image/jpeg",
+      upsert: false,
+    });
+  if (uploadErr) {
+    console.error("[uploadTyingStepPhotoAction] storage", uploadErr);
+    return { ok: false, error: uploadErr.message };
+  }
+  const { data: pub } = supabase.storage.from("pattern-step-photos").getPublicUrl(storagePath);
+  return { ok: true, url: pub.publicUrl };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Bulk variant builder
+// ────────────────────────────────────────────────────────────────────────────
+
+export interface BulkCreateVariantsActionInput {
+  pattern_id: string;
+  pattern_slug: string;
+  sizes: string[];
+  bead_colors?: string[];
+  body_colors?: string[];
+  bead_weights_mm?: number[];
+  bead_materials?: BeadMaterial[];
+  /** Admin-only: produce canonical variants instead of user-owned ones. */
+  as_canonical?: boolean;
+  /** If supplied, also drop every created variant into this box at qty. */
+  add_to_box?: { box_id: string; quantity_per_variant: number };
+}
+
+export async function bulkCreateVariantsAction(
+  input: BulkCreateVariantsActionInput,
+): Promise<{ ok: boolean; error?: string; created?: number; addedToBox?: number }> {
+  if (input.sizes.length === 0) {
+    return { ok: false, error: "Pick at least one size." };
+  }
+  const result = await bulkCreateVariants({
+    pattern_id: input.pattern_id,
+    sizes: input.sizes,
+    bead_colors: input.bead_colors,
+    body_colors: input.body_colors,
+    bead_weights_mm: input.bead_weights_mm,
+    bead_materials: input.bead_materials,
+    as_canonical: input.as_canonical,
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+
+  let addedToBox = 0;
+  if (input.add_to_box && result.variants.length > 0) {
+    const boxResult = await addVariantsToBoxWithQty(
+      input.add_to_box.box_id,
+      result.variants.map((v) => ({
+        variant_id: v.id,
+        quantity: input.add_to_box!.quantity_per_variant,
+      })),
+    );
+    if (!boxResult.ok) {
+      // Variants exist; box-add failed. Tell the caller exactly that.
+      revalidatePath(`/flies/${input.pattern_slug}`);
+      return {
+        ok: false,
+        created: result.variants.length,
+        error: `Created ${result.variants.length} variants, but adding to box failed: ${boxResult.error}`,
+      };
+    }
+    addedToBox = boxResult.addedToBox;
+  }
+
+  revalidatePath(`/flies/${input.pattern_slug}`);
+  if (input.add_to_box) {
+    revalidatePath(`/flies/boxes/${input.add_to_box.box_id}`);
+    revalidatePath("/flies/boxes", "layout");
+  }
+  return { ok: true, created: result.variants.length, addedToBox };
 }
 
 /** Update how many physical flies of a variant are in a specific box. */

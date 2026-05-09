@@ -7,15 +7,20 @@
  * 20260508_phase2_unified_fly_model.sql + canonical/user_data backfills.
  */
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
   getCanonicalPatternBySlug,
+  getPatternForEdit,
   listCanonicalPatterns,
   listVariantRowsForPattern,
   listMyBoxes,
+  lookupPatternRedirect,
 } from "@/lib/db/fly-v2";
+import { createClient } from "@/lib/supabase/server";
+import { canEditPattern } from "@/lib/flies/permissions";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -37,7 +42,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const pattern = await getCanonicalPatternBySlug(slug);
+  let pattern = await getCanonicalPatternBySlug(slug);
+  if (!pattern) {
+    const r = await lookupPatternRedirect(slug);
+    if (r?.current_slug) pattern = await getCanonicalPatternBySlug(r.current_slug);
+  }
   if (!pattern) return { title: "Fly Pattern — Executive Angler" };
   const title = `${pattern.name} — ${pattern.category ?? "Fly Pattern"} | Executive Angler`;
   const description = pattern.description?.slice(0, 160) ?? `${pattern.name} fly pattern: tying recipe, variants, fishing tips.`;
@@ -56,12 +65,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PatternDetail({ params }: Props) {
   const { slug } = await params;
-  const pattern = await getCanonicalPatternBySlug(slug);
+  let pattern = await getCanonicalPatternBySlug(slug);
+  if (!pattern) {
+    const r = await lookupPatternRedirect(slug);
+    if (r?.current_slug && r.current_slug !== slug) {
+      redirect(`/flies/${r.current_slug}`);
+    }
+    if (r?.current_slug) pattern = await getCanonicalPatternBySlug(r.current_slug);
+  }
   if (!pattern) notFound();
 
-  const [variants, userBoxes] = await Promise.all([
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const editable = canEditPattern(pattern, user ? { id: user.id, email: user.email } : null);
+  const adminFlag = isAdmin(user?.email ?? null);
+
+  const [variants, userBoxes, fullPattern] = await Promise.all([
     listVariantRowsForPattern(pattern.id),
     listMyBoxes(),
+    editable ? getPatternForEdit(pattern.id) : Promise.resolve(null),
   ]);
 
   return (
@@ -129,7 +151,13 @@ export default async function PatternDetail({ params }: Props) {
               tap any cell to edit · multi-select for bulk actions · drop a photo onto a row to upload
             </p>
           </div>
-          <PatternHeaderActions patternId={pattern.id} patternSlug={pattern.slug ?? ""} />
+          <PatternHeaderActions
+            patternId={pattern.id}
+            patternSlug={pattern.slug ?? ""}
+            editablePattern={fullPattern}
+            userBoxes={userBoxes}
+            isAdmin={adminFlag}
+          />
         </div>
         <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">
           <VariantTable
