@@ -445,7 +445,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
   const Wrapper = embedded ? 'div' : 'div';
   const wrapperClass = embedded ? '' : 'min-h-screen bg-bg text-text-primary';
   const headerClass = embedded ? '' : 'border-b border-border';
-  const headerInnerClass = embedded ? 'pb-2' : 'max-w-6xl mx-auto px-4 py-6';
+  const headerInnerClass = embedded ? 'pb-2' : 'max-w-7xl mx-auto px-4 lg:px-6 py-4';
 
   return (
     <Wrapper className={wrapperClass}>
@@ -453,25 +453,25 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       <div className={headerClass}>
         <div className={headerInnerClass}>
           {!embedded && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-end justify-between border-b border-border pb-3">
               <div>
-                <div className="flex items-center gap-2 text-text-muted text-sm mb-1">
+                <div className="flex items-center gap-1.5 text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">
                   <Link href="/journal/flies" className="hover:text-accent">Fly Box</Link>
                   <span>/</span>
                   <span>Tying Workbench</span>
                 </div>
-                <h1 className="font-[family-name:var(--font-heading)] text-2xl text-text-primary">
+                <h1 className="font-[family-name:var(--font-heading)] text-2xl text-text-primary leading-tight">
                   Tying Workbench
                 </h1>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <span className="font-mono text-2xl text-accent font-semibold">{inventory.length}</span>
-                  <span className="text-text-muted text-sm ml-1">materials</span>
+                  <span className="font-mono text-xl text-accent font-semibold tabular-nums">{inventory.length}</span>
+                  <span className="text-text-muted text-[11px] uppercase tracking-widest ml-1">materials</span>
                 </div>
                 <Link
                   href="/journal/flies/new"
-                  className="flex items-center gap-2 bg-accent text-bg px-4 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-1.5 h-9 bg-accent text-bg px-3 rounded-md text-[13px] font-semibold hover:opacity-90 transition-opacity"
                 >
                   <Plus size={16} />
                   New Fly
@@ -497,7 +497,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                   onClick={() => setTab(id)}
                   role="tab"
                   aria-selected={tab === id}
-                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-[12px] font-semibold uppercase tracking-wide whitespace-nowrap transition-colors ${
                     tab === id
                       ? 'bg-accent text-bg'
                       : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised'
@@ -517,7 +517,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
         <div className="mb-4">
           <TipCard storageKey="workbench-intro-v2" title="Two ways to start — no inventory required">
             <p><span className="text-[#F0F6FC] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
@@ -539,14 +539,14 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                   value={flyQuery}
                   onChange={e => setFlyQuery(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') fetchFlyList(flyQuery, flyCategory); }}
-                  className="w-full bg-surface border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+                  className="w-full h-9 bg-surface border border-border rounded-md pl-9 pr-3 text-[13px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
                 />
               </div>
               <div className="grid grid-cols-[1fr_auto] gap-2 sm:contents">
                 <select
                   value={flyCategory}
                   onChange={e => setFlyCategory(e.target.value)}
-                  className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
+                  className="h-9 bg-surface border border-border rounded-md px-2.5 text-[13px] text-text-primary focus:outline-none focus:border-accent"
                 >
                   <option value="">All Types</option>
                   <option value="nymph">Nymph</option>
@@ -558,7 +558,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                 </select>
                 <button
                   onClick={() => fetchFlyList(flyQuery, flyCategory)}
-                  className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 whitespace-nowrap"
+                  className="h-9 bg-accent text-bg px-4 rounded-md text-[13px] font-semibold hover:opacity-90 whitespace-nowrap"
                 >
                   Search
                 </button>
@@ -714,13 +714,13 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                   value={browseSearch}
                   onChange={e => setBrowseSearch(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); } }}
-                  className="w-full bg-surface border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+                  className="w-full h-9 bg-surface border border-border rounded-md pl-9 pr-3 text-[13px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
                 />
               </div>
               <select
                 value={browseCategory}
                 onChange={e => { setBrowsePage(0); setBrowseCategory(e.target.value); }}
-                className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent"
+                className="h-9 bg-surface border border-border rounded-md px-2.5 text-[13px] text-text-primary focus:outline-none focus:border-accent"
               >
                 <option value="">All Categories</option>
                 {CATEGORIES.map(c => (
@@ -844,7 +844,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
           : 0;
         return (
           <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <div className="bg-surface rounded-xl border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-surface rounded-md border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-[family-name:var(--font-heading)] text-lg">
                   {isSized ? 'Inventory by Size' : 'Add to Inventory'}
@@ -971,7 +971,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
       {/* ─── Submit New Material Modal ──────────────────────────── */}
       {showSubmitMaterial && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-surface rounded-xl border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-surface rounded-md border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-[family-name:var(--font-heading)] text-lg">Add New Material</h3>
               <button onClick={() => setShowSubmitMaterial(false)} className="text-text-muted hover:text-text-primary">
@@ -1051,7 +1051,7 @@ function InventoryGroup({
   const groups = Object.values(byMaterial);
 
   return (
-    <div className="bg-surface rounded-xl border border-border overflow-hidden">
+    <div className="bg-surface rounded-md border border-border overflow-hidden">
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-raised transition-colors"
@@ -1127,7 +1127,7 @@ function MatchCard({ match }: { match: MatchResult }) {
   const isPerfect = match.match_percentage === 100;
 
   return (
-    <div className={`bg-surface rounded-xl border overflow-hidden ${
+    <div className={`bg-surface rounded-md border overflow-hidden ${
       isPerfect ? 'border-success' : 'border-border'
     }`}>
       <button
@@ -1211,7 +1211,7 @@ function PickFlyCard({
   const pctColor = pct === 100 ? 'text-success' : pct >= 50 ? 'text-accent' : 'text-text-muted';
 
   return (
-    <div className="bg-surface rounded-xl border border-border overflow-hidden">
+    <div className="bg-surface rounded-md border border-border overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-surface-raised transition-colors"
@@ -1321,7 +1321,7 @@ function MaterialCard({
   const isOwned = ownedCount > 0;
   const hasSizes = !!(material.sizes && material.sizes.length > 0);
   return (
-    <div className={`bg-surface rounded-xl border p-4 flex flex-col ${isPending ? 'border-[#E8923A]/40' : 'border-border'}`}>
+    <div className={`bg-surface rounded-md border p-3 flex flex-col ${isPending ? 'border-[#E8923A]/40' : 'border-border'}`}>
       <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">

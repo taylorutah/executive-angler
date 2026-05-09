@@ -525,59 +525,87 @@ function SlotRow({
 }) {
   const cfg = getRoleFields(role);
   const [material, setMaterial] = useState<TyingMaterial | null>(null);
+  const cellInputClass =
+    "w-full h-7 bg-[#0D1117] border border-[var(--color-border)] rounded px-2 text-[12px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]";
+  const cellSelectClass = `${cellInputClass} appearance-none cursor-pointer pr-5`;
+
   const renderField = (field: RoleField) => {
     const placeholder = cfg.placeholders?.[field] ?? "";
-    const cellClass =
-      "w-full h-7 bg-[#0D1117] border border-[var(--color-border)] rounded px-2 text-[12px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]";
     switch (field) {
-      case "size":
-        return (
+      case "size": {
+        const options = material?.sizes ?? [];
+        return options.length > 0 ? (
+          <select
+            value={value.size ?? ""}
+            onChange={(e) => onChange({ size: e.target.value })}
+            className={cellSelectClass}
+          >
+            <option value="">—</option>
+            {options.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        ) : (
           <input
             type="text"
             value={value.size ?? ""}
             onChange={(e) => onChange({ size: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
-      case "color":
-        return (
+      }
+      case "color": {
+        const options = material?.colors ?? [];
+        return options.length > 0 ? (
+          <select
+            value={value.color ?? ""}
+            onChange={(e) => onChange({ color: e.target.value })}
+            className={cellSelectClass}
+          >
+            <option value="">—</option>
+            {options.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        ) : (
           <input
             type="text"
             value={value.color ?? ""}
             onChange={(e) => onChange({ color: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
+      }
       case "weight":
         return (
           <input
             type="text"
-            value={value.weight ?? ""}
+            value={value.weight ?? material?.weight ?? ""}
             onChange={(e) => onChange({ weight: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
       case "materialType":
         return (
           <input
             type="text"
-            value={value.materialType ?? ""}
+            value={value.materialType ?? material?.material_type ?? ""}
             onChange={(e) => onChange({ materialType: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
       case "finish":
         return (
           <input
             type="text"
-            value={value.finish ?? ""}
+            value={value.finish ?? material?.finish ?? ""}
             onChange={(e) => onChange({ finish: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
       case "quantity":
@@ -587,7 +615,7 @@ function SlotRow({
             value={value.quantity ?? ""}
             onChange={(e) => onChange({ quantity: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
       case "length":
@@ -597,7 +625,7 @@ function SlotRow({
             value={value.size ?? ""}
             onChange={(e) => onChange({ size: e.target.value })}
             placeholder={placeholder}
-            className={cellClass}
+            className={cellInputClass}
           />
         );
     }
