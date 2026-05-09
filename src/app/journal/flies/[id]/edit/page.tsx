@@ -7,6 +7,7 @@ import VariantModal from "@/components/flies/VariantModal";
 import VariantTree from "@/components/flies/VariantTree";
 import FlyCardModal from "@/components/flies/FlyCardModal";
 import HelpHint from "@/components/ui/HelpHint";
+import CatchMigrationBanner from "@/components/flies/CatchMigrationBanner";
 import FlyPatternForm, {
   type FlyPatternFormInitial,
 } from "@/components/flies/FlyPatternForm";
@@ -280,6 +281,14 @@ export default function EditFlyPatternPage() {
         error={error}
         cancelHref="/my-flies?tab=box"
         topRight={topRight}
+        banner={
+          initial.parentCanonical ? (
+            <CatchMigrationBanner
+              patternId={id}
+              parentCanonicalName={initial.parentCanonical.name}
+            />
+          ) : null
+        }
         extras={<VariantTree patternId={id} />}
       />
 

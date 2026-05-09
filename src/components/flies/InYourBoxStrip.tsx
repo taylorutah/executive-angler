@@ -29,6 +29,7 @@ import {
   ListChecks,
   CreditCard,
   Library,
+  GitFork,
 } from "lucide-react";
 import PersonalizeSheet, {
   type PersonalizeSheetCanonicalFly,
@@ -91,6 +92,71 @@ export default function InYourBoxStrip({
   const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [cardOpen, setCardOpen] = useState(false);
   const [membershipOpen, setMembershipOpen] = useState<string | null>(null);
+  const [forking, setForking] = useState(false);
+  const [forkError, setForkError] = useState<string | null>(null);
+
+  /**
+   * "Open full editor" — eager fork. If the user already has a fly_patterns
+   * row with parent_canonical_id = fly.id, navigate there. Otherwise POST
+   * to forkPersonalizationToPattern with the active variant's
+   * personalizations and navigate to the fresh edit page.
+   */
+  async function openFullEditor() {
+    setForking(true);
+    setForkError(null);
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push(`/login?redirect=/flies/${fly.id}`);
+        return;
+      }
+
+      // Look for an existing fork first.
+      const { data: existing } = await supabase
+        .from("fly_patterns")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("parent_canonical_id", fly.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (existing?.id) {
+        router.push(`/journal/flies/${existing.id}/edit`);
+        return;
+      }
+
+      // No fork yet — create one from the active variant's personalizations.
+      const personalizations = activeRow?.personalizations ?? {};
+      const res = await fetch("/api/fishing/flies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "personalization",
+          canonical_fly_id: fly.id,
+          personalizations,
+        }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setForkError(data.error || "Couldn't open the editor. Try again.");
+        setForking(false);
+        return;
+      }
+      const { pattern_id } = (await res.json()) as { pattern_id?: string };
+      if (!pattern_id) {
+        setForkError("Fork succeeded but no pattern id returned.");
+        setForking(false);
+        return;
+      }
+      router.push(`/journal/flies/${pattern_id}/edit?just_forked=1`);
+    } catch (e) {
+      console.error("[openFullEditor]", e);
+      setForkError("Network error");
+      setForking(false);
+    }
+  }
 
   const activeRow: FlyBoxRow | null =
     variants.find((v) => v.id === initialActiveVariantId) ??
@@ -316,7 +382,7 @@ export default function InYourBoxStrip({
                 "No specs saved yet — tap Edit to record your hook, bead, thread."}
             </p>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
             <button
               type="button"
               onClick={() => setCardOpen(true)}
@@ -338,8 +404,24 @@ export default function InYourBoxStrip({
             >
               <Edit3 className="h-3.5 w-3.5" /> Edit
             </button>
+            <button
+              onClick={openFullEditor}
+              disabled={forking}
+              title="Open the full personal-pattern editor"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#0BA5C7]/40 bg-[#0BA5C7]/10 text-[#0BA5C7] hover:bg-[#0BA5C7]/20 text-xs font-semibold transition-colors disabled:opacity-60"
+            >
+              {forking ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <GitFork className="h-3.5 w-3.5" />
+              )}
+              {forking ? "Opening…" : "Open full editor"}
+            </button>
           </div>
         </div>
+        {forkError && (
+          <p className="mt-2 text-[11px] text-red-400">{forkError}</p>
+        )}
         {!isLibraryView && (
           <div className="mt-2 pt-2 border-t border-[#E8923A]/15 flex items-center justify-between gap-2 flex-wrap">
             {!showChipStrip ? (

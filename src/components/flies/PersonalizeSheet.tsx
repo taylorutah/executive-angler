@@ -510,13 +510,14 @@ export default function PersonalizeSheet({
                   {deviationCount === 1 ? "field" : "fields"} differ from the library version.
                 </div>
               )}
-              {deviationCount >= 3 && (
-                <PromoteToPatternPrompt
-                  canonicalFlyId={fly.id}
-                  canonicalName={fly.name}
-                  personalizations={personalizations}
-                />
-              )}
+              {/* Always show the fork CTA — Taylor wants the bridge to the
+                  full personal-pattern editor visible at all times, not
+                  hidden behind a 3+ deviation gate. */}
+              <PromoteToPatternPrompt
+                canonicalFlyId={fly.id}
+                canonicalName={fly.name}
+                personalizations={personalizations}
+              />
 
               {/* Variant identity */}
               <section className="space-y-3 rounded-xl border border-[#E8923A]/20 bg-[#E8923A]/5 p-3">
