@@ -129,25 +129,25 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
     const cfg = getRoleFields(step.role);
     if (!cfg.showSize) return <span className="text-[#484F58] text-[12px] text-center">—</span>;
     const options = step.material?.sizes ?? [];
-    return options.length > 0 ? (
-      <select
-        value={step.sizeChoice}
-        onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
-        className={cellSelect}
-      >
-        <option value="">—</option>
-        {options.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        value={step.sizeChoice}
-        onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
-        placeholder={cfg.placeholders?.size ?? ''}
-        className={cellInput}
-      />
+    const listId = options.length > 0 ? `sizes-${step.id}` : undefined;
+    return (
+      <>
+        <input
+          type="text"
+          list={listId}
+          value={step.sizeChoice}
+          onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
+          placeholder={cfg.placeholders?.size ?? ''}
+          className={cellInput}
+        />
+        {listId && (
+          <datalist id={listId}>
+            {options.map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   };
 
@@ -155,25 +155,25 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
     const cfg = getRoleFields(step.role);
     if (!cfg.showColor) return <span className="text-[#484F58] text-[12px] text-center">—</span>;
     const options = step.material?.colors ?? [];
-    return options.length > 0 ? (
-      <select
-        value={step.colorChoice}
-        onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
-        className={cellSelect}
-      >
-        <option value="">—</option>
-        {options.map((c) => (
-          <option key={c} value={c}>{c}</option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        value={step.colorChoice}
-        onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
-        placeholder={cfg.placeholders?.color ?? ''}
-        className={cellInput}
-      />
+    const listId = options.length > 0 ? `colors-${step.id}` : undefined;
+    return (
+      <>
+        <input
+          type="text"
+          list={listId}
+          value={step.colorChoice}
+          onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
+          placeholder={cfg.placeholders?.color ?? ''}
+          className={cellInput}
+        />
+        {listId && (
+          <datalist id={listId}>
+            {options.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   };
 
@@ -236,7 +236,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
   };
 
   return (
-    <div className="bg-[#161B22] overflow-hidden">
+    <div className="bg-[#161B22]">
       {/* Toolbar */}
       <div className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-2 py-1.5">
         <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">

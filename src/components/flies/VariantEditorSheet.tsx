@@ -524,57 +524,57 @@ function SlotRow({
 }) {
   const cfg = getRoleFields(role);
   const [material, setMaterial] = useState<TyingMaterial | null>(null);
+  const slotId = `slot-${role}`;
   const cellInputClass =
     "w-full h-7 bg-[#0D1117] border border-[var(--color-border)] rounded px-2 text-[12px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]";
-  const cellSelectClass = `${cellInputClass} appearance-none cursor-pointer pr-5`;
 
   const renderSize = () => {
     const placeholder = cfg.placeholders?.size ?? "";
     const options = material?.sizes ?? [];
-    return options.length > 0 ? (
-      <select
-        value={value.size ?? ""}
-        onChange={(e) => onChange({ size: e.target.value })}
-        className={cellSelectClass}
-      >
-        <option value="">—</option>
-        {options.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        value={value.size ?? ""}
-        onChange={(e) => onChange({ size: e.target.value })}
-        placeholder={placeholder}
-        className={cellInputClass}
-      />
+    const listId = options.length > 0 ? `${slotId}-sizes` : undefined;
+    return (
+      <>
+        <input
+          type="text"
+          list={listId}
+          value={value.size ?? ""}
+          onChange={(e) => onChange({ size: e.target.value })}
+          placeholder={placeholder}
+          className={cellInputClass}
+        />
+        {listId && (
+          <datalist id={listId}>
+            {options.map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   };
 
   const renderColor = () => {
     const placeholder = cfg.placeholders?.color ?? "";
     const options = material?.colors ?? [];
-    return options.length > 0 ? (
-      <select
-        value={value.color ?? ""}
-        onChange={(e) => onChange({ color: e.target.value })}
-        className={cellSelectClass}
-      >
-        <option value="">—</option>
-        {options.map((c) => (
-          <option key={c} value={c}>{c}</option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        value={value.color ?? ""}
-        onChange={(e) => onChange({ color: e.target.value })}
-        placeholder={placeholder}
-        className={cellInputClass}
-      />
+    const listId = options.length > 0 ? `${slotId}-colors` : undefined;
+    return (
+      <>
+        <input
+          type="text"
+          list={listId}
+          value={value.color ?? ""}
+          onChange={(e) => onChange({ color: e.target.value })}
+          placeholder={placeholder}
+          className={cellInputClass}
+        />
+        {listId && (
+          <datalist id={listId}>
+            {options.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+        )}
+      </>
     );
   };
 
