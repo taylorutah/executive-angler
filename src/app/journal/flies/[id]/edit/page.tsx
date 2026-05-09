@@ -136,10 +136,12 @@ export default function EditFlyPage() {
     else { setDeleting(false); setError("Failed to delete"); }
   }
 
-  const input = "w-full rounded-lg border border-[#21262D] bg-[#161B22] px-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-  const label = "flex items-center gap-1 text-xs font-semibold text-[#A8B2BD] uppercase tracking-wide mb-1";
-  const section = "bg-[#161B22] rounded-xl border border-[#21262D] p-5";
-  const sectionTitle = "flex items-center gap-2 text-sm font-bold text-[#F0F6FC] mb-4";
+  const input = "w-full h-9 rounded-md border border-[#30363D] bg-[#0D1117] px-2.5 text-[13px] text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none transition-colors";
+  const label = "flex items-center gap-1 text-[10px] font-bold text-[#6E7681] uppercase tracking-widest mb-1";
+  const section = "border border-[#30363D] rounded-md bg-[#161B22] overflow-hidden";
+  const sectionInner = "p-3";
+  const sectionHeader = "flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5";
+  const sectionTitle = "flex items-center gap-2 text-[10px] font-bold text-[#A8B2BD] uppercase tracking-widest";
   const isNymphLike = form.type === "Nymph" || form.type === "Wet Fly" || form.type === "Emerger" || form.type === "";
 
   if (loading) return (
@@ -216,8 +218,11 @@ export default function EditFlyPage() {
 
             {/* Pattern basics */}
             <div className={section}>
-              <h2 className={sectionTitle}><span>🪰</span> Pattern Info</h2>
-              <div className="space-y-3">
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>Pattern Info</h2>
+              </header>
+              <div className={sectionInner}>
+                <div className="space-y-3">
                 <div>
                   <label className={label}>Pattern Name <span className="text-red-400">*</span></label>
                   <input required className={input} placeholder="Perdigon, CDC Caddis…" value={form.name} onChange={e => updateForm("name", e.target.value)} />
@@ -252,11 +257,15 @@ export default function EditFlyPage() {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Hook & Bead */}
             <div className={section}>
-              <h2 className={sectionTitle}><span>⚙️</span> Hook &amp; Bead</h2>
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>Hook &amp; Bead</h2>
+              </header>
+              <div className={sectionInner}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className={label}>Hook Model</label>
@@ -312,19 +321,22 @@ export default function EditFlyPage() {
                   <input className={input} placeholder="Copper, gold, black nickel…" value={form.bead_color} onChange={e => updateForm("bead_color", e.target.value)} />
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Body / Tail / Thorax / Collar — nymph variation fields */}
             <div className={section}>
-              <h2 className={sectionTitle}>
-                <span>🧵</span>
-                Body, Tail &amp; Thorax
-                <HelpHint label="Why these matter">
-                  <p className="text-[#F0F6FC] font-semibold">First-class variation fields</p>
-                  <p>Changing just the thorax color or rib material creates a new variant. Filling these out makes diffing and auto-naming sharper.</p>
-                  <p className="text-[#6E7681] text-xs">Leave blank if not applicable — they&apos;re most useful on nymphs, emergers, and wet flies.</p>
-                </HelpHint>
-              </h2>
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>
+                  Body, Tail &amp; Thorax
+                  <HelpHint label="Why these matter">
+                    <p className="text-[#F0F6FC] font-semibold">First-class variation fields</p>
+                    <p>Changing just the thorax color or rib material creates a new variant. Filling these out makes diffing and auto-naming sharper.</p>
+                    <p className="text-[#6E7681] text-xs">Leave blank if not applicable — they&apos;re most useful on nymphs, emergers, and wet flies.</p>
+                  </HelpHint>
+                </h2>
+              </header>
+              <div className={sectionInner}>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 <div>
                   <label className={label}>Body Color</label>
@@ -360,24 +372,31 @@ export default function EditFlyPage() {
                   These fields are most useful on nymphs and wets — fill in what applies to your {form.type.toLowerCase()}.
                 </p>
               )}
+              </div>
             </div>
 
             {/* Tying Recipe */}
             <div className={section}>
-              <h2 className={sectionTitle}>
-                <span>📋</span>
-                Tying Recipe
-                <HelpHint label="Recipe vs fields above">
-                  <p>Use this free-form field for step-by-step notes, thread size, and anything that doesn&apos;t fit the structured fields above.</p>
-                  <p className="text-[#6E7681] text-xs">Structured Recipe Builder (coming from the workbench) will eventually replace this for library-matched materials.</p>
-                </HelpHint>
-              </h2>
-              <textarea rows={5} className={input} placeholder="Thread: 8/0 black&#10;Body: UV resin over thread&#10;Rib: copper wire&#10;Bead: 2.8mm tungsten" value={form.materials} onChange={e => updateForm("materials", e.target.value)} />
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>
+                  Tying Recipe
+                  <HelpHint label="Recipe vs fields above">
+                    <p>Use this free-form field for step-by-step notes, thread size, and anything that doesn&apos;t fit the structured fields above.</p>
+                    <p className="text-[#6E7681] text-xs">Structured Recipe Builder (coming from the workbench) will eventually replace this for library-matched materials.</p>
+                  </HelpHint>
+                </h2>
+              </header>
+              <div className={sectionInner}>
+                <textarea rows={5} className={`${input} h-auto py-2`} placeholder="Thread: 8/0 black&#10;Body: UV resin over thread&#10;Rib: copper wire&#10;Bead: 2.8mm tungsten" value={form.materials} onChange={e => updateForm("materials", e.target.value)} />
+              </div>
             </div>
 
             {/* Notes & Video */}
             <div className={section}>
-              <h2 className={sectionTitle}><span>📝</span> Notes &amp; Video</h2>
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>Notes &amp; Video</h2>
+              </header>
+              <div className={sectionInner}>
               <div className="space-y-3">
                 <div>
                   <label className={label}>Notes</label>
@@ -400,22 +419,27 @@ export default function EditFlyPage() {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
 
           </form>
 
           {/* SIDEBAR — photo + variant tree (sticky on desktop) */}
-          <aside className="space-y-4 lg:sticky lg:top-4 lg:self-start">
+          <aside className="space-y-3 lg:sticky lg:top-4 lg:self-start">
             {/* Photo */}
             <div className={section}>
-              <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wide mb-3">Photo</h2>
-              <FlyImageUploader
-                existingUrl={existingImage}
-                onFileChange={(f) => {
-                  setImageFile(f);
-                  if (f === null) setExistingImage(null);
-                }}
-              />
+              <header className={sectionHeader}>
+                <h2 className={sectionTitle}>Photo</h2>
+              </header>
+              <div className={sectionInner}>
+                <FlyImageUploader
+                  existingUrl={existingImage}
+                  onFileChange={(f) => {
+                    setImageFile(f);
+                    if (f === null) setExistingImage(null);
+                  }}
+                />
+              </div>
             </div>
 
             {/* Variant tree — lineage + children */}

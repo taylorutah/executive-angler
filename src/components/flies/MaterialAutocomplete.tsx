@@ -11,6 +11,8 @@ interface MaterialAutocompleteProps {
   freeText?: string;
   onSelect: (material: TyingMaterial | null, freeText?: string) => void;
   placeholder?: string;
+  /** Compact 32-px row style for use inside dense recipe tables. */
+  compact?: boolean;
 }
 
 export function MaterialAutocomplete({
@@ -19,6 +21,7 @@ export function MaterialAutocomplete({
   freeText: initialFreeText,
   onSelect,
   placeholder = 'Search materials...',
+  compact = false,
 }: MaterialAutocompleteProps) {
   const [query, setQuery] = useState(value?.name || initialFreeText || '');
   const [results, setResults] = useState<TyingMaterial[]>([]);
@@ -99,22 +102,38 @@ export function MaterialAutocomplete({
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2 focus-within:border-[#E8923A]">
-        <Search className="w-4 h-4 text-[#6E7681] shrink-0" />
+      <div
+        className={
+          compact
+            ? 'flex items-center gap-1.5 bg-[#0D1117] border border-[#30363D] rounded-md px-2 h-8 focus-within:border-[#E8923A]'
+            : 'flex items-center gap-2 bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2 focus-within:border-[#E8923A]'
+        }
+      >
+        <Search
+          className={
+            compact
+              ? 'w-3 h-3 text-[#6E7681] shrink-0'
+              : 'w-4 h-4 text-[#6E7681] shrink-0'
+          }
+        />
         <input
           type="text"
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={() => !useFreeText && query.length >= 2 && setIsOpen(true)}
           placeholder={placeholder}
-          className="flex-1 bg-transparent text-sm text-[#F0F6FC] placeholder-[#6E7681] outline-none"
+          className={
+            compact
+              ? 'flex-1 bg-transparent text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none'
+              : 'flex-1 bg-transparent text-sm text-[#F0F6FC] placeholder-[#6E7681] outline-none'
+          }
         />
         {loading && (
-          <div className="w-4 h-4 border-2 border-[#E8923A] border-t-transparent rounded-full animate-spin" />
+          <div className="w-3 h-3 border-2 border-[#E8923A] border-t-transparent rounded-full animate-spin" />
         )}
         {query && (
           <button onClick={handleClear} className="text-[#6E7681] hover:text-[#F0F6FC]">
-            <X className="w-4 h-4" />
+            <X className={compact ? 'w-3 h-3' : 'w-4 h-4'} />
           </button>
         )}
       </div>
