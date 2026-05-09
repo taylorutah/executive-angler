@@ -70,33 +70,33 @@ export default async function BoxDetailV2({ params }: Props) {
             </p>
           </div>
           {userBoxes.length > 1 && (
-            <div className="hidden md:flex flex-wrap justify-end gap-2 max-w-[50%] flex-shrink-0">
+            <div className="flex flex-col items-stretch gap-1 sm:flex-row sm:flex-wrap sm:items-start sm:justify-end sm:gap-1.5 sm:max-w-[45%] flex-shrink-0">
               {userBoxes.map((b) => {
                 const isActive = b.id === id;
                 return (
                   <Link
                     key={b.id}
                     href={`/flies/boxes/${b.id}`}
-                    className={`group flex items-center gap-2 rounded-lg border px-3 py-2 transition-colors ${
+                    className={`group flex items-center gap-1.5 rounded-md border px-2 py-1 sm:rounded-lg sm:px-3 sm:py-2 transition-colors ${
                       isActive
                         ? "border-[#E8923A] bg-[#E8923A]/10"
                         : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
                     }`}
                   >
                     <Box
-                      className={`h-3.5 w-3.5 flex-shrink-0 ${
+                      className={`h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5 ${
                         isActive ? "text-[#E8923A]" : "text-[#6E7681]"
                       }`}
                     />
                     <span
-                      className={`max-w-[140px] truncate text-xs font-semibold ${
+                      className={`max-w-[110px] sm:max-w-[140px] truncate text-[10px] sm:text-xs font-semibold ${
                         isActive ? "text-[#F0F6FC]" : "text-[#A8B2BD] group-hover:text-[#F0F6FC]"
                       }`}
                     >
                       {b.name}
                     </span>
                     {b.is_default && (
-                      <Star className="h-3 w-3 flex-shrink-0 fill-[#0BA5C7] text-[#0BA5C7]" />
+                      <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 flex-shrink-0 fill-[#0BA5C7] text-[#0BA5C7]" />
                     )}
                   </Link>
                 );
