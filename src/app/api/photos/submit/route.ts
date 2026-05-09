@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 
                 <div style="text-align: center; margin: 16px 0;">
                   <img
-                    src="${photoUrl}"
+                    src="${escapeHtml(photoUrl)}"
                     alt="Submitted photo"
                     style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 1px solid #E2E8F0;"
                   />

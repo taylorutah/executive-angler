@@ -376,10 +376,14 @@ export async function PATCH(req: NextRequest) {
           : body.recipe_steps;
 
         if (Array.isArray(steps)) {
-          await supabase
+          const { error: deleteError } = await supabase
             .from("fly_recipe_ingredients")
             .delete()
             .eq("fly_pattern_id", id);
+          if (deleteError) {
+            console.error("Failed to delete old recipe ingredients:", deleteError);
+            return NextResponse.json({ error: "Failed to update recipe: " + deleteError.message }, { status: 500 });
+          }
 
           if (steps.length > 0) {
             const ingredients = steps.map((s: Record<string, unknown>) => ({
