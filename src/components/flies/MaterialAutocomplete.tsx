@@ -33,8 +33,33 @@ export function MaterialAutocomplete({
   const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number; width: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputBoxRef = useRef<HTMLDivElement>(null);
+  const instanceIdRef = useRef<string>(`mac-${Math.random().toString(36).slice(2, 9)}`);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const debounceRef = useRef<any>(null);
+
+  // Global single-open coordination: when any instance opens its dropdown,
+  // every other instance hears the event and closes itself. Prevents the
+  // "two recipe rows stacking dropdowns at the same coordinate" bug.
+  useEffect(() => {
+    const onOtherOpened = (e: Event) => {
+      const ce = e as CustomEvent<{ id: string }>;
+      if (ce.detail?.id !== instanceIdRef.current) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('material-autocomplete-opened', onOtherOpened);
+    return () => window.removeEventListener('material-autocomplete-opened', onOtherOpened);
+  }, []);
+
+  // Notify other instances when this one opens.
+  useEffect(() => {
+    if (!isOpen) return;
+    window.dispatchEvent(
+      new CustomEvent('material-autocomplete-opened', {
+        detail: { id: instanceIdRef.current },
+      }),
+    );
+  }, [isOpen]);
 
   useEffect(() => {
     if (!query || query.length < 2 || useFreeText) {
@@ -65,13 +90,24 @@ export function MaterialAutocomplete({
   }, [query, category, useFreeText]);
 
   // Compute portal-relative position whenever the dropdown opens or the
-  // input box moves (scroll, resize, parent layout change).
+  // input box moves (scroll, resize, parent layout change). Bails out if
+  // the input has zero size (e.g. it's a hidden mobile twin on desktop
+  // via Tailwind `md:hidden`) — otherwise the portaled dropdown would
+  // render at the page origin (0,0) as a ghost.
   useLayoutEffect(() => {
     if (!isOpen) return;
     const update = () => {
       const el = inputBoxRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) {
+        // Element is detached or display:none. Force-close so we don't
+        // render an orphan dropdown and so the global "one-open" channel
+        // doesn't think this instance is still claiming the slot.
+        setIsOpen(false);
+        setDropdownRect(null);
+        return;
+      }
       setDropdownRect({
         top: r.bottom + window.scrollY + 4,
         left: r.left + window.scrollX,
