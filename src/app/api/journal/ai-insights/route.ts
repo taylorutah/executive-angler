@@ -145,8 +145,15 @@ ${sessionSummaries.join("\n")}`;
       messages: [{ role: "user", content: userPrompt }],
     });
 
-    const text =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const firstBlock = response.content?.[0];
+    if (!firstBlock || firstBlock.type !== "text") {
+      console.error("[AI Insights] Unexpected Claude response shape:", JSON.stringify(response.content));
+      return NextResponse.json({ error: "AI analysis returned an unexpected response format" }, { status: 502 });
+    }
+    const text = firstBlock.text;
+
+    // Log token usage for cost monitoring
+    console.info(`[AI Insights] tokens — input: ${response.usage?.input_tokens}, output: ${response.usage?.output_tokens}`);
 
     // Parse JSON from response — handle potential markdown code fences
     let insights: AIInsight[];
@@ -166,14 +173,8 @@ ${sessionSummaries.join("\n")}`;
           : "pattern",
       }));
     } catch {
-      // If JSON parsing fails, return the raw text as a single insight
-      insights = [
-        {
-          title: "AI Analysis",
-          insight: text.substring(0, 500),
-          type: "pattern" as const,
-        },
-      ];
+      console.error("[AI Insights] Failed to parse Claude JSON response");
+      return NextResponse.json({ error: "AI analysis could not be parsed. Please try again." }, { status: 502 });
     }
 
     return NextResponse.json(

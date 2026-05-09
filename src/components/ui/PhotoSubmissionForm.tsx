@@ -293,10 +293,14 @@ export default function PhotoSubmissionForm({
                   </label>
                   {!preview ? (
                     <div
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Upload photo — click or drag and drop a JPEG or PNG file"
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onClick={() => fileInputRef.current?.click()}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInputRef.current?.click(); } }}
                       className={`relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
                         isDragging
                           ? "border-[#E8923A] bg-[#E8923A]/5"
@@ -347,9 +351,10 @@ export default function PhotoSubmissionForm({
                       <button
                         type="button"
                         onClick={removeFile}
+                        aria-label="Remove selected photo"
                         className="absolute top-3 right-3 p-1.5 bg-[#161B22]/90 rounded-full shadow-sm hover:bg-[#161B22] transition-colors"
                       >
-                        <X className="h-4 w-4 text-[#A8B2BD]" />
+                        <X className="h-4 w-4 text-[#A8B2BD]" aria-hidden="true" />
                       </button>
                       <div className="p-3 bg-[#1F2937] border-t border-[#21262D] flex items-center gap-2">
                         <ImageIcon className="h-4 w-4 text-[#6E7681]" />

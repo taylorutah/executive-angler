@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * GET /api/rivers/flow?siteId=USGS_SITE_ID&days=30
@@ -40,6 +41,12 @@ interface USGSResponse {
 }
 
 export async function GET(request: NextRequest) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const siteId = request.nextUrl.searchParams.get("siteId");
   const days = Math.min(
     Math.max(parseInt(request.nextUrl.searchParams.get("days") || "30", 10) || 30, 1),
@@ -59,6 +66,7 @@ export async function GET(request: NextRequest) {
     const res = await fetch(url, {
       headers: { Accept: "application/json" },
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(8000),
     });
 
     if (!res.ok) {

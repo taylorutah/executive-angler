@@ -354,7 +354,7 @@ export async function PATCH(req: NextRequest) {
         const { error: deleteError } = await supabase.from("catches").delete().in("id", toDelete);
         if (deleteError) {
           console.error("[SESSION PATCH] Failed to delete removed catches:", deleteError.message);
-          // Non-fatal: orphaned catches are better than lost catches
+          return NextResponse.json({ error: "Failed to remove catches: " + deleteError.message }, { status: 500 });
         }
       }
     } else {

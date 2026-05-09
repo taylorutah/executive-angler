@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
   // Fetch all catches for these sessions
   const { data: catches } = await supabase
-    .from("fishing_catches")
+    .from("catches")
     .select("id, session_id, species, length_inches, fly_name, fly_size, time_caught")
     .in("session_id", sessionIds);
 

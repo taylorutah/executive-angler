@@ -251,10 +251,12 @@ export async function POST(req: NextRequest) {
 
           if (ingredientError) {
             console.error("Failed to save recipe ingredients:", ingredientError);
+            return NextResponse.json({ error: "Failed to save recipe ingredients: " + ingredientError.message }, { status: 500 });
           }
         }
       } catch (parseErr) {
         console.error("Failed to parse recipe steps:", parseErr);
+        return NextResponse.json({ error: "Invalid recipe_steps format" }, { status: 400 });
       }
     }
 
@@ -397,11 +399,11 @@ export async function PATCH(req: NextRequest) {
               .insert(ingredients);
             if (insertError) {
               console.error("Failed to reinsert recipe ingredients:", insertError);
+              return NextResponse.json({ error: "Failed to save recipe ingredients: " + insertError.message }, { status: 500 });
             }
           }
 
-          // Mark pattern as having structured recipe so other surfaces can
-          // prefer it over legacy materials text.
+          // Only mark as having structured recipe after ingredients saved successfully.
           await supabase
             .from("fly_patterns")
             .update({ has_structured_recipe: steps.length > 0 })
@@ -410,6 +412,7 @@ export async function PATCH(req: NextRequest) {
         }
       } catch (parseErr) {
         console.error("Failed to parse recipe steps in PATCH:", parseErr);
+        return NextResponse.json({ error: "Invalid recipe_steps format" }, { status: 400 });
       }
     }
 

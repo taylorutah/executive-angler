@@ -12,6 +12,15 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function generateToken(photoId: string, action: string): string {
   const secret = process.env.PHOTO_REVIEW_SECRET;
   if (!secret) {
@@ -148,16 +157,16 @@ export async function POST(request: NextRequest) {
                 <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin: 16px 0;">
                   <tr>
                     <td style="padding: 8px 0; color: #94A3B8; width: 120px;">Submitter</td>
-                    <td style="padding: 8px 0; color: #334155;">${user.user_metadata?.full_name || "N/A"} (${user.email})</td>
+                    <td style="padding: 8px 0; color: #334155;">${escapeHtml(user.user_metadata?.full_name || "N/A")} (${escapeHtml(user.email || "")})</td>
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; color: #94A3B8;">Entity</td>
-                    <td style="padding: 8px 0; color: #334155;">${entityName || entityId} (${entityType})</td>
+                    <td style="padding: 8px 0; color: #334155;">${escapeHtml(entityName || entityId)} (${escapeHtml(entityType)})</td>
                   </tr>
-                  ${caption ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Caption</td><td style="padding: 8px 0; color: #334155;">${caption}</td></tr>` : ""}
-                  ${cameraBody ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Camera</td><td style="padding: 8px 0; color: #334155;">${cameraBody}</td></tr>` : ""}
-                  ${lens ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Lens</td><td style="padding: 8px 0; color: #334155;">${lens}</td></tr>` : ""}
-                  ${aperture || shutterSpeed || iso ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Settings</td><td style="padding: 8px 0; color: #334155;">${[aperture, shutterSpeed, iso ? `ISO ${iso}` : ""].filter(Boolean).join(" · ")}</td></tr>` : ""}
+                  ${caption ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Caption</td><td style="padding: 8px 0; color: #334155;">${escapeHtml(caption)}</td></tr>` : ""}
+                  ${cameraBody ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Camera</td><td style="padding: 8px 0; color: #334155;">${escapeHtml(cameraBody)}</td></tr>` : ""}
+                  ${lens ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Lens</td><td style="padding: 8px 0; color: #334155;">${escapeHtml(lens)}</td></tr>` : ""}
+                  ${aperture || shutterSpeed || iso ? `<tr><td style="padding: 8px 0; color: #94A3B8;">Settings</td><td style="padding: 8px 0; color: #334155;">${escapeHtml([aperture, shutterSpeed, iso ? `ISO ${iso}` : ""].filter(Boolean).join(" · "))}</td></tr>` : ""}
                 </table>
 
                 <div style="margin: 24px 0; text-align: center;">

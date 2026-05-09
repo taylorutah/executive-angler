@@ -140,6 +140,7 @@ export default function CommunityPhotos({
           <button
             key={photo.id}
             onClick={() => setLightboxIndex(index)}
+            aria-label={`View photo${photo.caption ? `: ${photo.caption}` : ""} by ${photo.submitterName}`}
             className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-offset-2"
           >
             <Image

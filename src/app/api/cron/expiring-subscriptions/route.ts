@@ -31,12 +31,13 @@ function getSupabaseAdmin() {
 
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const authHeader =
-      req.headers.get("authorization") || req.headers.get("x-cron-secret");
-    if (authHeader !== cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  if (!cronSecret) {
+    return NextResponse.json({ error: "CRON_SECRET is not configured" }, { status: 500 });
+  }
+  const authHeader =
+    req.headers.get("authorization") || req.headers.get("x-cron-secret");
+  if (authHeader !== cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {

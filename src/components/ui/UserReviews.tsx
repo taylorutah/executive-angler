@@ -114,6 +114,8 @@ function ReviewForm({
             <button
               key={n}
               type="button"
+              aria-label={`Rate ${n} out of 5 stars`}
+              aria-pressed={rating === n}
               onMouseEnter={() => setHoverRating(n)}
               onMouseLeave={() => setHoverRating(0)}
               onClick={() => setRating(n)}
@@ -304,17 +306,17 @@ export default function UserReviews({ entityType, entityId }: Props) {
                     <button
                       onClick={() => { setEditingReview(review); setShowForm(false); }}
                       className="p-1.5 text-[#6E7681] hover:text-[#E8923A] transition-colors"
-                      title="Edit"
+                      aria-label="Edit review"
                     >
-                      <Edit3 className="h-3.5 w-3.5" />
+                      <Edit3 className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                     <button
                       onClick={() => handleDelete(review.id)}
                       disabled={deleting === review.id}
                       className="p-1.5 text-[#6E7681] hover:text-red-400 transition-colors disabled:opacity-50"
-                      title="Delete"
+                      aria-label="Delete review"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
                 )}
