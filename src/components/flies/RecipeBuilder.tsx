@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MaterialAutocomplete } from './MaterialAutocomplete';
 import type { TyingMaterial, RecipeRole } from '@/types/materials';
 import { Plus, GripVertical, Trash2, ChevronDown } from 'lucide-react';
@@ -10,6 +10,21 @@ import {
   getRoleFields,
   detailLabel,
 } from '@/lib/flies/role-field-config';
+import { composeBeadName } from '@/lib/flies/legacy-recipe-adapter';
+
+const BEAD_MATERIALS = ['none', 'tungsten', 'brass', 'copper', 'glass'] as const;
+const BEAD_SHAPES = ['standard', 'slotted', 'countersunk', 'inverted', 'off-center'] as const;
+const COMMON_BEAD_SIZES_MM = ['2.0', '2.4', '2.8', '3.2', '3.5', '3.8', '4.0', '4.6'];
+const COMMON_BEAD_COLORS = [
+  'copper',
+  'gold',
+  'black nickel',
+  'silver',
+  'white',
+  'fl. orange',
+  'fl. pink',
+  'matte black',
+];
 
 export interface RecipeStep {
   id: string;
@@ -29,6 +44,103 @@ export interface RecipeStep {
 interface RecipeBuilderProps {
   initialSteps?: RecipeStep[];
   onChange: (steps: RecipeStep[]) => void;
+}
+
+/**
+ * Shared inline cell renderers for the bead row — Material, Color, Size (mm),
+ * Shape. Used by both desktop (table) and mobile (stacked) layouts so we don't
+ * drift. Always 4 inputs; no MaterialAutocomplete on the bead row.
+ */
+interface BeadCellProps {
+  step: RecipeStep;
+  onChange: (patch: Partial<RecipeStep>) => void;
+  cellInput: string;
+  cellSelect: string;
+}
+
+function BeadMaterialSelect({ step, onChange, cellSelect }: BeadCellProps) {
+  return (
+    <div className="relative">
+      <select
+        value={step.materialTypeChoice}
+        onChange={(e) => onChange({ materialTypeChoice: e.target.value })}
+        className={cellSelect}
+        aria-label="Bead material"
+      >
+        <option value="">material…</option>
+        {BEAD_MATERIALS.map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
+    </div>
+  );
+}
+
+function BeadShapeSelect({ step, onChange, cellSelect }: BeadCellProps) {
+  return (
+    <div className="relative">
+      <select
+        value={step.finishChoice}
+        onChange={(e) => onChange({ finishChoice: e.target.value })}
+        className={cellSelect}
+        aria-label="Bead shape"
+      >
+        <option value="">shape…</option>
+        {BEAD_SHAPES.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
+    </div>
+  );
+}
+
+function BeadSizeInput({ step, onChange, cellInput }: BeadCellProps) {
+  return (
+    <>
+      <input
+        type="text"
+        inputMode="decimal"
+        list="bead-sizes-mm-rb"
+        value={step.sizeChoice}
+        onChange={(e) => onChange({ sizeChoice: e.target.value })}
+        placeholder="3.2"
+        className={cellInput}
+        aria-label="Bead size mm"
+      />
+      <datalist id="bead-sizes-mm-rb">
+        {COMMON_BEAD_SIZES_MM.map((s) => (
+          <option key={s} value={s} />
+        ))}
+      </datalist>
+    </>
+  );
+}
+
+function BeadColorInput({ step, onChange, cellInput }: BeadCellProps) {
+  return (
+    <>
+      <input
+        type="text"
+        list="bead-colors-rb"
+        value={step.colorChoice}
+        onChange={(e) => onChange({ colorChoice: e.target.value })}
+        placeholder="copper"
+        className={cellInput}
+        aria-label="Bead color"
+      />
+      <datalist id="bead-colors-rb">
+        {COMMON_BEAD_COLORS.map((c) => (
+          <option key={c} value={c} />
+        ))}
+      </datalist>
+    </>
+  );
 }
 
 let nextId = 1;
@@ -69,6 +181,16 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
       : [createEmptyStep('hook'), createEmptyStep('bead'), createEmptyStep('thread')]
   );
   const [dragIdx, setDragIdx] = useState<number | null>(null);
+
+  // Re-hydrate when the parent passes fresh initialSteps after async load
+  // (Edit page loads ingredients after mount). We only swap if the incoming
+  // array reference changes AND has content — preserves user edits in flight.
+  useEffect(() => {
+    if (initialSteps && initialSteps.length > 0) {
+      setSteps(initialSteps);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSteps]);
 
   const updateSteps = useCallback(
     (newSteps: RecipeStep[]) => {
@@ -256,10 +378,10 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
         <span />
         <span className="text-center">#</span>
         <span>Role</span>
-        <span>Material</span>
+        <span>Material / Brand</span>
         <span>Size</span>
         <span>Color</span>
-        <span>Detail</span>
+        <span>Detail / Shape</span>
         <span>Notes</span>
         <span className="text-center" title="Optional">Opt</span>
         <span />
@@ -313,29 +435,92 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
               </div>
 
-              {/* Material picker */}
-              <MaterialAutocomplete
-                category={cfg.materialCategory}
-                value={step.material}
-                freeText={step.materialName}
-                onSelect={(mat, freeText) => {
-                  updateStep(idx, {
-                    material: mat,
-                    materialName: freeText || mat?.name || '',
-                  });
-                }}
-                placeholder={`Search ${cfg.label.toLowerCase()}…`}
-                compact
-              />
+              {/* Material picker — bead row uses simplified Material dropdown
+                  in this slot, no autocomplete; subsequent columns show
+                  Color, Size (mm), Shape. */}
+              {step.role === 'bead' ? (
+                <BeadMaterialSelect
+                  step={step}
+                  onChange={(patch) => {
+                    const next = { ...step, ...patch };
+                    updateStep(idx, {
+                      ...patch,
+                      materialName: composeBeadName(next),
+                      material: null,
+                    });
+                  }}
+                  cellInput={cellInput}
+                  cellSelect={cellSelect}
+                />
+              ) : (
+                <MaterialAutocomplete
+                  category={cfg.materialCategory}
+                  value={step.material}
+                  freeText={step.materialName}
+                  onSelect={(mat, freeText) => {
+                    updateStep(idx, {
+                      material: mat,
+                      materialName: freeText || mat?.name || '',
+                    });
+                  }}
+                  placeholder={`Search ${cfg.label.toLowerCase()}…`}
+                  compact
+                />
+              )}
 
-              {/* Size column */}
-              <div>{renderSize(idx, step)}</div>
+              {/* Size column — bead uses dedicated mm input */}
+              {step.role === 'bead' ? (
+                <BeadSizeInput
+                  step={step}
+                  onChange={(patch) => {
+                    const next = { ...step, ...patch };
+                    updateStep(idx, {
+                      ...patch,
+                      materialName: composeBeadName(next),
+                    });
+                  }}
+                  cellInput={cellInput}
+                  cellSelect={cellSelect}
+                />
+              ) : (
+                <div>{renderSize(idx, step)}</div>
+              )}
 
-              {/* Color column */}
-              <div>{renderColor(idx, step)}</div>
+              {/* Color column — bead uses dedicated color datalist */}
+              {step.role === 'bead' ? (
+                <BeadColorInput
+                  step={step}
+                  onChange={(patch) => {
+                    const next = { ...step, ...patch };
+                    updateStep(idx, {
+                      ...patch,
+                      materialName: composeBeadName(next),
+                    });
+                  }}
+                  cellInput={cellInput}
+                  cellSelect={cellSelect}
+                />
+              ) : (
+                <div>{renderColor(idx, step)}</div>
+              )}
 
-              {/* Detail column */}
-              <div title={detailLabel(cfg.detail)}>{renderDetail(idx, step)}</div>
+              {/* Detail column — bead uses Shape dropdown */}
+              {step.role === 'bead' ? (
+                <BeadShapeSelect
+                  step={step}
+                  onChange={(patch) => {
+                    const next = { ...step, ...patch };
+                    updateStep(idx, {
+                      ...patch,
+                      materialName: composeBeadName(next),
+                    });
+                  }}
+                  cellInput={cellInput}
+                  cellSelect={cellSelect}
+                />
+              ) : (
+                <div title={detailLabel(cfg.detail)}>{renderDetail(idx, step)}</div>
+              )}
 
               {/* Notes (always inline visible) */}
               <input
@@ -394,39 +579,98 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
-              <MaterialAutocomplete
-                category={cfg.materialCategory}
-                value={step.material}
-                freeText={step.materialName}
-                onSelect={(mat, freeText) => {
-                  updateStep(idx, {
-                    material: mat,
-                    materialName: freeText || mat?.name || '',
-                  });
-                }}
-                placeholder={`Search ${cfg.label.toLowerCase()}…`}
-                compact
-              />
-              <div className="grid grid-cols-3 gap-1.5">
-                {cfg.showSize && (
-                  <div>
-                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
-                    {renderSize(idx, step)}
+              {step.role === 'bead' ? (
+                <>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Material</label>
+                      <BeadMaterialSelect
+                        step={step}
+                        onChange={(patch) => {
+                          const next = { ...step, ...patch };
+                          updateStep(idx, { ...patch, materialName: composeBeadName(next), material: null });
+                        }}
+                        cellInput={cellInput}
+                        cellSelect={cellSelect}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Shape</label>
+                      <BeadShapeSelect
+                        step={step}
+                        onChange={(patch) => {
+                          const next = { ...step, ...patch };
+                          updateStep(idx, { ...patch, materialName: composeBeadName(next) });
+                        }}
+                        cellInput={cellInput}
+                        cellSelect={cellSelect}
+                      />
+                    </div>
                   </div>
-                )}
-                {cfg.showColor && (
-                  <div>
-                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
-                    {renderColor(idx, step)}
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size (mm)</label>
+                      <BeadSizeInput
+                        step={step}
+                        onChange={(patch) => {
+                          const next = { ...step, ...patch };
+                          updateStep(idx, { ...patch, materialName: composeBeadName(next) });
+                        }}
+                        cellInput={cellInput}
+                        cellSelect={cellSelect}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                      <BeadColorInput
+                        step={step}
+                        onChange={(patch) => {
+                          const next = { ...step, ...patch };
+                          updateStep(idx, { ...patch, materialName: composeBeadName(next) });
+                        }}
+                        cellInput={cellInput}
+                        cellSelect={cellSelect}
+                      />
+                    </div>
                   </div>
-                )}
-                {cfg.detail && (
-                  <div>
-                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
-                    {renderDetail(idx, step)}
+                </>
+              ) : (
+                <>
+                  <MaterialAutocomplete
+                    category={cfg.materialCategory}
+                    value={step.material}
+                    freeText={step.materialName}
+                    onSelect={(mat, freeText) => {
+                      updateStep(idx, {
+                        material: mat,
+                        materialName: freeText || mat?.name || '',
+                      });
+                    }}
+                    placeholder={`Search ${cfg.label.toLowerCase()}…`}
+                    compact
+                  />
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {cfg.showSize && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
+                        {renderSize(idx, step)}
+                      </div>
+                    )}
+                    {cfg.showColor && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                        {renderColor(idx, step)}
+                      </div>
+                    )}
+                    {cfg.detail && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
+                        {renderDetail(idx, step)}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </>
+              )}
               <input
                 type="text"
                 value={step.notes}

@@ -10,6 +10,7 @@
 - **Dev:** `npm run dev` → http://localhost:3000
 - **Build:** `npm run build`
 - **Seed DB:** `npm run seed` (runs `npx tsx scripts/seed-all.ts`)
+- **QA test account (use for ALL automated testing, web + iOS):** `test@executiveangler.com` / `TestEA2026!` — same credentials submitted to App Store review. Do not change without explicit instruction.
 
 ## Tech Stack
 | Layer | Technology | Version |

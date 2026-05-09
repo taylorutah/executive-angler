@@ -53,7 +53,29 @@ export async function GET(req: NextRequest) {
         console.error("Failed to fetch fly pattern:", error);
         return NextResponse.json({ error: error.message }, { status: 404 });
       }
-      return NextResponse.json(data);
+
+      // Pull recipe ingredients + (optional) parent canonical so the editor
+      // can hydrate the structured RecipeBuilder + render a lineage card.
+      const [ingredientsRes, parentRes] = await Promise.all([
+        supabase
+          .from("fly_recipe_ingredients")
+          .select("*, material:tying_materials(*)")
+          .eq("fly_pattern_id", singleId)
+          .order("step_position", { ascending: true }),
+        data?.parent_canonical_id
+          ? supabase
+              .from("canonical_flies")
+              .select("id, slug, name")
+              .eq("id", data.parent_canonical_id)
+              .maybeSingle()
+          : Promise.resolve({ data: null, error: null } as const),
+      ]);
+
+      return NextResponse.json({
+        ...data,
+        recipe_ingredients: ingredientsRes.data ?? [],
+        parent_canonical: parentRes.data ?? null,
+      });
     }
 
     const { data, error } = await supabase
@@ -324,6 +346,7 @@ export async function PATCH(req: NextRequest) {
       description: str(body.description),
       video_url: str(body.video_url),
       tags: parseArr(body.tags),
+      source: str(body.source),
       ...(imageUrl ? { image_url: imageUrl } : {}),
     };
 
@@ -340,6 +363,56 @@ export async function PATCH(req: NextRequest) {
       console.error("Failed to update fly pattern:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Replace recipe ingredients atomically when the client sent a fresh set.
+    // Delete-then-insert is intentional — saves us a row-by-row diff and the
+    // worst case is the ingredient table is briefly empty for this pattern.
+    if (body.recipe_steps !== undefined) {
+      try {
+        const steps = typeof body.recipe_steps === "string"
+          ? JSON.parse(body.recipe_steps as string)
+          : body.recipe_steps;
+
+        if (Array.isArray(steps)) {
+          await supabase
+            .from("fly_recipe_ingredients")
+            .delete()
+            .eq("fly_pattern_id", id);
+
+          if (steps.length > 0) {
+            const ingredients = steps.map((s: Record<string, unknown>) => ({
+              fly_pattern_id: id,
+              material_id: s.material_id || null,
+              material_name: s.material_name || null,
+              step_position: s.step_position,
+              role: s.role,
+              color_choice: s.color_choice || null,
+              size_choice: s.size_choice || null,
+              quantity: s.quantity || null,
+              notes: s.notes || null,
+              is_optional: s.is_optional || false,
+            }));
+            const { error: insertError } = await supabase
+              .from("fly_recipe_ingredients")
+              .insert(ingredients);
+            if (insertError) {
+              console.error("Failed to reinsert recipe ingredients:", insertError);
+            }
+          }
+
+          // Mark pattern as having structured recipe so other surfaces can
+          // prefer it over legacy materials text.
+          await supabase
+            .from("fly_patterns")
+            .update({ has_structured_recipe: steps.length > 0 })
+            .eq("id", id)
+            .eq("user_id", user.id);
+        }
+      } catch (parseErr) {
+        console.error("Failed to parse recipe steps in PATCH:", parseErr);
+      }
+    }
+
     return NextResponse.json({ id });
   } catch (err) {
     console.error("Fly patterns PATCH error:", err);

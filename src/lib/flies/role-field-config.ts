@@ -45,12 +45,14 @@ export const ROLE_FIELDS: Record<RecipeRole, RoleFieldConfig> = {
     placeholders: { size: "#16", detail: "barbless" },
   },
   bead: {
+    // Bead uses a custom renderer in RecipeBuilder — no MaterialAutocomplete,
+    // no branded picker. Just Material / Color / Size (mm) / Shape. The
+    // showSize/showColor flags below aren't read for the bead row, but are
+    // kept truthy for any defensive fallback path.
     label: "Bead",
-    materialCategory: "bead",
     showSize: true,
     showColor: true,
-    detail: "materialType",
-    placeholders: { size: "3.2mm", color: "copper", detail: "tungsten" },
+    placeholders: { size: "3.2", color: "copper" },
   },
   thread: {
     label: "Thread",

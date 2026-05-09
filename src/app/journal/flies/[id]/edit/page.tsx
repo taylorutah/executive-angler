@@ -2,30 +2,55 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Trash2, Sparkles, Printer } from "lucide-react";
+import { Sparkles, Printer } from "lucide-react";
 import VariantModal from "@/components/flies/VariantModal";
 import VariantTree from "@/components/flies/VariantTree";
-import FlyImageUploader from "@/components/flies/FlyImageUploader";
 import FlyCardModal from "@/components/flies/FlyCardModal";
 import HelpHint from "@/components/ui/HelpHint";
+import FlyPatternForm, {
+  type FlyPatternFormInitial,
+} from "@/components/flies/FlyPatternForm";
+import type { RecipeStep } from "@/components/flies/RecipeBuilder";
+import {
+  ingredientsToSteps,
+  synthesizeStepsFromLegacy,
+} from "@/lib/flies/legacy-recipe-adapter";
 
-const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
+type FlySource = "tied" | "bought" | "gifted";
 
-const BEAD_MATERIALS = [
-  { value: "", label: "—" },
-  { value: "none", label: "None (unweighted)" },
-  { value: "brass", label: "Brass" },
-  { value: "tungsten", label: "Tungsten" },
-  { value: "slotted_tungsten", label: "Slotted tungsten" },
-  { value: "copper", label: "Copper" },
-  { value: "other", label: "Other" },
-];
+interface FlyResponse {
+  id: string;
+  name?: string;
+  type?: string;
+  size?: string | string[];
+  hook?: string;
+  bead_size?: string | string[];
+  bead_color?: string | string[];
+  bead_material?: string;
+  bead_size_mm?: number | string | null;
+  fly_color?: string | string[];
+  body_color?: string;
+  body_material?: string;
+  tail_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
+  rib_material?: string;
+  wing_material?: string;
+  thread_color?: string;
+  materials?: string;
+  description?: string;
+  video_url?: string;
+  tags?: string | string[];
+  source?: string;
+  image_url?: string | null;
+  parent_canonical_id?: string | null;
+  parent_canonical?: { id: string; slug: string; name: string } | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recipe_ingredients?: any[];
+  error?: string;
+}
 
-const COMMON_BEAD_SIZES_MM = ["2.0", "2.4", "2.8", "3.2", "3.5", "3.8", "4.0", "4.6"];
-
-/** Normalize array fields from DB — handles real arrays, JSON strings, and plain strings */
-function normalizeArrayField(val: unknown): string {
+function arrToString(val: unknown): string {
   if (!val) return "";
   if (Array.isArray(val)) return val.join(", ");
   if (typeof val === "string") {
@@ -34,94 +59,147 @@ function normalizeArrayField(val: unknown): string {
       try {
         const parsed = JSON.parse(trimmed);
         if (Array.isArray(parsed)) return parsed.join(", ");
-      } catch { /* fall through */ }
+      } catch {
+        /* fall through */
+      }
     }
     return trimmed;
   }
   return String(val);
 }
 
-export default function EditFlyPage() {
+function normalizeSource(s: string | undefined): FlySource {
+  if (s === "bought" || s === "gifted") return s;
+  return "tied";
+}
+
+export default function EditFlyPatternPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState("");
-  const [existingImage, setExistingImage] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const [form, setForm] = useState({
-    name: "", type: "", size: "", hook: "",
-    bead_size: "", bead_color: "", bead_material: "", bead_size_mm: "",
-    fly_color: "",
-    body_color: "", body_material: "", tail_color: "",
-    thorax_color: "", collar_color: "",
-    rib_material: "", wing_material: "",
-    materials: "", description: "", video_url: "", tags: "",
-  });
+  const [error, setError] = useState<string | null>(null);
+  const [initial, setInitial] = useState<FlyPatternFormInitial | null>(null);
+  const [flyForCard, setFlyForCard] = useState<Record<string, unknown> | null>(
+    null,
+  );
   const [variantOpen, setVariantOpen] = useState(false);
   const [cardOpen, setCardOpen] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     fetch(`/api/fishing/flies?id=${id}`)
-      .then(r => r.json())
-      .then(fly => {
-        if (fly.error) return;
-        setForm({
-          name: fly.name || "",
-          type: fly.type || "",
-          size: normalizeArrayField(fly.size),
-          hook: fly.hook || "",
-          bead_size: normalizeArrayField(fly.bead_size),
-          bead_color: fly.bead_color || "",
-          bead_material: fly.bead_material || "",
-          bead_size_mm: fly.bead_size_mm != null ? String(fly.bead_size_mm) : "",
-          fly_color: fly.fly_color || "",
-          body_color: fly.body_color || "",
-          body_material: fly.body_material || "",
-          tail_color: fly.tail_color || "",
-          thorax_color: fly.thorax_color || "",
-          collar_color: fly.collar_color || "",
-          rib_material: fly.rib_material || "",
-          wing_material: fly.wing_material || "",
-          materials: fly.materials || "",
-          description: fly.description || "",
-          video_url: fly.video_url || "",
-          tags: Array.isArray(fly.tags) ? fly.tags.join(", ") : fly.tags || "",
+      .then((r) => r.json())
+      .then((fly: FlyResponse) => {
+        if (cancelled) return;
+        if (fly.error) {
+          setError(fly.error);
+          setLoading(false);
+          return;
+        }
+
+        // Hydrate recipe steps: prefer structured ingredients, fall back to
+        // synthesized steps from legacy columns.
+        let steps: RecipeStep[] = ingredientsToSteps(fly.recipe_ingredients);
+        if (steps.length === 0) {
+          steps = synthesizeStepsFromLegacy({
+            hook: fly.hook,
+            bead_material: fly.bead_material,
+            bead_size: arrToString(fly.bead_size),
+            bead_size_mm: fly.bead_size_mm,
+            bead_color: fly.bead_color,
+            body_color: fly.body_color,
+            body_material: fly.body_material,
+            tail_color: fly.tail_color,
+            thorax_color: fly.thorax_color,
+            collar_color: fly.collar_color,
+            rib_material: fly.rib_material,
+            wing_material: fly.wing_material,
+            thread_color: fly.thread_color,
+          });
+        }
+
+        const init: FlyPatternFormInitial = {
+          name: fly.name ?? "",
+          type: fly.type ?? "",
+          size: arrToString(fly.size),
+          source: normalizeSource(fly.source),
+          tags: arrToString(fly.tags),
+          description: fly.description ?? "",
+          video_url: fly.video_url ?? "",
+          materials: fly.materials ?? "",
+          fly_color: arrToString(fly.fly_color),
+          imageUrl: fly.image_url ?? null,
+          recipeSteps: steps,
+          parentCanonical: fly.parent_canonical ?? null,
+        };
+
+        setInitial(init);
+        setFlyForCard({
+          id: fly.id,
+          name: fly.name ?? "",
+          type: fly.type ?? "",
+          size: arrToString(fly.size),
+          hook: fly.hook,
+          bead_size: arrToString(fly.bead_size),
+          bead_color: arrToString(fly.bead_color),
+          bead_material: fly.bead_material,
+          fly_color: arrToString(fly.fly_color),
+          body_color: fly.body_color,
+          body_material: fly.body_material,
+          tail_color: fly.tail_color,
+          thorax_color: fly.thorax_color,
+          collar_color: fly.collar_color,
+          rib_material: fly.rib_material,
+          wing_material: fly.wing_material,
+          materials: fly.materials,
+          description: fly.description,
+          tags: arrToString(fly.tags),
+          image_url: fly.image_url,
         });
-        if (fly.image_url) setExistingImage(fly.image_url);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : "Failed to load");
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
-  function updateForm(field: string, value: string) {
-    setForm(prev => ({ ...prev, [field]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(formData: FormData) {
     setSaving(true);
-    setError("");
+    setError(null);
     try {
+      const hasImage = formData.has("image");
       let res: Response;
-      if (imageFile) {
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-        fd.append("image", imageFile);
-        res = await fetch(`/api/fishing/flies?id=${id}`, { method: "PATCH", body: fd });
+      if (hasImage) {
+        res = await fetch(`/api/fishing/flies?id=${id}`, {
+          method: "PATCH",
+          body: formData,
+        });
       } else {
+        // No new image — use JSON for cleaner field handling
+        const body: Record<string, unknown> = {};
+        for (const [k, v] of formData.entries()) {
+          if (k === "image") continue;
+          body[k] = v;
+        }
         res = await fetch(`/api/fishing/flies?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: JSON.stringify(body),
         });
       }
-      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
-      router.push(`/my-flies?tab=box`);
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error || "Failed to save");
+      }
+      router.push("/my-flies?tab=box");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setSaving(false);
@@ -129,340 +207,103 @@ export default function EditFlyPage() {
   }
 
   async function handleDelete() {
-    if (!confirm("Delete this fly pattern permanently?")) return;
-    setDeleting(true);
     const res = await fetch(`/api/fishing/flies?id=${id}`, { method: "DELETE" });
-    if (res.ok) router.push("/my-flies?tab=box");
-    else { setDeleting(false); setError("Failed to delete"); }
+    if (res.ok) {
+      router.push("/my-flies?tab=box");
+    } else {
+      setError("Failed to delete");
+    }
   }
 
-  const input = "w-full h-9 rounded-md border border-[#30363D] bg-[#0D1117] px-2.5 text-[13px] text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none transition-colors";
-  const label = "flex items-center gap-1 text-[10px] font-bold text-[#6E7681] uppercase tracking-widest mb-1";
-  const section = "border border-[#30363D] rounded-md bg-[#161B22] overflow-hidden";
-  const sectionInner = "p-3";
-  const sectionHeader = "flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5";
-  const sectionTitle = "flex items-center gap-2 text-[10px] font-bold text-[#A8B2BD] uppercase tracking-widest";
-  const isNymphLike = form.type === "Nymph" || form.type === "Wet Fly" || form.type === "Emerger" || form.type === "";
-
-  if (loading) return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3 text-[#6E7681]">
-        <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-[#E8923A] animate-spin" />
-        <p className="text-sm">Loading fly pattern…</p>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-[#6E7681]">
+          <div className="h-8 w-8 rounded-full border-2 border-[#21262D] border-t-[#E8923A] animate-spin" />
+          <p className="text-sm">Loading fly pattern…</p>
+        </div>
       </div>
-    </div>
+    );
+  }
+
+  if (!initial) {
+    return (
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center text-[#A8B2BD]">
+        <p>{error || "Pattern not found."}</p>
+      </div>
+    );
+  }
+
+  const topRight = (
+    <>
+      <button
+        type="button"
+        onClick={() => setCardOpen(true)}
+        className="inline-flex items-center gap-1.5 rounded-md border border-[#D4751F]/40 bg-[#D4751F]/10 px-2.5 py-1 text-xs font-medium text-[#D4751F] hover:bg-[#D4751F]/20 transition-colors"
+        aria-label="Open recipe card"
+      >
+        <Printer className="h-3.5 w-3.5" />
+        Card
+      </button>
+      <button
+        type="button"
+        onClick={() => setVariantOpen(true)}
+        className="inline-flex items-center gap-1.5 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors"
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        Variant
+      </button>
+      <HelpHint label="What's a variant?">
+        <p className="text-[#F0F6FC] font-semibold">
+          Fork this fly into a child pattern
+        </p>
+        <p>
+          Change one or two specs (size, bead, color) and we&apos;ll auto-name it
+          and link it back to this parent so you can track what works.
+        </p>
+        <p className="text-[#6E7681] text-xs">
+          Use &quot;Spawn by axis&quot; to create a whole size or color run at
+          once.
+        </p>
+      </HelpHint>
+    </>
   );
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-6xl px-4 pt-6 pb-32">
+    <>
+      <FlyPatternForm
+        mode="edit"
+        initial={initial}
+        onSubmit={handleSubmit}
+        onDelete={handleDelete}
+        busy={saving}
+        error={error}
+        cancelHref="/my-flies?tab=box"
+        topRight={topRight}
+        extras={<VariantTree patternId={id} />}
+      />
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Link href="/my-flies" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-            <ArrowLeft className="h-4 w-4" /> My Flies
-          </Link>
-          <h1 className="font-heading text-xl font-bold text-[#F0F6FC]">Edit Fly Pattern</h1>
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setCardOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#D4751F]/40 bg-[#D4751F]/10 px-3 py-1.5 text-xs font-medium text-[#D4751F] hover:bg-[#D4751F]/20 transition-colors"
-              aria-label="Open recipe card"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              Card
-            </button>
-            <button
-              type="button"
-              onClick={() => setVariantOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-3 py-1.5 text-xs font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              Variant
-            </button>
-            <HelpHint label="What's a variant?">
-              <p className="text-[#F0F6FC] font-semibold">Fork this fly into a child pattern</p>
-              <p>Change one or two specs (size, bead, color) and we&apos;ll auto-name it and link it back to this parent so you can track what works.</p>
-              <p className="text-[#6E7681] text-xs">Use &quot;Spawn by axis&quot; to create a whole size or color run at once.</p>
-            </HelpHint>
-          </div>
-        </div>
+      {variantOpen && (
+        <VariantModal
+          open={variantOpen}
+          onClose={() => setVariantOpen(false)}
+          parent={{
+            patternId: id,
+            name: initial.name || "This pattern",
+            heroImageUrl: initial.imageUrl ?? null,
+          }}
+        />
+      )}
 
-        {variantOpen && (
-          <VariantModal
-            open={variantOpen}
-            onClose={() => setVariantOpen(false)}
-            parent={{
-              patternId: id,
-              name: form.name || "This pattern",
-              heroImageUrl: existingImage,
-            }}
-          />
-        )}
-
+      {flyForCard && (
         <FlyCardModal
           open={cardOpen}
           onClose={() => setCardOpen(false)}
-          fly={{ ...form, id, image_url: existingImage }}
-          imageUrl={existingImage}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          fly={flyForCard as any}
+          imageUrl={initial.imageUrl ?? null}
         />
-
-        {error && <div className="mb-4 rounded-lg bg-red-500/10 border border-red-500/30 px-4 py-3 text-red-400 text-sm">{error}</div>}
-
-        {/* Desktop 2-col layout: form (main) + sticky sidebar (photo + variant tree) */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-4 lg:gap-6">
-
-          {/* MAIN COLUMN — form */}
-          <form onSubmit={handleSubmit} className="space-y-4 min-w-0">
-
-            {/* Pattern basics */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>Pattern Info</h2>
-              </header>
-              <div className={sectionInner}>
-                <div className="space-y-3">
-                <div>
-                  <label className={label}>Pattern Name <span className="text-red-400">*</span></label>
-                  <input required className={input} placeholder="Perdigon, CDC Caddis…" value={form.name} onChange={e => updateForm("name", e.target.value)} />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className={label}>
-                      Type
-                      <HelpHint label="Pattern type">
-                        <p>Classification drives suggestions and filtering. Nymphs unlock bead + body variation fields below.</p>
-                      </HelpHint>
-                    </label>
-                    <select className={input} value={form.type} onChange={e => updateForm("type", e.target.value)}>
-                      <option value="">—</option>
-                      {FLY_TYPES.map(t => <option key={t}>{t}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className={label}>
-                      Hook Sizes
-                      <HelpHint label="How to enter sizes">
-                        <p className="text-[#F0F6FC] font-semibold">Comma-separate all sizes you tie this in</p>
-                        <p>Example: <span className="text-[#E8923A]">#14, #16, #18</span></p>
-                        <p className="text-[#6E7681] text-xs">We parse these into an array so filters and Tie Next can target specific sizes.</p>
-                      </HelpHint>
-                    </label>
-                    <input className={input} placeholder="#14, #16, #18" value={form.size} onChange={e => updateForm("size", e.target.value)} />
-                  </div>
-                  <div>
-                    <label className={label}>Fly Color</label>
-                    <input className={input} placeholder="Olive, black, orange…" value={form.fly_color} onChange={e => updateForm("fly_color", e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              </div>
-            </div>
-
-            {/* Hook & Bead */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>Hook &amp; Bead</h2>
-              </header>
-              <div className={sectionInner}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                <div>
-                  <label className={label}>Hook Model</label>
-                  <input className={input} placeholder="Hanak 300, Fulling Mill 5050…" value={form.hook} onChange={e => updateForm("hook", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>
-                    Bead Material
-                    <HelpHint label="Bead material">
-                      <p className="text-[#F0F6FC] font-semibold">Tungsten vs brass changes sink rate</p>
-                      <p>Tungsten is ~1.7× denser than brass — same size sinks faster. Slotted tungsten is for jig hooks.</p>
-                      <p className="text-[#6E7681] text-xs">This lets us treat &quot;Frenchie tungsten 3.2mm&quot; and &quot;Frenchie brass 3.5mm&quot; as distinct variants.</p>
-                    </HelpHint>
-                  </label>
-                  <select className={input} value={form.bead_material} onChange={e => updateForm("bead_material", e.target.value)}>
-                    {BEAD_MATERIALS.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className={label}>
-                    Bead Size (mm)
-                    <HelpHint label="Common bead sizes">
-                      <p className="text-[#F0F6FC] font-semibold">Common nymph bead sizes</p>
-                      <ul className="text-xs space-y-0.5">
-                        <li><span className="text-[#E8923A]">2.0–2.4mm</span> — #18–20 small nymphs</li>
-                        <li><span className="text-[#E8923A]">2.8–3.2mm</span> — #14–16 standard</li>
-                        <li><span className="text-[#E8923A]">3.5–3.8mm</span> — #12 heavy anchor</li>
-                        <li><span className="text-[#E8923A]">4.0–4.6mm</span> — streamer / big stones</li>
-                      </ul>
-                    </HelpHint>
-                  </label>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    list="bead-sizes-mm"
-                    className={input}
-                    placeholder="3.2"
-                    value={form.bead_size_mm}
-                    onChange={e => updateForm("bead_size_mm", e.target.value)}
-                  />
-                  <datalist id="bead-sizes-mm">
-                    {COMMON_BEAD_SIZES_MM.map(s => <option key={s} value={s} />)}
-                  </datalist>
-                </div>
-                <div>
-                  <label className={label}>Bead Size (label)</label>
-                  <input className={input} placeholder="e.g. 1/8&quot;, small" value={form.bead_size} onChange={e => updateForm("bead_size", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Bead Color</label>
-                  <input className={input} placeholder="Copper, gold, black nickel…" value={form.bead_color} onChange={e => updateForm("bead_color", e.target.value)} />
-                </div>
-              </div>
-              </div>
-            </div>
-
-            {/* Body / Tail / Thorax / Collar — nymph variation fields */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>
-                  Body, Tail &amp; Thorax
-                  <HelpHint label="Why these matter">
-                    <p className="text-[#F0F6FC] font-semibold">First-class variation fields</p>
-                    <p>Changing just the thorax color or rib material creates a new variant. Filling these out makes diffing and auto-naming sharper.</p>
-                    <p className="text-[#6E7681] text-xs">Leave blank if not applicable — they&apos;re most useful on nymphs, emergers, and wet flies.</p>
-                  </HelpHint>
-                </h2>
-              </header>
-              <div className={sectionInner}>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                <div>
-                  <label className={label}>Body Color</label>
-                  <input className={input} placeholder="Olive" value={form.body_color} onChange={e => updateForm("body_color", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Body Material</label>
-                  <input className={input} placeholder="UV resin, dubbing…" value={form.body_material} onChange={e => updateForm("body_material", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Tail Color</label>
-                  <input className={input} placeholder="CDL, pheasant…" value={form.tail_color} onChange={e => updateForm("tail_color", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Thorax Color</label>
-                  <input className={input} placeholder="Black, hot spot…" value={form.thorax_color} onChange={e => updateForm("thorax_color", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Collar Color</label>
-                  <input className={input} placeholder="Partridge, ice dub…" value={form.collar_color} onChange={e => updateForm("collar_color", e.target.value)} />
-                </div>
-                <div>
-                  <label className={label}>Rib Material</label>
-                  <input className={input} placeholder="Copper wire, flash…" value={form.rib_material} onChange={e => updateForm("rib_material", e.target.value)} />
-                </div>
-                <div className="col-span-2">
-                  <label className={label}>Wing Material</label>
-                  <input className={input} placeholder="CDC, deer hair, EP fiber…" value={form.wing_material} onChange={e => updateForm("wing_material", e.target.value)} />
-                </div>
-              </div>
-              {!isNymphLike && (
-                <p className="mt-3 text-xs text-[#6E7681]">
-                  These fields are most useful on nymphs and wets — fill in what applies to your {form.type.toLowerCase()}.
-                </p>
-              )}
-              </div>
-            </div>
-
-            {/* Tying Recipe */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>
-                  Tying Recipe
-                  <HelpHint label="Recipe vs fields above">
-                    <p>Use this free-form field for step-by-step notes, thread size, and anything that doesn&apos;t fit the structured fields above.</p>
-                    <p className="text-[#6E7681] text-xs">Structured Recipe Builder (coming from the workbench) will eventually replace this for library-matched materials.</p>
-                  </HelpHint>
-                </h2>
-              </header>
-              <div className={sectionInner}>
-                <textarea rows={5} className={`${input} h-auto py-2`} placeholder="Thread: 8/0 black&#10;Body: UV resin over thread&#10;Rib: copper wire&#10;Bead: 2.8mm tungsten" value={form.materials} onChange={e => updateForm("materials", e.target.value)} />
-              </div>
-            </div>
-
-            {/* Notes & Video */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>Notes &amp; Video</h2>
-              </header>
-              <div className={sectionInner}>
-              <div className="space-y-3">
-                <div>
-                  <label className={label}>Notes</label>
-                  <textarea rows={3} className={input} placeholder="When to use, rivers it works best on, tips…" value={form.description} onChange={e => updateForm("description", e.target.value)} />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className={label}>Tying Video URL</label>
-                    <input type="url" className={input} placeholder="https://youtube.com/…" value={form.video_url} onChange={e => updateForm("video_url", e.target.value)} />
-                  </div>
-                  <div>
-                    <label className={label}>
-                      Tags
-                      <HelpHint label="How tags work">
-                        <p>Free-form labels used for filtering and Tie Next suggestions. Commas separate them.</p>
-                        <p className="text-[#6E7681] text-xs">Common: euro, tungsten, fast-water, winter, tailwater, hopper-dropper.</p>
-                      </HelpHint>
-                    </label>
-                    <input className={input} placeholder="euro, tungsten, nymph, fast-water" value={form.tags} onChange={e => updateForm("tags", e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              </div>
-            </div>
-
-          </form>
-
-          {/* SIDEBAR — photo + variant tree (sticky on desktop) */}
-          <aside className="space-y-3 lg:sticky lg:top-4 lg:self-start">
-            {/* Photo */}
-            <div className={section}>
-              <header className={sectionHeader}>
-                <h2 className={sectionTitle}>Photo</h2>
-              </header>
-              <div className={sectionInner}>
-                <FlyImageUploader
-                  existingUrl={existingImage}
-                  onFileChange={(f) => {
-                    setImageFile(f);
-                    if (f === null) setExistingImage(null);
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Variant tree — lineage + children */}
-            <VariantTree patternId={id} />
-          </aside>
-
-        </div>
-
-        {/* Sticky save bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-[#161B22] border-t border-[#21262D] px-4 py-3 z-50 shadow-lg">
-          <div className="mx-auto max-w-6xl flex gap-3">
-            <button type="button" onClick={handleDelete} disabled={deleting}
-              className="flex items-center justify-center rounded-xl border border-red-500/30 px-4 py-3 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50 flex-shrink-0">
-              {deleting ? "…" : <Trash2 className="h-4 w-4" />}
-            </button>
-            <button onClick={handleSubmit} disabled={saving}
-              className="flex-1 rounded-xl bg-[#E8923A] py-3 text-[#0D1117] font-semibold text-sm hover:bg-[#F0A45A] transition-colors disabled:opacity-60 shadow-sm">
-              {saving ? "Saving…" : "Save Changes"}
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
+      )}
+    </>
   );
 }
