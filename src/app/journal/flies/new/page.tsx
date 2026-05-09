@@ -241,7 +241,7 @@ export default function NewFlyPatternPage() {
                   </button>
                 </header>
 
-                <div className="p-3">
+                <div className={useSimpleMode ? 'p-3' : ''}>
                   {useSimpleMode ? (
                     <div className="grid grid-cols-12 gap-3">
                       <div className="col-span-12 md:col-span-6">

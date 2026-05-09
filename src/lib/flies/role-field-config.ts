@@ -1,147 +1,173 @@
 import type { MaterialCategory, RecipeRole } from "@/types/materials";
 
-export type RoleField =
-  | "size"
-  | "color"
-  | "quantity"
-  | "weight"
-  | "materialType"
-  | "finish"
-  | "length";
+/**
+ * The recipe builder renders rows in a fixed Salesforce-style table layout
+ * with three meaningful column slots: SIZE, COLOR, DETAIL. Each role
+ * declares which of the three columns it uses and what that column's input
+ * actually represents (e.g. "weight" for thread, "materialType" for bead,
+ * "finish" for hook).
+ *
+ * Rules of thumb (from the brief):
+ *   - Hook → size + finish, no color, no qty
+ *   - Bead → size + color + materialType (tungsten/brass/glass), no qty
+ *   - Thread → weight + color, no size, no qty
+ *   - Dubbing / abdomen / thorax / body → color only, no size, no qty
+ *   - Tail / wing / hackle → color + size (size = match hook), no qty
+ *   - Wire / ribbing / flash → color only
+ *   - Eyes → size + color, qty defaults to "pair"
+ */
+
+export type DetailField = "weight" | "materialType" | "finish" | "quantity" | "length";
 
 export interface RoleFieldConfig {
   label: string;
-  /** Which tying_materials.category to filter the picker to. */
+  /** tying_materials.category to filter the picker to (undefined = no filter). */
   materialCategory?: MaterialCategory;
-  /** Which inputs to render, in display order. */
-  fields: RoleField[];
-  /** Default value for quantity when not user-editable (e.g. "1" for hook). */
+  /** Show the SIZE input on this role? */
+  showSize: boolean;
+  /** Show the COLOR input on this role? */
+  showColor: boolean;
+  /** Which (if any) detail input fills the third column. */
+  detail?: DetailField;
+  /** Default value for the detail field when it's `quantity` (e.g. "1", "pair"). */
   quantityDefault?: string;
-  /** Per-field placeholder hints. */
-  placeholders?: Partial<Record<RoleField, string>>;
+  /** Per-column placeholders. */
+  placeholders?: { size?: string; color?: string; detail?: string };
 }
 
-/**
- * Single source of truth for which fields a recipe step should render given
- * its role. Used by the recipe builder on the New/Edit Fly page, the variant
- * editor, and the workbench so every material-editing surface stays in sync.
- *
- * Rationale: a hook has no color, thread has no quantity, dubbing has no size,
- * etc. Showing every input on every row was wasted space and forced users to
- * mentally filter "which of these fields is relevant for this material?".
- */
 export const ROLE_FIELDS: Record<RecipeRole, RoleFieldConfig> = {
   hook: {
     label: "Hook",
     materialCategory: "hook",
-    fields: ["size", "finish"],
-    quantityDefault: "1",
-    placeholders: { size: "#16", finish: "barbless" },
+    showSize: true,
+    showColor: false,
+    detail: "finish",
+    placeholders: { size: "#16", detail: "barbless" },
   },
   bead: {
     label: "Bead",
     materialCategory: "bead",
-    fields: ["size", "materialType", "color"],
-    quantityDefault: "1",
-    placeholders: { size: "3.2mm", materialType: "tungsten", color: "copper" },
+    showSize: true,
+    showColor: true,
+    detail: "materialType",
+    placeholders: { size: "3.2mm", color: "copper", detail: "tungsten" },
   },
   thread: {
     label: "Thread",
     materialCategory: "thread",
-    fields: ["weight", "color"],
-    placeholders: { weight: "8/0", color: "olive" },
+    showSize: false,
+    showColor: true,
+    detail: "weight",
+    placeholders: { color: "olive", detail: "8/0" },
   },
   tail: {
     label: "Tail",
     materialCategory: "tail",
-    fields: ["color", "size"],
-    placeholders: { color: "pheasant", size: "match hook" },
+    showSize: true,
+    showColor: true,
+    placeholders: { size: "match hook", color: "pheasant" },
   },
   abdomen: {
     label: "Abdomen",
     materialCategory: "dubbing",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "olive" },
   },
   thorax: {
     label: "Thorax",
     materialCategory: "dubbing",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "black" },
   },
   body: {
     label: "Body",
     materialCategory: "body",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "olive" },
   },
   ribbing: {
     label: "Ribbing",
     materialCategory: "ribbing",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "copper" },
   },
   shellback: {
     label: "Shellback / Wing Case",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "black" },
   },
   wing: {
     label: "Wing",
     materialCategory: "wing",
-    fields: ["color", "size"],
-    placeholders: { color: "white", size: "shank" },
+    showSize: true,
+    showColor: true,
+    placeholders: { size: "shank", color: "white" },
   },
   hackle: {
     label: "Hackle",
     materialCategory: "feather",
-    fields: ["color", "size"],
-    placeholders: { color: "grizzly", size: "match hook" },
+    showSize: true,
+    showColor: true,
+    placeholders: { size: "match hook", color: "grizzly" },
   },
   collar: {
     label: "Collar",
     materialCategory: "feather",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "partridge" },
   },
   legs: {
     label: "Legs",
     materialCategory: "rubber",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "barred ginger" },
   },
   head: {
     label: "Head",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "black" },
   },
   hotspot: {
     label: "Hotspot",
     materialCategory: "dubbing",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "fl. orange" },
   },
   tag: {
     label: "Tag",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "fl. green" },
   },
   eye: {
     label: "Eyes",
     materialCategory: "eye",
-    fields: ["size", "color"],
+    showSize: true,
+    showColor: true,
+    detail: "quantity",
     quantityDefault: "pair",
-    placeholders: { size: "small", color: "silver" },
+    placeholders: { size: "small", color: "silver", detail: "pair" },
   },
   post: {
     label: "Post",
     materialCategory: "synthetic",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "white" },
   },
   antennae: {
     label: "Antennae",
-    fields: ["color"],
+    showSize: false,
+    showColor: true,
     placeholders: { color: "black" },
   },
 };
@@ -149,25 +175,29 @@ export const ROLE_FIELDS: Record<RecipeRole, RoleFieldConfig> = {
 export const RECIPE_ROLES: RecipeRole[] = Object.keys(ROLE_FIELDS) as RecipeRole[];
 
 export function getRoleFields(role: RecipeRole): RoleFieldConfig {
-  return ROLE_FIELDS[role] ?? { label: role, fields: ["color"] };
+  return (
+    ROLE_FIELDS[role] ?? {
+      label: role,
+      showSize: false,
+      showColor: true,
+    }
+  );
 }
 
-/** Field-label override per role (optional). */
-export function getFieldLabel(field: RoleField): string {
-  switch (field) {
-    case "size":
-      return "Size";
-    case "color":
-      return "Color";
-    case "quantity":
-      return "Qty";
+/** Detail-column header label given the detail field type. */
+export function detailLabel(detail: DetailField | undefined): string {
+  switch (detail) {
     case "weight":
       return "Weight";
     case "materialType":
       return "Material";
     case "finish":
       return "Finish";
+    case "quantity":
+      return "Qty";
     case "length":
       return "Length";
+    default:
+      return "Detail";
   }
 }

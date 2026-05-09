@@ -12,8 +12,7 @@ import {
   ROLE_FIELDS,
   RECIPE_ROLES,
   getRoleFields,
-  getFieldLabel,
-  type RoleField,
+  detailLabel,
 } from "@/lib/flies/role-field-config";
 import type { RecipeRole, TyingMaterial } from "@/types/materials";
 import { MaterialAutocomplete } from "./MaterialAutocomplete";
@@ -529,55 +528,60 @@ function SlotRow({
     "w-full h-7 bg-[#0D1117] border border-[var(--color-border)] rounded px-2 text-[12px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]";
   const cellSelectClass = `${cellInputClass} appearance-none cursor-pointer pr-5`;
 
-  const renderField = (field: RoleField) => {
-    const placeholder = cfg.placeholders?.[field] ?? "";
-    switch (field) {
-      case "size": {
-        const options = material?.sizes ?? [];
-        return options.length > 0 ? (
-          <select
-            value={value.size ?? ""}
-            onChange={(e) => onChange({ size: e.target.value })}
-            className={cellSelectClass}
-          >
-            <option value="">—</option>
-            {options.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={value.size ?? ""}
-            onChange={(e) => onChange({ size: e.target.value })}
-            placeholder={placeholder}
-            className={cellInputClass}
-          />
-        );
-      }
-      case "color": {
-        const options = material?.colors ?? [];
-        return options.length > 0 ? (
-          <select
-            value={value.color ?? ""}
-            onChange={(e) => onChange({ color: e.target.value })}
-            className={cellSelectClass}
-          >
-            <option value="">—</option>
-            {options.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={value.color ?? ""}
-            onChange={(e) => onChange({ color: e.target.value })}
-            placeholder={placeholder}
-            className={cellInputClass}
-          />
-        );
-      }
+  const renderSize = () => {
+    const placeholder = cfg.placeholders?.size ?? "";
+    const options = material?.sizes ?? [];
+    return options.length > 0 ? (
+      <select
+        value={value.size ?? ""}
+        onChange={(e) => onChange({ size: e.target.value })}
+        className={cellSelectClass}
+      >
+        <option value="">—</option>
+        {options.map((s) => (
+          <option key={s} value={s}>{s}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type="text"
+        value={value.size ?? ""}
+        onChange={(e) => onChange({ size: e.target.value })}
+        placeholder={placeholder}
+        className={cellInputClass}
+      />
+    );
+  };
+
+  const renderColor = () => {
+    const placeholder = cfg.placeholders?.color ?? "";
+    const options = material?.colors ?? [];
+    return options.length > 0 ? (
+      <select
+        value={value.color ?? ""}
+        onChange={(e) => onChange({ color: e.target.value })}
+        className={cellSelectClass}
+      >
+        <option value="">—</option>
+        {options.map((c) => (
+          <option key={c} value={c}>{c}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type="text"
+        value={value.color ?? ""}
+        onChange={(e) => onChange({ color: e.target.value })}
+        placeholder={placeholder}
+        className={cellInputClass}
+      />
+    );
+  };
+
+  const renderDetail = () => {
+    if (!cfg.detail) return null;
+    const placeholder = cfg.placeholders?.detail ?? "";
+    switch (cfg.detail) {
       case "weight":
         return (
           <input
@@ -663,14 +667,30 @@ function SlotRow({
             compact
           />
         </div>
-        {cfg.fields.map((field) => (
-          <div key={field}>
+        {cfg.showSize && (
+          <div>
             <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--color-text-muted)] mb-0.5">
-              {getFieldLabel(field)}
+              Size
             </label>
-            {renderField(field)}
+            {renderSize()}
           </div>
-        ))}
+        )}
+        {cfg.showColor && (
+          <div>
+            <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--color-text-muted)] mb-0.5">
+              Color
+            </label>
+            {renderColor()}
+          </div>
+        )}
+        {cfg.detail && (
+          <div>
+            <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--color-text-muted)] mb-0.5">
+              {detailLabel(cfg.detail)}
+            </label>
+            {renderDetail()}
+          </div>
+        )}
       </div>
     </div>
   );

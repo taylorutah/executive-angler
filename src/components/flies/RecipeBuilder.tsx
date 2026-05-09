@@ -3,13 +3,12 @@
 import { useState, useCallback } from 'react';
 import { MaterialAutocomplete } from './MaterialAutocomplete';
 import type { TyingMaterial, RecipeRole } from '@/types/materials';
-import { Plus, GripVertical, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
+import { Plus, GripVertical, Trash2, ChevronDown } from 'lucide-react';
 import {
   ROLE_FIELDS,
   RECIPE_ROLES,
   getRoleFields,
-  getFieldLabel,
-  type RoleField,
+  detailLabel,
 } from '@/lib/flies/role-field-config';
 
 export interface RecipeStep {
@@ -55,8 +54,13 @@ function createEmptyStep(role: RecipeRole = 'hook'): RecipeStep {
 }
 
 const cellInput =
-  'w-full h-8 bg-[#0D1117] border border-[#30363D] rounded-md px-2 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
-const cellSelect = `${cellInput} appearance-none cursor-pointer pr-6`;
+  'w-full h-7 bg-[#0D1117] border border-[#30363D] rounded px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
+const cellSelect = `${cellInput} appearance-none cursor-pointer pr-5`;
+
+// Fixed Salesforce-style grid: drag(20) | #(28) | role(110) | material(1.4fr) | size(90) | color(110) | detail(110) | notes(1fr) | opt(28) | del(24)
+// Static classes — Tailwind JIT requires literal strings (no template interpolation).
+const ROW_GRID =
+  'hidden md:grid md:items-center md:gap-1 md:px-2 md:py-1 md:grid-cols-[20px_28px_110px_minmax(0,1.4fr)_90px_110px_110px_minmax(0,1fr)_28px_24px]';
 
 export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
   const [steps, setSteps] = useState<RecipeStep[]>(
@@ -64,7 +68,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
       ? initialSteps
       : [createEmptyStep('hook'), createEmptyStep('bead'), createEmptyStep('thread')]
   );
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [dragIdx, setDragIdx] = useState<number | null>(null);
 
   const updateSteps = useCallback(
@@ -122,77 +125,70 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
   };
   const handleDragEnd = () => setDragIdx(null);
 
-  const renderField = (idx: number, step: RecipeStep, field: RoleField) => {
+  const renderSize = (idx: number, step: RecipeStep) => {
     const cfg = getRoleFields(step.role);
-    const placeholder = cfg.placeholders?.[field];
-    switch (field) {
-      case 'size': {
-        const options = step.material?.sizes ?? [];
-        return options.length > 0 ? (
-          <select
-            value={step.sizeChoice}
-            onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
-            className={cellSelect}
-          >
-            <option value="">—</option>
-            {options.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={step.sizeChoice}
-            onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
-            className={cellInput}
-          />
-        );
-      }
-      case 'color': {
-        const options = step.material?.colors ?? [];
-        return options.length > 0 ? (
-          <select
-            value={step.colorChoice}
-            onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
-            className={cellSelect}
-          >
-            <option value="">—</option>
-            {options.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={step.colorChoice}
-            onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
-            className={cellInput}
-          />
-        );
-      }
-      case 'quantity':
-        return (
-          <input
-            type="text"
-            value={step.quantity}
-            onChange={(e) => updateStep(idx, { quantity: e.target.value })}
-            placeholder={placeholder ?? '1'}
-            className={cellInput}
-          />
-        );
+    if (!cfg.showSize) return <span className="text-[#484F58] text-[12px] text-center">—</span>;
+    const options = step.material?.sizes ?? [];
+    return options.length > 0 ? (
+      <select
+        value={step.sizeChoice}
+        onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
+        className={cellSelect}
+      >
+        <option value="">—</option>
+        {options.map((s) => (
+          <option key={s} value={s}>{s}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type="text"
+        value={step.sizeChoice}
+        onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
+        placeholder={cfg.placeholders?.size ?? ''}
+        className={cellInput}
+      />
+    );
+  };
+
+  const renderColor = (idx: number, step: RecipeStep) => {
+    const cfg = getRoleFields(step.role);
+    if (!cfg.showColor) return <span className="text-[#484F58] text-[12px] text-center">—</span>;
+    const options = step.material?.colors ?? [];
+    return options.length > 0 ? (
+      <select
+        value={step.colorChoice}
+        onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
+        className={cellSelect}
+      >
+        <option value="">—</option>
+        {options.map((c) => (
+          <option key={c} value={c}>{c}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type="text"
+        value={step.colorChoice}
+        onChange={(e) => updateStep(idx, { colorChoice: e.target.value })}
+        placeholder={cfg.placeholders?.color ?? ''}
+        className={cellInput}
+      />
+    );
+  };
+
+  const renderDetail = (idx: number, step: RecipeStep) => {
+    const cfg = getRoleFields(step.role);
+    if (!cfg.detail) return <span className="text-[#484F58] text-[12px] text-center">—</span>;
+    const placeholder = cfg.placeholders?.detail ?? '';
+    switch (cfg.detail) {
       case 'weight':
         return (
           <input
             type="text"
-            value={step.weightChoice}
+            value={step.weightChoice || step.material?.weight || ''}
             onChange={(e) => updateStep(idx, { weightChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
+            placeholder={placeholder}
             className={cellInput}
           />
         );
@@ -200,9 +196,9 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
         return (
           <input
             type="text"
-            value={step.materialTypeChoice}
+            value={step.materialTypeChoice || step.material?.material_type || ''}
             onChange={(e) => updateStep(idx, { materialTypeChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
+            placeholder={placeholder}
             className={cellInput}
           />
         );
@@ -210,9 +206,19 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
         return (
           <input
             type="text"
-            value={step.finishChoice}
+            value={step.finishChoice || step.material?.finish || ''}
             onChange={(e) => updateStep(idx, { finishChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
+            placeholder={placeholder}
+            className={cellInput}
+          />
+        );
+      case 'quantity':
+        return (
+          <input
+            type="text"
+            value={step.quantity}
+            onChange={(e) => updateStep(idx, { quantity: e.target.value })}
+            placeholder={placeholder}
             className={cellInput}
           />
         );
@@ -222,7 +228,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
             type="text"
             value={step.sizeChoice}
             onChange={(e) => updateStep(idx, { sizeChoice: e.target.value })}
-            placeholder={placeholder ?? ''}
+            placeholder={placeholder}
             className={cellInput}
           />
         );
@@ -230,7 +236,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
   };
 
   return (
-    <div className="border border-[#30363D] rounded-md overflow-hidden">
+    <div className="bg-[#161B22] overflow-hidden">
       {/* Toolbar */}
       <div className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-2 py-1.5">
         <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
@@ -239,28 +245,29 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
         <button
           type="button"
           onClick={() => addStep()}
-          className="inline-flex items-center gap-1 text-[11px] font-medium text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#A8B2BD] hover:text-[#E8923A] transition-colors uppercase tracking-wide"
         >
-          <Plus className="w-3 h-3" /> Add step
+          <Plus className="w-3 h-3" /> Add Step
         </button>
       </div>
 
-      {/* Header row */}
-      <div className="hidden md:grid grid-cols-[20px_120px_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.8fr)_20px_20px] items-center gap-1 border-b border-[#30363D] bg-[#161B22] px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+      {/* Header row — real column labels */}
+      <div className={`${ROW_GRID} border-b border-[#30363D] bg-[#0D1117] text-[10px] font-bold uppercase tracking-widest text-[#6E7681]`}>
         <span />
+        <span className="text-center">#</span>
         <span>Role</span>
         <span>Material</span>
-        <span>Field 1</span>
-        <span>Field 2</span>
-        <span>Field 3</span>
-        <span />
+        <span>Size</span>
+        <span>Color</span>
+        <span>Detail</span>
+        <span>Notes</span>
+        <span className="text-center" title="Optional">Opt</span>
         <span />
       </div>
 
+      {/* Rows */}
       {steps.map((step, idx) => {
         const cfg = getRoleFields(step.role);
-        const isOpen = !!expanded[step.id];
-        const fieldsToShow = cfg.fields.slice(0, 3);
         return (
           <div
             key={step.id}
@@ -276,9 +283,9 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 : 'bg-[#161B22]'
             } hover:bg-[rgba(232,146,58,0.05)] transition-colors`}
           >
-            {/* Compact row (desktop grid, mobile stacked) */}
-            <div className="grid md:grid-cols-[20px_120px_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.8fr)_20px_20px] items-center gap-1 px-2 py-1.5 grid-cols-[20px_1fr_20px]">
-              {/* Drag handle */}
+            {/* Desktop dense row */}
+            <div className={ROW_GRID}>
+              {/* Drag */}
               <button
                 type="button"
                 className="cursor-grab active:cursor-grabbing text-[#484F58] hover:text-[#A8B2BD]"
@@ -287,127 +294,156 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 <GripVertical className="w-3.5 h-3.5" />
               </button>
 
-              {/* Role */}
-              <div className="relative md:col-auto col-span-1">
+              {/* Step number */}
+              <span className="text-[11px] font-mono tabular-nums text-[#6E7681] text-center">
+                {idx + 1}
+              </span>
+
+              {/* Role select */}
+              <div className="relative">
                 <select
                   value={step.role}
                   onChange={(e) => handleRoleChange(idx, e.target.value as RecipeRole)}
                   className={`${cellSelect} font-medium`}
                 >
                   {RECIPE_ROLES.map((r) => (
-                    <option key={r} value={r}>
-                      {ROLE_FIELDS[r].label}
-                    </option>
+                    <option key={r} value={r}>{ROLE_FIELDS[r].label}</option>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
               </div>
 
               {/* Material picker */}
-              <div className="md:col-auto col-span-3">
-                <MaterialAutocomplete
-                  category={cfg.materialCategory}
-                  value={step.material}
-                  freeText={step.materialName}
-                  onSelect={(mat, freeText) => {
-                    updateStep(idx, {
-                      material: mat,
-                      materialName: freeText || mat?.name || '',
-                    });
-                  }}
-                  placeholder={`Search ${cfg.label.toLowerCase()}…`}
-                  compact
+              <MaterialAutocomplete
+                category={cfg.materialCategory}
+                value={step.material}
+                freeText={step.materialName}
+                onSelect={(mat, freeText) => {
+                  updateStep(idx, {
+                    material: mat,
+                    materialName: freeText || mat?.name || '',
+                  });
+                }}
+                placeholder={`Search ${cfg.label.toLowerCase()}…`}
+                compact
+              />
+
+              {/* Size column */}
+              <div>{renderSize(idx, step)}</div>
+
+              {/* Color column */}
+              <div>{renderColor(idx, step)}</div>
+
+              {/* Detail column */}
+              <div title={detailLabel(cfg.detail)}>{renderDetail(idx, step)}</div>
+
+              {/* Notes (always inline visible) */}
+              <input
+                type="text"
+                value={step.notes}
+                onChange={(e) => updateStep(idx, { notes: e.target.value })}
+                placeholder="notes…"
+                className={cellInput}
+              />
+
+              {/* Optional toggle (inline) */}
+              <label className="flex justify-center cursor-pointer" title="Optional step">
+                <input
+                  type="checkbox"
+                  checked={step.isOptional}
+                  onChange={(e) => updateStep(idx, { isOptional: e.target.checked })}
+                  className="rounded border-[#30363D] bg-[#0D1117] text-[#E8923A] h-3.5 w-3.5"
                 />
-              </div>
-
-              {/* Schema-driven fields (3 max in row; rest only via expanded) */}
-              {[0, 1, 2].map((slot) => {
-                const field = fieldsToShow[slot];
-                return (
-                  <div key={slot} className="md:col-auto hidden md:block">
-                    {field ? renderField(idx, step, field) : null}
-                  </div>
-                );
-              })}
-
-              {/* Expand toggle */}
-              <button
-                type="button"
-                onClick={() =>
-                  setExpanded((e) => ({ ...e, [step.id]: !e[step.id] }))
-                }
-                className="text-[#484F58] hover:text-[#E8923A] transition-colors"
-                aria-label={isOpen ? 'Collapse step' : 'Expand step'}
-              >
-                {isOpen ? (
-                  <ChevronDown className="w-3.5 h-3.5" />
-                ) : (
-                  <ChevronRight className="w-3.5 h-3.5" />
-                )}
-              </button>
+              </label>
 
               {/* Delete */}
               <button
                 type="button"
                 onClick={() => removeStep(idx)}
-                className="text-[#484F58] hover:text-red-400 transition-colors"
+                className="flex justify-center text-[#484F58] hover:text-red-400 transition-colors"
                 aria-label="Delete step"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* Mobile: render fields under header in a stack */}
-            <div className="md:hidden px-2 pb-2 space-y-1.5">
-              {cfg.fields.map((field) => (
-                <div key={field}>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
-                    {getFieldLabel(field)}
-                  </label>
-                  {renderField(idx, step, field)}
-                </div>
-              ))}
-            </div>
-
-            {/* Expanded inline panel */}
-            {isOpen && (
-              <div className="border-t border-[#21262D] bg-[#0D1117] px-3 py-2 space-y-2">
-                {/* Any extra fields beyond the 3 visible in row */}
-                {cfg.fields.length > 3 && (
-                  <div className="hidden md:grid grid-cols-3 gap-2">
-                    {cfg.fields.slice(3).map((field) => (
-                      <div key={field}>
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
-                          {getFieldLabel(field)}
-                        </label>
-                        {renderField(idx, step, field)}
-                      </div>
+            {/* Mobile stacked layout */}
+            <div className="md:hidden p-2 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono tabular-nums text-[#6E7681]">
+                  {idx + 1}
+                </span>
+                <div className="relative flex-1">
+                  <select
+                    value={step.role}
+                    onChange={(e) => handleRoleChange(idx, e.target.value as RecipeRole)}
+                    className={`${cellSelect} font-medium`}
+                  >
+                    {RECIPE_ROLES.map((r) => (
+                      <option key={r} value={r}>{ROLE_FIELDS[r].label}</option>
                     ))}
+                  </select>
+                  <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeStep(idx)}
+                  className="text-[#484F58] hover:text-red-400 transition-colors"
+                  aria-label="Delete step"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <MaterialAutocomplete
+                category={cfg.materialCategory}
+                value={step.material}
+                freeText={step.materialName}
+                onSelect={(mat, freeText) => {
+                  updateStep(idx, {
+                    material: mat,
+                    materialName: freeText || mat?.name || '',
+                  });
+                }}
+                placeholder={`Search ${cfg.label.toLowerCase()}…`}
+                compact
+              />
+              <div className="grid grid-cols-3 gap-1.5">
+                {cfg.showSize && (
+                  <div>
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
+                    {renderSize(idx, step)}
                   </div>
                 )}
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
-                    Notes
-                  </label>
-                  <input
-                    type="text"
-                    value={step.notes}
-                    onChange={(e) => updateStep(idx, { notes: e.target.value })}
-                    placeholder="tie in at 60% mark, dub sparse…"
-                    className={cellInput}
-                  />
-                </div>
-                <label className="flex items-center gap-2 cursor-pointer pt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={step.isOptional}
-                    onChange={(e) => updateStep(idx, { isOptional: e.target.checked })}
-                    className="rounded border-[#30363D] bg-[#0D1117] text-[#E8923A] h-3.5 w-3.5"
-                  />
-                  <span className="text-[11px] text-[#A8B2BD]">Optional step</span>
-                </label>
+                {cfg.showColor && (
+                  <div>
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                    {renderColor(idx, step)}
+                  </div>
+                )}
+                {cfg.detail && (
+                  <div>
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
+                    {renderDetail(idx, step)}
+                  </div>
+                )}
               </div>
-            )}
+              <input
+                type="text"
+                value={step.notes}
+                onChange={(e) => updateStep(idx, { notes: e.target.value })}
+                placeholder="Notes (e.g. tie in at 60% mark)"
+                className={cellInput}
+              />
+              <label className="flex items-center gap-2 cursor-pointer pt-0.5">
+                <input
+                  type="checkbox"
+                  checked={step.isOptional}
+                  onChange={(e) => updateStep(idx, { isOptional: e.target.checked })}
+                  className="rounded border-[#30363D] bg-[#0D1117] text-[#E8923A] h-3.5 w-3.5"
+                />
+                <span className="text-[11px] text-[#A8B2BD]">Optional step</span>
+              </label>
+            </div>
           </div>
         );
       })}
