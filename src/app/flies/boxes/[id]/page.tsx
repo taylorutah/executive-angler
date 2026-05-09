@@ -6,7 +6,7 @@
  */
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { Box, ChevronLeft, Star } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getBoxById, listVariantsInBox, listMyBoxes } from "@/lib/db/fly-v2";
 import VariantTable from "@/components/flies-v2/VariantTable";
@@ -40,6 +40,40 @@ export default async function BoxDetailV2({ params }: Props) {
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
       <header className="border-b border-[#21262D] bg-[#161B22]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
+          {userBoxes.length > 1 && (
+            <div className="-mx-1 mb-3 flex gap-2 overflow-x-auto px-1 pb-1">
+              {userBoxes.map((b) => {
+                const isActive = b.id === id;
+                return (
+                  <Link
+                    key={b.id}
+                    href={`/flies/boxes/${b.id}`}
+                    className={`group flex flex-shrink-0 items-center gap-2 rounded-lg border px-3 py-2 transition-colors ${
+                      isActive
+                        ? "border-[#E8923A] bg-[#E8923A]/10"
+                        : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
+                    }`}
+                  >
+                    <Box
+                      className={`h-3.5 w-3.5 flex-shrink-0 ${
+                        isActive ? "text-[#E8923A]" : "text-[#6E7681]"
+                      }`}
+                    />
+                    <span
+                      className={`max-w-[140px] truncate text-xs font-semibold ${
+                        isActive ? "text-[#F0F6FC]" : "text-[#A8B2BD] group-hover:text-[#F0F6FC]"
+                      }`}
+                    >
+                      {b.name}
+                    </span>
+                    {b.is_default && (
+                      <Star className="h-3 w-3 flex-shrink-0 fill-[#0BA5C7] text-[#0BA5C7]" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
           <Link
             href="/flies?tab=boxes"
             className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#0BA5C7] transition-colors mb-2"
