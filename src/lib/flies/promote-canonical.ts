@@ -197,10 +197,15 @@ export async function promoteToCanonical(
   }
 
   if (input.sourcePatternId) {
-    await serviceClient
+    const { error: backlinkErr } = await serviceClient
       .from("fly_patterns")
       .update({ promoted_to_canonical_id: canonicalId })
       .eq("id", input.sourcePatternId);
+    if (backlinkErr) {
+      console.error(
+        `[promoteToCanonical] source back-link update failed for ${input.sourcePatternId} → ${canonicalId}: ${backlinkErr.message}. Personal pattern won't 301-redirect to the canonical.`,
+      );
+    }
   }
 
   return { ok: true, canonicalId };

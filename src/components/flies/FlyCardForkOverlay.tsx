@@ -20,11 +20,13 @@ interface Props {
 export default function FlyCardForkOverlay({ canonicalFlyId, flySlug }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleFork(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
     setBusy(true);
+    setError(null);
     const outcome = await findOrForkPersonalPattern({
       canonicalFlyId,
       personalizations: {},
@@ -36,6 +38,7 @@ export default function FlyCardForkOverlay({ canonicalFlyId, flySlug }: Props) {
     }
     if (outcome.kind === "error") {
       console.error("[FlyCardForkOverlay]", outcome.message);
+      setError(outcome.message);
       setBusy(false);
       return;
     }
@@ -43,20 +46,27 @@ export default function FlyCardForkOverlay({ canonicalFlyId, flySlug }: Props) {
     router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
   }
 
+  const baseClasses =
+    "absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-md backdrop-blur px-2 py-1 text-[10px] font-semibold opacity-0 group-hover:opacity-100 focus:opacity-100 disabled:opacity-60 transition-opacity";
+  const stateClasses = error
+    ? "border border-red-500/50 bg-red-500/15 text-red-300 hover:bg-red-500/25"
+    : "border border-[#0BA5C7]/40 bg-[#0BA5C7]/15 text-[#0BA5C7] hover:bg-[#0BA5C7]/25";
+
   return (
     <button
       type="button"
       onClick={handleFork}
       disabled={busy}
-      title="Make this the starting point for your own named pattern"
-      className="absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-md border border-[#0BA5C7]/40 bg-[#0BA5C7]/15 backdrop-blur px-2 py-1 text-[10px] font-semibold text-[#0BA5C7] opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-[#0BA5C7]/25 disabled:opacity-60 transition-opacity"
+      title={error || "Make this the starting point for your own named pattern"}
+      aria-label={error ? `Fork failed: ${error}` : "Tie your own version"}
+      className={`${baseClasses} ${stateClasses}`}
     >
       {busy ? (
         <Loader2 className="h-3 w-3 animate-spin" />
       ) : (
         <GitFork className="h-3 w-3" />
       )}
-      Tie your own
+      {error ? "Try again" : "Tie your own"}
     </button>
   );
 }
