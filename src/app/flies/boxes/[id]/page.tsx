@@ -10,6 +10,7 @@ import { Box, ChevronLeft, Star } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getBoxById, listVariantsInBox, listMyBoxes } from "@/lib/db/fly-v2";
 import VariantTable from "@/components/flies-v2/VariantTable";
+import QuickFlyAddButton from "@/components/flies-v2/QuickFlyAddButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -69,40 +70,45 @@ export default async function BoxDetailV2({ params }: Props) {
               tap any cell to edit
             </p>
           </div>
-          {userBoxes.length > 1 && (
-            <div className="flex flex-col items-stretch gap-1 sm:flex-row sm:flex-wrap sm:items-start sm:justify-end sm:gap-1.5 sm:max-w-[45%] flex-shrink-0">
-              {userBoxes.map((b) => {
-                const isActive = b.id === id;
-                return (
-                  <Link
-                    key={b.id}
-                    href={`/flies/boxes/${b.id}`}
-                    className={`group flex items-center gap-1.5 rounded-md border px-2 py-1 sm:rounded-lg sm:px-3 sm:py-2 transition-colors ${
-                      isActive
-                        ? "border-[#E8923A] bg-[#E8923A]/10"
-                        : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
-                    }`}
-                  >
-                    <Box
-                      className={`h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5 ${
-                        isActive ? "text-[#E8923A]" : "text-[#6E7681]"
-                      }`}
-                    />
-                    <span
-                      className={`max-w-[110px] sm:max-w-[140px] truncate text-[10px] sm:text-xs font-semibold ${
-                        isActive ? "text-[#F0F6FC]" : "text-[#A8B2BD] group-hover:text-[#F0F6FC]"
+          <div className="flex flex-col items-stretch gap-2 sm:items-end sm:max-w-[45%] flex-shrink-0">
+            {userBoxes.length > 1 && (
+              <div className="flex flex-col items-stretch gap-1 sm:flex-row sm:flex-wrap sm:items-start sm:justify-end sm:gap-1.5">
+                {userBoxes.map((b) => {
+                  const isActive = b.id === id;
+                  return (
+                    <Link
+                      key={b.id}
+                      href={`/flies/boxes/${b.id}`}
+                      className={`group flex items-center gap-1.5 rounded-md border px-2 py-1 sm:rounded-lg sm:px-3 sm:py-2 transition-colors ${
+                        isActive
+                          ? "border-[#E8923A] bg-[#E8923A]/10"
+                          : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
                       }`}
                     >
-                      {b.name}
-                    </span>
-                    {b.is_default && (
-                      <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 flex-shrink-0 fill-[#0BA5C7] text-[#0BA5C7]" />
-                    )}
-                  </Link>
-                );
-              })}
+                      <Box
+                        className={`h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5 ${
+                          isActive ? "text-[#E8923A]" : "text-[#6E7681]"
+                        }`}
+                      />
+                      <span
+                        className={`max-w-[110px] sm:max-w-[140px] truncate text-[10px] sm:text-xs font-semibold ${
+                          isActive ? "text-[#F0F6FC]" : "text-[#A8B2BD] group-hover:text-[#F0F6FC]"
+                        }`}
+                      >
+                        {b.name}
+                      </span>
+                      {b.is_default && (
+                        <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 flex-shrink-0 fill-[#0BA5C7] text-[#0BA5C7]" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+            <div className="flex sm:justify-end">
+              <QuickFlyAddButton boxId={id} boxName={box.name} />
             </div>
-          )}
+          </div>
         </div>
       </header>
 
