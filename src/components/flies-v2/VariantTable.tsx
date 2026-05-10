@@ -157,12 +157,12 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
       accessor: (row) => row.body_color ?? "",
       render: (row) => row.body_color ? <span className="text-[#A8B2BD]">{row.body_color}</span> : <span className="text-[#484F58]">—</span>,
     },
-    {
+    ...(boxId ? [] : [{
       key: "rib",
       label: "Rib",
-      accessor: (row) => row.rib_color ?? "",
-      render: (row) => row.rib_color ? <span className="text-[#A8B2BD]">{row.rib_color}</span> : <span className="text-[#484F58]">—</span>,
-    },
+      accessor: (row: VariantRow) => row.rib_color ?? "",
+      render: (row: VariantRow) => row.rib_color ? <span className="text-[#A8B2BD]">{row.rib_color}</span> : <span className="text-[#484F58]">—</span>,
+    }]),
     {
       key: "tied",
       label: "Tied",
