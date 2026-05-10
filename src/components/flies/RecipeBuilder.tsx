@@ -461,7 +461,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   cellSelect={cellSelect}
                 />
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
-                <div className="grid grid-cols-[110px_minmax(0,1fr)] gap-1">
+                <div className="flex flex-col gap-0.5">
                   <BrandSelect
                     category={cfg.materialCategory}
                     value={step.brandChoice || step.material?.brand || ''}
