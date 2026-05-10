@@ -222,9 +222,7 @@ export default function FlyPatternForm({
         {banner && <div className="mb-3">{banner}</div>}
 
         <form id={formId} onSubmit={handleSubmit} className="space-y-3">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-3">
-            {/* MAIN COLUMN */}
-            <div className="space-y-3 min-w-0">
+          <div className="space-y-3">
               {/* Pattern Info */}
               <section className="border border-[#30363D] rounded-md bg-[#161B22]">
                 <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
@@ -420,10 +418,9 @@ export default function FlyPatternForm({
                   </div>
                 </div>
               </section>
-            </div>
 
-            {/* SIDEBAR — photo + lineage + extras */}
-            <aside className="space-y-3 lg:sticky lg:top-4 lg:self-start">
+              {/* Photo — full-width section, uploader constrained so the 1:1
+                  dropzone doesn't dominate the layout. */}
               <section className="border border-[#30363D] rounded-md bg-[#161B22]">
                 <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
                   <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD]">
@@ -431,14 +428,16 @@ export default function FlyPatternForm({
                   </h2>
                 </header>
                 <div className="p-3">
-                  <FlyImageUploader
-                    existingUrl={initial?.imageUrl ?? null}
-                    onFileChange={(f) => {
-                      setImageFile(f);
-                      if (f === null) setImageRemoved(true);
-                      else setImageRemoved(false);
-                    }}
-                  />
+                  <div className="max-w-[260px]">
+                    <FlyImageUploader
+                      existingUrl={initial?.imageUrl ?? null}
+                      onFileChange={(f) => {
+                        setImageFile(f);
+                        if (f === null) setImageRemoved(true);
+                        else setImageRemoved(false);
+                      }}
+                    />
+                  </div>
                 </div>
               </section>
 
@@ -449,7 +448,7 @@ export default function FlyPatternForm({
                       Library Lineage
                     </h2>
                   </header>
-                  <div className="p-3 space-y-2">
+                  <div className="p-3 flex items-center justify-between gap-3">
                     <p className="text-[12px] text-[#A8B2BD] leading-snug">
                       Forked from{" "}
                       <span className="font-semibold text-[#F0F6FC]">
@@ -460,7 +459,7 @@ export default function FlyPatternForm({
                       href={`/flies/${initial.parentCanonical.slug}`}
                       target="_blank"
                       rel="noopener"
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#0BA5C7] hover:text-[#3FBED7] transition-colors"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#0BA5C7] hover:text-[#3FBED7] transition-colors shrink-0"
                     >
                       <ExternalLink className="w-3 h-3" /> View library reference
                     </Link>
@@ -469,7 +468,6 @@ export default function FlyPatternForm({
               )}
 
               {extras}
-            </aside>
           </div>
 
           {/* Submission gate: honeypot (hidden) + Turnstile widget. */}
