@@ -49,6 +49,7 @@ function emptyStep(role: RecipeRole): RecipeStep {
     weightChoice: "",
     materialTypeChoice: "",
     finishChoice: "",
+    brandChoice: "",
     notes: "",
     isOptional: false,
   };
@@ -213,6 +214,7 @@ export function ingredientsToSteps(
       weightChoice: "",
       materialTypeChoice: "",
       finishChoice: "",
+      brandChoice: ing.material?.brand ?? "",
       notes: ing.notes ?? "",
       isOptional: ing.is_optional ?? false,
     };

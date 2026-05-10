@@ -170,101 +170,60 @@ const beads: MaterialSeed[] = [
 ];
 
 // =============================================
-// THREADS (~80)
+// THREADS
+// One row per (brand, product line, denier) — colors[] holds every available
+// color. DO NOT explode into one row per color: the recipe builder's cascading
+// Brand → Product → Color selector relies on this consolidated shape.
 // =============================================
 const threads: MaterialSeed[] = [
-  // Semperfli
-  ...['Black','White','Red','Olive','Brown','Gray','Orange','Yellow','Pink','Purple','Tan','Cream'].map(color => ({
-    name: `Nano Silk 30D ${color}`,
-    brand: 'Semperfli',
-    category: 'thread' as const,
-    subcategory: 'nano-silk',
-    sizes: ['30D'],
-    colors: [color.toLowerCase()],
-    material_type: 'GSP',
-    weight: '30 denier',
-    description: `Ultra-fine GSP thread, 30 denier, ${color.toLowerCase()}`,
-  })),
-  ...['Black','White','Red','Olive','Brown','Hot Orange','Fluorescent Pink','Gray'].map(color => ({
-    name: `Nano Silk 18/0 ${color}`,
-    brand: 'Semperfli',
-    category: 'thread' as const,
-    subcategory: 'nano-silk',
-    sizes: ['18/0'],
-    colors: [color.toLowerCase()],
-    material_type: 'GSP',
-    weight: '18/0',
-    description: `Ultra-fine thread, 18/0, ${color.toLowerCase()}`,
-  })),
-  // UTC
-  ...['Black','White','Red','Olive','Brown','Gray','Orange','Yellow','Tan','Rusty Brown','Wine','Chartreuse'].map(color => ({
-    name: `Ultra Thread 70 ${color}`,
-    brand: 'UTC',
-    category: 'thread' as const,
-    subcategory: 'standard',
-    sizes: ['70 denier'],
-    colors: [color.toLowerCase()],
-    material_type: 'standard',
-    weight: '70 denier',
-    description: `Standard tying thread, 70 denier (6/0), ${color.toLowerCase()}`,
-  })),
-  ...['Black','White','Red','Olive','Brown','Tan'].map(color => ({
-    name: `Ultra Thread 140 ${color}`,
-    brand: 'UTC',
-    category: 'thread' as const,
-    subcategory: 'standard',
-    sizes: ['140 denier'],
-    colors: [color.toLowerCase()],
-    material_type: 'standard',
-    weight: '140 denier',
-    description: `Heavy tying thread, 140 denier (3/0), ${color.toLowerCase()}`,
-  })),
-  // Veevus
-  ...['Black','White','Olive','Brown','Red','Orange','Gray'].map(color => ({
-    name: `Veevus 14/0 ${color}`,
-    brand: 'Veevus',
-    category: 'thread' as const,
-    subcategory: 'fine',
-    sizes: ['14/0'],
-    colors: [color.toLowerCase()],
-    material_type: 'standard',
-    weight: '14/0',
-    description: `Fine tying thread, 14/0, ${color.toLowerCase()}`,
-  })),
-  ...['Black','White','Olive','Brown','Red','Gray','Tan'].map(color => ({
-    name: `Veevus 8/0 ${color}`,
-    brand: 'Veevus',
-    category: 'thread' as const,
-    subcategory: 'standard',
-    sizes: ['8/0'],
-    colors: [color.toLowerCase()],
-    material_type: 'standard',
-    weight: '8/0',
-    description: `Standard thread, 8/0, ${color.toLowerCase()}`,
-  })),
-  // UNI
-  ...['Black','White','Red','Olive','Camel','Rusty Dun','Iron Gray','Fire Orange'].map(color => ({
-    name: `UNI-Thread 8/0 ${color}`,
-    brand: 'UNI Products',
-    category: 'thread' as const,
-    subcategory: 'standard',
-    sizes: ['8/0'],
-    colors: [color.toLowerCase()],
-    material_type: 'waxed',
-    weight: '8/0',
-    description: `Waxed tying thread, 8/0, ${color.toLowerCase()}`,
-  })),
-  ...['Black','White','Red','Olive','Camel'].map(color => ({
-    name: `UNI-Thread 6/0 ${color}`,
-    brand: 'UNI Products',
-    category: 'thread' as const,
-    subcategory: 'standard',
-    sizes: ['6/0'],
-    colors: [color.toLowerCase()],
-    material_type: 'waxed',
-    weight: '6/0',
-    description: `Waxed tying thread, 6/0, ${color.toLowerCase()}`,
-  })),
+  {
+    name: 'Nano Silk 30D', brand: 'Semperfli', category: 'thread', subcategory: 'nano-silk',
+    sizes: ['30D'], weight: '30 denier', material_type: 'GSP',
+    colors: ['black','white','red','olive','brown','gray','orange','yellow','pink','purple','tan','cream'],
+    description: 'Ultra-fine GSP thread, 30 denier.',
+  },
+  {
+    name: 'Nano Silk 18/0', brand: 'Semperfli', category: 'thread', subcategory: 'nano-silk',
+    sizes: ['18/0'], weight: '18/0', material_type: 'GSP',
+    colors: ['black','white','red','olive','brown','hot orange','fluorescent pink','gray'],
+    description: 'Ultra-fine thread, 18/0.',
+  },
+  {
+    name: 'Ultra Thread 70', brand: 'UTC', category: 'thread', subcategory: 'standard',
+    sizes: ['70 denier'], weight: '70 denier', material_type: 'standard',
+    colors: ['black','white','red','olive','brown','gray','orange','yellow','tan','rusty brown','wine','chartreuse'],
+    description: 'Standard tying thread, 70 denier (6/0).',
+  },
+  {
+    name: 'Ultra Thread 140', brand: 'UTC', category: 'thread', subcategory: 'standard',
+    sizes: ['140 denier'], weight: '140 denier', material_type: 'standard',
+    colors: ['black','white','red','olive','brown','tan'],
+    description: 'Heavy tying thread, 140 denier (3/0).',
+  },
+  {
+    name: 'Veevus 14/0', brand: 'Veevus', category: 'thread', subcategory: 'fine',
+    sizes: ['14/0'], weight: '14/0', material_type: 'standard',
+    colors: ['black','white','olive','brown','red','orange','gray'],
+    description: 'Fine tying thread, 14/0.',
+  },
+  {
+    name: 'Veevus 8/0', brand: 'Veevus', category: 'thread', subcategory: 'standard',
+    sizes: ['8/0'], weight: '8/0', material_type: 'standard',
+    colors: ['black','white','olive','brown','red','gray','tan'],
+    description: 'Standard thread, 8/0.',
+  },
+  {
+    name: 'UNI-Thread 8/0', brand: 'UNI Products', category: 'thread', subcategory: 'standard',
+    sizes: ['8/0'], weight: '8/0', material_type: 'waxed',
+    colors: ['black','white','red','olive','camel','rusty dun','iron gray','fire orange'],
+    description: 'Waxed tying thread, 8/0.',
+  },
+  {
+    name: 'UNI-Thread 6/0', brand: 'UNI Products', category: 'thread', subcategory: 'standard',
+    sizes: ['6/0'], weight: '6/0', material_type: 'waxed',
+    colors: ['black','white','red','olive','camel'],
+    description: 'Waxed tying thread, 6/0.',
+  },
 ];
 
 // =============================================

@@ -69,6 +69,7 @@ function slotsToSteps(slots: MaterialSlot[]): RecipeStep[] {
       weightChoice: "",
       materialTypeChoice: "",
       finishChoice: "",
+      brandChoice: "",
       notes: s.description ?? "",
       isOptional: !!s.is_optional,
     };

@@ -11,6 +11,7 @@ import {
   detailLabel,
 } from '@/lib/flies/role-field-config';
 import { composeBeadName } from '@/lib/flies/legacy-recipe-adapter';
+import { BrandSelect, BrandFilteredMaterialSelect } from './recipe-rows/CascadeCells';
 
 const BEAD_MATERIALS = ['none', 'tungsten', 'brass', 'copper', 'glass'] as const;
 const BEAD_SHAPES = ['standard', 'slotted', 'countersunk', 'inverted', 'off-center'] as const;
@@ -37,6 +38,8 @@ export interface RecipeStep {
   weightChoice: string;
   materialTypeChoice: string;
   finishChoice: string;
+  /** Brand picker state for the thread/hook cascade rows. */
+  brandChoice: string;
   notes: string;
   isOptional: boolean;
 }
@@ -160,10 +163,14 @@ function createEmptyStep(role: RecipeRole = 'hook'): RecipeStep {
     weightChoice: '',
     materialTypeChoice: '',
     finishChoice: '',
+    brandChoice: '',
     notes: '',
     isOptional: false,
   };
 }
+
+/** Roles that render a Brand → Material cascade instead of a plain autocomplete. */
+const CASCADE_ROLES = new Set<RecipeRole>(['thread', 'hook']);
 
 const cellInput =
   'w-full h-7 bg-[#0D1117] border border-[#30363D] rounded px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
@@ -217,6 +224,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
       weightChoice: '',
       materialTypeChoice: '',
       finishChoice: '',
+      brandChoice: '',
       quantity: cfg.quantityDefault ?? '',
     });
   };
@@ -435,9 +443,9 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
               </div>
 
-              {/* Material picker — bead row uses simplified Material dropdown
-                  in this slot, no autocomplete; subsequent columns show
-                  Color, Size (mm), Shape. */}
+              {/* Material picker — bead, thread, and hook rows render
+                  dedicated cascading cells. Default path uses
+                  MaterialAutocomplete. */}
               {step.role === 'bead' ? (
                 <BeadMaterialSelect
                   step={step}
@@ -452,6 +460,39 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   cellInput={cellInput}
                   cellSelect={cellSelect}
                 />
+              ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] gap-1">
+                  <BrandSelect
+                    category={cfg.materialCategory}
+                    value={step.brandChoice || step.material?.brand || ''}
+                    onChange={(brand) =>
+                      updateStep(idx, {
+                        brandChoice: brand,
+                        // Reset downstream picks when brand changes.
+                        material: null,
+                        materialName: '',
+                      })
+                    }
+                    cellSelect={cellSelect}
+                    ariaLabel={`${cfg.label} brand`}
+                  />
+                  <BrandFilteredMaterialSelect
+                    category={cfg.materialCategory}
+                    brand={step.brandChoice || step.material?.brand || ''}
+                    value={step.material}
+                    onSelect={(mat) => {
+                      updateStep(idx, {
+                        material: mat,
+                        materialName: mat?.name || '',
+                        // Auto-fill brand if user picked material without setting brand first
+                        brandChoice: mat?.brand || step.brandChoice,
+                      });
+                    }}
+                    cellSelect={cellSelect}
+                    placeholder={step.role === 'hook' ? 'model…' : 'product…'}
+                    ariaLabel={`${cfg.label} product`}
+                  />
+                </div>
               ) : (
                 <MaterialAutocomplete
                   category={cfg.materialCategory}
@@ -632,6 +673,67 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                         cellSelect={cellSelect}
                       />
                     </div>
+                  </div>
+                </>
+              ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
+                <>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Brand</label>
+                      <BrandSelect
+                        category={cfg.materialCategory}
+                        value={step.brandChoice || step.material?.brand || ''}
+                        onChange={(brand) =>
+                          updateStep(idx, {
+                            brandChoice: brand,
+                            material: null,
+                            materialName: '',
+                          })
+                        }
+                        cellSelect={cellSelect}
+                        ariaLabel={`${cfg.label} brand`}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
+                        {step.role === 'hook' ? 'Model' : 'Product'}
+                      </label>
+                      <BrandFilteredMaterialSelect
+                        category={cfg.materialCategory}
+                        brand={step.brandChoice || step.material?.brand || ''}
+                        value={step.material}
+                        onSelect={(mat) => {
+                          updateStep(idx, {
+                            material: mat,
+                            materialName: mat?.name || '',
+                            brandChoice: mat?.brand || step.brandChoice,
+                          });
+                        }}
+                        cellSelect={cellSelect}
+                        placeholder={step.role === 'hook' ? 'model…' : 'product…'}
+                        ariaLabel={`${cfg.label} product`}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {cfg.showSize && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
+                        {renderSize(idx, step)}
+                      </div>
+                    )}
+                    {cfg.showColor && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                        {renderColor(idx, step)}
+                      </div>
+                    )}
+                    {cfg.detail && (
+                      <div>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
+                        {renderDetail(idx, step)}
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (

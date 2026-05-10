@@ -8,6 +8,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q') || '';
   const category = searchParams.get('category');
+  const brand = searchParams.get('brand');
   const limit = Math.min(parseInt(searchParams.get('limit') || '10', 10), 60);
   const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10), 0);
 
@@ -34,6 +35,10 @@ export async function GET(request: Request) {
 
   if (category) {
     query = query.eq('category', category);
+  }
+
+  if (brand) {
+    query = query.eq('brand', brand);
   }
 
   const { data, error } = await query;
