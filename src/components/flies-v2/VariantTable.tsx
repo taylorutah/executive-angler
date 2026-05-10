@@ -297,7 +297,7 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
       columns={columns}
       rowKey={(v) => v.id}
       density="compact"
-      defaultSort={{ key: "size", dir: "asc" }}
+      defaultSort={boxId ? { key: "fly_name", dir: "asc" } : { key: "size", dir: "asc" }}
       bulkActions={[
         {
           label: "Edit",
