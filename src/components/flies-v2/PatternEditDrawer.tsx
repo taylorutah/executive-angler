@@ -289,16 +289,16 @@ export default function PatternEditDrawer({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 flex items-stretch sm:items-center justify-center bg-black/60 sm:p-6">
+      {/* Backdrop — click to close */}
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close drawer"
-        className="flex-1 bg-black/60"
+        aria-label="Close editor"
+        className="absolute inset-0"
       />
-      {/* Panel */}
-      <div className="w-full max-w-[640px] h-full bg-[#0D1117] border-l border-[#21262D] shadow-2xl flex flex-col">
+      {/* Panel — centered, near-full-screen, capped at 7xl on wide displays */}
+      <div className="relative w-full max-w-7xl h-full sm:h-[calc(100vh-3rem)] bg-[#0D1117] border border-[#21262D] sm:rounded-xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between gap-3 border-b border-[#21262D] px-5 py-3 bg-[#161B22]">
           <div className="min-w-0">
