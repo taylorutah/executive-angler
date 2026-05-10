@@ -10,6 +10,7 @@
  * page automatically.
  */
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
 import { totalOwned, isLowStock } from "@/types/fly-v2";
@@ -51,6 +52,7 @@ function formatLastUsed(row: VariantRow): string {
 }
 
 export default function VariantTable({ variants, patternSlug, userBoxes, boxId }: Props) {
+  const router = useRouter();
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
@@ -264,7 +266,10 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
           patternSlug={patternSlug}
           open={true}
           onClose={() => setEditing(null)}
-          onSaved={() => showToast("Variant saved.")}
+          onSaved={() => {
+            showToast("Variant saved.");
+            router.refresh();
+          }}
         />
       )}
       {boxPicker && (
@@ -283,9 +288,11 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
               showToast(result.error ?? "Failed to add to box.", "error");
             } else if (result.added === 0) {
               showToast("Already in that box.");
+              router.refresh();
             } else {
               const n = result.added ?? rows.length;
               showToast(`Added ${n} variant${n === 1 ? "" : "s"} to box.`);
+              router.refresh();
             }
           }}
           onCancel={() => setBoxPicker(null)}
@@ -337,6 +344,7 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
             } else {
               const d = result.deleted ?? rows.length;
               showToast(`Deleted ${d} variant${d === 1 ? "" : "s"}.`);
+              router.refresh();
             }
           },
         },
