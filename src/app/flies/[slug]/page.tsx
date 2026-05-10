@@ -157,6 +157,7 @@ export default async function PatternDetail({ params }: Props) {
             editablePattern={fullPattern}
             userBoxes={userBoxes}
             isAdmin={adminFlag}
+            isCanonical={pattern.owner_user_id == null}
           />
         </div>
         <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">

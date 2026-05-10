@@ -1,27 +1,29 @@
 "use client";
 
 /**
- * PromoteToPatternPrompt — soft inline alert that appears in PersonalizeSheet
- * once the viewer has overridden enough fields that this is "becoming its own
- * fly." Clicking forks their personalization into a fresh fly_patterns row at
- * /anglers/{username}/flies/{slug}/edit and routes there.
+ * PromoteToPatternPrompt — fork CTA shown in PersonalizeSheet. Two variants:
+ *   - "inline" (default): compact card, used when 0–2 fields differ
+ *   - "banner": prominent top-of-sheet alert when ≥3 fields differ — at this
+ *     point the user is describing a different fly, not personalizing one
  */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { GitFork, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
 import type { Personalizations } from "@/lib/flies/resolveFlyForViewer";
 
 interface Props {
   canonicalFlyId: string;
   canonicalName: string;
   personalizations: Personalizations;
+  variant?: "inline" | "banner";
 }
 
 export default function PromoteToPatternPrompt({
   canonicalFlyId,
   canonicalName,
   personalizations,
+  variant = "inline",
 }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -30,43 +32,59 @@ export default function PromoteToPatternPrompt({
   async function handleFork() {
     setBusy(true);
     setError(null);
-    try {
-      // Look up the user's username so we can navigate to the right URL.
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setError("Sign in to fork as your own pattern.");
-        setBusy(false);
-        return;
-      }
-
-      const res = await fetch("/api/fishing/flies", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "personalization",
-          canonical_fly_id: canonicalFlyId,
-          personalizations,
-        }),
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setError(data.error || "Couldn't fork. Try again.");
-        return;
-      }
-      const { pattern_id } = (await res.json()) as { pattern_id?: string };
-      if (!pattern_id) {
-        setError("Fork succeeded but no pattern id returned.");
-        return;
-      }
-      // Navigate to the personal pattern edit page so the user can refine it.
-      router.push(`/journal/flies/${pattern_id}/edit`);
-    } catch (e) {
-      console.error("[PromoteToPatternPrompt] error:", e);
-      setError("Network error");
-    } finally {
-      setBusy(false);
+    const outcome = await findOrForkPersonalPattern({
+      canonicalFlyId,
+      personalizations,
+      loginRedirectTo: `/flies/${canonicalFlyId}`,
+    });
+    if (outcome.kind === "needs_login") {
+      router.push(outcome.redirectTo);
+      return;
     }
+    if (outcome.kind === "error") {
+      setError(outcome.message);
+      setBusy(false);
+      return;
+    }
+    const suffix = outcome.isNewFork ? "?just_forked=1" : "";
+    router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
+  }
+
+  if (variant === "banner") {
+    return (
+      <div className="rounded-xl border border-[#0BA5C7]/40 bg-[#0BA5C7]/10 px-4 py-3">
+        <div className="flex items-start gap-3">
+          <GitFork className="h-5 w-5 text-[#0BA5C7] mt-0.5 shrink-0" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm text-[#F0F6FC] font-semibold">
+              This is becoming its own fly.
+            </p>
+            <p className="text-xs text-[#A8B2BD] mt-0.5 leading-relaxed">
+              You&rsquo;ve overridden enough fields that you&rsquo;re describing a
+              different fly than{" "}
+              <span className="font-mono text-[#E8923A]">{canonicalName}</span>.
+              Save it as your own named pattern instead — you&rsquo;ll get a full
+              recipe page and proper catch attribution.
+            </p>
+            {error && <p className="text-[11px] text-red-400 mt-1.5">{error}</p>}
+            <div className="mt-2.5 flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={handleFork}
+                disabled={busy}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md bg-[#0BA5C7] text-[#0D1117] hover:bg-[#3FBED7] disabled:opacity-60 transition-colors"
+              >
+                {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <GitFork className="h-3.5 w-3.5" />}
+                Create new pattern
+              </button>
+              <span className="text-[10px] text-[#6E7681]">
+                Your fly box entry stays put — catches won&rsquo;t reassign.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -90,7 +108,7 @@ export default function PromoteToPatternPrompt({
               Fork as personal pattern
             </button>
             <span className="text-[10px] text-[#6E7681]">
-              Your fly box entry stays put — catches won't reassign.
+              Your fly box entry stays put — catches won&rsquo;t reassign.
             </span>
           </div>
         </div>

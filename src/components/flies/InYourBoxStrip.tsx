@@ -20,6 +20,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
 import {
   Plus,
   Edit3,
@@ -104,58 +105,22 @@ export default function InYourBoxStrip({
   async function openFullEditor() {
     setForking(true);
     setForkError(null);
-    try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push(`/login?redirect=/flies/${fly.id}`);
-        return;
-      }
-
-      // Look for an existing fork first.
-      const { data: existing } = await supabase
-        .from("fly_patterns")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("parent_canonical_id", fly.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (existing?.id) {
-        router.push(`/journal/flies/${existing.id}/edit`);
-        return;
-      }
-
-      // No fork yet — create one from the active variant's personalizations.
-      const personalizations = activeRow?.personalizations ?? {};
-      const res = await fetch("/api/fishing/flies", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "personalization",
-          canonical_fly_id: fly.id,
-          personalizations,
-        }),
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setForkError(data.error || "Couldn't open the editor. Try again.");
-        setForking(false);
-        return;
-      }
-      const { pattern_id } = (await res.json()) as { pattern_id?: string };
-      if (!pattern_id) {
-        setForkError("Fork succeeded but no pattern id returned.");
-        setForking(false);
-        return;
-      }
-      router.push(`/journal/flies/${pattern_id}/edit?just_forked=1`);
-    } catch (e) {
-      console.error("[openFullEditor]", e);
-      setForkError("Network error");
-      setForking(false);
+    const outcome = await findOrForkPersonalPattern({
+      canonicalFlyId: fly.id,
+      personalizations: activeRow?.personalizations ?? {},
+      loginRedirectTo: `/flies/${fly.id}`,
+    });
+    if (outcome.kind === "needs_login") {
+      router.push(outcome.redirectTo);
+      return;
     }
+    if (outcome.kind === "error") {
+      setForkError(outcome.message);
+      setForking(false);
+      return;
+    }
+    const suffix = outcome.isNewFork ? "?just_forked=1" : "";
+    router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
   }
 
   const activeRow: FlyBoxRow | null =

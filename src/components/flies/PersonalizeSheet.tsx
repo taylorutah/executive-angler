@@ -497,27 +497,40 @@ export default function PersonalizeSheet({
             </div>
           ) : (
             <>
+              {/* ≥3 deviations → promote to a banner at the top: at this
+                  point the user is describing a different fly, not a tweak. */}
+              {deviationCount >= 3 && (
+                <PromoteToPatternPrompt
+                  canonicalFlyId={fly.id}
+                  canonicalName={fly.name}
+                  personalizations={personalizations}
+                  variant="banner"
+                />
+              )}
+
               <p className="text-xs text-[#6E7681] leading-relaxed">
                 Same fly, your specs. Override hook brand, bead size, thread color, body
                 material — anything you tie differently. Empty fields fall back to the
                 library recipe.
               </p>
 
-              {/* Deviation counter + promote prompt */}
+              {/* Deviation counter */}
               {deviationCount > 0 && (
                 <div className="text-[11px] text-[#A8B2BD]">
                   <span className="font-semibold text-[#E8923A]">{deviationCount}</span>{" "}
                   {deviationCount === 1 ? "field" : "fields"} differ from the library version.
                 </div>
               )}
-              {/* Always show the fork CTA — Taylor wants the bridge to the
-                  full personal-pattern editor visible at all times, not
-                  hidden behind a 3+ deviation gate. */}
-              <PromoteToPatternPrompt
-                canonicalFlyId={fly.id}
-                canonicalName={fly.name}
-                personalizations={personalizations}
-              />
+              {/* Inline fork CTA — always visible as the bridge to the full
+                  personal-pattern editor. The banner above takes over once
+                  deviation count crosses the "this is a new fly" threshold. */}
+              {deviationCount < 3 && (
+                <PromoteToPatternPrompt
+                  canonicalFlyId={fly.id}
+                  canonicalName={fly.name}
+                  personalizations={personalizations}
+                />
+              )}
 
               {/* Variant identity */}
               <section className="space-y-3 rounded-xl border border-[#E8923A]/20 bg-[#E8923A]/5 p-3">
