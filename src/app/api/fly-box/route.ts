@@ -44,6 +44,7 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const canonicalFlyId = searchParams.get("canonical_fly_id");
+    const flyPatternId = searchParams.get("fly_pattern_id");
 
     let query = supabase
       .from("user_fly_box")
@@ -59,6 +60,13 @@ export async function GET(request: Request) {
       // Chip-strip mode: one canonical's variants, primary first then sort_order.
       query = query
         .eq("canonical_fly_id", canonicalFlyId)
+        .order("is_primary", { ascending: false })
+        .order("variant_sort_order", { ascending: true })
+        .order("added_at", { ascending: true });
+    } else if (flyPatternId) {
+      // Same chip-strip mode but scoped to a personal pattern.
+      query = query
+        .eq("fly_pattern_id", flyPatternId)
         .order("is_primary", { ascending: false })
         .order("variant_sort_order", { ascending: true })
         .order("added_at", { ascending: true });
@@ -100,6 +108,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       canonical_fly_id,
+      fly_pattern_id,
       preferred_sizes,
       preferred_colors,
       personal_notes,
@@ -116,9 +125,18 @@ export async function POST(request: Request) {
       target_count,
     } = body;
 
-    if (!canonical_fly_id) {
+    // Accept EITHER a canonical fly (library entry) or a fly_pattern (personal
+    // pattern owned by the user or shared). The user_fly_box schema carries
+    // both columns; exactly one should be set per row.
+    if (!canonical_fly_id && !fly_pattern_id) {
       return NextResponse.json(
-        { error: "canonical_fly_id is required" },
+        { error: "canonical_fly_id or fly_pattern_id is required" },
+        { status: 400 },
+      );
+    }
+    if (canonical_fly_id && fly_pattern_id) {
+      return NextResponse.json(
+        { error: "Provide only one of canonical_fly_id or fly_pattern_id" },
         { status: 400 },
       );
     }
@@ -132,12 +150,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: variantValidation }, { status: 400 });
     }
 
-    // Auto-promote to primary when no other variant of this canonical exists.
+    // Auto-promote to primary when no other variant of this fly exists.
+    // Scope is canonical_fly_id OR fly_pattern_id depending on which the
+    // caller supplied.
+    const flyScope = canonical_fly_id
+      ? { col: "canonical_fly_id" as const, value: canonical_fly_id as string }
+      : { col: "fly_pattern_id" as const, value: fly_pattern_id as string };
     const { count: existingCount } = await supabase
       .from("user_fly_box")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
-      .eq("canonical_fly_id", canonical_fly_id);
+      .eq(flyScope.col, flyScope.value);
     const isFirstVariant = (existingCount ?? 0) === 0;
 
     // Compute the next sort order so chips append at the end.
@@ -147,7 +170,7 @@ export async function POST(request: Request) {
         .from("user_fly_box")
         .select("variant_sort_order")
         .eq("user_id", user.id)
-        .eq("canonical_fly_id", canonical_fly_id)
+        .eq(flyScope.col, flyScope.value)
         .order("variant_sort_order", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -156,7 +179,8 @@ export async function POST(request: Request) {
 
     const insertRow: Record<string, unknown> = {
       user_id: user.id,
-      canonical_fly_id,
+      canonical_fly_id: canonical_fly_id ?? null,
+      fly_pattern_id: fly_pattern_id ?? null,
       preferred_sizes: preferred_sizes ?? null,
       preferred_colors: preferred_colors ?? null,
       personal_notes: personal_notes ?? null,

@@ -65,7 +65,16 @@ const TIER_ACCENT: Record<string, string> = {
 };
 
 export interface QuickAddFly {
+  /** Canonical fly id OR personal fly_pattern id. `kind` disambiguates. */
   id: string;
+  /**
+   * "canonical" → from canonical_flies (library entry). Chip pickers load
+   *               sizes/colors/bead options from canonical metadata.
+   * "personal"  → from fly_patterns (user-owned). No canonical recipe;
+   *               sheet skips the bead picker and uses a free-text size
+   *               input so the angler can record what they tied.
+   */
+  kind?: "canonical" | "personal";
   slug?: string;
   name: string;
   category?: string | null;
@@ -161,7 +170,10 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
   }, [beadMaterial, beadWeight, beadColor, selectedColor, selectedSizes]);
 
   // Load user's boxes + existing variants when sheet opens. Also hydrate
-  // canonical fly fields if the caller only passed sparse data.
+  // canonical fly fields if the caller only passed sparse data. For personal
+  // patterns we skip canonical hydration entirely — there's no canonical row
+  // and the angler types in their own size/bead/color.
+  const isPersonal = flyProp.kind === "personal";
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
@@ -171,16 +183,20 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
       setAuthError(false);
       try {
         const needsHydration =
-          !flyProp.sizes ||
-          !flyProp.colors ||
-          !flyProp.beadOptions ||
-          !flyProp.heroImageUrl ||
-          !flyProp.slug;
+          !isPersonal &&
+          (!flyProp.sizes ||
+            !flyProp.colors ||
+            !flyProp.beadOptions ||
+            !flyProp.heroImageUrl ||
+            !flyProp.slug);
         const supabase = createClient();
+        const variantsQuery = isPersonal
+          ? `fly_pattern_id=${encodeURIComponent(flyProp.id)}`
+          : `canonical_fly_id=${encodeURIComponent(flyProp.id)}`;
 
         const [boxesRes, variantsRes, canonicalRes] = await Promise.all([
           fetch("/api/fly-boxes", { credentials: "same-origin" }),
-          fetch(`/api/fly-box?canonical_fly_id=${encodeURIComponent(flyProp.id)}`, {
+          fetch(`/api/fly-box?${variantsQuery}`, {
             credentials: "same-origin",
           }),
           needsHydration
@@ -260,7 +276,16 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
     return () => {
       cancelled = true;
     };
-  }, [open, flyProp.id, flyProp.sizes, flyProp.colors, flyProp.beadOptions, flyProp.heroImageUrl, flyProp.slug]);
+  }, [
+    open,
+    flyProp.id,
+    flyProp.sizes,
+    flyProp.colors,
+    flyProp.beadOptions,
+    flyProp.heroImageUrl,
+    flyProp.slug,
+    isPersonal,
+  ]);
 
   // Reset form when sheet closes (so reopening for a different fly starts clean).
   useEffect(() => {
@@ -332,7 +357,9 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         .join(" · ");
 
     const payload: Record<string, unknown> = {
-      canonical_fly_id: fly.id,
+      ...(isPersonal
+        ? { fly_pattern_id: fly.id }
+        : { canonical_fly_id: fly.id }),
       preferred_sizes: selectedSizes.length ? selectedSizes : null,
       preferred_colors: selectedColor ? [selectedColor] : null,
       personalizations,
@@ -476,7 +503,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
 
               {/* Sizes */}
               {fly.sizes && fly.sizes.length > 0 ? (
-                <Section label="Size" required>
+                <Section label="Size">
                   <div className="flex flex-wrap gap-1.5">
                     {fly.sizes.map((s) => {
                       const active = selectedSizes.includes(s);
@@ -500,7 +527,24 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                     Pick one or more. You can also leave blank and add sizes later.
                   </p>
                 </Section>
-              ) : null}
+              ) : (
+                // Personal pattern (or canonical with no sizes set yet) — free-text input.
+                <Section label="Sizes (comma-separated)">
+                  <input
+                    type="text"
+                    placeholder="e.g. 14, 16, 18"
+                    value={selectedSizes.join(", ")}
+                    onChange={(e) => {
+                      const parts = e.target.value
+                        .split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                      setSelectedSizes(parts);
+                    }}
+                    className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                  />
+                </Section>
+              )}
 
               {/* Bead */}
               {showBead && (

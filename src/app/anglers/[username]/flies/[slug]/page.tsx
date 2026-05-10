@@ -7,6 +7,7 @@ import { isAdmin } from "@/lib/admin";
 import { Lock, Globe2, Edit3, ArrowLeft } from "lucide-react";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
 import SubmitToLibraryButton from "@/components/flies/SubmitToLibraryButton";
+import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 
 export const dynamic = "force-dynamic";
 
@@ -180,21 +181,27 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
               <p className="mt-3 text-sm text-[#A8B2BD] leading-relaxed">{fly.description}</p>
             )}
 
-            {isOwner && (
-              <div className="mt-4 flex gap-2 flex-wrap">
-                <Link
-                  href={`/journal/flies/${fly.id}/edit`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] text-xs font-semibold hover:bg-[#E8923A]/20 transition-colors"
-                >
-                  <Edit3 className="h-3.5 w-3.5" /> Edit pattern
-                </Link>
-                <SubmitToLibraryButton
-                  patternId={fly.id}
-                  pendingSubmission={pendingSubmission}
-                  isAdminUser={viewerIsAdmin}
-                />
-              </div>
-            )}
+            <div className="mt-4 flex gap-2 flex-wrap items-center">
+              <FlyBoxAddButton
+                fly={{ id: fly.id, name: fly.name, kind: "personal" }}
+                variant="pill"
+              />
+              {isOwner && (
+                <>
+                  <Link
+                    href={`/journal/flies/${fly.id}/edit`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] text-xs font-semibold hover:bg-[#E8923A]/20 transition-colors"
+                  >
+                    <Edit3 className="h-3.5 w-3.5" /> Edit pattern
+                  </Link>
+                  <SubmitToLibraryButton
+                    patternId={fly.id}
+                    pendingSubmission={pendingSubmission}
+                    isAdminUser={viewerIsAdmin}
+                  />
+                </>
+              )}
+            </div>
           </div>
         </header>
 

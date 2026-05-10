@@ -67,11 +67,12 @@ export default function FlyBoxAddButton({
     async function check() {
       try {
         const supabase = createClient();
+        const col = fly.kind === "personal" ? "fly_pattern_id" : "canonical_fly_id";
         const { count } = await supabase
           .from("user_fly_box")
           .select("id", { count: "exact", head: true })
           .eq("user_id", user!.id)
-          .eq("canonical_fly_id", fly.id);
+          .eq(col, fly.id);
         if (!cancelled) setVariantCount(count ?? 0);
       } catch (e) {
         console.warn("[FlyBoxAddButton] count check failed:", e);
@@ -84,7 +85,7 @@ export default function FlyBoxAddButton({
     return () => {
       cancelled = true;
     };
-  }, [isLoading, user, fly.id]);
+  }, [isLoading, user, fly.id, fly.kind]);
 
   function handleClick(e: React.MouseEvent) {
     if (stopPropagation) {

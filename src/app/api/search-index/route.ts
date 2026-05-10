@@ -119,6 +119,7 @@ export async function GET() {
       })),
       ...canonicalFlies.map((f) => ({
         type: "fly" as const,
+        id: f.id,
         slug: f.slug,
         title: f.name,
         subtitle: `${f.category} — Sizes ${f.sizes[0] || ""}–${f.sizes[f.sizes.length - 1] || ""}`,

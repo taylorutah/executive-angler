@@ -5,10 +5,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, X, MapPin, Fish, Home, BookOpen, Users, Store, Compass, Bug } from "lucide-react";
+import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 
 
 interface SearchResult {
   type: "destination" | "river" | "species" | "lodge" | "guide" | "fly-shop" | "article" | "fly";
+  /** Present on fly results (canonical fly id) — drives the inline Add-to-Box trigger. */
+  id?: string;
   slug: string;
   title: string;
   subtitle: string;
@@ -169,31 +172,42 @@ function SearchContent() {
             </div>
             <div className="space-y-2">
               {items!.map((item) => (
-                <Link
+                <div
                   key={item.href}
-                  href={item.href}
                   className="flex items-center gap-4 p-3 rounded-lg hover:bg-[#0D1117] transition-colors group"
                 >
-                  {item.imageUrl && (
-                    <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2937]">
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.title}
-                        fill
-                        className="object-cover"
-                        sizes="48px"
-                      />
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-4 flex-1 min-w-0"
+                  >
+                    {item.imageUrl && (
+                      <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2937]">
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                        />
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-medium text-[#F0F6FC] group-hover:text-[#E8923A] truncate">
+                        {item.title}
+                      </p>
+                      <p className="text-sm text-[#A8B2BD] truncate">
+                        {item.subtitle}
+                      </p>
                     </div>
+                  </Link>
+                  {item.type === "fly" && item.id && (
+                    <FlyBoxAddButton
+                      fly={{ id: item.id, slug: item.slug, name: item.title }}
+                      variant="pill"
+                      stopPropagation
+                    />
                   )}
-                  <div className="min-w-0">
-                    <p className="font-medium text-[#F0F6FC] group-hover:text-[#E8923A] truncate">
-                      {item.title}
-                    </p>
-                    <p className="text-sm text-[#A8B2BD] truncate">
-                      {item.subtitle}
-                    </p>
-                  </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>

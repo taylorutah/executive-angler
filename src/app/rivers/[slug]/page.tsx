@@ -15,6 +15,7 @@ import MapView from "@/components/maps/DynamicMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
+import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 // Privacy overhaul: RiverActivityPulse + RiverRealtimeActivity removed.
 // They surfaced active-session counts and per-event "X started fishing"
 // notifications across the community — both leak presence-style intel
@@ -331,18 +332,30 @@ export default async function RiverPage({ params }: Props) {
                                       </span>
                                     </div>
                                     {hatch.pattern && (
-                                      <p className="mt-1.5 text-[13px] text-[#A8B2BD]">
-                                        {matchedFly ? (
-                                          <Link
-                                            href={`/flies/${matchedFly.slug}`}
-                                            className="text-[#E8923A] hover:underline"
-                                          >
-                                            {hatch.pattern}
-                                          </Link>
-                                        ) : (
-                                          hatch.pattern
+                                      <div className="mt-1.5 flex items-center gap-2 text-[13px] text-[#A8B2BD]">
+                                        <p className="min-w-0 flex-1">
+                                          {matchedFly ? (
+                                            <Link
+                                              href={`/flies/${matchedFly.slug}`}
+                                              className="text-[#E8923A] hover:underline"
+                                            >
+                                              {hatch.pattern}
+                                            </Link>
+                                          ) : (
+                                            hatch.pattern
+                                          )}
+                                        </p>
+                                        {matchedFly && (
+                                          <FlyBoxAddButton
+                                            fly={{
+                                              id: matchedFly.id,
+                                              slug: matchedFly.slug,
+                                              name: matchedFly.name,
+                                            }}
+                                            variant="icon"
+                                          />
                                         )}
-                                      </p>
+                                      </div>
                                     )}
                                   </li>
                                 );
@@ -395,12 +408,28 @@ export default async function RiverPage({ params }: Props) {
                                   <td className="px-4 py-3 text-[#A8B2BD]">
                                     {(() => {
                                       const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
-                                      return matchedFly ? (
-                                        <Link href={`/flies/${matchedFly.slug}`} className="text-[#E8923A] hover:underline">
-                                          {hatch.pattern}
-                                        </Link>
-                                      ) : (
-                                        hatch.pattern
+                                      return (
+                                        <div className="flex items-center gap-2">
+                                          <span className="min-w-0 flex-1">
+                                            {matchedFly ? (
+                                              <Link href={`/flies/${matchedFly.slug}`} className="text-[#E8923A] hover:underline">
+                                                {hatch.pattern}
+                                              </Link>
+                                            ) : (
+                                              hatch.pattern
+                                            )}
+                                          </span>
+                                          {matchedFly && (
+                                            <FlyBoxAddButton
+                                              fly={{
+                                                id: matchedFly.id,
+                                                slug: matchedFly.slug,
+                                                name: matchedFly.name,
+                                              }}
+                                              variant="icon"
+                                            />
+                                          )}
+                                        </div>
                                       );
                                     })()}
                                   </td>

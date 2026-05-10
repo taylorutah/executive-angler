@@ -13,6 +13,7 @@ import { CommentsSection } from "@/components/social/CommentsSection";
 import { parseLocalDate } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
 import HelpHint from "@/components/ui/HelpHint";
+import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -644,13 +645,22 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     } catch { return null; }
   })();
 
-  // Unique flies used — prefer fly pattern image from flies prop, fall back to fly_image_url
+  // Unique flies used — prefer fly pattern image from flies prop, fall back to fly_image_url.
+  // Includes the personal pattern id (when resolvable) so the chip can offer
+  // an "Add to box" affordance via FlyBoxAddButton.
   const usedFlies = Array.from(
     new Map(
       catches.filter(c => c.fly_pattern?.name)
         .map(c => {
-          const patternImage = flies.find(f => f.name === c.fly_pattern!.name!)?.image_url;
-          return [c.fly_pattern!.name!, { name: c.fly_pattern!.name!, image: patternImage || c.fly_image_url }];
+          const matchedPattern = flies.find(f => f.name === c.fly_pattern!.name!);
+          return [
+            c.fly_pattern!.name!,
+            {
+              name: c.fly_pattern!.name!,
+              image: matchedPattern?.image_url || c.fly_image_url,
+              patternId: matchedPattern?.id,
+            },
+          ];
         })
     ).values()
   );
@@ -913,6 +923,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             <span className="text-lg flex-shrink-0">🪰</span>
                           )}
                           <span className="text-sm font-medium text-[#E8923A]">{f.name}</span>
+                          {f.patternId && (
+                            <FlyBoxAddButton
+                              fly={{ id: f.patternId, name: f.name, kind: "personal" }}
+                              variant="icon"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
