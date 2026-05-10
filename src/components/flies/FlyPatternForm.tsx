@@ -167,8 +167,11 @@ export default function FlyPatternForm({
   }
 
   async function handleDelete() {
+    // The parent now drives the confirmation flow via
+    // <DeleteFlyPatternDialog>, which surfaces affected journal catches and
+    // offers reassign / keep / delete-catches modes. The form just fires
+    // the click and lets the parent decide what to render next.
     if (!onDelete) return;
-    if (!confirm("Delete this fly pattern permanently?")) return;
     setDeleting(true);
     try {
       await onDelete();

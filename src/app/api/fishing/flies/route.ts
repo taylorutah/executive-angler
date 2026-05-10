@@ -641,7 +641,6 @@ async function forkPersonalizationToPattern(
     ]
       .filter(Boolean)
       .join(" ") || "";
-  const threadColor = pickPersonal(personalizations, "thread", "color") || "";
   const bodyColor = pickPersonal(personalizations, "body", "color") || "";
   const bodyMaterial =
     pickPersonal(personalizations, "body", "model") ||
@@ -658,7 +657,6 @@ async function forkPersonalizationToPattern(
     hook: hookText,
     bead_size: beadSize,
     bead_color: beadColor ? [beadColor] : null,
-    thread_color: threadColor || null,
     body_color: bodyColor,
     body_material: bodyMaterial,
     tail_color: tailColor,
@@ -700,14 +698,39 @@ export async function DELETE(req: NextRequest) {
     const id = req.nextUrl.searchParams.get("id");
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-    // Unlink any catches that reference this fly before deleting
-    const { error: unlinkError } = await supabase
-      .from("catches")
-      .update({ fly_pattern_id: null })
-      .eq("fly_pattern_id", id);
+    // `?destroy_catches=true` removes catches that reference this fly before
+    // deleting the pattern. Without this flag (default), catches are
+    // preserved by setting fly_pattern_id = null and keeping the fly_name
+    // text snapshot so journal records read "Pheasant Tail" forever even
+    // though the recipe is gone.
+    const destroyCatches =
+      req.nextUrl.searchParams.get("destroy_catches") === "true";
 
-    if (unlinkError) {
-      console.error("Failed to unlink catches:", unlinkError);
+    if (destroyCatches) {
+      // Scope deletion to catches the caller owns. RLS should enforce this
+      // too but defense in depth doesn't hurt.
+      const { error: catchDelErr } = await supabase
+        .from("catches")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("fly_pattern_id", id);
+      if (catchDelErr) {
+        console.error("Failed to delete catches:", catchDelErr);
+        return NextResponse.json(
+          { error: `Failed to delete catches: ${catchDelErr.message}` },
+          { status: 500 },
+        );
+      }
+    } else {
+      // Default: keep the catches, null the FK so the row delete doesn't
+      // violate (the FK has no ON DELETE clause).
+      const { error: unlinkError } = await supabase
+        .from("catches")
+        .update({ fly_pattern_id: null })
+        .eq("fly_pattern_id", id);
+      if (unlinkError) {
+        console.error("Failed to unlink catches:", unlinkError);
+      }
     }
 
     const { error } = await supabase

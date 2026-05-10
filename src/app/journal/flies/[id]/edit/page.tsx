@@ -8,6 +8,7 @@ import VariantTree from "@/components/flies/VariantTree";
 import FlyCardModal from "@/components/flies/FlyCardModal";
 import HelpHint from "@/components/ui/HelpHint";
 import CatchMigrationBanner from "@/components/flies/CatchMigrationBanner";
+import DeleteFlyPatternDialog from "@/components/flies/DeleteFlyPatternDialog";
 import FlyPatternForm, {
   type FlyPatternFormInitial,
 } from "@/components/flies/FlyPatternForm";
@@ -88,6 +89,7 @@ export default function EditFlyPatternPage() {
   );
   const [variantOpen, setVariantOpen] = useState(false);
   const [cardOpen, setCardOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -207,13 +209,11 @@ export default function EditFlyPatternPage() {
     }
   }
 
-  async function handleDelete() {
-    const res = await fetch(`/api/fishing/flies?id=${id}`, { method: "DELETE" });
-    if (res.ok) {
-      router.push("/my-flies?tab=box");
-    } else {
-      setError("Failed to delete");
-    }
+  // Open the delete dialog. The dialog handles the actual API calls
+  // (usage fetch → optional reassign → DELETE with destroy_catches flag).
+  function handleDelete() {
+    setDeleteOpen(true);
+    return Promise.resolve();
   }
 
   if (loading) {
@@ -313,6 +313,17 @@ export default function EditFlyPatternPage() {
           imageUrl={initial.imageUrl ?? null}
         />
       )}
+
+      <DeleteFlyPatternDialog
+        open={deleteOpen}
+        flyId={id}
+        flyName={initial.name || "this fly"}
+        onClose={() => setDeleteOpen(false)}
+        onDeleted={() => {
+          setDeleteOpen(false);
+          router.push("/my-flies?tab=box");
+        }}
+      />
     </>
   );
 }
