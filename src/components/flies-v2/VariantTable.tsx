@@ -9,6 +9,7 @@
  * Edits go through the updateStockAction server action and revalidate the
  * page automatically.
  */
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
 import { totalOwned, isLowStock } from "@/types/fly-v2";
@@ -98,6 +99,26 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
         />
       ),
     },
+    ...(boxId ? [{
+      key: "fly_name" as keyof VariantRow,
+      label: "Fly",
+      accessor: (row: VariantRow) => row.pattern?.name ?? row.display_name ?? "",
+      render: (row: VariantRow) => {
+        const name = row.pattern?.name ?? row.display_name ?? "Untitled";
+        const slug = row.pattern?.slug;
+        return slug ? (
+          <Link
+            href={`/flies/${slug}`}
+            className="text-[#F0F6FC] hover:text-[#E8923A] transition-colors font-medium"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {name}
+          </Link>
+        ) : (
+          <span className="text-[#F0F6FC] font-medium">{name}</span>
+        );
+      },
+    }] : []),
     {
       key: "size",
       label: "Size",

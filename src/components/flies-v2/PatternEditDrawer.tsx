@@ -1,7 +1,10 @@
 "use client";
 /**
  * PatternEditDrawer — full-pattern editor for canonical (admin) and personal
- * (owner) flies. Slide-out panel on desktop (640px), bottom sheet on mobile.
+ * (owner) flies. Centered full-screen modal (max-w-7xl) on desktop with 24px
+ * gutter, full-screen on mobile. Tabular tabs (Recipe/Steps/Variants) use
+ * the full body width; text-heavy tabs (Identity/Editorial/Danger) constrain
+ * to max-w-3xl/2xl for readable line length.
  *
  * Tabs:
  *   1. Identity   — name, slug, category, hook style, hero image
@@ -338,10 +341,12 @@ export default function PatternEditDrawer({
           ))}
         </div>
 
-        {/* Body */}
+        {/* Body — text-heavy tabs (identity/editorial/danger) get a max-width
+            for readable line length. Tabular tabs (recipe/steps/variants)
+            stay full-width to use the modal's extra room. */}
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {tab === "identity" && (
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-3xl mx-auto">
               <div>
                 <label className={labelCls}>Name</label>
                 <input
@@ -498,7 +503,7 @@ export default function PatternEditDrawer({
           )}
 
           {tab === "editorial" && (
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-3xl mx-auto">
               <div>
                 <label className={labelCls}>
                   Description{" "}
@@ -619,7 +624,7 @@ function DangerTab({ pattern, onDeleted }: { pattern: Pattern; onDeleted: () => 
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-2xl mx-auto">
       <div className="rounded-md border border-red-500/40 bg-red-500/5 p-4">
         <h3 className="text-red-300 font-semibold text-sm mb-1 flex items-center gap-1.5">
           <AlertTriangle className="w-4 h-4" />
