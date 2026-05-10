@@ -1,11 +1,15 @@
 "use client";
 
-import AddToFlyBoxButton from "./AddToFlyBoxButton";
+import FlyBoxAddButton from "./FlyBoxAddButton";
 
 /**
- * A small positioned wrapper for AddToFlyBoxButton when used inside a
- * catalog card whose root is a <Link>. Stops click/mousedown from
- * bubbling to the parent anchor so users can add without navigating.
+ * Inline "add to fly box" affordance for catalog cards whose root is a
+ * <Link>. Stops propagation so the trigger never navigates the parent.
+ *
+ * Card lists pass only `canonicalFlyId` + `flyName` (the actionSlot type is
+ * cross-boundary serializable); the underlying sheet lazy-fetches sizes /
+ * colors / bead options / hero image on open so chip pickers populate
+ * correctly without forcing every list page to hydrate richer data.
  */
 export default function CardActionSlot({
   canonicalFlyId,
@@ -16,23 +20,22 @@ export default function CardActionSlot({
   flyName: string;
   placement?: "top-right" | "inline";
 }) {
-  const stop = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-  };
   if (placement === "inline") {
     return (
-      <div onClick={stop} onMouseDown={stop}>
-        <AddToFlyBoxButton canonicalFlyId={canonicalFlyId} flyName={flyName} compact />
-      </div>
+      <FlyBoxAddButton
+        fly={{ id: canonicalFlyId, name: flyName }}
+        variant="pill"
+        stopPropagation
+      />
     );
   }
   return (
-    <div
-      className="absolute top-2 right-2 z-10"
-      onClick={stop}
-      onMouseDown={stop}
-    >
-      <AddToFlyBoxButton canonicalFlyId={canonicalFlyId} flyName={flyName} compact />
+    <div className="absolute top-2 right-2 z-10">
+      <FlyBoxAddButton
+        fly={{ id: canonicalFlyId, name: flyName }}
+        variant="icon"
+        stopPropagation
+      />
     </div>
   );
 }
