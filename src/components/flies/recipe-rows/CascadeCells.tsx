@@ -43,22 +43,26 @@ export function useBrands(category: MaterialCategory | undefined) {
   return brands;
 }
 
+// Borderless select intended to live inside a shared bordered container with
+// its sibling cascade picker, so the two read as one cell.
+const groupedSelect =
+  'w-full h-7 bg-transparent px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none appearance-none cursor-pointer pr-5';
+
 interface BrandSelectProps {
   category: MaterialCategory;
   value: string;
   onChange: (brand: string) => void;
-  cellSelect: string;
   ariaLabel: string;
 }
 
-export function BrandSelect({ category, value, onChange, cellSelect, ariaLabel }: BrandSelectProps) {
+export function BrandSelect({ category, value, onChange, ariaLabel }: BrandSelectProps) {
   const brands = useBrands(category);
   return (
     <div className="relative">
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={cellSelect}
+        className={groupedSelect}
         aria-label={ariaLabel}
       >
         <option value="">brand…</option>
@@ -78,21 +82,20 @@ interface BrandFilteredMaterialSelectProps {
   brand: string;
   value: TyingMaterial | null;
   onSelect: (material: TyingMaterial | null) => void;
-  cellSelect: string;
   placeholder: string;
   ariaLabel: string;
 }
 
 // Loads ALL materials for (category, brand) once; user picks via select. The
 // catalog is small enough per brand (≤30 rows for the biggest like Hareline
-// hooks) that a flat dropdown beats a search box for discovery. Falls back
-// to "—" if no brand is picked yet.
+// hooks) that a flat dropdown beats a search box for discovery. When no brand
+// is picked yet, renders a static placeholder line — no chevron, no select,
+// because there's nothing to open.
 export function BrandFilteredMaterialSelect({
   category,
   brand,
   value,
   onSelect,
-  cellSelect,
   placeholder,
   ariaLabel,
 }: BrandFilteredMaterialSelectProps) {
@@ -134,10 +137,12 @@ export function BrandFilteredMaterialSelect({
 
   if (!brand) {
     return (
-      <div className="relative">
-        <select disabled className={cellSelect} aria-label={ariaLabel}>
-          <option>—</option>
-        </select>
+      <div
+        className="h-7 px-2 flex items-center text-[12px] text-[#484F58]"
+        aria-label={ariaLabel}
+        aria-disabled="true"
+      >
+        pick a brand first
       </div>
     );
   }
@@ -151,7 +156,7 @@ export function BrandFilteredMaterialSelect({
           const next = materials.find((m) => m.id === id) || null;
           onSelect(next);
         }}
-        className={cellSelect}
+        className={groupedSelect}
         aria-label={ariaLabel}
         disabled={loading}
       >

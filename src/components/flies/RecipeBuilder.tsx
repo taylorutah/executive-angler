@@ -461,7 +461,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   cellSelect={cellSelect}
                 />
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
-                <div className="flex flex-col gap-0.5">
+                <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
                   <BrandSelect
                     category={cfg.materialCategory}
                     value={step.brandChoice || step.material?.brand || ''}
@@ -473,7 +473,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                         materialName: '',
                       })
                     }
-                    cellSelect={cellSelect}
                     ariaLabel={`${cfg.label} brand`}
                   />
                   <BrandFilteredMaterialSelect
@@ -488,7 +487,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                         brandChoice: mat?.brand || step.brandChoice,
                       });
                     }}
-                    cellSelect={cellSelect}
                     placeholder={step.role === 'hook' ? 'model…' : 'product…'}
                     ariaLabel={`${cfg.label} product`}
                   />
@@ -677,9 +675,11 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 </>
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
                 <>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Brand</label>
+                  <div>
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
+                      Brand · {step.role === 'hook' ? 'Model' : 'Product'}
+                    </label>
+                    <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
                       <BrandSelect
                         category={cfg.materialCategory}
                         value={step.brandChoice || step.material?.brand || ''}
@@ -690,14 +690,8 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                             materialName: '',
                           })
                         }
-                        cellSelect={cellSelect}
                         ariaLabel={`${cfg.label} brand`}
                       />
-                    </div>
-                    <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
-                        {step.role === 'hook' ? 'Model' : 'Product'}
-                      </label>
                       <BrandFilteredMaterialSelect
                         category={cfg.materialCategory}
                         brand={step.brandChoice || step.material?.brand || ''}
@@ -709,7 +703,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                             brandChoice: mat?.brand || step.brandChoice,
                           });
                         }}
-                        cellSelect={cellSelect}
                         placeholder={step.role === 'hook' ? 'model…' : 'product…'}
                         ariaLabel={`${cfg.label} product`}
                       />
