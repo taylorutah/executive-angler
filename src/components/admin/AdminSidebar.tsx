@@ -109,6 +109,10 @@ export default function AdminSidebar() {
         </p>
         <NavLink item={photosLink} pathname={pathname} />
         <NavLink
+          item={{ href: "/admin/flies/submissions", label: "Fly Submissions", icon: <Feather className="h-4 w-4" /> }}
+          pathname={pathname}
+        />
+        <NavLink
           item={{ href: "/admin/content/materials", label: "Materials Queue", icon: <Wrench className="h-4 w-4" /> }}
           pathname={pathname}
         />

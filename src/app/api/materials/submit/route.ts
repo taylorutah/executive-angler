@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import type { MaterialCategory } from '@/types/materials';
+import { checkSubmissionGate, logSubmission } from '@/lib/submission-gate';
 
 const VALID_CATEGORIES: MaterialCategory[] = [
   'hook', 'bead', 'thread', 'dubbing', 'feather', 'flash',
@@ -10,7 +11,7 @@ const VALID_CATEGORIES: MaterialCategory[] = [
 
 // POST /api/materials/submit — submit a new material; lands as is_verified=false (visible to
 // submitter via RLS until promoted). Slug collisions retry once with a per-user suffix.
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
   const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -26,6 +27,8 @@ export async function POST(request: Request) {
     sizes?: string[];
     colors?: string[];
     description?: string;
+    turnstileToken?: string;
+    website?: string;
   };
 
   try {
@@ -34,7 +37,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const { name, brand, category, subcategory, sizes, colors, description } = body;
+  const { name, brand, category, subcategory, sizes, colors, description, turnstileToken, website } = body;
+
+  const gate = await checkSubmissionGate({
+    type: 'material',
+    user,
+    turnstileToken: turnstileToken,
+    honeypot: website ?? null,
+    request,
+  });
+  if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
 
   if (!name || typeof name !== 'string' || name.trim().length < 2) {
     return NextResponse.json({ error: 'Name is required (min 2 characters)' }, { status: 400 });
@@ -78,6 +90,8 @@ export async function POST(request: Request) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  await logSubmission('material', user.id, gate.ipHash);
 
   return NextResponse.json(data, { status: 201 });
 }

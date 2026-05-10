@@ -1,42 +1,14 @@
-"use client";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
+import NewFlyPatternClient from "./NewFlyPatternClient";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import FlyPatternForm from "@/components/flies/FlyPatternForm";
-import type { RecipeStep } from "@/components/flies/RecipeBuilder";
+export default async function NewFlyPatternPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login?redirect=/journal/flies/new");
 
-export default function NewFlyPatternPage() {
-  const router = useRouter();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleSubmit(formData: FormData, _steps: RecipeStep[]) {
-    void _steps;
-    setBusy(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/fishing/flies", {
-        method: "POST",
-        body: formData,
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Failed to create fly pattern");
-      }
-      router.push("/journal/flies");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setBusy(false);
-    }
-  }
-
-  return (
-    <FlyPatternForm
-      mode="new"
-      onSubmit={handleSubmit}
-      busy={busy}
-      error={error}
-      cancelHref="/journal/flies"
-    />
-  );
+  return <NewFlyPatternClient isAdminUser={isAdmin(user.email)} />;
 }

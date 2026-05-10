@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { Lock, Globe2, Edit3, ArrowLeft } from "lucide-react";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
+import SubmitToLibraryButton from "@/components/flies/SubmitToLibraryButton";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,28 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
   // Visibility gate: non-owners only see public patterns.
   if (!isOwner && !viewerIsAdmin && fly.visibility !== "public") {
     notFound();
+  }
+
+  // Surface most recent open submission so the owner sees pending state.
+  // Wrapped in try/catch so the page renders even if the submissions table
+  // hasn't been migrated yet (graceful for deploys racing the SQL apply).
+  let pendingSubmission: { id: string; status: string; admin_notes: string | null } | null = null;
+  if (isOwner) {
+    try {
+      const { data: sub } = await supabase
+        .from("fly_pattern_submissions")
+        .select("id, status, admin_notes")
+        .eq("source_pattern_id", fly.id)
+        .in("status", ["pending", "needs_info", "rejected"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      pendingSubmission = sub
+        ? { id: sub.id as string, status: sub.status as string, admin_notes: (sub.admin_notes as string | null) ?? null }
+        : null;
+    } catch {
+      pendingSubmission = null;
+    }
   }
 
   // Resolve parent canonical for backlink.
@@ -158,13 +181,18 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
             )}
 
             {isOwner && (
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex gap-2 flex-wrap">
                 <Link
                   href={`/journal/flies/${fly.id}/edit`}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] text-xs font-semibold hover:bg-[#E8923A]/20 transition-colors"
                 >
                   <Edit3 className="h-3.5 w-3.5" /> Edit pattern
                 </Link>
+                <SubmitToLibraryButton
+                  patternId={fly.id}
+                  pendingSubmission={pendingSubmission}
+                  isAdminUser={viewerIsAdmin}
+                />
               </div>
             )}
           </div>

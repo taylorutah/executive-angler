@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { getBannedUserIds } from "@/lib/db/banned-users";
+import { checkSubmissionGate, logSubmission } from "@/lib/submission-gate";
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -95,7 +96,16 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { entityType, entityId, rating, title, body: reviewBody, visitDate } = body;
+  const {
+    entityType,
+    entityId,
+    rating,
+    title,
+    body: reviewBody,
+    visitDate,
+    turnstileToken,
+    website, // honeypot
+  } = body;
 
   if (!entityType || !entityId || !rating || !reviewBody) {
     return NextResponse.json({ error: "entityType, entityId, rating, and body required" }, { status: 400 });
@@ -104,6 +114,17 @@ export async function POST(req: NextRequest) {
   if (rating < 1 || rating > 5) {
     return NextResponse.json({ error: "Rating must be 1-5" }, { status: 400 });
   }
+
+  const gate = await checkSubmissionGate({
+    type: "review",
+    user,
+    // Same posture as photos: token optional. UserReviews form doesn't yet
+    // render a Turnstile widget; the gate falls back to other defenses.
+    turnstileToken: turnstileToken,
+    honeypot: website ?? null,
+    request: req,
+  });
+  if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
 
   // Check for existing review by this user on this entity
   const { data: existing } = await supabase
@@ -134,6 +155,9 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logSubmission("review", user.id, gate.ipHash);
+
   return NextResponse.json(review, { status: 201 });
 }
 

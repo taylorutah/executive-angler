@@ -2,6 +2,12 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin";
+import { checkSubmissionGate, logSubmission } from "@/lib/submission-gate";
+import {
+  mapTypeToCategory,
+  promoteToCanonical,
+} from "@/lib/flies/promote-canonical";
 
 // Service role client for storage uploads (bypasses RLS) — lazy init to avoid build-time errors
 let _serviceClient: ReturnType<typeof createServiceClient> | null = null;
@@ -143,6 +149,23 @@ export async function POST(req: NextRequest) {
       const formData = await req.formData();
       const file = formData.get("image") as File | null;
 
+      for (const [key, value] of formData.entries()) {
+        if (key !== "image") body[key] = value;
+      }
+
+      // Submission gate runs BEFORE the file upload so we don't burn storage
+      // on rejected requests (turnstile failure, rate limit, etc.).
+      const adminSubmitter = isAdmin(user.email);
+      const gate = await checkSubmissionGate({
+        type: "fly_pattern",
+        user,
+        turnstileToken: typeof body.turnstile_token === "string" ? body.turnstile_token : null,
+        honeypot: typeof body.website === "string" ? (body.website as string) : null,
+        request: req,
+        isAdminSubmitter: adminSubmitter,
+      });
+      if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
+
       if (file && file.size > 0) {
         const ext = file.name.split(".").pop() || "jpg";
         const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
@@ -162,10 +185,6 @@ export async function POST(req: NextRequest) {
           .from("fly-pattern-images")
           .getPublicUrl(path);
         imageUrl = publicUrl;
-      }
-
-      for (const [key, value] of formData.entries()) {
-        if (key !== "image") body[key] = value;
       }
     } else {
       body = await req.json();
@@ -225,11 +244,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Save recipe ingredients if structured recipe was provided
+    let recipeStepsJson: unknown = null;
     if (body.recipe_steps && data) {
       try {
         const steps = typeof body.recipe_steps === 'string'
           ? JSON.parse(body.recipe_steps as string)
           : body.recipe_steps;
+        recipeStepsJson = steps;
 
         if (Array.isArray(steps) && steps.length > 0) {
           const ingredients = steps.map((s: Record<string, unknown>) => ({
@@ -258,6 +279,84 @@ export async function POST(req: NextRequest) {
         console.error("Failed to parse recipe steps:", parseErr);
         return NextResponse.json({ error: "Invalid recipe_steps format" }, { status: 400 });
       }
+    }
+
+    // Library write path: admin → direct to canonical_flies; user → submission queue.
+    // The user's personal fly_patterns row (created above) is independent and
+    // stays in their box regardless of submission status.
+    const userIsAdmin = isAdmin(user.email);
+    const parentCanonicalId = typeof body.parent_canonical_id === "string" && body.parent_canonical_id
+      ? body.parent_canonical_id
+      : null;
+
+    if (userIsAdmin) {
+      const canonicalResult = await promoteToCanonical(getServiceClient(), {
+        sourcePatternId: data.id,
+        proposed: {
+          name: row.name as string,
+          type: row.type as string | undefined,
+          description: row.description as string | undefined,
+          materials: row.materials as string | undefined,
+          videoUrl: row.video_url as string | undefined,
+          heroImageUrl: imageUrl,
+          sizes: typeof row.size === "string" && row.size
+            ? (row.size as string).split(",").map((s) => s.trim()).filter(Boolean)
+            : null,
+          beadOptions: Array.isArray(row.bead_color) ? (row.bead_color as string[]) : null,
+          colors: Array.isArray(row.fly_color) ? (row.fly_color as string[]) : null,
+          tyingSteps: recipeStepsJson,
+          parentCanonicalId,
+        },
+      });
+      if (!canonicalResult.ok) {
+        // Personal pattern is saved; surface canonical insert failure so admin
+        // knows the library write didn't land. They can retry from the admin UI.
+        console.error("Admin canonical insert failed:", canonicalResult.error);
+      }
+    } else {
+      const submissionPayload = {
+        user_id: user.id,
+        source_pattern_id: data.id as string,
+        parent_canonical_id: parentCanonicalId,
+        name: String(row.name ?? ""),
+        category: mapTypeToCategory((row.type as string | undefined) ?? null),
+        description: typeof row.description === "string" ? row.description : null,
+        tying_steps: recipeStepsJson,
+        materials_list: typeof row.materials === "string" ? row.materials : null,
+        sizes:
+          typeof row.size === "string" && row.size
+            ? (row.size as string).split(",").map((s) => s.trim()).filter(Boolean)
+            : null,
+        colors: Array.isArray(row.fly_color) ? (row.fly_color as string[]) : null,
+        bead_options: Array.isArray(row.bead_color) ? (row.bead_color as string[]) : null,
+        hero_image_url: imageUrl ?? null,
+        video_url: typeof row.video_url === "string" ? row.video_url : null,
+        status: "pending" as const,
+      };
+      const subResult = await getServiceClient()
+        .from("fly_pattern_submissions")
+        .insert(submissionPayload as never);
+      if (subResult.error) {
+        // Same posture: personal pattern is saved, but flag the queue failure.
+        console.error("Submission queue insert failed:", subResult.error);
+      }
+    }
+
+    // Log the rate-limit row only after writes succeeded.
+    if (!userIsAdmin) {
+      const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? null;
+      const ipHash = ip
+        ? Array.from(new Uint8Array(
+            await crypto.subtle.digest(
+              "SHA-256",
+              new TextEncoder().encode(ip + (process.env.PHOTO_REVIEW_SECRET ?? ""))
+            )
+          ))
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("")
+            .slice(0, 32)
+        : null;
+      await logSubmission("fly_pattern", user.id, ipHash);
     }
 
     return NextResponse.json(data);

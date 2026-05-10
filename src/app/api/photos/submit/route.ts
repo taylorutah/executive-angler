@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import crypto from "crypto";
+import { checkSubmissionGate, logSubmission } from "@/lib/submission-gate";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -47,6 +48,8 @@ export async function POST(request: NextRequest) {
       aperture,
       shutterSpeed,
       iso,
+      turnstileToken,
+      website, // honeypot
     } = body;
 
     // Validate required fields
@@ -87,6 +90,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const gate = await checkSubmissionGate({
+      type: "photo",
+      user,
+      // Token is optional on the existing PhotoSubmissionForm — the gate
+      // skips Turnstile when undefined and relies on auth + email-verified
+      // + account-age + rate-limit + honeypot.
+      turnstileToken: turnstileToken,
+      honeypot: website ?? null,
+      request,
+    });
+    if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
+
     // Insert photo submission record using service role to bypass RLS
     const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey);
     const { data: submission, error: insertError } = await serviceClient
@@ -116,6 +131,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    await logSubmission("photo", user.id, gate.ipHash);
 
     // Send admin notification email
     const adminEmail = process.env.ADMIN_EMAIL;

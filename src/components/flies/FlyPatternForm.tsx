@@ -16,6 +16,9 @@ import Link from "next/link";
 import { ArrowLeft, ChevronDown, Trash2, ExternalLink } from "lucide-react";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
 import FlyImageUploader from "@/components/flies/FlyImageUploader";
+import TurnstileWidget from "@/components/ui/TurnstileWidget";
+
+const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 const FLY_TYPES = [
   "Nymph",
@@ -71,6 +74,12 @@ export interface FlyPatternFormProps {
   cancelHref?: string;
   /** Top-right action area on the title bar (Card / Variant on edit). */
   topRight?: ReactNode;
+  /**
+   * When true, render Turnstile + honeypot. New-pattern pages set this to
+   * false for admin users so the captcha never blocks Taylor's flow. Default
+   * true for new mode, false for edit mode.
+   */
+  requireCaptcha?: boolean;
 }
 
 export default function FlyPatternForm({
@@ -84,6 +93,7 @@ export default function FlyPatternForm({
   error,
   cancelHref = "/journal/flies",
   topRight,
+  requireCaptcha,
 }: FlyPatternFormProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageRemoved, setImageRemoved] = useState(false);
@@ -93,6 +103,12 @@ export default function FlyPatternForm({
   const [source, setSource] = useState<FlySource>(initial?.source ?? "tied");
   const [useSimpleMode, setUseSimpleMode] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [captchaAvailable, setCaptchaAvailable] = useState(true);
+
+  // Default to captcha for "new" mode; "edit" mode skips it (the user already
+  // owns the row). Admin pages can pass requireCaptcha={false} explicitly.
+  const showCaptcha = requireCaptcha ?? mode === "new";
 
   // Re-sync if the parent loads data asynchronously after first paint.
   useEffect(() => {
@@ -118,6 +134,10 @@ export default function FlyPatternForm({
     }
 
     formData.set("source", source);
+
+    if (showCaptcha && turnstileToken) {
+      formData.set("turnstile_token", turnstileToken);
+    }
 
     if (!useSimpleMode && recipeSteps.length > 0) {
       formData.set(
@@ -451,6 +471,39 @@ export default function FlyPatternForm({
               {extras}
             </aside>
           </div>
+
+          {/* Submission gate: honeypot (hidden) + Turnstile widget. */}
+          {showCaptcha && (
+            <div className="mt-4">
+              {/* Honeypot — real users won't fill this, bots will. */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: "-10000px",
+                  width: "1px",
+                  height: "1px",
+                  opacity: 0,
+                }}
+              />
+              <div className="border border-[#30363D] rounded-md bg-[#161B22] p-3">
+                <p className="text-[11px] text-[#A8B2BD] mb-2">
+                  Patterns submitted by community members go through a quick
+                  review before joining the public library. Your personal copy
+                  stays in your box right away.
+                </p>
+                <TurnstileWidget
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onToken={(t) => setTurnstileToken(t)}
+                  onAvailabilityChange={(ok) => setCaptchaAvailable(ok)}
+                />
+              </div>
+            </div>
+          )}
         </form>
 
         {/* Sticky save bar */}
@@ -477,8 +530,16 @@ export default function FlyPatternForm({
             <button
               type="submit"
               form={formId}
-              disabled={busy}
+              disabled={
+                busy ||
+                (showCaptcha && captchaAvailable && !turnstileToken)
+              }
               className="ml-auto h-9 px-4 inline-flex items-center bg-[#E8923A] text-white text-[12px] font-semibold rounded-md hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title={
+                showCaptcha && captchaAvailable && !turnstileToken
+                  ? "Complete the captcha to continue"
+                  : undefined
+              }
             >
               {busy
                 ? mode === "new"
