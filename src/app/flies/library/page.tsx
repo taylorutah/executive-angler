@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import FlyCardForkOverlay from "@/components/flies/FlyCardForkOverlay";
 import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
@@ -170,9 +171,14 @@ export default async function FliesPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {spotlightFlies.map((fly, i) => (
                 <ScrollAnimation key={fly!.id} delay={i * 0.1}>
+                  <div className="group relative">
+                    <FlyCardForkOverlay
+                      canonicalFlyId={fly!.id}
+                      flySlug={fly!.slug}
+                    />
                   <Link
                     href={`/flies/${fly!.slug}`}
-                    className="group block bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A]/30 transition-all duration-300 overflow-hidden"
+                    className="block bg-[#161B22] rounded-xl border border-[#21262D] group-hover:border-[#E8923A]/30 transition-all duration-300 overflow-hidden"
                   >
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-3">
@@ -226,6 +232,7 @@ export default async function FliesPage() {
                       )}
                     </div>
                   </Link>
+                  </div>
                 </ScrollAnimation>
               ))}
             </div>

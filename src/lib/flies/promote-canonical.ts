@@ -135,12 +135,73 @@ export async function promoteToCanonical(
 
   if (error || !data) return { ok: false, error: error?.message ?? "Insert failed" };
 
+  const canonicalId = data.id as string;
+
+  // Mirror to fly_patterns_v2 so the modern detail page (`/flies/[slug]`)
+  // can find it. The Phase 2 backfill (20260508_phase2_canonical_backfill.sql)
+  // is one-shot — there is no trigger keeping the two tables in sync.
+  // Failures here are logged but don't roll back the canonical_flies write;
+  // manual cleanup is acceptable for a rare failure mode.
+  const defaultSize =
+    Array.isArray(insertRow.sizes) && (insertRow.sizes as string[]).length > 0
+      ? (insertRow.sizes as string[])[0]
+      : "Standard";
+
+  const { error: pv2Err } = await serviceClient
+    .from("fly_patterns_v2")
+    .insert({
+      id: canonicalId,
+      slug: insertRow.slug as string,
+      name: insertRow.name as string,
+      category: insertRow.category as string,
+      description: (insertRow.description as string) ?? null,
+      history: (insertRow.history as string | null) ?? null,
+      tying_overview: (insertRow.tying_overview as string | null) ?? null,
+      fishing_tips: (insertRow.fishing_tips as string | null) ?? null,
+      imitates: (insertRow.imitates as string[] | null) ?? [],
+      water_types: (insertRow.water_types as string[] | null) ?? [],
+      base_materials: (insertRow.materials_list as unknown) ?? [],
+      tying_steps: (insertRow.tying_steps as unknown) ?? [],
+      hero_image_url: (insertRow.hero_image_url as string | null) ?? null,
+      gallery_image_urls: [],
+      video_url: (insertRow.video_url as string | null) ?? null,
+      visibility: "private",
+      contributed_by_user_id: null,
+      origin_credit: (insertRow.origin_credit as string | null) ?? null,
+      is_featured: false,
+      owner_user_id: null,
+    });
+
+  if (pv2Err) {
+    console.error(
+      `[promoteToCanonical] fly_patterns_v2 mirror failed for ${canonicalId}: ${pv2Err.message}. Canonical row exists in legacy table — manual fix needed for it to appear on the modern detail page.`,
+    );
+  } else {
+    // Default canonical variant so the variant table has at least one row.
+    const { error: fvErr } = await serviceClient
+      .from("fly_variants")
+      .insert({
+        pattern_id: canonicalId,
+        created_by_user_id: null,
+        slug: "default",
+        display_name: `${insertRow.name as string} #${defaultSize}`,
+        size: defaultSize,
+        sort_order: 0,
+        is_default_for_pattern: true,
+      });
+    if (fvErr) {
+      console.error(
+        `[promoteToCanonical] default fly_variants insert failed for ${canonicalId}: ${fvErr.message}. Pattern rows exist — manual fix needed.`,
+      );
+    }
+  }
+
   if (input.sourcePatternId) {
     await serviceClient
       .from("fly_patterns")
-      .update({ promoted_to_canonical_id: data.id })
+      .update({ promoted_to_canonical_id: canonicalId })
       .eq("id", input.sourcePatternId);
   }
 
-  return { ok: true, canonicalId: data.id as string };
+  return { ok: true, canonicalId };
 }
