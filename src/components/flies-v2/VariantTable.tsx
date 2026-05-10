@@ -106,16 +106,15 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
       render: (row: VariantRow) => {
         const name = row.pattern?.name ?? row.display_name ?? "Untitled";
         const slug = row.pattern?.slug;
-        return slug ? (
+        const href = slug ? `/flies/${slug}` : `/flies/by-id/${row.pattern_id}`;
+        return (
           <Link
-            href={`/flies/${slug}`}
+            href={href}
             className="text-[#F0F6FC] hover:text-[#E8923A] transition-colors font-medium"
             onClick={(e) => e.stopPropagation()}
           >
             {name}
           </Link>
-        ) : (
-          <span className="text-[#F0F6FC] font-medium">{name}</span>
         );
       },
     }] : []),
