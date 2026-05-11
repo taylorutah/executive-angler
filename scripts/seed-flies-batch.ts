@@ -333,7 +333,7 @@ async function main(): Promise<void> {
   console.log("\n=== Summary ===");
   console.log(JSON.stringify(summary, null, 2));
 
-  const logsDir = path.join(path.dirname(path.resolve(inputPath)), "..", "logs");
+  const logsDir = path.join(__dirname, "logs");
   fs.mkdirSync(logsDir, { recursive: true });
   const ts = new Date().toISOString().replace(/[:.]/g, "-");
   const logPath = path.join(logsDir, `seed-flies-batch-${ts}.log`);
