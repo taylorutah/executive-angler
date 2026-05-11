@@ -21,6 +21,7 @@ import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
 import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction, updateBoxTargetQuantityAction, cloneVariantAction } from "@/app/flies/v2/actions";
 import type { VariantAxis } from "@/lib/flies/variant-axes";
+import ColumnPicker, { useColumnPreferences, applyColumnPreferences } from "@/components/flies-v2/ColumnPicker";
 
 type SourceBadge = "curated" | "mine" | "community";
 
@@ -100,13 +101,13 @@ export default function VariantTable({
   activeAxes,
 }: Props) {
   const router = useRouter();
-  const axisSet = activeAxes ? new Set<VariantAxis>(activeAxes) : null;
-  // Show every column the pattern's active axis list declares — even when
-  // no row has a value yet. That lets the angler see what's missing and
-  // click in to fill it. Off-axis columns (a pattern that doesn't use a
-  // given axis) are hidden by setting `active_variant_axes` to exclude them.
-  // When no axis list is provided (legacy callers), show everything.
-  const showAxis = (axis: VariantAxis) => axisSet == null || axisSet.has(axis);
+  const [columnPrefs, setColumnPref] = useColumnPreferences();
+  // Pattern-declared axes (from prop) merged with the user's per-device
+  // column preferences. User overrides win — they can force-show an axis
+  // the pattern doesn't declare, or force-hide one it does.
+  // `size` is always present (asserted inside applyColumnPreferences).
+  const effectiveAxes = applyColumnPreferences(activeAxes, columnPrefs);
+  const showAxis = (axis: VariantAxis) => effectiveAxes.has(axis);
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
@@ -235,6 +236,18 @@ export default function VariantTable({
           align="center"
         />
       ),
+    }] : []),
+    ...(showAxis("hook") ? [{
+      key: "hook" as keyof VariantRow,
+      label: "Hook",
+      width: "160px",
+      accessor: (row: VariantRow) => row.hook_style ?? "",
+      render: (row: VariantRow) => {
+        const parts = [row.hook_style, row.hook_brand].filter(Boolean) as string[];
+        return parts.length > 0
+          ? <span className="text-[#A8B2BD]">{parts.join(" · ")}</span>
+          : <span className="text-[#484F58]">—</span>;
+      },
     }] : []),
     ...(showAxis("bead") ? [{
       key: "bead" as keyof VariantRow,
@@ -432,6 +445,13 @@ export default function VariantTable({
           onCancel={() => setBoxPicker(null)}
         />
       )}
+    <div className="flex items-center justify-end px-2 py-1.5 border-b border-[#21262D] bg-[#0D1117]">
+      <ColumnPicker
+        patternAxes={activeAxes ?? []}
+        prefs={columnPrefs}
+        onChange={setColumnPref}
+      />
+    </div>
     <DataTable<VariantRow>
       rows={variants}
       columns={columns}
