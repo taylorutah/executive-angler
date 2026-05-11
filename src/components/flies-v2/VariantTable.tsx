@@ -101,24 +101,12 @@ export default function VariantTable({
 }: Props) {
   const router = useRouter();
   const axisSet = activeAxes ? new Set<VariantAxis>(activeAxes) : null;
-  // A column is shown when (a) it's allowed by the pattern's axis list AND
-  // (b) at least one variant actually has a value for it. The second rule
-  // hides empty columns (e.g. Perdigon has no rib) without requiring admins
-  // to maintain a per-pattern axis list for every fly.
-  const axisHasValue: Record<VariantAxis, boolean> = {
-    size: true,
-    hook: variants.some((v) => v.hook_style || v.hook_brand),
-    bead: variants.some((v) => v.bead_material && v.bead_material !== "none"),
-    body: variants.some((v) => v.body_color),
-    rib: variants.some((v) => v.rib_color),
-    tail: variants.some((v) => v.tail_color),
-    wing: variants.some((v) => v.wing_color),
-    thorax: variants.some((v) => v.thorax_color),
-    collar: variants.some((v) => v.collar_color),
-    hackle: false,
-  };
-  const showAxis = (axis: VariantAxis) =>
-    (axisSet == null || axisSet.has(axis)) && axisHasValue[axis];
+  // Show every column the pattern's active axis list declares — even when
+  // no row has a value yet. That lets the angler see what's missing and
+  // click in to fill it. Off-axis columns (a pattern that doesn't use a
+  // given axis) are hidden by setting `active_variant_axes` to exclude them.
+  // When no axis list is provided (legacy callers), show everything.
+  const showAxis = (axis: VariantAxis) => axisSet == null || axisSet.has(axis);
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
