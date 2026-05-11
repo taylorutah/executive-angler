@@ -18,6 +18,7 @@ import {
 } from "@/lib/db/fly-v2";
 import { canEditPattern } from "@/lib/flies/permissions";
 import { resolveVariantAxes } from "@/lib/flies/variant-axes";
+import { parseBeadFromBaseMaterials } from "@/lib/flies/parseBeadSpec";
 
 export const dynamic = "force-dynamic";
 
@@ -315,6 +316,7 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
                   isAdmin={viewerIsAdmin}
                   isCanonical={false}
                   personalEditHref={`/journal/flies/${fly.id}/edit`}
+                  defaultBeadSpec={parseBeadFromBaseMaterials(v2Pattern.base_materials)}
                 />
               )}
             </div>

@@ -13,6 +13,7 @@ import NewVariantModal from "@/components/flies-v2/NewVariantModal";
 import EditPatternButton from "@/components/flies-v2/EditPatternButton";
 import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
 import type { Pattern, FlyBoxV2 } from "@/types/fly-v2";
+import type { ParsedBeadSpec } from "@/lib/flies/parseBeadSpec";
 
 interface Props {
   patternId: string;
@@ -42,6 +43,11 @@ interface Props {
    * form when not provided.
    */
   viewerUsername?: string | null;
+  /**
+   * Pre-parsed bead spec from pattern.base_materials. Pre-fills the
+   * "+ My configuration" modal so users only type what they're varying.
+   */
+  defaultBeadSpec?: ParsedBeadSpec;
 }
 
 export default function PatternHeaderActions({
@@ -53,6 +59,7 @@ export default function PatternHeaderActions({
   isCanonical = true,
   personalEditHref,
   viewerUsername,
+  defaultBeadSpec,
 }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -139,6 +146,7 @@ export default function PatternHeaderActions({
         patternSlug={patternSlug}
         open={open}
         onClose={() => setOpen(false)}
+        defaultBeadSpec={defaultBeadSpec}
       />
     </div>
   );

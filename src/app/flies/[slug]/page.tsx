@@ -26,6 +26,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import VariantTable from "@/components/flies-v2/VariantTable";
 import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
+import { parseBeadFromBaseMaterials } from "@/lib/flies/parseBeadSpec";
 import { resolveVariantAxes } from "@/lib/flies/variant-axes";
 
 export const revalidate = 3600;
@@ -168,6 +169,7 @@ export default async function PatternDetail({ params }: Props) {
             isAdmin={adminFlag}
             isCanonical={pattern.owner_user_id == null}
             viewerUsername={viewerUsername}
+            defaultBeadSpec={parseBeadFromBaseMaterials(pattern.base_materials)}
           />
         </div>
         <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">

@@ -8,21 +8,27 @@
 import { useState, useTransition } from "react";
 import { X } from "lucide-react";
 import { createVariantAction } from "@/app/flies/v2/actions";
+import type { ParsedBeadSpec } from "@/lib/flies/parseBeadSpec";
 
 interface Props {
   patternId: string;
   patternSlug: string;
   open: boolean;
   onClose: () => void;
+  /**
+   * Default bead spec parsed from the parent pattern's base_materials.
+   * Pre-fills the modal so users only need to type what they're varying.
+   */
+  defaultBeadSpec?: ParsedBeadSpec;
 }
 
 const BEAD_MATERIALS = ["tungsten", "brass", "glass", "none"] as const;
 
-export default function NewVariantModal({ patternId, patternSlug, open, onClose }: Props) {
+export default function NewVariantModal({ patternId, patternSlug, open, onClose, defaultBeadSpec }: Props) {
   const [size, setSize] = useState("");
-  const [beadMaterial, setBeadMaterial] = useState<string>("");
-  const [beadWeight, setBeadWeight] = useState("");
-  const [beadColor, setBeadColor] = useState("");
+  const [beadMaterial, setBeadMaterial] = useState<string>(defaultBeadSpec?.material ?? "");
+  const [beadWeight, setBeadWeight] = useState(defaultBeadSpec?.weight_mm != null ? String(defaultBeadSpec.weight_mm) : "");
+  const [beadColor, setBeadColor] = useState(defaultBeadSpec?.color ?? "");
   const [bodyColor, setBodyColor] = useState("");
   const [ribColor, setRibColor] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +37,10 @@ export default function NewVariantModal({ patternId, patternSlug, open, onClose 
   if (!open) return null;
 
   const reset = () => {
-    setSize(""); setBeadMaterial(""); setBeadWeight(""); setBeadColor("");
+    setSize("");
+    setBeadMaterial(defaultBeadSpec?.material ?? "");
+    setBeadWeight(defaultBeadSpec?.weight_mm != null ? String(defaultBeadSpec.weight_mm) : "");
+    setBeadColor(defaultBeadSpec?.color ?? "");
     setBodyColor(""); setRibColor(""); setError(null);
   };
 
