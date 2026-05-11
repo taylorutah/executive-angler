@@ -117,6 +117,7 @@ export default function PatternEditDrawer({
     category: pattern.category ?? "",
     hook_style: pattern.hook_style ?? "",
     hero_image_url: pattern.hero_image_url ?? "",
+    active_variant_axes: pattern.active_variant_axes ?? null,
   });
   const [recipe, setRecipe] = useState<RecipeStep[]>(slotsToSteps(pattern.base_materials));
   const [steps, setSteps] = useState<TyingStep[]>(pattern.tying_steps ?? []);
@@ -136,6 +137,7 @@ export default function PatternEditDrawer({
       category: pattern.category ?? "",
       hook_style: pattern.hook_style ?? "",
       hero_image_url: pattern.hero_image_url ?? "",
+      active_variant_axes: pattern.active_variant_axes ?? null,
     });
     setRecipe(slotsToSteps(pattern.base_materials));
     setSteps(pattern.tying_steps ?? []);
@@ -190,6 +192,7 @@ export default function PatternEditDrawer({
           slug: canRenameSlug ? (slugTrimmed || null) : undefined,
           category: identity.category || null,
           hook_style: identity.hook_style || null,
+          active_variant_axes: identity.active_variant_axes,
           // hero_image_url is updated by the upload action — don't double-write here.
         },
       });
@@ -200,6 +203,7 @@ export default function PatternEditDrawer({
         slug: canRenameSlug ? (slugTrimmed || null) : current.slug,
         category: identity.category || null,
         hook_style: identity.hook_style || null,
+        active_variant_axes: identity.active_variant_axes,
       };
       setCurrent(next);
       onPatternChanged?.(next);
@@ -409,6 +413,56 @@ export default function PatternEditDrawer({
                   />
                 </div>
               </div>
+              {isAdmin && patternIsCanonical && (
+                <div>
+                  <label className={labelCls}>Variant axis columns</label>
+                  <p className="mt-0.5 mb-2 text-[11px] text-[#6E7681]">
+                    Which option columns to show on the variants table. Leave on
+                    auto to use the category default ({identity.category || "—"}).
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(["size","bead","body","rib","tail","wing","thorax","collar","hackle","hook"] as const).map((axis) => {
+                      const active = identity.active_variant_axes?.includes(axis) ?? false;
+                      const customized = identity.active_variant_axes != null;
+                      // size is always shown — disable toggle so admins can't break it.
+                      const isLocked = axis === "size";
+                      return (
+                        <button
+                          key={axis}
+                          type="button"
+                          disabled={isLocked}
+                          onClick={() => {
+                            setIdentity((s) => {
+                              const current = s.active_variant_axes ?? ["size","bead","body"];
+                              const next = active
+                                ? current.filter((a) => a !== axis)
+                                : [...current, axis];
+                              return { ...s, active_variant_axes: next };
+                            });
+                          }}
+                          className={`inline-flex items-center rounded border px-2 py-1 text-[11px] transition-colors ${
+                            (customized && active) || (!customized && (axis === "size" || axis === "bead" || axis === "body"))
+                              ? "border-[#E8923A]/60 bg-[#E8923A]/15 text-[#E8923A]"
+                              : "border-[#21262D] bg-[#161B22] text-[#A8B2BD] hover:border-[#E8923A]/40 hover:text-[#F0F6FC]"
+                          } ${isLocked ? "opacity-60 cursor-not-allowed" : ""}`}
+                        >
+                          {axis}
+                        </button>
+                      );
+                    })}
+                    {identity.active_variant_axes != null && (
+                      <button
+                        type="button"
+                        onClick={() => setIdentity((s) => ({ ...s, active_variant_axes: null }))}
+                        className="inline-flex items-center rounded border border-[#21262D] bg-[#0D1117] px-2 py-1 text-[11px] text-[#6E7681] hover:text-[#F0F6FC]"
+                        title="Revert to per-category default"
+                      >
+                        Reset to auto
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
               <div>
                 <label className={labelCls}>Hero image</label>
                 <div className="flex items-start gap-3">

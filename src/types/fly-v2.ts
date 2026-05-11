@@ -174,6 +174,8 @@ export interface VariantInBox {
   user_id: string;
   sort_order: number;
   quantity: number;
+  /** Per-box target. When null, the global `VariantStock.target_count` applies. */
+  target_quantity: number | null;
   added_at: string;
 }
 
@@ -211,6 +213,8 @@ export interface VariantRow extends Variant {
   box_memberships: VariantBoxMembership[];
   /** Quantity in the specific box being viewed (only populated on box detail). */
   box_quantity: number | null;
+  /** Per-box target in the specific box being viewed (only on box detail). */
+  box_target_quantity: number | null;
 }
 
 /** Inventory math helpers — single source of truth for stock readouts. */

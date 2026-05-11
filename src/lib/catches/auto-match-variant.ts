@@ -1,20 +1,18 @@
 /**
- * Server-side auto-match: given a catch row that has a pattern + size + bead
- * spec but no `variant_id`, look up a `fly_variants` row whose recipe matches
- * exactly and attach it. The point is to never make the angler tap through a
- * variant chooser when their size/bead inputs already nail the configuration.
+ * Server-side variant resolution for catches.
  *
- * Match rules (all must hold):
- *   - We have a canonical pattern id (from `canonical_fly_id`, or resolved via
- *     `fly_pattern_id → fly_patterns.promoted_to_canonical_id`)
- *   - `size` matches `fly_variants.size` exactly (string compare)
- *   - When `bead_size` is given, it parses to a number and equals
- *     `fly_variants.bead_weight_mm`. When omitted, we accept any bead.
- *   - Exactly ONE variant matches. Multiple matches → ambiguous, skip.
+ * Two passes per catch:
+ *   1. Auto-match — when a catch has a pattern + size + bead but no
+ *      `variant_id`, look up `fly_variants` row(s) that match exactly.
+ *      Attach `variant_id` only on an unambiguous (exactly one) match.
+ *   2. Snapshot — when a catch ends up with a `variant_id` (manual chip pick
+ *      or auto-match), freeze the resolved recipe into
+ *      `catches.personalization_snapshot`. The snapshot preserves the spec
+ *      the fish was caught on so historical aggregations stay accurate even
+ *      if the variant is later edited or soft-deleted.
  *
- * Conservative on purpose: ambiguous matches stay null so historical catches
- * never get mis-aggregated. Users can still tap a chip on the web logger to
- * pick precisely.
+ * Manual chip picks (caller already set `variant_id`) skip the matching step
+ * but still get a fresh snapshot.
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -24,6 +22,26 @@ export interface CatchSpecForMatching {
   fly_pattern_id?: string | null;
   fly_size?: string | null;
   bead_size?: string | number | null;
+  personalization_snapshot?: Record<string, unknown> | null;
+}
+
+/** Shape of the frozen snapshot written to `catches.personalization_snapshot`. */
+export interface CatchVariantSnapshot {
+  variant_id: string;
+  pattern_id: string | null;
+  pattern_name: string | null;
+  size: string;
+  bead_material: string | null;
+  bead_weight_mm: number | null;
+  bead_color: string | null;
+  body_color: string | null;
+  rib_color: string | null;
+  tail_color: string | null;
+  wing_color: string | null;
+  thorax_color: string | null;
+  collar_color: string | null;
+  /** ISO timestamp when the snapshot was taken (i.e. catch save time). */
+  snapshotted_at: string;
 }
 
 function parseBeadMm(raw: unknown): number | null {
@@ -83,8 +101,49 @@ export async function autoMatchVariantId(
 }
 
 /**
- * Attach `variant_id` in place for a batch of catch payloads before insert.
- * Mutates each row that gets an unambiguous match.
+ * Build a frozen snapshot of the variant's spec at catch-save time. Returns
+ * null when the variant lookup fails (deleted, RLS-hidden, bad id).
+ */
+async function buildVariantSnapshot(
+  supabase: SupabaseClient,
+  variantId: string,
+): Promise<CatchVariantSnapshot | null> {
+  const { data } = await supabase
+    .from("fly_variants")
+    .select(
+      "id, pattern_id, size, bead_material, bead_weight_mm, bead_color, body_color, rib_color, tail_color, wing_color, thorax_color, collar_color, fly_patterns_v2(name)",
+    )
+    .eq("id", variantId)
+    .maybeSingle();
+  if (!data) return null;
+  const patternJoin = (data as { fly_patterns_v2?: { name?: string } | { name?: string }[] | null }).fly_patterns_v2;
+  const pattern_name = Array.isArray(patternJoin)
+    ? patternJoin[0]?.name ?? null
+    : patternJoin?.name ?? null;
+  return {
+    variant_id: data.id as string,
+    pattern_id: (data.pattern_id as string | null) ?? null,
+    pattern_name,
+    size: (data.size as string | null) ?? "",
+    bead_material: (data.bead_material as string | null) ?? null,
+    bead_weight_mm: (data.bead_weight_mm as number | null) ?? null,
+    bead_color: (data.bead_color as string | null) ?? null,
+    body_color: (data.body_color as string | null) ?? null,
+    rib_color: (data.rib_color as string | null) ?? null,
+    tail_color: (data.tail_color as string | null) ?? null,
+    wing_color: (data.wing_color as string | null) ?? null,
+    thorax_color: (data.thorax_color as string | null) ?? null,
+    collar_color: (data.collar_color as string | null) ?? null,
+    snapshotted_at: new Date().toISOString(),
+  };
+}
+
+/**
+ * For each catch in the batch:
+ *   1. Auto-match `variant_id` when missing.
+ *   2. Build & attach a `personalization_snapshot` when `variant_id` is set
+ *      and no snapshot is already present (caller's snapshot wins).
+ * Mutates rows in place.
  */
 export async function attachVariantIdsInPlace(
   supabase: SupabaseClient,
@@ -92,9 +151,14 @@ export async function attachVariantIdsInPlace(
 ): Promise<void> {
   await Promise.all(
     catches.map(async (c) => {
-      if (c.variant_id) return;
-      const matched = await autoMatchVariantId(supabase, c);
-      if (matched) c.variant_id = matched;
+      if (!c.variant_id) {
+        const matched = await autoMatchVariantId(supabase, c);
+        if (matched) c.variant_id = matched;
+      }
+      if (c.variant_id && !c.personalization_snapshot) {
+        const snap = await buildVariantSnapshot(supabase, c.variant_id);
+        if (snap) c.personalization_snapshot = snap as unknown as Record<string, unknown>;
+      }
     }),
   );
 }

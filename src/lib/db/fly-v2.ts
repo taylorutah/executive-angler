@@ -198,6 +198,7 @@ export async function listVariantRowsForPattern(patternId: string): Promise<Vari
     box_count: boxCountByVariant.get(v.id) ?? 0,
     box_memberships: membershipsByVariant.get(v.id) ?? [],
     box_quantity: null,
+    box_target_quantity: null,
   }));
 }
 
@@ -272,6 +273,7 @@ export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
         box_count: 0,
         box_memberships: [],
         box_quantity: null,
+        box_target_quantity: null,
       };
     })
     .filter((r): r is VariantRow => r !== null);
@@ -330,6 +332,7 @@ export async function listMyStockedVariants(): Promise<VariantRow[]> {
         box_count: 0,
         box_memberships: [],
         box_quantity: null,
+        box_target_quantity: null,
       };
     })
     .filter((r): r is VariantRow => r !== null);
@@ -356,12 +359,14 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
   // Fetch quantities separately so a missing column (pre-migration) degrades
   // gracefully to 1 instead of breaking the whole query.
   const quantityByVariant = new Map<string, number>();
+  const targetQuantityByVariant = new Map<string, number>();
   const { data: qtyRows } = await supabase
     .from("fly_variant_in_box")
-    .select("variant_id, quantity")
+    .select("variant_id, quantity, target_quantity")
     .eq("box_id", boxId);
-  for (const r of (qtyRows ?? []) as { variant_id: string; quantity?: number }[]) {
+  for (const r of (qtyRows ?? []) as { variant_id: string; quantity?: number; target_quantity?: number | null }[]) {
     if (r.quantity != null) quantityByVariant.set(r.variant_id, r.quantity);
+    if (r.target_quantity != null) targetQuantityByVariant.set(r.variant_id, r.target_quantity);
   }
 
   const { data: variantRows } = await supabase
@@ -414,6 +419,7 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
         box_count: 1,
         box_memberships: [],
         box_quantity: quantityByVariant.get(id) ?? 1,
+        box_target_quantity: targetQuantityByVariant.get(id) ?? null,
       };
     })
     .filter((r): r is VariantRow => r !== null);
@@ -649,6 +655,7 @@ export async function addVariantsToBox(
     user_id: user.id,
     sort_order: 0,
     quantity: 1,
+    target_quantity: null,
     added_at: new Date().toISOString(),
   }));
   const { error, count } = await supabase
@@ -702,6 +709,28 @@ export async function updateBoxVariantQuantity(
     .eq("variant_id", variantId);
   if (error) {
     console.error("[updateBoxVariantQuantity]", error);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Set the per-box target tied count for a variant in a specific box. When set
+ * to null, the global `fly_variant_stock.target_count` applies instead.
+ */
+export async function updateBoxVariantTargetQuantity(
+  boxId: string,
+  variantId: string,
+  targetQuantity: number | null,
+): Promise<boolean> {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("fly_variant_in_box")
+    .update({ target_quantity: targetQuantity })
+    .eq("box_id", boxId)
+    .eq("variant_id", variantId);
+  if (error) {
+    console.error("[updateBoxVariantTargetQuantity]", error);
     return false;
   }
   return true;
@@ -859,6 +888,12 @@ export interface PatternUpdateFields {
   base_materials?: MaterialSlot[];
   tying_steps?: TyingStep[];
   hero_image_url?: string | null;
+  /**
+   * Which variant option columns (size / bead / body / rib / tail / ...)
+   * should be visible on this pattern's variants table. Null means "use the
+   * per-category default" defined in `src/lib/flies/variant-axes.ts`.
+   */
+  active_variant_axes?: string[] | null;
 }
 
 /**
@@ -894,6 +929,7 @@ export async function updatePattern(
   if (fields.base_materials !== undefined) updates.base_materials = fields.base_materials;
   if (fields.tying_steps !== undefined) updates.tying_steps = fields.tying_steps;
   if (fields.hero_image_url !== undefined) updates.hero_image_url = fields.hero_image_url;
+  if (fields.active_variant_axes !== undefined) updates.active_variant_axes = fields.active_variant_axes;
 
   if (Object.keys(updates).length === 0) {
     // No-op save — return the row as-is so the caller's revalidate still fires.
@@ -1025,6 +1061,7 @@ export async function addVariantsToBoxWithQty(
     user_id: user.id,
     sort_order: 0,
     quantity: Math.max(1, Math.floor(i.quantity || 1)),
+    target_quantity: null,
     added_at: new Date().toISOString(),
   }));
   const { error: boxErr, count } = await supabase

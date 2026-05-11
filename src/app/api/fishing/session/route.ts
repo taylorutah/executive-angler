@@ -332,6 +332,9 @@ export async function PATCH(req: NextRequest) {
           variant_id: c.variant_id !== undefined
             ? (c.variant_id && String(c.variant_id).trim() !== "" ? c.variant_id : null)
             : ((existing as { variant_id?: string | null } | undefined)?.variant_id ?? null),
+          personalization_snapshot: c.personalization_snapshot !== undefined
+            ? (c.personalization_snapshot ?? null)
+            : ((existing as { personalization_snapshot?: unknown } | undefined)?.personalization_snapshot ?? null),
           fly_position: v("fly_position"),
           fly_size: v("fly_size"),
           bead_size: v("bead_size"),

@@ -19,7 +19,7 @@ import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
-import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction } from "@/app/flies/v2/actions";
+import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction, updateBoxTargetQuantityAction } from "@/app/flies/v2/actions";
 import type { VariantAxis } from "@/lib/flies/variant-axes";
 
 type SourceBadge = "curated" | "mine" | "community";
@@ -153,6 +153,14 @@ export default function VariantTable({
       quantity: next,
     });
 
+  const saveBoxTarget = (variantId: string) =>
+    (next: number) => updateBoxTargetQuantityAction({
+      box_id: boxId!,
+      variant_id: variantId,
+      // Zero in the UI = "no per-box target" (fall back to global).
+      target_quantity: next > 0 ? next : null,
+    });
+
   const columns: DataTableColumn<VariantRow>[] = [
     {
       key: "photo",
@@ -221,6 +229,21 @@ export default function VariantTable({
           value={row.box_quantity ?? 1}
           onSave={saveBoxQty(row.id)}
           title="How many of this fly are in this box"
+          align="center"
+        />
+      ),
+    }, {
+      key: "box_target" as keyof VariantRow,
+      label: "Box target",
+      width: "92px",
+      mono: true,
+      align: "center" as const,
+      accessor: (row: VariantRow) => row.box_target_quantity ?? 0,
+      render: (row: VariantRow) => (
+        <InlineNumberCell
+          value={row.box_target_quantity ?? 0}
+          onSave={saveBoxTarget(row.id)}
+          title="Target tied count for this specific box (0 = use global target)"
           align="center"
         />
       ),

@@ -15,6 +15,7 @@ import {
   removeVariantsFromBox,
   updateVariant,
   updateBoxVariantQuantity,
+  updateBoxVariantTargetQuantity,
   updatePattern,
   bulkCreateVariants,
   addVariantsToBoxWithQty,
@@ -266,6 +267,13 @@ export interface UpdateBoxQuantityInput {
   quantity: number;
 }
 
+export interface UpdateBoxTargetQuantityInput {
+  box_id: string;
+  variant_id: string;
+  /** Pass null to clear the per-box target (fall back to global target). */
+  target_quantity: number | null;
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 // Pattern editing — name/recipe/steps/editorial/hero
 // ────────────────────────────────────────────────────────────────────────────
@@ -474,6 +482,29 @@ export async function updateBoxQuantityAction(
     Math.floor(input.quantity),
   );
   if (!ok) return { ok: false, error: "Failed to update quantity." };
+  revalidatePath(`/flies/boxes/${input.box_id}`);
+  return { ok: true };
+}
+
+/**
+ * Set the per-box target tied count for a variant. Pass `target_quantity = 0`
+ * (or null via a `Clear` UI action) to revert to the global target.
+ */
+export async function updateBoxTargetQuantityAction(
+  input: UpdateBoxTargetQuantityInput,
+): Promise<{ ok: boolean; error?: string }> {
+  const next = input.target_quantity;
+  if (next != null) {
+    if (!Number.isFinite(next) || next < 0) {
+      return { ok: false, error: "Target must be a non-negative number." };
+    }
+  }
+  const ok = await updateBoxVariantTargetQuantity(
+    input.box_id,
+    input.variant_id,
+    next == null ? null : Math.floor(next),
+  );
+  if (!ok) return { ok: false, error: "Failed to update per-box target." };
   revalidatePath(`/flies/boxes/${input.box_id}`);
   return { ok: true };
 }
