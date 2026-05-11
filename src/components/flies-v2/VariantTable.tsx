@@ -19,7 +19,7 @@ import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
-import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction, updateBoxTargetQuantityAction } from "@/app/flies/v2/actions";
+import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction, updateBoxTargetQuantityAction, cloneVariantAction } from "@/app/flies/v2/actions";
 import type { VariantAxis } from "@/lib/flies/variant-axes";
 
 type SourceBadge = "curated" | "mine" | "community";
@@ -476,6 +476,34 @@ export default function VariantTable({
               return;
             }
             setEditing(row);
+          },
+        },
+        {
+          label: "Duplicate",
+          variant: "default" as const,
+          onClick: async (rows: VariantRow[]) => {
+            if (rows.length === 0) return;
+            let cloned = 0;
+            let failed = 0;
+            // Sequential to keep sort_order predictable and avoid a thundering
+            // herd of clone inserts. Typical use is 1–5 rows.
+            for (const row of rows) {
+              const r = await cloneVariantAction({
+                variant_id: row.id,
+                pattern_slug: patternSlug,
+              });
+              if (r.ok) cloned += 1;
+              else failed += 1;
+            }
+            if (cloned > 0) {
+              showToast(
+                `Duplicated ${cloned} ${cloned === 1 ? "row" : "rows"} — edit the new ${cloned === 1 ? "row" : "rows"} to change size or bead.`,
+              );
+              router.refresh();
+            }
+            if (failed > 0) {
+              showToast(`${failed} clone${failed === 1 ? "" : "s"} failed. Check permissions.`, "error");
+            }
           },
         },
         ...(userBoxes.length > 0

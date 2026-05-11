@@ -566,27 +566,44 @@ export async function createUserVariant(input: {
   bead_color?: string;
   body_color?: string;
   rib_color?: string;
+  tail_color?: string;
+  wing_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
   display_name?: string;
   notes?: string;
   hook_style?: string;
   hook_brand?: string;
   materials_override?: Record<string, string>;
+  /**
+   * Admin-only — when true, the variant is created as canonical (curated):
+   * `created_by_user_id = null`. Non-admins ignore this flag.
+   */
+  as_canonical?: boolean;
 }): Promise<Variant | null> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
+  const wantsCanonical = input.as_canonical === true;
+  const adminEmails = isAdmin(user.email ?? null);
+  const ownerId = wantsCanonical && adminEmails ? null : user.id;
+
   const { data, error } = await supabase
     .from("fly_variants")
     .insert({
       pattern_id: input.pattern_id,
-      created_by_user_id: user.id,
+      created_by_user_id: ownerId,
       size: input.size,
       bead_material: input.bead_material ?? null,
       bead_weight_mm: input.bead_weight_mm ?? null,
       bead_color: input.bead_color ?? null,
       body_color: input.body_color ?? null,
       rib_color: input.rib_color ?? null,
+      tail_color: input.tail_color ?? null,
+      wing_color: input.wing_color ?? null,
+      thorax_color: input.thorax_color ?? null,
+      collar_color: input.collar_color ?? null,
       display_name: input.display_name ?? null,
       notes: input.notes ?? null,
       hook_style: input.hook_style ?? null,
@@ -600,6 +617,49 @@ export async function createUserVariant(input: {
     return null;
   }
   return data as Variant;
+}
+
+/**
+ * Clone an existing variant — copies every spec field from the source row
+ * into a new row. When the source is curated and the caller is admin, the
+ * clone stays curated; otherwise the clone is created as user-owned.
+ * Returns the new variant, or null on failure.
+ */
+export async function cloneVariant(
+  sourceVariantId: string,
+): Promise<Variant | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: src } = await supabase
+    .from("fly_variants")
+    .select("*")
+    .eq("id", sourceVariantId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!src) return null;
+
+  const sourceIsCurated = (src as Variant).created_by_user_id == null;
+  return createUserVariant({
+    pattern_id: (src as Variant).pattern_id,
+    size: (src as Variant).size,
+    bead_material: (src as Variant).bead_material ?? undefined,
+    bead_weight_mm: (src as Variant).bead_weight_mm ?? undefined,
+    bead_color: (src as Variant).bead_color ?? undefined,
+    body_color: (src as Variant).body_color ?? undefined,
+    rib_color: (src as Variant).rib_color ?? undefined,
+    tail_color: (src as Variant).tail_color ?? undefined,
+    wing_color: (src as Variant).wing_color ?? undefined,
+    thorax_color: (src as Variant).thorax_color ?? undefined,
+    collar_color: (src as Variant).collar_color ?? undefined,
+    display_name: (src as Variant).display_name ?? undefined,
+    notes: (src as Variant).notes ?? undefined,
+    hook_style: (src as Variant).hook_style ?? undefined,
+    hook_brand: (src as Variant).hook_brand ?? undefined,
+    materials_override: (src as Variant).materials_override ?? {},
+    as_canonical: sourceIsCurated,
+  });
 }
 
 /** Upsert this user's stock entry for a variant (inline edits from the table). */

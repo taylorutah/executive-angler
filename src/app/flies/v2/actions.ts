@@ -16,6 +16,7 @@ import {
   updateVariant,
   updateBoxVariantQuantity,
   updateBoxVariantTargetQuantity,
+  cloneVariant,
   updatePattern,
   bulkCreateVariants,
   addVariantsToBoxWithQty,
@@ -61,6 +62,22 @@ export interface CreateVariantInput {
   rib_color?: string;
   display_name?: string;
   notes?: string;
+}
+
+/**
+ * Clone an existing variant. Source spec is copied verbatim into a new row.
+ * Admin cloning a Curated row produces a Curated clone; otherwise the clone
+ * is created as user-owned. After cloning, the caller typically opens the
+ * Edit modal on the new row to tweak (size, bead size, etc.).
+ */
+export async function cloneVariantAction(input: {
+  variant_id: string;
+  pattern_slug: string;
+}): Promise<{ ok: boolean; variantId?: string; error?: string }> {
+  const created = await cloneVariant(input.variant_id);
+  if (!created) return { ok: false, error: "Failed to clone — check permissions or that the source variant still exists." };
+  revalidatePath(`/flies/${input.pattern_slug}`);
+  return { ok: true, variantId: created.id };
 }
 
 /** Create a user-owned variant on a pattern. */
