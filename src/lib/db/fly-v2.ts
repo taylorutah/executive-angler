@@ -557,6 +557,50 @@ export async function getDefaultFlyBoxId(): Promise<string | null> {
 // Mutations: create variant, upsert stock, add to box
 // ────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Create a user-owned variant. Same as `createUserVariant` but returns the
+ * raw Supabase error on failure instead of swallowing to null, so callers
+ * can surface the actual code/message to the UI.
+ */
+export async function createUserVariantWithError(input: Parameters<typeof createUserVariant>[0]): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Not signed in." };
+  const wantsCanonical = input.as_canonical === true;
+  const adminEmails = isAdmin(user.email ?? null);
+  const ownerId = wantsCanonical && adminEmails ? null : user.id;
+  const { data, error } = await supabase
+    .from("fly_variants")
+    .insert({
+      pattern_id: input.pattern_id,
+      created_by_user_id: ownerId,
+      size: input.size,
+      bead_material: input.bead_material ?? null,
+      bead_weight_mm: input.bead_weight_mm ?? null,
+      bead_color: input.bead_color ?? null,
+      body_color: input.body_color ?? null,
+      rib_color: input.rib_color ?? null,
+      tail_color: input.tail_color ?? null,
+      wing_color: input.wing_color ?? null,
+      thorax_color: input.thorax_color ?? null,
+      collar_color: input.collar_color ?? null,
+      display_name: input.display_name ?? null,
+      notes: input.notes ?? null,
+      hook_style: input.hook_style ?? null,
+      hook_brand: input.hook_brand ?? null,
+      materials_override: input.materials_override ?? {},
+    })
+    .select()
+    .single();
+  if (error) {
+    const detail = [error.code, error.message, error.details, error.hint]
+      .filter(Boolean)
+      .join(" · ");
+    return { ok: false, error: detail || "Insert failed." };
+  }
+  return { ok: true, variant: data as Variant };
+}
+
 /** Create a user-owned variant on a pattern (canonical or personal). */
 export async function createUserVariant(input: {
   pattern_id: string;
@@ -613,7 +657,7 @@ export async function createUserVariant(input: {
     .select()
     .single();
   if (error) {
-    console.error("[createUserVariant]", error);
+    console.error("[createUserVariant]", { code: error.code, message: error.message, details: error.details, hint: error.hint });
     return null;
   }
   return data as Variant;
@@ -623,25 +667,30 @@ export async function createUserVariant(input: {
  * Clone an existing variant — copies every spec field from the source row
  * into a new row. When the source is curated and the caller is admin, the
  * clone stays curated; otherwise the clone is created as user-owned.
- * Returns the new variant, or null on failure.
+ * Returns the new variant or a detailed error.
  */
 export async function cloneVariant(
   sourceVariantId: string,
-): Promise<Variant | null> {
+): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  if (!user) return { ok: false, error: "Not signed in." };
 
-  const { data: src } = await supabase
+  const { data: src, error: srcErr } = await supabase
     .from("fly_variants")
     .select("*")
     .eq("id", sourceVariantId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!src) return null;
+  if (srcErr) {
+    return { ok: false, error: `Read source variant failed: ${srcErr.code ?? ""} ${srcErr.message}`.trim() };
+  }
+  if (!src) {
+    return { ok: false, error: "Source variant not found (deleted or not visible)." };
+  }
 
   const sourceIsCurated = (src as Variant).created_by_user_id == null;
-  return createUserVariant({
+  return createUserVariantWithError({
     pattern_id: (src as Variant).pattern_id,
     size: (src as Variant).size,
     bead_material: (src as Variant).bead_material ?? undefined,

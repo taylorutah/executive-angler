@@ -74,10 +74,10 @@ export async function cloneVariantAction(input: {
   variant_id: string;
   pattern_slug: string;
 }): Promise<{ ok: boolean; variantId?: string; error?: string }> {
-  const created = await cloneVariant(input.variant_id);
-  if (!created) return { ok: false, error: "Failed to clone — check permissions or that the source variant still exists." };
+  const result = await cloneVariant(input.variant_id);
+  if (!result.ok) return { ok: false, error: result.error };
   revalidatePath(`/flies/${input.pattern_slug}`);
-  return { ok: true, variantId: created.id };
+  return { ok: true, variantId: result.variant.id };
 }
 
 /** Create a user-owned variant on a pattern. */

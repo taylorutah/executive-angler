@@ -484,7 +484,7 @@ export default function VariantTable({
           onClick: async (rows: VariantRow[]) => {
             if (rows.length === 0) return;
             let cloned = 0;
-            let failed = 0;
+            const failures: string[] = [];
             // Sequential to keep sort_order predictable and avoid a thundering
             // herd of clone inserts. Typical use is 1–5 rows.
             for (const row of rows) {
@@ -493,7 +493,7 @@ export default function VariantTable({
                 pattern_slug: patternSlug,
               });
               if (r.ok) cloned += 1;
-              else failed += 1;
+              else failures.push(r.error ?? "Unknown error");
             }
             if (cloned > 0) {
               showToast(
@@ -501,8 +501,8 @@ export default function VariantTable({
               );
               router.refresh();
             }
-            if (failed > 0) {
-              showToast(`${failed} clone${failed === 1 ? "" : "s"} failed. Check permissions.`, "error");
+            if (failures.length > 0) {
+              showToast(`Clone failed: ${failures[0]}`, "error");
             }
           },
         },
