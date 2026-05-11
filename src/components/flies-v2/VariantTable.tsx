@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableColumn } from "@/components/data/DataTable";
-import { totalOwned, isLowStock } from "@/types/fly-v2";
 import type { VariantRow } from "@/types/fly-v2";
 import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
@@ -322,31 +321,26 @@ export default function VariantTable({
         />
       ),
     },
-    {
-      key: "target",
-      label: "Target",
-      width: "90px",
+    // Global stock target: only shown on pattern detail pages. Box detail
+    // pages have their own "Box target" column (per-box). The global total
+    // is a planning view that belongs on the canonical pattern page.
+    // Tied + Bought columns already show owned counts, so we don't repeat
+    // an "owned/target" combo here — just the editable target number.
+    ...(!boxId ? [{
+      key: "target" as keyof VariantRow,
+      label: "Stock target",
+      width: "100px",
       mono: true,
-      align: "right",
-      accessor: (row) => row.stock?.target_count ?? 0,
-      render: (row) => {
-        const n = row.stock?.target_count ?? 0;
-        const owned = totalOwned(row.stock);
-        const low = isLowStock(row.stock);
-        return (
-          <div className="flex items-center justify-end gap-1 w-full">
-            <span className={`font-['IBM_Plex_Mono'] text-[13px] ${low ? "text-[#E8923A]" : owned > 0 ? "text-[#F0F6FC]" : "text-[#484F58]"}`}>
-              {owned}/
-            </span>
-            <InlineNumberCell
-              value={n}
-              onSave={saveStock(row.id, "target_count")}
-              title="Target tied count (deficit lights up amber when below)"
-            />
-          </div>
-        );
-      },
-    },
+      align: "right" as const,
+      accessor: (row: VariantRow) => row.stock?.target_count ?? 0,
+      render: (row: VariantRow) => (
+        <InlineNumberCell
+          value={row.stock?.target_count ?? 0}
+          onSave={saveStock(row.id, "target_count")}
+          title="Total tied + bought you want of this configuration across all your boxes. Tie Next auto-derives from this vs. owned."
+        />
+      ),
+    }] : []),
     {
       key: "boxes",
       label: "Boxes",
