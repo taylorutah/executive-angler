@@ -79,6 +79,12 @@ export interface Pattern {
   origin_credit: string | null;
 
   is_featured: boolean;
+  /**
+   * Optional admin override for which variant option columns this pattern
+   * uses (e.g. ["size","bead","body","rib"]). When null/undefined, the
+   * per-category default from `src/lib/flies/variant-axes.ts` applies.
+   */
+  active_variant_axes?: string[] | null;
   created_at: string;
   updated_at: string;
 }
@@ -184,12 +190,25 @@ export interface VariantPhoto {
   uploaded_at: string;
 }
 
+/** A single box-membership entry for a variant: which box, how many. */
+export interface VariantBoxMembership {
+  box_id: string;
+  box_name: string;
+  quantity: number;
+}
+
 /** Convenience: Variant with stock + photos joined for table rows. */
 export interface VariantRow extends Variant {
   pattern: Pick<Pattern, "id" | "slug" | "name" | "category"> | null;
   stock: VariantStock | null;
   primary_photo: VariantPhoto | null;
   box_count: number;
+  /**
+   * Which boxes this variant is in, with the per-box quantity. Used on the
+   * pattern detail page to render a chip list ("Kill 3 · Madison 4") instead
+   * of just a count. Populated by `listVariantRowsForPattern`.
+   */
+  box_memberships: VariantBoxMembership[];
   /** Quantity in the specific box being viewed (only populated on box detail). */
   box_quantity: number | null;
 }

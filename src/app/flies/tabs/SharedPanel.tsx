@@ -4,8 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Share2, Feather } from "lucide-react";
 import type { FlyPattern } from "@/types/fishing-log";
+import { flyPermalink } from "@/lib/flies/permalink";
 
-export default function SharedPanel({ shared }: { shared: FlyPattern[] }) {
+export default function SharedPanel({
+  shared,
+  ownerUsernames,
+}: {
+  shared: FlyPattern[];
+  ownerUsernames: Record<string, string>;
+}) {
   if (shared.length === 0) {
     return (
       <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-14 text-center">
@@ -22,7 +29,17 @@ export default function SharedPanel({ shared }: { shared: FlyPattern[] }) {
 
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {shared.map((p) => (
+      {shared.map((p) => {
+        const href = flyPermalink({
+          id: p.id,
+          slug: p.slug ?? null,
+          promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
+          promotedCanonicalSlug: p.promoted_canonical_slug ?? null,
+          ownerUserId: p.user_id,
+          ownerUsername: ownerUsernames[p.user_id] ?? null,
+          viewerIsOwner: false,
+        });
+        return (
         <div
           key={p.id}
           className="flex flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
@@ -52,14 +69,15 @@ export default function SharedPanel({ shared }: { shared: FlyPattern[] }) {
           </div>
           <div className="mt-1 flex items-center justify-end">
             <Link
-              href={`/journal/flies/${p.id}/edit`}
+              href={href}
               className="text-xs text-[#E8923A] hover:underline"
             >
               Open
             </Link>
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

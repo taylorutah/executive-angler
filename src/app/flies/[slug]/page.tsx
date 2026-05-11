@@ -26,6 +26,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import VariantTable from "@/components/flies-v2/VariantTable";
 import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
+import { resolveVariantAxes } from "@/lib/flies/variant-axes";
 
 export const revalidate = 3600;
 
@@ -145,10 +146,10 @@ export default async function PatternDetail({ params }: Props) {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <h2 className="text-[#F0F6FC] font-semibold text-sm">Variants</h2>
+            <h2 className="text-[#F0F6FC] font-semibold text-sm">Configurations</h2>
             <p className="text-[#6E7681] text-xs">
-              {variants.length} {variants.length === 1 ? "spec" : "specs"} ·
-              tap any cell to edit · multi-select for bulk actions · drop a photo onto a row to upload
+              every way this fly is tied · {variants.length} {variants.length === 1 ? "spec" : "specs"} ·
+              tap any cell to edit your numbers · multi-select for bulk actions
             </p>
           </div>
           <PatternHeaderActions
@@ -165,6 +166,12 @@ export default async function PatternDetail({ params }: Props) {
             variants={variants}
             patternSlug={pattern.slug ?? ""}
             userBoxes={userBoxes}
+            viewerUserId={user?.id ?? null}
+            viewerIsAdmin={adminFlag}
+            activeAxes={resolveVariantAxes({
+              category: pattern.category,
+              active_variant_axes: pattern.active_variant_axes ?? null,
+            })}
           />
         </div>
       </section>

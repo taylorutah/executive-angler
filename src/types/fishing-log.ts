@@ -39,6 +39,14 @@ export interface FlyPattern {
   // Phase 1 workbench foundation
   parent_pattern_id?: string | null;
   parent_canonical_id?: string | null;
+  /** Set when this legacy pattern was promoted to a canonical fly. */
+  promoted_to_canonical_id?: string | null;
+  /**
+   * Transient field — server pages join `canonical_flies.slug` for any
+   * pattern with `promoted_to_canonical_id` so that link builders can route
+   * straight to /flies/<slug> without an extra resolver hop. NOT a DB column.
+   */
+  promoted_canonical_slug?: string | null;
   visibility?: FlyVisibility;
   shared_with_user_ids?: string[];
   tie_next_status?: TieNextStatus;

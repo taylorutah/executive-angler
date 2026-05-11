@@ -11,6 +11,7 @@ import {
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import { entryDeficit, entryStocked } from "@/lib/flies/box-stock";
 import type { FlyPattern } from "@/types/fishing-log";
+import { ownerPatternPermalink } from "@/lib/flies/permalink";
 import VariantChips from "@/components/flies/VariantChips";
 import VariantEditorSheet from "@/components/flies/VariantEditorSheet";
 import { TieNextCell } from "@/components/flies/VariantInlineCells";
@@ -359,7 +360,11 @@ function buildPatternRows(
       target: 0,
       deficit: 0,
       tieNextCount: p.is_tie_next || p.tie_next_status === "wanted" || p.tie_next_status === "at_vise" ? 1 : 0,
-      href: `/journal/flies/${p.id}/edit`,
+      href: ownerPatternPermalink({
+        id: p.id,
+        promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
+        promotedCanonicalSlug: p.promoted_canonical_slug ?? null,
+      }),
       hasTieNext: !!p.is_tie_next,
     });
   }
@@ -393,6 +398,8 @@ function buildFlyBoxProps(
       is_favorite: fly.is_favorite,
       is_tie_next: fly.is_tie_next,
       parent_canonical_id: fly.parent_canonical_id ?? undefined,
+      promoted_to_canonical_id: fly.promoted_to_canonical_id ?? null,
+      promoted_canonical_slug: fly.promoted_canonical_slug ?? null,
     },
   }));
 

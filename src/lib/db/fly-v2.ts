@@ -158,14 +158,34 @@ export async function listVariantRowsForPattern(patternId: string): Promise<Vari
     photoByVariant.set(p.variant_id, p);
   }
 
-  // Box counts (current user's boxes only, via RLS)
+  // Box memberships (current user's boxes only, via RLS) — joined with the
+  // box name + per-box quantity so the table can render chips like
+  // "Kill 3 · Madison 4" instead of just a count.
+  const membershipsByVariant = new Map<string, { box_id: string; box_name: string; quantity: number }[]>();
   const boxCountByVariant = new Map<string, number>();
   if (userId) {
     const { data: boxRows } = await supabase
       .from("fly_variant_in_box")
-      .select("variant_id")
+      .select("variant_id, box_id, quantity, fly_boxes(name)")
       .in("variant_id", variantIds);
-    for (const r of (boxRows ?? []) as { variant_id: string }[]) {
+    type BoxJoinRow = {
+      variant_id: string;
+      box_id: string;
+      quantity: number | null;
+      fly_boxes: { name: string | null } | { name: string | null }[] | null;
+    };
+    for (const r of (boxRows ?? []) as BoxJoinRow[]) {
+      const boxName = Array.isArray(r.fly_boxes)
+        ? r.fly_boxes[0]?.name ?? "Box"
+        : r.fly_boxes?.name ?? "Box";
+      const entry = {
+        box_id: r.box_id,
+        box_name: boxName,
+        quantity: r.quantity ?? 1,
+      };
+      const list = membershipsByVariant.get(r.variant_id) ?? [];
+      list.push(entry);
+      membershipsByVariant.set(r.variant_id, list);
       boxCountByVariant.set(r.variant_id, (boxCountByVariant.get(r.variant_id) ?? 0) + 1);
     }
   }
@@ -176,6 +196,7 @@ export async function listVariantRowsForPattern(patternId: string): Promise<Vari
     stock: stockByVariant.get(v.id) ?? null,
     primary_photo: photoByVariant.get(v.id) ?? null,
     box_count: boxCountByVariant.get(v.id) ?? 0,
+    box_memberships: membershipsByVariant.get(v.id) ?? [],
     box_quantity: null,
   }));
 }
@@ -183,6 +204,78 @@ export async function listVariantRowsForPattern(patternId: string): Promise<Vari
 // ────────────────────────────────────────────────────────────────────────────
 // User's Variant Stock (across all patterns)
 // ────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Variants where the user's target exceeds their owned stock — these are
+ * implicit shortages that should appear in Tie Next without manual flagging.
+ *
+ * Excludes any variant whose stock is already explicitly flagged
+ * (wanted / at_vise / done) so manual state always overrides the derivation.
+ * Items returned from here surface in the kanban with an "auto" hint.
+ */
+export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data: stockRows } = await supabase
+    .from("fly_variant_stock")
+    .select("*")
+    .eq("user_id", user.id)
+    .or("tie_next_status.is.null,tie_next_status.eq.none");
+
+  const shortageRows = (stockRows ?? []).filter((s) => {
+    const t = (s as VariantStock).target_count ?? 0;
+    if (t <= 0) return false;
+    const owned = ((s as VariantStock).tied_count ?? 0) + ((s as VariantStock).bought_count ?? 0);
+    return t > owned;
+  });
+  if (shortageRows.length === 0) return [];
+
+  const variantIds = shortageRows.map((s) => (s as VariantStock).variant_id);
+  const { data: variantRows } = await supabase
+    .from("fly_variants")
+    .select("*")
+    .in("id", variantIds)
+    .is("deleted_at", null);
+  const variantById = new Map<string, Variant>();
+  for (const v of (variantRows ?? []) as Variant[]) variantById.set(v.id, v);
+
+  const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
+  const { data: patternRows } = await supabase
+    .from("fly_patterns_v2")
+    .select("id, slug, name, category")
+    .in("id", patternIds);
+  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category">>();
+  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category">[]) {
+    patternById.set(p.id, p);
+  }
+
+  const { data: photoRows } = await supabase
+    .from("fly_variant_photos")
+    .select("*")
+    .in("variant_id", variantIds)
+    .eq("is_primary", true);
+  const photoByVariant = new Map<string, VariantPhoto>();
+  for (const p of (photoRows ?? []) as VariantPhoto[]) photoByVariant.set(p.variant_id, p);
+
+  return shortageRows
+    .map<VariantRow | null>((s) => {
+      const stock = s as VariantStock;
+      const v = variantById.get(stock.variant_id);
+      if (!v) return null;
+      return {
+        ...v,
+        pattern: patternById.get(v.pattern_id) ?? null,
+        stock,
+        primary_photo: photoByVariant.get(v.id) ?? null,
+        box_count: 0,
+        box_memberships: [],
+        box_quantity: null,
+      };
+    })
+    .filter((r): r is VariantRow => r !== null);
+}
 
 /** All variants the current user has stock for, joined with pattern + variant. */
 export async function listMyStockedVariants(): Promise<VariantRow[]> {
@@ -235,6 +328,7 @@ export async function listMyStockedVariants(): Promise<VariantRow[]> {
         stock: s,
         primary_photo: photoByVariant.get(s.variant_id) ?? null,
         box_count: 0,
+        box_memberships: [],
         box_quantity: null,
       };
     })
@@ -318,6 +412,7 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
         stock: stockByVariant.get(id) ?? null,
         primary_photo: photoByVariant.get(id) ?? null,
         box_count: 1,
+        box_memberships: [],
         box_quantity: quantityByVariant.get(id) ?? 1,
       };
     })

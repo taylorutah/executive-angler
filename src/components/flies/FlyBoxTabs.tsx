@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import HelpHint from '@/components/ui/HelpHint';
 import FlyCardModal from '@/components/flies/FlyCardModal';
+import { ownerPatternPermalink } from '@/lib/flies/permalink';
 import {
   resolveFlyForViewer,
   type Personalizations,
@@ -59,6 +60,8 @@ export interface SerializedFlyPattern {
   is_favorite?: boolean;
   is_tie_next?: boolean;
   parent_canonical_id?: string;
+  promoted_to_canonical_id?: string | null;
+  promoted_canonical_slug?: string | null;
 }
 
 export interface SerializedCanonicalFly {
@@ -629,7 +632,11 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                   const fly = card.fly;
                   const queued = !!fly.is_tie_next;
                   const inLibrary = canonicalNameSet.has(fly.name.toLowerCase().trim());
-                  const detailHref = `/journal/flies/${fly.id}/edit`;
+                  const detailHref = ownerPatternPermalink({
+                    id: fly.id,
+                    promoted_to_canonical_id: fly.promoted_to_canonical_id ?? null,
+                    promotedCanonicalSlug: fly.promoted_canonical_slug ?? null,
+                  });
                   const bead = parseArrayField(fly.bead_size);
                   const sizes = parseArrayField(fly.size);
                   return (

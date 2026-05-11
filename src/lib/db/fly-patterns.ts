@@ -304,3 +304,77 @@ export async function getMyFliesCounts(userId: string): Promise<{
     sharedWithMe: sharedRes.count ?? 0,
   };
 }
+
+/**
+ * Given a list of legacy fly_patterns rows, resolve the canonical slugs for
+ * any that have `promoted_to_canonical_id` set. Returns a map of
+ * promoted_to_canonical_id → slug so callers can join when building hrefs.
+ *
+ * Used by the four My Flies surfaces to avoid linking to /journal/flies/<id>/edit
+ * for patterns that have been promoted to canonical (those should land on
+ * /flies/<slug> instead).
+ */
+/**
+ * Mutates the given patterns in place to populate `promoted_canonical_slug`
+ * for any row whose `promoted_to_canonical_id` matches a known canonical.
+ * Convenience wrapper around `lookupPromotedCanonicalSlugs`.
+ */
+export async function attachPromotedCanonicalSlugs<T extends FlyPattern>(
+  patterns: T[]
+): Promise<T[]> {
+  const slugs = await lookupPromotedCanonicalSlugs(patterns);
+  for (const p of patterns) {
+    if (p.promoted_to_canonical_id) {
+      p.promoted_canonical_slug = slugs.get(p.promoted_to_canonical_id) ?? null;
+    }
+  }
+  return patterns;
+}
+
+export async function lookupPromotedCanonicalSlugs(
+  patterns: Pick<FlyPattern, "promoted_to_canonical_id">[]
+): Promise<Map<string, string>> {
+  const ids = Array.from(
+    new Set(
+      patterns
+        .map((p) => p.promoted_to_canonical_id)
+        .filter((v): v is string => typeof v === "string" && v.length > 0)
+    )
+  );
+  if (ids.length === 0) return new Map();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("canonical_flies")
+    .select("id, slug")
+    .in("id", ids);
+  if (error) {
+    console.error("[lookupPromotedCanonicalSlugs] error:", error);
+    return new Map();
+  }
+  return new Map((data ?? []).map((r) => [r.id as string, r.slug as string]));
+}
+
+/**
+ * Resolve angler_profiles.username for a set of user ids (used to build
+ * /anglers/<username>/flies/<slug> links for patterns the viewer doesn't own).
+ */
+export async function lookupAnglerUsernames(
+  userIds: string[]
+): Promise<Map<string, string>> {
+  const ids = Array.from(new Set(userIds.filter((v) => v && v.length > 0)));
+  if (ids.length === 0) return new Map();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("angler_profiles")
+    .select("user_id, username")
+    .in("user_id", ids);
+  if (error) {
+    console.error("[lookupAnglerUsernames] error:", error);
+    return new Map();
+  }
+  return new Map(
+    (data ?? [])
+      .filter((r) => r.username)
+      .map((r) => [r.user_id as string, r.username as string])
+  );
+}

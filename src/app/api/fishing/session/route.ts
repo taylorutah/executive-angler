@@ -303,6 +303,9 @@ export async function PATCH(req: NextRequest) {
           canonical_fly_id: c.canonical_fly_id !== undefined
             ? (c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null)
             : (existing?.canonical_fly_id ?? null),
+          variant_id: c.variant_id !== undefined
+            ? (c.variant_id && String(c.variant_id).trim() !== "" ? c.variant_id : null)
+            : ((existing as { variant_id?: string | null } | undefined)?.variant_id ?? null),
           fly_position: v("fly_position"),
           fly_size: v("fly_size"),
           bead_size: v("bead_size"),

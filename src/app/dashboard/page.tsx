@@ -4,7 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
-import { getMyFliesCounts, getTieNextQueue, getMyFlyBox } from "@/lib/db/fly-patterns";
+import { getMyFliesCounts, getTieNextQueue, getMyFlyBox, lookupPromotedCanonicalSlugs } from "@/lib/db/fly-patterns";
+import { ownerPatternPermalink } from "@/lib/flies/permalink";
 import type { MyFliesItem } from "@/components/dashboard/MyFliesWidget";
 
 // Never cache — always fetch fresh data
@@ -78,6 +79,7 @@ export default async function DashboardPage() {
 
   // Tie Next queue — wanted + at_vise items only (filter out done in the widget)
   const tieNextQueue = await getTieNextQueue(user.id);
+  const promotedSlugs = await lookupPromotedCanonicalSlugs(tieNextQueue.patterns);
   const tieNextItems: MyFliesItem[] = [
     ...tieNextQueue.boxEntries
       .filter((b) => b.tie_next_status === "wanted" || b.tie_next_status === "at_vise" || b.is_tie_next)
@@ -101,7 +103,13 @@ export default async function DashboardPage() {
         size: p.size ?? null,
         category: p.type ?? null,
         status: (p.tie_next_status as MyFliesItem["status"]) ?? (p.is_tie_next ? "wanted" : null),
-        href: `/journal/flies/${p.id}/edit`,
+        href: ownerPatternPermalink({
+          id: p.id,
+          promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
+          promotedCanonicalSlug: p.promoted_to_canonical_id
+            ? promotedSlugs.get(p.promoted_to_canonical_id) ?? null
+            : null,
+        }),
       })),
   ];
 

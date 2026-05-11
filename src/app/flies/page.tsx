@@ -11,13 +11,15 @@
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
+import { listMyBoxes, listBoxStats, listDerivedTieNextShortages } from "@/lib/db/fly-v2";
 import {
   getMyPatterns,
   getMyFlyBox,
   getTieNextQueue,
   getSharedWithMe,
   getMyFliesCounts,
+  attachPromotedCanonicalSlugs,
+  lookupAnglerUsernames,
 } from "@/lib/db/fly-patterns";
 import FliesHubClient from "./FliesHubClient";
 
@@ -52,14 +54,27 @@ export default async function FliesHubPage({
   const { tab } = await searchParams;
 
   const boxes = await listMyBoxes();
-  const [myPatterns, flyBoxEntries, tieNext, shared, counts, boxStats] = await Promise.all([
+  const [myPatterns, flyBoxEntries, tieNext, shared, counts, boxStats, derivedShortages] = await Promise.all([
     getMyPatterns(user.id),
     getMyFlyBox(user.id),
     getTieNextQueue(user.id),
     getSharedWithMe(user.id),
     getMyFliesCounts(user.id),
     listBoxStats(boxes.map((b) => b.id)),
+    listDerivedTieNextShortages(),
   ]);
+
+  // Attach promoted canonical slugs so link builders can route directly to
+  // /flies/<slug> for any pattern that has been accepted into the library.
+  // Also resolve shared-pattern owners' usernames for /anglers/<u>/flies/<slug>.
+  await Promise.all([
+    attachPromotedCanonicalSlugs(myPatterns),
+    attachPromotedCanonicalSlugs(tieNext.patterns),
+    attachPromotedCanonicalSlugs(shared),
+  ]);
+  const sharedOwnerUsernames = await lookupAnglerUsernames(
+    shared.map((p) => p.user_id),
+  );
 
   const { data: canonicalNamesData } = await supabase
     .from("canonical_flies")
@@ -78,7 +93,9 @@ export default async function FliesHubPage({
       flyBoxEntries={flyBoxEntries}
       tieNextPatterns={tieNext.patterns}
       tieNextBoxEntries={tieNext.boxEntries}
+      tieNextDerivedVariants={derivedShortages}
       shared={shared}
+      sharedOwnerUsernames={Object.fromEntries(sharedOwnerUsernames)}
       counts={counts}
       canonicalNames={canonicalNames}
     />

@@ -6,6 +6,9 @@ import Link from "next/link";
 import { Check, ListChecks, Wrench, CheckCircle2, GripVertical } from "lucide-react";
 import type { FlyPattern, TieNextStatus } from "@/types/fishing-log";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
+import type { VariantRow } from "@/types/fly-v2";
+import { totalOwned, deficit } from "@/types/fly-v2";
+import { ownerPatternPermalink } from "@/lib/flies/permalink";
 import HelpHint from "@/components/ui/HelpHint";
 import TipCard from "@/components/ui/TipCard";
 
@@ -57,6 +60,7 @@ type Item =
       href: string;
       targetQty: number | null;
       notes: string | null;
+      isDerived?: false;
     }
   | {
       kind: "box";
@@ -68,6 +72,20 @@ type Item =
       href: string;
       targetQty: number | null;
       notes: string | null;
+      isDerived?: false;
+    }
+  | {
+      kind: "variant";
+      id: string;
+      status: TieNextStatus;
+      name: string;
+      subtitle: string;
+      imageUrl: string | null;
+      href: string;
+      targetQty: number | null;
+      notes: string | null;
+      /** True when this item was auto-derived from a target/stock shortage. */
+      isDerived: true;
     };
 
 function patternToItem(p: FlyPattern): Item {
@@ -78,9 +96,38 @@ function patternToItem(p: FlyPattern): Item {
     name: p.name,
     subtitle: p.type || "Personal pattern",
     imageUrl: p.image_url ?? p.my_tied_fly_photo_url ?? null,
-    href: `/journal/flies/${p.id}/edit`,
+    href: ownerPatternPermalink({
+      id: p.id,
+      promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
+      promotedCanonicalSlug: p.promoted_canonical_slug ?? null,
+    }),
     targetQty: p.tie_next_target_qty ?? null,
     notes: p.tie_next_notes ?? null,
+  };
+}
+
+function variantToItem(v: VariantRow): Item {
+  const owned = totalOwned(v.stock);
+  const need = deficit(v.stock);
+  const beadStr = v.bead_material && v.bead_material !== "none"
+    ? [v.bead_material, v.bead_weight_mm ? `${v.bead_weight_mm}mm` : null, v.bead_color].filter(Boolean).join(" · ")
+    : null;
+  const subtitleParts = [
+    `size ${v.size}`,
+    beadStr,
+    v.body_color ?? null,
+  ].filter(Boolean) as string[];
+  return {
+    kind: "variant",
+    id: v.id,
+    status: "wanted",
+    name: v.pattern?.name ?? v.display_name ?? "Untitled variant",
+    subtitle: `${subtitleParts.join(" · ")} · need ${need} (have ${owned}/${v.stock?.target_count ?? 0})`,
+    imageUrl: null,
+    href: v.pattern?.slug ? `/flies/${v.pattern.slug}` : `/flies/by-id/${v.pattern_id}`,
+    targetQty: v.stock?.target_count ?? null,
+    notes: null,
+    isDerived: true,
   };
 }
 
@@ -101,15 +148,21 @@ function boxToItem(e: FlyBoxEntry): Item {
 interface Props {
   initialPatterns: FlyPattern[];
   initialBoxEntries: FlyBoxEntry[];
+  initialDerivedVariants?: VariantRow[];
 }
 
-export default function TieNextKanban({ initialPatterns, initialBoxEntries }: Props) {
+export default function TieNextKanban({
+  initialPatterns,
+  initialBoxEntries,
+  initialDerivedVariants = [],
+}: Props) {
   const initialItems = useMemo<Item[]>(
     () => [
       ...initialPatterns.map(patternToItem),
       ...initialBoxEntries.map(boxToItem),
+      ...initialDerivedVariants.map(variantToItem),
     ],
-    [initialPatterns, initialBoxEntries]
+    [initialPatterns, initialBoxEntries, initialDerivedVariants]
   );
   const [items, setItems] = useState<Item[]>(initialItems);
   const [dragId, setDragId] = useState<string | null>(null);
@@ -317,12 +370,22 @@ function KanbanCard({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <Link
-            href={item.href}
-            className="block truncate text-sm font-semibold text-[#F0F6FC] hover:text-[#E8923A]"
-          >
-            {item.name}
-          </Link>
+          <div className="flex items-center gap-1.5">
+            <Link
+              href={item.href}
+              className="block truncate text-sm font-semibold text-[#F0F6FC] hover:text-[#E8923A]"
+            >
+              {item.name}
+            </Link>
+            {item.isDerived && (
+              <span
+                title="Auto-derived from your target vs. on-hand stock. Bump your stock or target to clear it."
+                className="inline-flex items-center rounded border border-[#0BA5C7]/30 bg-[#0BA5C7]/10 px-1 py-px text-[9px] font-medium uppercase tracking-wider text-[#0BA5C7]"
+              >
+                auto
+              </span>
+            )}
+          </div>
           <p className="truncate text-[11px] text-[#6E7681]">{item.subtitle}</p>
           {item.targetQty ? (
             <p className="mt-1 text-[10px] text-[#A8B2BD]">

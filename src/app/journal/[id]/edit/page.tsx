@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
 import FlyPicker from "@/components/flies/FlyPicker";
+import VariantQuickPick, { type VariantOption } from "@/components/flies/VariantQuickPick";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 import { compressImage } from "@/lib/image-compress";
 import dynamic from "next/dynamic";
@@ -22,6 +23,12 @@ interface Catch {
   quantities: number;
   fly_pattern_id?: string;
   canonical_fly_id?: string;
+  /**
+   * Precise variant the fish was caught on (fly_variants.id). When set, the
+   * size/bead spec on this row reflects the variant's recipe — stats roll up
+   * by variant for fly-level analytics.
+   */
+  variant_id?: string;
   fly_name?: string;
   fly_position: string;
   fly_size: string;
@@ -227,6 +234,9 @@ export default function EditSessionPage() {
             length_inches: c.length_inches ?? "",
             quantities: c.quantities ?? 1,
             fly_pattern_id: c.fly_pattern_id || null,
+            canonical_fly_id: c.canonical_fly_id || null,
+            variant_id: c.variant_id || null,
+            fly_name: c.fly_name || null,
             fly_position: c.fly_position || "",
             fly_size: c.fly_size || "",
             bead_size: c.bead_size || "",
@@ -363,6 +373,7 @@ export default function EditSessionPage() {
           quantities: c.quantities ?? 1,
           fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
           canonical_fly_id: c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null,
+          variant_id: c.variant_id && String(c.variant_id).trim() !== "" ? c.variant_id : null,
           fly_name: c.fly_name || null,
           fly_position: c.fly_position || null,
           fly_size: c.fly_size || null,
@@ -733,18 +744,33 @@ export default function EditSessionPage() {
                             if (!sel) {
                               updateCatch(i, "fly_pattern_id", "");
                               updateCatch(i, "canonical_fly_id", "");
+                              updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", "");
                             } else if (sel.source === "personal") {
                               updateCatch(i, "fly_pattern_id", sel.id);
                               updateCatch(i, "canonical_fly_id", "");
+                              updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", sel.name);
                             } else {
                               updateCatch(i, "canonical_fly_id", sel.id);
                               updateCatch(i, "fly_pattern_id", "");
+                              updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", sel.name);
                             }
                           }}
                           placeholder="Search your flies and the library…"
+                        />
+                        <VariantQuickPick
+                          patternId={c.canonical_fly_id || null}
+                          selectedVariantId={c.variant_id || null}
+                          onSelect={(v: VariantOption) => {
+                            updateCatch(i, "variant_id", v.id);
+                            updateCatch(i, "fly_size", v.size);
+                            if (v.bead_weight_mm != null) {
+                              updateCatch(i, "bead_size", String(v.bead_weight_mm));
+                            }
+                          }}
+                          onClear={() => updateCatch(i, "variant_id", "")}
                         />
                         <button
                           type="button"

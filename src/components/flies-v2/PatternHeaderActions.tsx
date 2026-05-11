@@ -79,7 +79,7 @@ export default function PatternHeaderActions({
             type="button"
             onClick={handleTieYourOwn}
             disabled={forking}
-            title="Make this the starting point for your own named pattern"
+            title="Branch off and create your own named pattern based on this recipe"
             className="inline-flex items-center gap-1.5 rounded-md border border-[#0BA5C7]/40 bg-[#0BA5C7]/10 px-3 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/20 transition-colors disabled:opacity-60"
           >
             {forking ? (
@@ -87,16 +87,16 @@ export default function PatternHeaderActions({
             ) : (
               <GitFork className="h-3.5 w-3.5" />
             )}
-            {forking ? "Opening…" : "Tie your own version"}
+            {forking ? "Opening…" : "Branch as new pattern"}
           </button>
         )}
         <button
           type="button"
           onClick={() => setOpen(true)}
-          title="Same recipe, different size or bead"
+          title="Add a new size/bead/color configuration to this pattern"
           className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#d17d28] transition-colors"
         >
-          + New Variant
+          + My configuration
         </button>
       </div>
       {forkError && (

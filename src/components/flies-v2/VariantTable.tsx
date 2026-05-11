@@ -20,6 +20,36 @@ import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
 import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction } from "@/app/flies/v2/actions";
+import type { VariantAxis } from "@/lib/flies/variant-axes";
+
+type SourceBadge = "curated" | "mine" | "community";
+
+function variantSource(
+  row: VariantRow,
+  viewerUserId: string | null,
+): SourceBadge {
+  if (row.created_by_user_id == null) return "curated";
+  if (viewerUserId && row.created_by_user_id === viewerUserId) return "mine";
+  return "community";
+}
+
+const BADGE_STYLES: Record<SourceBadge, { label: string; cls: string; tip: string }> = {
+  curated: {
+    label: "Curated",
+    cls: "bg-[#0BA5C7]/10 text-[#0BA5C7] border-[#0BA5C7]/30",
+    tip: "Admin-maintained spec. You can adjust your own tied / bought / target counts inline, but the recipe stays consistent across the library.",
+  },
+  mine: {
+    label: "Mine",
+    cls: "bg-[#E8923A]/10 text-[#E8923A] border-[#E8923A]/30",
+    tip: "Your own configuration. Edit the spec freely.",
+  },
+  community: {
+    label: "Community",
+    cls: "bg-[#6E7681]/10 text-[#A8B2BD] border-[#30363D]",
+    tip: "Added by another angler. You can track your own inventory, but the spec belongs to the creator.",
+  },
+};
 
 interface Props {
   variants: VariantRow[];
@@ -29,6 +59,15 @@ interface Props {
   userBoxes: FlyBoxV2[];
   /** When set, shows a "Qty" column for per-box quantity tracking. */
   boxId?: string;
+  /** Current viewer's user id. Drives Mine/Community badge logic. */
+  viewerUserId?: string | null;
+  /** Whether the viewer can edit curated (canonical) variants. Admin only. */
+  viewerIsAdmin?: boolean;
+  /**
+   * Axis allowlist for this pattern — see `resolveVariantAxes`. Columns
+   * outside this list are hidden so the table only shows what's relevant.
+   */
+  activeAxes?: VariantAxis[];
 }
 
 function formatBead(row: VariantRow): string {
@@ -51,8 +90,35 @@ function formatLastUsed(row: VariantRow): string {
   return `${Math.floor(days / 365)}y ago`;
 }
 
-export default function VariantTable({ variants, patternSlug, userBoxes, boxId }: Props) {
+export default function VariantTable({
+  variants,
+  patternSlug,
+  userBoxes,
+  boxId,
+  viewerUserId = null,
+  viewerIsAdmin = false,
+  activeAxes,
+}: Props) {
   const router = useRouter();
+  const axisSet = activeAxes ? new Set<VariantAxis>(activeAxes) : null;
+  // A column is shown when (a) it's allowed by the pattern's axis list AND
+  // (b) at least one variant actually has a value for it. The second rule
+  // hides empty columns (e.g. Perdigon has no rib) without requiring admins
+  // to maintain a per-pattern axis list for every fly.
+  const axisHasValue: Record<VariantAxis, boolean> = {
+    size: true,
+    hook: variants.some((v) => v.hook_style || v.hook_brand),
+    bead: variants.some((v) => v.bead_material && v.bead_material !== "none"),
+    body: variants.some((v) => v.body_color),
+    rib: variants.some((v) => v.rib_color),
+    tail: variants.some((v) => v.tail_color),
+    wing: variants.some((v) => v.wing_color),
+    thorax: variants.some((v) => v.thorax_color),
+    collar: variants.some((v) => v.collar_color),
+    hackle: false,
+  };
+  const showAxis = (axis: VariantAxis) =>
+    (axisSet == null || axisSet.has(axis)) && axisHasValue[axis];
   // Inline toast — the bulk-action server actions can't directly trigger UI,
   // and native alert() blocks the page (terrible on iOS, blocks Cypress/MCP
   // testing). A 2.5s auto-dismissing pill gives the user feedback without
@@ -123,11 +189,25 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
     {
       key: "size",
       label: "Size",
-      width: "70px",
+      width: "120px",
       mono: true,
       align: "center",
       accessor: (row) => row.size,
-      render: (row) => <span className="text-[#F0F6FC]">{row.size}</span>,
+      render: (row) => {
+        const src = variantSource(row, viewerUserId);
+        const badge = BADGE_STYLES[src];
+        return (
+          <div className="flex items-center gap-1.5 justify-center">
+            <span className="text-[#F0F6FC]">{row.size}</span>
+            <span
+              title={badge.tip}
+              className={`inline-flex items-center rounded border px-1 py-px text-[9px] font-medium uppercase tracking-wider ${badge.cls}`}
+            >
+              {badge.label}
+            </span>
+          </div>
+        );
+      },
     },
     ...(boxId ? [{
       key: "box_qty" as keyof VariantRow,
@@ -145,25 +225,49 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
         />
       ),
     }] : []),
-    {
-      key: "bead",
+    ...(showAxis("bead") ? [{
+      key: "bead" as keyof VariantRow,
       label: "Bead",
       width: "200px",
-      accessor: (row) => row.bead_material ?? "",
-      render: (row) => <span className="text-[#A8B2BD]">{formatBead(row)}</span>,
-    },
-    {
-      key: "body",
+      accessor: (row: VariantRow) => row.bead_material ?? "",
+      render: (row: VariantRow) => <span className="text-[#A8B2BD]">{formatBead(row)}</span>,
+    }] : []),
+    ...(showAxis("body") ? [{
+      key: "body" as keyof VariantRow,
       label: "Body",
-      accessor: (row) => row.body_color ?? "",
-      render: (row) => row.body_color ? <span className="text-[#A8B2BD]">{row.body_color}</span> : <span className="text-[#484F58]">—</span>,
-    },
-    ...(boxId ? [] : [{
-      key: "rib",
+      accessor: (row: VariantRow) => row.body_color ?? "",
+      render: (row: VariantRow) => row.body_color ? <span className="text-[#A8B2BD]">{row.body_color}</span> : <span className="text-[#484F58]">—</span>,
+    }] : []),
+    ...(!boxId && showAxis("rib") ? [{
+      key: "rib" as keyof VariantRow,
       label: "Rib",
       accessor: (row: VariantRow) => row.rib_color ?? "",
       render: (row: VariantRow) => row.rib_color ? <span className="text-[#A8B2BD]">{row.rib_color}</span> : <span className="text-[#484F58]">—</span>,
-    }]),
+    }] : []),
+    ...(!boxId && showAxis("tail") ? [{
+      key: "tail" as keyof VariantRow,
+      label: "Tail",
+      accessor: (row: VariantRow) => row.tail_color ?? "",
+      render: (row: VariantRow) => row.tail_color ? <span className="text-[#A8B2BD]">{row.tail_color}</span> : <span className="text-[#484F58]">—</span>,
+    }] : []),
+    ...(!boxId && showAxis("wing") ? [{
+      key: "wing" as keyof VariantRow,
+      label: "Wing",
+      accessor: (row: VariantRow) => row.wing_color ?? "",
+      render: (row: VariantRow) => row.wing_color ? <span className="text-[#A8B2BD]">{row.wing_color}</span> : <span className="text-[#484F58]">—</span>,
+    }] : []),
+    ...(!boxId && showAxis("thorax") ? [{
+      key: "thorax" as keyof VariantRow,
+      label: "Thorax",
+      accessor: (row: VariantRow) => row.thorax_color ?? "",
+      render: (row: VariantRow) => row.thorax_color ? <span className="text-[#A8B2BD]">{row.thorax_color}</span> : <span className="text-[#484F58]">—</span>,
+    }] : []),
+    ...(!boxId && showAxis("collar") ? [{
+      key: "collar" as keyof VariantRow,
+      label: "Collar",
+      accessor: (row: VariantRow) => row.collar_color ?? "",
+      render: (row: VariantRow) => row.collar_color ? <span className="text-[#A8B2BD]">{row.collar_color}</span> : <span className="text-[#484F58]">—</span>,
+    }] : []),
     {
       key: "tied",
       label: "Tied",
@@ -222,16 +326,35 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
     {
       key: "boxes",
       label: "Boxes",
-      width: "60px",
-      mono: true,
-      align: "right",
+      width: boxId ? "60px" : "220px",
+      mono: !boxId,
+      align: boxId ? "right" : "left",
       accessor: (row) => row.box_count,
-      render: (row) =>
-        row.box_count > 0 ? (
-          <span className="text-[#0BA5C7]">{row.box_count}</span>
-        ) : (
-          <span className="text-[#484F58]">0</span>
-        ),
+      render: (row) => {
+        if (boxId || row.box_memberships.length === 0) {
+          return row.box_count > 0 ? (
+            <span className="text-[#0BA5C7]">{row.box_count}</span>
+          ) : (
+            <span className="text-[#484F58]">0</span>
+          );
+        }
+        return (
+          <div className="flex flex-wrap gap-1">
+            {row.box_memberships.map((m) => (
+              <Link
+                key={m.box_id}
+                href={`/flies/boxes/${m.box_id}`}
+                onClick={(e) => e.stopPropagation()}
+                title={`${m.box_name} · ${m.quantity} in box`}
+                className="inline-flex items-center gap-1 rounded border border-[#0BA5C7]/30 bg-[#0BA5C7]/10 px-1.5 py-px text-[10px] text-[#0BA5C7] hover:bg-[#0BA5C7]/20 transition-colors"
+              >
+                <span className="truncate max-w-[100px]">{m.box_name}</span>
+                <span className="font-['IBM_Plex_Mono'] text-[#F0F6FC]">{m.quantity}</span>
+              </Link>
+            ))}
+          </div>
+        );
+      },
     },
     {
       key: "last_used",
@@ -313,7 +436,23 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
               showToast("Select exactly one variant to edit.", "error");
               return;
             }
-            setEditing(rows[0]);
+            const row = rows[0];
+            const src = variantSource(row, viewerUserId);
+            if (src === "curated" && !viewerIsAdmin) {
+              showToast(
+                "Curated specs are maintained by admins. You can still edit your own tied / bought / target counts inline — click + New Variant to make your own.",
+                "error",
+              );
+              return;
+            }
+            if (src === "community" && !viewerIsAdmin) {
+              showToast(
+                "This variant belongs to another angler. Make your own with + New Variant.",
+                "error",
+              );
+              return;
+            }
+            setEditing(row);
           },
         },
         ...(userBoxes.length > 0

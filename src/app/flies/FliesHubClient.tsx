@@ -15,6 +15,7 @@ import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
 import TieNextKanban from "@/components/flies/TieNextKanban";
+import type { VariantRow } from "@/types/fly-v2";
 import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 import HelpHint from "@/components/ui/HelpHint";
 import PatternsTab from "./tabs/PatternsTab";
@@ -32,7 +33,9 @@ interface Props {
   flyBoxEntries: FlyBoxEntry[];
   tieNextPatterns: FlyPattern[];
   tieNextBoxEntries: FlyBoxEntry[];
+  tieNextDerivedVariants: VariantRow[];
   shared: FlyPattern[];
+  sharedOwnerUsernames: Record<string, string>;
   counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
   canonicalNames: string[];
 }
@@ -46,7 +49,9 @@ export default function FliesHubClient({
   flyBoxEntries,
   tieNextPatterns,
   tieNextBoxEntries,
+  tieNextDerivedVariants,
   shared,
+  sharedOwnerUsernames,
   counts,
   canonicalNames,
 }: Props) {
@@ -170,9 +175,10 @@ export default function FliesHubClient({
           <TieNextKanban
             initialPatterns={tieNextPatterns}
             initialBoxEntries={tieNextBoxEntries}
+            initialDerivedVariants={tieNextDerivedVariants}
           />
         )}
-        {tab === "shared" && <SharedPanel shared={shared} />}
+        {tab === "shared" && <SharedPanel shared={shared} ownerUsernames={sharedOwnerUsernames} />}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { ChevronDown, ChevronRight, GitBranch, Sparkles, Plus } from "lucide-rea
 import RecipeDiff from "./RecipeDiff";
 import HelpHint from "@/components/ui/HelpHint";
 import type { FlyPattern } from "@/types/fishing-log";
+import { ownerPatternPermalink } from "@/lib/flies/permalink";
 
 type CanonicalLite = {
   id: string;
@@ -137,7 +138,11 @@ function PersonalTree({
           {parent ? (
             <PersonalNode
               pattern={parent}
-              href={`/journal/flies/${parent.id}/edit`}
+              href={ownerPatternPermalink({
+                id: parent.id,
+                promoted_to_canonical_id: parent.promoted_to_canonical_id ?? null,
+                promotedCanonicalSlug: parent.promoted_canonical_slug ?? null,
+              })}
               diffAgainst={pattern}
               badge="Parent"
               badgeTone="parent"
@@ -171,7 +176,11 @@ function PersonalTree({
               <PersonalNode
                 key={s.id}
                 pattern={s}
-                href={`/journal/flies/${s.id}/edit`}
+                href={ownerPatternPermalink({
+                  id: s.id,
+                  promoted_to_canonical_id: s.promoted_to_canonical_id ?? null,
+                  promotedCanonicalSlug: s.promoted_canonical_slug ?? null,
+                })}
                 diffAgainst={parent ?? null}
                 badge="Sibling"
                 badgeTone="sibling"
@@ -190,7 +199,11 @@ function PersonalTree({
               <PersonalNode
                 key={c.id}
                 pattern={c}
-                href={`/journal/flies/${c.id}/edit`}
+                href={ownerPatternPermalink({
+                  id: c.id,
+                  promoted_to_canonical_id: c.promoted_to_canonical_id ?? null,
+                  promotedCanonicalSlug: c.promoted_canonical_slug ?? null,
+                })}
                 diffAgainst={pattern}
                 badge="Child"
                 badgeTone="child"
