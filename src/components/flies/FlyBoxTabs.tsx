@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Heart, ListChecks, Layers, Check, Loader2, Plus, CreditCard } from 'lucide-react';
+import { Heart, ListChecks, Layers, Check, Loader2, Plus, CreditCard, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -107,6 +107,12 @@ interface FlyBoxTabsProps {
   /** Viewer's username — threads to ownerPatternPermalink so personal fly
    *  cards link to /anglers/[username]/flies/[slug] instead of the edit form. */
   viewerUsername?: string | null;
+  /** Personal-pattern delete request — parent owns the dialog. */
+  onDeletePersonal?: (input: { id: string; name: string }) => void;
+  /** Library entry delete request — parent owns the dialog. The viewer's
+   *  user_fly_box row id is passed; parent decides whether to unlink the
+   *  whole canonical group or just this row. */
+  onDeleteLibraryEntry?: (input: { entryId: string; name: string }) => void;
 }
 
 // Compact favorite toggle (icon-only, fixed width on the left of the footer).
@@ -232,7 +238,7 @@ function TieNextDone({
   );
 }
 
-export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTieNextCount, sortedTypes, grouped: initialGrouped, canonicalNames, viewerUsername }: FlyBoxTabsProps) {
+export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTieNextCount, sortedTypes, grouped: initialGrouped, canonicalNames, viewerUsername, onDeletePersonal, onDeleteLibraryEntry }: FlyBoxTabsProps) {
   const [tab, setTab] = useState<Tab>('all');
   const [grouped, setGrouped] = useState(initialGrouped);
   const [favCount, setFavCount] = useState(initialFavCount);
@@ -628,6 +634,21 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                           ) : (
                             <TieNextToggle card={card} onToggle={toggleTieNext} />
                           )}
+                          {onDeleteLibraryEntry && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onDeleteLibraryEntry({ entryId: card.entry.id, name: displayName });
+                              }}
+                              title="Remove from your fly box (canonical stays in the library)"
+                              aria-label="Remove from your fly box"
+                              className="ml-auto flex-shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-md text-[#6E7681] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
@@ -711,6 +732,21 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                           />
                         ) : (
                           <TieNextToggle card={card} onToggle={toggleTieNext} />
+                        )}
+                        {onDeletePersonal && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onDeletePersonal({ id: fly.id, name: fly.name });
+                            }}
+                            title="Delete this pattern (and its variants)"
+                            aria-label="Delete this pattern"
+                            className="ml-auto flex-shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-md text-[#6E7681] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
                         )}
                       </div>
                     </div>

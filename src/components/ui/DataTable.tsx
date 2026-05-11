@@ -25,6 +25,17 @@ export interface DataTableProps<T> {
   emptyMessage?: string;
   /** Optional rendered above the table (filter row). */
   toolbar?: React.ReactNode;
+  /**
+   * When provided, renders a leading checkbox column for multi-select.
+   * The owner state lives in the parent so bulk actions can read it.
+   * `selectable(row)` lets the table skip rows that can't be acted on.
+   */
+  selection?: {
+    selectedKeys: Set<string>;
+    onToggleKey: (key: string) => void;
+    onToggleAllVisible: () => void;
+    selectable?: (row: T) => boolean;
+  };
 }
 
 /**
@@ -43,6 +54,7 @@ export default function DataTable<T>({
   onRowClick,
   emptyMessage = "No rows.",
   toolbar,
+  selection,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<{ id: string; dir: "asc" | "desc" } | null>(
     defaultSort ?? null,
@@ -77,6 +89,16 @@ export default function DataTable<T>({
     });
   };
 
+  const visibleSelectableKeys = selection
+    ? sorted
+        .filter((r) => (selection.selectable ? selection.selectable(r) : true))
+        .map((r) => getRowKey(r))
+    : [];
+  const allVisibleSelected =
+    selection != null &&
+    visibleSelectableKeys.length > 0 &&
+    visibleSelectableKeys.every((k) => selection.selectedKeys.has(k));
+
   return (
     <div className="w-full">
       {toolbar ? <div className="mb-3">{toolbar}</div> : null}
@@ -84,6 +106,20 @@ export default function DataTable<T>({
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-raised)]/40">
+              {selection && (
+                <th
+                  className="h-9 px-3 text-left w-[36px]"
+                  style={{ width: "36px" }}
+                >
+                  <input
+                    type="checkbox"
+                    aria-label={allVisibleSelected ? "Deselect all" : "Select all"}
+                    checked={allVisibleSelected}
+                    onChange={selection.onToggleAllVisible}
+                    className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[#E8923A]"
+                  />
+                </th>
+              )}
               {columns.map((c) => {
                 const isSorted = sort?.id === c.id;
                 return (
@@ -126,39 +162,61 @@ export default function DataTable<T>({
             {sorted.length === 0 ? (
               <tr>
                 <td
-                  colSpan={columns.length}
+                  colSpan={columns.length + (selection ? 1 : 0)}
                   className="h-24 px-3 text-center text-sm text-[var(--color-text-muted)]"
                 >
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
-              sorted.map((row) => (
-                <tr
-                  key={getRowKey(row)}
-                  onClick={onRowClick ? () => onRowClick(row) : undefined}
-                  className={[
-                    "h-9 border-b border-[var(--color-border)] last:border-b-0",
-                    onRowClick ? "cursor-pointer hover:bg-[var(--color-surface-raised)]/30" : "",
-                  ].join(" ")}
-                >
-                  {columns.map((c) => (
-                    <td
-                      key={c.id}
-                      className={[
-                        "px-3 py-1.5 align-middle text-[var(--color-text-primary)]",
-                        c.numeric
-                          ? "text-right font-[var(--font-mono)] tabular-nums"
-                          : "",
-                        c.hideOnSm ? "hidden sm:table-cell" : "",
-                        c.className ?? "",
-                      ].join(" ")}
-                    >
-                      {c.render ? c.render(row) : (c.accessor(row) ?? "—")}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              sorted.map((row) => {
+                const key = getRowKey(row);
+                const rowSelectable = selection
+                  ? selection.selectable
+                    ? selection.selectable(row)
+                    : true
+                  : false;
+                return (
+                  <tr
+                    key={key}
+                    onClick={onRowClick ? () => onRowClick(row) : undefined}
+                    className={[
+                      "h-9 border-b border-[var(--color-border)] last:border-b-0",
+                      onRowClick ? "cursor-pointer hover:bg-[var(--color-surface-raised)]/30" : "",
+                    ].join(" ")}
+                  >
+                    {selection && (
+                      <td className="px-3 py-1.5 align-middle" style={{ width: "36px" }}>
+                        {rowSelectable ? (
+                          <input
+                            type="checkbox"
+                            aria-label="Select row"
+                            checked={selection.selectedKeys.has(key)}
+                            onChange={() => selection.onToggleKey(key)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[#E8923A]"
+                          />
+                        ) : null}
+                      </td>
+                    )}
+                    {columns.map((c) => (
+                      <td
+                        key={c.id}
+                        className={[
+                          "px-3 py-1.5 align-middle text-[var(--color-text-primary)]",
+                          c.numeric
+                            ? "text-right font-[var(--font-mono)] tabular-nums"
+                            : "",
+                          c.hideOnSm ? "hidden sm:table-cell" : "",
+                          c.className ?? "",
+                        ].join(" ")}
+                      >
+                        {c.render ? c.render(row) : (c.accessor(row) ?? "—")}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

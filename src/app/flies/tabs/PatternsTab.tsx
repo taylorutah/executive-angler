@@ -91,6 +91,11 @@ export default function PatternsTab({
   const [removeLibrary, setRemoveLibrary] = useState<{ name: string; variantIds: string[] } | null>(null);
   const [removing, setRemoving] = useState(false);
   const [removeError, setRemoveError] = useState<string | null>(null);
+  // Multi-select state — keyed by PatternRow.key. Bulk delete operates on this.
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [bulkConfirm, setBulkConfirm] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number } | null>(null);
+  const [bulkError, setBulkError] = useState<string | null>(null);
 
   const rows = useMemo(
     () => buildPatternRows(myPatterns, flyBoxEntries, viewerUsername),
@@ -165,6 +170,31 @@ export default function PatternsTab({
             </span>
           </div>
 
+          {selectedKeys.size > 0 && (
+            <div className="mb-2 flex items-center justify-between gap-3 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-3 py-2 text-sm text-[var(--color-text-primary)]">
+              <span>
+                <span className="font-semibold">{selectedKeys.size}</span> selected
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedKeys(new Set())}
+                  className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBulkConfirm(true)}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Delete {selectedKeys.size}
+                </button>
+              </div>
+            </div>
+          )}
+
           <DataTable
             columns={buildColumns(setEditing, (row) => {
               if (row.source === "personal" && row.personalPatternId) {
@@ -184,6 +214,40 @@ export default function PatternsTab({
                 ? "No patterns yet. Create one or browse the Library."
                 : "No patterns match your filters."
             }
+            selection={{
+              selectedKeys,
+              onToggleKey: (key) => {
+                setSelectedKeys((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(key)) next.delete(key);
+                  else next.add(key);
+                  return next;
+                });
+              },
+              onToggleAllVisible: () => {
+                const visibleKeys = filtered
+                  .filter(
+                    (r) =>
+                      (r.source === "personal" && r.personalPatternId) ||
+                      (r.source === "library" && r.variants.length > 0),
+                  )
+                  .map((r) => r.key);
+                const allSelected = visibleKeys.every((k) => selectedKeys.has(k));
+                setSelectedKeys(() => {
+                  if (allSelected) {
+                    const next = new Set(selectedKeys);
+                    visibleKeys.forEach((k) => next.delete(k));
+                    return next;
+                  }
+                  const next = new Set(selectedKeys);
+                  visibleKeys.forEach((k) => next.add(k));
+                  return next;
+                });
+              },
+              selectable: (r) =>
+                (r.source === "personal" && !!r.personalPatternId) ||
+                (r.source === "library" && r.variants.length > 0),
+            }}
           />
         </>
       ) : (
@@ -194,6 +258,10 @@ export default function PatternsTab({
           grouped={flyBoxProps.grouped}
           canonicalNames={canonicalNames}
           viewerUsername={viewerUsername}
+          onDeletePersonal={(input) => setDeletePersonal(input)}
+          onDeleteLibraryEntry={(input) =>
+            setRemoveLibrary({ name: input.name, variantIds: [input.entryId] })
+          }
         />
       )}
 
@@ -212,6 +280,70 @@ export default function PatternsTab({
           onClose={() => setDeletePersonal(null)}
           onDeleted={() => {
             setDeletePersonal(null);
+            router.refresh();
+          }}
+        />
+      )}
+
+      {bulkConfirm && (
+        <BulkDeleteDialog
+          rows={rows.filter((r) => selectedKeys.has(r.key))}
+          progress={bulkProgress}
+          error={bulkError}
+          onCancel={() => {
+            if (bulkProgress) return;
+            setBulkConfirm(false);
+            setBulkError(null);
+          }}
+          onConfirm={async () => {
+            const targets = rows.filter((r) => selectedKeys.has(r.key));
+            setBulkError(null);
+            setBulkProgress({ done: 0, total: targets.length });
+            const errors: string[] = [];
+            for (let i = 0; i < targets.length; i++) {
+              const row = targets[i];
+              try {
+                if (row.source === "personal" && row.personalPatternId) {
+                  // Personal: hard-delete the pattern; catches default to unlink
+                  // (no destroy_catches flag = name snapshot kept on the catch).
+                  const r = await fetch(
+                    `/api/fishing/flies?id=${encodeURIComponent(row.personalPatternId)}`,
+                    { method: "DELETE" },
+                  );
+                  if (!r.ok) {
+                    const body = (await r.json().catch(() => ({}))) as { error?: string };
+                    errors.push(`${row.name}: ${body.error || r.statusText}`);
+                  }
+                } else if (row.source === "library" && row.variants.length > 0) {
+                  // Library: unlink every variant in the user's box.
+                  const results = await Promise.all(
+                    row.variants.map((v) =>
+                      fetch(`/api/fly-box?id=${encodeURIComponent(v.id)}`, {
+                        method: "DELETE",
+                      }),
+                    ),
+                  );
+                  const firstFail = results.find((res) => !res.ok);
+                  if (firstFail) {
+                    const body = (await firstFail.json().catch(() => ({}))) as { error?: string };
+                    errors.push(`${row.name}: ${body.error || firstFail.statusText}`);
+                  }
+                }
+              } catch (e) {
+                errors.push(`${row.name}: ${e instanceof Error ? e.message : "Network error"}`);
+              }
+              setBulkProgress({ done: i + 1, total: targets.length });
+            }
+            if (errors.length > 0) {
+              setBulkError(errors.slice(0, 3).join("\n") + (errors.length > 3 ? `\n…and ${errors.length - 3} more` : ""));
+              setBulkProgress(null);
+              // Refresh anyway — some may have succeeded.
+              router.refresh();
+              return;
+            }
+            setBulkProgress(null);
+            setBulkConfirm(false);
+            setSelectedKeys(new Set());
             router.refresh();
           }}
         />
@@ -255,6 +387,91 @@ export default function PatternsTab({
           }}
         />
       )}
+    </div>
+  );
+}
+
+function BulkDeleteDialog({
+  rows,
+  progress,
+  error,
+  onCancel,
+  onConfirm,
+}: {
+  rows: PatternRow[];
+  progress: { done: number; total: number } | null;
+  error: string | null;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  const personalCount = rows.filter((r) => r.source === "personal").length;
+  const libraryCount = rows.filter((r) => r.source === "library").length;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+      <div className="w-full max-w-md rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-xl">
+        <h3 className="font-heading text-lg text-[var(--color-text-primary)]">
+          Delete {rows.length} {rows.length === 1 ? "pattern" : "patterns"}?
+        </h3>
+        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+          {personalCount > 0 && (
+            <>
+              <span className="font-semibold text-[var(--color-text-primary)]">
+                {personalCount}
+              </span>{" "}
+              personal pattern{personalCount === 1 ? "" : "s"} will be deleted entirely
+              (catches that reference them keep a name snapshot, no FK).
+            </>
+          )}
+          {personalCount > 0 && libraryCount > 0 && <br />}
+          {libraryCount > 0 && (
+            <>
+              <span className="font-semibold text-[var(--color-text-primary)]">
+                {libraryCount}
+              </span>{" "}
+              library pattern{libraryCount === 1 ? "" : "s"} will be unlinked from your
+              fly box (the canonical stays in the library).
+            </>
+          )}
+        </p>
+        <ul className="mt-3 max-h-40 overflow-y-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-raised)]/40 p-2 text-xs text-[var(--color-text-secondary)]">
+          {rows.map((r) => (
+            <li key={r.key} className="flex items-center justify-between gap-2 py-0.5">
+              <span className="truncate">{r.name}</span>
+              <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">
+                {r.source === "personal" ? "delete" : "unlink"}
+              </span>
+            </li>
+          ))}
+        </ul>
+        {error && (
+          <pre className="mt-3 max-h-32 overflow-y-auto whitespace-pre-wrap rounded-md bg-red-500/10 border border-red-500/30 px-3 py-2 text-xs text-red-300">
+            {error}
+          </pre>
+        )}
+        {progress && (
+          <p className="mt-3 text-xs text-[var(--color-text-secondary)]">
+            Deleting {progress.done} / {progress.total}…
+          </p>
+        )}
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={progress !== null}
+            className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-3 py-1.5 text-sm text-[var(--color-text-primary)] hover:border-[#E8923A] disabled:opacity-60"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={progress !== null}
+            className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
+          >
+            {progress ? `Deleting…` : `Delete ${rows.length}`}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
