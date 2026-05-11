@@ -71,11 +71,12 @@ interface Props {
 }
 
 function formatBead(row: VariantRow): string {
-  if (!row.bead_material || row.bead_material === "none") return "—";
-  const parts: string[] = [row.bead_material];
+  if (row.bead_material === "none") return "—";
+  const parts: string[] = [];
+  if (row.bead_material) parts.push(row.bead_material);
   if (row.bead_weight_mm) parts.push(`${row.bead_weight_mm}mm`);
   if (row.bead_color) parts.push(row.bead_color);
-  return parts.join(" · ");
+  return parts.length === 0 ? "—" : parts.join(" · ");
 }
 
 function formatLastUsed(row: VariantRow): string {
