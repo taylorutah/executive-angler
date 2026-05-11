@@ -197,6 +197,16 @@ export interface VariantBoxMembership {
   box_id: string;
   box_name: string;
   quantity: number;
+  /**
+   * Per-box target tied count, when set. Used by shortage queries to compute
+   * `deficit` and by the box-detail UI's "Box target" column.
+   */
+  target_quantity?: number | null;
+  /**
+   * Computed shortage for THIS box (max(0, target_quantity - quantity)) when
+   * the membership came from a shortage query. Absent on regular reads.
+   */
+  deficit?: number;
 }
 
 /** Convenience: Variant with stock + photos joined for table rows. */

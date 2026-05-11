@@ -219,21 +219,78 @@ export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
 
+  // Two shortage sources:
+  //   (a) STOCK SHORTAGE — global target_count > owned (tied + bought).
+  //       Comes from fly_variant_stock. Suppressed when the user has
+  //       manually flagged tie_next_status (wanted/at_vise/done).
+  //   (b) BOX SHORTAGE — per-box target_quantity > quantity for any box.
+  //       Comes from fly_variant_in_box. Independent of stock status.
+  //
+  // We union the two by variant_id so a single variant in two boxes-short
+  // produces one kanban card with both box names in the subtitle.
+
+  // (a) stock shortages
   const { data: stockRows } = await supabase
     .from("fly_variant_stock")
     .select("*")
     .eq("user_id", user.id)
     .or("tie_next_status.is.null,tie_next_status.eq.none");
 
-  const shortageRows = (stockRows ?? []).filter((s) => {
-    const t = (s as VariantStock).target_count ?? 0;
-    if (t <= 0) return false;
-    const owned = ((s as VariantStock).tied_count ?? 0) + ((s as VariantStock).bought_count ?? 0);
-    return t > owned;
-  });
-  if (shortageRows.length === 0) return [];
+  const stockByVariant = new Map<string, VariantStock>();
+  const stockShortVariantIds = new Set<string>();
+  for (const r of (stockRows ?? []) as VariantStock[]) {
+    stockByVariant.set(r.variant_id, r);
+    const t = r.target_count ?? 0;
+    if (t <= 0) continue;
+    const owned = (r.tied_count ?? 0) + (r.bought_count ?? 0);
+    if (t > owned) stockShortVariantIds.add(r.variant_id);
+  }
 
-  const variantIds = shortageRows.map((s) => (s as VariantStock).variant_id);
+  // (b) per-box shortages
+  const { data: boxRows } = await supabase
+    .from("fly_variant_in_box")
+    .select("variant_id, box_id, quantity, target_quantity, fly_boxes(name)")
+    .eq("user_id", user.id)
+    .not("target_quantity", "is", null);
+
+  type BoxJoinRow = {
+    variant_id: string;
+    box_id: string;
+    quantity: number | null;
+    target_quantity: number | null;
+    fly_boxes: { name: string | null } | { name: string | null }[] | null;
+  };
+
+  const boxShortagesByVariant = new Map<
+    string,
+    { box_id: string; box_name: string; quantity: number; target_quantity: number; deficit: number }[]
+  >();
+  for (const r of (boxRows ?? []) as BoxJoinRow[]) {
+    const target = r.target_quantity ?? 0;
+    const qty = r.quantity ?? 0;
+    const deficit = target - qty;
+    if (deficit <= 0) continue;
+    const name = Array.isArray(r.fly_boxes)
+      ? r.fly_boxes[0]?.name ?? "Box"
+      : r.fly_boxes?.name ?? "Box";
+    const list = boxShortagesByVariant.get(r.variant_id) ?? [];
+    list.push({
+      box_id: r.box_id,
+      box_name: name,
+      quantity: qty,
+      target_quantity: target,
+      deficit,
+    });
+    boxShortagesByVariant.set(r.variant_id, list);
+  }
+
+  const allShortVariantIds = new Set<string>([
+    ...stockShortVariantIds,
+    ...boxShortagesByVariant.keys(),
+  ]);
+  if (allShortVariantIds.size === 0) return [];
+
+  const variantIds = Array.from(allShortVariantIds);
   const { data: variantRows } = await supabase
     .from("fly_variants")
     .select("*")
@@ -260,18 +317,18 @@ export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
   const photoByVariant = new Map<string, VariantPhoto>();
   for (const p of (photoRows ?? []) as VariantPhoto[]) photoByVariant.set(p.variant_id, p);
 
-  return shortageRows
-    .map<VariantRow | null>((s) => {
-      const stock = s as VariantStock;
-      const v = variantById.get(stock.variant_id);
+  return variantIds
+    .map<VariantRow | null>((vid) => {
+      const v = variantById.get(vid);
       if (!v) return null;
+      const boxShorts = boxShortagesByVariant.get(vid) ?? [];
       return {
         ...v,
         pattern: patternById.get(v.pattern_id) ?? null,
-        stock,
+        stock: stockByVariant.get(vid) ?? null,
         primary_photo: photoByVariant.get(v.id) ?? null,
-        box_count: 0,
-        box_memberships: [],
+        box_count: boxShorts.length,
+        box_memberships: boxShorts,
         box_quantity: null,
         box_target_quantity: null,
       };

@@ -108,24 +108,48 @@ function patternToItem(p: FlyPattern): Item {
 
 function variantToItem(v: VariantRow): Item {
   const owned = totalOwned(v.stock);
-  const need = deficit(v.stock);
+  const stockNeed = deficit(v.stock);
   const beadStr = v.bead_material && v.bead_material !== "none"
     ? [v.bead_material, v.bead_weight_mm ? `${v.bead_weight_mm}mm` : null, v.bead_color].filter(Boolean).join(" · ")
     : null;
-  const subtitleParts = [
+  const specParts = [
     `size ${v.size}`,
     beadStr,
     v.body_color ?? null,
   ].filter(Boolean) as string[];
+
+  // Box-driven shortages: when listDerivedTieNextShortages found per-box
+  // deficits, they live in box_memberships with `.deficit > 0`. Show
+  // "Kill +2 · Madison +1" so the angler knows which boxes drove this.
+  const boxShorts = v.box_memberships.filter((m) => (m.deficit ?? 0) > 0);
+  const boxNeedTotal = boxShorts.reduce((n, m) => n + (m.deficit ?? 0), 0);
+
+  let need: number;
+  let needSummary: string;
+  if (boxShorts.length > 0 && stockNeed === 0) {
+    // Pure box shortage — credit the box(es).
+    need = boxNeedTotal;
+    needSummary = `need ${boxNeedTotal} for ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")}`;
+  } else if (boxShorts.length > 0 && stockNeed > 0) {
+    // Both — show whichever number is bigger as the "need" but enumerate
+    // the boxes so it's actionable.
+    need = Math.max(stockNeed, boxNeedTotal);
+    needSummary = `need ${need} (stock ${owned}/${v.stock?.target_count ?? 0} · ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")})`;
+  } else {
+    // Stock-only shortage.
+    need = stockNeed;
+    needSummary = `need ${stockNeed} (have ${owned}/${v.stock?.target_count ?? 0})`;
+  }
+
   return {
     kind: "variant",
     id: v.id,
     status: "wanted",
     name: v.pattern?.name ?? v.display_name ?? "Untitled variant",
-    subtitle: `${subtitleParts.join(" · ")} · need ${need} (have ${owned}/${v.stock?.target_count ?? 0})`,
+    subtitle: `${specParts.join(" · ")} · ${needSummary}`,
     imageUrl: null,
     href: v.pattern?.slug ? `/flies/${v.pattern.slug}` : `/flies/by-id/${v.pattern_id}`,
-    targetQty: v.stock?.target_count ?? null,
+    targetQty: need,
     notes: null,
     isDerived: true,
   };
