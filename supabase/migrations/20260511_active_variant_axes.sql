@@ -14,37 +14,39 @@ alter table fly_patterns_v2
   default array['size','bead','body']::text[];
 
 -- Per-category defaults — backfill existing rows with sensible axes.
--- Categories per src/data/flies-canonical: dry, nymph, streamer, emerger,
--- wet, terrestrial, egg, midge.
+-- Category casing is inconsistent in the data (e.g. both 'nymph' and 'Nymph',
+-- 'dry' and 'Dry Fly'), so match with lower(category) like '<prefix>%'.
 update fly_patterns_v2
    set active_variant_axes = array['size','bead','body','rib']
- where category = 'nymph'
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where lower(category) like 'nymph%'
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 update fly_patterns_v2
    set active_variant_axes = array['size','body','wing','hackle']
- where category = 'dry'
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where lower(category) like 'dry%'
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 update fly_patterns_v2
    set active_variant_axes = array['size','bead','body','tail','wing']
- where category = 'streamer'
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where lower(category) like 'streamer%'
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 update fly_patterns_v2
    set active_variant_axes = array['size','body','wing','collar']
- where category = 'emerger'
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where lower(category) like 'emerger%'
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 update fly_patterns_v2
    set active_variant_axes = array['size','body','wing']
- where category = 'wet'
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where lower(category) like 'wet%'
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 update fly_patterns_v2
    set active_variant_axes = array['size','body']
- where category in ('terrestrial','egg','midge')
-   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']);
+ where (lower(category) like 'terrestrial%'
+        or lower(category) like 'egg%'
+        or lower(category) like 'midge%')
+   and (active_variant_axes is null or active_variant_axes = array['size','bead','body']::text[]);
 
 comment on column fly_patterns_v2.active_variant_axes is
   'Variant option axes this pattern uses (e.g. {size,bead,body,rib}). '
