@@ -81,11 +81,19 @@ export default async function PatternDetail({ params }: Props) {
   const editable = canEditPattern(pattern, user ? { id: user.id, email: user.email } : null);
   const adminFlag = isAdmin(user?.email ?? null);
 
-  const [variants, userBoxes, fullPattern] = await Promise.all([
+  const [variants, userBoxes, fullPattern, viewerProfile] = await Promise.all([
     listVariantRowsForPattern(pattern.id),
     listMyBoxes(),
     editable ? getPatternForEdit(pattern.id) : Promise.resolve(null),
+    user
+      ? supabase
+          .from("profiles")
+          .select("username")
+          .eq("user_id", user.id)
+          .maybeSingle()
+      : Promise.resolve({ data: null } as { data: { username: string } | null }),
   ]);
+  const viewerUsername = (viewerProfile?.data?.username as string | undefined) ?? null;
 
   return (
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
@@ -159,6 +167,7 @@ export default async function PatternDetail({ params }: Props) {
             userBoxes={userBoxes}
             isAdmin={adminFlag}
             isCanonical={pattern.owner_user_id == null}
+            viewerUsername={viewerUsername}
           />
         </div>
         <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">

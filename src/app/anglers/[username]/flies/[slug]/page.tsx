@@ -4,10 +4,20 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
-import { Lock, Globe2, Edit3, ArrowLeft } from "lucide-react";
+import { Lock, Globe2, ArrowLeft } from "lucide-react";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
 import SubmitToLibraryButton from "@/components/flies/SubmitToLibraryButton";
 import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
+import VariantTable from "@/components/flies-v2/VariantTable";
+import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
+import {
+  getPatternById,
+  getPatternForEdit,
+  listVariantRowsForPattern,
+  listMyBoxes,
+} from "@/lib/db/fly-v2";
+import { canEditPattern } from "@/lib/flies/permissions";
+import { resolveVariantAxes } from "@/lib/flies/variant-axes";
 
 export const dynamic = "force-dynamic";
 
@@ -85,8 +95,6 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
   }
 
   // Surface most recent open submission so the owner sees pending state.
-  // Wrapped in try/catch so the page renders even if the submissions table
-  // hasn't been migrated yet (graceful for deploys racing the SQL apply).
   let pendingSubmission: { id: string; status: string; admin_notes: string | null } | null = null;
   if (isOwner) {
     try {
@@ -117,17 +125,106 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
     parentCanonical = parent ?? null;
   }
 
+  // Personal patterns live in `fly_patterns` (v1) but their variants are in the
+  // v2 model (`fly_patterns_v2` / `fly_variants`). The v1 and v2 ids match
+  // after the Phase 2 backfill, so we can fetch the v2 row by the same id.
+  let v2Pattern = await getPatternById(fly.id);
+
+  // Lazy backfill: if no v2 row exists (legacy fork created pre-Phase 2 mirror),
+  // create one now so the Configurations table can render. Owner-only, since
+  // RLS only allows the pattern owner to insert. Also seed variants by cloning
+  // the parent canonical's curated specs so the user lands on a populated
+  // table matching what they branched from.
+  if (!v2Pattern && isOwner) {
+    const { data: upserted } = await supabase
+      .from("fly_patterns_v2")
+      .upsert(
+        {
+          id: fly.id,
+          name: fly.name,
+          category: typeof fly.type === "string" ? mapTypeToV2Category(fly.type) : null,
+          owner_user_id: profile.user_id,
+          visibility: fly.visibility ?? "private",
+          description: fly.description ?? null,
+          hero_image_url: fly.image_url ?? null,
+          video_url: fly.video_url ?? null,
+          forked_from_pattern_id: fly.parent_canonical_id ?? null,
+          contributed_by_user_id: profile.user_id,
+        },
+        { onConflict: "id" },
+      )
+      .select()
+      .maybeSingle();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    v2Pattern = (upserted as any) ?? (await getPatternById(fly.id));
+
+    if (v2Pattern && fly.parent_canonical_id) {
+      const { count: existingVariantCount } = await supabase
+        .from("fly_variants")
+        .select("id", { count: "exact", head: true })
+        .eq("pattern_id", fly.id);
+      if ((existingVariantCount ?? 0) === 0) {
+        const { data: curated } = await supabase
+          .from("fly_variants")
+          .select(
+            "size, hook_style, hook_brand, bead_material, bead_weight_mm, bead_color, body_color, rib_color, tail_color, wing_color, thorax_color, collar_color, materials_override, sort_order, display_name, notes",
+          )
+          .eq("pattern_id", fly.parent_canonical_id)
+          .is("created_by_user_id", null)
+          .is("deleted_at", null)
+          .order("sort_order");
+        if (curated && curated.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const clones = (curated as any[]).map((v) => ({
+            pattern_id: fly.id,
+            created_by_user_id: profile.user_id,
+            size: v.size,
+            hook_style: v.hook_style,
+            hook_brand: v.hook_brand,
+            bead_material: v.bead_material,
+            bead_weight_mm: v.bead_weight_mm,
+            bead_color: v.bead_color,
+            body_color: v.body_color,
+            rib_color: v.rib_color,
+            tail_color: v.tail_color,
+            wing_color: v.wing_color,
+            thorax_color: v.thorax_color,
+            collar_color: v.collar_color,
+            materials_override: v.materials_override ?? {},
+            sort_order: v.sort_order ?? 0,
+            display_name: v.display_name,
+            notes: v.notes,
+          }));
+          await supabase.from("fly_variants").insert(clones);
+        }
+      }
+    }
+  }
+
+  const [variants, userBoxes, editablePattern] = await Promise.all([
+    v2Pattern ? listVariantRowsForPattern(v2Pattern.id) : Promise.resolve([]),
+    isOwner ? listMyBoxes() : Promise.resolve([]),
+    v2Pattern && isOwner
+      ? Promise.resolve(
+          canEditPattern(v2Pattern, viewer ? { id: viewer.id, email: viewer.email } : null)
+            ? getPatternForEdit(v2Pattern.id)
+            : null,
+        )
+      : Promise.resolve(null),
+  ]);
+  const resolvedEditable = editablePattern ? await editablePattern : null;
+
   const videoEmbed = toYouTubeEmbedUrl(fly.video_url);
   const sizes = parseList(fly.size);
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6">
         <Link
           href={`/anglers/${profile.username}/flies`}
           className="inline-flex items-center gap-1 text-xs text-[#A8B2BD] hover:text-[#E8923A] mb-4"
         >
-          <ArrowLeft className="h-3.5 w-3.5" /> {profile.display_name || `@${profile.username}`}'s flies
+          <ArrowLeft className="h-3.5 w-3.5" /> {profile.display_name || `@${profile.username}`}&apos;s flies
         </Link>
 
         <header className="flex flex-col sm:flex-row gap-6 items-start mb-6">
@@ -187,23 +284,61 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
                 variant="pill"
               />
               {isOwner && (
-                <>
-                  <Link
-                    href={`/journal/flies/${fly.id}/edit`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] text-xs font-semibold hover:bg-[#E8923A]/20 transition-colors"
-                  >
-                    <Edit3 className="h-3.5 w-3.5" /> Edit pattern
-                  </Link>
-                  <SubmitToLibraryButton
-                    patternId={fly.id}
-                    pendingSubmission={pendingSubmission}
-                    isAdminUser={viewerIsAdmin}
-                  />
-                </>
+                <SubmitToLibraryButton
+                  patternId={fly.id}
+                  pendingSubmission={pendingSubmission}
+                  isAdminUser={viewerIsAdmin}
+                />
               )}
             </div>
           </div>
         </header>
+
+        {/* Configurations — same component / layout the canonical page uses. */}
+        {v2Pattern && (
+          <section className="mb-8">
+            <div className="mb-3 flex items-center justify-between gap-3 flex-wrap">
+              <div>
+                <h2 className="text-[#F0F6FC] font-semibold text-sm">Configurations</h2>
+                <p className="text-[#6E7681] text-xs">
+                  every way this fly is tied · {variants.length}{" "}
+                  {variants.length === 1 ? "spec" : "specs"}
+                  {isOwner ? " · tap any cell to edit your numbers · multi-select for bulk actions" : ""}
+                </p>
+              </div>
+              {isOwner && (
+                <PatternHeaderActions
+                  patternId={v2Pattern.id}
+                  patternSlug={slug}
+                  editablePattern={resolvedEditable}
+                  userBoxes={userBoxes}
+                  isAdmin={viewerIsAdmin}
+                  isCanonical={false}
+                  personalEditHref={`/journal/flies/${fly.id}/edit`}
+                />
+              )}
+            </div>
+            <div className="rounded-lg border border-[#21262D] bg-[#0D1117] overflow-hidden">
+              <VariantTable
+                variants={variants}
+                patternSlug={slug}
+                userBoxes={userBoxes}
+                viewerUserId={viewer?.id ?? null}
+                viewerIsAdmin={viewerIsAdmin}
+                activeAxes={resolveVariantAxes({
+                  category: v2Pattern.category,
+                  active_variant_axes: v2Pattern.active_variant_axes ?? null,
+                })}
+              />
+            </div>
+            {variants.length === 0 && isOwner && (
+              <p className="mt-2 text-xs text-[#6E7681]">
+                No configurations yet — tap <span className="text-[#E8923A]">+ My configuration</span>{" "}
+                to add a size.
+              </p>
+            )}
+          </section>
+        )}
 
         {/* Recipe details */}
         <section className="grid sm:grid-cols-2 gap-3">
@@ -251,4 +386,18 @@ function parseList(val: unknown): string[] {
   if (Array.isArray(val)) return val.filter(Boolean).map(String);
   if (typeof val === "string") return val.split(",").map((s) => s.trim()).filter(Boolean);
   return [];
+}
+
+const TYPE_LABEL_TO_V2_CATEGORY: Record<string, string> = {
+  "Nymph": "nymph",
+  "Dry Fly": "dry",
+  "Streamer": "streamer",
+  "Emerger": "emerger",
+  "Wet Fly": "wet",
+  "Terrestrial": "terrestrial",
+  "Egg": "egg",
+  "Midge": "midge",
+};
+function mapTypeToV2Category(type: string): string | null {
+  return TYPE_LABEL_TO_V2_CATEGORY[type] ?? type.toLowerCase() ?? null;
 }

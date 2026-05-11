@@ -62,6 +62,8 @@ export interface SerializedFlyPattern {
   parent_canonical_id?: string;
   promoted_to_canonical_id?: string | null;
   promoted_canonical_slug?: string | null;
+  /** Pattern slug (per owner) — needed for /anglers/[username]/flies/[slug]. */
+  slug?: string | null;
 }
 
 export interface SerializedCanonicalFly {
@@ -102,6 +104,9 @@ interface FlyBoxTabsProps {
   sortedTypes: string[];
   grouped: Record<string, UnifiedFly[]>;
   canonicalNames: string[];
+  /** Viewer's username — threads to ownerPatternPermalink so personal fly
+   *  cards link to /anglers/[username]/flies/[slug] instead of the edit form. */
+  viewerUsername?: string | null;
 }
 
 // Compact favorite toggle (icon-only, fixed width on the left of the footer).
@@ -227,7 +232,7 @@ function TieNextDone({
   );
 }
 
-export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTieNextCount, sortedTypes, grouped: initialGrouped, canonicalNames }: FlyBoxTabsProps) {
+export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTieNextCount, sortedTypes, grouped: initialGrouped, canonicalNames, viewerUsername }: FlyBoxTabsProps) {
   const [tab, setTab] = useState<Tab>('all');
   const [grouped, setGrouped] = useState(initialGrouped);
   const [favCount, setFavCount] = useState(initialFavCount);
@@ -634,6 +639,8 @@ export function FlyBoxTabs({ favCount: initialFavCount, tieNextCount: initialTie
                   const inLibrary = canonicalNameSet.has(fly.name.toLowerCase().trim());
                   const detailHref = ownerPatternPermalink({
                     id: fly.id,
+                    slug: fly.slug ?? null,
+                    ownerUsername: viewerUsername ?? null,
                     promoted_to_canonical_id: fly.promoted_to_canonical_id ?? null,
                     promotedCanonicalSlug: fly.promoted_canonical_slug ?? null,
                   });

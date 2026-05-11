@@ -22,6 +22,7 @@ type FlySource = "tied" | "bought" | "gifted";
 
 interface FlyResponse {
   id: string;
+  slug?: string | null;
   name?: string;
   type?: string;
   size?: string | string[];
@@ -47,6 +48,7 @@ interface FlyResponse {
   image_url?: string | null;
   parent_canonical_id?: string | null;
   parent_canonical?: { id: string; slug: string; name: string } | null;
+  owner_username?: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   recipe_ingredients?: any[];
   error?: string;
@@ -90,6 +92,10 @@ export default function EditFlyPatternPage() {
   const [variantOpen, setVariantOpen] = useState(false);
   const [cardOpen, setCardOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  // Detail-page URL for this pattern — drives Cancel + post-save navigation
+  // so editing flows back to the page they came from instead of bouncing to
+  // the flies list. Falls back to /flies if username/slug are missing.
+  const [detailHref, setDetailHref] = useState<string>("/flies?tab=patterns");
 
   useEffect(() => {
     let cancelled = false;
@@ -139,6 +145,9 @@ export default function EditFlyPatternPage() {
           parentCanonical: fly.parent_canonical ?? null,
         };
 
+        if (fly.owner_username && fly.slug) {
+          setDetailHref(`/anglers/${fly.owner_username}/flies/${fly.slug}`);
+        }
         setInitial(init);
         setFlyForCard({
           id: fly.id,
@@ -202,7 +211,7 @@ export default function EditFlyPatternPage() {
         const d = await res.json();
         throw new Error(d.error || "Failed to save");
       }
-      router.push("/my-flies?tab=box");
+      router.push(detailHref);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setSaving(false);
@@ -279,7 +288,7 @@ export default function EditFlyPatternPage() {
         onDelete={handleDelete}
         busy={saving}
         error={error}
-        cancelHref="/my-flies?tab=box"
+        cancelHref={detailHref}
         topRight={topRight}
         banner={
           initial.parentCanonical ? (
@@ -321,7 +330,7 @@ export default function EditFlyPatternPage() {
         onClose={() => setDeleteOpen(false)}
         onDeleted={() => {
           setDeleteOpen(false);
-          router.push("/my-flies?tab=box");
+          router.push(detailHref);
         }}
       />
     </>

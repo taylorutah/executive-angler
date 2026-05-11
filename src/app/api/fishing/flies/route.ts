@@ -60,9 +60,10 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 404 });
       }
 
-      // Pull recipe ingredients + (optional) parent canonical so the editor
-      // can hydrate the structured RecipeBuilder + render a lineage card.
-      const [ingredientsRes, parentRes] = await Promise.all([
+      // Pull recipe ingredients + (optional) parent canonical + viewer
+      // profile so the editor can hydrate the structured RecipeBuilder,
+      // render a lineage card, and link back to the detail page.
+      const [ingredientsRes, parentRes, profileRes] = await Promise.all([
         supabase
           .from("fly_recipe_ingredients")
           .select("*, material:tying_materials(*)")
@@ -75,12 +76,18 @@ export async function GET(req: NextRequest) {
               .eq("id", data.parent_canonical_id)
               .maybeSingle()
           : Promise.resolve({ data: null, error: null } as const),
+        supabase
+          .from("profiles")
+          .select("username")
+          .eq("user_id", user.id)
+          .maybeSingle(),
       ]);
 
       return NextResponse.json({
         ...data,
         recipe_ingredients: ingredientsRes.data ?? [],
         parent_canonical: parentRes.data ?? null,
+        owner_username: (profileRes.data?.username as string | undefined) ?? null,
       });
     }
 
@@ -242,6 +249,25 @@ export async function POST(req: NextRequest) {
       console.error("Failed to create fly pattern:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Mirror into fly_patterns_v2 so the new pattern is visible on the v2 grid
+    // (VariantTable, "+ My configuration", etc.). No variants to copy — user
+    // adds them via the Configurations table on the detail page.
+    const mainParentCanonicalId = typeof body.parent_canonical_id === "string" && body.parent_canonical_id
+      ? (body.parent_canonical_id as string)
+      : null;
+    await mirrorPersonalPatternToV2({
+      supabase,
+      userId: user.id,
+      personalPatternId: data.id as string,
+      name: row.name as string,
+      type: row.type as string | undefined,
+      description: row.description as string | undefined,
+      imageUrl: imageUrl,
+      videoUrl: row.video_url as string | undefined,
+      parentCanonicalId: mainParentCanonicalId,
+      copyCuratedVariants: !!mainParentCanonicalId,
+    });
 
     // Save recipe ingredients if structured recipe was provided
     let recipeStepsJson: unknown = null;
@@ -590,6 +616,9 @@ async function forkPersonalizationToPattern(
   const personalizations = ((body.personalizations as Record<string, Record<string, string | undefined> | undefined>) || {});
 
   // Load canonical so we can copy its content into the new fly_pattern row.
+  // Note: fork comes from either the legacy /flies/[slug] page (canonical_flies)
+  // or the v2 detail page (fly_patterns_v2 — same id as canonical_flies after
+  // the Phase 2 backfill). Either id resolves the same row.
   const { data: canonical, error: canonicalError } = await supabase
     .from("canonical_flies")
     .select(
@@ -686,7 +715,155 @@ async function forkPersonalizationToPattern(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  // Mirror into fly_patterns_v2 + copy curated variants from the parent
+  // canonical so the personal pattern lands on a populated Configurations
+  // table (same sizes/beads the canonical showed). Failures here are logged
+  // but don't roll back — the v1 row is still useful, and the personal
+  // detail page can lazy-bridge later.
+  await mirrorPersonalPatternToV2({
+    supabase,
+    userId,
+    personalPatternId: data.id as string,
+    name: row.name as string,
+    type: row.type as string | undefined,
+    description: row.description as string | undefined,
+    imageUrl: row.image_url as string | undefined,
+    videoUrl: row.video_url as string | undefined,
+    parentCanonicalId: canonical.id as string,
+    copyCuratedVariants: true,
+  });
+
   return NextResponse.json({ pattern_id: data.id, slug: data.slug, name: data.name }, { status: 201 });
+}
+
+/**
+ * Insert a fly_patterns_v2 mirror row for a newly created personal
+ * fly_patterns row (preserves id so v1 and v2 stay aligned). Optionally
+ * copies curated variants (created_by_user_id IS NULL) from the parent
+ * canonical's pattern, so a fork starts with the same sizes/specs the
+ * canonical exposed. Idempotent via on-conflict.
+ */
+async function mirrorPersonalPatternToV2(opts: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any;
+  userId: string;
+  personalPatternId: string;
+  name: string;
+  type?: string;
+  description?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  parentCanonicalId?: string | null;
+  copyCuratedVariants?: boolean;
+}): Promise<void> {
+  const {
+    supabase,
+    userId,
+    personalPatternId,
+    name,
+    type,
+    description,
+    imageUrl,
+    videoUrl,
+    parentCanonicalId,
+    copyCuratedVariants,
+  } = opts;
+
+  const category = type ? mapTypeToV2Category(type) : null;
+  const v2Row: Record<string, unknown> = {
+    id: personalPatternId,
+    name,
+    category,
+    owner_user_id: userId,
+    visibility: "private",
+    description: description ?? null,
+    hero_image_url: imageUrl ?? null,
+    video_url: videoUrl ?? null,
+    forked_from_pattern_id: parentCanonicalId ?? null,
+    contributed_by_user_id: userId,
+  };
+  Object.keys(v2Row).forEach((k) => v2Row[k] === undefined && delete v2Row[k]);
+
+  // Use the service client — fly_patterns_v2 has RLS that limits inserts to
+  // owner_user_id = auth.uid(); using service role here keeps the bridge
+  // reliable regardless of the request's RLS context. Cast through `never`
+  // because the service client's generated types are untyped here.
+  const svc = getServiceClient();
+  const { error: v2Err } = await svc
+    .from("fly_patterns_v2")
+    .upsert(v2Row as never, { onConflict: "id" });
+  if (v2Err) {
+    console.error("[mirrorPersonalPatternToV2] v2 upsert", v2Err);
+    return;
+  }
+
+  if (!copyCuratedVariants || !parentCanonicalId) return;
+
+  const { data: curatedVariants, error: curErr } = await svc
+    .from("fly_variants")
+    .select(
+      "size, hook_style, hook_brand, bead_material, bead_weight_mm, bead_color, body_color, rib_color, tail_color, wing_color, thorax_color, collar_color, materials_override, sort_order, display_name, notes",
+    )
+    .eq("pattern_id", parentCanonicalId)
+    .is("created_by_user_id", null)
+    .is("deleted_at", null)
+    .order("sort_order");
+  if (curErr) {
+    console.error("[mirrorPersonalPatternToV2] read curated variants", curErr);
+    return;
+  }
+  if (!curatedVariants || curatedVariants.length === 0) return;
+
+  // Skip if the personal pattern already has variants (idempotent re-fork).
+  const { count: existingCount } = await svc
+    .from("fly_variants")
+    .select("id", { count: "exact", head: true })
+    .eq("pattern_id", personalPatternId);
+  if ((existingCount ?? 0) > 0) return;
+
+  const cloneRows = (curatedVariants as Record<string, unknown>[]).map((v) => ({
+    pattern_id: personalPatternId,
+    created_by_user_id: userId,
+    size: v.size,
+    hook_style: v.hook_style,
+    hook_brand: v.hook_brand,
+    bead_material: v.bead_material,
+    bead_weight_mm: v.bead_weight_mm,
+    bead_color: v.bead_color,
+    body_color: v.body_color,
+    rib_color: v.rib_color,
+    tail_color: v.tail_color,
+    wing_color: v.wing_color,
+    thorax_color: v.thorax_color,
+    collar_color: v.collar_color,
+    materials_override: v.materials_override ?? {},
+    sort_order: v.sort_order ?? 0,
+    display_name: v.display_name,
+    notes: v.notes,
+  }));
+  const { error: cloneErr } = await svc
+    .from("fly_variants")
+    .insert(cloneRows as never);
+  if (cloneErr) {
+    console.error("[mirrorPersonalPatternToV2] clone variants", cloneErr);
+  }
+}
+
+// fly_patterns.type is the human label ("Nymph", "Dry Fly"); fly_patterns_v2.category
+// is the lowercase token ("nymph", "dry"). Map between them so the v2 mirror
+// row matches the variant-axes resolver and admin UI expectations.
+const TYPE_LABEL_TO_V2_CATEGORY: Record<string, string> = {
+  "Nymph": "nymph",
+  "Dry Fly": "dry",
+  "Streamer": "streamer",
+  "Emerger": "emerger",
+  "Wet Fly": "wet",
+  "Terrestrial": "terrestrial",
+  "Egg": "egg",
+  "Midge": "midge",
+};
+function mapTypeToV2Category(type: string): string | null {
+  return TYPE_LABEL_TO_V2_CATEGORY[type] ?? type.toLowerCase() ?? null;
 }
 
 export async function DELETE(req: NextRequest) {

@@ -98,6 +98,7 @@ export default async function FliesHubPage({
       sharedOwnerUsernames={Object.fromEntries(sharedOwnerUsernames)}
       counts={counts}
       canonicalNames={canonicalNames}
+      viewerUsername={(profile?.username as string | undefined) ?? null}
     />
   );
 }

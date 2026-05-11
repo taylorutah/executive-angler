@@ -6,8 +6,9 @@
  * Lives in its own client component so the v2 page itself stays an RSC.
  */
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { GitFork, Loader2 } from "lucide-react";
+import { GitFork, Loader2, Pencil } from "lucide-react";
 import NewVariantModal from "@/components/flies-v2/NewVariantModal";
 import EditPatternButton from "@/components/flies-v2/EditPatternButton";
 import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
@@ -28,6 +29,19 @@ interface Props {
    * meaningless.
    */
   isCanonical?: boolean;
+  /**
+   * For personal patterns: link target for the Edit button. When set, renders
+   * a Link (to the legacy /journal/flies/[id]/edit form) instead of the v2
+   * EditPatternButton modal. The legacy form is still the source of truth for
+   * editing fly_patterns row content.
+   */
+  personalEditHref?: string;
+  /**
+   * Viewer's own profile username — needed to land a fork on the personal
+   * detail page at /anglers/[username]/flies/[slug]. Falls back to the edit
+   * form when not provided.
+   */
+  viewerUsername?: string | null;
 }
 
 export default function PatternHeaderActions({
@@ -37,6 +51,8 @@ export default function PatternHeaderActions({
   userBoxes,
   isAdmin,
   isCanonical = true,
+  personalEditHref,
+  viewerUsername,
 }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -61,19 +77,35 @@ export default function PatternHeaderActions({
       return;
     }
     const suffix = outcome.isNewFork ? "?just_forked=1" : "";
-    router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
+    // Prefer the personal detail page (parity with canonical layout). Need
+    // both username and slug — fall back to the edit form if either is
+    // missing so the user still lands somewhere usable.
+    if (viewerUsername && outcome.slug) {
+      router.push(`/anglers/${viewerUsername}/flies/${outcome.slug}${suffix}`);
+    } else {
+      router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
+    }
   }
 
   return (
     <div className="flex flex-col items-end gap-1">
       <div className="flex items-center gap-2 flex-wrap justify-end">
-        {editablePattern && (
+        {personalEditHref ? (
+          <Link
+            href={personalEditHref}
+            className="inline-flex items-center gap-1.5 rounded-md border border-[#30363D] bg-[#161B22] px-3 py-1.5 text-xs font-medium text-[#F0F6FC] hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
+            title="Edit pattern recipe, photo, notes"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            Edit
+          </Link>
+        ) : editablePattern ? (
           <EditPatternButton
             pattern={editablePattern}
             boxes={userBoxes ?? []}
             isAdmin={!!isAdmin}
           />
-        )}
+        ) : null}
         {isCanonical && (
           <button
             type="button"

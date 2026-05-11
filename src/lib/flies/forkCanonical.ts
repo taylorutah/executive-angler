@@ -11,7 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Personalizations } from "@/lib/flies/resolveFlyForViewer";
 
 export type ForkOutcome =
-  | { kind: "ok"; patternId: string; isNewFork: boolean }
+  | { kind: "ok"; patternId: string; slug: string | null; isNewFork: boolean }
   | { kind: "needs_login"; redirectTo: string }
   | { kind: "error"; message: string };
 
@@ -43,7 +43,7 @@ export async function findOrForkPersonalPattern(opts: {
     // user clicks twice or has already forked from elsewhere.
     const { data: existing } = await supabase
       .from("fly_patterns")
-      .select("id")
+      .select("id, slug")
       .eq("user_id", user.id)
       .eq("parent_canonical_id", canonicalFlyId)
       .order("created_at", { ascending: false })
@@ -51,7 +51,12 @@ export async function findOrForkPersonalPattern(opts: {
       .maybeSingle();
 
     if (existing?.id) {
-      return { kind: "ok", patternId: existing.id, isNewFork: false };
+      return {
+        kind: "ok",
+        patternId: existing.id as string,
+        slug: (existing.slug as string | null) ?? null,
+        isNewFork: false,
+      };
     }
 
     const res = await fetch("/api/fishing/flies", {
@@ -70,14 +75,14 @@ export async function findOrForkPersonalPattern(opts: {
         message: data.error || "Couldn't fork. Try again.",
       };
     }
-    const { pattern_id } = (await res.json()) as { pattern_id?: string };
+    const { pattern_id, slug } = (await res.json()) as { pattern_id?: string; slug?: string };
     if (!pattern_id) {
       return {
         kind: "error",
         message: "Fork succeeded but no pattern id returned.",
       };
     }
-    return { kind: "ok", patternId: pattern_id, isNewFork: true };
+    return { kind: "ok", patternId: pattern_id, slug: slug ?? null, isNewFork: true };
   } catch (e) {
     console.error("[findOrForkPersonalPattern]", e);
     return { kind: "error", message: "Network error" };

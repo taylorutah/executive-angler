@@ -38,6 +38,7 @@ interface Props {
   sharedOwnerUsernames: Record<string, string>;
   counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
   canonicalNames: string[];
+  viewerUsername: string | null;
 }
 
 export default function FliesHubClient({
@@ -54,6 +55,7 @@ export default function FliesHubClient({
   sharedOwnerUsernames,
   counts,
   canonicalNames,
+  viewerUsername,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -168,6 +170,7 @@ export default function FliesHubClient({
             flyBoxEntries={flyBoxEntries}
             counts={counts}
             canonicalNames={canonicalNames}
+            viewerUsername={viewerUsername}
           />
         )}
         {tab === "workbench" && <WorkbenchClient embedded />}

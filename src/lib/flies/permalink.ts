@@ -48,13 +48,16 @@ export function flyPermalink(row: FlyPermalinkRow): string {
   if (row.isCanonical && row.slug) {
     return `/flies/${row.slug}`;
   }
-  // 4. Owner viewing their own personal pattern → edit page.
-  if (row.viewerIsOwner && row.id) {
-    return `/journal/flies/${row.id}/edit`;
-  }
-  // 5. Someone else's personal pattern (public/shared) — needs username.
+  // 4. Personal pattern with username + slug — public detail page. This is the
+  //    primary surface for personal flies, even for the owner. Edit access is
+  //    a button on the detail page, never the default link.
   if (row.ownerUsername && row.slug) {
     return `/anglers/${row.ownerUsername}/flies/${row.slug}`;
+  }
+  // 5. Owner viewing their own personal pattern but slug/username missing —
+  //    fall back to the edit form so they can still reach it.
+  if (row.viewerIsOwner && row.id) {
+    return `/journal/flies/${row.id}/edit`;
   }
   // 6. Last resort: the by-id resolver.
   if (row.id) {
@@ -66,14 +69,21 @@ export function flyPermalink(row: FlyPermalinkRow): string {
 /**
  * Convenience for the common case: a legacy `fly_patterns` row owned by the
  * current viewer. Most My Flies / Tie Next / dashboard surfaces use this.
+ *
+ * Pass `ownerUsername` + `slug` whenever available so the link routes to the
+ * detail page; without them it falls back to the edit form.
  */
 export function ownerPatternPermalink(pattern: {
   id: string;
+  slug?: string | null;
+  ownerUsername?: string | null;
   promoted_to_canonical_id?: string | null;
   promotedCanonicalSlug?: string | null;
 }): string {
   return flyPermalink({
     id: pattern.id,
+    slug: pattern.slug ?? null,
+    ownerUsername: pattern.ownerUsername ?? null,
     promoted_to_canonical_id: pattern.promoted_to_canonical_id ?? null,
     promotedCanonicalSlug: pattern.promotedCanonicalSlug ?? null,
     viewerIsOwner: true,

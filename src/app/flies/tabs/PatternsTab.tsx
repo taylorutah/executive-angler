@@ -47,6 +47,9 @@ interface PatternsTabProps {
   flyBoxEntries: FlyBoxEntry[];
   counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
   canonicalNames: string[];
+  /** Viewer's profile username — needed to link personal patterns to their
+   *  /anglers/[username]/flies/[slug] detail page. */
+  viewerUsername: string | null;
 }
 
 /** Row in the table view — one row per (canonical fly) or per (personal pattern). */
@@ -71,6 +74,7 @@ export default function PatternsTab({
   flyBoxEntries,
   counts,
   canonicalNames,
+  viewerUsername,
 }: PatternsTabProps) {
   const [view, setView] = useState<ViewMode>("table");
   const [search, setSearch] = useState("");
@@ -79,8 +83,8 @@ export default function PatternsTab({
   const [editing, setEditing] = useState<{ entry: FlyBoxEntry; patternName: string } | null>(null);
 
   const rows = useMemo(
-    () => buildPatternRows(myPatterns, flyBoxEntries),
-    [myPatterns, flyBoxEntries],
+    () => buildPatternRows(myPatterns, flyBoxEntries, viewerUsername),
+    [myPatterns, flyBoxEntries, viewerUsername],
   );
 
   const filtered = useMemo(() => {
@@ -170,6 +174,7 @@ export default function PatternsTab({
           sortedTypes={flyBoxProps.sortedTypes}
           grouped={flyBoxProps.grouped}
           canonicalNames={canonicalNames}
+          viewerUsername={viewerUsername}
         />
       )}
 
@@ -302,6 +307,7 @@ function buildColumns(
 function buildPatternRows(
   myPatterns: FlyPattern[],
   flyBoxEntries: FlyBoxEntry[],
+  viewerUsername: string | null,
 ): PatternRow[] {
   const rows: PatternRow[] = [];
 
@@ -362,6 +368,8 @@ function buildPatternRows(
       tieNextCount: p.is_tie_next || p.tie_next_status === "wanted" || p.tie_next_status === "at_vise" ? 1 : 0,
       href: ownerPatternPermalink({
         id: p.id,
+        slug: p.slug ?? null,
+        ownerUsername: viewerUsername,
         promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
         promotedCanonicalSlug: p.promoted_canonical_slug ?? null,
       }),
@@ -399,6 +407,7 @@ function buildFlyBoxProps(
       is_tie_next: fly.is_tie_next,
       parent_canonical_id: fly.parent_canonical_id ?? undefined,
       promoted_to_canonical_id: fly.promoted_to_canonical_id ?? null,
+      slug: fly.slug ?? null,
       promoted_canonical_slug: fly.promoted_canonical_slug ?? null,
     },
   }));
