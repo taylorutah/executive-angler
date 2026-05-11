@@ -273,7 +273,8 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
   const { data: variantRows } = await supabase
     .from("fly_variants")
     .select("*")
-    .in("id", variantIds);
+    .in("id", variantIds)
+    .is("deleted_at", null);
   const variantById = new Map<string, Variant>();
   for (const v of (variantRows ?? []) as Variant[]) variantById.set(v.id, v);
 
@@ -563,6 +564,33 @@ export async function addVariantsToBox(
     return null;
   }
   return count ?? variantIds.length;
+}
+
+/**
+ * Bulk-remove variants from a box. Unlinks rows in fly_variant_in_box without
+ * touching the underlying variants — the user can still see the variants on
+ * the pattern detail page and re-add them later.
+ */
+export async function removeVariantsFromBox(
+  boxId: string,
+  variantIds: string[],
+): Promise<{ removed: number; error?: string }> {
+  if (variantIds.length === 0) return { removed: 0, error: "No variants supplied." };
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { removed: 0, error: "You must be signed in." };
+
+  const { error, count } = await supabase
+    .from("fly_variant_in_box")
+    .delete({ count: "exact" })
+    .eq("box_id", boxId)
+    .eq("user_id", user.id)
+    .in("variant_id", variantIds);
+  if (error) {
+    console.error("[removeVariantsFromBox]", error);
+    return { removed: 0, error: error.message };
+  }
+  return { removed: count ?? 0 };
 }
 
 /** Update how many physical flies of a variant are in a specific box. */

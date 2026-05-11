@@ -19,7 +19,7 @@ import type { FlyBoxV2 } from "@/lib/db/fly-v2";
 import InlineNumberCell from "@/components/flies-v2/InlineNumberCell";
 import VariantPhotoCell from "@/components/flies-v2/VariantPhotoCell";
 import EditVariantModal from "@/components/flies-v2/EditVariantModal";
-import { updateStockAction, addToBoxAction, deleteVariantsAction, updateBoxQuantityAction } from "@/app/flies/v2/actions";
+import { updateStockAction, addToBoxAction, deleteVariantsAction, removeFromBoxAction, updateBoxQuantityAction } from "@/app/flies/v2/actions";
 
 interface Props {
   variants: VariantRow[];
@@ -328,12 +328,27 @@ export default function VariantTable({ variants, patternSlug, userBoxes, boxId }
             ]
           : []),
         {
-          label: "Delete",
+          label: boxId ? "Remove from box" : "Delete",
           variant: "danger" as const,
           onClick: async (rows: VariantRow[]) => {
             const n = rows.length;
+            if (boxId) {
+              const msg = `Remove ${n} fl${n === 1 ? "y" : "ies"} from this box? The pattern${n === 1 ? "" : "s"} stay${n === 1 ? "s" : ""} in your library — only the box assignment is removed.`;
+              if (!window.confirm(msg)) return;
+              const result = await removeFromBoxAction({
+                box_id: boxId,
+                variant_ids: rows.map((r) => r.id),
+              });
+              if (!result.ok) {
+                showToast(result.error ?? "Failed to remove.", "error");
+              } else {
+                const r = result.removed ?? rows.length;
+                showToast(`Removed ${r} fl${r === 1 ? "y" : "ies"} from box.`);
+                router.refresh();
+              }
+              return;
+            }
             const msg = `Delete ${n} variant${n === 1 ? "" : "s"}? Catches that referenced ${n === 1 ? "it" : "them"} will keep their history, but ${n === 1 ? "it" : "they"} will be hidden from this table.`;
-            // confirm() is acceptable here — destructive action, intentional block
             if (!window.confirm(msg)) return;
             const result = await deleteVariantsAction({
               pattern_slug: patternSlug,

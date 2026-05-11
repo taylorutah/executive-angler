@@ -12,6 +12,7 @@ import {
   createUserVariant,
   addVariantsToBox,
   softDeleteVariants,
+  removeVariantsFromBox,
   updateVariant,
   updateBoxVariantQuantity,
   updatePattern,
@@ -43,7 +44,8 @@ export async function updateStockAction(input: UpdateStockInput): Promise<{ ok: 
   if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
   // Box detail pages display this stock too — revalidate the layout so all
   // /flies/boxes/[id] pages see the change.
-  revalidatePath(`/flies/boxes`, "layout");
+  revalidatePath("/flies/boxes/[id]", "page");
+  revalidatePath("/flies/boxes");
   return { ok: true };
 }
 
@@ -213,7 +215,8 @@ export async function updateVariantAction(input: UpdateVariantInput): Promise<{ 
   });
   if (!result.ok) return { ok: false, error: result.error };
   if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
-  revalidatePath(`/flies/boxes`, "layout");
+  revalidatePath("/flies/boxes/[id]", "page");
+  revalidatePath("/flies/boxes");
   return { ok: true };
 }
 
@@ -232,8 +235,29 @@ export async function deleteVariantsAction(input: DeleteVariantsInput): Promise<
   const result = await softDeleteVariants(input.variant_ids);
   if (result.error) return { ok: false, error: result.error };
   if (input.pattern_slug) revalidatePath(`/flies/${input.pattern_slug}`);
-  revalidatePath(`/flies/boxes`, "layout");
+  revalidatePath("/flies/boxes/[id]", "page");
+  revalidatePath("/flies/boxes");
   return { ok: true, deleted: result.deleted };
+}
+
+export interface RemoveFromBoxInput {
+  box_id: string;
+  variant_ids: string[];
+}
+
+/**
+ * Bulk action: remove variants from a fly box. Only unlinks — the underlying
+ * variants and their stock/photos are untouched, so the user can re-add later.
+ */
+export async function removeFromBoxAction(input: RemoveFromBoxInput): Promise<{ ok: boolean; removed?: number; error?: string }> {
+  if (input.variant_ids.length === 0) return { ok: false, error: "No variants selected." };
+  const result = await removeVariantsFromBox(input.box_id, input.variant_ids);
+  if (result.error) return { ok: false, error: result.error };
+  revalidatePath(`/flies/boxes/${input.box_id}`);
+  revalidatePath("/flies/boxes/[id]", "page");
+  revalidatePath("/flies/boxes");
+  revalidatePath("/flies");
+  return { ok: true, removed: result.removed };
 }
 
 export interface UpdateBoxQuantityInput {
