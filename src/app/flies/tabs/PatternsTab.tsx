@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   FlyBoxTabs,
   type SerializedFlyPattern,
@@ -17,7 +18,8 @@ import VariantEditorSheet from "@/components/flies/VariantEditorSheet";
 import { TieNextCell } from "@/components/flies/VariantInlineCells";
 import DataTable, { type Column } from "@/components/ui/DataTable";
 import ViewModeToggle, { type ViewMode } from "@/components/ui/ViewModeToggle";
-import { Search } from "lucide-react";
+import DeleteFlyPatternDialog from "@/components/flies/DeleteFlyPatternDialog";
+import { Search, Trash2 } from "lucide-react";
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -67,6 +69,8 @@ interface PatternRow {
   href: string | null;
   /** When true, the row has at least one variant flagged for tie-next. */
   hasTieNext: boolean;
+  /** ID of the fly_patterns row (personal source only) — drives delete action. */
+  personalPatternId?: string;
 }
 
 export default function PatternsTab({
@@ -76,11 +80,17 @@ export default function PatternsTab({
   canonicalNames,
   viewerUsername,
 }: PatternsTabProps) {
+  const router = useRouter();
   const [view, setView] = useState<ViewMode>("table");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("");
   const [lowStockOnly, setLowStockOnly] = useState(false);
   const [editing, setEditing] = useState<{ entry: FlyBoxEntry; patternName: string } | null>(null);
+  // Delete confirmation state — one row at a time, branched by source.
+  const [deletePersonal, setDeletePersonal] = useState<{ id: string; name: string } | null>(null);
+  const [removeLibrary, setRemoveLibrary] = useState<{ name: string; variantIds: string[] } | null>(null);
+  const [removing, setRemoving] = useState(false);
+  const [removeError, setRemoveError] = useState<string | null>(null);
 
   const rows = useMemo(
     () => buildPatternRows(myPatterns, flyBoxEntries, viewerUsername),
@@ -156,7 +166,16 @@ export default function PatternsTab({
           </div>
 
           <DataTable
-            columns={buildColumns(setEditing)}
+            columns={buildColumns(setEditing, (row) => {
+              if (row.source === "personal" && row.personalPatternId) {
+                setDeletePersonal({ id: row.personalPatternId, name: row.name });
+              } else if (row.source === "library" && row.variants.length > 0) {
+                setRemoveLibrary({
+                  name: row.name,
+                  variantIds: row.variants.map((v) => v.id),
+                });
+              }
+            })}
             rows={filtered}
             getRowKey={(r) => r.key}
             defaultSort={{ id: "deficit", dir: "desc" }}
@@ -184,12 +203,119 @@ export default function PatternsTab({
         patternName={editing?.patternName}
         onClose={() => setEditing(null)}
       />
+
+      {deletePersonal && (
+        <DeleteFlyPatternDialog
+          open
+          flyId={deletePersonal.id}
+          flyName={deletePersonal.name}
+          onClose={() => setDeletePersonal(null)}
+          onDeleted={() => {
+            setDeletePersonal(null);
+            router.refresh();
+          }}
+        />
+      )}
+
+      {removeLibrary && (
+        <RemoveFromBoxDialog
+          name={removeLibrary.name}
+          variantCount={removeLibrary.variantIds.length}
+          busy={removing}
+          error={removeError}
+          onCancel={() => {
+            setRemoveLibrary(null);
+            setRemoveError(null);
+          }}
+          onConfirm={async () => {
+            setRemoving(true);
+            setRemoveError(null);
+            try {
+              const results = await Promise.all(
+                removeLibrary.variantIds.map((id) =>
+                  fetch(`/api/fly-box?id=${encodeURIComponent(id)}`, {
+                    method: "DELETE",
+                  }).then(async (r) => ({ ok: r.ok, body: r.ok ? null : await r.json().catch(() => ({})) })),
+                ),
+              );
+              const firstError = results.find((r) => !r.ok);
+              if (firstError) {
+                throw new Error(
+                  (firstError.body as { error?: string })?.error ||
+                    "Couldn't remove from your box.",
+                );
+              }
+              setRemoveLibrary(null);
+              router.refresh();
+            } catch (e) {
+              setRemoveError(e instanceof Error ? e.message : "Something went wrong");
+            } finally {
+              setRemoving(false);
+            }
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function RemoveFromBoxDialog({
+  name,
+  variantCount,
+  busy,
+  error,
+  onCancel,
+  onConfirm,
+}: {
+  name: string;
+  variantCount: number;
+  busy: boolean;
+  error: string | null;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+      <div className="w-full max-w-md rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-xl">
+        <h3 className="font-heading text-lg text-[var(--color-text-primary)]">
+          Remove {name} from your patterns?
+        </h3>
+        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+          This unlinks {variantCount === 1 ? "this variant" : `${variantCount} variants`}{" "}
+          from your fly box. The canonical pattern stays in the library — you can
+          add it back any time.
+        </p>
+        {error && (
+          <p className="mt-3 rounded-md bg-red-500/10 border border-red-500/30 px-3 py-2 text-xs text-red-300">
+            {error}
+          </p>
+        )}
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={busy}
+            className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-3 py-1.5 text-sm text-[var(--color-text-primary)] hover:border-[#E8923A] disabled:opacity-60"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={busy}
+            className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
+          >
+            {busy ? "Removing…" : "Remove"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
 function buildColumns(
   onEditVariant: (next: { entry: FlyBoxEntry; patternName: string }) => void,
+  onRequestDelete: (row: PatternRow) => void,
 ): Column<PatternRow>[] {
   return [
     {
@@ -299,6 +425,36 @@ function buildColumns(
         );
       },
     },
+    {
+      id: "actions",
+      header: "",
+      accessor: () => "",
+      width: "40px",
+      render: (r) => {
+        const isPersonal = r.source === "personal" && !!r.personalPatternId;
+        const isLibrary = r.source === "library" && r.variants.length > 0;
+        if (!isPersonal && !isLibrary) {
+          return <span className="text-[var(--color-text-muted)]">—</span>;
+        }
+        const label = isPersonal
+          ? "Delete this pattern (and its variants)"
+          : "Remove from your fly box (keeps the canonical in the library)";
+        return (
+          <button
+            type="button"
+            aria-label={label}
+            title={label}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRequestDelete(r);
+            }}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-400 transition-colors"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        );
+      },
+    },
   ];
 }
 
@@ -374,6 +530,7 @@ function buildPatternRows(
         promotedCanonicalSlug: p.promoted_canonical_slug ?? null,
       }),
       hasTieNext: !!p.is_tie_next,
+      personalPatternId: p.id,
     });
   }
 
