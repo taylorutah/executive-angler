@@ -275,9 +275,13 @@ export async function getMyFliesCounts(userId: string): Promise<{
       .from("fly_patterns")
       .select("id, is_favorite, tie_next_status, is_tie_next", { count: "exact" })
       .eq("user_id", userId),
+    // Select canonical_fly_id so we can collapse multi-variant rows into one
+    // logical pattern — mirrors how PatternsTab.buildPatternRows groups by
+    // canonical_fly_id. Without this the badge double-counts variants and
+    // diverges from the rendered table.
     supabase
       .from("user_fly_box")
-      .select("id, is_favorite, tie_next_status, is_tie_next", { count: "exact" })
+      .select("id, canonical_fly_id, is_favorite, tie_next_status, is_tie_next")
       .eq("user_id", userId),
     supabase
       .from("fly_patterns")
@@ -286,7 +290,12 @@ export async function getMyFliesCounts(userId: string): Promise<{
       .contains("shared_with_user_ids", [userId]),
   ]);
 
-  type CountRow = { is_favorite?: boolean; tie_next_status?: TieNextStatus; is_tie_next?: boolean };
+  type CountRow = {
+    canonical_fly_id?: string | null;
+    is_favorite?: boolean;
+    tie_next_status?: TieNextStatus;
+    is_tie_next?: boolean;
+  };
   const personal = (patternsRes.data ?? []) as CountRow[];
   const box = (boxRes.data ?? []) as CountRow[];
 
@@ -297,8 +306,18 @@ export async function getMyFliesCounts(userId: string): Promise<{
     r.tie_next_status === "wanted" || r.tie_next_status === "at_vise" || r.is_tie_next === true;
   const tieNext = personal.filter(inQueue).length + box.filter(inQueue).length;
 
+  // Distinct canonical patterns the user has in their box. user_fly_box rows
+  // are one-per-variant after migration 20260507, so a single canonical fly
+  // can produce multiple rows; the user sees one row per canonical in
+  // PatternsTab so the badge must match.
+  const distinctCanonicals = new Set(
+    box
+      .map((b) => b.canonical_fly_id)
+      .filter((id): id is string => typeof id === "string" && id.length > 0)
+  );
+
   return {
-    box: (patternsRes.count ?? 0) + (boxRes.count ?? 0),
+    box: (patternsRes.count ?? 0) + distinctCanonicals.size,
     favorites,
     tieNext,
     sharedWithMe: sharedRes.count ?? 0,

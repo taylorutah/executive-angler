@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
+import { getMyFliesCounts } from "@/lib/db/fly-patterns";
 import { JournalClient } from "./JournalClient";
 
 // Never cache — always fetch fresh session data
@@ -74,10 +75,11 @@ export default async function JournalPage() {
     .eq("user_id", user.id)
     .maybeSingle();
 
-  const { count: flyCount } = await supabase
-    .from("fly_patterns")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", user.id);
+  // Source of truth for the "Fly Box" label everywhere (dashboard card +
+  // /flies hub badge + this sidebar count) — distinct canonical patterns +
+  // personal patterns. Without this the same label shows two different
+  // numbers depending on which screen you're on.
+  const { box: flyCount } = await getMyFliesCounts(user.id);
 
   const sessionsData = (sessions || []) as FishingSession[];
   const rigsData = (rigs || []) as SessionRig[];
@@ -95,7 +97,7 @@ export default async function JournalPage() {
       email: user.email || "",
       avatarUrl: profile?.avatar_url || "",
     }}
-    totalFlyPatterns={flyCount || 0}
+    totalFlyPatterns={flyCount ?? 0}
     likeCounts={likeCounts}
     commentCounts={commentCounts}
   />;
