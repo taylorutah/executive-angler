@@ -246,20 +246,34 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
 
             {/* Catch summary — Strava-style mini splits table grouped by species */}
             {!hasPhotos && speciesRows.length > 0 && (
-              <div className="mb-2 space-y-0.5">
+              <div className="mb-2 mt-2 border-t border-[#21262D]/60 pt-2 space-y-1">
                 {speciesRows.map(row => (
-                  <div key={row.species} className="flex items-baseline justify-between gap-3 text-[11px]">
-                    <span className="text-[#F0F6FC] truncate">{row.species}</span>
-                    <span className="flex-shrink-0 flex items-baseline gap-3 text-[#A8B2BD] font-['IBM_Plex_Mono']">
-                      <span className="tabular-nums">{row.count}</span>
-                      <span className="tabular-nums w-14 text-right">
-                        {row.maxLength == null ? "—" : row.count > 1 ? `max ${row.maxLength}"` : `${row.maxLength}"`}
-                      </span>
+                  <div
+                    key={row.species}
+                    className="grid grid-cols-[1fr_auto_auto] items-baseline gap-x-4 text-[11px] tabular-nums"
+                  >
+                    <span className="truncate font-medium text-[#F0F6FC]">{row.species}</span>
+                    <span className="font-['IBM_Plex_Mono'] font-semibold text-[#F0F6FC] text-right">
+                      {row.count}
+                    </span>
+                    <span className="font-['IBM_Plex_Mono'] text-[#F0F6FC] text-right whitespace-nowrap min-w-[5ch]">
+                      {row.maxLength == null ? (
+                        <span className="text-[#6E7681]">—</span>
+                      ) : (
+                        <>
+                          {row.count > 1 && (
+                            <span className="mr-1 font-sans text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6E7681]">
+                              max
+                            </span>
+                          )}
+                          {row.maxLength}″
+                        </>
+                      )}
                     </span>
                   </div>
                 ))}
                 {overflowCount > 0 && (
-                  <div className="text-[10px] text-[#6E7681]">+{overflowCount} more</div>
+                  <div className="text-[10px] text-[#6E7681] pt-0.5">+{overflowCount} more species</div>
                 )}
               </div>
             )}
