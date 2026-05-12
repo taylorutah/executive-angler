@@ -76,6 +76,15 @@ export default async function FliesHubPage({
     shared.map((p) => p.user_id),
   );
 
+  // Badge count must mirror what the kanban renders: manual queue items
+  // (excluding "done", which lives in its own transient column) plus the
+  // auto-derived shortages that `getMyFliesCounts` doesn't see.
+  const activeTieNext =
+    tieNext.patterns.filter((p) => p.tie_next_status !== "done").length +
+    tieNext.boxEntries.filter((b) => b.tie_next_status !== "done").length +
+    derivedShortages.length;
+  const finalCounts = { ...counts, tieNext: activeTieNext };
+
   const { data: canonicalNamesData } = await supabase
     .from("canonical_flies")
     .select("name");
@@ -96,7 +105,7 @@ export default async function FliesHubPage({
       tieNextDerivedVariants={derivedShortages}
       shared={shared}
       sharedOwnerUsernames={Object.fromEntries(sharedOwnerUsernames)}
-      counts={counts}
+      counts={finalCounts}
       canonicalNames={canonicalNames}
       viewerUsername={(profile?.username as string | undefined) ?? null}
     />
