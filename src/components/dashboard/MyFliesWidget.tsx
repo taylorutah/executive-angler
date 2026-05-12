@@ -15,6 +15,10 @@ export interface MyFliesItem {
   category?: string | null;
   status?: "wanted" | "at_vise" | "done" | null;
   href: string;
+  /** Composed line like "size 18 · tungsten · 2.4mm · need 2 for My Kill Box +2". */
+  subtitle?: string | null;
+  /** True when this row came from listDerivedTieNextShortages — no manual actions. */
+  isDerived?: boolean;
 }
 
 interface Props {
@@ -145,35 +149,48 @@ export default function MyFliesWidget({ tieNext: initialTieNext, favorites: init
                   <p className="text-xs font-medium text-[#F0F6FC] truncate group-hover:text-[#E8923A] transition-colors">
                     {item.name}
                   </p>
-                  <div className="flex items-center gap-2 text-[10px] text-[#6E7681]">
-                    {item.category && <span className="capitalize">{item.category}</span>}
-                    {item.size && <span className="font-['IBM_Plex_Mono']">#{item.size.replace(/^#/, "")}</span>}
-                  </div>
+                  {item.isDerived && item.subtitle ? (
+                    <p className="text-[10px] text-[#6E7681] truncate">{item.subtitle}</p>
+                  ) : (
+                    <div className="flex items-center gap-2 text-[10px] text-[#6E7681]">
+                      {item.category && <span className="capitalize">{item.category}</span>}
+                      {item.size && <span className="font-['IBM_Plex_Mono']">#{item.size.replace(/^#/, "")}</span>}
+                    </div>
+                  )}
                 </div>
               </Link>
 
               {/* Right-side actions */}
               {tab === "tie-next" ? (
-                <>
-                  <button
-                    onClick={() => cycleStatus(item)}
-                    className={`text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded transition-colors ${
-                      item.status === "at_vise"
-                        ? "bg-[#E8923A]/15 text-[#E8923A] hover:bg-[#E8923A]/25"
-                        : "bg-[#0BA5C7]/15 text-[#0BA5C7] hover:bg-[#0BA5C7]/25"
-                    }`}
-                    title={item.status === "at_vise" ? "Mark done" : "Move to At Vise"}
+                item.isDerived ? (
+                  <span
+                    className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-[#0BA5C7]/10 text-[#0BA5C7]/80 border border-[#0BA5C7]/20"
+                    title="Auto-derived from a stock or fly-box shortage. Resolves when you tie or stock up."
                   >
-                    {item.status === "at_vise" ? "At Vise" : "Wanted"}
-                  </button>
-                  <button
-                    onClick={() => removeFromTieNext(item)}
-                    className="p-1 text-[#6E7681] hover:text-[#F0F6FC] transition-colors"
-                    title="Remove from Tie Next"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </>
+                    Auto
+                  </span>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => cycleStatus(item)}
+                      className={`text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded transition-colors ${
+                        item.status === "at_vise"
+                          ? "bg-[#E8923A]/15 text-[#E8923A] hover:bg-[#E8923A]/25"
+                          : "bg-[#0BA5C7]/15 text-[#0BA5C7] hover:bg-[#0BA5C7]/25"
+                      }`}
+                      title={item.status === "at_vise" ? "Mark done" : "Move to At Vise"}
+                    >
+                      {item.status === "at_vise" ? "At Vise" : "Wanted"}
+                    </button>
+                    <button
+                      onClick={() => removeFromTieNext(item)}
+                      className="p-1 text-[#6E7681] hover:text-[#F0F6FC] transition-colors"
+                      title="Remove from Tie Next"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </>
+                )
               ) : (
                 <button
                   onClick={() => removeFavorite(item)}

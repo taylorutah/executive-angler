@@ -5,6 +5,8 @@ import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
 import { getMyFliesCounts, getTieNextQueue, getMyFlyBox, lookupPromotedCanonicalSlugs } from "@/lib/db/fly-patterns";
+import { listDerivedTieNextShortages } from "@/lib/db/fly-v2";
+import { totalOwned, deficit } from "@/types/fly-v2";
 import { ownerPatternPermalink } from "@/lib/flies/permalink";
 import type { MyFliesItem } from "@/components/dashboard/MyFliesWidget";
 
@@ -77,8 +79,13 @@ export default async function DashboardPage() {
   // are removed — community activity is no longer surfaced here. The "My Flies"
   // widget below replaces them with the user's own Tie Next + Favorites.
 
-  // Tie Next queue — wanted + at_vise items only (filter out done in the widget)
-  const tieNextQueue = await getTieNextQueue(user.id);
+  // Tie Next queue — manual queue (wanted + at_vise) unioned with auto-derived
+  // shortages so this widget mirrors what the /flies kanban shows (otherwise
+  // the count silently undercounts and the dashboard lies).
+  const [tieNextQueue, derivedShortages] = await Promise.all([
+    getTieNextQueue(user.id),
+    listDerivedTieNextShortages(),
+  ]);
   const promotedSlugs = await lookupPromotedCanonicalSlugs(tieNextQueue.patterns);
   const tieNextItems: MyFliesItem[] = [
     ...tieNextQueue.boxEntries
@@ -111,6 +118,34 @@ export default async function DashboardPage() {
             : null,
         }),
       })),
+    ...derivedShortages.map<MyFliesItem>((v) => {
+      const owned = totalOwned(v.stock);
+      const stockNeed = deficit(v.stock);
+      const beadStr = v.bead_material && v.bead_material !== "none"
+        ? [v.bead_material, v.bead_weight_mm ? `${v.bead_weight_mm}mm` : null, v.bead_color].filter(Boolean).join(" · ")
+        : null;
+      const specParts = [`size ${v.size}`, beadStr, v.body_color ?? null].filter(Boolean) as string[];
+      const boxShorts = v.box_memberships.filter((m) => (m.deficit ?? 0) > 0);
+      const boxNeedTotal = boxShorts.reduce((n, m) => n + (m.deficit ?? 0), 0);
+      let needSummary: string;
+      if (boxShorts.length > 0 && stockNeed === 0) {
+        needSummary = `need ${boxNeedTotal} for ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")}`;
+      } else if (boxShorts.length > 0 && stockNeed > 0) {
+        const need = Math.max(stockNeed, boxNeedTotal);
+        needSummary = `need ${need} (stock ${owned}/${v.stock?.target_count ?? 0} · ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")})`;
+      } else {
+        needSummary = `need ${stockNeed} (have ${owned}/${v.stock?.target_count ?? 0})`;
+      }
+      return {
+        key: `variant-${v.id}`,
+        name: v.pattern?.name ?? v.display_name ?? "Untitled variant",
+        imageUrl: null,
+        category: v.pattern?.category ?? null,
+        href: v.pattern?.slug ? `/flies/${v.pattern.slug}` : `/flies/by-id/${v.pattern_id}`,
+        subtitle: `${specParts.join(" · ")} · ${needSummary}`,
+        isDerived: true,
+      };
+    }),
   ];
 
   // Favorites — pulled from full fly box, filtered to is_favorite=true
