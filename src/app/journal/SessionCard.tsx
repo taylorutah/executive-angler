@@ -109,17 +109,30 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
   const accent = accentColor(session.river_name);
 
-  // Build static map URL if coordinates exist. Fall back to the first GPS track
-  // point so sessions that started before GPS locked (cold start, indoors) still
-  // get a thumbnail rendered.
-  const mapToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-  const firstRoutePoint = session.route_points?.[0];
-  const startLat = session.latitude ?? firstRoutePoint?.[0];
-  const startLon = session.longitude ?? firstRoutePoint?.[1];
-  const hasMapThumb = startLat != null && startLon != null && mapToken;
-  const mapThumbUrl = hasMapThumb
-    ? `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s+E8923A(${startLon},${startLat})/${startLon},${startLat},13,0/128x160@2x?access_token=${mapToken}&attribution=false&logo=false`
-    : null;
+  const speciesAgg = (() => {
+    const map = new Map<string, { species: string; count: number; maxLength: number | null }>();
+    for (const c of catches) {
+      if (!c.species) continue;
+      const key = c.species;
+      const qty = c.quantities ?? 1;
+      const lenNum = c.length_inches != null ? parseFloat(String(c.length_inches)) : NaN;
+      const existing = map.get(key);
+      if (existing) {
+        existing.count += qty;
+        if (!isNaN(lenNum)) {
+          existing.maxLength = existing.maxLength == null ? lenNum : Math.max(existing.maxLength, lenNum);
+        }
+      } else {
+        map.set(key, { species: key, count: qty, maxLength: isNaN(lenNum) ? null : lenNum });
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return (b.maxLength ?? 0) - (a.maxLength ?? 0);
+    });
+  })();
+  const speciesRows = speciesAgg.slice(0, 4);
+  const overflowCount = speciesAgg.length - speciesRows.length;
 
   return (
     <Link href={`/journal/${session.id}`} className="block group">
@@ -231,16 +244,24 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               );
             })()}
 
-            {/* Catch summary — shown when no photos, gives card substance */}
-            {!hasPhotos && catches.length > 0 && (
-              <p className="text-[11px] text-[#A8B2BD] mb-2 truncate">
-                {catches.filter(c => c.species).map(c => {
-                  const parts = [c.species];
-                  if (c.length_inches) parts.push(`${c.length_inches}"`);
-                  if (c.fly_pattern?.name) parts.push(c.fly_pattern.name);
-                  return parts.join(" · ");
-                }).join("  ·  ")}
-              </p>
+            {/* Catch summary — Strava-style mini splits table grouped by species */}
+            {!hasPhotos && speciesRows.length > 0 && (
+              <div className="mb-2 space-y-0.5">
+                {speciesRows.map(row => (
+                  <div key={row.species} className="flex items-baseline justify-between gap-3 text-[11px]">
+                    <span className="text-[#F0F6FC] truncate">{row.species}</span>
+                    <span className="flex-shrink-0 flex items-baseline gap-3 text-[#A8B2BD] font-['IBM_Plex_Mono']">
+                      <span className="tabular-nums">{row.count}</span>
+                      <span className="tabular-nums w-14 text-right">
+                        {row.maxLength == null ? "—" : row.count > 1 ? `max ${row.maxLength}"` : `${row.maxLength}"`}
+                      </span>
+                    </span>
+                  </div>
+                ))}
+                {overflowCount > 0 && (
+                  <div className="text-[10px] text-[#6E7681]">+{overflowCount} more</div>
+                )}
+              </div>
             )}
 
             {/* Photo collage — BELOW title/description */}
@@ -276,17 +297,6 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
             )}
 
           </div>
-
-          {/* Map thumbnail — right column (hidden on mobile, too small to be useful) */}
-          {mapThumbUrl && (
-            <div className="hidden sm:block flex-shrink-0 border-l border-[#21262D]">
-              <img
-                src={mapThumbUrl}
-                alt="Map"
-                className="h-full w-16 lg:w-32 object-cover"
-              />
-            </div>
-          )}
         </div>
       </article>
     </Link>
