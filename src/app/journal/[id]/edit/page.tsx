@@ -69,6 +69,17 @@ export default function EditSessionPage() {
   const [flies, setFlies] = useState<{ id: string; name: string; isCanonical?: boolean; category?: string }[]>([]);
   const [catalogFlies, setCatalogFlies] = useState<{ id: string; name: string; category?: string }[]>([]);
   const [catches, setCatches] = useState<Catch[]>([]);
+  // Cached variants per catch row (keyed by catch index). Populated when the
+  // user picks a canonical fly so the Size picker can offer the right options
+  // and we can look up the bead for the selected size without a DB round-trip.
+  type CachedVariant = {
+    id: string;
+    size: string;
+    bead_weight_mm: number | null;
+    is_stocked: boolean;
+    in_box_count: number;
+  };
+  const [catchVariants, setCatchVariants] = useState<Record<number, CachedVariant[]>>({});
   const [savingPhotos, setSavingPhotos] = useState(false);
   const [showSpotManager, setShowSpotManager] = useState(false);
   const [gearRodId, setGearRodId] = useState<string | null>(null);
@@ -248,6 +259,26 @@ export default function EditSessionPage() {
           }));
         setCatches(loadedCatches);
 
+        // Pre-fetch + cache variants for every loaded catch that has a
+        // canonical fly, so the Size picker dropdown is populated when the
+        // user opens an existing session for editing (parity with new-catch
+        // flow). Fire-and-forget; UI falls back to free-text size input
+        // until the cache lands.
+        loadedCatches.forEach((c: { canonical_fly_id?: string | null }, idx: number) => {
+          if (c.canonical_fly_id) {
+            (async () => {
+              try {
+                const res = await fetch(`/api/flies/variants?pattern_id=${encodeURIComponent(c.canonical_fly_id!)}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const raw = (data.variants ?? []) as CachedVariant[];
+                const sorted = sortVariants(raw);
+                setCatchVariants((prev) => ({ ...prev, [idx]: sorted }));
+              } catch {}
+            })();
+          }
+        });
+
         // Resolve simple/full mode:
         // If catches exist in the DB → ALWAYS open in Full mode (data wins over localStorage).
         // This ensures drift-mode sessions edited into full mode stay in full mode.
@@ -308,39 +339,32 @@ export default function EditSessionPage() {
   }
 
   /**
-   * Manual edit of a denormalized variant field (fly_size, bead_size).
-   * When the user types directly, clear variant_id so we don't claim the row
-   * still matches the curated variant we auto-picked.
+   * Sort variants by "best match for this user": stocked-in-box first,
+   * then most-in-boxes, then smallest size as a tiebreaker.
    */
-  function updateCatchManual(i: number, field: "fly_size" | "bead_size", value: string) {
-    setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, [field]: value, variant_id: "" } : c));
+  function sortVariants(list: CachedVariant[]): CachedVariant[] {
+    return [...list].sort((a, b) => {
+      if (a.is_stocked !== b.is_stocked) return a.is_stocked ? -1 : 1;
+      if (a.in_box_count !== b.in_box_count) return b.in_box_count - a.in_box_count;
+      return Number(a.size) - Number(b.size);
+    });
   }
 
   /**
-   * Auto-fill the catch row's variant_id + fly_size + bead_size from the
-   * canonical fly's "best" variant for this user — stocked in their box
-   * first, then most-in-boxes, then size ascending. Called once when the
-   * user picks a canonical fly so they don't have to also pick a size.
+   * Pick a canonical fly and auto-fill size + bead + variant_id from the
+   * user's best-matching variant. Also caches the full variant list on the
+   * catch row so the Size dropdown can offer just the sizes that exist.
    */
-  async function autoFillFromBestVariant(catchIdx: number, canonicalFlyId: string) {
+  async function fetchAndCacheVariants(catchIdx: number, canonicalFlyId: string) {
     try {
       const res = await fetch(`/api/flies/variants?pattern_id=${encodeURIComponent(canonicalFlyId)}`);
       if (!res.ok) return;
       const data = await res.json();
-      const list = (data.variants ?? []) as Array<{
-        id: string;
-        size: string;
-        bead_weight_mm: number | null;
-        is_stocked: boolean;
-        in_box_count: number;
-      }>;
-      if (list.length === 0) return;
-      list.sort((a, b) => {
-        if (a.is_stocked !== b.is_stocked) return a.is_stocked ? -1 : 1;
-        if (a.in_box_count !== b.in_box_count) return b.in_box_count - a.in_box_count;
-        return Number(a.size) - Number(b.size);
-      });
-      const best = list[0];
+      const raw = (data.variants ?? []) as CachedVariant[];
+      const sorted = sortVariants(raw);
+      setCatchVariants((prev) => ({ ...prev, [catchIdx]: sorted }));
+      if (sorted.length === 0) return;
+      const best = sorted[0];
       setCatches((prev) => prev.map((c, idx) => idx === catchIdx ? {
         ...c,
         variant_id: best.id,
@@ -350,6 +374,24 @@ export default function EditSessionPage() {
     } catch {
       // silently ignore — user can fill in manually
     }
+  }
+
+  /**
+   * User picked a new size from the dropdown (or typed one). Find the
+   * matching variant in the cache and use its bead spec. If no matching
+   * variant exists, keep the typed size but clear variant_id and bead.
+   */
+  function onCatchSizeChange(catchIdx: number, newSize: string) {
+    const variants = catchVariants[catchIdx] ?? [];
+    // Prefer the user's stocked/in-box variant at this size (already sorted
+    // best-first), so multi-config sizes resolve to the right bead.
+    const match = variants.find((v) => v.size === newSize);
+    setCatches((prev) => prev.map((c, idx) => idx === catchIdx ? {
+      ...c,
+      fly_size: newSize,
+      variant_id: match?.id ?? "",
+      bead_size: match?.bead_weight_mm != null ? String(match.bead_weight_mm) : "",
+    } : c));
   }
 
   function addCatchPhoto(catchIdx: number, file: File) {
@@ -800,10 +842,10 @@ export default function EditSessionPage() {
                               updateCatch(i, "fly_pattern_id", "");
                               updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", sel.name);
-                              // Auto-fill fly_size + bead_size from the user's
-                              // best-matching variant on this canonical fly so
-                              // they don't have to pick a "configuration".
-                              autoFillFromBestVariant(i, sel.id);
+                              // Fetch the user's variants + auto-fill best
+                              // size and the bead that's associated with it
+                              // in their box.
+                              fetchAndCacheVariants(i, sel.id);
                             }
                           }}
                           placeholder="Search your flies and the library…"
@@ -829,11 +871,33 @@ export default function EditSessionPage() {
                       </div>
                       <div>
                         <label className={label}>Fly Size (#)</label>
-                        <input type="number" step="1" min="1" className={input} placeholder="14" value={c.fly_size} onChange={(e) => updateCatchManual(i, "fly_size", e.target.value)} />
-                      </div>
-                      <div>
-                        <label className={label}>Bead (mm)</label>
-                        <input type="number" step="0.1" min="0" className={input} placeholder="2.5" value={c.bead_size} onChange={(e) => updateCatchManual(i, "bead_size", e.target.value)} />
+                        {(catchVariants[i]?.length ?? 0) > 0 ? (
+                          <select
+                            className={input}
+                            value={c.fly_size}
+                            onChange={(e) => onCatchSizeChange(i, e.target.value)}
+                          >
+                            <option value="">—</option>
+                            {/* Dedupe sizes; preserve best-first order from sortVariants. */}
+                            {Array.from(
+                              new Map((catchVariants[i] ?? []).map((v) => [v.size, v])).values(),
+                            ).map((v) => (
+                              <option key={v.id} value={v.size}>{v.size}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          // No fly picked yet, or personal pattern with no
+                          // variants — fall back to free-text entry.
+                          <input
+                            type="number"
+                            step="1"
+                            min="1"
+                            className={input}
+                            placeholder="14"
+                            value={c.fly_size}
+                            onChange={(e) => onCatchSizeChange(i, e.target.value)}
+                          />
+                        )}
                       </div>
                       <div>
                         <label className={label}>Time</label>
