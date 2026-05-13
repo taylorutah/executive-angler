@@ -102,7 +102,11 @@ One object per fly. Required fields are `name`, `category`, `origin_credit`. Eve
 - **Slug rule:** lowercase, alphanumeric + hyphens, max 80 chars, `slugify(name)`. The script auto-generates; do not pass `slug` in JSON.
 - **Categories enum (exact):** `dry | nymph | streamer | emerger | wet | terrestrial | egg | midge`. Anything else is rejected with `ERROR_VALIDATION`.
 - **`tying_materials` categories:** `hook | bead | thread | dubbing | feather | flash | foam | wire | resin | marker | rubber | synthetic | tail | wing | ribbing | chenille | body | eye`.
-- **Bead naming convention (important):** In `base_materials` recipe slots, beads are spec'd by **material + finish/color + size (mm)** with NO brand. ✅ `"Slotted tungsten, copper, 2.8mm"`. ❌ `"Hareline Slotted Tungsten, copper, 2.8mm"`. Brands are interchangeable on the vise for beads; they are NOT for hooks or threads (those keep brand + model, e.g. `"Dohiku 303"`, `"Semperfli Nano Silk 12/0 brown"`).
+- **Recipe brand convention — when to include brand in a `base_materials` slot:**
+  - ✅ **Brand + model**: hooks (`"Dohiku 303"`, `"Hanak 450"`), threads (`"UNI-Thread 8/0 rusty dun"`), branded dubbings with distinct character (`"Troutline Mad Rabbit Dubbing"`, `"Hareline Ice Dub"`)
+  - ❌ **Spec only — no brand**: beads (`"Slotted tungsten, copper, 2.8mm"`), CDC and other naturals (`"CDC, dark dun"`, `"Coq de Leon, pardo"`), generic wire (`"Small copper wire"`)
+  - **Rule:** include the brand only when the brand actually changes the product. Beads/CDC/hackle/generic wire are interchangeable across brands at the vise; hooks/threads/specialty dubbings aren't.
+  - The `tying_materials` table itself can still store full brand metadata for inventory/SKU tracking — that's separate from how the recipe slot reads.
 
 ## Anti-patterns (do not do these)
 
