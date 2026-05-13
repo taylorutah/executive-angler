@@ -41,6 +41,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
+import { parseBeadSpec } from "../src/lib/flies/parseBeadSpec";
 
 // Inline .env.local loader (matches scripts/seed-flies.ts — no dotenv dep)
 try {
@@ -302,7 +303,21 @@ async function main(): Promise<void> {
       continue;
     }
 
-    // 3. fly_variants — one default canonical variant
+    // 3. fly_variants — one default canonical variant. Populate bead fields
+    //    from the pattern's base_materials bead slot so the Configurations
+    //    table renders a real bead spec instead of "—".
+    const beadSlot = (row.base_materials ?? []).find(
+      (m) => m.slot?.toLowerCase() === "bead",
+    );
+    const beadParsed = beadSlot ? parseBeadSpec(beadSlot.material) : {};
+    // fly_variants.bead_material is constrained to tungsten|brass|glass|none.
+    // "copper" is technically a real bead material but the column rejects it —
+    // we record copper-cased material in the recipe slot only.
+    const variantBeadMaterial =
+      beadParsed.material && ["tungsten", "brass", "glass", "none"].includes(beadParsed.material)
+        ? beadParsed.material
+        : null;
+
     const { error: fvErr } = await sb.from("fly_variants").insert({
       pattern_id: patternId,
       created_by_user_id: null,
@@ -310,6 +325,9 @@ async function main(): Promise<void> {
       display_name: `${row.name} #${defaultSize}`,
       size: defaultSize,
       hook_style: row.hook_style ?? null,
+      bead_material: variantBeadMaterial,
+      bead_weight_mm: beadParsed.weight_mm ?? null,
+      bead_color: beadParsed.color ?? null,
       sort_order: 0,
       is_default_for_pattern: true,
     });

@@ -31,6 +31,7 @@ import {
 } from "@/app/flies/v2/actions";
 import type { Pattern, MaterialSlot, TyingStep, FlyBoxV2 } from "@/types/fly-v2";
 import type { RecipeRole } from "@/types/materials";
+import { parseBeadSpec } from "@/lib/flies/parseBeadSpec";
 
 interface Props {
   pattern: Pattern;
@@ -58,10 +59,26 @@ const KNOWN_ROLES = new Set<RecipeRole>([
   "collar", "thorax", "abdomen", "shellback", "legs", "antennae", "post",
 ]);
 
+// Slot-name aliases: legacy/abbreviated names users sometimes use that should
+// map to the canonical RecipeRole. Keep this list tight — only obvious synonyms.
+const SLOT_ALIASES: Record<string, RecipeRole> = {
+  rib: "ribbing",
+  abdom: "abdomen",
+  collr: "collar",
+};
+
+function resolveRole(slot: string | null | undefined): RecipeRole {
+  if (!slot) return "body";
+  if (KNOWN_ROLES.has(slot as RecipeRole)) return slot as RecipeRole;
+  const aliased = SLOT_ALIASES[slot.toLowerCase()];
+  if (aliased) return aliased;
+  return "body";
+}
+
 function slotsToSteps(slots: MaterialSlot[]): RecipeStep[] {
   return (slots ?? []).map((s, i) => {
-    const role = (KNOWN_ROLES.has(s.slot as RecipeRole) ? s.slot : "body") as RecipeRole;
-    return {
+    const role = resolveRole(s.slot);
+    const step: RecipeStep = {
       id: `slot-${i}-${s.slot}`,
       role,
       material: null,
@@ -76,17 +93,65 @@ function slotsToSteps(slots: MaterialSlot[]): RecipeStep[] {
       notes: s.description ?? "",
       isOptional: !!s.is_optional,
     };
+
+    // For bead rows, parse the free-text material string into structured
+    // fields so the BeadMaterial/Shape/Size/Color cells render the real
+    // values instead of blank placeholders.
+    if (role === "bead" && s.material) {
+      const parsed = parseBeadSpec(s.material);
+      if (parsed.material) step.materialTypeChoice = parsed.material;
+      if (parsed.finish) step.finishChoice = parsed.finish;
+      if (parsed.weight_mm != null) step.sizeChoice = String(parsed.weight_mm);
+      if (parsed.color) step.colorChoice = parsed.color;
+      // Clear materialName so the bead row's structured controls own the
+      // cell. composeBeadName() rebuilds it on save via stepsToSlots.
+      if (parsed.material || parsed.finish || parsed.weight_mm != null || parsed.color) {
+        step.materialName = "";
+      }
+    }
+
+    return step;
   });
 }
 
 function stepsToSlots(steps: RecipeStep[]): MaterialSlot[] {
-  return steps.map((s) => ({
-    slot: s.role,
-    material: s.materialName || s.material?.name || "",
-    description: s.notes || undefined,
-    brand: s.material?.brand || undefined,
-    is_optional: s.isOptional || undefined,
-  }));
+  return steps.map((s) => {
+    // Bead row: recompose the canonical "<finish> <material>, <color>, <size>mm"
+    // string from structured fields so base_materials stays in sync with what
+    // the user picked. Falls through to materialName when no structured fields
+    // are set (e.g. legacy patterns that haven't been touched).
+    if (s.role === "bead") {
+      const parts: string[] = [];
+      const finish = s.finishChoice?.trim();
+      const material = s.materialTypeChoice?.trim();
+      const color = s.colorChoice?.trim();
+      const size = s.sizeChoice?.trim();
+      if (finish && material) parts.push(`${capitalize(finish)} ${material}`);
+      else if (material) parts.push(capitalize(material));
+      else if (finish) parts.push(capitalize(finish));
+      if (color) parts.push(color);
+      if (size) parts.push(/mm$/i.test(size) ? size : `${size}mm`);
+      const composed = parts.join(", ");
+      return {
+        slot: s.role,
+        material: composed || s.materialName || s.material?.name || "",
+        description: s.notes || undefined,
+        brand: s.material?.brand || undefined,
+        is_optional: s.isOptional || undefined,
+      };
+    }
+    return {
+      slot: s.role,
+      material: s.materialName || s.material?.name || "",
+      description: s.notes || undefined,
+      brand: s.material?.brand || undefined,
+      is_optional: s.isOptional || undefined,
+    };
+  });
+}
+
+function capitalize(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
 const inputCls =

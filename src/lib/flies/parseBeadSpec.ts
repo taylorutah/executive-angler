@@ -1,9 +1,11 @@
 import type { MaterialSlot } from "@/types/fly-v2";
 
-export type BeadMaterial = "tungsten" | "brass" | "glass" | "none";
+export type BeadMaterial = "tungsten" | "brass" | "glass" | "none" | "copper";
+export type BeadFinish = "slotted" | "countersunk" | "off-center" | "inverted" | "standard";
 
 export interface ParsedBeadSpec {
   material?: BeadMaterial;
+  finish?: BeadFinish;
   weight_mm?: number;
   color?: string;
 }
@@ -12,7 +14,16 @@ const MATERIAL_KEYWORDS: Record<BeadMaterial, RegExp> = {
   tungsten: /\btungsten\b/i,
   brass: /\bbrass\b/i,
   glass: /\bglass\b/i,
+  copper: /\bcopper bead\b/i,
   none: /\bnone\b/i,
+};
+
+const FINISH_KEYWORDS: Record<BeadFinish, RegExp> = {
+  slotted: /\bslotted\b/i,
+  countersunk: /\bcountersunk\b/i,
+  "off-center": /\boff[\s-]?center\b/i,
+  inverted: /\binverted\b/i,
+  standard: /\bstandard\b/i,
 };
 
 // Order matters — longest/most-specific first so "black nickel" wins over "black".
@@ -52,6 +63,13 @@ export function parseBeadSpec(text: string | null | undefined): ParsedBeadSpec {
   for (const [mat, re] of Object.entries(MATERIAL_KEYWORDS) as [BeadMaterial, RegExp][]) {
     if (re.test(text)) {
       out.material = mat;
+      break;
+    }
+  }
+
+  for (const [fin, re] of Object.entries(FINISH_KEYWORDS) as [BeadFinish, RegExp][]) {
+    if (re.test(text)) {
+      out.finish = fin;
       break;
     }
   }

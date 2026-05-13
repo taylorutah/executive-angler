@@ -15,16 +15,40 @@ import { BrandSelect, BrandFilteredMaterialSelect } from './recipe-rows/CascadeC
 
 const BEAD_MATERIALS = ['none', 'tungsten', 'brass', 'copper', 'glass'] as const;
 const BEAD_SHAPES = ['standard', 'slotted', 'countersunk', 'inverted', 'off-center'] as const;
-const COMMON_BEAD_SIZES_MM = ['2.0', '2.4', '2.8', '3.2', '3.5', '3.8', '4.0', '4.6'];
+const COMMON_BEAD_SIZES_MM = [
+  '1.5', '2.0', '2.3', '2.4', '2.5', '2.8', '3.0', '3.3', '3.5', '3.8', '4.0', '4.6', '5.0',
+];
 const COMMON_BEAD_COLORS = [
+  // Metals / classic
   'copper',
   'gold',
-  'black nickel',
   'silver',
-  'white',
-  'fl. orange',
-  'fl. pink',
+  'bronze',
+  'nickel',
+  'black nickel',
   'matte black',
+  'black',
+  'white',
+  // Metallic / iridescent
+  'metallic pink',
+  'metallic blue',
+  'metallic green',
+  'metallic olive',
+  'metallic copper',
+  'metallic purple',
+  'rainbow',
+  // Fluorescent / hot
+  'fl. pink',
+  'fl. orange',
+  'fl. red',
+  'fl. chartreuse',
+  'hot pink',
+  'hot orange',
+  // Earth / natural
+  'olive',
+  'brown',
+  'rust',
+  'tan',
 ];
 
 export interface RecipeStep {
