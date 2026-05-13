@@ -191,9 +191,9 @@ export default function DashboardClient({
 
       {/* ─── Dashboard Header ─── */}
       <div className="bg-[#161B22] border-b border-[#21262D]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6">
           {/* Welcome + actions — stacks on mobile */}
-          <div className="mb-6">
+          <div>
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC]">
@@ -249,9 +249,6 @@ export default function DashboardClient({
               </Link>
             </div>
           </div>
-
-          {/* Stats Card */}
-          <StatsCard es={es} />
         </div>
       </div>
 
@@ -263,6 +260,9 @@ export default function DashboardClient({
 
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
+
+            {/* Stats Card — sized to match action grid width */}
+            <StatsCard es={es} />
 
             {/* MOBILE-ONLY: My Flies (Tie Next + Favorites) — replaces old Recent Activity */}
             <div className="lg:hidden">
