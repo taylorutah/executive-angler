@@ -2,6 +2,16 @@
 
 > ⚠️ **Vault writes:** Before writing any file to `~/Documents/Taylor's Vault/`, read `~/Documents/Taylor's Vault/VAULT_STANDARDS.md`. Required: `## See Also` wikilinks + `## Timeline` on every file. Run `qmd update -c ea` after every vault write.
 
+## Rules (read first)
+- state assumptions, never guess silently 
+- minimum code, nothing speculative 
+- surgical changes, don't refactor adjacent code 
+- define success, loop until verified
+- Never commit without my explicit approval.
+- Run `npm run build` before claiming a task is done.
+- Don't fabricate fishing facts — ask if unsure.
+- Use Supabase queries via `src/lib/db/*.ts`, not direct client calls in pages.
+
 ## Quick Reference
 - **URL:** https://www.executiveangler.com (Vercel, auto-deploy from `main`)
 - **Repo:** github.com/taylorutah/executive-angler

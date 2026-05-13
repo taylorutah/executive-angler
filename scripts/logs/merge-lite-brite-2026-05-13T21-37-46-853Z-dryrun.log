@@ -1,0 +1,19 @@
+2026-05-13T21:37:43.259Z  Mode: DRY-RUN (no writes)
+2026-05-13T21:37:43.606Z  Winner: Lite Brite Perdigon (lite-brite-perdigon)
+2026-05-13T21:37:43.723Z  Loser:  Lite Bright Perdigon (lite-bright-perdigon)
+2026-05-13T21:37:43.968Z  Winner has 4 variants; loser has 7 variants.
+2026-05-13T21:37:43.968Z    Winner variant 875da73b-a7bf-4021-bcea-6baccbaadc91 (size 16) already as good as or better than loser c7a6ca75-4afa-4da9-8040-51b152dd8bc7; no spec copy.
+2026-05-13T21:37:43.968Z    Winner variant 875da73b-a7bf-4021-bcea-6baccbaadc91 (size 16) already as good as or better than loser fe06c945-f1a9-4808-8d7a-48f9cca8dadb; no spec copy.
+2026-05-13T21:37:43.968Z    Winner variant 875da73b-a7bf-4021-bcea-6baccbaadc91 (size 16) already as good as or better than loser e2aec941-a187-46ee-998a-68ee2cd1593e; no spec copy.
+2026-05-13T21:37:43.968Z    Merge specs into winner variant 9cdcafc0-068f-4285-82d5-c2222643e945 (size 18): {"bead_weight_mm":2.4}
+2026-05-13T21:37:43.968Z    Merge specs into winner variant 5d1a90c5-c087-47e2-9353-2cd22abb894b (size 20): {"bead_weight_mm":2}
+2026-05-13T21:37:43.968Z    Winner variant 875da73b-a7bf-4021-bcea-6baccbaadc91 (size 16) already as good as or better than loser f267d36c-7a91-46a1-b8dd-346444fffb0a; no spec copy.
+2026-05-13T21:37:43.968Z    Merge specs into winner variant b3db147a-772a-4952-840d-5b70ef76220e (size 14): {"bead_weight_mm":3.8}
+2026-05-13T21:37:44.557Z    Reassign 1 catch(es) variant_id c27e9de1-4cc0-4d6b-ac94-3b227b11cd58 → 9cdcafc0-068f-4285-82d5-c2222643e945
+2026-05-13T21:37:45.175Z    Reassign 1 catch(es) fly_pattern_id 1946f383-832d-46f2-87c9-57cb72c5079b → 1f5c47e1-5b37-4992-a6c7-b1c7e92867b7 (fly_name → "Lite Brite Perdigon")
+2026-05-13T21:37:45.882Z    Move stock row user=e0cb4b66-74eb-4bb9-b793-0445dcf5ec2b 72531c3a-0919-4b8f-9b06-36e3d7416945 → 5d1a90c5-c087-47e2-9353-2cd22abb894b (tied=3)
+2026-05-13T21:37:46.119Z    Move stock row user=e0cb4b66-74eb-4bb9-b793-0445dcf5ec2b f267d36c-7a91-46a1-b8dd-346444fffb0a → 875da73b-a7bf-4021-bcea-6baccbaadc91 (tied=3)
+2026-05-13T21:37:46.355Z    Move stock row user=e0cb4b66-74eb-4bb9-b793-0445dcf5ec2b 2fd8669e-4f73-46a3-8399-dd11c102e438 → b3db147a-772a-4952-840d-5b70ef76220e (tied=3)
+2026-05-13T21:37:46.491Z    Update legacy fly_patterns fork: {"parent_canonical_id":"1f5c47e1-5b37-4992-a6c7-b1c7e92867b7","name":"Lite Brite Perdigon — copper"}
+2026-05-13T21:37:46.603Z    Rename fly_patterns_v2 fork: "Lite Bright Perdigon — Yours" → "Lite Brite Perdigon — Yours"
+2026-05-13T21:37:46.852Z  ERROR: Aborting delete: catches.fly_pattern_id still has 1 row(s) pointing at 1946f383-832d-46f2-87c9-57cb72c5079b

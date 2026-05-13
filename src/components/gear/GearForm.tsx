@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Lock } from "lucide-react";
 import type { GearItem, GearType, RodSpecs, ReelSpecs, LineSpecs, LeaderSpecs, TippetSpecs } from "@/types/gear";
 import EuroLeaderBuilder from "./EuroLeaderBuilder";
@@ -226,8 +227,9 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
   }
 
   if (!open) return null;
+  if (typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
@@ -469,6 +471,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
