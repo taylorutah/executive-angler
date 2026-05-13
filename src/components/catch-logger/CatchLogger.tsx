@@ -57,7 +57,11 @@ interface Props {
   onLogged?: (info: { catchId: string; flyName: string; size: string; species: string }) => void;
 }
 
-const COMMON_SPECIES = ["Rainbow", "Brown", "Cutthroat", "Brook", "Bluegill", "Bass"];
+const COMMON_SPECIES = [
+  "Rainbow Trout", "Brown Trout", "Cutthroat Trout", "Brook Trout",
+  "Mountain Whitefish", "Tiger Trout", "Bull Trout",
+  "Smallmouth Bass", "Largemouth Bass", "Bluegill",
+];
 
 function variantThumbUrl(v: VariantRow): string | null {
   if (!v.primary_photo) return null;
@@ -74,7 +78,7 @@ export default function CatchLogger({
   onClose,
   onLogged,
 }: Props) {
-  const [species, setSpecies] = useState(defaultSpecies || lastCatch?.species || "Rainbow");
+  const [species, setSpecies] = useState(defaultSpecies || lastCatch?.species || "Rainbow Trout");
   const [length, setLength] = useState<string>(
     lastCatch?.length_inches != null ? String(lastCatch.length_inches) : ""
   );
