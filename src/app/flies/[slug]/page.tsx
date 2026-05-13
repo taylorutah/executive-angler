@@ -26,6 +26,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import VariantTable from "@/components/flies-v2/VariantTable";
 import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
+import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import { parseBeadFromBaseMaterials } from "@/lib/flies/parseBeadSpec";
 import { resolveVariantAxes } from "@/lib/flies/variant-axes";
 
@@ -147,6 +148,9 @@ export default async function PatternDetail({ params }: Props) {
                   {pattern.description}
                 </p>
               )}
+            </div>
+            <div className="flex-shrink-0">
+              <FlyFavoriteButton canonicalFlyId={pattern.id} />
             </div>
           </div>
         </div>

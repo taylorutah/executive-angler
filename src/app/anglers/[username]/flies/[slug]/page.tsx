@@ -8,6 +8,7 @@ import { Lock, Globe2, ArrowLeft } from "lucide-react";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
 import SubmitToLibraryButton from "@/components/flies/SubmitToLibraryButton";
 import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
+import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import VariantTable from "@/components/flies-v2/VariantTable";
 import PatternHeaderActions from "@/components/flies-v2/PatternHeaderActions";
 import {
@@ -284,6 +285,7 @@ export default async function AnglerFlyDetailPage({ params }: Props) {
                 fly={{ id: fly.id, name: fly.name, kind: "personal" }}
                 variant="pill"
               />
+              {isOwner && <FlyFavoriteButton flyPatternId={fly.id} />}
               {isOwner && (
                 <SubmitToLibraryButton
                   patternId={fly.id}

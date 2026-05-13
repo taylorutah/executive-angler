@@ -5,12 +5,16 @@ import { createClient } from "@/lib/supabase/client";
 import { Heart, Loader2 } from "lucide-react";
 
 interface FlyFavoriteButtonProps {
-  canonicalFlyId: string;
+  /** Canonical fly id — toggles is_favorite on user_fly_box row(s). */
+  canonicalFlyId?: string;
+  /** Personal legacy fly_patterns row id — toggles is_favorite on the row. */
+  flyPatternId?: string;
   compact?: boolean;
 }
 
 export default function FlyFavoriteButton({
   canonicalFlyId,
+  flyPatternId,
   compact = false,
 }: FlyFavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -31,20 +35,32 @@ export default function FlyFavoriteButton({
         }
         if (!cancelled) setIsAuthenticated(true);
 
-        // Multi-variant: 2+ rows possible per (user, canonical_fly). Use limit
-        // and treat "any row is_favorite=true" as favorite. Wrap in try/catch/
-        // finally so a thrown error doesn't leave the spinner running forever.
-        const { data } = await supabase
-          .from("user_fly_box")
-          .select("is_favorite")
-          .eq("user_id", user.id)
-          .eq("canonical_fly_id", canonicalFlyId)
-          .limit(10);
-
-        const anyFavorited = (data ?? []).some(
-          (r) => (r as { is_favorite?: boolean }).is_favorite === true,
-        );
-        if (!cancelled) setIsFavorite(anyFavorited);
+        if (canonicalFlyId) {
+          // Multi-variant: 2+ rows possible per (user, canonical_fly). Use limit
+          // and treat "any row is_favorite=true" as favorite.
+          const { data } = await supabase
+            .from("user_fly_box")
+            .select("is_favorite")
+            .eq("user_id", user.id)
+            .eq("canonical_fly_id", canonicalFlyId)
+            .limit(10);
+          const anyFavorited = (data ?? []).some(
+            (r) => (r as { is_favorite?: boolean }).is_favorite === true,
+          );
+          if (!cancelled) setIsFavorite(anyFavorited);
+        } else if (flyPatternId) {
+          const { data } = await supabase
+            .from("fly_patterns")
+            .select("is_favorite")
+            .eq("id", flyPatternId)
+            .eq("user_id", user.id)
+            .maybeSingle();
+          if (!cancelled) {
+            setIsFavorite(
+              (data as { is_favorite?: boolean } | null)?.is_favorite === true,
+            );
+          }
+        }
       } catch (e) {
         console.warn("[FlyFavoriteButton] status check failed:", e);
       } finally {
@@ -55,7 +71,7 @@ export default function FlyFavoriteButton({
     return () => {
       cancelled = true;
     };
-  }, [canonicalFlyId]);
+  }, [canonicalFlyId, flyPatternId]);
 
   async function handleToggle() {
     if (!isAuthenticated) {
@@ -65,13 +81,15 @@ export default function FlyFavoriteButton({
 
     setLoading(true);
     try {
+      const body: Record<string, unknown> = { favorite: !isFavorite };
+      if (canonicalFlyId) body.canonicalFlyId = canonicalFlyId;
+      else if (flyPatternId) body.flyPatternId = flyPatternId;
+      else throw new Error("FlyFavoriteButton: need canonicalFlyId or flyPatternId");
+
       const res = await fetch("/api/fishing/fly-favorites", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          canonicalFlyId,
-          favorite: !isFavorite,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (res.ok) {
