@@ -1,7 +1,7 @@
 "use client";
 
 import { FishingSession, SessionRig, Catch } from "@/types/fishing-log";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
@@ -9,7 +9,8 @@ import { CalendarView } from "./CalendarView";
 import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles, Upload } from "lucide-react";
 import Link from "next/link";
 import TipCard from "@/components/ui/TipCard";
-import Image from "next/image";
+import FilterDropdown from "@/components/ui/FilterDropdown";
+import FilterBar from "@/components/ui/FilterBar";
 import dynamic from "next/dynamic";
 
 const JournalMapView = dynamic(
@@ -134,6 +135,35 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     return a.created_at < b.created_at ? 1 : a.created_at > b.created_at ? -1 : 0;
   });
 
+  // Facets: rivers ordered by recency of last session (newest first), years DESC
+  const riverFacets = useMemo(() => {
+    const map = new Map<string, { lastDate: string; count: number }>();
+    for (const s of sortedSessions) {
+      const name = s.river_name || "Unknown";
+      const existing = map.get(name);
+      if (!existing) {
+        map.set(name, { lastDate: s.date, count: 1 });
+      } else {
+        existing.count += 1;
+        if (s.date > existing.lastDate) existing.lastDate = s.date;
+      }
+    }
+    return Array.from(map.entries())
+      .map(([name, v]) => ({ value: name, label: name, count: v.count, lastDate: v.lastDate }))
+      .sort((a, b) => (a.lastDate < b.lastDate ? 1 : a.lastDate > b.lastDate ? -1 : 0));
+  }, [sortedSessions]);
+
+  const yearFacets = useMemo(() => {
+    const counts = new Map<number, number>();
+    for (const s of sortedSessions) {
+      const y = parseLocalDate(s.date).getFullYear();
+      counts.set(y, (counts.get(y) || 0) + 1);
+    }
+    return Array.from(counts.entries())
+      .map(([year, count]) => ({ value: String(year), label: String(year), count }))
+      .sort((a, b) => Number(b.value) - Number(a.value));
+  }, [sortedSessions]);
+
   // Filter sessions
   const filteredSessions = sortedSessions.filter((session) => {
     // River filter
@@ -174,29 +204,31 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     return true;
   });
 
-  const handleFilterChange = (
-    type: "rivers" | "years" | "locations",
-    value: string | number
-  ) => {
-    if (type === "rivers") {
-      const river = value as string;
-      setFilterRivers((prev) =>
-        prev.includes(river) ? prev.filter((r) => r !== river) : [...prev, river]
-      );
-    } else if (type === "years") {
-      const year = value as number;
-      setFilterYears((prev) =>
-        prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
-      );
-    } else if (type === "locations") {
-      const location = value as string;
-      setFilterLocations((prev) =>
-        prev.includes(location)
-          ? prev.filter((l) => l !== location)
-          : [...prev, location]
-      );
-    }
+  const handleLocationChange = (_: "locations", value: string) => {
+    setFilterLocations((prev) =>
+      prev.includes(value) ? prev.filter((l) => l !== value) : [...prev, value]
+    );
   };
+
+  const yearSelectedStr = filterYears.map((y) => String(y));
+
+  const activeChips = [
+    ...filterRivers.map((r) => ({
+      key: `river:${r}`,
+      label: r,
+      onRemove: () => setFilterRivers((prev) => prev.filter((x) => x !== r)),
+    })),
+    ...filterYears.map((y) => ({
+      key: `year:${y}`,
+      label: String(y),
+      onRemove: () => setFilterYears((prev) => prev.filter((x) => x !== y)),
+    })),
+    ...filterLocations.map((l) => ({
+      key: `loc:${l}`,
+      label: l,
+      onRemove: () => setFilterLocations((prev) => prev.filter((x) => x !== l)),
+    })),
+  ];
 
   const clearFilters = () => {
     setFilterRivers([]);
@@ -305,19 +337,35 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                   ✕
                 </button>
               </div>
-              <SidebarFilters
-                sessions={sessions}
-                filterRivers={filterRivers}
-                filterYears={filterYears}
-                filterLocations={filterLocations}
-                onFilterChange={handleFilterChange}
-                stats={{
-                  totalSessions,
-                  totalFish,
-                  riversFished,
-                  bestSession: bestSession || undefined,
-                }}
-              />
+              <div className="space-y-5">
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">Rivers</p>
+                  <FilterDropdown
+                    label="Rivers"
+                    options={riverFacets}
+                    selected={filterRivers}
+                    onChange={setFilterRivers}
+                    placeholder="All rivers"
+                    emptyMessage="No rivers logged yet"
+                  />
+                </div>
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">Years</p>
+                  <FilterDropdown
+                    label="Years"
+                    options={yearFacets}
+                    selected={yearSelectedStr}
+                    onChange={(next) => setFilterYears(next.map(Number))}
+                    placeholder="All years"
+                    emptyMessage="No years yet"
+                  />
+                </div>
+                <SidebarFilters
+                  sessions={sessions}
+                  filterLocations={filterLocations}
+                  onFilterChange={handleLocationChange}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -435,55 +483,80 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               </a>
             </div>
 
-            {/* Filters — always at bottom */}
+            {/* Location tags — venue-type filter, kept in sidebar */}
             <SidebarFilters
               sessions={sessions}
-              filterRivers={filterRivers}
-              filterYears={filterYears}
               filterLocations={filterLocations}
-              onFilterChange={handleFilterChange}
-              stats={{
-                totalSessions,
-                totalFish,
-                riversFished,
-                bestSession: bestSession || undefined,
-              }}
+              onFilterChange={handleLocationChange}
             />
           </div>
         </aside>
 
         {/* Main content */}
         <main className="flex-1 px-4 py-6 lg:px-0 lg:py-0">
-          {/* View toggle header */}
-          <div className="mb-6 hidden items-center justify-between lg:flex">
-            <div className="flex gap-2">
-              <button
-                onClick={() => setView("list")}
-                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  view === "list"
-                    ? "bg-[#E8923A] text-white"
-                    : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#0D1117] border border-[#21262D]"
-                }`}
+          {/* Top filter bar — sticky on desktop, hidden on mobile (mobile uses bottom sheet) */}
+          {sessions.length > 0 && (
+            <div className="hidden lg:block">
+              <FilterBar
+                sticky
+                inline
+                activeChips={activeChips}
+                onClearAll={hasActiveFilters ? clearFilters : undefined}
+                rightSlot={
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5 border border-[#21262D] rounded-lg p-0.5 bg-[#161B22]">
+                      <button
+                        onClick={() => setView("list")}
+                        aria-label="List view"
+                        aria-pressed={view === "list"}
+                        className={`p-1.5 rounded-md transition-colors ${
+                          view === "list"
+                            ? "bg-[#E8923A]/10 text-[#E8923A]"
+                            : "text-[#6E7681] hover:text-[#A8B2BD]"
+                        }`}
+                      >
+                        <ListIcon className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => setView("calendar")}
+                        aria-label="Calendar view"
+                        aria-pressed={view === "calendar"}
+                        className={`p-1.5 rounded-md transition-colors ${
+                          view === "calendar"
+                            ? "bg-[#E8923A]/10 text-[#E8923A]"
+                            : "text-[#6E7681] hover:text-[#A8B2BD]"
+                        }`}
+                      >
+                        <CalendarIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <span className="text-xs text-[#6E7681] hidden xl:inline tabular-nums">
+                      {filteredSessions.length === sortedSessions.length
+                        ? `${sortedSessions.length} sessions`
+                        : `${filteredSessions.length} of ${sortedSessions.length}`}
+                    </span>
+                  </div>
+                }
               >
-                <ListIcon className="h-4 w-4" />
-                List
-              </button>
-              <button
-                onClick={() => setView("calendar")}
-                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  view === "calendar"
-                    ? "bg-[#E8923A] text-white"
-                    : "bg-[#161B22] text-[#A8B2BD] hover:bg-[#0D1117] border border-[#21262D]"
-                }`}
-              >
-                <CalendarIcon className="h-4 w-4" />
-                Calendar
-              </button>
+                <FilterDropdown
+                  label="Rivers"
+                  options={riverFacets}
+                  selected={filterRivers}
+                  onChange={setFilterRivers}
+                  placeholder="Rivers"
+                  emptyMessage="No rivers logged yet"
+                />
+                <FilterDropdown
+                  label="Years"
+                  options={yearFacets}
+                  selected={yearSelectedStr}
+                  onChange={(next) => setFilterYears(next.map(Number))}
+                  placeholder="Years"
+                  emptyMessage="No years yet"
+                />
+              </FilterBar>
             </div>
-            <p className="text-sm text-[#A8B2BD]">
-              Showing {filteredSessions.length} session{filteredSessions.length !== 1 ? "s" : ""}
-            </p>
-          </div>
+          )}
 
           {/* One-time intro */}
           <div className="mb-4">

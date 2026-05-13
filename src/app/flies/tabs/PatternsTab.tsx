@@ -19,7 +19,9 @@ import { TieNextCell } from "@/components/flies/VariantInlineCells";
 import DataTable, { type Column } from "@/components/ui/DataTable";
 import ViewModeToggle, { type ViewMode } from "@/components/ui/ViewModeToggle";
 import DeleteFlyPatternDialog from "@/components/flies/DeleteFlyPatternDialog";
-import { Search, Trash2 } from "lucide-react";
+import FilterDropdown, { type FilterOption } from "@/components/ui/FilterDropdown";
+import FilterBar from "@/components/ui/FilterBar";
+import { Search, Trash2, X } from "lucide-react";
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -83,8 +85,9 @@ export default function PatternsTab({
   const router = useRouter();
   const [view, setView] = useState<ViewMode>("table");
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<string>("");
-  const [lowStockOnly, setLowStockOnly] = useState(false);
+  const [typeFilters, setTypeFilters] = useState<string[]>([]);
+  // status filters: any of "low-stock", "tie-next", "personal"
+  const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [editing, setEditing] = useState<{ entry: FlyBoxEntry; patternName: string } | null>(null);
   // Delete confirmation state — one row at a time, branched by source.
   const [deletePersonal, setDeletePersonal] = useState<{ id: string; name: string } | null>(null);
@@ -104,19 +107,68 @@ export default function PatternsTab({
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const typeSet = new Set(typeFilters);
+    const statusSet = new Set(statusFilters);
     return rows.filter((r) => {
       if (q && !r.name.toLowerCase().includes(q)) return false;
-      if (typeFilter && r.type !== typeFilter) return false;
-      if (lowStockOnly && r.deficit === 0) return false;
+      if (typeSet.size > 0 && !typeSet.has(r.type)) return false;
+      if (statusSet.size > 0) {
+        // OR within status: row must match at least one selected status.
+        const matches =
+          (statusSet.has("low-stock") && r.deficit > 0) ||
+          (statusSet.has("tie-next") && r.hasTieNext) ||
+          (statusSet.has("personal") && r.source === "personal");
+        if (!matches) return false;
+      }
       return true;
     });
-  }, [rows, search, typeFilter, lowStockOnly]);
+  }, [rows, search, typeFilters, statusFilters]);
 
-  const allTypes = useMemo(() => {
-    const set = new Set<string>();
-    for (const r of rows) set.add(r.type);
-    return Array.from(set).sort();
+  const typeOptions: FilterOption[] = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of rows) counts.set(r.type, (counts.get(r.type) || 0) + 1);
+    return Array.from(counts.entries())
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [rows]);
+
+  const statusOptions: FilterOption[] = useMemo(() => {
+    let lowStock = 0;
+    let tieNext = 0;
+    let personal = 0;
+    for (const r of rows) {
+      if (r.deficit > 0) lowStock++;
+      if (r.hasTieNext) tieNext++;
+      if (r.source === "personal") personal++;
+    }
+    return [
+      { value: "low-stock", label: "Low stock", count: lowStock },
+      { value: "tie-next", label: "Tie Next", count: tieNext },
+      { value: "personal", label: "Your patterns", count: personal },
+    ];
+  }, [rows]);
+
+  const statusLabel = (v: string) =>
+    v === "low-stock" ? "Low stock" : v === "tie-next" ? "Tie Next" : "Your patterns";
+
+  const activeChips = [
+    ...typeFilters.map((t) => ({
+      key: `type:${t}`,
+      label: t,
+      onRemove: () => setTypeFilters((prev) => prev.filter((x) => x !== t)),
+    })),
+    ...statusFilters.map((s) => ({
+      key: `status:${s}`,
+      label: statusLabel(s),
+      onRemove: () => setStatusFilters((prev) => prev.filter((x) => x !== s)),
+    })),
+  ];
+
+  const clearAll = () => {
+    setTypeFilters([]);
+    setStatusFilters([]);
+  };
+  const hasActive = typeFilters.length > 0 || statusFilters.length > 0;
 
   const flyBoxProps = useMemo(
     () => buildFlyBoxProps(myPatterns, flyBoxEntries, counts),
@@ -131,7 +183,17 @@ export default function PatternsTab({
 
       {view === "table" ? (
         <>
-          <div className="mb-3 flex flex-wrap items-center gap-2">
+          <FilterBar
+            sticky={false}
+            inline
+            activeChips={activeChips}
+            onClearAll={hasActive ? clearAll : undefined}
+            rightSlot={
+              <span className="text-[11px] font-[var(--font-mono)] tabular-nums text-[var(--color-text-muted)]">
+                {filtered.length} / {rows.length}
+              </span>
+            }
+          >
             <label className="relative flex-1 min-w-[180px] max-w-xs">
               <Search
                 size={14}
@@ -141,34 +203,37 @@ export default function PatternsTab({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search patterns…"
-                className="w-full pl-7 pr-2 py-1.5 text-sm rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]"
+                aria-label="Search patterns"
+                className="w-full pl-7 pr-7 py-1.5 text-sm rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[#E8923A]"
               />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  aria-label="Clear search"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </label>
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="text-sm rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] px-2 py-1.5 focus:outline-none focus:border-[#E8923A]"
-            >
-              <option value="">All types</option>
-              {allTypes.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-            <label className="inline-flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
-              <input
-                type="checkbox"
-                checked={lowStockOnly}
-                onChange={(e) => setLowStockOnly(e.target.checked)}
-                className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)]"
-              />
-              Low stock only
-            </label>
-            <span className="ml-auto text-[11px] font-[var(--font-mono)] tabular-nums text-[var(--color-text-muted)]">
-              {filtered.length} / {rows.length}
-            </span>
-          </div>
+            <FilterDropdown
+              label="Type"
+              options={typeOptions}
+              selected={typeFilters}
+              onChange={setTypeFilters}
+              placeholder="Type"
+              emptyMessage="No patterns to filter yet"
+            />
+            <FilterDropdown
+              label="Status"
+              options={statusOptions}
+              selected={statusFilters}
+              onChange={setStatusFilters}
+              placeholder="Status"
+              searchable={false}
+            />
+          </FilterBar>
 
           {selectedKeys.size > 0 && (
             <div className="mb-2 flex items-center justify-between gap-3 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-3 py-2 text-sm text-[var(--color-text-primary)]">

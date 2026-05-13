@@ -2,61 +2,20 @@
 
 import { FishingSession } from "@/types/fishing-log";
 import { useState } from "react";
-import Link from "next/link";
-import { parseLocalDate, formatDate } from "@/lib/date";
 import HelpHint from "@/components/ui/HelpHint";
 
 interface SidebarFiltersProps {
   sessions: FishingSession[];
-  filterRivers: string[];
-  filterYears: number[];
   filterLocations: string[];
-  onFilterChange: (type: "rivers" | "years" | "locations", value: string | number) => void;
-  stats: {
-    totalSessions: number;
-    totalFish: number;
-    riversFished: number;
-    bestSession?: {
-      fish: number;
-      date: string;
-    };
-  };
+  onFilterChange: (type: "locations", value: string) => void;
 }
 
 export function SidebarFilters({
   sessions,
-  filterRivers,
-  filterYears,
   filterLocations,
   onFilterChange,
-  stats,
 }: SidebarFiltersProps) {
-  const [showAllRivers, setShowAllRivers] = useState(false);
   const [showAllLocations, setShowAllLocations] = useState(false);
-
-  // Count sessions per river
-  const riverCounts = sessions.reduce((acc, session) => {
-    const river = session.river_name || "Unknown";
-    acc[river] = (acc[river] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const riverOptions = Object.entries(riverCounts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([river, count]) => ({ river, count }));
-
-  const visibleRivers = showAllRivers ? riverOptions : riverOptions.slice(0, 5);
-
-  // Count sessions per year
-  const yearCounts = sessions.reduce((acc, session) => {
-    const year = parseLocalDate(session.date).getFullYear();
-    acc[year] = (acc[year] || 0) + 1;
-    return acc;
-  }, {} as Record<number, number>);
-
-  const yearOptions = Object.entries(yearCounts)
-    .sort((a, b) => Number(b[0]) - Number(a[0]))
-    .map(([year, count]) => ({ year: Number(year), count }));
 
   // Extract locations from tags
   const locationCounts = sessions.reduce((acc, session) => {
@@ -82,99 +41,10 @@ export function SidebarFilters({
     ? locationOptions
     : locationOptions.slice(0, 5);
 
+  if (locationOptions.length === 0) return null;
+
   return (
     <div className="space-y-6">
-
-
-      {/* River Filter */}
-      <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
-          Filter by River
-        </h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filterRivers.length === 0}
-              onChange={() => {
-                // Clear all river filters
-                riverOptions.forEach(({ river }) => {
-                  if (filterRivers.includes(river)) {
-                    onFilterChange("rivers", river);
-                  }
-                });
-              }}
-              className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
-            />
-            <span>All Rivers</span>
-          </label>
-          {visibleRivers.map(({ river, count }) => (
-            <label
-              key={river}
-              className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={filterRivers.includes(river)}
-                onChange={() => onFilterChange("rivers", river)}
-                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
-              />
-              <span>
-                {river} <span className="text-[#A8B2BD]">({count})</span>
-              </span>
-            </label>
-          ))}
-          {riverOptions.length > 5 && (
-            <button
-              onClick={() => setShowAllRivers(!showAllRivers)}
-              className="text-xs text-[#E8923A] hover:text-[#E8923A]"
-            >
-              {showAllRivers ? "Show less" : `Show ${riverOptions.length - 5} more`}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Year Filter */}
-      <div>
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
-          Filter by Year
-        </h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filterYears.length === 0}
-              onChange={() => {
-                // Clear all year filters
-                yearOptions.forEach(({ year }) => {
-                  if (filterYears.includes(year)) {
-                    onFilterChange("years", year);
-                  }
-                });
-              }}
-              className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
-            />
-            <span>All Years</span>
-          </label>
-          {yearOptions.map(({ year, count }) => (
-            <label
-              key={year}
-              className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={filterYears.includes(year)}
-                onChange={() => onFilterChange("years", year)}
-                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
-              />
-              <span>
-                {year} <span className="text-[#A8B2BD]">({count})</span>
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
 
       {/* Location Filter */}
       {locationOptions.length > 0 && (

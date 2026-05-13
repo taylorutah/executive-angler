@@ -13,6 +13,7 @@ import {
 import type { RiverStats } from "@/types/awards";
 import HelpHint from "@/components/ui/HelpHint";
 import MyFliesWidget, { type MyFliesItem } from "@/components/dashboard/MyFliesWidget";
+import QuickActions, { type QuickAction } from "@/components/dashboard/QuickActions";
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
 
@@ -260,6 +261,17 @@ export default function DashboardClient({
 
           {/* ─── Left Column (main) ─── */}
           <div className="space-y-8">
+
+            {/* Primary actions — daily-driver CTAs always one tap away */}
+            <QuickActions
+              eyebrow="Quick log"
+              actions={[
+                { href: "/journal/new", label: "Log session", icon: Plus, primary: true, hint: "Track today's outing" },
+                { href: "/journal/flies/new", label: "Add pattern", icon: Feather, hint: "Save a new tie" },
+                { href: "/my-flies?tab=workbench", label: "Workbench", icon: Wrench, hint: "Inventory & matches" },
+                { href: "/journal", label: "Open journal", icon: BookOpen, hint: "Full session feed" },
+              ] satisfies QuickAction[]}
+            />
 
             {/* Stats Card — sized to match action grid width */}
             <StatsCard es={es} />
