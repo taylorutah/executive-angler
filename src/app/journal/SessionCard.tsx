@@ -244,41 +244,34 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
               );
             })()}
 
-            {/* Catch summary — Strava-style mini splits table grouped by species.
-                Constrained width so the table feels deliberate on wide cards
-                instead of stretching the row across half a screen. */}
+            {/* Catch summary — one chip per species with count + max length
+                baked in. Matches the fly-chip language already on the card
+                (rounded pill, tinted bg, mono numerics) but in teal so fish
+                read as distinct from flies. */}
             {!hasPhotos && speciesRows.length > 0 && (
-              <div className="mb-2 mt-2.5 border-t border-[#21262D]/60 pt-2.5">
-                <div className="max-w-[340px] space-y-1.5">
-                  {speciesRows.map(row => (
-                    <div
-                      key={row.species}
-                      className="grid grid-cols-[1fr_auto_auto] items-baseline gap-x-5 text-[12px] tabular-nums"
-                    >
-                      <span className="truncate font-medium text-[#F0F6FC]">{row.species}</span>
-                      <span className="font-['IBM_Plex_Mono'] font-bold text-[#F0F6FC] text-right min-w-[2ch]">
-                        {row.count}
+              <div className="mb-2 mt-2 flex flex-wrap gap-1.5">
+                {speciesRows.map(row => (
+                  <span
+                    key={row.species}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#0BA5C7]/30 bg-[#0BA5C7]/10 px-2.5 py-1 text-[11px] text-[#0BA5C7]"
+                  >
+                    <Fish className="h-3 w-3 flex-shrink-0" />
+                    <span className="font-medium">{row.species}</span>
+                    <span className="font-['IBM_Plex_Mono'] font-bold tabular-nums">
+                      {row.count}
+                    </span>
+                    {row.maxLength != null && (
+                      <span className="font-['IBM_Plex_Mono'] tabular-nums text-[#0BA5C7]/80">
+                        {row.count > 1 ? `max ${row.maxLength}″` : `${row.maxLength}″`}
                       </span>
-                      <span className="font-['IBM_Plex_Mono'] font-semibold text-[#F0F6FC] text-right whitespace-nowrap min-w-[5ch]">
-                        {row.maxLength == null ? (
-                          <span className="font-normal text-[#6E7681]">—</span>
-                        ) : (
-                          <>
-                            {row.count > 1 && (
-                              <span className="mr-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.08em] text-[#6E7681]">
-                                max
-                              </span>
-                            )}
-                            {row.maxLength}″
-                          </>
-                        )}
-                      </span>
-                    </div>
-                  ))}
-                  {overflowCount > 0 && (
-                    <div className="pt-0.5 text-[10px] text-[#6E7681]">+{overflowCount} more species</div>
-                  )}
-                </div>
+                    )}
+                  </span>
+                ))}
+                {overflowCount > 0 && (
+                  <span className="inline-flex items-center px-1.5 py-1 text-[11px] text-[#6E7681]">
+                    +{overflowCount} more
+                  </span>
+                )}
               </div>
             )}
 
