@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
 import GearPicker from "@/components/gear/GearPicker";
 import FlyPicker from "@/components/flies/FlyPicker";
-import VariantQuickPick, { type VariantOption } from "@/components/flies/VariantQuickPick";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 import { compressImage } from "@/lib/image-compress";
 import dynamic from "next/dynamic";
@@ -306,6 +305,51 @@ export default function EditSessionPage() {
   }
   function updateCatch(i: number, field: string, value: string | number) {
     setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, [field]: value } : c));
+  }
+
+  /**
+   * Manual edit of a denormalized variant field (fly_size, bead_size).
+   * When the user types directly, clear variant_id so we don't claim the row
+   * still matches the curated variant we auto-picked.
+   */
+  function updateCatchManual(i: number, field: "fly_size" | "bead_size", value: string) {
+    setCatches((prev) => prev.map((c, idx) => idx === i ? { ...c, [field]: value, variant_id: "" } : c));
+  }
+
+  /**
+   * Auto-fill the catch row's variant_id + fly_size + bead_size from the
+   * canonical fly's "best" variant for this user — stocked in their box
+   * first, then most-in-boxes, then size ascending. Called once when the
+   * user picks a canonical fly so they don't have to also pick a size.
+   */
+  async function autoFillFromBestVariant(catchIdx: number, canonicalFlyId: string) {
+    try {
+      const res = await fetch(`/api/flies/variants?pattern_id=${encodeURIComponent(canonicalFlyId)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const list = (data.variants ?? []) as Array<{
+        id: string;
+        size: string;
+        bead_weight_mm: number | null;
+        is_stocked: boolean;
+        in_box_count: number;
+      }>;
+      if (list.length === 0) return;
+      list.sort((a, b) => {
+        if (a.is_stocked !== b.is_stocked) return a.is_stocked ? -1 : 1;
+        if (a.in_box_count !== b.in_box_count) return b.in_box_count - a.in_box_count;
+        return Number(a.size) - Number(b.size);
+      });
+      const best = list[0];
+      setCatches((prev) => prev.map((c, idx) => idx === catchIdx ? {
+        ...c,
+        variant_id: best.id,
+        fly_size: best.size,
+        bead_size: best.bead_weight_mm != null ? String(best.bead_weight_mm) : "",
+      } : c));
+    } catch {
+      // silently ignore — user can fill in manually
+    }
   }
 
   function addCatchPhoto(catchIdx: number, file: File) {
@@ -756,21 +800,13 @@ export default function EditSessionPage() {
                               updateCatch(i, "fly_pattern_id", "");
                               updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", sel.name);
+                              // Auto-fill fly_size + bead_size from the user's
+                              // best-matching variant on this canonical fly so
+                              // they don't have to pick a "configuration".
+                              autoFillFromBestVariant(i, sel.id);
                             }
                           }}
                           placeholder="Search your flies and the library…"
-                        />
-                        <VariantQuickPick
-                          patternId={c.canonical_fly_id || null}
-                          selectedVariantId={c.variant_id || null}
-                          onSelect={(v: VariantOption) => {
-                            updateCatch(i, "variant_id", v.id);
-                            updateCatch(i, "fly_size", v.size);
-                            if (v.bead_weight_mm != null) {
-                              updateCatch(i, "bead_size", String(v.bead_weight_mm));
-                            }
-                          }}
-                          onClear={() => updateCatch(i, "variant_id", "")}
                         />
                         <button
                           type="button"
@@ -793,11 +829,11 @@ export default function EditSessionPage() {
                       </div>
                       <div>
                         <label className={label}>Fly Size (#)</label>
-                        <input type="number" step="1" min="1" className={input} placeholder="14" value={c.fly_size} onChange={(e) => updateCatch(i, "fly_size", e.target.value)} />
+                        <input type="number" step="1" min="1" className={input} placeholder="14" value={c.fly_size} onChange={(e) => updateCatchManual(i, "fly_size", e.target.value)} />
                       </div>
                       <div>
                         <label className={label}>Bead (mm)</label>
-                        <input type="number" step="0.1" min="0" className={input} placeholder="2.5" value={c.bead_size} onChange={(e) => updateCatch(i, "bead_size", e.target.value)} />
+                        <input type="number" step="0.1" min="0" className={input} placeholder="2.5" value={c.bead_size} onChange={(e) => updateCatchManual(i, "bead_size", e.target.value)} />
                       </div>
                       <div>
                         <label className={label}>Time</label>
