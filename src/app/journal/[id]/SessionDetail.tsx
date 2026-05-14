@@ -10,7 +10,7 @@ import {
 import { KudosButton } from "@/components/social/KudosButton";
 import { compressImage } from "@/lib/image-compress";
 import { CommentsSection } from "@/components/social/CommentsSection";
-import { parseLocalDate } from "@/lib/date";
+import { parseLocalDate, formatCatchTime } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
 import HelpHint from "@/components/ui/HelpHint";
 import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
@@ -399,7 +399,7 @@ function FishLightbox({ photos, initialIndex, onClose }: {
             {c.fly_position && <span>· {c.fly_position}</span>}
             {c.fly_size && <span>· Size {c.fly_size}</span>}
             {c.bead_size && <span>· {c.bead_size} bead</span>}
-            {c.time_caught && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{c.time_caught}</span>}
+            {c.time_caught && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatCatchTime(c.time_caught)}</span>}
           </div>
         </div>
         {photos.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {photos.length}</p>}
@@ -1345,7 +1345,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             <span className="bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium flex-shrink-0">{c.fly_position}</span>
                           )}
                           {c.fly_size && <span className="flex-shrink-0">#{String(c.fly_size).replace(/^#/, "")}</span>}
-                          {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{c.time_caught}</span>}
+                          {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{formatCatchTime(c.time_caught)}</span>}
                         </div>
                         {(c.weather_temp_f != null || c.weather_condition || c.weather_humidity != null || c.weather_pressure_hpa != null) && (
                           <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[10px] text-[#6E7681]">
@@ -1458,7 +1458,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             ) : <span className="text-[#6E7681]">—</span>}
                           </td>
                           <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.fly_size || "—"}</td>
-                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.time_caught || "—"}</td>
+                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{formatCatchTime(c.time_caught)}</td>
                           <td className="py-2.5 px-3 text-xs text-[#6E7681]">
                             {(c.weather_temp_f != null || c.weather_humidity != null || c.weather_pressure_hpa != null) ? (
                               <div className="space-y-0.5">
