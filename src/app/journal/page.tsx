@@ -49,10 +49,13 @@ export default async function JournalPage() {
     console.error("Error fetching rigs:", rigsError);
   }
 
-  // Fetch catches with fish photos for feed collage
+  // Fetch catches with fish photos for feed collage. Use the denormalized
+  // fly_name snapshot (kept current by the v2 catch logger + admin rename)
+  // rather than the legacy fly_patterns join, which goes null for catches
+  // logged through the post-flatten variant_id flow.
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_pattern:fly_patterns(name)")
+    .select("id, session_id, species, length_inches, quantities, fish_image_url, fly_name")
     .in("session_id", sessionIds);
 
   // Fetch social engagement counts (kudos + comments per session)

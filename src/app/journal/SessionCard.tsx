@@ -91,9 +91,19 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const catches = catchesProp || session.catches || [];
   const totalFish = session.total_fish ?? catches.reduce((s, c) => s + (c.quantities || 1), 0);
   const fishPhotos = catches.map(c => c.fish_image_url).filter(Boolean).slice(0, 4) as string[];
-  const topFlies = Array.from(
-    new Map(catches.filter(c => c.fly_pattern?.name).map(c => [c.fly_pattern!.name!, c.fly_pattern!.name!])).values()
-  ).slice(0, 3);
+  const topFlies = (() => {
+    const map = new Map<string, number>();
+    for (const c of catches) {
+      const name = (c as { fly_name?: string | null }).fly_name?.trim()
+        || c.fly_pattern?.name?.trim();
+      if (!name) continue;
+      map.set(name, (map.get(name) || 0) + (c.quantities ?? 1));
+    }
+    return Array.from(map.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([name, count]) => ({ name, count }));
+  })();
   const tags = session.trip_tags || session.tags || [];
   const title = session.river_name || session.title || "Fishing Session";
 
@@ -212,8 +222,8 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
             {/* Flies */}
             {topFlies.length > 0 && (
               <div className="flex flex-wrap gap-1 mb-2">
-                {topFlies.map(name => (
-                  <span key={name} className="text-[10px] bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2 py-0.5">🪰 {name}</span>
+                {topFlies.map(({ name, count }) => (
+                  <span key={name} className="text-[10px] bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2 py-0.5">🪰 {name}{count > 1 ? ` × ${count}` : ""}</span>
                 ))}
               </div>
             )}
