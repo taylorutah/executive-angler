@@ -47,7 +47,7 @@ export default async function HatchReportsPage() {
 
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, fly_pattern_id, fly_size, time_caught, quantities")
+    .select("id, session_id, species, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, quantities")
     .eq("user_id", user.id);
 
   const { data: flies } = await supabase
@@ -68,7 +68,7 @@ export default async function HatchReportsPage() {
       sessions={sessions || []}
       catches={(catches || []).map(c => ({
         ...c,
-        flyName: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.name || null : null,
+        flyName: c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.name || null : null),
         flyType: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.type || null : null,
       }))}
       rivers={(rivers || []).map(r => ({

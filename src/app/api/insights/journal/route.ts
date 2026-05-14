@@ -36,7 +36,7 @@ export async function POST() {
       .limit(50),
     supabase
       .from("catches")
-      .select("id, session_id, species, length_inches, fly_pattern_id, fly_size, time_caught, quantities")
+      .select("id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, quantities")
       .eq("user_id", user.id)
       .limit(500),
     supabase
@@ -62,7 +62,7 @@ export async function POST() {
     const sessionCatches = catches.filter(c => c.session_id === s.id);
     const speciesSet = new Set(sessionCatches.map(c => c.species).filter(Boolean));
     const flyNames = sessionCatches
-      .map(c => c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null)
+      .map(c => c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null))
       .filter(Boolean);
     const biggest = sessionCatches.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
 

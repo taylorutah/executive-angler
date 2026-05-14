@@ -47,7 +47,7 @@ export default async function InsightsPage() {
       .order("date", { ascending: false }),
     supabase
       .from("catches")
-      .select("id, session_id, species, length_inches, fly_pattern_id, fly_size, fly_position, time_caught, quantities")
+      .select("id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, fly_position, time_caught, quantities")
       .eq("user_id", user.id),
     supabase
       .from("fly_patterns")
@@ -62,7 +62,7 @@ export default async function InsightsPage() {
       sessions={sessionsRes.data || []}
       catches={(catchesRes.data || []).map(c => ({
         ...c,
-        flyName: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.name || null : null,
+        flyName: c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.name || null : null),
         flyType: c.fly_pattern_id ? flyMap[c.fly_pattern_id]?.type || null : null,
       }))}
     />

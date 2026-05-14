@@ -57,7 +57,7 @@ export async function POST() {
     supabase
       .from("catches")
       .select(
-        "id, session_id, species, length_inches, fly_pattern_id, fly_size, fly_position, time_caught, quantities"
+        "id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, fly_position, time_caught, quantities"
       )
       .eq("user_id", user.id)
       .limit(300),
@@ -82,7 +82,7 @@ export async function POST() {
     const sessionCatches = catches.filter((c) => c.session_id === s.id);
     const speciesSet = new Set(sessionCatches.map((c) => c.species).filter(Boolean));
     const flyNames = sessionCatches
-      .map((c) => (c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null))
+      .map((c) => c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null))
       .filter(Boolean);
     const flyPositions = sessionCatches
       .map((c) => c.fly_position)

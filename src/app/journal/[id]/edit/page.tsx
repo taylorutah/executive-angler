@@ -818,6 +818,11 @@ export default function EditSessionPage() {
                       </div>
                       <div className="col-span-2">
                         <label className={label}>Fly Pattern</label>
+                        {c.variant_id && !c.fly_pattern_id && !c.canonical_fly_id && c.fly_name && (
+                          <p className="text-[10px] text-[#6E7681] mb-1">
+                            Current: <span className="text-[#0BA5C7]">{c.fly_name}</span> — pick a new fly to replace
+                          </p>
+                        )}
                         <FlyPicker
                           value={
                             c.fly_pattern_id

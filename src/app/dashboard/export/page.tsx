@@ -23,7 +23,7 @@ export default async function ExportPage() {
   // Fetch all catches
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, fly_pattern_id, fly_size, time_caught, notes, quantities")
+    .select("id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, notes, quantities")
     .eq("user_id", user.id);
 
   // Fetch fly patterns for name lookup
@@ -39,7 +39,7 @@ export default async function ExportPage() {
       sessions={sessions || []}
       catches={(catches || []).map(c => ({
         ...c,
-        flyPatternName: c.fly_pattern_id ? flyMap[c.fly_pattern_id] || null : null,
+        flyPatternName: c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id] || null : null),
       }))}
     />
   );

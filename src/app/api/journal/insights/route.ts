@@ -23,6 +23,8 @@ interface CatchRow {
   species: string | null;
   length_inches: number | null;
   fly_pattern_id: string | null;
+  fly_name: string | null;
+  variant_id: string | null;
   fly_size: string | null;
   time_caught: string | null;
   quantities: number | null;
@@ -126,7 +128,7 @@ export async function GET() {
     supabase
       .from("catches")
       .select(
-        "id, session_id, species, length_inches, fly_pattern_id, fly_size, time_caught, quantities"
+        "id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, quantities"
       )
       .eq("user_id", user.id),
     supabase
@@ -153,13 +155,18 @@ export async function GET() {
   > = {};
 
   for (const c of catches) {
-    const flyId = c.fly_pattern_id;
-    if (!flyId) continue;
-    const fly = flyMap.get(flyId);
-    if (!fly) continue;
-    const key = flyId;
+    // Resolve display name across the three identity paths: denormalized
+    // snapshot (set at save by both variant + legacy logging), legacy
+    // pattern join, or skip if neither is available.
+    const legacyFly = c.fly_pattern_id ? flyMap.get(c.fly_pattern_id) : null;
+    const name = c.fly_name || legacyFly?.name || null;
+    if (!name) continue;
+    const type = legacyFly?.type ?? null;
+    // Key by name so variant catches and legacy catches of the same
+    // pattern aggregate together.
+    const key = name;
     if (!flyAgg[key]) {
-      flyAgg[key] = { name: fly.name, type: fly.type, catches: 0, sessionIds: new Set() };
+      flyAgg[key] = { name, type, catches: 0, sessionIds: new Set() };
     }
     flyAgg[key].catches += c.quantities || 1;
     flyAgg[key].sessionIds.add(c.session_id);
