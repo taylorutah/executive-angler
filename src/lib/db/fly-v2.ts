@@ -1115,6 +1115,40 @@ export async function updatePattern(
     return { ok: false, error: error.message, status: 500 };
   }
   const updated = data as Pattern;
+
+  // Cascade rename → catches.fly_name snapshot.
+  //
+  // `catches.fly_name` is a denormalized snapshot stamped at catch save time.
+  // Without this cascade it'd hold the old name forever and the journal feed
+  // / leaderboards / iOS catch summaries would drift the moment anyone edits
+  // a fly. We touch only rows whose variant_id points at a variant of this
+  // pattern AND whose current snapshot differs from the new name, so this is
+  // a no-op when name didn't change.
+  if (fields.name !== undefined && fields.name !== guard.pattern.name) {
+    const newName = fields.name;
+    const { data: variantRows, error: vErr } = await supabase
+      .from("fly_variants")
+      .select("id")
+      .eq("pattern_id", patternId);
+    if (vErr) {
+      console.error("[updatePattern] cascade lookup failed:", vErr);
+      // Don't fail the rename — the pattern is already updated. Snapshot
+      // refresh can be re-run via the data-migration SQL if drift surfaces.
+    } else if ((variantRows ?? []).length > 0) {
+      const variantIds = (variantRows as { id: string }[]).map((r) => r.id);
+      const { error: cErr, count } = await supabase
+        .from("catches")
+        .update({ fly_name: newName }, { count: "exact" })
+        .in("variant_id", variantIds)
+        .neq("fly_name", newName);
+      if (cErr) {
+        console.error("[updatePattern] cascade refresh failed:", cErr);
+      } else if ((count ?? 0) > 0) {
+        console.log(`[updatePattern] refreshed fly_name on ${count} catch(es) for pattern ${patternId}`);
+      }
+    }
+  }
+
   return {
     ok: true,
     pattern: updated,
