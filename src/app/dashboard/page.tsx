@@ -139,7 +139,7 @@ export default async function DashboardPage() {
       return {
         key: `variant-${v.id}`,
         name: v.pattern?.name ?? v.display_name ?? "Untitled variant",
-        imageUrl: null,
+        imageUrl: v.pattern?.hero_image_url ?? null,
         category: v.pattern?.category ?? null,
         href: v.pattern?.slug ? `/flies/${v.pattern.slug}` : `/flies/by-id/${v.pattern_id}`,
         subtitle: `${specParts.join(" · ")} · ${needSummary}`,

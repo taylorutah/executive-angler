@@ -302,10 +302,10 @@ export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
   const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
   const { data: patternRows } = await supabase
     .from("fly_patterns_v2")
-    .select("id, slug, name, category")
+    .select("id, slug, name, category, hero_image_url")
     .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category">[]) {
+  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
     patternById.set(p.id, p);
   }
 
@@ -360,10 +360,10 @@ export async function listMyStockedVariants(): Promise<VariantRow[]> {
   const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
   const { data: patternRows } = await supabase
     .from("fly_patterns_v2")
-    .select("id, slug, name, category")
+    .select("id, slug, name, category, hero_image_url")
     .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category">[]) {
+  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
     patternById.set(p.id, p);
   }
 
@@ -447,10 +447,10 @@ export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
   const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
   const { data: patternRows } = await supabase
     .from("fly_patterns_v2")
-    .select("id, slug, name, category")
+    .select("id, slug, name, category, hero_image_url")
     .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category">[]) {
+  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
     patternById.set(p.id, p);
   }
 

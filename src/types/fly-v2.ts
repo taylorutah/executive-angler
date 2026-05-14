@@ -211,7 +211,7 @@ export interface VariantBoxMembership {
 
 /** Convenience: Variant with stock + photos joined for table rows. */
 export interface VariantRow extends Variant {
-  pattern: Pick<Pattern, "id" | "slug" | "name" | "category"> | null;
+  pattern: Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url"> | null;
   stock: VariantStock | null;
   primary_photo: VariantPhoto | null;
   box_count: number;
