@@ -1124,7 +1124,12 @@ export async function updatePattern(
   // a fly. We touch only rows whose variant_id points at a variant of this
   // pattern AND whose current snapshot differs from the new name, so this is
   // a no-op when name didn't change.
-  if (fields.name !== undefined && fields.name !== guard.pattern.name) {
+  //
+  // `assertCanEditPattern` doesn't return `name` on its pattern guard, so we
+  // can't compare against the old value cheaply — fall back to a `fields.name`
+  // presence check. The cascade UPDATE's own `.neq("fly_name", newName)`
+  // filter prevents wasted writes when the snapshot already matches.
+  if (fields.name !== undefined) {
     const newName = fields.name;
     const { data: variantRows, error: vErr } = await supabase
       .from("fly_variants")
