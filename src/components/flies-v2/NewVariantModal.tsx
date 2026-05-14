@@ -20,17 +20,28 @@ interface Props {
    * Pre-fills the modal so users only need to type what they're varying.
    */
   defaultBeadSpec?: ParsedBeadSpec;
+  /**
+   * Admin viewers can flip the "Add as curated" switch to create a variant
+   * with `created_by_user_id = null` — visible to everyone, not just them.
+   * Default-on for admins so the catalog actually grows when admin uses this
+   * modal; uncheck for a personal-only variant. Hidden entirely for non-admins
+   * (server-side guard in createUserVariant downgrades the flag regardless).
+   */
+  isAdmin?: boolean;
 }
 
 const BEAD_MATERIALS = ["tungsten", "brass", "glass", "none"] as const;
 
-export default function NewVariantModal({ patternId, patternSlug, open, onClose, defaultBeadSpec }: Props) {
+export default function NewVariantModal({ patternId, patternSlug, open, onClose, defaultBeadSpec, isAdmin }: Props) {
   const [size, setSize] = useState("");
   const [beadMaterial, setBeadMaterial] = useState<string>(defaultBeadSpec?.material ?? "");
   const [beadWeight, setBeadWeight] = useState(defaultBeadSpec?.weight_mm != null ? String(defaultBeadSpec.weight_mm) : "");
   const [beadColor, setBeadColor] = useState(defaultBeadSpec?.color ?? "");
   const [bodyColor, setBodyColor] = useState("");
   const [ribColor, setRibColor] = useState("");
+  // Default to curated when admin opens the modal — that's the entire point
+  // of having the toggle here. They can uncheck for a personal-only variant.
+  const [asCanonical, setAsCanonical] = useState<boolean>(!!isAdmin);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -42,6 +53,7 @@ export default function NewVariantModal({ patternId, patternSlug, open, onClose,
     setBeadWeight(defaultBeadSpec?.weight_mm != null ? String(defaultBeadSpec.weight_mm) : "");
     setBeadColor(defaultBeadSpec?.color ?? "");
     setBodyColor(""); setRibColor(""); setError(null);
+    setAsCanonical(!!isAdmin);
   };
 
   const submit = () => {
@@ -57,6 +69,7 @@ export default function NewVariantModal({ patternId, patternSlug, open, onClose,
         bead_color: beadColor || undefined,
         body_color: bodyColor || undefined,
         rib_color: ribColor || undefined,
+        as_canonical: isAdmin ? asCanonical : undefined,
       });
       if (!r.ok) { setError(r.error ?? "Failed to create variant."); return; }
       reset();
@@ -162,6 +175,21 @@ export default function NewVariantModal({ patternId, patternSlug, open, onClose,
               />
             </div>
           </div>
+
+          {isAdmin && (
+            <label className="flex items-start gap-2 cursor-pointer pt-1">
+              <input
+                type="checkbox"
+                checked={asCanonical}
+                onChange={(e) => setAsCanonical(e.target.checked)}
+                className="mt-0.5 h-3.5 w-3.5 rounded border-[#30363D] bg-[#0D1117] accent-[#E8923A]"
+              />
+              <span className="text-[11px] leading-snug text-[#A8B2BD]">
+                <span className="text-[#F0F6FC] font-medium">Add as curated</span>
+                <span className="text-[#6E7681]"> — visible to everyone (admin)</span>
+              </span>
+            </label>
+          )}
 
           {error && (
             <p className="text-xs text-[#F87171]">{error}</p>

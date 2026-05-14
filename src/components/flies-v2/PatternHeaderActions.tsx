@@ -147,6 +147,7 @@ export default function PatternHeaderActions({
         open={open}
         onClose={() => setOpen(false)}
         defaultBeadSpec={defaultBeadSpec}
+        isAdmin={isAdmin}
       />
     </div>
   );

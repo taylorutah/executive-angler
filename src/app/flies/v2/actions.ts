@@ -62,6 +62,13 @@ export interface CreateVariantInput {
   rib_color?: string;
   display_name?: string;
   notes?: string;
+  /**
+   * Admin-only — when true, the new variant is created as canonical
+   * (`created_by_user_id = null`) so it shows for all users, not just the
+   * creator. Non-admins setting this flag are silently downgraded to a
+   * personal variant by `createUserVariant`.
+   */
+  as_canonical?: boolean;
 }
 
 /**
@@ -80,7 +87,13 @@ export async function cloneVariantAction(input: {
   return { ok: true, variantId: result.variant.id };
 }
 
-/** Create a user-owned variant on a pattern. */
+/**
+ * Create a variant on a pattern. Defaults to a user-owned variant
+ * (`created_by_user_id = auth.uid()`). Admins can pass `as_canonical: true`
+ * to create a curated variant visible to everyone — `createUserVariant`
+ * checks the admin email list server-side, so non-admins setting the flag
+ * silently get a personal variant instead.
+ */
 export async function createVariantAction(input: CreateVariantInput): Promise<{ ok: boolean; variantId?: string; error?: string }> {
   if (!input.size?.trim()) return { ok: false, error: "Size is required." };
   const variant = await createUserVariant({
@@ -93,6 +106,7 @@ export async function createVariantAction(input: CreateVariantInput): Promise<{ 
     rib_color: input.rib_color,
     display_name: input.display_name,
     notes: input.notes,
+    as_canonical: input.as_canonical,
   });
   if (!variant) return { ok: false, error: "Failed to create variant. Are you signed in?" };
   revalidatePath(`/flies/${input.pattern_slug}`);
