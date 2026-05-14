@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { KudosButton } from "@/components/social/KudosButton";
 import { compressImage } from "@/lib/image-compress";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 import { CommentsSection } from "@/components/social/CommentsSection";
 import { parseLocalDate, formatCatchTime } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
@@ -492,6 +493,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
   const [uploadingSessionPhoto, setUploadingSessionPhoto] = useState(false);
   const [sessionPhotoLightboxIdx, setSessionPhotoLightboxIdx] = useState<number | null>(null);
 
+  // Pending photo awaiting crop (catch or session). Stores raw blob URL +
+  // a target tag describing what to do with the cropped Blob.
+  const [pendingPhoto, setPendingPhoto] = useState<
+    | { src: string; target: { kind: "catch"; catchId: string } | { kind: "session" } }
+    | null
+  >(null);
+
   // Inline notes editing
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(session.notes || "");
@@ -558,10 +566,36 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     }
   }
 
-  async function handleCatchPhotoUpload(catchId: string, file: File) {
+  function handleCatchPhotoUpload(catchId: string, file: File) {
+    try {
+      validateImageFile(file);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Invalid image");
+      return;
+    }
+    setPendingPhoto({
+      src: URL.createObjectURL(file),
+      target: { kind: "catch", catchId },
+    });
+  }
+
+  function handleSessionPhotoUpload(file: File) {
+    try {
+      validateImageFile(file);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Invalid image");
+      return;
+    }
+    setPendingPhoto({
+      src: URL.createObjectURL(file),
+      target: { kind: "session" },
+    });
+  }
+
+  async function uploadCroppedCatchPhoto(catchId: string, blob: Blob) {
     setUploadingCatch(catchId);
     try {
-      const compressed = await compressImage(file);
+      const compressed = await compressImage(blob);
       const form = new FormData();
       form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
       form.append("catchId", catchId);
@@ -582,10 +616,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     }
   }
 
-  async function handleSessionPhotoUpload(file: File) {
+  async function uploadCroppedSessionPhoto(blob: Blob) {
     setUploadingSessionPhoto(true);
     try {
-      const compressed = await compressImage(file);
+      const compressed = await compressImage(blob);
       const form = new FormData();
       form.append("file", new File([compressed], "photo.jpg", { type: "image/jpeg" }));
       form.append("sessionId", session.id);
@@ -604,6 +638,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
     } finally {
       setUploadingSessionPhoto(false);
     }
+  }
+
+  function handleEditorApply(blob: Blob) {
+    if (!pendingPhoto) return;
+    const target = pendingPhoto.target;
+    URL.revokeObjectURL(pendingPhoto.src);
+    setPendingPhoto(null);
+    if (target.kind === "catch") {
+      void uploadCroppedCatchPhoto(target.catchId, blob);
+    } else {
+      void uploadCroppedSessionPhoto(blob);
+    }
+  }
+
+  function handleEditorCancel() {
+    if (pendingPhoto) URL.revokeObjectURL(pendingPhoto.src);
+    setPendingPhoto(null);
   }
 
   async function handleSessionPhotoDelete(photoId: string) {
@@ -1515,6 +1566,16 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           {/* Social bar is now in the header card left column */}
         </div>
       </div>
+
+      <ImageEditor
+        open={!!pendingPhoto}
+        imageSrc={pendingPhoto?.src ?? ""}
+        aspect="free"
+        maxOutputPx={1600}
+        title={pendingPhoto?.target.kind === "session" ? "Crop session photo" : "Crop fish photo"}
+        onCancel={handleEditorCancel}
+        onApply={handleEditorApply}
+      />
     </>
   );
 }

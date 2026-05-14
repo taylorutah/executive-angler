@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import Cropper from "react-easy-crop";
-import type { Area } from "react-easy-crop";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Camera, Crop, Loader2, Upload, X, CheckCircle } from "lucide-react";
+import { Camera, Crop, Upload, X } from "lucide-react";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 
 interface FlyImageUploaderProps {
   existingUrl?: string | null;
@@ -22,12 +20,7 @@ export default function FlyImageUploader({
   const [previewUrl, setPreviewUrl] = useState<string | null>(existingUrl ?? null);
   const lastBlobUrl = useRef<string | null>(null);
 
-  const [cropMode, setCropMode] = useState(false);
-  const [rawImageUrl, setRawImageUrl] = useState<string>("");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [cropProcessing, setCropProcessing] = useState(false);
+  const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     setPreviewUrl(existingUrl ?? null);
@@ -40,60 +33,36 @@ export default function FlyImageUploader({
     };
   }, [rawImageUrl]);
 
-  const onCropComplete = useCallback((_: Area, pixels: Area) => {
-    setCroppedAreaPixels(pixels);
-  }, []);
-
   function handleFileSelect(file: File) {
-    if (!file.type.startsWith("image/")) {
-      setError("Please upload an image (JPEG, PNG, or WebP)");
-      return;
-    }
-    if (file.size > 15 * 1024 * 1024) {
-      setError("Image too large. Maximum 15 MB.");
-      return;
-    }
-    setError(null);
-
-    const localUrl = URL.createObjectURL(file);
-    setRawImageUrl(localUrl);
-    setCropMode(true);
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
-  }
-
-  async function handleCropConfirm() {
-    if (!croppedAreaPixels || !rawImageUrl) return;
-    setCropProcessing(true);
-    setError(null);
-
     try {
-      const blob = await getCroppedImage(rawImageUrl, croppedAreaPixels);
-      const croppedFile = new File([blob], `fly-${Date.now()}.jpg`, {
-        type: "image/jpeg",
-      });
-
-      if (lastBlobUrl.current) URL.revokeObjectURL(lastBlobUrl.current);
-      const newPreview = URL.createObjectURL(blob);
-      lastBlobUrl.current = newPreview;
-      setPreviewUrl(newPreview);
-
-      onFileChange(croppedFile);
-
-      URL.revokeObjectURL(rawImageUrl);
-      setRawImageUrl("");
-      setCropMode(false);
+      validateImageFile(file);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Crop failed");
-    } finally {
-      setCropProcessing(false);
+      setError(e instanceof Error ? e.message : "Invalid image");
+      return;
     }
+    setError(null);
+    setRawImageUrl(URL.createObjectURL(file));
   }
 
-  function handleCropCancel() {
-    setCropMode(false);
+  function handleEditorApply(blob: Blob) {
     if (rawImageUrl) URL.revokeObjectURL(rawImageUrl);
-    setRawImageUrl("");
+    setRawImageUrl(null);
+
+    const croppedFile = new File([blob], `fly-${Date.now()}.jpg`, {
+      type: "image/jpeg",
+    });
+
+    if (lastBlobUrl.current) URL.revokeObjectURL(lastBlobUrl.current);
+    const newPreview = URL.createObjectURL(blob);
+    lastBlobUrl.current = newPreview;
+    setPreviewUrl(newPreview);
+
+    onFileChange(croppedFile);
+  }
+
+  function handleEditorCancel() {
+    if (rawImageUrl) URL.revokeObjectURL(rawImageUrl);
+    setRawImageUrl(null);
   }
 
   function handleRemove() {
@@ -104,94 +73,6 @@ export default function FlyImageUploader({
     setPreviewUrl(null);
     setError(null);
     onFileChange(null);
-  }
-
-  if (cropMode && rawImageUrl && typeof document !== "undefined") {
-    // Render through a portal at document.body so the modal isn't trapped
-    // inside any ancestor that creates a containing block for fixed
-    // positioning (transforms, sticky parents, etc.) — that's what was
-    // making it spill into the page flow with the header still visible.
-    return createPortal(
-      <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
-        <div className="w-full max-w-xl max-h-[calc(100vh-2rem)] flex flex-col bg-[#161B22] rounded-2xl overflow-hidden border border-[#21262D] shadow-2xl">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[#21262D] flex-shrink-0">
-            <div className="flex items-center gap-2 min-w-0">
-              <Crop className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-              <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
-              <span className="text-[10px] text-[#6E7681] ml-2 hidden sm:inline">
-                Drag · Scroll to zoom
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={handleCropCancel}
-              className="text-[#6E7681] hover:text-[#F0F6FC] flex-shrink-0"
-              aria-label="Cancel crop"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="relative w-full aspect-square bg-black flex-shrink-0">
-            <Cropper
-              image={rawImageUrl}
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-              showGrid
-              cropShape="rect"
-              style={{
-                containerStyle: { background: "#000" },
-                cropAreaStyle: { border: "2px solid #E8923A" },
-              }}
-            />
-          </div>
-          <div className="px-4 py-3 border-t border-[#21262D] flex-shrink-0">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-xs text-[#A8B2BD]">Zoom</span>
-              <input
-                type="range"
-                min={1}
-                max={3}
-                step={0.05}
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className="flex-1 accent-[#E8923A]"
-                aria-label="Zoom level"
-              />
-              <span className="text-xs text-[#A8B2BD] font-mono w-10 text-right">
-                {zoom.toFixed(1)}×
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handleCropCancel}
-                className="flex-1 px-4 py-2.5 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleCropConfirm}
-                disabled={cropProcessing || !croppedAreaPixels}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
-              >
-                {cropProcessing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <CheckCircle className="h-4 w-4" />
-                )}
-                {cropProcessing ? "Processing..." : "Apply Crop"}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>,
-      document.body,
-    );
   }
 
   return (
@@ -251,7 +132,7 @@ export default function FlyImageUploader({
             Drop photo here or click to browse
           </span>
           <span className="text-[10px] text-[#6E7681] mt-1">
-            Crop & zoom · 1:1 · JPEG/PNG/WebP · 15 MB max
+            Crop · zoom · rotate · 1:1 · JPEG/PNG/WebP · 15 MB max
           </span>
         </button>
       )}
@@ -279,48 +160,16 @@ export default function FlyImageUploader({
           <Upload className="h-3 w-3" /> 1:1 looks best in the fly box
         </p>
       ) : null}
+
+      <ImageEditor
+        open={!!rawImageUrl}
+        imageSrc={rawImageUrl ?? ""}
+        aspect={1}
+        maxOutputPx={1600}
+        title="Crop fly photo"
+        onCancel={handleEditorCancel}
+        onApply={handleEditorApply}
+      />
     </div>
   );
-}
-
-async function getCroppedImage(imageSrc: string, area: Area): Promise<Blob> {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("No canvas context");
-
-  const maxWidth = 1600;
-  const scale = Math.min(maxWidth / area.width, 1);
-  canvas.width = Math.round(area.width * scale);
-  canvas.height = Math.round(area.height * scale);
-
-  ctx.drawImage(
-    image,
-    area.x,
-    area.y,
-    area.width,
-    area.height,
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-  );
-
-  return new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Canvas toBlob failed"))),
-      "image/jpeg",
-      0.85,
-    );
-  });
-}
-
-function createImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    img.addEventListener("load", () => resolve(img));
-    img.addEventListener("error", reject);
-    img.crossOrigin = "anonymous";
-    img.src = url;
-  });
 }

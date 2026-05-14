@@ -25,6 +25,7 @@ import { X, Upload, AlertTriangle } from "lucide-react";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
 import TyingStepsEditor from "@/components/flies-v2/TyingStepsEditor";
 import BulkVariantBuilder from "@/components/flies-v2/BulkVariantBuilder";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 import {
   updatePatternAction,
   uploadPatternHeroAction,
@@ -340,10 +341,26 @@ export default function PatternEditDrawer({
     else if (tab === "editorial") saveEditorial();
   };
 
-  // Hero upload
+  // Hero upload — pick → crop/zoom/rotate via ImageEditor → upload.
   const heroFileRef = useRef<HTMLInputElement | null>(null);
+  const [heroRawSrc, setHeroRawSrc] = useState<string | null>(null);
+
   const onHeroFile = (file: File) => {
-    if (file.size > 5 * 1024 * 1024) { showStatus("File over 5 MB.", "error"); return; }
+    try {
+      validateImageFile(file);
+    } catch (e) {
+      showStatus(e instanceof Error ? e.message : "Invalid image", "error");
+      return;
+    }
+    setHeroRawSrc(URL.createObjectURL(file));
+  };
+
+  const onHeroCropApply = (blob: Blob) => {
+    if (heroRawSrc) URL.revokeObjectURL(heroRawSrc);
+    setHeroRawSrc(null);
+    const file = new File([blob], `pattern-${Date.now()}.jpg`, {
+      type: "image/jpeg",
+    });
     startTransition(async () => {
       const fd = new FormData();
       fd.set("file", file);
@@ -357,6 +374,11 @@ export default function PatternEditDrawer({
       onPatternChanged?.(next);
       showStatus("Hero image uploaded.");
     });
+  };
+
+  const onHeroCropCancel = () => {
+    if (heroRawSrc) URL.revokeObjectURL(heroRawSrc);
+    setHeroRawSrc(null);
   };
 
   if (!open) return null;
@@ -581,7 +603,8 @@ export default function PatternEditDrawer({
                       </button>
                     )}
                     <p className="text-[10px] text-[#6E7681] max-w-[200px]">
-                      JPG / PNG / WebP up to 5 MB.
+                      JPG / PNG / WebP up to 15 MB. Crop, zoom, and rotate
+                      after upload.
                     </p>
                     <input
                       ref={heroFileRef}
@@ -710,6 +733,16 @@ export default function PatternEditDrawer({
           )}
         </div>
       </div>
+
+      <ImageEditor
+        open={!!heroRawSrc}
+        imageSrc={heroRawSrc ?? ""}
+        aspect={1}
+        maxOutputPx={1600}
+        title="Crop hero image"
+        onCancel={onHeroCropCancel}
+        onApply={onHeroCropApply}
+      />
     </div>
   );
 }

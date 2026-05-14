@@ -16,6 +16,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { compressImage } from "@/lib/image-compress";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 
 interface PhotoSubmissionFormProps {
   entityType: string;
@@ -46,6 +47,7 @@ export default function PhotoSubmissionForm({
   // File state
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -71,20 +73,34 @@ export default function PhotoSubmissionForm({
 
   const handleFile = useCallback((selectedFile: File) => {
     setError(null);
-
-    if (!ACCEPTED_TYPES.includes(selectedFile.type)) {
-      setError("Please upload a JPEG or PNG image.");
+    try {
+      validateImageFile(selectedFile, {
+        maxSizeBytes: MAX_FILE_SIZE,
+        acceptedTypes: ACCEPTED_TYPES,
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Invalid image");
       return;
     }
-    if (selectedFile.size > MAX_FILE_SIZE) {
-      setError("File size must be under 10MB.");
-      return;
-    }
-
-    setFile(selectedFile);
-    const url = URL.createObjectURL(selectedFile);
-    setPreview(url);
+    setRawImageSrc(URL.createObjectURL(selectedFile));
   }, []);
+
+  const handleEditorApply = useCallback(
+    (blob: Blob) => {
+      if (rawImageSrc) URL.revokeObjectURL(rawImageSrc);
+      setRawImageSrc(null);
+      const cropped = new File([blob], "photo.jpg", { type: "image/jpeg" });
+      setFile(cropped);
+      if (preview) URL.revokeObjectURL(preview);
+      setPreview(URL.createObjectURL(blob));
+    },
+    [rawImageSrc, preview],
+  );
+
+  const handleEditorCancel = useCallback(() => {
+    if (rawImageSrc) URL.revokeObjectURL(rawImageSrc);
+    setRawImageSrc(null);
+  }, [rawImageSrc]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -531,6 +547,16 @@ export default function PhotoSubmissionForm({
           )}
         </div>
       )}
+
+      <ImageEditor
+        open={!!rawImageSrc}
+        imageSrc={rawImageSrc ?? ""}
+        aspect="free"
+        maxOutputPx={1600}
+        title="Crop your photo"
+        onCancel={handleEditorCancel}
+        onApply={handleEditorApply}
+      />
     </div>
   );
 }

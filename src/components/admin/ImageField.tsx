@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import Cropper from "react-easy-crop";
-import type { Area } from "react-easy-crop";
+import { useEffect, useRef, useState } from "react";
 import {
-  Camera, Upload, Loader2, CheckCircle, Info,
+  Camera, Upload, Loader2, Info,
   Image as ImageIcon, Type, User, Link as LinkIcon, Crop, X,
 } from "lucide-react";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 
 export interface ImageFieldPatch {
   url?: string;
@@ -45,144 +44,46 @@ export default function ImageField({
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
 
-  // Crop state
-  const [cropMode, setCropMode] = useState(false);
-  const [rawImageUrl, setRawImageUrl] = useState<string>("");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [cropProcessing, setCropProcessing] = useState(false);
-
-  const onCropComplete = useCallback((_: Area, pixels: Area) => {
-    setCroppedAreaPixels(pixels);
-  }, []);
-
-  async function handleFileSelect(file: File) {
-    if (!file.type.startsWith("image/")) {
-      setError("Please upload an image (JPEG, PNG, or WebP)");
-      return;
-    }
-    if (file.size > 15 * 1024 * 1024) {
-      setError("Image too large. Maximum 15 MB.");
+  function handleFileSelect(file: File) {
+    try {
+      validateImageFile(file);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Invalid image");
       return;
     }
     setError(null);
-
-    const localUrl = URL.createObjectURL(file);
-    setRawImageUrl(localUrl);
-    setCropMode(true);
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
+    setRawImageUrl(URL.createObjectURL(file));
   }
 
-  async function handleCropConfirm() {
-    if (!croppedAreaPixels || !rawImageUrl) return;
-    setCropProcessing(true);
-    setError(null);
+  async function handleEditorApply(blob: Blob) {
+    if (rawImageUrl) URL.revokeObjectURL(rawImageUrl);
+    setRawImageUrl(null);
 
+    setUploading(true);
+    setError(null);
     try {
-      const croppedBlob = await getCroppedImage(rawImageUrl, croppedAreaPixels);
-      setUploading(true);
       const formData = new FormData();
-      formData.append("file", croppedBlob, "cropped.jpg");
+      formData.append("file", blob, "cropped.jpg");
       formData.append(
         "submission_id",
-        `${submissionIdPrefix}-${Date.now()}`
+        `${submissionIdPrefix}-${Date.now()}`,
       );
-
       const res = await fetch(uploadEndpoint, { method: "POST", body: formData });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "Upload failed");
-
       onChange({ url: result.url });
-      setCropMode(false);
-      URL.revokeObjectURL(rawImageUrl);
-      setRawImageUrl("");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Crop/upload failed");
+      setError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploading(false);
     }
-
-    setUploading(false);
-    setCropProcessing(false);
   }
 
-  function handleCropCancel() {
-    setCropMode(false);
+  function handleEditorCancel() {
     if (rawImageUrl) URL.revokeObjectURL(rawImageUrl);
-    setRawImageUrl("");
-  }
-
-  // Fullscreen crop overlay
-  if (cropMode && rawImageUrl) {
-    return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 bg-[#161B22] border-b border-[#21262D]">
-          <div className="flex items-center gap-2">
-            <Crop className="h-5 w-5 text-[#E8923A]" />
-            <h2 className="text-sm font-bold text-[#F0F6FC]">Crop & Position</h2>
-            <span className="text-[10px] text-[#6E7681] ml-2">
-              Drag to reposition · Scroll to zoom
-            </span>
-          </div>
-          <button onClick={handleCropCancel} className="text-[#6E7681] hover:text-[#F0F6FC]">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex-1 relative">
-          <Cropper
-            image={rawImageUrl}
-            crop={crop}
-            zoom={zoom}
-            aspect={aspectRatio}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
-            showGrid
-            cropShape="rect"
-            style={{
-              containerStyle: { background: "#000" },
-              cropAreaStyle: { border: "2px solid #E8923A" },
-            }}
-          />
-        </div>
-        <div className="px-6 py-4 bg-[#161B22] border-t border-[#21262D]">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-xs text-[#A8B2BD]">Zoom</span>
-            <input
-              type="range"
-              min={1}
-              max={3}
-              step={0.05}
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1 accent-[#E8923A]"
-            />
-            <span className="text-xs text-[#A8B2BD] font-mono w-10 text-right">
-              {zoom.toFixed(1)}×
-            </span>
-          </div>
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={handleCropCancel}
-              className="flex-1 px-4 py-3 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleCropConfirm}
-              disabled={cropProcessing}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
-            >
-              {cropProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-              {cropProcessing ? "Processing..." : "Apply Crop"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    setRawImageUrl(null);
   }
 
   return (
@@ -235,20 +136,21 @@ export default function ImageField({
           onDragLeave={(e) => {
             e.currentTarget.classList.remove("border-[#E8923A]");
           }}
-          onDrop={async (e) => {
+          onDrop={(e) => {
             e.preventDefault();
             e.currentTarget.classList.remove("border-[#E8923A]");
             const file = e.dataTransfer.files[0];
-            if (file) await handleFileSelect(file);
+            if (file) handleFileSelect(file);
           }}
         >
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
             className="hidden"
-            onChange={async (e) => {
+            onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) await handleFileSelect(file);
+              if (file) handleFileSelect(file);
+              e.target.value = "";
             }}
           />
           {uploading ? (
@@ -278,10 +180,21 @@ export default function ImageField({
         type="file"
         accept="image/jpeg,image/png,image/webp"
         className="hidden"
-        onChange={async (e) => {
+        onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) await handleFileSelect(f);
+          if (f) handleFileSelect(f);
+          e.target.value = "";
         }}
+      />
+
+      <ImageEditor
+        open={!!rawImageUrl}
+        imageSrc={rawImageUrl ?? ""}
+        aspect={aspectRatio}
+        maxOutputPx={2400}
+        title="Crop & position"
+        onCancel={handleEditorCancel}
+        onApply={handleEditorApply}
       />
 
       {/* Raw URL field — lets editors paste a URL or audit the stored value */}
@@ -442,44 +355,3 @@ function AltTextTipsPopover() {
   );
 }
 
-async function getCroppedImage(imageSrc: string, area: Area): Promise<Blob> {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("No canvas context");
-
-  const maxWidth = 2400;
-  const scale = Math.min(maxWidth / area.width, 1);
-  canvas.width = Math.round(area.width * scale);
-  canvas.height = Math.round(area.height * scale);
-
-  ctx.drawImage(
-    image,
-    area.x,
-    area.y,
-    area.width,
-    area.height,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  return new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Canvas toBlob failed"))),
-      "image/jpeg",
-      0.85
-    );
-  });
-}
-
-function createImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.addEventListener("load", () => resolve(img));
-    img.addEventListener("error", reject);
-    img.crossOrigin = "anonymous";
-    img.src = url;
-  });
-}

@@ -8,6 +8,7 @@ import GearPicker from "@/components/gear/GearPicker";
 import FlyPicker from "@/components/flies/FlyPicker";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
 import { compressImage } from "@/lib/image-compress";
+import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 import dynamic from "next/dynamic";
 
 const SessionLocationPicker = dynamic(
@@ -81,6 +82,9 @@ export default function EditSessionPage() {
   };
   const [catchVariants, setCatchVariants] = useState<Record<number, CachedVariant[]>>({});
   const [savingPhotos, setSavingPhotos] = useState(false);
+  const [pendingCatchPhoto, setPendingCatchPhoto] = useState<
+    { src: string; catchIdx: number } | null
+  >(null);
   const [showSpotManager, setShowSpotManager] = useState(false);
   const [gearRodId, setGearRodId] = useState<string | null>(null);
   const [gearReelId, setGearReelId] = useState<string | null>(null);
@@ -395,13 +399,39 @@ export default function EditSessionPage() {
   }
 
   function addCatchPhoto(catchIdx: number, file: File) {
+    const c = catches[catchIdx];
+    if (c) {
+      const existing = (c.fish_image_urls || []).length;
+      const pending = (c.pendingPhotos || []).length;
+      if (existing + pending >= 3) { alert("Maximum 3 photos per catch"); return; }
+    }
+    try {
+      validateImageFile(file);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Invalid image");
+      return;
+    }
+    setPendingCatchPhoto({ src: URL.createObjectURL(file), catchIdx });
+  }
+
+  function handleCatchEditorApply(blob: Blob) {
+    if (!pendingCatchPhoto) return;
+    const { catchIdx, src } = pendingCatchPhoto;
+    URL.revokeObjectURL(src);
+    setPendingCatchPhoto(null);
+    const cropped = new File([blob], "photo.jpg", { type: "image/jpeg" });
     setCatches(prev => prev.map((c, i) => {
       if (i !== catchIdx) return c;
       const existing = (c.fish_image_urls || []).length;
       const pending = (c.pendingPhotos || []).length;
-      if (existing + pending >= 3) { alert("Maximum 3 photos per catch"); return c; }
-      return { ...c, pendingPhotos: [...(c.pendingPhotos || []), file] };
+      if (existing + pending >= 3) return c;
+      return { ...c, pendingPhotos: [...(c.pendingPhotos || []), cropped] };
     }));
+  }
+
+  function handleCatchEditorCancel() {
+    if (pendingCatchPhoto) URL.revokeObjectURL(pendingCatchPhoto.src);
+    setPendingCatchPhoto(null);
   }
 
   function removeCatchPhoto(catchIdx: number, url: string) {
@@ -1131,6 +1161,16 @@ export default function EditSessionPage() {
         </div>
 
       </div>
+
+      <ImageEditor
+        open={!!pendingCatchPhoto}
+        imageSrc={pendingCatchPhoto?.src ?? ""}
+        aspect="free"
+        maxOutputPx={1600}
+        title="Crop fish photo"
+        onCancel={handleCatchEditorCancel}
+        onApply={handleCatchEditorApply}
+      />
     </div>
   );
 }
