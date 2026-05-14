@@ -323,10 +323,10 @@ async function migrateSourcePattern(
   submitterId: string
 ): Promise<void> {
   const { error: markErr } = await supabase
-    .from("fly_patterns")
+    .from("fly_patterns_v2")
     .update({ promoted_to_canonical_id: newCanonicalId })
     .eq("id", sourceFlyPatternId)
-    .eq("user_id", submitterId);
+    .eq("owner_user_id", submitterId);
   if (markErr) console.error("[migrateSourcePattern] mark error:", markErr);
 
   const { error: catchErr } = await supabase

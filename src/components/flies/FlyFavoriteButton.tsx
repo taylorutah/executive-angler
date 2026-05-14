@@ -50,10 +50,10 @@ export default function FlyFavoriteButton({
           if (!cancelled) setIsFavorite(anyFavorited);
         } else if (flyPatternId) {
           const { data } = await supabase
-            .from("fly_patterns")
+            .from("fly_patterns_v2")
             .select("is_favorite")
             .eq("id", flyPatternId)
-            .eq("user_id", user.id)
+            .eq("owner_user_id", user.id)
             .maybeSingle();
           if (!cancelled) {
             setIsFavorite(

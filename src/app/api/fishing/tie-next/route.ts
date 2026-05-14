@@ -24,10 +24,15 @@ export async function GET() {
         .eq("user_id", user.id)
         .eq("is_tie_next", true)
         .order("tie_next_order", { ascending: true, nullsFirst: false }),
+      // Personal patterns marked as tie-next. Aliases keep the response
+      // shape stable for callers (dashboard/page.tsx, TieNextKanban) that
+      // expect `type` / `image_url` from the legacy fly_patterns column
+      // names. Size text isn't on fly_patterns_v2 (it lives on the
+      // fly_variants rows); callers already tolerate null.
       supabase
-        .from("fly_patterns")
-        .select("id, name, type, image_url, size, is_tie_next")
-        .eq("user_id", user.id)
+        .from("fly_patterns_v2")
+        .select("id, name, type:category, image_url:hero_image_url, is_tie_next, tie_next_status, promoted_to_canonical_id")
+        .eq("owner_user_id", user.id)
         .eq("is_tie_next", true),
     ]);
 
@@ -108,13 +113,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, flyBoxId, is_tie_next: true });
     }
 
-    // Toggle personal fly pattern
+    // Toggle personal fly pattern (writes to fly_patterns_v2; legacy
+    // fly_patterns becomes a view post-drop-migration that can't accept writes).
     if (flyPatternId) {
       const { error } = await supabase
-        .from("fly_patterns")
+        .from("fly_patterns_v2")
         .update({ is_tie_next: true, tie_next_status: "wanted" })
         .eq("id", flyPatternId)
-        .eq("user_id", user.id);
+        .eq("owner_user_id", user.id);
 
       if (error) {
         console.error("[tie-next POST] pattern update error:", error);
@@ -207,10 +213,10 @@ export async function PATCH(req: NextRequest) {
       }
 
       const { error } = await supabase
-        .from("fly_patterns")
+        .from("fly_patterns_v2")
         .update(updates)
         .eq("id", flyPatternId)
-        .eq("user_id", user.id);
+        .eq("owner_user_id", user.id);
 
       if (error) {
         console.error("[tie-next PATCH] pattern error:", error);
@@ -258,10 +264,10 @@ export async function DELETE(req: NextRequest) {
 
     if (flyPatternId) {
       const { error } = await supabase
-        .from("fly_patterns")
+        .from("fly_patterns_v2")
         .update({ is_tie_next: false, tie_next_status: "none" })
         .eq("id", flyPatternId)
-        .eq("user_id", user.id);
+        .eq("owner_user_id", user.id);
 
       if (error) {
         console.error("[tie-next DELETE] pattern error:", error);

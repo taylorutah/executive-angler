@@ -21,10 +21,13 @@ export async function GET() {
         `)
         .eq("user_id", user.id)
         .eq("is_favorite", true),
+      // Personal favorited patterns. Aliases keep the legacy column names
+      // (`type`, `image_url`) so callers don't need to change. Size is
+      // per-variant on v2 — callers already tolerate null/undefined.
       supabase
-        .from("fly_patterns")
-        .select("id, name, type, image_url, size, is_favorite")
-        .eq("user_id", user.id)
+        .from("fly_patterns_v2")
+        .select("id, name, type:category, image_url:hero_image_url, is_favorite")
+        .eq("owner_user_id", user.id)
         .eq("is_favorite", true),
     ]);
 
@@ -172,13 +175,14 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Toggle on a personal fly pattern
+    // Toggle on a personal fly pattern (v2 write; legacy fly_patterns
+    // becomes a view post-drop and can't accept writes).
     if (flyPatternId) {
       const { error } = await supabase
-        .from("fly_patterns")
+        .from("fly_patterns_v2")
         .update({ is_favorite: favorite })
         .eq("id", flyPatternId)
-        .eq("user_id", user.id);
+        .eq("owner_user_id", user.id);
 
       if (error) {
         console.error("[fly-favorites POST] pattern update error:", error);

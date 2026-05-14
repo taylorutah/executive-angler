@@ -384,9 +384,9 @@ export async function getMyFliesCounts(userId: string): Promise<{
   const supabase = await createClient();
   const [patternsRes, boxRes, sharedRes] = await Promise.all([
     supabase
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .select("id, is_favorite, tie_next_status, is_tie_next", { count: "exact" })
-      .eq("user_id", userId),
+      .eq("owner_user_id", userId),
     // Select canonical_fly_id so we can collapse multi-variant rows into one
     // logical pattern — mirrors how PatternsTab.buildPatternRows groups by
     // canonical_fly_id. Without this the badge double-counts variants and

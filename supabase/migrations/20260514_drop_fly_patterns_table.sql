@@ -183,6 +183,13 @@ select
   null::uuid                                     as parent_canonical_id,
   'tied'::text                                   as source,
   coalesce(hr.has_structured_recipe, false)      as has_structured_recipe,
+  -- Per-user pattern state (added in 20260514_pattern_user_state_on_v2)
+  pv.is_favorite                                 as is_favorite,
+  pv.is_tie_next                                 as is_tie_next,
+  pv.tie_next_status                             as tie_next_status,
+  pv.tie_next_notes                              as tie_next_notes,
+  pv.tie_next_target_qty                         as tie_next_target_qty,
+  pv.tie_next_order                              as tie_next_order,
   pv.created_at                                  as created_at,
   pv.updated_at                                  as updated_at
 from fly_patterns_v2 pv
