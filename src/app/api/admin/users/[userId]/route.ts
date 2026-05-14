@@ -53,11 +53,18 @@ export async function GET(
     .select("id, session_id, species, length_inches, fly_pattern_id, created_at")
     .eq("user_id", userId);
 
-  // Fly patterns
-  const { data: flies } = await admin
-    .from("fly_patterns")
-    .select("id, name, image_url, created_at")
-    .eq("user_id", userId);
+  // Fly patterns (v2 — owned patterns). Alias hero_image_url → image_url
+  // so the response shape stays backward-compatible for the admin UI.
+  const { data: fliesV2 } = await admin
+    .from("fly_patterns_v2")
+    .select("id, name, hero_image_url, created_at")
+    .eq("owner_user_id", userId);
+  const flies = (fliesV2 ?? []).map((f) => ({
+    id: f.id,
+    name: f.name,
+    image_url: f.hero_image_url,
+    created_at: f.created_at,
+  }));
 
   // Follow counts
   const { count: followers } = await admin

@@ -40,19 +40,48 @@ export async function POST(req: NextRequest) {
   const patternId = body.pattern_id;
   if (!patternId) return NextResponse.json({ error: "Missing pattern_id" }, { status: 400 });
 
-  // Confirm ownership before snapshotting.
-  const { data: pattern, error: pErr } = await supabase
-    .from("fly_patterns")
+  // Confirm ownership before snapshotting. Reads v2 (legacy fly_patterns is
+  // gone post 2026-05-14 drop). Aggregates per-variant sizes/colors from
+  // fly_variants since v2 hoisted those off the pattern level.
+  const { data: patternV2, error: pErr } = await supabase
+    .from("fly_patterns_v2")
     .select(
-      "id, name, type, size, fly_color, bead_color, materials, description, video_url, image_url, parent_canonical_id, promoted_to_canonical_id, user_id"
+      "id, name, category, description, video_url, hero_image_url, promoted_to_canonical_id, owner_user_id, inspired_by_fly_id"
     )
     .eq("id", patternId)
-    .eq("user_id", user.id)
+    .eq("owner_user_id", user.id)
     .single();
-  if (pErr || !pattern) {
+  if (pErr || !patternV2) {
     return NextResponse.json({ error: "Pattern not found" }, { status: 404 });
   }
-  const p = pattern as Record<string, unknown>;
+  const { data: variants } = await supabase
+    .from("fly_variants")
+    .select("size, body_color, bead_color")
+    .eq("pattern_id", patternId);
+  const sizesFromVariants = Array.from(
+    new Set((variants ?? []).map((v) => v.size as string).filter(Boolean))
+  );
+  const colorsFromVariants = Array.from(
+    new Set((variants ?? []).map((v) => v.body_color as string | null).filter((c): c is string => !!c))
+  );
+  const beadColorsFromVariants = Array.from(
+    new Set((variants ?? []).map((v) => v.bead_color as string | null).filter((c): c is string => !!c))
+  );
+  const p: Record<string, unknown> = {
+    id: patternV2.id,
+    name: patternV2.name,
+    type: patternV2.category, // category is the v2 vocabulary; promote helper maps it back
+    size: sizesFromVariants.join(","),
+    fly_color: colorsFromVariants.length ? colorsFromVariants : null,
+    bead_color: beadColorsFromVariants.length ? beadColorsFromVariants : null,
+    materials: null, // v2 stores materials per-variant or in base_materials JSONB — not surfaced here
+    description: patternV2.description,
+    video_url: patternV2.video_url,
+    image_url: patternV2.hero_image_url,
+    parent_canonical_id: patternV2.inspired_by_fly_id,
+    promoted_to_canonical_id: patternV2.promoted_to_canonical_id,
+    user_id: patternV2.owner_user_id,
+  };
 
   if (p.promoted_to_canonical_id) {
     return NextResponse.json(

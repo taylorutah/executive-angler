@@ -5,6 +5,22 @@
  */
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 
+/**
+ * Pre-variant-migration stub: a user_fly_box row that points at a canonical
+ * fly but has no size / bead / variant_label of its own. These rows can't link
+ * a catch to a specific variant and show as bare pattern names with no chip,
+ * so the Fly Box UI filters them out.
+ */
+export function isStubEntry(
+  e: Pick<FlyBoxEntry, "variant_label" | "hook_size" | "bead_weight_mm" | "bead_material">,
+): boolean {
+  if (e.variant_label && e.variant_label.trim().length > 0) return false;
+  if (e.hook_size && e.hook_size.trim().length > 0) return false;
+  if (typeof e.bead_weight_mm === "number") return false;
+  if (e.bead_material && e.bead_material !== "none") return false;
+  return true;
+}
+
 /** Per-entry stocked total: prefers quantity_by_size sum, falls back to tied_count. */
 export function entryStocked(
   e: Pick<FlyBoxEntry, "tied_count" | "quantity_by_size">,

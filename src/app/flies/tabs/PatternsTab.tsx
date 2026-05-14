@@ -10,7 +10,7 @@ import {
   type SerializedFlyBoxEntry,
 } from "@/components/flies/FlyBoxTabs";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
-import { entryDeficit, entryStocked } from "@/lib/flies/box-stock";
+import { entryDeficit, entryStocked, isStubEntry } from "@/lib/flies/box-stock";
 import type { FlyPattern } from "@/types/fishing-log";
 import { ownerPatternPermalink } from "@/lib/flies/permalink";
 import VariantChips from "@/components/flies/VariantChips";
@@ -19,9 +19,10 @@ import { TieNextCell } from "@/components/flies/VariantInlineCells";
 import DataTable, { type Column } from "@/components/ui/DataTable";
 import ViewModeToggle, { type ViewMode } from "@/components/ui/ViewModeToggle";
 import DeleteFlyPatternDialog from "@/components/flies/DeleteFlyPatternDialog";
+import BulkSetBeadDialog from "@/components/flies/BulkSetBeadDialog";
 import FilterDropdown, { type FilterOption } from "@/components/ui/FilterDropdown";
 import FilterBar from "@/components/ui/FilterBar";
-import { Search, Trash2, X } from "lucide-react";
+import { Search, Trash2, X, CircleDot } from "lucide-react";
 
 const CATEGORY_TO_TYPE: Record<string, string> = {
   dry: "Dry Fly",
@@ -89,6 +90,9 @@ export default function PatternsTab({
   // status filters: any of "low-stock", "tie-next", "personal"
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [editing, setEditing] = useState<{ entry: FlyBoxEntry; patternName: string } | null>(null);
+  // Bulk-set-bead dialog state for backfilling personal-pattern variants
+  // whose legacy bead_size was empty.
+  const [bulkBead, setBulkBead] = useState<{ patternId: string; patternName: string; beadlessCount: number } | null>(null);
   // Delete confirmation state — one row at a time, branched by source.
   const [deletePersonal, setDeletePersonal] = useState<{ id: string; name: string } | null>(null);
   const [removeLibrary, setRemoveLibrary] = useState<{ name: string; variantIds: string[] } | null>(null);
@@ -261,16 +265,31 @@ export default function PatternsTab({
           )}
 
           <DataTable
-            columns={buildColumns(setEditing, (row) => {
-              if (row.source === "personal" && row.personalPatternId) {
-                setDeletePersonal({ id: row.personalPatternId, name: row.name });
-              } else if (row.source === "library" && row.variants.length > 0) {
-                setRemoveLibrary({
-                  name: row.name,
-                  variantIds: row.variants.map((v) => v.id),
+            columns={buildColumns(
+              setEditing,
+              (row) => {
+                if (row.source === "personal" && row.personalPatternId) {
+                  setDeletePersonal({ id: row.personalPatternId, name: row.name });
+                } else if (row.source === "library" && row.variants.length > 0) {
+                  setRemoveLibrary({
+                    name: row.name,
+                    variantIds: row.variants.map((v) => v.id),
+                  });
+                }
+              },
+              (row) => {
+                // Only library rows (v2 personal patterns surface here) with at
+                // least one bead-less variant get the bulk-set-bead action.
+                if (row.source !== "library" || row.variants.length === 0) return;
+                const beadless = row.variants.filter((v) => v.bead_weight_mm == null);
+                if (beadless.length === 0) return;
+                setBulkBead({
+                  patternId: row.variants[0]!.canonical_fly_id!,
+                  patternName: row.name,
+                  beadlessCount: beadless.length,
                 });
-              }
-            })}
+              },
+            )}
             rows={filtered}
             getRowKey={(r) => r.key}
             defaultSort={{ id: "deficit", dir: "desc" }}
@@ -336,6 +355,20 @@ export default function PatternsTab({
         patternName={editing?.patternName}
         onClose={() => setEditing(null)}
       />
+
+      {bulkBead && (
+        <BulkSetBeadDialog
+          open
+          patternId={bulkBead.patternId}
+          patternName={bulkBead.patternName}
+          beadlessCount={bulkBead.beadlessCount}
+          onClose={() => setBulkBead(null)}
+          onApplied={() => {
+            setBulkBead(null);
+            router.refresh();
+          }}
+        />
+      )}
 
       {deletePersonal && (
         <DeleteFlyPatternDialog
@@ -598,6 +631,7 @@ function RemoveFromBoxDialog({
 function buildColumns(
   onEditVariant: (next: { entry: FlyBoxEntry; patternName: string }) => void,
   onRequestDelete: (row: PatternRow) => void,
+  onSetBead: (row: PatternRow) => void,
 ): Column<PatternRow>[] {
   return [
     {
@@ -711,29 +745,48 @@ function buildColumns(
       id: "actions",
       header: "",
       accessor: () => "",
-      width: "40px",
+      width: "72px",
       render: (r) => {
         const isPersonal = r.source === "personal" && !!r.personalPatternId;
         const isLibrary = r.source === "library" && r.variants.length > 0;
         if (!isPersonal && !isLibrary) {
           return <span className="text-[var(--color-text-muted)]">—</span>;
         }
-        const label = isPersonal
+        const beadlessCount = isLibrary
+          ? r.variants.filter((v) => v.bead_weight_mm == null).length
+          : 0;
+        const deleteLabel = isPersonal
           ? "Delete this pattern (and its variants)"
           : "Remove from your fly box (keeps the canonical in the library)";
         return (
-          <button
-            type="button"
-            aria-label={label}
-            title={label}
-            onClick={(e) => {
-              e.stopPropagation();
-              onRequestDelete(r);
-            }}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-400 transition-colors"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
+          <div className="flex items-center gap-0.5">
+            {beadlessCount > 0 && (
+              <button
+                type="button"
+                aria-label={`Set bead for ${beadlessCount} variant${beadlessCount === 1 ? "" : "s"} without bead`}
+                title={`${beadlessCount} variant${beadlessCount === 1 ? "" : "s"} have no bead — set one for all`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSetBead(r);
+                }}
+                className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--color-text-muted)] hover:bg-[#E8923A]/10 hover:text-[#E8923A] transition-colors"
+              >
+                <CircleDot className="h-3.5 w-3.5" />
+              </button>
+            )}
+            <button
+              type="button"
+              aria-label={deleteLabel}
+              title={deleteLabel}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRequestDelete(r);
+              }}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-400 transition-colors"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
         );
       },
     },
@@ -750,9 +803,13 @@ function buildPatternRows(
   const rows: PatternRow[] = [];
 
   // Group library entries by canonical_fly_id so each pattern is one row.
+  // Drop stub rows (no variant-distinguishing data — no size, bead, or label):
+  // they're pre-variant-migration entries that can't link a catch to a real
+  // variant. If a canonical only has stubs, the whole pattern row drops out.
   const byCanonical = new Map<string, FlyBoxEntry[]>();
   for (const e of flyBoxEntries) {
     if (!e.canonical_fly_id || !e.canonical_fly) continue;
+    if (isStubEntry(e)) continue;
     const arr = byCanonical.get(e.canonical_fly_id) ?? [];
     arr.push(e);
     byCanonical.set(e.canonical_fly_id, arr);
@@ -777,9 +834,7 @@ function buildPatternRows(
       type: CATEGORY_TO_TYPE[cf.category] ?? "Other",
       imageUrl: head.custom_image_url ?? cf.hero_image_url ?? null,
       variants: variants.sort(
-        (a, b) =>
-          (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0) ||
-          (a.variant_sort_order ?? 0) - (b.variant_sort_order ?? 0),
+        (a, b) => (a.variant_sort_order ?? 0) - (b.variant_sort_order ?? 0),
       ),
       inBox,
       target,
@@ -851,8 +906,19 @@ function buildFlyBoxProps(
     },
   }));
 
-  const libraryCards: UnifiedFly[] = flyBoxEntries
-    .filter((e) => e.canonical_fly)
+  // One card per canonical fly. Multiple variants of the same fly collapse
+  // into a single card here (the variant list lives in the table view); stub
+  // rows are dropped, and if every entry for a canonical is a stub we drop
+  // the card entirely — useless for catch logging.
+  const cardByCanonical = new Map<string, FlyBoxEntry>();
+  for (const e of flyBoxEntries) {
+    if (!e.canonical_fly_id || !e.canonical_fly) continue;
+    if (isStubEntry(e)) continue;
+    if (!cardByCanonical.has(e.canonical_fly_id)) {
+      cardByCanonical.set(e.canonical_fly_id, e);
+    }
+  }
+  const libraryCards: UnifiedFly[] = Array.from(cardByCanonical.values())
     .map((e) => ({
       source: "library" as const,
       entry: {

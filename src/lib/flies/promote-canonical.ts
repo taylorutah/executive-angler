@@ -198,7 +198,7 @@ export async function promoteToCanonical(
 
   if (input.sourcePatternId) {
     const { error: backlinkErr } = await serviceClient
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .update({ promoted_to_canonical_id: canonicalId })
       .eq("id", input.sourcePatternId);
     if (backlinkErr) {

@@ -22,7 +22,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { X, Loader2, Plus, Check, RotateCcw, Lock, Star, Trash2 } from "lucide-react";
+import { X, Loader2, Plus, Check, RotateCcw, Lock, Trash2 } from "lucide-react";
 import { deriveSlotKey, type Personalizations } from "@/lib/flies/resolveFlyForViewer";
 import { suggestVariantLabel } from "@/lib/flies/variantLabel";
 import PromoteToPatternPrompt from "./PromoteToPatternPrompt";
@@ -126,8 +126,6 @@ export default function PersonalizeSheet({
   const [tiedCount, setTiedCount] = useState<number | "">("");
   // Per-size stock: { "16": 4, "18": 4 } — how many of each size are tied/in box.
   const [quantityBySize, setQuantityBySize] = useState<Record<string, number>>({});
-  const [isPrimary, setIsPrimary] = useState(false);
-  const [wasPrimary, setWasPrimary] = useState(false);
   const [extraSlots, setExtraSlots] = useState<SlotRowDef[]>([]);
   const [ingredientRows, setIngredientRows] = useState<SlotRowDef[]>([]);
 
@@ -152,7 +150,7 @@ export default function PersonalizeSheet({
           const userRes = await supabase
             .from("user_fly_box")
             .select(
-              "personalizations, preferred_sizes, preferred_colors, personal_notes, custom_name, variant_label, is_primary, tie_next_status, tie_next_target_qty, tied_count, quantity_by_size",
+              "personalizations, preferred_sizes, preferred_colors, personal_notes, custom_name, variant_label, tie_next_status, tie_next_target_qty, tied_count, quantity_by_size",
             )
             .eq("id", variantId)
             .maybeSingle();
@@ -230,7 +228,6 @@ export default function PersonalizeSheet({
           personal_notes?: string | null;
           custom_name?: string | null;
           variant_label?: string | null;
-          is_primary?: boolean | null;
           tie_next_target_qty?: number | null;
           tied_count?: number | null;
           quantity_by_size?: Record<string, number> | null;
@@ -242,8 +239,6 @@ export default function PersonalizeSheet({
         setPersonalNotes(saved?.personal_notes ?? "");
         setCustomName(saved?.custom_name ?? "");
         setVariantLabel(saved?.variant_label ?? "");
-        setIsPrimary(!!saved?.is_primary);
-        setWasPrimary(!!saved?.is_primary);
         setTieNextTargetQty(
           typeof saved?.tie_next_target_qty === "number" ? saved.tie_next_target_qty : "",
         );
@@ -384,8 +379,6 @@ export default function PersonalizeSheet({
           Object.keys(cleanedQuantityBySize).length > 0 ? cleanedQuantityBySize : null,
       };
       if (tieNextStatus) payload.tie_next_status = tieNextStatus;
-      // Only send is_primary when it changed — server demotes the prior primary.
-      if (isInBox && isPrimary && !wasPrimary) payload.is_primary = true;
 
       let res: Response;
       if (mode === "create") {
@@ -640,24 +633,6 @@ export default function PersonalizeSheet({
                   />
                 </div>
 
-                {/* Make primary */}
-                {isInBox && (
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isPrimary}
-                      onChange={(e) => setIsPrimary(e.target.checked)}
-                      disabled={wasPrimary}
-                      className="w-4 h-4 accent-[#E8923A]"
-                    />
-                    <span className="inline-flex items-center gap-1 text-xs text-[#F0F6FC]">
-                      <Star className="h-3 w-3" />
-                      {wasPrimary
-                        ? "This is your primary variant"
-                        : "Make this the primary variant"}
-                    </span>
-                  </label>
-                )}
               </section>
 
               {/* Quantity & tying */}

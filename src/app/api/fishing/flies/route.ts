@@ -209,39 +209,32 @@ export async function POST(req: NextRequest) {
       return Number.isFinite(n) ? n : undefined;
     };
 
-    const row: Record<string, unknown> = {
-      user_id: user.id,
-      name: str(body.name),
-      type: str(body.type),
-      size: str(body.size),
-      hook: str(body.hook),
-      bead_size: str(body.bead_size),
-      bead_color: parseArr(body.bead_color),
-      bead_material: str(body.bead_material),
-      bead_size_mm: num(body.bead_size_mm),
-      fly_color: parseArr(body.fly_color),
-      body_color: str(body.body_color),
-      body_material: str(body.body_material),
-      tail_color: str(body.tail_color),
-      thorax_color: str(body.thorax_color),
-      collar_color: str(body.collar_color),
-      rib_material: str(body.rib_material),
-      wing_material: str(body.wing_material),
-      materials: str(body.materials),
-      description: str(body.description),
-      video_url: str(body.video_url),
-      tags: parseArr(body.tags),
-      source: str(body.source) || 'tied',
-      has_structured_recipe: body.has_structured_recipe === 'true',
-      ...(imageUrl ? { image_url: imageUrl } : {}),
-    };
+    // v2 insert: only fields that map to fly_patterns_v2. Variant-level
+    // fields (size, hook, bead_*, body_color, etc.) move to fly_variants —
+    // the user adds them via the Configurations table on the detail page.
+    // Materials free-text gets concatenated into description so it doesn't
+    // get lost; v2 stores structured materials in fly_recipe_ingredients.
+    const materialsText = str(body.materials);
+    const baseDescription = str(body.description);
+    const composedDescription =
+      materialsText && baseDescription
+        ? `${baseDescription}\n\nMaterials:\n${materialsText}`
+        : (materialsText ? `Materials:\n${materialsText}` : baseDescription);
 
-    // Remove undefined values so Supabase uses column defaults
-    Object.keys(row).forEach((k) => row[k] === undefined && delete row[k]);
+    const v2Row: Record<string, unknown> = {
+      owner_user_id: user.id,
+      name: str(body.name),
+      category: str(body.type),
+      description: composedDescription,
+      video_url: str(body.video_url),
+      visibility: "private",
+      ...(imageUrl ? { hero_image_url: imageUrl } : {}),
+    };
+    Object.keys(v2Row).forEach((k) => v2Row[k] === undefined && delete v2Row[k]);
 
     const { data, error } = await supabase
-      .from("fly_patterns")
-      .insert(row)
+      .from("fly_patterns_v2")
+      .insert(v2Row)
       .select()
       .single();
 
@@ -250,24 +243,41 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Mirror into fly_patterns_v2 so the new pattern is visible on the v2 grid
-    // (VariantTable, "+ My configuration", etc.). No variants to copy — user
-    // adds them via the Configurations table on the detail page.
+    // `row` is kept around as a compat alias for the canonical-submission
+    // block below, which reads legacy field names (row.name, row.size, etc.).
+    const row: Record<string, unknown> = {
+      name: v2Row.name,
+      type: v2Row.category,
+      size: str(body.size),
+      bead_color: parseArr(body.bead_color),
+      fly_color: parseArr(body.fly_color),
+      materials: materialsText,
+      description: composedDescription,
+      video_url: v2Row.video_url,
+    };
+
     const mainParentCanonicalId = typeof body.parent_canonical_id === "string" && body.parent_canonical_id
       ? (body.parent_canonical_id as string)
       : null;
-    await mirrorPersonalPatternToV2({
-      supabase,
-      userId: user.id,
-      personalPatternId: data.id as string,
-      name: row.name as string,
-      type: row.type as string | undefined,
-      description: row.description as string | undefined,
-      imageUrl: imageUrl,
-      videoUrl: row.video_url as string | undefined,
-      parentCanonicalId: mainParentCanonicalId,
-      copyCuratedVariants: !!mainParentCanonicalId,
-    });
+    // If forking from a canonical, copy its curated variants so the new
+    // pattern starts with populated Configurations.
+    if (mainParentCanonicalId) {
+      await mirrorPersonalPatternToV2({
+        supabase,
+        userId: user.id,
+        personalPatternId: data.id as string,
+        name: row.name as string,
+        type: row.type as string | undefined,
+        description: row.description as string | undefined,
+        imageUrl: imageUrl,
+        videoUrl: row.video_url as string | undefined,
+        parentCanonicalId: mainParentCanonicalId,
+        copyCuratedVariants: true,
+      });
+    }
+    // Suppress unused-warning for `num` (legacy bead_size_mm parser kept
+    // in case the helper is reused below).
+    void num;
 
     // Save recipe ingredients if structured recipe was provided
     let recipeStepsJson: unknown = null;
@@ -452,39 +462,36 @@ export async function PATCH(req: NextRequest) {
       return Number.isFinite(n) ? n : undefined;
     };
 
+    // v2 patch: only pattern-level fields. Variant-level fields (size, hook,
+    // bead, body_color, etc.) go through the variant editor on the detail
+    // page. Materials free-text is folded into description for storage.
+    const materialsText = str(body.materials);
+    const baseDescription = str(body.description);
+    const composedDescription =
+      materialsText && baseDescription
+        ? `${baseDescription}\n\nMaterials:\n${materialsText}`
+        : (materialsText ? `Materials:\n${materialsText}` : baseDescription);
     const updates: Record<string, unknown> = {
       name: str(body.name),
-      type: str(body.type),
-      size: str(body.size),
-      hook: str(body.hook),
-      bead_size: str(body.bead_size),
-      bead_color: parseArr(body.bead_color),
-      bead_material: str(body.bead_material),
-      bead_size_mm: num(body.bead_size_mm),
-      fly_color: parseArr(body.fly_color),
-      body_color: str(body.body_color),
-      body_material: str(body.body_material),
-      tail_color: str(body.tail_color),
-      thorax_color: str(body.thorax_color),
-      collar_color: str(body.collar_color),
-      rib_material: str(body.rib_material),
-      wing_material: str(body.wing_material),
-      materials: str(body.materials),
-      description: str(body.description),
+      category: str(body.type),
+      description: composedDescription,
       video_url: str(body.video_url),
-      tags: parseArr(body.tags),
-      source: str(body.source),
-      ...(imageUrl ? { image_url: imageUrl } : {}),
+      ...(imageUrl ? { hero_image_url: imageUrl } : {}),
     };
 
     // Remove undefined values so we only update fields that were sent
     Object.keys(updates).forEach((k) => updates[k] === undefined && delete updates[k]);
 
+    // Silence unused warnings — these helpers were used by legacy variant-level
+    // fields that the v2 model no longer accepts at the pattern level.
+    void parseArr;
+    void num;
+
     const { error } = await supabase
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .update(updates)
       .eq("id", id)
-      .eq("user_id", user.id);
+      .eq("owner_user_id", user.id);
 
     if (error) {
       console.error("Failed to update fly pattern:", error);
@@ -532,12 +539,8 @@ export async function PATCH(req: NextRequest) {
             }
           }
 
-          // Only mark as having structured recipe after ingredients saved successfully.
-          await supabase
-            .from("fly_patterns")
-            .update({ has_structured_recipe: steps.length > 0 })
-            .eq("id", id)
-            .eq("user_id", user.id);
+          // Legacy `has_structured_recipe` flag has no v2 equivalent —
+          // consumers should derive presence from fly_recipe_ingredients count.
         }
       } catch (parseErr) {
         console.error("Failed to parse recipe steps in PATCH:", parseErr);
@@ -585,9 +588,9 @@ async function ensureUniquePatternSlug(
   for (let i = 1; i < 100; i++) {
     const candidate = i === 1 ? base : `${base}-${i}`;
     const { data } = await supabase
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .select("id")
-      .eq("user_id", userId)
+      .eq("owner_user_id", userId)
       .eq("slug", candidate)
       .maybeSingle();
     if (!data) return candidate;
@@ -677,36 +680,38 @@ async function forkPersonalizationToPattern(
     "";
   const tailColor = pickPersonal(personalizations, "tail", "color") || "";
 
-  const row: Record<string, unknown> = {
-    user_id: userId,
+  // v2 fork: write directly to fly_patterns_v2. Personalisation snippets
+  // (hookText, beadSize, beadColor, bodyColor, etc.) become a single
+  // fly_variants row on the new pattern so the detail page shows them.
+  // Materials get folded into description for storage (v2 stores structured
+  // materials in fly_recipe_ingredients).
+  const composedDescription = [
+    canonical.description || "",
+    materialsText ? `Materials:\n${materialsText}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const v2Row: Record<string, unknown> = {
+    owner_user_id: userId,
     name: baseName,
     slug,
-    type: CATEGORY_TO_TYPE[canonical.category as string] || canonical.category,
-    size: Array.isArray(sizes) && sizes.length ? sizes.join(", ") : "",
-    hook: hookText,
-    bead_size: beadSize,
-    bead_color: beadColor ? [beadColor] : null,
-    body_color: bodyColor,
-    body_material: bodyMaterial,
-    tail_color: tailColor,
-    materials: materialsText,
-    description: canonical.description || "",
-    image_url: (flyBox?.custom_image_url as string | undefined) || canonical.hero_image_url || null,
+    category: canonical.category,
+    description: composedDescription || null,
+    hero_image_url:
+      (flyBox?.custom_image_url as string | undefined) || canonical.hero_image_url || null,
     video_url: canonical.video_url || null,
-    parent_canonical_id: canonical.id,
     visibility: "private",
-    source: "tied",
-    notes: (flyBox?.personal_notes as string | undefined) || null,
+    contributed_by_user_id: userId,
   };
-
-  Object.keys(row).forEach((k) => {
-    const v = row[k];
-    if (v === undefined || v === "") delete row[k];
+  Object.keys(v2Row).forEach((k) => {
+    const v = v2Row[k];
+    if (v === undefined || v === "") delete v2Row[k];
   });
 
   const { data, error } = await supabase
-    .from("fly_patterns")
-    .insert(row)
+    .from("fly_patterns_v2")
+    .insert(v2Row)
     .select("id, slug, name")
     .single();
 
@@ -715,23 +720,46 @@ async function forkPersonalizationToPattern(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Mirror into fly_patterns_v2 + copy curated variants from the parent
-  // canonical so the personal pattern lands on a populated Configurations
-  // table (same sizes/beads the canonical showed). Failures here are logged
-  // but don't roll back — the v1 row is still useful, and the personal
-  // detail page can lazy-bridge later.
-  await mirrorPersonalPatternToV2({
-    supabase,
-    userId,
-    personalPatternId: data.id as string,
-    name: row.name as string,
-    type: row.type as string | undefined,
-    description: row.description as string | undefined,
-    imageUrl: row.image_url as string | undefined,
-    videoUrl: row.video_url as string | undefined,
-    parentCanonicalId: canonical.id as string,
-    copyCuratedVariants: true,
-  });
+  // Seed variants on the new pattern. If we have personalisation hints
+  // (size/bead/colors), create one variant per size carrying those.
+  // Otherwise copy the canonical's curated variants via the mirror helper
+  // so the user lands on a populated Configurations table.
+  const sizeList = Array.isArray(sizes) ? sizes.filter(Boolean) : [];
+  const beadMm = /^[0-9]+(\.[0-9]+)?$/.test(beadSize.trim()) ? Number(beadSize.trim()) : null;
+  const hasPersonalisationHints =
+    sizeList.length > 0 || beadColor || bodyColor || hookText;
+
+  if (hasPersonalisationHints) {
+    const variantRows = (sizeList.length > 0 ? sizeList : ["Standard"]).map(
+      (size: string, idx: number) => ({
+        pattern_id: data.id,
+        created_by_user_id: userId,
+        size,
+        hook_style: hookText || null,
+        bead_weight_mm: beadMm,
+        bead_color: beadColor || null,
+        body_color: bodyColor || null,
+        sort_order: idx,
+      }),
+    );
+    await supabase.from("fly_variants").insert(variantRows);
+  } else {
+    await mirrorPersonalPatternToV2({
+      supabase,
+      userId,
+      personalPatternId: data.id as string,
+      name: baseName,
+      type: canonical.category as string | undefined,
+      description: composedDescription || undefined,
+      imageUrl: (v2Row.hero_image_url as string | undefined) ?? undefined,
+      videoUrl: (v2Row.video_url as string | undefined) ?? undefined,
+      parentCanonicalId: canonical.id as string,
+      copyCuratedVariants: true,
+    });
+  }
+  void bodyMaterial;
+  void tailColor;
+  void CATEGORY_TO_TYPE;
 
   return NextResponse.json({ pattern_id: data.id, slug: data.slug, name: data.name }, { status: 201 });
 }
@@ -770,6 +798,8 @@ async function mirrorPersonalPatternToV2(opts: {
   } = opts;
 
   const category = type ? mapTypeToV2Category(type) : null;
+  // Post-flatten v2 schema doesn't have forked_from_pattern_id; the fork
+  // lineage isn't carried over (per flatten-fly-architecture refactor).
   const v2Row: Record<string, unknown> = {
     id: personalPatternId,
     name,
@@ -779,9 +809,9 @@ async function mirrorPersonalPatternToV2(opts: {
     description: description ?? null,
     hero_image_url: imageUrl ?? null,
     video_url: videoUrl ?? null,
-    forked_from_pattern_id: parentCanonicalId ?? null,
     contributed_by_user_id: userId,
   };
+  void parentCanonicalId; // referenced only for curated-variant copy below
   Object.keys(v2Row).forEach((k) => v2Row[k] === undefined && delete v2Row[k]);
 
   // Use the service client — fly_patterns_v2 has RLS that limits inserts to
@@ -911,10 +941,10 @@ export async function DELETE(req: NextRequest) {
     }
 
     const { error } = await supabase
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .delete()
       .eq("id", id)
-      .eq("user_id", user.id);
+      .eq("owner_user_id", user.id);
 
     if (error) {
       console.error("Failed to delete fly pattern:", error);

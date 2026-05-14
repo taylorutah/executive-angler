@@ -114,6 +114,118 @@ export async function getMyFlyBox(userId: string): Promise<FlyBoxEntry[]> {
   return (data ?? []) as unknown as FlyBoxEntry[];
 }
 
+/**
+ * Personal-pattern variants stored in the v2 model (fly_patterns_v2 +
+ * fly_variants + fly_variant_in_box) mapped into the same `FlyBoxEntry` shape
+ * the rest of the UI already speaks. Surfaces the personal recipes that the
+ * 2026-05-14 explode migration created — they live entirely in v2 with no
+ * counterpart in legacy `user_fly_box`.
+ *
+ * Variants Phase 2 originally derived from `user_fly_box` are skipped
+ * (`migrated_from_ufb_id` is non-null on those) so the legacy ufb fetch
+ * stays the source of truth for the canonical-fly personalisations.
+ */
+export async function getMyV2PersonalVariants(userId: string): Promise<FlyBoxEntry[]> {
+  const supabase = await createClient();
+  type Row = {
+    box_id: string;
+    variant_id: string;
+    sort_order: number | null;
+    added_at: string | null;
+    fly_variants: {
+      id: string;
+      pattern_id: string;
+      size: string;
+      display_name: string | null;
+      bead_weight_mm: number | null;
+      bead_material: BeadMaterial | null;
+      hook_style: string | null;
+      notes: string | null;
+      migrated_from_ufb_id: string | null;
+      fly_patterns_v2: {
+        id: string;
+        slug: string | null;
+        name: string;
+        category: string | null;
+        hero_image_url: string | null;
+        owner_user_id: string | null;
+      } | null;
+    } | null;
+  };
+  const { data, error } = await supabase
+    .from("fly_variant_in_box")
+    .select(
+      `
+      box_id, variant_id, sort_order, added_at,
+      fly_variants:fly_variants!inner (
+        id, pattern_id, size, display_name, bead_weight_mm, bead_material,
+        hook_style, notes, migrated_from_ufb_id,
+        fly_patterns_v2:fly_patterns_v2!inner (
+          id, slug, name, category, hero_image_url, owner_user_id
+        )
+      )
+    `
+    )
+    .eq("user_id", userId)
+    .returns<Row[]>();
+  if (error) {
+    console.error("[getMyV2PersonalVariants] error:", error);
+    return [];
+  }
+  return (data ?? [])
+    .filter((r) => {
+      const fv = r.fly_variants;
+      // Only owned-pattern variants that weren't backfilled from ufb.
+      return !!fv
+        && !!fv.fly_patterns_v2
+        && fv.fly_patterns_v2.owner_user_id != null
+        && fv.migrated_from_ufb_id == null;
+    })
+    .map((r) => {
+      const fv = r.fly_variants!;
+      const pv = fv.fly_patterns_v2!;
+      return {
+        id: `v2:${r.variant_id}:${r.box_id}`,
+        canonical_fly_id: pv.id,
+        fly_pattern_id: null,
+        variant_label: fv.display_name,
+        hook_size: fv.size,
+        bead_weight_mm: fv.bead_weight_mm,
+        bead_material: fv.bead_material,
+        variant_sort_order: r.sort_order ?? 0,
+        added_at: r.added_at ?? undefined,
+        canonical_fly: {
+          id: pv.id,
+          slug: pv.slug ?? pv.id,
+          name: pv.name,
+          // Legacy `fly_patterns.type` was mixed-case ("Dry Fly", "Nymph").
+          // CATEGORY_TO_TYPE expects lowercase canonical keys ("dry", "nymph").
+          category: normalizeLegacyCategory(pv.category),
+          hero_image_url: pv.hero_image_url ?? null,
+        },
+      } as FlyBoxEntry;
+    });
+}
+
+/** Maps the legacy `fly_patterns.type` vocabulary to the canonical category keys
+ *  the v2 UI expects ("Dry Fly" → "dry", "Nymph" → "nymph", etc.). Unknown
+ *  values pass through lowercased. */
+function normalizeLegacyCategory(raw: string | null | undefined): string {
+  if (!raw) return "other";
+  const lc = raw.trim().toLowerCase();
+  const map: Record<string, string> = {
+    "dry fly":     "dry",
+    "wet fly":     "wet",
+    "nymph":       "nymph",
+    "streamer":    "streamer",
+    "emerger":     "emerger",
+    "terrestrial": "terrestrial",
+    "egg":         "egg",
+    "midge":       "midge",
+  };
+  return map[lc] ?? lc;
+}
+
 /** All variants of a given parent pattern (one level deep). */
 export async function getVariantsOf(parentPatternId: string): Promise<FlyPattern[]> {
   const supabase = await createClient();

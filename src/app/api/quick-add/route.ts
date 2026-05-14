@@ -1,30 +1,31 @@
 /**
- * Quick-add endpoint for bulk-adding personal flies to a box.
+ * Quick-add endpoint for bulk-adding personal flies to a box (v2).
  *
- * The user has hundreds of flies in their physical boxes that aren't in the
- * canonical library. This endpoint creates each as a personal fly_patterns
- * row + a user_fly_box stock entry + a fly_box_membership in the chosen box.
- * The user can later link any of them to a canonical fly via parent_canonical_id
- * or submit them to the library.
+ * For each entry: creates a fly_patterns_v2 row (owned by the user), one
+ * fly_variants row per size, and a fly_variant_in_box membership in the
+ * target box. Tied counts (from quantity_by_size) land in fly_variant_stock
+ * per-variant. Bead spec is hoisted off the pattern onto every variant —
+ * users can refine per-variant later via the PersonalizeSheet.
  *
  * POST /api/quick-add
  * Body: {
- *   box_id: string                 // target box to add memberships to
+ *   box_id: string                 // target box
  *   entries: Array<{
  *     name: string                 // required
- *     type?: string                // "Nymph", "Dry Fly", etc.
- *     hook?: string
- *     bead_size?: string
- *     bead_color?: string
- *     fly_color?: string
- *     description?: string
- *     sizes?: string[]             // ["14", "16", "18"]
- *     quantity_by_size?: Record<string, number>  // { "16": 4, "18": 4 }
- *     personal_notes?: string
+ *     type?: string                // "Nymph" → category="Nymph"
+ *     hook?: string                // → variant.hook_style
+ *     bead_size?: string           // numeric → variant.bead_weight_mm
+ *     bead_color?: string          // → variant.bead_color
+ *     fly_color?: string           // → variant.body_color
+ *     description?: string         // → pattern.description
+ *     sizes?: string[]             // ["14","16","18"] — one variant each
+ *     quantity_by_size?: Record<string, number>  // → fly_variant_stock.tied_count
+ *     personal_notes?: string      // → fly_variant_stock.personal_notes
  *   }>
  * }
  *
- * Response: { created: number, errors: Array<{ index, name, error }>, ids: string[] }
+ * Response: { created: number, errors: Array<{index, name, error}>, ids: string[] }
+ *   `ids` are fly_variant_in_box row ids (one per created variant placement).
  */
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
@@ -42,12 +43,13 @@ interface QuickAddEntry {
   personal_notes?: string;
 }
 
-function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+function parseBeadWeightMm(raw: string | undefined): number | null {
+  if (!raw) return null;
+  return /^[0-9]+(\.[0-9]+)?$/.test(raw.trim()) ? Number(raw.trim()) : null;
+}
+
+function cleanSize(raw: string): string {
+  return raw.replace(/[\[\]"#\s]/g, "").trim();
 }
 
 export async function POST(req: NextRequest) {
@@ -68,10 +70,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "At least one entry is required" }, { status: 400 });
   }
   if (entriesRaw.length > 200) {
-    return NextResponse.json(
-      { error: "Maximum 200 entries per call" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Maximum 200 entries per call" }, { status: 400 });
   }
 
   // Verify box ownership
@@ -96,9 +95,7 @@ export async function POST(req: NextRequest) {
       : undefined;
     const quantityBySize: Record<string, number> = {};
     if (r.quantity_by_size && typeof r.quantity_by_size === "object") {
-      for (const [k, v] of Object.entries(
-        r.quantity_by_size as Record<string, unknown>,
-      )) {
+      for (const [k, v] of Object.entries(r.quantity_by_size as Record<string, unknown>)) {
         if (typeof v === "number" && v > 0) quantityBySize[k] = Math.floor(v);
       }
     }
@@ -106,25 +103,14 @@ export async function POST(req: NextRequest) {
       name,
       type: typeof r.type === "string" ? r.type.trim() || undefined : undefined,
       hook: typeof r.hook === "string" ? r.hook.trim() || undefined : undefined,
-      bead_size:
-        typeof r.bead_size === "string" ? r.bead_size.trim() || undefined : undefined,
-      bead_color:
-        typeof r.bead_color === "string"
-          ? r.bead_color.trim() || undefined
-          : undefined,
-      fly_color:
-        typeof r.fly_color === "string" ? r.fly_color.trim() || undefined : undefined,
-      description:
-        typeof r.description === "string"
-          ? r.description.trim() || undefined
-          : undefined,
+      bead_size: typeof r.bead_size === "string" ? r.bead_size.trim() || undefined : undefined,
+      bead_color: typeof r.bead_color === "string" ? r.bead_color.trim() || undefined : undefined,
+      fly_color: typeof r.fly_color === "string" ? r.fly_color.trim() || undefined : undefined,
+      description: typeof r.description === "string" ? r.description.trim() || undefined : undefined,
       sizes,
-      quantity_by_size:
-        Object.keys(quantityBySize).length > 0 ? quantityBySize : undefined,
+      quantity_by_size: Object.keys(quantityBySize).length > 0 ? quantityBySize : undefined,
       personal_notes:
-        typeof r.personal_notes === "string"
-          ? r.personal_notes.trim() || undefined
-          : undefined,
+        typeof r.personal_notes === "string" ? r.personal_notes.trim() || undefined : undefined,
     });
   }
 
@@ -135,14 +121,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Per-row creation: fly_patterns → user_fly_box → fly_box_membership.
-  // Sequential to keep slug uniqueness simple; n is at most 200.
-  const errors: Array<{ index: number; name: string; error: string }> = [];
-  const createdEntryIds: string[] = [];
+  // Next sort_order on the target box, so new variants land at the end.
   let nextSort = 0;
   {
     const { data: existingMax } = await supabase
-      .from("fly_box_membership")
+      .from("fly_variant_in_box")
       .select("sort_order")
       .eq("box_id", boxId)
       .order("sort_order", { ascending: false })
@@ -150,46 +133,22 @@ export async function POST(req: NextRequest) {
     nextSort = ((existingMax?.[0]?.sort_order as number | undefined) ?? -1) + 1;
   }
 
+  const errors: Array<{ index: number; name: string; error: string }> = [];
+  const createdInBoxIds: string[] = [];
+
   for (let i = 0; i < entries.length; i++) {
     const e = entries[i];
 
-    // 1. Insert fly_pattern
-    let baseSlug = slugify(e.name) || `pattern-${Date.now()}-${i}`;
-    // We could collide on (user_id, slug); add a numeric suffix if needed.
-    // Simplest robust approach: probe for clashes once then increment.
-    let slug = baseSlug;
-    let suffix = 1;
-    while (suffix < 50) {
-      const { data: existing } = await supabase
-        .from("fly_patterns")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("slug", slug)
-        .maybeSingle();
-      if (!existing) break;
-      suffix += 1;
-      slug = `${baseSlug}-${suffix}`;
-    }
-    if (suffix >= 50) {
-      slug = `${baseSlug}-${Date.now().toString().slice(-6)}`;
-    }
-    void baseSlug; // baseSlug used for slug derivation
-
-    const patternRow = {
-      user_id: user.id,
-      name: e.name,
-      slug,
-      type: e.type ?? null,
-      hook: e.hook ?? null,
-      bead_size: e.bead_size ?? null,
-      bead_color: e.bead_color ?? null,
-      fly_color: e.fly_color ?? null,
-      description: e.description ?? null,
-      visibility: "private",
-    };
+    // 1. Insert v2 pattern (owned by the user).
     const { data: pattern, error: patternErr } = await supabase
-      .from("fly_patterns")
-      .insert(patternRow)
+      .from("fly_patterns_v2")
+      .insert({
+        owner_user_id: user.id,
+        name: e.name,
+        category: e.type ?? null,
+        description: e.description ?? null,
+        visibility: "private",
+      })
       .select("id")
       .single();
     if (patternErr || !pattern) {
@@ -201,58 +160,106 @@ export async function POST(req: NextRequest) {
       continue;
     }
 
-    // 2. Insert user_fly_box (linked to the new pattern, no canonical_fly_id)
-    const ufbRow: Record<string, unknown> = {
-      user_id: user.id,
-      fly_pattern_id: pattern.id,
-      preferred_sizes: e.sizes ?? null,
-      personal_notes: e.personal_notes ?? null,
-      is_primary: true, // first entry per pattern is primary by definition
-    };
-    if (e.quantity_by_size) {
-      ufbRow.quantity_by_size = e.quantity_by_size;
-      ufbRow.tied_count = Object.values(e.quantity_by_size).reduce(
-        (sum, n) => sum + n,
-        0,
-      );
-    }
-    const { data: ufb, error: ufbErr } = await supabase
-      .from("user_fly_box")
-      .insert(ufbRow)
-      .select("id")
-      .single();
-    if (ufbErr || !ufb) {
+    // 2. Build one variant per size (or a single placeholder variant if no
+    //    sizes were supplied — matches Phase 2 backfill behavior).
+    const sizesClean = (e.sizes ?? [])
+      .map(cleanSize)
+      .filter((s) => s.length > 0);
+    const sizesForVariants = sizesClean.length > 0 ? sizesClean : ["Standard"];
+
+    const beadMm = parseBeadWeightMm(e.bead_size);
+    const variantInserts = sizesForVariants.map((size, idx) => ({
+      pattern_id: pattern.id,
+      created_by_user_id: user.id,
+      size,
+      hook_style: e.hook ?? null,
+      bead_weight_mm: beadMm,
+      bead_color: e.bead_color ?? null,
+      body_color: e.fly_color ?? null,
+      sort_order: idx,
+    }));
+
+    const { data: variants, error: variantsErr } = await supabase
+      .from("fly_variants")
+      .insert(variantInserts)
+      .select("id, size");
+    if (variantsErr || !variants || variants.length === 0) {
       errors.push({
         index: i,
         name: e.name,
-        error: ufbErr?.message ?? "Failed to create box entry",
+        error: variantsErr?.message ?? "Failed to create variants",
       });
       // Roll back the pattern row to avoid orphans.
-      await supabase.from("fly_patterns").delete().eq("id", pattern.id);
+      await supabase.from("fly_patterns_v2").delete().eq("id", pattern.id);
       continue;
     }
 
-    // 3. Insert membership in target box
-    const { error: memErr } = await supabase.from("fly_box_membership").insert({
+    // 3. Place each variant in the target box.
+    const inBoxInserts = variants.map((v, idx) => ({
       box_id: boxId,
-      user_fly_box_id: ufb.id,
-      sort_order: nextSort++,
-    });
-    if (memErr) {
+      variant_id: v.id as string,
+      user_id: user.id,
+      sort_order: nextSort + idx,
+    }));
+    const { data: inBoxRows, error: inBoxErr } = await supabase
+      .from("fly_variant_in_box")
+      .insert(inBoxInserts)
+      .select("id");
+    if (inBoxErr || !inBoxRows) {
       errors.push({
         index: i,
         name: e.name,
-        error: `Created but not added to box: ${memErr.message}`,
+        error: inBoxErr?.message ?? "Variants created but not placed in box",
       });
-      // Don't roll back — entry exists in My Flies; user can manually add later.
+      // Don't roll back — variants are still in the user's library, just
+      // not in this box yet. They can add manually via the variant editor.
+    } else {
+      nextSort += inBoxRows.length;
+      for (const r of inBoxRows) createdInBoxIds.push(r.id as string);
     }
 
-    createdEntryIds.push(ufb.id);
+    // 4. Optionally populate per-variant stock from quantity_by_size.
+    if (e.quantity_by_size) {
+      const stockRows: Array<{
+        user_id: string;
+        variant_id: string;
+        tied_count: number;
+        personal_notes: string | null;
+      }> = [];
+      for (const v of variants) {
+        const qty = e.quantity_by_size[v.size as string];
+        if (typeof qty === "number" && qty > 0) {
+          stockRows.push({
+            user_id: user.id,
+            variant_id: v.id as string,
+            tied_count: qty,
+            personal_notes: e.personal_notes ?? null,
+          });
+        }
+      }
+      if (stockRows.length > 0) {
+        const { error: stockErr } = await supabase
+          .from("fly_variant_stock")
+          .insert(stockRows);
+        if (stockErr) {
+          // Non-fatal — variants and box placement succeeded; stock is gravy.
+          console.error(`[quick-add] stock insert failed for "${e.name}": ${stockErr.message}`);
+        }
+      }
+    } else if (e.personal_notes) {
+      // No quantity but user left a note — attach to every variant.
+      const noteRows = variants.map((v) => ({
+        user_id: user.id,
+        variant_id: v.id as string,
+        personal_notes: e.personal_notes!,
+      }));
+      await supabase.from("fly_variant_stock").insert(noteRows);
+    }
   }
 
   return NextResponse.json({
-    created: createdEntryIds.length,
+    created: createdInBoxIds.length,
     errors,
-    ids: createdEntryIds,
+    ids: createdInBoxIds,
   });
 }

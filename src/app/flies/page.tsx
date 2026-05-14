@@ -15,6 +15,7 @@ import { listMyBoxes, listBoxStats, listDerivedTieNextShortages } from "@/lib/db
 import {
   getMyPatterns,
   getMyFlyBox,
+  getMyV2PersonalVariants,
   getTieNextQueue,
   getSharedWithMe,
   getMyFliesCounts,
@@ -54,15 +55,24 @@ export default async function FliesHubPage({
   const { tab } = await searchParams;
 
   const boxes = await listMyBoxes();
-  const [myPatterns, flyBoxEntries, tieNext, shared, counts, boxStats, derivedShortages] = await Promise.all([
+  const [myPatternsRaw, flyBoxEntriesLegacy, flyBoxEntriesV2, tieNext, shared, counts, boxStats, derivedShortages] = await Promise.all([
     getMyPatterns(user.id),
     getMyFlyBox(user.id),
+    getMyV2PersonalVariants(user.id),
     getTieNextQueue(user.id),
     getSharedWithMe(user.id),
     getMyFliesCounts(user.id),
     listBoxStats(boxes.map((b) => b.id)),
     listDerivedTieNextShortages(),
   ]);
+
+  // After the 2026-05-14 explode migration personal patterns live in v2 as
+  // first-class variants. Merge them into flyBoxEntries so they render as
+  // library-style rolled-up cards, and drop the matching legacy fly_patterns
+  // rows from `myPatterns` so they don't double up alongside the v2 surface.
+  const flyBoxEntries = [...flyBoxEntriesLegacy, ...flyBoxEntriesV2];
+  const v2PatternIds = new Set(flyBoxEntriesV2.map((e) => e.canonical_fly_id).filter((x): x is string => !!x));
+  const myPatterns = myPatternsRaw.filter((p) => !v2PatternIds.has(p.id));
 
   // Attach promoted canonical slugs so link builders can route directly to
   // /flies/<slug> for any pattern that has been accepted into the library.

@@ -85,12 +85,12 @@ export async function POST(req: NextRequest) {
       .eq("user_id", userId);
     if (sessionsErr) console.error("[ACCOUNT DELETE] sessions:", sessionsErr.message);
 
-    // 3. Fly patterns
+    // 3. Fly patterns (v2 — fly_patterns_v2 cascades to fly_variants/in_box/stock).
     const { error: fliesErr } = await admin
-      .from("fly_patterns")
+      .from("fly_patterns_v2")
       .delete()
-      .eq("user_id", userId);
-    if (fliesErr) console.error("[ACCOUNT DELETE] fly_patterns:", fliesErr.message);
+      .eq("owner_user_id", userId);
+    if (fliesErr) console.error("[ACCOUNT DELETE] fly_patterns_v2:", fliesErr.message);
 
     // 4. Gear items
     const { error: gearErr } = await admin
