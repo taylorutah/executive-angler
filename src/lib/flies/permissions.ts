@@ -44,7 +44,7 @@ export async function assertCanEditPattern(
   supabase: SupabaseClient<any, "public", any>,
   patternId: string,
 ): Promise<
-  | { ok: true; user: { id: string; email: string | null }; pattern: { id: string; owner_user_id: string | null; slug: string | null } }
+  | { ok: true; user: { id: string; email: string | null }; pattern: { id: string; owner_user_id: string | null; slug: string | null; name: string } }
   | { ok: false; error: string; status: 401 | 403 | 404 }
 > {
   const { data: { user } } = await supabase.auth.getUser();
@@ -52,13 +52,13 @@ export async function assertCanEditPattern(
 
   const { data: row, error } = await supabase
     .from("fly_patterns_v2")
-    .select("id, owner_user_id, slug")
+    .select("id, owner_user_id, slug, name")
     .eq("id", patternId)
     .maybeSingle();
   if (error) return { ok: false, error: error.message, status: 404 };
   if (!row) return { ok: false, error: "Pattern not found.", status: 404 };
 
-  const pattern = row as { id: string; owner_user_id: string | null; slug: string | null };
+  const pattern = row as { id: string; owner_user_id: string | null; slug: string | null; name: string };
   if (!canEditPattern(pattern, { id: user.id, email: user.email })) {
     return { ok: false, error: "You don't have permission to edit this pattern.", status: 403 };
   }
