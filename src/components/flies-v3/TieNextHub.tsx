@@ -65,13 +65,18 @@ export default function TieNextHub({ configurations }: Props) {
 
   async function advance(c: FlyConfigurationWithFly, to: "at_vise" | "done" | "wanted") {
     setPendingId(c.id);
+    // Keep is_tie_next=true through the done state. The client-side filter
+    // hides done items past 14 days; a server-side scheduled job (TBD) can
+    // sweep them to is_tie_next=false. Unsetting on transition to done
+    // removes them from the kanban immediately, which loses the "recent
+    // wins" Done column entirely.
     await fetch("/api/fishing/fly-configurations", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: c.id,
         tie_next_status: to,
-        is_tie_next: to !== "done",
+        is_tie_next: true,
       }),
     });
     startTransition(() => {

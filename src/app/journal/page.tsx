@@ -37,11 +37,14 @@ export default async function JournalPage() {
     console.error("Error fetching sessions:", sessionsError);
   }
 
-  // Fetch all rigs for these sessions
+  // Fetch all rigs for these sessions. Post-Phase-C: fly_patterns view is
+  // dropped — `session_rigs.fly_pattern_id` now references `flies(id)`
+  // directly. The join name still surfaces as `fly_pattern` for backwards
+  // compat with the renderer below.
   const sessionIds = sessions?.map((s) => s.id) || [];
   const { data: rigs, error: rigsError } = await supabase
     .from("session_rigs")
-    .select("*, fly_pattern:fly_patterns(*)")
+    .select("*, fly_pattern:flies(*)")
     .in("session_id", sessionIds)
     .order("position", { ascending: true });
 

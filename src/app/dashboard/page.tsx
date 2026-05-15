@@ -4,7 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
-import { getMyFliesCounts, getTieNextQueue, getMyFlyBox, lookupPromotedCanonicalSlugs } from "@/lib/db/fly-patterns";
+import { listMyConfigurationsWithFly, listMyPatternsHub } from "@/lib/db/fly-model";
+import { summarizeVersion } from "@/components/flies-v3/summarize-version";
 import { listDerivedTieNextShortages } from "@/lib/db/fly-v2";
 import { totalOwned, deficit } from "@/types/fly-v2";
 import { ownerPatternPermalink } from "@/lib/flies/permalink";
@@ -79,93 +80,39 @@ export default async function DashboardPage() {
   // are removed — community activity is no longer surfaced here. The "My Flies"
   // widget below replaces them with the user's own Tie Next + Favorites.
 
-  // Tie Next queue — manual queue (wanted + at_vise) unioned with auto-derived
-  // shortages so this widget mirrors what the /flies kanban shows (otherwise
-  // the count silently undercounts and the dashboard lies).
-  const [tieNextQueue, derivedShortages] = await Promise.all([
-    getTieNextQueue(user.id),
-    listDerivedTieNextShortages(),
+  // Post-Phase-C: Tie Next + Favorites widget reads from the new
+  // user_fly_configurations table. Each row joins to its `flies` row.
+  const [tieNextConfigurations, favoriteConfigurations, patternsHub] = await Promise.all([
+    listMyConfigurationsWithFly({ tieNextOnly: true }),
+    listMyConfigurationsWithFly({ favoritesOnly: true }),
+    listMyPatternsHub(),
   ]);
-  const promotedSlugs = await lookupPromotedCanonicalSlugs(tieNextQueue.patterns);
-  const tieNextItems: MyFliesItem[] = [
-    ...tieNextQueue.boxEntries
-      .filter((b) => b.tie_next_status === "wanted" || b.tie_next_status === "at_vise" || b.is_tie_next)
-      .map<MyFliesItem>((b) => ({
-        key: `box-${b.id}`,
-        flyBoxId: b.id,
-        name: b.canonical_fly?.name ?? "Untitled fly",
-        imageUrl: b.canonical_fly?.hero_image_url ?? null,
-        size: b.preferred_sizes?.[0] ?? null,
-        category: b.canonical_fly?.category ?? null,
-        status: (b.tie_next_status as MyFliesItem["status"]) ?? (b.is_tie_next ? "wanted" : null),
-        href: b.canonical_fly?.slug ? `/flies/${b.canonical_fly.slug}` : "/my-flies?tab=box",
-      })),
-    ...tieNextQueue.patterns
-      .filter((p) => (p.tie_next_status === "wanted" || p.tie_next_status === "at_vise" || p.is_tie_next))
-      .map<MyFliesItem>((p) => ({
-        key: `pattern-${p.id}`,
-        flyPatternId: p.id,
-        name: p.name,
-        imageUrl: p.image_url ?? null,
-        size: p.size ?? null,
-        category: p.type ?? null,
-        status: (p.tie_next_status as MyFliesItem["status"]) ?? (p.is_tie_next ? "wanted" : null),
-        href: ownerPatternPermalink({
-          id: p.id,
-          promoted_to_canonical_id: p.promoted_to_canonical_id ?? null,
-          promotedCanonicalSlug: p.promoted_to_canonical_id
-            ? promotedSlugs.get(p.promoted_to_canonical_id) ?? null
-            : null,
-        }),
-      })),
-    ...derivedShortages.map<MyFliesItem>((v) => {
-      const owned = totalOwned(v.stock);
-      const stockNeed = deficit(v.stock);
-      const beadStr = v.bead_material && v.bead_material !== "none"
-        ? [v.bead_material, v.bead_weight_mm ? `${v.bead_weight_mm}mm` : null, v.bead_color].filter(Boolean).join(" · ")
-        : null;
-      const specParts = [`size ${v.size}`, beadStr, v.body_color ?? null].filter(Boolean) as string[];
-      const boxShorts = v.box_memberships.filter((m) => (m.deficit ?? 0) > 0);
-      const boxNeedTotal = boxShorts.reduce((n, m) => n + (m.deficit ?? 0), 0);
-      let needSummary: string;
-      if (boxShorts.length > 0 && stockNeed === 0) {
-        needSummary = `need ${boxNeedTotal} for ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")}`;
-      } else if (boxShorts.length > 0 && stockNeed > 0) {
-        const need = Math.max(stockNeed, boxNeedTotal);
-        needSummary = `need ${need} (stock ${owned}/${v.stock?.target_count ?? 0} · ${boxShorts.map((m) => `${m.box_name} +${m.deficit}`).join(" · ")})`;
-      } else {
-        needSummary = `need ${stockNeed} (have ${owned}/${v.stock?.target_count ?? 0})`;
-      }
-      return {
-        key: `variant-${v.id}`,
-        name: v.pattern?.name ?? v.display_name ?? "Untitled variant",
-        imageUrl: v.pattern?.hero_image_url ?? null,
-        category: v.pattern?.category ?? null,
-        href: v.pattern?.slug ? `/flies/${v.pattern.slug}` : `/flies/by-id/${v.pattern_id}`,
-        subtitle: `${specParts.join(" · ")} · ${needSummary}`,
-        isDerived: true,
-      };
-    }),
-  ];
 
-  // Favorites — pulled from full fly box, filtered to is_favorite=true
-  const flyBox = await getMyFlyBox(user.id);
-  const favoriteItems: MyFliesItem[] = flyBox
-    .filter((b) => b.is_favorite)
-    .map<MyFliesItem>((b) => ({
-      key: `fav-box-${b.id}`,
-      flyBoxId: b.id,
-      name: b.canonical_fly?.name ?? "Untitled fly",
-      imageUrl: b.canonical_fly?.hero_image_url ?? null,
-      size: b.preferred_sizes?.[0] ?? null,
-      category: b.canonical_fly?.category ?? null,
-      href: b.canonical_fly?.slug ? `/flies/${b.canonical_fly.slug}` : "/my-flies?tab=box",
+  const tieNextItems: MyFliesItem[] = tieNextConfigurations
+    .filter((c) => c.tie_next_status === "wanted" || c.tie_next_status === "at_vise")
+    .map<MyFliesItem>((c) => ({
+      key: `cfg-${c.id}`,
+      name: c.fly.name,
+      imageUrl: c.fly.hero_image_url ?? null,
+      size: c.size ?? null,
+      category: c.fly.category ?? null,
+      status: c.tie_next_status as MyFliesItem["status"],
+      subtitle: summarizeVersion(c),
+      href: `/flies/${c.fly.slug}`,
     }));
 
-  // Fly Box count — sum of personal patterns (fly_patterns) and saved
-  // canonical entries (user_fly_box). Reuses the same source of truth as
-  // /my-flies so the dashboard stays in sync when the definition evolves.
-  const { box: flyCount } = await getMyFliesCounts(user.id);
+  const favoriteItems: MyFliesItem[] = favoriteConfigurations.map<MyFliesItem>((c) => ({
+    key: `fav-${c.id}`,
+    name: c.fly.name,
+    imageUrl: c.fly.hero_image_url ?? null,
+    size: c.size ?? null,
+    category: c.fly.category ?? null,
+    subtitle: summarizeVersion(c),
+    href: `/flies/${c.fly.slug}`,
+  }));
+
+  // Fly Box count — number of distinct flies the user has a version of.
+  const flyCount = patternsHub.length;
 
   // Gear count
   const { count: gearCount } = await supabase

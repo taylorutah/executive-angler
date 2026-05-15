@@ -11,18 +11,11 @@
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { listMyBoxes, listBoxStats, listDerivedTieNextShortages } from "@/lib/db/fly-v2";
+import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
 import { listMyPatternsHub, listMyConfigurationsWithFly } from "@/lib/db/fly-model";
-import {
-  getMyPatterns,
-  getMyFlyBox,
-  getMyV2PersonalVariants,
-  getTieNextQueue,
-  getSharedWithMe,
-  getMyFliesCounts,
-  attachPromotedCanonicalSlugs,
-  lookupAnglerUsernames,
-} from "@/lib/db/fly-patterns";
+import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
+import type { FlyPattern } from "@/types/fishing-log";
+import type { VariantRow } from "@/types/fly-v2";
 import FliesHubClient from "./FliesHubClient";
 
 export const metadata: Metadata = {
@@ -56,45 +49,45 @@ export default async function FliesHubPage({
   const { tab } = await searchParams;
 
   const boxes = await listMyBoxes();
-  const [myPatternsRaw, flyBoxEntriesLegacy, flyBoxEntriesV2, tieNext, shared, counts, boxStats, derivedShortages, patternsHubRows] = await Promise.all([
-    getMyPatterns(user.id),
-    getMyFlyBox(user.id),
-    getMyV2PersonalVariants(user.id),
-    getTieNextQueue(user.id),
-    getSharedWithMe(user.id),
-    getMyFliesCounts(user.id),
+  // Post-Phase-C: legacy queries (getMyPatterns, getMyFlyBox,
+  // getMyV2PersonalVariants, getTieNextQueue, getSharedWithMe,
+  // getMyFliesCounts) target dropped tables. Their results were only
+  // consumed by the legacy <PatternsTab /> + <TieNextKanban />, which
+  // have been replaced by <PatternsHub /> + <TieNextHub /> (both read
+  // from `flies` + `user_fly_configurations`). Skip them entirely.
+  const [boxStats, patternsHubRows] = await Promise.all([
     listBoxStats(boxes.map((b) => b.id)),
-    listDerivedTieNextShortages(),
     listMyPatternsHub(),
   ]);
   const tieNextConfigurations = await listMyConfigurationsWithFly({ tieNextOnly: true });
 
-  // After the 2026-05-14 explode migration personal patterns live in v2 as
-  // first-class variants. Merge them into flyBoxEntries so they render as
-  // library-style rolled-up cards, and drop the matching legacy fly_patterns
-  // rows from `myPatterns` so they don't double up alongside the v2 surface.
-  const flyBoxEntries = [...flyBoxEntriesLegacy, ...flyBoxEntriesV2];
-  const v2PatternIds = new Set(flyBoxEntriesV2.map((e) => e.canonical_fly_id).filter((x): x is string => !!x));
-  const myPatterns = myPatternsRaw.filter((p) => !v2PatternIds.has(p.id));
+  // Empty stubs for the legacy props FliesHubClient still expects.
+  // PatternsHub + TieNextHub ignore them; deleting the props would touch
+  // every legacy component import. Cheaper to pass [] here.
+  const myPatterns: FlyPattern[] = [];
+  const flyBoxEntries: FlyBoxEntry[] = [];
+  const tieNext = { patterns: [] as FlyPattern[], boxEntries: [] as FlyBoxEntry[] };
+  const shared: FlyPattern[] = [];
+  const derivedShortages: VariantRow[] = [];
+  const counts = { box: 0, favorites: 0, tieNext: 0, sharedWithMe: 0 };
+  const sharedOwnerUsernames: Map<string, string> = new Map();
 
-  // Attach promoted canonical slugs so link builders can route directly to
-  // /flies/<slug> for any pattern that has been accepted into the library.
-  // Also resolve shared-pattern owners' usernames for /anglers/<u>/flies/<slug>.
-  await Promise.all([
-    attachPromotedCanonicalSlugs(myPatterns),
-    attachPromotedCanonicalSlugs(tieNext.patterns),
-    attachPromotedCanonicalSlugs(shared),
-  ]);
-  const sharedOwnerUsernames = await lookupAnglerUsernames(
-    shared.map((p) => p.user_id),
-  );
-
-  // Badge count = configurations the user has marked wanted or at_vise.
-  // Done items live in their own transient column, not counted.
+  // Recompute counts from the new schema. The legacy getMyFliesCounts()
+  // still queries dropped tables — its results are 0s post-Phase-C.
+  // "Patterns" = distinct flies the user has any version of (= hub rows).
+  // "Favorites" / "Tie Next" = configurations with the matching flag.
+  // "Shared with me" stays on the legacy `counts.sharedWithMe` field since
+  // shared-fly model isn't migrated yet.
   const activeTieNext = tieNextConfigurations.filter(
     (c) => c.tie_next_status === "wanted" || c.tie_next_status === "at_vise",
   ).length;
-  const finalCounts = { ...counts, tieNext: activeTieNext };
+  const favoritesCount = patternsHubRows.filter((r) => r.favorite_any).length;
+  const finalCounts = {
+    ...counts,
+    box: patternsHubRows.length,
+    favorites: favoritesCount,
+    tieNext: activeTieNext,
+  };
 
   const { data: canonicalNamesData } = await supabase
     .from("canonical_flies")
