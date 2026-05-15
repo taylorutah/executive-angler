@@ -488,7 +488,7 @@ function ManageBoxesPopover({
                     />
                     <span className="truncate font-medium">{b.name}</span>
                   </span>
-                  {b.tier && (
+                  {b.tier && !b.name.toLowerCase().includes(b.tier.toLowerCase()) && (
                     <span className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)] shrink-0">
                       {b.tier}
                     </span>
@@ -659,7 +659,7 @@ function BulkManageBoxesPanel({
                     </span>
                     <span className="truncate font-medium">{b.name}</span>
                   </span>
-                  {b.tier && (
+                  {b.tier && !b.name.toLowerCase().includes(b.tier.toLowerCase()) && (
                     <span className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)] shrink-0">
                       {b.tier}
                     </span>
