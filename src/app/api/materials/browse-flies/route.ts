@@ -13,10 +13,14 @@ export async function GET(request: Request) {
   const category = (searchParams.get('category') || '').trim();
   const limit = Math.min(parseInt(searchParams.get('limit') || '60', 10) || 60, 120);
 
+  // Read from new `flies` table. is_featured drives the top-of-list
+  // ordering (rank no longer exists in the new schema).
   let query = supabase
-    .from('canonical_flies')
-    .select('id, slug, name, category, hero_image_url, tagline, rank')
-    .order('rank', { ascending: true, nullsFirst: false })
+    .from('flies')
+    .select('id, slug, name, category, hero_image_url, is_featured')
+    .eq('status', 'approved')
+    .order('is_featured', { ascending: false })
+    .order('name', { ascending: true })
     .limit(limit);
 
   if (q) query = query.ilike('name', `%${q}%`);
@@ -88,7 +92,7 @@ export async function GET(request: Request) {
       name: f.name,
       category: f.category,
       hero_image_url: f.hero_image_url,
-      tagline: f.tagline,
+      tagline: undefined,
       ingredient_count: c.total,
       required_count: c.required,
       owned_required_count: c.ownedRequired,

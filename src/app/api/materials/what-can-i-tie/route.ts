@@ -55,7 +55,10 @@ export async function GET() {
     });
   };
 
-  // 2. Fetch all recipes (canonical + user's own patterns with structured recipes)
+  // 2. Fetch all recipes (canonical + user's own patterns with structured recipes).
+  // The fly_recipe_ingredients FK still points at canonical_flies — Phase C
+  // will re-point it to `flies`. Until then this join works as-is because
+  // canonical_flies + flies share the same IDs (Phase A preserved them).
   const { data: allIngredients } = await supabase
     .from('fly_recipe_ingredients')
     .select('*, canonical_fly:canonical_flies(id, slug, name, category, hero_image_url), fly_pattern:fly_patterns(id, name, type, image_url)')

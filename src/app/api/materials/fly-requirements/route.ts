@@ -16,9 +16,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'slug or canonical_fly_id required' }, { status: 400 });
   }
 
+  // Read fly metadata from the new `flies` table. Slug-rename redirects
+  // (handled in src/lib/db/fly-model.ts) apply at the page layer — the API
+  // expects the resolved slug. Anonymous reads filter to status='approved'.
   let flyQuery = supabase
-    .from('canonical_flies')
-    .select('id, slug, name, category, hero_image_url, tagline, sizes, colors')
+    .from('flies')
+    .select('id, slug, name, category, hero_image_url, option_envelope')
+    .eq('status', 'approved')
     .limit(1);
 
   if (slug) flyQuery = flyQuery.eq('slug', slug);
@@ -81,6 +85,8 @@ export async function GET(request: Request) {
   const required = enriched.filter(i => !i.is_optional);
   const ownedRequired = required.filter(i => i.owned).length;
 
+  // Map option_envelope back to the shape the workbench UI expects.
+  const env = (fly.option_envelope as { sizes?: number[]; colors?: { body?: string[] } } | null) ?? {};
   return NextResponse.json({
     fly: {
       id: fly.id,
@@ -88,9 +94,9 @@ export async function GET(request: Request) {
       name: fly.name,
       category: fly.category,
       hero_image_url: fly.hero_image_url,
-      tagline: fly.tagline,
-      sizes: fly.sizes,
-      colors: fly.colors,
+      tagline: undefined,
+      sizes: (env.sizes ?? []).map(String),
+      colors: env.colors?.body ?? [],
     },
     ingredients: enriched,
     summary: {

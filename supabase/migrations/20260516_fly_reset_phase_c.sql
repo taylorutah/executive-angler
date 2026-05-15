@@ -31,10 +31,6 @@ alter table catches drop column if exists fly_pattern_id;
 alter table session_rigs drop constraint if exists session_rigs_fly_pattern_id_fkey;
 alter table session_rigs drop column if exists fly_pattern_id;
 
--- Fly recipe ingredients (legacy structured recipe) — fully obsolete now
--- that materials_list lives on `flies`.
-drop table if exists fly_recipe_ingredients cascade;
-
 -- Fly pattern submissions queue — pending lives on flies.status now.
 drop table if exists fly_pattern_submissions cascade;
 
@@ -45,12 +41,58 @@ drop table if exists fly_variant_stock  cascade;
 drop table if exists fly_variants       cascade;
 drop table if exists fly_patterns_v2    cascade;
 
--- Pre-v2 canonical mirror — `flies` is the new source of truth.
-drop table if exists canonical_flies cascade;
-
 -- Pre-v2 user fly box — `fly_box_entries_v3` + `user_fly_configurations`
 -- have replaced it.
 drop table if exists user_fly_box cascade;
+
+-- canonical_flies → repoint FKs to `flies`, then drop and replace with a
+-- compatibility VIEW so workbench code (fly_recipe_ingredients joins,
+-- what-can-i-tie) keeps working without a rewrite.
+--
+-- fly_recipe_ingredients.canonical_fly_id originally referenced
+-- canonical_flies(id). Phase A preserved IDs, so re-pointing the FK to
+-- flies(id) is a metadata-only change (no row movement).
+alter table if exists fly_recipe_ingredients
+  drop constraint if exists fly_recipe_ingredients_canonical_fly_id_fkey;
+alter table if exists fly_recipe_ingredients
+  add constraint fly_recipe_ingredients_canonical_fly_id_fkey
+  foreign key (canonical_fly_id) references flies(id) on delete cascade;
+
+-- Drop the canonical_flies table and create a compatibility view in its
+-- place. Any code path that still does `from('canonical_flies').select(...)`
+-- gets a read-only view of approved flies. Writes against the view will
+-- fail (intentional — all writes now go to `flies`).
+drop table if exists canonical_flies cascade;
+create view canonical_flies as
+select
+  id,
+  slug,
+  name,
+  category,
+  description,
+  hero_image_url,
+  null::text as tagline,
+  null::int  as rank,
+  is_featured as featured,
+  (option_envelope -> 'sizes')   as sizes,
+  (option_envelope #> '{colors,body}') as colors,
+  (option_envelope -> 'bead' -> 'sizes_mm') as bead_options,
+  null::text[] as hook_styles,
+  materials_list,
+  history,
+  tying_overview,
+  fishing_tips,
+  imitates,
+  effective_species_ids,
+  water_types,
+  inspired_by_fly_id as contributed_by_user_id,
+  origin_credit,
+  created_at,
+  updated_at
+from flies
+where status = 'approved';
+
+grant select on canonical_flies to authenticated, anon, service_role;
 
 -- _fly_dedup_candidates is intentionally KEPT for audit. The Phase B CLI
 -- updates `decision` and `decided_at` so this stays as the history of
