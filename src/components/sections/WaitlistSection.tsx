@@ -60,7 +60,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
         </div>
 
         {/* Headline */}
-        <h2 className="text-[#F0F6FC] font-heading font-normal leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
+        <h2 className="text-[#F0F6FC] font-heading font-bold leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
           Be first on the water.
         </h2>
 

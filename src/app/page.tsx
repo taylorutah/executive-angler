@@ -76,7 +76,7 @@ export default function HomePage() {
               </ScrollAnimation>
               <ScrollAnimation delay={0.1}>
                 <h1
-                  className="text-[#F0F6FC] font-heading font-normal leading-[1.05] mb-6"
+                  className="text-[#F0F6FC] font-heading font-bold leading-[1.05] mb-6"
                   style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
                 >
                   Better data.<br />Better days on the water.
