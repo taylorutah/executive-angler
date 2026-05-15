@@ -219,6 +219,12 @@ create table if not exists fly_slug_redirects (
 -- Every canonical v2 row (owner_user_id IS NULL, status='approved' or
 -- legacy NULL status) becomes a flies row. UUIDs are preserved so app code
 -- can dual-read during the transition.
+--
+-- Slug normalization: the apostrophe-S artifact (e.g. "walt-s-worm" — Walt's
+-- Worm round-tripped through a slugger that kept the apostrophe as its own
+-- segment) gets collapsed inline. Only the pattern `<word>-s-<word>` is
+-- normalized; nothing else in the slug is touched. Old slug → new slug
+-- redirect rows are added below so existing links keep working.
 insert into flies (
   id, slug, name, category,
   description, history, tying_overview, fishing_tips,
@@ -229,7 +235,11 @@ insert into flies (
 )
 select
   pv.id,
-  coalesce(pv.slug, 'fly-' || substr(pv.id::text, 1, 8)),
+  -- Normalize ANY occurrence of "-s-" between word characters (handles
+  -- multi-word genitives like "walt-s-worm" → "walts-worm"). Leaves all
+  -- other characters alone. Falls back to 'fly-<id>' if slug is null.
+  coalesce(regexp_replace(pv.slug, '([a-z0-9])-s-([a-z0-9])', '\1s-\2', 'g'),
+           'fly-' || substr(pv.id::text, 1, 8)),
   pv.name,
   pv.category,
   pv.description, pv.history, pv.tying_overview, pv.fishing_tips,
@@ -246,6 +256,25 @@ select
 from fly_patterns_v2 pv
 where pv.owner_user_id is null
 on conflict (id) do nothing;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 7b. BACKFILL: slug-change redirects for normalized canonical slugs
+-- ────────────────────────────────────────────────────────────────────────────
+-- Wherever step 7 normalized a slug (apostrophe-S artifact), record the old
+-- slug → new slug mapping so old URLs (bookmarks, links from emails, indexed
+-- by Google) keep resolving via the redirect table. The app's
+-- lookupPatternRedirect() helper already consults this table.
+insert into fly_slug_redirects (from_slug, to_slug, reason)
+select
+  pv.slug,
+  regexp_replace(pv.slug, '([a-z0-9])-s-([a-z0-9])', '\1s-\2', 'g'),
+  'apostrophe_s_normalization'
+from fly_patterns_v2 pv
+where pv.owner_user_id is null
+  and pv.slug is not null
+  and pv.slug ~ '[a-z0-9]-s-[a-z0-9]'
+  and pv.slug <> regexp_replace(pv.slug, '([a-z0-9])-s-([a-z0-9])', '\1s-\2', 'g')
+on conflict (from_slug) do nothing;
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- 8. BACKFILL: derive option_envelope from existing fly_variants
