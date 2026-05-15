@@ -26,7 +26,6 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import YourStockSection from "@/components/flies-v3/YourStockSection";
 import OptionEnvelopeChips from "@/components/flies-v3/OptionEnvelopeChips";
-import AddToBoxButton from "@/components/flies-v3/AddToBoxButton";
 import type { MaterialSlot } from "@/types/flies";
 
 export const revalidate = 3600;
@@ -133,7 +132,7 @@ export default async function FlyDetail({ params }: Props) {
               <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[#0BA5C7] mb-1">
                 {fly.category ?? "Fly Pattern"}
               </p>
-              <h1 className="font-['DM_Serif_Display'] text-3xl text-[#F0F6FC] tracking-tight leading-tight">
+              <h1 className="font-heading text-3xl text-[#F0F6FC] tracking-tight leading-tight">
                 {fly.name}
               </h1>
               {fly.description && (
@@ -145,11 +144,6 @@ export default async function FlyDetail({ params }: Props) {
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <FlyFavoriteButton canonicalFlyId={fly.id} />
-              <AddToBoxButton
-                flyId={fly.id}
-                loginRedirectPath={`/flies/${fly.slug}`}
-                compact
-              />
             </div>
           </div>
         </div>
@@ -160,7 +154,7 @@ export default async function FlyDetail({ params }: Props) {
           fly={fly}
           isLoggedIn={isLoggedIn}
           versions={versions}
-          boxes={boxes.map((b) => ({ id: b.id, name: b.name }))}
+          boxes={boxes.map((b) => ({ id: b.id, name: b.name, tier: b.tier }))}
           loginRedirectPath={`/flies/${fly.slug}`}
         />
 
@@ -170,19 +164,19 @@ export default async function FlyDetail({ params }: Props) {
           <section className="mx-auto max-w-3xl py-12 space-y-8 border-t border-[#21262D] mt-6">
             {fly.history && (
               <div>
-                <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] mb-3">History</h3>
+                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">History</h3>
                 <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.history}</p>
               </div>
             )}
             {fly.tying_overview && (
               <div>
-                <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] mb-3">Tying overview</h3>
+                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Tying overview</h3>
                 <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.tying_overview}</p>
               </div>
             )}
             {fly.fishing_tips && (
               <div>
-                <h3 className="font-['DM_Serif_Display'] text-xl text-[#F0F6FC] mb-3">Fishing tips</h3>
+                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Fishing tips</h3>
                 <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.fishing_tips}</p>
               </div>
             )}
@@ -205,19 +199,15 @@ function Recipe({ materials }: { materials: MaterialSlot[] }) {
       <h2 className="font-heading text-xl text-[#F0F6FC] mb-3">Recipe</h2>
       <ul className="rounded-lg border border-[#21262D] bg-[#161B22] divide-y divide-[#21262D]">
         {materials.map((m, i) => {
-          const slotLabel = (m.label ?? capitalize(String(m.slot ?? "Material"))).trim();
-          const d = m.default ?? {};
-          const detail = [
-            d.material as string | undefined,
-            d.color as string | undefined,
-            d.size_mm ? `${d.size_mm}mm` : undefined,
-            d.brand as string | undefined,
-            d.model as string | undefined,
-          ].filter(Boolean).join(" · ");
+          const slotLabel = capitalize(String(m.slot ?? "Material"));
+          const detail = [m.material, m.brand].filter(Boolean).join(" · ");
           return (
             <li key={i} className="px-4 py-2.5 text-sm flex items-baseline gap-3">
               <span className="w-20 text-[#6E7681] text-xs uppercase tracking-wide flex-shrink-0">{slotLabel}</span>
-              <span className="text-[#F0F6FC]">{detail || (typeof d === "string" ? d : "—")}</span>
+              <span className="text-[#F0F6FC]">{detail || "—"}</span>
+              {m.description && (
+                <span className="text-[#6E7681] text-xs">{m.description}</span>
+              )}
             </li>
           );
         })}

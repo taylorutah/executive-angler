@@ -27,20 +27,16 @@ export type FlyCategory =
   | "nymph" | "dry" | "streamer" | "emerger" | "wet"
   | "terrestrial" | "egg" | "midge" | "other";
 
-/** A single slot in a fly's recipe. Slot vocabulary is fixed; values inside
- *  each slot are free-form so flies can use whatever brand/model is right. */
+/** A single slot in a fly's recipe. Slot vocabulary is fixed; the `material`
+ *  field is a free-form display string so flies can use whatever
+ *  brand/model/size combination is right. */
 export interface MaterialSlot {
   slot: "bead" | "hook" | "thread" | "body" | "rib" | "tail"
-      | "wing" | "thorax" | "collar" | "other";
-  label?: string;
-  default?: {
-    material?: string;
-    brand?: string;
-    model?: string;
-    color?: string;
-    size_mm?: number;
-    [k: string]: unknown;
-  };
+      | "wing" | "thorax" | "collar" | "hackle" | "head" | "other" | string;
+  material: string;
+  description?: string;
+  brand?: string;
+  is_optional?: boolean;
 }
 
 /** Recommended options for a fly — informational, never enforced.
