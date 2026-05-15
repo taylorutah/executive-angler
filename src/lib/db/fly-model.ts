@@ -150,6 +150,129 @@ export async function listMyConfigurationsForFly(
   }));
 }
 
+/** Rolled-up rows for the /flies?tab=patterns hub: one row per fly that
+ *  the user has any version of, with totals across all versions. */
+export interface PatternsHubRow {
+  fly: Fly;
+  versions: FlyConfiguration[];
+  tied_total: number;
+  bought_total: number;
+  target_total: number;
+  deficit: number;
+  tie_next_count: number;
+  favorite_any: boolean;
+  in_box_count: number;
+}
+
+export async function listMyPatternsHub(): Promise<PatternsHubRow[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  // 1. All my configurations.
+  const { data: configs, error: cErr } = await supabase
+    .from("user_fly_configurations")
+    .select("*")
+    .eq("user_id", user.id);
+  if (cErr) {
+    console.error("[listMyPatternsHub configs]", cErr);
+    return [];
+  }
+  const cfgs = (configs ?? []) as FlyConfiguration[];
+  if (cfgs.length === 0) return [];
+
+  // 2. Flies for those configurations.
+  const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
+  const { data: flies, error: fErr } = await supabase
+    .from("flies")
+    .select("*")
+    .in("id", flyIds);
+  if (fErr) {
+    console.error("[listMyPatternsHub flies]", fErr);
+    return [];
+  }
+  const fliesById = new Map((flies ?? []).map((f) => [f.id as string, f as Fly]));
+
+  // 3. Box-membership counts per configuration.
+  const cfgIds = cfgs.map((c) => c.id);
+  const { data: entries } = await supabase
+    .from("fly_box_entries_v3")
+    .select("configuration_id")
+    .in("configuration_id", cfgIds);
+  const inBoxByCfg = new Map<string, number>();
+  for (const e of (entries ?? []) as Array<{ configuration_id: string }>) {
+    inBoxByCfg.set(e.configuration_id, (inBoxByCfg.get(e.configuration_id) ?? 0) + 1);
+  }
+
+  // 4. Roll up by fly.
+  const byFly = new Map<string, PatternsHubRow>();
+  for (const cfg of cfgs) {
+    const fly = fliesById.get(cfg.fly_id);
+    if (!fly) continue;
+    let row = byFly.get(cfg.fly_id);
+    if (!row) {
+      row = {
+        fly,
+        versions: [],
+        tied_total: 0,
+        bought_total: 0,
+        target_total: 0,
+        deficit: 0,
+        tie_next_count: 0,
+        favorite_any: false,
+        in_box_count: 0,
+      };
+      byFly.set(cfg.fly_id, row);
+    }
+    row.versions.push(cfg);
+    row.tied_total   += cfg.tied_count;
+    row.bought_total += cfg.bought_count;
+    row.target_total += cfg.target_count;
+    const shortfall = cfg.target_count - cfg.tied_count - cfg.bought_count;
+    if (shortfall > 0) row.deficit += shortfall;
+    if (cfg.is_tie_next) row.tie_next_count += 1;
+    if (cfg.is_favorite) row.favorite_any = true;
+    row.in_box_count += inBoxByCfg.get(cfg.id) ?? 0;
+  }
+
+  return Array.from(byFly.values()).sort((a, b) =>
+    a.fly.name.localeCompare(b.fly.name),
+  );
+}
+
+/** Each configuration joined with its fly — used by Tie-Next and Favorites tabs. */
+export interface FlyConfigurationWithFly extends FlyConfiguration {
+  fly: Fly;
+}
+
+export async function listMyConfigurationsWithFly(opts: {
+  tieNextOnly?: boolean;
+  favoritesOnly?: boolean;
+} = {}): Promise<FlyConfigurationWithFly[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+  let q = supabase.from("user_fly_configurations").select("*").eq("user_id", user.id);
+  if (opts.tieNextOnly) q = q.eq("is_tie_next", true);
+  if (opts.favoritesOnly) q = q.eq("is_favorite", true);
+  const { data: configs, error } = await q.order("updated_at", { ascending: false });
+  if (error) {
+    console.error("[listMyConfigurationsWithFly]", error);
+    return [];
+  }
+  const cfgs = (configs ?? []) as FlyConfiguration[];
+  if (cfgs.length === 0) return [];
+  const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
+  const { data: flies } = await supabase.from("flies").select("*").in("id", flyIds);
+  const map = new Map((flies ?? []).map((f) => [f.id as string, f as Fly]));
+  return cfgs
+    .map((c) => {
+      const fly = map.get(c.fly_id);
+      return fly ? { ...c, fly } : null;
+    })
+    .filter((x): x is FlyConfigurationWithFly => x !== null);
+}
+
 /** All of the current user's configurations across all flies. */
 export async function listAllMyConfigurations(): Promise<FlyConfiguration[]> {
   const supabase = await createClient();

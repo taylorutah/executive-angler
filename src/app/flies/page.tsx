@@ -12,6 +12,7 @@ import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { listMyBoxes, listBoxStats, listDerivedTieNextShortages } from "@/lib/db/fly-v2";
+import { listMyPatternsHub } from "@/lib/db/fly-model";
 import {
   getMyPatterns,
   getMyFlyBox,
@@ -55,7 +56,7 @@ export default async function FliesHubPage({
   const { tab } = await searchParams;
 
   const boxes = await listMyBoxes();
-  const [myPatternsRaw, flyBoxEntriesLegacy, flyBoxEntriesV2, tieNext, shared, counts, boxStats, derivedShortages] = await Promise.all([
+  const [myPatternsRaw, flyBoxEntriesLegacy, flyBoxEntriesV2, tieNext, shared, counts, boxStats, derivedShortages, patternsHubRows] = await Promise.all([
     getMyPatterns(user.id),
     getMyFlyBox(user.id),
     getMyV2PersonalVariants(user.id),
@@ -64,6 +65,7 @@ export default async function FliesHubPage({
     getMyFliesCounts(user.id),
     listBoxStats(boxes.map((b) => b.id)),
     listDerivedTieNextShortages(),
+    listMyPatternsHub(),
   ]);
 
   // After the 2026-05-14 explode migration personal patterns live in v2 as
@@ -110,6 +112,7 @@ export default async function FliesHubPage({
       boxStats={boxStats}
       myPatterns={myPatterns}
       flyBoxEntries={flyBoxEntries}
+      patternsHubRows={patternsHubRows}
       tieNextPatterns={tieNext.patterns}
       tieNextBoxEntries={tieNext.boxEntries}
       tieNextDerivedVariants={derivedShortages}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
+import { deleteUserCascade } from "@/lib/admin/delete-user";
 
 function getAdminSupabase() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
@@ -217,4 +218,75 @@ export async function PATCH(
     default:
       return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  const { userId } = await params;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || !isAdmin(user.email)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  }
+  if (userId === user.id) {
+    return NextResponse.json(
+      { error: "Use /api/account/delete to delete your own account" },
+      { status: 400 }
+    );
+  }
+
+  const admin = getAdminSupabase();
+  if (!admin) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
+  // Capture email + username before the cascade for the audit trail —
+  // after auth.users is gone we can't look this up.
+  let targetEmail: string | null = null;
+  let targetUsername: string | null = null;
+  try {
+    const { data: authUser } = await admin.auth.admin.getUserById(userId);
+    targetEmail = authUser?.user?.email ?? null;
+  } catch {}
+  try {
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("username, display_name")
+      .eq("user_id", userId)
+      .single();
+    targetUsername = profile?.username ?? profile?.display_name ?? null;
+  } catch {}
+
+  const result = await deleteUserCascade(userId, admin);
+
+  await admin.from("admin_audit_log").insert({
+    admin_user_id: user.id,
+    admin_email: user.email,
+    action: "delete_user",
+    target_user_id: userId,
+    details: {
+      target_email: targetEmail,
+      target_username: targetUsername,
+      auth_deleted: result.authDeleted,
+      errors: result.errors,
+    },
+  });
+
+  if (!result.authDeleted) {
+    return NextResponse.json(
+      {
+        error: "Auth user deletion failed — data may be partially removed",
+        errors: result.errors,
+      },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: `User ${targetUsername || userId.slice(0, 8)} deleted`,
+    errors: result.errors,
+  });
 }

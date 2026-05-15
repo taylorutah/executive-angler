@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -8,7 +8,10 @@ import {
   Loader2, Fish, Calendar, StickyNote,
   ChevronDown, ChevronUp, User, Feather, LogIn, Mail,
   MapPin, Camera, MessageSquare, TicketPercent, Activity,
+  Trash2, Lock, Globe,
 } from "lucide-react";
+import DeleteUserModal from "@/components/admin/DeleteUserModal";
+import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
 
 interface UserProfile {
   user_id: string;
@@ -36,7 +39,22 @@ interface UserProfile {
   active_promo: { code: string; until: string } | null;
 }
 
-export default function UsersClient({ users, adminId, adminEmail }: { users: UserProfile[]; adminId: string; adminEmail: string }) {
+interface SessionRow {
+  id: string;
+  date: string | null;
+  river_name: string | null;
+  total_fish: number | null;
+  weather: string | null;
+  water_temp_f: number | null;
+  location: string | null;
+  section: string | null;
+  created_at: string | null;
+  is_private: boolean | null;
+}
+
+export default function UsersClient({ users: initialUsers, adminId, adminEmail }: { users: UserProfile[]; adminId: string; adminEmail: string }) {
+  void adminEmail;
+  const [users, setUsers] = useState<UserProfile[]>(initialUsers);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "premium" | "banned" | "promo" | "active" | "inactive">("all");
   const [sortBy, setSortBy] = useState<"recent" | "activity" | "power">("recent");
@@ -45,6 +63,9 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [noteText, setNoteText] = useState<Record<string, string>>({});
   const [banReason, setBanReason] = useState<Record<string, string>>({});
+  const [sessionsByUser, setSessionsByUser] = useState<Record<string, SessionRow[] | "loading" | "error">>({});
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [deletingUser, setDeletingUser] = useState<UserProfile | null>(null);
 
   const THIRTY_DAYS = 30 * 86400000;
 
@@ -105,6 +126,36 @@ export default function UsersClient({ users, adminId, adminEmail }: { users: Use
       }
     } catch { setMessage({ type: "error", text: "Network error" }); }
     setActionLoading(null);
+  }
+
+  useEffect(() => {
+    if (!expandedUser) return;
+    if (sessionsByUser[expandedUser] !== undefined) return;
+    let cancelled = false;
+    setSessionsByUser(prev => ({ ...prev, [expandedUser]: "loading" }));
+    fetch(`/api/admin/users/${expandedUser}`)
+      .then(async res => {
+        if (cancelled) return;
+        if (!res.ok) {
+          setSessionsByUser(prev => ({ ...prev, [expandedUser]: "error" }));
+          return;
+        }
+        const json = await res.json();
+        if (!cancelled) {
+          setSessionsByUser(prev => ({ ...prev, [expandedUser]: (json.sessions || []) as SessionRow[] }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSessionsByUser(prev => ({ ...prev, [expandedUser]: "error" }));
+      });
+    return () => { cancelled = true; };
+  }, [expandedUser, sessionsByUser]);
+
+  function handleUserDeleted(userId: string) {
+    setUsers(prev => prev.filter(u => u.user_id !== userId));
+    setDeletingUser(null);
+    setExpandedUser(null);
+    setMessage({ type: "success", text: "User deleted" });
   }
 
   async function addNote(userId: string) {

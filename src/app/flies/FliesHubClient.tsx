@@ -14,11 +14,12 @@ import {
 import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
+import type { PatternsHubRow } from "@/lib/db/fly-model";
 import TieNextKanban from "@/components/flies/TieNextKanban";
 import type { VariantRow } from "@/types/fly-v2";
 import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 import HelpHint from "@/components/ui/HelpHint";
-import PatternsTab from "./tabs/PatternsTab";
+import PatternsHub from "@/components/flies-v3/PatternsHub";
 import BoxesManager from "@/components/flies-v2/BoxesManager";
 import SharedPanel from "./tabs/SharedPanel";
 
@@ -31,6 +32,7 @@ interface Props {
   boxStats: Record<string, BoxStats>;
   myPatterns: FlyPattern[];
   flyBoxEntries: FlyBoxEntry[];
+  patternsHubRows: PatternsHubRow[];
   tieNextPatterns: FlyPattern[];
   tieNextBoxEntries: FlyBoxEntry[];
   tieNextDerivedVariants: VariantRow[];
@@ -48,6 +50,7 @@ export default function FliesHubClient({
   boxStats,
   myPatterns,
   flyBoxEntries,
+  patternsHubRows,
   tieNextPatterns,
   tieNextBoxEntries,
   tieNextDerivedVariants,
@@ -165,13 +168,7 @@ export default function FliesHubClient({
           <BoxesManager initialBoxes={boxes} initialStats={boxStats} />
         )}
         {tab === "patterns" && (
-          <PatternsTab
-            myPatterns={myPatterns}
-            flyBoxEntries={flyBoxEntries}
-            counts={counts}
-            canonicalNames={canonicalNames}
-            viewerUsername={viewerUsername}
-          />
+          <PatternsHub rows={patternsHubRows} />
         )}
         {tab === "workbench" && <WorkbenchClient embedded />}
         {tab === "tie-next" && (
