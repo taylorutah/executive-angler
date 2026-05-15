@@ -1,13 +1,20 @@
 "use client";
-
+/**
+ * FlyFavoriteButton — toggles the favorite flag on a user's fly version.
+ *
+ * Post-fly-model-reset: any "fly is favorited" reduces to "user has at
+ * least one configuration of this fly with is_favorite=true". Toggle
+ * creates a default configuration if none exists, or flips the flag on
+ * the first config.
+ */
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Heart, Loader2 } from "lucide-react";
 
 interface FlyFavoriteButtonProps {
-  /** Canonical fly id — toggles is_favorite on user_fly_box row(s). */
+  /** The fly's id in the `flies` table. */
   canonicalFlyId?: string;
-  /** Personal legacy fly_patterns row id — toggles is_favorite on the row. */
+  /** Back-compat alias; some callers pass flyPatternId — treated as fly id. */
   flyPatternId?: string;
   compact?: boolean;
 }
@@ -17,6 +24,7 @@ export default function FlyFavoriteButton({
   flyPatternId,
   compact = false,
 }: FlyFavoriteButtonProps) {
+  const flyId = canonicalFlyId ?? flyPatternId ?? null;
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -28,38 +36,20 @@ export default function FlyFavoriteButton({
       try {
         const supabase = createClient();
         const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-          if (!cancelled) setChecking(false);
-          return;
-        }
+        if (!user) { if (!cancelled) setChecking(false); return; }
         if (!cancelled) setIsAuthenticated(true);
 
-        if (canonicalFlyId) {
-          // Multi-variant: 2+ rows possible per (user, canonical_fly). Use limit
-          // and treat "any row is_favorite=true" as favorite.
+        if (flyId) {
           const { data } = await supabase
-            .from("user_fly_box")
+            .from("user_fly_configurations")
             .select("is_favorite")
             .eq("user_id", user.id)
-            .eq("canonical_fly_id", canonicalFlyId)
+            .eq("fly_id", flyId)
             .limit(10);
           const anyFavorited = (data ?? []).some(
             (r) => (r as { is_favorite?: boolean }).is_favorite === true,
           );
           if (!cancelled) setIsFavorite(anyFavorited);
-        } else if (flyPatternId) {
-          const { data } = await supabase
-            .from("fly_patterns_v2")
-            .select("is_favorite")
-            .eq("id", flyPatternId)
-            .eq("owner_user_id", user.id)
-            .maybeSingle();
-          if (!cancelled) {
-            setIsFavorite(
-              (data as { is_favorite?: boolean } | null)?.is_favorite === true,
-            );
-          }
         }
       } catch (e) {
         console.warn("[FlyFavoriteButton] status check failed:", e);
@@ -68,32 +58,50 @@ export default function FlyFavoriteButton({
       }
     }
     checkStatus();
-    return () => {
-      cancelled = true;
-    };
-  }, [canonicalFlyId, flyPatternId]);
+    return () => { cancelled = true; };
+  }, [flyId]);
 
   async function handleToggle() {
     if (!isAuthenticated) {
       window.location.href = "/login?redirect=/flies";
       return;
     }
-
+    if (!flyId) return;
     setLoading(true);
     try {
-      const body: Record<string, unknown> = { favorite: !isFavorite };
-      if (canonicalFlyId) body.canonicalFlyId = canonicalFlyId;
-      else if (flyPatternId) body.flyPatternId = flyPatternId;
-      else throw new Error("FlyFavoriteButton: need canonicalFlyId or flyPatternId");
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-      const res = await fetch("/api/fishing/fly-favorites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      // Find an existing config (any) for this fly.
+      const { data: existing } = await supabase
+        .from("user_fly_configurations")
+        .select("id, is_favorite")
+        .eq("user_id", user.id)
+        .eq("fly_id", flyId)
+        .limit(1)
+        .maybeSingle();
 
-      if (res.ok) {
-        setIsFavorite(!isFavorite);
+      const nextValue = !isFavorite;
+
+      if (existing?.id) {
+        const res = await fetch("/api/fishing/fly-configurations", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: existing.id, is_favorite: nextValue }),
+        });
+        if (res.ok) setIsFavorite(nextValue);
+      } else if (nextValue) {
+        // Create a default configuration favoring this fly.
+        const res = await fetch("/api/fishing/fly-configurations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fly_id: flyId, is_favorite: true }),
+        });
+        if (res.ok) setIsFavorite(true);
+      } else {
+        // Unfavoriting and no config exists — nothing to do.
+        setIsFavorite(false);
       }
     } catch {
       // silently fail
@@ -131,11 +139,7 @@ export default function FlyFavoriteButton({
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : (
-        <Heart
-          className={`h-4 w-4 transition-all duration-200 ${
-            isFavorite ? "fill-red-400" : ""
-          }`}
-        />
+        <Heart className={`h-4 w-4 transition-all duration-200 ${isFavorite ? "fill-red-400" : ""}`} />
       )}
       {!compact && (isFavorite ? "Favorited" : "Favorite")}
     </button>

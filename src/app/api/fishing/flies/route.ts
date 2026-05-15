@@ -4,10 +4,6 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin";
 import { checkSubmissionGate, logSubmission } from "@/lib/submission-gate";
-import {
-  mapTypeToCategory,
-  promoteToCanonical,
-} from "@/lib/flies/promote-canonical";
 
 // Service role client for storage uploads (bypasses RLS) — lazy init to avoid build-time errors
 let _serviceClient: ReturnType<typeof createServiceClient> | null = null;
