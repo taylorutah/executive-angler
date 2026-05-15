@@ -13,7 +13,7 @@
 
 import { useState, useEffect, FormEvent, ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Trash2, ExternalLink } from "lucide-react";
+import { ArrowLeft, ChevronDown, Trash2, ExternalLink, BookOpen, User } from "lucide-react";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
 import FlyImageUploader from "@/components/flies/FlyImageUploader";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
@@ -55,7 +55,7 @@ export interface FlyPatternFormInitial {
 }
 
 export interface FlyPatternFormProps {
-  mode: "new" | "edit";
+  mode: "new" | "edit" | "canonical-edit";
   initial?: FlyPatternFormInitial;
   /**
    * Submit handler. Receives the FormData (image included if changed) and the
@@ -133,7 +133,7 @@ export default function FlyPatternForm({
       formData.set("image_removed", "true");
     }
 
-    formData.set("source", source);
+    if (!isCanonical) formData.set("source", source);
 
     if (showCaptcha && turnstileToken) {
       formData.set("turnstile_token", turnstileToken);
@@ -157,7 +157,7 @@ export default function FlyPatternForm({
         ),
       );
       formData.set("has_structured_recipe", "true");
-    } else if (mode === "edit") {
+    } else if (mode === "edit" || isCanonical) {
       // Edit explicitly clearing structured recipe: send empty array so PATCH
       // wipes existing rows.
       formData.set("recipe_steps", JSON.stringify([]));
@@ -180,35 +180,93 @@ export default function FlyPatternForm({
     }
   }
 
-  const formId = mode === "new" ? "new-fly-form" : "edit-fly-form";
+  const isCanonical = mode === "canonical-edit";
+  const formId =
+    mode === "new"
+      ? "new-fly-form"
+      : isCanonical
+      ? "canonical-fly-form"
+      : "edit-fly-form";
+  const topLabel = mode === "new"
+    ? "New Pattern"
+    : isCanonical
+    ? "Edit Canonical Fly"
+    : "Edit Pattern";
+  const titleText = mode === "new"
+    ? "New Fly Pattern"
+    : isCanonical
+    ? "Edit Canonical Fly"
+    : "Edit Fly Pattern";
+  const subtitleText = mode === "new"
+    ? "Build your recipe from 500+ tying materials"
+    : isCanonical
+    ? "Library entry — edits appear on /flies/<slug> for everyone"
+    : "Refine your pattern — recipe, photo, notes";
+  const submitLabel = mode === "new"
+    ? "Create Pattern"
+    : isCanonical
+    ? "Save Library Entry"
+    : "Save Changes";
+  const submitBusyLabel = mode === "new" ? "Creating…" : "Saving…";
+  const backLabel = isCanonical ? "Back to library" : "Fly Patterns";
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-4 pb-32">
+    <div className={`min-h-screen pt-4 pb-32 ${isCanonical ? "bg-[#1a1208]" : "bg-[#0D1117]"}`}>
+      {isCanonical && (
+        <div className="bg-[#E8923A] text-[#0D1117] border-b-2 border-[#D17D28]">
+          <div className="mx-auto max-w-6xl px-4 lg:px-6 py-2 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 shrink-0" />
+            <p className="text-[12px] font-semibold uppercase tracking-wider">
+              Library entry — visible to every angler
+            </p>
+            <span className="ml-auto text-[11px] font-medium opacity-80">
+              Admin · Canonical fly
+            </span>
+          </div>
+        </div>
+      )}
       <div className="mx-auto max-w-6xl px-4 lg:px-6">
         {/* Top bar */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3 mt-2">
           <Link
             href={cancelHref}
             className="inline-flex items-center gap-1.5 text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Fly Patterns
+            {backLabel}
           </Link>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
-            {mode === "new" ? "New Pattern" : "Edit Pattern"}
+          <span
+            className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest ${
+              isCanonical
+                ? "text-[#E8923A]"
+                : "text-[#0BA5C7]"
+            }`}
+          >
+            {isCanonical ? (
+              <BookOpen className="w-3 h-3" />
+            ) : mode === "edit" ? (
+              <User className="w-3 h-3" />
+            ) : null}
+            {isCanonical
+              ? "Library Entry"
+              : mode === "edit"
+              ? "Your Pattern"
+              : topLabel}
           </span>
         </div>
 
         {/* Title row */}
-        <div className="flex items-end justify-between border-b border-[#21262D] pb-3 mb-4 gap-3">
+        <div
+          className={`flex items-end justify-between pb-3 mb-4 gap-3 border-b-2 ${
+            isCanonical ? "border-[#E8923A]/40" : "border-[#21262D]"
+          }`}
+        >
           <div className="min-w-0">
             <h1 className="font-heading text-2xl text-[#F0F6FC] leading-tight">
-              {mode === "new" ? "New Fly Pattern" : "Edit Fly Pattern"}
+              {titleText}
             </h1>
             <p className="text-[12px] text-[#6E7681] mt-0.5">
-              {mode === "new"
-                ? "Build your recipe from 500+ tying materials"
-                : "Refine your pattern — recipe, photo, notes"}
+              {subtitleText}
             </p>
           </div>
           {topRight && (
@@ -283,25 +341,27 @@ export default function FlyPatternForm({
                       className={inputClass}
                     />
                   </div>
-                  <div className="col-span-12 md:col-span-6">
-                    <label className={labelClass}>Source</label>
-                    <div className="flex gap-1">
-                      {FLY_SOURCES.map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => setSource(s)}
-                          className={`px-3 h-7 rounded-md text-[12px] font-medium transition-colors capitalize ${
-                            source === s
-                              ? "bg-[#E8923A] text-white"
-                              : "bg-[#0D1117] border border-[#30363D] text-[#A8B2BD] hover:border-[#E8923A]/60"
-                          }`}
-                        >
-                          {s}
-                        </button>
-                      ))}
+                  {!isCanonical && (
+                    <div className="col-span-12 md:col-span-6">
+                      <label className={labelClass}>Source</label>
+                      <div className="flex gap-1">
+                        {FLY_SOURCES.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setSource(s)}
+                            className={`px-3 h-7 rounded-md text-[12px] font-medium transition-colors capitalize ${
+                              source === s
+                                ? "bg-[#E8923A] text-white"
+                                : "bg-[#0D1117] border border-[#30363D] text-[#A8B2BD] hover:border-[#E8923A]/60"
+                            }`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="col-span-12 md:col-span-6">
                     <label htmlFor="tags" className={labelClass}>
                       Tags
@@ -508,8 +568,20 @@ export default function FlyPatternForm({
         </form>
 
         {/* Sticky save bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-[#0D1117] border-t border-[#21262D] z-40">
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-40 border-t-2 ${
+            isCanonical
+              ? "bg-[#1a1208] border-[#E8923A]"
+              : "bg-[#0D1117] border-[#21262D]"
+          }`}
+        >
           <div className="mx-auto max-w-6xl px-3 py-2 flex items-center gap-2">
+            {isCanonical && (
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A]/15 border border-[#E8923A]/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E8923A]">
+                <BookOpen className="w-3 h-3" />
+                Editing library entry
+              </span>
+            )}
             {onDelete ? (
               <button
                 type="button"
@@ -542,13 +614,7 @@ export default function FlyPatternForm({
                   : undefined
               }
             >
-              {busy
-                ? mode === "new"
-                  ? "Creating…"
-                  : "Saving…"
-                : mode === "new"
-                ? "Create Pattern"
-                : "Save Changes"}
+              {busy ? submitBusyLabel : submitLabel}
             </button>
           </div>
         </div>

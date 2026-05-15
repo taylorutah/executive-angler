@@ -364,7 +364,7 @@ const gearProductsConfig: EntityConfig = {
 // Canonical Flies (The Trout Fly Library)
 // ---------------------------------------------------------------------------
 const canonicalFliesConfig: EntityConfig = {
-  table: "canonical_flies",
+  table: "flies",
   label: "Flies (Trout Fly Library)",
   labelSingular: "Fly",
   slug: "flies",

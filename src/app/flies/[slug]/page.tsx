@@ -20,7 +20,9 @@ import {
   lookupFlySlugRedirect,
 } from "@/lib/db/fly-model";
 import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
+import { Pencil } from "lucide-react";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
@@ -78,6 +80,7 @@ export default async function FlyDetail({ params }: Props) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
+  const viewerIsAdmin = isAdmin(user?.email);
 
   const [versions, boxes] = await Promise.all([
     isLoggedIn ? listMyConfigurationsForFly(fly.id) : Promise.resolve([]),
@@ -144,6 +147,16 @@ export default async function FlyDetail({ params }: Props) {
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <FlyFavoriteButton canonicalFlyId={fly.id} />
+              {viewerIsAdmin && (
+                <Link
+                  href={`/admin/flies/${fly.slug}/edit`}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                  aria-label="Edit canonical fly"
+                >
+                  <Pencil className="h-3.5 w-3.5" />
+                  Edit
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -158,7 +171,10 @@ export default async function FlyDetail({ params }: Props) {
           loginRedirectPath={`/flies/${fly.slug}`}
         />
 
-        <Recipe materials={fly.materials_list ?? []} />
+        <Recipe
+          materials={fly.materials_list ?? []}
+          editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit` : null}
+        />
 
         {(fly.history || fly.tying_overview || fly.fishing_tips) && (
           <section className="mx-auto max-w-3xl py-12 space-y-8 border-t border-[#21262D] mt-6">
@@ -192,26 +208,50 @@ export default async function FlyDetail({ params }: Props) {
   );
 }
 
-function Recipe({ materials }: { materials: MaterialSlot[] }) {
-  if (!materials || materials.length === 0) return null;
+function Recipe({
+  materials,
+  editHref,
+}: {
+  materials: MaterialSlot[];
+  editHref: string | null;
+}) {
+  const hasMaterials = materials && materials.length > 0;
   return (
     <section className="my-8">
       <h2 className="font-heading text-xl text-[#F0F6FC] mb-3">Recipe</h2>
-      <ul className="rounded-lg border border-[#21262D] bg-[#161B22] divide-y divide-[#21262D]">
-        {materials.map((m, i) => {
-          const slotLabel = capitalize(String(m.slot ?? "Material"));
-          const detail = [m.material, m.brand].filter(Boolean).join(" · ");
-          return (
-            <li key={i} className="px-4 py-2.5 text-sm flex items-baseline gap-3">
-              <span className="w-20 text-[#6E7681] text-xs uppercase tracking-wide flex-shrink-0">{slotLabel}</span>
-              <span className="text-[#F0F6FC]">{detail || "—"}</span>
-              {m.description && (
-                <span className="text-[#6E7681] text-xs">{m.description}</span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      {hasMaterials ? (
+        <ul className="rounded-lg border border-[#21262D] bg-[#161B22] divide-y divide-[#21262D]">
+          {materials.map((m, i) => {
+            const slotLabel = capitalize(String(m.slot ?? "Material"));
+            const detail = [m.material, m.brand].filter(Boolean).join(" · ");
+            return (
+              <li key={i} className="px-4 py-2.5 text-sm flex items-baseline gap-3">
+                <span className="w-20 text-[#6E7681] text-xs uppercase tracking-wide flex-shrink-0">{slotLabel}</span>
+                <span className="text-[#F0F6FC]">{detail || "—"}</span>
+                {m.description && (
+                  <span className="text-[#6E7681] text-xs">{m.description}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div className="rounded-lg border border-dashed border-[#21262D] bg-[#161B22] px-4 py-6 text-sm text-[#6E7681]">
+          {editHref ? (
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <span>Recipe not filled in yet.</span>
+              <Link
+                href={editHref}
+                className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+              >
+                + Add recipe
+              </Link>
+            </div>
+          ) : (
+            <span>Recipe coming soon.</span>
+          )}
+        </div>
+      )}
     </section>
   );
 }
