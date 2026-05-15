@@ -423,33 +423,25 @@ from vib_map
 on conflict do nothing;
 
 -- ────────────────────────────────────────────────────────────────────────────
--- 11. BACKFILL: catches.configuration_id + options_snapshot
+-- 11. BACKFILL: catches — SKIPPED on purpose
 -- ────────────────────────────────────────────────────────────────────────────
-update catches c
-   set configuration_id = ufc.id,
-       options_snapshot = jsonb_build_object(
-         'size', v.size,
-         'bead', jsonb_strip_nulls(jsonb_build_object(
-           'size_mm', v.bead_weight_mm,
-           'color', v.bead_color,
-           'material', v.bead_material::text)),
-         'colors', jsonb_strip_nulls(jsonb_build_object(
-           'body', v.body_color, 'rib', v.rib_color, 'tail', v.tail_color,
-           'wing', v.wing_color, 'thorax', v.thorax_color, 'collar', v.collar_color))
-       )
-  from fly_variants v
-  join fly_patterns_v2 pv on pv.id = v.pattern_id
-  join user_fly_configurations ufc
-    on ufc.user_id = c.user_id
-   and ufc.fly_id = case
-       when pv.owner_user_id is null then pv.id
-       when pv.inspired_by_fly_id is not null
-         and exists (select 1 from flies where id = pv.inspired_by_fly_id) then pv.inspired_by_fly_id
-       else pv.id end
-   and coalesce(ufc.size, '') = coalesce(v.size, '')
- where c.fly_pattern_id is not null
-   and v.id is not null
-   and c.configuration_id is null;
+-- We deliberately do NOT backfill catches.configuration_id here. The catches
+-- table records `fly_pattern_id` (the pattern) and `fly_name` (a string
+-- snapshot), but it has never recorded which variant/size/bead/color the
+-- angler actually used. Inferring it now would either be guesswork or a
+-- cartesian explosion of false matches — both destroy more truth than they
+-- preserve.
+--
+-- What this means for your data:
+--   - Every catch keeps its existing fly_pattern_id (points at fly_patterns_v2,
+--     which is untouched) and fly_name string.
+--   - The new configuration_id and options_snapshot columns stay NULL for
+--     historical catches. The UI must render them from fly_name + the pattern
+--     join (no regression — that's exactly what it does today).
+--   - Going forward, the catch-logging UI will set configuration_id when
+--     the angler picks a saved configuration at log time.
+--
+-- No UPDATE of any existing catch column. No rows added or removed.
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- 12. BACKFILL: Phase B dedup candidates
@@ -573,30 +565,68 @@ alter table _fly_dedup_candidates enable row level security;
 
 commit;
 
--- ────────────────────────────────────────────────────────────────────────────
--- Post-migration verification queries (run manually after applying):
+-- ════════════════════════════════════════════════════════════════════════════
+-- DATA SAFETY GUARANTEE
+-- ════════════════════════════════════════════════════════════════════════════
 --
---   -- Canonical flies migrated
---   select count(*) from flies where status = 'approved';
---   select count(*) from fly_patterns_v2 where owner_user_id is null;
---   -- ↑ these should match
+-- Tables this migration READS FROM (never modified):
+--   fly_patterns_v2, fly_variants, fly_variant_stock, fly_variant_in_box
 --
---   -- Per-user configurations (replace UUID with the user being verified)
---   select count(*) from user_fly_configurations where user_id = '...';
---   select count(*) from fly_variant_stock
---     where user_id = '...'
---       and (tied_count > 0 or bought_count > 0 or target_count > 0
---            or is_favorite or tie_next_status in ('wanted','at_vise')
---            or personal_notes is not null);
---   -- ↑ these should match
+-- Tables this migration CREATES (new, empty before backfill):
+--   flies, user_fly_configurations, fly_box_entries_v3,
+--   _fly_dedup_candidates, fly_slug_redirects
 --
---   -- Dedup queue size
---   select decision, count(*) from _fly_dedup_candidates group by decision;
---   -- ↑ all 'pending' on first run — Phase B CLI drains them
+-- Tables this migration ADDS COLUMNS TO (additive — existing data untouched):
+--   catches: + configuration_id (nullable FK), + options_snapshot (jsonb)
 --
---   -- Catches with configuration_id set
---   select count(*) from catches where configuration_id is not null;
+-- Tables this migration NEVER TOUCHES (no read, no write, no schema change):
+--   sessions, fishing_sessions, session_rigs, session_catch_aggregates,
+--   catches.fly_pattern_id (existing column unchanged),
+--   catches.fly_name (existing column unchanged),
+--   catches.user_id / .species / .length_in / .photo_url / etc.,
+--   canonical_flies, fly_patterns (view), user_fly_box,
+--   fly_pattern_submissions, fly_variant_photos
 --
+-- Catch backfill is intentionally SKIPPED (see step 11). Historical catches
+-- keep their fly_pattern_id and fly_name; the new configuration_id stays
+-- NULL for them. UI renders them exactly as today.
+--
+-- ════════════════════════════════════════════════════════════════════════════
+-- Pre- and post-migration sanity checks (run manually as Taylor)
+-- ════════════════════════════════════════════════════════════════════════════
+--
+-- BEFORE applying (record these numbers):
+--   select count(*) as catches_total from catches;
+--   select count(*) as sessions_total from fishing_sessions;
+--   select count(*) as canonical_total from fly_patterns_v2 where owner_user_id is null;
+--   select count(*) as personal_total  from fly_patterns_v2 where owner_user_id is not null;
+--   select count(*) as variants_total  from fly_variants where deleted_at is null;
+--   select count(*) as stock_total     from fly_variant_stock
+--    where tied_count > 0 or bought_count > 0 or target_count > 0
+--       or is_favorite or tie_next_status in ('wanted','at_vise')
+--       or personal_notes is not null;
+--
+-- AFTER applying:
+--   1. catches_total       — MUST be identical (no rows added/removed).
+--   2. sessions_total      — MUST be identical (table not touched).
+--   3. canonical_total     — MUST equal new `select count(*) from flies`.
+--   4. stock_total         — should approximately equal new count of
+--                            `select count(*) from user_fly_configurations`.
+--                            (Exact match unless a variant was personal-owned
+--                            and routed via inspired_by_fly_id — see dedup
+--                            queue for those.)
+--   5. variants_total      — MUST be identical (table not touched).
+--
+-- Spot-check your own data after the migration:
+--   select fly_id, count(*) as configs
+--     from user_fly_configurations
+--    where user_id = 'YOUR-USER-UUID'
+--    group by fly_id order by configs desc;
+--
+--   select count(*) as my_catches_pre, count(distinct fly_pattern_id) as flies_caught
+--     from catches where user_id = 'YOUR-USER-UUID';
+--
+-- ════════════════════════════════════════════════════════════════════════════
 -- Phase B follow-up: run `npm run dedup-flies` (scripts/dedup-flies.ts) to
 -- drain _fly_dedup_candidates. Phase C migration drops the legacy tables.
--- ────────────────────────────────────────────────────────────────────────────
+-- ════════════════════════════════════════════════════════════════════════════
