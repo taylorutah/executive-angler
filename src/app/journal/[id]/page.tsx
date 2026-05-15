@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import SessionDetail from "./SessionDetail";
-import { checkPremium } from "@/lib/admin";
+import { checkPremium, isAdmin } from "@/lib/admin";
 import CatchLoggerEntry from "@/components/catch-logger/CatchLoggerEntry";
 import { listMyBoxes, listVariantsInBox } from "@/lib/db/fly-v2";
 
@@ -38,12 +39,24 @@ export default async function SessionDetailPage({ params }: Props) {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
+  const viewerIsAdmin = isAdmin(user?.email);
 
-  // Fetch the session first — RLS already filters private rows out for
-  // non-owners (including the anon role), so a `maybeSingle()` that
-  // returns null means "either doesn't exist or you aren't allowed to see
-  // it." In either case the right response is 404.
-  const { data: session, error } = await supabase
+  // Admins get a service-role read client so they can view any session —
+  // including private sessions owned by other users. RLS on fishing_sessions
+  // is `auth.uid() = user_id`, so the cookie-bound client would return null
+  // for non-owners. Non-admins continue to use the cookie client which
+  // respects RLS exactly as before.
+  const reader = viewerIsAdmin && process.env.SUPABASE_SERVICE_ROLE_KEY
+    ? createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+    : supabase;
+
+  // Fetch the session first — for non-admins, RLS filters private rows out,
+  // so null means "doesn't exist or not allowed." For admins we used the
+  // service-role client, so null genuinely means "doesn't exist."
+  const { data: session, error } = await reader
     .from("fishing_sessions")
     .select("*")
     .eq("id", id)
@@ -56,18 +69,15 @@ export default async function SessionDetailPage({ params }: Props) {
 
   // Privacy overhaul 2026-05-04: session detail is owner-only by design.
   // RLS on fishing_sessions is `auth.uid() = user_id` — non-owners receive
-  // null at the SELECT above and 404 at line 50. The check below is dead
-  // code under current RLS but stays as belt-and-suspenders against any
-  // future RLS loosening.
-  if (!isOwner) {
+  // null at the SELECT above and 404 at line 50. Admins bypass this check
+  // so they can view any user's session for moderation/support.
+  if (!isOwner && !viewerIsAdmin) {
     notFound();
   }
 
   // If the session owner has profile_visibility = 'private', even direct
-  // session links are owner-only. RLS already blocks the DB read, but we
-  // check explicitly here so we can 404 cleanly without leaking any info.
-  // For 'followers_only', direct links remain accessible (Strava parity —
-  // you can share a specific session URL with anyone).
+  // session links are owner-only. Admins bypass this gate so they can see
+  // private profiles' sessions during moderation.
   let ownerProfile: {
     display_name: string | null;
     username: string | null;
@@ -75,7 +85,7 @@ export default async function SessionDetailPage({ params }: Props) {
     profile_visibility?: string;
   } | null = null;
   if (session.user_id) {
-    const { data: profile } = await supabase
+    const { data: profile } = await reader
       .from("profiles")
       .select("display_name, username, avatar_url, profile_visibility")
       .eq("user_id", session.user_id)
@@ -83,14 +93,12 @@ export default async function SessionDetailPage({ params }: Props) {
     ownerProfile = profile ?? null;
   }
 
-  // Hard block: profile_visibility = 'private' means owner-only, even for
-  // sessions that are marked 'public' at the session level.
   const ownerVisibility = ownerProfile?.profile_visibility ?? "public";
-  if (!isOwner && ownerVisibility === "private") {
+  if (!isOwner && !viewerIsAdmin && ownerVisibility === "private") {
     notFound();
   }
 
-  const { data: catches } = await supabase
+  const { data: catches } = await reader
     .from("catches")
     .select("*")
     .eq("session_id", id)
@@ -111,20 +119,24 @@ export default async function SessionDetailPage({ params }: Props) {
   const variantIds = catchesArr
     .map((c) => c.variant_id)
     .filter((v): v is string => !!v);
+  // Post-Phase-C: fly_variants table is dropped. catches.fly_name
+  // (denormalized snapshot) carries the fly name forward — no per-variant
+  // lookup needed. Leave the map empty so the renderer falls back to fly_name.
+  void variantIds;
   const patternByVariant = new Map<string, { name: string; type?: string; image_url?: string }>();
-  if (variantIds.length > 0) {
-    const { data: variantPatterns } = await supabase
-      .from("fly_variants")
-      .select("id, pattern:fly_patterns_v2(name, category, hero_image_url)")
-      .in("id", variantIds);
+  if (false) {
+    // Placeholder so subsequent for-loop type structure stays valid.
     type V = {
       id: string;
       pattern?: { name?: string; category?: string; hero_image_url?: string }
         | { name?: string; category?: string; hero_image_url?: string }[]
         | null;
     };
-    for (const row of (variantPatterns ?? []) as V[]) {
-      const p = Array.isArray(row.pattern) ? row.pattern[0] : row.pattern;
+    const rows: V[] = [];
+    for (const row of rows) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pat = row.pattern as any;
+      const p = Array.isArray(pat) ? pat[0] : pat;
       if (p?.name) {
         patternByVariant.set(row.id, {
           name: p.name,
@@ -154,10 +166,10 @@ export default async function SessionDetailPage({ params }: Props) {
     .filter((v): v is string => !!v);
 
   const { data: flies } = flyPatternIds.length > 0
-    ? await supabase.from("fly_patterns").select("id, name, type, image_url").in("id", flyPatternIds)
+    ? await reader.from("fly_patterns").select("id, name, type, image_url").in("id", flyPatternIds)
     : { data: [] };
 
-  const { data: sessionPhotos } = await supabase
+  const { data: sessionPhotos } = await reader
     .from("session_photos")
     .select("id, url, caption, created_at")
     .eq("session_id", id)

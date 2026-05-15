@@ -27,7 +27,7 @@ interface UserData {
     premium_granted_by: string | null;
     premium_granted_at: string | null;
   } | null;
-  sessions: { id: string; date: string; river_name: string | null; total_fish: number | null; is_private: boolean }[];
+  sessions: { id: string; date: string; river_name: string | null; total_fish: number | null; broadcast_presence: boolean | null }[];
   catches: { id: string; species: string | null; length_inches: number | null }[];
   flies: { id: string; name: string | null }[];
   followers: number;
@@ -329,7 +329,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                     >
                       <div>
                         <p className="text-sm text-[#F0F6FC] font-medium">{s.river_name || "Unknown"}</p>
-                        <p className="text-xs text-[#6E7681]">{formatDate(s.date)} {s.is_private ? "· 🔒 Private" : ""}</p>
+                        <p className="text-xs text-[#6E7681]">{formatDate(s.date)} {s.broadcast_presence ? "" : "· 🔒 Private"}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-mono text-[#E8923A]">{s.total_fish || 0} fish</span>

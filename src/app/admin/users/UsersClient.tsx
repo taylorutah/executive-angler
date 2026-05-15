@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -49,7 +49,7 @@ interface SessionRow {
   location: string | null;
   section: string | null;
   created_at: string | null;
-  is_private: boolean | null;
+  broadcast_presence: boolean | null;
 }
 
 export default function UsersClient({ users: initialUsers, adminId, adminEmail }: { users: UserProfile[]; adminId: string; adminEmail: string }) {
@@ -64,6 +64,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   const [noteText, setNoteText] = useState<Record<string, string>>({});
   const [banReason, setBanReason] = useState<Record<string, string>>({});
   const [sessionsByUser, setSessionsByUser] = useState<Record<string, SessionRow[] | "loading" | "error">>({});
+  const fetchedSessions = useRef<Set<string>>(new Set());
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [deletingUser, setDeletingUser] = useState<UserProfile | null>(null);
 
@@ -130,26 +131,25 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
 
   useEffect(() => {
     if (!expandedUser) return;
-    if (sessionsByUser[expandedUser] !== undefined) return;
-    let cancelled = false;
-    setSessionsByUser(prev => ({ ...prev, [expandedUser]: "loading" }));
-    fetch(`/api/admin/users/${expandedUser}`)
+    if (fetchedSessions.current.has(expandedUser)) return;
+    const uid = expandedUser;
+    fetchedSessions.current.add(uid);
+    setSessionsByUser(prev => ({ ...prev, [uid]: "loading" }));
+    fetch(`/api/admin/users/${uid}`)
       .then(async res => {
-        if (cancelled) return;
         if (!res.ok) {
-          setSessionsByUser(prev => ({ ...prev, [expandedUser]: "error" }));
+          setSessionsByUser(prev => ({ ...prev, [uid]: "error" }));
+          fetchedSessions.current.delete(uid);
           return;
         }
         const json = await res.json();
-        if (!cancelled) {
-          setSessionsByUser(prev => ({ ...prev, [expandedUser]: (json.sessions || []) as SessionRow[] }));
-        }
+        setSessionsByUser(prev => ({ ...prev, [uid]: (json.sessions || []) as SessionRow[] }));
       })
       .catch(() => {
-        if (!cancelled) setSessionsByUser(prev => ({ ...prev, [expandedUser]: "error" }));
+        setSessionsByUser(prev => ({ ...prev, [uid]: "error" }));
+        fetchedSessions.current.delete(uid);
       });
-    return () => { cancelled = true; };
-  }, [expandedUser, sessionsByUser]);
+  }, [expandedUser]);
 
   function handleUserDeleted(userId: string) {
     setUsers(prev => prev.filter(u => u.user_id !== userId));
@@ -532,10 +532,10 @@ function SessionsPanel({
                 <Fish className="h-3 w-3" /> {s.total_fish}
               </span>
             )}
-            {s.is_private ? (
-              <Lock className="h-3 w-3 text-[#6E7681] shrink-0" />
-            ) : (
+            {s.broadcast_presence ? (
               <Globe className="h-3 w-3 text-[#6E7681] shrink-0" />
+            ) : (
+              <Lock className="h-3 w-3 text-[#6E7681] shrink-0" />
             )}
           </button>
         ))}

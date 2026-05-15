@@ -24,7 +24,7 @@ interface Session {
   notes: string | null;
   flies_notes: string | null;
   tags: string[] | null;
-  is_private: boolean | null;
+  broadcast_presence: boolean | null;
   created_at: string | null;
 }
 
@@ -234,10 +234,10 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1">
-                  {session.is_private ? (
-                    <><Lock className="h-3 w-3" /> Private</>
-                  ) : (
+                  {session.broadcast_presence ? (
                     <><Globe className="h-3 w-3" /> Public</>
+                  ) : (
+                    <><Lock className="h-3 w-3" /> Private</>
                   )}
                 </span>
               </div>

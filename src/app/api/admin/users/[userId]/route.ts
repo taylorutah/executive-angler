@@ -43,7 +43,7 @@ export async function GET(
   // Sessions
   const { data: sessions } = await admin
     .from("fishing_sessions")
-    .select("id, date, river_name, total_fish, weather, water_temp_f, location, section, created_at, is_private")
+    .select("id, date, river_name, total_fish, weather, water_temp_f, location, section, created_at, broadcast_presence")
     .eq("user_id", userId)
     .order("date", { ascending: false })
     .limit(50);
