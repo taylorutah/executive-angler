@@ -66,7 +66,7 @@ export default function PhoneHeroMockup() {
           {/* App header */}
           <div className="px-5 pt-4 pb-3">
             <div className="flex items-center justify-between mb-1">
-              <h2 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-xl leading-none">Home</h2>
+              <h2 className="font-heading text-[#F0F6FC] text-xl leading-none">Home</h2>
               <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#E8923A] to-[#d17d28] flex items-center justify-center">
                 <span className="text-[10px] font-bold text-white">T</span>
               </div>
@@ -108,7 +108,7 @@ export default function PhoneHeroMockup() {
               <div key={s.river} className="bg-[#161B22] border border-[#21262D] rounded-2xl p-3">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-[15px] leading-tight">{s.river}</h3>
+                    <h3 className="font-heading text-[#F0F6FC] text-[15px] leading-tight">{s.river}</h3>
                     <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-[9px] mt-0.5">{s.time}</p>
                   </div>
                   <span className="font-['IBM_Plex_Mono'] text-[10px] text-[#6E7681]">{s.location}</span>

@@ -367,7 +367,7 @@ export default function BoxesManager({
             className="w-full max-w-md rounded-lg border border-[#30363D] bg-[#161B22] shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-[#21262D] px-4 py-3">
-              <h2 className="font-['DM_Serif_Display'] text-lg text-[#F0F6FC]">
+              <h2 className="font-heading text-lg text-[#F0F6FC]">
                 {editor.kind === "edit" ? "Edit box" : "New box"}
               </h2>
               <button

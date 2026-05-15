@@ -115,7 +115,7 @@ export default async function GearCatalogPage({ searchParams }: Props) {
     <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
       <header className="border-b border-[#21262D] bg-[#161B22]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
-          <h1 className="font-['DM_Serif_Display'] text-3xl text-[#F0F6FC] tracking-tight">
+          <h1 className="font-heading text-3xl text-[#F0F6FC] tracking-tight">
             Gear
           </h1>
           <p className="mt-1 text-sm text-[#A8B2BD]">

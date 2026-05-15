@@ -32,7 +32,7 @@ export default function RiverMockup() {
 
         {/* Compact hero — 140pt aesthetic */}
         <h1
-          className="font-['DM_Serif_Display']"
+          className="font-heading"
           style={{ fontSize: 96, color: C.chalk, lineHeight: 1, letterSpacing: "-0.01em" }}
         >
           Provo River

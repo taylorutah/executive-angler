@@ -271,7 +271,7 @@ export default function CatchLogger({
                       <Image src={url} alt="" fill sizes="160px" className="object-cover" />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-[#161B22]">
-                        <span className="font-['DM_Serif_Display'] text-[#484F58] text-2xl">
+                        <span className="font-heading text-[#484F58] text-2xl">
                           {(v.pattern?.name ?? "?")[0]}
                         </span>
                       </div>

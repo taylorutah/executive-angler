@@ -76,7 +76,7 @@ export default function HomePage() {
               </ScrollAnimation>
               <ScrollAnimation delay={0.1}>
                 <h1
-                  className="text-[#F0F6FC] font-['DM_Serif_Display'] font-normal leading-[1.05] mb-6"
+                  className="text-[#F0F6FC] font-heading font-normal leading-[1.05] mb-6"
                   style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
                 >
                   Better data.<br />Better days on the water.
@@ -159,7 +159,7 @@ export default function HomePage() {
             {/* Session card mockup */}
             <ScrollAnimation>
               <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
-                <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
+                <h3 className="font-heading text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
                 <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
                 <div className="flex items-baseline justify-between mb-6">
                   <div className="text-center">
@@ -190,7 +190,7 @@ export default function HomePage() {
             {/* Copy */}
             <ScrollAnimation delay={0.2}>
               <p className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.15em] mb-4">JOURNAL</p>
-              <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
+              <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
                 Every session.<br />Every detail.<br />Always yours.
               </h2>
               <p className="text-[#A8B2BD] text-lg leading-relaxed mb-6">
@@ -221,7 +221,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
             <p className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.15em] mb-4 text-center">FLIES</p>
-            <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
+            <h2 className="text-[#F0F6FC] font-heading text-4xl text-center mb-3">
               Your Digital Fly Box &amp; Tying Workbench
             </h2>
             <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
@@ -254,7 +254,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
             <p className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs uppercase tracking-[0.15em] mb-4 text-center">RIVERS</p>
-            <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl text-center mb-3">
+            <h2 className="text-[#F0F6FC] font-heading text-4xl text-center mb-3">
               What&apos;s Happening on the Water
             </h2>
             <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
@@ -266,7 +266,7 @@ export default function HomePage() {
               <ScrollAnimation key={r.name} delay={i * 0.08}>
                 <Link href={r.href} className="block bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
                   <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs uppercase tracking-wider mb-1">{r.location}</p>
-                  <h3 className="font-['DM_Serif_Display'] text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
+                  <h3 className="font-heading text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
                   <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal mb-0.5">{r.fish}</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-3">fish this week</div>
                   <div className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs mb-4">{"\u25CF"} {r.ago}</div>
@@ -298,7 +298,7 @@ export default function HomePage() {
                   Pro &mdash; $2.99/mo
                 </span>
               </div>
-              <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-4xl mb-4">
+              <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
                 See <em>your</em> patterns
               </h2>
               <p className="text-[#A8B2BD] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
@@ -339,7 +339,7 @@ export default function HomePage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <ScrollAnimation>
-            <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-5xl mb-4">
+            <h2 className="text-[#F0F6FC] font-heading text-5xl mb-4">
               Start fishing smarter.
             </h2>
             <p className="text-[#A8B2BD] text-lg mb-10 max-w-xl mx-auto">

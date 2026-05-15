@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { DM_Serif_Display, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Inter, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
@@ -11,11 +11,10 @@ import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import "./globals.css";
 
-const dmSerif = DM_Serif_Display({
+const inter = Inter({
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-dm-serif",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -108,7 +107,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${dmSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
       <head>
         {/* Theme bootstrap — runs synchronously before paint to prevent FOUC.
             Reads saved preference from localStorage; falls back to system

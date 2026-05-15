@@ -68,7 +68,7 @@ export default function LegacyMockup() {
             </div>
           </div>
           <h1
-            className="font-['DM_Serif_Display']"
+            className="font-heading"
             style={{ fontSize: 80, color: C.chalk, lineHeight: 1, marginTop: 28, letterSpacing: "-0.01em" }}
           >
             Taylor Warnick

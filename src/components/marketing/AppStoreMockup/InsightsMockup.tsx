@@ -57,7 +57,7 @@ export default function InsightsMockup() {
               </span>
             </div>
             <h1
-              className="font-['DM_Serif_Display']"
+              className="font-heading"
               style={{ fontSize: 104, color: C.chalk, lineHeight: 1, letterSpacing: "-0.01em" }}
             >
               Patterns
@@ -100,7 +100,7 @@ export default function InsightsMockup() {
               Tomorrow's Forecast
             </div>
             <div
-              className="font-['DM_Serif_Display']"
+              className="font-heading"
               style={{ color: C.chalk, fontSize: 58, lineHeight: 1.1, marginTop: 18, letterSpacing: "-0.01em" }}
             >
               Green River A-Section will fish hot.
@@ -188,7 +188,7 @@ export default function InsightsMockup() {
                     {tag}
                   </div>
                   <div
-                    className="font-['DM_Serif_Display']"
+                    className="font-heading"
                     style={{ color: C.chalk, fontSize: 36, lineHeight: 1.15, marginTop: 10, letterSpacing: "-0.005em" }}
                   >
                     {title}

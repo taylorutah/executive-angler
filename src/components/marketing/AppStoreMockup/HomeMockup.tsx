@@ -55,7 +55,7 @@ export default function HomeMockup() {
         <div className="flex items-start justify-between" style={{ marginBottom: 24 }}>
           <div>
             <h1
-              className="font-['DM_Serif_Display']"
+              className="font-heading"
               style={{ fontSize: 104, color: C.chalk, lineHeight: 1, letterSpacing: "-0.01em" }}
             >
               Home
@@ -168,7 +168,7 @@ export default function HomeMockup() {
               <div className="flex items-start justify-between" style={{ marginBottom: 24 }}>
                 <div>
                   <h3
-                    className="font-['DM_Serif_Display']"
+                    className="font-heading"
                     style={{ fontSize: 54, color: C.chalk, lineHeight: 1 }}
                   >
                     {s.river}

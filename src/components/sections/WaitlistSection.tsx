@@ -60,7 +60,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
         </div>
 
         {/* Headline */}
-        <h2 className="text-[#F0F6FC] font-['DM_Serif_Display'] font-normal leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
+        <h2 className="text-[#F0F6FC] font-heading font-normal leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
           Be first on the water.
         </h2>
 
@@ -73,7 +73,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
           /* Success state */
           <div className="bg-[#161B22] border border-[#3FB950]/30 rounded-2xl p-8 text-center">
             <CheckCircle className="h-12 w-12 text-[#3FB950] mx-auto mb-4" strokeWidth={1.5} />
-            <h3 className="text-[#F0F6FC] font-['DM_Serif_Display'] text-2xl mb-2">
+            <h3 className="text-[#F0F6FC] font-heading text-2xl mb-2">
               You&apos;re on the list.
             </h3>
             <p className="text-[#A8B2BD] text-sm">

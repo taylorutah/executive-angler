@@ -39,7 +39,7 @@ export default function SessionMockup() {
 
         {/* Session title */}
         <h1
-          className="font-['DM_Serif_Display']"
+          className="font-heading"
           style={{ fontSize: 96, color: C.chalk, lineHeight: 1.05, letterSpacing: "-0.01em" }}
         >
           Green River

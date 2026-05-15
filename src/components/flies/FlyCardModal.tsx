@@ -344,7 +344,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                       alignItems: "center",
                       justifyContent: "center",
                       fontFamily:
-                        "var(--font-heading), 'DM Serif Display', Georgia, serif",
+                        "var(--font-heading), system-ui, sans-serif",
                       fontSize: 17,
                       fontWeight: 400,
                       lineHeight: 1,
@@ -356,7 +356,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                     <div
                       style={{
                         fontFamily:
-                          "var(--font-heading), 'DM Serif Display', Georgia, serif",
+                          "var(--font-heading), system-ui, sans-serif",
                         fontSize: 14,
                         color: CARD_FOREST,
                         letterSpacing: "0.01em",
@@ -446,7 +446,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   <h1
                     style={{
                       fontFamily:
-                        "var(--font-heading), 'DM Serif Display', Georgia, serif",
+                        "var(--font-heading), system-ui, sans-serif",
                       fontSize: 26,
                       lineHeight: 1.1,
                       fontWeight: 400,

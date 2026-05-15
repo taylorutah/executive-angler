@@ -33,7 +33,7 @@ export default function FlyBoxMockup() {
         <div className="flex items-start justify-between" style={{ marginBottom: 22 }}>
           <div>
             <h1
-              className="font-['DM_Serif_Display']"
+              className="font-heading"
               style={{ fontSize: 104, color: C.chalk, lineHeight: 1, letterSpacing: "-0.01em" }}
             >
               Fly Box
@@ -109,7 +109,7 @@ export default function FlyBoxMockup() {
                 Most Productive
               </div>
               <div
-                className="font-['DM_Serif_Display']"
+                className="font-heading"
                 style={{ color: C.chalk, fontSize: 52, marginTop: 8, lineHeight: 1 }}
               >
                 RS2 Emerger
