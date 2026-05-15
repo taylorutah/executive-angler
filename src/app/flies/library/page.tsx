@@ -82,15 +82,15 @@ export default async function FliesPage() {
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
+      // Post-Phase-C: favorites live on user_fly_configurations, joined to flies.
       const { data: favRows } = await supabase
-        .from("user_fly_box")
-        .select("canonical_fly_id")
+        .from("user_fly_configurations")
+        .select("fly_id")
         .eq("user_id", user.id)
-        .eq("is_favorite", true)
-        .not("canonical_fly_id", "is", null);
+        .eq("is_favorite", true);
       const favIds = new Set(
         (favRows ?? [])
-          .map((r) => (r as { canonical_fly_id?: string | null }).canonical_fly_id)
+          .map((r) => (r as { fly_id?: string | null }).fly_id)
           .filter((id): id is string => !!id),
       );
       if (favIds.size > 0) {

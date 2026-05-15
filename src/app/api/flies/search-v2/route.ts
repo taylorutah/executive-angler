@@ -4,9 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 /**
  * GET /api/flies/search-v2?q=...&limit=12
  *
- * Pattern search against the unified fly_patterns_v2 table. Returns both
- * canonical (library) patterns and the caller's personal patterns. Used by
- * the Quick Fly Add sheet on box detail pages.
+ * Search against the `flies` table (approved canonicals only). Used by
+ * the Quick Fly Add sheet, fly picker, and any place that needs a typeahead.
+ *
+ * Post-Phase-C: personal-fork results are gone — there are no "personal"
+ * flies in the new model; every fly lives at /flies/[slug]. The
+ * `source: "canonical"` field is kept for client compatibility.
  */
 
 interface SearchResult {
@@ -15,54 +18,32 @@ interface SearchResult {
   name: string;
   category: string | null;
   hero_image_url: string | null;
-  source: "canonical" | "personal";
+  source: "canonical";
 }
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
 
   const q = (req.nextUrl.searchParams.get("q") ?? "").trim();
   const limit = Math.min(Number(req.nextUrl.searchParams.get("limit") ?? 12), 25);
 
-  const canonicalQuery = supabase
-    .from("fly_patterns_v2")
+  let query = supabase
+    .from("flies")
     .select("id, slug, name, category, hero_image_url")
-    .is("owner_user_id", null)
+    .eq("status", "approved")
     .order("is_featured", { ascending: false })
     .order("name")
     .limit(limit);
-  if (q) canonicalQuery.ilike("name", `%${q}%`);
+  if (q) query = query.ilike("name", `%${q}%`);
 
-  const personalPromise = user
-    ? supabase
-        .from("fly_patterns_v2")
-        .select("id, slug, name, category, hero_image_url")
-        .eq("owner_user_id", user.id)
-        .is("promoted_to_canonical_id", null)
-        .ilike("name", q ? `%${q}%` : "%")
-        .order("updated_at", { ascending: false })
-        .limit(limit)
-    : Promise.resolve({ data: [], error: null } as { data: unknown[]; error: null });
-
-  const [canonicalRes, personalRes] = await Promise.all([canonicalQuery, personalPromise]);
-  if (canonicalRes.error) {
-    console.error("[fly-search-v2] canonical error:", canonicalRes.error);
-    return NextResponse.json({ error: canonicalRes.error.message }, { status: 500 });
+  const { data, error } = await query;
+  if (error) {
+    console.error("[fly-search-v2]", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
   type Row = { id: string; slug: string | null; name: string; category: string | null; hero_image_url: string | null };
-
-  const personal: SearchResult[] = ((personalRes.data ?? []) as Row[]).map((p) => ({
-    id: p.id,
-    slug: p.slug,
-    name: p.name,
-    category: p.category,
-    hero_image_url: p.hero_image_url,
-    source: "personal",
-  }));
-
-  const canonical: SearchResult[] = ((canonicalRes.data ?? []) as Row[]).map((p) => ({
+  const results: SearchResult[] = ((data ?? []) as Row[]).map((p) => ({
     id: p.id,
     slug: p.slug,
     name: p.name,
@@ -71,5 +52,5 @@ export async function GET(req: NextRequest) {
     source: "canonical",
   }));
 
-  return NextResponse.json({ results: [...personal, ...canonical].slice(0, limit) });
+  return NextResponse.json({ results });
 }

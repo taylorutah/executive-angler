@@ -22,14 +22,46 @@ begin;
 -- breaks once that table goes).
 drop view if exists fly_patterns cascade;
 
--- Catches: drop the legacy fly_pattern_id FK so deleting fly_patterns_v2
--- doesn't try to nullify it. configuration_id (added in Phase A) replaces it.
+-- Catches: re-point the legacy fly_pattern_id FK from fly_patterns_v2 to
+-- flies. Phase A preserved IDs, so existing values still point at the
+-- correct fly — we just swap the FK target before dropping the old
+-- table. 108 production catches reference a pattern this way; dropping
+-- the column would lose that history.
+--
+-- Order matters: drop the old FK, null any references that no longer
+-- resolve into `flies` (e.g. catches that pointed at a personal pattern
+-- which was rejected during dedup), then add the new FK.
 alter table catches drop constraint if exists catches_fly_pattern_id_fkey;
-alter table catches drop column if exists fly_pattern_id;
+-- First re-point catches whose pattern was MERGED in Phase B dedup.
+-- _fly_dedup_candidates.decision='merge' captures (child_fly_id →
+-- parent_fly_id). Catches that referenced the child now reference the
+-- parent.
+update catches c
+   set fly_pattern_id = d.parent_fly_id
+  from _fly_dedup_candidates d
+ where d.decision = 'merge'
+   and d.parent_fly_id is not null
+   and c.fly_pattern_id = d.child_fly_id;
+-- Then null anything still unresolved.
+update catches set fly_pattern_id = null
+ where fly_pattern_id is not null
+   and fly_pattern_id not in (select id from flies);
+alter table catches add constraint catches_fly_pattern_id_fkey
+  foreign key (fly_pattern_id) references flies(id) on delete set null;
 
 -- Session rigs: same treatment.
 alter table session_rigs drop constraint if exists session_rigs_fly_pattern_id_fkey;
-alter table session_rigs drop column if exists fly_pattern_id;
+update session_rigs r
+   set fly_pattern_id = d.parent_fly_id
+  from _fly_dedup_candidates d
+ where d.decision = 'merge'
+   and d.parent_fly_id is not null
+   and r.fly_pattern_id = d.child_fly_id;
+update session_rigs set fly_pattern_id = null
+ where fly_pattern_id is not null
+   and fly_pattern_id not in (select id from flies);
+alter table session_rigs add constraint session_rigs_fly_pattern_id_fkey
+  foreign key (fly_pattern_id) references flies(id) on delete set null;
 
 -- Fly pattern submissions queue — pending lives on flies.status now.
 drop table if exists fly_pattern_submissions cascade;

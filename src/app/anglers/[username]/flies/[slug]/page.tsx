@@ -47,11 +47,16 @@ export default async function AnglerFlyRedirect({ params }: Props) {
     .maybeSingle();
   if (!profile?.user_id) redirect("/flies");
 
+  // Post-Phase-C: the personal v2 table is gone. Look up the corresponding
+  // private fly (imported during Phase A as "fly-private-<short-id>") and
+  // follow its inspired_by_fly_id or name to a canonical match.
+  // The submitter is the original owner.
   const { data: pv } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("id, name, inspired_by_fly_id")
-    .eq("owner_user_id", profile.user_id)
-    .eq("slug", slug)
+    .eq("submitted_by_user_id", profile.user_id)
+    .or(`slug.eq.${slug},slug.ilike.fly-private-%`)
+    .ilike("name", slug.replace(/-/g, " "))
     .maybeSingle();
   if (!pv) redirect("/flies");
 
