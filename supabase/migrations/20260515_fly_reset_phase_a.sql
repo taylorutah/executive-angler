@@ -406,7 +406,7 @@ select
   coalesce(s.times_used, 0),
   s.last_loss_at,
   s.personal_notes,
-  coalesce(s.created_at, now()),
+  coalesce(s.added_at, now()),
   coalesce(s.updated_at, now())
 from fly_variant_stock s
 join fly_variants v   on v.id = s.variant_id and v.deleted_at is null
@@ -436,6 +436,178 @@ with vib_map as (
     ufc.id as configuration_id
   from fly_variant_in_box ib
   join fly_variants v  on v.id = ib.variant_id and v.deleted_at is null
+  join fly_patterns_v2 pv on pv.id = v.pattern_id
+  join user_fly_configurations ufc
+    on ufc.user_id = ib.user_id
+   and ufc.fly_id = case
+       when pv.owner_user_id is null then pv.id
+       when pv.inspired_by_fly_id is not null
+         and exists (select 1 from flies where id = pv.inspired_by_fly_id) then pv.inspired_by_fly_id
+       else pv.id end
+   and coalesce(ufc.size, '') = coalesce(v.size, '')
+)
+insert into fly_box_entries_v3 (box_id, configuration_id, user_id, sort_order, added_at)
+select box_id, configuration_id, user_id, coalesce(sort_order, 0), coalesce(added_at, now())
+from vib_map
+on conflict do nothing;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 10b. BACKFILL: configs for box-resident variants without stock state
+-- ────────────────────────────────────────────────────────────────────────────
+-- Step 9 only created configs for variants with meaningful stock state. Many
+-- box memberships reference variants the user added to a box but never
+-- tracked counts on — those rows need a zero-state config so the box stays
+-- populated.
+insert into user_fly_configurations (
+  user_id, fly_id, nickname, size, slot_overrides,
+  tied_count, bought_count, target_count,
+  is_favorite, is_tie_next, tie_next_status,
+  created_at, updated_at
+)
+select distinct
+  ib.user_id,
+  case
+    when pv.owner_user_id is null then pv.id
+    when pv.inspired_by_fly_id is not null
+      and exists (select 1 from flies where id = pv.inspired_by_fly_id) then pv.inspired_by_fly_id
+    else pv.id
+  end as fly_id,
+  v.display_name,
+  v.size,
+  jsonb_strip_nulls(jsonb_build_object(
+    'bead', case when v.bead_weight_mm is not null or v.bead_color is not null or v.bead_material is not null
+                 then jsonb_strip_nulls(jsonb_build_object(
+                       'size_mm', v.bead_weight_mm,
+                       'color', v.bead_color,
+                       'material', v.bead_material::text))
+                 else null end,
+    'hook', case when v.hook_style is not null or v.hook_brand is not null
+                 then jsonb_strip_nulls(jsonb_build_object(
+                       'style', v.hook_style,
+                       'brand', v.hook_brand))
+                 else null end,
+    'body', case when v.body_color is not null then jsonb_build_object('color', v.body_color) else null end,
+    'rib',  case when v.rib_color  is not null then jsonb_build_object('color', v.rib_color)  else null end,
+    'tail', case when v.tail_color is not null then jsonb_build_object('color', v.tail_color) else null end,
+    'wing', case when v.wing_color is not null then jsonb_build_object('color', v.wing_color) else null end,
+    'thorax', case when v.thorax_color is not null then jsonb_build_object('color', v.thorax_color) else null end,
+    'collar', case when v.collar_color is not null then jsonb_build_object('color', v.collar_color) else null end
+  )),
+  0, 0, 0, false, false, 'none',
+  coalesce(ib.added_at, now()), coalesce(ib.added_at, now())
+from fly_variant_in_box ib
+join fly_variants v     on v.id = ib.variant_id and v.deleted_at is null
+join fly_patterns_v2 pv on pv.id = v.pattern_id
+where (
+  pv.owner_user_id is null
+  or (pv.inspired_by_fly_id is not null
+      and exists (select 1 from flies where id = pv.inspired_by_fly_id))
+)
+and not exists (
+  select 1 from user_fly_configurations ufc
+   where ufc.user_id = ib.user_id
+     and ufc.fly_id = case
+         when pv.owner_user_id is null then pv.id
+         when pv.inspired_by_fly_id is not null then pv.inspired_by_fly_id
+         else pv.id end
+     and coalesce(ufc.size, '') = coalesce(v.size, '')
+);
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 10c. BACKFILL: import personal v2 patterns into flies as private rows
+-- ────────────────────────────────────────────────────────────────────────────
+-- Personal-owned v2 patterns (forks the May 13 flatten promoted, and any
+-- user-created flies) need a row in `flies` so their variants can have
+-- configurations. Status='private' keeps them visible only to the owner.
+-- The Phase B dedup CLI promotes/merges them via _fly_dedup_candidates.
+insert into flies (
+  id, slug, name, category,
+  description, history, tying_overview, fishing_tips,
+  hero_image_url, gallery_image_urls, video_url,
+  materials_list, status, submitted_by_user_id,
+  inspired_by_fly_id, origin_credit, imitates, effective_species_ids, water_types,
+  is_featured, created_at, updated_at
+)
+select
+  pv.id,
+  -- Namespace personal slugs to avoid collision with canonicals.
+  coalesce(pv.slug, 'fly') || '-private-' || substr(pv.id::text, 1, 8),
+  pv.name,
+  pv.category,
+  pv.description, pv.history, pv.tying_overview, pv.fishing_tips,
+  pv.hero_image_url, coalesce(pv.gallery_image_urls, '{}'), pv.video_url,
+  coalesce(pv.base_materials, '[]'::jsonb),
+  'private',
+  pv.owner_user_id,
+  pv.inspired_by_fly_id, pv.origin_credit,
+  coalesce(pv.imitates, '{}'),
+  coalesce(pv.effective_species_ids, '{}'),
+  coalesce(pv.water_types, '{}'),
+  coalesce(pv.is_featured, false),
+  pv.created_at, pv.updated_at
+from fly_patterns_v2 pv
+where pv.owner_user_id is not null
+on conflict (id) do nothing;
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 10d. BACKFILL: configs for variants of personal patterns
+-- ────────────────────────────────────────────────────────────────────────────
+insert into user_fly_configurations (
+  user_id, fly_id, nickname, size, slot_overrides,
+  tied_count, bought_count, target_count,
+  is_favorite, is_tie_next, tie_next_status,
+  created_at, updated_at
+)
+select distinct
+  ib.user_id,
+  pv.id,
+  v.display_name,
+  v.size,
+  jsonb_strip_nulls(jsonb_build_object(
+    'bead', case when v.bead_weight_mm is not null or v.bead_color is not null or v.bead_material is not null
+                 then jsonb_strip_nulls(jsonb_build_object(
+                       'size_mm', v.bead_weight_mm,
+                       'color', v.bead_color,
+                       'material', v.bead_material::text))
+                 else null end,
+    'hook', case when v.hook_style is not null or v.hook_brand is not null
+                 then jsonb_strip_nulls(jsonb_build_object(
+                       'style', v.hook_style,
+                       'brand', v.hook_brand))
+                 else null end,
+    'body', case when v.body_color is not null then jsonb_build_object('color', v.body_color) else null end,
+    'rib',  case when v.rib_color  is not null then jsonb_build_object('color', v.rib_color)  else null end,
+    'tail', case when v.tail_color is not null then jsonb_build_object('color', v.tail_color) else null end,
+    'wing', case when v.wing_color is not null then jsonb_build_object('color', v.wing_color) else null end,
+    'thorax', case when v.thorax_color is not null then jsonb_build_object('color', v.thorax_color) else null end,
+    'collar', case when v.collar_color is not null then jsonb_build_object('color', v.collar_color) else null end
+  )),
+  0, 0, 0, false, false, 'none',
+  coalesce(ib.added_at, now()), coalesce(ib.added_at, now())
+from fly_variant_in_box ib
+join fly_variants v     on v.id = ib.variant_id and v.deleted_at is null
+join fly_patterns_v2 pv on pv.id = v.pattern_id
+where pv.owner_user_id is not null
+  and exists (select 1 from flies where id = pv.id)
+  and not exists (
+    select 1 from user_fly_configurations ufc
+     where ufc.user_id = ib.user_id
+       and ufc.fly_id = pv.id
+       and coalesce(ufc.size, '') = coalesce(v.size, '')
+  );
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 10e. BACKFILL: fly_box_entries_v3 — final pass picking up new configs
+-- ────────────────────────────────────────────────────────────────────────────
+with vib_map as (
+  select
+    ib.box_id,
+    ib.user_id,
+    ib.sort_order,
+    ib.added_at,
+    ufc.id as configuration_id
+  from fly_variant_in_box ib
+  join fly_variants v     on v.id = ib.variant_id and v.deleted_at is null
   join fly_patterns_v2 pv on pv.id = v.pattern_id
   join user_fly_configurations ufc
     on ufc.user_id = ib.user_id
