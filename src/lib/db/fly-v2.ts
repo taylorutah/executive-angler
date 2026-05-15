@@ -29,13 +29,17 @@ import type {
 // Patterns
 // ────────────────────────────────────────────────────────────────────────────
 
-/** All canonical patterns (library), publicly readable. */
+/** All canonical patterns (library), publicly readable. Approved only —
+ *  the May 13 flatten-fly-architecture migration added a `status` column
+ *  with values approved/pending/rejected/private but no query filtered on
+ *  it, leaving pending submissions visible to everyone. */
 export async function listCanonicalPatterns(): Promise<Pattern[]> {
   const supabase = createStaticClient();
   const { data, error } = await supabase
     .from("fly_patterns_v2")
     .select("*")
     .is("owner_user_id", null)
+    .or("status.is.null,status.eq.approved")
     .order("name");
   if (error) {
     console.error("[listCanonicalPatterns]", error);
@@ -44,7 +48,9 @@ export async function listCanonicalPatterns(): Promise<Pattern[]> {
   return (data ?? []) as Pattern[];
 }
 
-/** Single canonical pattern by slug. */
+/** Single canonical pattern by slug. Falls back to a status-agnostic lookup
+ *  when the strict query misses so submitters can still preview their own
+ *  pending rows (visibility is enforced by RLS, not at the application layer). */
 export async function getCanonicalPatternBySlug(slug: string): Promise<Pattern | null> {
   const supabase = createStaticClient();
   const { data, error } = await supabase
@@ -52,12 +58,38 @@ export async function getCanonicalPatternBySlug(slug: string): Promise<Pattern |
     .select("*")
     .eq("slug", slug)
     .is("owner_user_id", null)
+    .or("status.is.null,status.eq.approved")
     .maybeSingle();
   if (error) {
     console.error("[getCanonicalPatternBySlug]", error);
     return null;
   }
-  return (data ?? null) as Pattern | null;
+  if (data) return data as Pattern;
+  // Fallback 1: same slug, no status filter (covers pending submissions the
+  // submitter is allowed to see via RLS).
+  const { data: fallback } = await supabase
+    .from("fly_patterns_v2")
+    .select("*")
+    .eq("slug", slug)
+    .is("owner_user_id", null)
+    .maybeSingle();
+  if (fallback) return fallback as Pattern;
+  // Fallback 2: legacy canonical_flies has its own slug column that drifted
+  // from fly_patterns_v2 during the Phase 2 migrations. If the slug only
+  // exists in canonical_flies, resolve to the v2 row by id so the rest of
+  // the page still works (variants, photos, etc. all key off the v2 id).
+  const { data: legacyCanonical } = await supabase
+    .from("canonical_flies")
+    .select("id")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!legacyCanonical?.id) return null;
+  const { data: byId } = await supabase
+    .from("fly_patterns_v2")
+    .select("*")
+    .eq("id", legacyCanonical.id as string)
+    .maybeSingle();
+  return (byId ?? null) as Pattern | null;
 }
 
 /** Pattern by id (canonical or personal — RLS gates visibility). */

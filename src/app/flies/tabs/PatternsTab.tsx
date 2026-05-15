@@ -827,6 +827,20 @@ function buildPatternRows(
     const tieNextCount = variants.filter(
       (v) => v.tie_next_status === "wanted" || v.tie_next_status === "at_vise",
     ).length;
+    // Personal v2 patterns flow through this same path (getMyV2PersonalVariants
+    // synthesizes a canonical_fly join from the personal row). Route them to
+    // the angler permalink so the canonical detail page — which filters
+    // owner_user_id IS NULL — doesn't 404.
+    const isPersonalV2 = !!cf.owner_user_id;
+    const href = isPersonalV2
+      ? ownerPatternPermalink({
+          id: cf.id,
+          slug: cf.slug ?? null,
+          ownerUsername: viewerUsername,
+        })
+      : cf.slug
+        ? `/flies/${cf.slug}`
+        : "/flies";
     rows.push({
       key: `lib-${cf.id}`,
       source: "library",
@@ -840,7 +854,7 @@ function buildPatternRows(
       target,
       deficit,
       tieNextCount,
-      href: `/flies/${cf.slug}`,
+      href,
       hasTieNext: tieNextCount > 0,
     });
   }

@@ -42,7 +42,7 @@ export interface FlyBoxEntry {
   quantity_by_size?: Record<string, number>;
   last_loss_at?: string | null;
   added_at?: string;
-  canonical_fly?: FlyBoxCanonicalJoin | null;
+  canonical_fly?: (FlyBoxCanonicalJoin & { owner_user_id?: string | null }) | null;
   // Variant identity (migration 20260507)
   variant_label?: string | null;
   is_primary?: boolean;
@@ -196,12 +196,18 @@ export async function getMyV2PersonalVariants(userId: string): Promise<FlyBoxEnt
         added_at: r.added_at ?? undefined,
         canonical_fly: {
           id: pv.id,
-          slug: pv.slug ?? pv.id,
+          // Keep real slug only — falling back to UUID generated /flies/<uuid>
+          // links that 404 because the canonical detail page filters by
+          // `owner_user_id IS NULL` (these are personal v2 rows).
+          slug: pv.slug ?? "",
           name: pv.name,
           // Legacy `fly_patterns.type` was mixed-case ("Dry Fly", "Nymph").
           // CATEGORY_TO_TYPE expects lowercase canonical keys ("dry", "nymph").
           category: normalizeLegacyCategory(pv.category),
           hero_image_url: pv.hero_image_url ?? null,
+          // Surface owner so the patterns list can route personal v2 rows to
+          // /anglers/<u>/flies/<slug> instead of the canonical /flies/<slug>.
+          owner_user_id: pv.owner_user_id ?? null,
         },
       } as FlyBoxEntry;
     });

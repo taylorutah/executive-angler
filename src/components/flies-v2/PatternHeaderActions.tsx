@@ -5,13 +5,9 @@
  *
  * Lives in its own client component so the v2 page itself stays an RSC.
  */
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { GitFork, Loader2, Pencil } from "lucide-react";
-import NewVariantModal from "@/components/flies-v2/NewVariantModal";
+import { Pencil } from "lucide-react";
 import EditPatternButton from "@/components/flies-v2/EditPatternButton";
-import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
 import type { Pattern, FlyBoxV2 } from "@/types/fly-v2";
 import type { ParsedBeadSpec } from "@/lib/flies/parseBeadSpec";
 
@@ -51,49 +47,11 @@ interface Props {
 }
 
 export default function PatternHeaderActions({
-  patternId,
-  patternSlug,
   editablePattern,
   userBoxes,
   isAdmin,
-  isCanonical = true,
   personalEditHref,
-  viewerUsername,
-  defaultBeadSpec,
 }: Props) {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [forking, setForking] = useState(false);
-  const [forkError, setForkError] = useState<string | null>(null);
-
-  async function handleTieYourOwn() {
-    setForking(true);
-    setForkError(null);
-    const outcome = await findOrForkPersonalPattern({
-      canonicalFlyId: patternId,
-      personalizations: {},
-      loginRedirectTo: `/flies/${patternSlug}`,
-    });
-    if (outcome.kind === "needs_login") {
-      router.push(outcome.redirectTo);
-      return;
-    }
-    if (outcome.kind === "error") {
-      setForkError(outcome.message);
-      setForking(false);
-      return;
-    }
-    const suffix = outcome.isNewFork ? "?just_forked=1" : "";
-    // Prefer the personal detail page (parity with canonical layout). Need
-    // both username and slug — fall back to the edit form if either is
-    // missing so the user still lands somewhere usable.
-    if (viewerUsername && outcome.slug) {
-      router.push(`/anglers/${viewerUsername}/flies/${outcome.slug}${suffix}`);
-    } else {
-      router.push(`/journal/flies/${outcome.patternId}/edit${suffix}`);
-    }
-  }
-
   return (
     <div className="flex flex-col items-end gap-1">
       <div className="flex items-center gap-2 flex-wrap justify-end">
@@ -113,42 +71,15 @@ export default function PatternHeaderActions({
             isAdmin={!!isAdmin}
           />
         ) : null}
-        {isCanonical && (
-          <button
-            type="button"
-            onClick={handleTieYourOwn}
-            disabled={forking}
-            title="Branch off and create your own named pattern based on this recipe"
-            className="inline-flex items-center gap-1.5 rounded-md border border-[#0BA5C7]/40 bg-[#0BA5C7]/10 px-3 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/20 transition-colors disabled:opacity-60"
-          >
-            {forking ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <GitFork className="h-3.5 w-3.5" />
-            )}
-            {forking ? "Opening…" : "Branch as new pattern"}
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          title="Add a new size/bead/color configuration to this pattern"
-          className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#d17d28] transition-colors"
-        >
-          + My configuration
-        </button>
+        {/*
+          Fork + configuration buttons hidden during the fly model reset
+          (2026-05-15). Both flows created parallel fly entities — branching
+          forged a personal pattern row with its own URL, configuration added
+          a fly_variants row per size/bead/color combo. Both behaviors are
+          being replaced by the canonical-with-options + user-configurations
+          model. See plan: im-still-not-sure-elegant-hummingbird.md.
+        */}
       </div>
-      {forkError && (
-        <p className="text-[11px] text-red-400">{forkError}</p>
-      )}
-      <NewVariantModal
-        patternId={patternId}
-        patternSlug={patternSlug}
-        open={open}
-        onClose={() => setOpen(false)}
-        defaultBeadSpec={defaultBeadSpec}
-        isAdmin={isAdmin}
-      />
     </div>
   );
 }
