@@ -12,7 +12,7 @@ import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { listMyBoxes, listBoxStats, listDerivedTieNextShortages } from "@/lib/db/fly-v2";
-import { listMyPatternsHub } from "@/lib/db/fly-model";
+import { listMyPatternsHub, listMyConfigurationsWithFly } from "@/lib/db/fly-model";
 import {
   getMyPatterns,
   getMyFlyBox,
@@ -67,6 +67,7 @@ export default async function FliesHubPage({
     listDerivedTieNextShortages(),
     listMyPatternsHub(),
   ]);
+  const tieNextConfigurations = await listMyConfigurationsWithFly({ tieNextOnly: true });
 
   // After the 2026-05-14 explode migration personal patterns live in v2 as
   // first-class variants. Merge them into flyBoxEntries so they render as
@@ -88,13 +89,11 @@ export default async function FliesHubPage({
     shared.map((p) => p.user_id),
   );
 
-  // Badge count must mirror what the kanban renders: manual queue items
-  // (excluding "done", which lives in its own transient column) plus the
-  // auto-derived shortages that `getMyFliesCounts` doesn't see.
-  const activeTieNext =
-    tieNext.patterns.filter((p) => p.tie_next_status !== "done").length +
-    tieNext.boxEntries.filter((b) => b.tie_next_status !== "done").length +
-    derivedShortages.length;
+  // Badge count = configurations the user has marked wanted or at_vise.
+  // Done items live in their own transient column, not counted.
+  const activeTieNext = tieNextConfigurations.filter(
+    (c) => c.tie_next_status === "wanted" || c.tie_next_status === "at_vise",
+  ).length;
   const finalCounts = { ...counts, tieNext: activeTieNext };
 
   const { data: canonicalNamesData } = await supabase
@@ -113,6 +112,7 @@ export default async function FliesHubPage({
       myPatterns={myPatterns}
       flyBoxEntries={flyBoxEntries}
       patternsHubRows={patternsHubRows}
+      tieNextConfigurations={tieNextConfigurations}
       tieNextPatterns={tieNext.patterns}
       tieNextBoxEntries={tieNext.boxEntries}
       tieNextDerivedVariants={derivedShortages}

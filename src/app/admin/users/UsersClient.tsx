@@ -368,6 +368,13 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       </div>
                     </div>
 
+                    {/* Sessions panel */}
+                    <SessionsPanel
+                      state={sessionsByUser[u.user_id]}
+                      userId={u.user_id}
+                      onOpenSession={(id) => setActiveSessionId(id)}
+                    />
+
                     {/* Actions */}
                     <div className="flex gap-2 flex-wrap">
                       <button onClick={() => adminAction(u.is_premium ? "revoke_premium" : "grant_premium", u.user_id)}
@@ -384,6 +391,15 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                           Unban
                         </button>
                       )}
+
+                      <button
+                        onClick={() => setDeletingUser(u)}
+                        disabled={!!actionLoading || u.user_id === adminId}
+                        title={u.user_id === adminId ? "You cannot delete your own admin account from here" : "Permanently delete user"}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-950/20 text-red-400 border border-red-900/40 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-red-950/40">
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Delete user
+                      </button>
                     </div>
 
                     {/* Ban with reason */}
@@ -429,6 +445,100 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
             <p className="text-[#6E7681]">No users match</p>
           </div>
         )}
+      </div>
+
+      {activeSessionId && (
+        <AdminSessionDetailModal
+          sessionId={activeSessionId}
+          onClose={() => setActiveSessionId(null)}
+        />
+      )}
+
+      {deletingUser && (
+        <DeleteUserModal
+          userId={deletingUser.user_id}
+          username={deletingUser.username}
+          displayName={deletingUser.display_name}
+          email={deletingUser.email}
+          sessionCount={deletingUser.session_count}
+          catchCount={deletingUser.catch_count}
+          flyBoxCount={deletingUser.fly_box_count}
+          photoCount={deletingUser.photo_count}
+          onCancel={() => setDeletingUser(null)}
+          onDeleted={handleUserDeleted}
+        />
+      )}
+    </div>
+  );
+}
+
+function SessionsPanel({
+  state,
+  userId,
+  onOpenSession,
+}: {
+  state: SessionRow[] | "loading" | "error" | undefined;
+  userId: string;
+  onOpenSession: (id: string) => void;
+}) {
+  if (state === undefined || state === "loading") {
+    return (
+      <div className="bg-[#0D1117] border border-[#21262D] rounded-lg p-4 flex items-center justify-center">
+        <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+      </div>
+    );
+  }
+  if (state === "error") {
+    return (
+      <div className="bg-red-950/15 border border-red-900/40 rounded-lg p-3 text-xs text-red-400">
+        Failed to load sessions
+      </div>
+    );
+  }
+  if (state.length === 0) {
+    return (
+      <div className="bg-[#0D1117] border border-[#21262D] rounded-lg p-3 text-xs text-[#6E7681]">
+        No fishing sessions logged.
+      </div>
+    );
+  }
+  const shown = state.slice(0, 10);
+  return (
+    <div className="bg-[#0D1117] border border-[#21262D] rounded-lg overflow-hidden">
+      <div className="px-3 py-2 border-b border-[#21262D] flex items-center justify-between">
+        <p className="text-[10px] font-bold text-[#A8B2BD] uppercase tracking-wider">Sessions ({state.length})</p>
+        {state.length > 10 && (
+          <Link href={`/admin/users/${userId}`} className="text-[10px] text-[#E8923A] hover:underline">
+            View all →
+          </Link>
+        )}
+      </div>
+      <div className="divide-y divide-[#21262D]/50">
+        {shown.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => onOpenSession(s.id)}
+            className="w-full px-3 py-2 flex items-center gap-3 text-left hover:bg-[#161B22] transition-colors"
+          >
+            <Calendar className="h-3.5 w-3.5 text-[#6E7681] shrink-0" />
+            <span className="text-xs text-[#A8B2BD] w-20 shrink-0 font-mono">
+              {s.date ? formatDate(s.date) : "—"}
+            </span>
+            <span className="text-xs text-[#F0F6FC] flex-1 truncate">
+              {s.river_name || s.location || "Unknown water"}
+            </span>
+            {s.total_fish != null && s.total_fish > 0 && (
+              <span className="inline-flex items-center gap-1 text-[10px] text-[#0BA5C7] shrink-0">
+                <Fish className="h-3 w-3" /> {s.total_fish}
+              </span>
+            )}
+            {s.is_private ? (
+              <Lock className="h-3 w-3 text-[#6E7681] shrink-0" />
+            ) : (
+              <Globe className="h-3 w-3 text-[#6E7681] shrink-0" />
+            )}
+          </button>
+        ))}
       </div>
     </div>
   );

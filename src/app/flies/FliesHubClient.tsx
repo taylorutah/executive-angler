@@ -16,6 +16,8 @@ import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
 import type { PatternsHubRow } from "@/lib/db/fly-model";
 import TieNextKanban from "@/components/flies/TieNextKanban";
+import TieNextHub from "@/components/flies-v3/TieNextHub";
+import type { FlyConfigurationWithFly } from "@/lib/db/fly-model";
 import type { VariantRow } from "@/types/fly-v2";
 import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 import HelpHint from "@/components/ui/HelpHint";
@@ -33,6 +35,7 @@ interface Props {
   myPatterns: FlyPattern[];
   flyBoxEntries: FlyBoxEntry[];
   patternsHubRows: PatternsHubRow[];
+  tieNextConfigurations: FlyConfigurationWithFly[];
   tieNextPatterns: FlyPattern[];
   tieNextBoxEntries: FlyBoxEntry[];
   tieNextDerivedVariants: VariantRow[];
@@ -51,6 +54,7 @@ export default function FliesHubClient({
   myPatterns,
   flyBoxEntries,
   patternsHubRows,
+  tieNextConfigurations,
   tieNextPatterns,
   tieNextBoxEntries,
   tieNextDerivedVariants,
@@ -172,11 +176,7 @@ export default function FliesHubClient({
         )}
         {tab === "workbench" && <WorkbenchClient embedded />}
         {tab === "tie-next" && (
-          <TieNextKanban
-            initialPatterns={tieNextPatterns}
-            initialBoxEntries={tieNextBoxEntries}
-            initialDerivedVariants={tieNextDerivedVariants}
-          />
+          <TieNextHub configurations={tieNextConfigurations} />
         )}
         {tab === "shared" && <SharedPanel shared={shared} ownerUsernames={sharedOwnerUsernames} />}
       </div>

@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   ChevronLeft, Shield, Crown, Ban, CheckCircle, XCircle,
   Fish, Calendar, Feather, Users, Clock, StickyNote,
-  AlertTriangle, Sparkles, UserX, UserCheck, Loader2
+  AlertTriangle, Sparkles, UserX, UserCheck, Loader2, Trash2,
 } from "lucide-react";
+import DeleteUserModal from "@/components/admin/DeleteUserModal";
+import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
 
 interface UserData {
   profile: {
@@ -33,6 +36,7 @@ interface UserData {
 }
 
 export default function UserDetailClient({ userId }: { userId: string }) {
+  const router = useRouter();
   const [data, setData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -41,6 +45,8 @@ export default function UserDetailClient({ userId }: { userId: string }) {
   const [proReason, setProReason] = useState("");
   const [banReason, setBanReason] = useState("");
   const [showBanConfirm, setShowBanConfirm] = useState(false);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => { loadUser(); }, [userId]);
 
@@ -272,6 +278,14 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                     Unban User
                   </button>
                 )}
+
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-red-950/20 text-red-400 border border-red-900/40 rounded-lg text-sm font-semibold hover:bg-red-950/40 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete User
+                </button>
               </div>
             </div>
 
@@ -308,7 +322,11 @@ export default function UserDetailClient({ userId }: { userId: string }) {
               ) : (
                 <div className="divide-y divide-[#21262D]">
                   {data.sessions.slice(0, 20).map(s => (
-                    <div key={s.id} className="px-5 py-3 flex items-center justify-between hover:bg-[#1F2937]/30 transition-colors">
+                    <button
+                      key={s.id}
+                      onClick={() => setActiveSessionId(s.id)}
+                      className="w-full text-left px-5 py-3 flex items-center justify-between hover:bg-[#1F2937]/30 transition-colors"
+                    >
                       <div>
                         <p className="text-sm text-[#F0F6FC] font-medium">{s.river_name || "Unknown"}</p>
                         <p className="text-xs text-[#6E7681]">{formatDate(s.date)} {s.is_private ? "· 🔒 Private" : ""}</p>
@@ -316,7 +334,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-mono text-[#E8923A]">{s.total_fish || 0} fish</span>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
@@ -366,6 +384,31 @@ export default function UserDetailClient({ userId }: { userId: string }) {
           </div>
         </div>
       </div>
+
+      {activeSessionId && (
+        <AdminSessionDetailModal
+          sessionId={activeSessionId}
+          onClose={() => setActiveSessionId(null)}
+        />
+      )}
+
+      {showDeleteModal && data?.profile && (
+        <DeleteUserModal
+          userId={userId}
+          username={data.profile.username}
+          displayName={data.profile.display_name}
+          email={null}
+          sessionCount={data.sessions.length}
+          catchCount={data.catches.length}
+          flyBoxCount={data.flies.length}
+          photoCount={0}
+          onCancel={() => setShowDeleteModal(false)}
+          onDeleted={() => {
+            setShowDeleteModal(false);
+            router.push("/admin/users");
+          }}
+        />
+      )}
     </div>
   );
 }
