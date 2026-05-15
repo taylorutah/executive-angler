@@ -209,11 +209,10 @@ export async function POST(req: NextRequest) {
       return Number.isFinite(n) ? n : undefined;
     };
 
-    // v2 insert: only fields that map to fly_patterns_v2. Variant-level
-    // fields (size, hook, bead_*, body_color, etc.) move to fly_variants —
-    // the user adds them via the Configurations table on the detail page.
-    // Materials free-text gets concatenated into description so it doesn't
-    // get lost; v2 stores structured materials in fly_recipe_ingredients.
+    // Post-Phase-C: inserts go to `flies` with status='private'. The user
+    // can submit it for canonical review later. Variant-level fields
+    // (size, bead, color) live on user_fly_configurations and are added
+    // separately from the fly's detail page.
     const materialsText = str(body.materials);
     const baseDescription = str(body.description);
     const composedDescription =
@@ -221,20 +220,30 @@ export async function POST(req: NextRequest) {
         ? `${baseDescription}\n\nMaterials:\n${materialsText}`
         : (materialsText ? `Materials:\n${materialsText}` : baseDescription);
 
-    const v2Row: Record<string, unknown> = {
-      owner_user_id: user.id,
+    // Generate a private namespaced slug so it doesn't collide with
+    // approved canonicals.
+    const baseSlug = (str(body.name) ?? "fly")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "")
+      .slice(0, 60);
+    const privateSlug = `${baseSlug || "fly"}-private-${user.id.slice(0, 8)}-${Date.now().toString(36)}`;
+
+    const v3Row: Record<string, unknown> = {
+      slug: privateSlug,
       name: str(body.name),
       category: str(body.type),
       description: composedDescription,
       video_url: str(body.video_url),
-      visibility: "private",
+      status: "private",
+      submitted_by_user_id: user.id,
       ...(imageUrl ? { hero_image_url: imageUrl } : {}),
     };
-    Object.keys(v2Row).forEach((k) => v2Row[k] === undefined && delete v2Row[k]);
+    Object.keys(v3Row).forEach((k) => v3Row[k] === undefined && delete v3Row[k]);
 
     const { data, error } = await supabase
-      .from("fly_patterns_v2")
-      .insert(v2Row)
+      .from("flies")
+      .insert(v3Row)
       .select()
       .single();
 
@@ -243,41 +252,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // `row` is kept around as a compat alias for the canonical-submission
-    // block below, which reads legacy field names (row.name, row.size, etc.).
-    const row: Record<string, unknown> = {
-      name: v2Row.name,
-      type: v2Row.category,
-      size: str(body.size),
-      bead_color: parseArr(body.bead_color),
-      fly_color: parseArr(body.fly_color),
-      materials: materialsText,
-      description: composedDescription,
-      video_url: v2Row.video_url,
-    };
-
-    const mainParentCanonicalId = typeof body.parent_canonical_id === "string" && body.parent_canonical_id
-      ? (body.parent_canonical_id as string)
-      : null;
-    // If forking from a canonical, copy its curated variants so the new
-    // pattern starts with populated Configurations.
-    if (mainParentCanonicalId) {
-      await mirrorPersonalPatternToV2({
-        supabase,
-        userId: user.id,
-        personalPatternId: data.id as string,
-        name: row.name as string,
-        type: row.type as string | undefined,
-        description: row.description as string | undefined,
-        imageUrl: imageUrl,
-        videoUrl: row.video_url as string | undefined,
-        parentCanonicalId: mainParentCanonicalId,
-        copyCuratedVariants: true,
-      });
-    }
-    // Suppress unused-warning for `num` (legacy bead_size_mm parser kept
-    // in case the helper is reused below).
+    // Suppress unused-warning for legacy helpers no longer used in the
+    // post-Phase-C insert path.
     void num;
+    void parseArr;
 
     // Save recipe ingredients if structured recipe was provided
     let recipeStepsJson: unknown = null;
@@ -317,66 +295,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Library write path: admin → direct to canonical_flies; user → submission queue.
-    // The user's personal fly_patterns row (created above) is independent and
-    // stays in their box regardless of submission status.
+    // Post-Phase-C: library promotion goes through the dedicated
+    // /api/fishing/flies/submit-to-library endpoint, not this create
+    // endpoint. New flies always land as status='private'. The user
+    // can submit to library separately from the fly detail page.
+    void recipeStepsJson;
     const userIsAdmin = isAdmin(user.email);
-    const parentCanonicalId = typeof body.parent_canonical_id === "string" && body.parent_canonical_id
-      ? body.parent_canonical_id
-      : null;
-
-    if (userIsAdmin) {
-      const canonicalResult = await promoteToCanonical(getServiceClient(), {
-        sourcePatternId: data.id,
-        proposed: {
-          name: row.name as string,
-          type: row.type as string | undefined,
-          description: row.description as string | undefined,
-          materials: row.materials as string | undefined,
-          videoUrl: row.video_url as string | undefined,
-          heroImageUrl: imageUrl,
-          sizes: typeof row.size === "string" && row.size
-            ? (row.size as string).split(",").map((s) => s.trim()).filter(Boolean)
-            : null,
-          beadOptions: Array.isArray(row.bead_color) ? (row.bead_color as string[]) : null,
-          colors: Array.isArray(row.fly_color) ? (row.fly_color as string[]) : null,
-          tyingSteps: recipeStepsJson,
-          parentCanonicalId,
-        },
-      });
-      if (!canonicalResult.ok) {
-        // Personal pattern is saved; surface canonical insert failure so admin
-        // knows the library write didn't land. They can retry from the admin UI.
-        console.error("Admin canonical insert failed:", canonicalResult.error);
-      }
-    } else {
-      const submissionPayload = {
-        user_id: user.id,
-        source_pattern_id: data.id as string,
-        parent_canonical_id: parentCanonicalId,
-        name: String(row.name ?? ""),
-        category: mapTypeToCategory((row.type as string | undefined) ?? null),
-        description: typeof row.description === "string" ? row.description : null,
-        tying_steps: recipeStepsJson,
-        materials_list: typeof row.materials === "string" ? row.materials : null,
-        sizes:
-          typeof row.size === "string" && row.size
-            ? (row.size as string).split(",").map((s) => s.trim()).filter(Boolean)
-            : null,
-        colors: Array.isArray(row.fly_color) ? (row.fly_color as string[]) : null,
-        bead_options: Array.isArray(row.bead_color) ? (row.bead_color as string[]) : null,
-        hero_image_url: imageUrl ?? null,
-        video_url: typeof row.video_url === "string" ? row.video_url : null,
-        status: "pending" as const,
-      };
-      const subResult = await getServiceClient()
-        .from("fly_pattern_submissions")
-        .insert(submissionPayload as never);
-      if (subResult.error) {
-        // Same posture: personal pattern is saved, but flag the queue failure.
-        console.error("Submission queue insert failed:", subResult.error);
-      }
-    }
 
     // Log the rate-limit row only after writes succeeded.
     if (!userIsAdmin) {
