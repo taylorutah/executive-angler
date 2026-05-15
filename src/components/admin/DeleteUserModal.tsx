@@ -28,13 +28,8 @@ export default function DeleteUserModal({
   onCancel,
   onDeleted,
 }: Props) {
-  const [confirmText, setConfirmText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Require typing the username if present, otherwise "DELETE".
-  const requiredText = username || "DELETE";
-  const canDelete = confirmText.trim() === requiredText && !loading;
 
   async function handleDelete() {
     setLoading(true);
@@ -102,20 +97,6 @@ export default function DeleteUserModal({
           </ul>
         </div>
 
-        <label className="block mb-4">
-          <span className="text-xs text-[#A8B2BD]">
-            Type <code className="text-[#E8923A] font-mono">{requiredText}</code> to confirm
-          </span>
-          <input
-            type="text"
-            value={confirmText}
-            onChange={(e) => setConfirmText(e.target.value)}
-            placeholder={requiredText}
-            autoFocus
-            className="mt-1 w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] font-mono placeholder-[#6E7681] focus:outline-none focus:border-red-400"
-          />
-        </label>
-
         {error && (
           <div className="mb-4 px-3 py-2 bg-red-950/30 border border-red-800 rounded-lg text-xs text-red-400">
             {error}
@@ -132,8 +113,9 @@ export default function DeleteUserModal({
           </button>
           <button
             onClick={handleDelete}
-            disabled={!canDelete}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 disabled:opacity-30 disabled:cursor-not-allowed"
+            disabled={loading}
+            autoFocus
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? "Deleting..." : "Delete user"}
