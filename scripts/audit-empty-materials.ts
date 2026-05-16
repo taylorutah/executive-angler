@@ -8,6 +8,20 @@
  * scripts).
  */
 import { createClient } from "@supabase/supabase-js";
+import { readFileSync } from "node:fs";
+
+// Inline .env.local loader (avoids dotenv dep — matches scripts/apply-migration-*.mjs)
+try {
+  const envText = readFileSync(".env.local", "utf8");
+  for (const line of envText.split("\n")) {
+    const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
+    if (m && !process.env[m[1]]) {
+      process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    }
+  }
+} catch {
+  /* fall through — env may already be set */
+}
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
