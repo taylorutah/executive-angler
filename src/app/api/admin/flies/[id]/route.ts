@@ -99,13 +99,20 @@ export async function PATCH(
     if (videoUrl !== undefined) updates.video_url = videoUrl || null;
     if (imageUrl) updates.hero_image_url = imageUrl;
 
-    // recipe_steps → materials_list
-    if (body.recipe_steps !== undefined) {
+    // recipe_steps_structured (full camelCase RecipeStep[]) → materials_list.
+    // Prefer the structured payload; the legacy `recipe_steps` field uses
+    // snake_case keys that don't match recipeStepsToMaterialSlots' input
+    // shape, so converting it directly produced empty material strings.
+    const rawSteps =
+      body.recipe_steps_structured !== undefined
+        ? body.recipe_steps_structured
+        : body.recipe_steps;
+    if (rawSteps !== undefined) {
       try {
         const steps: RecipeStep[] =
-          typeof body.recipe_steps === "string"
-            ? JSON.parse(body.recipe_steps as string)
-            : (body.recipe_steps as RecipeStep[]);
+          typeof rawSteps === "string"
+            ? JSON.parse(rawSteps as string)
+            : (rawSteps as RecipeStep[]);
         if (Array.isArray(steps)) {
           updates.materials_list = recipeStepsToMaterialSlots(steps);
         }

@@ -156,11 +156,17 @@ export default function FlyPatternForm({
           })),
         ),
       );
+      // Canonical edit needs every structured field (materialTypeChoice,
+      // finishChoice, brandChoice, …) to round-trip through
+      // recipeStepsToMaterialSlots. The DTO above drops those, so we also
+      // ship the raw RecipeStep[] state. Legacy POSTs ignore this field.
+      formData.set("recipe_steps_structured", JSON.stringify(recipeSteps));
       formData.set("has_structured_recipe", "true");
     } else if (mode === "edit" || isCanonical) {
       // Edit explicitly clearing structured recipe: send empty array so PATCH
       // wipes existing rows.
       formData.set("recipe_steps", JSON.stringify([]));
+      formData.set("recipe_steps_structured", JSON.stringify([]));
     }
 
     await onSubmit(formData, useSimpleMode ? [] : recipeSteps);
@@ -316,7 +322,13 @@ export default function FlyPatternForm({
                         name="type"
                         required
                         className={`${inputClass} appearance-none cursor-pointer pr-7`}
-                        defaultValue={initial?.type ?? ""}
+                        defaultValue={
+                          initial?.type
+                            ? FLY_TYPES.find(
+                                (t) => t.toLowerCase() === initial.type!.toLowerCase(),
+                              ) ?? ""
+                            : ""
+                        }
                       >
                         <option value="">Select…</option>
                         {FLY_TYPES.map((type) => (
