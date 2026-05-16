@@ -244,10 +244,10 @@ export default function DashboardClient({
             {/* Bento Action Grid — featured Workbench + supporting tiles, with live data previews */}
             <section>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 auto-rows-[minmax(120px,auto)]">
-                {/* FEATURED — Workbench with live tie-next preview, spans 2 cols + 2 rows on desktop */}
+                {/* FEATURED — Workbench with live tie-next preview, spans 2 cols on desktop */}
                 <Link
                   href="/flies?tab=workbench"
-                  className="group col-span-2 md:row-span-2 relative overflow-hidden p-5 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/40 hover:border-[#E8923A] transition-all flex flex-col"
+                  className="group col-span-2 relative overflow-hidden p-5 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/40 hover:border-[#E8923A] transition-all flex flex-col"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -349,22 +349,30 @@ export default function DashboardClient({
                     <p className="text-[11px] text-[#A8B2BD] mt-0.5">What&apos;s hatching</p>
                   </div>
                 </Link>
+
+                {/* Gear Locker — pulled into the bento so the 3-col grid stays balanced */}
+                <Link
+                  href="/account/gear"
+                  className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#A8B2BD] transition-all flex flex-col justify-between"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-[#A8B2BD]/15">
+                      <Package className="h-4 w-4 text-[#A8B2BD]" />
+                    </div>
+                    {gearCount > 0 && (
+                      <span className="font-mono text-sm font-bold text-[#F0F6FC] tabular-nums">{gearCount}</span>
+                    )}
+                  </div>
+                  <div className="mt-3">
+                    <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
+                    <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels &amp; more</p>
+                  </div>
+                </Link>
               </div>
 
               {/* Row 3 — secondary utilities (smaller, muted) */}
               {/* Secondary utilities — smaller, denser row */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-3">
-                <Link
-                  href="/account/gear"
-                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#A8B2BD] transition-all"
-                >
-                  <Package className="h-4 w-4 text-[#A8B2BD] shrink-0" />
-                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Gear Locker</span>
-                  {gearCount > 0 && (
-                    <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">{gearCount}</span>
-                  )}
-                </Link>
-
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
                 <Link
                   href="/dashboard/analytics"
                   className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#E8923A]/60 transition-all"
