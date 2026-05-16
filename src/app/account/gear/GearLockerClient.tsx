@@ -31,7 +31,6 @@ function euroSectionsSummary(sections: Array<Record<string, unknown>>): string {
       if (sec.x_size) parts.push(sec.x_size as string);
       return parts.join(" ");
     }
-    // butt / level / sighter
     const label = role === "butt" ? "Butt"
                 : role === "level" ? "Level"
                 : "Sighter";
@@ -86,7 +85,6 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const specs = specsToString(item);
 
-  // Euro leader section summary
   const euroSections = (() => {
     if (item.type !== "leader") return null;
     const s = item.specs as Record<string, unknown>;
@@ -97,76 +95,79 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
   })();
 
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 flex items-start gap-3 hover:border-[#6E7681] transition-colors group">
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-semibold text-[#F0F6FC] text-sm truncate">{item.name}</span>
-          {item.is_default && (
-            <span className="flex-shrink-0 inline-flex items-center gap-1 text-[10px] font-bold bg-[#E8923A]/15 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-2 py-0.5">
-              <Star className="h-2.5 w-2.5 fill-current" /> DEFAULT
-            </span>
+    <div className="bg-[#0D1117] border border-[#21262D] rounded-lg p-3 hover:border-[#6E7681] transition-colors">
+      <div className="flex items-start gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+            <span className="font-semibold text-[#F0F6FC] text-sm truncate">{item.name}</span>
+            {item.is_default && (
+              <span className="flex-shrink-0 inline-flex items-center gap-0.5 text-[9px] font-bold bg-[#E8923A]/15 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-1.5 py-0.5">
+                <Star className="h-2 w-2 fill-current" /> DEFAULT
+              </span>
+            )}
+          </div>
+          {(item.maker || item.model) && (
+            <p className="text-[11px] text-[#A8B2BD] leading-snug">
+              {[item.maker, item.model].filter(Boolean).join(" ")}
+            </p>
+          )}
+          {specs && <p className="text-[11px] text-[#6E7681] leading-snug">{specs}</p>}
+          {euroSections && (
+            <p className="text-[10px] text-[#6E7681]/70 mt-0.5 leading-snug line-clamp-2">
+              {euroSections}
+            </p>
+          )}
+          {item.notes && <p className="text-[11px] text-[#6E7681] italic mt-0.5 line-clamp-1">{item.notes}</p>}
+        </div>
+
+        {/* Actions — always visible (mobile has no hover) */}
+        <div className="flex items-center gap-0.5 flex-shrink-0">
+          <button
+            onClick={onToggleDefault}
+            title={item.is_default ? "Remove default" : "Set as default"}
+            aria-label={item.is_default ? "Remove default" : "Set as default"}
+            className={`p-1.5 rounded-md transition-colors ${
+              item.is_default
+                ? "text-[#E8923A] bg-[#E8923A]/10 hover:bg-[#E8923A]/20"
+                : "text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10"
+            }`}
+          >
+            <Star className={`h-3.5 w-3.5 ${item.is_default ? "fill-current" : ""}`} />
+          </button>
+
+          <button
+            onClick={onEdit}
+            aria-label="Edit"
+            className="p-1.5 rounded-md text-[#6E7681] hover:text-[#0BA5C7] hover:bg-[#0BA5C7]/10 transition-colors"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+
+          {confirmDelete ? (
+            <div className="flex items-center gap-0.5">
+              <button
+                onClick={onDelete}
+                className="text-[10px] font-semibold text-red-500 border border-red-500/30 rounded px-1.5 py-1 hover:bg-red-500/10 transition-colors"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="text-[10px] text-[#6E7681] border border-[#21262D] rounded px-1.5 py-1 hover:bg-[#21262D] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirmDelete(true)}
+              aria-label="Delete"
+              className="p-1.5 rounded-md text-[#6E7681] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
           )}
         </div>
-        {(item.maker || item.model) && (
-          <p className="text-xs text-[#A8B2BD] mb-1">
-            {[item.maker, item.model].filter(Boolean).join(" ")}
-          </p>
-        )}
-        {specs && <p className="text-xs text-[#6E7681]">{specs}</p>}
-        {euroSections && (
-          <p className="text-[10px] text-[#6E7681]/70 mt-1 leading-relaxed">
-            {euroSections}
-          </p>
-        )}
-        {item.notes && <p className="text-xs text-[#6E7681] italic mt-1 line-clamp-2">{item.notes}</p>}
-      </div>
-
-      <div className="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-        {/* Default toggle */}
-        <button
-          onClick={onToggleDefault}
-          title={item.is_default ? "Remove default" : "Set as default"}
-          className={`p-1.5 rounded-lg transition-colors ${
-            item.is_default
-              ? "text-[#E8923A] bg-[#E8923A]/10 hover:bg-[#E8923A]/20"
-              : "text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10"
-          }`}
-        >
-          <Star className={`h-3.5 w-3.5 ${item.is_default ? "fill-current" : ""}`} />
-        </button>
-
-        {/* Edit */}
-        <button
-          onClick={onEdit}
-          className="p-1.5 rounded-lg text-[#6E7681] hover:text-[#0BA5C7] hover:bg-[#0BA5C7]/10 transition-colors"
-        >
-          <Pencil className="h-3.5 w-3.5" />
-        </button>
-
-        {/* Delete */}
-        {confirmDelete ? (
-          <div className="flex items-center gap-1">
-            <button
-              onClick={onDelete}
-              className="text-[10px] font-semibold text-red-500 border border-red-500/30 rounded px-2 py-1 hover:bg-red-500/10 transition-colors"
-            >
-              Confirm
-            </button>
-            <button
-              onClick={() => setConfirmDelete(false)}
-              className="text-[10px] text-[#6E7681] border border-[#21262D] rounded px-2 py-1 hover:bg-[#21262D] transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setConfirmDelete(true)}
-            className="p-1.5 rounded-lg text-[#6E7681] hover:text-red-500 hover:bg-red-500/10 transition-colors"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        )}
       </div>
     </div>
   );
@@ -187,7 +188,6 @@ export default function GearLockerClient() {
         return;
       }
       const data: Record<string, GearItem[]> | GearItem[] = await res.json();
-      // API returns grouped object — flatten to array
       const flat: GearItem[] = Array.isArray(data)
         ? data
         : Object.values(data).flat();
@@ -244,7 +244,6 @@ export default function GearLockerClient() {
       const updated: GearItem = await res.json();
       setItems((prev) => prev.map((i) => {
         if (i.id === updated.id) return updated;
-        // Clear other defaults of same type when setting new default
         if (updated.is_default && i.type === updated.type) return { ...i, is_default: false };
         return i;
       }));
@@ -260,7 +259,6 @@ export default function GearLockerClient() {
       let next = exists
         ? prev.map((i) => (i.id === saved.id ? saved : i))
         : [...prev, saved];
-      // If this is now the default, clear others of the same type
       if (saved.is_default) {
         next = next.map((i) => i.id === saved.id ? i : i.type === saved.type ? { ...i, is_default: false } : i);
       }
@@ -271,64 +269,89 @@ export default function GearLockerClient() {
   const itemsOfType = (type: GearType) => items.filter((i) => i.type === type);
   const isFirstOfType = (type: GearType) => itemsOfType(type).length === 0;
 
+  const totalItems = items.length;
+  const totalDefaults = items.filter((i) => i.is_default).length;
+
   return (
-    <div className="min-h-screen bg-[#0D1117] pb-16">
-      <div className="mx-auto max-w-3xl px-4 pt-6">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-2">
-          <Link href="/account" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-            <ArrowLeft className="h-4 w-4" /> Account
+    <div className="min-h-screen bg-[#0D1117]">
+      {/* Header bar — mirrors Dashboard */}
+      <div className="bg-[#161B22] border-b border-[#21262D]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-5">
+          <Link
+            href="/account"
+            className="inline-flex items-center gap-1.5 text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors mb-2"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Account
           </Link>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="min-w-0">
+              <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#E8923A]">Gear Locker</h1>
+              <p className="text-xs sm:text-sm text-[#A8B2BD] mt-1 max-w-2xl">
+                Track your rods, reels, lines, and leaders. Mark a default per type and it auto-attaches to every new session you log.
+              </p>
+            </div>
+            {!loading && totalItems > 0 && (
+              <div className="flex items-center gap-4 text-xs text-[#6E7681] shrink-0">
+                <div>
+                  <div className="font-mono text-lg font-bold text-[#F0F6FC] leading-none">{totalItems}</div>
+                  <div className="tracking-wide uppercase mt-1">Items</div>
+                </div>
+                <div className="h-8 w-px bg-[#21262D]" />
+                <div>
+                  <div className="font-mono text-lg font-bold text-[#E8923A] leading-none">{totalDefaults}</div>
+                  <div className="tracking-wide uppercase mt-1">Defaults</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
 
-        <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-[#E8923A] mb-1">Gear Locker</h1>
-          <p className="text-sm text-[#6E7681]">
-            Track your rods, reels, lines, and leaders — like Strava&apos;s shoe tracking, but for fly fishing.
-            Mark a default and it auto-attaches to every new session you log.
-          </p>
-        </div>
-
+      {/* Main content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-6 w-6 rounded-full border-2 border-[#E8923A]/30 border-t-[#E8923A] animate-spin" />
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
             {GEAR_TYPES.map(({ type, label, emoji }) => {
               const typeItems = itemsOfType(type);
               return (
-                <section key={type}>
+                <section
+                  key={type}
+                  className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 flex flex-col"
+                >
                   {/* Section header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-[#F0F6FC] uppercase tracking-wide">
-                      <span>{emoji}</span>
-                      {label}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h2 className="flex items-center gap-2 text-sm font-bold text-[#F0F6FC] uppercase tracking-wide min-w-0">
+                      <span className="text-base shrink-0" aria-hidden>{emoji}</span>
+                      <span className="truncate">{label}</span>
                       {typeItems.length > 0 && (
-                        <span className="text-xs font-normal text-[#6E7681] normal-case tracking-normal">
+                        <span className="text-xs font-normal text-[#6E7681] normal-case tracking-normal shrink-0">
                           ({typeItems.length})
                         </span>
                       )}
                     </h2>
                     <button
                       onClick={() => openAdd(type)}
-                      className="flex items-center gap-1.5 text-xs font-medium text-[#0BA5C7] hover:text-[#0BA5C7]/80 border border-[#0BA5C7]/20 hover:border-[#0BA5C7]/40 rounded-lg px-2.5 py-1.5 transition-colors"
+                      className="flex items-center gap-1 text-xs font-medium text-[#0BA5C7] hover:text-[#0BA5C7]/80 border border-[#0BA5C7]/20 hover:border-[#0BA5C7]/40 rounded-md px-2 py-1 transition-colors shrink-0"
                     >
-                      <Plus className="h-3.5 w-3.5" />
-                      Add {label.replace(/s$/, "")}
+                      <Plus className="h-3 w-3" />
+                      <span className="hidden sm:inline">Add</span>
                     </button>
                   </div>
 
                   {typeItems.length === 0 ? (
                     <button
                       onClick={() => openAdd(type)}
-                      className="w-full border border-dashed border-[#21262D] rounded-xl py-6 text-center text-sm text-[#6E7681] hover:border-[#E8923A]/30 hover:text-[#E8923A]/60 transition-colors"
+                      className="flex-1 w-full border border-dashed border-[#21262D] rounded-lg py-5 text-center text-xs text-[#6E7681] hover:border-[#E8923A]/30 hover:text-[#E8923A]/60 transition-colors min-h-[100px] flex flex-col items-center justify-center"
                     >
-                      <span className="text-2xl block mb-1">{emoji}</span>
-                      No {label.toLowerCase()} yet — add one
+                      <span className="text-xl block mb-1">{emoji}</span>
+                      No {label.toLowerCase()} yet
                     </button>
                   ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-2 flex-1">
                       {typeItems.map((item) => (
                         <GearCard
                           key={item.id}
