@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MaterialAutocomplete } from './MaterialAutocomplete';
 import type { TyingMaterial, RecipeRole } from '@/types/materials';
-import { Plus, GripVertical, Trash2, ChevronDown } from 'lucide-react';
+import { Plus, GripVertical, Trash2 } from 'lucide-react';
 import {
   ROLE_FIELDS,
   RECIPE_ROLES,
@@ -101,7 +101,6 @@ function BeadMaterialSelect({ step, onChange, cellSelect }: BeadCellProps) {
           </option>
         ))}
       </select>
-      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
     </div>
   );
 }
@@ -122,7 +121,6 @@ function BeadShapeSelect({ step, onChange, cellSelect }: BeadCellProps) {
           </option>
         ))}
       </select>
-      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
     </div>
   );
 }
@@ -464,7 +462,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                     <option key={r} value={r}>{ROLE_FIELDS[r].label}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
               </div>
 
               {/* Material picker — bead, thread, and hook rows render
@@ -631,7 +628,6 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                       <option key={r} value={r}>{ROLE_FIELDS[r].label}</option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
                 </div>
                 <button
                   type="button"

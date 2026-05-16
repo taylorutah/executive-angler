@@ -271,7 +271,6 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-[#6E7681] pointer-events-none" />
               </div>
             );
           })}

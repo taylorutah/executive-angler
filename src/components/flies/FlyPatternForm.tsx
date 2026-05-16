@@ -13,7 +13,7 @@
 
 import { useState, useEffect, useRef, FormEvent, ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Trash2, ExternalLink, BookOpen, User } from "lucide-react";
+import { ArrowLeft, Trash2, ExternalLink, BookOpen, User } from "lucide-react";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
 import FlyImageUploader from "@/components/flies/FlyImageUploader";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
@@ -370,7 +370,6 @@ export default function FlyPatternForm({
                           </option>
                         ))}
                       </select>
-                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6E7681] pointer-events-none" />
                     </div>
                   </div>
                   <div className="col-span-6 md:col-span-3">

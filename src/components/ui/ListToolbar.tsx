@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { LayoutGrid, Grid3X3, List, Newspaper, ChevronDown, Search, X } from "lucide-react";
+import { LayoutGrid, Grid3X3, List, Newspaper, Search, X } from "lucide-react";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
 
 interface ListToolbarProps {
@@ -191,7 +191,6 @@ export default function ListToolbar({
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681] pointer-events-none" />
           </div>
         </div>
       </div>

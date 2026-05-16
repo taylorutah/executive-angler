@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { ChevronDown } from 'lucide-react';
 import type { TyingMaterial, MaterialCategory } from '@/types/materials';
 
 // Module-level cache so brand dropdowns don't refetch per row.
@@ -72,7 +71,6 @@ export function BrandSelect({ category, value, onChange, ariaLabel }: BrandSelec
           </option>
         ))}
       </select>
-      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
     </div>
   );
 }
@@ -167,7 +165,6 @@ export function BrandFilteredMaterialSelect({
           </option>
         ))}
       </select>
-      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-[#6E7681] pointer-events-none" />
     </div>
   );
 }
