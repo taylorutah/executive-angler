@@ -247,7 +247,7 @@ export default function DashboardClient({
                 {/* FEATURED — Workbench with live tie-next preview, spans 2 cols + 2 rows on desktop */}
                 <Link
                   href="/flies?tab=workbench"
-                  className="group col-span-2 md:row-span-2 relative overflow-hidden p-5 bg-gradient-to-br from-[#1a1208] via-[#161B22] to-[#161B22] rounded-2xl border border-[#E8923A]/30 hover:border-[#E8923A] transition-all flex flex-col"
+                  className="group col-span-2 md:row-span-2 relative overflow-hidden p-5 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/40 hover:border-[#E8923A] transition-all flex flex-col"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -269,7 +269,7 @@ export default function DashboardClient({
                   {/* Live tie-next preview rows */}
                   <div className="flex-1 mt-1 space-y-2">
                     {tieNextItems.slice(0, 3).map((item) => (
-                      <div key={item.key} className="flex items-center gap-2.5 rounded-lg bg-[#0D1117]/60 border border-[#21262D] px-2.5 py-2">
+                      <div key={item.key} className="flex items-center gap-2.5 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-2">
                         <div className="h-8 w-8 rounded-md bg-[#21262D] overflow-hidden shrink-0">
                           {item.imageUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
