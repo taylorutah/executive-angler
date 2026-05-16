@@ -384,7 +384,7 @@ const canonicalFliesConfig: EntityConfig = {
     { key: "imitates", dbColumn: "imitates", label: "Imitates", type: "string-array", placeholder: "e.g. mayflies, midges" },
     { key: "effectiveSpecies", dbColumn: "effective_species", label: "Effective Species", type: "string-array", placeholder: "e.g. Rainbow Trout, Brown Trout" },
     { key: "waterTypes", dbColumn: "water_types", label: "Water Types", type: "string-array", placeholder: "e.g. tailwater, freestone, spring creek" },
-    { key: "sizes", dbColumn: "sizes", label: "Sizes", type: "string-array", required: true, placeholder: "e.g. #14, #16, #18" },
+    { key: "sizes", dbColumn: "sizes", label: "Sizes", type: "string-array", required: true, placeholder: "e.g. 14, 16, 18" },
     { key: "colors", dbColumn: "colors", label: "Colors", type: "string-array" },
     { key: "beadOptions", dbColumn: "bead_options", label: "Bead Options", type: "string-array" },
     { key: "hookStyles", dbColumn: "hook_styles", label: "Hook Styles", type: "string-array" },

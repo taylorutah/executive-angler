@@ -760,7 +760,17 @@
 
 /* ── Borders ── */
 .light-mode .border-\[\#21262D\] { border-color: #D4CBB8 !important; }
+.light-mode .border-\[\#30363D\] { border-color: #D4CBB8 !important; }
 .light-mode .border-\[\#484F58\] { border-color: #B0A898 !important; }
+.light-mode [class*="border-[#21262D]"] { border-color: #D4CBB8 !important; }
+.light-mode [class*="border-[#30363D]"] { border-color: #D4CBB8 !important; }
+.light-mode [class*="border-[#484F58]"] { border-color: #B0A898 !important; }
+
+/* Canonical (admin) fly edit page — was a near-black brown; in light mode
+   use the same cream as the rest of the page so the form doesn't sit on
+   a dark slab. */
+.light-mode .bg-\[\#1a1208\] { background-color: #F7F3EC !important; }
+.light-mode [class*="bg-[#1a1208]"] { background-color: #F7F3EC !important; }
 
 /* ── Hover borders ── */
 .light-mode .hover\:border-\[\#484F58\]:hover { border-color: #B0A898 !important; }

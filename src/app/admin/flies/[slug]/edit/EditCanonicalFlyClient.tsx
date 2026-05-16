@@ -10,15 +10,17 @@ import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 interface Props {
   flyId: string;
   slug: string;
+  /** Where to send the user after Save / Cancel. Defaults to the public detail. */
+  returnTo?: string;
   initial: FlyPatternFormInitial;
 }
 
-export default function EditCanonicalFlyClient({ flyId, slug, initial }: Props) {
+export default function EditCanonicalFlyClient({ flyId, slug, returnTo, initial }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const detailHref = `/flies/${slug}`;
+  const detailHref = returnTo ?? `/flies/${slug}`;
 
   async function handleSubmit(formData: FormData, _steps: RecipeStep[]) {
     void _steps;
@@ -45,13 +47,21 @@ export default function EditCanonicalFlyClient({ flyId, slug, initial }: Props) 
         });
       }
       if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
-        throw new Error(d.error || "Failed to save");
+        const d = await res.json().catch(() => null);
+        const reason =
+          (d && typeof d.error === "string" && d.error) ||
+          res.statusText ||
+          "Unknown error";
+        throw new Error(`Save failed (HTTP ${res.status}): ${reason}`);
       }
       router.push(detailHref);
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Save failed — could not reach the server",
+      );
       setBusy(false);
     }
   }

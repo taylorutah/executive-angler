@@ -11,6 +11,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Download, Copy, Share2, Printer, Loader2 } from "lucide-react";
 import { domToBlob } from "modern-screenshot";
+import { formatHookSizes } from "@/lib/flies/variant-format";
 
 type FlyForCard = {
   id?: string;
@@ -251,7 +252,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
 
   if (!open) return null;
 
-  const hookSizes = (fly.size || "").trim();
+  const hookSizes = formatHookSizes(fly.size);
   const beadStr = formatBead(fly);
   const bodyStr = formatBody(fly);
   const tagList = (fly.tags || "")

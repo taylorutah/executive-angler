@@ -42,7 +42,7 @@ export const ROLE_FIELDS: Record<RecipeRole, RoleFieldConfig> = {
     showSize: true,
     showColor: false,
     detail: "finish",
-    placeholders: { size: "#16", detail: "barbless" },
+    placeholders: { size: "16", detail: "barbless" },
   },
   bead: {
     // Bead uses a custom renderer in RecipeBuilder — no MaterialAutocomplete,

@@ -5,6 +5,7 @@ import Image from "next/image";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FlyCardForkOverlay from "@/components/flies/FlyCardForkOverlay";
+import { formatHookSize } from "@/lib/flies/variant-format";
 import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
@@ -124,7 +125,7 @@ export default async function FliesPage() {
       imageAlt: `${fly.name} fly pattern for trout fishing`,
       title: fly.name,
       subtitle: fly.tagline || undefined,
-      meta: `Sizes ${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`,
+      meta: `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`,
       badges: [FLY_CATEGORY_LABELS[fly.category] || fly.category],
       featured: fly.featured,
       description: fly.description?.substring(0, 150),

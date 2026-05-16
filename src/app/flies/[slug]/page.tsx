@@ -149,7 +149,7 @@ export default async function FlyDetail({ params }: Props) {
               <FlyFavoriteButton canonicalFlyId={fly.id} />
               {viewerIsAdmin && (
                 <Link
-                  href={`/admin/flies/${fly.slug}/edit`}
+                  href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
                   className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
                   aria-label="Edit canonical fly"
                 >
@@ -173,7 +173,7 @@ export default async function FlyDetail({ params }: Props) {
 
         <Recipe
           materials={fly.materials_list ?? []}
-          editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit` : null}
+          editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}` : null}
         />
 
         {(fly.history || fly.tying_overview || fly.fishing_tips) && (

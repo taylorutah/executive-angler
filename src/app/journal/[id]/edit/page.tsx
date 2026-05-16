@@ -1004,7 +1004,7 @@ export default function EditSessionPage() {
 
             <div className={section}>
               <h2 className="text-sm font-bold text-[#A8B2BD] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
-              <textarea rows={3} className={input} placeholder="Perdigon #16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
+              <textarea rows={3} className={input} placeholder="Perdigon size 16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
             </div>
 
             <div className={section}>
@@ -1130,7 +1130,7 @@ export default function EditSessionPage() {
                   <label className={label}>Size</label>
                   <input
                     className={input}
-                    placeholder="#14, #16, #18"
+                    placeholder="14, 16, 18"
                     value={newFlyForm.size}
                     onChange={(e) => setNewFlyForm((p) => ({ ...p, size: e.target.value }))}
                   />

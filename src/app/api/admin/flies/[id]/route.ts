@@ -136,7 +136,9 @@ export async function PATCH(
     return NextResponse.json({ id, ok: true });
   } catch (err) {
     console.error("[admin/flies PATCH] error:", err);
-    return NextResponse.json({ error: "Failed to update fly" }, { status: 500 });
+    const message =
+      err instanceof Error ? err.message : "Failed to update fly";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

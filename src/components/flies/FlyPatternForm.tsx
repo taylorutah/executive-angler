@@ -11,7 +11,7 @@
  * Used by both `/journal/flies/new` and `/journal/flies/[id]/edit`.
  */
 
-import { useState, useEffect, FormEvent, ReactNode } from "react";
+import { useState, useEffect, useRef, FormEvent, ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft, ChevronDown, Trash2, ExternalLink, BookOpen, User } from "lucide-react";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
@@ -35,7 +35,7 @@ const FLY_SOURCES = ["tied", "bought", "gifted"] as const;
 type FlySource = (typeof FLY_SOURCES)[number];
 
 const inputClass =
-  "w-full h-9 bg-[#161B22] border border-transparent rounded-md px-2.5 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors";
+  "w-full h-9 bg-[#0D1117] border border-[#30363D] rounded-md px-2.5 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors";
 const labelClass =
   "block text-[10px] font-bold uppercase tracking-widest text-[#6E7681] mb-1";
 
@@ -97,6 +97,15 @@ export default function FlyPatternForm({
 }: FlyPatternFormProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageRemoved, setImageRemoved] = useState(false);
+  const errorRef = useRef<HTMLDivElement | null>(null);
+
+  // When a save error appears, scroll it into view so it isn't hidden below
+  // the fold on a long form.
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [error]);
   const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>(
     initial?.recipeSteps ?? [],
   );
@@ -133,6 +142,19 @@ export default function FlyPatternForm({
       formData.set("image_removed", "true");
     }
 
+    // Hook sizes are stored without the leading `#` — display layers
+    // (variant chips, fly cards) prepend it when rendering. Strip any
+    // `#` the user typed so we don't end up with "##16".
+    const rawSize = formData.get("size");
+    if (typeof rawSize === "string") {
+      const cleaned = rawSize
+        .split(",")
+        .map((s) => s.trim().replace(/^#+/, ""))
+        .filter(Boolean)
+        .join(", ");
+      formData.set("size", cleaned);
+    }
+
     if (!isCanonical) formData.set("source", source);
 
     if (showCaptcha && turnstileToken) {
@@ -140,10 +162,16 @@ export default function FlyPatternForm({
     }
 
     if (!useSimpleMode && recipeSteps.length > 0) {
+      // Strip user-typed `#` from hook sizeChoice so we store bare numbers.
+      const normalized = recipeSteps.map((s) =>
+        s.role === "hook" && s.sizeChoice
+          ? { ...s, sizeChoice: s.sizeChoice.replace(/^#+/, "") }
+          : s,
+      );
       formData.set(
         "recipe_steps",
         JSON.stringify(
-          recipeSteps.map((s, i) => ({
+          normalized.map((s, i) => ({
             role: s.role,
             material_id: s.material?.id || null,
             material_name: s.materialName || s.material?.name || "",
@@ -160,7 +188,7 @@ export default function FlyPatternForm({
       // finishChoice, brandChoice, …) to round-trip through
       // recipeStepsToMaterialSlots. The DTO above drops those, so we also
       // ship the raw RecipeStep[] state. Legacy POSTs ignore this field.
-      formData.set("recipe_steps_structured", JSON.stringify(recipeSteps));
+      formData.set("recipe_steps_structured", JSON.stringify(normalized));
       formData.set("has_structured_recipe", "true");
     } else if (mode === "edit" || isCanonical) {
       // Edit explicitly clearing structured recipe: send empty array so PATCH
@@ -281,8 +309,13 @@ export default function FlyPatternForm({
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-2 rounded-md mb-3 text-[13px]">
-            {error}
+          <div
+            ref={errorRef}
+            role="alert"
+            aria-live="assertive"
+            className="bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-2 rounded-md mb-3 text-[13px]"
+          >
+            <span className="font-semibold">Save failed.</span> {error}
           </div>
         )}
 
@@ -349,7 +382,7 @@ export default function FlyPatternForm({
                       id="size"
                       name="size"
                       defaultValue={initial?.size ?? ""}
-                      placeholder="#14, #16, #18"
+                      placeholder="14, 16, 18"
                       className={inputClass}
                     />
                   </div>

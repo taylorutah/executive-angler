@@ -92,6 +92,32 @@ export function formatVariantLabel(
   return parts.length ? parts.join(" · ") : "Variant";
 }
 
+/**
+ * Display helper for a single stored hook size ("14" → "#14"). Idempotent:
+ * a value already starting with `#` is returned unchanged.
+ */
+export function formatHookSize(raw: string | number | null | undefined): string {
+  if (raw === null || raw === undefined) return "";
+  const s = String(raw).trim();
+  if (!s) return "";
+  return s.startsWith("#") ? s : `#${s}`;
+}
+
+/**
+ * Display helper for hook sizes that we store as bare numbers ("14, 16, 18").
+ * Prepends `#` to each comma-separated entry. Pre-existing values that
+ * already start with `#` are left alone.
+ */
+export function formatHookSizes(raw: string | null | undefined): string {
+  if (!raw) return "";
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => (s.startsWith("#") ? s : `#${s}`))
+    .join(", ");
+}
+
 export const BEAD_WEIGHT_OPTIONS = [1.5, 2.0, 2.5, 2.8, 3.0, 3.3, 3.8, 4.0] as const;
 export const BEAD_MATERIALS: readonly BeadMaterial[] = [
   "tungsten",

@@ -101,7 +101,7 @@ const ENTITY_FIELDS: Record<string, { label: string; key: string; type: string; 
     { label: "Water Types", key: "water_types", type: "tags", placeholder: "Tailwater, Freestone, Spring creek, Still water" },
     { label: "When to Use", key: "when_to_use", type: "textarea", placeholder: "Seasonal timing, conditions, hatch matches" },
     { label: "Fishing Tips", key: "fishing_tips", type: "textarea", placeholder: "How to fish it — presentation, retrieve, depth" },
-    { label: "Materials List", key: "materials_list", type: "textarea", placeholder: "Hook: Umpqua U202 #16\nThread: UTC 70 Black\nBead: Tungsten copper 3/32\"" },
+    { label: "Materials List", key: "materials_list", type: "textarea", placeholder: "Hook: Umpqua U202 size 16\nThread: UTC 70 Black\nBead: Tungsten copper 3/32\"" },
     { label: "Tying Overview", key: "tying_overview", type: "textarea", placeholder: "Step-by-step tying summary" },
     { label: "YouTube Tying Video URL", key: "video_url", type: "text", placeholder: "https://www.youtube.com/watch?v=..." },
     { label: "Origin / Tier Credit", key: "origin_credit", type: "text", placeholder: "e.g., Tied by John Barr, South Platte CO" },

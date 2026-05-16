@@ -7,6 +7,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import { formatHookSize } from "@/lib/flies/variant-format";
 
 export const revalidate = 3600;
 
@@ -154,7 +155,7 @@ export default async function FlyCategoryPage({ params }: Props) {
                     subtitle={fly.tagline || fly.description?.substring(0, 100)}
                     meta={
                       fly.sizes.length > 0
-                        ? `Sizes ${fly.sizes[0]}–${fly.sizes[fly.sizes.length - 1]}`
+                        ? `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`
                         : undefined
                     }
                     badges={
