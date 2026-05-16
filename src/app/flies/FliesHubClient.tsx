@@ -44,6 +44,7 @@ interface Props {
   counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
   canonicalNames: string[];
   viewerUsername: string | null;
+  viewerIsAdmin?: boolean;
 }
 
 export default function FliesHubClient({
@@ -63,6 +64,7 @@ export default function FliesHubClient({
   counts,
   canonicalNames,
   viewerUsername,
+  viewerIsAdmin = false,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -174,7 +176,7 @@ export default function FliesHubClient({
         {tab === "patterns" && (
           <PatternsHub rows={patternsHubRows} />
         )}
-        {tab === "workbench" && <WorkbenchClient embedded />}
+        {tab === "workbench" && <WorkbenchClient embedded viewerIsAdmin={viewerIsAdmin} />}
         {tab === "tie-next" && (
           <TieNextHub configurations={tieNextConfigurations} />
         )}

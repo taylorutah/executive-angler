@@ -80,7 +80,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 // ─── Main Component ──────────────────────────────────────────────
 
-export default function WorkbenchClient({ embedded = false }: { embedded?: boolean } = {}) {
+export default function WorkbenchClient({
+  embedded = false,
+  viewerIsAdmin = false,
+}: { embedded?: boolean; viewerIsAdmin?: boolean } = {}) {
   const [tab, setTab] = useState<Tab>('pickFly');
   const [inventory, setInventory] = useState<UserMaterialInventory[]>([]);
   const [invLoading, setInvLoading] = useState(true);
@@ -588,6 +591,7 @@ export default function WorkbenchClient({ embedded = false }: { embedded?: boole
                     requirements={flyRequirements[fly.slug]}
                     onToggle={() => toggleFlyExpanded(fly.slug)}
                     onAddMaterial={(material, size) => openInventoryModal(material, { preselectedSize: size })}
+                    viewerIsAdmin={viewerIsAdmin}
                   />
                 ))}
               </div>
@@ -1199,6 +1203,7 @@ function PickFlyCard({
   requirements,
   onToggle,
   onAddMaterial,
+  viewerIsAdmin = false,
 }: {
   fly: FlyBrowseItem;
   expanded: boolean;
@@ -1206,6 +1211,7 @@ function PickFlyCard({
   requirements?: FlyRequirementsResponse;
   onToggle: () => void;
   onAddMaterial: (material: TyingMaterial, size?: string) => void;
+  viewerIsAdmin?: boolean;
 }) {
   const pct = fly.coverage_percentage;
   const pctColor = pct === 100 ? 'text-success' : pct >= 50 ? 'text-accent' : 'text-text-muted';
@@ -1290,12 +1296,21 @@ function PickFlyCard({
                 >
                   View pattern & tying steps <ArrowRight size={12} />
                 </Link>
-                <Link
-                  href={`/journal/flies/new?pattern=${encodeURIComponent(requirements.fly.slug)}`}
-                  className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
-                >
-                  Start tying this <ArrowRight size={12} />
-                </Link>
+                {viewerIsAdmin ? (
+                  <Link
+                    href={`/admin/flies/${requirements.fly.slug}/edit?from=${encodeURIComponent("/flies?tab=workbench")}`}
+                    className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
+                  >
+                    Edit canonical recipe <ArrowRight size={12} />
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/flies/${requirements.fly.slug}`}
+                    className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
+                  >
+                    Start tying this <ArrowRight size={12} />
+                  </Link>
+                )}
               </div>
             </>
           )}

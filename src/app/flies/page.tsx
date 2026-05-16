@@ -11,6 +11,7 @@
 import { permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
 import { listMyPatternsHub, listMyConfigurationsWithFly } from "@/lib/db/fly-model";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
@@ -114,6 +115,7 @@ export default async function FliesHubPage({
       counts={finalCounts}
       canonicalNames={canonicalNames}
       viewerUsername={(profile?.username as string | undefined) ?? null}
+      viewerIsAdmin={isAdmin(user.email)}
     />
   );
 }

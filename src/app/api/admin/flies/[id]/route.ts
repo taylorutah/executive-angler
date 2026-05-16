@@ -1,20 +1,29 @@
 /**
  * Admin: PATCH/DELETE a canonical fly.
  *
- * PATCH — accepts the same multipart/JSON shape as /api/fishing/flies. Maps
- * RecipeBuilder recipe_steps → materials_list (MaterialSlot[]) and writes
- * back to the `flies` table. Uses the service-role client because RLS
- * disallows writes to canonical rows for non-submitter users.
+ * PATCH writes the recipe to BOTH stores so they can never drift:
+ *   1. fly_recipe_ingredients (delete-then-insert by canonical_fly_id) — the
+ *      structured source of truth read by Workbench, what-can-i-tie, and
+ *      inventory matching.
+ *   2. flies.materials_list (jsonb) — denormalized read-cache for the
+ *      Library detail page (statically rendered, no joins).
+ *
+ * Both writes use the service-role client because RLS disallows writes to
+ * canonical rows for non-submitter users. The conversion helpers in
+ * src/lib/flies/recipe-conversion.ts are the single source of truth for
+ * shape transforms.
  *
  * DELETE — soft-delete by setting status='rejected' (keeps the row + slug
- * redirect lineage intact). Not exposed in the editor UI yet, but available
- * for future use.
+ * redirect lineage intact). Not exposed in the editor UI.
  */
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
-import { recipeStepsToMaterialSlots } from "@/lib/flies/recipe-conversion";
+import {
+  recipeStepsToMaterialSlots,
+  recipeStepsToIngredientInserts,
+} from "@/lib/flies/recipe-conversion";
 import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,6 +97,7 @@ export async function PATCH(
       body = await req.json();
     }
 
+    // Build column updates for the flies row.
     const updates: Record<string, unknown> = {};
     const name = str(body.name);
     if (name !== undefined) updates.name = name;
@@ -99,23 +109,29 @@ export async function PATCH(
     if (videoUrl !== undefined) updates.video_url = videoUrl || null;
     if (imageUrl) updates.hero_image_url = imageUrl;
 
-    // recipe_steps_structured (full camelCase RecipeStep[]) → materials_list.
-    // Prefer the structured payload; the legacy `recipe_steps` field uses
-    // snake_case keys that don't match recipeStepsToMaterialSlots' input
-    // shape, so converting it directly produced empty material strings.
+    // Parse recipe steps. Prefer `recipe_steps_structured` (camelCase
+    // RecipeStep[] — lossless for canonical edit). Fall back to snake_case
+    // `recipe_steps` for legacy callers.
     const rawSteps =
       body.recipe_steps_structured !== undefined
         ? body.recipe_steps_structured
         : body.recipe_steps;
+
+    let stepsForWrite: RecipeStep[] | null = null;
     if (rawSteps !== undefined) {
       try {
-        const steps: RecipeStep[] =
+        const parsed =
           typeof rawSteps === "string"
             ? JSON.parse(rawSteps as string)
-            : (rawSteps as RecipeStep[]);
-        if (Array.isArray(steps)) {
-          updates.materials_list = recipeStepsToMaterialSlots(steps);
+            : rawSteps;
+        if (!Array.isArray(parsed)) {
+          return NextResponse.json(
+            { error: "recipe_steps must be an array" },
+            { status: 400 },
+          );
         }
+        stepsForWrite = parsed as RecipeStep[];
+        updates.materials_list = recipeStepsToMaterialSlots(stepsForWrite);
       } catch (parseErr) {
         console.error("[admin/flies PATCH] recipe_steps parse error:", parseErr);
         return NextResponse.json({ error: "Invalid recipe_steps format" }, { status: 400 });
@@ -124,6 +140,37 @@ export async function PATCH(
 
     updates.updated_at = new Date().toISOString();
 
+    // Step 1 — write fly_recipe_ingredients (Workbench source of truth).
+    // Done BEFORE the flies row update so that if anything fails, the
+    // updated_at hasn't been bumped yet (caller can retry safely).
+    if (stepsForWrite !== null) {
+      const { error: delErr } = await service
+        .from("fly_recipe_ingredients")
+        .delete()
+        .eq("canonical_fly_id", id);
+      if (delErr) {
+        console.error("[admin/flies PATCH] ingredient delete error:", delErr);
+        return NextResponse.json(
+          { error: `Failed to clear existing recipe: ${delErr.message}` },
+          { status: 500 },
+        );
+      }
+      if (stepsForWrite.length > 0) {
+        const inserts = recipeStepsToIngredientInserts(stepsForWrite, id);
+        const { error: insErr } = await service
+          .from("fly_recipe_ingredients")
+          .insert(inserts);
+        if (insErr) {
+          console.error("[admin/flies PATCH] ingredient insert error:", insErr);
+          return NextResponse.json(
+            { error: `Failed to save recipe ingredients: ${insErr.message}` },
+            { status: 500 },
+          );
+        }
+      }
+    }
+
+    // Step 2 — update flies row (denormalized materials_list cache + metadata).
     const { error } = await service
       .from("flies")
       .update(updates)
