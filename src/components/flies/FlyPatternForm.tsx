@@ -35,7 +35,7 @@ const FLY_SOURCES = ["tied", "bought", "gifted"] as const;
 type FlySource = (typeof FLY_SOURCES)[number];
 
 const inputClass =
-  "w-full h-9 bg-[#0D1117] border border-[#30363D] rounded-md px-2.5 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors";
+  "w-full h-9 bg-[#161B22] border border-transparent rounded-md px-2.5 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors";
 const labelClass =
   "block text-[10px] font-bold uppercase tracking-widest text-[#6E7681] mb-1";
 

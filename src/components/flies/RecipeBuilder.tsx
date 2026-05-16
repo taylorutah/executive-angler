@@ -197,7 +197,7 @@ function createEmptyStep(role: RecipeRole = 'hook'): RecipeStep {
 const CASCADE_ROLES = new Set<RecipeRole>(['thread', 'hook']);
 
 const cellInput =
-  'w-full h-7 bg-[#0D1117] border border-[#30363D] rounded px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
+  'w-full h-7 bg-[#161B22] border border-transparent rounded px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
 const cellSelect = `${cellInput} appearance-none cursor-pointer pr-5`;
 
 // Fixed Salesforce-style grid: drag(20) | #(28) | role(110) | material(1.4fr) | size(90) | color(110) | detail(110) | notes(1fr) | opt(28) | del(24)
@@ -485,7 +485,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   cellSelect={cellSelect}
                 />
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
-                <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
+                <div className="border border-transparent rounded divide-y divide-[#21262D] bg-[#161B22] focus-within:border-[#E8923A] transition-colors">
                   <BrandSelect
                     category={cfg.materialCategory}
                     value={step.brandChoice || step.material?.brand || ''}
@@ -703,7 +703,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                     <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
                       Brand · {step.role === 'hook' ? 'Model' : 'Product'}
                     </label>
-                    <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
+                    <div className="border border-transparent rounded divide-y divide-[#21262D] bg-[#161B22] focus-within:border-[#E8923A] transition-colors">
                       <BrandSelect
                         category={cfg.materialCategory}
                         value={step.brandChoice || step.material?.brand || ''}
