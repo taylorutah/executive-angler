@@ -241,59 +241,33 @@ export default function DashboardClient({
               </Link>
             )}
 
-            {/* Bento Action Grid — featured Workbench + supporting tiles, with live data previews */}
+            {/* Action Grid — uniform tiles, Workbench gets emphasis via orange border (not size) */}
             <section>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 auto-rows-[minmax(120px,auto)]">
-                {/* FEATURED — Workbench with live tie-next preview, spans 2 cols on desktop */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {/* Workbench — primary action, distinguished by orange border */}
                 <Link
                   href="/flies?tab=workbench"
-                  className="group col-span-2 relative overflow-hidden p-5 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/40 hover:border-[#E8923A] transition-all flex flex-col"
+                  className="group p-4 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/40 hover:border-[#E8923A] transition-all flex flex-col justify-between"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-[#E8923A]/15">
-                        <Wrench className="h-5 w-5 text-[#E8923A]" />
-                      </div>
-                      <div>
-                        <h3 className="text-base font-bold text-[#F0F6FC]">Workbench</h3>
-                        <p className="text-[11px] text-[#A8B2BD]">
-                          {tieNextItems.length > 0
-                            ? `${tieNextItems.length} fl${tieNextItems.length === 1 ? "y" : "ies"} on the queue`
-                            : "Pick a pattern · check inventory"}
-                        </p>
-                      </div>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-[#E8923A]/15">
+                      <Wrench className="h-4 w-4 text-[#E8923A]" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] group-hover:translate-x-0.5 transition-all" />
-                  </div>
-
-                  {/* Live tie-next preview rows */}
-                  <div className="flex-1 mt-1 space-y-2">
-                    {tieNextItems.slice(0, 3).map((item) => (
-                      <div key={item.key} className="flex items-center gap-2.5 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-2">
-                        <div className="h-8 w-8 rounded-md bg-[#21262D] overflow-hidden shrink-0">
-                          {item.imageUrl && (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={item.imageUrl} alt="" className="h-full w-full object-cover" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-[12px] font-medium text-[#F0F6FC] truncate">{item.name}</p>
-                          <p className="text-[10px] text-[#6E7681] truncate">{item.size || item.category || "tie next"}</p>
-                        </div>
-                        {item.status === "at_vise" && (
-                          <span className="text-[9px] font-bold tracking-wider text-[#0BA5C7] bg-[#0BA5C7]/10 px-1.5 py-0.5 rounded shrink-0">AT VISE</span>
-                        )}
-                      </div>
-                    ))}
-                    {tieNextItems.length === 0 && (
-                      <div className="rounded-lg border border-dashed border-[#21262D] px-3 py-4 text-center">
-                        <p className="text-[11px] text-[#6E7681]">No flies queued. Open the Workbench to plan your next tie.</p>
-                      </div>
+                    {tieNextItems.length > 0 && (
+                      <span className="font-mono text-sm font-bold text-[#F0F6FC] tabular-nums">{tieNextItems.length}</span>
                     )}
+                  </div>
+                  <div className="mt-3">
+                    <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Workbench</h3>
+                    <p className="text-[11px] text-[#A8B2BD] mt-0.5">
+                      {tieNextItems.length > 0
+                        ? `${tieNextItems.length} on the queue`
+                        : "Match inventory"}
+                    </p>
                   </div>
                 </Link>
 
-                {/* Insights — slim, compact */}
+                {/* Insights */}
                 <Link
                   href="/dashboard/insights"
                   className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#A855F7] transition-all flex flex-col justify-between"
@@ -350,7 +324,7 @@ export default function DashboardClient({
                   </div>
                 </Link>
 
-                {/* Gear Locker — pulled into the bento so the 3-col grid stays balanced */}
+                {/* Gear Locker */}
                 <Link
                   href="/account/gear"
                   className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#A8B2BD] transition-all flex flex-col justify-between"
