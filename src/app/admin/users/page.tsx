@@ -4,7 +4,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { isAdmin } from "@/lib/admin";
 import UsersClient from "./UsersClient";
 
-export const metadata = { title: "User Management — Admin — Executive Angler" };
+export const metadata = { title: "User Management — Admin" };
 export const dynamic = "force-dynamic";
 
 function getAdminSupabase() {

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ThreadDetailClient } from "./ThreadDetailClient";
 
 export const metadata: Metadata = {
-  title: "Conversation | Executive Angler",
+  title: "Conversation",
   description: "Direct message conversation.",
 };
 

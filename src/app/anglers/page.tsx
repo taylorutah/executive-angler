@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FollowButton } from "@/components/social/FollowButton";
 
 export const metadata: Metadata = {
-  title: "Angler Directory — Executive Angler",
+  title: "Angler Directory",
   description: "Browse the angler directory. Find anglers on your rivers and follow their session reports.",
 };
 

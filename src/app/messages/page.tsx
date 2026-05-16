@@ -5,7 +5,7 @@ import type { DMThread } from "@/types/fishing-log";
 import { MessagesClient } from "./MessagesClient";
 
 export const metadata: Metadata = {
-  title: "Messages | Executive Angler",
+  title: "Messages",
   description: "Direct messages with fellow anglers.",
 };
 

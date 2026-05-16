@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Detailed profiles of 35 fly fishing species — trout, salmon, char, bass, and saltwater game fish. Habitat, tactics, fly patterns, and conservation status.",
   alternates: { canonical: `${SITE_URL}/species` },
   openGraph: {
-    title: "35 Fly Fishing Species Guide | Executive Angler",
+    title: "35 Fly Fishing Species Guide",
     description: "Detailed profiles of 35 fly fishing species — trout, salmon, char, bass, and saltwater game fish. Habitat, tactics, and fly patterns.",
     images: ["/api/og?title=Fish%20Species%20Guide&subtitle=35%20Species%20Profiles&type=species"],
   },

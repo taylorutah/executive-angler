@@ -7,7 +7,7 @@ import { checkPremium } from "@/lib/admin";
 import HatchReportsClient from "./HatchReportsClient";
 
 export const metadata: Metadata = {
-  title: "Hatch Reports — Executive Angler",
+  title: "Hatch Reports",
   description: "Real-time and historical hatch reports from your fishing data.",
 };
 

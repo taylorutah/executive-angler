@@ -56,10 +56,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = unslugify(slug);
 
   return {
-    title: `${displayName} Fly Patterns — Best Imitations for Trout | Executive Angler`,
+    title: `${displayName} Fly Patterns — Best Imitations for Trout`,
     description: `The best fly patterns that imitate ${displayName.toLowerCase()}. Browse proven imitations with tying guides, sizes, materials, and fishing tips for matching this hatch.`,
     openGraph: {
-      title: `${displayName} Fly Patterns | Executive Angler`,
+      title: `${displayName} Fly Patterns`,
       description: `Top fly patterns imitating ${displayName.toLowerCase()} — matched to hatches and trout feeding behavior.`,
       images: [
         `/api/og?title=${encodeURIComponent(`${displayName} Patterns`)}&subtitle=Hatch%20Imitations&type=fly`,

@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     "Find 27 curated fly shops near top fishing waters. Local knowledge, expert staff, hours, services, and the right flies for every river. Browse by region.",
   alternates: { canonical: `${SITE_URL}/fly-shops` },
   openGraph: {
-    title: "27 Fly Shops Near the Best Fishing Waters | Executive Angler",
+    title: "27 Fly Shops Near the Best Fishing Waters",
     description: "Find 27 curated fly shops near top fishing waters. Local knowledge, expert staff, and the right flies for every river.",
     images: ["/api/og?title=Fly%20Shops&subtitle=27%20Curated%20Shops&type=default"],
   },

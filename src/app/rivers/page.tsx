@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. From the Madison to the Moy — find your next water.",
   alternates: { canonical: `${SITE_URL}/rivers` },
   openGraph: {
-    title: "41 Fly Fishing Rivers — Maps, Hatches & Access | Executive Angler",
+    title: "41 Fly Fishing Rivers — Maps, Hatches & Access",
     description: "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. Find your next water.",
     images: ["/api/og?title=Fly%20Fishing%20Rivers&subtitle=41%20Legendary%20Waters&type=river"],
   },

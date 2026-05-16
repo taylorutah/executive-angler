@@ -5,7 +5,7 @@ import AdminClient from "./AdminClient";
 import { isAdmin } from "@/lib/admin";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard — Executive Angler",
+  title: "Admin Dashboard",
   description: "Admin metrics and management.",
 };
 

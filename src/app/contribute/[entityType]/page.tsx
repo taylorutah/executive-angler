@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ entityTyp
   const { entityType } = await params;
   const label = TYPE_LABELS[entityType] || "Entity";
   return {
-    title: `Add ${label} — Contribute — Executive Angler`,
+    title: `Add ${label} — Contribute`,
     description: `Submit a new ${label.toLowerCase()} to Executive Angler.`,
   };
 }

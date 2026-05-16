@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 import type { RiverStats } from "@/types/awards";
 
 export const metadata: Metadata = {
-  title: "Dashboard — Executive Angler",
+  title: "Dashboard",
   description: "Your personalized fly fishing dashboard.",
 };
 

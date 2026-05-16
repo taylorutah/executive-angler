@@ -6,7 +6,7 @@ import { APP_STORE_URL } from "@/lib/constants";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata: Metadata = {
-  title: "On The Water | Executive Angler",
+  title: "On The Water",
   description:
     "Anglers currently on the water. Locations and fish counts stay private — only general river, section, and weather are shown.",
 };

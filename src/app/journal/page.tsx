@@ -9,7 +9,7 @@ import { JournalClient } from "./JournalClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "My Fishing Journal | Executive Angler",
+  title: "My Fishing Journal",
   description: "Your personal fishing log with sessions, catches, and river reports.",
 };
 

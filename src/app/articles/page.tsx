@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation. Level up your angling with in-depth instruction.",
   alternates: { canonical: `${SITE_URL}/articles` },
   openGraph: {
-    title: "Fly Fishing Articles — Techniques, Gear & Trip Planning | Executive Angler",
+    title: "Fly Fishing Articles — Techniques, Gear & Trip Planning",
     description: "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation.",
     images: ["/api/og?title=Articles%20%26%20Instruction&subtitle=Expert%20Fly%20Fishing%20Content&type=article"],
   },

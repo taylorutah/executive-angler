@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import ExportClient from "./ExportClient";
 
 export const metadata: Metadata = {
-  title: "Export Data — Executive Angler",
+  title: "Export Data",
   description: "Download your fishing data as CSV or PDF.",
 };
 

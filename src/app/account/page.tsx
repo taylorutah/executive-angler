@@ -4,7 +4,7 @@ import AccountClient from "./AccountClient";
 import { isAdmin, checkPremium } from "@/lib/admin";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 
-export const metadata = { title: "My Account | Executive Angler" };
+export const metadata = { title: "My Account" };
 
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ redirect?: string; welcome?: string }> }) {
   const params = await searchParams;

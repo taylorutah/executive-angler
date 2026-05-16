@@ -17,7 +17,7 @@ import {
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Content Management — Admin | Executive Angler",
+  title: "Content Management — Admin",
   description: "Manage all content entities.",
 };
 

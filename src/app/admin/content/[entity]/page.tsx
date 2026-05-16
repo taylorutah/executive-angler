@@ -11,7 +11,7 @@ export async function generateMetadata({
   const { entity } = await params;
   const config = getEntityConfig(entity);
   return {
-    title: `${config?.label ?? "Entity"} — Admin | Executive Angler`,
+    title: `${config?.label ?? "Entity"} — Admin`,
   };
 }
 

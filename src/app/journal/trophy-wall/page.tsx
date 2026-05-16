@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import TrophyWallClient from './TrophyWallClient';
 
 export const metadata = {
-  title: 'Trophy Wall | Executive Angler',
+  title: 'Trophy Wall',
   description: 'Your personal bests — biggest fish by species, by river, and top sessions',
 };
 

@@ -6,7 +6,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import MaterialsQueueClient from './MaterialsQueueClient';
 
 export const metadata: Metadata = {
-  title: 'Materials Review — Admin | Executive Angler',
+  title: 'Materials Review — Admin',
   description: 'Review and promote user-submitted fly tying materials.',
 };
 

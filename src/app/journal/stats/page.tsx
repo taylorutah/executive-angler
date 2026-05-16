@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { checkPremium } from '@/lib/admin';
 
 export const metadata = {
-  title: 'River Stats | Executive Angler',
+  title: 'River Stats',
   description: 'View your fishing statistics and achievements by river',
 };
 

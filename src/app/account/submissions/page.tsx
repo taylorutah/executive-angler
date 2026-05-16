@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import MySubmissionsClient from "./MySubmissionsClient";
 
 export const metadata: Metadata = {
-  title: "My Submissions — Executive Angler",
+  title: "My Submissions",
   description: "Manage your community contributions.",
 };
 

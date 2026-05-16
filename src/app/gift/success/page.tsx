@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Gift } from "lucide-react";
 
 export const metadata = {
-  title: "Gift sent — Executive Angler",
+  title: "Gift sent",
 };
 
 export const dynamic = "force-dynamic";

@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import GiftPurchaseClient from "./GiftPurchaseClient";
 
 export const metadata = {
-  title: "Gift Pro — Executive Angler",
+  title: "Gift Pro",
   description: "Gift a year of Executive Angler Pro to a fishing buddy.",
 };
 

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUpdateForm from "./PhotoUpdateForm";
 
 export const metadata: Metadata = {
-  title: "Update Listing Photo — Contribute — Executive Angler",
+  title: "Update Listing Photo — Contribute",
   description: "Submit a hero photo for an existing fly shop, lodge, guide, or river listing.",
 };
 

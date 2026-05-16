@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     "Browse 120+ proven trout fly patterns with tying guides, materials, variations, and where to fish them. Dry flies, nymphs, streamers, emergers, and more.",
   alternates: { canonical: `${SITE_URL}/flies/library` },
   openGraph: {
-    title: "Trout Fly Library | Executive Angler",
+    title: "Trout Fly Library",
     description:
       "The complete trout fly reference — 120+ patterns with tying videos, materials lists, and fishing tips.",
     images: [

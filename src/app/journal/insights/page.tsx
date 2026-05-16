@@ -7,7 +7,7 @@ import { Lock } from "lucide-react";
 import InsightsPageClient from "./InsightsPageClient";
 
 export const metadata: Metadata = {
-  title: "Journal Insights — Executive Angler",
+  title: "Journal Insights",
   description:
     "Rule-based analysis of your fishing patterns — fly effectiveness, timing, weather correlations, and more.",
 };

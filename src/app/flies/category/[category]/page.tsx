@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = CATEGORY_LABELS[category] || category;
 
   return {
-    title: `${label} — Complete Pattern Guide | Executive Angler`,
+    title: `${label} — Complete Pattern Guide`,
     description: CATEGORY_DESCRIPTIONS[category] || `Browse all ${label.toLowerCase()} patterns with tying guides, materials, and fishing tips.`,
     openGraph: {
       title: `${label} — Trout Fly Pattern Guide`,

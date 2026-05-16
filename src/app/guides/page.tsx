@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. From Montana to Mongolia — find your next guide and book direct.",
   alternates: { canonical: `${SITE_URL}/guides` },
   openGraph: {
-    title: "31 Expert Fly Fishing Guides | Executive Angler",
+    title: "31 Expert Fly Fishing Guides",
     description: "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. Find your next guide and book direct.",
     images: ["/api/og?title=Fly%20Fishing%20Guides&subtitle=31%20Expert%20Professionals&type=default"],
   },

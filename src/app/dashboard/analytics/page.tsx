@@ -7,7 +7,7 @@ import { checkPremium } from "@/lib/admin";
 import AnalyticsClient from "./AnalyticsClient";
 
 export const metadata: Metadata = {
-  title: "Analytics — Executive Angler",
+  title: "Analytics",
   description: "Your fishing trends, species breakdown, and performance over time.",
 };
 

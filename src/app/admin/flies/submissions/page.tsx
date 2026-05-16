@@ -5,7 +5,7 @@ import { isAdmin } from "@/lib/admin";
 import AdminFlySubmissionsClient from "./AdminFlySubmissionsClient";
 
 export const metadata: Metadata = {
-  title: "Fly Submissions — Admin | Executive Angler",
+  title: "Fly Submissions — Admin",
   description: "Review and approve community fly pattern submissions.",
 };
 

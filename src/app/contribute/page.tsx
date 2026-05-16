@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MapPin, Store, Mountain, Home, Fish, Compass } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contribute — Executive Angler",
+  title: "Contribute",
   description: "Help build the ultimate fly fishing resource. Submit rivers, fly shops, guides, lodges, and more.",
 };
 

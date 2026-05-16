@@ -5,7 +5,7 @@ import { isAdmin } from "@/lib/admin";
 import UserDetailClient from "./UserDetailClient";
 
 export const metadata: Metadata = {
-  title: "User Detail — Admin — Executive Angler",
+  title: "User Detail — Admin",
 };
 
 export default async function UserDetailPage({ params }: { params: Promise<{ userId: string }> }) {

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NotificationsClient } from "./NotificationsClient";
 
 export const metadata: Metadata = {
-  title: "Notifications | Executive Angler",
+  title: "Notifications",
   description: "Your notifications and activity updates.",
 };
 

@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import SubmissionsQueueClient from "./SubmissionsQueueClient";
 
-export const metadata = { title: "Submissions Review — Admin — Executive Angler" };
+export const metadata = { title: "Submissions Review — Admin" };
 
 export default async function AdminSubmissionsPage() {
   const supabase = await createClient();

@@ -18,7 +18,7 @@ import AddToLockerButton from "@/components/gear-v2/AddToLockerButton";
 import GearCategoryTabs from "@/components/gear-v2/GearCategoryTabs";
 
 export const metadata: Metadata = {
-  title: "Gear — Executive Angler",
+  title: "Gear",
   description: "Fly fishing gear catalog: rods, reels, waders, lines, leaders, tippet, packs. Add to your locker in one click.",
 };
 

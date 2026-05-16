@@ -7,12 +7,12 @@ import MaterialsBrowserClient from "./MaterialsBrowserClient";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Fly Tying Materials Database | Executive Angler",
+  title: "Fly Tying Materials Database",
   description:
     "Browse 500+ verified fly tying materials — hooks, beads, thread, dubbing, feathers, flash, and more. Search by name, brand, or category to find exactly what you need for your next pattern.",
   alternates: { canonical: `${SITE_URL}/flies/materials` },
   openGraph: {
-    title: "Fly Tying Materials Database | Executive Angler",
+    title: "Fly Tying Materials Database",
     description:
       "Browse 500+ verified fly tying materials — hooks, beads, thread, dubbing, feathers, flash, and more.",
     images: [

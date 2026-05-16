@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .maybeSingle();
   void session; // schema sanity check; we always noindex now
   return {
-    title: "Session | Executive Angler",
+    title: "Session",
     description: `Fishing session ${id.slice(0, 8)}`,
     robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
   };

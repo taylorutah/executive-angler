@@ -35,10 +35,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!river) return { title: "River Not Found" };
 
   return {
-    title: `Best Flies for ${river.name} — Top Patterns & Tying Guides | Executive Angler`,
+    title: `Best Flies for ${river.name} — Top Patterns & Tying Guides`,
     description: `Discover the best fly patterns for fishing the ${river.name}. Dry flies, nymphs, streamers, and emergers matched to the hatches and conditions on this legendary water.`,
     openGraph: {
-      title: `Best Flies for ${river.name} | Executive Angler`,
+      title: `Best Flies for ${river.name}`,
       description: `Top fly patterns for the ${river.name} — matched to local hatches, species, and seasonal conditions.`,
       images: [
         `/api/og?title=${encodeURIComponent(`Best Flies for ${river.name}`)}&subtitle=Pattern%20Guide&type=fly`,

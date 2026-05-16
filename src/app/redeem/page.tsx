@@ -3,7 +3,7 @@ import { checkPremium } from "@/lib/admin";
 import RedeemClient from "./RedeemClient";
 
 export const metadata = {
-  title: "Redeem Pro — Executive Angler",
+  title: "Redeem Pro",
   description: "Redeem your promo code for 30 days of Executive Angler Pro — no credit card required.",
 };
 

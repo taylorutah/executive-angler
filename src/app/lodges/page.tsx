@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "Compare 32 fly fishing lodges worldwide — from Alaskan fly-outs to Scottish castle beats. Real reviews, pricing tiers, amenities, and direct booking links.",
   alternates: { canonical: `${SITE_URL}/lodges` },
   openGraph: {
-    title: "32 Premier Fly Fishing Lodges | Executive Angler",
+    title: "32 Premier Fly Fishing Lodges",
     description: "Compare 32 fly fishing lodges worldwide — real reviews, pricing tiers, amenities, and direct booking links.",
     images: ["/api/og?title=Fly%20Fishing%20Lodges&subtitle=32%20Premier%20Properties&type=destination"],
   },

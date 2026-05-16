@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const blockIndex = (profile?.profile_visibility ?? "public") !== "public" || !isSearchable;
 
   return {
-    title: `@${displayHandle} — Executive Angler`,
+    title: `@${displayHandle}`,
     description: `View @${displayHandle}'s fishing sessions and river reports on Executive Angler.`,
     robots: blockIndex
       ? { index: false, follow: false, googleBot: { index: false, follow: false } }

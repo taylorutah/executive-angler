@@ -20,7 +20,7 @@ import type { VariantRow } from "@/types/fly-v2";
 import FliesHubClient from "./FliesHubClient";
 
 export const metadata: Metadata = {
-  title: "Flies — Executive Angler",
+  title: "Flies",
   description:
     "Your fly boxes, personal patterns, tying workbench, tie-next queue, and shared flies — one place.",
 };

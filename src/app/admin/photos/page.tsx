@@ -5,7 +5,7 @@ import { isAdmin } from "@/lib/admin";
 import AdminPhotosClient from "./AdminPhotosClient";
 
 export const metadata: Metadata = {
-  title: "Photo Submissions — Admin | Executive Angler",
+  title: "Photo Submissions — Admin",
   description: "Review and manage community photo submissions.",
 };
 

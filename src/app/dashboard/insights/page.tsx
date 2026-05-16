@@ -7,7 +7,7 @@ import { checkPremium } from "@/lib/admin";
 import InsightsClient from "./InsightsClient";
 
 export const metadata: Metadata = {
-  title: "Insights — Executive Angler",
+  title: "Insights",
   description: "Personal insights into your fishing patterns: best flies, peak conditions, and where you fish best.",
 };
 

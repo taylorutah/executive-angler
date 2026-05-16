@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import ImportClient from "./ImportClient";
 
 export const metadata: Metadata = {
-  title: "Import Journal — Executive Angler",
+  title: "Import Journal",
   description:
     "Bring your old fishing journal into Executive Angler. Use AI to format your data and import it in minutes.",
 };

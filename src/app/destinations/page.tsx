@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Maps, best months, species, and local intel to plan your next adventure.",
   alternates: { canonical: `${SITE_URL}/destinations` },
   openGraph: {
-    title: "30+ Fly Fishing Destinations Worldwide | Executive Angler",
+    title: "30+ Fly Fishing Destinations Worldwide",
     description: "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Plan your next adventure.",
     images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=30%20World-Class%20Waters&type=destination"],
   },

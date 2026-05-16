@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import FeedbackClient from "./FeedbackClient";
 
 export const metadata: Metadata = {
-  title: "Feature Requests & Feedback — Executive Angler",
+  title: "Feature Requests & Feedback",
   description: "Help shape Executive Angler. Submit ideas, report bugs, and vote on what gets built next.",
 };
 
