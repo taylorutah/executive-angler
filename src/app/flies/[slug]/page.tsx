@@ -44,8 +44,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const fly = await getFlyBySlug(slug);
-  if (!fly) return { title: "Fly Pattern — Executive Angler" };
-  const title = `${fly.name} — ${fly.category ?? "Fly Pattern"} | Executive Angler`;
+  // Layout template appends " | Executive Angler"; don't double-add it here.
+  if (!fly) return { title: "Fly Pattern" };
+  const title = `${fly.name} — ${fly.category ?? "Fly Pattern"}`;
   const description = fly.description?.slice(0, 160) ?? `${fly.name}: tying recipe, options, fishing tips.`;
   return {
     title,
@@ -222,7 +223,7 @@ function Recipe({
       {hasMaterials ? (
         <ul className="rounded-lg border border-[#21262D] bg-[#161B22] divide-y divide-[#21262D]">
           {materials.map((m, i) => {
-            const slotLabel = capitalize(String(m.slot ?? "Material"));
+            const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
             const detail = [m.material, m.brand].filter(Boolean).join(" · ");
             return (
               <li key={i} className="px-4 py-2.5 text-sm flex items-baseline gap-3">
@@ -254,6 +255,15 @@ function Recipe({
       )}
     </section>
   );
+}
+
+function formatSlotLabel(slot: string): string {
+  // hot_spot → Hot Spot, wingcase → Wingcase, ribbing → Rib, etc.
+  return slot
+    .split(/[_\s]+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ") || "Material";
 }
 
 function capitalize(s: string): string {

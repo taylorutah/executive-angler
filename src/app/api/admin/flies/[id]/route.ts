@@ -24,6 +24,7 @@ import {
   recipeStepsToMaterialSlots,
   recipeStepsToIngredientInserts,
 } from "@/lib/flies/recipe-conversion";
+import { formTypeToCanonicalCategory } from "@/lib/flies/fly-type-map";
 import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,7 +103,9 @@ export async function PATCH(
     const name = str(body.name);
     if (name !== undefined) updates.name = name;
     const type = str(body.type);
-    if (type !== undefined && type !== "") updates.category = type.toLowerCase();
+    if (type !== undefined && type !== "") {
+      updates.category = formTypeToCanonicalCategory(type);
+    }
     const description = str(body.description);
     if (description !== undefined) updates.description = description;
     const videoUrl = str(body.video_url);

@@ -5,6 +5,7 @@
 import { notFound } from "next/navigation";
 import { getFlyBySlug } from "@/lib/db/fly-model";
 import { materialSlotsToRecipeSteps } from "@/lib/flies/recipe-conversion";
+import { canonicalCategoryToFormType } from "@/lib/flies/fly-type-map";
 import EditCanonicalFlyClient from "./EditCanonicalFlyClient";
 
 interface Props {
@@ -40,7 +41,7 @@ export default async function EditCanonicalFlyPage({ params, searchParams }: Pro
       returnTo={returnTo}
       initial={{
         name: fly.name,
-        type: fly.category ?? "",
+        type: canonicalCategoryToFormType(fly.category),
         description: fly.description ?? "",
         video_url: fly.video_url ?? "",
         imageUrl: fly.hero_image_url ?? null,

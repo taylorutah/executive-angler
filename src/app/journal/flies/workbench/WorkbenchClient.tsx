@@ -78,6 +78,16 @@ const CATEGORY_LABELS: Record<string, string> = {
   eye: 'Eyes', resin: 'Resins', marker: 'Markers',
 };
 
+/** "hot_spot" → "Hot Spot", "ribbing" → "Ribbing", "wingcase" → "Wingcase". */
+function formatRoleLabel(role: string | null | undefined): string {
+  if (!role) return "Material";
+  return role
+    .split(/[_\s]+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
 // ─── Main Component ──────────────────────────────────────────────
 
 export default function WorkbenchClient({
@@ -1167,7 +1177,7 @@ function MatchCard({ match }: { match: MatchResult }) {
               <div key={i} className="flex items-center gap-2 text-sm">
                 <X size={12} className="text-danger flex-shrink-0" />
                 <span className="text-text-secondary">
-                  <span className="text-text-muted capitalize">{m.role}:</span> {m.material_name}
+                  <span className="text-text-muted">{formatRoleLabel(m.role)}:</span> {m.material_name}
                 </span>
               </div>
             ))}
@@ -1266,7 +1276,7 @@ function PickFlyCard({
                     ) : (
                       <div className="w-[14px] h-[14px] rounded-full border border-border flex-shrink-0" />
                     )}
-                    <span className="text-text-muted capitalize text-xs w-20 flex-shrink-0">{ing.role}</span>
+                    <span className="text-text-muted text-xs w-20 flex-shrink-0">{formatRoleLabel(ing.role)}</span>
                     <span className="text-text-primary flex-1 truncate">
                       {ing.material?.name || ing.material_name || '—'}
                       {ing.is_optional && <span className="text-text-muted text-xs ml-1">(optional)</span>}

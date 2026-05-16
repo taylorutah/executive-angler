@@ -26,6 +26,7 @@ const FLY_TYPES = [
   "Streamer",
   "Wet Fly",
   "Emerger",
+  "Midge",
   "Terrestrial",
   "Egg",
   "Other",
