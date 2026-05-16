@@ -10,7 +10,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X } from "lucide-react";
+import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "lucide-react";
 import type { FlyBoxV2, FlyBoxTier, BoxStats } from "@/lib/db/fly-v2";
 
 const CATEGORY_SHORT: Record<string, string> = {
@@ -49,7 +49,7 @@ const TIER_LABELS: Record<FlyBoxTier, string> = {
   custom: "Custom",
 };
 
-const TIER_DESCRIPTIONS: Record<FlyBoxTier, string> = {
+const TIER_DESCRIPTIONS_DEFAULT: Record<FlyBoxTier, string> = {
   kill: "Chest-worn, 12–20 highest-confidence flies",
   support: "Pack/vest variations and situational patterns",
   archive: "Truck/garage modular inserts",
@@ -78,9 +78,11 @@ const EMPTY_FORM: FormState = {
 export default function BoxesManager({
   initialBoxes,
   initialStats,
+  initialTierDescriptions = {},
 }: {
   initialBoxes: FlyBoxV2[];
   initialStats: Record<string, BoxStats>;
+  initialTierDescriptions?: Record<string, string>;
 }) {
   const router = useRouter();
   const [boxes, setBoxes] = useState<FlyBoxV2[]>(initialBoxes);
@@ -91,6 +93,53 @@ export default function BoxesManager({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [tierOverrides, setTierOverrides] =
+    useState<Record<string, string>>(initialTierDescriptions);
+  const [editingTier, setEditingTier] = useState<FlyBoxTier | null>(null);
+  const [tierDraft, setTierDraft] = useState("");
+  const [tierBusy, setTierBusy] = useState(false);
+
+  function descriptionFor(tier: FlyBoxTier): string {
+    const override = tierOverrides[tier];
+    return typeof override === "string" && override.trim()
+      ? override
+      : TIER_DESCRIPTIONS_DEFAULT[tier];
+  }
+
+  function startEditTier(tier: FlyBoxTier) {
+    setTierDraft(descriptionFor(tier));
+    setEditingTier(tier);
+  }
+
+  function cancelEditTier() {
+    setEditingTier(null);
+    setTierDraft("");
+  }
+
+  async function saveTier(tier: FlyBoxTier) {
+    const next = tierDraft.trim();
+    // Empty = reset to default (clear override server-side).
+    if (next === descriptionFor(tier).trim() && (next.length > 0 || !tierOverrides[tier])) {
+      cancelEditTier();
+      return;
+    }
+    setTierBusy(true);
+    try {
+      const res = await fetch("/api/profile/tier-descriptions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier_descriptions: { [tier]: next || null } }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Failed to save.");
+      setTierOverrides((json.tier_descriptions ?? {}) as Record<string, string>);
+      cancelEditTier();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to save tier description.");
+    } finally {
+      setTierBusy(false);
+    }
+  }
 
   // Close any open kebab menu on outside click or Escape.
   useEffect(() => {
@@ -241,7 +290,59 @@ export default function BoxesManager({
                 <h2 className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[#0BA5C7]">
                   {TIER_LABELS[tier]}
                 </h2>
-                <p className="text-xs text-[#6E7681]">{TIER_DESCRIPTIONS[tier]}</p>
+                {editingTier === tier ? (
+                  <div className="mt-1 flex items-start gap-2">
+                    <input
+                      autoFocus
+                      type="text"
+                      value={tierDraft}
+                      onChange={(e) => setTierDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          saveTier(tier);
+                        } else if (e.key === "Escape") {
+                          e.preventDefault();
+                          cancelEditTier();
+                        }
+                      }}
+                      maxLength={200}
+                      placeholder={TIER_DESCRIPTIONS_DEFAULT[tier]}
+                      disabled={tierBusy}
+                      className="flex-1 rounded border border-[#30363D] bg-[#0D1117] px-2 py-1 text-xs text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => saveTier(tier)}
+                      disabled={tierBusy}
+                      aria-label="Save description"
+                      className="rounded p-1 text-[#E8923A] hover:bg-[#1F2937] disabled:opacity-50"
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEditTier}
+                      disabled={tierBusy}
+                      aria-label="Cancel"
+                      className="rounded p-1 text-[#6E7681] hover:bg-[#1F2937] disabled:opacity-50"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <p className="group flex items-center gap-1.5 text-xs text-[#6E7681]">
+                    <span>{descriptionFor(tier)}</span>
+                    <button
+                      type="button"
+                      onClick={() => startEditTier(tier)}
+                      aria-label={`Edit ${TIER_LABELS[tier]} description`}
+                      className="rounded p-0.5 text-[#484F58] opacity-0 transition-opacity hover:text-[#E8923A] group-hover:opacity-100 focus:opacity-100"
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </button>
+                  </p>
+                )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {items.map((b) => (
@@ -402,7 +503,7 @@ export default function BoxesManager({
                 >
                   {(Object.keys(TIER_LABELS) as FlyBoxTier[]).map((t) => (
                     <option key={t} value={t}>
-                      {TIER_LABELS[t]} — {TIER_DESCRIPTIONS[t]}
+                      {TIER_LABELS[t]} — {descriptionFor(t)}
                     </option>
                   ))}
                 </select>

@@ -129,7 +129,7 @@ export default async function FlyDetail({ params }: Props) {
           )}
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[360px_1fr] gap-6 lg:gap-8 items-start">
             {/* Hero image — bigger, square, prominent */}
-            <div className="relative aspect-square w-full max-w-[280px] sm:max-w-none rounded-2xl overflow-hidden bg-gradient-to-br from-[#21262D] to-[#0D1117] shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full max-w-[280px] sm:max-w-none mx-auto md:mx-0 rounded-2xl overflow-hidden bg-gradient-to-br from-[#21262D] to-[#0D1117] shadow-lg shadow-black/20">
               {fly.hero_image_url ? (
                 <Image
                   src={fly.hero_image_url}
@@ -155,7 +155,7 @@ export default async function FlyDetail({ params }: Props) {
                   <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[#0BA5C7] mb-1.5">
                     {fly.category ?? "Fly Pattern"}
                   </p>
-                  <h1 className="font-heading text-4xl sm:text-5xl text-[#F0F6FC] tracking-tight leading-[1.05]">
+                  <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl text-[#F0F6FC] tracking-tight leading-[1.05]">
                     {fly.name}
                   </h1>
                 </div>

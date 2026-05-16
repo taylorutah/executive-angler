@@ -42,10 +42,12 @@ export default async function FliesHubPage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("ties_own_flies, display_name, username")
+    .select("ties_own_flies, display_name, username, tier_descriptions")
     .eq("user_id", user.id)
     .maybeSingle();
   const tiesOwnFlies = profile?.ties_own_flies !== false;
+  const tierDescriptions =
+    (profile?.tier_descriptions as Record<string, string> | null) ?? {};
 
   const { tab } = await searchParams;
 
@@ -116,6 +118,7 @@ export default async function FliesHubPage({
       canonicalNames={canonicalNames}
       viewerUsername={(profile?.username as string | undefined) ?? null}
       viewerIsAdmin={isAdmin(user.email)}
+      tierDescriptions={tierDescriptions}
     />
   );
 }

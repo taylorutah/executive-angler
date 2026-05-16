@@ -70,7 +70,7 @@ export default function HeroCompact({
 
         {/* Text block */}
         <div className={`flex-1 min-w-0 py-2.5 sm:py-3 pr-3 sm:pr-4 flex flex-col justify-center ${children ? "pt-9 sm:pt-3" : ""}`}>
-          <h1 className="font-heading text-lg sm:text-3xl font-bold text-white tracking-tight leading-tight line-clamp-2 sm:truncate">
+          <h1 className="font-heading text-lg sm:text-3xl font-bold text-[#F0F6FC] tracking-tight leading-tight line-clamp-2 sm:truncate">
             {title}
           </h1>
           {subtitle && (

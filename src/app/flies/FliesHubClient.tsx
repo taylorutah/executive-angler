@@ -45,6 +45,7 @@ interface Props {
   canonicalNames: string[];
   viewerUsername: string | null;
   viewerIsAdmin?: boolean;
+  tierDescriptions?: Record<string, string>;
 }
 
 export default function FliesHubClient({
@@ -65,6 +66,7 @@ export default function FliesHubClient({
   canonicalNames,
   viewerUsername,
   viewerIsAdmin = false,
+  tierDescriptions = {},
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -171,7 +173,7 @@ export default function FliesHubClient({
         </div>
 
         {tab === "boxes" && (
-          <BoxesManager initialBoxes={boxes} initialStats={boxStats} />
+          <BoxesManager initialBoxes={boxes} initialStats={boxStats} initialTierDescriptions={tierDescriptions} />
         )}
         {tab === "patterns" && (
           <PatternsHub rows={patternsHubRows} />
