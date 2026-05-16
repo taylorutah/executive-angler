@@ -31,6 +31,10 @@ interface UserProfile {
   email: string | null;
   last_sign_in_at: string | null;
   last_session_at: string | null;
+  last_login_at: string | null;
+  last_login_country: string | null;
+  last_login_region: string | null;
+  last_login_city: string | null;
   session_count: number;
   catch_count: number;
   fly_box_count: number;
@@ -284,6 +288,11 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       <span className="inline-flex items-center gap-1">
                         <LogIn className="h-3 w-3" /> {u.last_sign_in_at ? `last login ${formatRelative(u.last_sign_in_at)}` : "never signed in"}
                       </span>
+                      {formatLoginLocation(u) && (
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="h-3 w-3" /> {formatLoginLocation(u)}
+                        </span>
+                      )}
                       <span className="inline-flex items-center gap-1">
                         <Activity className="h-3 w-3" /> {u.last_session_at ? `fished ${formatRelative(u.last_session_at)}` : "no sessions"}
                       </span>
@@ -317,6 +326,13 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <LogIn className="h-3 w-3 text-[#6E7681]" />
                         Last sign-in {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "never"}
                       </p>
+                      {formatLoginLocation(u) && (
+                        <p className="flex items-center gap-1.5">
+                          <MapPin className="h-3 w-3 text-[#6E7681]" />
+                          Login from {formatLoginLocation(u)}
+                          {u.last_login_at ? ` · ${formatDateTime(u.last_login_at)}` : ""}
+                        </p>
+                      )}
                       <p className="flex items-center gap-1.5">
                         <Activity className="h-3 w-3 text-[#6E7681]" />
                         Last session {u.last_session_at ? formatDate(u.last_session_at) : "none logged"}
@@ -542,6 +558,18 @@ function SessionsPanel({
       </div>
     </div>
   );
+}
+
+function formatLoginLocation(u: {
+  last_login_city: string | null;
+  last_login_region: string | null;
+  last_login_country: string | null;
+}): string | null {
+  const parts = [u.last_login_city, u.last_login_region, u.last_login_country]
+    .map((p) => (p && p.trim() ? p.trim() : null))
+    .filter((p): p is string => !!p);
+  if (parts.length === 0) return null;
+  return parts.join(", ");
 }
 
 function formatDate(d: string): string {

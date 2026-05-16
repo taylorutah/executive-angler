@@ -25,7 +25,7 @@ export default async function AdminUsersPage() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "user_id, username, display_name, avatar_url, is_premium, is_banned, ban_reason, premium_granted_by, premium_granted_at, banned_at, banned_by, created_at, home_state, home_location"
+      "user_id, username, display_name, avatar_url, is_premium, is_banned, ban_reason, premium_granted_by, premium_granted_at, banned_at, banned_by, created_at, home_state, home_location, last_login_at, last_login_country, last_login_region, last_login_city"
     )
     .order("created_at", { ascending: false })
     .limit(500);
