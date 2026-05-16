@@ -110,6 +110,7 @@ export default async function FlyDetail({ params }: Props) {
         }}
       />
 
+      {/* ── HERO BAND — image left + title/meta right on desktop, stacks on mobile ── */}
       <div className="border-b border-[#21262D] bg-[#161B22]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-3">
           <Breadcrumbs
@@ -120,90 +121,127 @@ export default async function FlyDetail({ params }: Props) {
             ]}
           />
         </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {pendingBanner && (
             <div className="mb-4 rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-400">
               {pendingBanner}
             </div>
           )}
-          <div className="flex items-start gap-4 flex-wrap">
-            {fly.hero_image_url && (
-              <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-[#0D1117]">
-                <Image src={fly.hero_image_url} alt={fly.name} fill className="object-cover" sizes="96px" />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[#0BA5C7] mb-1">
-                {fly.category ?? "Fly Pattern"}
-              </p>
-              <h1 className="font-heading text-3xl text-[#F0F6FC] tracking-tight leading-tight">
-                {fly.name}
-              </h1>
-              {fly.description && (
-                <p className="mt-2 text-sm text-[#A8B2BD] max-w-2xl">{fly.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[360px_1fr] gap-6 lg:gap-8 items-start">
+            {/* Hero image — bigger, square, prominent */}
+            <div className="relative aspect-square w-full max-w-[280px] sm:max-w-none rounded-2xl overflow-hidden bg-gradient-to-br from-[#21262D] to-[#0D1117] shadow-lg shadow-black/20">
+              {fly.hero_image_url ? (
+                <Image
+                  src={fly.hero_image_url}
+                  alt={fly.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 280px, 360px"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-heading text-5xl text-[#E8923A]/30">
+                    {fly.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                  </span>
+                </div>
               )}
-              <div className="mt-3">
+            </div>
+
+            {/* Title + meta column */}
+            <div className="min-w-0 flex flex-col gap-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[#0BA5C7] mb-1.5">
+                    {fly.category ?? "Fly Pattern"}
+                  </p>
+                  <h1 className="font-heading text-4xl sm:text-5xl text-[#F0F6FC] tracking-tight leading-[1.05]">
+                    {fly.name}
+                  </h1>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <FlyFavoriteButton canonicalFlyId={fly.id} />
+                  {viewerIsAdmin && (
+                    <Link
+                      href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                      aria-label="Edit canonical fly"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                      Edit
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {fly.description && (
+                <p className="text-[15px] text-[#A8B2BD] leading-relaxed max-w-2xl">{fly.description}</p>
+              )}
+
+              <div className="mt-1">
                 <OptionEnvelopeChips envelope={fly.option_envelope ?? {}} />
               </div>
-            </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <FlyFavoriteButton canonicalFlyId={fly.id} />
-              {viewerIsAdmin && (
-                <Link
-                  href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                  aria-label="Edit canonical fly"
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                  Edit
-                </Link>
+
+              {fly.origin_credit && (
+                <p className="text-[12px] text-[#6E7681] mt-1">
+                  Originated by <span className="text-[#A8B2BD]">{fly.origin_credit}</span>
+                </p>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <YourStockSection
-          fly={fly}
-          isLoggedIn={isLoggedIn}
-          versions={versions}
-          boxes={boxes.map((b) => ({ id: b.id, name: b.name, tier: b.tier }))}
-          loginRedirectPath={`/flies/${fly.slug}`}
-        />
+      {/* ── BODY — Recipe (primary, left) + Your Stock (sidebar, right) on desktop ── */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 lg:gap-10">
+          {/* Left column — Recipe + editorial */}
+          <div className="min-w-0">
+            <Recipe
+              materials={fly.materials_list ?? []}
+              editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}` : null}
+            />
 
-        <Recipe
-          materials={fly.materials_list ?? []}
-          editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}` : null}
-        />
+            {(fly.history || fly.tying_overview || fly.fishing_tips) && (
+              <section className="mt-10 pt-8 border-t border-[#21262D] space-y-8">
+                {fly.history && (
+                  <div>
+                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">History</h3>
+                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.history}</p>
+                  </div>
+                )}
+                {fly.tying_overview && (
+                  <div>
+                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Tying overview</h3>
+                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.tying_overview}</p>
+                  </div>
+                )}
+                {fly.fishing_tips && (
+                  <div>
+                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Fishing tips</h3>
+                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.fishing_tips}</p>
+                  </div>
+                )}
+                <div className="pt-4 border-t border-[#21262D]">
+                  <Link href="/flies" className="text-[#0BA5C7] hover:text-[#E8923A] text-sm transition-colors">
+                    ← Browse all flies
+                  </Link>
+                </div>
+              </section>
+            )}
+          </div>
 
-        {(fly.history || fly.tying_overview || fly.fishing_tips) && (
-          <section className="mx-auto max-w-3xl py-12 space-y-8 border-t border-[#21262D] mt-6">
-            {fly.history && (
-              <div>
-                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">History</h3>
-                <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.history}</p>
-              </div>
-            )}
-            {fly.tying_overview && (
-              <div>
-                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Tying overview</h3>
-                <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.tying_overview}</p>
-              </div>
-            )}
-            {fly.fishing_tips && (
-              <div>
-                <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Fishing tips</h3>
-                <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.fishing_tips}</p>
-              </div>
-            )}
-            <div className="pt-4 border-t border-[#21262D]">
-              <Link href="/flies" className="text-[#0BA5C7] hover:text-[#E8923A] text-sm transition-colors">
-                ← Browse all flies
-              </Link>
-            </div>
-          </section>
-        )}
+          {/* Right column — Your Stock (sticky on desktop) */}
+          <aside className="lg:sticky lg:top-20 lg:self-start">
+            <YourStockSection
+              fly={fly}
+              isLoggedIn={isLoggedIn}
+              versions={versions}
+              boxes={boxes.map((b) => ({ id: b.id, name: b.name, tier: b.tier }))}
+              loginRedirectPath={`/flies/${fly.slug}`}
+            />
+          </aside>
+        </div>
       </div>
     </main>
   );

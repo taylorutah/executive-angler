@@ -59,122 +59,77 @@ function formatDate(d: string): string {
   return new Date(d + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-/* ─── Stats Card (matches iOS HomeStatsCard exactly) ─── */
+/* ─── Hero Stats — lead number + supporting strip + context bar ─── */
 function StatsCard({ es }: { es: DashboardProps["enhancedStats"] }) {
   return (
-    <div className="rounded-xl p-px bg-gradient-to-br from-[#E8923A]/40 via-[#E8923A]/15 to-[#0BA5C7]/30 shadow-lg shadow-[#E8923A]/5">
-    <div className="rounded-[11px] overflow-hidden bg-[#161B22] ea-stats-card">
-
-      {/* Hero row — Sessions · Total Fish · Biggest */}
-      <div className="px-4 pt-2 pb-0">
-        <span className="text-[8px] font-bold text-[#6E7681] tracking-[0.15em] uppercase">All Time</span>
-      </div>
-      <div className="grid grid-cols-3 divide-x divide-[#21262D]">
-        <HeroStat icon={<Calendar className="h-3.5 w-3.5 text-[#E8923A]/60" />} value={String(es.totalSessions)} label="SESSIONS" />
-        <HeroStat icon={<Fish className="h-3.5 w-3.5 text-[#E8923A]/60" />} value={String(es.totalFish)} label="TOTAL FISH" />
-        <div className="flex flex-col items-center justify-center py-4">
-          <div className="flex items-baseline gap-1">
-            <Ruler className="h-3.5 w-3.5 text-[#E8923A]/60 self-center" />
-            <span className="font-mono text-xl sm:text-3xl font-semibold text-[#F0F6FC] ml-1">
-              {es.biggestFish > 0 ? es.biggestFish : "—"}
-            </span>
-            {es.biggestFish > 0 && (
-              <span className="font-mono text-xs sm:text-base text-[#A8B2BD]">in</span>
+    <div className="rounded-2xl p-px bg-gradient-to-br from-[#E8923A]/40 via-[#E8923A]/10 to-[#0BA5C7]/25 shadow-lg shadow-[#E8923A]/5">
+      <div className="rounded-[15px] overflow-hidden bg-[#161B22]">
+        {/* Lead — one big number that carries the story */}
+        <div className="px-6 sm:px-8 pt-7 pb-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold text-[#6E7681] tracking-[0.18em] uppercase mb-1">All-Time</p>
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-[64px] sm:text-[80px] leading-none font-bold text-[#F0F6FC] tabular-nums tracking-tight">
+                  {es.totalFish}
+                </span>
+                <span className="font-mono text-xl text-[#A8B2BD] mb-1">fish</span>
+              </div>
+              <p className="text-sm text-[#A8B2BD] mt-2">
+                across <span className="text-[#F0F6FC] font-medium">{es.totalSessions}</span> sessions
+                {es.monthSessions > 0 && (
+                  <>
+                    {" · "}
+                    <span className="text-[#E8923A] font-medium">
+                      {es.monthFish} this month
+                    </span>
+                  </>
+                )}
+              </p>
+            </div>
+            {es.weeklyStreak > 0 && (
+              <div className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-orange-400/10 border border-orange-400/30 px-2.5 py-1">
+                <Flame className="h-3.5 w-3.5 text-orange-400" />
+                <span className="font-mono text-sm font-bold text-orange-400">{es.weeklyStreak}</span>
+                <span className="text-[10px] font-bold tracking-wider text-orange-300/80">WK STREAK</span>
+              </div>
             )}
           </div>
-          <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">BIGGEST</span>
         </div>
+
+        {/* Supporting strip — 4 secondary numbers, not competing with the hero */}
+        <div className="grid grid-cols-4 divide-x divide-[#21262D] border-t border-[#21262D]">
+          <SupportStat icon={<Ruler className="h-3 w-3" />} value={es.biggestFish > 0 ? `${es.biggestFish}"` : "—"} label="Biggest" />
+          <SupportStat icon={<BarChart3 className="h-3 w-3" />} value={String(es.avgFishPerSession)} label="Avg / session" />
+          <SupportStat icon={<Leaf className="h-3 w-3" />} value={String(es.speciesCount)} label="Species" />
+          <SupportStat icon={<Calendar className="h-3 w-3" />} value={String(es.monthSessions)} label="This month" />
+        </div>
+
+        {/* Context bar — home water */}
+        {es.favoriteRiver && (
+          <div className="flex items-center justify-between px-5 sm:px-8 py-3 border-t border-[#21262D] bg-[#0D1117]/40">
+            <div className="flex items-center gap-2 text-[#A8B2BD]">
+              <MapPin className="h-3.5 w-3.5 text-[#E8923A]/70" />
+              <span className="text-[11px] font-bold tracking-[0.12em] uppercase">Home Water</span>
+            </div>
+            <span className="font-mono text-sm font-semibold text-[#F0F6FC] truncate max-w-[260px]">{es.favoriteRiver}</span>
+          </div>
+        )}
       </div>
-
-      <Divider />
-
-      {/* Secondary row — Avg/Session · Species · Wk Streak */}
-      <div className="grid grid-cols-3 divide-x divide-[#21262D]">
-        <SecondaryStat icon={<BarChart3 className="h-3 w-3 text-[#E8923A]/50" />} value={String(es.avgFishPerSession)} label="AVG / SESSION" />
-        <SecondaryStat icon={<Leaf className="h-3 w-3 text-[#E8923A]/50" />} value={String(es.speciesCount)} label="SPECIES" />
-        <div className="flex flex-col items-center justify-center py-3">
-          <div className="flex items-center gap-1">
-            <Flame className={`h-3 w-3 ${es.weeklyStreak > 0 ? "text-orange-400" : "text-[#E8923A]/50"}`} />
-            <span className="font-mono text-xl font-semibold text-[#F0F6FC]">{es.weeklyStreak}</span>
-          </div>
-          <div className="flex items-center gap-0.5">
-            <span className="text-[8px] font-bold text-[#A8B2BD] tracking-[0.08em] mt-0.5">WK STREAK</span>
-            <HelpHint label="How weekly streak works">
-              <p className="text-[#F0F6FC] font-semibold">Weeks in a row with at least one logged session.</p>
-              <p>Calendar weeks (Mon–Sun). Miss a week and the streak resets.</p>
-              <p className="text-[#6E7681] text-xs">The flame turns orange once you&apos;re on a streak of one or more.</p>
-            </HelpHint>
-          </div>
-        </div>
-      </div>
-
-      <Divider />
-
-      {/* Bottom bar — This Month + Home Water side by side on desktop, stacked on mobile */}
-      <div className="lg:grid lg:grid-cols-2 lg:divide-x lg:divide-[#21262D]">
-        {/* This Month */}
-        <div className="flex items-center justify-between px-5 py-3">
-          <div className="flex items-center gap-2">
-            <Flame className="h-3 w-3 text-[#E8923A]" />
-            <span className="text-[10px] font-bold text-[#A8B2BD] tracking-[0.1em]">THIS MONTH</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <MonthPill value={es.monthSessions} label="sessions" />
-            <MonthPill value={es.monthFish} label="fish" />
-          </div>
-        </div>
-
-        <div className="block lg:hidden"><Divider /></div>
-
-        {/* Home Water */}
-        <div className="flex items-center justify-between px-5 py-3">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-3 w-3 text-[#E8923A]/60" />
-            <span className="text-[10px] font-bold text-[#A8B2BD] tracking-[0.08em]">HOME WATER</span>
-          </div>
-          <span className="font-mono text-sm font-semibold text-[#F0F6FC] truncate max-w-[200px]">{es.favoriteRiver}</span>
-        </div>
-      </div>
-    </div>
     </div>
   );
 }
 
-function HeroStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+function SupportStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-4">
-      <div className="flex items-center gap-1.5">
-        {icon}
-        <span className="font-mono text-xl sm:text-3xl font-semibold text-[#F0F6FC]">{value}</span>
+    <div className="flex flex-col items-center justify-center py-3 px-2 gap-0.5">
+      <div className="flex items-baseline gap-1.5">
+        <span className="text-[#E8923A]/50">{icon}</span>
+        <span className="font-mono text-lg sm:text-xl font-semibold text-[#F0F6FC] tabular-nums">{value}</span>
       </div>
-      <span className="text-[9px] font-bold text-[#A8B2BD] tracking-[0.1em] mt-1">{label}</span>
+      <span className="text-[10px] text-[#6E7681] tracking-wide">{label}</span>
     </div>
   );
-}
-
-function SecondaryStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-3">
-      <div className="flex items-center gap-1">
-        {icon}
-        <span className="font-mono text-xl font-semibold text-[#F0F6FC]">{value}</span>
-      </div>
-      <span className="text-[8px] font-bold text-[#A8B2BD] tracking-[0.08em] mt-0.5">{label}</span>
-    </div>
-  );
-}
-
-function MonthPill({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <span className="font-mono text-sm font-semibold text-[#F0F6FC]">{value}</span>
-      <span className="text-[10px] text-[#A8B2BD]">{label}</span>
-    </div>
-  );
-}
-
-function Divider() {
-  return <div className="h-px bg-[#21262D] mx-4" />;
 }
 
 /* ─── Main Component ─── */
@@ -286,109 +241,161 @@ export default function DashboardClient({
               </Link>
             )}
 
-            {/* Quick Actions Grid — single 3-col grid, ordered by daily use */}
+            {/* Bento Action Grid — featured Workbench + supporting tiles, with live data previews */}
             <section>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {/* Row 1 — daily drivers */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 auto-rows-[minmax(120px,auto)]">
+                {/* FEATURED — Workbench with live tie-next preview, spans 2 cols + 2 rows on desktop */}
                 <Link
-                  href="/my-flies?tab=workbench"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
+                  href="/flies?tab=workbench"
+                  className="group col-span-2 md:row-span-2 relative overflow-hidden p-5 bg-gradient-to-br from-[#1a1208] via-[#161B22] to-[#161B22] rounded-2xl border border-[#E8923A]/30 hover:border-[#E8923A] transition-all flex flex-col"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <Wrench className="h-5 w-5 text-[#E8923A]" />
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-[#E8923A]/15">
+                        <Wrench className="h-5 w-5 text-[#E8923A]" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-[#F0F6FC]">Workbench</h3>
+                        <p className="text-[11px] text-[#A8B2BD]">
+                          {tieNextItems.length > 0
+                            ? `${tieNextItems.length} fl${tieNextItems.length === 1 ? "y" : "ies"} on the queue`
+                            : "Pick a pattern · check inventory"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] group-hover:translate-x-0.5 transition-all" />
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Workbench</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Inventory &amp; matches</p>
+
+                  {/* Live tie-next preview rows */}
+                  <div className="flex-1 mt-1 space-y-2">
+                    {tieNextItems.slice(0, 3).map((item) => (
+                      <div key={item.key} className="flex items-center gap-2.5 rounded-lg bg-[#0D1117]/60 border border-[#21262D] px-2.5 py-2">
+                        <div className="h-8 w-8 rounded-md bg-[#21262D] overflow-hidden shrink-0">
+                          {item.imageUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={item.imageUrl} alt="" className="h-full w-full object-cover" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[12px] font-medium text-[#F0F6FC] truncate">{item.name}</p>
+                          <p className="text-[10px] text-[#6E7681] truncate">{item.size || item.category || "tie next"}</p>
+                        </div>
+                        {item.status === "at_vise" && (
+                          <span className="text-[9px] font-bold tracking-wider text-[#0BA5C7] bg-[#0BA5C7]/10 px-1.5 py-0.5 rounded shrink-0">AT VISE</span>
+                        )}
+                      </div>
+                    ))}
+                    {tieNextItems.length === 0 && (
+                      <div className="rounded-lg border border-dashed border-[#21262D] px-3 py-4 text-center">
+                        <p className="text-[11px] text-[#6E7681]">No flies queued. Open the Workbench to plan your next tie.</p>
+                      </div>
+                    )}
+                  </div>
                 </Link>
 
-                <Link
-                  href="/journal/flies"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#2EA44F] transition-all"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <Feather className="h-5 w-5 text-[#2EA44F]" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">{flyCount > 0 ? `${flyCount} patterns` : "Your patterns"}</p>
-                </Link>
-
-                <Link
-                  href="/account/gear"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A8B2BD] transition-all"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <Package className="h-5 w-5 text-[#A8B2BD]" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A8B2BD] transition-colors">Gear Locker</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Rods, reels &amp; more</p>
-                </Link>
-
-                {/* Row 2 — intelligence */}
+                {/* Insights — slim, compact */}
                 <Link
                   href="/dashboard/insights"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#A855F7] transition-all"
+                  className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#A855F7] transition-all flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <Lightbulb className="h-5 w-5 text-[#A855F7]" />
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-[#A855F7]/15">
+                      <Lightbulb className="h-4 w-4 text-[#A855F7]" />
+                    </div>
                     {!isPremium && (
                       <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                     )}
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">Insights</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Patterns in your data</p>
+                  <div className="mt-3">
+                    <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#A855F7] transition-colors">Insights</h3>
+                    <p className="text-[11px] text-[#A8B2BD] mt-0.5">Patterns in your data</p>
+                  </div>
                 </Link>
 
+                {/* Fly Box */}
+                <Link
+                  href="/flies"
+                  className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#2EA44F] transition-all flex flex-col justify-between"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-[#2EA44F]/15">
+                      <Feather className="h-4 w-4 text-[#2EA44F]" />
+                    </div>
+                    {flyCount > 0 && (
+                      <span className="font-mono text-sm font-bold text-[#F0F6FC] tabular-nums">{flyCount}</span>
+                    )}
+                  </div>
+                  <div className="mt-3">
+                    <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#2EA44F] transition-colors">Fly Box</h3>
+                    <p className="text-[11px] text-[#A8B2BD] mt-0.5">{flyCount > 0 ? "Saved patterns" : "Start your collection"}</p>
+                  </div>
+                </Link>
+
+                {/* Hatch Reports */}
                 <Link
                   href="/dashboard/hatch-reports"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#14B8A6] transition-all"
+                  className="group p-4 bg-[#161B22] rounded-2xl border border-[#21262D] hover:border-[#14B8A6] transition-all flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <Leaf className="h-5 w-5 text-[#14B8A6]" />
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-[#14B8A6]/15">
+                      <Leaf className="h-4 w-4 text-[#14B8A6]" />
+                    </div>
                     {!isPremium && (
                       <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
                     )}
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#14B8A6] transition-colors">Hatch Reports</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">What&apos;s hatching</p>
-                </Link>
-
-                <Link
-                  href="/dashboard/analytics"
-                  className="group p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-all"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <BarChart3 className="h-5 w-5 text-[#E8923A]" />
-                    {!isPremium && (
-                      <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
-                    )}
+                  <div className="mt-3">
+                    <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#14B8A6] transition-colors">Hatch Reports</h3>
+                    <p className="text-[11px] text-[#A8B2BD] mt-0.5">What&apos;s hatching</p>
                   </div>
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">Analytics</h3>
-                  <p className="text-[11px] text-[#A8B2BD] mt-0.5">Trends &amp; stats</p>
                 </Link>
               </div>
 
               {/* Row 3 — secondary utilities (smaller, muted) */}
-              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              {/* Secondary utilities — smaller, denser row */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-3">
+                <Link
+                  href="/account/gear"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#A8B2BD] transition-all"
+                >
+                  <Package className="h-4 w-4 text-[#A8B2BD] shrink-0" />
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Gear Locker</span>
+                  {gearCount > 0 && (
+                    <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">{gearCount}</span>
+                  )}
+                </Link>
+
+                <Link
+                  href="/dashboard/analytics"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#E8923A]/60 transition-all"
+                >
+                  <BarChart3 className="h-4 w-4 text-[#E8923A] shrink-0" />
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Analytics</span>
+                  {!isPremium && (
+                    <span className="ml-auto text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
+                  )}
+                </Link>
+
                 <Link
                   href="/dashboard/export"
-                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#0BA5C7]/60 transition-all"
                 >
                   <BookOpen className="h-4 w-4 text-[#0BA5C7] shrink-0" />
-                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Export data</span>
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Export</span>
                 </Link>
 
                 <Link
                   href="/journal/import"
-                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#2EA44F]/60 transition-all"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#2EA44F]/60 transition-all"
                 >
                   <Upload className="h-4 w-4 text-[#2EA44F] shrink-0" />
-                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Import data</span>
+                  <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">Import</span>
                 </Link>
 
                 {AWARDS_VISIBLE && (
                 <Link
                   href="/journal/stats"
-                  className="group flex-1 flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#FFD700]/60 transition-all"
+                  className="group flex items-center gap-2 p-2.5 bg-[#0D1117] rounded-lg border border-[#21262D]/60 hover:border-[#FFD700]/60 transition-all"
                 >
                   <Trophy className="h-4 w-4 text-[#FFD700] shrink-0" />
                   <span className="text-xs font-medium text-[#A8B2BD] group-hover:text-[#F0F6FC] transition-colors truncate">
@@ -397,9 +404,6 @@ export default function DashboardClient({
                   <span className="ml-auto text-[10px] text-[#6E7681] shrink-0">
                     {riverStats.reduce((sum, rs) => sum + rs.awards.length, 0)}
                   </span>
-                  {!isPremium && (
-                    <span className="text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded shrink-0">PRO</span>
-                  )}
                 </Link>
                 )}
               </div>
