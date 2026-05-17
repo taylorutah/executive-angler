@@ -23,6 +23,7 @@ import WorkbenchClient from "@/app/journal/flies/workbench/WorkbenchClient";
 import HelpHint from "@/components/ui/HelpHint";
 import PatternsHub from "@/components/flies-v3/PatternsHub";
 import BoxesManager from "@/components/flies-v2/BoxesManager";
+import type { TierDefinition } from "@/lib/flies/tier-definitions";
 import SharedPanel from "./tabs/SharedPanel";
 
 type Tab = "boxes" | "patterns" | "workbench" | "tie-next" | "shared";
@@ -45,7 +46,7 @@ interface Props {
   canonicalNames: string[];
   viewerUsername: string | null;
   viewerIsAdmin?: boolean;
-  tierDescriptions?: Record<string, string>;
+  tierDefinitions: TierDefinition[];
 }
 
 export default function FliesHubClient({
@@ -66,7 +67,7 @@ export default function FliesHubClient({
   canonicalNames,
   viewerUsername,
   viewerIsAdmin = false,
-  tierDescriptions = {},
+  tierDefinitions,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -173,7 +174,7 @@ export default function FliesHubClient({
         </div>
 
         {tab === "boxes" && (
-          <BoxesManager initialBoxes={boxes} initialStats={boxStats} initialTierDescriptions={tierDescriptions} />
+          <BoxesManager initialBoxes={boxes} initialStats={boxStats} initialTierDefinitions={tierDefinitions} />
         )}
         {tab === "patterns" && (
           <PatternsHub rows={patternsHubRows} />

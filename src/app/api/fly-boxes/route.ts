@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import type { FlyBoxTier, FlyBoxV2 } from "@/lib/db/fly-v2";
+import type { FlyBoxV2 } from "@/lib/db/fly-v2";
+import { TIER_KEY_PATTERN } from "@/lib/flies/tier-definitions";
 
-const ALLOWED_TIERS: readonly FlyBoxTier[] = ["kill", "support", "archive", "custom"];
-
-function isTier(v: unknown): v is FlyBoxTier {
-  return typeof v === "string" && (ALLOWED_TIERS as readonly string[]).includes(v);
+function isTier(v: unknown): v is string {
+  return typeof v === "string" && TIER_KEY_PATTERN.test(v);
 }
 
 function coerceCapacity(v: unknown): number | null {
@@ -52,7 +51,7 @@ export async function POST(request: Request) {
     if (!name) {
       return NextResponse.json({ error: "Name is required." }, { status: 400 });
     }
-    const tier: FlyBoxTier = isTier(body.tier) ? body.tier : "custom";
+    const tier: string = isTier(body.tier) ? body.tier : "custom";
     const description = typeof body.description === "string" && body.description.trim()
       ? body.description.trim()
       : null;

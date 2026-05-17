@@ -18,6 +18,7 @@ import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { FlyPattern } from "@/types/fishing-log";
 import type { VariantRow } from "@/types/fly-v2";
 import FliesHubClient from "./FliesHubClient";
+import { resolveTierDefinitions } from "@/lib/flies/tier-definitions";
 
 export const metadata: Metadata = {
   title: "Flies",
@@ -42,12 +43,14 @@ export default async function FliesHubPage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("ties_own_flies, display_name, username, tier_descriptions")
+    .select("ties_own_flies, display_name, username, tier_descriptions, tier_definitions")
     .eq("user_id", user.id)
     .maybeSingle();
   const tiesOwnFlies = profile?.ties_own_flies !== false;
-  const tierDescriptions =
-    (profile?.tier_descriptions as Record<string, string> | null) ?? {};
+  const tierDefinitions = resolveTierDefinitions(
+    profile?.tier_definitions,
+    profile?.tier_descriptions as Record<string, string> | null,
+  );
 
   const { tab } = await searchParams;
 
@@ -118,7 +121,7 @@ export default async function FliesHubPage({
       canonicalNames={canonicalNames}
       viewerUsername={(profile?.username as string | undefined) ?? null}
       viewerIsAdmin={isAdmin(user.email)}
-      tierDescriptions={tierDescriptions}
+      tierDefinitions={tierDefinitions}
     />
   );
 }
