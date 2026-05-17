@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   X, Save, Loader2, CheckCircle, Pencil, Image as ImageIcon,
 } from "lucide-react";
@@ -35,7 +35,18 @@ export default function HeroImageEditor({
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Clear stale errors/success when the modal is re-opened so a failed save
+  // from a previous session doesn't appear to be a fresh error on next open.
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setSuccess(false);
+    }
+  }, [isOpen]);
+
   function applyPatch(patch: ImageFieldPatch) {
+    // Any edit clears any stale error from a prior failed save attempt.
+    if (error) setError(null);
     if (patch.url !== undefined) setImageUrl(patch.url);
     if (patch.alt !== undefined) setAltText(patch.alt);
     if (patch.credit !== undefined) setCredit(patch.credit);
