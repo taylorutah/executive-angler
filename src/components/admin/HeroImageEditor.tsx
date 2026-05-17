@@ -55,11 +55,11 @@ export default function HeroImageEditor({
     setSaving(true);
     setError(null);
 
+    let stage = "init";
     try {
-      // Empty-string credit URL fails browser URL validation in some flows —
-      // normalize to null so the server stores NULL rather than "".
       const cleanCreditUrl = creditUrl.trim();
       if (cleanCreditUrl) {
+        stage = "validate credit URL";
         try {
           new URL(cleanCreditUrl);
         } catch {
@@ -69,24 +69,38 @@ export default function HeroImageEditor({
         }
       }
 
+      stage = "validate image URL";
+      try {
+        new URL(imageUrl);
+      } catch {
+        throw new Error(
+          `Stored image URL isn't a valid URL: "${imageUrl}". Re-upload the image or paste a fresh URL.`,
+        );
+      }
+
+      stage = "serialize body";
+      const body = JSON.stringify({
+        entity_type: entityType,
+        entity_id: entityId,
+        hero_image_url: imageUrl,
+        hero_image_alt: altText.trim(),
+        hero_image_credit: credit.trim() || null,
+        hero_image_credit_url: cleanCreditUrl || null,
+      });
+
+      stage = "fetch /api/admin/hero-image";
       const res = await fetch("/api/admin/hero-image", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          entity_type: entityType,
-          entity_id: entityId,
-          hero_image_url: imageUrl,
-          hero_image_alt: altText.trim(),
-          hero_image_credit: credit.trim() || null,
-          hero_image_credit_url: cleanCreditUrl || null,
-        }),
+        body,
       });
 
+      stage = `parse response (HTTP ${res.status})`;
       let result: { error?: string; success?: boolean } = {};
       try {
         result = await res.json();
       } catch {
-        // Non-JSON response (e.g., HTML error page) — fall through with res.ok check
+        // Non-JSON response — fall through with res.ok check
       }
       if (!res.ok) {
         throw new Error(
@@ -101,8 +115,11 @@ export default function HeroImageEditor({
         window.location.reload();
       }, 1500);
     } catch (e) {
-      console.error("[HeroImageEditor] save failed:", e);
-      setError(e instanceof Error ? e.message : "Save failed");
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error(`[HeroImageEditor] save failed at "${stage}":`, e, {
+        entityType, entityId, imageUrl, altText, credit, creditUrl,
+      });
+      setError(`${msg} (stage: ${stage})`);
     }
     setSaving(false);
   }
