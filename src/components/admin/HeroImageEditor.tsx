@@ -56,6 +56,19 @@ export default function HeroImageEditor({
     setError(null);
 
     try {
+      // Empty-string credit URL fails browser URL validation in some flows —
+      // normalize to null so the server stores NULL rather than "".
+      const cleanCreditUrl = creditUrl.trim();
+      if (cleanCreditUrl) {
+        try {
+          new URL(cleanCreditUrl);
+        } catch {
+          throw new Error(
+            `Photo credit URL isn't a valid URL: "${cleanCreditUrl}". Include https:// or leave blank.`,
+          );
+        }
+      }
+
       const res = await fetch("/api/admin/hero-image", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -65,12 +78,21 @@ export default function HeroImageEditor({
           hero_image_url: imageUrl,
           hero_image_alt: altText.trim(),
           hero_image_credit: credit.trim() || null,
-          hero_image_credit_url: creditUrl.trim() || null,
+          hero_image_credit_url: cleanCreditUrl || null,
         }),
       });
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "Save failed");
+      let result: { error?: string; success?: boolean } = {};
+      try {
+        result = await res.json();
+      } catch {
+        // Non-JSON response (e.g., HTML error page) — fall through with res.ok check
+      }
+      if (!res.ok) {
+        throw new Error(
+          result.error || `Save failed (HTTP ${res.status})`,
+        );
+      }
 
       setSuccess(true);
       setTimeout(() => {
@@ -79,6 +101,7 @@ export default function HeroImageEditor({
         window.location.reload();
       }, 1500);
     } catch (e) {
+      console.error("[HeroImageEditor] save failed:", e);
       setError(e instanceof Error ? e.message : "Save failed");
     }
     setSaving(false);

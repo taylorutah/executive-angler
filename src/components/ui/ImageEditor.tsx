@@ -148,7 +148,7 @@ export default function ImageEditor({
       aria-modal="true"
       aria-label={title}
     >
-      <div className="w-full max-w-2xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[#161B22] rounded-2xl overflow-hidden border border-[#21262D] shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[#161B22] rounded-2xl overflow-hidden border border-[#21262D] shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#21262D] flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
@@ -168,16 +168,13 @@ export default function ImageEditor({
           </button>
         </div>
 
-        {/* Crop canvas */}
+        {/* Crop canvas — sized to a generous viewing area, NOT the target crop
+            aspect. react-easy-crop overlays the crop frame at `aspect` on top
+            of the image, so a portrait source on a 21:9 hero crop still
+            renders the full image at usable size. */}
         <div
           className="relative w-full bg-black flex-shrink-0"
-          style={{
-            aspectRatio:
-              effectiveAspect && Number.isFinite(effectiveAspect) && effectiveAspect > 0
-                ? String(effectiveAspect)
-                : "1",
-            maxHeight: "min(70vh, 600px)",
-          }}
+          style={{ height: "min(65vh, 560px)" }}
         >
           <Cropper
             image={imageSrc}
