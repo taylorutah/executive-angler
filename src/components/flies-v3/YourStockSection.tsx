@@ -202,14 +202,29 @@ function VersionCard({
   const [busy, setBusy] = useState(false);
   const [boxesOpen, setBoxesOpen] = useState(false);
 
+  // Optimistic state — keeps the UI in sync with the click instantly,
+  // independent of router.refresh() round-trip latency (notably slow under
+  // Safari's stricter App Router cache behavior).
+  const [optimisticFavorite, setOptimisticFavorite] = useState(version.is_favorite);
+  const [optimisticTieNext, setOptimisticTieNext] = useState(version.is_tie_next);
+  const [optimisticTied, setOptimisticTied] = useState(version.tied_count);
+
+  // Reconcile optimistic state when fresh server props arrive.
+  useEffect(() => { setOptimisticFavorite(version.is_favorite); }, [version.is_favorite]);
+  useEffect(() => { setOptimisticTieNext(version.is_tie_next); }, [version.is_tie_next]);
+  useEffect(() => { setOptimisticTied(version.tied_count); }, [version.tied_count]);
+
   const summary = summarizeVersion(version);
-  const deficit = Math.max(0, version.target_count - version.tied_count - version.bought_count);
+  const deficit = Math.max(0, version.target_count - optimisticTied - version.bought_count);
 
   async function toggle(field: "is_favorite" | "is_tie_next") {
+    const prev = field === "is_favorite" ? optimisticFavorite : optimisticTieNext;
+    const newVal = !prev;
+    if (field === "is_favorite") setOptimisticFavorite(newVal);
+    else setOptimisticTieNext(newVal);
     setBusy(true);
     try {
-      const newVal = !version[field];
-      await fetch("/api/fishing/fly-configurations", {
+      const res = await fetch("/api/fishing/fly-configurations", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -218,24 +233,31 @@ function VersionCard({
           ...(field === "is_tie_next" ? { tie_next_status: newVal ? "wanted" : "none" } : {}),
         }),
       });
+      if (!res.ok) throw new Error("Failed");
       router.refresh();
+    } catch {
+      if (field === "is_favorite") setOptimisticFavorite(prev);
+      else setOptimisticTieNext(prev);
     } finally {
       setBusy(false);
     }
   }
 
   async function bumpTied(delta: number) {
+    const prev = optimisticTied;
+    const next = Math.max(0, prev + delta);
+    setOptimisticTied(next);
     setBusy(true);
     try {
-      await fetch("/api/fishing/fly-configurations", {
+      const res = await fetch("/api/fishing/fly-configurations", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: version.id,
-          tied_count: Math.max(0, version.tied_count + delta),
-        }),
+        body: JSON.stringify({ id: version.id, tied_count: next }),
       });
+      if (!res.ok) throw new Error("Failed");
       router.refresh();
+    } catch {
+      setOptimisticTied(prev);
     } finally {
       setBusy(false);
     }
@@ -251,6 +273,16 @@ function VersionCard({
       setBusy(false);
     }
   }
+
+  const favoriteTip = optimisticFavorite
+    ? `Remove ${summary} from your favorites`
+    : `Mark ${summary} as a favorite version`;
+  const tieNextTip = optimisticTieNext
+    ? `Remove ${summary} from your "Tie Next" list`
+    : `Add ${summary} to your "Tie Next" list (workbench queue)`;
+  const boxTip = version.in_boxes.length > 0
+    ? `Manage which fly boxes hold ${summary} (currently in ${version.in_boxes.length})`
+    : `Add ${summary} to a fly box`;
 
   return (
     <li className={`relative rounded-lg border p-4 transition-colors ${
@@ -276,7 +308,7 @@ function VersionCard({
             )}
             <div className="mt-2 flex items-center gap-3 text-xs">
               <span>
-                Tied <span className="font-semibold">{version.tied_count}</span> / Target{" "}
+                Tied <span className="font-semibold">{optimisticTied}</span> / Target{" "}
                 <span className="font-semibold">{version.target_count}</span>
               </span>
               {deficit > 0 && (
@@ -289,17 +321,19 @@ function VersionCard({
               type="button"
               disabled={busy}
               onClick={() => bumpTied(1)}
-              title="Tied one more"
+              title={`Tied one more — increase count for ${summary}`}
+              aria-label={`Tied one more of ${summary}`}
               className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
             >
               +
             </button>
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || optimisticTied === 0}
               onClick={() => bumpTied(-1)}
-              title="Used / lost one"
-              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+              title={`Lost or used one — decrease count for ${summary}`}
+              aria-label={`Used or lost one of ${summary}`}
+              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               −
             </button>
@@ -307,24 +341,28 @@ function VersionCard({
               type="button"
               disabled={busy}
               onClick={() => toggle("is_favorite")}
-              title="Favorite"
+              title={favoriteTip}
+              aria-label={favoriteTip}
+              aria-pressed={optimisticFavorite}
               className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
-                version.is_favorite
-                  ? "border-rose-500/40 bg-rose-500/10 text-rose-500"
-                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+                optimisticFavorite
+                  ? "border-rose-500 bg-rose-500 text-white shadow-sm"
+                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-rose-500 hover:border-rose-500/40"
               }`}
             >
-              <Heart className="h-3.5 w-3.5" fill={version.is_favorite ? "currentColor" : "none"} />
+              <Heart className="h-3.5 w-3.5" fill={optimisticFavorite ? "currentColor" : "none"} />
             </button>
             <button
               type="button"
               disabled={busy}
               onClick={() => toggle("is_tie_next")}
-              title="Tie next"
+              title={tieNextTip}
+              aria-label={tieNextTip}
+              aria-pressed={optimisticTieNext}
               className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
-                version.is_tie_next
-                  ? "border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A]"
-                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+                optimisticTieNext
+                  ? "border-[#E8923A] bg-[#E8923A] text-white shadow-sm"
+                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-[#E8923A] hover:border-[#E8923A]/40"
               }`}
             >
               <Wrench className="h-3.5 w-3.5" />
@@ -333,13 +371,16 @@ function VersionCard({
               <button
                 type="button"
                 onClick={() => setBoxesOpen((o) => !o)}
-                title="Manage which boxes this version is in"
+                title={boxTip}
+                aria-label={boxTip}
                 aria-haspopup="dialog"
                 aria-expanded={boxesOpen}
                 className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
-                  boxesOpen || version.in_boxes.length > 0
-                    ? "border-[#0BA5C7]/40 bg-[#0BA5C7]/10 text-[#0BA5C7]"
-                    : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+                  version.in_boxes.length > 0
+                    ? "border-[#0BA5C7] bg-[#0BA5C7] text-white shadow-sm"
+                    : boxesOpen
+                      ? "border-[#0BA5C7]/60 bg-[#0BA5C7]/15 text-[#0BA5C7]"
+                      : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-[#0BA5C7] hover:border-[#0BA5C7]/40"
                 }`}
               >
                 <BoxIcon className="h-3.5 w-3.5" />
@@ -356,7 +397,8 @@ function VersionCard({
             <button
               type="button"
               onClick={onEdit}
-              title="Edit"
+              title={`Edit ${summary} — change size, materials, counts, or notes`}
+              aria-label={`Edit ${summary}`}
               className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
             >
               <Pencil className="h-3.5 w-3.5" />
@@ -365,7 +407,8 @@ function VersionCard({
               type="button"
               disabled={busy}
               onClick={remove}
-              title="Delete version"
+              title={`Delete ${summary} from your stock — past catches stay intact`}
+              aria-label={`Delete ${summary}`}
               className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/40"
             >
               <Trash2 className="h-3.5 w-3.5" />
