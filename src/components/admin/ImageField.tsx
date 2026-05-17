@@ -38,7 +38,7 @@ export default function ImageField({
   showAlt = true,
   showCredit = true,
   submissionIdPrefix = "admin-image",
-  uploadEndpoint = "/api/submissions/upload",
+  uploadEndpoint = "/api/admin/upload-image",
   label,
 }: ImageFieldProps) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -71,10 +71,23 @@ export default function ImageField({
         `${submissionIdPrefix}-${Date.now()}`,
       );
       const res = await fetch(uploadEndpoint, { method: "POST", body: formData });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "Upload failed");
+      let result: { url?: string; error?: string } = {};
+      try {
+        result = await res.json();
+      } catch {
+        // Non-JSON response (404 HTML, etc.) — surface a clearer message
+        // than Safari's "JSON Parse error: …" / WebKit DOMException wording.
+      }
+      if (!res.ok) {
+        throw new Error(
+          result.error ||
+            `Upload failed (HTTP ${res.status}). Endpoint: ${uploadEndpoint}`,
+        );
+      }
+      if (!result.url) throw new Error("Upload succeeded but no URL returned");
       onChange({ url: result.url });
     } catch (e) {
+      console.error("[ImageField] upload failed:", e);
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
       setUploading(false);
