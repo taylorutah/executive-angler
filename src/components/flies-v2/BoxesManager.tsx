@@ -331,17 +331,18 @@ export default function BoxesManager({
                     </button>
                   </div>
                 ) : (
-                  <p className="group flex items-center gap-1.5 text-xs text-[#6E7681]">
-                    <span>{descriptionFor(tier)}</span>
-                    <button
-                      type="button"
-                      onClick={() => startEditTier(tier)}
-                      aria-label={`Edit ${TIER_LABELS[tier]} description`}
-                      className="rounded p-0.5 text-[#484F58] opacity-0 transition-opacity hover:text-[#E8923A] group-hover:opacity-100 focus:opacity-100"
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </button>
-                  </p>
+                  <button
+                    type="button"
+                    onClick={() => startEditTier(tier)}
+                    aria-label={`Edit ${TIER_LABELS[tier]} description`}
+                    title="Click to edit"
+                    className="group inline-flex items-center gap-1.5 rounded text-left text-xs text-[#6E7681] hover:text-[#F0F6FC]"
+                  >
+                    <span className="border-b border-dashed border-transparent group-hover:border-[#484F58]">
+                      {descriptionFor(tier)}
+                    </span>
+                    <Pencil className="h-3 w-3 text-[#484F58] group-hover:text-[#E8923A]" />
+                  </button>
                 )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
