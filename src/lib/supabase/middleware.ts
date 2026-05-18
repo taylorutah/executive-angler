@@ -23,26 +23,36 @@ async function captureLoginLocation(
 
     // Local/dev requests have no Vercel headers — skip the write but still
     // stamp the cookie so we don't retry on every request.
+    let wrote = false;
     if (country || region || city) {
-      await supabase
+      const { error } = await supabase
         .from("profiles")
-        .update({
-          last_login_at: new Date().toISOString(),
-          last_login_country: country,
-          last_login_region: region,
-          last_login_city: city,
-        })
-        .eq("user_id", userId);
+        .upsert(
+          {
+            user_id: userId,
+            last_login_at: new Date().toISOString(),
+            last_login_country: country,
+            last_login_region: region,
+            last_login_city: city,
+          },
+          { onConflict: "user_id" }
+        );
+      if (!error) wrote = true;
     }
 
-    const cookieOptions: CookieOptions = {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    };
-    response.cookies.set(LOGIN_STAMP_COOKIE, lastSignInAt, cookieOptions);
+    // Only stamp the cookie if we either successfully wrote location OR we're
+    // in an env without geo headers (local dev). Failed writes leave the cookie
+    // unset so the next request retries.
+    if (wrote || (!country && !region && !city)) {
+      const cookieOptions: CookieOptions = {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: true,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30,
+      };
+      response.cookies.set(LOGIN_STAMP_COOKIE, lastSignInAt, cookieOptions);
+    }
   } catch (err) {
     console.warn("[LOGIN LOCATION] capture failed:", err);
   }
