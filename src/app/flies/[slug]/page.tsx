@@ -22,7 +22,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
-import { Pencil } from "lucide-react";
+import { Pencil, Copy } from "lucide-react";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
@@ -161,6 +161,19 @@ export default async function FlyDetail({ params }: Props) {
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <FlyFavoriteButton canonicalFlyId={fly.id} />
+                  <Link
+                    href={
+                      isLoggedIn
+                        ? `/journal/flies/new?cloneFrom=${fly.id}`
+                        : `/login?redirect=${encodeURIComponent(`/journal/flies/new?cloneFrom=${fly.id}`)}`
+                    }
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#00B4D8]/20 transition-colors"
+                    aria-label="Clone this fly into a new pattern"
+                    title="Start a new fly pre-filled from this one"
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                    Clone
+                  </Link>
                   {viewerIsAdmin && (
                     <Link
                       href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}

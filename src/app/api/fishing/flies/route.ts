@@ -37,6 +37,63 @@ async function createClient() {
   );
 }
 
+/**
+ * Copy an existing Supabase Storage image into the user's fly-pattern-images
+ * namespace. Used by the Clone flow so the new fly gets its own image copy
+ * rather than referencing the source URL (which could be deleted later).
+ *
+ * SSRF guard: the source URL MUST be from our own Supabase project's public
+ * storage prefix. Anything else returns undefined and the fly saves imageless.
+ */
+async function copyClonedImage(
+  userId: string,
+  sourceUrl: string,
+): Promise<string | undefined> {
+  try {
+    const projectUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!projectUrl) return undefined;
+    const storagePrefix = `${projectUrl}/storage/v1/object/public/`;
+    if (!sourceUrl.startsWith(storagePrefix)) return undefined;
+
+    const rest = sourceUrl.slice(storagePrefix.length);
+    const slashIdx = rest.indexOf("/");
+    if (slashIdx <= 0) return undefined;
+    const sourceBucket = rest.slice(0, slashIdx);
+    const sourcePath = rest.slice(slashIdx + 1);
+    if (!sourceBucket || !sourcePath) return undefined;
+
+    const svc = getServiceClient();
+    const { data: blob, error: downloadError } = await svc.storage
+      .from(sourceBucket)
+      .download(sourcePath);
+    if (downloadError || !blob) {
+      console.error("[copyClonedImage] download failed:", downloadError);
+      return undefined;
+    }
+
+    const ext = sourcePath.split(".").pop() || "jpg";
+    const destPath = `${userId}/${crypto.randomUUID()}.${ext}`;
+    const arrayBuffer = await blob.arrayBuffer();
+    const { error: uploadError } = await svc.storage
+      .from("fly-pattern-images")
+      .upload(destPath, arrayBuffer, {
+        contentType: blob.type || "image/jpeg",
+        upsert: true,
+      });
+    if (uploadError) {
+      console.error("[copyClonedImage] upload failed:", uploadError);
+      return undefined;
+    }
+    const { data: { publicUrl } } = svc.storage
+      .from("fly-pattern-images")
+      .getPublicUrl(destPath);
+    return publicUrl;
+  } catch (e) {
+    console.error("[copyClonedImage] unexpected error:", e);
+    return undefined;
+  }
+}
+
 export async function GET(req: NextRequest) {
   try {
     const supabase = await createClient();
@@ -188,6 +245,15 @@ export async function POST(req: NextRequest) {
           .from("fly-pattern-images")
           .getPublicUrl(path);
         imageUrl = publicUrl;
+      }
+
+      // Clone flow: if no fresh file was uploaded but the client is asking us
+      // to copy an image from a known Supabase Storage URL, do that now.
+      // Strip the field so it can't leak into a column downstream.
+      const cloneFromUrl = body.clone_image_from_url;
+      delete body.clone_image_from_url;
+      if (!imageUrl && typeof cloneFromUrl === "string" && cloneFromUrl.length > 0) {
+        imageUrl = await copyClonedImage(user.id, cloneFromUrl);
       }
     } else {
       body = await req.json();
