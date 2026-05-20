@@ -1,49 +1,59 @@
 /**
- * Batch-import canonical fly patterns from a JSON file.
+ * Batch-import flies from a JSON file into the post-2026-05-15 `flies` table.
  *
  * Usage:
  *   SEED_ADMIN_USER_ID=<uuid> tsx scripts/seed-flies-batch.ts <input.json> [--force-name]
  *
  * Behavior:
- *   - Idempotent: skips rows whose slug already exists in canonical_flies
+ *   - Idempotent: skips rows whose slug already exists in `flies`
  *   - Name-similarity guard: skips rows within Levenshtein distance 2 of an
- *     existing canonical name. Override with --force-name (use sparingly).
+ *     existing fly name. Override with --force-name (use sparingly).
  *   - origin_credit is REQUIRED per row (use "Classic pattern, originator
- *     unknown" if truly unknown). Per the canonical-approval policy, every
- *     canonical needs provenance.
+ *     unknown" if truly unknown). Every canonical fly needs provenance.
+ *   - Inserts as status='approved' with admin user as both submitter +
+ *     approver, so the row is immediately visible via the `canonical_flies`
+ *     view and on /flies/[slug].
  *   - Defaults missing hero_image_url to /images/fly-icons/<category>.svg
  *     (reuses existing per-category icon SVGs)
- *   - Dual-writes to canonical_flies AND fly_patterns_v2 + fly_variants so
- *     the new pattern appears on the modern detail page (`/flies/[slug]`).
- *     The legacy backfill (20260508_phase2_canonical_backfill.sql) is one-shot;
- *     there is no trigger keeping the two tables in sync.
  *   - Writes a per-run log to scripts/logs/seed-flies-batch-<timestamp>.log
  *
- * Input shape (one object per pattern):
+ * Input shape (one object per fly):
  *   {
  *     "name": "Purple Haze",
- *     "category": "dry",                                  // required: dry|nymph|streamer|emerger|wet|terrestrial|egg|midge
- *     "origin_credit": "Andy Carlson",                    // required
+ *     "category": "dry",                          // required: dry|nymph|streamer|emerger|wet|terrestrial|egg|midge|other
+ *     "origin_credit": "Andy Carlson",            // required
  *     "description": "Parachute Adams variant with a purple body.",
  *     "history": "Originated on the Big Hole...",
  *     "tying_overview": "...",
  *     "fishing_tips": "...",
+ *     "recipe_notes": "...",
  *     "imitates": ["mayfly", "BWO"],
- *     "hook_style": "dry fly, standard",
- *     "default_size": "16",
- *     "base_materials": [
- *       { "slot": "hook", "material": "TMC 100, size 16" },
- *       { "slot": "body", "material": "Purple superfine dubbing" }
+ *     "water_types": ["freestone", "tailwater"],
+ *     "video_url": "https://www.youtube.com/...",
+ *     "hero_image_url": "https://..."             // optional; falls back to category placeholder
+ *     "materials_list": [                         // see MaterialSlot in src/types/flies.ts
+ *       { "slot": "hook",   "material": "TMC 100 — size 16", "brand": "Tiemco" },
+ *       { "slot": "thread", "material": "UTC 70 black", "brand": "UTC" },
+ *       { "slot": "body",   "material": "Purple superfine dubbing" }
  *     ],
- *     "hero_image_url": "https://..."                     // optional; falls back to category placeholder
+ *     "option_envelope": {                        // recommended options — informational only
+ *       "sizes": [12, 14, 16, 18, 20],
+ *       "bead": { "sizes_mm": [2.5, 3.0, 3.3], "colors": ["copper","gold"], "materials": ["tungsten"] },
+ *       "colors": { "body": ["purple","olive"], "rib": ["red"] }
+ *     }
  *   }
+ *
+ * Legacy field aliases (for old input files):
+ *   - `base_materials` → `materials_list`
+ *   - `default_size` + ignored `tying_steps`/`hook_style` — silently dropped
+ *     since the v3 model has no analog. If you want sizes recommended on the
+ *     fly, put them in `option_envelope.sizes`.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import { parseBeadSpec } from "../src/lib/flies/parseBeadSpec";
 
-// Inline .env.local loader (matches scripts/seed-flies.ts — no dotenv dep)
+// Inline .env.local loader
 try {
   const envContent = fs.readFileSync(
     path.resolve(process.cwd(), ".env.local"),
@@ -69,8 +79,27 @@ const FLY_CATEGORIES = [
   "terrestrial",
   "egg",
   "midge",
+  "other",
 ] as const;
 type FlyCategory = (typeof FLY_CATEGORIES)[number];
+
+interface MaterialSlotInput {
+  slot: string;
+  material: string;
+  description?: string;
+  brand?: string;
+  is_optional?: boolean;
+}
+
+interface OptionEnvelopeInput {
+  sizes?: number[];
+  bead?: {
+    sizes_mm?: number[];
+    colors?: string[];
+    materials?: string[];
+  };
+  colors?: Record<string, string[]>;
+}
 
 interface BatchPattern {
   name: string;
@@ -80,18 +109,15 @@ interface BatchPattern {
   history?: string;
   tying_overview?: string;
   fishing_tips?: string;
+  recipe_notes?: string;
   imitates?: string[];
-  hook_style?: string;
-  default_size?: string;
-  base_materials?: Array<{
-    slot: string;
-    material: string;
-    description?: string;
-    brand?: string;
-    is_optional?: boolean;
-  }>;
-  tying_steps?: unknown;
+  water_types?: string[];
+  video_url?: string;
   hero_image_url?: string;
+  materials_list?: MaterialSlotInput[];
+  option_envelope?: OptionEnvelopeInput;
+  // Legacy aliases — silently mapped onto the new shape
+  base_materials?: MaterialSlotInput[];
 }
 
 function slugify(s: string): string {
@@ -99,6 +125,7 @@ function slugify(s: string): string {
     s
       .toLowerCase()
       .normalize("NFKD")
+      .replace(/[̀-ͯ]/g, "")    // strip accents (Luboš → lubos)
       .replace(/[^a-z0-9\s-]/g, "")
       .trim()
       .replace(/\s+/g, "-")
@@ -124,17 +151,6 @@ function levenshtein(a: string, b: string): number {
   }
   return prev[n];
 }
-
-const DEFAULT_SIZE: Record<FlyCategory, string> = {
-  dry: "14",
-  nymph: "16",
-  streamer: "6",
-  emerger: "18",
-  wet: "14",
-  terrestrial: "12",
-  egg: "10",
-  midge: "20",
-};
 
 async function main(): Promise<void> {
   const inputPath = process.argv[2];
@@ -164,11 +180,12 @@ async function main(): Promise<void> {
   const input: BatchPattern[] = Array.isArray(parsed) ? parsed : [parsed];
   console.log(`Loaded ${input.length} pattern(s) from ${inputPath}`);
 
+  // Pull existing flies once for slug + Levenshtein checks.
   const { data: existing, error: existingErr } = await sb
-    .from("canonical_flies")
+    .from("flies")
     .select("id, slug, name");
   if (existingErr) {
-    console.error("Couldn't fetch existing canonicals:", existingErr.message);
+    console.error("Couldn't fetch existing flies:", existingErr.message);
     process.exit(1);
   }
   const existingSlugs = new Set<string>(
@@ -177,10 +194,11 @@ async function main(): Promise<void> {
   const existingNames: Array<{ slug: string; name: string }> = (
     existing ?? []
   ).map((r) => ({ slug: r.slug as string, name: r.name as string }));
-  console.log(`Found ${existingSlugs.size} existing canonicals.`);
+  console.log(`Found ${existingSlugs.size} existing flies.`);
 
   const summary = { inserted: 0, skipped_slug: 0, skipped_similar: 0, errored: 0 };
   const logLines: string[] = [];
+  const nowIso = new Date().toISOString();
 
   for (const row of input) {
     if (!row.name?.trim()) {
@@ -234,12 +252,12 @@ async function main(): Promise<void> {
 
     const heroImageUrl =
       row.hero_image_url ?? `/images/fly-icons/${row.category}.svg`;
-    const defaultSize = row.default_size ?? DEFAULT_SIZE[row.category];
     const description = row.description ?? `${row.name} fly pattern.`;
+    const materialsList = row.materials_list ?? row.base_materials ?? [];
+    const optionEnvelope = row.option_envelope ?? {};
 
-    // 1. canonical_flies (legacy table — still queried in some paths)
-    const { data: cf, error: cfErr } = await sb
-      .from("canonical_flies")
+    const { data: inserted, error: insErr } = await sb
+      .from("flies")
       .insert({
         slug,
         name: row.name,
@@ -248,102 +266,36 @@ async function main(): Promise<void> {
         history: row.history ?? null,
         tying_overview: row.tying_overview ?? null,
         fishing_tips: row.fishing_tips ?? null,
+        recipe_notes: row.recipe_notes ?? null,
         hero_image_url: heroImageUrl,
-        sizes: [defaultSize],
+        video_url: row.video_url ?? null,
+        materials_list: materialsList,
+        option_envelope: optionEnvelope,
         imitates: row.imitates ?? [],
+        water_types: row.water_types ?? [],
         origin_credit: row.origin_credit,
-        contributed_by_user_id: adminUserId,
-        featured: false,
-        materials_list: row.base_materials ?? null,
-        tying_steps: row.tying_steps ?? null,
+        submitted_by_user_id: adminUserId,
+        approved_by_user_id: adminUserId,
+        approved_at: nowIso,
+        status: "approved",
+        is_featured: false,
       })
       .select("id")
       .single();
 
-    if (cfErr || !cf) {
+    if (insErr || !inserted) {
       console.error(
-        `ERROR insert canonical_flies "${row.name}": ${cfErr?.message ?? "unknown"}`,
+        `ERROR insert "${row.name}": ${insErr?.message ?? "unknown"}`,
       );
       summary.errored++;
-      logLines.push(`ERROR_CF\t${slug}\t${cfErr?.message ?? "unknown"}`);
+      logLines.push(`ERROR_INSERT\t${slug}\t${insErr?.message ?? "unknown"}`);
       continue;
     }
 
-    const patternId = cf.id as string;
-
-    // 2. fly_patterns_v2 (modern unified table — what /flies/[slug] reads)
-    const { error: pvErr } = await sb.from("fly_patterns_v2").insert({
-      id: patternId,
-      slug,
-      name: row.name,
-      category: row.category,
-      description,
-      history: row.history ?? null,
-      tying_overview: row.tying_overview ?? null,
-      fishing_tips: row.fishing_tips ?? null,
-      imitates: row.imitates ?? [],
-      water_types: [],
-      base_materials: row.base_materials ?? [],
-      tying_steps: row.tying_steps ?? [],
-      hero_image_url: heroImageUrl,
-      gallery_image_urls: [],
-      visibility: "private",
-      contributed_by_user_id: adminUserId,
-      origin_credit: row.origin_credit,
-      is_featured: false,
-      owner_user_id: null,
-    });
-
-    if (pvErr) {
-      console.error(
-        `ERROR insert fly_patterns_v2 "${row.name}": ${pvErr.message}. canonical_flies row was created (id=${patternId}) — manual cleanup may be needed.`,
-      );
-      summary.errored++;
-      logLines.push(`ERROR_PV2\t${slug}\t${pvErr.message}\tcf_id=${patternId}`);
-      continue;
-    }
-
-    // 3. fly_variants — one default canonical variant. Populate bead fields
-    //    from the pattern's base_materials bead slot so the Configurations
-    //    table renders a real bead spec instead of "—".
-    const beadSlot = (row.base_materials ?? []).find(
-      (m) => m.slot?.toLowerCase() === "bead",
-    );
-    const beadParsed = beadSlot ? parseBeadSpec(beadSlot.material) : {};
-    // fly_variants.bead_material is constrained to tungsten|brass|glass|none.
-    // "copper" is technically a real bead material but the column rejects it —
-    // we record copper-cased material in the recipe slot only.
-    const variantBeadMaterial =
-      beadParsed.material && ["tungsten", "brass", "glass", "none"].includes(beadParsed.material)
-        ? beadParsed.material
-        : null;
-
-    const { error: fvErr } = await sb.from("fly_variants").insert({
-      pattern_id: patternId,
-      created_by_user_id: null,
-      slug: "default",
-      display_name: `${row.name} #${defaultSize}`,
-      size: defaultSize,
-      hook_style: row.hook_style ?? null,
-      bead_material: variantBeadMaterial,
-      bead_weight_mm: beadParsed.weight_mm ?? null,
-      bead_color: beadParsed.color ?? null,
-      sort_order: 0,
-      is_default_for_pattern: true,
-    });
-
-    if (fvErr) {
-      console.error(
-        `ERROR insert default variant "${row.name}": ${fvErr.message}. Pattern rows exist (${patternId}) — manual fix needed.`,
-      );
-      summary.errored++;
-      logLines.push(`ERROR_FV\t${slug}\t${fvErr.message}\tcf_id=${patternId}`);
-      continue;
-    }
-
-    console.log(`OK  inserted: "${row.name}" (${slug}) → ${patternId}`);
+    const flyId = inserted.id as string;
+    console.log(`OK  inserted: "${row.name}" (${slug}) → ${flyId}`);
     summary.inserted++;
-    logLines.push(`INSERTED\t${slug}\t${row.name}\t${patternId}`);
+    logLines.push(`INSERTED\t${slug}\t${row.name}\t${flyId}`);
     existingSlugs.add(slug);
     existingNames.push({ slug, name: row.name });
   }
