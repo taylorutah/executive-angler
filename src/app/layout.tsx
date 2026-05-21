@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
+import CommandPalette from "@/components/CommandPalette";
 import { ThemeProvider } from "@/lib/theme-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
@@ -152,6 +153,7 @@ export default function RootLayout({
             <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
             <Footer />
             <MobileTabBar />
+            <CommandPalette />
           </ThemeProvider>
         </AuthProvider>
         <Analytics />
