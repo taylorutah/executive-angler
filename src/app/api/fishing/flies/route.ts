@@ -50,24 +50,61 @@ async function copyClonedImage(
   sourceUrl: string,
 ): Promise<string | undefined> {
   try {
-    const projectUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!projectUrl) return undefined;
+    const rawProjectUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!rawProjectUrl) {
+      console.error(
+        "[copyClonedImage] NEXT_PUBLIC_SUPABASE_URL not set in this runtime",
+      );
+      return undefined;
+    }
+    // Tolerate a trailing slash on the env var — that has historically caused
+    // a silent SSRF-check miss (`startsWith` fails on the double-slashed
+    // prefix and we bail without logging).
+    const projectUrl = rawProjectUrl.replace(/\/+$/, "");
     const storagePrefix = `${projectUrl}/storage/v1/object/public/`;
-    if (!sourceUrl.startsWith(storagePrefix)) return undefined;
+    if (!sourceUrl.startsWith(storagePrefix)) {
+      console.error(
+        "[copyClonedImage] SSRF check failed",
+        { storagePrefix, sourceUrlHead: sourceUrl.slice(0, 80) },
+      );
+      return undefined;
+    }
 
     const rest = sourceUrl.slice(storagePrefix.length);
     const slashIdx = rest.indexOf("/");
-    if (slashIdx <= 0) return undefined;
+    if (slashIdx <= 0) {
+      console.error("[copyClonedImage] malformed source path", { rest });
+      return undefined;
+    }
     const sourceBucket = rest.slice(0, slashIdx);
-    const sourcePath = rest.slice(slashIdx + 1);
-    if (!sourceBucket || !sourcePath) return undefined;
+    // The path component can be URL-encoded (`%20` etc.); Supabase Storage's
+    // download() expects the raw decoded path. decodeURIComponent is safe
+    // here since the URL was produced by getPublicUrl() server-side.
+    const rawPath = rest.slice(slashIdx + 1);
+    let sourcePath: string;
+    try {
+      sourcePath = decodeURIComponent(rawPath);
+    } catch {
+      sourcePath = rawPath;
+    }
+    if (!sourceBucket || !sourcePath) {
+      console.error("[copyClonedImage] empty bucket or path", {
+        sourceBucket,
+        sourcePath,
+      });
+      return undefined;
+    }
 
     const svc = getServiceClient();
     const { data: blob, error: downloadError } = await svc.storage
       .from(sourceBucket)
       .download(sourcePath);
     if (downloadError || !blob) {
-      console.error("[copyClonedImage] download failed:", downloadError);
+      console.error("[copyClonedImage] download failed", {
+        bucket: sourceBucket,
+        path: sourcePath,
+        downloadError,
+      });
       return undefined;
     }
 
@@ -81,12 +118,19 @@ async function copyClonedImage(
         upsert: true,
       });
     if (uploadError) {
-      console.error("[copyClonedImage] upload failed:", uploadError);
+      console.error("[copyClonedImage] upload failed", {
+        destPath,
+        uploadError,
+      });
       return undefined;
     }
-    const { data: { publicUrl } } = svc.storage
-      .from("fly-pattern-images")
-      .getPublicUrl(destPath);
+    const {
+      data: { publicUrl },
+    } = svc.storage.from("fly-pattern-images").getPublicUrl(destPath);
+    console.log("[copyClonedImage] copied", {
+      from: `${sourceBucket}/${sourcePath}`,
+      to: destPath,
+    });
     return publicUrl;
   } catch (e) {
     console.error("[copyClonedImage] unexpected error:", e);
