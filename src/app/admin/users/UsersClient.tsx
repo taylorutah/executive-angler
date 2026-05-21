@@ -41,6 +41,8 @@ interface UserProfile {
   photo_count: number;
   review_count: number;
   active_promo: { code: string; until: string } | null;
+  provider: string;
+  email_confirmed: boolean;
 }
 
 interface SessionRow {
@@ -60,7 +62,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   void adminEmail;
   const [users, setUsers] = useState<UserProfile[]>(initialUsers);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "premium" | "banned" | "promo" | "active" | "inactive">("all");
+  const [filter, setFilter] = useState<"all" | "premium" | "banned" | "promo" | "active" | "inactive" | "unverified">("all");
   const [sortBy, setSortBy] = useState<"recent" | "activity" | "power">("recent");
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -80,6 +82,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
     if (filter === "promo" && !u.active_promo) return false;
     if (filter === "active" && !(u.last_session_at && Date.now() - new Date(u.last_session_at).getTime() < THIRTY_DAYS)) return false;
     if (filter === "inactive" && u.last_session_at && Date.now() - new Date(u.last_session_at).getTime() < THIRTY_DAYS) return false;
+    if (filter === "unverified" && u.email_confirmed) return false;
     if (search) {
       const q = search.toLowerCase();
       return (
@@ -229,7 +232,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
             </select>
           </div>
           <div className="flex flex-wrap gap-1">
-            {(["all", "premium", "promo", "active", "inactive", "banned"] as const).map(f => (
+            {(["all", "premium", "promo", "active", "inactive", "unverified", "banned"] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#A8B2BD]"}`}>
                 {f === "all" ? "All" :
@@ -237,6 +240,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                  f === "promo" ? "Promo" :
                  f === "active" ? "Active 30d" :
                  f === "inactive" ? "Lapsed" :
+                 f === "unverified" ? "Unverified" :
                  "Banned"}
               </button>
             ))}
@@ -260,6 +264,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-bold text-[#F0F6FC] truncate">{u.display_name || u.username || "No name"}</span>
+                      <ProviderBadge provider={u.provider} verified={u.email_confirmed} />
                       {u.is_premium && <Crown className="h-3.5 w-3.5 text-[#E8923A]" />}
                       {u.is_banned && <Ban className="h-3.5 w-3.5 text-red-400" />}
                       {u.active_promo && (
@@ -557,6 +562,24 @@ function SessionsPanel({
         ))}
       </div>
     </div>
+  );
+}
+
+function ProviderBadge({ provider, verified }: { provider: string; verified: boolean }) {
+  const map: Record<string, { label: string; bg: string; fg: string }> = {
+    google:  { label: "Google", bg: "bg-[#4285F4]/15", fg: "text-[#8AB4F8]" },
+    apple:   { label: "Apple",  bg: "bg-[#F0F6FC]/10", fg: "text-[#F0F6FC]" },
+    email:   { label: "Email",  bg: "bg-[#6E7681]/15", fg: "text-[#A8B2BD]" },
+  };
+  const cfg = map[provider] || { label: provider, bg: "bg-[#6E7681]/15", fg: "text-[#A8B2BD]" };
+  return (
+    <span
+      title={`Signed up via ${cfg.label}${verified ? "" : " · email NOT confirmed"}`}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${cfg.bg} ${cfg.fg}`}
+    >
+      {cfg.label}
+      {!verified && <span className="text-red-400">●</span>}
+    </span>
   );
 }
 

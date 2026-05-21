@@ -116,9 +116,11 @@ export default async function AdminUsersPage() {
     );
   }
 
-  // auth.users for email + last_sign_in_at
+  // auth.users for email + last_sign_in_at + signup provider + confirmation
   const emailMap: Record<string, string> = {};
   const lastSignInMap: Record<string, string | null> = {};
+  const providerMap: Record<string, string> = {};
+  const emailConfirmedMap: Record<string, boolean> = {};
   if (admin) {
     // listUsers is paginated — grab up to 2000 (4 pages × 500)
     for (let page = 1; page <= 4; page++) {
@@ -127,6 +129,13 @@ export default async function AdminUsersPage() {
       users.forEach((u) => {
         emailMap[u.id] = u.email || "";
         lastSignInMap[u.id] = u.last_sign_in_at ?? null;
+        // Prefer the identities array (most accurate) and fall back to app_metadata.
+        const identityProvider = u.identities?.[0]?.provider;
+        providerMap[u.id] =
+          (identityProvider as string) ||
+          ((u.app_metadata as { provider?: string })?.provider) ||
+          "email";
+        emailConfirmedMap[u.id] = !!u.email_confirmed_at;
       });
       if (users.length < 500) break;
     }
@@ -143,6 +152,8 @@ export default async function AdminUsersPage() {
     photo_count: photoCountMap[p.user_id] || 0,
     review_count: reviewCountMap[p.user_id] || 0,
     active_promo: promoMap[p.user_id] ?? null,
+    provider: providerMap[p.user_id] || "email",
+    email_confirmed: emailConfirmedMap[p.user_id] ?? false,
   }));
 
   return <UsersClient users={enriched} adminId={user.id} adminEmail={user.email || ""} />;

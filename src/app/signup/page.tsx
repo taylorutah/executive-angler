@@ -99,6 +99,27 @@ function SignupForm() {
       ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
       : `${window.location.origin}/auth/callback`;
 
+    // Server-side preflight: rate-limit per IP, verify Turnstile fail-closed,
+    // block disposable email domains, reject Gmail dot-trick collisions.
+    // Only if this returns ok do we let Supabase create the account.
+    try {
+      const preflight = await fetch("/api/auth/preflight", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, captchaToken }),
+      });
+      if (!preflight.ok) {
+        const data = (await preflight.json().catch(() => ({}))) as { error?: string };
+        setError(data.error || "Signup blocked. Please try again.");
+        setLoading(false);
+        return;
+      }
+    } catch {
+      setError("Could not reach the signup service. Try again in a moment.");
+      setLoading(false);
+      return;
+    }
+
     const { data: authData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
@@ -125,18 +146,6 @@ function SignupForm() {
         { user_id: authData.user.id, display_name: name },
         { onConflict: "user_id" }
       );
-    }
-
-    // Seed 3 demo sessions so the new user's journal isn't empty.
-    // Route is idempotent (no-ops if sessions already exist) and failures
-    // here shouldn't block signup — the worst case is an empty journal.
-    try {
-      await fetch("/api/onboarding/seed-demo", {
-        method: "POST",
-        credentials: "same-origin",
-      });
-    } catch (seedError) {
-      console.warn("[SIGNUP] Demo seed skipped:", seedError);
     }
 
     // If the user was mid-flow on another page (e.g. /redeem?code=REDDIT30),

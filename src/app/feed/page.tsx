@@ -4,6 +4,7 @@ import { ActivityFeed } from "@/components/feed/ActivityFeed";
 import Link from "next/link";
 import { APP_STORE_URL } from "@/lib/constants";
 import { getBannedUserIds } from "@/lib/db/banned-users";
+import { getUntrustedUserIds } from "@/lib/db/trust";
 
 export const metadata: Metadata = {
   title: "On The Water",
@@ -161,7 +162,14 @@ export default async function FeedPage() {
      it projects only safe columns (river, section, weather, profile).
      Catches and counts are unreachable from this surface by design. */
 
-  const bannedUserIds = await getBannedUserIds();
+  const [bannedUserIds, untrustedUserIds] = await Promise.all([
+    getBannedUserIds(),
+    getUntrustedUserIds(),
+  ]);
+
+  // New accounts (< 7 days old) don't appear in the public presence feed —
+  // gives bots no surface to inflate, gives real new users a quiet ramp-in.
+  const hiddenUserIds = Array.from(new Set([...bannedUserIds, ...untrustedUserIds]));
 
   let presenceQuery = supabase
     .from("session_presence")
@@ -169,11 +177,11 @@ export default async function FeedPage() {
       `id, user_id, river_name, section, date, weather, created_at, username, display_name, avatar_url`
     );
 
-  if (bannedUserIds.length > 0) {
+  if (hiddenUserIds.length > 0) {
     presenceQuery = presenceQuery.not(
       "user_id",
       "in",
-      `(${bannedUserIds.join(",")})`
+      `(${hiddenUserIds.join(",")})`
     );
   }
 

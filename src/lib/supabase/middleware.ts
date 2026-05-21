@@ -60,6 +60,11 @@ async function captureLoginLocation(
 
 const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/notifications", "/messages", "/admin"];
 
+// Paths that require a verified email. Excludes /account (so users can manage
+// their email + resend confirmation) and /admin (admin gating is handled
+// inside the admin layout itself).
+const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed"];
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -104,6 +109,20 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
+  }
+
+  // Authenticated but email not verified — block content surfaces until they
+  // click the confirmation link. OAuth providers (Google/Apple) populate
+  // email_confirmed_at automatically, so this only catches email/password
+  // signups that skipped confirmation.
+  if (user && !user.email_confirmed_at && pathname !== "/verify-email") {
+    const needsVerify = EMAIL_VERIFIED_REQUIRED.some((p) => pathname.startsWith(p));
+    if (needsVerify) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/verify-email";
+      url.searchParams.set("next", pathname);
+      return NextResponse.redirect(url);
+    }
   }
 
   // Logged-in users land on their dashboard instead of the marketing home

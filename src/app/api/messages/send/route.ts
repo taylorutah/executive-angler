@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { isTrusted } from "@/lib/db/trust";
 
 /**
  * POST /api/messages/send
@@ -23,6 +24,7 @@ export async function POST(req: NextRequest) {
   try {
     // Authenticate the user
     let userId: string | null = null;
+    let userCreatedAt: string | null = null;
 
     const authHeader = req.headers.get("authorization");
     if (authHeader?.startsWith("Bearer ")) {
@@ -36,6 +38,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
       userId = user.id;
+      userCreatedAt = user.created_at ?? null;
     } else {
       const supabase = await createServerClient();
       const {
@@ -45,6 +48,19 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
       userId = user.id;
+      userCreatedAt = user.created_at ?? null;
+    }
+
+    // Trust window: accounts younger than 7 days can't send DMs.
+    // Bots love DMs as a spam vector — make them earn it.
+    if (!isTrusted(userCreatedAt)) {
+      return NextResponse.json(
+        {
+          error:
+            "New accounts can't send messages yet. This restriction lifts after 7 days.",
+        },
+        { status: 403 }
+      );
     }
 
     const { threadId, body: messageBody } = (await req.json()) as {
