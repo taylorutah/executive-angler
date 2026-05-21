@@ -1,36 +1,45 @@
 "use client";
 
+/**
+ * Client wrapper for the unified fly edit page. Renders FlyPatternForm and
+ * submits PATCH to /api/flies/[id], which permission-gates owner vs admin
+ * server-side and writes both flies.materials_list + fly_recipe_ingredients
+ * atomically.
+ */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import FlyPatternForm, {
   type FlyPatternFormInitial,
 } from "@/components/flies/FlyPatternForm";
-import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 
 interface Props {
   flyId: string;
   slug: string;
-  /** Where to send the user after Save / Cancel. Defaults to the public detail. */
-  returnTo?: string;
+  mode: "edit" | "canonical-edit";
+  /** Where to send the user after Save / Cancel. */
+  returnTo: string;
   initial: FlyPatternFormInitial;
 }
 
-export default function EditCanonicalFlyClient({ flyId, slug, returnTo, initial }: Props) {
+export default function FlyEditClient({
+  flyId,
+  slug,
+  mode,
+  returnTo,
+  initial,
+}: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const detailHref = returnTo ?? `/flies/${slug}`;
-
-  async function handleSubmit(formData: FormData, _steps: RecipeStep[]) {
-    void _steps;
+  async function handleSubmit(formData: FormData) {
     setBusy(true);
     setError(null);
     try {
       const hasImage = formData.has("image");
       let res: Response;
       if (hasImage) {
-        res = await fetch(`/api/admin/flies/${flyId}`, {
+        res = await fetch(`/api/flies/${flyId}`, {
           method: "PATCH",
           body: formData,
         });
@@ -40,7 +49,7 @@ export default function EditCanonicalFlyClient({ flyId, slug, returnTo, initial 
           if (k === "image") continue;
           body[k] = v;
         }
-        res = await fetch(`/api/admin/flies/${flyId}`, {
+        res = await fetch(`/api/flies/${flyId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -54,7 +63,7 @@ export default function EditCanonicalFlyClient({ flyId, slug, returnTo, initial 
           "Unknown error";
         throw new Error(`Save failed (HTTP ${res.status}): ${reason}`);
       }
-      router.push(detailHref);
+      router.push(returnTo);
       router.refresh();
     } catch (err) {
       setError(
@@ -66,14 +75,17 @@ export default function EditCanonicalFlyClient({ flyId, slug, returnTo, initial 
     }
   }
 
+  // Reference unused props to keep the signature stable for future use.
+  void slug;
+
   return (
     <FlyPatternForm
-      mode="canonical-edit"
+      mode={mode}
       initial={initial}
       onSubmit={handleSubmit}
       busy={busy}
       error={error}
-      cancelHref={detailHref}
+      cancelHref={returnTo}
       requireCaptcha={false}
     />
   );

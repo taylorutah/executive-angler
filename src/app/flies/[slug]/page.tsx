@@ -179,48 +179,28 @@ export default async function FlyDetail({ params }: Props) {
                     Clone
                   </Link>
                   {(() => {
-                    // Edit routing depends on what kind of fly this is.
-                    //
-                    // - status='approved' canonical → admin edit tool. Only
-                    //   admins see this branch; the admin edit page enforces
-                    //   permission server-side too.
-                    // - status='private' or 'pending' AND viewer is the
-                    //   owner → owner edit page (/journal/flies/{id}/edit),
-                    //   which reuses the same FlyPatternForm the create flow
-                    //   uses. Available to any signed-in owner, not just
-                    //   admins — non-admin users who clone a fly need to be
-                    //   able to edit their clones.
-                    // - else → no edit affordance.
+                    // Unified edit URL — server-side gate at /flies/[slug]/edit
+                    // decides whether to render the owner form (mode=edit) or
+                    // the admin canonical form (mode=canonical-edit), or to
+                    // redirect away if the viewer can't edit.
                     const isOwner =
                       !!user && fly.submitted_by_user_id === user.id;
                     const isPrivateOwn =
                       isOwner &&
                       (fly.status === "private" || fly.status === "pending");
-                    if (isPrivateOwn) {
-                      return (
-                        <Link
-                          href={`/journal/flies/${fly.id}/edit`}
-                          className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                          aria-label="Edit this fly"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                          Edit
-                        </Link>
-                      );
-                    }
-                    if (viewerIsAdmin && fly.status === "approved") {
-                      return (
-                        <Link
-                          href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
-                          className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                          aria-label="Edit canonical fly"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                          Edit
-                        </Link>
-                      );
-                    }
-                    return null;
+                    const canEdit =
+                      isPrivateOwn || (viewerIsAdmin && fly.status === "approved");
+                    if (!canEdit) return null;
+                    return (
+                      <Link
+                        href={`/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                        aria-label="Edit this fly"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </Link>
+                    );
                   })()}
                   {/* Delete: owner of a private/pending fly, OR admin on any. */}
                   {isLoggedIn &&
@@ -257,7 +237,7 @@ export default async function FlyDetail({ params }: Props) {
           <div className="min-w-0">
             <Recipe
               materials={fly.materials_list ?? []}
-              editHref={viewerIsAdmin ? `/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}` : null}
+              editHref={viewerIsAdmin ? `/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}` : null}
             />
 
             {(fly.history || fly.tying_overview || fly.fishing_tips) && (
