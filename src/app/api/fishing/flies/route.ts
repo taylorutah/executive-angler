@@ -314,6 +314,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Auto-create a minimal user_fly_configurations row so the new fly is
+    // immediately visible in the Patterns hub (which joins through configs).
+    // Non-fatal: if this fails, the fly is still saved and the user can
+    // configure it manually from the detail page.
+    if (data) {
+      const { error: cfgError } = await supabase
+        .from("user_fly_configurations")
+        .insert({
+          user_id: user.id,
+          fly_id: data.id,
+          tied_count: 0,
+          bought_count: 0,
+          target_count: 0,
+          is_favorite: false,
+          is_tie_next: false,
+        });
+      if (cfgError) console.error("[flies POST] auto-config insert failed:", cfgError);
+    }
+
     // Suppress unused-warning for legacy helpers no longer used in the
     // post-Phase-C insert path.
     void num;

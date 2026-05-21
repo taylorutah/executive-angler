@@ -119,6 +119,7 @@ export default async function FliesHubPage({
       sharedOwnerUsernames={Object.fromEntries(sharedOwnerUsernames)}
       counts={finalCounts}
       canonicalNames={canonicalNames}
+      viewerUserId={user.id}
       viewerUsername={(profile?.username as string | undefined) ?? null}
       viewerIsAdmin={isAdmin(user.email)}
       tierDefinitions={tierDefinitions}

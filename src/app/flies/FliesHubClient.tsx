@@ -44,6 +44,7 @@ interface Props {
   sharedOwnerUsernames: Record<string, string>;
   counts: { box: number; favorites: number; tieNext: number; sharedWithMe: number };
   canonicalNames: string[];
+  viewerUserId: string | null;
   viewerUsername: string | null;
   viewerIsAdmin?: boolean;
   tierDefinitions: TierDefinition[];
@@ -65,6 +66,7 @@ export default function FliesHubClient({
   sharedOwnerUsernames,
   counts,
   canonicalNames,
+  viewerUserId,
   viewerUsername,
   viewerIsAdmin = false,
   tierDefinitions,
@@ -177,7 +179,11 @@ export default function FliesHubClient({
           <BoxesManager initialBoxes={boxes} initialStats={boxStats} initialTierDefinitions={tierDefinitions} />
         )}
         {tab === "patterns" && (
-          <PatternsHub rows={patternsHubRows} />
+          <PatternsHub
+            rows={patternsHubRows}
+            viewerUserId={viewerUserId}
+            viewerUsername={viewerUsername}
+          />
         )}
         {tab === "workbench" && <WorkbenchClient embedded viewerIsAdmin={viewerIsAdmin} />}
         {tab === "tie-next" && (

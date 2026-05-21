@@ -179,10 +179,28 @@ export async function listMyPatternsHub(): Promise<PatternsHubRow[]> {
     return [];
   }
   const cfgs = (configs ?? []) as FlyConfiguration[];
-  if (cfgs.length === 0) return [];
 
-  // 2. Flies for those configurations.
-  const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
+  // 1b. Flies the user created (clones + originals) — surface even if no
+  // configuration row exists yet, so they're discoverable in the Patterns hub.
+  const { data: createdFlies, error: createdErr } = await supabase
+    .from("flies")
+    .select("*")
+    .eq("submitted_by_user_id", user.id)
+    .in("status", ["private", "pending", "approved"]);
+  if (createdErr) {
+    console.error("[listMyPatternsHub created]", createdErr);
+  }
+  const createdRows = (createdFlies ?? []) as Fly[];
+
+  if (cfgs.length === 0 && createdRows.length === 0) return [];
+
+  // 2. Flies for configurations + flies created by user.
+  const flyIds = Array.from(
+    new Set<string>([
+      ...cfgs.map((c) => c.fly_id),
+      ...createdRows.map((f) => f.id),
+    ]),
+  );
   const { data: flies, error: fErr } = await supabase
     .from("flies")
     .select("*")
@@ -233,6 +251,24 @@ export async function listMyPatternsHub(): Promise<PatternsHubRow[]> {
     if (cfg.is_tie_next) row.tie_next_count += 1;
     if (cfg.is_favorite) row.favorite_any = true;
     row.in_box_count += inBoxByCfg.get(cfg.id) ?? 0;
+  }
+
+  // 5. Surface user-created flies that have no configurations yet (e.g. a
+  // fresh clone whose auto-config insert silently failed). They render as
+  // zero-version rows so the user can still find and click into them.
+  for (const fly of createdRows) {
+    if (byFly.has(fly.id)) continue;
+    byFly.set(fly.id, {
+      fly,
+      versions: [],
+      tied_total: 0,
+      bought_total: 0,
+      target_total: 0,
+      deficit: 0,
+      tie_next_count: 0,
+      favorite_any: false,
+      in_box_count: 0,
+    });
   }
 
   return Array.from(byFly.values()).sort((a, b) =>
