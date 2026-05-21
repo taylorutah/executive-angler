@@ -76,11 +76,13 @@ export async function listFlyWorkspaceRows(
   const configs = (configsData ?? []) as FlyConfiguration[];
 
   // 2. Flies the user created — surfaced even without configs.
+  // Filter out soft-deleted rows (deleted_at IS NOT NULL).
   const { data: createdData, error: createdErr } = await supabase
     .from("flies")
     .select("*")
     .eq("submitted_by_user_id", user.id)
-    .in("status", ["private", "pending", "approved"]);
+    .in("status", ["private", "pending", "approved"])
+    .is("deleted_at", null);
   if (createdErr) {
     console.error("[listFlyWorkspaceRows created]", createdErr);
   }
@@ -101,7 +103,8 @@ export async function listFlyWorkspaceRows(
     const { data: extra, error: fErr } = await supabase
       .from("flies")
       .select("*")
-      .in("id", missingIds);
+      .in("id", missingIds)
+      .is("deleted_at", null);
     if (fErr) {
       console.error("[listFlyWorkspaceRows flies]", fErr);
       return [];

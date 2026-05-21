@@ -16,6 +16,7 @@ import SortMenu from "@/components/flies/workspace/SortMenu";
 import ViewSwitcher from "@/components/flies/workspace/ViewSwitcher";
 import ViewRail from "@/components/flies/workspace/ViewRail";
 import CloneDrawer from "@/components/flies/workspace/CloneDrawer";
+import UndoDeleteToast from "@/components/flies/UndoDeleteToast";
 import {
   GridDisplay,
   TableDisplay,
@@ -405,6 +406,9 @@ export default function WorkspaceClient({
         ) : (
           <GridDisplay rows={optimisticRows} viewerUsername={viewerUsername} />
         )}
+
+      {/* Soft-delete Undo banner (shown when ?undo={id} is present). */}
+      <UndoDeleteToast />
 
       {/* Inline Clone drawer — opens via ?clone={canonicalFlyId} URL param */}
       <CloneDrawer

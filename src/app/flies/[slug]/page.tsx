@@ -26,6 +26,7 @@ import { Pencil, Copy } from "lucide-react";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
+import DeleteFlyButton from "@/components/flies/DeleteFlyButton";
 import YourStockSection from "@/components/flies-v3/YourStockSection";
 import OptionEnvelopeChips from "@/components/flies-v3/OptionEnvelopeChips";
 import type { MaterialSlot } from "@/types/flies";
@@ -187,6 +188,13 @@ export default async function FlyDetail({ params }: Props) {
                       Edit
                     </Link>
                   )}
+                  {/* Delete: owner of a private/pending fly, OR admin on any. */}
+                  {isLoggedIn &&
+                    ((fly.submitted_by_user_id === user?.id &&
+                      (fly.status === "private" || fly.status === "pending")) ||
+                      viewerIsAdmin) && (
+                      <DeleteFlyButton flyId={fly.id} flyName={fly.name} />
+                    )}
                 </div>
               </div>
 

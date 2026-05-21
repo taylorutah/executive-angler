@@ -20,13 +20,15 @@ import type {
 // Flies (public library)
 // ────────────────────────────────────────────────────────────────────────────
 
-/** All approved canonical flies. Used by the library page. */
+/** All approved canonical flies. Used by the library page.
+ *  Soft-deleted rows (deleted_at IS NOT NULL) are excluded. */
 export async function listApprovedFlies(): Promise<Fly[]> {
   const supabase = createStaticClient();
   const { data, error } = await supabase
     .from("flies")
     .select("*")
     .eq("status", "approved")
+    .is("deleted_at", null)
     .order("name");
   if (error) {
     console.error("[listApprovedFlies]", error);
@@ -35,7 +37,8 @@ export async function listApprovedFlies(): Promise<Fly[]> {
   return (data ?? []) as Fly[];
 }
 
-/** Approved fly by slug. Falls back to slug-redirects and submitter pending. */
+/** Approved fly by slug. Falls back to slug-redirects and submitter pending.
+ *  Soft-deleted rows are excluded across all branches. */
 export async function getFlyBySlug(slug: string): Promise<Fly | null> {
   const supabase = createStaticClient();
   const { data } = await supabase
@@ -43,6 +46,7 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
     .select("*")
     .eq("slug", slug)
     .eq("status", "approved")
+    .is("deleted_at", null)
     .maybeSingle();
   if (data) return data as Fly;
 
@@ -58,27 +62,31 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
       .select("*")
       .eq("slug", redirect.to_slug)
       .eq("status", "approved")
+      .is("deleted_at", null)
       .maybeSingle();
     if (redirected) return redirected as Fly;
   }
 
   // Submitter peek: pending/private rows visible to their owner via RLS.
+  // Still filter deleted_at so an archived fly can't be re-opened by slug.
   const auth = await createClient();
   const { data: own } = await auth
     .from("flies")
     .select("*")
     .eq("slug", slug)
+    .is("deleted_at", null)
     .maybeSingle();
   return (own ?? null) as Fly | null;
 }
 
-/** Fly by ID (any status — RLS gates visibility). */
+/** Fly by ID (any status — RLS gates visibility). Soft-deleted rows excluded. */
 export async function getFlyById(id: string): Promise<Fly | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("flies")
     .select("*")
     .eq("id", id)
+    .is("deleted_at", null)
     .maybeSingle();
   return (data ?? null) as Fly | null;
 }
@@ -182,11 +190,13 @@ export async function listMyPatternsHub(): Promise<PatternsHubRow[]> {
 
   // 1b. Flies the user created (clones + originals) — surface even if no
   // configuration row exists yet, so they're discoverable in the Patterns hub.
+  // Filter out soft-deleted rows.
   const { data: createdFlies, error: createdErr } = await supabase
     .from("flies")
     .select("*")
     .eq("submitted_by_user_id", user.id)
-    .in("status", ["private", "pending", "approved"]);
+    .in("status", ["private", "pending", "approved"])
+    .is("deleted_at", null);
   if (createdErr) {
     console.error("[listMyPatternsHub created]", createdErr);
   }
@@ -299,7 +309,12 @@ export async function listMyConfigurationsWithFly(opts: {
   const cfgs = (configs ?? []) as FlyConfiguration[];
   if (cfgs.length === 0) return [];
   const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
-  const { data: flies } = await supabase.from("flies").select("*").in("id", flyIds);
+  // Excludes soft-deleted rows so archived flies drop out of Tie Next / Favorites.
+  const { data: flies } = await supabase
+    .from("flies")
+    .select("*")
+    .in("id", flyIds)
+    .is("deleted_at", null);
   const map = new Map((flies ?? []).map((f) => [f.id as string, f as Fly]));
   return cfgs
     .map((c) => {
