@@ -470,9 +470,25 @@ export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
                             sourceColumn: col.id,
                           }),
                         );
-                        // Also stash a plain-text version for cross-tool
-                        // compatibility / Firefox quirk.
+                        // text/plain is the fallback drag payload that some
+                        // OS-level drag previews show — keep it to just the
+                        // fly name so it doesn't leak URLs or card metadata.
                         e.dataTransfer.setData("text/plain", r.fly.name);
+
+                        // Use the whole card as the drag image. Without
+                        // this, the browser defaults to dragging the inner
+                        // <a> (FlyCard wraps in a Link), which produces a
+                        // messy URL/text preview. setDragImage overrides
+                        // the default regardless of which child element
+                        // originated the drag.
+                        const node = e.currentTarget as HTMLLIElement;
+                        const rect = node.getBoundingClientRect();
+                        e.dataTransfer.setDragImage(
+                          node,
+                          e.clientX - rect.left,
+                          e.clientY - rect.top,
+                        );
+
                         setDraggingFlyId(r.fly.id);
                         setDragSourceCol(col.id);
                       }}
