@@ -129,10 +129,11 @@ export function MaterialAutocomplete({
     const handleClick = (e: MouseEvent) => {
       const target = e.target as Node;
       if (containerRef.current && containerRef.current.contains(target)) return;
-      // Walk up looking for the portal sentinel.
+      // Walk up looking for the portal sentinel. The attribute is set as
+      // an empty string, which is falsy via dataset — must check presence.
       let node: Node | null = target;
       while (node && node instanceof HTMLElement) {
-        if (node.dataset?.materialAutocompleteDropdown) return;
+        if (node.hasAttribute('data-material-autocomplete-dropdown')) return;
         node = node.parentElement;
       }
       setIsOpen(false);
