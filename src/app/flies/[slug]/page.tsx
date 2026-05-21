@@ -163,15 +163,9 @@ export default async function FlyDetail({ params }: Props) {
                   <FlyFavoriteButton canonicalFlyId={fly.id} />
                   <Link
                     href={(() => {
-                      // When the workspace feature flag is on, route Clone
-                      // through the workspace's inline drawer (no full-page
-                      // nav). Otherwise fall back to the legacy /journal/
-                      // flies/new full-page form.
-                      const workspaceOn =
-                        process.env.NEXT_PUBLIC_FLIES_WORKSPACE === "1";
-                      const target = workspaceOn
-                        ? `/flies/workspace?clone=${fly.id}`
-                        : `/journal/flies/new?cloneFrom=${fly.id}`;
+                      // Clone always opens the workspace's inline drawer
+                      // (Phase 6 cutover — no more full-page form nav).
+                      const target = `/flies/workspace?clone=${fly.id}`;
                       return isLoggedIn
                         ? target
                         : `/login?redirect=${encodeURIComponent(target)}`;

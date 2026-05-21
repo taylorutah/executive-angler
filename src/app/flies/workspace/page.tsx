@@ -28,17 +28,14 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const FEATURE_FLAG_ON = process.env.NEXT_PUBLIC_FLIES_WORKSPACE === "1";
+// Workspace is the canonical patterns experience as of Phase 6 cutover —
+// no feature flag.
 
 export default async function FlyWorkspacePage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  if (!FEATURE_FLAG_ON) {
-    redirect("/flies?tab=patterns");
-  }
-
   const supabase = await createClient();
   const {
     data: { user },

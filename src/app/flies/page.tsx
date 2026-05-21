@@ -41,6 +41,24 @@ export default async function FliesHubPage({
   } = await supabase.auth.getUser();
   if (!user) permanentRedirect("/flies/library");
 
+  // Phase 6 cutover: the workspace replaces the old "Patterns" tab as the
+  // default landing for /flies. The other tabs (Boxes, Workbench, Tie Next,
+  // Shared) continue to render via the legacy FliesHubClient until their
+  // own dedicated routes are migrated. Hand off the workspace's URL params
+  // verbatim so `?clone=...`, `?view=...`, etc. keep working.
+  const sp = await searchParams;
+  const tab = sp.tab ?? "patterns";
+  if (tab === "patterns") {
+    // Preserve any non-tab params (clone, view, source, …) when redirecting.
+    const carry = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) {
+      if (k === "tab" || v === undefined) continue;
+      carry.set(k, v);
+    }
+    const qs = carry.toString();
+    permanentRedirect(qs ? `/flies/workspace?${qs}` : "/flies/workspace");
+  }
+
   const { data: profile } = await supabase
     .from("profiles")
     .select("ties_own_flies, display_name, username, tier_descriptions, tier_definitions")
@@ -51,8 +69,6 @@ export default async function FliesHubPage({
     profile?.tier_definitions,
     profile?.tier_descriptions as Record<string, string> | null,
   );
-
-  const { tab } = await searchParams;
 
   const boxes = await listMyBoxes();
   // Post-Phase-C: legacy queries (getMyPatterns, getMyFlyBox,
