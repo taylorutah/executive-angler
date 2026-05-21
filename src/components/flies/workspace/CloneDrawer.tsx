@@ -29,6 +29,22 @@ interface Props {
   onFailure: (error: string) => void;
 }
 
+interface CloneSourceRecipeStep {
+  id: string;
+  role: string;
+  material: null;
+  materialName: string;
+  colorChoice: string;
+  sizeChoice: string;
+  quantity: string;
+  weightChoice: string;
+  materialTypeChoice: string;
+  finishChoice: string;
+  brandChoice: string;
+  notes: string;
+  isOptional: boolean;
+}
+
 interface CloneSource {
   sourceName: string;
   sourceSlug: string;
@@ -38,6 +54,12 @@ interface CloneSource {
     type?: string;
     description?: string;
     video_url?: string;
+    /** Plain-text "slot: material" lines, composed into the saved
+     *  description so the user sees them on the detail page. */
+    materials?: string;
+    /** Structured recipe steps — inserted into fly_recipe_ingredients on
+     *  save so the Recipe section renders with the source's slot list. */
+    recipeSteps?: CloneSourceRecipeStep[];
   };
 }
 
@@ -116,8 +138,39 @@ export default function CloneDrawer({
     form.set("name", name.trim());
     if (category) form.set("type", category);
     if (notes) form.set("description", notes);
+    // The server-side clone resolver looks up this canonical and copies
+    // materials_list, option_envelope, hero_image_url (via copyClonedImage),
+    // video_url, imitates, water_types, and category onto the new private
+    // fly. The detail page's Recipe section reads materials_list directly,
+    // so this is what makes the cloned recipe render. User-supplied
+    // name/category/notes still override.
+    if (canonicalFlyId) {
+      form.set("cloned_from_canonical_id", canonicalFlyId);
+    }
+    // Also pass the source image URL as a belt-and-suspenders signal —
+    // copyClonedImage runs from either field. Harmless if the server-side
+    // canonical lookup already covers it.
     if (source.sourceImageUrl) {
       form.set("clone_image_from_url", source.sourceImageUrl);
+    }
+    // Also insert structured recipe rows into fly_recipe_ingredients for the
+    // future Recipe-from-rows rendering path. The detail page currently
+    // reads materials_list (carried by the server-side clone above), but
+    // these rows are useful for the structured editor that lives on the
+    // edit page.
+    if (source.initial.recipeSteps && source.initial.recipeSteps.length > 0) {
+      const steps = source.initial.recipeSteps.map((s, idx) => ({
+        step_position: idx,
+        role: s.role,
+        material_id: null,
+        material_name: s.materialName || null,
+        color_choice: s.colorChoice || null,
+        size_choice: s.sizeChoice || null,
+        quantity: s.quantity || null,
+        notes: s.notes || null,
+        is_optional: !!s.isOptional,
+      }));
+      form.set("recipe_steps", JSON.stringify(steps));
     }
 
     try {

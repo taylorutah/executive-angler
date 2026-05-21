@@ -291,15 +291,68 @@ export async function POST(req: NextRequest) {
       .slice(0, 60);
     const privateSlug = `${baseSlug || "fly"}-private-${user.id.slice(0, 8)}-${Date.now().toString(36)}`;
 
+    // ── Clone passthrough ───────────────────────────────────────────────
+    // If the client identifies a source canonical via `cloned_from_canonical_id`,
+    // copy every "structural" field (materials_list, option_envelope,
+    // imitates, water_types, video_url) AND the hero image from the source
+    // canonical into the new private fly. User-supplied name/category/notes
+    // still win.
+    //
+    // The detail page's Recipe section reads `materials_list` directly, so
+    // copying this jsonb is what makes the cloned recipe actually render.
+    const cloneSourceId = str(body.cloned_from_canonical_id);
+    delete body.cloned_from_canonical_id;
+    let inheritedMaterials: unknown = undefined;
+    let inheritedOptionEnvelope: unknown = undefined;
+    let inheritedImitates: string[] | undefined = undefined;
+    let inheritedWaterTypes: string[] | undefined = undefined;
+    let inheritedVideoUrl: string | undefined = undefined;
+    let inheritedCategory: string | undefined = undefined;
+    if (cloneSourceId) {
+      const { data: src } = await supabase
+        .from("flies")
+        .select(
+          "category, materials_list, option_envelope, imitates, water_types, video_url, hero_image_url",
+        )
+        .eq("id", cloneSourceId)
+        .eq("status", "approved")
+        .maybeSingle();
+      if (src) {
+        inheritedMaterials = src.materials_list;
+        inheritedOptionEnvelope = src.option_envelope;
+        inheritedImitates = (src.imitates as string[] | null) ?? undefined;
+        inheritedWaterTypes = (src.water_types as string[] | null) ?? undefined;
+        inheritedVideoUrl = (src.video_url as string | null) ?? undefined;
+        inheritedCategory = (src.category as string | null) ?? undefined;
+        // If the client didn't supply a fresh upload and didn't already
+        // pass clone_image_from_url, derive it from the source row.
+        if (!imageUrl && typeof src.hero_image_url === "string" && src.hero_image_url.length > 0) {
+          const copied = await copyClonedImage(user.id, src.hero_image_url);
+          if (copied) imageUrl = copied;
+          else console.warn("[flies POST] copyClonedImage returned undefined for", src.hero_image_url);
+        }
+      } else {
+        console.warn("[flies POST] cloned_from_canonical_id not found / not approved:", cloneSourceId);
+      }
+    }
+
     const v3Row: Record<string, unknown> = {
       slug: privateSlug,
       name: str(body.name),
-      category: str(body.type),
+      category: str(body.type) ?? inheritedCategory,
       description: composedDescription,
-      video_url: str(body.video_url),
+      video_url: str(body.video_url) ?? inheritedVideoUrl,
       status: "private",
       submitted_by_user_id: user.id,
       ...(imageUrl ? { hero_image_url: imageUrl } : {}),
+      ...(inheritedMaterials !== undefined
+        ? { materials_list: inheritedMaterials }
+        : {}),
+      ...(inheritedOptionEnvelope !== undefined
+        ? { option_envelope: inheritedOptionEnvelope }
+        : {}),
+      ...(inheritedImitates ? { imitates: inheritedImitates } : {}),
+      ...(inheritedWaterTypes ? { water_types: inheritedWaterTypes } : {}),
     };
     Object.keys(v3Row).forEach((k) => v3Row[k] === undefined && delete v3Row[k]);
 
