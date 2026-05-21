@@ -162,11 +162,20 @@ export default async function FlyDetail({ params }: Props) {
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <FlyFavoriteButton canonicalFlyId={fly.id} />
                   <Link
-                    href={
-                      isLoggedIn
-                        ? `/journal/flies/new?cloneFrom=${fly.id}`
-                        : `/login?redirect=${encodeURIComponent(`/journal/flies/new?cloneFrom=${fly.id}`)}`
-                    }
+                    href={(() => {
+                      // When the workspace feature flag is on, route Clone
+                      // through the workspace's inline drawer (no full-page
+                      // nav). Otherwise fall back to the legacy /journal/
+                      // flies/new full-page form.
+                      const workspaceOn =
+                        process.env.NEXT_PUBLIC_FLIES_WORKSPACE === "1";
+                      const target = workspaceOn
+                        ? `/flies/workspace?clone=${fly.id}`
+                        : `/journal/flies/new?cloneFrom=${fly.id}`;
+                      return isLoggedIn
+                        ? target
+                        : `/login?redirect=${encodeURIComponent(target)}`;
+                    })()}
                     className="inline-flex items-center gap-1.5 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#00B4D8]/20 transition-colors"
                     aria-label="Clone this fly into a new pattern"
                     title="Start a new fly pre-filled from this one"

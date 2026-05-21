@@ -7,9 +7,9 @@
  * the page is bookmarkable and back-button-friendly. Persists user views
  * via the /api/fishing/fly-views endpoints.
  */
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useOptimistic, useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import FilterBar from "@/components/flies/workspace/FilterBar";
@@ -17,6 +17,7 @@ import type { FilterOption } from "@/components/flies/workspace/FilterPill";
 import SortMenu from "@/components/flies/workspace/SortMenu";
 import ViewSwitcher from "@/components/flies/workspace/ViewSwitcher";
 import ViewRail from "@/components/flies/workspace/ViewRail";
+import CloneDrawer from "@/components/flies/workspace/CloneDrawer";
 import {
   GridDisplay,
   TableDisplay,
@@ -24,6 +25,7 @@ import {
   GroupByBoxDisplay,
 } from "@/components/flies/workspace/displays";
 
+import type { Fly } from "@/types/flies";
 import type {
   WorkspaceRow,
   WorkspaceFilter,
@@ -69,6 +71,7 @@ export default function WorkspaceClient({
   viewerUsername,
 }: Props) {
   const router = useRouter();
+  const urlParams = useSearchParams();
   const [, startTransition] = useTransition();
 
   const [filter, setFilter] = useState<WorkspaceFilter>(activeFilter);
@@ -76,6 +79,25 @@ export default function WorkspaceClient({
   const [display, setDisplay] = useState<WorkspaceViewType>(activeDisplay);
   const [views, setViews] = useState<FlyViewDescriptor[]>(initialViews);
   const [currentViewId, setCurrentViewId] = useState<string>(activeViewId);
+
+  // Clone drawer state — driven by ?clone={canonicalFlyId} URL param so the
+  // canonical detail page can hand off cleanly via `<Link href="...?clone=...">`.
+  const cloneParam = urlParams?.get("clone") ?? null;
+  const [cloneOpen, setCloneOpen] = useState<boolean>(!!cloneParam);
+  useEffect(() => {
+    setCloneOpen(!!cloneParam);
+  }, [cloneParam]);
+
+  // Optimistic rows: lets us push a placeholder card the moment Clone is
+  // saved, before the server resolves. Keys with negative pseudo-ids until
+  // the real fly arrives.
+  const [optimisticRows, addOptimisticRow] = useOptimistic(
+    rows,
+    (current, op: { kind: "add"; row: WorkspaceRow } | { kind: "remove"; id: string }) => {
+      if (op.kind === "add") return [op.row, ...current];
+      return current.filter((r) => r.fly.id !== op.id);
+    },
+  );
 
   // Resync from server-side props when the URL changes (e.g. user back-button).
   useEffect(() => {
@@ -199,6 +221,83 @@ export default function WorkspaceClient({
     }
   }
 
+  // ── Clone drawer handlers ────────────────────────────────────────────────
+
+  function closeCloneDrawer() {
+    setCloneOpen(false);
+    // Strip `clone` from the URL so back-button doesn't re-open it.
+    const sp = new URLSearchParams(urlParams?.toString() ?? "");
+    sp.delete("clone");
+    const qs = sp.toString();
+    router.replace(qs ? `/flies/workspace?${qs}` : "/flies/workspace", {
+      scroll: false,
+    });
+  }
+
+  function handleOptimisticClone(placeholderName: string) {
+    const placeholderId = `optimistic-${Date.now()}`;
+    addOptimisticRow({
+      kind: "add",
+      row: {
+        fly: {
+          id: placeholderId,
+          slug: placeholderId,
+          name: placeholderName,
+          category: null,
+          description: null,
+          history: null,
+          tying_overview: null,
+          fishing_tips: null,
+          recipe_notes: null,
+          hero_image_url: null,
+          gallery_image_urls: [],
+          video_url: null,
+          materials_list: [],
+          option_envelope: {},
+          status: "private",
+          submitted_by_user_id: null,
+          approved_by_user_id: null,
+          approved_at: null,
+          reject_reason: null,
+          inspired_by_fly_id: null,
+          origin_credit: null,
+          imitates: [],
+          effective_species_ids: [],
+          water_types: [],
+          is_featured: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as unknown as Fly,
+        is_custom: true,
+        versions: [],
+        tied_total: 0,
+        bought_total: 0,
+        target_total: 0,
+        deficit: 0,
+        tie_next_count: 0,
+        favorite_any: false,
+        box_ids: [],
+        in_box_count: 0,
+        last_used_at: null,
+      },
+    });
+  }
+
+  function handleCloneCreated(_fly: Fly) {
+    void _fly;
+    // Refresh server data so the real row replaces the optimistic placeholder.
+    // The optimistic row is automatically dropped when React re-renders with
+    // the new server `rows` prop.
+    startTransition(() => router.refresh());
+  }
+
+  function handleCloneFailure(_msg: string) {
+    void _msg;
+    // useOptimistic auto-rolls-back when the action throws / completes; we
+    // also force a refresh to be safe.
+    startTransition(() => router.refresh());
+  }
+
   async function togglePin(id: string, pinned: boolean) {
     try {
       const res = await fetch(`/api/fishing/fly-views/${id}`, {
@@ -221,7 +320,7 @@ export default function WorkspaceClient({
 
   const categoryOptions: FilterOption[] = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const r of rows) {
+    for (const r of optimisticRows) {
       const c = (r.fly.category ?? "").toString();
       if (!c) continue;
       counts.set(c, (counts.get(c) ?? 0) + 1);
@@ -233,7 +332,7 @@ export default function WorkspaceClient({
         label: CATEGORY_LABELS[value] ?? value,
         count,
       }));
-  }, [rows]);
+  }, [optimisticRows]);
 
   const boxOptions: FilterOption[] = useMemo(
     () =>
@@ -265,7 +364,7 @@ export default function WorkspaceClient({
           </h1>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
             <span className="font-[var(--font-mono)] tabular-nums">
-              {rows.length}
+              {optimisticRows.length}
             </span>{" "}
             patterns in your collection
           </p>
@@ -309,7 +408,7 @@ export default function WorkspaceClient({
         />
         <div className="mb-4 flex items-center justify-between gap-2 flex-wrap">
           <span className="text-xs text-[var(--color-text-muted)]">
-            Showing <span className="font-[var(--font-mono)] tabular-nums">{rows.length}</span> flies
+            Showing <span className="font-[var(--font-mono)] tabular-nums">{optimisticRows.length}</span> flies
             {hasUnsavedChanges && (
               <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#E8923A]/10 text-[#E8923A] px-2 py-0.5 text-[10px]">
                 Unsaved changes
@@ -323,22 +422,35 @@ export default function WorkspaceClient({
         </div>
 
         {/* Display panel */}
-        {rows.length === 0 ? (
+        {optimisticRows.length === 0 ? (
           <EmptyState viewId={currentViewId} />
         ) : display === "table" ? (
-          <TableDisplay rows={rows} viewerUsername={viewerUsername} />
+          <TableDisplay rows={optimisticRows} viewerUsername={viewerUsername} />
         ) : display === "kanban" ? (
-          <KanbanDisplay rows={rows} viewerUsername={viewerUsername} />
+          <KanbanDisplay rows={optimisticRows} viewerUsername={viewerUsername} />
         ) : display === "group-by-box" ? (
           <GroupByBoxDisplay
-            rows={rows}
+            rows={optimisticRows}
             viewerUsername={viewerUsername}
             boxes={boxes}
           />
         ) : (
-          <GridDisplay rows={rows} viewerUsername={viewerUsername} />
+          <GridDisplay rows={optimisticRows} viewerUsername={viewerUsername} />
         )}
       </div>
+
+      {/* Inline Clone drawer — opens via ?clone={canonicalFlyId} URL param */}
+      <CloneDrawer
+        open={cloneOpen}
+        canonicalFlyId={cloneParam}
+        onOpenChange={(next) => {
+          if (!next) closeCloneDrawer();
+          else setCloneOpen(true);
+        }}
+        onOptimisticStart={handleOptimisticClone}
+        onCreated={handleCloneCreated}
+        onFailure={handleCloneFailure}
+      />
     </div>
   );
 }
