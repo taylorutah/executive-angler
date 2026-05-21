@@ -30,13 +30,15 @@ interface Props {
 }
 
 export default function FlyCard({ row, viewerUsername }: Props) {
+  void viewerUsername; // Kept on the prop for API compatibility — no longer used.
+  // Every fly (canonical OR private) routes through /flies/{slug}.
+  // getFlyBySlug() in fly-model has a "submitter peek" branch that returns
+  // private/pending flies to their owner via RLS, so the same URL works for
+  // both shapes. The old /anglers/{username}/flies/{slug} path is a
+  // deprecated redirect-only handler that lands on /flies → /flies/workspace,
+  // which was the source of the "Click my fly → workspace" bug.
   const flyStatus = (row.fly as { status?: string | null }).status ?? null;
-  const isPrivateRoute =
-    row.is_custom && (flyStatus === "private" || flyStatus === "pending");
-  const href =
-    isPrivateRoute && viewerUsername
-      ? `/anglers/${viewerUsername}/flies/${row.fly.slug}`
-      : `/flies/${row.fly.slug}`;
+  const href = `/flies/${row.fly.slug}`;
   const transitionName = `fly-${row.fly.id}`;
 
   return (

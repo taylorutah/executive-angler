@@ -183,13 +183,12 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
         </thead>
         <tbody>
           {rows.map((r) => {
-            const flyStatus = (r.fly as { status?: string | null }).status ?? null;
-            const privateRoute =
-              r.is_custom && (flyStatus === "private" || flyStatus === "pending");
-            const href =
-              privateRoute && viewerUsername
-                ? `/anglers/${viewerUsername}/flies/${r.fly.slug}`
-                : `/flies/${r.fly.slug}`;
+            // Single URL scheme for every fly. /flies/[slug] resolves
+            // approved canonicals AND the viewer's own private/pending flies
+            // (RLS-gated submitter peek inside getFlyBySlug). The old
+            // /anglers/{username}/flies/{slug} path is a deprecated
+            // redirect-only handler.
+            const href = `/flies/${r.fly.slug}`;
             return (
               <tr
                 key={r.fly.id}
