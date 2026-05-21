@@ -17,9 +17,11 @@ import {
   useMemo,
   useRef,
   useState,
+  useTransition,
 } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChevronRight, ChevronDown, Wrench, Heart, Sparkles } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import FlyCard from "./FlyCard";
@@ -268,60 +270,233 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Kanban — columns by tie_next_status
+// Kanban — columns by tie_next_status (drag-and-drop enabled)
 // ────────────────────────────────────────────────────────────────────────────
 
+type KanbanColumnId = "wanted" | "at_vise" | "done";
+
+const KANBAN_COLUMNS: { id: KanbanColumnId; label: string }[] = [
+  { id: "wanted", label: "Wanted" },
+  { id: "at_vise", label: "At vise" },
+  { id: "done", label: "Done" },
+];
+
 export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
-  // A fly appears in a column if ANY of its configurations have that status.
-  const columns = useMemo(() => {
-    const wanted: WorkspaceRow[] = [];
-    const atVise: WorkspaceRow[] = [];
-    const done: WorkspaceRow[] = [];
-    for (const r of rows) {
-      const statuses = new Set(
-        r.versions.map((v) => v.tie_next_status).filter(Boolean) as string[],
-      );
-      if (statuses.has("wanted")) wanted.push(r);
-      if (statuses.has("at_vise")) atVise.push(r);
-      if (statuses.has("done")) done.push(r);
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+
+  // Optimistic per-configuration status overrides applied on top of the
+  // server `rows`. A successful PATCH leaves the override in place until
+  // the next router.refresh() reconciles with fresh server data; a failed
+  // PATCH clears the affected overrides so the UI snaps back.
+  const [overrides, setOverrides] = useState<Record<string, KanbanColumnId>>({});
+
+  // Track drag state for visual feedback.
+  const [draggingFlyId, setDraggingFlyId] = useState<string | null>(null);
+  const [dragSourceCol, setDragSourceCol] = useState<KanbanColumnId | null>(null);
+  const [dragOverCol, setDragOverCol] = useState<KanbanColumnId | null>(null);
+
+  // Effective status for a given configuration (override wins over server).
+  function statusOf(configId: string, serverStatus: string | null | undefined): KanbanColumnId | null {
+    if (overrides[configId]) return overrides[configId];
+    if (serverStatus === "wanted" || serverStatus === "at_vise" || serverStatus === "done") {
+      return serverStatus;
     }
-    return [
-      { id: "wanted", label: "Wanted", rows: wanted },
-      { id: "at_vise", label: "At vise", rows: atVise },
-      { id: "done", label: "Done", rows: done },
-    ];
-  }, [rows]);
+    return null;
+  }
+
+  // A fly appears in a column if ANY of its configurations have that
+  // effective status. Same rule as the read-only version, but with overrides.
+  const columns = useMemo(() => {
+    const buckets: Record<KanbanColumnId, WorkspaceRow[]> = {
+      wanted: [],
+      at_vise: [],
+      done: [],
+    };
+    for (const r of rows) {
+      const statuses = new Set<KanbanColumnId>();
+      for (const v of r.versions) {
+        const s = statusOf(v.id, v.tie_next_status);
+        if (s) statuses.add(s);
+      }
+      for (const s of statuses) buckets[s].push(r);
+    }
+    return KANBAN_COLUMNS.map((c) => ({ ...c, rows: buckets[c.id] }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows, overrides]);
+
+  async function handleMove(
+    row: WorkspaceRow,
+    from: KanbanColumnId,
+    to: KanbanColumnId,
+  ) {
+    if (from === to) return;
+    // Find every version of this fly currently in the source column. Those
+    // are the configurations we'll re-tag with `to`.
+    const targets = row.versions.filter(
+      (v) => statusOf(v.id, v.tie_next_status) === from,
+    );
+    if (targets.length === 0) return;
+
+    // Apply optimistic overrides for every targeted configuration.
+    setOverrides((prev) => {
+      const next = { ...prev };
+      for (const v of targets) next[v.id] = to;
+      return next;
+    });
+
+    // Fire PATCHes in parallel. Keep is_tie_next=true so the row stays
+    // visible across all three columns (matches TieNextHub behavior).
+    const results = await Promise.allSettled(
+      targets.map((v) =>
+        fetch("/api/fishing/fly-configurations", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: v.id,
+            tie_next_status: to,
+            is_tie_next: true,
+          }),
+        }).then(async (res) => {
+          if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body?.error ?? `PATCH failed (${res.status})`);
+          }
+          return res.json();
+        }),
+      ),
+    );
+
+    const anyFailed = results.some((r) => r.status === "rejected");
+    if (anyFailed) {
+      // Roll back the affected overrides so the user sees the failure.
+      setOverrides((prev) => {
+        const next = { ...prev };
+        for (const v of targets) delete next[v.id];
+        return next;
+      });
+      // Surface a console error — toast infra in this view is up to the
+      // caller; an alert is jarring during fast drags.
+      // eslint-disable-next-line no-console
+      console.error(
+        "Failed to move fly",
+        row.fly.name,
+        results.filter((r) => r.status === "rejected"),
+      );
+      return;
+    }
+
+    // Reconcile with server (refresh re-renders with new `rows`; the
+    // override is still applied until the prop change settles, then the
+    // override is no longer needed because the server matches it).
+    startTransition(() => router.refresh());
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {columns.map((col) => (
-        <section
-          key={col.id}
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-3"
-        >
-          <header className="mb-3 flex items-center justify-between">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">
-              {col.label}
-            </h3>
-            <span className="text-[10px] font-[var(--font-mono)] tabular-nums text-[var(--color-text-muted)]">
-              {col.rows.length}
-            </span>
-          </header>
-          {col.rows.length === 0 ? (
-            <p className="text-xs text-[var(--color-text-muted)] py-6 text-center">
-              Empty.
-            </p>
-          ) : (
-            <ul className="space-y-2">
-              {col.rows.map((r) => (
-                <li key={r.fly.id}>
-                  <FlyCard row={r} viewerUsername={viewerUsername} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      ))}
+      {columns.map((col) => {
+        const isDropTarget = dragOverCol === col.id && dragSourceCol !== col.id;
+        return (
+          <section
+            key={col.id}
+            onDragOver={(e) => {
+              // Only accept drops if a card is being dragged. preventDefault
+              // is required to enable the drop event to fire.
+              if (!draggingFlyId) return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              if (dragOverCol !== col.id) setDragOverCol(col.id);
+            }}
+            onDragLeave={(e) => {
+              // Only clear when leaving the column container itself, not a
+              // child element within it.
+              if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+              if (dragOverCol === col.id) setDragOverCol(null);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOverCol(null);
+              const raw = e.dataTransfer.getData("application/x-ea-fly");
+              setDraggingFlyId(null);
+              setDragSourceCol(null);
+              if (!raw) return;
+              try {
+                const { flyId, sourceColumn } = JSON.parse(raw) as {
+                  flyId: string;
+                  sourceColumn: KanbanColumnId;
+                };
+                const row = rows.find((r) => r.fly.id === flyId);
+                if (!row) return;
+                void handleMove(row, sourceColumn, col.id);
+              } catch {
+                /* ignore malformed payloads */
+              }
+            }}
+            className={[
+              "rounded-lg border bg-[var(--color-surface)]/40 p-3 transition-colors",
+              isDropTarget
+                ? "border-[#E8923A] bg-[#E8923A]/[0.06] ring-2 ring-[#E8923A]/30"
+                : "border-[var(--color-border)]",
+            ].join(" ")}
+            data-kanban-column={col.id}
+          >
+            <header className="mb-3 flex items-center justify-between">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {col.label}
+              </h3>
+              <span className="text-[10px] font-[var(--font-mono)] tabular-nums text-[var(--color-text-muted)]">
+                {col.rows.length}
+              </span>
+            </header>
+            {col.rows.length === 0 ? (
+              <p className="text-xs text-[var(--color-text-muted)] py-6 text-center">
+                {isDropTarget ? "Drop to move here." : "Empty."}
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {col.rows.map((r) => {
+                  const isBeingDragged =
+                    draggingFlyId === r.fly.id && dragSourceCol === col.id;
+                  return (
+                    <li
+                      key={r.fly.id}
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.effectAllowed = "move";
+                        e.dataTransfer.setData(
+                          "application/x-ea-fly",
+                          JSON.stringify({
+                            flyId: r.fly.id,
+                            sourceColumn: col.id,
+                          }),
+                        );
+                        // Also stash a plain-text version for cross-tool
+                        // compatibility / Firefox quirk.
+                        e.dataTransfer.setData("text/plain", r.fly.name);
+                        setDraggingFlyId(r.fly.id);
+                        setDragSourceCol(col.id);
+                      }}
+                      onDragEnd={() => {
+                        setDraggingFlyId(null);
+                        setDragSourceCol(null);
+                        setDragOverCol(null);
+                      }}
+                      className={[
+                        "cursor-grab active:cursor-grabbing transition-opacity",
+                        isBeingDragged ? "opacity-40" : "opacity-100",
+                      ].join(" ")}
+                      data-kanban-card={r.fly.id}
+                      data-kanban-source={col.id}
+                    >
+                      <FlyCard row={r} viewerUsername={viewerUsername} />
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        );
+      })}
     </div>
   );
 }
