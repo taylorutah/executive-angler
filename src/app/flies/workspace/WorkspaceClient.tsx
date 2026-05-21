@@ -1,39 +1,38 @@
 "use client";
 /**
- * WorkspaceClient — Phase 1 shell.
+ * WorkspaceClient — Phase 2 fully-wired workspace.
  *
- * Renders the unified workspace data as a grid of cards. Two pieces of UI:
- *   1. A *virtual view rail* on desktop (and a chip strip on mobile) so the
- *      user can switch between All / Created by me / Favorites / Tie next /
- *      In a box / Need to restock.
- *   2. A grid of fly cards. The card design mirrors PatternsHub so users
- *      transitioning between hubs see the same shape.
- *
- * Phase 2 layers in filter pills, sort menu, view switcher, URL state for
- * everything, and the saved-views CRUD UI.
+ * Composes ViewRail · FilterBar · SortMenu · ViewSwitcher · display panels.
+ * Owns local UI state for filter/sort/display, mirrors it into the URL so
+ * the page is bookmarkable and back-button-friendly. Persists user views
+ * via the /api/fishing/fly-views endpoints.
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Sparkles,
-  Star,
-  Wrench,
-  Boxes as BoxesIcon,
-  Layers,
-  Heart,
-  Plus,
-} from "lucide-react";
-import type { WorkspaceRow } from "@/lib/flies/workspace-shared";
-import { VIRTUAL_VIEWS } from "@/lib/flies/workspace-shared";
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
 
-interface Props {
-  rows: WorkspaceRow[];
-  activeViewId: string;
-  viewerUserId: string;
-  viewerUsername: string | null;
-}
+import FilterBar from "@/components/flies/workspace/FilterBar";
+import type { FilterOption } from "@/components/flies/workspace/FilterPill";
+import SortMenu from "@/components/flies/workspace/SortMenu";
+import ViewSwitcher from "@/components/flies/workspace/ViewSwitcher";
+import ViewRail from "@/components/flies/workspace/ViewRail";
+import {
+  GridDisplay,
+  TableDisplay,
+  KanbanDisplay,
+  GroupByBoxDisplay,
+} from "@/components/flies/workspace/displays";
+
+import type {
+  WorkspaceRow,
+  WorkspaceFilter,
+  WorkspaceSort,
+  WorkspaceViewType,
+  FlyViewDescriptor,
+} from "@/lib/flies/workspace-shared";
+import { getVirtualView } from "@/lib/flies/workspace-shared";
+import { encodeWorkspaceParams } from "@/lib/flies/workspace-url";
 
 const CATEGORY_LABELS: Record<string, string> = {
   nymph: "Nymph",
@@ -47,30 +46,214 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
+interface Props {
+  rows: WorkspaceRow[];
+  boxes: { id: string; name: string }[];
+  allViews: FlyViewDescriptor[];
+  activeViewId: string;
+  activeFilter: WorkspaceFilter;
+  activeSort: WorkspaceSort;
+  activeDisplay: WorkspaceViewType;
+  viewerUserId: string;
+  viewerUsername: string | null;
+}
+
 export default function WorkspaceClient({
   rows,
+  boxes,
+  allViews: initialViews,
   activeViewId,
+  activeFilter,
+  activeSort,
+  activeDisplay,
   viewerUsername,
 }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams?.get("search") ?? "");
+  const [, startTransition] = useTransition();
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter((r) => r.fly.name.toLowerCase().includes(q));
-  }, [rows, search]);
+  const [filter, setFilter] = useState<WorkspaceFilter>(activeFilter);
+  const [sort, setSort] = useState<WorkspaceSort>(activeSort);
+  const [display, setDisplay] = useState<WorkspaceViewType>(activeDisplay);
+  const [views, setViews] = useState<FlyViewDescriptor[]>(initialViews);
+  const [currentViewId, setCurrentViewId] = useState<string>(activeViewId);
 
-  function setView(viewId: string) {
-    const params = new URLSearchParams(searchParams?.toString() ?? "");
-    if (viewId === "all") params.delete("view");
-    else params.set("view", viewId);
-    const qs = params.toString();
-    router.replace(qs ? `/flies/workspace?${qs}` : "/flies/workspace", {
-      scroll: false,
+  // Resync from server-side props when the URL changes (e.g. user back-button).
+  useEffect(() => {
+    setFilter(activeFilter);
+    setSort(activeSort);
+    setDisplay(activeDisplay);
+    setCurrentViewId(activeViewId);
+  }, [activeFilter, activeSort, activeDisplay, activeViewId]);
+
+  // Push state changes to URL — server re-renders with new rows.
+  function syncUrl(next: {
+    viewId?: string;
+    filter?: WorkspaceFilter;
+    sort?: WorkspaceSort;
+    display?: WorkspaceViewType;
+  }) {
+    const sp = encodeWorkspaceParams({
+      viewId: next.viewId ?? currentViewId,
+      filter: next.filter ?? filter,
+      sort: next.sort ?? sort,
+      display: next.display ?? display,
+    });
+    const qs = sp.toString();
+    const url = qs ? `/flies/workspace?${qs}` : "/flies/workspace";
+    startTransition(() => router.replace(url, { scroll: false }));
+  }
+
+  function selectView(viewId: string) {
+    const v = getVirtualView(viewId) ?? views.find((x) => x.id === viewId);
+    if (!v) return;
+    setCurrentViewId(viewId);
+    setFilter(v.filter);
+    setSort(v.sort);
+    setDisplay(v.view_type);
+    syncUrl({
+      viewId,
+      filter: v.filter,
+      sort: v.sort,
+      display: v.view_type,
     });
   }
+
+  function updateFilter(next: WorkspaceFilter) {
+    setFilter(next);
+    syncUrl({ filter: next });
+  }
+  function updateSort(next: WorkspaceSort) {
+    setSort(next);
+    syncUrl({ sort: next });
+  }
+  function updateDisplay(next: WorkspaceViewType) {
+    setDisplay(next);
+    syncUrl({ display: next });
+  }
+
+  // ── Saved-view CRUD wiring ────────────────────────────────────────────────
+
+  async function saveCurrentAsView(name: string) {
+    try {
+      const res = await fetch("/api/fishing/fly-views", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          filter,
+          sort,
+          view_type: display,
+        }),
+      });
+      const body = await res.json();
+      if (!res.ok) return { ok: false, error: body.error ?? "Save failed" };
+      const v = body.view;
+      const newView: FlyViewDescriptor = {
+        id: v.id,
+        name: v.name,
+        filter: v.filter ?? {},
+        sort: v.sort ?? { field: "name", direction: "asc" },
+        view_type: v.view_type ?? "grid",
+        is_virtual: false,
+        is_pinned: !!v.is_pinned,
+      };
+      setViews((arr) => [...arr, newView]);
+      setCurrentViewId(newView.id);
+      syncUrl({ viewId: newView.id });
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : "Save failed" };
+    }
+  }
+
+  async function renameView(id: string, name: string) {
+    try {
+      const res = await fetch(`/api/fishing/fly-views/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      const body = await res.json();
+      if (!res.ok) return { ok: false, error: body.error };
+      setViews((arr) => arr.map((v) => (v.id === id ? { ...v, name } : v)));
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : "Rename failed" };
+    }
+  }
+
+  async function deleteView(id: string) {
+    try {
+      const res = await fetch(`/api/fishing/fly-views/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json();
+        return { ok: false, error: body.error };
+      }
+      setViews((arr) => arr.filter((v) => v.id !== id));
+      if (currentViewId === id) selectView("all");
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : "Delete failed" };
+    }
+  }
+
+  async function togglePin(id: string, pinned: boolean) {
+    try {
+      const res = await fetch(`/api/fishing/fly-views/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_pinned: pinned }),
+      });
+      const body = await res.json();
+      if (!res.ok) return { ok: false, error: body.error };
+      setViews((arr) =>
+        arr.map((v) => (v.id === id ? { ...v, is_pinned: pinned } : v)),
+      );
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : "Pin failed" };
+    }
+  }
+
+  // ── Filter pill option lists ─────────────────────────────────────────────
+
+  const categoryOptions: FilterOption[] = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of rows) {
+      const c = (r.fly.category ?? "").toString();
+      if (!c) continue;
+      counts.set(c, (counts.get(c) ?? 0) + 1);
+    }
+    return Array.from(counts.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([value, count]) => ({
+        value,
+        label: CATEGORY_LABELS[value] ?? value,
+        count,
+      }));
+  }, [rows]);
+
+  const boxOptions: FilterOption[] = useMemo(
+    () =>
+      boxes.map((b) => ({
+        value: b.id,
+        label: b.name,
+      })),
+    [boxes],
+  );
+
+  // Detect "unsaved changes" relative to the active view's stored config.
+  const hasUnsavedChanges = useMemo(() => {
+    const v = getVirtualView(currentViewId) ?? views.find((x) => x.id === currentViewId);
+    if (!v) return false;
+    return (
+      JSON.stringify(v.filter) !== JSON.stringify(filter) ||
+      JSON.stringify(v.sort) !== JSON.stringify(sort) ||
+      v.view_type !== display
+    );
+  }, [currentViewId, views, filter, sort, display]);
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
@@ -102,204 +285,87 @@ export default function WorkspaceClient({
           </div>
         </header>
 
-        {/* Persistent sub-nav. Boxes stays equally prominent here. */}
+        {/* Persistent sub-nav — Boxes stays one click away */}
         <FliesSubNav active="workspace" />
 
-        {/* View chips. On desktop these become a left rail in Phase 2; for
-            Phase 1 we render them horizontally for simplicity. */}
-        <div
-          role="tablist"
-          aria-label="Workspace view"
-          className="mb-4 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        >
-          <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-1 min-w-max">
-            {VIRTUAL_VIEWS.map((v) => (
-              <button
-                key={v.id}
-                role="tab"
-                aria-selected={activeViewId === v.id}
-                onClick={() => setView(v.id)}
-                className={[
-                  "flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
-                  activeViewId === v.id
-                    ? "bg-[#E8923A] text-white"
-                    : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text-primary)]",
-                ].join(" ")}
-              >
-                <ViewIcon viewId={v.id} />
-                {v.name}
-              </button>
-            ))}
+        {/* View rail (virtual + saved views, with save/rename/delete) */}
+        <ViewRail
+          views={views}
+          activeViewId={currentViewId}
+          onSelect={selectView}
+          onSaveCurrent={saveCurrentAsView}
+          onRename={renameView}
+          onDelete={deleteView}
+          onTogglePin={togglePin}
+          hasUnsavedChanges={hasUnsavedChanges}
+        />
+
+        {/* Filter + sort + display switcher */}
+        <FilterBar
+          filter={filter}
+          onChange={updateFilter}
+          categoryOptions={categoryOptions}
+          boxOptions={boxOptions}
+        />
+        <div className="mb-4 flex items-center justify-between gap-2 flex-wrap">
+          <span className="text-xs text-[var(--color-text-muted)]">
+            Showing <span className="font-[var(--font-mono)] tabular-nums">{rows.length}</span> flies
+            {hasUnsavedChanges && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#E8923A]/10 text-[#E8923A] px-2 py-0.5 text-[10px]">
+                Unsaved changes
+              </span>
+            )}
+          </span>
+          <div className="flex items-center gap-2">
+            <SortMenu sort={sort} onChange={updateSort} />
+            <ViewSwitcher value={display} onChange={updateDisplay} />
           </div>
         </div>
 
-        {/* Search bar — Phase 2 adds full filter bar. */}
-        <div className="mb-4">
-          <input
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search your flies…"
-            className="w-full max-w-md rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+        {/* Display panel */}
+        {rows.length === 0 ? (
+          <EmptyState viewId={currentViewId} />
+        ) : display === "table" ? (
+          <TableDisplay rows={rows} viewerUsername={viewerUsername} />
+        ) : display === "kanban" ? (
+          <KanbanDisplay rows={rows} viewerUsername={viewerUsername} />
+        ) : display === "group-by-box" ? (
+          <GroupByBoxDisplay
+            rows={rows}
+            viewerUsername={viewerUsername}
+            boxes={boxes}
           />
-        </div>
-
-        {/* Grid of fly cards. */}
-        {filtered.length === 0 ? (
-          <p className="text-sm text-[var(--color-text-muted)] py-12 text-center">
-            {activeViewId === "created-by-me"
-              ? "You haven't created any flies yet. Clone a canonical pattern or start a new one."
-              : activeViewId === "favorites"
-                ? "No favorited flies yet."
-                : activeViewId === "tie-next"
-                  ? "Your tie-next queue is empty."
-                  : activeViewId === "in-a-box"
-                    ? "Add a fly to a box to see it here."
-                    : activeViewId === "restock"
-                      ? "Inventory looks healthy — nothing to restock."
-                      : rows.length === 0
-                        ? "Your collection is empty. Browse the library and tap “+ Add to my box.”"
-                        : "No matches. Adjust your search."}
-          </p>
         ) : (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {filtered.map((r) => {
-              const flyStatus = (r.fly as { status?: string | null }).status ?? null;
-              const isPrivateRoute =
-                r.is_custom &&
-                (flyStatus === "private" || flyStatus === "pending");
-              const href =
-                isPrivateRoute && viewerUsername
-                  ? `/anglers/${viewerUsername}/flies/${r.fly.slug}`
-                  : `/flies/${r.fly.slug}`;
-              return (
-                <li key={r.fly.id}>
-                  <Link
-                    href={href}
-                    className="block h-full rounded-lg border border-[var(--color-border)] hover:border-[#E8923A]/60 hover:bg-[#E8923A]/5 transition-colors px-4 py-3"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-md bg-[var(--color-surface)]">
-                        {r.fly.hero_image_url ? (
-                          <Image
-                            src={r.fly.hero_image_url}
-                            alt={r.fly.name}
-                            fill
-                            sizes="56px"
-                            className="object-cover"
-                          />
-                        ) : null}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <p className="font-medium truncate text-[var(--color-text-primary)]">
-                            {r.fly.name}
-                          </p>
-                          {r.is_custom && (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#0BA5C7] flex-shrink-0"
-                              title={
-                                flyStatus === "pending"
-                                  ? "Submitted for review"
-                                  : flyStatus === "approved"
-                                    ? "Your fly, now in the canonical library"
-                                    : "Created by you"
-                              }
-                            >
-                              <Sparkles className="h-3 w-3" />
-                              Custom
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-[var(--color-text-muted)] truncate">
-                          {CATEGORY_LABELS[(r.fly.category as string) ?? ""] ??
-                            r.fly.category ??
-                            "Fly"}
-                          {r.versions.length > 0
-                            ? ` · ${r.versions.length} version${r.versions.length === 1 ? "" : "s"}`
-                            : " · No versions yet"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-3 flex items-center gap-3 text-[11px] text-[var(--color-text-muted)]">
-                      <Stat label="In box" value={r.in_box_count} />
-                      <Stat label="Target" value={r.target_total} />
-                      <Stat
-                        label="Δ"
-                        value={r.deficit}
-                        warn={r.deficit > 0}
-                      />
-                      {r.tie_next_count > 0 && (
-                        <span className="ml-auto inline-flex items-center gap-1 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#E8923A]">
-                          <Wrench className="h-3 w-3" /> {r.tie_next_count}
-                        </span>
-                      )}
-                      {r.favorite_any && (
-                        <Heart
-                          className="h-3.5 w-3.5 text-rose-500"
-                          fill="currentColor"
-                        />
-                      )}
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <GridDisplay rows={rows} viewerUsername={viewerUsername} />
         )}
       </div>
     </div>
   );
 }
 
-function ViewIcon({ viewId }: { viewId: string }) {
-  switch (viewId) {
-    case "created-by-me":
-      return <Sparkles className="h-3.5 w-3.5" />;
-    case "favorites":
-      return <Star className="h-3.5 w-3.5" />;
-    case "tie-next":
-      return <Wrench className="h-3.5 w-3.5" />;
-    case "in-a-box":
-      return <BoxesIcon className="h-3.5 w-3.5" />;
-    case "restock":
-      return <Heart className="h-3.5 w-3.5" />;
-    default:
-      return <Layers className="h-3.5 w-3.5" />;
-  }
-}
-
-function Stat({
-  label,
-  value,
-  warn,
-}: {
-  label: string;
-  value: number;
-  warn?: boolean;
-}) {
+function EmptyState({ viewId }: { viewId: string }) {
+  const copy =
+    viewId === "created-by-me"
+      ? "You haven't created any flies yet. Clone a canonical pattern or start a new one."
+      : viewId === "favorites"
+        ? "No favorited flies yet."
+        : viewId === "tie-next"
+          ? "Your tie-next queue is empty."
+          : viewId === "in-a-box"
+            ? "Add a fly to a box to see it here."
+            : viewId === "restock"
+              ? "Inventory looks healthy — nothing to restock."
+              : "No flies match your filters. Adjust them or clear all.";
   return (
-    <span className="inline-flex items-baseline gap-1">
-      <span className="text-[10px] uppercase tracking-wider">{label}</span>
-      <span
-        className={`font-[var(--font-mono)] tabular-nums ${
-          warn ? "text-[#E8923A] font-semibold" : ""
-        }`}
-      >
-        {value}
-      </span>
-    </span>
+    <p className="text-sm text-[var(--color-text-muted)] py-12 text-center">
+      {copy}
+    </p>
   );
 }
 
 /**
- * Persistent flies sub-nav. Renders above the workspace contents on every
- * `/flies/*` route so Boxes / Workbench / Tie Next / Shared stay one click
- * away regardless of where the user is.
- *
- * Phase 1: only rendered inside the workspace shell to validate the layout.
- * Phase 6 promotes this into a shared layout file consumed by the rest of
- * the /flies routes.
+ * Persistent flies sub-nav. Boxes stays equally prominent — one click from
+ * anywhere in the workspace.
  */
 function FliesSubNav({
   active,

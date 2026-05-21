@@ -1,57 +1,41 @@
 /**
- * /flies/workspace — the new Flies Workspace, behind a feature flag.
+ * /flies/workspace — the unified Flies Workspace, behind a feature flag.
  *
- * Phase 1 scope: render the unified data set (configs + created-by-me) as a
- * simple grid using the default "All my flies" virtual view. No filter UI,
- * no view switcher, no saved-view CRUD yet — those are Phase 2.
+ * Phase 2: filter pills, sort menu, view switcher, URL state, saved-view
+ * CRUD via /api/fishing/fly-views, four display modes (Grid · Table ·
+ * Kanban · Group-by-box).
  *
- * Goal of Phase 1: prove the query layer feeds a real page, validate the
- * persistent sub-nav with Boxes/Workbench/Tie Next/Shared, and ship behind
- * a flag so we can iterate without touching the live Patterns tab.
- *
- * Feature flag: NEXT_PUBLIC_FLIES_WORKSPACE=1 (env var or local dev override).
- *   - When unset/0: redirect to /flies?tab=patterns so accidental URL visits
- *     don't dead-end on an empty page in prod.
- *   - When 1: render the workspace.
- *
- * iOS contract: this page is web-only. iOS continues hitting its existing
- * data paths.
+ * Feature flag: NEXT_PUBLIC_FLIES_WORKSPACE=1. When off, redirects to the
+ * legacy hub so prod is untouched.
  */
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { listFlyWorkspaceRows } from "@/lib/db/fly-workspace";
-import { getVirtualView } from "@/lib/flies/workspace-shared";
+import { listFlyWorkspaceRows, listSavedFlyViews } from "@/lib/db/fly-workspace";
+import { listMyBoxes } from "@/lib/db/fly-v2";
+import {
+  getVirtualView,
+  VIRTUAL_VIEWS,
+} from "@/lib/flies/workspace-shared";
+import { decodeWorkspaceParams } from "@/lib/flies/workspace-url";
 import WorkspaceClient from "./WorkspaceClient";
 
 export const metadata: Metadata = {
   title: "Flies Workspace",
-  description: "Your unified fly collection — search, filter, and switch views in one place.",
+  description:
+    "Your unified fly collection — search, filter, sort, and switch views in one place.",
 };
 
 export const dynamic = "force-dynamic";
 
 const FEATURE_FLAG_ON = process.env.NEXT_PUBLIC_FLIES_WORKSPACE === "1";
 
-type SearchParams = {
-  view?: string;
-  source?: string;
-  cat?: string;
-  box?: string;
-  tag?: string;
-  search?: string;
-  sort?: string;
-  display?: string;
-};
-
 export default async function FlyWorkspacePage({
   searchParams,
 }: {
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
   if (!FEATURE_FLAG_ON) {
-    // Soft fall-back to the existing hub. We don't 404 because the flag may
-    // flip on for a single user via cookie in a future iteration.
     redirect("/flies?tab=patterns");
   }
 
@@ -64,46 +48,49 @@ export default async function FlyWorkspacePage({
   }
 
   const params = await searchParams;
-  const viewId = params.view ?? "all";
+  const decoded = decodeWorkspaceParams(params);
 
-  // For Phase 1 we only resolve virtual views. Saved views land in Phase 2
-  // once the `user_fly_views` table is in place.
-  const view = getVirtualView(viewId);
-  if (!view) {
-    notFound();
-  }
+  // Resolve the active view: virtual first, then saved.
+  const savedViews = await listSavedFlyViews();
+  const view =
+    getVirtualView(decoded.viewId) ??
+    savedViews.find((v) => v.id === decoded.viewId) ??
+    getVirtualView("all")!;
 
-  // Merge URL params over the view's defaults. URL wins so users can tweak
-  // a saved view in-place without losing the diff.
+  // URL params override the view's defaults so users can tweak in place.
   const filter = {
     ...view.filter,
-    source:
-      params.source === "custom" || params.source === "canonical"
-        ? params.source
-        : view.filter.source,
-    categories: params.cat?.split(",").filter(Boolean) ?? view.filter.categories,
-    box_ids: params.box?.split(",").filter(Boolean) ?? view.filter.box_ids,
-    tags: (params.tag?.split(",").filter(Boolean) ??
-      view.filter.tags) as typeof view.filter.tags,
-    search: params.search ?? view.filter.search,
+    ...decoded.filter,
   };
+  const sort = decoded.sort ?? view.sort;
+  const display = decoded.display ?? view.view_type;
 
-  // For Phase 1, always sort + display the view's defaults. URL overrides
-  // for sort/display are wired in Phase 2.
-  const rows = await listFlyWorkspaceRows(filter, view.sort);
+  // For "group-by-box" we need the user's boxes too.
+  const [rows, boxes, profile] = await Promise.all([
+    listFlyWorkspaceRows(filter, sort),
+    listMyBoxes(),
+    supabase
+      .from("profiles")
+      .select("username")
+      .eq("user_id", user.id)
+      .maybeSingle(),
+  ]);
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("username")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  if (!view) notFound();
+
+  const allViews = [...VIRTUAL_VIEWS, ...savedViews];
 
   return (
     <WorkspaceClient
       rows={rows}
+      boxes={boxes.map((b) => ({ id: b.id, name: b.name }))}
+      allViews={allViews}
       activeViewId={view.id}
+      activeFilter={filter}
+      activeSort={sort}
+      activeDisplay={display}
       viewerUserId={user.id}
-      viewerUsername={(profile?.username as string | undefined) ?? null}
+      viewerUsername={(profile.data?.username as string | undefined) ?? null}
     />
   );
 }
