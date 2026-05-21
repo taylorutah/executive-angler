@@ -416,18 +416,22 @@ export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
             onDrop={(e) => {
               e.preventDefault();
               setDragOverCol(null);
-              const raw = e.dataTransfer.getData("application/x-ea-fly");
+              // Safari sometimes drops the custom MIME type; fall back to
+              // text/plain which we also stash the JSON payload in.
+              const raw =
+                e.dataTransfer.getData("application/x-ea-fly") ||
+                e.dataTransfer.getData("text/plain");
               setDraggingFlyId(null);
               setDragSourceCol(null);
               if (!raw) return;
               try {
-                const { flyId, sourceColumn } = JSON.parse(raw) as {
+                const parsed = JSON.parse(raw) as {
                   flyId: string;
                   sourceColumn: KanbanColumnId;
                 };
-                const row = rows.find((r) => r.fly.id === flyId);
+                const row = rows.find((r) => r.fly.id === parsed.flyId);
                 if (!row) return;
-                void handleMove(row, sourceColumn, col.id);
+                void handleMove(row, parsed.sourceColumn, col.id);
               } catch {
                 /* ignore malformed payloads */
               }
@@ -462,18 +466,16 @@ export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
                       key={r.fly.id}
                       draggable
                       onDragStart={(e) => {
+                        const payload = JSON.stringify({
+                          flyId: r.fly.id,
+                          sourceColumn: col.id,
+                        });
                         e.dataTransfer.effectAllowed = "move";
-                        e.dataTransfer.setData(
-                          "application/x-ea-fly",
-                          JSON.stringify({
-                            flyId: r.fly.id,
-                            sourceColumn: col.id,
-                          }),
-                        );
-                        // text/plain is the fallback drag payload that some
-                        // OS-level drag previews show — keep it to just the
-                        // fly name so it doesn't leak URLs or card metadata.
-                        e.dataTransfer.setData("text/plain", r.fly.name);
+                        e.dataTransfer.setData("application/x-ea-fly", payload);
+                        // Safari sometimes won't round-trip custom MIME
+                        // types — stash the same JSON in text/plain as a
+                        // fallback the drop handler can read.
+                        e.dataTransfer.setData("text/plain", payload);
 
                         // Use the whole card as the drag image. Without
                         // this, the browser defaults to dragging the inner
@@ -499,6 +501,11 @@ export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
                       }}
                       className={[
                         "cursor-grab active:cursor-grabbing transition-opacity",
+                        // Disable native drag on inner <a>/<img> so the
+                        // <li> wins as the drag source — Safari otherwise
+                        // makes the link the source and ignores
+                        // setDragImage, producing a messy URL preview.
+                        "[&_a]:[-webkit-user-drag:none] [&_img]:[-webkit-user-drag:none] [&_a]:[user-drag:none] [&_img]:[user-drag:none]",
                         isBeingDragged ? "opacity-40" : "opacity-100",
                       ].join(" ")}
                       data-kanban-card={r.fly.id}
