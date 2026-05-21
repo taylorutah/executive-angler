@@ -178,16 +178,50 @@ export default async function FlyDetail({ params }: Props) {
                     <Copy className="h-3.5 w-3.5" />
                     Clone
                   </Link>
-                  {viewerIsAdmin && (
-                    <Link
-                      href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
-                      aria-label="Edit canonical fly"
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                      Edit
-                    </Link>
-                  )}
+                  {(() => {
+                    // Edit routing depends on what kind of fly this is.
+                    //
+                    // - status='approved' canonical → admin edit tool. Only
+                    //   admins see this branch; the admin edit page enforces
+                    //   permission server-side too.
+                    // - status='private' or 'pending' AND viewer is the
+                    //   owner → owner edit page (/journal/flies/{id}/edit),
+                    //   which reuses the same FlyPatternForm the create flow
+                    //   uses. Available to any signed-in owner, not just
+                    //   admins — non-admin users who clone a fly need to be
+                    //   able to edit their clones.
+                    // - else → no edit affordance.
+                    const isOwner =
+                      !!user && fly.submitted_by_user_id === user.id;
+                    const isPrivateOwn =
+                      isOwner &&
+                      (fly.status === "private" || fly.status === "pending");
+                    if (isPrivateOwn) {
+                      return (
+                        <Link
+                          href={`/journal/flies/${fly.id}/edit`}
+                          className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                          aria-label="Edit this fly"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                          Edit
+                        </Link>
+                      );
+                    }
+                    if (viewerIsAdmin && fly.status === "approved") {
+                      return (
+                        <Link
+                          href={`/admin/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
+                          className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                          aria-label="Edit canonical fly"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                          Edit
+                        </Link>
+                      );
+                    }
+                    return null;
+                  })()}
                   {/* Delete: owner of a private/pending fly, OR admin on any. */}
                   {isLoggedIn &&
                     ((fly.submitted_by_user_id === user?.id &&
