@@ -8,9 +8,7 @@
  * via the /api/fishing/fly-views endpoints.
  */
 import { useEffect, useMemo, useOptimistic, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus } from "lucide-react";
 
 import FilterBar from "@/components/flies/workspace/FilterBar";
 import type { FilterOption } from "@/components/flies/workspace/FilterPill";
@@ -354,40 +352,10 @@ export default function WorkspaceClient({
     );
   }, [currentViewId, views, filter, sort, display]);
 
+  // Header + sub-nav come from `src/app/flies/layout.tsx` (FliesShell).
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
-        {/* Header */}
-        <header className="mb-5 sm:mb-6">
-          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">
-            Flies
-          </h1>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-            <span className="font-[var(--font-mono)] tabular-nums">
-              {optimisticRows.length}
-            </span>{" "}
-            patterns in your collection
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <Link
-              href="/flies/library"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[#E8923A]/40 transition-colors"
-            >
-              Browse Library
-            </Link>
-            <Link
-              href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
-            >
-              <Plus className="h-4 w-4" /> New Pattern
-            </Link>
-          </div>
-        </header>
-
-        {/* Persistent sub-nav — Boxes stays one click away */}
-        <FliesSubNav active="workspace" />
-
-        {/* View rail (virtual + saved views, with save/rename/delete) */}
+    <>
+      {/* View rail (virtual + saved views, with save/rename/delete) */}
         <ViewRail
           views={views}
           activeViewId={currentViewId}
@@ -437,7 +405,6 @@ export default function WorkspaceClient({
         ) : (
           <GridDisplay rows={optimisticRows} viewerUsername={viewerUsername} />
         )}
-      </div>
 
       {/* Inline Clone drawer — opens via ?clone={canonicalFlyId} URL param */}
       <CloneDrawer
@@ -451,7 +418,7 @@ export default function WorkspaceClient({
         onCreated={handleCloneCreated}
         onFailure={handleCloneFailure}
       />
-    </div>
+    </>
   );
 }
 
@@ -475,43 +442,5 @@ function EmptyState({ viewId }: { viewId: string }) {
   );
 }
 
-/**
- * Persistent flies sub-nav. Boxes stays equally prominent — one click from
- * anywhere in the workspace.
- */
-function FliesSubNav({
-  active,
-}: {
-  active: "workspace" | "boxes" | "workbench" | "tie-next" | "shared";
-}) {
-  const items: { key: typeof active; label: string; href: string }[] = [
-    { key: "workspace", label: "Workspace", href: "/flies/workspace" },
-    { key: "boxes", label: "Boxes", href: "/flies?tab=boxes" },
-    { key: "workbench", label: "Workbench", href: "/flies?tab=workbench" },
-    { key: "tie-next", label: "Tie Next", href: "/flies?tab=tie-next" },
-    { key: "shared", label: "Shared", href: "/flies?tab=shared" },
-  ];
-  return (
-    <nav
-      aria-label="Flies sections"
-      className="mb-5 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-    >
-      <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-1 min-w-max">
-        {items.map((it) => (
-          <Link
-            key={it.key}
-            href={it.href}
-            className={[
-              "rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
-              active === it.key
-                ? "bg-[var(--color-bg)] text-[var(--color-text-primary)] shadow-sm"
-                : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
-            ].join(" ")}
-          >
-            {it.label}
-          </Link>
-        ))}
-      </div>
-    </nav>
-  );
-}
+// FliesSubNav now lives in src/app/flies/_components/FliesShell.tsx —
+// single source of truth consumed by every /flies/* route via layout.tsx.

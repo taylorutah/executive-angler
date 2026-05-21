@@ -19,6 +19,7 @@ import {
 } from "@/lib/flies/workspace-shared";
 import { decodeWorkspaceParams } from "@/lib/flies/workspace-url";
 import WorkspaceClient from "./WorkspaceClient";
+import FliesShell from "../_components/FliesShell";
 
 export const metadata: Metadata = {
   title: "Flies Workspace",
@@ -78,16 +79,18 @@ export default async function FlyWorkspacePage({
   const allViews = [...VIRTUAL_VIEWS, ...savedViews];
 
   return (
-    <WorkspaceClient
-      rows={rows}
-      boxes={boxes.map((b) => ({ id: b.id, name: b.name }))}
-      allViews={allViews}
-      activeViewId={view.id}
-      activeFilter={filter}
-      activeSort={sort}
-      activeDisplay={display}
-      viewerUserId={user.id}
-      viewerUsername={(profile.data?.username as string | undefined) ?? null}
-    />
+    <FliesShell active="workspace" counts={{ patterns: rows.length }}>
+      <WorkspaceClient
+        rows={rows}
+        boxes={boxes.map((b) => ({ id: b.id, name: b.name }))}
+        allViews={allViews}
+        activeViewId={view.id}
+        activeFilter={filter}
+        activeSort={sort}
+        activeDisplay={display}
+        viewerUserId={user.id}
+        viewerUsername={(profile.data?.username as string | undefined) ?? null}
+      />
+    </FliesShell>
   );
 }
