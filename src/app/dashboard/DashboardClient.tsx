@@ -410,7 +410,9 @@ export default function DashboardClient({
                 </div>
                 <div className="space-y-3">
                   {(showAllRivers ? riverStats : riverStats.slice(0, 3)).map((rs) => {
-                    const riverSlug = rs.river_id ? riverSlugMap[rs.river_id] : favRivers.find((r) => r.name === rs.river_name)?.slug;
+                    const riverSlug = rs.river_slug
+                      ?? (rs.river_id ? riverSlugMap[rs.river_id] : undefined)
+                      ?? favRivers.find((r) => r.name === rs.river_name)?.slug;
                     const riverHref = riverSlug ? `/rivers/${riverSlug}` : `/rivers`;
                     return (
                       <div

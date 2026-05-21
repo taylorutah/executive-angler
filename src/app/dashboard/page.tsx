@@ -123,11 +123,36 @@ export default async function DashboardPage() {
   // River slug lookup — maps river_id → slug for "Your Rivers" links
   const { data: allRiverSlugs } = await supabase
     .from("rivers")
-    .select("id, slug");
+    .select("id, name, slug");
   const riverSlugMap: Record<string, string> = {};
-  (allRiverSlugs || []).forEach((r: { id: string; slug: string }) => {
+  const riverList: Array<{ name: string; slug: string }> = [];
+  (allRiverSlugs || []).forEach((r: { id: string; name: string; slug: string }) => {
     riverSlugMap[r.id] = r.slug;
+    riverList.push({ name: r.name, slug: r.slug });
   });
+
+  // Resolve a session river_name (e.g., "Middle Provo") to a canonical river slug.
+  // Strips section qualifiers and matches by remaining core tokens.
+  const SECTION_TOKENS = new Set([
+    "upper", "middle", "lower", "north", "south", "east", "west",
+    "fork", "branch", "river", "creek", "stream", "the",
+  ]);
+  const coreTokens = (s: string) =>
+    s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t && !SECTION_TOKENS.has(t));
+  function resolveRiverSlug(riverName: string | undefined, riverId: string | undefined): string | undefined {
+    if (riverId && riverSlugMap[riverId]) return riverSlugMap[riverId];
+    if (!riverName) return undefined;
+    const lowerName = riverName.toLowerCase();
+    const exact = riverList.find((r) => r.name.toLowerCase() === lowerName);
+    if (exact) return exact.slug;
+    const sessionCore = coreTokens(riverName);
+    if (sessionCore.length === 0) return undefined;
+    const match = riverList.find((r) => {
+      const rc = coreTokens(r.name);
+      return rc.length > 0 && sessionCore.every((t) => rc.includes(t));
+    });
+    return match?.slug;
+  }
 
   // River stats (per-river metrics: sessions, fish, avg, best, species, awards)
   const { data: allSessions } = await supabase
@@ -163,9 +188,11 @@ export default async function DashboardPage() {
     const totalFishR = rSessions.reduce((sum, s) => sum + (s.total_fish || 0), 0);
     const bestSession = rSessions.reduce((max, s) => Math.max(max, s.total_fish || 0), 0);
 
+    const resolvedRiverId = rSessions[0]?.river_id ?? undefined;
     const stats: RiverStats = {
       river_name: river,
-      river_id: rSessions[0]?.river_id ?? undefined,
+      river_id: resolvedRiverId,
+      river_slug: resolveRiverSlug(river, resolvedRiverId),
       total_sessions: rSessions.length,
       total_fish: totalFishR,
       biggest_fish: biggestFish > 0 ? biggestFish : undefined,

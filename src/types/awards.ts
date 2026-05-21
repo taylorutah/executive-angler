@@ -20,6 +20,7 @@ export interface UserAward {
 export interface RiverStats {
   river_name: string;
   river_id?: string;
+  river_slug?: string;
   total_sessions: number;
   total_fish: number;
   biggest_fish?: number;
