@@ -3,17 +3,35 @@
  * Display-mode renderers for the Flies Workspace. Each component takes the
  * already-filtered rows and renders them in a different shape.
  *
- *   GridDisplay        — responsive grid of FlyCards (default).
+ *   GridDisplay        — responsive grid of FlyCards. Virtualizes when
+ *                        rows > VIRTUALIZE_THRESHOLD so 1000-row inventories
+ *                        scroll at 60fps.
  *   TableDisplay       — dense, scannable table for inventory work.
+ *                        Also virtualizes past the threshold.
  *   KanbanDisplay      — columns by tie-next status: wanted · at vise · done.
  *   GroupByBoxDisplay  — accordion sections, one per box plus an "Unsorted" bucket.
  */
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, ChevronDown, Wrench, Heart, Sparkles } from "lucide-react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import FlyCard from "./FlyCard";
 import type { WorkspaceRow } from "@/lib/flies/workspace-shared";
+
+// Small isomorphic-safe useLayoutEffect alias to avoid the SSR warning.
+const useMemoLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+/** Below this row count, the browser handles things fine — skip the
+ *  measurement/layout overhead of virtualization. */
+const VIRTUALIZE_THRESHOLD = 100;
 
 const CATEGORY_LABELS: Record<string, string> = {
   nymph: "Nymph",
@@ -42,16 +60,106 @@ interface BaseProps {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function GridDisplay({ rows, viewerUsername }: BaseProps) {
+  if (rows.length <= VIRTUALIZE_THRESHOLD) {
+    return (
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {rows.map((r) => (
+          <li key={r.fly.id}>
+            <FlyCard row={r} viewerUsername={viewerUsername} />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return <VirtualGrid rows={rows} viewerUsername={viewerUsername} />;
+}
+
+/**
+ * Virtualized grid for large inventories.
+ *
+ * Computes columns from viewport width (1 / 2 / 3) and renders only the
+ * rows in the viewport via @tanstack/react-virtual. Each "virtual row"
+ * holds up to 3 cards. Estimated row height ~180px; the virtualizer
+ * dynamically measures actual heights as cards render.
+ */
+function VirtualGrid({ rows, viewerUsername }: BaseProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [columns, setColumns] = useState(3);
+
+  // Recompute column count on resize.
+  useMemoLayoutEffect(() => {
+    function compute() {
+      const w = window.innerWidth;
+      setColumns(w < 640 ? 1 : w < 1024 ? 2 : 3);
+    }
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  const virtualRows = useMemo(() => {
+    const buckets: WorkspaceRow[][] = [];
+    for (let i = 0; i < rows.length; i += columns) {
+      buckets.push(rows.slice(i, i + columns));
+    }
+    return buckets;
+  }, [rows, columns]);
+
+  const v = useVirtualizer({
+    count: virtualRows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 180,
+    overscan: 4,
+  });
+
   return (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      {rows.map((r) => (
-        <li key={r.fly.id}>
-          <FlyCard row={r} viewerUsername={viewerUsername} />
-        </li>
-      ))}
-    </ul>
+    <div
+      ref={parentRef}
+      className="overflow-y-auto"
+      style={{ maxHeight: "calc(100vh - 320px)" }}
+    >
+      <div
+        style={{
+          height: v.getTotalSize(),
+          position: "relative",
+          width: "100%",
+        }}
+      >
+        {v.getVirtualItems().map((vi) => {
+          const bucket = virtualRows[vi.index];
+          return (
+            <div
+              key={vi.key}
+              ref={v.measureElement}
+              data-index={vi.index}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${vi.start}px)`,
+              }}
+            >
+              <ul
+                className="grid gap-3 mb-3"
+                style={{
+                  gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+                }}
+              >
+                {bucket.map((r) => (
+                  <li key={r.fly.id}>
+                    <FlyCard row={r} viewerUsername={viewerUsername} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Table
