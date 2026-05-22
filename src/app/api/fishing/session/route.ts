@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { attachVariantIdsInPlace } from "@/lib/catches/auto-match-variant";
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -193,9 +192,6 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   if (catches?.length) {
-    // Auto-match variant_id when pattern + size + bead unambiguously point at
-    // an existing fly_variants row. Manual variant_id selections win.
-    await attachVariantIdsInPlace(supabase, catches as Record<string, unknown>[]);
     const catchRows = catches.map((c: Record<string, unknown>) => {
       const row: Record<string, unknown> = {
         ...c,
@@ -203,10 +199,10 @@ export async function POST(req: NextRequest) {
         user_id: user.id,
         fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
         canonical_fly_id: c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null,
+        configuration_id: c.configuration_id && String(c.configuration_id).trim() !== "" ? c.configuration_id : null,
         length_inches: stripNum(c.length_inches) ?? null,
         quantities: c.quantities ? Number(c.quantities) || null : null,
       };
-      // Remove undefined values
       return Object.fromEntries(Object.entries(row).filter(([, v]) => v !== undefined));
     });
     const { error: catchError } = await supabase.from("catches").insert(catchRows);
@@ -281,28 +277,6 @@ export async function PATCH(req: NextRequest) {
     const existingIds = new Set((existingCatches || []).map((c) => c.id as string));
 
     if (catches?.length) {
-      // Auto-match variant_id for any catch that has a pattern + size + bead
-      // but no variant_id yet. Merges existing-DB-side spec with incoming
-      // patch so that even a partial update (e.g. size-only edit) can promote
-      // the row to a precise variant when the spec now uniquely identifies one.
-      const forMatching = (catches as Record<string, unknown>[]).map((c) => {
-        const existing = c.id ? existingById.get(c.id as string) : null;
-        return {
-          variant_id: (c.variant_id ?? existing?.variant_id) as string | null,
-          canonical_fly_id: (c.canonical_fly_id ?? existing?.canonical_fly_id) as string | null,
-          fly_pattern_id: (c.fly_pattern_id ?? existing?.fly_pattern_id) as string | null,
-          fly_size: (c.fly_size ?? existing?.fly_size) as string | null,
-          bead_size: (c.bead_size ?? existing?.bead_size) as string | number | null,
-          _ref: c,
-        };
-      });
-      await attachVariantIdsInPlace(supabase, forMatching);
-      for (const m of forMatching) {
-        if (m.variant_id && (m._ref as Record<string, unknown>).variant_id == null) {
-          (m._ref as Record<string, unknown>).variant_id = m.variant_id;
-        }
-      }
-
       const toUpdate: Array<{ id: string; data: Record<string, unknown> }> = [];
       const toInsert: Record<string, unknown>[] = [];
       const incomingIds = new Set<string>();
@@ -329,12 +303,9 @@ export async function PATCH(req: NextRequest) {
           canonical_fly_id: c.canonical_fly_id !== undefined
             ? (c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null)
             : (existing?.canonical_fly_id ?? null),
-          variant_id: c.variant_id !== undefined
-            ? (c.variant_id && String(c.variant_id).trim() !== "" ? c.variant_id : null)
-            : ((existing as { variant_id?: string | null } | undefined)?.variant_id ?? null),
-          personalization_snapshot: c.personalization_snapshot !== undefined
-            ? (c.personalization_snapshot ?? null)
-            : ((existing as { personalization_snapshot?: unknown } | undefined)?.personalization_snapshot ?? null),
+          configuration_id: c.configuration_id !== undefined
+            ? (c.configuration_id && String(c.configuration_id).trim() !== "" ? c.configuration_id : null)
+            : ((existing as { configuration_id?: string | null } | undefined)?.configuration_id ?? null),
           fly_position: v("fly_position"),
           fly_size: v("fly_size"),
           bead_size: v("bead_size"),

@@ -1,16 +1,22 @@
 /**
  * Picker data bundle — the single round-trip the catch-logging fly picker uses
- * to render its chip bar (boxes), pattern-first row list (every fly the user
- * has), and RECENTS section (last 14 days of catches).
+ * to render its chip bar (boxes), pattern-first row list, and RECENTS section.
  *
- * Mirrors the iOS FlyPickerSheet contract so behavior stays in lockstep:
- *   - "All Flies" pseudo-box surfaces every variant the user has stock for OR
- *     box-membership in, plus orphan personal patterns with no variants yet.
- *   - Each user box (fly_boxes) becomes a chip; tapping it scopes the list to
- *     that box's variants only.
- *   - Recents are pattern keys derived from the user's most-recent catches.
+ * Reads ONLY the unified post-reset schema:
+ *   - `flies`                     — fly identity (canonical + user-submitted)
+ *   - `fly_boxes`                 — user's named boxes
+ *   - `user_fly_configurations`   — per-user fly versions (size + slot overrides
+ *                                   + tied/bought/target counts + tie-next state)
+ *   - `fly_box_entries_v3`        — configurations ↔ boxes
+ *   - `catches`                   — for RECENTS (last 14d)
+ *
+ * "Variant" in this module's public type names is preserved for picker-UI
+ * stability — the underlying id is a `user_fly_configurations.id`.
+ *
+ * Mirrors the iOS FlyPickerSheet contract so behavior stays in lockstep.
  */
 import { createClient } from "@/lib/supabase/server";
+import type { Fly, FlyConfiguration } from "@/types/flies";
 
 export interface PickerBox {
   id: string;
@@ -20,7 +26,9 @@ export interface PickerBox {
 }
 
 export interface PickerVariant {
+  /** user_fly_configurations.id */
   variant_id: string;
+  /** flies.id */
   pattern_id: string;
   pattern_name: string;
   pattern_category: string | null;
@@ -29,9 +37,9 @@ export interface PickerVariant {
   size: string;
   bead_weight_mm: number | null;
   bead_material: string | null;
-  /** Box memberships for this variant (one row per box the variant sits in). */
+  /** Box memberships for this configuration. */
   box_ids: string[];
-  /** True if the user has a fly_variant_stock row for this variant. */
+  /** True when the user has tied or bought ≥ 1 of this configuration. */
   is_stocked: boolean;
 }
 
@@ -52,35 +60,26 @@ export interface PickerLibraryPattern {
 
 export interface PickerRecent {
   pattern_id: string;
+  /** user_fly_configurations.id when known. */
   variant_id: string | null;
-  /** ms timestamp of the most recent catch on this pattern. */
   caught_at: number;
 }
 
 export interface PickerBundle {
   boxes: PickerBox[];
   variants: PickerVariant[];
-  /** Personal patterns owned by the user that have no variants yet. */
+  /** Flies the user created (status in [private, pending, approved]) that have
+   *  no configurations yet — they should still be pickable. */
   orphanPatterns: PickerOrphanPattern[];
-  /**
-   * Canonical fly library — top patterns by rank. Surfaces in the picker
-   * when the user is on "All flies" so they can pick library flies even
-   * before they've stocked any variants in their own boxes.
-   */
+  /** Top approved flies from the canonical library. */
   libraryPatterns: PickerLibraryPattern[];
   recents: PickerRecent[];
 }
 
-const LIBRARY_LIMIT = 200;
-
 const RECENTS_DAYS = 14;
 const RECENTS_LIMIT = 50;
+const LIBRARY_LIMIT = 200;
 
-/**
- * Single-shot fetch for everything the picker needs to render. Returns empty
- * arrays when the user is signed out — the catch-edit page is gated on auth
- * upstream so this only happens in dev/preview contexts.
- */
 export async function loadFlyPickerBundle(): Promise<PickerBundle> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -89,7 +88,6 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
   }
   const userId = user.id;
 
-  // Boxes — for the chip bar.
   const boxesPromise = supabase
     .from("fly_boxes")
     .select("id, name, tier, sort_order")
@@ -98,51 +96,43 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
     .order("sort_order")
     .order("created_at");
 
-  // Box memberships for this user — drives box scoping per variant.
-  const membershipsPromise = supabase
-    .from("fly_variant_in_box")
-    .select("variant_id, box_id")
+  const configsPromise = supabase
+    .from("user_fly_configurations")
+    .select("*")
     .eq("user_id", userId);
 
-  // Stocked variants for this user — drives is_stocked + ensures variants
-  // outside any box still surface in "All Flies".
-  const stockPromise = supabase
-    .from("fly_variant_stock")
-    .select("variant_id")
-    .eq("user_id", userId);
+  const createdFliesPromise = supabase
+    .from("flies")
+    .select("id, name, category, hero_image_url, submitted_by_user_id")
+    .eq("submitted_by_user_id", userId)
+    .in("status", ["private", "pending", "approved"])
+    .is("deleted_at", null);
 
-  // Personal patterns — orphan ones (no variants in any box / no stock) still
-  // need to be pickable.
-  const patternsPromise = supabase
-    .from("fly_patterns_v2")
-    .select("id, name, category, hero_image_url, owner_user_id")
-    .eq("owner_user_id", userId)
-    .order("name");
-
-  // Recents — most recent catches in the last 14 days, with variant + pattern.
   const sinceIso = new Date(Date.now() - RECENTS_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  // Phase A: catches.configuration_id is the primary fly link. Legacy
+  // catches predating the reset have configuration_id NULL, but still
+  // carry fly_pattern_id / canonical_fly_id snapshots; surface those too.
   const recentsPromise = supabase
     .from("catches")
-    .select("variant_id, canonical_fly_id, fly_pattern_id, caught_at")
+    .select("configuration_id, fly_pattern_id, canonical_fly_id, caught_at")
     .eq("user_id", userId)
     .gte("caught_at", sinceIso)
     .order("caught_at", { ascending: false })
     .limit(RECENTS_LIMIT);
 
-  // Canonical library — top patterns by rank. Lets the picker show useful
-  // rows in "All flies" even when the user has no stocked variants yet.
   const libraryPromise = supabase
-    .from("canonical_flies")
+    .from("flies")
     .select("id, name, category, hero_image_url")
-    .order("rank", { ascending: true, nullsFirst: false })
+    .eq("status", "approved")
+    .is("deleted_at", null)
+    .order("is_featured", { ascending: false })
     .order("name")
     .limit(LIBRARY_LIMIT);
 
-  const [boxesRes, membershipsRes, stockRes, patternsRes, recentsRes, libraryRes] = await Promise.all([
+  const [boxesRes, configsRes, createdRes, recentsRes, libraryRes] = await Promise.all([
     boxesPromise,
-    membershipsPromise,
-    stockPromise,
-    patternsPromise,
+    configsPromise,
+    createdFliesPromise,
     recentsPromise,
     libraryPromise,
   ]);
@@ -150,138 +140,119 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
   const boxes: PickerBox[] = (boxesRes.data ?? []).map((b) => ({
     id: b.id as string,
     name: (b.name as string) ?? "Box",
-    tier: ((b.tier as PickerBox["tier"]) ?? "custom"),
+    tier: (b.tier as PickerBox["tier"]) ?? "custom",
     sort_order: (b.sort_order as number) ?? 0,
   }));
 
-  // Build the variant universe: union of (in any box) ∪ (stocked).
-  const membershipsByVariant = new Map<string, string[]>();
-  for (const r of (membershipsRes.data ?? []) as { variant_id: string; box_id: string }[]) {
-    const list = membershipsByVariant.get(r.variant_id) ?? [];
-    list.push(r.box_id);
-    membershipsByVariant.set(r.variant_id, list);
-  }
-  const stockedVariantIds = new Set<string>(
-    ((stockRes.data ?? []) as { variant_id: string }[]).map((s) => s.variant_id),
-  );
-  const allVariantIds = new Set<string>([
-    ...membershipsByVariant.keys(),
-    ...stockedVariantIds,
-  ]);
-
-  let variants: PickerVariant[] = [];
-  if (allVariantIds.size > 0) {
-    const variantIds = Array.from(allVariantIds);
-    const { data: variantRows } = await supabase
-      .from("fly_variants")
-      .select("id, pattern_id, size, bead_weight_mm, bead_material")
-      .in("id", variantIds)
-      .is("deleted_at", null);
-
-    const patternIds = Array.from(
-      new Set(((variantRows ?? []) as { pattern_id: string }[]).map((v) => v.pattern_id)),
-    );
-    const { data: patternRows } = patternIds.length
-      ? await supabase
-          .from("fly_patterns_v2")
-          .select("id, name, category, owner_user_id, hero_image_url")
-          .in("id", patternIds)
-      : { data: [] as Record<string, unknown>[] };
-    const patternById = new Map<string, {
-      name: string;
-      category: string | null;
-      owner_user_id: string | null;
-      hero_image_url: string | null;
-    }>();
-    for (const p of (patternRows ?? []) as {
-      id: string;
-      name: string;
-      category: string | null;
-      owner_user_id: string | null;
-      hero_image_url: string | null;
-    }[]) {
-      patternById.set(p.id, {
-        name: p.name,
-        category: p.category,
-        owner_user_id: p.owner_user_id,
-        hero_image_url: p.hero_image_url,
-      });
-    }
-
-    variants = ((variantRows ?? []) as {
-      id: string;
-      pattern_id: string;
-      size: string;
-      bead_weight_mm: number | null;
-      bead_material: string | null;
-    }[]).map<PickerVariant | null>((v) => {
-      const p = patternById.get(v.pattern_id);
-      if (!p) return null;
-      return {
-        variant_id: v.id,
-        pattern_id: v.pattern_id,
-        pattern_name: p.name,
-        pattern_category: p.category,
-        pattern_owner_user_id: p.owner_user_id,
-        pattern_hero_image_url: p.hero_image_url,
-        size: v.size,
-        bead_weight_mm: v.bead_weight_mm,
-        bead_material: v.bead_material,
-        box_ids: membershipsByVariant.get(v.id) ?? [],
-        is_stocked: stockedVariantIds.has(v.id),
-      };
-    }).filter((r): r is PickerVariant => r !== null);
-  }
-
-  // Orphan personal patterns — those with no variants in the variant universe.
-  const patternIdsWithVariants = new Set<string>(variants.map((v) => v.pattern_id));
-  const orphanPatterns: PickerOrphanPattern[] = ((patternsRes.data ?? []) as {
+  const configs = (configsRes.data ?? []) as FlyConfiguration[];
+  const createdFlies = (createdRes.data ?? []) as Array<{
     id: string;
     name: string;
     category: string | null;
     hero_image_url: string | null;
-    owner_user_id: string;
-  }[])
-    .filter((p) => !patternIdsWithVariants.has(p.id))
-    .map((p) => ({
-      pattern_id: p.id,
-      name: p.name,
-      category: p.category,
-      hero_image_url: p.hero_image_url,
-      owner_user_id: p.owner_user_id,
+    submitted_by_user_id: string;
+  }>;
+
+  // Hydrate flies referenced by configurations (those not in `created`).
+  const flyIdsFromConfigs = new Set(configs.map((c) => c.fly_id));
+  const createdFlyIds = new Set(createdFlies.map((f) => f.id));
+  const missingFlyIds = Array.from(flyIdsFromConfigs).filter((id) => !createdFlyIds.has(id));
+  type FlyPickerRow = Pick<Fly, "id" | "name" | "category" | "hero_image_url" | "submitted_by_user_id">;
+  let configuredFlies: FlyPickerRow[] = [];
+  if (missingFlyIds.length > 0) {
+    const { data } = await supabase
+      .from("flies")
+      .select("id, name, category, hero_image_url, submitted_by_user_id")
+      .in("id", missingFlyIds)
+      .is("deleted_at", null);
+    configuredFlies = (data ?? []) as FlyPickerRow[];
+  }
+  const fliesById = new Map<string, FlyPickerRow>();
+  for (const f of createdFlies) fliesById.set(f.id, f as FlyPickerRow);
+  for (const f of configuredFlies) fliesById.set(f.id, f);
+
+  // Box memberships for the user's configurations.
+  const cfgIds = configs.map((c) => c.id);
+  const boxIdsByCfg = new Map<string, string[]>();
+  if (cfgIds.length > 0) {
+    const { data: entries } = await supabase
+      .from("fly_box_entries_v3")
+      .select("configuration_id, box_id")
+      .in("configuration_id", cfgIds);
+    for (const e of (entries ?? []) as { configuration_id: string; box_id: string }[]) {
+      const arr = boxIdsByCfg.get(e.configuration_id) ?? [];
+      arr.push(e.box_id);
+      boxIdsByCfg.set(e.configuration_id, arr);
+    }
+  }
+
+  // One PickerVariant per (configuration, size). When a configuration has
+  // no size set, fall back to a synthetic "—" row so it's still pickable.
+  const variants: PickerVariant[] = [];
+  for (const c of configs) {
+    const fly = fliesById.get(c.fly_id);
+    if (!fly) continue;
+    const bead = c.slot_overrides?.bead;
+    const beadMm = typeof bead?.size_mm === "number" ? bead.size_mm : null;
+    const beadMaterial = typeof bead?.material === "string" ? bead.material : null;
+    variants.push({
+      variant_id: c.id,
+      pattern_id: c.fly_id,
+      pattern_name: fly.name,
+      pattern_category: fly.category ?? null,
+      pattern_owner_user_id: fly.submitted_by_user_id ?? null,
+      pattern_hero_image_url: fly.hero_image_url ?? null,
+      size: c.size ?? "—",
+      bead_weight_mm: beadMm,
+      bead_material: beadMaterial,
+      box_ids: boxIdsByCfg.get(c.id) ?? [],
+      is_stocked: (c.tied_count + c.bought_count) > 0,
+    });
+  }
+
+  // Orphan patterns — flies the user created but have no configuration for.
+  const patternIdsWithVariants = new Set<string>(variants.map((v) => v.pattern_id));
+  const orphanPatterns: PickerOrphanPattern[] = createdFlies
+    .filter((f) => !patternIdsWithVariants.has(f.id))
+    .map((f) => ({
+      pattern_id: f.id,
+      name: f.name,
+      category: f.category,
+      hero_image_url: f.hero_image_url,
+      owner_user_id: f.submitted_by_user_id,
     }));
 
-  // Recents — collapse to one entry per pattern (first/most-recent wins).
+  // Recents — collapse to one entry per fly_id (first/most-recent wins).
   const seenPatterns = new Set<string>();
   const recents: PickerRecent[] = [];
-  for (const r of (recentsRes.data ?? []) as {
-    variant_id: string | null;
-    canonical_fly_id: string | null;
+  // Build a configuration_id → fly_id lookup so configuration-id-only catches
+  // (the new path) resolve to a pattern row.
+  const flyIdByCfg = new Map<string, string>();
+  for (const c of configs) flyIdByCfg.set(c.id, c.fly_id);
+  for (const r of (recentsRes.data ?? []) as Array<{
+    configuration_id: string | null;
     fly_pattern_id: string | null;
+    canonical_fly_id: string | null;
     caught_at: string;
-  }[]) {
-    // Map back to a pattern_id. Prefer the variant_id lookup (it's accurate)
-    // and fall back to canonical_fly_id / fly_pattern_id when variant is null.
+  }>) {
     let patternId: string | null = null;
-    if (r.variant_id) {
-      patternId = variants.find((v) => v.variant_id === r.variant_id)?.pattern_id ?? null;
-    }
-    if (!patternId) patternId = r.canonical_fly_id ?? r.fly_pattern_id ?? null;
+    if (r.configuration_id) patternId = flyIdByCfg.get(r.configuration_id) ?? null;
+    if (!patternId) patternId = r.fly_pattern_id ?? r.canonical_fly_id ?? null;
     if (!patternId || seenPatterns.has(patternId)) continue;
     seenPatterns.add(patternId);
     recents.push({
       pattern_id: patternId,
-      variant_id: r.variant_id,
+      variant_id: r.configuration_id,
       caught_at: Date.parse(r.caught_at),
     });
   }
 
-  const libraryPatterns: PickerLibraryPattern[] = ((libraryRes.data ?? []) as {
+  const libraryPatterns: PickerLibraryPattern[] = ((libraryRes.data ?? []) as Array<{
     id: string;
     name: string;
     category: string | null;
     hero_image_url: string | null;
-  }[]).map((p) => ({
+  }>).map((p) => ({
     pattern_id: p.id,
     name: p.name,
     category: p.category,
