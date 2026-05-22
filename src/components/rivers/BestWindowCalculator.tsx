@@ -21,6 +21,9 @@ interface HatchCorrelation {
   fly_name: string;
   months: string[];
   pct_of_catches: number;
+  catch_count: number;
+  session_count: number;
+  last_caught: string | null;
   avg_fish_per_session: number;
 }
 
@@ -203,20 +206,31 @@ export default function BestWindowCalculator({ riverId }: Props) {
         )}
       </div>
 
-      {/* Hatch Correlation */}
+      {/* Fly Performance — actual catch counts per canonical fly */}
       {hatchCorrelation.length > 0 && (
         <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
-          <h3 className="text-sm font-bold text-[#F0F6FC] mb-3">Your Fly Performance</h3>
+          <h3 className="text-sm font-bold text-[#F0F6FC] mb-1">Your Fly Performance</h3>
+          <p className="text-[10px] text-[#6E7681] mb-3">
+            Real catch counts per fly across your sessions on this river.
+          </p>
           <div className="space-y-2">
             {hatchCorrelation.slice(0, 5).map((h) => (
               <div key={h.fly_name} className="flex items-center justify-between py-1.5">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium text-[#F0F6FC] truncate">{h.fly_name}</p>
-                  <p className="text-[10px] text-[#6E7681]">{h.months.join(", ")}</p>
+                  <p className="text-[10px] text-[#6E7681]">
+                    {h.months.slice(0, 4).join(", ")}
+                    {h.months.length > 4 ? "…" : ""}
+                  </p>
                 </div>
                 <div className="text-right shrink-0 ml-3">
-                  <p className="text-xs font-bold text-[#E8923A]">{h.pct_of_catches}%</p>
-                  <p className="text-[10px] text-[#6E7681]">{h.avg_fish_per_session}/session</p>
+                  <p className="text-xs font-bold text-[#E8923A]">
+                    {h.catch_count} {h.catch_count === 1 ? "catch" : "catches"}
+                  </p>
+                  <p className="text-[10px] text-[#6E7681]">
+                    {h.pct_of_catches}% · {h.session_count}{" "}
+                    {h.session_count === 1 ? "session" : "sessions"}
+                  </p>
                 </div>
               </div>
             ))}

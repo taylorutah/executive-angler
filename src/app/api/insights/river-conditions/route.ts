@@ -46,11 +46,49 @@ export async function GET(request: NextRequest) {
 
   const sessionIds = sessions.map((s) => s.id);
 
-  // Fetch all catches for these sessions
+  // Fetch all catches for these sessions. Pull fly_pattern_id so we can
+  // group by canonical fly identity (rename-safe) instead of the
+  // denormalized fly_name snapshot — which leaves "Walt's Worm" /
+  // "Walt's Worm (dropper)" / "Walt's Worm (hare's mask...)" looking
+  // like three different flies in the rollup.
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, fly_name, fly_size, time_caught")
+    .select("id, session_id, species, length_inches, fly_name, fly_pattern_id, fly_size, time_caught")
     .in("session_id", sessionIds);
+
+  // Resolve live fly names by fly_pattern_id (canonical / personal patterns
+  // both live in `flies` post Phase A). The live row is authoritative — a
+  // renamed pattern surfaces under its current name across every catch.
+  const flyPatternIds = Array.from(
+    new Set((catches ?? []).map((c) => c.fly_pattern_id).filter((v): v is string => !!v))
+  );
+  const { data: rawFlies } = flyPatternIds.length > 0
+    ? await supabase
+        .from("flies")
+        .select("id, name")
+        .in("id", flyPatternIds)
+        .is("deleted_at", null)
+    : { data: [] };
+  const flyNameById = new Map(
+    (rawFlies ?? []).map((f) => [f.id as string, f.name as string])
+  );
+
+  // Canonical identity for grouping. If fly_pattern_id is set, the live
+  // fly row is the source of truth; otherwise fall back to a normalized
+  // fly_name (lowercased, whitespace-collapsed) so freehand snapshots that
+  // differ only in trailing notes still merge.
+  function flyIdentity(c: { fly_pattern_id?: string | null; fly_name?: string | null }):
+    { key: string; displayName: string } | null {
+    if (c.fly_pattern_id) {
+      const name = flyNameById.get(c.fly_pattern_id);
+      if (name) return { key: `id:${c.fly_pattern_id}`, displayName: name };
+    }
+    if (c.fly_name && c.fly_name.trim()) {
+      const norm = c.fly_name.trim().toLowerCase().replace(/\s+/g, " ");
+      return { key: `name:${norm}`, displayName: c.fly_name.trim() };
+    }
+    return null;
+  }
 
   const catchesBySession = new Map<string, typeof catches>();
   for (const c of catches || []) {
@@ -103,20 +141,27 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Build per-session correlation data
+  // Build per-session correlation data. `top_fly` (winner per session by
+  // catch count) is kept for the Best Window card — but the all-fly
+  // performance rollup below uses every catch, not just the per-session
+  // winner.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sessionData: any[] = sessions.map((s) => {
     const sc = catchesBySession.get(s.id) || [];
     const speciesSet = new Set(sc.map((c) => c.species).filter(Boolean));
     const biggest = sc.reduce((max, c) => (c.length_inches || 0) > (max || 0) ? c.length_inches : max, 0 as number | null);
-    const flyFreq = new Map<string, number>();
+    const flyFreq = new Map<string, { displayName: string; count: number }>();
     for (const c of sc) {
-      if (c.fly_name) flyFreq.set(c.fly_name, (flyFreq.get(c.fly_name) || 0) + 1);
+      const ident = flyIdentity(c);
+      if (!ident) continue;
+      const entry = flyFreq.get(ident.key) || { displayName: ident.displayName, count: 0 };
+      entry.count += 1;
+      flyFreq.set(ident.key, entry);
     }
     let topFly: string | null = null;
     let topFlyCount = 0;
-    for (const [fly, count] of flyFreq) {
-      if (count > topFlyCount) { topFly = fly; topFlyCount = count; }
+    for (const { displayName, count } of flyFreq.values()) {
+      if (count > topFlyCount) { topFly = displayName; topFlyCount = count; }
     }
 
     return {
@@ -191,27 +236,57 @@ export async function GET(request: NextRequest) {
     };
   }
 
-  // Hatch correlation — fly patterns by month
-  const flyMonthData = new Map<string, { months: Set<string>; totalFish: number; sessions: number }>();
-  for (const s of sessionData) {
-    if (!s.top_fly || !s.date) continue;
-    const month = new Date(s.date + "T12:00:00").toLocaleDateString("en-US", { month: "long" });
-    const entry = flyMonthData.get(s.top_fly) || { months: new Set(), totalFish: 0, sessions: 0 };
+  // Fly performance — aggregate over every catch, not just the per-session
+  // winner. Group by canonical fly identity (live fly id when present,
+  // normalized fly_name otherwise) so renames and trailing parenthetical
+  // notes don't fragment the rollup. Counts are real catches, not session
+  // totals.
+  const sessionDateById = new Map(sessions.map((s) => [s.id, s.date]));
+  const flyAgg = new Map<
+    string,
+    { displayName: string; catches: number; sessions: Set<string>; months: Set<string>; lastDate: string | null }
+  >();
+  let totalAttributedCatches = 0;
+  for (const c of catches ?? []) {
+    const ident = flyIdentity(c);
+    if (!ident) continue;
+    const sessionDate = sessionDateById.get(c.session_id);
+    if (!sessionDate) continue;
+    const month = new Date(sessionDate + "T12:00:00").toLocaleDateString("en-US", { month: "long" });
+    const entry = flyAgg.get(ident.key) || {
+      displayName: ident.displayName,
+      catches: 0,
+      sessions: new Set<string>(),
+      months: new Set<string>(),
+      lastDate: null,
+    };
+    entry.catches += 1;
+    entry.sessions.add(c.session_id);
     entry.months.add(month);
-    entry.totalFish += s.fish_count;
-    entry.sessions += 1;
-    flyMonthData.set(s.top_fly, entry);
+    if (!entry.lastDate || sessionDate > entry.lastDate) entry.lastDate = sessionDate;
+    flyAgg.set(ident.key, entry);
+    totalAttributedCatches += 1;
   }
 
-  const totalCatches = sessionData.reduce((s, t) => s + t.fish_count, 0);
-  const hatchCorrelation = Array.from(flyMonthData.entries())
-    .map(([fly, data]) => ({
-      fly_name: fly,
+  const hatchCorrelation = Array.from(flyAgg.values())
+    .map((data) => ({
+      fly_name: data.displayName,
       months: Array.from(data.months),
-      pct_of_catches: totalCatches > 0 ? Math.round((data.totalFish / totalCatches) * 100) : 0,
-      avg_fish_per_session: Math.round((data.totalFish / data.sessions) * 10) / 10,
+      pct_of_catches:
+        totalAttributedCatches > 0
+          ? Math.round((data.catches / totalAttributedCatches) * 100)
+          : 0,
+      catch_count: data.catches,
+      session_count: data.sessions.size,
+      last_caught: data.lastDate,
+      // Kept for backwards-compat with the existing client. Now reports
+      // actual catches per session this fly was used (not session.total_fish).
+      avg_fish_per_session:
+        data.sessions.size > 0
+          ? Math.round((data.catches / data.sessions.size) * 10) / 10
+          : 0,
     }))
-    .sort((a, b) => b.pct_of_catches - a.pct_of_catches)
+    .sort((a, b) => b.catch_count - a.catch_count)
     .slice(0, 10);
 
   return NextResponse.json(

@@ -104,11 +104,6 @@ export default async function SessionDetailPage({ params }: Props) {
     .eq("session_id", id)
     .order("created_at", { ascending: true });
 
-  // Post-flatten: every fly is its own canonical in fly_patterns_v2. Resolve
-  // the display fly_pattern via variant_id → fly_variants.pattern_id →
-  // fly_patterns_v2 (the single source of truth). The legacy fly_patterns
-  // join is gone — its names drift on rename and we'd rather show the
-  // denormalized fly_name snapshot than stale legacy data.
   type CatchRow = {
     fly_pattern_id?: string | null;
     fly_pattern?: { name: string; type?: string; image_url?: string } | null;
@@ -116,57 +111,22 @@ export default async function SessionDetailPage({ params }: Props) {
     fly_name?: string | null;
   };
   const catchesArr = (catches ?? []) as CatchRow[];
-  const variantIds = catchesArr
-    .map((c) => c.variant_id)
-    .filter((v): v is string => !!v);
-  // Post-Phase-C: fly_variants table is dropped. catches.fly_name
-  // (denormalized snapshot) carries the fly name forward — no per-variant
-  // lookup needed. Leave the map empty so the renderer falls back to fly_name.
-  void variantIds;
-  const patternByVariant = new Map<string, { name: string; type?: string; image_url?: string }>();
-  if (false) {
-    // Placeholder so subsequent for-loop type structure stays valid.
-    type V = {
-      id: string;
-      pattern?: { name?: string; category?: string; hero_image_url?: string }
-        | { name?: string; category?: string; hero_image_url?: string }[]
-        | null;
-    };
-    const rows: V[] = [];
-    for (const row of rows) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const pat = row.pattern as any;
-      const p = Array.isArray(pat) ? pat[0] : pat;
-      if (p?.name) {
-        patternByVariant.set(row.id, {
-          name: p.name,
-          type: p.category,
-          image_url: p.hero_image_url,
-        });
-      }
-    }
-  }
-  // Resolution order: live v2 pattern → denormalized fly_name snapshot.
-  // The snapshot is refreshed by flatten-fly-forks-data.sql + the admin
-  // rename action, so this stays consistent with the catalog.
-  for (const c of catchesArr) {
-    if (c.variant_id) {
-      const synth = patternByVariant.get(c.variant_id);
-      if (synth) {
-        c.fly_pattern = synth;
-        continue;
-      }
-    }
-    if (c.fly_name) c.fly_pattern = { name: c.fly_name };
-  }
 
-  // Flies used in this session (from fly_patterns table, matched by catch)
-  const flyPatternIds = catchesArr
-    .map((c) => c.fly_pattern_id)
-    .filter((v): v is string => !!v);
+  // Fetch live fly rows for every fly_pattern_id referenced by any catch.
+  // We resolve the display fly_pattern from the live row first (so renames
+  // propagate) and only fall back to the denormalized fly_name snapshot
+  // when no fly_pattern_id is present. Without this, catches whose snapshot
+  // wasn't written (older rows, or the post-rename gap) drop out of
+  // "Flies That Worked" even though they share a fly_pattern_id with
+  // catches that do show up.
+  const flyPatternIds = Array.from(
+    new Set(
+      catchesArr
+        .map((c) => c.fly_pattern_id)
+        .filter((v): v is string => !!v)
+    )
+  );
 
-  // Map unified `flies` rows back to the legacy FlyPattern shape
-  // (`type`, `image_url`) that SessionDetail expects.
   const { data: rawFlies } = flyPatternIds.length > 0
     ? await reader
         .from("flies")
@@ -180,6 +140,25 @@ export default async function SessionDetailPage({ params }: Props) {
     type: (f.category as string | null) ?? null,
     image_url: (f.hero_image_url as string | null) ?? null,
   }));
+  const flyById = new Map(flies.map((f) => [f.id, f]));
+
+  // Resolution order: live fly (by fly_pattern_id) → denormalized fly_name
+  // snapshot. The live row is authoritative; the snapshot is only a fallback
+  // for catches whose fly_pattern_id didn't survive (or never landed).
+  for (const c of catchesArr) {
+    if (c.fly_pattern_id) {
+      const live = flyById.get(c.fly_pattern_id);
+      if (live) {
+        c.fly_pattern = {
+          name: live.name,
+          type: live.type ?? undefined,
+          image_url: live.image_url ?? undefined,
+        };
+        continue;
+      }
+    }
+    if (c.fly_name) c.fly_pattern = { name: c.fly_name };
+  }
 
   const { data: sessionPhotos } = await reader
     .from("session_photos")
