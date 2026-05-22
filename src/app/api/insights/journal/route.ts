@@ -27,7 +27,7 @@ export async function POST() {
   }
 
   // Fetch user data
-  const [sessionsRes, catchesRes, fliesRes] = await Promise.all([
+  const [sessionsRes, catchesRes] = await Promise.all([
     supabase
       .from("fishing_sessions")
       .select("id, date, river_name, total_fish, weather, water_temp_f, water_clarity, section, notes, flies_notes")
@@ -36,17 +36,26 @@ export async function POST() {
       .limit(50),
     supabase
       .from("catches")
-      .select("id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, quantities")
+      .select("id, session_id, species, length_inches, fly_pattern_id, canonical_fly_id, fly_name, fly_size, time_caught, quantities")
       .eq("user_id", user.id)
       .limit(500),
-    supabase
-      .from("flies")
-      .select("id, name, type")
-      .eq("user_id", user.id),
   ]);
 
   const sessions = sessionsRes.data || [];
   const catches = catchesRes.data || [];
+
+  // Resolve live fly names by FK (canonical_fly_id for web canonical picks,
+  // fly_pattern_id for personal picks + iOS/Android). `flies` table has no
+  // `user_id` or `type` columns post-Phase A — only fetch the IDs we need.
+  const referencedFlyIds = Array.from(
+    new Set(
+      catches.flatMap((c) => [c.fly_pattern_id, c.canonical_fly_id])
+        .filter((v): v is string => !!v)
+    )
+  );
+  const fliesRes = referencedFlyIds.length > 0
+    ? await supabase.from("flies").select("id, name").in("id", referencedFlyIds).is("deleted_at", null)
+    : { data: [] as { id: string; name: string }[] };
   const flies = fliesRes.data || [];
 
   if (sessions.length < 3) {
@@ -62,7 +71,11 @@ export async function POST() {
     const sessionCatches = catches.filter(c => c.session_id === s.id);
     const speciesSet = new Set(sessionCatches.map(c => c.species).filter(Boolean));
     const flyNames = sessionCatches
-      .map(c => c.fly_name || (c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null))
+      .map(c =>
+        (c.fly_pattern_id ? flyMap[c.fly_pattern_id] : null) ||
+        (c.canonical_fly_id ? flyMap[c.canonical_fly_id] : null) ||
+        c.fly_name
+      )
       .filter(Boolean);
     const biggest = sessionCatches.reduce((max, c) => Math.max(max, c.length_inches || 0), 0);
 

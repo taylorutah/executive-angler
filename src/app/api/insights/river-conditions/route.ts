@@ -53,35 +53,44 @@ export async function GET(request: NextRequest) {
   // like three different flies in the rollup.
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, fly_name, fly_pattern_id, fly_size, time_caught")
+    .select("id, session_id, species, length_inches, fly_name, fly_pattern_id, canonical_fly_id, fly_size, time_caught")
     .in("session_id", sessionIds);
 
-  // Resolve live fly names by fly_pattern_id (canonical / personal patterns
-  // both live in `flies` post Phase A). The live row is authoritative — a
+  // Resolve live fly names by FK (web canonical picks set canonical_fly_id;
+  // iOS/Android + web personal picks set fly_pattern_id). Both reference the
+  // unified `flies` table post Phase A. The live row is authoritative — a
   // renamed pattern surfaces under its current name across every catch.
-  const flyPatternIds = Array.from(
-    new Set((catches ?? []).map((c) => c.fly_pattern_id).filter((v): v is string => !!v))
+  const referencedFlyIds = Array.from(
+    new Set(
+      (catches ?? [])
+        .flatMap((c) => [c.fly_pattern_id, c.canonical_fly_id])
+        .filter((v): v is string => !!v)
+    )
   );
-  const { data: rawFlies } = flyPatternIds.length > 0
+  const { data: rawFlies } = referencedFlyIds.length > 0
     ? await supabase
         .from("flies")
         .select("id, name")
-        .in("id", flyPatternIds)
+        .in("id", referencedFlyIds)
         .is("deleted_at", null)
     : { data: [] };
   const flyNameById = new Map(
     (rawFlies ?? []).map((f) => [f.id as string, f.name as string])
   );
 
-  // Canonical identity for grouping. If fly_pattern_id is set, the live
-  // fly row is the source of truth; otherwise fall back to a normalized
-  // fly_name (lowercased, whitespace-collapsed) so freehand snapshots that
-  // differ only in trailing notes still merge.
-  function flyIdentity(c: { fly_pattern_id?: string | null; fly_name?: string | null }):
-    { key: string; displayName: string } | null {
-    if (c.fly_pattern_id) {
-      const name = flyNameById.get(c.fly_pattern_id);
-      if (name) return { key: `id:${c.fly_pattern_id}`, displayName: name };
+  // Canonical identity for grouping. If either FK is set, the live fly row
+  // is the source of truth; otherwise fall back to a normalized fly_name
+  // (lowercased, whitespace-collapsed) so freehand snapshots that differ
+  // only in trailing notes still merge.
+  function flyIdentity(c: {
+    fly_pattern_id?: string | null;
+    canonical_fly_id?: string | null;
+    fly_name?: string | null;
+  }): { key: string; displayName: string } | null {
+    const flyId = c.fly_pattern_id || c.canonical_fly_id;
+    if (flyId) {
+      const name = flyNameById.get(flyId);
+      if (name) return { key: `id:${flyId}`, displayName: name };
     }
     if (c.fly_name && c.fly_name.trim()) {
       const norm = c.fly_name.trim().toLowerCase().replace(/\s+/g, " ");

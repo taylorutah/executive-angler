@@ -23,8 +23,8 @@ interface CatchRow {
   species: string | null;
   length_inches: number | null;
   fly_pattern_id: string | null;
+  canonical_fly_id: string | null;
   fly_name: string | null;
-  variant_id: string | null;
   fly_size: string | null;
   time_caught: string | null;
   quantities: number | null;
@@ -117,7 +117,7 @@ export async function GET() {
   }
 
   // Fetch user data in parallel
-  const [sessionsRes, catchesRes, fliesRes] = await Promise.all([
+  const [sessionsRes, catchesRes] = await Promise.all([
     supabase
       .from("fishing_sessions")
       .select(
@@ -128,18 +128,38 @@ export async function GET() {
     supabase
       .from("catches")
       .select(
-        "id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, time_caught, quantities"
+        "id, session_id, species, length_inches, fly_pattern_id, canonical_fly_id, fly_name, fly_size, time_caught, quantities"
       )
-      .eq("user_id", user.id),
-    supabase
-      .from("flies")
-      .select("id, name, type")
       .eq("user_id", user.id),
   ]);
 
   const sessions: SessionRow[] = sessionsRes.data || [];
   const catches: CatchRow[] = catchesRes.data || [];
-  const flies: FlyRow[] = fliesRes.data || [];
+
+  // Resolve live fly identity for every catch via either FK (web canonical
+  // picks → canonical_fly_id; iOS/Android + web personal picks → fly_pattern_id).
+  // Phase A unified `flies` table holds both — there's no user_id or `type`
+  // column on it (use `submitted_by_user_id` / `category`). The old query
+  // failed silently with `user_id` filter + `type` select; this fetch is
+  // FK-driven and pulls only the rows actually referenced by these catches.
+  const referencedFlyIds = Array.from(
+    new Set(
+      catches.flatMap((c) => [c.fly_pattern_id, c.canonical_fly_id])
+        .filter((v): v is string => !!v)
+    )
+  );
+  const fliesRes = referencedFlyIds.length > 0
+    ? await supabase
+        .from("flies")
+        .select("id, name, category")
+        .in("id", referencedFlyIds)
+        .is("deleted_at", null)
+    : { data: [] as { id: string; name: string; category: string | null }[] };
+  const flies: FlyRow[] = (fliesRes.data || []).map((f) => ({
+    id: f.id as string,
+    name: f.name as string,
+    type: (f as { category?: string | null }).category ?? null,
+  }));
 
   const flyMap = new Map(flies.map((f) => [f.id, f]));
 
@@ -158,10 +178,14 @@ export async function GET() {
     // Resolve display name across the three identity paths: denormalized
     // snapshot (set at save by both variant + legacy logging), legacy
     // pattern join, or skip if neither is available.
-    const legacyFly = c.fly_pattern_id ? flyMap.get(c.fly_pattern_id) : null;
-    const name = c.fly_name || legacyFly?.name || null;
+    // Web canonical picks set canonical_fly_id only; iOS/Android + web personal
+    // picks set fly_pattern_id. Both reference the same flies table — try both.
+    const liveFly =
+      (c.fly_pattern_id ? flyMap.get(c.fly_pattern_id) : null) ||
+      (c.canonical_fly_id ? flyMap.get(c.canonical_fly_id) : null);
+    const name = liveFly?.name || c.fly_name || null;
     if (!name) continue;
-    const type = legacyFly?.type ?? null;
+    const type = liveFly?.type ?? null;
     // Key by name so variant catches and legacy catches of the same
     // pattern aggregate together.
     const key = name;

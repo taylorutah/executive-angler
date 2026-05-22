@@ -43,10 +43,16 @@ export async function GET(request: Request) {
     if (sessionsError) throw sessionsError;
 
     const sessionIds = (sessions || []).map((s: AnyRec) => s.id);
+    // Phase C: `fly_patterns` was a compat view that was dropped. The
+    // denormalized `fly_name` column is kept in lockstep with the live fly
+    // by the session POST/PATCH handlers, so reading the snapshot directly
+    // is correct and avoids the FK-embed disambiguation problem (only
+    // fly_pattern_id has a true FK constraint; canonical_fly_id is an
+    // orphan column post Phase C cascade).
     const { data: catches, error: catchesError } = sessionIds.length > 0
       ? await supabase
           .from('catches')
-          .select('*, fly_pattern:fly_patterns(name)')
+          .select('*')
           .in('session_id', sessionIds)
           .order('created_at', { ascending: true })
       : { data: [], error: null };
@@ -139,7 +145,7 @@ function buildCatchValues(c: AnyRec | null): Record<string, unknown> {
   return {
     species: c.species,
     length_inches: c.length_inches,
-    fly_pattern_name: c.fly_pattern?.name || c.fly_name || null,
+    fly_pattern_name: c.fly_name || null,
     fly_size: c.fly_size,
     fly_position: c.fly_position,
     bead_size: c.bead_size,

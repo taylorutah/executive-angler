@@ -133,21 +133,49 @@ export async function getFliesByCategory(
   return (data ?? []).map(mapRow);
 }
 
+/**
+ * Returns canonical flies that are actually being used on this river,
+ * derived from the `river_fly_pulse` RPC (last 60 days of user catches,
+ * SECURITY DEFINER so public callers see the aggregate without owner RLS).
+ *
+ * Editorial curation via `canonical_flies.related_river_ids` was retired
+ * with Phase A — the unified `flies` table doesn't carry that column, and
+ * the Phase-C `canonical_flies` view doesn't expose it either. Live catch
+ * data is a better signal than stale editorial picks anyway.
+ */
 export async function getFliesForRiver(
   riverId: string
 ): Promise<CanonicalFly[]> {
   const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("canonical_flies")
-    .select("*")
-    .contains("related_river_ids", [riverId])
-    .order("rank", { ascending: true, nullsFirst: false });
+  const { data: pulse, error: pulseError } = await supabase.rpc(
+    "river_fly_pulse",
+    { target_river_id: riverId }
+  );
 
-  if (error) {
-    console.error("[getFliesForRiver] Supabase error:", error);
+  if (pulseError) {
+    console.error("[getFliesForRiver] river_fly_pulse error:", pulseError);
     return [];
   }
-  return (data ?? []).map(mapRow);
+  const names = ((pulse ?? []) as Array<{ fly_name: string | null }>)
+    .map((p) => p.fly_name)
+    .filter((n): n is string => !!n);
+  if (names.length === 0) return [];
+
+  const { data: flies, error: fliesError } = await supabase
+    .from("canonical_flies")
+    .select("*")
+    .in("name", names);
+
+  if (fliesError) {
+    console.error("[getFliesForRiver] flies lookup error:", fliesError);
+    return [];
+  }
+
+  // Preserve pulse ordering (by catch count desc) so the "hot fly" leads.
+  const order = new Map(names.map((n, i) => [n, i]));
+  return (flies ?? [])
+    .map(mapRow)
+    .sort((a, b) => (order.get(a.name) ?? 999) - (order.get(b.name) ?? 999));
 }
 
 export async function getFliesByEffectiveSpecies(
