@@ -152,6 +152,53 @@ function resolveBroadcast(
   return undefined;
 }
 
+/**
+ * Build a resolver that derives the canonical `fly_name` snapshot for a
+ * catch from its `fly_pattern_id` / `canonical_fly_id`. The snapshot tracks
+ * the live fly so the catch's display name can never drift from its
+ * foreign keys (the May 2026 LBP → PTBD mismatch came from a PATCH path
+ * that updated fly_pattern_id but left fly_name untouched).
+ *
+ * Falls back to a caller-provided free-text fly_name when neither FK is
+ * set — that's the legitimate "freehand entry" path (CSV import, quick
+ * catches without picking a library fly).
+ *
+ * `supabase` here can be either the cookie-bound client or a service
+ * client; reads only.
+ */
+async function buildFlyNameResolver(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  candidateIds: Array<string | null | undefined>
+) {
+  const ids = Array.from(
+    new Set(
+      candidateIds
+        .filter((v): v is string => typeof v === "string" && v.trim() !== "")
+    )
+  );
+  const nameById = new Map<string, string>();
+  if (ids.length > 0) {
+    const { data } = await supabase
+      .from("flies")
+      .select("id, name")
+      .in("id", ids)
+      .is("deleted_at", null);
+    for (const f of data ?? []) {
+      nameById.set(f.id as string, f.name as string);
+    }
+  }
+  return function resolveFlyName(
+    flyPatternId: string | null | undefined,
+    canonicalFlyId: string | null | undefined,
+    fallback: string | null | undefined
+  ): string | null {
+    if (flyPatternId && nameById.has(flyPatternId)) return nameById.get(flyPatternId)!;
+    if (canonicalFlyId && nameById.has(canonicalFlyId)) return nameById.get(canonicalFlyId)!;
+    if (typeof fallback === "string" && fallback.trim() !== "") return fallback;
+    return null;
+  };
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -192,14 +239,29 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   if (catches?.length) {
+    const resolveFlyName = await buildFlyNameResolver(
+      supabase,
+      (catches as Record<string, unknown>[]).flatMap((c) => [
+        c.fly_pattern_id as string | undefined,
+        c.canonical_fly_id as string | undefined,
+      ])
+    );
     const catchRows = catches.map((c: Record<string, unknown>) => {
+      const flyPatternId =
+        c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? (c.fly_pattern_id as string) : null;
+      const canonicalFlyId =
+        c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? (c.canonical_fly_id as string) : null;
       const row: Record<string, unknown> = {
         ...c,
         session_id: session.id,
         user_id: user.id,
-        fly_pattern_id: c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null,
-        canonical_fly_id: c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null,
+        fly_pattern_id: flyPatternId,
+        canonical_fly_id: canonicalFlyId,
         configuration_id: c.configuration_id && String(c.configuration_id).trim() !== "" ? c.configuration_id : null,
+        // Always derive fly_name from the live fly when a FK is set, so
+        // the snapshot can't drift from the canonical identity. Free-text
+        // fly_name only persists when no FK is provided.
+        fly_name: resolveFlyName(flyPatternId, canonicalFlyId, c.fly_name as string | null | undefined),
         length_inches: stripNum(c.length_inches) ?? null,
         quantities: c.quantities ? Number(c.quantities) || null : null,
       };
@@ -277,6 +339,23 @@ export async function PATCH(req: NextRequest) {
     const existingIds = new Set((existingCatches || []).map((c) => c.id as string));
 
     if (catches?.length) {
+      // Pre-resolve fly_name for every fly_pattern_id / canonical_fly_id
+      // the client sent (and every one already on disk for catches it's
+      // PATCHing without sending FKs). Without this, swapping a catch
+      // from fly A to fly B leaves the old snapshot in place — exactly
+      // how the May 2026 LBP/PTBD mismatch was produced.
+      const candidateFlyIds: Array<string | undefined> = [];
+      for (const c of catches as Record<string, unknown>[]) {
+        candidateFlyIds.push(c.fly_pattern_id as string | undefined);
+        candidateFlyIds.push(c.canonical_fly_id as string | undefined);
+        const existing = c.id ? existingById.get(c.id as string) : null;
+        if (existing) {
+          candidateFlyIds.push(existing.fly_pattern_id as string | undefined);
+          candidateFlyIds.push(existing.canonical_fly_id as string | undefined);
+        }
+      }
+      const resolveFlyName = await buildFlyNameResolver(supabase, candidateFlyIds);
+
       const toUpdate: Array<{ id: string; data: Record<string, unknown> }> = [];
       const toInsert: Record<string, unknown>[] = [];
       const incomingIds = new Set<string>();
@@ -291,21 +370,30 @@ export async function PATCH(req: NextRequest) {
           if (val === undefined) return existing?.[field] ?? fallback;
           return val || fallback;
         };
+        const resolvedFlyPatternId = c.fly_pattern_id !== undefined
+          ? (c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? (c.fly_pattern_id as string) : null)
+          : ((existing?.fly_pattern_id as string | null | undefined) ?? null);
+        const resolvedCanonicalFlyId = c.canonical_fly_id !== undefined
+          ? (c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? (c.canonical_fly_id as string) : null)
+          : ((existing?.canonical_fly_id as string | null | undefined) ?? null);
+        // Snapshot is derived from the final FKs. Only fall back to the
+        // client-sent (or existing) fly_name when no FK is set — that's
+        // the free-text case (CSV import, quick catches w/o picker).
+        const fallbackFlyName = c.fly_name !== undefined
+          ? (c.fly_name as string | null | undefined)
+          : ((existing?.fly_name as string | null | undefined) ?? null);
         const clean: Record<string, unknown> = {
           session_id: id,
           user_id: user.id,
           species: v("species"),
           length_inches: c.length_inches !== undefined ? (stripNum(c.length_inches) ?? null) : (existing?.length_inches ?? null),
           quantities: c.quantities !== undefined ? (Number(c.quantities) || 1) : (existing?.quantities ?? 1),
-          fly_pattern_id: c.fly_pattern_id !== undefined
-            ? (c.fly_pattern_id && String(c.fly_pattern_id).trim() !== "" ? c.fly_pattern_id : null)
-            : (existing?.fly_pattern_id ?? null),
-          canonical_fly_id: c.canonical_fly_id !== undefined
-            ? (c.canonical_fly_id && String(c.canonical_fly_id).trim() !== "" ? c.canonical_fly_id : null)
-            : (existing?.canonical_fly_id ?? null),
+          fly_pattern_id: resolvedFlyPatternId,
+          canonical_fly_id: resolvedCanonicalFlyId,
           configuration_id: c.configuration_id !== undefined
             ? (c.configuration_id && String(c.configuration_id).trim() !== "" ? c.configuration_id : null)
             : ((existing as { configuration_id?: string | null } | undefined)?.configuration_id ?? null),
+          fly_name: resolveFlyName(resolvedFlyPatternId, resolvedCanonicalFlyId, fallbackFlyName),
           fly_position: v("fly_position"),
           fly_size: v("fly_size"),
           bead_size: v("bead_size"),
