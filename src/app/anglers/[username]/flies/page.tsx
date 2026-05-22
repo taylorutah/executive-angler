@@ -40,20 +40,33 @@ export default async function AnglerFliesPage({ params }: Props) {
   // only see public patterns. Promoted-to-canonical patterns are excluded
   // from the index (they redirect to the canonical) but kept around for
   // lineage.
-  const query = supabase
-    .from("fly_patterns")
-    .select("id, slug, name, type, image_url, fly_color, size, visibility, parent_canonical_id, promoted_to_canonical_id")
-    .eq("user_id", profile.user_id)
-    .is("promoted_to_canonical_id", null)
+  // Visibility on the unified schema:
+  //   - owner / admin sees private + pending + approved
+  //   - everyone else sees approved only
+  const allowedStatuses = isOwner || viewerIsAdmin
+    ? ["private", "pending", "approved"]
+    : ["approved"];
+  const { data: rawFlies } = await supabase
+    .from("flies")
+    .select("id, slug, name, category, hero_image_url, status")
+    .eq("submitted_by_user_id", profile.user_id)
+    .in("status", allowedStatuses)
+    .is("deleted_at", null)
     .not("slug", "is", null)
     .order("updated_at", { ascending: false });
-
-  if (!isOwner && !viewerIsAdmin) {
-    query.eq("visibility", "public");
-  }
-
-  const { data: flies } = await query;
-  const list = flies ?? [];
+  // Map to the legacy shape the rest of this page expects.
+  const list = (rawFlies ?? []).map((f) => ({
+    id: f.id as string,
+    slug: f.slug as string,
+    name: f.name as string,
+    type: (f.category as string | null) ?? null,
+    image_url: (f.hero_image_url as string | null) ?? null,
+    fly_color: null as string | null,
+    size: null as string | null,
+    visibility: (f.status === "approved" ? "public" : "private") as "public" | "private",
+    parent_canonical_id: null as string | null,
+    promoted_to_canonical_id: null as string | null,
+  }));
 
   return (
     <div className="min-h-screen bg-[#0D1117]">

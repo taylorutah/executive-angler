@@ -33,7 +33,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // 1. fly_patterns_v2 (canonical or personal)
   const { data: v2 } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("slug, owner_user_id")
     .eq("id", id)
     .maybeSingle();
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // 2. canonical_flies (legacy mirror — same id as v2 row when present)
   const { data: legacyCanonical } = await supabase
-    .from("canonical_flies")
+    .from("flies")
     .select("slug")
     .eq("id", id)
     .maybeSingle();
@@ -56,14 +56,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // 3. fly_patterns (legacy personal) — may be promoted or unpromoted
   const { data: legacyPersonal } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("slug, user_id, promoted_to_canonical_id")
     .eq("id", id)
     .maybeSingle();
   if (legacyPersonal) {
     if (legacyPersonal.promoted_to_canonical_id) {
       const { data: promoted } = await supabase
-        .from("canonical_flies")
+        .from("flies")
         .select("slug")
         .eq("id", legacyPersonal.promoted_to_canonical_id as string)
         .maybeSingle();

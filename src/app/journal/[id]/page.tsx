@@ -165,9 +165,21 @@ export default async function SessionDetailPage({ params }: Props) {
     .map((c) => c.fly_pattern_id)
     .filter((v): v is string => !!v);
 
-  const { data: flies } = flyPatternIds.length > 0
-    ? await reader.from("fly_patterns").select("id, name, type, image_url").in("id", flyPatternIds)
+  // Map unified `flies` rows back to the legacy FlyPattern shape
+  // (`type`, `image_url`) that SessionDetail expects.
+  const { data: rawFlies } = flyPatternIds.length > 0
+    ? await reader
+        .from("flies")
+        .select("id, name, category, hero_image_url")
+        .in("id", flyPatternIds)
+        .is("deleted_at", null)
     : { data: [] };
+  const flies = (rawFlies ?? []).map((f) => ({
+    id: f.id as string,
+    name: f.name as string,
+    type: (f.category as string | null) ?? null,
+    image_url: (f.hero_image_url as string | null) ?? null,
+  }));
 
   const { data: sessionPhotos } = await reader
     .from("session_photos")

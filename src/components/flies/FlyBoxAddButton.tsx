@@ -69,7 +69,7 @@ export default function FlyBoxAddButton({
         const supabase = createClient();
         const col = fly.kind === "personal" ? "fly_pattern_id" : "canonical_fly_id";
         const { count } = await supabase
-          .from("user_fly_box")
+          .from("fly_box_entries_v3")
           .select("id", { count: "exact", head: true })
           .eq("user_id", user!.id)
           .eq(col, fly.id);

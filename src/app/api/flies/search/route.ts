@@ -2,52 +2,48 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * GET /api/flies/search?q=...&limit=10
+ * GET /api/flies/search?q=...&limit=25
  *
- * Unified fly search across canonical_flies (the encyclopedia) and the
- * caller's own fly_patterns. Returns a flat list — each result tagged with
- * its source so the catch row can write either canonical_fly_id or
- * fly_pattern_id.
+ * Live fly search across the unified `flies` table. Returns:
+ *   - Approved canonical patterns (visible to everyone)
+ *   - The caller's own private/pending submissions
  *
- * Public visibility on fly_patterns is honoured for non-owners but the
- * primary use case is the catch-logging picker, so the caller's own private
- * patterns are always returned.
+ * Each result is tagged with its `source` so the catch picker writes the
+ * correct id column on the catch row (`canonical_fly_id` vs `fly_pattern_id`).
  */
-
 interface SearchResult {
   source: "canonical" | "personal";
   id: string;
   name: string;
   category?: string | null;
   imageUrl?: string | null;
-  // Personal-only
   isMine?: boolean;
-  username?: string | null;
 }
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  // Search works for anonymous users too — they just don't see personal patterns.
 
   const q = (req.nextUrl.searchParams.get("q") ?? "").trim();
-  const limit = Math.min(Number(req.nextUrl.searchParams.get("limit") ?? 12), 25);
+  const limit = Math.min(Number(req.nextUrl.searchParams.get("limit") ?? 12), 50);
 
-  // Empty query returns popular canonicals so the picker has something to
-  // show when first opened.
   const canonicalQuery = supabase
-    .from("canonical_flies")
+    .from("flies")
     .select("id, slug, name, category, hero_image_url")
-    .order("rank", { ascending: true, nullsFirst: false })
+    .eq("status", "approved")
+    .is("deleted_at", null)
+    .order("is_featured", { ascending: false })
+    .order("name")
     .limit(limit);
   if (q) canonicalQuery.ilike("name", `%${q}%`);
 
   const personalPromise = user
     ? supabase
-        .from("fly_patterns")
-        .select("id, slug, name, type, image_url, user_id")
-        .eq("user_id", user.id)
-        .is("promoted_to_canonical_id", null)
+        .from("flies")
+        .select("id, slug, name, category, hero_image_url, submitted_by_user_id")
+        .eq("submitted_by_user_id", user.id)
+        .in("status", ["private", "pending", "approved"])
+        .is("deleted_at", null)
         .ilike("name", q ? `%${q}%` : "%")
         .order("updated_at", { ascending: false })
         .limit(limit)
@@ -55,7 +51,6 @@ export async function GET(req: NextRequest) {
 
   const [canonicalRes, personalRes] = await Promise.all([canonicalQuery, personalPromise]);
   if (canonicalRes.error) {
-    console.error("[fly-search] canonical error:", canonicalRes.error);
     return NextResponse.json({ error: canonicalRes.error.message }, { status: 500 });
   }
 
@@ -63,8 +58,8 @@ export async function GET(req: NextRequest) {
     source: "personal" as const,
     id: p.id as string,
     name: p.name as string,
-    category: (p.type as string | null) ?? null,
-    imageUrl: (p.image_url as string | null) ?? null,
+    category: (p.category as string | null) ?? null,
+    imageUrl: (p.hero_image_url as string | null) ?? null,
     isMine: true,
   }));
 
@@ -76,7 +71,18 @@ export async function GET(req: NextRequest) {
     imageUrl: (c.hero_image_url as string | null) ?? null,
   }));
 
-  // Personal results first (the angler's stuff is more relevant to them) then
-  // canonical encyclopedia results.
-  return NextResponse.json({ results: [...personal, ...canonical].slice(0, limit) });
+  // Dedup: a row with submitted_by_user_id=user.id and status=approved would
+  // appear in both lists; prefer the "personal" entry so the picker writes
+  // fly_pattern_id (catches still target the same id either way since both
+  // columns now FK to `flies`).
+  const seen = new Set<string>();
+  const merged: SearchResult[] = [];
+  for (const r of [...personal, ...canonical]) {
+    if (seen.has(r.id)) continue;
+    seen.add(r.id);
+    merged.push(r);
+    if (merged.length >= limit) break;
+  }
+
+  return NextResponse.json({ results: merged });
 }

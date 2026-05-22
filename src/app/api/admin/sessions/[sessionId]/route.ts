@@ -85,7 +85,7 @@ export async function GET(
 
   if (variantIds.length > 0) {
     const { data: variantPatterns } = await admin
-      .from("fly_variants")
+      .from("user_fly_configurations")
       .select("id, pattern:fly_patterns_v2(name, category, hero_image_url)")
       .in("id", variantIds);
     type V = {

@@ -61,7 +61,7 @@ export async function POST() {
       )
       .eq("user_id", user.id)
       .limit(300),
-    supabase.from("fly_patterns").select("id, name, type").eq("user_id", user.id),
+    supabase.from("flies").select("id, name, type").eq("user_id", user.id),
   ]);
 
   const sessions = sessionsRes.data || [];

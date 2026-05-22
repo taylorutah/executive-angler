@@ -35,7 +35,7 @@ export async function GET(
   // delete-prompt purposes we treat ownership loosely — if you can't see it
   // you can't delete it, so the count would be zero anyway.
   const { data: pattern } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, name, user_id")
     .eq("id", id)
     .maybeSingle();

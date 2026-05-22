@@ -51,7 +51,7 @@ export default async function HatchReportsPage() {
     .eq("user_id", user.id);
 
   const { data: flies } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, name, type")
     .eq("user_id", user.id);
 

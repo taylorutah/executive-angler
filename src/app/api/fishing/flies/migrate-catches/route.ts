@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   if (!patternId) return NextResponse.json({ error: "Missing pattern_id" }, { status: 400 });
 
   const { data: pat, error: pErr } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, parent_canonical_id")
     .eq("id", patternId)
     .eq("user_id", user.id)
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   if (!patternId) return NextResponse.json({ error: "Missing pattern_id" }, { status: 400 });
 
   const { data: pat, error: pErr } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, parent_canonical_id")
     .eq("id", patternId)
     .eq("user_id", user.id)

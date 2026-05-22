@@ -26,9 +26,11 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     .eq("user_id", user.id);
 
   const { data: flies } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id")
-    .eq("user_id", user.id);
+    .eq("submitted_by_user_id", user.id)
+    .in("status", ["private", "pending", "approved"])
+    .is("deleted_at", null);
 
   const { data: favs } = await supabase
     .from("user_favorites")

@@ -42,7 +42,7 @@ export async function findOrForkPersonalPattern(opts: {
     // Look for an existing fork first — avoid creating duplicates if the
     // user clicks twice or has already forked from elsewhere.
     const { data: existing } = await supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("id, slug")
       .eq("user_id", user.id)
       .eq("parent_canonical_id", canonicalFlyId)

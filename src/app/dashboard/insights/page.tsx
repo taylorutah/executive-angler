@@ -50,7 +50,7 @@ export default async function InsightsPage() {
       .select("id, session_id, species, length_inches, fly_pattern_id, fly_name, variant_id, fly_size, fly_position, time_caught, quantities")
       .eq("user_id", user.id),
     supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("id, name, type")
       .eq("user_id", user.id),
   ]);

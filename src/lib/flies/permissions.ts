@@ -51,7 +51,7 @@ export async function assertCanEditPattern(
   if (!user) return { ok: false, error: "You must be signed in.", status: 401 };
 
   const { data: row, error } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("id, owner_user_id, slug, name")
     .eq("id", patternId)
     .maybeSingle();

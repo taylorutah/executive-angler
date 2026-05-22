@@ -62,7 +62,7 @@ export default async function AdminUsersPage() {
   const flyBoxCountMap: Record<string, number> = {};
   if (admin) {
     const { data: flyRows } = await admin
-      .from("user_fly_box")
+      .from("fly_box_entries_v3")
       .select("user_id")
       .limit(20000);
     (flyRows || []).forEach((f: { user_id: string }) => {

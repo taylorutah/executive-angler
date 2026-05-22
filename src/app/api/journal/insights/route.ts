@@ -132,7 +132,7 @@ export async function GET() {
       )
       .eq("user_id", user.id),
     supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("id, name, type")
       .eq("user_id", user.id),
   ]);

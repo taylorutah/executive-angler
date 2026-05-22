@@ -32,14 +32,14 @@ export async function GET(req: NextRequest) {
     if (canonicalId) {
       const [canonicalRes, variantsRes] = await Promise.all([
         supabase
-          .from("canonical_flies")
+          .from("flies")
           .select(
             "id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url"
           )
           .eq("id", canonicalId)
           .maybeSingle(),
         supabase
-          .from("fly_patterns")
+          .from("flies")
           .select(
             "id, name, type, size, hook, bead_size, bead_color, fly_color, image_url, my_tied_fly_photo_url, provenance_credit, user_id, updated_at"
           )
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     const { data: pattern } = await supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("*")
       .eq("id", patternId!)
       .maybeSingle();
@@ -86,14 +86,14 @@ export async function GET(req: NextRequest) {
     const [parentRes, canonicalRes, childrenRes, siblingsRes] = await Promise.all([
       pattern.parent_pattern_id
         ? supabase
-            .from("fly_patterns")
+            .from("flies")
             .select("*")
             .eq("id", pattern.parent_pattern_id)
             .maybeSingle()
         : Promise.resolve({ data: null }),
       pattern.parent_canonical_id
         ? supabase
-            .from("canonical_flies")
+            .from("flies")
             .select(
               "id, slug, name, category, tagline, sizes, colors, bead_options, hook_styles, hero_image_url"
             )
@@ -101,20 +101,20 @@ export async function GET(req: NextRequest) {
             .maybeSingle()
         : Promise.resolve({ data: null }),
       supabase
-        .from("fly_patterns")
+        .from("flies")
         .select("*")
         .eq("parent_pattern_id", patternId!)
         .order("created_at", { ascending: false }),
       pattern.parent_pattern_id
         ? supabase
-            .from("fly_patterns")
+            .from("flies")
             .select("*")
             .eq("parent_pattern_id", pattern.parent_pattern_id)
             .neq("id", patternId!)
             .order("created_at", { ascending: false })
         : pattern.parent_canonical_id
           ? supabase
-              .from("fly_patterns")
+              .from("flies")
               .select("*")
               .eq("parent_canonical_id", pattern.parent_canonical_id)
               .neq("id", patternId!)

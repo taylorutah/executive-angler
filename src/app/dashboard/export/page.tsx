@@ -28,7 +28,7 @@ export default async function ExportPage() {
 
   // Fetch fly patterns for name lookup
   const { data: flies } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, name")
     .eq("user_id", user.id);
 

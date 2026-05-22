@@ -31,7 +31,7 @@ export default async function AdminPage() {
 
   // Total fly patterns
   const { count: totalFlies } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("*", { count: "exact", head: true });
 
   // Sessions in last 7 days

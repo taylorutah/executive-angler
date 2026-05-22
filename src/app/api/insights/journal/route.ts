@@ -40,7 +40,7 @@ export async function POST() {
       .eq("user_id", user.id)
       .limit(500),
     supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("id, name, type")
       .eq("user_id", user.id),
   ]);

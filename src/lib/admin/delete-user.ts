@@ -49,7 +49,7 @@ export async function deleteUserCascade(
 
   // 3. Fly patterns v2 (cascades to fly_variants / in_box / stock)
   {
-    const { error } = await admin.from("fly_patterns_v2").delete().eq("owner_user_id", userId);
+    const { error } = await admin.from("flies").delete().eq("owner_user_id", userId);
     log("fly_patterns_v2", error);
   }
 

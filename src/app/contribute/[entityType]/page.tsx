@@ -43,7 +43,7 @@ export default async function SubmissionPage({
 
   if (entityType === "fly_pattern" && from_fly_box) {
     const { data: flyPattern } = await supabase
-      .from("fly_patterns")
+      .from("flies")
       .select("*")
       .eq("id", from_fly_box)
       .eq("user_id", user.id)

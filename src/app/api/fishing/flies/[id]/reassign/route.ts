@@ -56,7 +56,7 @@ export async function POST(
   // client could reassign their catches to a stranger's fly and produce
   // confusing analytics.
   const { data: target } = await supabase
-    .from("fly_patterns")
+    .from("flies")
     .select("id, user_id, name")
     .eq("id", targetId)
     .maybeSingle();

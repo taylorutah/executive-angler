@@ -1,18 +1,21 @@
 /**
- * Phase 2 fly query module — patterns / variants / stock / photos / box membership.
+ * fly-v2.ts — façade module bridging legacy consumers to the unified Phase A
+ * fly schema (`flies` + `user_fly_configurations` + `fly_box_entries_v3` +
+ * `fly_boxes`).
  *
- * Replaces src/lib/db/fly-patterns.ts (canonical_flies + fly_patterns + user_fly_box
- * with personalizations jsonb tangle) with focused queries against the unified
- * fly_patterns_v2 / fly_variants / fly_variant_stock / fly_variant_in_box /
- * fly_variant_photos schema.
+ * The exported function signatures and types match the pre-reset module so
+ * existing pages compile unchanged. Internally everything reads/writes the
+ * unified tables. The mapping is intentionally lossy in one direction —
+ * legacy "Variant" colour columns are projected out of `slot_overrides` jsonb,
+ * and per-variant photos collapse to the fly's hero image — but every
+ * surface that the app still uses (boxes pages, dashboard tie-next, catch
+ * logger, journal session detail) keeps working.
  *
- * Until the full Phase 2 cutover, the legacy module stays in place. New surfaces
- * (Pattern detail v2, Box view v2) import from here behind a feature flag.
+ * Long-term: consumers migrate to `Fly` / `FlyConfiguration` types directly
+ * (see `src/types/flies.ts`) and this file gets deleted. Until then it's the
+ * one place that knows both shapes.
  */
 import { createClient } from "@/lib/supabase/server";
-import { createStaticClient } from "@/lib/supabase/static";
-import { isAdmin } from "@/lib/admin";
-import { assertCanEditPattern } from "@/lib/flies/permissions";
 import type {
   Pattern,
   Variant,
@@ -24,494 +27,358 @@ import type {
   TyingStep,
   BeadMaterial,
 } from "@/types/fly-v2";
+import type { Fly, FlyConfiguration } from "@/types/flies";
+
+// ────────────────────────────────────────────────────────────────────────────
+// Mappers — Fly→Pattern, FlyConfiguration→(Variant, VariantStock)
+// ────────────────────────────────────────────────────────────────────────────
+
+function flyToPattern(f: Fly): Pattern {
+  return {
+    id: f.id,
+    slug: f.slug,
+    name: f.name,
+    category: f.category as Pattern["category"],
+    owner_user_id: f.submitted_by_user_id,
+    forked_from_pattern_id: null,
+    promoted_to_canonical_id: null,
+    description: f.description,
+    history: f.history,
+    tying_overview: f.tying_overview,
+    fishing_tips: f.fishing_tips,
+    imitates: f.imitates ?? [],
+    effective_species_ids: f.effective_species_ids ?? [],
+    water_types: f.water_types ?? [],
+    hook_style: null,
+    base_materials: (f.materials_list as MaterialSlot[]) ?? [],
+    tying_steps: [] as TyingStep[],
+    hero_image_url: f.hero_image_url,
+    gallery_image_urls: f.gallery_image_urls ?? [],
+    video_url: f.video_url,
+    visibility: f.status === "private" ? "private" : "public",
+    shared_with_user_ids: [],
+    contributed_by_user_id: null,
+    origin_credit: f.origin_credit ?? null,
+    is_featured: f.is_featured,
+    active_variant_axes: null,
+    created_at: f.created_at,
+    updated_at: f.updated_at,
+  };
+}
+
+type SlotMap = FlyConfiguration["slot_overrides"];
+function slotColor(slots: SlotMap, slot: string): string | null {
+  const v = slots?.[slot];
+  return (typeof v?.color === "string" ? v.color : null);
+}
+
+function configToVariant(c: FlyConfiguration): Variant {
+  const s = c.slot_overrides ?? {};
+  const bead = s.bead ?? {};
+  const hook = s.hook ?? {};
+  return {
+    id: c.id,
+    pattern_id: c.fly_id,
+    created_by_user_id: c.user_id,
+    slug: null,
+    size: c.size ?? "",
+    bead_material: (typeof bead.material === "string" ? bead.material : null) as Variant["bead_material"],
+    bead_weight_mm: typeof bead.size_mm === "number" ? bead.size_mm : null,
+    bead_color: typeof bead.color === "string" ? bead.color : null,
+    body_color: slotColor(s, "body"),
+    rib_color: slotColor(s, "rib"),
+    tail_color: slotColor(s, "tail"),
+    wing_color: slotColor(s, "wing"),
+    thorax_color: slotColor(s, "thorax"),
+    collar_color: slotColor(s, "collar"),
+    hook_style: typeof hook.style === "string" ? hook.style : null,
+    hook_brand: typeof hook.brand === "string" ? hook.brand : null,
+    materials_override: {},
+    display_name: c.nickname,
+    notes: c.personal_notes,
+    sort_order: 0,
+    is_default_for_pattern: false,
+    created_at: c.created_at,
+    updated_at: c.updated_at,
+  };
+}
+
+function configToStock(c: FlyConfiguration): VariantStock {
+  return {
+    id: c.id,
+    variant_id: c.id,
+    user_id: c.user_id,
+    tied_count: c.tied_count,
+    bought_count: c.bought_count,
+    target_count: c.target_count,
+    is_favorite: c.is_favorite,
+    tie_next_status: c.tie_next_status ?? "none",
+    tie_next_target_qty: c.tie_next_target_qty,
+    tie_next_notes: c.tie_next_notes,
+    times_used: c.times_used,
+    last_used_at: c.last_used_at,
+    last_loss_at: c.last_loss_at,
+    personal_notes: c.personal_notes,
+    added_at: c.created_at,
+    updated_at: c.updated_at,
+  };
+}
 
 // ────────────────────────────────────────────────────────────────────────────
 // Patterns
 // ────────────────────────────────────────────────────────────────────────────
 
-/** All canonical patterns (library), publicly readable. Approved only —
- *  the May 13 flatten-fly-architecture migration added a `status` column
- *  with values approved/pending/rejected/private but no query filtered on
- *  it, leaving pending submissions visible to everyone. */
 export async function listCanonicalPatterns(): Promise<Pattern[]> {
-  const supabase = createStaticClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("*")
-    .is("owner_user_id", null)
-    .or("status.is.null,status.eq.approved")
+    .eq("status", "approved")
+    .is("deleted_at", null)
     .order("name");
   if (error) {
     console.error("[listCanonicalPatterns]", error);
     return [];
   }
-  return (data ?? []) as Pattern[];
+  return ((data ?? []) as Fly[]).map(flyToPattern);
 }
 
-/** Single canonical pattern by slug. Falls back to a status-agnostic lookup
- *  when the strict query misses so submitters can still preview their own
- *  pending rows (visibility is enforced by RLS, not at the application layer). */
 export async function getCanonicalPatternBySlug(slug: string): Promise<Pattern | null> {
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("fly_patterns_v2")
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("flies")
     .select("*")
     .eq("slug", slug)
-    .is("owner_user_id", null)
-    .or("status.is.null,status.eq.approved")
+    .is("deleted_at", null)
     .maybeSingle();
-  if (error) {
-    console.error("[getCanonicalPatternBySlug]", error);
-    return null;
-  }
-  if (data) return data as Pattern;
-  // Fallback 1: same slug, no status filter (covers pending submissions the
-  // submitter is allowed to see via RLS).
-  const { data: fallback } = await supabase
-    .from("fly_patterns_v2")
-    .select("*")
-    .eq("slug", slug)
-    .is("owner_user_id", null)
-    .maybeSingle();
-  if (fallback) return fallback as Pattern;
-  // Fallback 2: legacy canonical_flies has its own slug column that drifted
-  // from fly_patterns_v2 during the Phase 2 migrations. If the slug only
-  // exists in canonical_flies, resolve to the v2 row by id so the rest of
-  // the page still works (variants, photos, etc. all key off the v2 id).
-  const { data: legacyCanonical } = await supabase
-    .from("canonical_flies")
-    .select("id")
-    .eq("slug", slug)
-    .maybeSingle();
-  if (!legacyCanonical?.id) return null;
-  const { data: byId } = await supabase
-    .from("fly_patterns_v2")
-    .select("*")
-    .eq("id", legacyCanonical.id as string)
-    .maybeSingle();
-  return (byId ?? null) as Pattern | null;
+  return data ? flyToPattern(data as Fly) : null;
 }
 
-/** Pattern by id (canonical or personal — RLS gates visibility). */
 export async function getPatternById(id: string): Promise<Pattern | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("fly_patterns_v2")
+  const { data } = await supabase
+    .from("flies")
     .select("*")
     .eq("id", id)
+    .is("deleted_at", null)
     .maybeSingle();
-  if (error) {
-    console.error("[getPatternById]", error);
-    return null;
-  }
-  return (data ?? null) as Pattern | null;
+  return data ? flyToPattern(data as Fly) : null;
 }
 
-/** All personal patterns owned by the current user. */
 export async function listMyPatterns(): Promise<Pattern[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
   const { data, error } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("*")
-    .eq("owner_user_id", user.id)
+    .eq("submitted_by_user_id", user.id)
+    .is("deleted_at", null)
+    .in("status", ["private", "pending", "approved"])
     .order("name");
   if (error) {
     console.error("[listMyPatterns]", error);
     return [];
   }
-  return (data ?? []) as Pattern[];
+  return ((data ?? []) as Fly[]).map(flyToPattern);
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Variants
+// Variants (= user_fly_configurations)
 // ────────────────────────────────────────────────────────────────────────────
 
-/**
- * All variants visible on a pattern's detail page:
- *   - Canonical-curated variants (created_by_user_id is null) — visible to all
- *   - Plus current user's own variants on this pattern
- *
- * RLS handles the visibility filter. Soft-deleted rows are filtered in JS
- * so this works whether or not the deleted_at migration has been applied
- * yet (a `.is("deleted_at", null)` predicate would error against a missing
- * column). The read policy stays open so historical catch detail can still
- * resolve a deleted variant's spec.
- */
 export async function listVariantsForPattern(patternId: string): Promise<Variant[]> {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
   const { data, error } = await supabase
-    .from("fly_variants")
+    .from("user_fly_configurations")
     .select("*")
-    .eq("pattern_id", patternId)
-    .order("sort_order")
-    .order("size");
+    .eq("user_id", user.id)
+    .eq("fly_id", patternId);
   if (error) {
     console.error("[listVariantsForPattern]", error);
     return [];
   }
-  return ((data ?? []) as Variant[]).filter(
-    (v) => !(v as unknown as { deleted_at?: string | null }).deleted_at,
-  );
+  return ((data ?? []) as FlyConfiguration[]).map(configToVariant);
 }
 
-/** Variant rows for a pattern, joined with stock + primary photo + box count. */
+/** Build VariantRow[] from the user's configurations for a fly. */
 export async function listVariantRowsForPattern(patternId: string): Promise<VariantRow[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const userId = user?.id ?? null;
+  if (!user) return [];
 
-  const variants = await listVariantsForPattern(patternId);
-  if (variants.length === 0) return [];
-  const variantIds = variants.map((v) => v.id);
-
-  // Stock for the current user only (RLS enforces this anyway)
-  const stockByVariant = new Map<string, VariantStock>();
-  if (userId) {
-    const { data: stockRows } = await supabase
-      .from("fly_variant_stock")
+  const [{ data: configs }, { data: flyRow }] = await Promise.all([
+    supabase
+      .from("user_fly_configurations")
       .select("*")
-      .eq("user_id", userId)
-      .in("variant_id", variantIds);
-    for (const s of (stockRows ?? []) as VariantStock[]) {
-      stockByVariant.set(s.variant_id, s);
-    }
+      .eq("user_id", user.id)
+      .eq("fly_id", patternId),
+    supabase
+      .from("flies")
+      .select("id, slug, name, category, hero_image_url")
+      .eq("id", patternId)
+      .maybeSingle(),
+  ]);
+
+  const fly = (flyRow ?? null) as Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url"> | null;
+  const cfgs = (configs ?? []) as FlyConfiguration[];
+  if (cfgs.length === 0) return [];
+
+  // Per-config box memberships.
+  const cfgIds = cfgs.map((c) => c.id);
+  const { data: entries } = await supabase
+    .from("fly_box_entries_v3")
+    .select("configuration_id, box_id, fly_boxes(name)")
+    .in("configuration_id", cfgIds);
+
+  type EntryJoin = {
+    configuration_id: string;
+    box_id: string;
+    fly_boxes: { name: string | null } | { name: string | null }[] | null;
+  };
+  const membershipsByCfg = new Map<string, { box_id: string; box_name: string; quantity: number }[]>();
+  const boxCountByCfg = new Map<string, number>();
+  for (const e of (entries ?? []) as EntryJoin[]) {
+    const name = Array.isArray(e.fly_boxes)
+      ? e.fly_boxes[0]?.name ?? "Box"
+      : e.fly_boxes?.name ?? "Box";
+    const list = membershipsByCfg.get(e.configuration_id) ?? [];
+    list.push({ box_id: e.box_id, box_name: name, quantity: 1 });
+    membershipsByCfg.set(e.configuration_id, list);
+    boxCountByCfg.set(e.configuration_id, (boxCountByCfg.get(e.configuration_id) ?? 0) + 1);
   }
 
-  // Primary photos
-  const { data: photoRows } = await supabase
-    .from("fly_variant_photos")
-    .select("*")
-    .in("variant_id", variantIds)
-    .eq("is_primary", true);
-  const photoByVariant = new Map<string, VariantPhoto>();
-  for (const p of (photoRows ?? []) as VariantPhoto[]) {
-    photoByVariant.set(p.variant_id, p);
-  }
-
-  // Box memberships (current user's boxes only, via RLS) — joined with the
-  // box name + per-box quantity so the table can render chips like
-  // "Kill 3 · Madison 4" instead of just a count.
-  const membershipsByVariant = new Map<string, { box_id: string; box_name: string; quantity: number }[]>();
-  const boxCountByVariant = new Map<string, number>();
-  if (userId) {
-    const { data: boxRows } = await supabase
-      .from("fly_variant_in_box")
-      .select("variant_id, box_id, quantity, fly_boxes(name)")
-      .in("variant_id", variantIds);
-    type BoxJoinRow = {
-      variant_id: string;
-      box_id: string;
-      quantity: number | null;
-      fly_boxes: { name: string | null } | { name: string | null }[] | null;
-    };
-    for (const r of (boxRows ?? []) as BoxJoinRow[]) {
-      const boxName = Array.isArray(r.fly_boxes)
-        ? r.fly_boxes[0]?.name ?? "Box"
-        : r.fly_boxes?.name ?? "Box";
-      const entry = {
-        box_id: r.box_id,
-        box_name: boxName,
-        quantity: r.quantity ?? 1,
-      };
-      const list = membershipsByVariant.get(r.variant_id) ?? [];
-      list.push(entry);
-      membershipsByVariant.set(r.variant_id, list);
-      boxCountByVariant.set(r.variant_id, (boxCountByVariant.get(r.variant_id) ?? 0) + 1);
-    }
-  }
-
-  return variants.map<VariantRow>((v) => ({
-    ...v,
-    pattern: null,
-    stock: stockByVariant.get(v.id) ?? null,
-    primary_photo: photoByVariant.get(v.id) ?? null,
-    box_count: boxCountByVariant.get(v.id) ?? 0,
-    box_memberships: membershipsByVariant.get(v.id) ?? [],
+  return cfgs.map<VariantRow>((c) => ({
+    ...configToVariant(c),
+    pattern: fly,
+    stock: configToStock(c),
+    primary_photo: null,
+    box_count: boxCountByCfg.get(c.id) ?? 0,
+    box_memberships: membershipsByCfg.get(c.id) ?? [],
     box_quantity: null,
     box_target_quantity: null,
   }));
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// User's Variant Stock (across all patterns)
-// ────────────────────────────────────────────────────────────────────────────
-
-/**
- * Variants where the user's target exceeds their owned stock — these are
- * implicit shortages that should appear in Tie Next without manual flagging.
- *
- * Excludes any variant whose stock is already explicitly flagged
- * (wanted / at_vise / done) so manual state always overrides the derivation.
- * Items returned from here surface in the kanban with an "auto" hint.
- */
-export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
-
-  // Two shortage sources:
-  //   (a) STOCK SHORTAGE — global target_count > owned (tied + bought).
-  //       Comes from fly_variant_stock. Suppressed when the user has
-  //       manually flagged tie_next_status (wanted/at_vise/done).
-  //   (b) BOX SHORTAGE — per-box target_quantity > quantity for any box.
-  //       Comes from fly_variant_in_box. Independent of stock status.
-  //
-  // We union the two by variant_id so a single variant in two boxes-short
-  // produces one kanban card with both box names in the subtitle.
-
-  // (a) stock shortages
-  const { data: stockRows } = await supabase
-    .from("fly_variant_stock")
-    .select("*")
-    .eq("user_id", user.id)
-    .or("tie_next_status.is.null,tie_next_status.eq.none");
-
-  const stockByVariant = new Map<string, VariantStock>();
-  const stockShortVariantIds = new Set<string>();
-  for (const r of (stockRows ?? []) as VariantStock[]) {
-    stockByVariant.set(r.variant_id, r);
-    const t = r.target_count ?? 0;
-    if (t <= 0) continue;
-    const owned = (r.tied_count ?? 0) + (r.bought_count ?? 0);
-    if (t > owned) stockShortVariantIds.add(r.variant_id);
-  }
-
-  // (b) per-box shortages
-  const { data: boxRows } = await supabase
-    .from("fly_variant_in_box")
-    .select("variant_id, box_id, quantity, target_quantity, fly_boxes(name)")
-    .eq("user_id", user.id)
-    .not("target_quantity", "is", null);
-
-  type BoxJoinRow = {
-    variant_id: string;
-    box_id: string;
-    quantity: number | null;
-    target_quantity: number | null;
-    fly_boxes: { name: string | null } | { name: string | null }[] | null;
-  };
-
-  const boxShortagesByVariant = new Map<
-    string,
-    { box_id: string; box_name: string; quantity: number; target_quantity: number; deficit: number }[]
-  >();
-  for (const r of (boxRows ?? []) as BoxJoinRow[]) {
-    const target = r.target_quantity ?? 0;
-    const qty = r.quantity ?? 0;
-    const deficit = target - qty;
-    if (deficit <= 0) continue;
-    const name = Array.isArray(r.fly_boxes)
-      ? r.fly_boxes[0]?.name ?? "Box"
-      : r.fly_boxes?.name ?? "Box";
-    const list = boxShortagesByVariant.get(r.variant_id) ?? [];
-    list.push({
-      box_id: r.box_id,
-      box_name: name,
-      quantity: qty,
-      target_quantity: target,
-      deficit,
-    });
-    boxShortagesByVariant.set(r.variant_id, list);
-  }
-
-  const allShortVariantIds = new Set<string>([
-    ...stockShortVariantIds,
-    ...boxShortagesByVariant.keys(),
-  ]);
-  if (allShortVariantIds.size === 0) return [];
-
-  const variantIds = Array.from(allShortVariantIds);
-  const { data: variantRows } = await supabase
-    .from("fly_variants")
-    .select("*")
-    .in("id", variantIds)
-    .is("deleted_at", null);
-  const variantById = new Map<string, Variant>();
-  for (const v of (variantRows ?? []) as Variant[]) variantById.set(v.id, v);
-
-  const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
-  const { data: patternRows } = await supabase
-    .from("fly_patterns_v2")
-    .select("id, slug, name, category, hero_image_url")
-    .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
-    patternById.set(p.id, p);
-  }
-
-  const { data: photoRows } = await supabase
-    .from("fly_variant_photos")
-    .select("*")
-    .in("variant_id", variantIds)
-    .eq("is_primary", true);
-  const photoByVariant = new Map<string, VariantPhoto>();
-  for (const p of (photoRows ?? []) as VariantPhoto[]) photoByVariant.set(p.variant_id, p);
-
-  return variantIds
-    .map<VariantRow | null>((vid) => {
-      const v = variantById.get(vid);
-      if (!v) return null;
-      const boxShorts = boxShortagesByVariant.get(vid) ?? [];
-      return {
-        ...v,
-        pattern: patternById.get(v.pattern_id) ?? null,
-        stock: stockByVariant.get(vid) ?? null,
-        primary_photo: photoByVariant.get(v.id) ?? null,
-        box_count: boxShorts.length,
-        box_memberships: boxShorts,
-        box_quantity: null,
-        box_target_quantity: null,
-      };
-    })
-    .filter((r): r is VariantRow => r !== null);
-}
-
-/** All variants the current user has stock for, joined with pattern + variant. */
 export async function listMyStockedVariants(): Promise<VariantRow[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
 
-  const { data: stockRows, error: stockErr } = await supabase
-    .from("fly_variant_stock")
+  const { data: configs } = await supabase
+    .from("user_fly_configurations")
     .select("*")
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false });
-  if (stockErr || !stockRows || stockRows.length === 0) return [];
+  const cfgs = (configs ?? []) as FlyConfiguration[];
+  if (cfgs.length === 0) return [];
 
-  const variantIds = (stockRows as VariantStock[]).map((s) => s.variant_id);
-  const { data: variantRows } = await supabase
-    .from("fly_variants")
-    .select("*")
-    .in("id", variantIds);
-  const variantById = new Map<string, Variant>();
-  for (const v of (variantRows ?? []) as Variant[]) variantById.set(v.id, v);
-
-  const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
-  const { data: patternRows } = await supabase
-    .from("fly_patterns_v2")
+  const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
+  const { data: flies } = await supabase
+    .from("flies")
     .select("id, slug, name, category, hero_image_url")
-    .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
-    patternById.set(p.id, p);
+    .in("id", flyIds);
+  const flyById = new Map<string, Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const f of (flies ?? []) as Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
+    flyById.set(f.id, f);
   }
 
-  const { data: photoRows } = await supabase
-    .from("fly_variant_photos")
-    .select("*")
-    .in("variant_id", variantIds)
-    .eq("is_primary", true);
-  const photoByVariant = new Map<string, VariantPhoto>();
-  for (const p of (photoRows ?? []) as VariantPhoto[]) {
-    photoByVariant.set(p.variant_id, p);
-  }
-
-  return (stockRows as VariantStock[])
-    .map<VariantRow | null>((s) => {
-      const v = variantById.get(s.variant_id);
-      if (!v) return null;
-      return {
-        ...v,
-        pattern: patternById.get(v.pattern_id) ?? null,
-        stock: s,
-        primary_photo: photoByVariant.get(s.variant_id) ?? null,
-        box_count: 0,
-        box_memberships: [],
-        box_quantity: null,
-        box_target_quantity: null,
-      };
-    })
-    .filter((r): r is VariantRow => r !== null);
+  return cfgs.map<VariantRow>((c) => ({
+    ...configToVariant(c),
+    pattern: flyById.get(c.fly_id) ?? null,
+    stock: configToStock(c),
+    primary_photo: null,
+    box_count: 0,
+    box_memberships: [],
+    box_quantity: null,
+    box_target_quantity: null,
+  }));
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// Box-scoped views (variants in a single fly_box)
-// ────────────────────────────────────────────────────────────────────────────
+/** Tie-next deficits: configurations where target > tied + bought, OR
+ *  with an explicit tie_next flag. */
+export async function listDerivedTieNextShortages(): Promise<VariantRow[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
 
-/** Variants in a specific fly_box, with stock + primary photo. */
+  const { data: configs } = await supabase
+    .from("user_fly_configurations")
+    .select("*")
+    .eq("user_id", user.id);
+  const cfgs = (configs ?? []) as FlyConfiguration[];
+  const shorted = cfgs.filter((c) => {
+    if (c.is_tie_next) return true;
+    const t = c.target_count ?? 0;
+    if (t <= 0) return false;
+    return t > (c.tied_count ?? 0) + (c.bought_count ?? 0);
+  });
+  if (shorted.length === 0) return [];
+
+  const flyIds = Array.from(new Set(shorted.map((c) => c.fly_id)));
+  const { data: flies } = await supabase
+    .from("flies")
+    .select("id, slug, name, category, hero_image_url")
+    .in("id", flyIds);
+  const flyById = new Map<string, Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const f of (flies ?? []) as Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
+    flyById.set(f.id, f);
+  }
+
+  return shorted.map<VariantRow>((c) => ({
+    ...configToVariant(c),
+    pattern: flyById.get(c.fly_id) ?? null,
+    stock: configToStock(c),
+    primary_photo: null,
+    box_count: 0,
+    box_memberships: [],
+    box_quantity: null,
+    box_target_quantity: null,
+  }));
+}
+
+/** Configurations inside a single box. */
 export async function listVariantsInBox(boxId: string): Promise<VariantRow[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
 
-  const { data: memberships } = await supabase
-    .from("fly_variant_in_box")
-    .select("variant_id, sort_order")
+  const { data: entries } = await supabase
+    .from("fly_box_entries_v3")
+    .select("configuration_id, sort_order")
     .eq("box_id", boxId)
     .order("sort_order");
-  const variantIds = (memberships ?? []).map((m: { variant_id: string }) => m.variant_id);
-  if (variantIds.length === 0) return [];
+  const cfgIds = ((entries ?? []) as { configuration_id: string }[]).map((e) => e.configuration_id);
+  if (cfgIds.length === 0) return [];
 
-  // Fetch quantities separately so a missing column (pre-migration) degrades
-  // gracefully to 1 instead of breaking the whole query.
-  const quantityByVariant = new Map<string, number>();
-  const targetQuantityByVariant = new Map<string, number>();
-  const { data: qtyRows } = await supabase
-    .from("fly_variant_in_box")
-    .select("variant_id, quantity, target_quantity")
-    .eq("box_id", boxId);
-  for (const r of (qtyRows ?? []) as { variant_id: string; quantity?: number; target_quantity?: number | null }[]) {
-    if (r.quantity != null) quantityByVariant.set(r.variant_id, r.quantity);
-    if (r.target_quantity != null) targetQuantityByVariant.set(r.variant_id, r.target_quantity);
-  }
-
-  const { data: variantRows } = await supabase
-    .from("fly_variants")
+  const { data: configs } = await supabase
+    .from("user_fly_configurations")
     .select("*")
-    .in("id", variantIds)
-    .is("deleted_at", null);
-  const variantById = new Map<string, Variant>();
-  for (const v of (variantRows ?? []) as Variant[]) variantById.set(v.id, v);
+    .in("id", cfgIds);
+  const cfgs = (configs ?? []) as FlyConfiguration[];
 
-  const { data: stockRows } = await supabase
-    .from("fly_variant_stock")
-    .select("*")
-    .eq("user_id", user.id)
-    .in("variant_id", variantIds);
-  const stockByVariant = new Map<string, VariantStock>();
-  for (const s of (stockRows ?? []) as VariantStock[]) {
-    stockByVariant.set(s.variant_id, s);
-  }
-
-  const patternIds = Array.from(new Set((variantRows ?? []).map((v: Variant) => v.pattern_id)));
-  const { data: patternRows } = await supabase
-    .from("fly_patterns_v2")
+  const flyIds = Array.from(new Set(cfgs.map((c) => c.fly_id)));
+  const { data: flies } = await supabase
+    .from("flies")
     .select("id, slug, name, category, hero_image_url")
-    .in("id", patternIds);
-  const patternById = new Map<string, Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">>();
-  for (const p of (patternRows ?? []) as Pick<Pattern, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
-    patternById.set(p.id, p);
+    .in("id", flyIds);
+  const flyById = new Map<string, Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">>();
+  for (const f of (flies ?? []) as Pick<Fly, "id" | "slug" | "name" | "category" | "hero_image_url">[]) {
+    flyById.set(f.id, f);
   }
 
-  const { data: photoRows } = await supabase
-    .from("fly_variant_photos")
-    .select("*")
-    .in("variant_id", variantIds)
-    .eq("is_primary", true);
-  const photoByVariant = new Map<string, VariantPhoto>();
-  for (const p of (photoRows ?? []) as VariantPhoto[]) {
-    photoByVariant.set(p.variant_id, p);
-  }
-
-  return variantIds
-    .map<VariantRow | null>((id) => {
-      const v = variantById.get(id);
-      if (!v) return null;
-      return {
-        ...v,
-        pattern: patternById.get(v.pattern_id) ?? null,
-        stock: stockByVariant.get(id) ?? null,
-        primary_photo: photoByVariant.get(id) ?? null,
-        box_count: 1,
-        box_memberships: [],
-        box_quantity: quantityByVariant.get(id) ?? 1,
-        box_target_quantity: targetQuantityByVariant.get(id) ?? null,
-      };
-    })
-    .filter((r): r is VariantRow => r !== null);
+  return cfgs.map<VariantRow>((c) => ({
+    ...configToVariant(c),
+    pattern: flyById.get(c.fly_id) ?? null,
+    stock: configToStock(c),
+    primary_photo: null,
+    box_count: 1,
+    box_memberships: [],
+    box_quantity: 1,
+    box_target_quantity: null,
+  }));
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -535,7 +402,6 @@ export interface FlyBoxV2 {
   updated_at: string;
 }
 
-/** All boxes for the current user, ordered by tier then sort_order. */
 export async function listMyBoxes(): Promise<FlyBoxV2[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -554,7 +420,6 @@ export async function listMyBoxes(): Promise<FlyBoxV2[]> {
   return (data ?? []) as FlyBoxV2[];
 }
 
-/** Single box by id (RLS gates access to own boxes only). */
 export async function getBoxById(id: string): Promise<FlyBoxV2 | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -574,50 +439,49 @@ export interface BoxStats {
   byCategory: Record<string, number>;
 }
 
-/** Variant counts per box, grouped by pattern category. 3 queries total (no N+1). */
+/** Per-box counts grouped by fly category. */
 export async function listBoxStats(boxIds: string[]): Promise<Record<string, BoxStats>> {
   if (boxIds.length === 0) return {};
   const supabase = await createClient();
 
-  const { data: memberships } = await supabase
-    .from("fly_variant_in_box")
-    .select("box_id, variant_id, quantity")
+  const { data: entries } = await supabase
+    .from("fly_box_entries_v3")
+    .select("box_id, configuration_id")
     .in("box_id", boxIds);
-  if (!memberships || memberships.length === 0) return {};
+  if (!entries || entries.length === 0) return {};
+  const rows = entries as { box_id: string; configuration_id: string }[];
 
-  const variantIds = Array.from(new Set(memberships.map((m: { variant_id: string }) => m.variant_id)));
-  const { data: variantRows } = await supabase
-    .from("fly_variants")
-    .select("id, pattern_id")
-    .in("id", variantIds);
-  const variantToPattern = new Map<string, string>();
-  for (const v of (variantRows ?? []) as { id: string; pattern_id: string }[]) {
-    variantToPattern.set(v.id, v.pattern_id);
+  const cfgIds = Array.from(new Set(rows.map((r) => r.configuration_id)));
+  const { data: configs } = await supabase
+    .from("user_fly_configurations")
+    .select("id, fly_id")
+    .in("id", cfgIds);
+  const cfgToFly = new Map<string, string>();
+  for (const c of (configs ?? []) as { id: string; fly_id: string }[]) {
+    cfgToFly.set(c.id, c.fly_id);
   }
 
-  const patternIds = Array.from(new Set(Array.from(variantToPattern.values())));
-  const { data: patternRows } = await supabase
-    .from("fly_patterns_v2")
+  const flyIds = Array.from(new Set(Array.from(cfgToFly.values())));
+  const { data: flies } = await supabase
+    .from("flies")
     .select("id, category")
-    .in("id", patternIds);
-  const patternCategory = new Map<string, string>();
-  for (const p of (patternRows ?? []) as { id: string; category: string | null }[]) {
-    if (p.category) patternCategory.set(p.id, p.category);
+    .in("id", flyIds);
+  const flyCat = new Map<string, string>();
+  for (const f of (flies ?? []) as { id: string; category: string | null }[]) {
+    if (f.category) flyCat.set(f.id, f.category);
   }
 
   const result: Record<string, BoxStats> = {};
-  for (const m of memberships as { box_id: string; variant_id: string; quantity?: number }[]) {
-    const qty = m.quantity ?? 1;
-    if (!result[m.box_id]) result[m.box_id] = { total: 0, byCategory: {} };
-    result[m.box_id].total += qty;
-    const pid = variantToPattern.get(m.variant_id);
-    const cat = pid ? (patternCategory.get(pid) ?? "other") : "other";
-    result[m.box_id].byCategory[cat] = (result[m.box_id].byCategory[cat] ?? 0) + qty;
+  for (const r of rows) {
+    if (!result[r.box_id]) result[r.box_id] = { total: 0, byCategory: {} };
+    result[r.box_id].total += 1;
+    const flyId = cfgToFly.get(r.configuration_id);
+    const cat = flyId ? (flyCat.get(flyId) ?? "other") : "other";
+    result[r.box_id].byCategory[cat] = (result[r.box_id].byCategory[cat] ?? 0) + 1;
   }
   return result;
 }
 
-/** Get the user's default fly_box id (creates one named "My Fly Box" if missing). */
 export async function getDefaultFlyBoxId(): Promise<string | null> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -629,7 +493,6 @@ export async function getDefaultFlyBoxId(): Promise<string | null> {
     .eq("is_default", true)
     .maybeSingle();
   if (data?.id) return data.id as string;
-  // Lazy-create — keeps the UX of "always a place for new variants" working.
   const { data: created, error } = await supabase
     .from("fly_boxes")
     .insert({ user_id: user.id, name: "My Fly Box", tier: "custom", is_default: true })
@@ -643,41 +506,60 @@ export async function getDefaultFlyBoxId(): Promise<string | null> {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Mutations: create variant, upsert stock, add to box
+// Mutations — configurations + box membership
 // ────────────────────────────────────────────────────────────────────────────
 
-/**
- * Create a user-owned variant. Same as `createUserVariant` but returns the
- * raw Supabase error on failure instead of swallowing to null, so callers
- * can surface the actual code/message to the UI.
- */
+/** Build a `slot_overrides` jsonb from legacy column fields. */
+function legacySpecToSlots(input: {
+  bead_material?: Variant["bead_material"];
+  bead_weight_mm?: number;
+  bead_color?: string;
+  body_color?: string;
+  rib_color?: string;
+  tail_color?: string;
+  wing_color?: string;
+  thorax_color?: string;
+  collar_color?: string;
+  hook_style?: string;
+  hook_brand?: string;
+}): Record<string, Record<string, unknown>> {
+  const slots: Record<string, Record<string, unknown>> = {};
+  const beadObj: Record<string, unknown> = {};
+  if (input.bead_material) beadObj.material = input.bead_material;
+  if (input.bead_weight_mm != null) beadObj.size_mm = input.bead_weight_mm;
+  if (input.bead_color) beadObj.color = input.bead_color;
+  if (Object.keys(beadObj).length) slots.bead = beadObj;
+  for (const [legacy, slot] of [
+    ["body_color", "body"],
+    ["rib_color", "rib"],
+    ["tail_color", "tail"],
+    ["wing_color", "wing"],
+    ["thorax_color", "thorax"],
+    ["collar_color", "collar"],
+  ] as const) {
+    const v = (input as Record<string, unknown>)[legacy];
+    if (typeof v === "string" && v) slots[slot] = { color: v };
+  }
+  const hookObj: Record<string, unknown> = {};
+  if (input.hook_style) hookObj.style = input.hook_style;
+  if (input.hook_brand) hookObj.brand = input.hook_brand;
+  if (Object.keys(hookObj).length) slots.hook = hookObj;
+  return slots;
+}
+
 export async function createUserVariantWithError(input: Parameters<typeof createUserVariant>[0]): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "Not signed in." };
-  const wantsCanonical = input.as_canonical === true;
-  const adminEmails = isAdmin(user.email ?? null);
-  const ownerId = wantsCanonical && adminEmails ? null : user.id;
   const { data, error } = await supabase
-    .from("fly_variants")
+    .from("user_fly_configurations")
     .insert({
-      pattern_id: input.pattern_id,
-      created_by_user_id: ownerId,
+      user_id: user.id,
+      fly_id: input.pattern_id,
       size: input.size,
-      bead_material: input.bead_material ?? null,
-      bead_weight_mm: input.bead_weight_mm ?? null,
-      bead_color: input.bead_color ?? null,
-      body_color: input.body_color ?? null,
-      rib_color: input.rib_color ?? null,
-      tail_color: input.tail_color ?? null,
-      wing_color: input.wing_color ?? null,
-      thorax_color: input.thorax_color ?? null,
-      collar_color: input.collar_color ?? null,
-      display_name: input.display_name ?? null,
-      notes: input.notes ?? null,
-      hook_style: input.hook_style ?? null,
-      hook_brand: input.hook_brand ?? null,
-      materials_override: input.materials_override ?? {},
+      nickname: input.display_name ?? null,
+      personal_notes: input.notes ?? null,
+      slot_overrides: legacySpecToSlots(input),
     })
     .select()
     .single();
@@ -687,10 +569,9 @@ export async function createUserVariantWithError(input: Parameters<typeof create
       .join(" · ");
     return { ok: false, error: detail || "Insert failed." };
   }
-  return { ok: true, variant: data as Variant };
+  return { ok: true, variant: configToVariant(data as FlyConfiguration) };
 }
 
-/** Create a user-owned variant on a pattern (canonical or personal). */
 export async function createUserVariant(input: {
   pattern_id: string;
   size: string;
@@ -708,99 +589,43 @@ export async function createUserVariant(input: {
   hook_style?: string;
   hook_brand?: string;
   materials_override?: Record<string, string>;
-  /**
-   * Admin-only — when true, the variant is created as canonical (curated):
-   * `created_by_user_id = null`. Non-admins ignore this flag.
-   */
+  /** Canonical variants are not a concept in the new schema; flag ignored. */
   as_canonical?: boolean;
 }): Promise<Variant | null> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const wantsCanonical = input.as_canonical === true;
-  const adminEmails = isAdmin(user.email ?? null);
-  const ownerId = wantsCanonical && adminEmails ? null : user.id;
-
-  const { data, error } = await supabase
-    .from("fly_variants")
-    .insert({
-      pattern_id: input.pattern_id,
-      created_by_user_id: ownerId,
-      size: input.size,
-      bead_material: input.bead_material ?? null,
-      bead_weight_mm: input.bead_weight_mm ?? null,
-      bead_color: input.bead_color ?? null,
-      body_color: input.body_color ?? null,
-      rib_color: input.rib_color ?? null,
-      tail_color: input.tail_color ?? null,
-      wing_color: input.wing_color ?? null,
-      thorax_color: input.thorax_color ?? null,
-      collar_color: input.collar_color ?? null,
-      display_name: input.display_name ?? null,
-      notes: input.notes ?? null,
-      hook_style: input.hook_style ?? null,
-      hook_brand: input.hook_brand ?? null,
-      materials_override: input.materials_override ?? {},
-    })
-    .select()
-    .single();
-  if (error) {
-    console.error("[createUserVariant]", { code: error.code, message: error.message, details: error.details, hint: error.hint });
-    return null;
-  }
-  return data as Variant;
+  const r = await createUserVariantWithError(input);
+  return r.ok ? r.variant : null;
 }
 
-/**
- * Clone an existing variant — copies every spec field from the source row
- * into a new row. When the source is curated and the caller is admin, the
- * clone stays curated; otherwise the clone is created as user-owned.
- * Returns the new variant or a detailed error.
- */
 export async function cloneVariant(
   sourceVariantId: string,
 ): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: "Not signed in." };
-
   const { data: src, error: srcErr } = await supabase
-    .from("fly_variants")
+    .from("user_fly_configurations")
     .select("*")
     .eq("id", sourceVariantId)
-    .is("deleted_at", null)
     .maybeSingle();
-  if (srcErr) {
-    return { ok: false, error: `Read source variant failed: ${srcErr.code ?? ""} ${srcErr.message}`.trim() };
-  }
-  if (!src) {
-    return { ok: false, error: "Source variant not found (deleted or not visible)." };
-  }
-
-  const sourceIsCurated = (src as Variant).created_by_user_id == null;
+  if (srcErr) return { ok: false, error: `Read source failed: ${srcErr.message}` };
+  if (!src) return { ok: false, error: "Source configuration not found." };
+  const cfg = src as FlyConfiguration;
   return createUserVariantWithError({
-    pattern_id: (src as Variant).pattern_id,
-    size: (src as Variant).size,
-    bead_material: (src as Variant).bead_material ?? undefined,
-    bead_weight_mm: (src as Variant).bead_weight_mm ?? undefined,
-    bead_color: (src as Variant).bead_color ?? undefined,
-    body_color: (src as Variant).body_color ?? undefined,
-    rib_color: (src as Variant).rib_color ?? undefined,
-    tail_color: (src as Variant).tail_color ?? undefined,
-    wing_color: (src as Variant).wing_color ?? undefined,
-    thorax_color: (src as Variant).thorax_color ?? undefined,
-    collar_color: (src as Variant).collar_color ?? undefined,
-    display_name: (src as Variant).display_name ?? undefined,
-    notes: (src as Variant).notes ?? undefined,
-    hook_style: (src as Variant).hook_style ?? undefined,
-    hook_brand: (src as Variant).hook_brand ?? undefined,
-    materials_override: (src as Variant).materials_override ?? {},
-    as_canonical: sourceIsCurated,
+    pattern_id: cfg.fly_id,
+    size: cfg.size ?? "",
+    bead_material: (cfg.slot_overrides?.bead?.material as Variant["bead_material"]) ?? undefined,
+    bead_weight_mm: typeof cfg.slot_overrides?.bead?.size_mm === "number"
+      ? (cfg.slot_overrides.bead.size_mm as number)
+      : undefined,
+    bead_color: typeof cfg.slot_overrides?.bead?.color === "string"
+      ? (cfg.slot_overrides.bead.color as string)
+      : undefined,
+    body_color: typeof cfg.slot_overrides?.body?.color === "string"
+      ? (cfg.slot_overrides.body.color as string)
+      : undefined,
+    display_name: cfg.nickname ?? undefined,
+    notes: cfg.personal_notes ?? undefined,
   });
 }
 
-/** Upsert this user's stock entry for a variant (inline edits from the table). */
 export async function upsertVariantStock(input: {
   variant_id: string;
   tied_count?: number;
@@ -810,34 +635,25 @@ export async function upsertVariantStock(input: {
   personal_notes?: string;
 }): Promise<VariantStock | null> {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
+  const updates: Record<string, unknown> = {};
+  if (input.tied_count !== undefined) updates.tied_count = input.tied_count;
+  if (input.bought_count !== undefined) updates.bought_count = input.bought_count;
+  if (input.target_count !== undefined) updates.target_count = input.target_count;
+  if (input.is_favorite !== undefined) updates.is_favorite = input.is_favorite;
+  if (input.personal_notes !== undefined) updates.personal_notes = input.personal_notes;
   const { data, error } = await supabase
-    .from("fly_variant_stock")
-    .upsert(
-      {
-        user_id: user.id,
-        variant_id: input.variant_id,
-        ...("tied_count" in input ? { tied_count: input.tied_count } : {}),
-        ...("bought_count" in input ? { bought_count: input.bought_count } : {}),
-        ...("target_count" in input ? { target_count: input.target_count } : {}),
-        ...("is_favorite" in input ? { is_favorite: input.is_favorite } : {}),
-        ...("personal_notes" in input ? { personal_notes: input.personal_notes } : {}),
-      },
-      { onConflict: "user_id,variant_id" }
-    )
+    .from("user_fly_configurations")
+    .update(updates)
+    .eq("id", input.variant_id)
     .select()
     .single();
   if (error) {
     console.error("[upsertVariantStock]", error);
     return null;
   }
-  return data as VariantStock;
+  return configToStock(data as FlyConfiguration);
 }
 
-/** Add a variant to one or more boxes (bulk). Returns null on auth/db failure,
- *  number of rows touched on success (0 means all variants already in the box). */
 export async function addVariantsToBox(
   boxId: string,
   variantIds: string[],
@@ -846,19 +662,16 @@ export async function addVariantsToBox(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
   if (variantIds.length === 0) return 0;
-
-  const rows = variantIds.map<VariantInBox>((vid) => ({
+  const rows = variantIds.map((cfgId) => ({
     box_id: boxId,
-    variant_id: vid,
+    configuration_id: cfgId,
     user_id: user.id,
     sort_order: 0,
-    quantity: 1,
-    target_quantity: null,
     added_at: new Date().toISOString(),
   }));
   const { error, count } = await supabase
-    .from("fly_variant_in_box")
-    .upsert(rows, { onConflict: "box_id,variant_id", count: "exact" });
+    .from("fly_box_entries_v3")
+    .upsert(rows, { onConflict: "box_id,configuration_id", count: "exact" });
   if (error) {
     console.error("[addVariantsToBox]", error);
     return null;
@@ -866,80 +679,46 @@ export async function addVariantsToBox(
   return count ?? variantIds.length;
 }
 
-/**
- * Bulk-remove variants from a box. Unlinks rows in fly_variant_in_box without
- * touching the underlying variants — the user can still see the variants on
- * the pattern detail page and re-add them later.
- */
 export async function removeVariantsFromBox(
   boxId: string,
   variantIds: string[],
 ): Promise<{ removed: number; error?: string }> {
-  if (variantIds.length === 0) return { removed: 0, error: "No variants supplied." };
+  if (variantIds.length === 0) return { removed: 0, error: "No configurations supplied." };
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { removed: 0, error: "You must be signed in." };
-
   const { error, count } = await supabase
-    .from("fly_variant_in_box")
+    .from("fly_box_entries_v3")
     .delete({ count: "exact" })
     .eq("box_id", boxId)
     .eq("user_id", user.id)
-    .in("variant_id", variantIds);
-  if (error) {
-    console.error("[removeVariantsFromBox]", error);
-    return { removed: 0, error: error.message };
-  }
+    .in("configuration_id", variantIds);
+  if (error) return { removed: 0, error: error.message };
   return { removed: count ?? 0 };
 }
 
-/** Update how many physical flies of a variant are in a specific box. */
+export async function removeVariantFromBox(boxId: string, variantId: string): Promise<boolean> {
+  const r = await removeVariantsFromBox(boxId, [variantId]);
+  return !r.error;
+}
+
+/** Per-box quantity is not a concept on Phase A — no-op for back-compat. */
 export async function updateBoxVariantQuantity(
-  boxId: string,
-  variantId: string,
-  quantity: number,
+  _boxId: string,
+  _variantId: string,
+  _quantity: number,
 ): Promise<boolean> {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("fly_variant_in_box")
-    .update({ quantity })
-    .eq("box_id", boxId)
-    .eq("variant_id", variantId);
-  if (error) {
-    console.error("[updateBoxVariantQuantity]", error);
-    return false;
-  }
   return true;
 }
 
-/**
- * Set the per-box target tied count for a variant in a specific box. When set
- * to null, the global `fly_variant_stock.target_count` applies instead.
- */
 export async function updateBoxVariantTargetQuantity(
-  boxId: string,
-  variantId: string,
-  targetQuantity: number | null,
+  _boxId: string,
+  _variantId: string,
+  _targetQuantity: number | null,
 ): Promise<boolean> {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("fly_variant_in_box")
-    .update({ target_quantity: targetQuantity })
-    .eq("box_id", boxId)
-    .eq("variant_id", variantId);
-  if (error) {
-    console.error("[updateBoxVariantTargetQuantity]", error);
-    return false;
-  }
   return true;
 }
 
-/**
- * Update a variant's spec fields (size / bead / colors / hook / display_name /
- * notes). Creator can update their own variants; admin can update any
- * (canonical or anyone's user variant). Returns the updated row, or null +
- * error on permission/db failure.
- */
 export async function updateVariant(
   variantId: string,
   fields: {
@@ -956,122 +735,61 @@ export async function updateVariant(
   },
 ): Promise<{ ok: true; variant: Variant } | { ok: false; error: string }> {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: "You must be signed in." };
-
-  const { data: row, error: loadErr } = await supabase
-    .from("fly_variants")
-    .select("id, created_by_user_id")
+  const { data: existing } = await supabase
+    .from("user_fly_configurations")
+    .select("*")
     .eq("id", variantId)
     .maybeSingle();
-  if (loadErr) return { ok: false, error: loadErr.message };
-  if (!row) return { ok: false, error: "Variant not found." };
-  const isCreator = (row as { created_by_user_id: string | null }).created_by_user_id === user.id;
-  if (!isCreator && !isAdmin(user.email ?? null)) {
-    return { ok: false, error: "You can only edit variants you created. Canonical variants require admin." };
-  }
+  if (!existing) return { ok: false, error: "Configuration not found." };
+  const cfg = existing as FlyConfiguration;
+  const slots = { ...(cfg.slot_overrides ?? {}) };
+  const beadSlot = { ...(slots.bead ?? {}) };
+  if (fields.bead_material !== undefined) beadSlot.material = fields.bead_material ?? undefined;
+  if (fields.bead_weight_mm !== undefined) beadSlot.size_mm = fields.bead_weight_mm ?? undefined;
+  if (fields.bead_color !== undefined) beadSlot.color = fields.bead_color ?? undefined;
+  if (Object.keys(beadSlot).length) slots.bead = beadSlot;
+  if (fields.body_color !== undefined) slots.body = { ...(slots.body ?? {}), color: fields.body_color ?? undefined };
+  if (fields.rib_color !== undefined) slots.rib = { ...(slots.rib ?? {}), color: fields.rib_color ?? undefined };
+  const hookSlot = { ...(slots.hook ?? {}) };
+  if (fields.hook_style !== undefined) hookSlot.style = fields.hook_style ?? undefined;
+  if (fields.hook_brand !== undefined) hookSlot.brand = fields.hook_brand ?? undefined;
+  if (Object.keys(hookSlot).length) slots.hook = hookSlot;
 
   const updates: Record<string, unknown> = {};
   if (fields.size !== undefined) updates.size = fields.size;
-  if (fields.bead_material !== undefined) updates.bead_material = fields.bead_material;
-  if (fields.bead_weight_mm !== undefined) updates.bead_weight_mm = fields.bead_weight_mm;
-  if (fields.bead_color !== undefined) updates.bead_color = fields.bead_color;
-  if (fields.body_color !== undefined) updates.body_color = fields.body_color;
-  if (fields.rib_color !== undefined) updates.rib_color = fields.rib_color;
-  if (fields.hook_style !== undefined) updates.hook_style = fields.hook_style;
-  if (fields.hook_brand !== undefined) updates.hook_brand = fields.hook_brand;
-  if (fields.display_name !== undefined) updates.display_name = fields.display_name;
-  if (fields.notes !== undefined) updates.notes = fields.notes;
+  if (fields.display_name !== undefined) updates.nickname = fields.display_name;
+  if (fields.notes !== undefined) updates.personal_notes = fields.notes;
+  updates.slot_overrides = slots;
 
-  const { data: updated, error: updErr } = await supabase
-    .from("fly_variants")
+  const { data: updated, error } = await supabase
+    .from("user_fly_configurations")
     .update(updates)
     .eq("id", variantId)
     .select()
     .single();
-  if (updErr) {
-    console.error("[updateVariant]", updErr);
-    return { ok: false, error: updErr.message };
-  }
-  return { ok: true, variant: updated as Variant };
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, variant: configToVariant(updated as FlyConfiguration) };
 }
 
-/**
- * Soft-delete a batch of variants. Rules:
- *   - Creator (`created_by_user_id = auth.uid()`) can delete their own variants.
- *   - Admin (per `isAdmin(email)`) can delete canonical variants
- *     (`created_by_user_id IS NULL`) and anyone else's user variants.
- *   - The whole batch is rejected if any single row fails the permission check —
- *     no partial deletes.
- *
- * Catches that referenced these variants are unaffected: their `variant_id`
- * still resolves to the (now-flagged) row, so catch history continues to show
- * the spec used.
- */
 export async function softDeleteVariants(
   variantIds: string[],
 ): Promise<{ deleted: number; error?: string }> {
-  if (variantIds.length === 0) return { deleted: 0, error: "No variants supplied." };
-
+  if (variantIds.length === 0) return { deleted: 0, error: "No configurations supplied." };
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { deleted: 0, error: "You must be signed in." };
-
-  const { data: rows, error: loadErr } = await supabase
-    .from("fly_variants")
-    .select("id, created_by_user_id")
-    .in("id", variantIds)
-    .is("deleted_at", null);
-  if (loadErr) {
-    console.error("[softDeleteVariants] load", loadErr);
-    return { deleted: 0, error: loadErr.message };
-  }
-  if (!rows || rows.length === 0) return { deleted: 0 };
-
-  const admin = isAdmin(user.email ?? null);
-  for (const row of rows as { id: string; created_by_user_id: string | null }[]) {
-    const isCreator = row.created_by_user_id === user.id;
-    if (!isCreator && !admin) {
-      return {
-        deleted: 0,
-        error: "You can only delete variants you created. Canonical variants require admin.",
-      };
-    }
-  }
-
-  const ids = (rows as { id: string }[]).map((r) => r.id);
-  const { error: updateErr, count } = await supabase
-    .from("fly_variants")
-    .update({ deleted_at: new Date().toISOString() }, { count: "exact" })
-    .in("id", ids)
-    .is("deleted_at", null);
-  if (updateErr) {
-    console.error("[softDeleteVariants] update", updateErr);
-    return { deleted: 0, error: updateErr.message };
-  }
-  return { deleted: count ?? ids.length };
+  const { error, count } = await supabase
+    .from("user_fly_configurations")
+    .delete({ count: "exact" })
+    .in("id", variantIds);
+  if (error) return { deleted: 0, error: error.message };
+  return { deleted: count ?? 0 };
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Pattern editing — full pattern fetch, update, slug-redirect
+// Pattern editing — proxies the `flies` row
 // ────────────────────────────────────────────────────────────────────────────
 
-/**
- * Fetch a pattern with every editable field hydrated. Used by the edit
- * drawer to seed initial state without a second round-trip.
- */
 export async function getPatternForEdit(patternId: string): Promise<Pattern | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("fly_patterns_v2")
-    .select("*")
-    .eq("id", patternId)
-    .maybeSingle();
-  if (error) {
-    console.error("[getPatternForEdit]", error);
-    return null;
-  }
-  return (data ?? null) as Pattern | null;
+  return getPatternById(patternId);
 }
 
 export interface PatternUpdateFields {
@@ -1086,23 +804,9 @@ export interface PatternUpdateFields {
   base_materials?: MaterialSlot[];
   tying_steps?: TyingStep[];
   hero_image_url?: string | null;
-  /**
-   * Which variant option columns (size / bead / body / rib / tail / ...)
-   * should be visible on this pattern's variants table. Null means "use the
-   * per-category default" defined in `src/lib/flies/variant-axes.ts`.
-   */
   active_variant_axes?: string[] | null;
 }
 
-/**
- * Update a pattern. Permission is enforced both here (assertCanEditPattern)
- * and at the RLS layer — defence in depth. Returns the updated row, or
- * { ok: false } with status (401/403/404/500) so the server action can
- * relay to the UI.
- *
- * If `slug` changes on a canonical pattern, caller is responsible for
- * inserting a fly_pattern_redirects row to keep the old URL alive.
- */
 export async function updatePattern(
   patternId: string,
   fields: PatternUpdateFields,
@@ -1111,98 +815,57 @@ export async function updatePattern(
   | { ok: false; error: string; status: 401 | 403 | 404 | 500 }
 > {
   const supabase = await createClient();
-  const guard = await assertCanEditPattern(supabase, patternId);
-  if (!guard.ok) return { ok: false, error: guard.error, status: guard.status };
+  const { data: existing } = await supabase
+    .from("flies")
+    .select("id, slug")
+    .eq("id", patternId)
+    .maybeSingle();
+  if (!existing) return { ok: false, error: "Pattern not found.", status: 404 };
+  const oldSlug = (existing as { slug: string | null }).slug;
 
-  const oldSlug = guard.pattern.slug;
   const updates: Record<string, unknown> = {};
   if (fields.name !== undefined) updates.name = fields.name;
   if (fields.slug !== undefined) updates.slug = fields.slug;
   if (fields.category !== undefined) updates.category = fields.category;
-  if (fields.hook_style !== undefined) updates.hook_style = fields.hook_style;
   if (fields.description !== undefined) updates.description = fields.description;
   if (fields.history !== undefined) updates.history = fields.history;
   if (fields.tying_overview !== undefined) updates.tying_overview = fields.tying_overview;
   if (fields.fishing_tips !== undefined) updates.fishing_tips = fields.fishing_tips;
-  if (fields.base_materials !== undefined) updates.base_materials = fields.base_materials;
-  if (fields.tying_steps !== undefined) updates.tying_steps = fields.tying_steps;
+  if (fields.base_materials !== undefined) updates.materials_list = fields.base_materials;
   if (fields.hero_image_url !== undefined) updates.hero_image_url = fields.hero_image_url;
-  if (fields.active_variant_axes !== undefined) updates.active_variant_axes = fields.active_variant_axes;
 
   if (Object.keys(updates).length === 0) {
-    // No-op save — return the row as-is so the caller's revalidate still fires.
-    const current = await getPatternForEdit(patternId);
-    if (!current) return { ok: false, error: "Pattern vanished mid-update.", status: 404 };
-    return { ok: true, pattern: current, slugChanged: false, oldSlug };
+    const p = await getPatternById(patternId);
+    return p
+      ? { ok: true, pattern: p, slugChanged: false, oldSlug }
+      : { ok: false, error: "Pattern vanished.", status: 404 };
   }
 
   const { data, error } = await supabase
-    .from("fly_patterns_v2")
+    .from("flies")
     .update(updates)
     .eq("id", patternId)
     .select()
     .single();
-  if (error) {
-    console.error("[updatePattern]", error);
-    return { ok: false, error: error.message, status: 500 };
-  }
-  const updated = data as Pattern;
+  if (error) return { ok: false, error: error.message, status: 500 };
+  const fly = data as Fly;
 
-  // Cascade rename → catches.fly_name snapshot.
-  //
-  // `catches.fly_name` is a denormalized snapshot stamped at catch save time.
-  // Without this cascade it'd hold the old name forever and the journal feed
-  // / leaderboards / iOS catch summaries would drift the moment anyone edits
-  // a fly. We touch only rows whose variant_id points at a variant of this
-  // pattern AND whose current snapshot differs from the new name, so this is
-  // a no-op when name didn't change.
-  //
-  // `assertCanEditPattern` doesn't return `name` on its pattern guard, so we
-  // can't compare against the old value cheaply — fall back to a `fields.name`
-  // presence check. The cascade UPDATE's own `.neq("fly_name", newName)`
-  // filter prevents wasted writes when the snapshot already matches.
   if (fields.name !== undefined) {
-    const newName = fields.name;
-    const { data: variantRows, error: vErr } = await supabase
-      .from("fly_variants")
-      .select("id")
-      .eq("pattern_id", patternId);
-    if (vErr) {
-      console.error("[updatePattern] cascade lookup failed:", vErr);
-      // Don't fail the rename — the pattern is already updated. Snapshot
-      // refresh can be re-run via the data-migration SQL if drift surfaces.
-    } else if ((variantRows ?? []).length > 0) {
-      const variantIds = (variantRows as { id: string }[]).map((r) => r.id);
-      const { error: cErr, count } = await supabase
-        .from("catches")
-        .update({ fly_name: newName }, { count: "exact" })
-        .in("variant_id", variantIds)
-        .neq("fly_name", newName);
-      if (cErr) {
-        console.error("[updatePattern] cascade refresh failed:", cErr);
-      } else if ((count ?? 0) > 0) {
-        console.log(`[updatePattern] refreshed fly_name on ${count} catch(es) for pattern ${patternId}`);
-      }
-    }
+    await supabase
+      .from("catches")
+      .update({ fly_name: fields.name }, { count: "exact" })
+      .or(`canonical_fly_id.eq.${patternId},fly_pattern_id.eq.${patternId}`)
+      .neq("fly_name", fields.name);
   }
 
   return {
     ok: true,
-    pattern: updated,
+    pattern: flyToPattern(fly),
     slugChanged: fields.slug !== undefined && fields.slug !== oldSlug,
     oldSlug,
   };
 }
 
-/**
- * Cartesian product → batch insert. Each row in the matrix becomes one
- * fly_variants row owned by the current user (created_by_user_id = auth.uid()).
- *
- * Permission: any signed-in user can create user-owned variants on a
- * pattern — RLS on fly_variants gates this. Admin can create canonical
- * variants by passing `as_canonical: true` (created_by_user_id null), but
- * only if assertCanEditPattern passes for the parent pattern.
- */
 export interface BulkCreateVariantsInput {
   pattern_id: string;
   sizes: string[];
@@ -1210,7 +873,6 @@ export interface BulkCreateVariantsInput {
   body_colors?: string[];
   bead_weights_mm?: number[];
   bead_materials?: BeadMaterial[];
-  /** Admin-only: create canonical variants visible to all users. */
   as_canonical?: boolean;
 }
 
@@ -1220,20 +882,11 @@ export async function bulkCreateVariants(
   | { ok: true; variants: Variant[] }
   | { ok: false; error: string; status: 400 | 401 | 403 | 404 | 500 }
 > {
-  if (input.sizes.length === 0) {
-    return { ok: false, error: "At least one size is required.", status: 400 };
-  }
-
+  if (input.sizes.length === 0) return { ok: false, error: "At least one size is required.", status: 400 };
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "You must be signed in.", status: 401 };
 
-  if (input.as_canonical) {
-    const guard = await assertCanEditPattern(supabase, input.pattern_id);
-    if (!guard.ok) return { ok: false, error: guard.error, status: guard.status };
-  }
-
-  // Cartesian product. Empty optional axes → [undefined] so the loop runs once.
   const beadColors = input.bead_colors?.length ? input.bead_colors : [undefined];
   const bodyColors = input.body_colors?.length ? input.body_colors : [undefined];
   const beadWeights = input.bead_weights_mm?.length ? input.bead_weights_mm : [undefined];
@@ -1246,14 +899,15 @@ export async function bulkCreateVariants(
         for (const beadWeight of beadWeights) {
           for (const beadMaterial of beadMaterials) {
             rows.push({
-              pattern_id: input.pattern_id,
-              created_by_user_id: input.as_canonical ? null : user.id,
+              user_id: user.id,
+              fly_id: input.pattern_id,
               size,
-              bead_color: beadColor ?? null,
-              body_color: bodyColor ?? null,
-              bead_weight_mm: beadWeight ?? null,
-              bead_material: beadMaterial ?? null,
-              materials_override: {},
+              slot_overrides: legacySpecToSlots({
+                bead_color: beadColor,
+                body_color: bodyColor,
+                bead_weight_mm: beadWeight,
+                bead_material: beadMaterial,
+              }),
             });
           }
         }
@@ -1262,22 +916,13 @@ export async function bulkCreateVariants(
   }
 
   const { data, error } = await supabase
-    .from("fly_variants")
+    .from("user_fly_configurations")
     .insert(rows)
     .select();
-  if (error) {
-    console.error("[bulkCreateVariants]", error);
-    return { ok: false, error: error.message, status: 500 };
-  }
-  return { ok: true, variants: (data ?? []) as Variant[] };
+  if (error) return { ok: false, error: error.message, status: 500 };
+  return { ok: true, variants: ((data ?? []) as FlyConfiguration[]).map(configToVariant) };
 }
 
-/**
- * Add a list of variants to a box with a per-variant target_count seeded
- * into fly_variant_stock so the deficit calculation lights up immediately.
- * Composes addVariantsToBox + upsertVariantStock in a way the UI can call
- * as one click.
- */
 export async function addVariantsToBoxWithQty(
   boxId: string,
   items: { variant_id: string; quantity: number }[],
@@ -1286,49 +931,36 @@ export async function addVariantsToBoxWithQty(
   | { ok: false; error: string }
 > {
   if (items.length === 0) return { ok: true, addedToBox: 0, stockRows: 0 };
-
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "You must be signed in." };
 
-  const variantIds = items.map((i) => i.variant_id);
-  const boxRows = items.map<VariantInBox>((i) => ({
+  const rows = items.map((i) => ({
     box_id: boxId,
-    variant_id: i.variant_id,
+    configuration_id: i.variant_id,
     user_id: user.id,
     sort_order: 0,
-    quantity: Math.max(1, Math.floor(i.quantity || 1)),
-    target_quantity: null,
     added_at: new Date().toISOString(),
   }));
-  const { error: boxErr, count } = await supabase
-    .from("fly_variant_in_box")
-    .upsert(boxRows, { onConflict: "box_id,variant_id", count: "exact" });
-  if (boxErr) {
-    console.error("[addVariantsToBoxWithQty] box", boxErr);
-    return { ok: false, error: boxErr.message };
-  }
+  const { error, count } = await supabase
+    .from("fly_box_entries_v3")
+    .upsert(rows, { onConflict: "box_id,configuration_id", count: "exact" });
+  if (error) return { ok: false, error: error.message };
 
-  const stockRows = items.map((i) => ({
-    user_id: user.id,
-    variant_id: i.variant_id,
-    target_count: Math.max(0, Math.floor(i.quantity || 0)),
-  }));
-  const { error: stockErr } = await supabase
-    .from("fly_variant_stock")
-    .upsert(stockRows, { onConflict: "user_id,variant_id" });
-  if (stockErr) {
-    // Box-add already succeeded — surface the error but don't roll back.
-    // The user can correct target counts manually from the variant table.
-    console.error("[addVariantsToBoxWithQty] stock", stockErr);
-    return { ok: false, error: `Added to box, but target counts failed: ${stockErr.message}` };
+  // Optional target_count seed.
+  for (const i of items) {
+    if (i.quantity > 0) {
+      await supabase
+        .from("user_fly_configurations")
+        .update({ target_count: Math.max(0, Math.floor(i.quantity)) })
+        .eq("id", i.variant_id);
+    }
   }
-
-  return { ok: true, addedToBox: count ?? variantIds.length, stockRows: stockRows.length };
+  return { ok: true, addedToBox: count ?? items.length, stockRows: items.length };
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Slug redirects (canonical rename safety)
+// Slug redirects — fly_slug_redirects (new table replaces fly_pattern_redirects)
 // ────────────────────────────────────────────────────────────────────────────
 
 export interface PatternRedirectHit {
@@ -1336,56 +968,40 @@ export interface PatternRedirectHit {
   current_slug: string | null;
 }
 
-/**
- * If `slug` matches a row in fly_pattern_redirects, return the current slug
- * to redirect to. Returns null when no redirect is registered.
- */
 export async function lookupPatternRedirect(slug: string): Promise<PatternRedirectHit | null> {
-  const supabase = createStaticClient();
-  const { data: redirect, error } = await supabase
-    .from("fly_pattern_redirects")
-    .select("pattern_id")
-    .eq("old_slug", slug)
+  const supabase = await createClient();
+  const { data: red } = await supabase
+    .from("fly_slug_redirects")
+    .select("to_slug")
+    .eq("from_slug", slug)
     .maybeSingle();
-  if (error || !redirect) return null;
-
-  const { data: pattern } = await supabase
-    .from("fly_patterns_v2")
-    .select("slug")
-    .eq("id", (redirect as { pattern_id: string }).pattern_id)
+  if (!red) return null;
+  const toSlug = (red as { to_slug: string | null }).to_slug;
+  if (!toSlug) return null;
+  const { data: fly } = await supabase
+    .from("flies")
+    .select("id, slug")
+    .eq("slug", toSlug)
     .maybeSingle();
-
+  if (!fly) return null;
   return {
-    pattern_id: (redirect as { pattern_id: string }).pattern_id,
-    current_slug: ((pattern as { slug: string | null } | null)?.slug) ?? null,
+    pattern_id: (fly as { id: string }).id,
+    current_slug: (fly as { slug: string | null }).slug,
   };
 }
 
-/** Insert a redirect row when an admin renames a canonical pattern's slug. */
 export async function insertPatternRedirect(oldSlug: string, patternId: string): Promise<boolean> {
   if (!oldSlug) return true;
   const supabase = await createClient();
+  const { data: fly } = await supabase
+    .from("flies")
+    .select("slug")
+    .eq("id", patternId)
+    .maybeSingle();
+  const toSlug = (fly as { slug: string | null } | null)?.slug;
+  if (!toSlug) return false;
   const { error } = await supabase
-    .from("fly_pattern_redirects")
-    .upsert({ old_slug: oldSlug, pattern_id: patternId }, { onConflict: "old_slug" });
-  if (error) {
-    console.error("[insertPatternRedirect]", error);
-    return false;
-  }
-  return true;
-}
-
-/** Remove a variant from a box. */
-export async function removeVariantFromBox(boxId: string, variantId: string): Promise<boolean> {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("fly_variant_in_box")
-    .delete()
-    .eq("box_id", boxId)
-    .eq("variant_id", variantId);
-  if (error) {
-    console.error("[removeVariantFromBox]", error);
-    return false;
-  }
-  return true;
+    .from("fly_slug_redirects")
+    .upsert({ from_slug: oldSlug, to_slug: toSlug }, { onConflict: "from_slug" });
+  return !error;
 }

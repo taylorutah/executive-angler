@@ -57,7 +57,7 @@ export async function GET(
   // Fly patterns (v2 — owned patterns). Alias hero_image_url → image_url
   // so the response shape stays backward-compatible for the admin UI.
   const { data: fliesV2 } = await admin
-    .from("fly_patterns_v2")
+    .from("flies")
     .select("id, name, hero_image_url, created_at")
     .eq("owner_user_id", userId);
   const flies = (fliesV2 ?? []).map((f) => ({
