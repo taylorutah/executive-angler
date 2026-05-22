@@ -1,16 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Search, Check, Feather, Loader2, X } from "lucide-react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { Search, Check, Feather, Loader2, X, ChevronLeft } from "lucide-react";
+import { useActiveBox } from "@/lib/flies/active-box";
+import { buildPickerRows, type PatternRow, type PickerSize } from "@/lib/flies/picker-rows";
+import type { PickerBundle } from "@/lib/db/fly-picker";
 
 /**
- * Unified fly typeahead picker. Searches both canonical_flies (the library)
- * and the caller's own fly_patterns (their personal flies). Returns either
- * a canonical_fly_id or fly_pattern_id to the parent — never both.
+ * iOS-parity fly picker. Mirrors `FlyPickerSheet.swift`:
+ *   1. Box chip bar across the top (All Flies + every user box, sticky).
+ *   2. RECENTS section (up to 5 most recent patterns from the last 14 days).
+ *   3. Pattern-first list of every fly in the active scope.
+ *   4. Step 2 inline size grid — clicking a pattern reveals its hook sizes;
+ *      clicking a size commits the variant (size + bead auto-resolved).
  *
- * Used by the catch logging form so anglers can tag a catch with the same
- * fly identity whether it's from the library or their own patterns. Stats
- * roll up to the right surface either way.
+ * Live catalog search (debounced) augments the local list when the user types
+ * a query — canonical hits that aren't in the user's library show up as new
+ * pattern rows with no size grid (size step falls back to manual entry on the
+ * parent form).
  */
 
 export interface FlyPickerSelection {
@@ -18,9 +25,19 @@ export interface FlyPickerSelection {
   id: string;
   name: string;
   category?: string | null;
+  /** Set when the user picked a specific size (variant) in the picker. */
+  variantId?: string;
+  /** Hook size string (e.g. "14") when a size was selected. */
+  size?: string;
+  /** Bead weight in mm when known via the chosen variant. */
+  beadWeightMm?: number | null;
 }
 
-interface SearchResult extends FlyPickerSelection {
+interface CatalogHit {
+  source: "canonical" | "personal";
+  id: string;
+  name: string;
+  category?: string | null;
   imageUrl?: string | null;
   isMine?: boolean;
 }
@@ -32,71 +49,147 @@ interface Props {
   className?: string;
 }
 
-export default function FlyPicker({ value, onChange, placeholder = "Search flies…", className = "" }: Props) {
+export default function FlyPicker({
+  value,
+  onChange,
+  placeholder = "Search flies…",
+  className = "",
+}: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [highlight, setHighlight] = useState(0);
+  const [bundle, setBundle] = useState<PickerBundle | null>(null);
+  const [bundleLoading, setBundleLoading] = useState(false);
+  const [catalogHits, setCatalogHits] = useState<CatalogHit[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState(false);
+  const [pushed, setPushed] = useState<PatternRow | null>(null);
+  const { activeBoxId, setActiveBoxId } = useActiveBox();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Debounced fetch
+  // Load the picker bundle once on first open. Mirrors the iOS sheet which
+  // hydrates FlyBoxStore on first appearance, not on app launch.
   useEffect(() => {
-    if (!open) return;
+    if (!open || bundle || bundleLoading) return;
+    let cancelled = false;
+    setBundleLoading(true);
+    fetch("/api/flies/picker-data")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        setBundle(data as PickerBundle);
+      })
+      .finally(() => {
+        if (!cancelled) setBundleLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, bundle, bundleLoading]);
+
+  // Debounced catalog search — only when the user is typing.
+  useEffect(() => {
+    if (!open || query.trim().length < 2) {
+      setCatalogHits([]);
+      return;
+    }
     const t = setTimeout(async () => {
-      setLoading(true);
+      setCatalogLoading(true);
       try {
-        const res = await fetch(`/api/flies/search?q=${encodeURIComponent(query)}&limit=12`);
+        const res = await fetch(
+          `/api/flies/search?q=${encodeURIComponent(query.trim())}&limit=25`,
+        );
         if (res.ok) {
           const data = await res.json();
-          setResults(data.results ?? []);
-          setHighlight(0);
+          setCatalogHits((data.results ?? []) as CatalogHit[]);
         }
       } finally {
-        setLoading(false);
+        setCatalogLoading(false);
       }
-    }, 150);
+    }, 250);
     return () => clearTimeout(t);
   }, [query, open]);
 
-  // Click outside closes
+  // Click-outside closes the popover.
   useEffect(() => {
     function onClick(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
+        setPushed(null);
       }
     }
     if (open) document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  const select = useCallback(
-    (r: SearchResult) => {
-      onChange({ source: r.source, id: r.id, name: r.name, category: r.category });
-      setQuery("");
-      setOpen(false);
-    },
-    [onChange]
+  // Build the row model from the bundle.
+  const { recents, rows, library } = useMemo(() => {
+    if (!bundle) {
+      return {
+        recents: [] as PatternRow[],
+        rows: [] as PatternRow[],
+        library: [] as PatternRow[],
+      };
+    }
+    return buildPickerRows(bundle, activeBoxId, query);
+  }, [bundle, activeBoxId, query]);
+
+  // Catalog hits not already represented in the local rows (dedup by id).
+  const localPatternIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const r of rows) ids.add(r.pattern_id);
+    for (const r of recents) ids.add(r.pattern_id);
+    for (const r of library) ids.add(r.pattern_id);
+    return ids;
+  }, [rows, recents, library]);
+  const extraCatalogRows: PatternRow[] = useMemo(
+    () =>
+      catalogHits
+        .filter((h) => !localPatternIds.has(h.id))
+        .map((h) => ({
+          pattern_id: h.id,
+          source: h.source,
+          name: h.name,
+          category: h.category ?? null,
+          hero_image_url: h.imageUrl ?? null,
+          sizes: [],
+          isOrphan: true,
+          inActiveBox: false,
+        })),
+    [catalogHits, localPatternIds],
   );
 
-  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlight((h) => Math.min(h + 1, results.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlight((h) => Math.max(h - 1, 0));
-    } else if (e.key === "Enter" && results[highlight]) {
-      e.preventDefault();
-      select(results[highlight]);
-    } else if (e.key === "Escape") {
+  const select = useCallback(
+    (row: PatternRow, size: PickerSize | null) => {
+      // Sticky active box: if this pattern lives in any of the user's boxes
+      // and none of them is the active box, switch to its first box (mirrors
+      // iOS FlyPickerSheet:611–613).
+      if (size && bundle) {
+        const variant = bundle.variants.find((v) => v.variant_id === size.variant_id);
+        if (variant && variant.box_ids.length > 0 && !variant.box_ids.includes(activeBoxId ?? "")) {
+          setActiveBoxId(variant.box_ids[0]);
+        }
+      }
+      onChange({
+        source: row.source,
+        id: row.pattern_id,
+        name: row.name,
+        category: row.category,
+        ...(size
+          ? {
+              variantId: size.variant_id,
+              size: size.size,
+              beadWeightMm: size.bead_weight_mm,
+            }
+          : {}),
+      });
+      setQuery("");
       setOpen(false);
-    }
-  }
+      setPushed(null);
+    },
+    [onChange, bundle, activeBoxId, setActiveBoxId],
+  );
 
-  // Display: when value is set, show the chip + clear button; on click, open
-  // the picker for replacement.
+  // Selected-chip display when a fly is set.
   if (value && !open) {
     return (
       <div className={`relative ${className}`}>
@@ -111,6 +204,9 @@ export default function FlyPicker({ value, onChange, placeholder = "Search flies
           <div className="flex items-center gap-2 min-w-0">
             <Feather className="h-3.5 w-3.5 text-[#E8923A] shrink-0" />
             <span className="text-sm text-[#F0F6FC] truncate">{value.name}</span>
+            {value.size && (
+              <span className="text-[10px] text-[#6E7681] shrink-0">#{value.size}</span>
+            )}
             {value.source === "personal" && (
               <span className="text-[9px] font-bold uppercase tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full shrink-0">
                 Yours
@@ -139,56 +235,258 @@ export default function FlyPicker({ value, onChange, placeholder = "Search flies
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setOpen(true)}
-          onKeyDown={handleKey}
           placeholder={placeholder}
           className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#161B22] border border-[#21262D] text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
         />
-        {loading && (
+        {(bundleLoading || catalogLoading) && (
           <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681] animate-spin" />
         )}
       </div>
 
       {open && (
-        <div className="absolute z-30 left-0 right-0 mt-1 max-h-80 overflow-y-auto rounded-lg bg-[#0D1117] border border-[#21262D] shadow-xl">
-          {results.length === 0 && !loading && (
-            <p className="px-3 py-3 text-xs text-[#6E7681]">
-              {query ? `No matches for "${query}"` : "Start typing to search…"}
-            </p>
-          )}
-          {results.map((r, i) => (
-            <button
-              key={`${r.source}-${r.id}`}
-              type="button"
-              onMouseEnter={() => setHighlight(i)}
-              onClick={() => select(r)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors ${
-                i === highlight ? "bg-[#161B22]" : "hover:bg-[#161B22]"
-              }`}
-            >
-              <div className="h-7 w-7 rounded bg-[#161B22] border border-[#21262D] overflow-hidden shrink-0 flex items-center justify-center">
-                {r.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={r.imageUrl} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  <Feather className="h-3 w-3 text-[#6E7681]" />
+        <div className="absolute z-30 left-0 right-0 mt-1 rounded-lg bg-[#0D1117] border border-[#21262D] shadow-xl overflow-hidden">
+          {/* Step 2: size grid for the pushed pattern. */}
+          {pushed ? (
+            <SizeGrid
+              row={pushed}
+              currentVariantId={value?.variantId}
+              onBack={() => setPushed(null)}
+              onPick={(size) => select(pushed, size)}
+            />
+          ) : (
+            <>
+              <BoxChipBar
+                bundle={bundle}
+                activeBoxId={activeBoxId}
+                onSelect={setActiveBoxId}
+              />
+              <div className="max-h-80 overflow-y-auto">
+                {recents.length > 0 && (
+                  <RowSection
+                    title="Recents"
+                    rows={recents}
+                    value={value}
+                    onPick={(row) => {
+                      if (row.sizes.length > 0) setPushed(row);
+                      else select(row, null);
+                    }}
+                  />
                 )}
+                {rows.length > 0 && (
+                  <RowSection
+                    title={recents.length > 0 ? "Your flies" : undefined}
+                    rows={rows}
+                    value={value}
+                    onPick={(row) => {
+                      if (row.sizes.length > 0) setPushed(row);
+                      else select(row, null);
+                    }}
+                  />
+                )}
+                {library.length > 0 && (
+                  <RowSection
+                    title="Library"
+                    rows={library}
+                    value={value}
+                    onPick={(row) => select(row, null)}
+                  />
+                )}
+                {extraCatalogRows.length > 0 && (
+                  <RowSection
+                    title="More matches"
+                    rows={extraCatalogRows}
+                    value={value}
+                    onPick={(row) => select(row, null)}
+                  />
+                )}
+                {!bundleLoading &&
+                  recents.length === 0 &&
+                  rows.length === 0 &&
+                  library.length === 0 &&
+                  extraCatalogRows.length === 0 && (
+                    <p className="px-3 py-3 text-xs text-[#6E7681]">
+                      {query
+                        ? `No matches for "${query}"`
+                        : activeBoxId
+                          ? "This box is empty. Pick All Flies to see more."
+                          : "Your fly box is empty."}
+                    </p>
+                  )}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-[#F0F6FC] truncate">{r.name}</p>
-                {r.category && <p className="text-[10px] text-[#6E7681] capitalize">{r.category}</p>}
-              </div>
-              {r.isMine && (
-                <span className="text-[9px] font-bold uppercase tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full shrink-0">
-                  Yours
-                </span>
-              )}
-              {value?.source === r.source && value.id === r.id && (
-                <Check className="h-3.5 w-3.5 text-[#E8923A] shrink-0" />
-              )}
-            </button>
-          ))}
+            </>
+          )}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── BoxChipBar ─────────────────────────────────────────────────────────────
+
+function BoxChipBar({
+  bundle,
+  activeBoxId,
+  onSelect,
+}: {
+  bundle: PickerBundle | null;
+  activeBoxId: string | null;
+  onSelect: (id: string | null) => void;
+}) {
+  if (!bundle || bundle.boxes.length === 0) return null;
+  return (
+    <div className="flex items-center gap-1.5 px-2 py-2 border-b border-[#21262D] overflow-x-auto">
+      <ChipButton active={activeBoxId == null} onClick={() => onSelect(null)}>
+        All flies
+      </ChipButton>
+      {bundle.boxes.map((b) => (
+        <ChipButton
+          key={b.id}
+          active={activeBoxId === b.id}
+          onClick={() => onSelect(b.id)}
+        >
+          {b.name}
+        </ChipButton>
+      ))}
+    </div>
+  );
+}
+
+function ChipButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+        active
+          ? "bg-[#E8923A] text-[#0D1117]"
+          : "bg-transparent border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40 hover:text-[#F0F6FC]"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+// ── RowSection ────────────────────────────────────────────────────────────
+
+function RowSection({
+  title,
+  rows,
+  value,
+  onPick,
+}: {
+  title?: string;
+  rows: PatternRow[];
+  value: FlyPickerSelection | null | undefined;
+  onPick: (row: PatternRow) => void;
+}) {
+  return (
+    <div>
+      {title && (
+        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#6E7681]">
+          {title}
+        </p>
+      )}
+      {rows.map((r) => {
+        const selected = value?.id === r.pattern_id && value.source === r.source;
+        return (
+          <button
+            key={`${r.source}-${r.pattern_id}`}
+            type="button"
+            onClick={() => onPick(r)}
+            className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[#161B22] ${
+              selected ? "bg-[#161B22]" : ""
+            }`}
+          >
+            <div className="h-7 w-7 rounded bg-[#161B22] border border-[#21262D] overflow-hidden shrink-0 flex items-center justify-center">
+              {r.hero_image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={r.hero_image_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <Feather className="h-3 w-3 text-[#6E7681]" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-[#F0F6FC] truncate">{r.name}</p>
+              <p className="text-[10px] text-[#6E7681] capitalize truncate">
+                {r.category ?? (r.isOrphan ? "Personal" : "")}
+                {r.sizes.length > 0 && (
+                  <span className="ml-1 text-[#6E7681]">
+                    · {r.sizes.length} size{r.sizes.length === 1 ? "" : "s"}
+                  </span>
+                )}
+              </p>
+            </div>
+            {r.source === "personal" && !r.isOrphan && (
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full shrink-0">
+                Yours
+              </span>
+            )}
+            {selected && <Check className="h-3.5 w-3.5 text-[#E8923A] shrink-0" />}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── SizeGrid (step 2) ─────────────────────────────────────────────────────
+
+function SizeGrid({
+  row,
+  currentVariantId,
+  onBack,
+  onPick,
+}: {
+  row: PatternRow;
+  currentVariantId?: string;
+  onBack: () => void;
+  onPick: (size: PickerSize) => void;
+}) {
+  return (
+    <div className="max-h-80 overflow-y-auto">
+      <div className="flex items-center gap-2 px-2 py-2 border-b border-[#21262D]">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-[#A8B2BD] hover:bg-[#161B22] hover:text-[#F0F6FC]"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" /> Back
+        </button>
+        <p className="text-sm text-[#F0F6FC] font-semibold truncate flex-1">{row.name}</p>
+      </div>
+      <div className="grid grid-cols-3 gap-1.5 p-2">
+        {row.sizes.map((s) => {
+          const isCurrent = currentVariantId === s.variant_id;
+          return (
+            <button
+              key={s.variant_id}
+              type="button"
+              onClick={() => onPick(s)}
+              className={`px-2 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                isCurrent
+                  ? "bg-[#E8923A] text-[#0D1117]"
+                  : "bg-[#161B22] border border-[#21262D] text-[#F0F6FC] hover:border-[#E8923A]/40"
+              }`}
+            >
+              <div>#{s.size}</div>
+              {s.bead_weight_mm != null && (
+                <div className="text-[9px] text-[#6E7681] font-normal mt-0.5">
+                  {s.bead_weight_mm}mm bead
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

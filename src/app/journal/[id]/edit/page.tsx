@@ -867,19 +867,33 @@ export default function EditSessionPage() {
                               updateCatch(i, "canonical_fly_id", "");
                               updateCatch(i, "variant_id", "");
                               updateCatch(i, "fly_name", "");
-                            } else if (sel.source === "personal") {
+                              return;
+                            }
+                            // Identity fields.
+                            if (sel.source === "personal") {
                               updateCatch(i, "fly_pattern_id", sel.id);
                               updateCatch(i, "canonical_fly_id", "");
-                              updateCatch(i, "variant_id", "");
-                              updateCatch(i, "fly_name", sel.name);
                             } else {
                               updateCatch(i, "canonical_fly_id", sel.id);
                               updateCatch(i, "fly_pattern_id", "");
+                            }
+                            updateCatch(i, "fly_name", sel.name);
+                            // Variant resolved by the picker (size step): write
+                            // the precise variant_id / size / bead so we skip
+                            // the legacy fetchAndCacheVariants round-trip.
+                            if (sel.variantId) {
+                              updateCatch(i, "variant_id", sel.variantId);
+                              if (sel.size) updateCatch(i, "fly_size", sel.size);
+                              if (sel.beadWeightMm != null) {
+                                updateCatch(i, "bead_size", String(sel.beadWeightMm));
+                              }
+                            } else {
                               updateCatch(i, "variant_id", "");
-                              updateCatch(i, "fly_name", sel.name);
-                              // Fetch the user's variants + auto-fill best
-                              // size and the bead that's associated with it
-                              // in their box.
+                            }
+                            // Still warm the per-row variant cache so the
+                            // Fly Size dropdown can offer the full size list
+                            // for adjustment after the initial pick.
+                            if (sel.source === "canonical") {
                               fetchAndCacheVariants(i, sel.id);
                             }
                           }}
