@@ -68,8 +68,15 @@ export default function FlyPicker({
 
   // Load the picker bundle once on first open. Mirrors the iOS sheet which
   // hydrates FlyBoxStore on first appearance, not on app launch.
+  //
+  // `bundleLoading` is intentionally NOT in the dep array — including it
+  // makes the effect re-run on its own state update, and the cleanup from
+  // the first invocation cancels the in-flight fetch before it can write
+  // the bundle. (That's exactly the Safari/prod hang reported on 2026-05-22.)
+  const fetchStartedRef = useRef(false);
   useEffect(() => {
-    if (!open || bundle || bundleLoading) return;
+    if (!open || bundle || fetchStartedRef.current) return;
+    fetchStartedRef.current = true;
     let cancelled = false;
     setBundleLoading(true);
     fetch("/api/flies/picker-data")
@@ -78,13 +85,16 @@ export default function FlyPicker({
         if (cancelled || !data) return;
         setBundle(data as PickerBundle);
       })
+      .catch(() => {
+        // Surface in the empty-state copy; do not silently retry.
+      })
       .finally(() => {
         if (!cancelled) setBundleLoading(false);
       });
     return () => {
       cancelled = true;
     };
-  }, [open, bundle, bundleLoading]);
+  }, [open, bundle]);
 
   // Debounced catalog search — only when the user is typing.
   useEffect(() => {
