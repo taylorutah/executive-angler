@@ -40,6 +40,8 @@ interface CatalogHit {
   category?: string | null;
   imageUrl?: string | null;
   isMine?: boolean;
+  /** Hook sizes from the fly's option_envelope. Picker prompts when present. */
+  sizes?: string[];
 }
 
 interface Props {
@@ -161,7 +163,10 @@ export default function FlyPicker({
           name: h.name,
           category: h.category ?? null,
           hero_image_url: h.imageUrl ?? null,
-          sizes: [],
+          // Synthesize canonical-size PickerSize entries (no variant_id)
+          // so the picker pushes to the size grid for catalog-only hits
+          // exactly like it does for library / orphan rows.
+          sizes: (h.sizes ?? []).map((s) => ({ size: s, bead_weight_mm: null })),
           isOrphan: true,
           inActiveBox: false,
         })),
@@ -172,8 +177,10 @@ export default function FlyPicker({
     (row: PatternRow, size: PickerSize | null) => {
       // Sticky active box: if this pattern lives in any of the user's boxes
       // and none of them is the active box, switch to its first box (mirrors
-      // iOS FlyPickerSheet:611–613).
-      if (size && bundle) {
+      // iOS FlyPickerSheet:611–613). Only meaningful when size carries a
+      // real variant_id — canonical sizes (no variant) don't belong to any
+      // box yet.
+      if (size?.variant_id && bundle) {
         const variant = bundle.variants.find((v) => v.variant_id === size.variant_id);
         if (variant && variant.box_ids.length > 0 && !variant.box_ids.includes(activeBoxId ?? "")) {
           setActiveBoxId(variant.box_ids[0]);
@@ -186,7 +193,10 @@ export default function FlyPicker({
         category: row.category,
         ...(size
           ? {
-              variantId: size.variant_id,
+              // variantId may be undefined for canonical-size selections —
+              // the catch row keeps configuration_id null in that case
+              // (parent form handles this; see edit/page.tsx).
+              ...(size.variant_id ? { variantId: size.variant_id } : {}),
               size: size.size,
               beadWeightMm: size.bead_weight_mm,
             }
@@ -298,7 +308,10 @@ export default function FlyPicker({
                     title="Library"
                     rows={library}
                     value={value}
-                    onPick={(row) => select(row, null)}
+                    onPick={(row) => {
+                      if (row.sizes.length > 0) setPushed(row);
+                      else select(row, null);
+                    }}
                   />
                 )}
                 {extraCatalogRows.length > 0 && (
@@ -306,7 +319,10 @@ export default function FlyPicker({
                     title="More matches"
                     rows={extraCatalogRows}
                     value={value}
-                    onPick={(row) => select(row, null)}
+                    onPick={(row) => {
+                      if (row.sizes.length > 0) setPushed(row);
+                      else select(row, null);
+                    }}
                   />
                 )}
                 {!bundleLoading &&
@@ -475,10 +491,15 @@ function SizeGrid({
       </div>
       <div className="grid grid-cols-3 gap-1.5 p-2">
         {row.sizes.map((s) => {
-          const isCurrent = currentVariantId === s.variant_id;
+          // `variant_id` is omitted for canonical-only sizes (library
+          // patterns the user hasn't configured yet). Highlight the
+          // current selection by variant_id when one exists; otherwise
+          // canonical sizes always render unselected — the user is
+          // picking, not re-selecting.
+          const isCurrent = !!s.variant_id && currentVariantId === s.variant_id;
           return (
             <button
-              key={s.variant_id}
+              key={s.variant_id ?? `canonical-${s.size}`}
               type="button"
               onClick={() => onPick(s)}
               className={`px-2 py-2 rounded-lg text-sm font-semibold transition-colors ${

@@ -11,7 +11,14 @@ import type {
 } from "@/lib/db/fly-picker";
 
 export interface PickerSize {
-  variant_id: string;
+  /**
+   * `user_fly_configurations.id` when this size corresponds to a real user
+   * variant (in their box, tied/bought/target>0). Omitted for canonical
+   * sizes derived from a library fly's `option_envelope.sizes` — the user
+   * hasn't created a configuration yet, but they can still pick the hook
+   * size for the catch.
+   */
+  variant_id?: string;
   size: string;
   bead_weight_mm: number | null;
 }
@@ -117,13 +124,20 @@ export function buildPickerRows(
     };
   };
 
+  // Synthetic canonical sizes (no variant_id) — used for orphan personal
+  // patterns and library rows. The picker pushes to the size grid when
+  // these exist so the user can pick a hook size before committing, even
+  // without a per-user configuration.
+  const canonicalSizes = (sizes: string[]): PickerSize[] =>
+    sizes.map((s) => ({ size: s, bead_weight_mm: null }));
+
   const orphanRow = (p: PickerOrphanPattern): PatternRow => ({
     pattern_id: p.pattern_id,
     source: "personal",
     name: p.name,
     category: p.category,
     hero_image_url: p.hero_image_url,
-    sizes: [],
+    sizes: canonicalSizes(p.sizes),
     isOrphan: true,
     inActiveBox: false,
   });
@@ -134,7 +148,7 @@ export function buildPickerRows(
     name: p.name,
     category: p.category,
     hero_image_url: p.hero_image_url,
-    sizes: [],
+    sizes: canonicalSizes(p.sizes),
     isOrphan: true,
     inActiveBox: false,
   });

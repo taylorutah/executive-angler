@@ -49,6 +49,11 @@ export interface PickerOrphanPattern {
   category: string | null;
   hero_image_url: string | null;
   owner_user_id: string;
+  /** Hook sizes from the fly's option_envelope. Empty when the personal
+   *  pattern declares no canonical sizes — picker then commits with no
+   *  size and the free-text "Fly Size (#)" field on the parent form
+   *  acts as the fallback. */
+  sizes: string[];
 }
 
 export interface PickerLibraryPattern {
@@ -56,6 +61,12 @@ export interface PickerLibraryPattern {
   name: string;
   category: string | null;
   hero_image_url: string | null;
+  /**
+   * Hook sizes available for this canonical pattern, derived from
+   * `flies.option_envelope.sizes`. The picker uses these to render the
+   * size grid when the user hasn't created a per-user configuration yet.
+   */
+  sizes: string[];
 }
 
 export interface PickerRecent {
@@ -80,6 +91,32 @@ const RECENTS_DAYS = 14;
 const RECENTS_LIMIT = 50;
 const LIBRARY_LIMIT = 200;
 
+/**
+ * Coerce a fly's `option_envelope.sizes` (numbers or strings, possibly with
+ * dupes / out-of-order values) into a clean ascending string[] of hook
+ * sizes for the picker grid.
+ *
+ * Hook sizes are conventionally written as plain integers ("14", "16") —
+ * larger numbers = smaller flies. We sort ascending so the grid reads
+ * smallest-fly → biggest-fly left→right, matching how anglers think about
+ * a size run (a 12 then a 14 then a 16).
+ */
+function normalizeCanonicalSizes(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  const seen = new Set<string>();
+  const out: { sortKey: number; label: string }[] = [];
+  for (const raw of input) {
+    if (raw === null || raw === undefined) continue;
+    const s = String(raw).trim();
+    if (!s || seen.has(s)) continue;
+    seen.add(s);
+    const n = parseInt(s.replace(/[^0-9-]/g, ""), 10);
+    out.push({ sortKey: Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER, label: s });
+  }
+  out.sort((a, b) => a.sortKey - b.sortKey);
+  return out.map((o) => o.label);
+}
+
 export async function loadFlyPickerBundle(): Promise<PickerBundle> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -103,7 +140,7 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
 
   const createdFliesPromise = supabase
     .from("flies")
-    .select("id, name, category, hero_image_url, submitted_by_user_id")
+    .select("id, name, category, hero_image_url, submitted_by_user_id, option_envelope")
     .eq("submitted_by_user_id", userId)
     .in("status", ["private", "pending", "approved"])
     .is("deleted_at", null);
@@ -122,7 +159,7 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
 
   const libraryPromise = supabase
     .from("flies")
-    .select("id, name, category, hero_image_url")
+    .select("id, name, category, hero_image_url, option_envelope")
     .eq("status", "approved")
     .is("deleted_at", null)
     .order("is_featured", { ascending: false })
@@ -151,6 +188,7 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
     category: string | null;
     hero_image_url: string | null;
     submitted_by_user_id: string;
+    option_envelope: { sizes?: Array<number | string> } | null;
   }>;
 
   // Hydrate flies referenced by configurations (those not in `created`).
@@ -220,6 +258,7 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
       category: f.category,
       hero_image_url: f.hero_image_url,
       owner_user_id: f.submitted_by_user_id,
+      sizes: normalizeCanonicalSizes(f.option_envelope?.sizes),
     }));
 
   // Recents — collapse to one entry per fly_id (first/most-recent wins).
@@ -252,11 +291,13 @@ export async function loadFlyPickerBundle(): Promise<PickerBundle> {
     name: string;
     category: string | null;
     hero_image_url: string | null;
+    option_envelope: { sizes?: Array<number | string> } | null;
   }>).map((p) => ({
     pattern_id: p.id,
     name: p.name,
     category: p.category,
     hero_image_url: p.hero_image_url,
+    sizes: normalizeCanonicalSizes(p.option_envelope?.sizes),
   }));
 
   return { boxes, variants, orphanPatterns, libraryPatterns, recents };

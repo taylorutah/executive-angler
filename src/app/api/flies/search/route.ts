@@ -18,6 +18,28 @@ interface SearchResult {
   category?: string | null;
   imageUrl?: string | null;
   isMine?: boolean;
+  /**
+   * Hook sizes derived from the fly's `option_envelope.sizes`. The picker
+   * uses these to render a size grid for catalog hits before commit, so a
+   * library fly the user has never tied still prompts for size.
+   */
+  sizes?: string[];
+}
+
+function normalizeCanonicalSizes(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  const seen = new Set<string>();
+  const out: { sortKey: number; label: string }[] = [];
+  for (const raw of input) {
+    if (raw === null || raw === undefined) continue;
+    const s = String(raw).trim();
+    if (!s || seen.has(s)) continue;
+    seen.add(s);
+    const n = parseInt(s.replace(/[^0-9-]/g, ""), 10);
+    out.push({ sortKey: Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER, label: s });
+  }
+  out.sort((a, b) => a.sortKey - b.sortKey);
+  return out.map((o) => o.label);
 }
 
 export async function GET(req: NextRequest) {
@@ -29,7 +51,7 @@ export async function GET(req: NextRequest) {
 
   const canonicalQuery = supabase
     .from("flies")
-    .select("id, slug, name, category, hero_image_url")
+    .select("id, slug, name, category, hero_image_url, option_envelope")
     .eq("status", "approved")
     .is("deleted_at", null)
     .order("is_featured", { ascending: false })
@@ -40,7 +62,7 @@ export async function GET(req: NextRequest) {
   const personalPromise = user
     ? supabase
         .from("flies")
-        .select("id, slug, name, category, hero_image_url, submitted_by_user_id")
+        .select("id, slug, name, category, hero_image_url, submitted_by_user_id, option_envelope")
         .eq("submitted_by_user_id", user.id)
         .in("status", ["private", "pending", "approved"])
         .is("deleted_at", null)
@@ -61,6 +83,9 @@ export async function GET(req: NextRequest) {
     category: (p.category as string | null) ?? null,
     imageUrl: (p.hero_image_url as string | null) ?? null,
     isMine: true,
+    sizes: normalizeCanonicalSizes(
+      (p.option_envelope as { sizes?: Array<number | string> } | null)?.sizes
+    ),
   }));
 
   const canonical: SearchResult[] = (canonicalRes.data ?? []).map((c) => ({
@@ -69,6 +94,9 @@ export async function GET(req: NextRequest) {
     name: c.name as string,
     category: c.category as string | null,
     imageUrl: (c.hero_image_url as string | null) ?? null,
+    sizes: normalizeCanonicalSizes(
+      (c.option_envelope as { sizes?: Array<number | string> } | null)?.sizes
+    ),
   }));
 
   // Dedup: a row with submitted_by_user_id=user.id and status=approved would
