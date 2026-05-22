@@ -106,32 +106,34 @@ export default async function SessionDetailPage({ params }: Props) {
 
   type CatchRow = {
     fly_pattern_id?: string | null;
+    canonical_fly_id?: string | null;
     fly_pattern?: { name: string; type?: string; image_url?: string } | null;
     variant_id?: string | null;
     fly_name?: string | null;
   };
   const catchesArr = (catches ?? []) as CatchRow[];
 
-  // Fetch live fly rows for every fly_pattern_id referenced by any catch.
-  // We resolve the display fly_pattern from the live row first (so renames
-  // propagate) and only fall back to the denormalized fly_name snapshot
-  // when no fly_pattern_id is present. Without this, catches whose snapshot
-  // wasn't written (older rows, or the post-rename gap) drop out of
-  // "Flies That Worked" even though they share a fly_pattern_id with
-  // catches that do show up.
-  const flyPatternIds = Array.from(
+  // Fetch live fly rows for every fly id referenced by any catch — both
+  // `fly_pattern_id` (personal patterns) and `canonical_fly_id` (library
+  // patterns) live in the same unified `flies` table post Phase A. The
+  // catch editor sets exactly one of these depending on which source the
+  // angler picked from; the display must resolve either. Without including
+  // canonical_fly_id here, catches edited to a library fly would only
+  // surface their live name through the denormalized fly_name snapshot —
+  // which falls behind whenever a server PATCH path forgets to rewrite it.
+  const flyIds = Array.from(
     new Set(
       catchesArr
-        .map((c) => c.fly_pattern_id)
+        .flatMap((c) => [c.fly_pattern_id, c.canonical_fly_id])
         .filter((v): v is string => !!v)
     )
   );
 
-  const { data: rawFlies } = flyPatternIds.length > 0
+  const { data: rawFlies } = flyIds.length > 0
     ? await reader
         .from("flies")
         .select("id, name, category, hero_image_url")
-        .in("id", flyPatternIds)
+        .in("id", flyIds)
         .is("deleted_at", null)
     : { data: [] };
   const flies = (rawFlies ?? []).map((f) => ({
@@ -142,12 +144,14 @@ export default async function SessionDetailPage({ params }: Props) {
   }));
   const flyById = new Map(flies.map((f) => [f.id, f]));
 
-  // Resolution order: live fly (by fly_pattern_id) → denormalized fly_name
-  // snapshot. The live row is authoritative; the snapshot is only a fallback
-  // for catches whose fly_pattern_id didn't survive (or never landed).
+  // Resolution order: live fly (by fly_pattern_id, then canonical_fly_id)
+  // → denormalized fly_name snapshot. The live row is authoritative; the
+  // snapshot is only a fallback for catches with neither FK set (CSV
+  // import / freehand quick-add).
   for (const c of catchesArr) {
-    if (c.fly_pattern_id) {
-      const live = flyById.get(c.fly_pattern_id);
+    const fkId = c.fly_pattern_id || c.canonical_fly_id;
+    if (fkId) {
+      const live = flyById.get(fkId);
       if (live) {
         c.fly_pattern = {
           name: live.name,
