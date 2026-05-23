@@ -6,10 +6,10 @@ import { RIVER_AWARDS } from "@/types/awards";
 import { checkPremium } from "@/lib/admin";
 import { listMyConfigurationsWithFly, listMyPatternsHub } from "@/lib/db/fly-model";
 import { summarizeVersion } from "@/components/flies-v3/summarize-version";
-import { listDerivedTieNextShortages } from "@/lib/db/fly-v2";
-import { totalOwned, deficit } from "@/types/fly-v2";
-import { ownerPatternPermalink } from "@/lib/flies/permalink";
+import { listMyFavoriteSections, listMyRiverSectionPrefs } from "@/lib/db/favorite-sections";
 import type { MyFliesItem } from "@/components/dashboard/MyFliesWidget";
+import type { FavoriteSectionDTO, YourRiverDTO } from "@/components/dashboard/RiverSectionsGrid";
+import type { GaugeChoice } from "@/components/dashboard/RiverSectionCard";
 
 // Never cache — always fetch fresh data
 export const dynamic = "force-dynamic";
@@ -24,12 +24,6 @@ export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/dashboard");
-
-  // Fetch user favorites (rivers, destinations, etc.)
-  const { data: favorites } = await supabase
-    .from("user_favorites")
-    .select("entity_type, entity_id")
-    .eq("user_id", user.id);
 
   // Fetch user profile (including premium status)
   const { data: profile } = await supabase
@@ -51,30 +45,6 @@ export default async function DashboardPage() {
     .order("date", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(5);
-
-  // Fetch river details for favorited rivers
-  const favRiverIds = (favorites || [])
-    .filter((f) => f.entity_type === "river")
-    .map((f) => f.entity_id);
-
-  const { data: favRivers } = favRiverIds.length > 0
-    ? await supabase
-        .from("rivers")
-        .select("id, name, slug, hero_image_url, primary_species")
-        .in("id", favRiverIds)
-    : { data: [] };
-
-  // Fetch destination details for favorited destinations
-  const favDestIds = (favorites || [])
-    .filter((f) => f.entity_type === "destination")
-    .map((f) => f.entity_id);
-
-  const { data: favDests } = favDestIds.length > 0
-    ? await supabase
-        .from("destinations")
-        .select("id, name, slug, hero_image_url")
-        .in("id", favDestIds)
-    : { data: [] };
 
   // Privacy overhaul: dashboard is owner-only. Following/explore/suggested feeds
   // are removed — community activity is no longer surfaced here. The "My Flies"
@@ -120,16 +90,37 @@ export default async function DashboardPage() {
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id);
 
-  // River slug lookup — maps river_id → slug for "Your Rivers" links
-  const { data: allRiverSlugs } = await supabase
+  // Fetch all rivers with their JSONB gauge configs — used by both the
+  // section picker (Pin section modal) and the "Your Rivers" tab so we can
+  // expose a gauge selector on each river card.
+  const { data: allRiversRaw } = await supabase
     .from("rivers")
-    .select("id, name, slug");
+    .select("id, name, slug, usgs_gauge_id");
+
+  function parseGauges(raw: unknown): GaugeChoice[] {
+    if (!raw) return [];
+    if (typeof raw === "string") {
+      const t = raw.trim();
+      if (!t.startsWith("[")) return [];
+      try { return JSON.parse(t) as GaugeChoice[]; } catch { return []; }
+    }
+    if (Array.isArray(raw)) return raw as GaugeChoice[];
+    return [];
+  }
+
   const riverSlugMap: Record<string, string> = {};
   const riverList: Array<{ name: string; slug: string }> = [];
-  (allRiverSlugs || []).forEach((r: { id: string; name: string; slug: string }) => {
+  const riversById = new Map<string, { name: string; slug: string; gauges: GaugeChoice[] }>();
+  (allRiversRaw || []).forEach((r: { id: string; name: string; slug: string; usgs_gauge_id: unknown }) => {
+    const gauges = parseGauges(r.usgs_gauge_id);
     riverSlugMap[r.id] = r.slug;
     riverList.push({ name: r.name, slug: r.slug });
+    riversById.set(r.id, { name: r.name, slug: r.slug, gauges });
   });
+
+  const riversForPicker = Array.from(riversById.entries())
+    .map(([id, r]) => ({ id, name: r.name, slug: r.slug, gauges: r.gauges }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   // Resolve a session river_name (e.g., "Middle Provo") to a canonical river slug.
   // Strips section qualifiers and matches by remaining core tokens.
@@ -277,21 +268,72 @@ export default async function DashboardPage() {
     }
   }
 
+  // Favorite river sections (Zone A — Favorites tab)
+  const favoriteSections = await listMyFavoriteSections();
+  const favoriteSectionsDTO: FavoriteSectionDTO[] = favoriteSections.map((fs) => ({
+    id: fs.id,
+    river_id: fs.river_id,
+    river_name: fs.river_name,
+    river_slug: fs.river_slug,
+    usgs_site_id: fs.usgs_site_id,
+    section_name: fs.section_name,
+    gauge_name: fs.gauge_name,
+  }));
+
+  // "Your Rivers" — rivers the user has fished, mapped to their gauge list
+  // with the user's remembered gauge choice (or best section-name match).
+  const sectionPrefs = await listMyRiverSectionPrefs();
+  const prefBySection = new Map(sectionPrefs.map((p) => [p.river_id, p.usgs_site_id]));
+
+  const SECTION_TOKENS_YR = new Set([
+    "upper","middle","lower","north","south","east","west",
+    "fork","branch","river","creek","stream","the",
+  ]);
+  function coreTokensYR(s: string): string[] {
+    return s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t && !SECTION_TOKENS_YR.has(t));
+  }
+
+  const yourRiversDTO: YourRiverDTO[] = [];
+  for (const rs of riverStatsArr) {
+    const riverId = rs.river_id;
+    if (!riverId) continue;
+    const river = riversById.get(riverId);
+    if (!river || river.gauges.length === 0) continue;
+
+    const preferred = prefBySection.get(riverId);
+    let defaultSiteId: string | undefined = preferred;
+    if (!defaultSiteId) {
+      const nameTokens = coreTokensYR(rs.river_name);
+      const matched = river.gauges.find((g) => {
+        const sectionTokens = coreTokensYR(g.section);
+        return sectionTokens.length > 0 && sectionTokens.every((t) => nameTokens.includes(t));
+      });
+      defaultSiteId = matched?.site_id ?? river.gauges[0].site_id;
+    }
+
+    yourRiversDTO.push({
+      river_id: riverId,
+      river_name: river.name,
+      river_slug: river.slug,
+      gauges: river.gauges,
+      default_site_id: defaultSiteId,
+    });
+  }
+
   return (
     <DashboardClient
       user={{ id: user.id, email: user.email ?? "" }}
       profile={profile}
       mySessions={mySessions || []}
-      favRivers={favRivers || []}
-      favDests={favDests || []}
       tieNextItems={tieNextItems}
       favoriteItems={favoriteItems}
-      totalFavorites={(favorites || []).length}
       flyCount={flyCount ?? 0}
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
-      riverSlugMap={riverSlugMap}
       isPremium={isPremium}
+      favoriteSections={favoriteSectionsDTO}
+      yourRivers={yourRiversDTO}
+      riversForPicker={riversForPicker}
       enhancedStats={{
         totalSessions,
         totalFish: totalFishAll,
