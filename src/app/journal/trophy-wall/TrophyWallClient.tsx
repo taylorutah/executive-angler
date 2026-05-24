@@ -256,26 +256,30 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
             {/* Runner-up — fills the otherwise-empty right side when there's no PB photo */}
             {!biggestOverall.fish_image_url && runnerUp && (
-              <div className="md:w-56 md:border-l md:border-[#FFD700]/15 md:pl-5 pt-3 md:pt-0 border-t md:border-t-0 border-[#FFD700]/15">
-                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6E7681] mb-2">
+              <div className="relative md:w-60 md:border-l md:border-[#FFD700]/25 md:pl-6 pt-3 md:pt-0 border-t md:border-t-0 border-[#FFD700]/20 bg-[#0D1117]/40 md:bg-transparent rounded-md md:rounded-none p-3 md:p-0">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#A8B2BD] mb-2">
                   Runner-up
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <div className="font-mono text-[24px] leading-none font-semibold text-[#F0F6FC] tabular-nums">
+                  <div className="font-mono text-[28px] leading-none font-bold text-[#F0F6FC] tabular-nums">
                     {runnerUp.length_inches}&quot;
                   </div>
                   {runnerUp.species && (
-                    <div className="font-heading text-[14px] text-[#E8923A]/85 tracking-[-0.005em]">
+                    <div className="font-heading text-[15px] text-[#E8923A] tracking-[-0.005em]">
                       {runnerUp.species}
                     </div>
                   )}
                 </div>
-                <div className="mt-2 font-mono text-[11px] text-[#6E7681] flex flex-wrap items-baseline gap-x-2">
-                  {runnerUpSession?.river_name && <span>{runnerUpSession.river_name}</span>}
+                <div className="mt-2 font-mono text-[11px] text-[#A8B2BD] flex flex-wrap items-baseline gap-x-2">
+                  {runnerUpSession?.river_name && (
+                    <span className="text-[#A8B2BD]">{runnerUpSession.river_name}</span>
+                  )}
                   {runnerUpSession?.date && (
                     <>
                       {runnerUpSession?.river_name && <span className="text-[#3a4150]">·</span>}
-                      <span>{new Date(runnerUpSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      <span className="text-[#6E7681]">
+                        {new Date(runnerUpSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      </span>
                     </>
                   )}
                 </div>
