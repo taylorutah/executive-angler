@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { checkPremium } from "@/lib/admin";
-import Link from "next/link";
-import { Lock } from "lucide-react";
+import ProGate from "@/components/ui/ProGate";
 import InsightsPageClient from "./InsightsPageClient";
 
 export const metadata: Metadata = {
   title: "Journal Insights",
-  description:
-    "Rule-based analysis of your fishing patterns — fly effectiveness, timing, weather correlations, and more.",
+  description: "Patterns from your own journal — fly effectiveness, timing, weather.",
 };
 
 export default async function JournalInsightsPage() {
@@ -24,23 +22,10 @@ export default async function JournalInsightsPage() {
 
   if (!isPremium) {
     return (
-      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-[#161B22] rounded-2xl border border-[#21262D] p-8 text-center">
-          <Lock className="h-12 w-12 text-[#E8923A] mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-[#F0F6FC] mb-2">Premium Feature</h1>
-          <p className="text-sm text-[#A8B2BD] mb-6">
-            Journal Insights analyzes your fishing history to surface patterns in
-            fly effectiveness, timing, weather, and more — all from your real
-            data.
-          </p>
-          <Link
-            href="/account"
-            className="inline-flex items-center gap-2 bg-[#E8923A] text-white font-semibold rounded-xl px-6 py-3 hover:bg-[#d4822e] transition-colors"
-          >
-            Upgrade to Pro
-          </Link>
-        </div>
-      </div>
+      <ProGate
+        feature="Journal Insights"
+        pitch="Surface patterns from your own sessions — fly effectiveness, timing, weather. Built only from your data."
+      />
     );
   }
 

@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
-  ArrowLeft,
   Bug,
   Timer,
   Cloud,
@@ -16,7 +14,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
-import TipCard from "@/components/ui/TipCard";
+import PageHeader from "@/components/ui/PageHeader";
 
 // =============================================
 // Types matching API response
@@ -123,34 +121,13 @@ export default function InsightsPageClient({ isPremium = true }: { isPremium?: b
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-4 pb-16">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/journal"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-[#F0F6FC] transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Journal
-          </Link>
-          <div className="flex items-center gap-3">
-            <BarChart3 className="h-7 w-7 text-[#E8923A]" />
-            <h1 className="font-heading text-3xl sm:text-4xl text-[#F0F6FC]">
-              Journal Insights
-            </h1>
-          </div>
-          <p className="text-slate-400 mt-2">
-            Data-driven patterns from your fishing journal.
-          </p>
-        </div>
-
-        <div className="mb-6">
-          <TipCard storageKey="insights-intro" title="How these insights work" tone="premium">
-            <p>Everything here is computed from <span className="text-[#F0F6FC] font-semibold">your</span> logged sessions — time of day, weather, water temp, fly patterns, catch rates.</p>
-            <p className="text-[#6E7681]">Signal gets better with volume. Log water temp + weather to unlock the sharpest cards. Aim for 20+ sessions before trusting weather/temp correlations.</p>
-          </TipCard>
-        </div>
+    <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <PageHeader
+          eyebrow="Pro · Journal"
+          title="Insights"
+          meta="Patterns from your sessions only. Sharper with more volume — 20+ sessions before trusting weather and temp correlations."
+        />
 
         {/* AI Fishing Coach — paused until re-enabled via NEXT_PUBLIC_FEATURE_AI_INSIGHTS */}
         {process.env.NEXT_PUBLIC_FEATURE_AI_INSIGHTS === "true" && (

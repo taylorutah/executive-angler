@@ -1,13 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import RiverStatsView from './RiverStatsView';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 import { checkPremium } from '@/lib/admin';
 
 export const metadata = {
   title: 'River Stats',
-  description: 'View your fishing statistics and achievements by river',
+  description: 'Your sessions, fish, and personal bests by river.',
 };
 
 export default async function StatsPage() {
@@ -23,24 +21,8 @@ export default async function StatsPage() {
   const isPremium = await checkPremium(supabase, user.id, user.email);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-4 pb-8">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/journal"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-cream transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Journal
-          </Link>
-          <h1 className="font-heading text-4xl text-cream">River Statistics</h1>
-          <p className="text-slate-400 mt-2">
-            Track your progress and see how you&apos;re doing on each river
-          </p>
-        </div>
-
-        {/* Stats View */}
+    <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <RiverStatsView isPremium={isPremium} />
       </div>
     </div>

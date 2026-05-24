@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import GearPicker from "@/components/gear/GearPicker";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function NewSessionPage() {
   const router = useRouter();
@@ -92,16 +92,8 @@ export default function NewSessionPage() {
   return (
     <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
       <div className="container mx-auto px-4 max-w-3xl">
-        <Link
-          href="/journal"
-          className="inline-flex items-center gap-2 text-[#E8923A] hover:text-[#E8923A] mb-6 text-sm font-medium"
-        >
-          ← Back to Journal
-        </Link>
+        <PageHeader eyebrow="Journal" title="Log a session" />
 
-        <h1 className="text-4xl font-heading font-bold text-[#E8923A] mb-8">
-          Log New Session
-        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}

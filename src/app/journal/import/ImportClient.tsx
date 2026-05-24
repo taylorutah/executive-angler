@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft,
   Check,
   Copy,
   Download,
@@ -16,6 +15,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { HEADERS, WATER_CLARITY_VALUES, FLY_POSITION_VALUES } from "@/lib/import/csv-schema";
+import PageHeader from "@/components/ui/PageHeader";
 
 type PreviewCatch = {
   rowIndex: number;
@@ -189,29 +189,13 @@ export default function ImportClient() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-[#F0F6FC]">
-      <div className="max-w-5xl mx-auto px-4 py-8 lg:py-12">
-        {/* Back link */}
-        <Link
-          href="/journal"
-          className="inline-flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors mb-6"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to Journal
-        </Link>
+      <div className="max-w-5xl mx-auto px-4 py-6 lg:py-8">
+        <PageHeader
+          eyebrow="Journal"
+          title="Import sessions"
+          meta="Old notebooks, spreadsheets, Notion pages — format into an EA-ready CSV with AI, upload, review, save."
+        />
 
-        {/* Hero */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 text-[#E8923A] text-xs font-bold uppercase tracking-wider mb-3">
-            <Upload className="h-4 w-4" /> Import Journal
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-heading text-[#F0F6FC] mb-3">
-            Bring your fishing history to Executive Angler
-          </h1>
-          <p className="text-base text-[#A8B2BD] max-w-2xl">
-            Old notebooks, spreadsheets, Notion pages, even the notes app — format
-            anything into an Executive Angler–ready CSV with help from AI, then upload
-            it here. You&apos;ll review every session before anything is saved.
-          </p>
-        </div>
 
         {/* Stage: upload */}
         {stage === "upload" && (
