@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Trophy, Fish, Target, MapPin, Calendar, Star, Ruler, Camera, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import TipCard from '@/components/ui/TipCard';
 
 interface CatchRecord {
   id: string;
@@ -184,73 +183,72 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
   }
 
   return (
-    <div className="space-y-8">
-      <TipCard storageKey="trophy-wall-intro" title="Your personal bests">
-        <p>Every measured catch shows up here, with your biggest fish per species surfaced first. Tap any photo to open the lightbox.</p>
-        <p className="text-[#6E7681]">Only catches with a <span className="text-[#E8923A]">length</span> count — log inches on catches to see them on the wall.</p>
-      </TipCard>
-
-      {/* Quick stats row */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
-          <div className="text-3xl font-bold font-mono text-[#E8923A]">{totalMeasured}</div>
-          <div className="text-xs text-[#6E7681] mt-1">Measured Fish</div>
-        </div>
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
-          <div className="text-3xl font-bold font-mono text-[#00B4D8]">{totalSpecies}</div>
-          <div className="text-xs text-[#6E7681] mt-1">Species</div>
-        </div>
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
-          <div className="text-3xl font-bold font-mono text-[#FFD700]">{totalRivers}</div>
-          <div className="text-xs text-[#6E7681] mt-1">Rivers</div>
-        </div>
+    <div className="space-y-6">
+      {/* Bezel stat line — quiet totals under the page header */}
+      <div className="font-mono text-[12px] text-[#6E7681] flex flex-wrap items-baseline gap-x-3 -mt-2">
+        <span><span className="text-[#E8923A] font-semibold">{totalMeasured}</span> measured fish</span>
+        <span className="text-[#3a4150]">·</span>
+        <span><span className="text-[#7BD9C2] font-semibold">{totalSpecies}</span> species</span>
+        <span className="text-[#3a4150]">·</span>
+        <span><span className="text-[#0BA5C7] font-semibold">{totalRivers}</span> rivers</span>
       </div>
 
-      {/* Hero trophy -- biggest fish overall */}
+      {/* Hero trophy — the one thing this page is about. Tighter padding, no big title row. */}
       {biggestOverall && (
-        <div className="bg-gradient-to-br from-[#FFD700]/10 via-[#E8923A]/5 to-[#0D1117] border border-[#FFD700]/30 rounded-xl p-6 md:p-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Trophy className="w-6 h-6 text-[#FFD700]" />
-            <h2 className="font-heading text-2xl text-[#FFD700]">Personal Best</h2>
-          </div>
-          <div className="flex flex-col md:flex-row gap-6 items-start">
+        <div className="relative bg-gradient-to-br from-[#FFD700]/10 via-[#E8923A]/[0.04] to-[#0D1117] border border-[#FFD700]/30 rounded-xl p-5 md:p-6 overflow-hidden">
+          <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#FFD700]">
+            <Trophy className="w-3 h-3" /> Personal best
+          </span>
+          <div className="flex flex-col md:flex-row gap-5 items-start">
             {biggestOverall.fish_image_url && (
-              <div className="w-full md:w-64 h-48 relative rounded-lg overflow-hidden border border-[#21262D]">
+              <div className="w-full md:w-52 h-40 relative rounded-lg overflow-hidden border border-[#21262D] shrink-0">
                 <Image
                   src={biggestOverall.fish_image_url}
                   alt="Personal best catch"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 256px"
+                  sizes="(max-width: 768px) 100vw, 208px"
                 />
               </div>
             )}
-            <div className="flex-1">
-              <div className="text-5xl font-bold font-mono text-cream mb-2">
-                {biggestOverall.length_inches}&quot;
-              </div>
-              {biggestOverall.species && (
-                <div className="text-lg text-[#E8923A] font-medium mb-3">{biggestOverall.species}</div>
-              )}
-              <div className="space-y-1.5 text-sm text-[#A8B2BD]">
-                {biggestSession?.river_name && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#6E7681]" />
-                    {biggestSession.river_name}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-baseline gap-3">
+                <div className="font-mono text-[44px] leading-none font-bold text-[#F0F6FC] tabular-nums">
+                  {biggestOverall.length_inches}&quot;
+                </div>
+                {biggestOverall.species && (
+                  <div className="font-heading text-[18px] text-[#E8923A] tracking-[-0.005em]">
+                    {biggestOverall.species}
                   </div>
+                )}
+              </div>
+              <div className="mt-3 font-mono text-[12px] text-[#A8B2BD] flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                {biggestSession?.river_name && (
+                  <>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-[#6E7681]" />
+                      {biggestSession.river_name}
+                    </span>
+                  </>
                 )}
                 {biggestSession?.date && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#6E7681]" />
-                    {new Date(biggestSession.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  </div>
+                  <>
+                    {biggestSession?.river_name && <span className="text-[#3a4150]">·</span>}
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="w-3 h-3 text-[#6E7681]" />
+                      {new Date(biggestSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  </>
                 )}
                 {biggestOverall.fly_name && (
-                  <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-[#6E7681]" />
-                    {biggestOverall.fly_name}
-                    {biggestOverall.fly_size && <span className="text-[#6E7681]">#{String(biggestOverall.fly_size).replace(/^#/, "")}</span>}
-                  </div>
+                  <>
+                    <span className="text-[#3a4150]">·</span>
+                    <span className="inline-flex items-center gap-1">
+                      <Star className="w-3 h-3 text-[#6E7681]" />
+                      <span className="text-[#C4B5FD]">{biggestOverall.fly_name}</span>
+                      {biggestOverall.fly_size && <span className="text-[#6E7681]"> #{String(biggestOverall.fly_size).replace(/^#/, "")}</span>}
+                    </span>
+                  </>
                 )}
               </div>
             </div>
