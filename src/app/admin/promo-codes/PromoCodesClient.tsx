@@ -140,7 +140,7 @@ export default function PromoCodesClient({
                     variant="outline"
                     size="sm"
                     icon={Copy}
-                    noUpper
+                   
                     className="ml-auto"
                   >
                     {copied === c.code ? "Copied!" : "Copy redeem URL"}

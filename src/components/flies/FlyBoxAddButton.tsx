@@ -148,7 +148,7 @@ export default function FlyBoxAddButton({
           size="md"
           icon={!checking ? (inBox ? Check : Plus) : undefined}
           fullWidth
-          noUpper
+         
           className={className}
         >
           {inBox ? `In Your Box · ${variantCount} · Add another` : "Add to Fly Box"}
@@ -164,7 +164,7 @@ export default function FlyBoxAddButton({
         variant="pill"
         size="sm"
         icon={!checking ? (inBox ? Check : Plus) : undefined}
-        noUpper
+       
         className={className}
         title={inBox ? `In your box (${variantCount}) — add another variant` : "Add to fly box"}
       >

@@ -449,7 +449,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
             }}
             variant="destructive"
             size="sm"
-            noUpper
+           
           >
             Delete
           </Button>
@@ -770,7 +770,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   variant="solid"
                   size="md"
                   icon={Pencil}
-                  noUpper
+                 
                 >
                   Edit Session
                 </Button>
@@ -868,7 +868,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           variant="solid"
                           size="sm"
                           icon={notesSaving ? undefined : Check}
-                          noUpper
+                         
                         >
                           {notesSaving ? "Saving…" : "Save"}
                         </Button>

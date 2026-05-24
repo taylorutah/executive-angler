@@ -159,7 +159,7 @@ export default function SetupClient({
                     variant="outline"
                     size="sm"
                     icon={ExternalLink}
-                    noUpper
+                   
                   >
                     Open SQL Editor
                   </Button>

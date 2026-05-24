@@ -252,7 +252,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           >
             📊 Stats
           </Link>
-          <Button href="/journal/flies" variant="outline" size="sm" noUpper className="flex-1">
+          <Button href="/journal/flies" variant="outline" size="sm" className="flex-1">
             🪰 Flies
           </Button>
           <Link
@@ -261,7 +261,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           >
             🎣 Gear
           </Link>
-          <Button href="/journal/new" variant="solid" size="sm" noUpper className="flex-1">
+          <Button href="/journal/new" variant="solid" size="sm" className="flex-1">
             + Log
           </Button>
         </div>
@@ -438,7 +438,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
             {/* Log buttons */}
             <div className="space-y-2">
-              <Button href="/journal/new" variant="solid" size="md" noUpper fullWidth>
+              <Button href="/journal/new" variant="solid" size="md" fullWidth>
                 + Log Session
               </Button>
               <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#00B4D8] bg-[#00B4D8]/10 px-4 py-2.5 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors">

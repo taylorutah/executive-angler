@@ -105,7 +105,7 @@ export default function CatchMigrationBanner({
             variant="solid"
             size="sm"
             icon={!busy ? ArrowRightLeft : undefined}
-            noUpper
+           
           >
             {busy ? "Moving…" : `Move ${count} ${count === 1 ? "catch" : "catches"}`}
           </Button>

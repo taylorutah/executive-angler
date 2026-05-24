@@ -131,7 +131,7 @@ export default function AddToGearButton({
 
   if (!ready) {
     return (
-      <Button variant="outline" size="sm" loading disabled noUpper>
+      <Button variant="outline" size="sm" loading disabled>
         Loading
       </Button>
     );
@@ -146,7 +146,7 @@ export default function AddToGearButton({
         variant={inLocker ? "outline" : "solid"}
         size="sm"
         icon={!removing ? (inLocker ? Check : Plus) : undefined}
-        noUpper
+       
         aria-label={inLocker ? "Remove from my gear" : "Add to my gear"}
       >
         {inLocker ? "In Your Gear" : "Add to My Gear"}

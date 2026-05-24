@@ -373,13 +373,13 @@ export default function VariantModal({
               View fly box →
             </Link>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" noUpper onClick={onClose} disabled={saving}>
+              <Button variant="outline" size="sm" onClick={onClose} disabled={saving}>
                 Cancel
               </Button>
               <Button
                 variant="solid"
                 size="sm"
-                noUpper
+               
                 icon={saving ? undefined : Plus}
                 loading={saving}
                 onClick={mode === "single" ? submitSingle : submitBulk}

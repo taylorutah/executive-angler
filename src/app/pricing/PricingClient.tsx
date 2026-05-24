@@ -144,7 +144,7 @@ export default function PricingClient({
                   variant="outline"
                   size="lg"
                   fullWidth
-                  noUpper
+                 
                 >
                   {isLoading ? "Loading..." : "Manage Subscription"}
                 </Button>
@@ -223,7 +223,7 @@ export default function PricingClient({
                 </ul>
 
                 {!isLoggedIn && (
-                  <Button href="/signup" variant="outline" size="lg" fullWidth noUpper>
+                  <Button href="/signup" variant="outline" size="lg" fullWidth>
                     Get Started
                   </Button>
                 )}
@@ -272,7 +272,7 @@ export default function PricingClient({
                   variant="solid"
                   size="lg"
                   fullWidth
-                  noUpper
+                 
                 >
                   {isLoading ? "Loading..." : isLoggedIn ? "Subscribe Now" : "Sign Up & Subscribe"}
                 </Button>

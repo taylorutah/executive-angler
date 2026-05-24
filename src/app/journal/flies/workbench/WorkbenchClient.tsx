@@ -483,7 +483,7 @@ export default function WorkbenchClient({
                   <span className="font-mono text-xl text-accent font-semibold tabular-nums">{inventory.length}</span>
                   <span className="text-text-muted text-[11px] uppercase tracking-widest ml-1">materials</span>
                 </div>
-                <Button href="/journal/flies/new" variant="solid" size="md" icon={Plus} noUpper>
+                <Button href="/journal/flies/new" variant="solid" size="md" icon={Plus}>
                   New Fly
                 </Button>
               </div>
@@ -566,7 +566,7 @@ export default function WorkbenchClient({
                   <option value="emerger">Emerger</option>
                   <option value="terrestrial">Terrestrial</option>
                 </select>
-                <Button onClick={() => fetchFlyList(flyQuery, flyCategory)} variant="solid" size="md" noUpper>
+                <Button onClick={() => fetchFlyList(flyQuery, flyCategory)} variant="solid" size="md">
                   Search
                 </Button>
               </div>
@@ -618,10 +618,10 @@ export default function WorkbenchClient({
                   You don’t need an inventory to start — pick a fly and add materials as you go. Or browse the catalog and log what you already own.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target} noUpper>
+                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target}>
                     Pick a Pattern to Tie
                   </Button>
-                  <Button onClick={() => setTab('browse')} variant="outline" size="md" icon={Search} noUpper>
+                  <Button onClick={() => setTab('browse')} variant="outline" size="md" icon={Search}>
                     Browse Materials
                   </Button>
                 </div>
@@ -672,10 +672,10 @@ export default function WorkbenchClient({
                   This tab ranks recipes once you’ve logged some materials. Don’t want to build an inventory first? Start from a pattern instead — the Workbench will tell you what you need.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target} noUpper>
+                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target}>
                     Pick a Pattern
                   </Button>
-                  <Button onClick={() => setTab('inventory')} variant="outline" size="md" icon={Package} noUpper>
+                  <Button onClick={() => setTab('inventory')} variant="outline" size="md" icon={Package}>
                     Manage Inventory
                   </Button>
                 </div>
@@ -723,7 +723,7 @@ export default function WorkbenchClient({
                 onClick={() => { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); }}
                 variant="solid"
                 size="md"
-                noUpper
+               
               >
                 Search
               </Button>
@@ -735,7 +735,7 @@ export default function WorkbenchClient({
                 variant="outline"
                 size="md"
                 icon={Plus}
-                noUpper
+               
                 title="Add a material that's missing from the catalog"
               >
                 New Material
@@ -940,7 +940,7 @@ export default function WorkbenchClient({
                   loading={savingInventory}
                   variant="solid"
                   size="md"
-                  noUpper
+                 
                   fullWidth
                   className="flex-1"
                 >

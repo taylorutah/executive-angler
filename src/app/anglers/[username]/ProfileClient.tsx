@@ -266,7 +266,7 @@ export default function ProfileClient({
           {/* Action row */}
           <div className="mt-5 flex items-center gap-3">
             {isOwnProfile ? (
-              <Button href="/account" variant="outline" size="md" noUpper>
+              <Button href="/account" variant="outline" size="md">
                 Edit profile
               </Button>
             ) : viewerId ? (
@@ -283,7 +283,7 @@ export default function ProfileClient({
                 variant="solid"
                 size="md"
                 icon={UserPlus}
-                noUpper
+               
               >
                 Sign in to follow
               </Button>
@@ -777,7 +777,7 @@ function ReportDialog({
           <Button
             variant="destructive"
             size="md"
-            noUpper
+           
             onClick={handleSubmit}
             disabled={
               submitting || (reason === "other" && text.trim().length === 0)
@@ -853,7 +853,7 @@ function BlockDialog({
           <Button
             variant="destructive"
             size="md"
-            noUpper
+           
             onClick={handleConfirm}
             disabled={submitting}
             loading={submitting}
@@ -883,7 +883,7 @@ function NoticeDialog({
         <h3 className="text-base font-semibold text-[#F0F6FC]">{title}</h3>
         <p className="text-sm text-[#A8B2BD] mt-2">{body}</p>
         <div className="mt-5 flex items-center justify-end">
-          <Button variant="solid" size="md" noUpper onClick={onClose}>
+          <Button variant="solid" size="md" onClick={onClose}>
             OK
           </Button>
         </div>

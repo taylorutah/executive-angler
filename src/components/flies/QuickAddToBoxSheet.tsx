@@ -851,12 +851,12 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
             </p>
           )}
           <div className="flex gap-2">
-            <Button variant="outline" noUpper className="flex-1" onClick={onClose}>
+            <Button variant="outline" className="flex-1" onClick={onClose}>
               Cancel
             </Button>
             <Button
               variant="solid"
-              noUpper
+             
               icon={saving ? undefined : Plus}
               loading={saving}
               className="flex-[2]"
@@ -915,7 +915,7 @@ function SignInPrompt({ flySlug }: { flySlug?: string }) {
           Your fly box, your tying queue, your catch journal — all synced.
         </p>
       </div>
-      <Button variant="solid" noUpper href={`/login?redirect=${encodeURIComponent(redirect)}`}>
+      <Button variant="solid" href={`/login?redirect=${encodeURIComponent(redirect)}`}>
         Sign in
       </Button>
     </div>

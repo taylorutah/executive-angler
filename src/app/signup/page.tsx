@@ -188,7 +188,7 @@ function SignupForm() {
               Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
             <div className="mt-6">
-              <Button href="/journal" variant="solid" size="lg" noUpper>
+              <Button href="/journal" variant="solid" size="lg">
                 Go to Your Journal
               </Button>
             </div>
@@ -357,7 +357,7 @@ function SignupForm() {
               size="lg"
               fullWidth
               loading={loading}
-              noUpper
+             
             >
               {loading ? "Creating account…" : "Create Account"}
             </Button>

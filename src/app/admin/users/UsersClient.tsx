@@ -406,7 +406,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         size="sm"
                         icon={Crown}
                         loading={actionLoading === `${u.is_premium ? "revoke_premium" : "grant_premium"}-${u.user_id}`}
-                        noUpper
+                       
                       >
                         {u.is_premium ? "Revoke Pro" : "Grant Pro"}
                       </Button>
@@ -419,7 +419,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                           size="sm"
                           icon={Ban}
                           loading={actionLoading === `unban-${u.user_id}`}
-                          noUpper
+                         
                         >
                           Unban
                         </Button>
@@ -432,7 +432,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         variant="destructive"
                         size="sm"
                         icon={Trash2}
-                        noUpper
+                       
                       >
                         Delete user
                       </Button>
@@ -449,7 +449,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                           disabled={!!actionLoading || !banReason[u.user_id]?.trim()}
                           variant="destructive"
                           size="sm"
-                          noUpper
+                         
                         >
                           Ban
                         </Button>

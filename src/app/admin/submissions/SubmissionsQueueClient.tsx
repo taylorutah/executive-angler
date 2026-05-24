@@ -137,7 +137,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                         icon={CheckCircle}
                         loading={isLoading("approve")}
                         title="Approve"
-                        noUpper
+                       
                       >
                         Approve
                       </Button>
@@ -185,7 +185,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           size="sm"
                           icon={MessageCircle}
                           loading={isLoading("needs_info")}
-                          noUpper
+                         
                         >
                           Need Info
                         </Button>
@@ -196,7 +196,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           size="sm"
                           icon={XCircle}
                           loading={isLoading("reject")}
-                          noUpper
+                         
                         >
                           Reject
                         </Button>

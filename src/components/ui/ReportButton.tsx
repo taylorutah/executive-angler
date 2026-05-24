@@ -127,7 +127,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
                   size="md"
                   icon={!submitting ? Send : undefined}
                   fullWidth
-                  noUpper
+                 
                 >
                   Submit Report
                 </Button>

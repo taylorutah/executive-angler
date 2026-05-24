@@ -68,16 +68,14 @@ export default function DashboardClient({
                 </p>
               )}
             </div>
-            <div className="hidden sm:flex gap-2 shrink-0">
-              <Button href="/contribute" variant="ghost" size="md" icon={Plus}>Contribute</Button>
-              <Button href="/feedback" variant="ghost" size="md" icon={Lightbulb}>Ideas</Button>
-              <Button href="/journal" variant="solid" size="md" icon={BookOpen}>My Journal</Button>
+            <div className="hidden sm:flex gap-1.5 shrink-0">
+              <Button href="/contribute" variant="ghost" size="sm" icon={Plus}>Contribute</Button>
+              <Button href="/feedback" variant="ghost" size="sm" icon={Lightbulb}>Ideas</Button>
             </div>
           </div>
           <div className="flex sm:hidden gap-2 mt-4">
-            <Button href="/journal" variant="solid" size="md" icon={BookOpen} fullWidth>Journal</Button>
-            <Button href="/contribute" variant="ghost" size="md" icon={Plus} fullWidth>Add</Button>
-            <Button href="/feedback" variant="ghost" size="md" icon={Lightbulb} fullWidth>Ideas</Button>
+            <Button href="/contribute" variant="ghost" size="sm" icon={Plus} fullWidth>Contribute</Button>
+            <Button href="/feedback" variant="ghost" size="sm" icon={Lightbulb} fullWidth>Ideas</Button>
           </div>
         </div>
       </div>

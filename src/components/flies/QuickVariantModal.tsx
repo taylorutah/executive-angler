@@ -263,7 +263,7 @@ export function QuickVariantModal({ material, isOwnPending, onClose, onSaved }: 
             variant="solid"
             size="md"
             icon={status !== 'saving' ? Check : undefined}
-            noUpper
+           
             className="flex-1"
           >
             Save

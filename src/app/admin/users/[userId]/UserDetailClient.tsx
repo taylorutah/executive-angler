@@ -233,7 +233,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                     icon={XCircle}
                     loading={actionLoading === "revoke_pro"}
                     fullWidth
-                    noUpper
+                   
                   >
                     Revoke Pro Access
                   </Button>
@@ -259,7 +259,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                           size="sm"
                           loading={actionLoading === "ban"}
                           fullWidth
-                          noUpper
+                         
                         >
                           {actionLoading === "ban" ? "Banning..." : "Confirm Ban"}
                         </Button>
@@ -267,7 +267,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                           onClick={() => { setShowBanConfirm(false); setBanReason(""); }}
                           variant="outline"
                           size="sm"
-                          noUpper
+                         
                         >
                           Cancel
                         </Button>
@@ -280,7 +280,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                       size="sm"
                       icon={UserX}
                       fullWidth
-                      noUpper
+                     
                     >
                       Ban User
                     </Button>
@@ -294,7 +294,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                     icon={UserCheck}
                     loading={actionLoading === "unban"}
                     fullWidth
-                    noUpper
+                   
                   >
                     Unban User
                   </Button>
@@ -306,7 +306,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                   size="sm"
                   icon={Trash2}
                   fullWidth
-                  noUpper
+                 
                 >
                   Delete User
                 </Button>
@@ -331,7 +331,7 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                 icon={StickyNote}
                 loading={actionLoading === "add_note"}
                 fullWidth
-                noUpper
+               
                 className="mt-2"
               >
                 Save Note

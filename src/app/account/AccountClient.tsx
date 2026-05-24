@@ -622,7 +622,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                       variant="solid"
                       size="md"
                       icon={Save}
-                      noUpper
+                     
                     >
                       {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}
                     </Button>
@@ -743,7 +743,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <p className="text-sm text-[#A8B2BD] max-w-sm mx-auto mb-6">
                       Personal insights, per-river scorecard, and the Best Window Calculator &mdash; built from your own data. Pro is $2.99/mo or $19.99/yr.
                     </p>
-                    <Button href="/pricing" variant="solid" size="lg" icon={Sparkles} noUpper>
+                    <Button href="/pricing" variant="solid" size="lg" icon={Sparkles}>
                       View Plans
                     </Button>
                     <p className="text-[11px] text-[#6E7681] mt-4">
@@ -814,7 +814,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     variant="solid"
                     size="md"
                     icon={Save}
-                    noUpper
+                   
                   >
                     {notifSaving ? "Saving…" : notifSaved ? "Saved ✓" : "Save Preferences"}
                   </Button>
@@ -836,7 +836,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter password" />
                   </div>
                   {pwError && <p className="text-sm text-red-500">{pwError}</p>}
-                  <Button type="submit" variant="outline" size="md" icon={Shield} noUpper>
+                  <Button type="submit" variant="outline" size="md" icon={Shield}>
                     {pwSaved ? "Updated ✓" : "Update Password"}
                   </Button>
                 </form>

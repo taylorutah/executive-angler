@@ -347,7 +347,7 @@ export default function AdminPhotosClient() {
                         icon={XCircle}
                         loading={actionLoading === photo.id}
                         fullWidth
-                        noUpper
+                       
                       >
                         Reject
                       </Button>
@@ -365,7 +365,7 @@ export default function AdminPhotosClient() {
                         icon={XCircle}
                         loading={actionLoading === photo.id}
                         fullWidth
-                        noUpper
+                       
                       >
                         Revoke Approval
                       </Button>
@@ -382,7 +382,7 @@ export default function AdminPhotosClient() {
                         icon={CheckCircle}
                         loading={actionLoading === photo.id}
                         fullWidth
-                        noUpper
+                       
                       >
                         Approve Instead
                       </Button>

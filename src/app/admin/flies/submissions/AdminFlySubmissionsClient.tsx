@@ -224,7 +224,7 @@ export default function AdminFlySubmissionsClient() {
                           variant="outline"
                           size="sm"
                           icon={AlertCircle}
-                          noUpper
+                         
                         >
                           Needs Info
                         </Button>
@@ -234,7 +234,7 @@ export default function AdminFlySubmissionsClient() {
                           variant="destructive"
                           size="sm"
                           icon={XCircle}
-                          noUpper
+                         
                         >
                           Reject
                         </Button>

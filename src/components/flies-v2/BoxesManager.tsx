@@ -342,10 +342,10 @@ export default function BoxesManager({
   return (
     <>
       <div className="mb-6 flex items-center justify-end gap-2">
-        <Button variant="outline" size="sm" icon={Plus} noUpper onClick={openAddTier}>
+        <Button variant="outline" size="sm" icon={Plus} onClick={openAddTier}>
           Add Tier
         </Button>
-        <Button variant="solid" size="sm" icon={Plus} noUpper onClick={openCreate}>
+        <Button variant="solid" size="sm" icon={Plus} onClick={openCreate}>
           New Box
         </Button>
       </div>
@@ -498,7 +498,7 @@ export default function BoxesManager({
             <Plus className="h-8 w-8 text-[#484F58] mx-auto mb-3" />
             <p className="text-[#A8B2BD] text-sm">No boxes yet.</p>
             <div className="mt-3 inline-block">
-              <Button variant="solid" size="sm" icon={Plus} noUpper onClick={openCreate}>
+              <Button variant="solid" size="sm" icon={Plus} onClick={openCreate}>
                 Create your first box
               </Button>
             </div>
@@ -591,10 +591,10 @@ export default function BoxesManager({
             </div>
 
             <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
-              <Button variant="outline" size="sm" noUpper onClick={closeEditor} disabled={busy}>
+              <Button variant="outline" size="sm" onClick={closeEditor} disabled={busy}>
                 Cancel
               </Button>
-              <Button variant="solid" size="sm" noUpper type="submit" disabled={busy} loading={busy}>
+              <Button variant="solid" size="sm" type="submit" disabled={busy} loading={busy}>
                 {busy ? "Saving…" : editor.kind === "edit" ? "Save" : "Create"}
               </Button>
             </div>
@@ -659,10 +659,10 @@ export default function BoxesManager({
             </div>
 
             <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
-              <Button variant="outline" size="sm" noUpper onClick={() => setAddTierOpen(false)} disabled={tierBusy}>
+              <Button variant="outline" size="sm" onClick={() => setAddTierOpen(false)} disabled={tierBusy}>
                 Cancel
               </Button>
-              <Button variant="solid" size="sm" noUpper type="submit" disabled={tierBusy} loading={tierBusy}>
+              <Button variant="solid" size="sm" type="submit" disabled={tierBusy} loading={tierBusy}>
                 {tierBusy ? "Saving…" : "Add"}
               </Button>
             </div>

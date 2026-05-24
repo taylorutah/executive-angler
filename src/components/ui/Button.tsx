@@ -46,8 +46,8 @@ interface CommonProps {
   className?: string;
   fullWidth?: boolean;
   loading?: boolean;
-  /** Mute the uppercase tracking on the Strava variants (e.g. for very long labels). */
-  noUpper?: boolean;
+  /** Opt into Strava-loud uppercase + tracking. Default is sentence case (field-journal voice). */
+  loud?: boolean;
 }
 
 type ButtonAsButton = CommonProps &
@@ -116,21 +116,22 @@ const ICON_SIZE: Record<Size, string> = {
   lg: "h-[18px] w-[18px]",
 };
 
-function variantClasses(variant: Variant, noUpper: boolean | undefined): string {
+function variantClasses(variant: Variant, loud: boolean | undefined): string {
+  const caps = loud ? "uppercase tracking-[0.04em]" : "";
   switch (variant) {
     case "solid":
       return [
         "bg-[#E8923A] text-white border border-transparent",
-        "font-bold",
-        noUpper ? "" : "uppercase tracking-[0.04em]",
+        loud ? "font-bold" : "font-semibold",
+        caps,
         "rounded hover:bg-[#C97726] active:bg-[#B36620]",
         "shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "outline":
       return [
         "bg-transparent text-[#E8923A] border-2 border-[#E8923A]",
-        "font-bold",
-        noUpper ? "" : "uppercase tracking-[0.04em]",
+        loud ? "font-bold" : "font-semibold",
+        caps,
         "rounded hover:bg-[#E8923A] hover:text-white",
         "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
@@ -174,8 +175,8 @@ function variantClasses(variant: Variant, noUpper: boolean | undefined): string 
     case "destructive":
       return [
         "bg-red-900/30 text-red-400 border border-red-800/50",
-        "font-bold",
-        noUpper ? "" : "uppercase tracking-[0.04em]",
+        loud ? "font-bold" : "font-semibold",
+        caps,
         "rounded hover:bg-red-900/50 hover:text-red-300",
       ].join(" ");
   }
@@ -197,13 +198,13 @@ export function Button(props: ButtonProps) {
     className = "",
     fullWidth,
     loading,
-    noUpper,
+    loud,
     ...rest
   } = props as CommonProps & Record<string, unknown>;
 
   const classes = [
     BASE,
-    variantClasses(variant, noUpper),
+    variantClasses(variant, loud),
     SIZE_CLASSES[variant][size],
     fullWidth ? "w-full" : "",
     className,

@@ -431,7 +431,7 @@ export default function DeleteFlyPatternDialog({
               size="md"
               icon={!submitting ? Trash2 : undefined}
               iconRight={!submitting ? ArrowRight : undefined}
-              noUpper
+             
               className="flex-[2]"
             >
               {submitting

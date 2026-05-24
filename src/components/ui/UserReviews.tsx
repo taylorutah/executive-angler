@@ -174,7 +174,7 @@ function ReviewForm({
           loading={saving}
           variant="solid"
           size="md"
-          noUpper
+         
         >
           {saving ? "Saving..." : existingReview ? "Update Review" : "Submit Review"}
         </Button>
@@ -255,7 +255,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
             onClick={() => setShowForm(true)}
             variant="solid"
             size="sm"
-            noUpper
+           
           >
             Write a Review
           </Button>
@@ -314,7 +314,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
                       variant="outline"
                       size="sm"
                       icon={Edit3}
-                      noUpper
+                     
                       aria-label="Edit review"
                     >
                       Edit
@@ -326,7 +326,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
                       variant="destructive"
                       size="sm"
                       icon={deleting === review.id ? undefined : Trash2}
-                      noUpper
+                     
                       aria-label="Delete review"
                     >
                       Delete

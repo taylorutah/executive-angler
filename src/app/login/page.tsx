@@ -130,7 +130,7 @@ function LoginForm() {
               size="lg"
               fullWidth
               loading={loading}
-              noUpper
+             
             >
               {loading ? "Signing in…" : "Sign In with Email"}
             </Button>

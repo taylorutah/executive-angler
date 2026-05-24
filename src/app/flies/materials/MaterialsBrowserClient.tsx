@@ -314,14 +314,14 @@ export default function MaterialsBrowserClient({
               variant="solid"
               size="sm"
               icon={Plus}
-              noUpper
+             
               onClick={() => setSubmitModalOpen(true)}
               title="Submit a new material to the community catalog"
             >
               Submit Material
             </Button>
           ) : (
-            <Button variant="outline" size="sm" icon={Plus} noUpper href="/login?next=/flies/materials">
+            <Button variant="outline" size="sm" icon={Plus} href="/login?next=/flies/materials">
               Sign in to Submit
             </Button>
           )}
@@ -430,7 +430,7 @@ export default function MaterialsBrowserClient({
         {/* Load more */}
         {!loading && hasMore && materials.length > 0 && (
           <div className="mt-8 flex justify-center">
-            <Button variant="outline" noUpper onClick={handleLoadMore} disabled={loadingMore} loading={loadingMore}>
+            <Button variant="outline" onClick={handleLoadMore} disabled={loadingMore} loading={loadingMore}>
               {loadingMore ? "Loading..." : "Load More Materials"}
             </Button>
           </div>

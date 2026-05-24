@@ -67,7 +67,7 @@ export default function DeleteFlyButton({
           variant="destructive"
           size="sm"
           icon={Trash2}
-          noUpper
+         
           aria-label={`Delete ${flyName}`}
           title="Delete this fly"
         >
@@ -124,7 +124,7 @@ export default function DeleteFlyButton({
               variant="destructive"
               size="md"
               icon={!busy ? Trash2 : undefined}
-              noUpper
+             
             >
               {busy ? "Deleting…" : "Delete fly"}
             </Button>

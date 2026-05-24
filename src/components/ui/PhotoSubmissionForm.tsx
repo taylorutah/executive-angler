@@ -272,7 +272,7 @@ export default function PhotoSubmissionForm({
                 href={`/login?redirect=${typeof window !== "undefined" ? window.location.pathname : ""}`}
                 variant="solid"
                 size="md"
-                noUpper
+               
               >
                 Sign In
               </Button>
@@ -533,7 +533,7 @@ export default function PhotoSubmissionForm({
                   size="lg"
                   icon={!submitting ? Upload : undefined}
                   fullWidth
-                  noUpper
+                 
                 >
                   {submitting ? "Uploading..." : "Submit Photo"}
                 </Button>

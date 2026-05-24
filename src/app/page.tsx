@@ -104,12 +104,12 @@ export default function HomePage() {
                     rel="noopener noreferrer"
                     variant="solid"
                     size="lg"
-                    noUpper
+                    loud
                   >
                     <AppleSvg />
                     Download for iPhone
                   </Button>
-                  <Button href="/signup" variant="hero" size="md">
+                  <Button href="/signup" variant="hero" size="md" loud>
                     Open Web App
                   </Button>
                 </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <Button href="/signup" variant="solid" size="lg" noUpper>
+              <Button href="/signup" variant="solid" size="lg" loud>
                 Start Logging Free
               </Button>
             </ScrollAnimation>
@@ -327,7 +327,7 @@ export default function HomePage() {
               </div>
             </ScrollAnimation>
             <ScrollAnimation delay={0.25}>
-              <Button href="/pricing" variant="solid" size="lg" noUpper>
+              <Button href="/pricing" variant="solid" size="lg" loud>
                 See Plans &amp; Pricing
               </Button>
             </ScrollAnimation>
@@ -353,12 +353,12 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 variant="solid"
                 size="lg"
-                noUpper
+                loud
               >
                 <AppleSvg />
                 Download for iPhone
               </Button>
-              <Button href="/signup" variant="hero" size="md">
+              <Button href="/signup" variant="hero" size="md" loud>
                 Open Web App
               </Button>
             </div>

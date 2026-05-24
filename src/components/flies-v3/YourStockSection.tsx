@@ -71,7 +71,7 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
         <p className="text-sm text-[var(--color-text-muted)] mb-4">
           You haven&apos;t saved a version of this fly yet. Add one to track it in your boxes and on the workbench.
         </p>
-        <Button variant="solid" size="sm" icon={Plus} noUpper onClick={() => setCreating(true)}>
+        <Button variant="solid" size="sm" icon={Plus} onClick={() => setCreating(true)}>
           Add a version
         </Button>
 
@@ -110,10 +110,10 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
             {selected.size} selected
           </span>
           <div className="flex items-center gap-2">
-            <Button variant="solid" size="sm" icon={BoxIcon} noUpper onClick={() => setBulkOpen(true)}>
+            <Button variant="solid" size="sm" icon={BoxIcon} onClick={() => setBulkOpen(true)}>
               Manage boxes…
             </Button>
-            <Button variant="outline" size="sm" icon={X} noUpper onClick={clearSelection}>
+            <Button variant="outline" size="sm" icon={X} onClick={clearSelection}>
               Clear
             </Button>
           </div>
@@ -636,7 +636,7 @@ function BulkManageBoxesPanel({
             A square box means all selected versions are in that box; an empty box means none; a dashed box means some.
           </p>
         </div>
-        <Button variant="outline" size="sm" noUpper onClick={onClose}>
+        <Button variant="outline" size="sm" onClick={onClose}>
           Close
         </Button>
       </div>
