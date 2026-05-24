@@ -17,7 +17,7 @@ update_river() {
 }
 
 # Provo River (UT)
-update_river "provo-river" '[{"site_id":"10154200","name":"Near Woodland","section":"Upper Provo"},{"site_id":"10155100","name":"Below Jordanelle Dam","section":"Middle Provo"},{"site_id":"10159500","name":"Below Deer Creek Dam","section":"Lower Provo"},{"site_id":"10163000","name":"At Provo","section":"Lower Provo (Canyon)"}]'
+update_river "provo-river" '[{"site_id":"10154200","name":"Near Woodland","section":"Upper Provo"},{"site_id":"10155500","name":"Near Charleston","section":"Middle Provo"},{"site_id":"10159500","name":"Below Deer Creek Dam","section":"Lower Provo"},{"site_id":"10163000","name":"At Provo","section":"Lower Provo (Canyon)"}]'
 
 # Madison River (MT)
 update_river "river-madison" '[{"site_id":"06038500","name":"Below Hebgen Lake","section":"Upper Madison (50-Mile Riffle)"},{"site_id":"06040000","name":"Near Cameron","section":"Middle Madison"},{"site_id":"06041000","name":"Below Ennis Lake","section":"Bear Trap Canyon"}]'
