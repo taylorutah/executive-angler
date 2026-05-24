@@ -24,9 +24,9 @@ interface Props {
 
 export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCount, milestoneCount }: Props) {
   return (
-    <div className="rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
-      {/* Stat pills */}
-      <div className="flex flex-wrap items-center gap-2 min-w-0 flex-1">
+    <div className="rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-4 flex flex-col gap-3">
+      {/* Row 1 — stat pills */}
+      <div className="flex flex-wrap items-center gap-2">
         <StatPill href="/journal" value={stats.totalFish} label="fish" />
         <StatPill href="/journal" value={stats.totalSessions} label="sessions" />
         {stats.monthFish > 0 && (
@@ -47,8 +47,8 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
         )}
       </div>
 
-      {/* Quick-launch tiles */}
-      <div className="flex items-stretch gap-2 overflow-x-auto lg:overflow-visible -mx-1 px-1 lg:mx-0 lg:px-0">
+      {/* Row 2 — quick-launch tiles */}
+      <div className="flex items-stretch gap-2 overflow-x-auto -mx-1 px-1 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
         <ButtonTile href="/dashboard/workbench" icon={Wrench} iconColor="#E8923A" label="Workbench" badge={tieNextCount} size="sm" />
         <ButtonTile href="/dashboard/insights" icon={Lightbulb} iconColor="#C4B5FD" label="Insights" size="sm" />
         <ButtonTile href="/flies" icon={Feather} iconColor="#7BD9C2" label="Fly Box" badge={flyCount} size="sm" />

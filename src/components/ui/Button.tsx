@@ -32,6 +32,7 @@ type Variant =
   | "brand"
   | "neutral"
   | "pill"
+  | "ghost"
   | "glass"
   | "hero"
   | "destructive";
@@ -87,6 +88,11 @@ const SIZE_CLASSES: Record<Variant, Record<Size, string>> = {
     md: "px-4 py-2 text-[13px]",
     lg: "px-[22px] py-2.5 text-[14px]",
   },
+  ghost: {
+    sm: "px-3 py-1.5 text-[12px]",
+    md: "px-4 py-2 text-[13px]",
+    lg: "px-5 py-2.5 text-[14px]",
+  },
   glass: {
     sm: "px-3 py-1.5 text-[12px]",
     md: "px-4 py-2 text-[13px]",
@@ -118,7 +124,7 @@ function variantClasses(variant: Variant, noUpper: boolean | undefined): string 
         "font-bold",
         noUpper ? "" : "uppercase tracking-[0.04em]",
         "rounded hover:bg-[#C97726] active:bg-[#B36620]",
-        "shadow-sm",
+        "shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "outline":
       return [
@@ -126,6 +132,7 @@ function variantClasses(variant: Variant, noUpper: boolean | undefined): string 
         "font-bold",
         noUpper ? "" : "uppercase tracking-[0.04em]",
         "rounded hover:bg-[#E8923A] hover:text-white",
+        "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "brand":
       return [
@@ -133,6 +140,12 @@ function variantClasses(variant: Variant, noUpper: boolean | undefined): string 
         "border border-[#C97726] font-semibold",
         "rounded shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_1px_2px_rgba(0,0,0,0.15)]",
         "hover:from-[#E8923A] hover:to-[#C97726]",
+        "hover:shadow-md hover:-translate-y-px active:translate-y-0",
+      ].join(" ");
+    case "ghost":
+      return [
+        "bg-transparent text-[#A8B2BD] border border-[#21262D] font-medium",
+        "rounded hover:text-[#F0F6FC] hover:border-[#6E7681]",
       ].join(" ");
     case "neutral":
       return [
