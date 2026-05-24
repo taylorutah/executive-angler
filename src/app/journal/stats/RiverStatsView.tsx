@@ -94,7 +94,7 @@ function RiverRow({
   maxSessions: number;
 }) {
   const lastFished = s.last_session
-    ? new Date(s.last_session + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    ? new Date(s.last_session + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : '—';
   const href = s.river_slug ? `/rivers/${s.river_slug}` : '/journal';
   const intensity = Math.max(0.18, s.total_sessions / maxSessions);
