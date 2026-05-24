@@ -106,6 +106,9 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
   // Overall biggest fish
   const biggestOverall = catches[0]; // already sorted by length desc
   const biggestSession = biggestOverall ? sessionMap.get(biggestOverall.session_id) : null;
+  // Runner-up — useful filler for the hero's right side when the #1 has no photo
+  const runnerUp = catches[1];
+  const runnerUpSession = runnerUp ? sessionMap.get(runnerUp.session_id) : null;
 
   // Biggest fish per species
   const biggestBySpecies = new Map<string, CatchRecord>();
@@ -199,7 +202,7 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
           <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#FFD700]">
             <Trophy className="w-3 h-3" /> Personal best
           </span>
-          <div className="flex flex-col md:flex-row gap-5 items-start">
+          <div className="flex flex-col md:flex-row gap-5 items-stretch">
             {biggestOverall.fish_image_url && (
               <div className="w-full md:w-52 h-40 relative rounded-lg overflow-hidden border border-[#21262D] shrink-0">
                 <Image
@@ -224,12 +227,10 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
               </div>
               <div className="mt-3 font-mono text-[12px] text-[#A8B2BD] flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 {biggestSession?.river_name && (
-                  <>
-                    <span className="inline-flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#6E7681]" />
-                      {biggestSession.river_name}
-                    </span>
-                  </>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#6E7681]" />
+                    {biggestSession.river_name}
+                  </span>
                 )}
                 {biggestSession?.date && (
                   <>
@@ -252,6 +253,34 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                 )}
               </div>
             </div>
+
+            {/* Runner-up — fills the otherwise-empty right side when there's no PB photo */}
+            {!biggestOverall.fish_image_url && runnerUp && (
+              <div className="md:w-56 md:border-l md:border-[#FFD700]/15 md:pl-5 pt-3 md:pt-0 border-t md:border-t-0 border-[#FFD700]/15">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6E7681] mb-2">
+                  Runner-up
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <div className="font-mono text-[24px] leading-none font-semibold text-[#F0F6FC] tabular-nums">
+                    {runnerUp.length_inches}&quot;
+                  </div>
+                  {runnerUp.species && (
+                    <div className="font-heading text-[14px] text-[#E8923A]/85 tracking-[-0.005em]">
+                      {runnerUp.species}
+                    </div>
+                  )}
+                </div>
+                <div className="mt-2 font-mono text-[11px] text-[#6E7681] flex flex-wrap items-baseline gap-x-2">
+                  {runnerUpSession?.river_name && <span>{runnerUpSession.river_name}</span>}
+                  {runnerUpSession?.date && (
+                    <>
+                      {runnerUpSession?.river_name && <span className="text-[#3a4150]">·</span>}
+                      <span>{new Date(runnerUpSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
