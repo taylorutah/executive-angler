@@ -20,6 +20,7 @@ import {
   FollowButton,
   type FollowStatus,
 } from "@/components/social/FollowButton";
+import { Button } from "@/components/ui/Button";
 
 interface ProfileClientProps {
   profile: {
@@ -265,12 +266,9 @@ export default function ProfileClient({
           {/* Action row */}
           <div className="mt-5 flex items-center gap-3">
             {isOwnProfile ? (
-              <Link
-                href="/account"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-2 text-sm font-semibold text-[#F0F6FC] hover:border-[#E8923A]/40 transition-colors"
-              >
+              <Button href="/account" variant="outline" size="md" noUpper>
                 Edit profile
-              </Link>
+              </Button>
             ) : viewerId ? (
               <FollowButton
                 targetUserId={profile.userId}
@@ -278,15 +276,17 @@ export default function ProfileClient({
                 onStatusChange={handleStatusChange}
               />
             ) : (
-              <Link
+              <Button
                 href={`/login?redirect=/anglers/${
                   profile.username || profile.userId
                 }`}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-[#0D1117] hover:bg-[#F0A050] transition-colors"
+                variant="solid"
+                size="md"
+                icon={UserPlus}
+                noUpper
               >
-                <UserPlus className="h-4 w-4" />
                 Sign in to follow
-              </Link>
+              </Button>
             )}
           </div>
         </div>
@@ -774,16 +774,18 @@ function ReportDialog({
           >
             Cancel
           </button>
-          <button
-            type="button"
+          <Button
+            variant="destructive"
+            size="md"
+            noUpper
             onClick={handleSubmit}
             disabled={
               submitting || (reason === "other" && text.trim().length === 0)
             }
-            className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-900/40 border border-red-800/60 text-red-300 hover:bg-red-900/60 disabled:opacity-50 transition-colors"
+            loading={submitting}
           >
             {submitting ? "Submitting…" : "Submit report"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -848,14 +850,16 @@ function BlockDialog({
           >
             Cancel
           </button>
-          <button
-            type="button"
+          <Button
+            variant="destructive"
+            size="md"
+            noUpper
             onClick={handleConfirm}
             disabled={submitting}
-            className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-900/40 border border-red-800/60 text-red-300 hover:bg-red-900/60 disabled:opacity-50 transition-colors"
+            loading={submitting}
           >
             {submitting ? "Blocking…" : "Block"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -879,13 +883,9 @@ function NoticeDialog({
         <h3 className="text-base font-semibold text-[#F0F6FC]">{title}</h3>
         <p className="text-sm text-[#A8B2BD] mt-2">{body}</p>
         <div className="mt-5 flex items-center justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A050] transition-colors"
-          >
+          <Button variant="solid" size="md" noUpper onClick={onClose}>
             OK
-          </button>
+          </Button>
         </div>
       </div>
     </div>

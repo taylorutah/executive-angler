@@ -15,6 +15,7 @@ import { parseLocalDate, formatCatchTime } from "@/lib/date";
 import { RiverStatsWidget } from "@/components/stats/RiverStatsWidget";
 import HelpHint from "@/components/ui/HelpHint";
 import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
+import { Button } from "@/components/ui/Button";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -439,16 +440,20 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
       <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
       {onDelete && (
-        <button
-          onClick={() => {
-            onDelete(photo.id);
-            if (photos.length === 1) onClose();
-            else if (idx >= photos.length - 1) setIdx(0);
-          }}
-          className="absolute top-4 right-16 p-2 rounded-full bg-red-600/80 text-white hover:bg-red-600"
-        >
-          Delete
-        </button>
+        <div className="absolute top-4 right-16">
+          <Button
+            onClick={() => {
+              onDelete(photo.id);
+              if (photos.length === 1) onClose();
+              else if (idx >= photos.length - 1) setIdx(0);
+            }}
+            variant="destructive"
+            size="sm"
+            noUpper
+          >
+            Delete
+          </Button>
+        </div>
       )}
       {photos.length > 1 && (
         <>
@@ -760,10 +765,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             <div className="flex items-center gap-3">
               {isOwner && notesSaved && <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Saved</span>}
               {isOwner && (
-                <Link href={`/journal/${session.id}/edit`}
-                  className="flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4822f] transition-colors shadow-sm">
-                  <Pencil className="h-3.5 w-3.5" /> Edit Session
-                </Link>
+                <Button
+                  href={`/journal/${session.id}/edit`}
+                  variant="solid"
+                  size="md"
+                  icon={Pencil}
+                  noUpper
+                >
+                  Edit Session
+                </Button>
               )}
             </div>
           </div>
@@ -851,10 +861,17 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         className="w-full text-sm text-[#A8B2BD] leading-relaxed rounded-lg border border-[#E8923A]/40 bg-[#161B22] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
                       />
                       <div className="flex items-center gap-2 mt-1.5">
-                        <button onClick={saveNotes} disabled={notesSaving}
-                          className="flex items-center gap-1 text-xs font-bold text-white bg-[#E8923A] rounded-lg px-3 py-1.5 shadow-sm hover:bg-[#C97A1F] disabled:opacity-60 transition-colors">
-                          <Check className="h-3 w-3" /> {notesSaving ? "Saving…" : "Save"}
-                        </button>
+                        <Button
+                          onClick={saveNotes}
+                          disabled={notesSaving}
+                          loading={notesSaving}
+                          variant="solid"
+                          size="sm"
+                          icon={notesSaving ? undefined : Check}
+                          noUpper
+                        >
+                          {notesSaving ? "Saving…" : "Save"}
+                        </Button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
                           className="flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#A8B2BD]">
                           <RotateCcw className="h-3 w-3" /> Cancel

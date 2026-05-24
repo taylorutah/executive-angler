@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, CheckCircle, XCircle, Copy, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 const MIGRATION_SQL = `-- Executive Angler Admin Schema Migration
 -- Run this in Supabase SQL Editor (one-time setup)
@@ -143,22 +144,25 @@ export default function SetupClient({
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Migration SQL</h2>
                 <div className="flex gap-2">
-                  <button
+                  <Button
                     onClick={handleCopy}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-[#E8923A] text-white rounded-lg text-xs font-semibold hover:bg-[#F0A65A] transition-colors"
+                    variant="brand"
+                    size="sm"
+                    icon={Copy}
                   >
-                    <Copy className="h-3 w-3" />
                     {copied ? "Copied!" : "Copy SQL"}
-                  </button>
-                  <a
+                  </Button>
+                  <Button
                     href="https://supabase.com/dashboard/project/qlasxtfbodyxbcuchvxz/sql/new"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-[#21262D] text-[#F0F6FC] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors"
+                    variant="outline"
+                    size="sm"
+                    icon={ExternalLink}
+                    noUpper
                   >
-                    <ExternalLink className="h-3 w-3" />
                     Open SQL Editor
-                  </a>
+                  </Button>
                 </div>
               </div>
               <pre className="text-xs text-[#A8B2BD] bg-[#0D1117] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">

@@ -6,6 +6,7 @@ import {
   ChevronLeft, ChevronRight, Eye, CheckCircle, XCircle, MessageCircle,
   Clock, Send, AlertCircle, Loader2, Shield
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface Submission {
   id: string;
@@ -128,15 +129,18 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
                     {/* Quick actions */}
                     <div className="flex gap-1.5 shrink-0">
-                      <button
+                      <Button
                         onClick={() => handleAction(s.id, "approve")}
                         disabled={!!actionLoading}
-                        className="flex items-center gap-1 px-3 py-2 bg-[#2EA44F]/15 text-[#2EA44F] rounded-lg text-xs font-bold hover:bg-[#2EA44F]/25 disabled:opacity-50"
+                        variant="solid"
+                        size="sm"
+                        icon={CheckCircle}
+                        loading={isLoading("approve")}
                         title="Approve"
+                        noUpper
                       >
-                        {isLoading("approve") ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
                         Approve
-                      </button>
+                      </Button>
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : s.id)}
                         className="p-2 bg-[#21262D] text-[#A8B2BD] rounded-lg hover:text-[#F0F6FC] transition-colors"
@@ -174,22 +178,28 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           placeholder="Reason / feedback..."
                           className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                         />
-                        <button
+                        <Button
                           onClick={() => handleAction(s.id, "needs_info", { feedback: feedback[s.id] || "" })}
                           disabled={!!actionLoading || !feedback[s.id]?.trim()}
-                          className="px-3 py-2 bg-yellow-400/15 text-yellow-400 rounded-lg text-xs font-bold hover:bg-yellow-400/25 disabled:opacity-50"
+                          variant="outline"
+                          size="sm"
+                          icon={MessageCircle}
+                          loading={isLoading("needs_info")}
+                          noUpper
                         >
-                          {isLoading("needs_info") ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <MessageCircle className="h-3.5 w-3.5 inline mr-1" />}
                           Need Info
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           onClick={() => handleAction(s.id, "reject", { reason: feedback[s.id] || "Does not meet quality standards" })}
                           disabled={!!actionLoading}
-                          className="px-3 py-2 bg-red-950/30 text-red-400 rounded-lg text-xs font-bold hover:bg-red-950/50 disabled:opacity-50"
+                          variant="destructive"
+                          size="sm"
+                          icon={XCircle}
+                          loading={isLoading("reject")}
+                          noUpper
                         >
-                          {isLoading("reject") ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <XCircle className="h-3.5 w-3.5 inline mr-1" />}
                           Reject
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}

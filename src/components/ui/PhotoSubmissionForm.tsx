@@ -10,13 +10,12 @@ import {
   ChevronUp,
   CheckCircle,
   AlertCircle,
-  Loader2,
   ImageIcon,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { compressImage } from "@/lib/image-compress";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
+import { Button } from "@/components/ui/Button";
 
 interface PhotoSubmissionFormProps {
   entityType: string;
@@ -269,12 +268,14 @@ export default function PhotoSubmissionForm({
               <p className="text-[#A8B2BD] mb-4">
                 Sign in to submit your photos
               </p>
-              <Link
+              <Button
                 href={`/login?redirect=${typeof window !== "undefined" ? window.location.pathname : ""}`}
-                className="inline-flex items-center px-5 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0F6FC] hover:text-[#E8923A] transition-colors"
+                variant="solid"
+                size="md"
+                noUpper
               >
                 Sign In
-              </Link>
+              </Button>
             </div>
           ) : (
             <>
@@ -524,24 +525,18 @@ export default function PhotoSubmissionForm({
                   </label>
                 </div>
 
-                {/* Submit Button */}
-                <button
+                <Button
                   type="submit"
                   disabled={submitting || !file || !rightsConfirmed}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#F0F6FC] hover:text-[#E8923A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  loading={submitting}
+                  variant="solid"
+                  size="lg"
+                  icon={!submitting ? Upload : undefined}
+                  fullWidth
+                  noUpper
                 >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Uploading...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="h-4 w-4" />
-                      Submit Photo
-                    </>
-                  )}
-                </button>
+                  {submitting ? "Uploading..." : "Submit Photo"}
+                </Button>
               </form>
             </>
           )}

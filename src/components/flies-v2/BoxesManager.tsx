@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import {
   DEFAULT_TIER_KEYS,
@@ -341,22 +342,12 @@ export default function BoxesManager({
   return (
     <>
       <div className="mb-6 flex items-center justify-end gap-2">
-        <button
-          type="button"
-          onClick={openAddTier}
-          className="inline-flex items-center gap-2 rounded-md border border-[#30363D] bg-transparent px-3 py-1.5 text-sm font-medium text-[#A8B2BD] hover:border-[#E8923A] hover:text-[#F0F6FC] transition-colors"
-        >
-          <Plus className="h-4 w-4" />
+        <Button variant="outline" size="sm" icon={Plus} noUpper onClick={openAddTier}>
           Add Tier
-        </button>
-        <button
-          type="button"
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-md bg-[#E8923A] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#d17d28] transition-colors"
-        >
-          <Plus className="h-4 w-4" />
+        </Button>
+        <Button variant="solid" size="sm" icon={Plus} noUpper onClick={openCreate}>
           New Box
-        </button>
+        </Button>
       </div>
 
       <section className="space-y-8">
@@ -506,14 +497,11 @@ export default function BoxesManager({
           <div className="rounded-lg border border-[#21262D] bg-[#161B22] p-10 text-center">
             <Plus className="h-8 w-8 text-[#484F58] mx-auto mb-3" />
             <p className="text-[#A8B2BD] text-sm">No boxes yet.</p>
-            <button
-              type="button"
-              onClick={openCreate}
-              className="mt-3 inline-flex items-center gap-2 rounded-md bg-[#E8923A] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#d17d28]"
-            >
-              <Plus className="h-4 w-4" />
-              Create your first box
-            </button>
+            <div className="mt-3 inline-block">
+              <Button variant="solid" size="sm" icon={Plus} noUpper onClick={openCreate}>
+                Create your first box
+              </Button>
+            </div>
           </div>
         )}
       </section>
@@ -603,21 +591,12 @@ export default function BoxesManager({
             </div>
 
             <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
-              <button
-                type="button"
-                onClick={closeEditor}
-                disabled={busy}
-                className="rounded px-3 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] disabled:opacity-50"
-              >
+              <Button variant="outline" size="sm" noUpper onClick={closeEditor} disabled={busy}>
                 Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={busy}
-                className="rounded bg-[#E8923A] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#d17d28] disabled:opacity-50"
-              >
+              </Button>
+              <Button variant="solid" size="sm" noUpper type="submit" disabled={busy} loading={busy}>
                 {busy ? "Saving…" : editor.kind === "edit" ? "Save" : "Create"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -680,21 +659,12 @@ export default function BoxesManager({
             </div>
 
             <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
-              <button
-                type="button"
-                onClick={() => setAddTierOpen(false)}
-                disabled={tierBusy}
-                className="rounded px-3 py-1.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] disabled:opacity-50"
-              >
+              <Button variant="outline" size="sm" noUpper onClick={() => setAddTierOpen(false)} disabled={tierBusy}>
                 Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={tierBusy}
-                className="rounded bg-[#E8923A] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#d17d28] disabled:opacity-50"
-              >
+              </Button>
+              <Button variant="solid" size="sm" noUpper type="submit" disabled={tierBusy} loading={tierBusy}>
                 {tierBusy ? "Saving…" : "Add"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

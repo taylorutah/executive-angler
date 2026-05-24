@@ -14,6 +14,7 @@ import {
   Search,
 } from "lucide-react";
 import type { PromoCodeRow, PromoRedemptionRow } from "./page";
+import { Button } from "@/components/ui/Button";
 
 export default function PromoCodesClient({
   codes,
@@ -134,13 +135,16 @@ export default function PromoCodesClient({
                   <span className="text-xs text-[#A8B2BD]">
                     {c.duration_days}d Pro
                   </span>
-                  <button
+                  <Button
                     onClick={() => copyRedeemUrl(c.code)}
-                    className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#21262D] text-[#A8B2BD] hover:text-[#F0F6FC] text-xs"
+                    variant="outline"
+                    size="sm"
+                    icon={Copy}
+                    noUpper
+                    className="ml-auto"
                   >
-                    <Copy className="h-3 w-3" />
                     {copied === c.code ? "Copied!" : "Copy redeem URL"}
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="grid grid-cols-4 gap-3 mb-3">

@@ -14,6 +14,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Wrench, Pencil, Trash2, Plus, Box as BoxIcon, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import type { Fly, FlyConfigurationWithBoxes } from "@/types/flies";
 import ConfigureSheet from "./ConfigureSheet";
 import { summarizeVersion } from "./summarize-version";
@@ -70,14 +71,9 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
         <p className="text-sm text-[var(--color-text-muted)] mb-4">
           You haven&apos;t saved a version of this fly yet. Add one to track it in your boxes and on the workbench.
         </p>
-        <button
-          type="button"
-          onClick={() => setCreating(true)}
-          className="inline-flex items-center gap-2 rounded-md bg-[#E8923A] px-4 py-2 text-sm font-medium text-white hover:bg-[#d17d28]"
-        >
-          <Plus className="h-4 w-4" />
+        <Button variant="solid" size="sm" icon={Plus} noUpper onClick={() => setCreating(true)}>
           Add a version
-        </button>
+        </Button>
 
         {creating && (
           <ConfigureSheet
@@ -103,14 +99,9 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
             You tie this fly in {versions.length} version{versions.length === 1 ? "" : "s"}.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setCreating(true)}
-          className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-3 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20"
-        >
-          <Plus className="h-3.5 w-3.5" />
+        <Button variant="pill" size="sm" icon={Plus} onClick={() => setCreating(true)}>
           Add another version
-        </button>
+        </Button>
       </div>
 
       {selected.size > 0 && (
@@ -119,22 +110,12 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
             {selected.size} selected
           </span>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setBulkOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1 text-xs font-medium text-white hover:bg-[#d17d28]"
-            >
-              <BoxIcon className="h-3.5 w-3.5" />
+            <Button variant="solid" size="sm" icon={BoxIcon} noUpper onClick={() => setBulkOpen(true)}>
               Manage boxes…
-            </button>
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="inline-flex items-center gap-1 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-2 py-1 text-xs text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
-            >
-              <X className="h-3 w-3" />
+            </Button>
+            <Button variant="outline" size="sm" icon={X} noUpper onClick={clearSelection}>
               Clear
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -655,13 +636,9 @@ function BulkManageBoxesPanel({
             A square box means all selected versions are in that box; an empty box means none; a dashed box means some.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-2 py-1 text-xs text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
-        >
+        <Button variant="outline" size="sm" noUpper onClick={onClose}>
           Close
-        </button>
+        </Button>
       </div>
       {boxes.length === 0 ? (
         <p className="text-xs text-[var(--color-text-muted)]">

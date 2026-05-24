@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
 import { compressImage } from "@/lib/image-compress";
+import { Button } from "@/components/ui/Button";
 
 const AWARD_EMOJI_MAP: Record<string, string> = {
   first_timer: "🪝", sessions_10: "🪝",
@@ -614,11 +615,17 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   </div>
 
                   <div className="flex items-center gap-3 pt-2">
-                    <button type="submit" disabled={saveDisabled}
-                      className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-2.5 text-white text-sm font-semibold hover:bg-[#D4782A] disabled:opacity-50 transition-colors">
-                      <Save className="h-4 w-4" />
+                    <Button
+                      type="submit"
+                      disabled={saveDisabled}
+                      loading={saving}
+                      variant="solid"
+                      size="md"
+                      icon={Save}
+                      noUpper
+                    >
                       {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </div>
@@ -736,13 +743,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <p className="text-sm text-[#A8B2BD] max-w-sm mx-auto mb-6">
                       Personal insights, per-river scorecard, and the Best Window Calculator &mdash; built from your own data. Pro is $2.99/mo or $19.99/yr.
                     </p>
-                    <Link
-                      href="/pricing"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors"
-                    >
-                      <Sparkles className="h-4 w-4" />
+                    <Button href="/pricing" variant="solid" size="lg" icon={Sparkles} noUpper>
                       View Plans
-                    </Link>
+                    </Button>
                     <p className="text-[11px] text-[#6E7681] mt-4">
                       Starting at $2.50/mo. Same price on iOS, Android, and web.
                     </p>
@@ -803,11 +806,18 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-[#21262D]">
-                  <button type="button" onClick={handleSaveNotifications} disabled={notifSaving}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-2.5 text-white text-sm font-semibold hover:bg-[#D4782A] disabled:opacity-50 transition-colors">
-                    <Save className="h-4 w-4" />
+                  <Button
+                    type="button"
+                    onClick={handleSaveNotifications}
+                    disabled={notifSaving}
+                    loading={notifSaving}
+                    variant="solid"
+                    size="md"
+                    icon={Save}
+                    noUpper
+                  >
                     {notifSaving ? "Saving…" : notifSaved ? "Saved ✓" : "Save Preferences"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
@@ -826,11 +836,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter password" />
                   </div>
                   {pwError && <p className="text-sm text-red-500">{pwError}</p>}
-                  <button type="submit"
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#1F2937] border border-[#21262D] px-6 py-2.5 text-[#F0F6FC] text-sm font-semibold hover:bg-[#161B22] transition-colors">
-                    <Shield className="h-4 w-4" />
+                  <Button type="submit" variant="outline" size="md" icon={Shield} noUpper>
                     {pwSaved ? "Updated ✓" : "Update Password"}
-                  </button>
+                  </Button>
                 </form>
               </div>
             )}
@@ -895,15 +903,17 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     </div>
 
                     <div className="flex items-center gap-3 pt-2 border-t border-[#21262D]">
-                      <button
+                      <Button
                         type="button"
                         onClick={handleClearDemoContent}
                         disabled={demoClearing || !demoProbed || !hasDemoContent}
-                        className="inline-flex items-center gap-2 rounded-lg bg-red-900/30 border border-red-800/50 text-red-400 px-4 py-2 text-sm font-semibold hover:bg-red-900/50 hover:text-red-300 disabled:opacity-50 transition-colors"
+                        loading={demoClearing}
+                        variant="destructive"
+                        size="md"
+                        icon={Trash2}
                       >
-                        <Trash2 className="h-4 w-4" />
-                        {demoClearing ? "Clearing…" : demoCleared ? "Cleared ✓" : "Clear demo content"}
-                      </button>
+                        {demoClearing ? "Clearing…" : demoCleared ? "Cleared ✓" : "Clear Demo Content"}
+                      </Button>
                       {demoCleared && (
                         <span className="text-xs text-[#2EA44F]">Your journal is empty and ready.</span>
                       )}

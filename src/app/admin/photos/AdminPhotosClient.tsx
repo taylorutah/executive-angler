@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   ExternalLink,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 type TabKey = "pending" | "approved" | "rejected";
 
@@ -327,65 +328,64 @@ export default function AdminPhotosClient() {
                   {/* Action Buttons */}
                   {photo.status === "pending" && (
                     <div className="flex gap-3 pt-2 border-t border-[#21262D]">
-                      <button
+                      <Button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#E8923A]-light transition-colors disabled:opacity-50"
+                        variant="brand"
+                        size="sm"
+                        icon={CheckCircle}
+                        loading={actionLoading === photo.id}
+                        fullWidth
                       >
-                        {actionLoading === photo.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <CheckCircle className="h-4 w-4" />
-                        )}
                         Approve
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => handleAction(photo.id, "reject")}
                         disabled={actionLoading === photo.id}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#161B22] text-red-600 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        variant="destructive"
+                        size="sm"
+                        icon={XCircle}
+                        loading={actionLoading === photo.id}
+                        fullWidth
+                        noUpper
                       >
-                        {actionLoading === photo.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <XCircle className="h-4 w-4" />
-                        )}
                         Reject
-                      </button>
+                      </Button>
                     </div>
                   )}
 
                   {/* Reverse action for already-reviewed photos */}
                   {photo.status === "approved" && (
                     <div className="pt-2 border-t border-[#21262D]">
-                      <button
+                      <Button
                         onClick={() => handleAction(photo.id, "reject")}
                         disabled={actionLoading === photo.id}
-                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-red-500 text-sm font-medium rounded-lg border border-[#21262D] hover:bg-red-50 transition-colors disabled:opacity-50"
+                        variant="destructive"
+                        size="sm"
+                        icon={XCircle}
+                        loading={actionLoading === photo.id}
+                        fullWidth
+                        noUpper
                       >
-                        {actionLoading === photo.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <XCircle className="h-4 w-4" />
-                        )}
                         Revoke Approval
-                      </button>
+                      </Button>
                     </div>
                   )}
 
                   {photo.status === "rejected" && (
                     <div className="pt-2 border-t border-[#21262D]">
-                      <button
+                      <Button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}
-                        className="w-full flex items-center justify-center gap-1.5 px-4 py-2 text-[#E8923A] text-sm font-medium rounded-lg border border-[#21262D] hover:bg-green-50 transition-colors disabled:opacity-50"
+                        variant="outline"
+                        size="sm"
+                        icon={CheckCircle}
+                        loading={actionLoading === photo.id}
+                        fullWidth
+                        noUpper
                       >
-                        {actionLoading === photo.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <CheckCircle className="h-4 w-4" />
-                        )}
                         Approve Instead
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>

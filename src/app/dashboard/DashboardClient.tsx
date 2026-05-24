@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Fish, MapPin, ChevronRight, BookOpen, Plus, Lightbulb, Sparkles,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import type { RiverStats } from "@/types/awards";
 import MyFliesWidget, { type MyFliesItem } from "@/components/dashboard/MyFliesWidget";
 import RiverSectionsGrid, {
@@ -68,45 +69,15 @@ export default function DashboardClient({
               )}
             </div>
             <div className="hidden sm:flex gap-2 shrink-0">
-              <Link
-                href="/contribute"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#E8923A] hover:text-[#E8923A] transition-colors"
-              >
-                <Plus className="h-4 w-4" /> Contribute
-              </Link>
-              <Link
-                href="/feedback"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg hover:border-[#0BA5C7] hover:text-[#0BA5C7] transition-colors"
-              >
-                <Lightbulb className="h-4 w-4" /> Ideas
-              </Link>
-              <Link
-                href="/journal"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors"
-              >
-                <BookOpen className="h-4 w-4" /> My Journal
-              </Link>
+              <Button href="/contribute" variant="outline" size="md" icon={Plus}>Contribute</Button>
+              <Button href="/feedback" variant="outline" size="md" icon={Lightbulb}>Ideas</Button>
+              <Button href="/journal" variant="solid" size="md" icon={BookOpen}>My Journal</Button>
             </div>
           </div>
           <div className="flex sm:hidden gap-2 mt-4">
-            <Link
-              href="/journal"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#E8923A] text-white text-sm font-semibold rounded-lg"
-            >
-              <BookOpen className="h-4 w-4" /> Journal
-            </Link>
-            <Link
-              href="/contribute"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg"
-            >
-              <Plus className="h-4 w-4" /> Add
-            </Link>
-            <Link
-              href="/feedback"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] text-sm font-medium rounded-lg"
-            >
-              <Lightbulb className="h-4 w-4" /> Ideas
-            </Link>
+            <Button href="/journal" variant="solid" size="md" icon={BookOpen} fullWidth>Journal</Button>
+            <Button href="/contribute" variant="outline" size="md" icon={Plus} fullWidth>Add</Button>
+            <Button href="/feedback" variant="outline" size="md" icon={Lightbulb} fullWidth>Ideas</Button>
           </div>
         </div>
       </div>

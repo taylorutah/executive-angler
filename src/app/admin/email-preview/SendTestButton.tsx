@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -52,14 +53,16 @@ export default function SendTestButton({
         className="text-xs px-2 py-1 rounded border border-[#D4CBB8] bg-white text-[#111827] placeholder:text-[#9CA3AF] w-56"
         disabled={status === "sending"}
       />
-      <button
+      <Button
         type="button"
         onClick={handleSend}
         disabled={status === "sending" || !to.includes("@")}
-        className="text-xs px-3 py-1 rounded-md bg-[#D4751F] text-white font-medium hover:bg-[#B86417] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        variant="brand"
+        size="sm"
+        loading={status === "sending"}
       >
         {status === "sending" ? "Sending…" : "Send test"}
-      </button>
+      </Button>
       {status === "sent" && (
         <span className="text-xs text-[#16A34A] font-medium">✓ {message}</span>
       )}

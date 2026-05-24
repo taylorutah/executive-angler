@@ -7,6 +7,7 @@ import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
+import { Button } from "@/components/ui/Button";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
@@ -400,15 +401,17 @@ export default async function FlyShopPage({ params }: Props) {
                   Contact
                 </h3>
                 {shop.websiteUrl && (
-                  <a
+                  <Button
                     href={shop.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-[#161B22] text-[#E8923A] font-semibold rounded-lg hover:bg-[#0D1117] transition-colors"
+                    variant="solid"
+                    size="md"
+                    icon={ExternalLink}
+                    fullWidth
                   >
-                    <ExternalLink className="h-4 w-4" />
                     Visit Website
-                  </a>
+                  </Button>
                 )}
                 <div className="mt-4 space-y-2 text-sm">
                   {shop.phone && (

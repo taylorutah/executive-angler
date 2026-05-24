@@ -35,6 +35,7 @@ import {
   Check,
   Anchor,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface UsageSession {
   id: string;
@@ -422,17 +423,17 @@ export default function DeleteFlyPatternDialog({
             >
               Cancel
             </button>
-            <button
-              type="button"
+            <Button
               onClick={handleConfirm}
               disabled={submitDisabled}
-              className="flex-[2] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500 text-white text-sm font-semibold hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              loading={submitting}
+              variant="destructive"
+              size="md"
+              icon={!submitting ? Trash2 : undefined}
+              iconRight={!submitting ? ArrowRight : undefined}
+              noUpper
+              className="flex-[2]"
             >
-              {submitting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Trash2 className="h-4 w-4" />
-              )}
               {submitting
                 ? "Working…"
                 : mode === "reassign" && hasCatches
@@ -440,8 +441,7 @@ export default function DeleteFlyPatternDialog({
                 : mode === "delete-catches"
                 ? "Delete catches + fly"
                 : "Delete fly"}
-              {!submitting && <ArrowRight className="h-3.5 w-3.5" />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

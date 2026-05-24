@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   AlertCircle,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 type Status = "pending" | "approved" | "rejected" | "needs_info";
 
@@ -207,27 +208,36 @@ export default function AdminFlySubmissionsClient() {
                         className="w-full bg-[#0D1117] border border-white/10 rounded px-3 py-2 text-sm placeholder:text-cream/30"
                       />
                       <div className="flex gap-2">
-                        <button
+                        <Button
                           disabled={actingId === sub.id}
                           onClick={() => act(sub.id, "approve")}
-                          className="bg-[#E8923A] hover:bg-[#E8923A]/90 disabled:opacity-50 text-black font-medium px-4 py-1.5 rounded text-sm flex items-center gap-1.5"
+                          variant="brand"
+                          size="sm"
+                          icon={CheckCircle}
+                          loading={actingId === sub.id}
                         >
-                          <CheckCircle className="w-4 h-4" /> Approve → canonical
-                        </button>
-                        <button
+                          Approve → canonical
+                        </Button>
+                        <Button
                           disabled={actingId === sub.id}
                           onClick={() => act(sub.id, "needs_info")}
-                          className="bg-yellow-600/20 hover:bg-yellow-600/30 text-yellow-300 px-4 py-1.5 rounded text-sm flex items-center gap-1.5 border border-yellow-600/30"
+                          variant="outline"
+                          size="sm"
+                          icon={AlertCircle}
+                          noUpper
                         >
-                          <AlertCircle className="w-4 h-4" /> Needs Info
-                        </button>
-                        <button
+                          Needs Info
+                        </Button>
+                        <Button
                           disabled={actingId === sub.id}
                           onClick={() => act(sub.id, "reject")}
-                          className="bg-red-600/20 hover:bg-red-600/30 text-red-300 px-4 py-1.5 rounded text-sm flex items-center gap-1.5 border border-red-600/30"
+                          variant="destructive"
+                          size="sm"
+                          icon={XCircle}
+                          noUpper
                         >
-                          <XCircle className="w-4 h-4" /> Reject
-                        </button>
+                          Reject
+                        </Button>
                       </div>
                     </div>
                   )}

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, Plus, Loader2 } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import GearForm, { type PresetProduct } from "@/components/gear/GearForm";
+import { Button } from "@/components/ui/Button";
 import type { GearType } from "@/types/gear";
 import type { GearProductCategory } from "@/types/gear-catalog";
 
@@ -130,37 +131,26 @@ export default function AddToGearButton({
 
   if (!ready) {
     return (
-      <button
-        disabled
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#161B22] text-[#6E7681] text-sm font-semibold"
-      >
-        <Loader2 className="h-4 w-4 animate-spin" />
+      <Button variant="outline" size="sm" loading disabled noUpper>
         Loading
-      </button>
+      </Button>
     );
   }
 
   return (
     <>
-      <button
+      <Button
         onClick={handleClick}
         disabled={removing}
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-          inLocker
-            ? "bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/40 hover:bg-[#E8923A]/20"
-            : "bg-[#E8923A] text-[#0D1117] hover:bg-[#E8923A]/90"
-        }`}
+        loading={removing}
+        variant={inLocker ? "outline" : "solid"}
+        size="sm"
+        icon={!removing ? (inLocker ? Check : Plus) : undefined}
+        noUpper
         aria-label={inLocker ? "Remove from my gear" : "Add to my gear"}
       >
-        {removing ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : inLocker ? (
-          <Check className="h-4 w-4" />
-        ) : (
-          <Plus className="h-4 w-4" />
-        )}
         {inLocker ? "In Your Gear" : "Add to My Gear"}
-      </button>
+      </Button>
 
       <GearForm
         open={formOpen}

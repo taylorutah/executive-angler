@@ -37,6 +37,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/Button";
 import type { Personalizations } from "@/lib/flies/resolveFlyForViewer";
 import { suggestVariantLabel } from "@/lib/flies/variantLabel";
 
@@ -850,13 +851,15 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
             </p>
           )}
           <div className="flex gap-2">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg border border-[#21262D] text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22] transition-colors"
-            >
+            <Button variant="outline" noUpper className="flex-1" onClick={onClose}>
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="solid"
+              noUpper
+              icon={saving ? undefined : Plus}
+              loading={saving}
+              className="flex-[2]"
               onClick={handleSave}
               disabled={
                 saving ||
@@ -865,19 +868,13 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 selectedBoxIds.length === 0 ||
                 boxes.length === 0
               }
-              className="flex-[2] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#E8923A] text-[#0D1117] text-sm font-semibold hover:bg-[#F0A65A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {saving ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Plus className="h-4 w-4" />
-              )}
               {saving
                 ? "Saving…"
                 : selectedBoxIds.length > 1
                 ? `Add to ${selectedBoxIds.length} boxes`
                 : "Add to box"}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -918,12 +915,9 @@ function SignInPrompt({ flySlug }: { flySlug?: string }) {
           Your fly box, your tying queue, your catch journal — all synced.
         </p>
       </div>
-      <Link
-        href={`/login?redirect=${encodeURIComponent(redirect)}`}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] text-[#0D1117] px-4 py-2 text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
-      >
+      <Button variant="solid" noUpper href={`/login?redirect=${encodeURIComponent(redirect)}`}>
         Sign in
-      </Link>
+      </Button>
     </div>
   );
 }

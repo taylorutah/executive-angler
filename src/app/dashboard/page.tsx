@@ -293,8 +293,14 @@ export default async function DashboardPage() {
     return s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t && !SECTION_TOKENS_YR.has(t));
   }
 
+  // Build "Your Rivers" — last 6 distinct (river, gauge section) the user has fished.
+  // Iterate by recency (last_session desc), dedupe by (river_id + default_site_id).
+  const yourRiversByRecency = [...riverStatsArr].sort((a, b) =>
+    (b.last_session || "").localeCompare(a.last_session || "")
+  );
   const yourRiversDTO: YourRiverDTO[] = [];
-  for (const rs of riverStatsArr) {
+  const seenRiverSection = new Set<string>();
+  for (const rs of yourRiversByRecency) {
     const riverId = rs.river_id;
     if (!riverId) continue;
     const river = riversById.get(riverId);
@@ -311,6 +317,10 @@ export default async function DashboardPage() {
       defaultSiteId = matched?.site_id ?? river.gauges[0].site_id;
     }
 
+    const dedupeKey = `${riverId}::${defaultSiteId}`;
+    if (seenRiverSection.has(dedupeKey)) continue;
+    seenRiverSection.add(dedupeKey);
+
     yourRiversDTO.push({
       river_id: riverId,
       river_name: river.name,
@@ -318,6 +328,8 @@ export default async function DashboardPage() {
       gauges: river.gauges,
       default_site_id: defaultSiteId,
     });
+
+    if (yourRiversDTO.length >= 6) break;
   }
 
   return (

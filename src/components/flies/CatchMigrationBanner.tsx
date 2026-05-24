@@ -9,7 +9,8 @@
  * "migrate" or "skip" so it doesn't nag.
  */
 import { useEffect, useState } from "react";
-import { ArrowRightLeft, X, Loader2 } from "lucide-react";
+import { ArrowRightLeft, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface Props {
   patternId: string;
@@ -97,15 +98,17 @@ export default function CatchMigrationBanner({
           Move {count === 1 ? "it" : "them"} to this personal pattern so your stats line up?
         </p>
         <div className="mt-2 flex items-center gap-2">
-          <button
-            type="button"
+          <Button
             onClick={migrate}
             disabled={busy}
-            className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-md bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A65A] disabled:opacity-60 transition-colors"
+            loading={busy}
+            variant="solid"
+            size="sm"
+            icon={!busy ? ArrowRightLeft : undefined}
+            noUpper
           >
-            {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : <ArrowRightLeft className="h-3 w-3" />}
             {busy ? "Moving…" : `Move ${count} ${count === 1 ? "catch" : "catches"}`}
-          </button>
+          </Button>
           <button
             type="button"
             onClick={dismiss}

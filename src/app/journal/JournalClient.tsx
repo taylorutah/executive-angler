@@ -11,6 +11,7 @@ import Link from "next/link";
 import TipCard from "@/components/ui/TipCard";
 import FilterDropdown from "@/components/ui/FilterDropdown";
 import FilterBar from "@/components/ui/FilterBar";
+import { Button } from "@/components/ui/Button";
 import dynamic from "next/dynamic";
 
 const JournalMapView = dynamic(
@@ -251,24 +252,18 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           >
             📊 Stats
           </Link>
-          <Link
-            href="/journal/flies"
-            className="flex-1 text-center rounded-md border border-[#E8923A] px-2 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/10"
-          >
+          <Button href="/journal/flies" variant="outline" size="sm" noUpper className="flex-1">
             🪰 Flies
-          </Link>
+          </Button>
           <Link
             href="/account/gear"
             className="flex-1 text-center rounded-md border border-[#0BA5C7] px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/10"
           >
             🎣 Gear
           </Link>
-          <Link
-            href="/journal/new"
-            className="flex-1 text-center rounded-md bg-[#E8923A] px-2 py-1.5 text-xs font-medium text-white hover:bg-[#E8923A]/80"
-          >
+          <Button href="/journal/new" variant="solid" size="sm" noUpper className="flex-1">
             + Log
-          </Link>
+          </Button>
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4">
@@ -443,9 +438,9 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
             {/* Log buttons */}
             <div className="space-y-2">
-              <Link href="/journal/new" className="block w-full text-center rounded-xl bg-[#E8923A] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D1117] transition-colors shadow-sm">
+              <Button href="/journal/new" variant="solid" size="md" noUpper fullWidth>
                 + Log Session
-              </Link>
+              </Button>
               <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#00B4D8] bg-[#00B4D8]/10 px-4 py-2.5 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors">
                 + Add Fly Pattern
               </Link>

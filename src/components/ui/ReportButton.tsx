@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Flag, X, Send, Loader2, CheckCircle } from "lucide-react";
+import { Flag, X, Send, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface ReportButtonProps {
   entityType: string;
@@ -118,14 +119,18 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
 
                 {error && <p className="text-xs text-red-400 mb-3">{error}</p>}
 
-                <button
+                <Button
                   onClick={handleSubmit}
                   disabled={!reason || submitting}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#E8923A] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] disabled:opacity-50"
+                  loading={submitting}
+                  variant="solid"
+                  size="md"
+                  icon={!submitting ? Send : undefined}
+                  fullWidth
+                  noUpper
                 >
-                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   Submit Report
-                </button>
+                </Button>
               </>
             )}
           </div>

@@ -17,6 +17,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Trash2, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface Props {
   flyId: string;
@@ -62,15 +63,16 @@ export default function DeleteFlyButton({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <button
-          type="button"
+        <Button
+          variant="destructive"
+          size="sm"
+          icon={Trash2}
+          noUpper
           aria-label={`Delete ${flyName}`}
           title="Delete this fly"
-          className="inline-flex items-center gap-1.5 rounded-md border border-rose-500/40 bg-rose-500/10 px-2.5 py-1.5 text-xs font-medium text-rose-400 hover:bg-rose-500/20 transition-colors"
         >
-          <Trash2 className="h-3.5 w-3.5" />
           Delete
-        </button>
+        </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />
@@ -115,15 +117,17 @@ export default function DeleteFlyButton({
                 Cancel
               </button>
             </Dialog.Close>
-            <button
-              type="button"
+            <Button
               onClick={handleDelete}
               disabled={busy}
-              className="inline-flex items-center gap-1.5 rounded-md bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-600 disabled:opacity-60"
+              loading={busy}
+              variant="destructive"
+              size="md"
+              icon={!busy ? Trash2 : undefined}
+              noUpper
             >
-              <Trash2 className="h-3.5 w-3.5" />
               {busy ? "Deleting…" : "Delete fly"}
-            </button>
+            </Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

@@ -13,6 +13,7 @@ import HelpHint from '@/components/ui/HelpHint';
 import TipCard from '@/components/ui/TipCard';
 import { SubmitMaterialForm } from '@/components/flies/SubmitMaterialForm';
 import { QuickVariantModal } from '@/components/flies/QuickVariantModal';
+import { Button } from '@/components/ui/Button';
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -482,13 +483,9 @@ export default function WorkbenchClient({
                   <span className="font-mono text-xl text-accent font-semibold tabular-nums">{inventory.length}</span>
                   <span className="text-text-muted text-[11px] uppercase tracking-widest ml-1">materials</span>
                 </div>
-                <Link
-                  href="/journal/flies/new"
-                  className="inline-flex items-center gap-1.5 h-9 bg-accent text-bg px-3 rounded-md text-[13px] font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <Plus size={16} />
+                <Button href="/journal/flies/new" variant="solid" size="md" icon={Plus} noUpper>
                   New Fly
-                </Link>
+                </Button>
               </div>
             </div>
           )}
@@ -569,12 +566,9 @@ export default function WorkbenchClient({
                   <option value="emerger">Emerger</option>
                   <option value="terrestrial">Terrestrial</option>
                 </select>
-                <button
-                  onClick={() => fetchFlyList(flyQuery, flyCategory)}
-                  className="h-9 bg-accent text-bg px-4 rounded-md text-[13px] font-semibold hover:opacity-90 whitespace-nowrap"
-                >
+                <Button onClick={() => fetchFlyList(flyQuery, flyCategory)} variant="solid" size="md" noUpper>
                   Search
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -624,20 +618,12 @@ export default function WorkbenchClient({
                   You don’t need an inventory to start — pick a fly and add materials as you go. Or browse the catalog and log what you already own.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <button
-                    onClick={() => setTab('pickFly')}
-                    className="flex items-center justify-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90"
-                  >
-                    <Target size={16} />
+                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target} noUpper>
                     Pick a Pattern to Tie
-                  </button>
-                  <button
-                    onClick={() => setTab('browse')}
-                    className="flex items-center justify-center gap-2 bg-surface border border-border text-text-primary px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-surface-raised"
-                  >
-                    <Search size={16} />
+                  </Button>
+                  <Button onClick={() => setTab('browse')} variant="outline" size="md" icon={Search} noUpper>
                     Browse Materials
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -686,20 +672,12 @@ export default function WorkbenchClient({
                   This tab ranks recipes once you’ve logged some materials. Don’t want to build an inventory first? Start from a pattern instead — the Workbench will tell you what you need.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <button
-                    onClick={() => setTab('pickFly')}
-                    className="flex items-center justify-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90"
-                  >
-                    <Target size={16} />
+                  <Button onClick={() => setTab('pickFly')} variant="solid" size="md" icon={Target} noUpper>
                     Pick a Pattern
-                  </button>
-                  <button
-                    onClick={() => setTab('inventory')}
-                    className="flex items-center justify-center gap-2 bg-surface border border-border text-text-primary px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-surface-raised"
-                  >
-                    <Package size={16} />
+                  </Button>
+                  <Button onClick={() => setTab('inventory')} variant="outline" size="md" icon={Package} noUpper>
                     Manage Inventory
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -741,22 +719,27 @@ export default function WorkbenchClient({
                   <option key={c} value={c}>{CATEGORY_LABELS[c] || c}</option>
                 ))}
               </select>
-              <button
+              <Button
                 onClick={() => { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); }}
-                className="bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+                variant="solid"
+                size="md"
+                noUpper
               >
                 Search
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   setSubmitInitialCategory((browseCategory as MaterialCategory) || undefined);
                   setShowSubmitMaterial(true);
                 }}
-                className="flex items-center gap-1.5 bg-surface border border-border text-text-primary px-3 py-2 rounded-lg text-sm font-medium hover:border-accent"
+                variant="outline"
+                size="md"
+                icon={Plus}
+                noUpper
                 title="Add a material that's missing from the catalog"
               >
-                <Plus size={14} /> New Material
-              </button>
+                New Material
+              </Button>
             </div>
 
             {browseLoading ? (
@@ -951,16 +934,20 @@ export default function WorkbenchClient({
                 >
                   Cancel
                 </button>
-                <button
+                <Button
                   onClick={saveInventoryChanges}
                   disabled={savingInventory}
-                  className="flex-1 bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                  loading={savingInventory}
+                  variant="solid"
+                  size="md"
+                  noUpper
+                  fullWidth
+                  className="flex-1"
                 >
-                  {savingInventory && <Loader2 size={14} className="animate-spin" />}
                   {isSized
                     ? (checkedCount === 0 ? 'Save (clear all)' : `Save ${checkedCount} size${checkedCount === 1 ? '' : 's'}`)
                     : 'Save'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

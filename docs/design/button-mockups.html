@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Executive Angler — Button System Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:      #0D1117;
+    --surface: #161B22;
+    --surface-2:#1F2630;
+    --border:  #21262D;
+    --border-strong:#30363D;
+    --text:    #F0F6FC;
+    --text-muted:#A8B2BD;
+    --text-dim:#6E7681;
+    --copper:  #E8923A;
+    --copper-2:#F5A65A;
+    --copper-dark:#C97726;
+    --teal:    #00B4D8;
+    --green:   #2EA043;
+    --cream:   #F5EFE0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #F5EFE0; color: #1A1A1A;
+    font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto;
+    padding: 0.6in 0.7in;
+    background: #F5EFE0;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .page-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1.5px solid #1A1A1A; padding-bottom: 10px; margin-bottom: 26px;
+  }
+  .brand { font-family: "DM Serif Display", serif; font-size: 22px; letter-spacing: -0.01em; }
+  .brand .accent { color: var(--copper); }
+  .page-meta { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #6E7681; }
+
+  .cover h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 56px; line-height: 1.05; letter-spacing: -0.02em;
+    margin: 60px 0 16px 0;
+  }
+  .cover .sub { font-size: 18px; color: #4A4A4A; max-width: 540px; line-height: 1.55; }
+  .cover .palette { display: flex; gap: 14px; margin-top: 48px; }
+  .swatch { width: 70px; }
+  .swatch .chip { height: 70px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-top: 8px; color: #4A4A4A; }
+  .swatch .hex { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #1A1A1A; margin-top: 2px; }
+
+  .toc { margin-top: 60px; columns: 2; column-gap: 36px; }
+  .toc li { font-family: "DM Sans", sans-serif; font-size: 14px; padding: 7px 0;
+    border-bottom: 1px dotted #B5AC97; list-style: none; display: flex; justify-content: space-between; }
+  .toc li .num { font-family: "IBM Plex Mono", monospace; color: var(--copper); font-weight: 600; font-size: 12px; }
+
+  /* Style card */
+  .style-card { margin-bottom: 36px; break-inside: avoid; }
+  .style-card .head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+  .style-card .num {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    color: #fff; background: var(--copper);
+    padding: 2px 8px; border-radius: 4px; letter-spacing: 0.04em;
+  }
+  .style-card h2 {
+    font-family: "DM Serif Display", serif; font-size: 24px; margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .style-card .desc { font-size: 12.5px; color: #4A4A4A; margin: 2px 0 14px 0; max-width: 640px; line-height: 1.5; }
+  .style-card .usage { font-family: "IBM Plex Mono", monospace; font-size: 10px;
+    color: #6E5C3A; background: rgba(232,146,58,0.10); padding: 3px 8px; border-radius: 4px; display: inline-block;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
+
+  .demo-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 22px 20px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .demo-dark  { background: var(--bg); border: 1px solid var(--border); }
+  .demo-light { background: #FFFFFF; border: 1px solid #E5E0CC; }
+
+  .size-label {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #6E7681; margin-bottom: 6px; display: block;
+  }
+  .size-label.on-light { color: #6E7681; }
+  .demo-col { display: flex; flex-direction: column; align-items: flex-start; }
+
+  /* SVG icon defaults */
+  .ic { width: 16px; height: 16px; flex: none; }
+  .ic-sm { width: 14px; height: 14px; }
+  .ic-lg { width: 18px; height: 18px; }
+  .ic-xl { width: 20px; height: 20px; }
+
+  /* ============================================================
+     BUTTON STYLES
+     ============================================================ */
+
+  /* 01 — Strava Solid Primary */
+  .btn-strava-solid {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--copper); color: #FFFFFF;
+    font-family: "DM Sans", sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border: none; border-radius: 4px;
+    cursor: pointer; transition: background 0.15s ease;
+  }
+  .btn-strava-solid.sm  { padding: 7px 14px;  font-size: 11px; }
+  .btn-strava-solid.md  { padding: 10px 18px; font-size: 13px; }
+  .btn-strava-solid.lg  { padding: 14px 24px; font-size: 14px; }
+  .btn-strava-solid.hover { background: var(--copper-dark); }
+
+  /* 02 — Strava Outline / Ghost */
+  .btn-strava-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--copper);
+    font-family: "DM Sans", sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border: 2px solid var(--copper); border-radius: 4px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-strava-outline.sm { padding: 5px 12px; font-size: 11px; }
+  .btn-strava-outline.md { padding: 8px 16px; font-size: 13px; }
+  .btn-strava-outline.lg { padding: 12px 22px; font-size: 14px; }
+  .btn-strava-outline.hover { background: var(--copper); color: #fff; }
+
+  /* 03 — Salesforce Lightning Brand */
+  .btn-sf-brand {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(180deg, var(--copper-2) 0%, var(--copper) 100%);
+    color: #FFFFFF;
+    font-family: "DM Sans", sans-serif; font-weight: 600;
+    border: 1px solid var(--copper-dark); border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 1px 2px rgba(0,0,0,0.15);
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-sf-brand.sm { padding: 5px 14px;  font-size: 12px; line-height: 20px; }
+  .btn-sf-brand.md { padding: 7px 18px;  font-size: 13px; line-height: 22px; }
+  .btn-sf-brand.lg { padding: 10px 22px; font-size: 14px; line-height: 24px; }
+
+  /* 04 — Salesforce Neutral (secondary) */
+  .btn-sf-neutral {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #FFFFFF; color: #1A1A1A;
+    font-family: "DM Sans", sans-serif; font-weight: 500;
+    border: 1px solid #C9CCD1; border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-sf-neutral.sm { padding: 5px 12px; font-size: 12px; line-height: 20px; }
+  .btn-sf-neutral.md { padding: 7px 16px; font-size: 13px; line-height: 22px; }
+  .btn-sf-neutral.lg { padding: 10px 20px; font-size: 14px; line-height: 24px; }
+
+  /* 05 — Pill Soft Tint */
+  .btn-pill-tint {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,146,58,0.12); color: var(--copper);
+    font-family: "DM Sans", sans-serif; font-weight: 600;
+    border: 1px solid rgba(232,146,58,0.18); border-radius: 999px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-pill-tint.sm { padding: 5px 13px;  font-size: 12px; }
+  .btn-pill-tint.md { padding: 8px 16px;  font-size: 13px; }
+  .btn-pill-tint.lg { padding: 11px 22px; font-size: 14px; }
+  .btn-pill-tint.on-dark { background: rgba(232,146,58,0.16); color: var(--copper-2);
+    border-color: rgba(232,146,58,0.30); }
+
+  /* 06 — Icon Tile (Notion / Linear style) */
+  .btn-tile {
+    position: relative;
+    display: inline-flex; flex-direction: column; align-items: flex-start;
+    gap: 6px; padding: 12px 14px;
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    min-width: 92px; cursor: pointer; transition: all 0.15s ease;
+    font-family: "DM Sans", sans-serif;
+  }
+  .btn-tile .label { font-size: 12.5px; font-weight: 600; }
+  .btn-tile .sub { font-size: 10.5px; color: var(--text-muted); }
+  .btn-tile .badge {
+    position: absolute; top: -6px; right: -6px;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    background: var(--copper); color: #fff;
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 700;
+    border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+    border: 2px solid var(--bg);
+  }
+  .btn-tile.lg { padding: 16px 18px; min-width: 120px; }
+  .btn-tile.hover { border-color: var(--copper); background: rgba(232,146,58,0.08); }
+
+  /* 07 — Compact Stat Pill (info + action) */
+  .btn-stat {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 12px;
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-stat .num { color: var(--copper); font-weight: 700; }
+  .btn-stat .lbl { color: var(--text-muted); text-transform: lowercase; }
+  .btn-stat .div { color: var(--text-dim); }
+  .btn-stat.lg { padding: 10px 16px; font-size: 14px; }
+
+  /* 08 — Glass / Frosted (for floating UI on hero imagery) */
+  .btn-glass {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: #FFFFFF;
+    font-family: "DM Sans", sans-serif; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.22); border-radius: 8px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn-glass.sm { padding: 6px 13px;  font-size: 12px; }
+  .btn-glass.md { padding: 9px 16px;  font-size: 13px; }
+  .btn-glass.lg { padding: 12px 22px; font-size: 14px; }
+  .btn-glass.hover { background: rgba(232,146,58,0.40); border-color: var(--copper); }
+
+  /* 09 — Hero Outline Heavy (used on landing) */
+  .btn-hero-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px; font-size: 15px;
+    background: transparent; color: var(--text);
+    font-family: "DM Sans", sans-serif; font-weight: 700;
+    border: 1.5px solid var(--text); border-radius: 6px;
+    cursor: pointer; transition: all 0.18s ease;
+  }
+  .btn-hero-outline.lg { padding: 18px 32px; font-size: 16px; }
+  .btn-hero-outline.hover { background: var(--copper); border-color: var(--copper); color: #fff; }
+
+  /* 10 — Split / Segmented (primary + dropdown) */
+  .btn-split {
+    display: inline-flex; align-items: stretch; border-radius: 6px; overflow: hidden;
+    border: 1px solid var(--copper-dark); box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+  }
+  .btn-split .primary, .btn-split .caret {
+    background: var(--copper); color: #fff;
+    font-family: "DM Sans", sans-serif; font-weight: 600;
+    border: none; cursor: pointer; transition: background 0.15s ease;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-split .primary { padding: 9px 16px; font-size: 13px; }
+  .btn-split .caret { padding: 9px 10px; border-left: 1px solid var(--copper-dark); }
+  .btn-split.lg .primary { padding: 12px 22px; font-size: 14px; }
+  .btn-split.lg .caret { padding: 12px 12px; }
+  .btn-split.hover .primary, .btn-split.hover .caret { background: var(--copper-dark); }
+
+  /* Footer note */
+  .footer-note {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    color: #6E5C3A; text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* Print sizing */
+  @page { size: letter; margin: 0; }
+  @media print {
+    html, body { background: #F5EFE0; }
+    .page { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="page cover">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span></div>
+    <div class="page-meta">v0.1 · 2026-05-24 · button system</div>
+  </div>
+
+  <h1>Button System<br/>Mockups</h1>
+  <p class="sub">
+    Ten production-ready button styles for the Executive Angler dashboard, drawing from Strava's
+    no-nonsense action language and Salesforce Lightning's hierarchy-first system. Each style is
+    rendered at three sizes with branded colors, typography, and hover states. Pick one (or a pair)
+    as the canonical system; the rest become reference for edge cases.
+  </p>
+
+  <div class="palette">
+    <div class="swatch"><div class="chip" style="background:#E8923A"></div><div class="name">Copper</div><div class="hex">#E8923A</div></div>
+    <div class="swatch"><div class="chip" style="background:#0D1117"></div><div class="name">Ink</div><div class="hex">#0D1117</div></div>
+    <div class="swatch"><div class="chip" style="background:#161B22"></div><div class="name">Surface</div><div class="hex">#161B22</div></div>
+    <div class="swatch"><div class="chip" style="background:#00B4D8"></div><div class="name">Signal</div><div class="hex">#00B4D8</div></div>
+    <div class="swatch"><div class="chip" style="background:#F5EFE0"></div><div class="name">Cream</div><div class="hex">#F5EFE0</div></div>
+    <div class="swatch"><div class="chip" style="background:#F0F6FC"></div><div class="name">Text</div><div class="hex">#F0F6FC</div></div>
+  </div>
+
+  <ol class="toc">
+    <li><span><span class="num">01</span> &nbsp; Strava Solid Primary</span><span>p. 2</span></li>
+    <li><span><span class="num">02</span> &nbsp; Strava Outline / Ghost</span><span>p. 2</span></li>
+    <li><span><span class="num">03</span> &nbsp; Salesforce Lightning Brand</span><span>p. 3</span></li>
+    <li><span><span class="num">04</span> &nbsp; Salesforce Neutral</span><span>p. 3</span></li>
+    <li><span><span class="num">05</span> &nbsp; Pill Soft Tint</span><span>p. 4</span></li>
+    <li><span><span class="num">06</span> &nbsp; Icon Tile (Linear/Notion)</span><span>p. 4</span></li>
+    <li><span><span class="num">07</span> &nbsp; Compact Stat Pill</span><span>p. 5</span></li>
+    <li><span><span class="num">08</span> &nbsp; Glass / Frosted</span><span>p. 5</span></li>
+    <li><span><span class="num">09</span> &nbsp; Hero Outline Heavy</span><span>p. 6</span></li>
+    <li><span><span class="num">10</span> &nbsp; Split / Segmented</span><span>p. 6</span></li>
+  </ol>
+
+  <div style="margin-top: 80px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #6E5C3A; line-height: 1.6;">
+    Fonts &nbsp;·&nbsp; DM Serif Display (display) &nbsp;·&nbsp; DM Sans (UI) &nbsp;·&nbsp; IBM Plex Mono (data, meta)<br/>
+    Each style is shown in its native mode (dark for surfaces; light for forms/admin).
+  </div>
+</section>
+
+
+<!-- ====================== PAGE 2: 01 & 02 ====================== -->
+<section class="page">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span> &nbsp;/&nbsp; Buttons</div>
+    <div class="page-meta">page 2 / 6</div>
+  </div>
+
+  <!-- 01 Strava Solid -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">01</span>
+      <h2>Strava Solid Primary</h2>
+      <span class="usage">CTA · Hero</span>
+    </div>
+    <p class="desc">Heavy, uppercase, all-caps copper slab. Strava's signature "DO THE THING" button.
+    Use sparingly — one per view, reserved for the single most important action ("LOG SESSION",
+    "TIE NEW FLY", "VIEW JOURNAL").</p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <span class="size-label">SMALL · 28px</span>
+        <button class="btn-strava-solid sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          LOG SESSION
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">MEDIUM · 38px</span>
+        <button class="btn-strava-solid md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          LOG SESSION
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">LARGE · 48px</span>
+        <button class="btn-strava-solid lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          LOG SESSION
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">HOVER</span>
+        <button class="btn-strava-solid md hover">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          LOG SESSION
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Strava Outline -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">02</span>
+      <h2>Strava Outline / Ghost</h2>
+      <span class="usage">Secondary · Toolbar</span>
+    </div>
+    <p class="desc">Same energy as 01 but for secondary actions sitting next to a primary CTA. Fills with
+    copper on hover. Pair with the solid for action rows (e.g., "LOG SESSION" + "ADD FLY").</p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <span class="size-label">SMALL</span>
+        <button class="btn-strava-outline sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          CONTRIBUTE
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">MEDIUM</span>
+        <button class="btn-strava-outline md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          CONTRIBUTE
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">LARGE</span>
+        <button class="btn-strava-outline lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          CONTRIBUTE
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">HOVER</span>
+        <button class="btn-strava-outline md hover">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          CONTRIBUTE
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================== PAGE 3: 03 & 04 ====================== -->
+<section class="page">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span> &nbsp;/&nbsp; Buttons</div>
+    <div class="page-meta">page 3 / 6</div>
+  </div>
+
+  <!-- 03 SF Brand -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">03</span>
+      <h2>Salesforce Lightning Brand</h2>
+      <span class="usage">Admin · Forms · CMS</span>
+    </div>
+    <p class="desc">Refined, professional, soft gradient — Salesforce's go-to "primary action" pattern.
+    Mixed case, modest weight, comfortable density. Best for the admin CMS, settings, and any
+    place we want "considered" rather than "shouting."</p>
+    <div class="demo-row demo-light">
+      <div class="demo-col">
+        <span class="size-label on-light">SMALL · 30px</span>
+        <button class="btn-sf-brand sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+          Save changes
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">MEDIUM · 36px</span>
+        <button class="btn-sf-brand md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+          Save changes
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">LARGE · 44px</span>
+        <button class="btn-sf-brand lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 SF Neutral -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">04</span>
+      <h2>Salesforce Neutral</h2>
+      <span class="usage">Cancel · Secondary form action</span>
+    </div>
+    <p class="desc">The companion to 03 — white surface, gray border, dark text. Used for "Cancel,"
+    "Back," or any reversible secondary action in forms. Quiet by design.</p>
+    <div class="demo-row demo-light">
+      <div class="demo-col">
+        <span class="size-label on-light">SMALL</span>
+        <button class="btn-sf-neutral sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cancel
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">MEDIUM</span>
+        <button class="btn-sf-neutral md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cancel
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">LARGE</span>
+        <button class="btn-sf-neutral lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cancel
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">PAIRED</span>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sf-neutral md">Cancel</button>
+          <button class="btn-sf-brand md">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================== PAGE 4: 05 & 06 ====================== -->
+<section class="page">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span> &nbsp;/&nbsp; Buttons</div>
+    <div class="page-meta">page 4 / 6</div>
+  </div>
+
+  <!-- 05 Pill Tint -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">05</span>
+      <h2>Pill Soft Tint</h2>
+      <span class="usage">Filter chip · Quick action · Inline</span>
+    </div>
+    <p class="desc">Modern SaaS "chip" CTA: copper-tinted background, copper text, fully rounded.
+    Friendlier than a slab. Use for filter toggles, "Tie Next," "Mark Caught," and inline content
+    actions. Two backgrounds shown — works in both light and dark mode.</p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <span class="size-label">SM · DARK</span>
+        <button class="btn-pill-tint sm on-dark">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
+          Favorite
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">MD · DARK</span>
+        <button class="btn-pill-tint md on-dark">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
+          Favorite
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">LG · DARK</span>
+        <button class="btn-pill-tint lg on-dark">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
+          Favorite
+        </button>
+      </div>
+    </div>
+    <div class="demo-row demo-light" style="margin-top:10px;">
+      <div class="demo-col">
+        <span class="size-label on-light">SM · LIGHT</span>
+        <button class="btn-pill-tint sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Mark caught
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">MD · LIGHT</span>
+        <button class="btn-pill-tint md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Mark caught
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label on-light">LG · LIGHT</span>
+        <button class="btn-pill-tint lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Mark caught
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 Icon Tile -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">06</span>
+      <h2>Icon Tile</h2>
+      <span class="usage">Dashboard quick-launch row</span>
+    </div>
+    <p class="desc">Linear / Notion-style nav tile: icon top-left, label, optional sub-label, optional
+    count badge in the corner. <b>This is the recommended upgrade to the small icon row at the
+    bottom of your dashboard</b> — same density, but legible and tap-friendly.</p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <button class="btn-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E8923A" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <div class="label">Workbench</div>
+          <div class="sub">4 to tie</div>
+          <span class="badge">4</span>
+        </button>
+      </div>
+      <div class="demo-col">
+        <button class="btn-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#C4B5FD" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          <div class="label">Insights</div>
+          <div class="sub">3 new</div>
+        </button>
+      </div>
+      <div class="demo-col">
+        <button class="btn-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#7BD9C2" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
+          <div class="label">Fly Box</div>
+          <div class="sub">20 patterns</div>
+          <span class="badge">20</span>
+        </button>
+      </div>
+      <div class="demo-col">
+        <button class="btn-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#FFD479" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <div class="label">Milestones</div>
+          <div class="sub">25 earned</div>
+          <span class="badge">25</span>
+        </button>
+      </div>
+    </div>
+    <div class="footer-note">Recommended replacement for the 36×36 icon-only row in CompactStatsRow.tsx</div>
+  </div>
+</section>
+
+
+<!-- ====================== PAGE 5: 07 & 08 ====================== -->
+<section class="page">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span> &nbsp;/&nbsp; Buttons</div>
+    <div class="page-meta">page 5 / 6</div>
+  </div>
+
+  <!-- 07 Stat Pill -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">07</span>
+      <h2>Compact Stat Pill</h2>
+      <span class="usage">Dashboard stats row · Linkified data</span>
+    </div>
+    <p class="desc">For the "321 fish · 75 sessions" row at the bottom of your dashboard. Each stat
+    becomes a tappable pill that deep-links to its detail view. Mono-spaced numbers, copper
+    accents on the values. <b>Direct upgrade to today's CompactStatsRow text.</b></p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <span class="size-label">DEFAULT</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-stat"><span class="num">321</span><span class="lbl">fish</span></button>
+          <button class="btn-stat"><span class="num">75</span><span class="lbl">sessions</span></button>
+          <button class="btn-stat"><span class="num">16</span><span class="lbl">this month</span></button>
+          <button class="btn-stat"><span class="num">21"</span><span class="lbl">PB</span></button>
+          <button class="btn-stat"><span class="num">8</span><span class="lbl">species</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="demo-row demo-dark" style="margin-top:10px;">
+      <div class="demo-col">
+        <span class="size-label">LARGE</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-stat lg"><span class="num">321</span><span class="lbl">fish</span></button>
+          <button class="btn-stat lg"><span class="num">75</span><span class="lbl">sessions</span></button>
+          <button class="btn-stat lg"><span class="num">21"</span><span class="lbl">PB</span></button>
+          <button class="btn-stat lg"><span class="num">8</span><span class="lbl">species</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-note">Drop-in replacement for the inline text stats — readable + tappable</div>
+  </div>
+
+  <!-- 08 Glass -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">08</span>
+      <h2>Glass / Frosted</h2>
+      <span class="usage">Hero · Photo overlays · Map controls</span>
+    </div>
+    <p class="desc">Backdrop-blurred translucent surface — for CTAs that float over photography
+    (river hero images, fish photos, map views). Stays readable on any background.</p>
+    <div class="demo-row" style="background: linear-gradient(135deg, #2A4A3A 0%, #4A6B5C 100%); border:none;">
+      <div class="demo-col">
+        <span class="size-label" style="color:#E5E5E5;">SMALL</span>
+        <button class="btn-glass sm">
+          <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Open Web App
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label" style="color:#E5E5E5;">MEDIUM</span>
+        <button class="btn-glass md">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Open Web App
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label" style="color:#E5E5E5;">LARGE</span>
+        <button class="btn-glass lg">
+          <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Open Web App
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label" style="color:#E5E5E5;">HOVER</span>
+        <button class="btn-glass md hover">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Open Web App
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================== PAGE 6: 09 & 10 ====================== -->
+<section class="page">
+  <div class="page-header">
+    <div class="brand">Executive <span class="accent">Angler</span> &nbsp;/&nbsp; Buttons</div>
+    <div class="page-meta">page 6 / 6</div>
+  </div>
+
+  <!-- 09 Hero Outline -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">09</span>
+      <h2>Hero Outline Heavy</h2>
+      <span class="usage">Landing page · Marketing</span>
+    </div>
+    <p class="desc">Large, generous padding, hairline border. Pairs with a solid copper CTA on the
+    landing page — "Download for iPhone" (solid) + "Open Web App" (this style). Hover fills with
+    copper for unmistakable affordance.</p>
+    <div class="demo-row demo-dark" style="padding: 36px 28px;">
+      <div class="demo-col">
+        <span class="size-label">DEFAULT · 52px</span>
+        <button class="btn-hero-outline">
+          <svg class="ic ic-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+          Open Web App
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">LARGE · 58px</span>
+        <button class="btn-hero-outline lg">
+          <svg class="ic ic-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+          Open Web App
+        </button>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">HOVER</span>
+        <button class="btn-hero-outline hover">
+          <svg class="ic ic-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+          Open Web App
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 Split -->
+  <div class="style-card">
+    <div class="head">
+      <span class="num">10</span>
+      <h2>Split / Segmented</h2>
+      <span class="usage">Primary + alternate actions</span>
+    </div>
+    <p class="desc">A primary action joined to a dropdown caret for related variants. Use for
+    "Log Session ▾" (with options: Quick Log · Detailed · From iOS) or "Export ▾" (CSV · JSON · PDF).
+    Powerful when you have one obvious action plus 2-3 less-common variants.</p>
+    <div class="demo-row demo-dark">
+      <div class="demo-col">
+        <span class="size-label">MEDIUM</span>
+        <div class="btn-split">
+          <button class="primary">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Log Session
+          </button>
+          <button class="caret">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">LARGE</span>
+        <div class="btn-split lg">
+          <button class="primary">
+            <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="caret">
+            <svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="demo-col">
+        <span class="size-label">HOVER</span>
+        <div class="btn-split hover">
+          <button class="primary">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Log Session
+          </button>
+          <button class="caret">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing recommendation -->
+  <div style="margin-top: 40px; padding: 20px 24px; background:#fff; border-left: 4px solid var(--copper); border-radius: 4px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--copper); margin-bottom:8px;">Recommendation</div>
+    <p style="margin:0; font-size:13.5px; line-height:1.6; color:#1A1A1A;">
+      For your dashboard specifically, I'd ship <b>#01 Strava Solid</b> as the "My Journal" primary,
+      <b>#02 Strava Outline</b> for "Contribute" and "Ideas," <b>#06 Icon Tile</b> in place of the
+      cramped 36×36 icon row, and <b>#07 Compact Stat Pill</b> to replace the inline text stats.
+      That's a coherent four-piece system covering every action surface on the page. The other six
+      stay in the library for forms (03/04), filters (05), photo overlays (08), landing (09), and
+      multi-variant actions (10).
+    </p>
+  </div>
+</section>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ import {
   Check, Sparkles, Crown,
   BarChart3, Trophy, Award, Waves, Target, CalendarRange, Flame, Wrench, Gift,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface Props {
   isLoggedIn: boolean;
@@ -136,13 +137,17 @@ export default function PricingClient({
                 You have full access to every Pro feature.
               </p>
               {subscriptionSource === "stripe" && (
-                <button
+                <Button
                   onClick={handlePortal}
                   disabled={isLoading}
-                  className="w-full py-3 rounded-lg bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-medium hover:border-[#E8923A] transition-colors disabled:opacity-50"
+                  loading={isLoading}
+                  variant="outline"
+                  size="lg"
+                  fullWidth
+                  noUpper
                 >
                   {isLoading ? "Loading..." : "Manage Subscription"}
-                </button>
+                </Button>
               )}
               {(subscriptionSource === "apple" || subscriptionSource === "google") && (
                 <p className="text-xs text-[#6E7681]">
@@ -218,12 +223,9 @@ export default function PricingClient({
                 </ul>
 
                 {!isLoggedIn && (
-                  <Link
-                    href="/signup"
-                    className="block w-full py-3 rounded-lg bg-[#161B22] border border-[#21262D] text-center text-[#F0F6FC] font-medium hover:border-[#A8B2BD] transition-colors"
-                  >
+                  <Button href="/signup" variant="outline" size="lg" fullWidth noUpper>
                     Get Started
-                  </Link>
+                  </Button>
                 )}
               </div>
 
@@ -263,13 +265,17 @@ export default function PricingClient({
                   ))}
                 </ul>
 
-                <button
+                <Button
                   onClick={handleCheckout}
                   disabled={isLoading}
-                  className="w-full py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors disabled:opacity-50"
+                  loading={isLoading}
+                  variant="solid"
+                  size="lg"
+                  fullWidth
+                  noUpper
                 >
                   {isLoading ? "Loading..." : isLoggedIn ? "Subscribe Now" : "Sign Up & Subscribe"}
-                </button>
+                </Button>
               </div>
             </div>
 

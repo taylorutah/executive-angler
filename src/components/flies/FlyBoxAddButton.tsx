@@ -28,6 +28,7 @@ import { Plus, Check, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import QuickAddToBoxSheet, { type QuickAddFly } from "./QuickAddToBoxSheet";
 import AddToBoxToast, { type ToastInfo } from "./AddToBoxToast";
+import { Button } from "@/components/ui/Button";
 
 type Variant = "icon" | "pill" | "full" | "menu";
 
@@ -139,60 +140,36 @@ export default function FlyBoxAddButton({
 
     if (variant === "full") {
       return (
-        <button
-          type="button"
+        <Button
           onClick={handleClick}
           onMouseDown={stopPropagation ? (e) => e.stopPropagation() : undefined}
-          className={`inline-flex items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-medium w-full transition-colors ${
-            inBox
-              ? "border-[#E8923A]/30 bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20"
-              : "border-[#E8923A] text-[#E8923A] hover:bg-[#E8923A] hover:text-white"
-          } ${className ?? ""}`}
+          loading={checking}
+          variant={inBox ? "outline" : "solid"}
+          size="md"
+          icon={!checking ? (inBox ? Check : Plus) : undefined}
+          fullWidth
+          noUpper
+          className={className}
         >
-          {checking ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : inBox ? (
-            <>
-              <Check className="h-4 w-4" />
-              In Your Box · {variantCount} · Add another
-            </>
-          ) : (
-            <>
-              <Plus className="h-4 w-4" />
-              Add to Fly Box
-            </>
-          )}
-        </button>
+          {inBox ? `In Your Box · ${variantCount} · Add another` : "Add to Fly Box"}
+        </Button>
       );
     }
 
-    // Default: pill (compact)
     return (
-      <button
-        type="button"
+      <Button
         onClick={handleClick}
         onMouseDown={stopPropagation ? (e) => e.stopPropagation() : undefined}
-        className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
-          inBox
-            ? "border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20"
-            : "border-[#E8923A]/60 bg-[#0D1117]/80 text-[#E8923A] hover:bg-[#E8923A] hover:text-white backdrop-blur-sm"
-        } ${className ?? ""}`}
+        loading={checking}
+        variant="pill"
+        size="sm"
+        icon={!checking ? (inBox ? Check : Plus) : undefined}
+        noUpper
+        className={className}
         title={inBox ? `In your box (${variantCount}) — add another variant` : "Add to fly box"}
       >
-        {checking ? (
-          <Loader2 className="h-3 w-3 animate-spin" />
-        ) : inBox ? (
-          <>
-            <Check className="h-3 w-3" />
-            <span>In box · {variantCount}</span>
-          </>
-        ) : (
-          <>
-            <Plus className="h-3 w-3" />
-            <span>Add</span>
-          </>
-        )}
-      </button>
+        {inBox ? `In box · ${variantCount}` : "Add"}
+      </Button>
     );
   };
 

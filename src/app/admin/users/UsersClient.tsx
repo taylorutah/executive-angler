@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import DeleteUserModal from "@/components/admin/DeleteUserModal";
 import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
+import { Button } from "@/components/ui/Button";
 
 interface UserProfile {
   user_id: string;
@@ -398,29 +399,43 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
 
                     {/* Actions */}
                     <div className="flex gap-2 flex-wrap">
-                      <button onClick={() => adminAction(u.is_premium ? "revoke_premium" : "grant_premium", u.user_id)}
+                      <Button
+                        onClick={() => adminAction(u.is_premium ? "revoke_premium" : "grant_premium", u.user_id)}
                         disabled={!!actionLoading}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold disabled:opacity-50 ${u.is_premium ? "bg-[#E8923A]/15 text-[#E8923A]" : "bg-[#2EA44F]/15 text-[#2EA44F]"}`}>
-                        {actionLoading === `${u.is_premium ? "revoke_premium" : "grant_premium"}-${u.user_id}` ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Crown className="h-3.5 w-3.5" />}
+                        variant={u.is_premium ? "outline" : "brand"}
+                        size="sm"
+                        icon={Crown}
+                        loading={actionLoading === `${u.is_premium ? "revoke_premium" : "grant_premium"}-${u.user_id}`}
+                        noUpper
+                      >
                         {u.is_premium ? "Revoke Pro" : "Grant Pro"}
-                      </button>
+                      </Button>
 
                       {u.is_banned && (
-                        <button onClick={() => adminAction("unban", u.user_id)} disabled={!!actionLoading}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-[#2EA44F]/15 text-[#2EA44F] disabled:opacity-50">
-                          {actionLoading === `unban-${u.user_id}` ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
+                        <Button
+                          onClick={() => adminAction("unban", u.user_id)}
+                          disabled={!!actionLoading}
+                          variant="outline"
+                          size="sm"
+                          icon={Ban}
+                          loading={actionLoading === `unban-${u.user_id}`}
+                          noUpper
+                        >
                           Unban
-                        </button>
+                        </Button>
                       )}
 
-                      <button
+                      <Button
                         onClick={() => setDeletingUser(u)}
                         disabled={!!actionLoading || u.user_id === adminId}
                         title={u.user_id === adminId ? "You cannot delete your own admin account from here" : "Permanently delete user"}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-950/20 text-red-400 border border-red-900/40 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-red-950/40">
-                        <Trash2 className="h-3.5 w-3.5" />
+                        variant="destructive"
+                        size="sm"
+                        icon={Trash2}
+                        noUpper
+                      >
                         Delete user
-                      </button>
+                      </Button>
                     </div>
 
                     {/* Ban with reason */}
@@ -429,11 +444,15 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <input type="text" value={banReason[u.user_id] || ""} onChange={e => setBanReason(prev => ({ ...prev, [u.user_id]: e.target.value }))}
                           placeholder="Ban reason (required)..."
                           className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-red-400" />
-                        <button onClick={() => adminAction("ban", u.user_id, { reason: banReason[u.user_id] || "" })}
+                        <Button
+                          onClick={() => adminAction("ban", u.user_id, { reason: banReason[u.user_id] || "" })}
                           disabled={!!actionLoading || !banReason[u.user_id]?.trim()}
-                          className="px-3 py-2 bg-red-950/30 text-red-400 rounded-lg text-xs font-bold disabled:opacity-50">
+                          variant="destructive"
+                          size="sm"
+                          noUpper
+                        >
                           Ban
-                        </button>
+                        </Button>
                       </div>
                     )}
 

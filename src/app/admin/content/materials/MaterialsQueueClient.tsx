@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, X, Loader2, Edit2, Save } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface PendingMaterial {
   id: string;
@@ -138,14 +139,16 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
                     >
                       <X size={14} />
                     </button>
-                    <button
+                    <Button
                       onClick={() => promote(item.id)}
                       disabled={isBusy}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#2EA44F] hover:bg-[#26873e] text-white text-sm font-medium disabled:opacity-50"
+                      variant="brand"
+                      size="sm"
+                      icon={Check}
+                      loading={isBusy}
                     >
-                      {isBusy ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
                       Promote
-                    </button>
+                    </Button>
                   </div>
                 </div>
 

@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -167,9 +168,7 @@ export default function Header() {
                     <Link href="/login" className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]">
                       Sign In
                     </Link>
-                    <Link href="/signup" className="px-4 py-1.5 rounded-lg text-sm font-medium bg-[#E8923A] text-white hover:bg-[#d17d28] transition-colors">
-                      Join Free
-                    </Link>
+                    <Button href="/signup" variant="solid" size="sm">Join Free</Button>
                   </div>
                 )}
 
@@ -332,9 +331,9 @@ export default function Header() {
                     <Link href="/login" className="block px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       Sign In
                     </Link>
-                    <Link href="/signup" className="block px-4 py-3 text-base font-medium text-white bg-[#E8923A] rounded-lg text-center hover:bg-[#d17d28]">
-                      Create Account
-                    </Link>
+                    <div className="px-2 pt-2">
+                      <Button href="/signup" variant="solid" size="md" fullWidth>Create Account</Button>
+                    </div>
                   </>
                 )}
               </div>

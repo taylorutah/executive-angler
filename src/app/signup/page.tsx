@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
+import { Button } from "@/components/ui/Button";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -186,12 +187,11 @@ function SignupForm() {
             <p className="text-[#A8B2BD]">
               Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
-            <Link
-              href="/journal"
-              className="mt-6 inline-block px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#cf7d30] transition-colors"
-            >
-              Go to Your Journal
-            </Link>
+            <div className="mt-6">
+              <Button href="/journal" variant="solid" size="lg" noUpper>
+                Go to Your Journal
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -350,13 +350,17 @@ function SignupForm() {
               </p>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={!canSubmit}
-              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#cf7d30] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="solid"
+              size="lg"
+              fullWidth
+              loading={loading}
+              noUpper
             >
               {loading ? "Creating account…" : "Create Account"}
-            </button>
+            </Button>
           </form>
 
           <p className="text-center text-sm text-[#A8B2BD]">

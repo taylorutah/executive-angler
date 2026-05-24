@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, X, Loader2, AlertCircle, Check, Copy, Package } from 'lucide-react';
+import { Plus, X, AlertCircle, Check, Copy, Package } from 'lucide-react';
 import type { TyingMaterial } from '@/types/materials';
+import { Button } from '@/components/ui/Button';
 
 interface Props {
   material: TyingMaterial;
@@ -255,14 +256,18 @@ export function QuickVariantModal({ material, isOwnPending, onClose, onSaved }: 
           >
             Cancel
           </button>
-          <button
+          <Button
             onClick={handleSave}
             disabled={status === 'saving'}
-            className="flex-1 bg-accent text-bg px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+            loading={status === 'saving'}
+            variant="solid"
+            size="md"
+            icon={status !== 'saving' ? Check : undefined}
+            noUpper
+            className="flex-1"
           >
-            {status === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
             Save
-          </button>
+          </Button>
         </div>
       </div>
     </div>

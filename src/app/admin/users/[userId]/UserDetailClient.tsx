@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import DeleteUserModal from "@/components/admin/DeleteUserModal";
 import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
+import { Button } from "@/components/ui/Button";
 
 interface UserData {
   profile: {
@@ -211,24 +212,31 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                       placeholder="Reason (optional)"
                       className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
                     />
-                    <button
+                    <Button
                       onClick={() => adminAction("grant_pro", { reason: proReason })}
                       disabled={actionLoading === "grant_pro"}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-[#E8923A]/15 text-[#E8923A] rounded-lg text-sm font-semibold hover:bg-[#E8923A]/25 transition-colors disabled:opacity-50"
+                      variant="brand"
+                      size="sm"
+                      icon={Sparkles}
+                      loading={actionLoading === "grant_pro"}
+                      fullWidth
                     >
-                      {actionLoading === "grant_pro" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                       Grant Pro Access
-                    </button>
+                    </Button>
                   </div>
                 ) : (
-                  <button
+                  <Button
                     onClick={() => adminAction("revoke_pro")}
                     disabled={actionLoading === "revoke_pro"}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-[#21262D] text-[#A8B2BD] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
+                    variant="outline"
+                    size="sm"
+                    icon={XCircle}
+                    loading={actionLoading === "revoke_pro"}
+                    fullWidth
+                    noUpper
                   >
-                    {actionLoading === "revoke_pro" ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
                     Revoke Pro Access
-                  </button>
+                  </Button>
                 )}
 
                 {/* Ban toggle */}
@@ -244,48 +252,64 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                         className="w-full px-3 py-2 bg-[#0D1117] border border-red-900/50 rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-red-500"
                       />
                       <div className="flex gap-2">
-                        <button
+                        <Button
                           onClick={() => { if (banReason.trim()) adminAction("ban", { reason: banReason }); }}
                           disabled={!banReason.trim() || actionLoading === "ban"}
-                          className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-500 disabled:opacity-50"
+                          variant="destructive"
+                          size="sm"
+                          loading={actionLoading === "ban"}
+                          fullWidth
+                          noUpper
                         >
                           {actionLoading === "ban" ? "Banning..." : "Confirm Ban"}
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           onClick={() => { setShowBanConfirm(false); setBanReason(""); }}
-                          className="px-3 py-2 bg-[#21262D] text-[#A8B2BD] rounded-lg text-xs hover:bg-[#2D333B]"
+                          variant="outline"
+                          size="sm"
+                          noUpper
                         >
                           Cancel
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   ) : (
-                    <button
+                    <Button
                       onClick={() => setShowBanConfirm(true)}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-red-950/30 text-red-400 rounded-lg text-sm font-semibold hover:bg-red-950/50 transition-colors"
+                      variant="destructive"
+                      size="sm"
+                      icon={UserX}
+                      fullWidth
+                      noUpper
                     >
-                      <UserX className="h-4 w-4" />
                       Ban User
-                    </button>
+                    </Button>
                   )
                 ) : (
-                  <button
+                  <Button
                     onClick={() => adminAction("unban")}
                     disabled={actionLoading === "unban"}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-green-950/30 text-green-400 rounded-lg text-sm font-semibold hover:bg-green-950/50 transition-colors disabled:opacity-50"
+                    variant="outline"
+                    size="sm"
+                    icon={UserCheck}
+                    loading={actionLoading === "unban"}
+                    fullWidth
+                    noUpper
                   >
-                    {actionLoading === "unban" ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserCheck className="h-4 w-4" />}
                     Unban User
-                  </button>
+                  </Button>
                 )}
 
-                <button
+                <Button
                   onClick={() => setShowDeleteModal(true)}
-                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-red-950/20 text-red-400 border border-red-900/40 rounded-lg text-sm font-semibold hover:bg-red-950/40 transition-colors"
+                  variant="destructive"
+                  size="sm"
+                  icon={Trash2}
+                  fullWidth
+                  noUpper
                 >
-                  <Trash2 className="h-4 w-4" />
                   Delete User
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -299,14 +323,19 @@ export default function UserDetailClient({ userId }: { userId: string }) {
                 rows={3}
                 className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
               />
-              <button
+              <Button
                 onClick={() => { if (noteText.trim()) { adminAction("add_note", { note: noteText }); setNoteText(""); } }}
                 disabled={!noteText.trim() || actionLoading === "add_note"}
-                className="mt-2 w-full px-3 py-2 bg-[#21262D] text-[#F0F6FC] rounded-lg text-xs font-semibold hover:bg-[#2D333B] disabled:opacity-50"
+                variant="outline"
+                size="sm"
+                icon={StickyNote}
+                loading={actionLoading === "add_note"}
+                fullWidth
+                noUpper
+                className="mt-2"
               >
-                <StickyNote className="h-3 w-3 inline mr-1" />
                 Save Note
-              </button>
+              </Button>
             </div>
           </div>
 

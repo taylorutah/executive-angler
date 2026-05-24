@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { SubmitMaterialForm } from "@/components/flies/SubmitMaterialForm";
+import { Button } from "@/components/ui/Button";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -309,22 +310,20 @@ export default function MaterialsBrowserClient({
         {/* Submit Material button row */}
         <div className="mb-4 flex items-center justify-end gap-2">
           {isAuthenticated ? (
-            <button
+            <Button
+              variant="solid"
+              size="sm"
+              icon={Plus}
+              noUpper
               onClick={() => setSubmitModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#d17d28]"
               title="Submit a new material to the community catalog"
             >
-              <Plus className="h-4 w-4" />
               Submit Material
-            </button>
+            </Button>
           ) : (
-            <Link
-              href="/login?next=/flies/materials"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#21262D] bg-[#161B22] px-4 py-2 text-sm font-medium text-[#A8B2BD] transition-colors hover:border-[#E8923A]/40 hover:text-[#F0F6FC]"
-            >
-              <Plus className="h-4 w-4" />
+            <Button variant="outline" size="sm" icon={Plus} noUpper href="/login?next=/flies/materials">
               Sign in to Submit
-            </Link>
+            </Button>
           )}
         </div>
 
@@ -431,20 +430,9 @@ export default function MaterialsBrowserClient({
         {/* Load more */}
         {!loading && hasMore && materials.length > 0 && (
           <div className="mt-8 flex justify-center">
-            <button
-              onClick={handleLoadMore}
-              disabled={loadingMore}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-6 py-3 text-sm font-medium text-[#F0F6FC] transition-colors hover:border-[#E8923A]/40 hover:bg-[#1C2128] disabled:opacity-50"
-            >
-              {loadingMore ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Load More Materials"
-              )}
-            </button>
+            <Button variant="outline" noUpper onClick={handleLoadMore} disabled={loadingMore} loading={loadingMore}>
+              {loadingMore ? "Loading..." : "Load More Materials"}
+            </Button>
           </div>
         )}
       </div>

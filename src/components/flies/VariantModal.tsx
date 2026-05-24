@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Loader2, Plus, Sparkles, Wand2, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export type VariantParentSpec = {
   patternId?: string;
@@ -372,27 +373,22 @@ export default function VariantModal({
               View fly box →
             </Link>
             <div className="flex gap-2">
-              <button
-                onClick={onClose}
-                disabled={saving}
-                className="rounded-lg px-4 py-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
-              >
+              <Button variant="outline" size="sm" noUpper onClick={onClose} disabled={saving}>
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="solid"
+                size="sm"
+                noUpper
+                icon={saving ? undefined : Plus}
+                loading={saving}
                 onClick={mode === "single" ? submitSingle : submitBulk}
                 disabled={saving || (mode === "bulk" && (overLimit || bulkCount === 0))}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-[#0D1117] hover:bg-[#F0A45A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {saving ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Plus className="h-4 w-4" />
-                )}
                 {mode === "bulk"
                   ? `Create ${bulkCount} variant${bulkCount === 1 ? "" : "s"}`
                   : "Create variant"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

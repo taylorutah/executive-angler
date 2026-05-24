@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
+import { Button } from "@/components/ui/Button";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -122,12 +123,17 @@ function LoginForm() {
               }}
             />
             {error && <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">{error}</p>}
-            <button
-              type="submit" disabled={loading || !captchaResolved}
-              className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#0D1117] transition-colors disabled:opacity-50"
+            <Button
+              type="submit"
+              disabled={loading || !captchaResolved}
+              variant="solid"
+              size="lg"
+              fullWidth
+              loading={loading}
+              noUpper
             >
               {loading ? "Signing in…" : "Sign In with Email"}
-            </button>
+            </Button>
           </form>
 
           <p className="text-center text-sm text-[#A8B2BD]">

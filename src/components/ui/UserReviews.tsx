@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Star, Trash2, Edit3, User } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
+import { Button } from "@/components/ui/Button";
 
 interface Review {
   id: string;
@@ -166,14 +167,17 @@ function ReviewForm({
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <div className="flex gap-2">
-        <button
+      <div className="flex gap-2 items-center">
+        <Button
           type="submit"
           disabled={saving}
-          className="px-5 py-2 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#D4801F] transition-colors disabled:opacity-50"
+          loading={saving}
+          variant="solid"
+          size="md"
+          noUpper
         >
           {saving ? "Saving..." : existingReview ? "Update Review" : "Submit Review"}
-        </button>
+        </Button>
         {onCancel && (
           <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
             Cancel
@@ -247,12 +251,14 @@ export default function UserReviews({ entityType, entityId }: Props) {
           Reviews {reviews.length > 0 && <span className="text-base font-normal text-[#6E7681]">({reviews.length})</span>}
         </h2>
         {currentUserId && !hasOwnReview && !showForm && (
-          <button
+          <Button
             onClick={() => setShowForm(true)}
-            className="px-4 py-1.5 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#D4801F] transition-colors"
+            variant="solid"
+            size="sm"
+            noUpper
           >
             Write a Review
-          </button>
+          </Button>
         )}
       </div>
 
@@ -302,22 +308,29 @@ export default function UserReviews({ entityType, entityId }: Props) {
 
                 {/* Edit/Delete for own reviews */}
                 {review.user_id === currentUserId && (
-                  <div className="flex gap-1 shrink-0">
-                    <button
+                  <div className="flex gap-2 shrink-0">
+                    <Button
                       onClick={() => { setEditingReview(review); setShowForm(false); }}
-                      className="p-1.5 text-[#6E7681] hover:text-[#E8923A] transition-colors"
+                      variant="outline"
+                      size="sm"
+                      icon={Edit3}
+                      noUpper
                       aria-label="Edit review"
                     >
-                      <Edit3 className="h-3.5 w-3.5" aria-hidden="true" />
-                    </button>
-                    <button
+                      Edit
+                    </Button>
+                    <Button
                       onClick={() => handleDelete(review.id)}
                       disabled={deleting === review.id}
-                      className="p-1.5 text-[#6E7681] hover:text-red-400 transition-colors disabled:opacity-50"
+                      loading={deleting === review.id}
+                      variant="destructive"
+                      size="sm"
+                      icon={deleting === review.id ? undefined : Trash2}
+                      noUpper
                       aria-label="Delete review"
                     >
-                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    </button>
+                      Delete
+                    </Button>
                   </div>
                 )}
               </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { Plus, Loader2 } from "lucide-react";
 import type { FieldConfig } from "@/lib/admin/field-types";
 import EntityTable from "@/components/admin/EntityTable";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
+import { Button } from "@/components/ui/Button";
 
 interface EntityListClientProps {
   entitySlug: string;
@@ -148,13 +148,14 @@ export default function EntityListClient({
               {rows.length} record{rows.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <Link
+          <Button
             href={`/admin/content/${entitySlug}/new`}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors"
+            variant="brand"
+            size="md"
+            icon={Plus}
           >
-            <Plus className="h-4 w-4" />
             New {entityLabel.replace(/s$/, "")}
-          </Link>
+          </Button>
         </div>
       </header>
 
