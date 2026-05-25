@@ -85,15 +85,15 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
 
       {/* Quick-launch tiles */}
       <div className="flex items-stretch gap-2 overflow-x-auto -mx-1 px-1 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
-        <ButtonTile href="/dashboard/workbench" icon={Wrench} iconColor="#E8923A" label="Workbench" badge={tieNextCount} size="sm" />
+        <ButtonTile href="/flies?tab=workbench" icon={Wrench} iconColor="#E8923A" label="Workbench" badge={tieNextCount} size="sm" />
         <ButtonTile href="/dashboard/insights" icon={Lightbulb} iconColor="#C4B5FD" label="Insights" size="sm" />
         <ButtonTile href="/flies" icon={Feather} iconColor="#7BD9C2" label="Fly Box" badge={flyCount} size="sm" />
-        <ButtonTile href="/hatches" icon={Leaf} iconColor="#90EE90" label="Hatches" size="sm" />
+        <ButtonTile href="/dashboard/hatch-reports" icon={Leaf} iconColor="#90EE90" label="Hatches" size="sm" />
         <ButtonTile href="/gear" icon={Package} iconColor="#A8B2BD" label="Gear" badge={gearCount} size="sm" />
         <ButtonTile href="/dashboard/analytics" icon={BarChart3} iconColor="#0BA5C7" label="Analytics" size="sm" />
         <ButtonTile href="/dashboard/export" icon={BookOpen} iconColor="#A8B2BD" label="Export" size="sm" />
-        <ButtonTile href="/dashboard/import" icon={Upload} iconColor="#A8B2BD" label="Import" size="sm" />
-        <ButtonTile href="/dashboard/milestones" icon={Trophy} iconColor="#FFD479" label="Awards" badge={milestoneCount} size="sm" />
+        <ButtonTile href="/journal/import" icon={Upload} iconColor="#A8B2BD" label="Import" size="sm" />
+        <ButtonTile href="/journal/trophy-wall" icon={Trophy} iconColor="#FFD479" label="Awards" badge={milestoneCount} size="sm" />
       </div>
     </div>
   );
