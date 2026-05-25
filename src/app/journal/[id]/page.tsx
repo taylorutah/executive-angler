@@ -229,7 +229,7 @@ export default async function SessionDetailPage({ params }: Props) {
             activeBoxName={activeBoxName}
             activeBoxVariants={activeBoxVariants}
             lastCatch={lastCatch}
-            defaultSpecies={lastCatch?.species ?? "Rainbow"}
+            defaultSpecies={lastCatch?.species ?? "Rainbow Trout"}
           />
         </div>
       )}

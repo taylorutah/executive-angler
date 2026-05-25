@@ -22,6 +22,7 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { ChevronLeft, Repeat, Search } from "lucide-react";
 import type { VariantRow } from "@/types/fly-v2";
 import { logCatchAction } from "@/app/journal/[id]/actions";
+import { COMMON_SPECIES } from "@/lib/species-suggestions";
 
 /** Light haptic on supported browsers (mobile Safari + Chrome Android). */
 function haptic() {
@@ -56,12 +57,6 @@ interface Props {
   /** Called after a successful log so the parent can show an Undo toast. */
   onLogged?: (info: { catchId: string; flyName: string; size: string; species: string }) => void;
 }
-
-const COMMON_SPECIES = [
-  "Rainbow Trout", "Brown Trout", "Cutthroat Trout", "Brook Trout",
-  "Mountain Whitefish", "Tiger Trout", "Bull Trout",
-  "Smallmouth Bass", "Largemouth Bass", "Bluegill",
-];
 
 function variantThumbUrl(v: VariantRow): string | null {
   if (!v.primary_photo) return null;

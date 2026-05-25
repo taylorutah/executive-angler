@@ -10,6 +10,7 @@ import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/Sessi
 import { compressImage } from "@/lib/image-compress";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 import dynamic from "next/dynamic";
+import { COMMON_SPECIES } from "@/lib/species-suggestions";
 
 const SessionLocationPicker = dynamic(
   () => import("@/components/maps/SessionLocationPicker"),
@@ -43,7 +44,6 @@ interface Catch {
 
 interface Spot { id: string; name: string; latitude?: number; longitude?: number; description?: string; }
 
-const SPECIES = ["Brown Trout", "Rainbow Trout", "Cutthroat Trout", "Brook Trout", "Mountain Whitefish", "Tiger Trout", "Bull Trout"];
 const CLARITY = ["Crystal Clear", "Clear", "Slightly Cloudy", "Cloudy", "Murky"];
 const POSITIONS = ["On Point", "Dropper", "Tag", "Single"];
 const FLY_TYPES = ["Nymph", "Dry Fly", "Streamer", "Wet Fly", "Emerger", "Terrestrial", "Egg", "Other"];
@@ -761,7 +761,7 @@ export default function EditSessionPage() {
                       <div className="col-span-2">
                         <label className={label}>Species</label>
                         <input list={`species-list-${i}`} className={input} placeholder="Brown Trout" value={c.species} onChange={(e) => updateCatch(i, "species", e.target.value)} />
-                        <datalist id={`species-list-${i}`}>{SPECIES.map((s) => <option key={s} value={s} />)}</datalist>
+                        <datalist id={`species-list-${i}`}>{COMMON_SPECIES.map((s) => <option key={s} value={s} />)}</datalist>
                       </div>
                       <div>
                         <label className={label}>Length (")</label>
