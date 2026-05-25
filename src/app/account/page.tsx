@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
-import { isAdmin, checkPremium } from "@/lib/admin";
+import { isAdmin, checkPremium, isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata = { title: "My Account" };
@@ -154,6 +154,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         currentPeriodEnd: subscription.current_period_end,
       } : null}
       hasStripeCustomer={!!profile?.stripe_customer_id}
+      foundersWindow={isFoundersFreeWindow()}
+      foundersFreeEndIso={FOUNDERS_FREE_END.toISOString()}
     />
   );
 }

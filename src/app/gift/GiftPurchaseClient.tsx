@@ -7,11 +7,16 @@ import { Gift, Loader2, Sparkles } from "lucide-react";
 interface Props {
   isLoggedIn: boolean;
   purchaserName: string | null;
+  foundersWindow?: boolean;
+  foundersFreeEndIso?: string;
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function GiftPurchaseClient({ isLoggedIn, purchaserName }: Props) {
+export default function GiftPurchaseClient({ isLoggedIn, purchaserName, foundersWindow = false, foundersFreeEndIso }: Props) {
+  const foundersEndLabel = foundersFreeEndIso
+    ? new Date(foundersFreeEndIso).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+    : null;
   const [recipientEmail, setRecipientEmail] = useState("");
   const [recipientMessage, setRecipientMessage] = useState("");
   const [fromName, setFromName] = useState(purchaserName ?? "");
@@ -64,10 +69,19 @@ export default function GiftPurchaseClient({ isLoggedIn, purchaserName }: Props)
           <h1 className="font-serif text-3xl sm:text-4xl text-[#F0F6FC] mb-3">
             Give a year of Pro.
           </h1>
-          <p className="text-sm text-[#A8B2BD] max-w-md mx-auto">
-            $19.99 &mdash; a full year of Executive Angler Pro for a fishing buddy.
-            They&apos;ll get an email with a link to claim it.
-          </p>
+          {foundersWindow && foundersEndLabel ? (
+            <p className="text-sm text-[#A8B2BD] max-w-md mx-auto">
+              $19.99 &mdash; a full paid year of Pro for a fishing buddy, starting
+              {" "}{foundersEndLabel} (when the Founders&apos; Free Launch Year ends).
+              They get Pro free until then like every angler — your gift extends
+              it by a full paid year after.
+            </p>
+          ) : (
+            <p className="text-sm text-[#A8B2BD] max-w-md mx-auto">
+              $19.99 &mdash; a full year of Executive Angler Pro for a fishing buddy.
+              They&apos;ll get an email with a link to claim it.
+            </p>
+          )}
         </div>
 
         <div className="rounded-2xl border border-[#21262D] bg-[#161B22] p-6 space-y-5">

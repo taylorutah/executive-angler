@@ -78,9 +78,9 @@ export function buildWelcome(args: {
           "Live USGS flow, hatch charts, access points, and regs for 138 rivers across the West &mdash; plus community photos from anglers who've been there.",
       },
       {
-        title: "Unlock Pro when you're ready",
+        title: "Pro is free during the launch year",
         body:
-          "Personal insights, per-river scorecard, best-window calculator, and trophy wall &mdash; built from your own data, never crowdsourced. $2.99/month or $19.99/year.",
+          "Personal insights, per-river scorecard, best-window calculator, and trophy wall &mdash; built from your own data, never crowdsourced. Free for every signed-in angler during our Founders&apos; Free Launch Year. No card required.",
       },
     ])}
     ${DIVIDER_HTML}
@@ -366,7 +366,7 @@ export function buildExpiringSoon(args: {
       <strong style="color:#111827;">Your journal stays safe either way.</strong> Every session, catch, fly, and photo remains exactly where it is. Only Pro-only features (Personal Insights, Per-River Scorecard, Best Window Calculator) will pause.
     </p>
     <p style="margin:0;">
-      Three more days of Pro for less than a coffee: $2.99/month or $19.99/year.
+      Three more days of Pro. Lock in pricing on the pricing page.
     </p>
   `;
 
@@ -524,6 +524,69 @@ export function buildAccountDeleted(args: {
     hideFooterPreferences: true,
     footerNote:
       "Didn't mean to delete? Reply to this email &mdash; we read every one.",
+    replyTo: "hello@executiveangler.com",
+  };
+}
+
+/* ─────────── Founders' Free Welcome (sent on signup during window) ─────────── */
+
+export function buildFoundersFreeWelcome(args: {
+  displayName?: string | null;
+  windowEndIso: string;
+}): BrandedEmailContent {
+  const { displayName, windowEndIso } = args;
+  const endLabel = formatDate(windowEndIso);
+  const greeting = displayName ? `Welcome in, ${displayName}.` : "Welcome in.";
+
+  const body = `
+    <p style="margin:0 0 20px;">
+      You signed up during our <strong style="color:#111827;">Founders&apos; Free Launch Year</strong>,
+      which means every Pro feature is unlocked for you, free, until
+      <strong style="color:#D4751F;">${endLabel}</strong>. No card, no trial, no asterisk.
+    </p>
+    ${buildSectionLabel("What's unlocked for you")}
+    ${buildFeatureList([
+      {
+        title: "Personal Insights Dashboard",
+        body:
+          "Your best flies, times, weather, rivers, and species &mdash; computed from your sessions only.",
+      },
+      {
+        title: "Per-River Scorecard",
+        body:
+          "Your sessions, top fly, best section, best month, gear &mdash; for every river you log. Private to you.",
+      },
+      {
+        title: "Best Window Calculator",
+        body:
+          "Your catch history overlaid on live USGS flow. Know when to drop everything and go.",
+      },
+      {
+        title: "Trophy Wall+ and Year-over-Year",
+        body:
+          "Biggest by species, per river, top sessions. Last April vs. this April at a glance.",
+      },
+    ])}
+    ${DIVIDER_HTML}
+    <p style="margin:0 0 12px;">
+      Pricing returns on <strong style="color:#111827;">${endLabel}</strong>
+      ($2.99/month or $19.99/year). We&apos;ll email you 30 days before so there
+      are no surprises &mdash; and your journal, fly box, and photos stay with
+      you either way.
+    </p>
+    <p style="margin:0;font-size:13px;color:#6B7280;">
+      The deal is simple: use the app, log your sessions, tell us what&apos;s
+      broken. Reply to this email &mdash; a real human reads every one.
+    </p>
+  `;
+
+  return {
+    subject: "Pro is free for you until 2027",
+    heading: `${greeting} Pro is on the house.`,
+    preheader: `Every Pro feature unlocked for you, free, until ${endLabel}.`,
+    body,
+    ctaLabel: "Open your journal",
+    ctaUrl: `${SITE_URL}/journal`,
     replyTo: "hello@executiveangler.com",
   };
 }

@@ -78,9 +78,11 @@ interface Props {
     currentPeriodEnd: string | null;
   } | null;
   hasStripeCustomer?: boolean;
+  foundersWindow?: boolean;
+  foundersFreeEndIso?: string;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, tiesOwnFlies: initialTiesOwnFlies = true, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, tiesOwnFlies: initialTiesOwnFlies = true, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false, foundersWindow = false, foundersFreeEndIso }: Props) {
   const router = useRouter();
 
   // Determine initial section from URL hash
@@ -632,11 +634,68 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
             )}
 
             {/* ═══════ SUBSCRIPTION ═══════ */}
-            {activeSection === "subscription" && (
+            {activeSection === "subscription" && (() => {
+              const foundersEndLabel = foundersFreeEndIso
+                ? new Date(foundersFreeEndIso).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+                : null;
+              const isFoundersGiftedPro = foundersWindow && isPremium && !subscription;
+              return (
               <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
                 <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Subscription</h2>
 
-                {isPremium ? (
+                {isFoundersGiftedPro && foundersEndLabel ? (
+                  <div className="space-y-6">
+                    <div className="rounded-xl bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent border border-[#E8923A]/20 p-5">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="h-10 w-10 rounded-full bg-[#E8923A]/15 flex items-center justify-center">
+                          <Crown className="h-5 w-5 text-[#E8923A]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-[#F0F6FC]">Founders&apos; Free Pro</p>
+                          <p className="text-xs text-[#2EA44F] font-medium">Active — free until {foundersEndLabel}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-[#A8B2BD]">
+                        Every Pro feature is unlocked for you, free, during the Founders&apos; Free Launch Year. No card on file.
+                      </p>
+                      <p className="text-xs text-[#6E7681] mt-2">
+                        Pricing returns to $2.99/mo or $19.99/yr on {foundersEndLabel}. We&apos;ll email you 30 days before.
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/pricing"
+                      className="block rounded-xl border border-[#21262D] hover:border-[#E8923A]/40 bg-[#0D1117] transition-colors p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
+                          <Sparkles className="h-4 w-4 text-[#E8923A]" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-[#F0F6FC]">Lock in pricing now</p>
+                          <p className="text-[11px] text-[#A8B2BD]">Pre-subscribe to keep Pro after the launch year ends. Cancel anytime.</p>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/gift"
+                      className="block rounded-xl border border-[#E8923A]/20 bg-gradient-to-br from-[#E8923A]/5 to-transparent hover:border-[#E8923A]/40 transition-colors p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
+                          <Gift className="h-4 w-4 text-[#E8923A]" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-[#F0F6FC]">Gift Pro to a fishing buddy</p>
+                          <p className="text-[11px] text-[#A8B2BD]">Their paid year starts after the launch year ends.</p>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
+                      </div>
+                    </Link>
+                  </div>
+                ) : isPremium ? (
                   <div className="space-y-6">
                     {/* Status card */}
                     <div className="rounded-xl bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent border border-[#E8923A]/20 p-5">
@@ -752,7 +811,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   </div>
                 )}
               </div>
-            )}
+              );
+            })()}
 
             {/* ═══════ NOTIFICATIONS ═══════ */}
             {activeSection === "notifications" && (

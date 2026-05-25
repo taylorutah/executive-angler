@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
-import { checkPremium } from "@/lib/admin";
+import { checkPremium, isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 import { listMyConfigurationsWithFly, listMyPatternsHub } from "@/lib/db/fly-model";
 import { summarizeVersion } from "@/components/flies-v3/summarize-version";
 import { listMyFavoriteSections, listMyRiverSectionPrefs } from "@/lib/db/favorite-sections";
@@ -343,6 +343,8 @@ export default async function DashboardPage() {
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
       isPremium={isPremium}
+      foundersWindow={isFoundersFreeWindow()}
+      foundersFreeEndIso={FOUNDERS_FREE_END.toISOString()}
       favoriteSections={favoriteSectionsDTO}
       yourRivers={yourRiversDTO}
       riversForPicker={riversForPicker}

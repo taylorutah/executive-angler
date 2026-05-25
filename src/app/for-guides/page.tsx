@@ -33,7 +33,13 @@ export default function ForGuidesPage() {
             rainbow, their first tailwater brown, their first steelhead than any
             marketing channel ever will. We&apos;d rather have guides using Pro,
             recommending the app to clients, and telling us what&apos;s broken &mdash; than
-            charging you $2.99 a month.
+            asking you to pay for it.
+          </p>
+          <p>
+            Right now, every angler gets Pro free during our{" "}
+            <strong>Founders&apos; Free Launch Year</strong> (through May 25, 2027).
+            When the launch year ends, guides keep Pro free, forever — that&apos;s
+            the program.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">

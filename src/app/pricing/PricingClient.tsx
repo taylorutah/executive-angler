@@ -13,6 +13,8 @@ interface Props {
   isPremium: boolean;
   subscriptionSource?: "apple" | "google" | "stripe" | "promo" | null;
   subscriptionExpiresAt?: string | null;
+  foundersWindow?: boolean;
+  foundersFreeEndIso?: string;
 }
 
 const MONTHLY_PRICE = 2.99;
@@ -50,6 +52,8 @@ export default function PricingClient({
   isPremium,
   subscriptionSource = null,
   subscriptionExpiresAt = null,
+  foundersWindow = false,
+  foundersFreeEndIso,
 }: Props) {
   const [plan, setPlan] = useState<"monthly" | "annual">("annual");
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +66,20 @@ export default function PricingClient({
         day: "numeric",
       })
     : null;
+
+  const foundersEndLabel = foundersFreeEndIso
+    ? new Date(foundersFreeEndIso).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
+
+  // During the founders window every authenticated user has Pro via the
+  // gate, but only "real" subscribers have a subscriptionSource. Distinguish
+  // the two so we don't show "You're a Pro" copy to gate-Pro users.
+  const isFoundersGiftedPro =
+    foundersWindow && isPremium && !subscriptionSource;
 
   const handleCheckout = async () => {
     if (!isLoggedIn) {
@@ -113,22 +131,68 @@ export default function PricingClient({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 text-center relative">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E8923A]/10 border border-[#E8923A]/20 mb-6">
             <Sparkles className="h-3.5 w-3.5 text-[#E8923A]" />
-            <span className="text-xs font-semibold text-[#E8923A] tracking-wide">EXECUTIVE ANGLER PRO</span>
+            <span className="text-xs font-semibold text-[#E8923A] tracking-wide">
+              {foundersWindow ? "FOUNDERS' FREE LAUNCH YEAR" : "EXECUTIVE ANGLER PRO"}
+            </span>
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl text-[#F0F6FC] mb-4">
-            See <em>your</em> patterns. $2.99.
-          </h1>
-          <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto mb-3">
-            Every session you log makes Pro sharper for you specifically. Your private intelligence layer — never crowdsourced from other anglers.
-          </p>
-          <p className="text-sm text-[#6E7681] max-w-2xl mx-auto">
-            We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
-          </p>
+          {foundersWindow && foundersEndLabel ? (
+            <>
+              <h1 className="font-serif text-4xl sm:text-5xl text-[#F0F6FC] mb-4">
+                Pro is free until {foundersEndLabel}.
+              </h1>
+              <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto mb-3">
+                Every Pro feature unlocked for every signed-in angler, no card required.
+                Your private intelligence layer — never crowdsourced from other anglers.
+              </p>
+              <p className="text-sm text-[#6E7681] max-w-2xl mx-auto">
+                Pricing returns to $2.99/mo or $19.99/yr on {foundersEndLabel}. We&apos;ll give you 30 days&apos; notice.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="font-serif text-4xl sm:text-5xl text-[#F0F6FC] mb-4">
+                See <em>your</em> patterns. $2.99.
+              </h1>
+              <p className="text-lg text-[#A8B2BD] max-w-2xl mx-auto mb-3">
+                Every session you log makes Pro sharper for you specifically. Your private intelligence layer — never crowdsourced from other anglers.
+              </p>
+              <p className="text-sm text-[#6E7681] max-w-2xl mx-auto">
+                We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
+              </p>
+            </>
+          )}
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {isPremium && !isPromoPremium ? (
+        {isFoundersGiftedPro && foundersEndLabel ? (
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <div className="p-8 bg-[#161B22] rounded-2xl border border-[#E8923A]/30">
+              <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-4" />
+              <h2 className="font-serif text-2xl text-[#F0F6FC] mb-2">
+                Founders&apos; Free Pro is active
+              </h2>
+              <p className="text-sm text-[#A8B2BD] mb-2">
+                Every Pro feature is unlocked for you, free, until {foundersEndLabel}.
+              </p>
+              <p className="text-xs text-[#6E7681] mb-6">
+                No subscription required. Pricing returns on {foundersEndLabel} — we&apos;ll send a heads-up 30 days before.
+              </p>
+              <Button
+                onClick={handleCheckout}
+                disabled={isLoading}
+                loading={isLoading}
+                variant="outline"
+                size="md"
+              >
+                {isLoading ? "Loading..." : "Lock in pricing now"}
+              </Button>
+              <p className="mt-3 text-[11px] text-[#6E7681]">
+                Pre-subscribe to keep Pro after the launch year ends. Cancel anytime.
+              </p>
+            </div>
+          </div>
+        ) : isPremium && !isPromoPremium ? (
           <div className="max-w-md mx-auto text-center mb-16">
             <div className="p-8 bg-[#161B22] rounded-2xl border border-[#E8923A]/30">
               <Crown className="h-10 w-10 text-[#E8923A] mx-auto mb-4" />
@@ -144,7 +208,7 @@ export default function PricingClient({
                   variant="outline"
                   size="lg"
                   fullWidth
-                 
+
                 >
                   {isLoading ? "Loading..." : "Manage Subscription"}
                 </Button>
@@ -233,21 +297,36 @@ export default function PricingClient({
               <div className="p-6 bg-[#161B22] rounded-2xl border-2 border-[#E8923A]/50 relative">
                 <div className="absolute -top-3 left-6">
                   <span className="text-[10px] font-bold tracking-wider bg-[#E8923A] text-[#0D1117] px-3 py-1 rounded-full uppercase">
-                    Your Private Layer
+                    {foundersWindow ? "Free During Launch Year" : "Your Private Layer"}
                   </span>
                 </div>
                 <h3 className="text-sm font-bold text-[#E8923A] tracking-wider uppercase mb-1">Pro</h3>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="font-mono text-4xl font-bold text-[#F0F6FC]">
-                    ${plan === "annual" ? ANNUAL_MONTHLY : MONTHLY_PRICE}
-                  </span>
-                  <span className="text-sm text-[#A8B2BD]">/mo</span>
-                </div>
-                <p className="text-xs text-[#6E7681] mb-6">
-                  {plan === "annual"
-                    ? `$${ANNUAL_PRICE}/year — billed annually`
-                    : `$${MONTHLY_PRICE}/month — billed monthly`}
-                </p>
+                {foundersWindow ? (
+                  <>
+                    <div className="flex items-baseline gap-1 mb-1">
+                      <span className="font-mono text-4xl font-bold text-[#F0F6FC]">$0</span>
+                      <span className="text-sm text-[#A8B2BD]">/mo</span>
+                    </div>
+                    <p className="text-xs text-[#6E7681] mb-6">
+                      Free for every angler{foundersEndLabel ? ` until ${foundersEndLabel}` : ""}. After:
+                      ${MONTHLY_PRICE}/mo or ${ANNUAL_PRICE}/yr.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-1 mb-1">
+                      <span className="font-mono text-4xl font-bold text-[#F0F6FC]">
+                        ${plan === "annual" ? ANNUAL_MONTHLY : MONTHLY_PRICE}
+                      </span>
+                      <span className="text-sm text-[#A8B2BD]">/mo</span>
+                    </div>
+                    <p className="text-xs text-[#6E7681] mb-6">
+                      {plan === "annual"
+                        ? `$${ANNUAL_PRICE}/year — billed annually`
+                        : `$${MONTHLY_PRICE}/month — billed monthly`}
+                    </p>
+                  </>
+                )}
 
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2.5">
@@ -272,10 +351,19 @@ export default function PricingClient({
                   variant="solid"
                   size="lg"
                   fullWidth
-                 
+
                 >
-                  {isLoading ? "Loading..." : isLoggedIn ? "Subscribe Now" : "Sign Up & Subscribe"}
+                  {isLoading
+                    ? "Loading..."
+                    : foundersWindow
+                      ? (isLoggedIn ? "Lock in pricing" : "Sign Up — Pro Free")
+                      : (isLoggedIn ? "Subscribe Now" : "Sign Up & Subscribe")}
                 </Button>
+                {foundersWindow && (
+                  <p className="mt-3 text-[11px] text-[#6E7681] text-center">
+                    No charge during the launch year. Pre-subscribe only if you want to lock in pricing for after.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -306,7 +394,11 @@ export default function PricingClient({
             className="inline-flex items-center gap-2 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
           >
             <Gift className="h-4 w-4 text-[#E8923A]" />
-            <span>Gift a year of Pro to a fishing buddy — $19.99</span>
+            <span>
+              {foundersWindow && foundersEndLabel
+                ? `Gift a friend a paid year of Pro starting ${foundersEndLabel} — $19.99`
+                : "Gift a year of Pro to a fishing buddy — $19.99"}
+            </span>
           </Link>
         </div>
       </div>

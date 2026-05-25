@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { buildBrandedEmail } from "@/lib/email/templates";
-import { buildWelcome } from "@/lib/email/senders";
+import { buildWelcome, buildFoundersFreeWelcome } from "@/lib/email/senders";
+import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 
 /**
  * POST /api/notifications/welcome
@@ -54,7 +55,9 @@ export async function POST(req: NextRequest) {
     }
 
     const resend = getResend();
-    const content = buildWelcome({ displayName });
+    const content = isFoundersFreeWindow()
+      ? buildFoundersFreeWelcome({ displayName, windowEndIso: FOUNDERS_FREE_END.toISOString() })
+      : buildWelcome({ displayName });
     const html = buildBrandedEmail(content);
 
     const { data, error } = await resend.emails.send({

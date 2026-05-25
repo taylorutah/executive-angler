@@ -1,5 +1,6 @@
 import {
   buildWelcome,
+  buildFoundersFreeWelcome,
   buildProWelcome,
   buildPaymentFailed,
   buildSubscriptionCanceled,
@@ -11,6 +12,7 @@ import {
   buildAccountDeleted,
   type BrandedEmailContent,
 } from "@/lib/email/senders";
+import { FOUNDERS_FREE_END } from "@/lib/admin";
 
 export type EmailSample = {
   key: string;
@@ -35,6 +37,15 @@ export const EMAIL_SAMPLES: ReadonlyArray<EmailSample> = [
     label: "Signup Welcome",
     when: "Fires on first authenticated callback (email confirm or OAuth signup).",
     content: buildWelcome({ displayName: "Taylor" }),
+  },
+  {
+    key: "founders_free_welcome",
+    label: "Founders' Free Welcome",
+    when: "Fires on signup during the Founders' Free Launch Year window.",
+    content: buildFoundersFreeWelcome({
+      displayName: "Taylor",
+      windowEndIso: FOUNDERS_FREE_END.toISOString(),
+    }),
   },
   {
     key: "pro_welcome",

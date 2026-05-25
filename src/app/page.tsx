@@ -9,6 +9,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
 import { Button } from "@/components/ui/Button";
 import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
+import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 
 const AppleSvg = () => (
   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -51,6 +52,12 @@ const PILLAR_FEATURES = [
 ];
 
 export default function HomePage() {
+  const foundersWindow = isFoundersFreeWindow();
+  const foundersEndLabel = FOUNDERS_FREE_END.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   return (
     <>
       {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
@@ -299,14 +306,16 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2 mb-6">
                 <Sparkles className="h-4 w-4 text-[#E8923A]" />
                 <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
-                  Pro &mdash; $2.99/mo
+                  {foundersWindow ? `Pro — Free Until ${foundersEndLabel}` : "Pro"}
                 </span>
               </div>
               <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
                 See <em>your</em> patterns
               </h2>
               <p className="text-[#A8B2BD] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
-                Your private intelligence layer: which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers.
+                {foundersWindow
+                  ? "Your private intelligence layer is free for every signed-in angler during the Founders' Free Launch Year. No card required."
+                  : "Your private intelligence layer: which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers."}
               </p>
               <p className="text-[#6E7681] text-sm mb-10 max-w-xl mx-auto">
                 We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.

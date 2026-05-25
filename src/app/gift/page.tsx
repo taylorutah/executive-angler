@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import GiftPurchaseClient from "./GiftPurchaseClient";
+import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 
 export const metadata = {
   title: "Gift Pro",
@@ -28,6 +29,8 @@ export default async function GiftPage() {
     <GiftPurchaseClient
       isLoggedIn={!!user}
       purchaserName={purchaserName}
+      foundersWindow={isFoundersFreeWindow()}
+      foundersFreeEndIso={FOUNDERS_FREE_END.toISOString()}
     />
   );
 }

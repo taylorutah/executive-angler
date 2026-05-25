@@ -65,7 +65,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
             href="/pricing"
             className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#F0A65A] transition-colors"
           >
-            Upgrade to Pro — $2.99/mo
+            See Pricing
           </Link>
           <p className="flex items-center gap-1.5 text-[10px] text-[#6E7681] mt-3">
             <Lock className="h-3 w-3" /> Your data, your patterns. Never crowdsourced from others.

@@ -14,6 +14,19 @@ export const PERMANENT_PRO_EMAILS = [
   "taylor@executiveangler.com",
 ];
 
+/**
+ * Founders' Free Launch Year — every authenticated user has Pro until this
+ * date. Driven by env var so it can be flipped without a redeploy. See
+ * vault: Executive Angler/Founders-Free-Launch-Year-Plan.md
+ */
+export const FOUNDERS_FREE_END = new Date(
+  process.env.NEXT_PUBLIC_FOUNDERS_FREE_END ?? "2027-05-25T07:00:00Z"
+);
+
+export function isFoundersFreeWindow(now: Date = new Date()): boolean {
+  return now < FOUNDERS_FREE_END;
+}
+
 export function isAdmin(email: string | null | undefined): boolean {
   return !!email && ADMIN_EMAILS.includes(email);
 }
@@ -27,9 +40,10 @@ export function isPermanentPro(email: string | null | undefined): boolean {
  *
  * Order:
  *   1. Permanent Pro email whitelist (admin bypass)
- *   2. profiles.is_premium flag (set by DB triggers on subscriptions or
+ *   2. Founders' Free Launch Year window — every authenticated user is Pro
+ *   3. profiles.is_premium flag (set by DB triggers on subscriptions or
  *      admin-granted)
- *   3. Direct subscriptions table check — catches the ~ms race where a
+ *   4. Direct subscriptions table check — catches the ~ms race where a
  *      webhook just wrote a row but the trigger hasn't propagated yet, and
  *      filters out stale rows whose current_period_end has passed.
  */
@@ -40,6 +54,7 @@ export async function checkPremium(
   email?: string | null
 ): Promise<boolean> {
   if (isPermanentPro(email)) return true;
+  if (isFoundersFreeWindow()) return true;
 
   const { data: profile } = await supabase
     .from("profiles")

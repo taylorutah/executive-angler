@@ -23,6 +23,8 @@ interface DashboardProps {
   flyCount: number;
   gearCount: number;
   isPremium: boolean;
+  foundersWindow?: boolean;
+  foundersFreeEndIso?: string;
   riverStats: RiverStats[];
   enhancedStats: {
     totalSessions: number;
@@ -46,10 +48,14 @@ function formatDate(d: string): string {
 
 export default function DashboardClient({
   user, profile, mySessions, tieNextItems, favoriteItems, flyCount, gearCount,
-  isPremium, riverStats, enhancedStats, favoriteSections, yourRivers, riversForPicker,
+  isPremium, foundersWindow = false, foundersFreeEndIso,
+  riverStats, enhancedStats, favoriteSections, yourRivers, riversForPicker,
 }: DashboardProps) {
   const displayName = profile?.display_name || profile?.username || user.email.split("@")[0];
   const milestoneCount = riverStats.reduce((sum, rs) => sum + rs.awards.length, 0);
+  const foundersEndLabel = foundersFreeEndIso
+    ? new Date(foundersFreeEndIso).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })
+    : null;
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
@@ -115,7 +121,17 @@ export default function DashboardClient({
               <MyFliesWidget tieNext={tieNextItems} favorites={favoriteItems} />
             </div>
 
-            {/* Upgrade banner (free users only) */}
+            {/* Founders' Free Pro pill (window-active premium users) */}
+            {foundersWindow && isPremium && foundersEndLabel && (
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-[#E8923A]/20 bg-[#161B22]">
+                <Sparkles className="h-4 w-4 text-[#E8923A] shrink-0" />
+                <p className="text-xs text-[#A8B2BD] flex-1">
+                  <span className="text-[#F0F6FC] font-semibold">Founders&apos; Free Pro</span> — every Pro feature unlocked, free, until {foundersEndLabel}.
+                </p>
+              </div>
+            )}
+
+            {/* Upgrade banner (free users only — only shows post-window) */}
             {!isPremium && (
               <Link
                 href="/pricing"
@@ -125,7 +141,7 @@ export default function DashboardClient({
                   <Sparkles className="h-5 w-5 text-[#E8923A]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">See <em>your</em> patterns — Pro $2.99/mo</h3>
+                  <h3 className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">See <em>your</em> patterns with Pro</h3>
                   <p className="text-[11px] text-[#A8B2BD] truncate">Per-river scorecard, personal insights, Best Window — your data, never crowdsourced</p>
                 </div>
                 <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors shrink-0" />
