@@ -71,10 +71,10 @@ export default function GiftPurchaseClient({ isLoggedIn, purchaserName, founders
           </h1>
           {foundersWindow && foundersEndLabel ? (
             <p className="text-sm text-[#A8B2BD] max-w-md mx-auto">
-              $19.99 &mdash; a full paid year of Pro for a fishing buddy, starting
-              {" "}{foundersEndLabel} (when the Founders&apos; Free Launch Year ends).
-              They get Pro free until then like every angler — your gift extends
-              it by a full paid year after.
+              $19.99 &mdash; a full paid year of Executive Angler Pro for a fishing
+              buddy. Every angler has Pro free until {foundersEndLabel}, so they
+              can sit on the claim link until then — their paid year starts the
+              day they redeem.
             </p>
           ) : (
             <p className="text-sm text-[#A8B2BD] max-w-md mx-auto">

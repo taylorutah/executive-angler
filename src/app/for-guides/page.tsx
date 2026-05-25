@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/constants";
+import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 
 export const metadata: Metadata = {
   title: "Pro is Free for Guides",
@@ -8,6 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function ForGuidesPage() {
+  const foundersWindow = isFoundersFreeWindow();
+  const foundersEndLabel = FOUNDERS_FREE_END.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   return (
     <div className="pt-8 pb-20 bg-[#0D1117] min-h-screen">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -35,12 +42,14 @@ export default function ForGuidesPage() {
             recommending the app to clients, and telling us what&apos;s broken &mdash; than
             asking you to pay for it.
           </p>
-          <p>
-            Right now, every angler gets Pro free during our{" "}
-            <strong>Founders&apos; Free Launch Year</strong> (through May 25, 2027).
-            When the launch year ends, guides keep Pro free, forever — that&apos;s
-            the program.
-          </p>
+          {foundersWindow && (
+            <p>
+              Right now, every angler gets Pro free during our{" "}
+              <strong>Founders&apos; Free Launch Year</strong> (through {foundersEndLabel}).
+              When the launch year ends, guides keep Pro free, forever — that&apos;s
+              the program.
+            </p>
+          )}
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             What you get

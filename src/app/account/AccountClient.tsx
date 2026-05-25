@@ -689,7 +689,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         </div>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-[#F0F6FC]">Gift Pro to a fishing buddy</p>
-                          <p className="text-[11px] text-[#A8B2BD]">Their paid year starts after the launch year ends.</p>
+                          <p className="text-[11px] text-[#A8B2BD]">$19.99 — they redeem when they&apos;re ready, paid year starts on redemption.</p>
                         </div>
                         <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
                       </div>

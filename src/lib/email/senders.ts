@@ -581,7 +581,7 @@ export function buildFoundersFreeWelcome(args: {
   `;
 
   return {
-    subject: "Pro is free for you until 2027",
+    subject: `Pro is free for you until ${endLabel}`,
     heading: `${greeting} Pro is on the house.`,
     preheader: `Every Pro feature unlocked for you, free, until ${endLabel}.`,
     body,

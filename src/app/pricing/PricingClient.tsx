@@ -240,7 +240,14 @@ export default function PricingClient({
               </div>
             )}
 
-            {/* Billing toggle */}
+            {/* Billing toggle — labeling shifts during the launch year so users
+                understand the toggle controls post-window pricing, not today. */}
+            {foundersWindow && (
+              <p className="text-center text-xs text-[#A8B2BD] mb-3">
+                Pro is free for you today. Pick the plan you&apos;d like to lock in
+                for after the launch year ends:
+              </p>
+            )}
             <div className="flex items-center justify-center gap-3 mb-8">
               <button
                 onClick={() => setPlan("monthly")}
@@ -250,7 +257,7 @@ export default function PricingClient({
                     : "bg-[#161B22] text-[#A8B2BD] border border-[#21262D] hover:border-[#A8B2BD]"
                 }`}
               >
-                Monthly
+                Monthly {foundersWindow && <span className="text-[10px] font-normal opacity-80">· ${MONTHLY_PRICE}/mo</span>}
               </button>
               <button
                 onClick={() => setPlan("annual")}
@@ -260,7 +267,7 @@ export default function PricingClient({
                     : "bg-[#161B22] text-[#A8B2BD] border border-[#21262D] hover:border-[#A8B2BD]"
                 }`}
               >
-                Annual
+                Annual {foundersWindow && <span className="text-[10px] font-normal opacity-80">· ${ANNUAL_PRICE}/yr</span>}
                 <span className="absolute -top-2.5 -right-2 text-[9px] font-bold bg-[#2EA44F] text-white px-1.5 py-0.5 rounded-full">
                   -{SAVINGS_PCT}%
                 </span>
@@ -395,9 +402,7 @@ export default function PricingClient({
           >
             <Gift className="h-4 w-4 text-[#E8923A]" />
             <span>
-              {foundersWindow && foundersEndLabel
-                ? `Gift a friend a paid year of Pro starting ${foundersEndLabel} — $19.99`
-                : "Gift a year of Pro to a fishing buddy — $19.99"}
+              Gift a year of Pro to a fishing buddy — $19.99
             </span>
           </Link>
         </div>
