@@ -12,7 +12,7 @@ function getAdminSupabase() {
 }
 
 /**
- * PATCH /api/admin/users — Admin user actions (grant/revoke pro, ban/unban)
+ * PATCH /api/admin/users — Admin user actions (ban/unban)
  * POST /api/admin/users — Add internal note
  */
 
@@ -34,38 +34,6 @@ export async function PATCH(request: Request) {
   }
 
   switch (action) {
-    case "grant_premium": {
-      const { error } = await admin
-        .from("profiles")
-        .update({
-          is_premium: true,
-          premium_granted_by: user.email,
-          premium_granted_at: new Date().toISOString(),
-        })
-        .eq("user_id", user_id);
-
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-      await logAudit(admin, user, "grant_premium", user_id);
-      return NextResponse.json({ message: "Pro access granted" });
-    }
-
-    case "revoke_premium": {
-      const { error } = await admin
-        .from("profiles")
-        .update({
-          is_premium: false,
-          premium_granted_by: null,
-          premium_granted_at: null,
-        })
-        .eq("user_id", user_id);
-
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-      await logAudit(admin, user, "revoke_premium", user_id);
-      return NextResponse.json({ message: "Pro access revoked" });
-    }
-
     case "ban": {
       const { error } = await admin
         .from("profiles")

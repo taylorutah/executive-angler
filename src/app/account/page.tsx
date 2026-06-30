@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
-import { isAdmin, checkPremium, isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 
 export const metadata = { title: "My Account" };
@@ -39,19 +39,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, profile_visibility, searchable, is_premium, stripe_customer_id, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
+    .select("feed_display, display_name, avatar_url, home_location, username, bio, is_private, profile_visibility, searchable, email_notify_follows, email_notify_comments, email_notify_likes, email_digest_frequency, ties_own_flies")
     .eq("user_id", user.id)
     .single();
-
-  // Fetch active subscription info
-  const { data: subscription } = await supabase
-    .from("subscriptions")
-    .select("source, plan, status, current_period_end")
-    .eq("user_id", user.id)
-    .in("status", ["active", "trialing"])
-    .order("current_period_end", { ascending: false })
-    .limit(1)
-    .maybeSingle();
 
   // Fetch user awards
   const { data: awards } = await supabase
@@ -146,16 +136,6 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         emailDigestFrequency: (profile?.email_digest_frequency as "none" | "daily" | "weekly") ?? "weekly",
       }}
       isAdmin={isAdmin(user.email)}
-      isPremium={await checkPremium(supabase, user.id, user.email)}
-      subscription={subscription ? {
-        source: subscription.source as "apple" | "google" | "stripe",
-        plan: subscription.plan as "monthly" | "annual",
-        status: subscription.status as "active" | "trialing",
-        currentPeriodEnd: subscription.current_period_end,
-      } : null}
-      hasStripeCustomer={!!profile?.stripe_customer_id}
-      foundersWindow={isFoundersFreeWindow()}
-      foundersFreeEndIso={FOUNDERS_FREE_END.toISOString()}
     />
   );
 }

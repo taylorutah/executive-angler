@@ -386,10 +386,6 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         body: JSON.stringify(payload),
         credentials: "same-origin",
       });
-      if (res.status === 403) {
-        setError("Upgrade to Pro for unlimited flies.");
-        return;
-      }
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         setError(data.error || "Save failed.");

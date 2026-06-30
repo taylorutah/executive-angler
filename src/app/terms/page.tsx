@@ -75,41 +75,15 @@ export default function TermsPage() {
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
-            4a. Founders&apos; Free Launch Year
+            4a. Free Access
           </h2>
           <p>
-            From May 25, 2026 through May 25, 2027 (the &quot;Founders&apos;
-            Free Launch Year&quot;), every authenticated {SITE_NAME} user has full
-            access to Pro features at no cost. No payment method is required to
-            activate Pro access during this window.
+            {SITE_NAME} is free to use. Every feature of the app &mdash; journal,
+            fly workbench, river conditions, personal insights, scorecards, exports,
+            and everything else &mdash; is available to all users at no cost. There
+            is no paid tier, no subscription, and no payment is ever required to use
+            the app.
           </p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              Pro features are unlocked for all signed-in users automatically — no
-              code, coupon, or sign-up step is required.
-            </li>
-            <li>
-              Standard Pro pricing returns on May 25, 2027 at $2.99/month or
-              $19.99/year. Users without an active paid subscription on that date
-              will be returned to the Free tier; existing journal data, fly box
-              contents, and account settings are preserved.
-            </li>
-            <li>
-              We will notify all users at least 30 days before the window closes
-              (on or about April 25, 2027) with an in-app banner and email so
-              there are no surprises.
-            </li>
-            <li>
-              Users may pre-subscribe at any time during the window to lock in
-              pricing for continued Pro access after May 25, 2027. Pre-purchasers
-              are billed immediately and their subscription period runs from the
-              date of purchase.
-            </li>
-            <li>
-              The Founders&apos; Free Launch Year affects Pro feature access only.
-              Free-tier access continues unchanged after the window closes.
-            </li>
-          </ul>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
             5. Third-Party Links

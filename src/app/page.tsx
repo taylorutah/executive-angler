@@ -9,7 +9,6 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
 import { Button } from "@/components/ui/Button";
 import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
-import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 
 const AppleSvg = () => (
   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -52,12 +51,6 @@ const PILLAR_FEATURES = [
 ];
 
 export default function HomePage() {
-  const foundersWindow = isFoundersFreeWindow();
-  const foundersEndLabel = FOUNDERS_FREE_END.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
   return (
     <>
       {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
@@ -298,7 +291,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. PRO — Intelligence layer ──────────────────────────────── */}
+      {/* ── 5. Intelligence layer ────────────────────────────────────── */}
       <section className="bg-[#0D1117] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
@@ -306,19 +299,17 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2 mb-6">
                 <Sparkles className="h-4 w-4 text-[#E8923A]" />
                 <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
-                  {foundersWindow ? `Pro — Free Until ${foundersEndLabel}` : "Pro"}
+                  Your Intelligence Layer
                 </span>
               </div>
               <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
                 See <em>your</em> patterns
               </h2>
               <p className="text-[#A8B2BD] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
-                {foundersWindow
-                  ? "Your private intelligence layer is free for every signed-in angler during the Founders' Free Launch Year. No card required."
-                  : "Your private intelligence layer: which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers."}
+                Which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers. Free for every angler.
               </p>
               <p className="text-[#6E7681] text-sm mb-10 max-w-xl mx-auto">
-                We never publish locations or fish counts. Pro deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
+                We never publish locations or fish counts. It deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
               </p>
             </ScrollAnimation>
             <ScrollAnimation delay={0.15}>
@@ -336,8 +327,8 @@ export default function HomePage() {
               </div>
             </ScrollAnimation>
             <ScrollAnimation delay={0.25}>
-              <Button href="/pricing" variant="solid" size="lg" loud>
-                See Plans &amp; Pricing
+              <Button href="/signup" variant="solid" size="lg" loud>
+                Start Your Journal — Free
               </Button>
             </ScrollAnimation>
           </div>
@@ -353,7 +344,7 @@ export default function HomePage() {
               Start fishing smarter.
             </h2>
             <p className="text-[#A8B2BD] text-lg mb-10 max-w-xl mx-auto">
-              Free to start. Log unlimited sessions. Upgrade when your data demands it.
+              Free to start. Log unlimited sessions. Every feature, every angler.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button

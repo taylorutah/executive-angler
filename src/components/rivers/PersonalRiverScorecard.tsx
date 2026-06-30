@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { Sparkles, Lock, Fish, Ruler, MapPin, Sunrise, Calendar, Wrench, Feather, TrendingUp } from "lucide-react";
 import type { PersonalRiverScorecard } from "@/app/api/insights/personal-river/[riverId]/route";
 
@@ -10,7 +9,7 @@ interface Props {
   riverName: string;
 }
 
-type AuthState = "loading" | "none" | "free" | "premium";
+type AuthState = "loading" | "none" | "ready";
 
 export default function PersonalRiverScorecardCard({ riverId, riverName }: Props) {
   const [data, setData] = useState<PersonalRiverScorecard | null>(null);
@@ -21,11 +20,10 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
     fetch(`/api/insights/personal-river/${riverId}`).then(async (res) => {
       if (cancelled) return;
       if (res.status === 401) return setAuthState("none");
-      if (res.status === 403) return setAuthState("free");
       if (!res.ok) return setAuthState("none");
       const json = (await res.json()) as PersonalRiverScorecard;
       setData(json);
-      setAuthState("premium");
+      setAuthState("ready");
     }).catch(() => setAuthState("none"));
     return () => { cancelled = true; };
   }, [riverId]);
@@ -43,39 +41,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
     return null;
   }
 
-  if (authState === "free") {
-    return (
-      <div className="rounded-xl p-px bg-gradient-to-br from-[#E8923A]/40 via-[#E8923A]/10 to-[#0BA5C7]/30">
-        <div className="bg-[#161B22] rounded-[11px] p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="h-4 w-4 text-[#E8923A]" />
-            <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
-              Your River Scorecard
-            </h3>
-            <span className="ml-auto text-[9px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">
-              PRO
-            </span>
-          </div>
-          <p className="text-sm text-[#A8B2BD] mb-4 leading-relaxed">
-            Your sessions, your biggest fish, your best section, your top fly,
-            your best time of day, your best month, your gear — all for{" "}
-            {riverName}. Pro turns your private journal into a per-river edge.
-          </p>
-          <Link
-            href="/pricing"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8923A] text-white text-sm font-semibold rounded-lg hover:bg-[#F0A65A] transition-colors"
-          >
-            See Pricing
-          </Link>
-          <p className="flex items-center gap-1.5 text-[10px] text-[#6E7681] mt-3">
-            <Lock className="h-3 w-3" /> Your data, your patterns. Never crowdsourced from others.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Premium with data
+  // Signed in, with data
   if (!data || data.totalSessions === 0) {
     return (
       <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
@@ -102,9 +68,6 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
           <h3 className="font-heading text-base font-semibold text-[#F0F6FC]">
             Your River Scorecard
           </h3>
-          <span className="ml-auto text-[9px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">
-            PRO
-          </span>
         </div>
         <p className="text-[11px] text-[#6E7681] mb-4">
           From your private journal — visible only to you.

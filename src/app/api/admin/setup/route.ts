@@ -18,29 +18,17 @@ export async function POST() {
 
   const results: string[] = [];
 
-  // Test if is_premium column exists by trying to select it
+  // Test if is_banned column exists by trying to select it
   const { error: testError } = await supabase
     .from("profiles")
-    .select("is_premium")
+    .select("is_banned")
     .limit(1);
 
   if (testError?.message?.includes("does not exist")) {
-    results.push("⚠️ Admin columns (is_premium, is_banned, etc.) need to be added via Supabase SQL Editor");
+    results.push("⚠️ Admin columns (is_banned, etc.) need to be added via Supabase SQL Editor");
     results.push("Run the SQL from: supabase/migrations/admin-schema.sql");
   } else {
-    results.push("✅ profiles.is_premium column exists");
-
-    // Set admin accounts as premium
-    const { error: premiumError } = await supabase
-      .from("profiles")
-      .update({ is_premium: true })
-      .in("user_id", [user.id]);
-
-    if (premiumError) {
-      results.push(`⚠️ Failed to set premium: ${premiumError.message}`);
-    } else {
-      results.push(`✅ Set ${user.email} as premium`);
-    }
+    results.push("✅ profiles.is_banned column exists");
   }
 
   // Test if admin_audit_log table exists

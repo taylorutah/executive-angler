@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  ChevronLeft, Shield, Crown, Ban, CheckCircle, XCircle,
+  ChevronLeft, Shield, Ban,
   Fish, Calendar, Feather, Users, Clock, StickyNote,
-  AlertTriangle, Sparkles, UserX, UserCheck, Loader2, Trash2,
+  AlertTriangle, UserX, UserCheck, Loader2, Trash2,
 } from "lucide-react";
 import DeleteUserModal from "@/components/admin/DeleteUserModal";
 import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
@@ -21,12 +21,9 @@ interface UserData {
     avatar_url: string | null;
     bio: string | null;
     created_at: string | null;
-    is_premium: boolean;
     is_banned: boolean;
     ban_reason: string | null;
     banned_at: string | null;
-    premium_granted_by: string | null;
-    premium_granted_at: string | null;
   } | null;
   sessions: { id: string; date: string; river_name: string | null; total_fish: number | null; broadcast_presence: boolean | null }[];
   catches: { id: string; species: string | null; length_inches: number | null }[];
@@ -43,7 +40,6 @@ export default function UserDetailClient({ userId }: { userId: string }) {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [noteText, setNoteText] = useState("");
-  const [proReason, setProReason] = useState("");
   const [banReason, setBanReason] = useState("");
   const [showBanConfirm, setShowBanConfirm] = useState(false);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -149,11 +145,6 @@ export default function UserDetailClient({ userId }: { userId: string }) {
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-xl font-bold text-[#F0F6FC]">{p.display_name || "No name"}</h2>
                 {p.username && <span className="text-sm text-[#E8923A]">@{p.username}</span>}
-                {p.is_premium && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#E8923A]/15 text-[#E8923A] rounded-full text-[10px] font-bold uppercase">
-                    <Crown className="h-3 w-3" /> PRO
-                  </span>
-                )}
                 {p.is_banned && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-950/50 text-red-400 rounded-full text-[10px] font-bold uppercase">
                     <Ban className="h-3 w-3" /> BANNED
@@ -164,9 +155,6 @@ export default function UserDetailClient({ userId }: { userId: string }) {
               <div className="flex items-center gap-4 mt-2 text-xs text-[#6E7681]">
                 <span>ID: <code className="text-[#A8B2BD]">{p.user_id.slice(0, 12)}...</code></span>
                 <span>Joined {formatDate(p.created_at)}</span>
-                {p.premium_granted_by && (
-                  <span>Pro granted by {p.premium_granted_by} on {formatDate(p.premium_granted_at)}</span>
-                )}
               </div>
             </div>
           </div>
@@ -202,43 +190,6 @@ export default function UserDetailClient({ userId }: { userId: string }) {
             <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
               <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Actions</h3>
               <div className="space-y-2">
-                {/* Pro toggle */}
-                {!p.is_premium ? (
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      value={proReason}
-                      onChange={e => setProReason(e.target.value)}
-                      placeholder="Reason (optional)"
-                      className="w-full px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
-                    />
-                    <Button
-                      onClick={() => adminAction("grant_pro", { reason: proReason })}
-                      disabled={actionLoading === "grant_pro"}
-                      variant="brand"
-                      size="sm"
-                      icon={Sparkles}
-                      loading={actionLoading === "grant_pro"}
-                      fullWidth
-                    >
-                      Grant Pro Access
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    onClick={() => adminAction("revoke_pro")}
-                    disabled={actionLoading === "revoke_pro"}
-                    variant="outline"
-                    size="sm"
-                    icon={XCircle}
-                    loading={actionLoading === "revoke_pro"}
-                    fullWidth
-                   
-                  >
-                    Revoke Pro Access
-                  </Button>
-                )}
-
                 {/* Ban toggle */}
                 {!p.is_banned ? (
                   showBanConfirm ? (
@@ -456,8 +407,6 @@ function StatRow({ icon, label, value }: { icon: React.ReactNode; label: string;
 
 function AuditIcon({ action }: { action: string }) {
   switch (action) {
-    case "grant_pro": return <Sparkles className="h-3.5 w-3.5 text-[#E8923A]" />;
-    case "revoke_pro": return <XCircle className="h-3.5 w-3.5 text-[#A8B2BD]" />;
     case "ban_user": return <Ban className="h-3.5 w-3.5 text-red-400" />;
     case "unban_user": return <UserCheck className="h-3.5 w-3.5 text-green-400" />;
     case "add_note": return <StickyNote className="h-3.5 w-3.5 text-blue-400" />;

@@ -9,9 +9,6 @@ const MIGRATION_SQL = `-- Executive Angler Admin Schema Migration
 -- Run this in Supabase SQL Editor (one-time setup)
 
 -- 1. Add admin columns to profiles
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_premium boolean DEFAULT false;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS premium_granted_by text;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS premium_granted_at timestamptz;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_banned boolean DEFAULT false;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS ban_reason text;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS banned_at timestamptz;
@@ -52,14 +49,7 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
--- 6. Set founder accounts as Pro
-UPDATE profiles SET is_premium = true
-WHERE user_id IN (
-  SELECT id FROM auth.users
-  WHERE email IN ('taylor.warnick@gmail.com', 'taylor@executiveangler.com')
-);
-
--- 7. Photo credit + alt text columns on all entity tables
+-- 6. Photo credit + alt text columns on all entity tables
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE rivers ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
@@ -82,12 +72,11 @@ ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_alt text;
 ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_credit text;
 ALTER TABLE articles ADD COLUMN IF NOT EXISTS hero_image_credit_url text;
 
--- 8. Indexes
+-- 7. Indexes
 CREATE INDEX IF NOT EXISTS idx_audit_log_target ON admin_audit_log(target_user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created ON admin_audit_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_user_notes_user ON admin_user_notes(user_id);
 CREATE INDEX IF NOT EXISTS idx_profiles_banned ON profiles(is_banned) WHERE is_banned = true;
-CREATE INDEX IF NOT EXISTS idx_profiles_premium ON profiles(is_premium) WHERE is_premium = true;
 `;
 
 export default function SetupClient({

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Target, Loader2, Lock, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
-import Link from "next/link";
+import { Target, Loader2, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
 
 interface BestWindow {
   flow_min: number | null;
@@ -37,7 +36,7 @@ export default function BestWindowCalculator({ riverId }: Props) {
   const [currentFlow, setCurrentFlow] = useState<number | null>(null);
   const [currentTemp, setCurrentTemp] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [authState, setAuthState] = useState<"loading" | "none" | "free" | "premium">("loading");
+  const [authState, setAuthState] = useState<"loading" | "none" | "ready">("loading");
 
   useEffect(() => {
     async function load() {
@@ -45,9 +44,8 @@ export default function BestWindowCalculator({ riverId }: Props) {
         // Fetch insights
         const res = await fetch(`/api/insights/river-conditions?riverId=${riverId}`);
         if (res.status === 401) { setAuthState("none"); return; }
-        if (res.status === 403) { setAuthState("free"); return; }
         if (!res.ok) return;
-        setAuthState("premium");
+        setAuthState("ready");
         const data = await res.json();
         setBestWindow(data.bestWindow);
         setHatchCorrelation(data.hatchCorrelation || []);
@@ -83,25 +81,6 @@ export default function BestWindowCalculator({ riverId }: Props) {
   }
 
   if (authState === "none") return null;
-
-  if (authState === "free") {
-    return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-3 mb-3">
-          <Target className="h-5 w-5 text-[#E8923A]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">Best Window Calculator</h3>
-          <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
-        </div>
-        <div className="flex items-center gap-2 text-[#6E7681] text-sm">
-          <Lock className="h-4 w-4" />
-          <span>Know exactly when to fish based on your data.</span>
-        </div>
-        <Link href="/account" className="text-xs text-[#E8923A] hover:underline mt-2 inline-block">
-          Upgrade to Pro →
-        </Link>
-      </div>
-    );
-  }
 
   if (!bestWindow || bestWindow.session_count < 3) return null;
 

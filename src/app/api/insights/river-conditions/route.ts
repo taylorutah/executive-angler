@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
 
 /**
  * GET /api/insights/river-conditions?riverId=xxx
  *
  * Returns the user's personal catch data correlated with USGS flow data
- * for a specific river. Premium-gated.
+ * for a specific river.
  *
  * Response shape:
  * {
@@ -25,11 +24,6 @@ export async function GET(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return NextResponse.json({ error: "Premium required" }, { status: 403 });
   }
 
   // Fetch all user sessions on this river

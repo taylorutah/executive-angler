@@ -341,6 +341,15 @@ Destinations (mega: Montana, Wyoming, Colorado, Idaho, Alaska, New Zealand, View
 ## Change Log
 See `docs/Changelog/` for session-by-session details.
 
+### 2026-06-30
+**Everything Free — all gates, payments, and the Pro tier removed (web + iOS + Android):**
+- **No Pro tier anywhere.** Every feature is free for all users; no payment, no upgrade prompts. Branch `make-everything-free`.
+- **Web:** removed `checkPremium`/founders/permanent-pro from `src/lib/admin.ts` (kept `isAdmin`); dropped `isPremium` from `auth-context`; all 6 formerly-gated API routes serve any authed user; deleted `ProGate` and un-gated the 5 gated pages; deleted Stripe/promo/gift/founding/premium-status routes + subscription crons (`vercel.json`) + `stripe` dep; deleted `/pricing`, `/gift`, `/founding`, `/redeem`, `/refund-policy`; removed Header Pro pill + Gift links, Footer pricing/refund links, dashboard upgrade banner, account Subscription tab, scorecard/best-window/flow-overlay "Upgrade to Pro" teasers; trimmed email senders to welcome + account-deleted; collapsed `hero-height` tiers to `anonymous|authenticated`; stripped admin grant/revoke-Pro tooling. `npm run build` green.
+- **iOS:** deleted PremiumStore/PremiumLimits/Paywall/PremiumGate/PremiumUpgradeBanner + StoreKit; feature views un-gated. iOS + watchOS build green.
+- **Android:** deleted Paywall/PaywallViewModel/PremiumGateView/PremiumUpgradeBanner; removed `billing-ktx`; `PremiumManager` reduced to always-true stub. `assembleDebug` green.
+- **DB left dormant (not dropped):** `subscriptions` table + `profiles.is_premium`/`premium_granted_*` columns + trigger remain. Optional drop migration at `supabase/migrations/2026-06-30_drop_billing_OPTIONAL.sql` — NOT auto-run.
+- **Manual follow-ups:** delete Stripe/promo env vars in Vercel after deploy; resubmit iOS/Android builds to the stores (your step).
+
 ### 2026-04-02
 **Review UI + Vercel build fix + cross-platform push:**
 

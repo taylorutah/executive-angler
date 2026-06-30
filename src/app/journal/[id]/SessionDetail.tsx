@@ -344,7 +344,6 @@ interface Props {
    * the same read-only layout minus the sign-in CTAs.
    */
   isAnonymous?: boolean;
-  isPremium?: boolean;
 }
 
 interface FishPhotoEntry {
@@ -476,7 +475,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   );
 }
 
-export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true, ownerProfile = null, isAnonymous = false, isPremium = false }: Props) {
+export default function SessionDetail({ session, catches, flies, sessionPhotos = [], isOwner = true, ownerProfile = null, isAnonymous = false }: Props) {
   // Login return path — anon viewers who tap any signed-in-only surface
   // (kudos CTA, comment CTA, follow button) come back to this session.
   const loginHref = `/login?redirect=/journal/${session.id}`;
@@ -1325,7 +1324,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           {/* ---- RIVER STATS WIDGET ---- */}
           {session.river_name && (
             <div className="mb-5">
-              <RiverStatsWidget riverName={session.river_name} isPremium={isPremium} />
+              <RiverStatsWidget riverName={session.river_name} />
             </div>
           )}
 

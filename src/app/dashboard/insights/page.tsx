@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
-import ProGate from "@/components/ui/ProGate";
 import InsightsClient from "./InsightsClient";
 
 export const metadata: Metadata = {
@@ -14,16 +12,6 @@ export default async function InsightsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/dashboard/insights");
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return (
-      <ProGate
-        feature="Insights"
-        pitch="Surface patterns from your own sessions — best flies, peak conditions, where you fish best."
-      />
-    );
-  }
 
   // Fetch all user data for analysis
   const [sessionsRes, catchesRes] = await Promise.all([

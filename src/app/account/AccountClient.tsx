@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Crown, Sparkles, CreditCard, Database, Trash2, Gift } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Database, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
@@ -25,7 +25,7 @@ const AWARD_EMOJI_MAP: Record<string, string> = {
   streak_4: "⚡", streak_12: "💎",
 };
 
-type Section = "profile" | "subscription" | "notifications" | "security" | "connected" | "data";
+type Section = "profile" | "notifications" | "security" | "connected" | "data";
 
 interface Props {
   user: {
@@ -70,26 +70,16 @@ interface Props {
     emailNotifyLikes: boolean;
     emailDigestFrequency: "none" | "daily" | "weekly";
   };
-  isPremium?: boolean;
-  subscription?: {
-    source: "apple" | "google" | "stripe";
-    plan: "monthly" | "annual";
-    status: "active" | "trialing";
-    currentPeriodEnd: string | null;
-  } | null;
-  hasStripeCustomer?: boolean;
-  foundersWindow?: boolean;
-  foundersFreeEndIso?: string;
 }
 
-export default function AccountClient({ user, feedDisplay: initialFeedDisplay, tiesOwnFlies: initialTiesOwnFlies = true, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false, isPremium = false, subscription = null, hasStripeCustomer = false, foundersWindow = false, foundersFreeEndIso }: Props) {
+export default function AccountClient({ user, feedDisplay: initialFeedDisplay, tiesOwnFlies: initialTiesOwnFlies = true, stats, awards = [], welcome, socialCounts, notificationPrefs, isAdmin = false }: Props) {
   const router = useRouter();
 
   // Determine initial section from URL hash
   const getInitialSection = (): Section => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (["profile", "subscription", "notifications", "security", "connected", "data"].includes(hash)) return hash as Section;
+      if (["profile", "notifications", "security", "connected", "data"].includes(hash)) return hash as Section;
     }
     return "profile";
   };
@@ -134,9 +124,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
   const [digestFrequency, setDigestFrequency] = useState<"none" | "daily" | "weekly">(notificationPrefs.emailDigestFrequency);
   const [notifSaving, setNotifSaving] = useState(false);
   const [notifSaved, setNotifSaved] = useState(false);
-
-  // Subscription portal
-  const [portalLoading, setPortalLoading] = useState(false);
 
   // Demo content state
   const [demoProbed, setDemoProbed] = useState(false);
@@ -192,21 +179,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     }
   }
 
-  async function handleManageSubscription() {
-    setPortalLoading(true);
-    try {
-      const res = await fetch("/api/checkout/portal", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch {
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setPortalLoading(false);
-    }
-  }
-
   // Username availability
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [usernameChecking, setUsernameChecking] = useState(false);
@@ -246,7 +218,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
   // Handle hash navigation
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (["profile", "subscription", "notifications", "security", "connected", "data"].includes(hash)) {
+    if (["profile", "notifications", "security", "connected", "data"].includes(hash)) {
       setActiveSection(hash as Section);
     }
   }, []);
@@ -358,7 +330,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
   const sidebarItems: { key: Section; icon: React.ElementType; label: string }[] = [
     { key: "profile", icon: Settings, label: "Edit Profile" },
-    { key: "subscription", icon: CreditCard, label: "Subscription" },
     { key: "notifications", icon: Bell, label: "Notifications" },
     { key: "security", icon: Key, label: "Security" },
     { key: "connected", icon: Link2, label: "Connected Accounts" },
@@ -632,187 +603,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                 </form>
               </div>
             )}
-
-            {/* ═══════ SUBSCRIPTION ═══════ */}
-            {activeSection === "subscription" && (() => {
-              const foundersEndLabel = foundersFreeEndIso
-                ? new Date(foundersFreeEndIso).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
-                : null;
-              const isFoundersGiftedPro = foundersWindow && isPremium && !subscription;
-              return (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Subscription</h2>
-
-                {isFoundersGiftedPro && foundersEndLabel ? (
-                  <div className="space-y-6">
-                    <div className="rounded-xl bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent border border-[#E8923A]/20 p-5">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="h-10 w-10 rounded-full bg-[#E8923A]/15 flex items-center justify-center">
-                          <Crown className="h-5 w-5 text-[#E8923A]" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-[#F0F6FC]">Founders&apos; Free Pro</p>
-                          <p className="text-xs text-[#2EA44F] font-medium">Active — free until {foundersEndLabel}</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-[#A8B2BD]">
-                        Every Pro feature is unlocked for you, free, during the Founders&apos; Free Launch Year. No card on file.
-                      </p>
-                      <p className="text-xs text-[#6E7681] mt-2">
-                        Pricing returns to $2.99/mo or $19.99/yr on {foundersEndLabel}. We&apos;ll email you 30 days before.
-                      </p>
-                    </div>
-
-                    <Link
-                      href="/pricing"
-                      className="block rounded-xl border border-[#21262D] hover:border-[#E8923A]/40 bg-[#0D1117] transition-colors p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
-                          <Sparkles className="h-4 w-4 text-[#E8923A]" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-[#F0F6FC]">Lock in pricing now</p>
-                          <p className="text-[11px] text-[#A8B2BD]">Pre-subscribe to keep Pro after the launch year ends. Cancel anytime.</p>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/gift"
-                      className="block rounded-xl border border-[#E8923A]/20 bg-gradient-to-br from-[#E8923A]/5 to-transparent hover:border-[#E8923A]/40 transition-colors p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
-                          <Gift className="h-4 w-4 text-[#E8923A]" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-[#F0F6FC]">Gift Pro to a fishing buddy</p>
-                          <p className="text-[11px] text-[#A8B2BD]">$19.99 — they redeem when they&apos;re ready, paid year starts on redemption.</p>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
-                      </div>
-                    </Link>
-                  </div>
-                ) : isPremium ? (
-                  <div className="space-y-6">
-                    {/* Status card */}
-                    <div className="rounded-xl bg-gradient-to-br from-[#E8923A]/10 via-[#E8923A]/5 to-transparent border border-[#E8923A]/20 p-5">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="h-10 w-10 rounded-full bg-[#E8923A]/15 flex items-center justify-center">
-                          <Crown className="h-5 w-5 text-[#E8923A]" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-[#F0F6FC]">Executive Angler Pro</p>
-                          <p className="text-xs text-[#2EA44F] font-medium">
-                            {subscription?.status === "trialing" ? "Free Trial" : "Active"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid sm:grid-cols-3 gap-4">
-                        <div>
-                          <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Plan</p>
-                          <p className="text-sm text-[#F0F6FC] font-medium mt-0.5 capitalize">
-                            {subscription?.plan || "Pro"}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Source</p>
-                          <p className="text-sm text-[#F0F6FC] font-medium mt-0.5 capitalize">
-                            {subscription?.source === "apple" ? "Apple App Store" : subscription?.source === "google" ? "Google Play" : subscription?.source === "stripe" ? "Web (Stripe)" : "—"}
-                          </p>
-                        </div>
-                        {subscription?.currentPeriodEnd && (
-                          <div>
-                            <p className="text-[10px] font-bold text-[#6E7681] uppercase tracking-wider">Renews</p>
-                            <p className="text-sm text-[#F0F6FC] font-medium mt-0.5">
-                              {new Date(subscription.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Management options */}
-                    <div className="space-y-3">
-                      {subscription?.source === "stripe" || hasStripeCustomer ? (
-                        <button
-                          onClick={handleManageSubscription}
-                          disabled={portalLoading}
-                          className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[#0D1117] border border-[#21262D] hover:border-[#E8923A]/40 transition-colors disabled:opacity-50"
-                        >
-                          <span className="text-sm font-medium text-[#F0F6FC]">Manage Subscription</span>
-                          <ChevronRight className="h-4 w-4 text-[#6E7681]" />
-                        </button>
-                      ) : null}
-
-                      {subscription?.source === "apple" && (
-                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] px-4 py-3">
-                          <p className="text-sm text-[#A8B2BD]">
-                            Your subscription is managed through the <strong className="text-[#F0F6FC]">Apple App Store</strong>.
-                          </p>
-                          <p className="text-xs text-[#6E7681] mt-1">
-                            Open Settings → Apple ID → Subscriptions on your iPhone to manage billing.
-                          </p>
-                        </div>
-                      )}
-
-                      {subscription?.source === "google" && (
-                        <div className="rounded-lg bg-[#0D1117] border border-[#21262D] px-4 py-3">
-                          <p className="text-sm text-[#A8B2BD]">
-                            Your subscription is managed through <strong className="text-[#F0F6FC]">Google Play</strong>.
-                          </p>
-                          <p className="text-xs text-[#6E7681] mt-1">
-                            Open the Google Play Store app → Payments & subscriptions to manage billing.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-
-                    <p className="text-[11px] text-[#6E7681]">
-                      Your Pro access syncs across iOS, Android, and web — regardless of where you subscribed.
-                    </p>
-
-                    {/* Gift CTA — visible to existing Pro users (their main path to /gift) */}
-                    <Link
-                      href="/gift"
-                      className="block rounded-xl border border-[#E8923A]/20 bg-gradient-to-br from-[#E8923A]/5 to-transparent hover:border-[#E8923A]/40 transition-colors p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0">
-                          <Gift className="h-4 w-4 text-[#E8923A]" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-[#F0F6FC]">Gift a year of Pro</p>
-                          <p className="text-[11px] text-[#A8B2BD]">$19.99 — send a fishing buddy 12 months of Pro.</p>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
-                      </div>
-                    </Link>
-                  </div>
-                ) : (
-                  /* Not premium — upgrade CTA */
-                  <div className="text-center py-6">
-                    <div className="h-14 w-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center mx-auto mb-4">
-                      <Sparkles className="h-7 w-7 text-[#E8923A]" />
-                    </div>
-                    <h3 className="font-serif text-xl text-[#F0F6FC] mb-2">See <em>your</em> patterns</h3>
-                    <p className="text-sm text-[#A8B2BD] max-w-sm mx-auto mb-6">
-                      Personal insights, per-river scorecard, and the Best Window Calculator &mdash; built from your own data. Pro is $2.99/mo or $19.99/yr.
-                    </p>
-                    <Button href="/pricing" variant="solid" size="lg" icon={Sparkles}>
-                      View Plans
-                    </Button>
-                    <p className="text-[11px] text-[#6E7681] mt-4">
-                      Starting at $2.50/mo. Same price on iOS, Android, and web.
-                    </p>
-                  </div>
-                )}
-              </div>
-              );
-            })()}
 
             {/* ═══════ NOTIFICATIONS ═══════ */}
             {activeSection === "notifications" && (

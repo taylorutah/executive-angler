@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendBrandedEmail } from "@/lib/email/client";
-import { buildWelcome, buildFoundersFreeWelcome } from "@/lib/email/senders";
-import { isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
+import { buildWelcome } from "@/lib/email/senders";
 
 /**
  * GET /auth/callback
@@ -224,12 +223,7 @@ async function maybeSendWelcomeEmail(
     if (probe.error && /welcome_email_sent_at/.test(probe.error.message)) {
       if (!args.columnMissingFallback) return;
     }
-    const content = isFoundersFreeWindow()
-      ? buildFoundersFreeWelcome({
-          displayName: args.displayName,
-          windowEndIso: FOUNDERS_FREE_END.toISOString(),
-        })
-      : buildWelcome({ displayName: args.displayName });
+    const content = buildWelcome({ displayName: args.displayName });
     const result = await sendBrandedEmail({
       tag: "welcome",
       to: args.email,

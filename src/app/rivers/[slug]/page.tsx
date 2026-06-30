@@ -32,7 +32,7 @@ import CollapsibleSection from "@/components/rivers/CollapsibleSection";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { SITE_URL } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin, checkPremium } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import {
   getAllRivers,
   getRiverBySlug,

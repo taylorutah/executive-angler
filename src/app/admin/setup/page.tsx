@@ -11,10 +11,6 @@ export default async function AdminSetupPage() {
   // Check which schema pieces exist
   const checks: Record<string, boolean> = {};
 
-  // profiles.is_premium
-  const { error: e1 } = await supabase.from("profiles").select("is_premium").limit(1);
-  checks["profiles.is_premium"] = !e1;
-
   // profiles.is_banned
   const { error: e2 } = await supabase.from("profiles").select("is_banned").limit(1);
   checks["profiles.is_banned"] = !e2;

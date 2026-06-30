@@ -3,14 +3,12 @@
 import { useState } from "react";
 import {
   Sparkles,
-  Lock,
   Loader2,
   RefreshCw,
   TrendingUp,
   Lightbulb,
   Trophy,
 } from "lucide-react";
-import Link from "next/link";
 
 interface AIInsight {
   title: string;
@@ -42,7 +40,7 @@ const typeConfig: Record<
   },
 };
 
-export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
+export default function AIInsightsCard() {
   const [insights, setInsights] = useState<AIInsight[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,35 +74,6 @@ export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
     }
   }
 
-  // Locked state for non-premium users
-  if (!isPremium) {
-    return (
-      <div className="bg-[#161B22] rounded-2xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-[#E8923A]" />
-          <h2 className="text-base font-bold text-[#F0F6FC]">Fishing Insights</h2>
-          <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">
-            PRO
-          </span>
-        </div>
-
-        <div className="flex flex-col items-center text-center py-6">
-          <Lock className="h-10 w-10 text-[#6E7681] mb-3" />
-          <p className="text-sm text-[#A8B2BD] mb-4 max-w-xs">
-            Unlock personal insights that surface your patterns, identify which
-            flies and conditions work best, and show you how to catch more fish.
-          </p>
-          <Link
-            href="/pricing"
-            className="inline-flex items-center gap-2 bg-[#E8923A] text-white text-sm font-semibold rounded-xl px-5 py-2.5 hover:bg-[#d4822e] transition-colors"
-          >
-            Upgrade to Pro
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-gradient-to-br from-[#161B22] to-[#1a1f2a] rounded-2xl border border-[#E8923A]/20 p-6">
       {/* Header */}
@@ -112,9 +81,6 @@ export default function AIInsightsCard({ isPremium }: { isPremium: boolean }) {
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-[#E8923A]" />
           <h2 className="text-base font-bold text-[#F0F6FC]">Fishing Insights</h2>
-          <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">
-            PRO
-          </span>
         </div>
         {generated && !loading && (
           <button

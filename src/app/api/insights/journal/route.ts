@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
 
 /**
  * POST /api/insights/journal
  *
  * Takes the user's session + catch data and generates a natural-language
- * journal analysis using Claude. Premium-gated.
+ * journal analysis using Claude.
  */
 export async function POST() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -19,11 +18,6 @@ export async function POST() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return NextResponse.json({ error: "Premium required" }, { status: 403 });
   }
 
   // Fetch user data

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
-import ProGate from "@/components/ui/ProGate";
 import AnalyticsClient from "./AnalyticsClient";
 
 export const metadata: Metadata = {
@@ -14,16 +12,6 @@ export default async function AnalyticsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/dashboard/analytics");
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return (
-      <ProGate
-        feature="Analytics"
-        pitch="Trends, species breakdowns, and performance over time — all from your sessions."
-      />
-    );
-  }
 
   // Fetch all sessions
   const { data: sessions } = await supabase

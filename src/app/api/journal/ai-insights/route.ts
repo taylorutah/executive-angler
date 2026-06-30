@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
 
 export interface AIInsight {
   title: string;
@@ -14,11 +13,12 @@ export interface AIInsight {
  *
  * Fetches user's recent fishing sessions + catches, sends structured data
  * to Claude, and returns 3-5 actionable insight cards as JSON.
- * Auth required, premium-gated.
+ * Auth required.
  */
 export async function POST() {
-  // AI Insights paused — rule-based insights at /api/journal/insights power the Pro experience.
-  // Re-enable by setting NEXT_PUBLIC_FEATURE_AI_INSIGHTS=true (and providing ANTHROPIC_API_KEY).
+  // AI Insights are off by default — rule-based insights at /api/journal/insights
+  // power the experience. Re-enable by setting NEXT_PUBLIC_FEATURE_AI_INSIGHTS=true
+  // (and providing ANTHROPIC_API_KEY).
   if (process.env.NEXT_PUBLIC_FEATURE_AI_INSIGHTS !== "true") {
     return NextResponse.json({ error: "AI insights are currently unavailable." }, { status: 503 });
   }
@@ -37,11 +37,6 @@ export async function POST() {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return NextResponse.json({ error: "Premium required" }, { status: 403 });
   }
 
   // Fetch last 20 sessions with catches and fly patterns

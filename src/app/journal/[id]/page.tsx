@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import SessionDetail from "./SessionDetail";
-import { checkPremium, isAdmin } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import CatchLoggerEntry from "@/components/catch-logger/CatchLoggerEntry";
 import { listMyBoxes, listVariantsInBox } from "@/lib/db/fly-v2";
 
@@ -241,7 +241,6 @@ export default async function SessionDetailPage({ params }: Props) {
         isOwner={isOwner}
         ownerProfile={ownerProfileForDetail}
         isAnonymous={isAnonymous}
-        isPremium={user ? await checkPremium(supabase, user.id, user.email) : false}
       />
     </>
   );

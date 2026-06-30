@@ -98,31 +98,12 @@ export default function PrivacyPage() {
           </ul>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
-            Subscriptions &amp; Billing
+            Pricing
           </h2>
           <p>
-            Executive Angler Pro subscriptions can be purchased on any platform.
-            Depending on where you subscribe, billing is handled by:
-          </p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              <strong>Apple App Store</strong> — Manage or cancel in your
-              Apple&nbsp;ID → Subscriptions settings.
-            </li>
-            <li>
-              <strong>Google Play Store</strong> — Manage or cancel in the
-              Google&nbsp;Play app → Payments &amp; subscriptions.
-            </li>
-            <li>
-              <strong>Stripe (web)</strong> — Manage or cancel from your
-              Account → Subscription page on our website.
-            </li>
-          </ul>
-          <p>
-            We do not directly collect or store your payment card information.
-            All payment processing is handled by the respective platform
-            (Apple, Google, or Stripe). Your Pro access syncs automatically
-            across iOS, Android, and web — regardless of where you subscribed.
+            Executive Angler is free to use. Every feature is available to all
+            users at no cost on iOS, Android, and web. There is no paid tier or
+            subscription, and we never collect or store payment information.
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">

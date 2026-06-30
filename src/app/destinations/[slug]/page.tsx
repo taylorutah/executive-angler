@@ -17,7 +17,7 @@ import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import HeroImageEditor from "@/components/admin/HeroImageEditor";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin, checkPremium } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import { getHeroHeight } from "@/lib/hero-height";
 import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
@@ -86,11 +86,7 @@ export default async function DestinationPage({ params }: Props) {
   const userIsAdmin = isAdmin(currentUser?.email);
 
   // Auth-aware hero height
-  let heroTier: HeroTier = "anonymous";
-  if (currentUser) {
-    const isPro = await checkPremium(supabase, currentUser.id, currentUser.email);
-    heroTier = isPro ? "pro" : "free";
-  }
+  const heroTier: HeroTier = currentUser ? "authenticated" : "anonymous";
   const heroHeight = getHeroHeight("destination", heroTier);
 
   const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies, galleryPhotos] = await Promise.all([

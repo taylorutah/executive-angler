@@ -5,8 +5,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
   ReferenceLine, Scatter, ScatterChart, ZAxis, ComposedChart,
 } from "recharts";
-import { Fish, Loader2, Lock } from "lucide-react";
-import Link from "next/link";
+import { Fish, Loader2 } from "lucide-react";
 
 interface CatchPoint {
   date: string;
@@ -34,7 +33,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
   const [catchPoints, setCatchPoints] = useState<CatchPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [authState, setAuthState] = useState<"loading" | "none" | "free" | "premium">("loading");
+  const [authState, setAuthState] = useState<"loading" | "none" | "ready">("loading");
 
   useEffect(() => {
     async function load() {
@@ -45,15 +44,11 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
           setAuthState("none");
           return;
         }
-        if (insightsRes.status === 403) {
-          setAuthState("free");
-          return;
-        }
         if (!insightsRes.ok) {
           setError("Could not load personal data");
           return;
         }
-        setAuthState("premium");
+        setAuthState("ready");
         const insightsData = await insightsRes.json();
         setCatchPoints(insightsData.catches || []);
 
@@ -136,30 +131,10 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
   // Not logged in
   if (authState === "none") return null;
 
-  // Free user — teaser
-  if (authState === "free") {
-    return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-3 mb-3">
-          <Fish className="h-5 w-5 text-[#E8923A]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">Your Catches vs. Flow</h3>
-          <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
-        </div>
-        <div className="flex items-center gap-2 text-[#6E7681] text-sm">
-          <Lock className="h-4 w-4" />
-          <span>See your catch data overlaid on USGS flow charts.</span>
-        </div>
-        <Link href="/account" className="text-xs text-[#E8923A] hover:underline mt-2 inline-block">
-          Upgrade to Pro →
-        </Link>
-      </div>
-    );
-  }
-
-  // Premium but no data
+  // No catch data yet
   if (catchPoints.length === 0) return null;
 
-  // Premium but no flow readings to overlay
+  // No flow readings to overlay
   if (flowReadings.length < 7) return null;
 
   function formatMonth(dateStr: string) {

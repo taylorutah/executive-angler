@@ -2,14 +2,12 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { isPermanentPro } from "@/lib/admin";
 
 export type AuthUser = {
   id: string;
   email?: string;
   avatarUrl?: string;
   displayName?: string;
-  isPremium: boolean;
 };
 
 type AuthContextValue = {
@@ -38,28 +36,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("avatar_url, display_name, is_premium")
+      .select("avatar_url, display_name")
       .eq("user_id", authUser.id)
       .maybeSingle();
-
-    let premium = isPermanentPro(authUser.email);
-    if (!premium) premium = profile?.is_premium === true;
-    if (!premium) {
-      const { data: sub } = await supabase
-        .from("subscriptions")
-        .select("status")
-        .eq("user_id", authUser.id)
-        .in("status", ["active", "trialing"])
-        .maybeSingle();
-      if (sub) premium = true;
-    }
 
     setUser({
       id: authUser.id,
       email: authUser.email ?? undefined,
       avatarUrl: profile?.avatar_url || undefined,
       displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
-      isPremium: premium,
     });
     setIsLoading(false);
   }, []);

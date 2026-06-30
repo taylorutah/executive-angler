@@ -97,7 +97,7 @@ const TIME_SLOT_COLORS: Record<string, string> = {
 // Component
 // =============================================
 
-export default function InsightsPageClient({ isPremium = true }: { isPremium?: boolean }) {
+export default function InsightsPageClient() {
   const [data, setData] = useState<InsightsPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -124,15 +124,15 @@ export default function InsightsPageClient({ isPremium = true }: { isPremium?: b
     <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <PageHeader
-          eyebrow="Pro · Journal"
+          eyebrow="Journal"
           title="Insights"
           meta="Patterns from your sessions only. Sharper with more volume — 20+ sessions before trusting weather and temp correlations."
         />
 
-        {/* AI Fishing Coach — paused until re-enabled via NEXT_PUBLIC_FEATURE_AI_INSIGHTS */}
+        {/* AI Fishing Coach — off by default; enable via NEXT_PUBLIC_FEATURE_AI_INSIGHTS */}
         {process.env.NEXT_PUBLIC_FEATURE_AI_INSIGHTS === "true" && (
           <div className="mb-8">
-            <AIInsightsCard isPremium={isPremium} />
+            <AIInsightsCard />
           </div>
         )}
 

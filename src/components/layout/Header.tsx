@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Menu, X, Search, User, Heart, Bell,
-  MessageSquare, Bug, FishSymbol, Sparkles, Gift, Package
+  MessageSquare, Bug, FishSymbol, Package
 } from "lucide-react";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -116,20 +116,6 @@ export default function Header() {
                     Feed
                   </Link>
                 )}
-
-                {!user?.isPremium && (
-                  <Link
-                    href="/pricing"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      pathname === "/pricing"
-                        ? "text-[#E8923A]"
-                        : "text-[#E8923A]/70 hover:text-[#E8923A]"
-                    }`}
-                  >
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Pro
-                  </Link>
-                )}
               </nav>
 
               {/* ── Right Actions ── */}
@@ -195,11 +181,6 @@ export default function Header() {
                           <Link href="/journal/flies/new" className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
                             <Bug className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
                             New Fly Recipe
-                          </Link>
-                          <div className="h-px bg-[#21262D] mx-4" />
-                          <Link href="/gift" className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
-                            <Gift className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-                            Gift a Year of Pro
                           </Link>
                         </div>
                       </div>
@@ -286,13 +267,6 @@ export default function Header() {
                 </Link>
               )}
 
-              {!user?.isPremium && (
-                <Link href="/pricing" className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-[#E8923A]/70 hover:text-[#E8923A] hover:bg-[#E8923A]/5 transition-colors">
-                  <Sparkles className="h-5 w-5" />
-                  Pro
-                </Link>
-              )}
-
               {/* Quick actions — mobile */}
               {user && (
                 <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
@@ -321,9 +295,6 @@ export default function Header() {
                     </Link>
                     <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
                       <User className="h-5 w-5" /> Account
-                    </Link>
-                    <Link href="/gift" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
-                      <Gift className="h-5 w-5" /> Gift Pro
                     </Link>
                   </>
                 ) : (

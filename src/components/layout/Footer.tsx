@@ -8,7 +8,6 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "Flies", href: "/flies" },
     { label: "Gear Locker", href: "/account/gear" },
     { label: "Feed", href: "/feed" },
-    { label: "Pricing", href: "/pricing" },
     { label: "Import & Export", href: "/journal/import" },
   ],
   Discover: [
@@ -30,8 +29,6 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
     { label: "For Guides", href: "/for-guides" },
-    { label: "Gift Pro", href: "/gift" },
-    { label: "Refund Policy", href: "/refund-policy" },
   ],
 };
 
@@ -197,9 +194,6 @@ export default function Footer() {
             </Link>
             <Link href="/terms" className="hover:text-[#F0F6FC] transition-colors">
               Terms
-            </Link>
-            <Link href="/refund-policy" className="hover:text-[#F0F6FC] transition-colors">
-              Refunds
             </Link>
             <Link href="/contact" className="hover:text-[#F0F6FC] transition-colors">
               Contact

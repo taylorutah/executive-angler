@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import Papa from "papaparse";
-import { checkPremium } from "@/lib/admin";
 import {
   parseRows,
   markDuplicates,
@@ -22,11 +21,6 @@ export async function POST(request: NextRequest) {
 
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const premium = await checkPremium(supabase, user.id, user.email);
-  if (!premium) {
-    return NextResponse.json({ error: "Premium required" }, { status: 403 });
   }
 
   const { searchParams } = new URL(request.url);

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
 
 // =============================================
 // Types
@@ -109,11 +108,6 @@ export async function GET() {
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) {
-    return NextResponse.json({ error: "Premium required" }, { status: 403 });
   }
 
   // Fetch user data in parallel

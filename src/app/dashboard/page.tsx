@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 import { RIVER_AWARDS } from "@/types/awards";
-import { checkPremium, isFoundersFreeWindow, FOUNDERS_FREE_END } from "@/lib/admin";
 import { listMyConfigurationsWithFly, listMyPatternsHub } from "@/lib/db/fly-model";
 import { summarizeVersion } from "@/components/flies-v3/summarize-version";
 import { listMyFavoriteSections, listMyRiverSectionPrefs } from "@/lib/db/favorite-sections";
@@ -25,17 +24,12 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/dashboard");
 
-  // Fetch user profile (including premium status)
+  // Fetch user profile
   const { data: profile } = await supabase
     .from("profiles")
-    .select("username, display_name, avatar_url, home_location, is_premium")
+    .select("username, display_name, avatar_url, home_location")
     .eq("user_id", user.id)
     .single();
-
-  // Full 3-tier premium check (permanent-pro email → profiles.is_premium →
-  // active subscription). The banner logic reads this — using profile.is_premium
-  // alone misses permanent-pro emails whose profile flag isn't set.
-  const isPremium = await checkPremium(supabase, user.id, user.email);
 
   // Fetch user own sessions (last 5)
   const { data: mySessions } = await supabase
@@ -342,9 +336,6 @@ export default async function DashboardPage() {
       flyCount={flyCount ?? 0}
       gearCount={gearCount ?? 0}
       riverStats={riverStatsArr}
-      isPremium={isPremium}
-      foundersWindow={isFoundersFreeWindow()}
-      foundersFreeEndIso={FOUNDERS_FREE_END.toISOString()}
       favoriteSections={favoriteSectionsDTO}
       yourRivers={yourRiversDTO}
       riversForPicker={riversForPicker}

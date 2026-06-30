@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ChevronLeft, Shield, Search, Crown, Ban,
+  ChevronLeft, Shield, Search, Ban,
   Loader2, Fish, Calendar, StickyNote,
   ChevronDown, ChevronUp, User, Feather, LogIn, Mail,
   MapPin, Camera, MessageSquare, TicketPercent, Activity,
@@ -19,11 +19,8 @@ interface UserProfile {
   username: string | null;
   display_name: string | null;
   avatar_url: string | null;
-  is_premium: boolean | null;
   is_banned: boolean | null;
   ban_reason: string | null;
-  premium_granted_by: string | null;
-  premium_granted_at: string | null;
   banned_at: string | null;
   banned_by: string | null;
   created_at: string;
@@ -63,7 +60,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   void adminEmail;
   const [users, setUsers] = useState<UserProfile[]>(initialUsers);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "premium" | "banned" | "promo" | "active" | "inactive" | "unverified">("all");
+  const [filter, setFilter] = useState<"all" | "banned" | "promo" | "active" | "inactive" | "unverified">("all");
   const [sortBy, setSortBy] = useState<"recent" | "activity" | "power">("recent");
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -78,7 +75,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   const THIRTY_DAYS = 30 * 86400000;
 
   const filtered = users.filter(u => {
-    if (filter === "premium" && !u.is_premium) return false;
     if (filter === "banned" && !u.is_banned) return false;
     if (filter === "promo" && !u.active_promo) return false;
     if (filter === "active" && !(u.last_session_at && Date.now() - new Date(u.last_session_at).getTime() < THIRTY_DAYS)) return false;
@@ -111,7 +107,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   });
 
   const totalUsers = users.length;
-  const proUsers = users.filter(u => u.is_premium).length;
   const bannedUsers = users.filter(u => u.is_banned).length;
   const newThisWeek = users.filter(u => (Date.now() - new Date(u.created_at).getTime()) < 7 * 86400000).length;
   const activeThisMonth = users.filter(u => u.last_session_at && (Date.now() - new Date(u.last_session_at).getTime()) < THIRTY_DAYS).length;
@@ -195,7 +190,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
           {[
             { val: totalUsers, label: "Total", color: "text-[#F0F6FC]" },
-            { val: proUsers, label: "Pro", color: "text-[#E8923A]" },
             { val: activeThisMonth, label: "Active 30d", color: "text-[#2EA44F]" },
             { val: newThisWeek, label: "New 7d", color: "text-[#0BA5C7]" },
             { val: promoUsers, label: "Promo", color: "text-[#E8923A]" },
@@ -233,11 +227,10 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
             </select>
           </div>
           <div className="flex flex-wrap gap-1">
-            {(["all", "premium", "promo", "active", "inactive", "unverified", "banned"] as const).map(f => (
+            {(["all", "promo", "active", "inactive", "unverified", "banned"] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${filter === f ? "bg-[#E8923A] text-white" : "bg-[#161B22] text-[#A8B2BD]"}`}>
                 {f === "all" ? "All" :
-                 f === "premium" ? "Pro" :
                  f === "promo" ? "Promo" :
                  f === "active" ? "Active 30d" :
                  f === "inactive" ? "Lapsed" :
@@ -266,7 +259,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-bold text-[#F0F6FC] truncate">{u.display_name || u.username || "No name"}</span>
                       <ProviderBadge provider={u.provider} verified={u.email_confirmed} />
-                      {u.is_premium && <Crown className="h-3.5 w-3.5 text-[#E8923A]" />}
                       {u.is_banned && <Ban className="h-3.5 w-3.5 text-red-400" />}
                       {u.active_promo && (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E8923A]/15 text-[#E8923A]">
@@ -383,11 +375,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <p className={`text-lg font-bold font-mono ${u.review_count > 0 ? "text-[#F0F6FC]" : "text-[#6E7681]"}`}>{u.review_count}</p>
                         <p className="text-[9px] text-[#6E7681] uppercase">Reviews</p>
                       </div>
-                      <div className="bg-[#0D1117] rounded-lg p-3 text-center border border-[#21262D]">
-                        <Crown className="h-4 w-4 text-[#E8923A] mx-auto mb-1" />
-                        <p className="text-lg font-bold text-[#F0F6FC] font-mono">{u.is_premium ? "Pro" : "Free"}</p>
-                        <p className="text-[9px] text-[#6E7681] uppercase">Tier</p>
-                      </div>
                     </div>
 
                     {/* Sessions panel */}
@@ -399,18 +386,6 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
 
                     {/* Actions */}
                     <div className="flex gap-2 flex-wrap">
-                      <Button
-                        onClick={() => adminAction(u.is_premium ? "revoke_premium" : "grant_premium", u.user_id)}
-                        disabled={!!actionLoading}
-                        variant={u.is_premium ? "outline" : "brand"}
-                        size="sm"
-                        icon={Crown}
-                        loading={actionLoading === `${u.is_premium ? "revoke_premium" : "grant_premium"}-${u.user_id}`}
-                       
-                      >
-                        {u.is_premium ? "Revoke Pro" : "Grant Pro"}
-                      </Button>
-
                       {u.is_banned && (
                         <Button
                           onClick={() => adminAction("unban", u.user_id)}

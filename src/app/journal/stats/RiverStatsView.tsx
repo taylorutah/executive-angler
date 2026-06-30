@@ -8,7 +8,7 @@ import PageHeader from '@/components/ui/PageHeader';
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
-export default function RiverStatsView({ isPremium = false }: { isPremium?: boolean }) {
+export default function RiverStatsView() {
   const [stats, setStats] = useState<RiverStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +76,7 @@ export default function RiverStatsView({ isPremium = false }: { isPremium?: bool
       ) : (
         <div className="bg-[#161B22] border border-[#21262D] rounded-xl divide-y divide-[#21262D] overflow-hidden">
           {stats.map((s) => (
-            <RiverRow key={s.river_name} stats={s} isPremium={isPremium} maxSessions={maxSessions} />
+            <RiverRow key={s.river_name} stats={s} maxSessions={maxSessions} />
           ))}
         </div>
       )}
@@ -86,11 +86,9 @@ export default function RiverStatsView({ isPremium = false }: { isPremium?: bool
 
 function RiverRow({
   stats: s,
-  isPremium,
   maxSessions,
 }: {
   stats: RiverStats;
-  isPremium: boolean;
   maxSessions: number;
 }) {
   const lastFished = s.last_session
@@ -117,7 +115,7 @@ function RiverRow({
             {s.river_name}
           </h3>
           <div className="flex items-center gap-2 shrink-0">
-            {AWARDS_VISIBLE && isPremium && s.awards.length > 0 && (
+            {AWARDS_VISIBLE && s.awards.length > 0 && (
               <span className="inline-flex items-center gap-1 font-mono text-[10px] text-[#FFD479] tracking-[0.04em]">
                 ★ {s.awards.length}
               </span>

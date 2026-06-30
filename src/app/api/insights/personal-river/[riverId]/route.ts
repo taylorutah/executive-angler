@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { checkPremium } from "@/lib/admin";
 
 /**
  * Personal River Scorecard — owner-only stats for THIS river. Replaces
@@ -9,8 +8,7 @@ import { checkPremium } from "@/lib/admin";
  *
  * Status codes:
  *   401 → not signed in (UI shows nothing)
- *   403 → free tier (UI shows upgrade teaser)
- *   200 → premium, full stats
+ *   200 → full stats for the signed-in user
  */
 
 export interface PersonalRiverScorecard {
@@ -49,9 +47,6 @@ export async function GET(
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const isPremium = await checkPremium(supabase, user.id, user.email);
-  if (!isPremium) return NextResponse.json({ error: "Premium required" }, { status: 403 });
 
   const ago30 = new Date(Date.now() - 30 * 86400000).toISOString().split("T")[0];
 

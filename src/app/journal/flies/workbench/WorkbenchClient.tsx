@@ -170,9 +170,7 @@ export default function WorkbenchClient({
     setMatchesError(null);
     try {
       const res = await fetch('/api/materials/what-can-i-tie');
-      if (res.status === 403) {
-        setMatchesError('Premium feature — upgrade to unlock');
-      } else if (res.ok) {
+      if (res.ok) {
         const data = await res.json();
         setMatches(data.matches || []);
       } else {
