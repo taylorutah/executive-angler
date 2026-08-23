@@ -14,7 +14,6 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "Madison River", href: "/rivers/madison-river" },
     { label: "Montana", href: "/destinations/montana" },
     { label: "Fly Library", href: "/flies/library" },
-    { label: "Best Flies for the Madison", href: "/flies/for/madison-river" },
     { label: "Green River", href: "/rivers/green-river" },
     { label: "Belize", href: "/destinations/belize" },
     { label: "Destinations", href: "/destinations" },
