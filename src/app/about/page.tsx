@@ -9,11 +9,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const counts = await catalogCounts();
   const desc = `${SITE_NAME} combines world-class fishing editorial with a private journal. Explore ${counts.destinations} destinations, ${counts.rivers} rivers, and ${counts.flies} fly patterns.`;
   return {
-    title: brandedTitle("About — Data-Driven Fly Fishing Resource"),
+    title: brandedTitle("Fly Fishing Resource & Fishing Log"),
     description: desc,
     alternates: { canonical: `${SITE_URL}/about` },
     openGraph: {
-      title: `About ${SITE_NAME}`,
+      title: "Fly Fishing Resource & Fishing Log | Executive Angler",
       description: desc,
       images: ["/api/og?title=About%20Executive%20Angler&type=default"],
     },
