@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SITE_NAME, SOCIAL_LINKS, APP_STORE_URL } from "@/lib/constants";
 
 const footerColumns: Record<string, { label: string; href: string }[]> = {
@@ -72,19 +71,22 @@ export default function Footer() {
               className="inline-block"
               aria-label={SITE_NAME}
             >
-              <Image
+              {/* Raw SVGs — next/image optimizer + lazy-load can leave this looking like alt text. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/images/logo-horizontal-white.svg"
-                alt={SITE_NAME}
-                width={200}
-                height={38}
-                className="h-9 w-auto block dark-logo pointer-events-none"
+                alt=""
+                width={220}
+                height={42}
+                className="h-10 w-[220px] max-w-full block dark-logo"
               />
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/images/logo-horizontal-forest.svg"
-                alt={SITE_NAME}
-                width={200}
-                height={38}
-                className="h-9 w-auto hidden light-logo pointer-events-none"
+                alt=""
+                width={220}
+                height={42}
+                className="h-10 w-[220px] max-w-full hidden light-logo"
               />
             </Link>
             <p className="mt-4 text-[15px] leading-relaxed text-[#A8B2BD]">
