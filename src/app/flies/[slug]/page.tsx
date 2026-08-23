@@ -15,12 +15,8 @@ import Link from "next/link";
 import {
   listApprovedFlies,
   getFlyBySlug,
-  listMyConfigurationsForFly,
-  listMyBoxes,
   lookupFlySlugRedirect,
 } from "@/lib/db/fly-model";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/constants";
 import { Pencil, Copy } from "lucide-react";
 import JsonLd from "@/components/seo/JsonLd";
@@ -79,15 +75,11 @@ export default async function FlyDetail({ params }: Props) {
     redirect(`/flies/${fly.slug}`);
   }
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const isLoggedIn = !!user;
-  const viewerIsAdmin = isAdmin(user?.email);
-
-  const [versions, boxes] = await Promise.all([
-    isLoggedIn ? listMyConfigurationsForFly(fly.id) : Promise.resolve([]),
-    isLoggedIn ? listMyBoxes() : Promise.resolve([]),
-  ]);
+  // Skip cookies() so public fly pages stay CDN-cacheable.
+  const viewerId: string | null = null;
+  const isLoggedIn = false;
+  const viewerIsAdmin = false;
+  const boxes: { id: string; name: string; tier: string }[] = [];
 
   const pendingBanner = fly.status === "pending"
     ? "This fly is pending review — only you can see it."
@@ -184,7 +176,7 @@ export default async function FlyDetail({ params }: Props) {
                     // the admin canonical form (mode=canonical-edit), or to
                     // redirect away if the viewer can't edit.
                     const isOwner =
-                      !!user && fly.submitted_by_user_id === user.id;
+                      viewerId !== null && fly.submitted_by_user_id === viewerId;
                     const isPrivateOwn =
                       isOwner &&
                       (fly.status === "private" || fly.status === "pending");
@@ -204,7 +196,7 @@ export default async function FlyDetail({ params }: Props) {
                   })()}
                   {/* Delete: owner of a private/pending fly, OR admin on any. */}
                   {isLoggedIn &&
-                    ((fly.submitted_by_user_id === user?.id &&
+                    ((fly.submitted_by_user_id === viewerId &&
                       (fly.status === "private" || fly.status === "pending")) ||
                       viewerIsAdmin) && (
                       <DeleteFlyButton flyId={fly.id} flyName={fly.name} />
@@ -274,8 +266,8 @@ export default async function FlyDetail({ params }: Props) {
             <YourStockSection
               fly={fly}
               isLoggedIn={isLoggedIn}
-              versions={versions}
-              boxes={boxes.map((b) => ({ id: b.id, name: b.name, tier: b.tier }))}
+              versions={[]}
+              boxes={boxes}
               loginRedirectPath={`/flies/${fly.slug}`}
             />
           </aside>

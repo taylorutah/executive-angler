@@ -8,6 +8,17 @@ const nextConfig: NextConfig = {
         destination: "/rivers/green-river",
         permanent: true,
       },
+      {
+        source: "/rivers/madison",
+        destination: "/rivers/madison-river",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "executiveangler.com" }],
+        destination: "https://www.executiveangler.com/:path*",
+        permanent: true,
+      },
     ];
   },
   images: {

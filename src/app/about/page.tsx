@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { brandedTitle, catalogCounts } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Executive Angler — Data-Driven Fly Fishing Resource",
-  description:
-    "Executive Angler combines world-class fishing editorial with data-driven tools. Explore 30+ destinations, 41 rivers, 35 species, and 120+ fly patterns.",
-  alternates: { canonical: `${SITE_URL}/about` },
-  openGraph: {
-    title: "About Executive Angler",
-    description: "Executive Angler combines world-class fishing editorial with data-driven tools. Explore 30+ destinations, 41 rivers, and 120+ fly patterns.",
-    images: ["/api/og?title=About%20Executive%20Angler&type=default"],
-  },
-};
+export const revalidate = 3600;
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const counts = await catalogCounts();
+  const desc = `${SITE_NAME} combines world-class fishing editorial with a private journal. Explore ${counts.destinations} destinations, ${counts.rivers} rivers, and ${counts.flies} fly patterns.`;
+  return {
+    title: brandedTitle("About Executive Angler — Data-Driven Fly Fishing Resource"),
+    description: desc,
+    alternates: { canonical: `${SITE_URL}/about` },
+    openGraph: {
+      title: `About ${SITE_NAME}`,
+      description: desc,
+      images: ["/api/og?title=About%20Executive%20Angler&type=default"],
+    },
+  };
+}
+
+export default async function AboutPage() {
+  const counts = await catalogCounts();
   return (
     <div className="pt-8 pb-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -51,14 +59,14 @@ export default function AboutPage() {
           </p>
           <ul className="list-disc pl-6 space-y-2 text-[#F0F6FC]">
             <li>
-              <strong>Destinations</strong> — In-depth profiles of 35+ fly fishing
-              regions across six continents, with maps, best months, target species,
+              <strong>Destinations</strong> — In-depth profiles of {counts.destinations} fly fishing
+              regions, with maps, best months, target species,
               and local regulations.
             </li>
             <li>
-              <strong>Rivers &amp; Waters</strong> — Detailed guides to 55+ rivers
+              <strong>Rivers &amp; Waters</strong> — Detailed guides to {counts.rivers} rivers
               and waterways, including access points, hatch charts, flow types, and
-              GPS coordinates.
+              USGS gauges.
             </li>
             <li>
               <strong>Lodges</strong> — Curated listings of premier fly fishing
@@ -101,6 +109,23 @@ export default function AboutPage() {
             water. Submit your best fishing photos to any destination, river, lodge,
             or species page, and your images will be featured alongside our editorial
             content after a brief review.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+            A private journal
+          </h2>
+          <p>
+            Your sessions, fish, and pin drops stay on your account. Public pages
+            carry hatch charts, gauges, and editorial, not other anglers&apos; catches
+            and not a leaderboard. Presence, when we show it, is river and weather.
+            Read{" "}
+            <Link
+              href="/articles/why-your-fishing-journal-should-be-private"
+              className="text-[#E8923A] hover:underline"
+            >
+              why your fishing journal should be private
+            </Link>
+            .
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">

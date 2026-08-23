@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { SITE_URL } from "@/lib/constants";
 
 /**
  * POST /api/river-alerts/check
@@ -211,7 +212,7 @@ export async function POST(req: NextRequest) {
   // 7. For each alerted river, find subscribed users and create notifications
   let notificationCount = 0;
   const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+  const baseUrl = SITE_URL;
 
   for (const [riverId, alert] of alertsByRiver) {
     // Find users who favorited this river

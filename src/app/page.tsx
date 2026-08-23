@@ -9,6 +9,8 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
 import { Button } from "@/components/ui/Button";
 import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
+import DiscoveryNav from "@/components/seo/DiscoveryNav";
 
 const AppleSvg = () => (
   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -17,7 +19,7 @@ const AppleSvg = () => (
 );
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — Fly Fishing Intelligence: Journal, Flies, Rivers`,
+  title: brandedTitle("Fly Fishing Intelligence: Journal, Flies, Rivers"),
   description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and see your own patterns across seasons. Private by default — we never publish locations or fish counts. Free fly fishing app — now on the App Store.",
   openGraph: {
     title: `${SITE_NAME} — Log Catches, Tie Better Flies, Fish Smarter`,
@@ -61,6 +63,7 @@ export default function HomePage() {
           alt=""
           fill
           priority
+          fetchPriority="high"
           className="object-cover opacity-[0.09] pointer-events-none"
           sizes="100vw"
         />
@@ -86,7 +89,9 @@ export default function HomePage() {
                   className="text-[#F0F6FC] font-heading font-bold leading-[1.05] mb-6"
                   style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
                 >
-                  Better data.<br />Better days on the water.
+                  Better data.{" "}
+                  <br />
+                  Better days on the water.
                 </h1>
               </ScrollAnimation>
               <ScrollAnimation delay={0.2}>
@@ -134,6 +139,10 @@ export default function HomePage() {
                 <PhoneHeroMockup />
               </div>
             </ScrollAnimation>
+          </div>
+
+          <div className="mt-10">
+            <DiscoveryNav />
           </div>
 
           {/* Four pillar nav cards (full-width below the split) */}
@@ -271,9 +280,7 @@ export default function HomePage() {
                 <Link href={r.href} className="block bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
                   <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs uppercase tracking-wider mb-1">{r.location}</p>
                   <h3 className="font-heading text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
-                  <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal mb-0.5">{r.fish}</div>
-                  <div className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-3">fish this week</div>
-                  <div className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs mb-4">{"\u25CF"} {r.ago}</div>
+                  <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-4">Live flow &amp; weather</p>
                   <span className="font-['IBM_Plex_Mono'] text-xs text-[#A8B2BD] group-hover:text-[#E8923A] transition-colors">
                     View River &rarr;
                   </span>

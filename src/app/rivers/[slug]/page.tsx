@@ -11,7 +11,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import MapView from "@/components/maps/DynamicMapView";
+import LazyMapView from "@/components/maps/LazyMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
@@ -24,15 +24,13 @@ import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
 import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
-import FlowChart from "@/components/rivers/FlowChart";
+import LazyFlowChart from "@/components/rivers/LazyFlowChart";
 import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import CollapsibleSection from "@/components/rivers/CollapsibleSection";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { SITE_URL } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -99,11 +97,7 @@ export default async function RiverPage({ params }: Props) {
       ? river.heroImageUrl
       : PLACEHOLDER_RIVER_IMAGE;
 
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
+  // Admin hero editor is client-gated so this page stays cacheable.
 
   const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies, galleryPhotos] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
@@ -194,17 +188,15 @@ export default async function RiverPage({ params }: Props) {
         heroImageCreditUrl={river.heroImageCreditUrl}
         galleryPhotos={galleryPhotos}
       >
-        {userIsAdmin && (
-          <HeroImageEditor
-            entityType="rivers"
-            entityId={river.id}
-            currentImageUrl={river.heroImageUrl}
-            currentAlt={river.heroImageAlt}
-            currentCredit={river.heroImageCredit}
-            currentCreditUrl={river.heroImageCreditUrl}
-            aspectRatio={16 / 3}
-          />
-        )}
+        <AdminHeroEditor
+          entityType="rivers"
+          entityId={river.id}
+          currentImageUrl={river.heroImageUrl}
+          currentAlt={river.heroImageAlt}
+          currentCredit={river.heroImageCredit}
+          currentCreditUrl={river.heroImageCreditUrl}
+          aspectRatio={16 / 3}
+        />
       </RiverHeroImage>
 
       {/* Title block — identity + navigation, all below the image */}
@@ -277,11 +269,20 @@ export default async function RiverPage({ params }: Props) {
 
               {/* 2. Flow history chart (7D/30D/6M/1Y toggles built-in) */}
               <ScrollAnimation>
-                <FlowChart
+                <LazyFlowChart
                   usgsGaugeId={river.usgsGaugeId ?? null}
                   riverName={river.name}
                   riverId={river.id}
                 />
+                {river.usgsGaugeId ? (
+                  <p className="mt-3 text-sm text-[#A8B2BD]">
+                    New to hydrographs?{" "}
+                    <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[#E8923A] hover:underline">
+                      How to read a USGS gauge for fly fishing
+                    </Link>
+                    .
+                  </p>
+                ) : null}
               </ScrollAnimation>
 
               {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
@@ -491,6 +492,105 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
+              {river.slug === "madison-river" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Planning a Madison trip in 2026
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          hatch-chart fly list
+                        </Link>
+                        , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
+                      </p>
+                      <p>
+                        If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
+                        <Link href="/destinations/montana" className="text-[#E8923A] hover:underline">
+                          Montana destination page
+                        </Link>{" "}
+                        for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
+                        <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[#E8923A] hover:underline">
+                          Best Flies for the Madison River in 2026
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "green-river" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Fishing the Green below Flaming Gorge
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        This tailwater is A, B, and C sections, clear water, and a crowd that shows up for the same reasons you did. Pack small flies, check the gauge on this page, and read{" "}
+                        <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing the Green River Below Flaming Gorge
+                        </Link>
+                        {" "}before you book a shuttle. The{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          hatch-chart fly list
+                        </Link>
+                        {" "}is public. Other anglers&apos; fish are not.
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "pecos-river-new-mexico" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Pecos pocket water
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        Above Terrero you can walk. Along the road you share campground runs. After runoff, a dry-dropper and some manners will fish this river. Longer notes are in{" "}
+                        <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing the Pecos River in New Mexico
+                        </Link>
+                        . Flies live on the{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          Pecos hatch-chart fly list
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "little-cottonwood-creek" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      A short Wasatch window
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        Little Cottonwood is not Big Cottonwood and it is not a tailwater. Fish the cold window, carry a thermometer, and leave when summer heat says so. Read{" "}
+                        <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing Little Cottonwood Creek
+                        </Link>
+                        . The{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          creek fly list
+                        </Link>
+                        {" "}follows the hatch chart.
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* 9. Regulations */}
               {river.regulations && (
                 <ScrollAnimation>
@@ -522,7 +622,7 @@ export default async function RiverPage({ params }: Props) {
                   icon={<MapIcon className="h-5 w-5" />}
                   defaultOpen={false}
                 >
-                  <MapView
+                  <LazyMapView
                     latitude={river.latitude}
                     longitude={river.longitude}
                     zoom={9}
@@ -615,11 +715,27 @@ export default async function RiverPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Best Flies for This River */}
+              {/* Best Flies for This River — always link the hatch-chart list */}
+              <ScrollAnimation>
+                <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5 mb-5">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
+                    Best Flies for {river.name}
+                  </h2>
+                  <p className="text-sm text-[#A8B2BD] mb-3">
+                    Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
+                  </p>
+                  <Link
+                    href={`/flies/for/${river.slug}`}
+                    className="inline-flex text-sm font-semibold text-[#E8923A] hover:underline"
+                  >
+                    Open the {river.name} fly list →
+                  </Link>
+                </div>
+              </ScrollAnimation>
               {riverFlies.length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
-                    Best Flies for {river.name}
+                    Catalog flies tied to {river.name}
                   </h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {riverFlies.slice(0, 8).map((fly) => (

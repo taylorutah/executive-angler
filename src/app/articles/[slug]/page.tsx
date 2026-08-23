@@ -7,15 +7,14 @@ import Badge from "@/components/ui/Badge";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds, getFliesByCategory, getAllCanonicalFlies } from "@/lib/db";
 import { getAuthorByArticleName } from "@/data/authors";
+import { extractFaqsFromHtml, faqPageJsonLd } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -82,10 +81,6 @@ export default async function ArticlePage({ params }: Props) {
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
   const allArticles = await getAllArticles();
   const otherArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
@@ -103,6 +98,7 @@ export default async function ArticlePage({ params }: Props) {
 
   const flyCategory = ARTICLE_FLY_MAP[article.slug];
   const shouldShowFlies = flyCategory !== undefined || article.category === "technique" || article.category === "gear";
+  const faqs = extractFaqsFromHtml(article.content);
 
   const [relatedDests, relatedRivers, relatedFlies] = await Promise.all([
     article.relatedDestinationIds?.length
@@ -164,6 +160,8 @@ export default async function ArticlePage({ params }: Props) {
         },
       }} />
 
+      {faqs.length > 0 && <JsonLd data={faqPageJsonLd(faqs)} />}
+
       {/* HowTo schema for technique articles */}
       {article.category === "technique" && (
         <JsonLd data={{
@@ -187,9 +185,9 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* Hero — tall, cinematic */}
       <section className="relative h-[62vh] min-h-[420px] w-full overflow-hidden">
-        {userIsAdmin && (
+        {true && (
           <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
+            <AdminHeroEditor
               entityType="articles"
               entityId={article.id}
               currentImageUrl={article.heroImageUrl}

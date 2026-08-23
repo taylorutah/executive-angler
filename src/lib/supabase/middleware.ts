@@ -66,6 +66,24 @@ const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/n
 const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed"];
 
 export async function updateSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.includes("-auth-token") || c.name.startsWith("sb-"));
+
+  if (!hasAuthCookie) {
+    const isProtectedPath = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+    if (isProtectedPath) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
+    }
+    // Anonymous public traffic: do not touch cookies, so CDN/ISR can cache.
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -96,8 +114,6 @@ export async function updateSession(request: NextRequest) {
   if (user) {
     await captureLoginLocation(request, supabaseResponse, supabase, user.id, user.last_sign_in_at);
   }
-
-  const pathname = request.nextUrl.pathname;
 
   // Redirect unauthenticated users from protected paths
   const isProtectedPath = PROTECTED_PATHS.some((path) =>

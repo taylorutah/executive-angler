@@ -7,8 +7,7 @@
  * custom webfonts).
  */
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+import { SITE_URL } from "@/lib/constants";
 
 type BrandedEmailOptions = {
   heading: string;

@@ -4,11 +4,12 @@ import Image from "next/image";
 import { ChevronRight, Heart } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllRivers } from "@/lib/db";
-import { createClient } from "@/lib/supabase/server";
 import RiversPageClient from "./RiversPageClient";
 import { SITE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
+import DiscoveryNav from "@/components/seo/DiscoveryNav";
 
-export const revalidate = 0; // dynamic — needs auth for favorites
+export const revalidate = 3600;
 
 const SPOTLIGHT_SLUGS = ["madison-river", "snake-river-wyoming", "henrys-fork"] as const;
 
@@ -24,42 +25,28 @@ const DIFFICULTY_STYLES: Record<string, string> = {
   advanced: "bg-red-100 text-red-800",
 };
 
-export const metadata: Metadata = {
-  title: "41 Fly Fishing Rivers — Maps, Hatches & Access Points",
-  description:
-    "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. From the Madison to the Moy — find your next water.",
-  alternates: { canonical: `${SITE_URL}/rivers` },
-  openGraph: {
-    title: "41 Fly Fishing Rivers — Maps, Hatches & Access",
-    description: "Browse 41 fly fishing rivers with interactive maps, hatch charts, access points, and regulations. Find your next water.",
-    images: ["/api/og?title=Fly%20Fishing%20Rivers&subtitle=41%20Legendary%20Waters&type=river"],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const rivers = await getAllRivers();
+  const n = rivers.length;
+  return {
+    title: brandedTitle(`${n} Fly Fishing Rivers — Maps, Hatches & Access Points`),
+    description: `Browse ${n} fly fishing rivers with interactive maps, hatch charts, access points, and regulations. From the Madison to the Moy — find your next water.`,
+    alternates: { canonical: `${SITE_URL}/rivers` },
+    openGraph: {
+      title: `${n} Fly Fishing Rivers — Maps, Hatches & Access`,
+      description: `Browse ${n} fly fishing rivers with interactive maps, hatch charts, access points, and regulations. Find your next water.`,
+      images: ["/api/og?title=Fly%20Fishing%20Rivers&subtitle=Legendary%20Waters&type=river"],
+    },
+  };
+}
 
 export default async function RiversPage() {
   const rivers = await getAllRivers();
 
-  // Check auth and fetch user's favorited rivers
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  let favoriteRiverIds: string[] = [];
-  if (user) {
-    const { data: favs } = await supabase
-      .from("user_favorites")
-      .select("entity_id")
-      .eq("user_id", user.id)
-      .eq("entity_type", "river");
-    favoriteRiverIds = (favs ?? []).map((f) => f.entity_id);
-  }
-
-  const myRivers = favoriteRiverIds.length > 0
-    ? rivers.filter((r) => favoriteRiverIds.includes(r.id))
-    : [];
-
   const spotlightRivers = SPOTLIGHT_SLUGS.map((s) => rivers.find((r) => r.slug === s)).filter(
     Boolean
   );
+  const myRivers: typeof rivers = [];
 
   // Prepare serializable river data for the client component
   const allRiversData = rivers.map((river) => ({
@@ -96,6 +83,9 @@ export default async function RiversPage() {
             {rivers.length} rivers documented from source to sea — access points, hatch charts,
             and everything a serious angler needs.
           </p>
+          <div className="mt-8">
+            <DiscoveryNav />
+          </div>
         </div>
       </section>
 

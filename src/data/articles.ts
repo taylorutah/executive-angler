@@ -1,4 +1,5 @@
 import type { Article } from "@/types/entities";
+import { seoRecoveryArticles } from "./seo-recovery-articles";
 
 export const articles: Article[] = [
   {
@@ -4592,4 +4593,5 @@ export const articles: Article[] = [
       "A 3-tier fly box system built for performance fishing. Kill Box on your chest, Support Box in your pack, Archive at home — organized by probability of use.",
     featured: true,
   },
+  ...seoRecoveryArticles,
 ];

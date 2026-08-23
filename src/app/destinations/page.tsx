@@ -9,6 +9,7 @@ import { getAllDestinations } from "@/lib/db";
 import { destinationListConfig, destinationRegionGroups } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import DiscoveryNav from "@/components/seo/DiscoveryNav";
 
 export const revalidate = 3600;
 
@@ -73,6 +74,9 @@ export default async function DestinationsPage() {
             Thirty handpicked destinations — from Montana&apos;s spring creeks to the wild salmon
             rivers of Kamchatka.
           </p>
+          <div className="mt-8">
+            <DiscoveryNav />
+          </div>
         </div>
       </section>
 

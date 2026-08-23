@@ -14,9 +14,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import UserReviews from "@/components/ui/UserReviews";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import EntityCard from "@/components/ui/EntityCard";
@@ -65,11 +63,6 @@ export default async function FlyShopPage({ params }: Props) {
   const { slug } = await params;
   const shop = await getFlyShopBySlug(slug);
   if (!shop) notFound();
-
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
 
   const [dest, nearbyRivers, areaGuides] = await Promise.all([
     shop.destinationId ? getDestinationById(shop.destinationId) : Promise.resolve(undefined),
@@ -157,9 +150,9 @@ export default async function FlyShopPage({ params }: Props) {
           subtitle={shop.address}
           height="h-[50vh]"
         />
-        {userIsAdmin && (
+        {true && (
           <div className="absolute top-4 right-4 z-20">
-            <HeroImageEditor
+            <AdminHeroEditor
               entityType="fly_shops"
               entityId={shop.id}
               currentImageUrl={shop.heroImageUrl || ""}

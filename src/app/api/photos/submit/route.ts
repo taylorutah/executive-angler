@@ -4,6 +4,7 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import crypto from "crypto";
 import { checkSubmissionGate, logSubmission } from "@/lib/submission-gate";
+import { SITE_URL } from "@/lib/constants";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     // Send admin notification email
     const adminEmail = process.env.ADMIN_EMAIL;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
+    const siteUrl = SITE_URL;
 
     if (adminEmail && process.env.RESEND_API_KEY) {
       const approveToken = generateToken(submission.id, "approve");

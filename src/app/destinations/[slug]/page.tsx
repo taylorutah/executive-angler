@@ -12,12 +12,10 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import MapView from "@/components/maps/DynamicMapView";
+import LazyMapView from "@/components/maps/LazyMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { getHeroHeight } from "@/lib/hero-height";
 import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
@@ -80,13 +78,8 @@ export default async function DestinationPage({ params }: Props) {
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
-  // Auth-aware hero height
-  const heroTier: HeroTier = currentUser ? "authenticated" : "anonymous";
+  // Always anonymous height so CDN can cache the public destination page.
+  const heroTier: HeroTier = "anonymous";
   const heroHeight = getHeroHeight("destination", heroTier);
 
   const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies, galleryPhotos] = await Promise.all([
@@ -167,18 +160,16 @@ export default async function DestinationPage({ params }: Props) {
             imageCredit={dest.heroImageCredit}
             imageCreditUrl={dest.heroImageCreditUrl}
           />
-          {userIsAdmin && (
-            <div className="absolute top-4 right-4 z-20">
-              <HeroImageEditor
-                entityType="destinations"
-                entityId={dest.id}
-                currentImageUrl={dest.heroImageUrl}
-                currentAlt={dest.heroImageAlt}
-                currentCredit={dest.heroImageCredit}
-                currentCreditUrl={dest.heroImageCreditUrl}
-              />
-            </div>
-          )}
+          <div className="absolute top-4 right-4 z-20">
+            <AdminHeroEditor
+              entityType="destinations"
+              entityId={dest.id}
+              currentImageUrl={dest.heroImageUrl}
+              currentAlt={dest.heroImageAlt}
+              currentCredit={dest.heroImageCredit}
+              currentCreditUrl={dest.heroImageCreditUrl}
+            />
+          </div>
         </div>
       ) : (
         <div className="bg-[#0D1117] pt-6">
@@ -195,8 +186,7 @@ export default async function DestinationPage({ params }: Props) {
               ]}
               galleryPhotos={galleryPhotos}
             >
-              {userIsAdmin && (
-                <HeroImageEditor
+                <AdminHeroEditor
                   entityType="destinations"
                   entityId={dest.id}
                   currentImageUrl={dest.heroImageUrl}
@@ -204,7 +194,6 @@ export default async function DestinationPage({ params }: Props) {
                   currentCredit={dest.heroImageCredit}
                   currentCreditUrl={dest.heroImageCreditUrl}
                 />
-              )}
             </HeroCompact>
           </div>
         </div>
@@ -264,13 +253,93 @@ export default async function DestinationPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
+              {dest.slug === "montana" && destRivers.length > 0 && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                      Montana rivers at a glance
+                    </h2>
+                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                      Use this as a trip-planning table, not a live report. Open each river for the hatch chart and gauge. Fly lists live at{" "}
+                      <Link href="/flies/for/madison-river" className="text-[#E8923A] hover:underline">
+                        /flies/for/[slug]
+                      </Link>
+                      .
+                    </p>
+                    <div className="overflow-x-auto rounded-xl border border-[#21262D]">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="bg-[#161B22] text-left text-[#A8B2BD]">
+                            <th className="px-4 py-3 font-medium">River</th>
+                            <th className="px-4 py-3 font-medium">Flow</th>
+                            <th className="px-4 py-3 font-medium">Wade / float</th>
+                            <th className="px-4 py-3 font-medium">Best months</th>
+                            <th className="px-4 py-3 font-medium">Flies</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {destRivers.slice(0, 8).map((r) => (
+                            <tr key={r.id} className="border-t border-[#21262D]">
+                              <td className="px-4 py-2.5">
+                                <Link href={`/rivers/${r.slug}`} className="text-white hover:text-[#E8923A]">
+                                  {r.name}
+                                </Link>
+                              </td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.flowType}</td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.wadingType}</td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">
+                                {(r.bestMonths ?? []).slice(0, 3).join(", ") || "—"}
+                              </td>
+                              <td className="px-4 py-2.5">
+                                <Link href={`/flies/for/${r.slug}`} className="text-[#E8923A] hover:underline">
+                                  Fly list
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {dest.slug === "belize" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                      Permit, bonefish, and tarpon
+                    </h2>
+                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                      Belize is permit country that also holds bonefish and tarpon. Plan a week around tides and a guide, not around a morning that has to be a grand slam. Species pages for{" "}
+                      <Link href="/species/permit" className="text-[#E8923A] hover:underline">
+                        permit
+                      </Link>
+                      ,{" "}
+                      <Link href="/species/bonefish" className="text-[#E8923A] hover:underline">
+                        bonefish
+                      </Link>
+                      , and{" "}
+                      <Link href="/species/tarpon" className="text-[#E8923A] hover:underline">
+                        tarpon
+                      </Link>
+                      {" "}sit next to the{" "}
+                      <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[#E8923A] hover:underline">
+                        Belize flats guide
+                      </Link>
+                      . We do not publish other anglers&apos; fish or GPS.
+                    </p>
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Map
                   </h2>
-                  <MapView
+                  <LazyMapView
                     latitude={dest.latitude}
                     longitude={dest.longitude}
                     zoom={7}
