@@ -12,17 +12,20 @@ import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Fly Fishing Articles — Techniques, Gear & Trip Planning",
-  description:
-    "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation. Level up your angling with in-depth instruction.",
-  alternates: { canonical: `${SITE_URL}/articles` },
-  openGraph: {
-    title: "Fly Fishing Articles — Techniques, Gear & Trip Planning",
-    description: "Read 16 expert fly fishing articles on techniques, gear reviews, destination guides, and conservation.",
-    images: ["/api/og?title=Articles%20%26%20Instruction&subtitle=Expert%20Fly%20Fishing%20Content&type=article"],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const articles = await getAllArticles();
+  const n = articles.length;
+  return {
+    title: `Fly Fishing Articles — Techniques, Gear & Trip Planning`,
+    description: `Read ${n} expert fly fishing articles on techniques, gear reviews, destination guides, and conservation. Level up your angling with in-depth instruction.`,
+    alternates: { canonical: `${SITE_URL}/articles` },
+    openGraph: {
+      title: "Fly Fishing Articles — Techniques, Gear & Trip Planning",
+      description: `Read ${n} expert fly fishing articles on techniques, gear reviews, destination guides, and conservation.`,
+      images: ["/api/og?title=Articles%20%26%20Instruction&subtitle=Expert%20Fly%20Fishing%20Content&type=article"],
+    },
+  };
+}
 
 export default async function ArticlesPage() {
   const articles = await getAllArticles();

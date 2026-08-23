@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
+import { SITE_URL as CANONICAL_SITE_URL } from "@/lib/constants";
 
 /* ── Singletons ── */
 
@@ -28,7 +29,7 @@ function getResend() {
 /* ── Constants ── */
 
 const FROM_EMAIL = "Executive Angler <noreply@executiveangler.com>";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
+const SITE_URL = CANONICAL_SITE_URL;
 
 const NOTIFICATION_COLUMN_MAP: Record<string, string> = {
   follow: "email_notify_follows",
@@ -266,7 +267,7 @@ export async function POST(req: NextRequest) {
       ? `${actorName} commented on your session`
       : `${actorName} gave kudos on your session`;
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://executiveangler.com";
+    const siteUrl = CANONICAL_SITE_URL;
     fetch(`${siteUrl}/api/notifications/push`, {
       method: "POST",
       headers: {

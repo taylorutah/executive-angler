@@ -12,12 +12,10 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import MapView from "@/components/maps/DynamicMapView";
+import LazyMapView from "@/components/maps/LazyMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { getHeroHeight } from "@/lib/hero-height";
 import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
@@ -80,13 +78,8 @@ export default async function DestinationPage({ params }: Props) {
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
-  // Auth-aware hero height
-  const heroTier: HeroTier = currentUser ? "authenticated" : "anonymous";
+  // Always anonymous height so CDN can cache the public destination page.
+  const heroTier: HeroTier = "anonymous";
   const heroHeight = getHeroHeight("destination", heroTier);
 
   const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies, galleryPhotos] = await Promise.all([
@@ -167,18 +160,16 @@ export default async function DestinationPage({ params }: Props) {
             imageCredit={dest.heroImageCredit}
             imageCreditUrl={dest.heroImageCreditUrl}
           />
-          {userIsAdmin && (
-            <div className="absolute top-4 right-4 z-20">
-              <HeroImageEditor
-                entityType="destinations"
-                entityId={dest.id}
-                currentImageUrl={dest.heroImageUrl}
-                currentAlt={dest.heroImageAlt}
-                currentCredit={dest.heroImageCredit}
-                currentCreditUrl={dest.heroImageCreditUrl}
-              />
-            </div>
-          )}
+          <div className="absolute top-4 right-4 z-20">
+            <AdminHeroEditor
+              entityType="destinations"
+              entityId={dest.id}
+              currentImageUrl={dest.heroImageUrl}
+              currentAlt={dest.heroImageAlt}
+              currentCredit={dest.heroImageCredit}
+              currentCreditUrl={dest.heroImageCreditUrl}
+            />
+          </div>
         </div>
       ) : (
         <div className="bg-[#0D1117] pt-6">
@@ -195,8 +186,7 @@ export default async function DestinationPage({ params }: Props) {
               ]}
               galleryPhotos={galleryPhotos}
             >
-              {userIsAdmin && (
-                <HeroImageEditor
+                <AdminHeroEditor
                   entityType="destinations"
                   entityId={dest.id}
                   currentImageUrl={dest.heroImageUrl}
@@ -204,7 +194,6 @@ export default async function DestinationPage({ params }: Props) {
                   currentCredit={dest.heroImageCredit}
                   currentCreditUrl={dest.heroImageCreditUrl}
                 />
-              )}
             </HeroCompact>
           </div>
         </div>
@@ -270,7 +259,7 @@ export default async function DestinationPage({ params }: Props) {
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
                     Map
                   </h2>
-                  <MapView
+                  <LazyMapView
                     latitude={dest.latitude}
                     longitude={dest.longitude}
                     zoom={7}

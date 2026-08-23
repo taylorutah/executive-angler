@@ -4,8 +4,9 @@ import { ChevronRight, Star } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
 
-export const revalidate = 0;
+export const revalidate = 3600;
 
 const SPOTLIGHT_SLUGS = [
   "domenick-swentosky-troutbitten",
@@ -19,17 +20,20 @@ const GUIDE_HEADLINES: Record<string, string> = {
   "paddy-mcdonnell-moy-ghillie": "Third-Generation Ghillie on Ireland's River Moy",
 };
 
-export const metadata: Metadata = {
-  title: "31 Expert Fly Fishing Guides — Compare & Book",
-  description:
-    "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. From Montana to Mongolia — find your next guide and book direct.",
-  alternates: { canonical: `${SITE_URL}/guides` },
-  openGraph: {
-    title: "31 Expert Fly Fishing Guides",
-    description: "Browse 31 vetted fly fishing guides worldwide with rates, specialties, and reviews. Find your next guide and book direct.",
-    images: ["/api/og?title=Fly%20Fishing%20Guides&subtitle=31%20Expert%20Professionals&type=default"],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const guides = await getAllGuides();
+  const n = guides.length;
+  return {
+    title: brandedTitle(`${n} Expert Fly Fishing Guides — Compare & Book`),
+    description: `Browse ${n} vetted fly fishing guides worldwide with rates, specialties, and reviews. From Montana to Mongolia — find your next guide and book direct.`,
+    alternates: { canonical: `${SITE_URL}/guides` },
+    openGraph: {
+      title: `${n} Expert Fly Fishing Guides`,
+      description: `Browse ${n} vetted fly fishing guides worldwide with rates, specialties, and reviews. Find your next guide and book direct.`,
+      images: ["/api/og?title=Fly%20Fishing%20Guides&subtitle=Expert%20Professionals&type=default"],
+    },
+  };
+}
 
 export default async function GuidesPage() {
   const [guides, destinations] = await Promise.all([getAllGuides(), getAllDestinations()]);

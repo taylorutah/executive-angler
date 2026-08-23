@@ -11,9 +11,19 @@ import {
   getAllGearBrands,
   getAllGearProducts,
 } from "@/lib/db";
-import { SITE_URL } from "@/lib/constants";
+import { pageUrl } from "@/lib/seo";
 
 export const revalidate = 86400;
+
+const MIN_PRODUCT_COPY = 80;
+
+function loc(path: string): string {
+  const url = pageUrl(path);
+  if (/\s/.test(url)) {
+    throw new Error(`[sitemap] whitespace in loc: ${JSON.stringify(url)}`);
+  }
+  return url;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies, gearBrands, gearProducts] =
@@ -29,114 +39,130 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getAllGearBrands(),
       getAllGearProducts(),
     ]);
-  const staticPages = [
-    { url: SITE_URL, lastModified: new Date(), priority: 1 },
-    { url: `${SITE_URL}/destinations`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/rivers`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/species`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/lodges`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/articles`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/guides`, lastModified: new Date(), priority: 0.8 },
-    { url: `${SITE_URL}/fly-shops`, lastModified: new Date(), priority: 0.8 },
-    { url: `${SITE_URL}/about`, lastModified: new Date(), priority: 0.5 },
-    { url: `${SITE_URL}/contact`, lastModified: new Date(), priority: 0.5 },
-    { url: `${SITE_URL}/privacy`, lastModified: new Date(), priority: 0.3 },
-    { url: `${SITE_URL}/terms`, lastModified: new Date(), priority: 0.3 },
+
+  const now = new Date();
+
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: loc("/"), lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: loc("/destinations"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/rivers"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/species"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/lodges"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/articles"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/guides"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: loc("/fly-shops"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: loc("/about"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: loc("/contact"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: loc("/privacy"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: loc("/terms"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: loc("/flies/library"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: loc("/gear"), lastModified: now, changeFrequency: "weekly", priority: 0.7 },
   ];
 
   const destinationPages = destinations.map((d) => ({
-    url: `${SITE_URL}/destinations/${d.slug}`,
-    lastModified: new Date(),
+    url: loc(`/destinations/${d.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const riverPages = rivers.map((r) => ({
-    url: `${SITE_URL}/rivers/${r.slug}`,
-    lastModified: new Date(),
+    url: loc(`/rivers/${r.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const speciesPages = species.map((s) => ({
-    url: `${SITE_URL}/species/${s.slug}`,
-    lastModified: new Date(),
+    url: loc(`/species/${s.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   const lodgePages = lodges.map((l) => ({
-    url: `${SITE_URL}/lodges/${l.slug}`,
-    lastModified: new Date(),
+    url: loc(`/lodges/${l.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   const articlePages = articles.map((a) => ({
-    url: `${SITE_URL}/articles/${a.slug}`,
+    url: loc(`/articles/${a.slug}`),
     lastModified: new Date(a.publishedAt),
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   const guidePages = guides.map((g) => ({
-    url: `${SITE_URL}/guides/${g.slug}`,
-    lastModified: new Date(),
+    url: loc(`/guides/${g.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
   const shopPages = flyShops.map((s) => ({
-    url: `${SITE_URL}/fly-shops/${s.slug}`,
-    lastModified: new Date(),
+    url: loc(`/fly-shops/${s.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
   const brandById = new Map(gearBrands.map((b) => [b.id, b]));
 
   const gearCategoryPages = ["rod", "reel", "waders"].map((cat) => ({
-    url: `${SITE_URL}/gear/category/${cat}`,
-    lastModified: new Date(),
+    url: loc(`/gear/category/${cat}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
   const gearBrandPages = gearBrands.map((b) => ({
-    url: `${SITE_URL}/gear/${b.slug}`,
-    lastModified: new Date(),
+    url: loc(`/gear/${b.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
-  const gearProductPages = gearProducts
-    .map((p) => {
-      const brand = brandById.get(p.brandId);
-      if (!brand) return null;
-      return {
-        url: `${SITE_URL}/gear/${brand.slug}/${p.slug}`,
-        lastModified: new Date(),
-        priority: 0.6,
-      };
-    })
-    .filter((entry): entry is { url: string; lastModified: Date; priority: number } => entry !== null);
+  const gearProductPages: MetadataRoute.Sitemap = [];
+  for (const p of gearProducts) {
+    const brand = brandById.get(p.brandId);
+    if (!brand) continue;
+    const copyLen = (p.description ?? "").trim().length;
+    const thin = copyLen < MIN_PRODUCT_COPY;
+    gearProductPages.push({
+      url: loc(`/gear/${brand.slug}/${p.slug}`),
+      lastModified: thin ? undefined : now,
+      changeFrequency: thin ? "yearly" : "monthly",
+      priority: thin ? 0.3 : 0.6,
+    });
+  }
 
   const flyPages = canonicalFlies.map((f) => ({
-    url: `${SITE_URL}/flies/${f.slug}`,
-    lastModified: new Date(),
+    url: loc(`/flies/${f.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
-  // Fly category pages
   const flyCategories = ["dry", "nymph", "streamer", "emerger", "wet", "terrestrial", "egg", "midge"];
   const flyCategoryPages = flyCategories.map((cat) => ({
-    url: `${SITE_URL}/flies/category/${cat}`,
-    lastModified: new Date(),
+    url: loc(`/flies/category/${cat}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
-  // Fly-for-river pages (one per river)
   const flyForRiverPages = rivers.map((r) => ({
-    url: `${SITE_URL}/flies/for/${r.slug}`,
-    lastModified: new Date(),
-    priority: 0.6,
+    url: loc(`/flies/for/${r.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
   }));
 
-  // Fly hatch/insect pages (unique imitates values)
   const insectSlugs = new Set<string>();
   for (const fly of canonicalFlies) {
-    for (const im of (fly.imitates ?? [])) {
+    for (const im of fly.imitates ?? []) {
       const slug = im
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
@@ -147,15 +173,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
   const flyHatchPages = Array.from(insectSlugs).map((slug) => ({
-    url: `${SITE_URL}/flies/hatch/${slug}`,
-    lastModified: new Date(),
+    url: loc(`/flies/hatch/${slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
   return [
     ...staticPages,
-    { url: `${SITE_URL}/flies`, lastModified: new Date(), priority: 0.9 },
-    { url: `${SITE_URL}/gear`, lastModified: new Date(), priority: 0.9 },
     ...destinationPages,
     ...riverPages,
     ...speciesPages,

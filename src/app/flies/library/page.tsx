@@ -10,12 +10,9 @@ import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/server";
+import DiscoveryNav from "@/components/seo/DiscoveryNav";
 
-// Per-request render: must read auth + the viewer's favorites. Cached
-// canonical_flies queries inside getAllCanonicalFlies still benefit from
-// Next's data cache.
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const FLY_CATEGORY_LABELS: Record<string, string> = {
   dry: "Dry Fly",
@@ -77,36 +74,6 @@ export default async function FliesPage() {
   let spotlightFlies: typeof allFlies = [];
   let spotlightLabel = "Essential Patterns";
 
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      // Post-Phase-C: favorites live on user_fly_configurations, joined to flies.
-      const { data: favRows } = await supabase
-        .from("user_fly_configurations")
-        .select("fly_id")
-        .eq("user_id", user.id)
-        .eq("is_favorite", true);
-      const favIds = new Set(
-        (favRows ?? [])
-          .map((r) => (r as { fly_id?: string | null }).fly_id)
-          .filter((id): id is string => !!id),
-      );
-      if (favIds.size > 0) {
-        spotlightFlies = allFlies
-          .filter((f) => favIds.has(f.id))
-          .slice(0, SPOTLIGHT_LIMIT);
-        spotlightLabel = "Your Favorites";
-      }
-    }
-  } catch (e) {
-    // Auth/network failure shouldn't break the public library. Fall through
-    // to the featured/fallback path.
-    console.warn("[/flies] favorite lookup failed:", e);
-  }
-
   if (spotlightFlies.length === 0) {
     const featured = allFlies.filter((f) => f.featured);
     if (featured.length > 0) {
@@ -159,6 +126,9 @@ export default async function FliesPage() {
             emergers, and more. Every pattern includes sizes, materials, tying
             videos, and where to fish it.
           </p>
+          <div className="mt-8">
+            <DiscoveryNav />
+          </div>
         </div>
       </section>
 

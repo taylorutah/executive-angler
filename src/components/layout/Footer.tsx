@@ -11,12 +11,14 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "Import & Export", href: "/journal/import" },
   ],
   Discover: [
+    { label: "Madison River", href: "/rivers/madison-river" },
+    { label: "Montana", href: "/destinations/montana" },
+    { label: "Fly Library", href: "/flies/library" },
+    { label: "Best Flies for the Madison", href: "/flies/for/madison-river" },
+    { label: "Green River", href: "/rivers/green-river" },
+    { label: "Belize", href: "/destinations/belize" },
     { label: "Destinations", href: "/destinations" },
-    { label: "Species", href: "/species" },
     { label: "Articles", href: "/articles" },
-    { label: "Techniques", href: "/articles?category=technique" },
-    { label: "Gear Reviews", href: "/articles?category=gear" },
-    { label: "Conservation", href: "/articles?category=conservation" },
   ],
   Directory: [
     { label: "Lodges", href: "/lodges" },

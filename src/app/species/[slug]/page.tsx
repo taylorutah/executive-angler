@@ -14,9 +14,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { getHeroHeight } from "@/lib/hero-height";
 import type { HeroTier } from "@/lib/hero-height";
 import { SITE_URL } from "@/lib/constants";
@@ -85,13 +83,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const sp = await getSpeciesBySlug(slug);
   if (!sp) notFound();
 
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
-  // Auth-aware hero height
-  const heroTier: HeroTier = currentUser ? "authenticated" : "anonymous";
+  const heroTier: HeroTier = "anonymous";
   const heroHeight = getHeroHeight("species", heroTier);
 
   const [relatedDests, relatedRivers, speciesFlies, galleryPhotos] = await Promise.all([
@@ -169,9 +161,9 @@ export default async function SpeciesDetailPage({ params }: Props) {
             height={heroHeight}
             imageContain={true}
           />
-          {userIsAdmin && (
+          {true && (
             <div className="absolute top-4 right-4 z-20">
-              <HeroImageEditor
+              <AdminHeroEditor
                 entityType="species"
                 entityId={sp.id}
                 currentImageUrl={sp.imageUrl || ""}
@@ -201,8 +193,8 @@ export default async function SpeciesDetailPage({ params }: Props) {
               galleryPhotos={galleryPhotos}
               imageContain={true}
             >
-              {userIsAdmin && (
-                <HeroImageEditor
+              {true && (
+                <AdminHeroEditor
                   entityType="species"
                   entityId={sp.id}
                   currentImageUrl={sp.imageUrl || ""}

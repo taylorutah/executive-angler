@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { buildBrandedEmail } from "./templates";
+import { SITE_URL as CANONICAL_SITE_URL } from "@/lib/constants";
 
 /**
  * Shared Resend client + branded-email sender.
@@ -9,8 +10,7 @@ import { buildBrandedEmail } from "./templates";
  */
 
 export const FROM_EMAIL = "Executive Angler <noreply@executiveangler.com>";
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.com";
+export const SITE_URL = CANONICAL_SITE_URL;
 
 let _resend: Resend | null = null;
 let _resendChecked = false;

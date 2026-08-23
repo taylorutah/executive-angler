@@ -11,7 +11,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
-import MapView from "@/components/maps/DynamicMapView";
+import LazyMapView from "@/components/maps/LazyMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import RiverSidebarPhotoWidget from "@/components/ui/RiverSidebarPhotoWidget";
 import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
@@ -24,15 +24,13 @@ import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 import RiverSidebarLive from "@/components/rivers/RiverSidebarLive";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
 import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
-import FlowChart from "@/components/rivers/FlowChart";
+import LazyFlowChart from "@/components/rivers/LazyFlowChart";
 import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import CollapsibleOverview from "@/components/rivers/CollapsibleOverview";
 import CollapsibleSection from "@/components/rivers/CollapsibleSection";
-import HeroImageEditor from "@/components/admin/HeroImageEditor";
+import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { SITE_URL } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -99,11 +97,7 @@ export default async function RiverPage({ params }: Props) {
       ? river.heroImageUrl
       : PLACEHOLDER_RIVER_IMAGE;
 
-  // Check if current user is admin (for hero image editor)
-  const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
-  const userIsAdmin = isAdmin(currentUser?.email);
-
+  // Admin hero editor is client-gated so this page stays cacheable.
 
   const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies, galleryPhotos] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
@@ -194,17 +188,15 @@ export default async function RiverPage({ params }: Props) {
         heroImageCreditUrl={river.heroImageCreditUrl}
         galleryPhotos={galleryPhotos}
       >
-        {userIsAdmin && (
-          <HeroImageEditor
-            entityType="rivers"
-            entityId={river.id}
-            currentImageUrl={river.heroImageUrl}
-            currentAlt={river.heroImageAlt}
-            currentCredit={river.heroImageCredit}
-            currentCreditUrl={river.heroImageCreditUrl}
-            aspectRatio={16 / 3}
-          />
-        )}
+        <AdminHeroEditor
+          entityType="rivers"
+          entityId={river.id}
+          currentImageUrl={river.heroImageUrl}
+          currentAlt={river.heroImageAlt}
+          currentCredit={river.heroImageCredit}
+          currentCreditUrl={river.heroImageCreditUrl}
+          aspectRatio={16 / 3}
+        />
       </RiverHeroImage>
 
       {/* Title block — identity + navigation, all below the image */}
@@ -277,7 +269,7 @@ export default async function RiverPage({ params }: Props) {
 
               {/* 2. Flow history chart (7D/30D/6M/1Y toggles built-in) */}
               <ScrollAnimation>
-                <FlowChart
+                <LazyFlowChart
                   usgsGaugeId={river.usgsGaugeId ?? null}
                   riverName={river.name}
                   riverId={river.id}
@@ -522,7 +514,7 @@ export default async function RiverPage({ params }: Props) {
                   icon={<MapIcon className="h-5 w-5" />}
                   defaultOpen={false}
                 >
-                  <MapView
+                  <LazyMapView
                     latitude={river.latitude}
                     longitude={river.longitude}
                     zoom={9}
@@ -615,11 +607,27 @@ export default async function RiverPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
-              {/* Best Flies for This River */}
+              {/* Best Flies for This River — always link the hatch-chart list */}
+              <ScrollAnimation>
+                <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5 mb-5">
+                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
+                    Best Flies for {river.name}
+                  </h2>
+                  <p className="text-sm text-[#A8B2BD] mb-3">
+                    Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
+                  </p>
+                  <Link
+                    href={`/flies/for/${river.slug}`}
+                    className="inline-flex text-sm font-semibold text-[#E8923A] hover:underline"
+                  >
+                    Open the {river.name} fly list →
+                  </Link>
+                </div>
+              </ScrollAnimation>
               {riverFlies.length > 0 && (
                 <ScrollAnimation>
                   <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
-                    Best Flies for {river.name}
+                    Catalog flies tied to {river.name}
                   </h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {riverFlies.slice(0, 8).map((fly) => (
