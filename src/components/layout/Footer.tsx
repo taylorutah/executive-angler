@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SITE_NAME, SOCIAL_LINKS, APP_STORE_URL } from "@/lib/constants";
 
 const footerColumns: Record<string, { label: string; href: string }[]> = {
@@ -69,12 +70,23 @@ export default function Footer() {
           <div className="max-w-md">
             <Link
               href="/"
-              className="inline-flex items-baseline gap-2 group"
+              className="inline-block"
               aria-label={SITE_NAME}
             >
-              <span className="font-heading text-2xl tracking-tight text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
-                Executive Angler
-              </span>
+              <Image
+                src="/images/logo-horizontal-white.svg"
+                alt={SITE_NAME}
+                width={200}
+                height={38}
+                className="h-9 w-auto block dark-logo pointer-events-none"
+              />
+              <Image
+                src="/images/logo-horizontal-forest.svg"
+                alt={SITE_NAME}
+                width={200}
+                height={38}
+                className="h-9 w-auto hidden light-logo pointer-events-none"
+              />
             </Link>
             <p className="mt-4 text-[15px] leading-relaxed text-[#A8B2BD]">
               The fly fishing intelligence platform. Journal every session, build fly recipes, and read river conditions before you tie on.
