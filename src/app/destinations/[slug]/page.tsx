@@ -253,6 +253,57 @@ export default async function DestinationPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
+              {dest.slug === "montana" && destRivers.length > 0 && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                      Montana rivers at a glance
+                    </h2>
+                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                      Use this as a trip-planning table, not a live report. Open each river for the hatch chart and gauge. Fly lists live at{" "}
+                      <Link href="/flies/for/madison-river" className="text-[#E8923A] hover:underline">
+                        /flies/for/[slug]
+                      </Link>
+                      .
+                    </p>
+                    <div className="overflow-x-auto rounded-xl border border-[#21262D]">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="bg-[#161B22] text-left text-[#A8B2BD]">
+                            <th className="px-4 py-3 font-medium">River</th>
+                            <th className="px-4 py-3 font-medium">Flow</th>
+                            <th className="px-4 py-3 font-medium">Wade / float</th>
+                            <th className="px-4 py-3 font-medium">Best months</th>
+                            <th className="px-4 py-3 font-medium">Flies</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {destRivers.slice(0, 8).map((r) => (
+                            <tr key={r.id} className="border-t border-[#21262D]">
+                              <td className="px-4 py-2.5">
+                                <Link href={`/rivers/${r.slug}`} className="text-white hover:text-[#E8923A]">
+                                  {r.name}
+                                </Link>
+                              </td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.flowType}</td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.wadingType}</td>
+                              <td className="px-4 py-2.5 text-[#A8B2BD]">
+                                {(r.bestMonths ?? []).slice(0, 3).join(", ") || "—"}
+                              </td>
+                              <td className="px-4 py-2.5">
+                                <Link href={`/flies/for/${r.slug}`} className="text-[#E8923A] hover:underline">
+                                  Fly list
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>

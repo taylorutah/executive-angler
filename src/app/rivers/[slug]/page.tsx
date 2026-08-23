@@ -483,6 +483,32 @@ export default async function RiverPage({ params }: Props) {
                 </div>
               </ScrollAnimation>
 
+              {river.slug === "madison-river" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Planning a Madison trip in 2026
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          hatch-chart fly list
+                        </Link>
+                        , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
+                      </p>
+                      <p>
+                        If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
+                        <Link href="/destinations/montana" className="text-[#E8923A] hover:underline">
+                          Montana destination page
+                        </Link>{" "}
+                        for lodges, shops, and neighboring rivers.
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* 9. Regulations */}
               {river.regulations && (
                 <ScrollAnimation>
