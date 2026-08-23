@@ -1,6 +1,7 @@
 import type { CanonicalFly } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(row: Record<string, unknown>): CanonicalFly {
   return {
@@ -32,7 +33,7 @@ function mapRow(row: Record<string, unknown>): CanonicalFly {
     keyVariations: (row.key_variations as CanonicalFly["keyVariations"]) ?? undefined,
 
     // Media
-    heroImageUrl: row.hero_image_url as string | undefined,
+    heroImageUrl: normalizeImageUrl(row.hero_image_url as string | null),
     galleryUrls: (row.gallery_urls as string[]) ?? [],
     iconUrl: row.icon_url as string | undefined,
     videoUrl: row.video_url as string | undefined,

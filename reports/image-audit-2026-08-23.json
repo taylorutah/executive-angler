@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-08-23T23:00:00.000Z",
+  "source": "production Supabase + HEAD samples against www.executiveangler.com / origin hosts",
+  "searchIndexBytes": 372923,
+  "searchIndexItems": 779,
+  "hostNotAllowlisted": 0,
+  "nextConfigDecision": "add no new remotePatterns; rehost dead Unsplash to Supabase",
+  "entities": {
+    "rivers_hero": { "total": 138, "null": 0, "relative": 136, "absolute": 2, "hostNotAllowlisted": 0 },
+    "rivers_thumbnail": { "total": 138, "null": 6, "relative": 132, "absolute": 0, "hostNotAllowlisted": 0 },
+    "destinations": { "total": 52, "null": 9, "relative": 43, "absolute": 0, "hostNotAllowlisted": 0 },
+    "articles": { "total": 24, "null": 0, "relative": 23, "absolute": 1, "hostNotAllowlisted": 0 },
+    "lodges": { "total": 32, "null": 0, "relative": 0, "absolute": 32, "hostNotAllowlisted": 0 },
+    "guides": { "total": 106, "null": 76, "relative": 1, "absolute": 29, "hostNotAllowlisted": 0 },
+    "fly_shops": { "total": 230, "null": 107, "relative": 1, "absolute": 122, "unsplash": 106, "hostNotAllowlisted": 0, "unsplashSampleDead": "7/32" },
+    "species": { "total": 35, "null": 0, "relative": 0, "absolute": 35, "hostNotAllowlisted": 0 },
+    "canonical_flies": { "total": 162, "null": 36, "relative": 3, "absolute": 123, "hostNotAllowlisted": 0 }
+  },
+  "nullDestinations": [
+    "connecticut",
+    "maryland",
+    "massachusetts",
+    "minnesota",
+    "nevada",
+    "new-york",
+    "vermont",
+    "washington",
+    "wisconsin"
+  ]
+}

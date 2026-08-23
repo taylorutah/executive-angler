@@ -1,6 +1,7 @@
 import type { Article } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Article {
   return {
@@ -10,7 +11,7 @@ function mapRow(r: Record<string, unknown>): Article {
     subtitle: (r.subtitle ?? undefined) as string | undefined,
     author: (r.author ?? "") as string,
     category: (r.category ?? "technique") as Article["category"],
-    heroImageUrl: (r.hero_image_url ?? "") as string,
+    heroImageUrl: normalizeImageUrl(r.hero_image_url as string | null),
     heroImageAlt: r.hero_image_alt as string | undefined,
     heroImageCredit: r.hero_image_credit as string | undefined,
     heroImageCreditUrl: r.hero_image_credit_url as string | undefined,

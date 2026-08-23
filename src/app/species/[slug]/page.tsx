@@ -151,10 +151,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
       {heroTier === "anonymous" ? (
         <div className="relative">
           <HeroSection
-            imageUrl={
-              sp.imageUrl ||
-              "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
-            }
+            imageUrl={sp.imageUrl}
             imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
             title={sp.commonName}
             subtitle={sp.scientificName || undefined}
@@ -178,10 +175,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
         <div className="bg-[#0D1117] pt-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <HeroCompact
-              heroImageUrl={
-                sp.imageUrl ||
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
-              }
+              heroImageUrl={sp.imageUrl}
               heroImageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
               heroImageCredit={sp.heroImageCredit}
               title={sp.commonName}

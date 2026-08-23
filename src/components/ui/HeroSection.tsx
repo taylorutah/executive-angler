@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { Camera } from "lucide-react";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
+import { isUsableImageUrl } from "@/lib/media/image-url";
 
 interface HeroSectionProps {
-  imageUrl: string;
+  imageUrl?: string;
   imageAlt: string;
   title: string;
   subtitle?: string;
@@ -28,12 +29,15 @@ export default function HeroSection({
   imageCredit,
   imageCreditUrl,
 }: HeroSectionProps) {
+  const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
+
   return (
     <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[#1F2937]" : ""}`}>
-      <Image
+      <SafeEntityImage
         src={imageUrl}
         alt={imageAlt}
-        fill
+        title=""
+        contain={imageContain}
         className={imageContain ? "object-contain" : "object-cover"}
         priority
         sizes="100vw"
@@ -57,8 +61,7 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* Photo credit — bottom right, subtle */}
-      {imageCredit && (
+      {showCredit && (
         <div className="absolute bottom-3 right-4 z-10">
           {imageCreditUrl ? (
             <a

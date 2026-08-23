@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin, ChevronRight, Star } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllFlyShops, getAllDestinations } from "@/lib/db";
 import { flyShopListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
@@ -125,26 +125,25 @@ export default async function FlyShopsPage() {
                     href={`/fly-shops/${shop.slug}`}
                     className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
                   >
-                    {shop.heroImageUrl && (
-                      <div className="relative h-48">
-                        <Image
-                          src={shop.heroImageUrl}
-                          alt={shop.name}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/60 to-transparent" />
-                        {shop.googleRating && (
-                          <div className="absolute top-3 right-3 flex items-center gap-1 bg-[#161B22]/90 backdrop-blur-sm rounded-full px-2 py-1">
-                            <Star className="h-3 w-3 fill-[#E8923A] text-[#E8923A]" />
-                            <span className="text-[10px] font-semibold text-[#E8923A]">
-                              {shop.googleRating}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    <div className="relative h-48">
+                      <SafeEntityImage
+                        src={shop.heroImageUrl}
+                        alt={shop.name}
+                        title={shop.name}
+                        meta={dest?.name}
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                      {shop.googleRating && (
+                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-[#161B22]/90 backdrop-blur-sm rounded-full px-2 py-1">
+                          <Star className="h-3 w-3 fill-[#E8923A] text-[#E8923A]" />
+                          <span className="text-[10px] font-semibold text-[#E8923A]">
+                            {shop.googleRating}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <div className="p-5 flex flex-col h-full">
                       <h3 className="font-heading text-lg font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-snug">
                         {shop.name}

@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Store } from "lucide-react";
 import type { CardData } from "@/types/list-config";
 import CardActionSlot from "@/components/flies/CardActionSlot";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 
 interface EntityCardProps {
   href: string;
@@ -38,14 +37,13 @@ export default function EntityCard({
   badges,
   iconOnly,
   imageContain,
-  imageZoom,
   tags,
   accent,
   description,
   actionSlot,
 }: EntityCardProps) {
-  // Text-only card when no image or iconOnly
-  if (!imageUrl || iconOnly) {
+  // Guides / shops that opt into icon-only keep that treatment.
+  if (iconOnly) {
     return (
       <Link
         href={href}
@@ -114,37 +112,30 @@ export default function EntityCard({
           flyName={actionSlot.flyName}
         />
       )}
-      {iconOnly ? (
-        <div className="h-44 bg-[#161B22] flex flex-col items-center justify-center gap-2 border-b border-[#21262D]">
-          <div className="w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
-            <Store className="h-6 w-6 text-[#E8923A]" />
+      <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
+        <SafeEntityImage
+          src={imageUrl}
+          alt={imageAlt}
+          title={title}
+          meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
+          unoptimized
+          contain={imageContain}
+          className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        {badges && badges.length > 0 && (
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+            {badges.map((badge) => (
+              <span
+                key={badge}
+                className="px-2.5 py-1 text-xs font-medium bg-[#161B22]/90 backdrop-blur-sm text-[#E8923A] rounded-full"
+              >
+                {badge}
+              </span>
+            ))}
           </div>
-          <span className="text-[#6E7681] text-xs">Photo coming soon</span>
-        </div>
-      ) : (
-        <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
-          <Image
-            src={imageUrl!}
-            alt={imageAlt}
-            fill
-            unoptimized
-            className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          {badges && badges.length > 0 && (
-            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-              {badges.map((badge) => (
-                <span
-                  key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[#161B22]/90 backdrop-blur-sm text-[#E8923A] rounded-full"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
       <div className="p-5">
         <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
           {title}

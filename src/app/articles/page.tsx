@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllArticles } from "@/lib/db";
 import { articleListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
@@ -82,15 +82,16 @@ export default async function ArticlesPage() {
               <Link href={`/articles/${heroArticle.slug}`} className="group block mb-6">
                 <div className="grid lg:grid-cols-2 rounded-2xl overflow-hidden shadow-xl">
                   <div className="relative h-72 lg:h-[420px]">
-                    <Image
+                    <SafeEntityImage
                       src={heroArticle.heroImageUrl}
                       alt={heroArticle.title}
-                      fill
+                      title={heroArticle.title}
+                      meta={`${heroArticle.category} · ${heroArticle.readingTimeMinutes} min`}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
                     <span className="absolute top-4 left-4 px-3 py-1 bg-[#E8923A] text-white text-xs font-semibold uppercase tracking-wide rounded-full">
                       {heroArticle.category}
                     </span>
@@ -130,10 +131,11 @@ export default async function ArticlesPage() {
                       className="group block bg-[#161B22] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
                     >
                       <div className="relative h-48">
-                        <Image
+                        <SafeEntityImage
                           src={article.heroImageUrl}
                           alt={article.title}
-                          fill
+                          title={article.title}
+                          meta={`${article.category} · ${article.readingTimeMinutes} min`}
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, 50vw"
                         />

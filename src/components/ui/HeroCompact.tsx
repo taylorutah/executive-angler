@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Images } from "lucide-react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
+import { isUsableImageUrl } from "@/lib/media/image-url";
 
 interface HeroCompactProps {
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt: string;
   heroImageCredit?: string;
   title: string;
@@ -30,42 +31,51 @@ export default function HeroCompact({
   children,
 }: HeroCompactProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const showPhoto = isUsableImageUrl(heroImageUrl);
 
-  const heroAsPhoto: ApprovedPhoto = {
-    id: "hero",
-    photoUrl: heroImageUrl,
-    caption: title,
-    submitterName: heroImageCredit || "Executive Angler",
-    submittedAt: new Date().toISOString(),
-  };
+  const heroAsPhoto: ApprovedPhoto | null = showPhoto
+    ? {
+        id: "hero",
+        photoUrl: heroImageUrl,
+        caption: title,
+        submitterName: heroImageCredit || "Executive Angler",
+        submittedAt: new Date().toISOString(),
+      }
+    : null;
 
-  const allPhotos = [heroAsPhoto, ...galleryPhotos];
+  const allPhotos = heroAsPhoto ? [heroAsPhoto, ...galleryPhotos] : galleryPhotos;
   const totalCount = allPhotos.length;
   const visibleChips = (chips ?? []).filter((c) => c && c.trim().length > 0);
 
   return (
     <>
       <div className="group relative flex items-stretch gap-3 sm:gap-4 bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-lg">
-        {/* Thumbnail — clickable to open gallery */}
         <button
           type="button"
-          onClick={() => setLightboxOpen(true)}
+          onClick={() => totalCount > 0 && setLightboxOpen(true)}
           className="relative shrink-0 w-[112px] sm:w-[200px] h-[112px] sm:h-[120px] bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-inset"
-          aria-label={`View ${totalCount} photo${totalCount === 1 ? "" : "s"} of ${title}`}
+          aria-label={
+            totalCount > 0
+              ? `View ${totalCount} photo${totalCount === 1 ? "" : "s"} of ${title}`
+              : title
+          }
         >
-          <Image
+          <SafeEntityImage
             src={heroImageUrl}
             alt={heroImageAlt}
-            fill
-            className={`${imageContain ? "object-contain" : "object-cover"} transition-transform duration-300 group-hover:scale-105`}
+            title={title}
+            meta={subtitle}
+            contain={imageContain}
+            className={`${imageContain ? "object-contain p-2" : "object-cover"} transition-transform duration-300 group-hover:scale-105`}
             sizes="(max-width: 640px) 112px, 200px"
             priority
           />
-          {/* Gallery count badge */}
-          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium">
-            <Images className="h-3 w-3" />
-            {totalCount}
-          </div>
+          {totalCount > 0 && (
+            <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium">
+              <Images className="h-3 w-3" />
+              {totalCount}
+            </div>
+          )}
         </button>
 
         {/* Text block */}
@@ -116,7 +126,7 @@ export default function HeroCompact({
         )}
       </div>
 
-      {lightboxOpen && (
+      {lightboxOpen && allPhotos.length > 0 && (
         <PhotoLightbox
           photos={allPhotos}
           initialIndex={0}

@@ -1,6 +1,7 @@
 import type { River } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(row: Record<string, unknown>): River {
   return {
@@ -10,11 +11,13 @@ function mapRow(row: Record<string, unknown>): River {
     destinationId: (row.destination_id ?? row.ea_destination_id ?? "") as string,
     additionalDestinationIds: (row.additional_destination_ids as string[]) ?? [],
     description: (row.description ?? "") as string,
-    heroImageUrl: (row.hero_image_url ?? "") as string,
+    heroImageUrl: normalizeImageUrl(row.hero_image_url as string | null),
     heroImageAlt: row.hero_image_alt as string | undefined,
     heroImageCredit: row.hero_image_credit as string | undefined,
     heroImageCreditUrl: row.hero_image_credit_url as string | undefined,
-    thumbnailUrl: (row.thumbnail_url ?? row.hero_image_url ?? "") as string,
+    thumbnailUrl: normalizeImageUrl(
+      (row.thumbnail_url as string | null) ?? (row.hero_image_url as string | null),
+    ),
     lengthMiles: row.length_miles ? Number(row.length_miles) : undefined,
     flowType: (row.flow_type ?? "freestone") as River["flowType"],
     difficulty: (row.difficulty ?? "intermediate") as River["difficulty"],

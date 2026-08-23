@@ -2,12 +2,12 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import DynamicRiversMapView from "@/components/maps/DynamicRiversMapView";
 import { US_STATES } from "@/lib/us-states";
 import { DESTINATION_STATE_MAP } from "@/lib/destination-state-map";
 import type { River } from "@/types/entities";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -285,10 +285,11 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
               }`}
             >
               <div className="relative h-36">
-                <Image
+                <SafeEntityImage
                   src={river.heroImageUrl}
                   alt={river.name}
-                  fill
+                  title={river.name}
+                  meta={[river.flowType, DESTINATION_STATE_MAP[river.destinationId ?? ""]].filter(Boolean).join(" · ")}
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
@@ -373,10 +374,11 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                   className="group block bg-[#161B22] rounded-xl overflow-hidden hover:shadow-lg transition-shadow ring-1 ring-[#21262D] hover:ring-[#E8923A]"
                 >
                   <div className="relative h-28">
-                    <Image
+                    <SafeEntityImage
                       src={river.heroImageUrl}
                       alt={river.name}
-                      fill
+                      title={river.name}
+                      meta={[river.flowType, DESTINATION_STATE_MAP[river.destinationId ?? ""]].filter(Boolean).join(" · ")}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, 25vw"
                     />

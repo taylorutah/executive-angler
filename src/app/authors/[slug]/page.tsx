@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { Globe, Instagram, Twitter, Linkedin, Youtube, BookOpen, Award, ChevronRight } from "lucide-react";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
@@ -240,17 +240,16 @@ export default async function AuthorPage({ params }: Props) {
                     href={`/articles/${article.slug}`}
                     className="group block bg-[#161B22] rounded-xl overflow-hidden border border-[#21262D] hover:border-[#E8923A]/30 hover:shadow-md transition-all"
                   >
-                    {article.heroImageUrl && (
-                      <div className="relative h-40 w-full overflow-hidden">
-                        <Image
-                          src={article.heroImageUrl}
-                          alt={article.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                        />
-                      </div>
-                    )}
+                    <div className="relative h-40 w-full overflow-hidden">
+                      <SafeEntityImage
+                        src={article.heroImageUrl}
+                        alt={article.title}
+                        title={article.title}
+                        meta={article.category}
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      />
+                    </div>
                     <div className="p-4">
                       <span className="text-[11px] text-[#E8923A] font-semibold uppercase tracking-wide">
                         {article.category}

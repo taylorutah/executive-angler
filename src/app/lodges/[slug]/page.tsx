@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import RatingStars from "@/components/ui/RatingStars";
 import Badge from "@/components/ui/Badge";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import { Button } from "@/components/ui/Button";
@@ -54,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: lodge.metaTitle || lodge.name,
       description: lodge.metaDescription || lodge.description.substring(0, 160),
-      images: [lodge.heroImageUrl],
+      ...(lodge.heroImageUrl ? { images: [lodge.heroImageUrl] } : {}),
     },
     alternates: {
       canonical: `${SITE_URL}/lodges/${slug}`,
@@ -293,11 +294,11 @@ export default async function LodgePage({ params }: Props) {
                         href={`/rivers/${river.slug}`}
                         className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
                       >
-                        <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0">
-                          <Image
+                        <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-[#1F2937]">
+                          <SafeEntityImage
                             src={river.heroImageUrl}
                             alt={river.name}
-                            fill
+                            title={river.name}
                             className="object-cover"
                             sizes="80px"
                           />

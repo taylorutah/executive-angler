@@ -1,6 +1,7 @@
 import type { Destination } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Destination {
   return {
@@ -12,7 +13,7 @@ function mapRow(r: Record<string, unknown>): Destination {
     state: (r.state ?? undefined) as string | undefined,
     tagline: (r.tagline ?? undefined) as string | undefined,
     description: (r.description ?? "") as string,
-    heroImageUrl: (r.hero_image_url ?? "") as string,
+    heroImageUrl: normalizeImageUrl(r.hero_image_url as string | null),
     heroImageCredit: r.hero_image_credit as string | undefined,
     heroImageCreditUrl: r.hero_image_credit_url as string | undefined,
     thumbnailUrl: (r.thumbnail_url ?? undefined) as string | undefined,

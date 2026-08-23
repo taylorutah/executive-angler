@@ -9,7 +9,7 @@ import ImageField, { type ImageFieldPatch } from "./ImageField";
 interface HeroImageEditorProps {
   entityType: string;
   entityId: string;
-  currentImageUrl: string;
+  currentImageUrl?: string;
   currentAlt?: string;
   currentCredit?: string;
   currentCreditUrl?: string;
@@ -27,7 +27,7 @@ export default function HeroImageEditor({
   aspectRatio = 21 / 9,
 }: HeroImageEditorProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState(currentImageUrl);
+  const [imageUrl, setImageUrl] = useState(currentImageUrl ?? "");
   const [altText, setAltText] = useState(currentAlt || "");
   const [credit, setCredit] = useState(currentCredit || "");
   const [creditUrl, setCreditUrl] = useState(currentCreditUrl || "");

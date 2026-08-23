@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight, Heart } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
 import { SITE_URL } from "@/lib/constants";
@@ -108,14 +108,15 @@ export default async function RiversPage() {
                       className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                     >
                       <div className="relative h-56">
-                        <Image
+                        <SafeEntityImage
                           src={river.heroImageUrl}
                           alt={river.name}
-                          fill
+                          title={river.name}
+                          meta={[river.flowType, river.wadingType].filter(Boolean).join(" · ")}
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                         <div className="absolute bottom-4 left-4">
                           <span
                             className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
@@ -173,14 +174,15 @@ export default async function RiversPage() {
                         className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                       >
                         <div className="relative h-56">
-                          <Image
+                          <SafeEntityImage
                             src={river.heroImageUrl}
                             alt={river.name}
-                            fill
+                            title={river.name}
+                            meta={[river.flowType, river.wadingType].filter(Boolean).join(" · ")}
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 33vw"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                           <div className="absolute bottom-4 left-4">
                             <span
                               className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}

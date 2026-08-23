@@ -8,7 +8,7 @@ import HeroImageEditor from "./HeroImageEditor";
 type Props = {
   entityType: string;
   entityId: string;
-  currentImageUrl: string;
+  currentImageUrl?: string;
   currentAlt?: string;
   currentCredit?: string;
   currentCreditUrl?: string;

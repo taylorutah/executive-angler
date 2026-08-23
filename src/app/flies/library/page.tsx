@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import EntityListView from "@/components/ui/EntityListView";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FlyCardForkOverlay from "@/components/flies/FlyCardForkOverlay";
 import { formatHookSize } from "@/lib/flies/variant-format";
@@ -23,17 +23,6 @@ const FLY_CATEGORY_LABELS: Record<string, string> = {
   terrestrial: "Terrestrial",
   egg: "Egg",
   midge: "Midge",
-};
-
-const CATEGORY_ICONS: Record<string, string> = {
-  dry: "/images/fly-icons/dry.svg",
-  nymph: "/images/fly-icons/nymph.svg",
-  streamer: "/images/fly-icons/streamer.svg",
-  emerger: "/images/fly-icons/emerger.svg",
-  wet: "/images/fly-icons/wet.svg",
-  terrestrial: "/images/fly-icons/terrestrial.svg",
-  egg: "/images/fly-icons/egg.svg",
-  midge: "/images/fly-icons/midge.svg",
 };
 
 // Final fallback if no flies are flagged `featured` in the admin AND the
@@ -166,25 +155,16 @@ export default async function FliesPage() {
                             {fly!.sizes[0]}–{fly!.sizes[fly!.sizes.length - 1]}
                           </p>
                         </div>
-                          {fly!.heroImageUrl ? (
-                          <div className="flex-shrink-0 w-28 rounded-lg overflow-hidden bg-[#F8F4EE]" style={{aspectRatio: '3/2'}}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                          <div className="relative flex-shrink-0 w-28 rounded-lg overflow-hidden bg-[#1F2937]" style={{aspectRatio: '3/2'}}>
+                            <SafeEntityImage
                               src={fly!.heroImageUrl}
                               alt={`${fly!.name} fly pattern`}
-                              className="w-full h-full object-cover"
+                              title={fly!.name}
+                              meta={`${FLY_CATEGORY_LABELS[fly!.category] || fly!.category} · ${fly!.sizes[0]}–${fly!.sizes[fly!.sizes.length - 1]}`}
+                              className="object-cover"
+                              sizes="112px"
                             />
                           </div>
-                        ) : (
-                          <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-[#0D1117] flex items-center justify-center p-2">
-                            <Image
-                              src={CATEGORY_ICONS[fly!.category] || CATEGORY_ICONS.dry}
-                              alt={FLY_CATEGORY_LABELS[fly!.category] || fly!.category}
-                              width={48}
-                              height={48}
-                            />
-                          </div>
-                        )}
                       </div>
                       <p className="mt-3 text-sm text-[#A8B2BD] line-clamp-2">
                         {fly!.description?.substring(0, 120)}

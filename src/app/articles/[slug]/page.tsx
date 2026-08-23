@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Clock, User, Calendar, MapPin, Fish } from "lucide-react";
 import Badge from "@/components/ui/Badge";
@@ -10,6 +9,7 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds, getFliesByCategory, getAllCanonicalFlies } from "@/lib/db";
@@ -197,10 +197,10 @@ export default async function ArticlePage({ params }: Props) {
             />
           </div>
         )}
-        <Image
+        <SafeEntityImage
           src={article.heroImageUrl}
           alt={article.title}
-          fill
+          title={article.title}
           className="object-cover"
           priority
           sizes="100vw"
@@ -361,11 +361,16 @@ export default async function ArticlePage({ params }: Props) {
                   {otherArticles.map((a) => (
                     <Link key={a.id} href={`/articles/${a.slug}`}
                       className="group block bg-[#161B22] rounded-xl overflow-hidden border border-[#21262D] hover:border-[#E8923A]/30 hover:shadow-md transition-all">
-                      {a.heroImageUrl && (
-                        <div className="relative h-36 w-full overflow-hidden">
-                          <Image src={a.heroImageUrl} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
-                        </div>
-                      )}
+                      <div className="relative h-36 w-full overflow-hidden">
+                        <SafeEntityImage
+                          src={a.heroImageUrl}
+                          alt={a.title}
+                          title={a.title}
+                          meta={a.category}
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(min-width: 640px) 33vw, 100vw"
+                        />
+                      </div>
                       <div className="p-4">
                         <span className="text-[11px] text-[#E8923A] font-semibold uppercase tracking-wide">{a.category}</span>
                         <h3 className="mt-1 font-heading text-sm font-bold text-[#F0F6FC] leading-snug group-hover:text-[#E8923A] transition-colors">{a.title}</h3>

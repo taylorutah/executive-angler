@@ -1,6 +1,7 @@
 import type { Species } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Species {
   return {
@@ -10,7 +11,7 @@ function mapRow(r: Record<string, unknown>): Species {
     scientificName: (r.scientific_name ?? undefined) as string | undefined,
     family: (r.family ?? undefined) as Species["family"],
     description: (r.description ?? undefined) as string | undefined,
-    imageUrl: (r.image_url ?? undefined) as string | undefined,
+    imageUrl: normalizeImageUrl(r.image_url as string | null),
     illustrationUrl: (r.illustration_url ?? undefined) as string | undefined,
     nativeRange: (r.native_range ?? undefined) as string | undefined,
     introducedRange: (r.introduced_range ?? undefined) as string | undefined,

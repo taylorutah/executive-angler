@@ -1,0 +1,10 @@
+entity,column,total,null_count,relative,absolute,host_not_allowlisted,notes
+rivers,hero_image_url,138,0,136,2,0,relative 200 on production; missing from this checkout public/
+rivers,thumbnail_url,138,6,132,0,0,falls back to hero in mapper
+destinations,hero_image_url,52,9,43,0,0,null: CT MD MA MN NV NY VT WA WI
+articles,hero_image_url,24,0,23,1,0,one api.executiveangler.com 200
+lodges,hero_image_url,32,0,0,32,0,
+guides,photo_url,106,76,1,29,0,
+fly_shops,hero_image_url,230,107,1,122,0,106 unsplash; sample 7/32 dead
+species,image_url,35,0,0,35,0,wikimedia; host allowlisted
+canonical_flies,hero_image_url,162,36,3,123,0,view over flies; no gallery column

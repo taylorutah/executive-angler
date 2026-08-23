@@ -7,7 +7,7 @@ export interface Destination {
   state?: string;
   tagline?: string;
   description: string;
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt?: string;
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
@@ -33,7 +33,7 @@ export interface River {
   destinationId: string;
   additionalDestinationIds?: string[];
   description: string;
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt?: string;
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
@@ -83,7 +83,7 @@ export interface Lodge {
   name: string;
   destinationId: string;
   description: string;
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt?: string;
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
@@ -175,7 +175,7 @@ export interface Article {
   subtitle?: string;
   author: string;
   category: "technique" | "destination" | "gear" | "conservation" | "culture" | "species";
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt?: string;
   heroImageCredit?: string;
   heroImageCreditUrl?: string;

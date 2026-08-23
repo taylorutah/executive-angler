@@ -1,6 +1,7 @@
 import type { FlyShop, GoogleReview } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): FlyShop {
   return {
@@ -9,7 +10,7 @@ function mapRow(r: Record<string, unknown>): FlyShop {
     name: r.name as string,
     destinationId: (r.destination_id ?? "") as string,
     description: (r.description ?? "") as string,
-    heroImageUrl: (r.hero_image_url ?? undefined) as string | undefined,
+    heroImageUrl: normalizeImageUrl(r.hero_image_url as string | null),
     heroImageAlt: (r.hero_image_alt ?? undefined) as string | undefined,
     heroImageCredit: (r.hero_image_credit ?? undefined) as string | undefined,
     heroImageCreditUrl: (r.hero_image_credit_url ?? undefined) as string | undefined,

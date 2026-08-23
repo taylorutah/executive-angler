@@ -5,14 +5,19 @@ import Image from "next/image";
 import { Images, Camera } from "lucide-react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
+import PlateFallback from "@/components/media/PlateFallback";
+import { isUsableImageUrl } from "@/lib/media/image-url";
 
 interface RiverHeroImageProps {
-  heroImageUrl: string;
+  heroImageUrl?: string;
   heroImageAlt: string;
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
   galleryPhotos: ApprovedPhoto[];
-  children?: React.ReactNode; // admin editor slot
+  /** Shown on the plate when the photo is missing. */
+  title: string;
+  meta?: string;
+  children?: React.ReactNode;
 }
 
 export default function RiverHeroImage({
@@ -21,37 +26,46 @@ export default function RiverHeroImage({
   heroImageCredit,
   heroImageCreditUrl,
   galleryPhotos,
+  title,
+  meta,
   children,
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
 
-  const heroAsPhoto: ApprovedPhoto = {
-    id: "hero",
-    photoUrl: heroImageUrl,
-    caption: heroImageAlt,
-    submitterName: heroImageCredit || "Executive Angler",
-    submittedAt: new Date().toISOString(),
-  };
+  const heroAsPhoto: ApprovedPhoto | null = showPhoto
+    ? {
+        id: "hero",
+        photoUrl: heroImageUrl,
+        caption: heroImageAlt,
+        submitterName: heroImageCredit || "Executive Angler",
+        submittedAt: new Date().toISOString(),
+      }
+    : null;
 
-  const allPhotos = [heroAsPhoto, ...galleryPhotos];
+  const allPhotos = heroAsPhoto ? [heroAsPhoto, ...galleryPhotos] : galleryPhotos;
   const totalCount = allPhotos.length;
 
   return (
     <>
       <div className="relative w-full overflow-hidden bg-[#0D1117]" style={{ height: "240px" }}>
-        <Image
-          src={heroImageUrl}
-          alt={heroImageAlt}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+        {showPhoto ? (
+          <Image
+            src={heroImageUrl}
+            alt={heroImageAlt}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+            onError={() => setFailed(true)}
+          />
+        ) : (
+          <PlateFallback title={title} meta={meta} />
+        )}
 
-        {/* Subtle bottom vignette for depth only — no text */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30 pointer-events-none" />
 
-        {/* Gallery pill — bottom left */}
         {totalCount > 1 && (
           <button
             type="button"
@@ -64,8 +78,7 @@ export default function RiverHeroImage({
           </button>
         )}
 
-        {/* Photo credit — bottom right */}
-        {heroImageCredit && (
+        {showPhoto && heroImageCredit && (
           <div className="absolute bottom-3 right-3 z-10">
             {heroImageCreditUrl ? (
               <a
@@ -86,13 +99,12 @@ export default function RiverHeroImage({
           </div>
         )}
 
-        {/* Admin editor slot — top right */}
         {children && (
           <div className="absolute top-3 right-3 z-20">{children}</div>
         )}
       </div>
 
-      {lightboxOpen && (
+      {lightboxOpen && allPhotos.length > 0 && (
         <PhotoLightbox
           photos={allPhotos}
           initialIndex={0}

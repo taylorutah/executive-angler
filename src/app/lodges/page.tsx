@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin, ChevronRight, Star } from "lucide-react";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllLodges, getAllDestinations, getAllRivers } from "@/lib/db";
 import { lodgeListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
@@ -128,16 +128,16 @@ export default async function LodgesPage() {
                 className="group block mb-6"
               >
                 <div className="grid lg:grid-cols-5 rounded-2xl overflow-hidden shadow-xl min-h-[380px]">
-                  <div className="relative lg:col-span-3 h-72 lg:h-auto">
-                    <Image
+                  <div className="relative lg:col-span-3 h-72 lg:h-auto min-h-[288px]">
+                    <SafeEntityImage
                       src={heroLodge.heroImageUrl}
                       alt={heroLodge.name}
-                      fill
+                      title={heroLodge.name}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 60vw"
                       priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest-dark/20 hidden lg:block" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden lg:block pointer-events-none" />
                   </div>
                   <div className="bg-[#0D1117] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
@@ -196,14 +196,14 @@ export default async function LodgesPage() {
                     className="group block bg-[#161B22] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
                   >
                     <div className="relative h-52">
-                      <Image
+                      <SafeEntityImage
                         src={lodge.heroImageUrl}
                         alt={lodge.name}
-                        fill
+                        title={lodge.name}
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                       <div className="absolute bottom-4 left-4 right-4">
                         <h3 className="font-heading text-xl font-bold text-white leading-tight">
                           {lodge.name}

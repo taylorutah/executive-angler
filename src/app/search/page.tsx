@@ -3,9 +3,9 @@
 import { Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { Search, X, MapPin, Fish, Home, BookOpen, Users, Store, Compass, Bug } from "lucide-react";
 import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 
 
 interface SearchResult {
@@ -180,17 +180,16 @@ function SearchContent() {
                     href={item.href}
                     className="flex items-center gap-4 flex-1 min-w-0"
                   >
-                    {item.imageUrl && (
-                      <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2937]">
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      </div>
-                    )}
+                    <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2937]">
+                      <SafeEntityImage
+                        src={item.imageUrl}
+                        alt={item.title}
+                        title={item.title}
+                        meta={item.subtitle}
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </div>
                     <div className="min-w-0">
                       <p className="font-medium text-[#F0F6FC] group-hover:text-[#E8923A] truncate">
                         {item.title}

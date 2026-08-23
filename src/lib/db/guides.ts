@@ -1,6 +1,7 @@
 import type { Guide } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Guide {
   return {
@@ -11,7 +12,7 @@ function mapRow(r: Record<string, unknown>): Guide {
     bio: (r.bio ?? "") as string,
     specialties: (r.specialties as string[]) ?? [],
     yearsExperience: r.years_experience ? Number(r.years_experience) : undefined,
-    photoUrl: (r.photo_url ?? undefined) as string | undefined,
+    photoUrl: normalizeImageUrl(r.photo_url as string | null),
     websiteUrl: (r.website_url ?? undefined) as string | undefined,
     phone: (r.phone ?? undefined) as string | undefined,
     email: (r.email ?? undefined) as string | undefined,

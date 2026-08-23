@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: river.metaTitle || `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
-      images: [river.heroImageUrl],
+      ...(river.heroImageUrl ? { images: [river.heroImageUrl] } : {}),
     },
     alternates: {
       canonical: `${SITE_URL}/rivers/${slug}`,
@@ -84,18 +84,10 @@ export async function generateStaticParams() {
   return allRivers.map((r) => ({ slug: r.slug }));
 }
 
-const PLACEHOLDER_RIVER_IMAGE =
-  "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=1600&q=80";
-
 export default async function RiverPage({ params }: Props) {
   const { slug } = await params;
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
-
-  const safeHeroUrl =
-    river.heroImageUrl && river.heroImageUrl.length > 0
-      ? river.heroImageUrl
-      : PLACEHOLDER_RIVER_IMAGE;
 
   // Admin hero editor is client-gated so this page stays cacheable.
 
@@ -162,7 +154,7 @@ export default async function RiverPage({ params }: Props) {
             latitude: river.latitude,
             longitude: river.longitude,
           },
-          image: safeHeroUrl,
+          ...(river.heroImageUrl ? { image: river.heroImageUrl } : {}),
           ...(dest
             ? {
                 containedInPlace: {
@@ -182,11 +174,18 @@ export default async function RiverPage({ params }: Props) {
 
       {/* Narrow panoramic hero — pure image, no text overlay */}
       <RiverHeroImage
-        heroImageUrl={safeHeroUrl}
+        heroImageUrl={river.heroImageUrl}
         heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
         heroImageCredit={river.heroImageCredit}
         heroImageCreditUrl={river.heroImageCreditUrl}
         galleryPhotos={galleryPhotos}
+        title={river.name}
+        meta={[
+          (river.flowType ?? "").replace(/-/g, " "),
+          dest?.state ?? dest?.name,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
       >
         <AdminHeroEditor
           entityType="rivers"

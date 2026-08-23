@@ -1,6 +1,7 @@
 import type { Lodge } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Lodge {
   return {
@@ -9,7 +10,7 @@ function mapRow(r: Record<string, unknown>): Lodge {
     name: r.name as string,
     destinationId: (r.destination_id ?? "") as string,
     description: (r.description ?? "") as string,
-    heroImageUrl: (r.hero_image_url ?? "") as string,
+    heroImageUrl: normalizeImageUrl(r.hero_image_url as string | null),
     thumbnailUrl: (r.thumbnail_url ?? undefined) as string | undefined,
     galleryUrls: (r.gallery_urls as string[]) ?? [],
     websiteUrl: (r.website_url ?? undefined) as string | undefined,
