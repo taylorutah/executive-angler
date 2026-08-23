@@ -69,6 +69,24 @@ export function websiteJsonLd() {
 
 export type FaqItem = { question: string; answer: string };
 
+/** Pull visible FAQ pairs from article HTML (h2 Frequently Asked Questions, then h3 + p). */
+export function extractFaqsFromHtml(html: string): FaqItem[] {
+  const start = html.search(/<h2[^>]*>\s*Frequently Asked Questions\s*<\/h2>/i);
+  if (start < 0) return [];
+  const afterHeading = html.slice(start).replace(/<h2[^>]*>[\s\S]*?<\/h2>/i, "");
+  const nextH2 = afterHeading.search(/<h2[\s>]/i);
+  const section = nextH2 >= 0 ? afterHeading.slice(0, nextH2) : afterHeading;
+  const faqs: FaqItem[] = [];
+  const re = /<h3[^>]*>([\s\S]*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(section))) {
+    const question = match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    const answer = match[2].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    if (question && answer) faqs.push({ question, answer });
+  }
+  return faqs;
+}
+
 export function faqPageJsonLd(faqs: FaqItem[]) {
   return {
     "@context": "https://schema.org",

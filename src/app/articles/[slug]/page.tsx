@@ -14,6 +14,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { getArticleBySlug, getAllArticles, getDestinationsByIds, getRiversByIds, getFliesByCategory, getAllCanonicalFlies } from "@/lib/db";
 import { getAuthorByArticleName } from "@/data/authors";
+import { extractFaqsFromHtml, faqPageJsonLd } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -97,6 +98,7 @@ export default async function ArticlePage({ params }: Props) {
 
   const flyCategory = ARTICLE_FLY_MAP[article.slug];
   const shouldShowFlies = flyCategory !== undefined || article.category === "technique" || article.category === "gear";
+  const faqs = extractFaqsFromHtml(article.content);
 
   const [relatedDests, relatedRivers, relatedFlies] = await Promise.all([
     article.relatedDestinationIds?.length
@@ -157,6 +159,8 @@ export default async function ArticlePage({ params }: Props) {
           cssSelector: [".article-body h2", ".article-body p:first-of-type"],
         },
       }} />
+
+      {faqs.length > 0 && <JsonLd data={faqPageJsonLd(faqs)} />}
 
       {/* HowTo schema for technique articles */}
       {article.category === "technique" && (

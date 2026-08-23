@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle, catalogCounts } from "@/lib/seo";
 
@@ -108,6 +109,23 @@ export default async function AboutPage() {
             water. Submit your best fishing photos to any destination, river, lodge,
             or species page, and your images will be featured alongside our editorial
             content after a brief review.
+          </p>
+
+          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+            A private journal
+          </h2>
+          <p>
+            Your sessions, fish, and pin drops stay on your account. Public pages
+            carry hatch charts, gauges, and editorial, not other anglers&apos; catches
+            and not a leaderboard. Presence, when we show it, is river and weather.
+            Read{" "}
+            <Link
+              href="/articles/why-your-fishing-journal-should-be-private"
+              className="text-[#E8923A] hover:underline"
+            >
+              why your fishing journal should be private
+            </Link>
+            .
           </p>
 
           <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">

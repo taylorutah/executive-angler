@@ -304,6 +304,35 @@ export default async function DestinationPage({ params }: Props) {
                 </ScrollAnimation>
               )}
 
+              {dest.slug === "belize" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                      Permit, bonefish, and tarpon
+                    </h2>
+                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                      Belize is permit country that also holds bonefish and tarpon. Plan a week around tides and a guide, not around a morning that has to be a grand slam. Species pages for{" "}
+                      <Link href="/species/permit" className="text-[#E8923A] hover:underline">
+                        permit
+                      </Link>
+                      ,{" "}
+                      <Link href="/species/bonefish" className="text-[#E8923A] hover:underline">
+                        bonefish
+                      </Link>
+                      , and{" "}
+                      <Link href="/species/tarpon" className="text-[#E8923A] hover:underline">
+                        tarpon
+                      </Link>
+                      {" "}sit next to the{" "}
+                      <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[#E8923A] hover:underline">
+                        Belize flats guide
+                      </Link>
+                      . We do not publish other anglers&apos; fish or GPS.
+                    </p>
+                  </div>
+                </ScrollAnimation>
+              )}
+
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>

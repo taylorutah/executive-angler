@@ -274,6 +274,15 @@ export default async function RiverPage({ params }: Props) {
                   riverName={river.name}
                   riverId={river.id}
                 />
+                {river.usgsGaugeId ? (
+                  <p className="mt-3 text-sm text-[#A8B2BD]">
+                    New to hydrographs?{" "}
+                    <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[#E8923A] hover:underline">
+                      How to read a USGS gauge for fly fishing
+                    </Link>
+                    .
+                  </p>
+                ) : null}
               </ScrollAnimation>
 
               {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
@@ -502,7 +511,80 @@ export default async function RiverPage({ params }: Props) {
                         <Link href="/destinations/montana" className="text-[#E8923A] hover:underline">
                           Montana destination page
                         </Link>{" "}
-                        for lodges, shops, and neighboring rivers.
+                        for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
+                        <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[#E8923A] hover:underline">
+                          Best Flies for the Madison River in 2026
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "green-river" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Fishing the Green below Flaming Gorge
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        This tailwater is A, B, and C sections, clear water, and a crowd that shows up for the same reasons you did. Pack small flies, check the gauge on this page, and read{" "}
+                        <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing the Green River Below Flaming Gorge
+                        </Link>
+                        {" "}before you book a shuttle. The{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          hatch-chart fly list
+                        </Link>
+                        {" "}is public. Other anglers&apos; fish are not.
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "pecos-river-new-mexico" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      Pecos pocket water
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        Above Terrero you can walk. Along the road you share campground runs. After runoff, a dry-dropper and some manners will fish this river. Longer notes are in{" "}
+                        <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing the Pecos River in New Mexico
+                        </Link>
+                        . Flies live on the{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          Pecos hatch-chart fly list
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                </ScrollAnimation>
+              )}
+
+              {river.slug === "little-cottonwood-creek" && (
+                <ScrollAnimation>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-5">
+                      A short Wasatch window
+                    </h2>
+                    <div className="space-y-4 text-[#A8B2BD] text-base leading-[1.8]">
+                      <p>
+                        Little Cottonwood is not Big Cottonwood and it is not a tailwater. Fish the cold window, carry a thermometer, and leave when summer heat says so. Read{" "}
+                        <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[#E8923A] hover:underline">
+                          Fly Fishing Little Cottonwood Creek
+                        </Link>
+                        . The{" "}
+                        <Link href={`/flies/for/${river.slug}`} className="text-[#E8923A] hover:underline">
+                          creek fly list
+                        </Link>
+                        {" "}follows the hatch chart.
                       </p>
                     </div>
                   </div>
