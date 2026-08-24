@@ -45,7 +45,7 @@ export default function RiverAnglerIntel({ riverId, riverName }: RiverAnglerInte
       <div className="flex items-center gap-2 mb-1">
         <TrendingUp className="h-4 w-4 text-[var(--action)]" />
         <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-          Recent Fly Choices
+          Flies fishing now
         </h3>
         <span className="ml-auto text-[10px] text-[var(--text-meta)] uppercase tracking-wider">
           Last 60 days

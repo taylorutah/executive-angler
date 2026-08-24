@@ -35,7 +35,7 @@ export default function LazyMapView(props: MapProps) {
       ) : (
         <div
           className={props.className ?? "h-[400px] w-full rounded-xl"}
-          style={{ background: "#1F2937" }}
+          style={{ background: "var(--vellum)" }}
           aria-hidden
         />
       )}

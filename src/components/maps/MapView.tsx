@@ -19,6 +19,38 @@ interface MapViewProps {
   markers?: Marker[];
   className?: string;
   bounds?: { sw: [number, number]; ne: [number, number] };
+  /** Vellum land / Teal water — the desk two-tone. */
+  tone?: "default" | "desk";
+}
+
+function applyDeskPalette(map: mapboxgl.Map) {
+  const styles = getComputedStyle(document.documentElement);
+  const land = styles.getPropertyValue("--vellum").trim() || "#F2EDE4";
+  const water = styles.getPropertyValue("--teal-700").trim() || "#0E7C93";
+
+  const style = map.getStyle();
+  for (const layer of style.layers ?? []) {
+    const id = layer.id.toLowerCase();
+    try {
+      if (layer.type === "background") {
+        map.setPaintProperty(layer.id, "background-color", land);
+      }
+      if (
+        layer.type === "fill" &&
+        (id.includes("land") || id.includes("landuse") || id.includes("landcover") || id.includes("park"))
+      ) {
+        map.setPaintProperty(layer.id, "fill-color", land);
+      }
+      if (layer.type === "fill" && (id.includes("water") || id.includes("ocean"))) {
+        map.setPaintProperty(layer.id, "fill-color", water);
+      }
+      if (layer.type === "line" && (id.includes("water") || id.includes("waterway"))) {
+        map.setPaintProperty(layer.id, "line-color", water);
+      }
+    } catch {
+      // Layer paint property not applicable — skip.
+    }
+  }
 }
 
 export default function MapView({
@@ -28,6 +60,7 @@ export default function MapView({
   markers = [],
   className = "h-[400px] w-full rounded-xl overflow-hidden",
   bounds,
+  tone = "default",
 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -43,12 +76,14 @@ export default function MapView({
       return;
     }
 
-    mapboxgl.accessToken = token;
+        mapboxgl.accessToken = token;
 
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/outdoors-v12",
+        style: tone === "desk"
+          ? "mapbox://styles/mapbox/light-v11"
+          : "mapbox://styles/mapbox/outdoors-v12",
         center: [longitude, latitude],
         zoom,
         // Required for mobile Safari WebGL stability
@@ -61,6 +96,7 @@ export default function MapView({
       // Resize after map loads — fixes 0-dimension init on mobile Safari
       map.current.on("load", () => {
         map.current?.resize();
+        if (tone === "desk" && map.current) applyDeskPalette(map.current);
 
         // Require 2 fingers to pan on touch devices
         const canvas = map.current!.getCanvas();
@@ -124,7 +160,7 @@ export default function MapView({
     return () => {
       map.current?.remove();
     };
-  }, [latitude, longitude, zoom, markers, bounds]);
+  }, [latitude, longitude, zoom, markers, bounds, tone]);
 
   return (
     <div className="relative">
