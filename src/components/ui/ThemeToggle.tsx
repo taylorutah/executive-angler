@@ -1,17 +1,9 @@
 "use client";
-import { Sun, Moon } from "lucide-react";
-import { useTheme } from "@/lib/theme-context";
 
+/**
+ * Lane E owns Header.tsx and should delete the ThemeToggle import.
+ * Register is route-determined; a user-controlled third axis is not allowed.
+ */
 export default function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  return (
-    <button
-      onClick={toggle}
-      className="flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-[var(--surface-card)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-    >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  );
+  return null;
 }

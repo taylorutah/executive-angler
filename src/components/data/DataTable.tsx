@@ -203,10 +203,10 @@ export function DataTable<T>({
     >
       {/* Toolbar */}
       {showToolbar && (
-        <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-[#21262D] bg-[#0D1117] px-3 py-2">
+        <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2">
           <div className="flex items-center gap-3">
             {selected.size > 0 && (
-              <span className="font-['IBM_Plex_Mono'] text-xs text-[#A8B2BD]">
+              <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--text-body)]">
                 {selected.size} selected
               </span>
             )}
@@ -221,10 +221,10 @@ export function DataTable<T>({
                   onClick={() => action.onClick(selectedRows)}
                   className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                     action.variant === "primary"
-                      ? "bg-[#E8923A] text-white hover:bg-[#d17d28]"
+                      ? "bg-[var(--action)] text-white hover:bg-[#d17d28]"
                       : action.variant === "danger"
                         ? "bg-[#7F1D1D] text-white hover:bg-[#991B1B]"
-                        : "bg-[#1F2937] text-[#F0F6FC] hover:bg-[#2D3748] border border-[#30363D]"
+                        : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[#2D3748] border border-[var(--border-strong)]"
                   }`}
                 >
                   {action.icon}
@@ -238,7 +238,7 @@ export function DataTable<T>({
 
       {/* Header */}
       <div
-        className={`sticky ${headerStickyTop} z-10 grid items-center gap-0 border-b border-[#30363D] bg-[#161B22] text-[10px] font-bold uppercase tracking-widest text-[#6E7681]`}
+        className={`sticky ${headerStickyTop} z-10 grid items-center gap-0 border-b border-[var(--border-strong)] bg-[var(--surface-raised)] text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]`}
         style={{
           gridTemplateColumns: [
             selectable ? "32px" : "",
@@ -272,7 +272,7 @@ export function DataTable<T>({
               type="button"
               disabled={!sortable}
               onClick={() => sortable && toggleSort(col.key)}
-              className={`flex ${align} items-center gap-1 px-2 py-1.5 ${sortable ? "hover:text-[#E8923A] cursor-pointer" : "cursor-default"} transition-colors`}
+              className={`flex ${align} items-center gap-1 px-2 py-1.5 ${sortable ? "hover:text-[var(--action)] cursor-pointer" : "cursor-default"} transition-colors`}
             >
               {col.label}
               {sortKey === col.key && (
@@ -285,7 +285,7 @@ export function DataTable<T>({
 
       {/* Rows */}
       {sortedRows.length === 0 ? (
-        <div className="px-4 py-12 text-center text-sm text-[#6E7681]">
+        <div className="px-4 py-12 text-center text-sm text-[var(--text-meta)]">
           {empty ?? "No rows."}
         </div>
       ) : (
@@ -298,13 +298,13 @@ export function DataTable<T>({
               key={id}
               onClick={() => onRowClick?.(row, i)}
               onMouseEnter={() => setActiveRow(i)}
-              className={`grid items-center border-b border-[#21262D] transition-colors ${
+              className={`grid items-center border-b border-[var(--border-rule)] transition-colors ${
                 isSelected
                   ? "bg-[rgba(232,146,58,0.08)]"
                   : i % 2 === 1
-                    ? "bg-[#0D1117]"
-                    : "bg-[#161B22]"
-              } ${isActive ? "ring-1 ring-inset ring-[#E8923A]/20" : ""} ${onRowClick ? "cursor-pointer" : ""} hover:bg-[rgba(232,146,58,0.05)]`}
+                    ? "bg-[var(--surface-page)]"
+                    : "bg-[var(--surface-raised)]"
+              } ${isActive ? "ring-1 ring-inset ring-[var(--action)]/20" : ""} ${onRowClick ? "cursor-pointer" : ""} hover:bg-[rgba(232,146,58,0.05)]`}
               style={{
                 gridTemplateColumns: [
                   selectable ? "32px" : "",
@@ -336,7 +336,7 @@ export function DataTable<T>({
                 return (
                   <div
                     key={col.key}
-                    className={`flex ${align} ${rowPadY} ${cellTextSize} ${fontClass} text-[#F0F6FC] px-2 ${col.className ?? ""} truncate`}
+                    className={`flex ${align} ${rowPadY} ${cellTextSize} ${fontClass} text-[var(--text-primary)] px-2 ${col.className ?? ""} truncate`}
                   >
                     {value}
                   </div>

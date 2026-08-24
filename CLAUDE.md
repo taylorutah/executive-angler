@@ -37,7 +37,7 @@
 | Icons | Lucide React | 0.575 |
 | Images | sharp | 0.34 (dev, for next/image optimization) |
 | Analytics | @vercel/analytics + @vercel/speed-insights | |
-| Fonts | DM Serif Display (headings) + DM Sans (body) + IBM Plex Mono (code/mono) | next/font/google |
+| Fonts | Fraunces (display + prose) + Archivo (UI) + IBM Plex Mono (identifiers) | next/font/google |
 
 ## Project Structure
 ```
@@ -266,7 +266,7 @@ SUPABASE_SERVICE_ROLE_KEY=<key>     # Required for seed scripts only (not in Ver
 ### Tailwind v4 — NO tailwind.config file
 - Config is in `src/app/globals.css` using `@theme inline { }` — there is **NO** `tailwind.config.js` or `.ts`
 - Custom colors: `forest`, `forest-light`, `forest-dark`, `river`, `river-light`, `river-dark`, `cream`, `cream-dark`, `gold`, `gold-light`, plus `slate-100` through `slate-950`
-- Custom fonts: `font-heading` (DM Serif Display), `font-sans` (DM Sans), `font-mono` (IBM Plex Mono)
+- Custom fonts: `font-heading` / `font-display` (Fraunces), `font-body` (Fraunces at text optical size — Newsreader was the spec face, dropped for payload), `font-sans` / `font-ui` (Archivo), `font-mono` (IBM Plex Mono, identifiers only). `.num` = Archivo + tabular-nums. Register is `data-register` on `<html>` (daylight | dusk), not a theme toggle.
 - If you need to add theme values, edit `@theme inline { }` in `globals.css`
 
 ### Images — Mostly Placeholders

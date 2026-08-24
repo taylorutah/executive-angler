@@ -14,7 +14,10 @@
     "fishing:import": "npx tsx scripts/import-notion-fishing.ts",
     "dedup-flies": "npx tsx scripts/dedup-flies.ts",
     "audit:images": "npx tsx scripts/audit-images.ts",
-    "test": "tsx --test src/lib/search/index.test.ts"
+    "test": "tsx --test src/lib/search/index.test.ts",
+    "check:contrast": "npx tsx scripts/check-contrast.ts",
+    "check:hex": "npx tsx scripts/check-hex.ts",
+    "codemod:tokens": "npx tsx scripts/codemod-tokens.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

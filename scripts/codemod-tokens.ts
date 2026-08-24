@@ -53,7 +53,7 @@ const HEX_TO_TOKEN: Record<string, string> = {
 };
 
 const SKIP_PATH_RE =
-  /(^|\/)(data|email|emails)(\/|$)|mapbox|theme-color|chart-config/i;
+  /(^|\/)src\/data(\/|$)|(^|\/)(email|emails)(\/|$)|mapbox|theme-color|chart-config/i;
 
 const CLASS_RE = new RegExp(
   `((?:[\\w-]+:)*)(${PREFIXES.join("|")})-\\[#([0-9A-Fa-f]{3,8})\\](\\/\\d+)?`,
