@@ -5,6 +5,8 @@ import { rankSearch } from "./rank";
 import { GROUP_ORDER } from "./types";
 import { buildHatchDocuments } from "./hatches";
 import { isUsgsSiteId } from "./usgs";
+import { expandTerm } from "./aliases";
+import { buildScoreContext, scoreDocument } from "./score";
 
 function doc(
   partial: Omit<SearchDocument, "href" | "subtitle"> & { subtitle?: string },
@@ -227,8 +229,17 @@ describe("rankSearch", () => {
     );
   });
 
-  it("green riverpheasant tail: zero results + suggestion", () => {
+  it("green riverpheasant tail: glued 3-token query falls back to closest matches", () => {
     const r = rankSearch("green riverpheasant tail", CORPUS);
+    // Strict AND misses. Relaxed 3-term (≥⅔) can still hit Green River
+    // (green + substring "tail" inside "tailwater"). Labelled closest, not empty.
+    assert.ok(r.total > 0);
+    assert.equal(r.matchQuality, "closest");
+    assert.ok(titles(r, "river").includes("Green River"));
+  });
+
+  it("green riverpheasant xzqfoo: still zero — not enough coverage even relaxed", () => {
+    const r = rankSearch("green riverpheasant xzqfoo", CORPUS);
     assert.equal(r.total, 0);
     assert.equal(r.groups.length, 0);
     assert.ok(r.suggestion, "should offer a nearest title");
@@ -302,5 +313,157 @@ describe("rankSearch", () => {
     assert.equal(isUsgsSiteId("06041000&period=P120D"), false);
     assert.equal(isUsgsSiteId("abc"), false);
     assert.equal(isUsgsSiteId("123"), false);
+  });
+
+  it("tailwater montana is an exact match, not a closest fallback", () => {
+    const r = rankSearch("tailwater montana", CORPUS);
+    assert.equal(r.matchQuality, "exact");
+    assert.ok(r.total > 0);
+    for (const item of r.groups.flatMap((g) => g.items)) {
+      assert.equal(item.matchQuality, "exact");
+    }
+  });
+
+  it("two-term partial coverage still returns zero (no closest fallback)", () => {
+    const r = rankSearch("tailwater iceland", CORPUS);
+    assert.equal(r.total, 0);
+    assert.equal(r.groups.length, 0);
+    assert.equal(r.matchQuality, undefined);
+  });
+});
+
+function withMadisonSeason(docs: SearchDocument[]): SearchDocument[] {
+  return docs.map((d) =>
+    d.slug === "madison-river"
+      ? {
+          ...d,
+          keywords: `${d.keywords ?? ""} dry september hopper stimulator parachute`,
+        }
+      : d,
+  );
+}
+
+describe("relaxed AND fallback", () => {
+  it("4-term natural language: closest matches for madison in september", () => {
+    const docs = withMadisonSeason(CORPUS);
+    const r = rankSearch("best dry fly for the madison in september", docs);
+    assert.ok(r.total > 0, "conversational query should return closest matches");
+    assert.equal(r.matchQuality, "closest");
+    assert.ok(
+      titles(r, "river").includes("Madison River"),
+      `rivers = ${titles(r, "river").join(", ")}`,
+    );
+    for (const item of r.groups.flatMap((g) => g.items)) {
+      assert.equal(item.matchQuality, "closest");
+    }
+  });
+
+  it("5-term natural language: closest matches when one filler term misses", () => {
+    const docs = [
+      ...withMadisonSeason(CORPUS),
+      doc({
+        type: "fly",
+        slug: "stimulator",
+        title: "Stimulator",
+        subtitle: "dry — Sizes 8–14",
+        keywords: "hopper madison september stimulator dry",
+        category: "dry",
+      }),
+    ];
+    const r = rankSearch("best stimulator hopper madison september", docs);
+    assert.ok(r.total > 0, "5-term query should return closest matches");
+    assert.equal(r.matchQuality, "closest");
+    assert.ok(
+      titles(r, "river").includes("Madison River") || titles(r, "fly").includes("Stimulator"),
+      `got rivers=${titles(r, "river").join(", ")} flies=${titles(r, "fly").join(", ")}`,
+    );
+    for (const item of r.groups.flatMap((g) => g.items)) {
+      assert.equal(item.matchQuality, "closest");
+    }
+  });
+});
+
+describe("term frequency memoization", () => {
+  it("lazily populates ScoreContext.termFreq and reuses it across documents", () => {
+    const ctx = buildScoreContext(CORPUS);
+    assert.equal(ctx.termFreq.size, 0);
+    scoreDocument("madison", CORPUS[1], ctx);
+    assert.ok(ctx.termFreq.size > 0);
+    const size = ctx.termFreq.size;
+    scoreDocument("madison", CORPUS[0], ctx);
+    assert.equal(ctx.termFreq.size, size);
+  });
+
+  it("ranks ~779 documents in under 16ms", () => {
+    const n = 779;
+    const index: SearchDocument[] = [];
+    for (let i = 0; i < n; i++) {
+      const base = CORPUS[i % CORPUS.length];
+      const original = i < CORPUS.length;
+      index.push({
+        ...base,
+        slug: original ? base.slug : `${base.slug}-${i}`,
+        title: original ? base.title : `${base.title} ${i}`,
+        href: original ? base.href : `/${base.type}/${base.slug}-${i}`,
+        keywords: `${base.keywords ?? ""} ${i % 2 === 0 ? "montana tailwater hopper" : "freestone september dry"}`,
+      });
+    }
+
+    for (const q of ["green river", "tailwater montana", "best dry fly for the madison in september"]) {
+      rankSearch(q, index);
+    }
+
+    let best = Infinity;
+    for (let i = 0; i < 20; i++) {
+      const t0 = performance.now();
+      rankSearch("best dry fly for the madison in september", index);
+      best = Math.min(best, performance.now() - t0);
+    }
+    assert.ok(best < 16, `ranking 779 docs took ${best.toFixed(2)}ms (need < 16ms)`);
+  });
+});
+
+describe("alias expansions", () => {
+  it("misspellings resolve to the river", () => {
+    assert.ok(titles(rankSearch("madision", CORPUS), "river").includes("Madison River"));
+    assert.ok(titles(rankSearch("missourri", CORPUS), "river").includes("Missouri River"));
+  });
+
+  it("the-X river nicknames still hit Bighorn, Deschutes, Green", () => {
+    assert.ok(titles(rankSearch("the bighorn", CORPUS), "river").includes("Bighorn River"));
+    const withDeschutes = [
+      doc({
+        type: "river",
+        slug: "deschutes-river",
+        title: "Deschutes River",
+        subtitle: "Oregon — freestone",
+      }),
+      ...CORPUS,
+    ];
+    assert.ok(
+      titles(rankSearch("the deschutes", withDeschutes), "river").includes("Deschutes River"),
+    );
+    assert.ok(titles(rankSearch("the green", CORPUS), "river").includes("Green River"));
+  });
+
+  it("hatch, fly, and hook vocabulary expand", () => {
+    const hopper = expandTerm("hopper");
+    assert.ok(hopper.some((v) => /grasshopper|hoppers/.test(v)));
+    assert.ok(expandTerm("skwala").length > 1);
+    assert.ok(expandTerm("trico").some((v) => /trico/.test(v)));
+    assert.ok(expandTerm("sex dungeon").includes("sex dungeons"));
+    assert.ok(expandTerm("circus peanut").includes("circus peanuts"));
+    assert.ok(expandTerm("weezy").includes("weiser") || expandTerm("weezy").includes("weiser river"));
+    assert.ok(expandTerm("size 16").some((v) => v === "16" || v.includes("hook")));
+    assert.ok(expandTerm("#16").some((v) => v.includes("size") || v.includes("hook")));
+    assert.ok(expandTerm("2xl").some((v) => /2x long|2xl/.test(v)));
+    assert.ok(expandTerm("3xl").length > 1);
+    assert.ok(expandTerm("4xl").length > 1);
+    assert.ok(expandTerm("std").some((v) => /standard/.test(v)));
+    assert.ok(expandTerm("1x fine").some((v) => /1xf|1x fine/.test(v)));
+    assert.ok(expandTerm("2x heavy").some((v) => /2xh|2x heavy/.test(v)));
+    assert.ok(expandTerm("barbless").includes("barbless hook"));
+    assert.ok(expandTerm("yellowstone").includes("yellowstone river"));
+    assert.ok(expandTerm("henry fork").includes("henrys fork") || expandTerm("henry fork").includes("henry's fork"));
   });
 });

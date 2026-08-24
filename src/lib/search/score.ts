@@ -44,19 +44,41 @@ const TYPE_TERMS: Record<string, SearchType> = {
 
 export interface ScoreContext {
   titleNorms: string[];
+  /** Lazily populated term → fraction of titles containing that term. */
+  termFreq: Map<string, number>;
+  /** Same query is scored against every doc in a pass — analyze once. */
+  analyzedQuery?: string;
+  analyzed?: AnalyzedQuery;
 }
 
 export function buildScoreContext(docs: SearchDocument[]): ScoreContext {
-  return { titleNorms: docs.map((d) => normalizeText(d.title)) };
+  return { titleNorms: docs.map((d) => normalizeText(d.title)), termFreq: new Map() };
 }
 
-function termFrequency(term: string, titleNorms: string[]): number {
-  if (titleNorms.length === 0) return 0;
+function analyzedFor(query: string, ctx: ScoreContext): AnalyzedQuery {
+  if (ctx.analyzed && ctx.analyzedQuery === query) return ctx.analyzed;
+  const analyzed = analyzeQuery(query);
+  ctx.analyzedQuery = query;
+  ctx.analyzed = analyzed;
+  return analyzed;
+}
+
+function termFrequency(term: string, ctx: ScoreContext): number {
+  const cache = ctx.termFreq ?? (ctx.termFreq = new Map());
+  const cached = cache.get(term);
+  if (cached !== undefined) return cached;
+  const titleNorms = ctx.titleNorms;
+  if (titleNorms.length === 0) {
+    cache.set(term, 0);
+    return 0;
+  }
   let hit = 0;
   for (const t of titleNorms) {
     if (hasWord(t, term) || t.includes(term)) hit++;
   }
-  return hit / titleNorms.length;
+  const freq = hit / titleNorms.length;
+  cache.set(term, freq);
+  return freq;
 }
 
 function bestPhraseMatch(phrases: string[], haystack: string): number {
@@ -142,12 +164,24 @@ export function analyzeQuery(query: string): AnalyzedQuery {
   return { content, typeFilters };
 }
 
+/**
+ * Strict AND: every content term. Relaxed: every term when there are 2,
+ * or at least two-thirds when there are 3+.
+ */
+function passesAndGate(termCount: number, matched: number, relaxed: boolean): boolean {
+  if (termCount < 2) return true;
+  if (matched === termCount) return true;
+  if (!relaxed || termCount === 2) return false;
+  return matched * 3 >= termCount * 2;
+}
+
 export function scoreDocument(
   query: string,
   doc: SearchDocument,
   ctx: ScoreContext,
+  opts?: { relaxed?: boolean },
 ): { score: number; coverage: number } {
-  const analyzed = analyzeQuery(query);
+  const analyzed = analyzedFor(query, ctx);
   const title = normalizeText(doc.title);
   const subtitle = normalizeText(doc.subtitle ?? "");
   const keywords = normalizeText(doc.keywords ?? "");
@@ -163,7 +197,7 @@ export function scoreDocument(
   for (const variants of analyzed.content) {
     const termScore = matchVariants(variants, title, subtitle, keywords);
     if (termScore > 0) matchedTerms += 1;
-    const freq = Math.max(...variants.map((v) => termFrequency(v, ctx.titleNorms)));
+    const freq = Math.max(...variants.map((v) => termFrequency(v, ctx)));
     const scale = freq > CORPUS_COMMON_THRESHOLD ? COMMON_TERM_SCALE : 1;
     raw += termScore * scale;
   }
@@ -171,8 +205,8 @@ export function scoreDocument(
   const coverage =
     analyzed.content.length === 0 ? 1 : matchedTerms / analyzed.content.length;
 
-  // Multi-term queries must cover every content term.
-  if (analyzed.content.length >= 2 && coverage < 1) {
+  // Multi-term queries must cover every content term (strict), or ≥⅔ of 3+ (relaxed).
+  if (!passesAndGate(analyzed.content.length, matchedTerms, opts?.relaxed === true)) {
     return { score: 0, coverage };
   }
   if (coverage === 0) return { score: 0, coverage: 0 };
