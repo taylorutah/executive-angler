@@ -42,6 +42,8 @@ describe("applyIvSeries", () => {
   it("takes the latest discharge for a site", () => {
     const bySite = new Map([["06038500", ["river-madison"]]]);
     const into = new Map<string, GaugeSnapshot>();
+    const recent = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const earlier = new Date(Date.now() - 75 * 60 * 1000).toISOString();
     applyIvSeries(
       [
         {
@@ -50,8 +52,8 @@ describe("applyIvSeries", () => {
           values: [
             {
               value: [
-                { value: "700", dateTime: "2026-08-24T11:00:00.000-06:00" },
-                { value: "760", dateTime: "2026-08-24T12:45:00.000-06:00" },
+                { value: "700", dateTime: earlier },
+                { value: "760", dateTime: recent },
               ],
             },
           ],
