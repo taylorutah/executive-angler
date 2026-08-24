@@ -86,7 +86,7 @@ export default function SubmitToLibraryButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#00B4D8]/40 bg-[#00B4D8]/10 text-[#00B4D8] text-xs font-semibold hover:bg-[#00B4D8]/20 transition-colors"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 text-[var(--signal-live)] text-xs font-semibold hover:bg-[var(--signal-live)]/20 transition-colors"
       >
         <Upload className="h-3.5 w-3.5" />
         {isAdminUser ? "Add to library" : "Submit to library"}
@@ -98,7 +98,7 @@ export default function SubmitToLibraryButton({
           onClick={() => !busy && setOpen(false)}
         >
           <div
-            className="bg-[#161B22] border border-[#30363D] rounded-lg max-w-md w-full p-5 relative"
+            className="bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-lg max-w-md w-full p-5 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -126,7 +126,7 @@ export default function SubmitToLibraryButton({
             )}
 
             <label className="block">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
                 Notes for reviewer (optional)
               </span>
               <textarea
@@ -134,7 +134,7 @@ export default function SubmitToLibraryButton({
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="Anything the reviewer should know — origin, who taught you, when you've been fishing it…"
-                className="mt-1 w-full bg-[#0D1117] border border-[#30363D] rounded p-2 text-sm placeholder:text-cream/30"
+                className="mt-1 w-full bg-[var(--surface-page)] border border-[var(--border-strong)] rounded p-2 text-sm placeholder:text-cream/30"
               />
             </label>
 
@@ -187,7 +187,7 @@ export default function SubmitToLibraryButton({
                   busy ||
                   (!isAdminUser && captchaAvailable && !token)
                 }
-                className="px-4 py-1.5 rounded bg-[#E8923A] text-black font-semibold text-sm flex items-center gap-1.5 disabled:opacity-50"
+                className="px-4 py-1.5 rounded bg-[var(--action)] text-black font-semibold text-sm flex items-center gap-1.5 disabled:opacity-50"
               >
                 {busy ? (
                   "Submitting…"

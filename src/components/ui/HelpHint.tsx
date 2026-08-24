@@ -46,7 +46,7 @@ export default function HelpHint({
               <button
                 type="button"
                 aria-label={label}
-                className={`inline-flex ${btnSize} items-center justify-center rounded-full text-[#6E7681] hover:text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors ${className}`}
+                className={`inline-flex ${btnSize} items-center justify-center rounded-full text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors ${className}`}
               >
                 <Icn size={iconSize} strokeWidth={2} />
               </button>
@@ -57,7 +57,7 @@ export default function HelpHint({
               side="top"
               align="center"
               sideOffset={4}
-              className="z-50 rounded bg-[#0D1117] border border-[#21262D] px-2 py-1 text-xs text-[#A8B2BD] shadow-lg data-[state=delayed-open]:animate-in data-[state=closed]:animate-out"
+              className="z-50 rounded bg-[var(--surface-page)] border border-[var(--border-rule)] px-2 py-1 text-xs text-[var(--text-body)] shadow-lg data-[state=delayed-open]:animate-in data-[state=closed]:animate-out"
             >
               {label}
             </Tooltip.Content>
@@ -70,10 +70,10 @@ export default function HelpHint({
             align="center"
             sideOffset={8}
             collisionPadding={16}
-            className="z-50 max-w-xs rounded-lg bg-[#0D1117] border border-[#21262D] p-3 text-sm text-[#A8B2BD] shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out"
+            className="z-50 max-w-xs rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] p-3 text-sm text-[var(--text-body)] shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out"
           >
             <div className="space-y-1.5 leading-relaxed">{children}</div>
-            <Popover.Arrow className="fill-[#21262D]" />
+            <Popover.Arrow className="fill-[var(--border-rule)]" />
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>

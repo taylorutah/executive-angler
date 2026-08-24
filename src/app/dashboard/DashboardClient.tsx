@@ -51,18 +51,18 @@ export default function DashboardClient({
   const milestoneCount = riverStats.reduce((sum, rs) => sum + rs.awards.length, 0);
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
 
       {/* ─── Header ─── */}
-      <div className="bg-[#161B22] border-b border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="font-serif text-2xl sm:text-3xl text-[#F0F6FC]">
+              <h1 className="font-serif text-2xl sm:text-3xl text-[var(--text-primary)]">
                 Welcome back, {displayName}
               </h1>
               {profile?.home_location && (
-                <p className="text-sm text-[#A8B2BD] flex items-center gap-1 mt-1">
+                <p className="text-sm text-[var(--text-body)] flex items-center gap-1 mt-1">
                   <MapPin className="h-3.5 w-3.5" /> {profile.home_location}
                 </p>
               )}
@@ -118,19 +118,19 @@ export default function DashboardClient({
             <section>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-[#E8923A]" />
-                  <h2 className="font-serif text-xl text-[#F0F6FC]">Recent Sessions</h2>
+                  <BookOpen className="h-5 w-5 text-[var(--action)]" />
+                  <h2 className="font-serif text-xl text-[var(--text-primary)]">Recent Sessions</h2>
                 </div>
-                <Link href="/journal" className="text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
+                <Link href="/journal" className="text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
                   Full journal &rarr;
                 </Link>
               </div>
               {mySessions.length === 0 ? (
-                <div className="bg-[#161B22] rounded-xl border border-[#21262D] border-dashed p-10 text-center">
-                  <Fish className="h-10 w-10 text-[#6E7681] mx-auto mb-3" />
-                  <p className="text-[#A8B2BD] mb-3">No sessions logged yet.</p>
-                  <p className="text-sm text-[#6E7681] mb-4">Download the app to start logging sessions.</p>
-                  <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8923A] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors">
+                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] border-dashed p-10 text-center">
+                  <Fish className="h-10 w-10 text-[var(--text-meta)] mx-auto mb-3" />
+                  <p className="text-[var(--text-body)] mb-3">No sessions logged yet.</p>
+                  <p className="text-sm text-[var(--text-meta)] mb-4">Download the app to start logging sessions.</p>
+                  <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--action)] text-white text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors">
                     Get the App
                   </Link>
                 </div>
@@ -140,21 +140,21 @@ export default function DashboardClient({
                     <Link
                       key={session.id}
                       href={`/journal/${session.id}`}
-                      className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A] transition-colors group"
+                      className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] hover:border-[var(--action)] transition-colors group"
                     >
                       <div className="text-center shrink-0 w-12">
-                        <p className="font-mono text-lg font-bold text-[#E8923A]">{session.total_fish ?? 0}</p>
-                        <p className="text-[9px] text-[#6E7681] uppercase">fish</p>
+                        <p className="font-mono text-lg font-bold text-[var(--action)]">{session.total_fish ?? 0}</p>
+                        <p className="text-[9px] text-[var(--text-meta)] uppercase">fish</p>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#F0F6FC] truncate">{session.river_name ?? "Unknown River"}</p>
-                        <p className="text-xs text-[#A8B2BD]">{formatDate(session.date)}</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)] truncate">{session.river_name ?? "Unknown River"}</p>
+                        <p className="text-xs text-[var(--text-body)]">{formatDate(session.date)}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {session.broadcast_presence !== true && (
-                          <span className="text-[10px] bg-[#21262D] text-[#6E7681] px-1.5 py-0.5 rounded">Private</span>
+                          <span className="text-[10px] bg-[var(--border-rule)] text-[var(--text-meta)] px-1.5 py-0.5 rounded">Private</span>
                         )}
-                        <ChevronRight className="h-4 w-4 text-[#6E7681] group-hover:text-[#E8923A] transition-colors" />
+                        <ChevronRight className="h-4 w-4 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors" />
                       </div>
                     </Link>
                   ))}

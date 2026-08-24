@@ -67,7 +67,7 @@ export default function ViewModeToggle({
         className={[
           "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors",
           mode === "grid"
-            ? "bg-[#E8923A] text-white"
+            ? "bg-[var(--action)] text-white"
             : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
         ].join(" ")}
       >
@@ -81,7 +81,7 @@ export default function ViewModeToggle({
         className={[
           "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors",
           mode === "table"
-            ? "bg-[#E8923A] text-white"
+            ? "bg-[var(--action)] text-white"
             : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
         ].join(" ")}
       >

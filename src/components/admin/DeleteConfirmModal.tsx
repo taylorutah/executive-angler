@@ -25,7 +25,7 @@ export default function DeleteConfirmModal({
       onClick={onCancel}
     >
       <div
-        className="bg-[#161B22] border border-[#21262D] rounded-2xl max-w-sm w-full shadow-2xl"
+        className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl max-w-sm w-full shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-6 py-5 space-y-4">
@@ -35,12 +35,12 @@ export default function DeleteConfirmModal({
               <AlertTriangle className="h-5 w-5 text-red-400" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#F0F6FC]">
+              <h3 className="text-base font-bold text-[var(--text-primary)]">
                 Delete Confirmation
               </h3>
-              <p className="mt-1 text-sm text-[#A8B2BD]">
+              <p className="mt-1 text-sm text-[var(--text-body)]">
                 Are you sure you want to delete{" "}
-                <span className="font-semibold text-[#F0F6FC]">{entityName}</span>?
+                <span className="font-semibold text-[var(--text-primary)]">{entityName}</span>?
                 This action cannot be undone.
               </p>
             </div>
@@ -63,7 +63,7 @@ export default function DeleteConfirmModal({
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-[#21262D] text-[#A8B2BD] rounded-lg text-sm font-semibold hover:bg-[#2D333B] hover:text-[#F0F6FC] transition-colors"
+              className="flex-1 px-4 py-2.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] hover:text-[var(--text-primary)] transition-colors"
             >
               Cancel
             </button>

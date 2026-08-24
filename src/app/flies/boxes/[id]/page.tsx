@@ -75,33 +75,33 @@ export default async function BoxDetailV3({ params }: Props) {
     .filter((x): x is Entry => x !== null);
 
   return (
-    <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
-      <header className="border-b border-[#21262D] bg-[#161B22]">
+    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
+      <header className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex items-start gap-6">
           <div className="min-w-0 flex-1">
             <Link
               href="/flies?tab=boxes"
-              className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#0BA5C7] transition-colors mb-2"
+              className="inline-flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--signal-live)] transition-colors mb-2"
             >
               <ChevronLeft className="h-3 w-3" /> All boxes
             </Link>
             <div className="flex items-baseline gap-3">
-              <h1 className="font-heading text-3xl text-[#F0F6FC] tracking-tight">
+              <h1 className="font-heading text-3xl text-[var(--text-primary)] tracking-tight">
                 {box.name}
               </h1>
-              <span className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[#0BA5C7]">
+              <span className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--signal-live)]">
                 {TIER_LABELS[box.tier]}
               </span>
               {box.is_default && (
-                <span className="rounded bg-[#0BA5C7]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#0BA5C7]">
+                <span className="rounded bg-[var(--signal-live)]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
                   Default
                 </span>
               )}
             </div>
             {box.description && (
-              <p className="mt-2 text-sm text-[#A8B2BD] max-w-2xl">{box.description}</p>
+              <p className="mt-2 text-sm text-[var(--text-body)] max-w-2xl">{box.description}</p>
             )}
-            <p className="mt-3 font-['IBM_Plex_Mono'] text-[11px] text-[#6E7681]">
+            <p className="mt-3 font-['IBM_Plex_Mono'] text-[11px] text-[var(--text-meta)]">
               {entries.length} {entries.length === 1 ? "version" : "versions"} ·
               {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
               tap any row to open the fly
@@ -118,15 +118,15 @@ export default async function BoxDetailV3({ params }: Props) {
                       href={`/flies/boxes/${b.id}`}
                       className={`group flex items-center gap-1.5 rounded-md border px-2 py-1 sm:rounded-lg sm:px-3 sm:py-2 transition-colors ${
                         isActive
-                          ? "border-[#E8923A] bg-[#E8923A]/10"
-                          : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
+                          ? "border-[var(--action)] bg-[var(--action)]/10"
+                          : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/40"
                       }`}
                     >
-                      <Box className={`h-3 w-3 flex-shrink-0 ${isActive ? "text-[#E8923A]" : "text-[#6E7681]"}`} />
-                      <span className={`max-w-[140px] truncate text-xs font-semibold ${isActive ? "text-[#F0F6FC]" : "text-[#A8B2BD]"}`}>
+                      <Box className={`h-3 w-3 flex-shrink-0 ${isActive ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`} />
+                      <span className={`max-w-[140px] truncate text-xs font-semibold ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"}`}>
                         {b.name}
                       </span>
-                      {b.is_default && <Star className="h-3 w-3 fill-[#0BA5C7] text-[#0BA5C7]" />}
+                      {b.is_default && <Star className="h-3 w-3 fill-[var(--signal-live)] text-[var(--signal-live)]" />}
                     </Link>
                   );
                 })}
@@ -138,11 +138,11 @@ export default async function BoxDetailV3({ params }: Props) {
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {entries.length === 0 ? (
-          <div className="rounded-lg border border-[#21262D] bg-[#0D1117] p-8 text-center">
-            <p className="text-sm text-[#A8B2BD]">This box is empty.</p>
-            <p className="mt-2 text-xs text-[#6E7681]">
+          <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-8 text-center">
+            <p className="text-sm text-[var(--text-body)]">This box is empty.</p>
+            <p className="mt-2 text-xs text-[var(--text-meta)]">
               Open any fly in the{" "}
-              <Link href="/flies/library" className="text-[#0BA5C7] hover:text-[#E8923A]">library</Link>{" "}
+              <Link href="/flies/library" className="text-[var(--signal-live)] hover:text-[var(--action)]">library</Link>{" "}
               and use the box-picker on a version to add it here.
             </p>
           </div>

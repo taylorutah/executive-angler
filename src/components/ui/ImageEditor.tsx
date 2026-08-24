@@ -148,20 +148,20 @@ export default function ImageEditor({
       aria-modal="true"
       aria-label={title}
     >
-      <div className="w-full max-w-4xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[#161B22] rounded-2xl overflow-hidden border border-[#21262D] shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[var(--surface-raised)] rounded-2xl overflow-hidden border border-[var(--border-rule)] shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#21262D] flex-shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)] flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
-            <CropIcon className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
-            <h2 className="text-sm font-bold text-[#F0F6FC] truncate">{title}</h2>
-            <span className="hidden sm:inline text-[10px] text-[#6E7681] ml-2">
+            <CropIcon className="h-5 w-5 text-[var(--action)] flex-shrink-0" />
+            <h2 className="text-sm font-bold text-[var(--text-primary)] truncate">{title}</h2>
+            <span className="hidden sm:inline text-[10px] text-[var(--text-meta)] ml-2">
               Drag · Scroll to zoom · R rotate · F flip
             </span>
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className="text-[#6E7681] hover:text-[#F0F6FC] flex-shrink-0"
+            className="text-[var(--text-meta)] hover:text-[var(--text-primary)] flex-shrink-0"
             aria-label="Cancel"
           >
             <X className="h-5 w-5" />
@@ -201,10 +201,10 @@ export default function ImageEditor({
         </div>
 
         {/* Controls */}
-        <div className="px-4 py-3 border-t border-[#21262D] flex-shrink-0 space-y-3">
+        <div className="px-4 py-3 border-t border-[var(--border-rule)] flex-shrink-0 space-y-3">
           {/* Zoom slider */}
           <div className="flex items-center gap-3">
-            <span className="text-xs text-[#A8B2BD] w-10">Zoom</span>
+            <span className="text-xs text-[var(--text-body)] w-10">Zoom</span>
             <input
               type="range"
               min={1}
@@ -212,10 +212,10 @@ export default function ImageEditor({
               step={0.05}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1 accent-[#E8923A]"
+              className="flex-1 accent-[var(--action)]"
               aria-label="Zoom level"
             />
-            <span className="text-xs text-[#A8B2BD] font-mono w-12 text-right">
+            <span className="text-xs text-[var(--text-body)] font-mono w-12 text-right">
               {zoom.toFixed(2)}×
             </span>
           </div>
@@ -266,7 +266,7 @@ export default function ImageEditor({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 px-4 py-2.5 bg-[#21262D] text-[#F0F6FC] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+              className="flex-1 px-4 py-2.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
             >
               Cancel
             </button>
@@ -274,7 +274,7 @@ export default function ImageEditor({
               type="button"
               onClick={apply}
               disabled={processing || !croppedArea}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
             >
               {processing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -308,10 +308,10 @@ function ToolButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={`inline-flex items-center px-2.5 py-1.5 rounded-lg border text-[#F0F6FC] transition-colors ${
+      className={`inline-flex items-center px-2.5 py-1.5 rounded-lg border text-[var(--text-primary)] transition-colors ${
         active
-          ? "border-[#E8923A] bg-[#E8923A]/15 text-[#E8923A]"
-          : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/50 hover:text-[#E8923A]"
+          ? "border-[var(--action)] bg-[var(--action)]/15 text-[var(--action)]"
+          : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/50 hover:text-[var(--action)]"
       }`}
     >
       {children}

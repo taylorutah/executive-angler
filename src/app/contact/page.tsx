@@ -78,21 +78,21 @@ function ContactPageInner() {
     <>
       <div className="pt-8 pb-20">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-4">
+          <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-[#A8B2BD] mb-10">
+          <p className="text-lg text-[var(--text-body)] mb-10">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>
 
           {submitted ? (
-            <div className="rounded-xl bg-[#E8923A]/5 border border-forest/20 p-8 text-center">
-              <CheckCircle className="h-12 w-12 text-[#E8923A] mx-auto mb-4" />
-              <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-2">
+            <div className="rounded-xl bg-[var(--action)]/5 border border-forest/20 p-8 text-center">
+              <CheckCircle className="h-12 w-12 text-[var(--action)] mx-auto mb-4" />
+              <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-2">
                 Message Sent
               </h2>
-              <p className="text-[#A8B2BD]">
+              <p className="text-[var(--text-body)]">
                 Thank you for reaching out. We&apos;ll get back to you as soon
                 as possible.
               </p>
@@ -102,7 +102,7 @@ function ContactPageInner() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
                 >
                   Name
                 </label>
@@ -111,7 +111,7 @@ function ContactPageInner() {
                   id="name"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -119,7 +119,7 @@ function ContactPageInner() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
                 >
                   Email
                 </label>
@@ -128,7 +128,7 @@ function ContactPageInner() {
                   id="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
                   placeholder="you@example.com"
                 />
               </div>
@@ -136,7 +136,7 @@ function ContactPageInner() {
               <div>
                 <label
                   htmlFor="subject"
-                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
                 >
                   Subject
                 </label>
@@ -145,7 +145,7 @@ function ContactPageInner() {
                   name="subject"
                   required
                   defaultValue={initialSubject}
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors"
+                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
                 >
                   <option value="">Select a topic</option>
                   {SUBJECT_OPTIONS.map((s) => (
@@ -159,7 +159,7 @@ function ContactPageInner() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-[#F0F6FC] mb-1.5"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
                 >
                   Message
                 </label>
@@ -168,7 +168,7 @@ function ContactPageInner() {
                   name="message"
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-[#21262D] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors resize-y"
+                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors resize-y"
                   placeholder="How can we help?"
                 />
               </div>
@@ -194,7 +194,7 @@ function ContactPageInner() {
                 <button
                   type="submit"
                   disabled={sending || !captchaResolved}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#E8923A] px-6 py-3 text-base font-medium text-white hover:bg-[#E8923A]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--action)] px-6 py-3 text-base font-medium text-white hover:bg-[var(--action)]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
                   {sending ? "Sending..." : "Send Message"}

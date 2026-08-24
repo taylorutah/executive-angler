@@ -47,16 +47,16 @@ export default async function AnglersPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
-      <div className="bg-[#161B22] border-b border-[#21262D]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
+      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">Angler Directory</h1>
-          <p className="text-[#A8B2BD] mt-2">Browse anglers and follow their river reports.</p>
+          <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)]">Angler Directory</h1>
+          <p className="text-[var(--text-body)] mt-2">Browse anglers and follow their river reports.</p>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {(!anglers || anglers.length === 0) ? (
-          <div className="text-center py-16 text-[#6E7681]">
+          <div className="text-center py-16 text-[var(--text-meta)]">
             <p>No public angler profiles yet.</p>
             <p className="mt-2 text-sm">Be the first to join!</p>
           </div>
@@ -66,8 +66,8 @@ export default async function AnglersPage() {
               const crowns = crownsByUser.get(a.user_id) || [];
               const initials = String((a.display_name || a.username || "A").charAt(0)).toUpperCase();
               return (
-                <div key={a.user_id} className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">
+                <div key={a.user_id} className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--action)]/10 flex items-center justify-center shrink-0 overflow-hidden">
                     {a.avatar_url ? (
                       <Image
                         src={a.avatar_url}
@@ -77,12 +77,12 @@ export default async function AnglersPage() {
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <span className="text-lg font-bold text-[#E8923A]">{initials}</span>
+                      <span className="text-lg font-bold text-[var(--action)]">{initials}</span>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-[#F0F6FC] flex-1">{a.display_name || a.username}</p>
+                      <p className="font-semibold text-[var(--text-primary)] flex-1">{a.display_name || a.username}</p>
                       <FollowButton targetUserId={a.user_id} compact />
                       {awardsVisible && crowns.slice(0, 3).map((c) => (
                         <span key={c.award_key + c.river_name} title={`${(c.metadata as { display_name?: string })?.display_name ?? c.award_key}${c.river_name ? ` — ${c.river_name}` : ""}`}>
@@ -90,22 +90,22 @@ export default async function AnglersPage() {
                         </span>
                       ))}
                       {awardsVisible && crowns.length > 3 && (
-                        <span className="text-[10px] text-[#6E7681]">+{crowns.length - 3}</span>
+                        <span className="text-[10px] text-[var(--text-meta)]">+{crowns.length - 3}</span>
                       )}
                     </div>
                     {a.username && (
-                      <p className="text-xs text-[#6E7681] mt-0.5">@{a.username}</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5">@{a.username}</p>
                     )}
                     {a.home_location && (
-                      <p className="text-xs text-[#A8B2BD] mt-0.5">{a.home_location}</p>
+                      <p className="text-xs text-[var(--text-body)] mt-0.5">{a.home_location}</p>
                     )}
                     {a.bio && (
-                      <p className="text-xs text-[#A8B2BD] mt-1 line-clamp-2">{a.bio}</p>
+                      <p className="text-xs text-[var(--text-body)] mt-1 line-clamp-2">{a.bio}</p>
                     )}
                     {awardsVisible && crowns.length > 0 && (
                       <div className="flex items-center gap-1 mt-2">
-                        <Crown className="h-3 w-3 text-[#E8923A]" />
-                        <span className="text-[10px] text-[#6E7681]">{crowns.length} milestone{crowns.length !== 1 ? "s" : ""}</span>
+                        <Crown className="h-3 w-3 text-[var(--action)]" />
+                        <span className="text-[10px] text-[var(--text-meta)]">{crowns.length} milestone{crowns.length !== 1 ? "s" : ""}</span>
                       </div>
                     )}
                   </div>

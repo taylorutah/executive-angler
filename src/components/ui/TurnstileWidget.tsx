@@ -159,7 +159,7 @@ export default function TurnstileWidget({
     <>
       <div ref={containerRef} className="mt-2" />
       {failedOpen && !hasToken && (
-        <p className="mt-2 text-xs text-[#6E7681]">
+        <p className="mt-2 text-xs text-[var(--text-meta)]">
           Having trouble with verification? You can still submit — we&apos;ll
           verify on the server.
         </p>

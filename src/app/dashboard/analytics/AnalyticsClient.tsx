@@ -129,30 +129,30 @@ export default function AnalyticsClient({
   const maxFly = flyData.length > 0 ? flyData[0][1] : 1;
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+            <Link href="/dashboard" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <div className="flex items-center gap-2">
-              <BarChart3 className="h-6 w-6 text-[#E8923A]" />
-              <h1 className="font-serif text-2xl text-[#F0F6FC]">Analytics</h1>
+              <BarChart3 className="h-6 w-6 text-[var(--action)]" />
+              <h1 className="font-serif text-2xl text-[var(--text-primary)]">Analytics</h1>
             </div>
           </div>
 
           {/* Time range picker */}
-          <div className="flex gap-1 bg-[#161B22] rounded-lg p-1 border border-[#21262D]">
+          <div className="flex gap-1 bg-[var(--surface-raised)] rounded-lg p-1 border border-[var(--border-rule)]">
             {(["1M", "3M", "6M", "1Y", "ALL"] as TimeRange[]).map(r => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
                   range === r
-                    ? "bg-[#E8923A] text-white"
-                    : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                    ? "bg-[var(--action)] text-white"
+                    : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {r}
@@ -163,23 +163,23 @@ export default function AnalyticsClient({
 
         {/* Summary Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
-          <StatCard icon={<Calendar className="h-4 w-4 text-[#E8923A]" />} value={String(totalSessions)} label="Sessions" />
-          <StatCard icon={<Fish className="h-4 w-4 text-[#0BA5C7]" />} value={String(totalFish)} label="Total Fish" />
-          <StatCard icon={<TrendingUp className="h-4 w-4 text-[#2EA44F]" />} value={avgPerSession} label="Avg / Session" />
+          <StatCard icon={<Calendar className="h-4 w-4 text-[var(--action)]" />} value={String(totalSessions)} label="Sessions" />
+          <StatCard icon={<Fish className="h-4 w-4 text-[var(--signal-live)]" />} value={String(totalFish)} label="Total Fish" />
+          <StatCard icon={<TrendingUp className="h-4 w-4 text-[var(--state-positive)]" />} value={avgPerSession} label="Avg / Session" />
           <StatCard icon={<Target className="h-4 w-4 text-[#FFD700]" />} value={bestSession ? String(bestSession.total_fish) : "—"} label="Best Session" />
           <StatCard icon={<Flame className="h-4 w-4 text-orange-400" />} value={biggestFish > 0 ? `${biggestFish.toFixed(1)}"` : "—"} label="Biggest Fish" />
         </div>
 
         {totalSessions === 0 ? (
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
-            <BarChart3 className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">No data to analyze</h2>
-            <p className="text-sm text-[#A8B2BD]">Start logging sessions to see your trends here.</p>
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-12 text-center">
+            <BarChart3 className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">No data to analyze</h2>
+            <p className="text-sm text-[var(--text-body)]">Start logging sessions to see your trends here.</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Catch Rate Over Time — recharts AreaChart */}
-            <ChartCard title="Catch Rate" icon={<TrendingUp className="h-4 w-4 text-[#E8923A]" />} span="lg:col-span-2">
+            <ChartCard title="Catch Rate" icon={<TrendingUp className="h-4 w-4 text-[var(--action)]" />} span="lg:col-span-2">
               {catchRateData.length > 0 ? (
                 <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
@@ -206,12 +206,12 @@ export default function AnalyticsClient({
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <p className="text-xs text-[#6E7681]">No catch data</p>
+                <p className="text-xs text-[var(--text-meta)]">No catch data</p>
               )}
             </ChartCard>
 
             {/* Species Breakdown — pie + bars */}
-            <ChartCard title="Species Breakdown" icon={<Fish className="h-4 w-4 text-[#0BA5C7]" />}>
+            <ChartCard title="Species Breakdown" icon={<Fish className="h-4 w-4 text-[var(--signal-live)]" />}>
               {speciesData.length > 0 ? (
                 <div className="flex flex-col gap-4">
                   <div className="h-36">
@@ -240,40 +240,40 @@ export default function AnalyticsClient({
                     {speciesData.map(([species, count], i) => (
                       <div key={species} className="flex items-center gap-2 text-xs">
                         <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: SPECIES_COLORS[i % SPECIES_COLORS.length] }} />
-                        <span className="text-[#F0F6FC] truncate flex-1">{species}</span>
-                        <span className="text-[#A8B2BD] font-mono">{count}</span>
+                        <span className="text-[var(--text-primary)] truncate flex-1">{species}</span>
+                        <span className="text-[var(--text-body)] font-mono">{count}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
-                <p className="text-xs text-[#6E7681]">No species data</p>
+                <p className="text-xs text-[var(--text-meta)]">No species data</p>
               )}
             </ChartCard>
 
             {/* Top Rivers */}
-            <ChartCard title="Top Rivers" icon={<MapPin className="h-4 w-4 text-[#E8923A]" />}>
+            <ChartCard title="Top Rivers" icon={<MapPin className="h-4 w-4 text-[var(--action)]" />}>
               <div className="space-y-2.5">
                 {riverData.map(([river, data]) => (
                   <div key={river}>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[#F0F6FC] font-medium truncate mr-2">{river}</span>
-                      <span className="text-[#A8B2BD] font-mono shrink-0">{data.sessions}s · {data.fish}f</span>
+                      <span className="text-[var(--text-primary)] font-medium truncate mr-2">{river}</span>
+                      <span className="text-[var(--text-body)] font-mono shrink-0">{data.sessions}s · {data.fish}f</span>
                     </div>
-                    <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
+                    <div className="h-2 bg-[var(--surface-page)] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#E8923A] rounded-full transition-all"
+                        className="h-full bg-[var(--action)] rounded-full transition-all"
                         style={{ width: `${(data.sessions / maxRiverSessions) * 100}%` }}
                       />
                     </div>
                   </div>
                 ))}
-                {riverData.length === 0 && <p className="text-xs text-[#6E7681]">No river data</p>}
+                {riverData.length === 0 && <p className="text-xs text-[var(--text-meta)]">No river data</p>}
               </div>
             </ChartCard>
 
             {/* Monthly Activity — recharts BarChart */}
-            <ChartCard title="Monthly Activity" icon={<Calendar className="h-4 w-4 text-[#2EA44F]" />}>
+            <ChartCard title="Monthly Activity" icon={<Calendar className="h-4 w-4 text-[var(--state-positive)]" />}>
               {monthlyData.length > 0 ? (
                 <div className="h-40">
                   <ResponsiveContainer width="100%" height="100%">
@@ -291,7 +291,7 @@ export default function AnalyticsClient({
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <p className="text-xs text-[#6E7681]">No monthly data</p>
+                <p className="text-xs text-[var(--text-meta)]">No monthly data</p>
               )}
             </ChartCard>
 
@@ -301,10 +301,10 @@ export default function AnalyticsClient({
                 {flyData.map(([fly, count]) => (
                   <div key={fly}>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[#F0F6FC] font-medium truncate mr-2">{fly}</span>
-                      <span className="text-[#A8B2BD] font-mono shrink-0">{count} catches</span>
+                      <span className="text-[var(--text-primary)] font-medium truncate mr-2">{fly}</span>
+                      <span className="text-[var(--text-body)] font-mono shrink-0">{count} catches</span>
                     </div>
-                    <div className="h-2 bg-[#0D1117] rounded-full overflow-hidden">
+                    <div className="h-2 bg-[var(--surface-page)] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-purple-500 rounded-full transition-all"
                         style={{ width: `${(count / maxFly) * 100}%` }}
@@ -312,7 +312,7 @@ export default function AnalyticsClient({
                     </div>
                   </div>
                 ))}
-                {flyData.length === 0 && <p className="text-xs text-[#6E7681]">No fly data — log catches with flies to see this</p>}
+                {flyData.length === 0 && <p className="text-xs text-[var(--text-meta)]">No fly data — log catches with flies to see this</p>}
               </div>
             </ChartCard>
           </div>
@@ -324,20 +324,20 @@ export default function AnalyticsClient({
 
 function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 text-center">
+    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 text-center">
       <div className="flex items-center justify-center mb-1.5">{icon}</div>
-      <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{value}</p>
-      <p className="text-[10px] text-[#A8B2BD] mt-0.5 uppercase tracking-wider">{label}</p>
+      <p className="text-2xl font-bold text-[var(--text-primary)] font-mono">{value}</p>
+      <p className="text-[10px] text-[var(--text-body)] mt-0.5 uppercase tracking-wider">{label}</p>
     </div>
   );
 }
 
 function ChartCard({ title, icon, children, span }: { title: string; icon: React.ReactNode; children: React.ReactNode; span?: string }) {
   return (
-    <div className={`bg-[#161B22] border border-[#21262D] rounded-xl p-5 ${span || ""}`}>
+    <div className={`bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 ${span || ""}`}>
       <div className="flex items-center gap-2 mb-4">
         {icon}
-        <h3 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">{title}</h3>
+        <h3 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider">{title}</h3>
       </div>
       {children}
     </div>

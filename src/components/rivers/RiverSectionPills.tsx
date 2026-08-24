@@ -86,7 +86,7 @@ export default function RiverSectionPills({ riverId }: Props) {
   const activeSiteId = selectedFromUrl || gauges[0].site_id;
 
   return (
-    <div className="bg-[#0D1117]">
+    <div className="bg-[var(--surface-page)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
         <div
           className="flex gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -106,12 +106,12 @@ export default function RiverSectionPills({ riverId }: Props) {
                 className={[
                   "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
                   isSelected
-                    ? "bg-[#E8923A]/[0.18] border-[#E8923A]/55 text-[#F0F6FC]"
-                    : "bg-[#161B22] border-[#30363D] text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40",
+                    ? "bg-[var(--action)]/[0.18] border-[var(--action)]/55 text-[var(--text-primary)]"
+                    : "bg-[var(--surface-raised)] border-[var(--border-strong)] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-[var(--action)]/40",
                 ].join(" ")}
               >
                 <Radio
-                  className={`h-3 w-3 ${isSelected ? "text-[#E8923A]" : "text-[#6E7681]"}`}
+                  className={`h-3 w-3 ${isSelected ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`}
                 />
                 <span className="whitespace-nowrap">{label}</span>
               </button>

@@ -52,10 +52,10 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
 
   if (!isLoggedIn) {
     return (
-      <div className="rounded-lg border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] p-5 my-8">
+      <div className="rounded-lg border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] p-5 my-8">
         <h2 className="font-heading text-xl mb-2">Your stock</h2>
         <p className="text-sm text-[var(--color-text-muted)]">
-          <a href={`/login?redirect=${encodeURIComponent(loginRedirectPath)}`} className="text-[#E8923A] hover:underline">
+          <a href={`/login?redirect=${encodeURIComponent(loginRedirectPath)}`} className="text-[var(--action)] hover:underline">
             Log in
           </a>{" "}
           to track your versions of this fly — sizes, beads, body colors, and how many you have in each box.
@@ -66,7 +66,7 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
 
   if (versions.length === 0) {
     return (
-      <div className="rounded-lg border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] p-5 my-8">
+      <div className="rounded-lg border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] p-5 my-8">
         <h2 className="font-heading text-xl mb-2">Your stock</h2>
         <p className="text-sm text-[var(--color-text-muted)] mb-4">
           You haven&apos;t saved a version of this fly yet. Add one to track it in your boxes and on the workbench.
@@ -105,8 +105,8 @@ export default function YourStockSection({ fly, isLoggedIn, versions, boxes, log
       </div>
 
       {selected.size > 0 && (
-        <div className="sticky top-14 z-30 mb-2 flex items-center justify-between gap-3 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-3 py-2 shadow-sm">
-          <span className="text-xs font-medium text-[#E8923A]">
+        <div className="sticky top-14 z-30 mb-2 flex items-center justify-between gap-3 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-3 py-2 shadow-sm">
+          <span className="text-xs font-medium text-[var(--action)]">
             {selected.size} selected
           </span>
           <div className="flex items-center gap-2">
@@ -268,8 +268,8 @@ function VersionCard({
   return (
     <li className={`relative rounded-lg border p-4 transition-colors ${
       selected
-        ? "border-[#E8923A]/60 bg-[#E8923A]/5"
-        : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D]"
+        ? "border-[var(--action)]/60 bg-[var(--action)]/5"
+        : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)]"
     }`}>
       <div className="flex items-start gap-3">
         <input
@@ -277,7 +277,7 @@ function VersionCard({
           checked={selected}
           onChange={onToggleSelect}
           aria-label={`Select ${summary}`}
-          className="mt-1 h-4 w-4 flex-shrink-0 accent-[#E8923A] cursor-pointer"
+          className="mt-1 h-4 w-4 flex-shrink-0 accent-[var(--action)] cursor-pointer"
         />
         <div className="flex items-start justify-between gap-3 flex-wrap flex-1 min-w-0">
           <div className="min-w-0">
@@ -293,7 +293,7 @@ function VersionCard({
                 <span className="font-semibold">{version.target_count}</span>
               </span>
               {deficit > 0 && (
-                <span className="text-[#E8923A]">need {deficit} more</span>
+                <span className="text-[var(--action)]">need {deficit} more</span>
               )}
             </div>
           </div>
@@ -304,7 +304,7 @@ function VersionCard({
               onClick={() => bumpTied(1)}
               title={`Tied one more — increase count for ${summary}`}
               aria-label={`Tied one more of ${summary}`}
-              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)]"
             >
               +
             </button>
@@ -314,7 +314,7 @@ function VersionCard({
               onClick={() => bumpTied(-1)}
               title={`Lost or used one — decrease count for ${summary}`}
               aria-label={`Used or lost one of ${summary}`}
-              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-7 w-7 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               −
             </button>
@@ -328,7 +328,7 @@ function VersionCard({
               className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
                 optimisticFavorite
                   ? "border-rose-500 bg-rose-500 text-white shadow-sm"
-                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-rose-500 hover:border-rose-500/40"
+                  : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] hover:text-rose-500 hover:border-rose-500/40"
               }`}
             >
               <Heart className="h-3.5 w-3.5" fill={optimisticFavorite ? "currentColor" : "none"} />
@@ -342,8 +342,8 @@ function VersionCard({
               aria-pressed={optimisticTieNext}
               className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
                 optimisticTieNext
-                  ? "border-[#E8923A] bg-[#E8923A] text-white shadow-sm"
-                  : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-[#E8923A] hover:border-[#E8923A]/40"
+                  ? "border-[var(--action)] bg-[var(--action)] text-white shadow-sm"
+                  : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] hover:text-[var(--action)] hover:border-[var(--action)]/40"
               }`}
             >
               <Wrench className="h-3.5 w-3.5" />
@@ -358,10 +358,10 @@ function VersionCard({
                 aria-expanded={boxesOpen}
                 className={`h-7 w-7 inline-flex items-center justify-center rounded-md border text-xs transition-colors ${
                   version.in_boxes.length > 0
-                    ? "border-[#0BA5C7] bg-[#0BA5C7] text-white shadow-sm"
+                    ? "border-[var(--signal-live)] bg-[var(--signal-live)] text-white shadow-sm"
                     : boxesOpen
-                      ? "border-[#0BA5C7]/60 bg-[#0BA5C7]/15 text-[#0BA5C7]"
-                      : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] hover:text-[#0BA5C7] hover:border-[#0BA5C7]/40"
+                      ? "border-[var(--signal-live)]/60 bg-[var(--signal-live)]/15 text-[var(--signal-live)]"
+                      : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] hover:text-[var(--signal-live)] hover:border-[var(--signal-live)]/40"
                 }`}
               >
                 <BoxIcon className="h-3.5 w-3.5" />
@@ -380,7 +380,7 @@ function VersionCard({
               onClick={onEdit}
               title={`Edit ${summary} — change size, materials, counts, or notes`}
               aria-label={`Edit ${summary}`}
-              className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+              className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)]"
             >
               <Pencil className="h-3.5 w-3.5" />
             </button>
@@ -390,7 +390,7 @@ function VersionCard({
               onClick={remove}
               title={`Delete ${summary} from your stock — past catches stay intact`}
               aria-label={`Delete ${summary}`}
-              className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/40"
+              className="h-7 w-7 inline-flex items-center justify-center rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/40"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -477,14 +477,14 @@ function ManageBoxesPopover({
       ref={ref}
       role="dialog"
       aria-label="Manage which boxes this version is in"
-      className="absolute right-0 top-9 z-40 w-64 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-[var(--color-surface,#fff)] dark:bg-[#161B22] p-3 shadow-lg"
+      className="absolute right-0 top-9 z-40 w-64 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)] p-3 shadow-lg"
     >
       <div className="flex items-center justify-between mb-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">In which boxes?</p>
         <button
           type="button"
           onClick={onClose}
-          className="text-[var(--color-text-muted)] hover:text-[#E8923A]"
+          className="text-[var(--color-text-muted)] hover:text-[var(--action)]"
           aria-label="Close"
         >
           <X className="h-3.5 w-3.5" />
@@ -501,14 +501,14 @@ function ManageBoxesPopover({
             const busy = busyBoxId === b.id;
             return (
               <li key={b.id}>
-                <label className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] cursor-pointer ${busy ? "opacity-60" : ""}`}>
+                <label className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] cursor-pointer ${busy ? "opacity-60" : ""}`}>
                   <span className="flex items-center gap-2 min-w-0">
                     <input
                       type="checkbox"
                       checked={checked}
                       disabled={busy}
                       onChange={() => toggleBox(b.id)}
-                      className="h-4 w-4 accent-[#E8923A] cursor-pointer"
+                      className="h-4 w-4 accent-[var(--action)] cursor-pointer"
                     />
                     <span className="truncate font-medium">{b.name}</span>
                   </span>
@@ -628,7 +628,7 @@ function BulkManageBoxesPanel({
   }
 
   return (
-    <div className="mb-3 rounded-lg border border-[#E8923A]/40 bg-[var(--color-surface,#fff)] dark:bg-[#161B22] p-4 shadow-sm">
+    <div className="mb-3 rounded-lg border border-[var(--action)]/40 bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)] p-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <div>
           <h3 className="font-heading text-base">Manage boxes for {selectedVersions.length} version{selectedVersions.length === 1 ? "" : "s"}</h3>
@@ -657,10 +657,10 @@ function BulkManageBoxesPanel({
                   onClick={() => toggleBox(b.id)}
                   className={`w-full flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
                     state === "checked"
-                      ? "border-[#E8923A]/40 bg-[#E8923A]/10 text-[var(--color-text)]"
+                      ? "border-[var(--action)]/40 bg-[var(--action)]/10 text-[var(--color-text)]"
                       : state === "indeterminate"
-                        ? "border-[#0BA5C7]/40 bg-[#0BA5C7]/10"
-                        : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]"
+                        ? "border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10"
+                        : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)]"
                   } ${busy ? "opacity-60" : ""}`}
                 >
                   <span className="flex items-center gap-2 min-w-0">
@@ -668,10 +668,10 @@ function BulkManageBoxesPanel({
                       aria-hidden="true"
                       className={`inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border ${
                         state === "checked"
-                          ? "border-[#E8923A] bg-[#E8923A] text-white"
+                          ? "border-[var(--action)] bg-[var(--action)] text-white"
                           : state === "indeterminate"
-                            ? "border-[#0BA5C7] bg-[#0BA5C7] text-white"
-                            : "border-[var(--color-border,#e5e7eb)] dark:border-[#30363D]"
+                            ? "border-[var(--signal-live)] bg-[var(--signal-live)] text-white"
+                            : "border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)]"
                       }`}
                     >
                       {state === "checked" && <span className="text-[10px] leading-none">✓</span>}

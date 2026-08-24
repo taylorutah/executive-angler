@@ -67,11 +67,11 @@ function trendArrow(current: number, weekMedian: number): string {
 }
 
 function tempColor(f: number | undefined): string {
-  if (f == null) return "text-[#A8B2BD]";
-  if (f < 45) return "text-[#0BA5C7]";
+  if (f == null) return "text-[var(--text-body)]";
+  if (f < 45) return "text-[var(--signal-live)]";
   if (f < 60) return "text-[#7BD9C2]";
   if (f < 68) return "text-[#90EE90]";
-  if (f < 72) return "text-[#E8923A]";
+  if (f < 72) return "text-[var(--action)]";
   return "text-[#E5484D]";
 }
 
@@ -130,13 +130,13 @@ export default function RiverSectionCard(props: Props) {
   const waterTempF = conditions?.waterTemp?.valueFahrenheit;
 
   return (
-    <div className="rounded-2xl bg-[#161B22] border border-[#21262D] overflow-hidden flex flex-col">
+    <div className="rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)] overflow-hidden flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-[#21262D]/60">
+      <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-[var(--border-rule)]/60">
         {mode === "favorite" && (
           <button
             type="button"
-            className="text-[#6E7681] hover:text-[#A8B2BD] cursor-grab active:cursor-grabbing touch-none"
+            className="text-[var(--text-meta)] hover:text-[var(--text-body)] cursor-grab active:cursor-grabbing touch-none"
             aria-label="Drag to reorder"
             {...dragAttributes}
             {...dragListeners}
@@ -145,23 +145,23 @@ export default function RiverSectionCard(props: Props) {
           </button>
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-bold text-[#6E7681] tracking-[0.16em] uppercase truncate">
+          <p className="text-[10px] font-bold text-[var(--text-meta)] tracking-[0.16em] uppercase truncate">
             {riverName}
           </p>
           {mode === "yours" && gauges && gauges.length > 1 ? (
             <select
-              className="bg-transparent text-[#F0F6FC] font-medium text-sm focus:outline-none cursor-pointer hover:text-[#E8923A]"
+              className="bg-transparent text-[var(--text-primary)] font-medium text-sm focus:outline-none cursor-pointer hover:text-[var(--action)]"
               value={siteId}
               onChange={(e) => onChangeGauge?.(e.target.value)}
             >
               {gauges.map((g) => (
-                <option key={g.site_id} value={g.site_id} className="bg-[#161B22]">
+                <option key={g.site_id} value={g.site_id} className="bg-[var(--surface-raised)]">
                   {g.section} · {g.name}
                 </option>
               ))}
             </select>
           ) : (
-            <p className="text-[#F0F6FC] font-medium text-sm truncate">{sectionName}</p>
+            <p className="text-[var(--text-primary)] font-medium text-sm truncate">{sectionName}</p>
           )}
         </div>
         {conditions?.stale && (
@@ -174,17 +174,17 @@ export default function RiverSectionCard(props: Props) {
             <button
               type="button"
               onClick={() => setShowMenu((s) => !s)}
-              className="p-1 rounded hover:bg-[#21262D] text-[#A8B2BD]"
+              className="p-1 rounded hover:bg-[var(--border-rule)] text-[var(--text-body)]"
               aria-label="Menu"
             >
               <MoreHorizontal className="h-4 w-4" />
             </button>
             {showMenu && (
-              <div className="absolute right-0 mt-1 w-36 rounded-lg bg-[#0D1117] border border-[#21262D] shadow-xl z-10 py-1 text-sm">
+              <div className="absolute right-0 mt-1 w-36 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] shadow-xl z-10 py-1 text-sm">
                 <button
                   type="button"
                   onClick={() => { setShowMenu(false); onRemove?.(); }}
-                  className="block w-full text-left px-3 py-1.5 text-[#E5484D] hover:bg-[#21262D]"
+                  className="block w-full text-left px-3 py-1.5 text-[#E5484D] hover:bg-[var(--border-rule)]"
                 >
                   Remove
                 </button>
@@ -197,19 +197,19 @@ export default function RiverSectionCard(props: Props) {
       {/* Live strip */}
       <div className="grid grid-cols-3 divide-x divide-[#21262D]/60">
         <div className="px-3 py-3 min-w-0">
-          <div className="flex items-center gap-1 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">
+          <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-meta)] tracking-wider uppercase">
             <Droplets className="h-3 w-3" /> Flow
           </div>
-          <p className="font-mono text-lg font-bold text-[#F0F6FC] tabular-nums truncate">
+          <p className="font-mono text-lg font-bold text-[var(--text-primary)] tabular-nums truncate">
             {currentFlow != null ? `${currentFlow.toLocaleString()}` : "—"}
-            <span className="text-xs text-[#A8B2BD] font-normal ml-1">cfs</span>
+            <span className="text-xs text-[var(--text-body)] font-normal ml-1">cfs</span>
             {currentFlow != null && (
-              <span className="text-xs text-[#A8B2BD] ml-1">{flowArrow}</span>
+              <span className="text-xs text-[var(--text-body)] ml-1">{flowArrow}</span>
             )}
           </p>
         </div>
         <div className="px-3 py-3 min-w-0">
-          <div className="flex items-center gap-1 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">
+          <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-meta)] tracking-wider uppercase">
             <Thermometer className="h-3 w-3" /> Water
           </div>
           <p className={`font-mono text-lg font-bold tabular-nums truncate ${tempColor(waterTempF)}`}>
@@ -217,10 +217,10 @@ export default function RiverSectionCard(props: Props) {
           </p>
         </div>
         <div className="px-3 py-3 min-w-0">
-          <div className="flex items-center gap-1 text-[10px] font-bold text-[#6E7681] tracking-wider uppercase">
+          <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-meta)] tracking-wider uppercase">
             <Wind className="h-3 w-3" /> Air
           </div>
-          <p className="font-mono text-lg font-bold text-[#F0F6FC] tabular-nums truncate">
+          <p className="font-mono text-lg font-bold text-[var(--text-primary)] tabular-nums truncate">
             {weather ? (
               <>
                 <span>{weather.weatherIcon}</span>{" "}
@@ -229,7 +229,7 @@ export default function RiverSectionCard(props: Props) {
             ) : "—"}
           </p>
           {weather && (
-            <p className="text-[10px] text-[#6E7681] truncate">
+            <p className="text-[10px] text-[var(--text-meta)] truncate">
               {weather.windMph} mph {weather.windDirectionLabel}
             </p>
           )}
@@ -239,9 +239,9 @@ export default function RiverSectionCard(props: Props) {
       {/* Hatch chip */}
       {hatchNow && hatchNow.length > 0 && (
         <div className="px-4 pt-2 pb-1">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#0BA5C7]/10 border border-[#0BA5C7]/30 px-2 py-0.5">
-            <span className="text-[9px] font-bold text-[#0BA5C7] tracking-wider uppercase">Hatching</span>
-            <span className="text-[11px] text-[#F0F6FC]">{hatchNow.slice(0, 2).join(" · ")}</span>
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--signal-live)]/10 border border-[var(--signal-live)]/30 px-2 py-0.5">
+            <span className="text-[9px] font-bold text-[var(--signal-live)] tracking-wider uppercase">Hatching</span>
+            <span className="text-[11px] text-[var(--text-primary)]">{hatchNow.slice(0, 2).join(" · ")}</span>
           </div>
         </div>
       )}
@@ -249,7 +249,7 @@ export default function RiverSectionCard(props: Props) {
       {/* Sparkline */}
       <div className="px-2 pt-1 pb-2 h-[80px]">
         {loading ? (
-          <div className="h-full flex items-center justify-center text-[10px] text-[#6E7681]">
+          <div className="h-full flex items-center justify-center text-[10px] text-[var(--text-meta)]">
             Loading 12-month flow…
           </div>
         ) : sparklineData.length > 0 ? (
@@ -281,20 +281,20 @@ export default function RiverSectionCard(props: Props) {
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-full flex items-center justify-center text-[10px] text-[#6E7681]">
+          <div className="h-full flex items-center justify-center text-[10px] text-[var(--text-meta)]">
             No history available
           </div>
         )}
       </div>
 
       {/* Year range + footer link */}
-      <div className="px-4 pb-3 flex items-center justify-between text-[10px] text-[#6E7681] gap-2">
+      <div className="px-4 pb-3 flex items-center justify-between text-[10px] text-[var(--text-meta)] gap-2">
         <span className="font-mono tabular-nums">
           12mo: {yearMin > 0 ? `${Math.round(yearMin).toLocaleString()}–${Math.round(yearMax).toLocaleString()}` : "—"} cfs
         </span>
         <Link
           href={`/rivers/${riverSlug}`}
-          className="inline-flex items-center gap-0.5 text-[#A8B2BD] hover:text-[#E8923A]"
+          className="inline-flex items-center gap-0.5 text-[var(--text-body)] hover:text-[var(--action)]"
         >
           Open <ChevronRight className="h-3 w-3" />
         </Link>

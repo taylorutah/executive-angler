@@ -1,41 +1,100 @@
 @import "tailwindcss";
 
 /* =============================================
-   THEME — Executive Angler Brand Spec v1.1 (March 2026)
+   THEME — tokens (Lane A)
+   Commit A holds TODAY's hardcoded hexes so the class rewrite is
+   pixel-identical. Commit B flips the values and binds registers.
    ============================================= */
 
+:root {
+  /* Primitive — Commit A = Abyss hexes currently painted in class names */
+  --paper: #0D1117;
+  --vellum: #161B22;
+  --card: #1F2937;
+  --rule: #21262D;
+  --ink: #F0F6FC;
+  --graphite: #A8B2BD;
+  --slate: #6E7681;
+
+  --riverbed: #0D1117;
+  --pool: #161B22;
+  --shelf: #1F2937;
+  --chalk: #F0F6FC;
+  --fog: #6E7681;
+
+  --copper-700: #E8923A;
+  --copper-400: #E8923A;
+  --teal-700: #0BA5C7;
+  --teal-300: #0BA5C7;
+  --rise-700: #2EA44F;
+  --rise-400: #2EA44F;
+  --cut-700: #DA3633;
+  --cut-400: #DA3633;
+
+  /* Semantic — identical to today's utilities in Commit A */
+  --surface-page: #0D1117;
+  --surface-raised: #161B22;
+  --surface-card: #1F2937;
+  --border-rule: #21262D;
+  --border-strong: #30363D;
+  --text-primary: #F0F6FC;
+  --text-body: #A8B2BD;
+  --text-meta: #6E7681;
+  --action: #E8923A;
+  --action-hover: #E8923A;
+  --on-action: #0D1117;
+  --signal-live: #0BA5C7;
+  --state-positive: #2EA44F;
+  --state-negative: #DA3633;
+
+  --background: var(--surface-page);
+  --foreground: var(--text-primary);
+}
+
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--surface-page);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: var(--font-inter), system-ui, sans-serif;
   --font-heading: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), monospace;
+  --font-display: var(--font-inter), system-ui, sans-serif;
+  --font-body: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ui: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* Brand Colors — Abyss Dark Palette (v1.1) */
-  --color-bg: #0D1117;          /* Abyss — primary background */
-  --color-surface: #161B22;     /* Depth — cards, panels, nav */
-  --color-surface-raised: #1F2937; /* Stone — elevated surfaces */
-  --color-dusk: #2C1F14;        /* Dusk — warm surfaces, hover, selected */
-  --color-accent: #E8923A;      /* Copper Dawn — primary CTA, data accent */
-  --color-signal: #0BA5C7;      /* River Teal — text/labels (desaturated) */
-  --color-signal-pip: #00B4D8;  /* River Teal full-sat — indicator dots, badges ONLY */
-  --color-text-primary: #F0F6FC; /* Chalk */
-  --color-text-secondary: #A8B2BD; /* Slate — bumped from #A8B2BD for 5.2:1 WCAG AA contrast */
-  --color-text-muted: #6E7681;  /* Muted — bumped from #484F58 for 3.5:1 readability */
-  --color-border: #21262D;      /* Tide */
-  --color-success: #2EA44F;     /* Rise — shifted from GitHub green */
-  --color-danger: #DA3633;      /* Cutthroat — shifted from GitHub red */
+  --color-bg: var(--surface-page);
+  --color-surface: var(--surface-raised);
+  --color-surface-raised: var(--surface-card);
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-dusk: #2C1F14;
+  --color-accent: var(--action);
+  --color-signal: var(--signal-live);
+  --color-signal-pip: var(--signal-live);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-body);
+  --color-text-muted: var(--text-meta);
+  --color-border: var(--border-rule);
+  --color-border-rule: var(--border-rule);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--state-positive);
+  --color-danger: var(--state-negative);
+  --color-action: var(--action);
+  --color-on-action: var(--on-action);
 }
 
 /* =============================================
    BASE LAYER — overridable by Tailwind utilities
    ============================================= */
 
+/* Tabular numerals — available; call sites migrate in later lanes */
+.num {
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
 @layer base {
   :root {
-    --background: #0D1117;
-    --foreground: #F0F6FC;
     --font-body: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 

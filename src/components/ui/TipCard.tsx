@@ -39,10 +39,10 @@ export default function TipCard({
 
   const accent =
     tone === "premium"
-      ? "from-[#E8923A]/15 to-[#00B4D8]/10 border-[#E8923A]/30"
-      : "from-[#00B4D8]/10 to-[#00B4D8]/5 border-[#00B4D8]/25";
+      ? "from-[var(--action)]/15 to-[var(--signal-live)]/10 border-[var(--action)]/30"
+      : "from-[var(--signal-live)]/10 to-[var(--signal-live)]/5 border-[var(--signal-live)]/25";
 
-  const iconColor = tone === "premium" ? "text-[#E8923A]" : "text-[#00B4D8]";
+  const iconColor = tone === "premium" ? "text-[var(--action)]" : "text-[var(--signal-live)]";
 
   return (
     <div
@@ -53,10 +53,10 @@ export default function TipCard({
           <Sparkles size={18} />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-heading text-sm font-semibold text-[#F0F6FC]">
+          <h3 className="font-heading text-sm font-semibold text-[var(--text-primary)]">
             {title}
           </h3>
-          <div className="mt-1 text-sm text-[#A8B2BD] leading-relaxed space-y-1.5">
+          <div className="mt-1 text-sm text-[var(--text-body)] leading-relaxed space-y-1.5">
             {children}
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function TipCard({
           } catch {}
           setDismissed(true);
         }}
-        className="absolute top-3 right-3 p-1 rounded text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+        className="absolute top-3 right-3 p-1 rounded text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
       >
         <X size={14} />
       </button>

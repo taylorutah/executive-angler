@@ -74,7 +74,7 @@ export default async function ThreadDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-[#0D1117]">
+    <main className="min-h-screen bg-[var(--surface-page)]">
       <div className="mx-auto max-w-2xl h-[100dvh] flex flex-col">
         <ThreadDetailClient
           threadId={threadId}

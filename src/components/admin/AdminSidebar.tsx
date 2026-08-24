@@ -68,11 +68,11 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
       href={item.href}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
         isActive
-          ? "text-[#E8923A] bg-[#E8923A]/10 border-l-2 border-[#E8923A] -ml-px"
-          : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D]/50"
+          ? "text-[var(--action)] bg-[var(--action)]/10 border-l-2 border-[var(--action)] -ml-px"
+          : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)]/50"
       }`}
     >
-      <span className={isActive ? "text-[#E8923A]" : "text-[#6E7681]"}>
+      <span className={isActive ? "text-[var(--action)]" : "text-[var(--text-meta)]"}>
         {item.icon}
       </span>
       {item.label}
@@ -84,7 +84,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 bg-[#161B22] border-r border-[#21262D] min-h-screen px-3 py-6 space-y-6">
+    <aside className="w-56 shrink-0 bg-[var(--surface-raised)] border-r border-[var(--border-rule)] min-h-screen px-3 py-6 space-y-6">
       {/* Dashboard */}
       <div>
         <NavLink item={dashboardLink} pathname={pathname} />
@@ -92,7 +92,7 @@ export default function AdminSidebar() {
 
       {/* Content section */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
           Content
         </p>
         <nav className="space-y-0.5">
@@ -104,7 +104,7 @@ export default function AdminSidebar() {
 
       {/* Moderation */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
           Moderation
         </p>
         <NavLink item={photosLink} pathname={pathname} />
@@ -120,7 +120,7 @@ export default function AdminSidebar() {
 
       {/* Tools */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
           Tools
         </p>
         <NavLink item={emailPreviewLink} pathname={pathname} />

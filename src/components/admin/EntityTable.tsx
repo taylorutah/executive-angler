@@ -234,7 +234,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
     <div className="space-y-4">
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
         <input
           type="text"
           value={search}
@@ -243,7 +243,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             setPage(0);
           }}
           placeholder="Search… (typo-tolerant — try 'wolly bugger')"
-          className="w-full pl-10 pr-4 py-2.5 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
+          className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
         />
       </div>
 
@@ -259,8 +259,8 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                   onChange={(e) => setColumnFilter(col.key, e.target.value)}
                   className={`appearance-none pl-3 pr-8 py-1.5 text-xs rounded-lg border transition-colors cursor-pointer ${
                     active
-                      ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A] font-semibold"
-                      : "border-[#21262D] bg-[#0D1117] text-[#A8B2BD] hover:border-[#E8923A]/40"
+                      ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)] font-semibold"
+                      : "border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-body)] hover:border-[var(--action)]/40"
                   }`}
                   title={`Filter by ${col.label}`}
                 >
@@ -278,7 +278,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             <button
               type="button"
               onClick={clearAllFilters}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
               title="Clear all filters and search"
             >
               <X className="h-3 w-3" /> Clear
@@ -286,7 +286,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             </button>
           )}
           <div className="ml-auto inline-flex items-center gap-2">
-            <span className="text-xs text-[#6E7681]">
+            <span className="text-xs text-[var(--text-meta)]">
               {sorted.length === rows.length
                 ? `${rows.length} ${rows.length === 1 ? "record" : "records"}`
                 : `${sorted.length} of ${rows.length}`}
@@ -297,7 +297,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                 setPageSize(parseInt(e.target.value, 10));
                 setPage(0);
               }}
-              className="text-xs px-2 py-1 rounded-lg border border-[#21262D] bg-[#0D1117] text-[#A8B2BD] focus:outline-none focus:border-[#E8923A] cursor-pointer"
+              className="text-xs px-2 py-1 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-body)] focus:outline-none focus:border-[var(--action)] cursor-pointer"
               title="Rows per page"
             >
               {PAGE_SIZE_OPTIONS.map((n) => (
@@ -312,29 +312,29 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
 
       {/* Table */}
       {paged.length === 0 ? (
-        <div className="rounded-xl border border-[#21262D] bg-[#161B22] px-6 py-12 text-center">
-          <p className="text-sm text-[#6E7681]">
+        <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 py-12 text-center">
+          <p className="text-sm text-[var(--text-meta)]">
             {search ? "No results match your search." : "No records found."}
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#21262D] bg-[#161B22]">
+        <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)]">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[#21262D] text-xs uppercase tracking-wider text-[#6E7681]">
+              <tr className="border-b border-[var(--border-rule)] text-xs uppercase tracking-wider text-[var(--text-meta)]">
                 {columns.map((col) => (
                   <th
                     key={col.key}
-                    className="px-5 py-3 font-semibold cursor-pointer select-none hover:text-[#A8B2BD] transition-colors"
+                    className="px-5 py-3 font-semibold cursor-pointer select-none hover:text-[var(--text-body)] transition-colors"
                     onClick={() => handleSort(col.key)}
                   >
                     <span className="inline-flex items-center gap-1">
                       {col.label}
                       {sortKey === col.key && (
                         sortDir === "asc" ? (
-                          <ChevronUp className="h-3 w-3 text-[#E8923A]" />
+                          <ChevronUp className="h-3 w-3 text-[var(--action)]" />
                         ) : (
-                          <ChevronDown className="h-3 w-3 text-[#E8923A]" />
+                          <ChevronDown className="h-3 w-3 text-[var(--action)]" />
                         )
                       )}
                     </span>
@@ -347,21 +347,21 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
               {paged.map((row) => {
                 const id = String(row.id ?? row.slug ?? "");
                 return (
-                  <tr key={id} className="transition-colors hover:bg-[#21262D]/40">
+                  <tr key={id} className="transition-colors hover:bg-[var(--border-rule)]/40">
                     {columns.map((col) => (
-                      <td key={col.key} className="px-5 py-3 text-[#F0F6FC]">
+                      <td key={col.key} className="px-5 py-3 text-[var(--text-primary)]">
                         {col.render
                           ? col.render(row[col.key], row)
                           : row[col.key] != null
                           ? String(row[col.key])
-                          : <span className="text-[#6E7681]">&mdash;</span>}
+                          : <span className="text-[var(--text-meta)]">&mdash;</span>}
                       </td>
                     ))}
                     <td className="px-5 py-3 text-right">
                       <div className="inline-flex items-center gap-1.5">
                         <Link
                           href={`/admin/content/${entitySlug}/${id}`}
-                          className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors"
+                          className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors"
                           title="Edit"
                         >
                           <Pencil className="h-4 w-4" />
@@ -369,7 +369,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                         <button
                           type="button"
                           onClick={() => onDelete(id)}
-                          className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-red-400 hover:bg-red-950/30 transition-colors"
+                          className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-red-400 hover:bg-red-950/30 transition-colors"
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -387,7 +387,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between text-sm">
-          <span className="text-[#6E7681]">
+          <span className="text-[var(--text-meta)]">
             {sorted.length} result{sorted.length !== 1 ? "s" : ""}
             {" "}· Page {currentPage + 1} of {totalPages}
           </span>
@@ -396,7 +396,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
               type="button"
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={currentPage === 0}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#21262D] text-[#A8B2BD] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               Prev
@@ -405,7 +405,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
               type="button"
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={currentPage >= totalPages - 1}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#21262D] text-[#A8B2BD] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Next
               <ChevronRight className="h-3.5 w-3.5" />

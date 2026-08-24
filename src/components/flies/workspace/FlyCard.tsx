@@ -45,7 +45,7 @@ export default function FlyCard({ row, viewerUsername }: Props) {
     <div className="@container h-full" style={{ viewTransitionName: transitionName }}>
       <Link
         href={href}
-        className="block h-full rounded-lg border border-[var(--color-border)] hover:border-[#E8923A]/60 hover:bg-[#E8923A]/5 transition-colors @[320px]:flex @[320px]:items-stretch @[320px]:gap-3 @[320px]:p-3 p-3"
+        className="block h-full rounded-lg border border-[var(--color-border)] hover:border-[var(--action)]/60 hover:bg-[var(--action)]/5 transition-colors @[320px]:flex @[320px]:items-stretch @[320px]:gap-3 @[320px]:p-3 p-3"
       >
         {/* Image — top on narrow, left on wide */}
         <div className="relative h-24 w-full @[320px]:h-auto @[320px]:w-24 @[320px]:flex-shrink-0 overflow-hidden rounded-md bg-[var(--color-surface)] mb-3 @[320px]:mb-0">
@@ -58,7 +58,7 @@ export default function FlyCard({ row, viewerUsername }: Props) {
               className="object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-2xl text-[#E8923A]/30 font-heading">
+            <div className="absolute inset-0 flex items-center justify-center text-2xl text-[var(--action)]/30 font-heading">
               {row.fly.name
                 .split(" ")
                 .map((w) => w[0])
@@ -84,7 +84,7 @@ export default function FlyCard({ row, viewerUsername }: Props) {
                           ? "Your fly, now canonical"
                           : "Created by you"
                     }
-                    className="inline-flex items-center gap-0.5 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-1 py-0.5 text-[9px] font-medium text-[#0BA5C7] flex-shrink-0"
+                    className="inline-flex items-center gap-0.5 rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-1 py-0.5 text-[9px] font-medium text-[var(--signal-live)] flex-shrink-0"
                   >
                     <Sparkles className="h-2.5 w-2.5" />
                     {flyStatus === "pending"
@@ -117,7 +117,7 @@ export default function FlyCard({ row, viewerUsername }: Props) {
             <Stat label="Target" value={row.target_total} />
             <Stat label="Δ" value={row.deficit} warn={row.deficit > 0} />
             {row.tie_next_count > 0 && (
-              <span className="ml-auto inline-flex items-center gap-1 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#E8923A]">
+              <span className="ml-auto inline-flex items-center gap-1 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-1.5 py-0.5 text-[10px] font-medium text-[var(--action)]">
                 <Wrench className="h-3 w-3" /> {row.tie_next_count}
               </span>
             )}
@@ -142,7 +142,7 @@ function Stat({
       <span className="text-[9px] uppercase tracking-wider">{label}</span>
       <span
         className={`font-[var(--font-mono)] tabular-nums ${
-          warn ? "text-[#E8923A] font-semibold" : ""
+          warn ? "text-[var(--action)] font-semibold" : ""
         }`}
       >
         {value}

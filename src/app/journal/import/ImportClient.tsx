@@ -188,7 +188,7 @@ export default function ImportClient() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#F0F6FC]">
+    <div className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)]">
       <div className="max-w-5xl mx-auto px-4 py-6 lg:py-8">
         <PageHeader
           eyebrow="Journal"
@@ -208,11 +208,11 @@ export default function ImportClient() {
             >
               <a
                 href="/api/import/template"
-                className="inline-flex items-center gap-2 bg-[#161B22] border border-[#21262D] text-[#F0F6FC] font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#1C2028] hover:border-[#E8923A]/40 transition-colors"
+                className="inline-flex items-center gap-2 bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#1C2028] hover:border-[var(--action)]/40 transition-colors"
               >
                 <Download className="h-4 w-4" /> Download Template (.csv)
               </a>
-              <div className="mt-4 text-xs text-[#6E7681] space-y-1.5">
+              <div className="mt-4 text-xs text-[var(--text-meta)] space-y-1.5">
                 <p>
                   The template includes one sample row as a formatting reference.
                   It&apos;s marked and will be ignored on upload — feel free to
@@ -220,7 +220,7 @@ export default function ImportClient() {
                 </p>
                 <p>
                   Already an Executive Angler user? Your{" "}
-                  <a href="/api/export/csv" className="text-[#E8923A] hover:underline">
+                  <a href="/api/export/csv" className="text-[var(--action)] hover:underline">
                     CSV export
                   </a>{" "}
                   uses this same format — edit and re-import to make bulk changes.
@@ -234,19 +234,19 @@ export default function ImportClient() {
               title="Prepare your data with AI"
               subtitle="Paste this prompt into ChatGPT, Claude, or Gemini along with your notebook photos or old file. The AI will output a ready-to-upload CSV."
             >
-              <div className="rounded-xl border border-[#21262D] bg-[#0D1117] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#21262D] bg-[#161B22]">
-                  <div className="flex items-center gap-2 text-xs text-[#A8B2BD]">
-                    <Sparkles className="h-3.5 w-3.5 text-[#E8923A]" />
+              <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-body)]">
+                    <Sparkles className="h-3.5 w-3.5 text-[var(--action)]" />
                     <span className="font-semibold">AI Prompt Template</span>
                   </div>
                   <button
                     onClick={copyPrompt}
-                    className="inline-flex items-center gap-1.5 text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
                   >
                     {promptCopied ? (
                       <>
-                        <Check className="h-3.5 w-3.5 text-[#00B4D8]" />
+                        <Check className="h-3.5 w-3.5 text-[var(--signal-live)]" />
                         Copied
                       </>
                     ) : (
@@ -257,14 +257,14 @@ export default function ImportClient() {
                     )}
                   </button>
                 </div>
-                <pre className="px-4 py-3 text-xs text-[#A8B2BD] whitespace-pre-wrap font-mono leading-relaxed max-h-80 overflow-y-auto">
+                <pre className="px-4 py-3 text-xs text-[var(--text-body)] whitespace-pre-wrap font-mono leading-relaxed max-h-80 overflow-y-auto">
                   {AI_PROMPT}
                 </pre>
               </div>
-              <div className="mt-3 text-xs text-[#6E7681]">
+              <div className="mt-3 text-xs text-[var(--text-meta)]">
                 Gear isn&apos;t part of import — once your journal is in, add rods,
                 reels, lines and tippets from{" "}
-                <Link href="/account/gear" className="text-[#E8923A] hover:underline">
+                <Link href="/account/gear" className="text-[var(--action)] hover:underline">
                   Gear Locker
                 </Link>
                 .
@@ -286,8 +286,8 @@ export default function ImportClient() {
                 onDrop={onDrop}
                 className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-10 px-6 cursor-pointer transition-colors ${
                   dragActive
-                    ? "border-[#E8923A] bg-[#E8923A]/5"
-                    : "border-[#21262D] bg-[#0D1117] hover:border-[#E8923A]/40"
+                    ? "border-[var(--action)] bg-[var(--action)]/5"
+                    : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/40"
                 }`}
               >
                 <input
@@ -301,18 +301,18 @@ export default function ImportClient() {
                 />
                 {busy ? (
                   <>
-                    <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin" />
-                    <div className="text-sm font-semibold text-[#F0F6FC]">
+                    <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin" />
+                    <div className="text-sm font-semibold text-[var(--text-primary)]">
                       Parsing your file…
                     </div>
                   </>
                 ) : (
                   <>
-                    <FileSpreadsheet className="h-8 w-8 text-[#A8B2BD]" />
-                    <div className="text-sm font-semibold text-[#F0F6FC]">
+                    <FileSpreadsheet className="h-8 w-8 text-[var(--text-body)]" />
+                    <div className="text-sm font-semibold text-[var(--text-primary)]">
                       Drop CSV here or click to choose
                     </div>
-                    <div className="text-xs text-[#6E7681]">
+                    <div className="text-xs text-[var(--text-meta)]">
                       Max 5 MB · up to 10,000 rows
                     </div>
                   </>
@@ -341,11 +341,11 @@ export default function ImportClient() {
         {/* Stage: importing */}
         {stage === "importing" && (
           <div className="flex flex-col items-center justify-center gap-4 py-20">
-            <Loader2 className="h-10 w-10 text-[#E8923A] animate-spin" />
-            <div className="text-base font-semibold text-[#F0F6FC]">
+            <Loader2 className="h-10 w-10 text-[var(--action)] animate-spin" />
+            <div className="text-base font-semibold text-[var(--text-primary)]">
               Importing your sessions…
             </div>
-            <div className="text-sm text-[#A8B2BD]">This usually takes a few seconds.</div>
+            <div className="text-sm text-[var(--text-body)]">This usually takes a few seconds.</div>
           </div>
         )}
 
@@ -370,14 +370,14 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6 lg:p-7">
+    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6 lg:p-7">
       <div className="flex items-start gap-4 mb-5">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#E8923A]/10 border border-[#E8923A]/30 flex items-center justify-center text-[#E8923A] font-bold text-sm">
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--action)]/10 border border-[var(--action)]/30 flex items-center justify-center text-[var(--action)] font-bold text-sm">
           {number}
         </div>
         <div className="flex-1">
-          <h2 className="text-lg font-bold text-[#F0F6FC] mb-1">{title}</h2>
-          <p className="text-sm text-[#A8B2BD]">{subtitle}</p>
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">{title}</h2>
+          <p className="text-sm text-[var(--text-body)]">{subtitle}</p>
         </div>
       </div>
       <div className="pl-12">{children}</div>
@@ -404,8 +404,8 @@ function PreviewPanel({
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
-        <h2 className="text-lg font-bold text-[#F0F6FC] mb-4">Preview</h2>
+      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
+        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Preview</h2>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
           <Stat label="Sessions" value={summary.sessions} />
           <Stat label="Catches" value={summary.catches} />
@@ -427,8 +427,8 @@ function PreviewPanel({
         </div>
 
         {unknownHeaders.length > 0 && (
-          <div className="mt-4 flex items-start gap-2 text-xs text-[#A8B2BD] bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2">
-            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[#E8923A]" />
+          <div className="mt-4 flex items-start gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2">
+            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--action)]" />
             <span>
               Ignored {unknownHeaders.length} unknown column{unknownHeaders.length > 1 ? "s" : ""}: {unknownHeaders.join(", ")}
             </span>
@@ -436,8 +436,8 @@ function PreviewPanel({
         )}
 
         {preview.exampleRowsSkipped > 0 && (
-          <div className="mt-2 flex items-start gap-2 text-xs text-[#A8B2BD] bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2">
-            <Check className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[#00B4D8]" />
+          <div className="mt-2 flex items-start gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2">
+            <Check className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--signal-live)]" />
             <span>
               Skipped {preview.exampleRowsSkipped} template example row{preview.exampleRowsSkipped > 1 ? "s" : ""}.
             </span>
@@ -448,7 +448,7 @@ function PreviewPanel({
           <button
             onClick={onCommit}
             disabled={commitDisabled || busy}
-            className="inline-flex items-center gap-2 bg-[#E8923A] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 bg-[var(--action)] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
             Import {summary.sessionsReady} session{summary.sessionsReady !== 1 ? "s" : ""}
@@ -456,7 +456,7 @@ function PreviewPanel({
           </button>
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
           >
             Use a different file
           </button>
@@ -465,8 +465,8 @@ function PreviewPanel({
 
       {/* Issues */}
       {(errorIssues.length > 0 || warnIssues.length > 0) && (
-        <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
-          <h3 className="text-base font-bold text-[#F0F6FC] mb-3">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
+          <h3 className="text-base font-bold text-[var(--text-primary)] mb-3">
             {errorIssues.length > 0
               ? `${errorIssues.length} error${errorIssues.length > 1 ? "s" : ""} will be skipped`
               : "Warnings"}
@@ -489,7 +489,7 @@ function PreviewPanel({
                 <span>
                   <span className="font-mono font-semibold">Row {i.row}</span>
                   {i.column && (
-                    <span className="text-[#A8B2BD]"> · {i.column}</span>
+                    <span className="text-[var(--text-body)]"> · {i.column}</span>
                   )}
                   : {i.message}
                 </span>
@@ -500,8 +500,8 @@ function PreviewPanel({
       )}
 
       {/* Sessions list */}
-      <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
-        <h3 className="text-base font-bold text-[#F0F6FC] mb-4">
+      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
+        <h3 className="text-base font-bold text-[var(--text-primary)] mb-4">
           {sessions.length} session{sessions.length !== 1 ? "s" : ""} detected
         </h3>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
@@ -515,15 +515,15 @@ function PreviewPanel({
               ? "text-amber-400 bg-amber-500/10"
               : s.river_match === "unmatched"
                 ? "text-amber-400 bg-amber-500/10"
-                : "text-[#00B4D8] bg-[#00B4D8]/10";
+                : "text-[var(--signal-live)] bg-[var(--signal-live)]/10";
             return (
               <div
                 key={idx}
-                className="rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3"
+                className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 text-xs text-[#6E7681] mb-1">
+                    <div className="flex items-center gap-2 text-xs text-[var(--text-meta)] mb-1">
                       <span className="font-mono">{s.date}</span>
                       {s.river_name && (
                         <>
@@ -532,10 +532,10 @@ function PreviewPanel({
                         </>
                       )}
                     </div>
-                    <div className="text-sm font-semibold text-[#F0F6FC] truncate">
+                    <div className="text-sm font-semibold text-[var(--text-primary)] truncate">
                       {s.title || "Untitled session"}
                     </div>
-                    <div className="mt-1 text-xs text-[#A8B2BD]">
+                    <div className="mt-1 text-xs text-[var(--text-body)]">
                       {s.catches.length === 0 ? (
                         <span>No fish</span>
                       ) : (
@@ -568,16 +568,16 @@ function DonePanel({
 }) {
   const { summary } = commit;
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-8 text-center">
-      <div className="w-14 h-14 rounded-full bg-[#00B4D8]/10 border border-[#00B4D8]/30 flex items-center justify-center mx-auto mb-4">
-        <Check className="h-7 w-7 text-[#00B4D8]" />
+    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-8 text-center">
+      <div className="w-14 h-14 rounded-full bg-[var(--signal-live)]/10 border border-[var(--signal-live)]/30 flex items-center justify-center mx-auto mb-4">
+        <Check className="h-7 w-7 text-[var(--signal-live)]" />
       </div>
-      <h2 className="text-xl font-bold text-[#F0F6FC] mb-2">Import complete</h2>
-      <div className="text-sm text-[#A8B2BD] mb-6 space-y-1">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Import complete</h2>
+      <div className="text-sm text-[var(--text-body)] mb-6 space-y-1">
         <div>
-          Created <span className="font-semibold text-[#F0F6FC]">{summary.sessionsCreated}</span> session
+          Created <span className="font-semibold text-[var(--text-primary)]">{summary.sessionsCreated}</span> session
           {summary.sessionsCreated !== 1 ? "s" : ""} and{" "}
-          <span className="font-semibold text-[#F0F6FC]">{summary.catchesCreated}</span> catch
+          <span className="font-semibold text-[var(--text-primary)]">{summary.catchesCreated}</span> catch
           {summary.catchesCreated !== 1 ? "es" : ""}.
         </div>
         {summary.duplicatesSkipped > 0 && (
@@ -600,13 +600,13 @@ function DonePanel({
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/journal"
-          className="inline-flex items-center gap-2 bg-[#E8923A] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors"
+          className="inline-flex items-center gap-2 bg-[var(--action)] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors"
         >
           View Journal
         </Link>
         <button
           onClick={onReset}
-          className="inline-flex items-center gap-2 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
         >
           Import another file
         </button>
@@ -626,16 +626,16 @@ function Stat({
 }) {
   const color =
     tone === "good"
-      ? "text-[#00B4D8]"
+      ? "text-[var(--signal-live)]"
       : tone === "warn"
         ? "text-amber-400"
         : tone === "bad"
           ? "text-red-400"
-          : "text-[#F0F6FC]";
+          : "text-[var(--text-primary)]";
   return (
-    <div className="rounded-xl bg-[#0D1117] border border-[#21262D] px-3 py-2.5">
+    <div className="rounded-xl bg-[var(--surface-page)] border border-[var(--border-rule)] px-3 py-2.5">
       <div className={`text-xl font-bold font-mono ${color}`}>{value}</div>
-      <div className="text-[11px] text-[#6E7681] uppercase tracking-wide mt-0.5">{label}</div>
+      <div className="text-[11px] text-[var(--text-meta)] uppercase tracking-wide mt-0.5">{label}</div>
     </div>
   );
 }

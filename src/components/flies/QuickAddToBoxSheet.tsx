@@ -428,11 +428,11 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      <div className="relative w-full sm:ml-auto sm:max-w-lg sm:h-full bg-[#0D1117] sm:border-l border-t sm:border-t-0 border-[#21262D] flex flex-col shadow-2xl rounded-t-2xl sm:rounded-none max-h-[92vh] sm:max-h-full">
+      <div className="relative w-full sm:ml-auto sm:max-w-lg sm:h-full bg-[var(--surface-page)] sm:border-l border-t sm:border-t-0 border-[var(--border-rule)] flex flex-col shadow-2xl rounded-t-2xl sm:rounded-none max-h-[92vh] sm:max-h-full">
         {/* Header */}
-        <div className="flex items-start gap-3 px-5 py-4 border-b border-[#21262D]">
+        <div className="flex items-start gap-3 px-5 py-4 border-b border-[var(--border-rule)]">
           {fly.heroImageUrl ? (
-            <div className="relative flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden border border-[#21262D] bg-[#161B22]">
+            <div className="relative flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
               <Image
                 src={fly.heroImageUrl}
                 alt={fly.name}
@@ -442,25 +442,25 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
               />
             </div>
           ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-[#21262D] bg-[#161B22] text-[#E8923A] flex-shrink-0">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--action)] flex-shrink-0">
               <Sparkles className="h-5 w-5" />
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#E8923A]">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--action)]">
               Add to fly box
             </p>
-            <h2 id="qa-fly-name" className="font-heading text-lg text-[#F0F6FC] truncate">
+            <h2 id="qa-fly-name" className="font-heading text-lg text-[var(--text-primary)] truncate">
               {fly.name}
             </h2>
             {fly.category && (
-              <p className="text-xs text-[#6E7681] capitalize truncate">{fly.category}</p>
+              <p className="text-xs text-[var(--text-meta)] capitalize truncate">{fly.category}</p>
             )}
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-1.5 text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22] rounded transition-colors"
+            className="p-1.5 text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)] rounded transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -469,7 +469,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
           {loading ? (
-            <div className="flex items-center gap-2 text-sm text-[#6E7681] py-8 justify-center">
+            <div className="flex items-center gap-2 text-sm text-[var(--text-meta)] py-8 justify-center">
               <Loader2 className="h-4 w-4 animate-spin" /> Loading your boxes…
             </div>
           ) : authError ? (
@@ -477,8 +477,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
           ) : (
             <>
               {hasExisting && (
-                <div className="rounded-lg border border-[#E8923A]/25 bg-[#E8923A]/5 p-3 text-xs text-[#A8B2BD] flex items-start gap-2">
-                  <Star className="h-3.5 w-3.5 text-[#E8923A] flex-shrink-0 mt-0.5" />
+                <div className="rounded-lg border border-[var(--action)]/25 bg-[var(--action)]/5 p-3 text-xs text-[var(--text-body)] flex items-start gap-2">
+                  <Star className="h-3.5 w-3.5 text-[var(--action)] flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     You already have {existingVariants.length}{" "}
                     {existingVariants.length === 1 ? "variant" : "variants"} of this fly.
@@ -487,7 +487,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                         {" "}
                         <Link
                           href={`/flies/${fly.slug}`}
-                          className="text-[#E8923A] hover:underline inline-flex items-center gap-0.5"
+                          className="text-[var(--action)] hover:underline inline-flex items-center gap-0.5"
                         >
                           Manage <ExternalLink className="h-3 w-3" />
                         </Link>
@@ -511,8 +511,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           onClick={() => toggleSize(s)}
                           className={`px-3 py-1.5 rounded-full text-xs font-mono transition-colors ${
                             active
-                              ? "bg-[#E8923A] text-[#0D1117] font-semibold"
-                              : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/50"
+                              ? "bg-[var(--action)] text-[var(--surface-page)] font-semibold"
+                              : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/50"
                           }`}
                         >
                           {active && <Check className="inline h-3 w-3 mr-0.5" />}#{s}
@@ -520,7 +520,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                       );
                     })}
                   </div>
-                  <p className="text-[10px] text-[#6E7681] mt-1.5">
+                  <p className="text-[10px] text-[var(--text-meta)] mt-1.5">
                     Pick one or more. You can also leave blank and add sizes later.
                   </p>
                 </Section>
@@ -538,7 +538,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                         .filter(Boolean);
                       setSelectedSizes(parts);
                     }}
-                    className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                    className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
                   />
                 </Section>
               )}
@@ -562,8 +562,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           }}
                           className={`px-3 py-1.5 rounded-full text-xs transition-colors ${
                             active
-                              ? "bg-[#0BA5C7] text-[#0D1117] font-semibold"
-                              : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#0BA5C7]/50"
+                              ? "bg-[var(--signal-live)] text-[var(--surface-page)] font-semibold"
+                              : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--signal-live)]/50"
                           }`}
                         >
                           {m.label}
@@ -573,7 +573,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                   </div>
                   {beadMaterial && beadMaterial !== "none" && (
                     <>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6E7681] mb-1">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-meta)] mb-1">
                         Weight
                       </p>
                       <div className="flex flex-wrap gap-1.5 mb-2">
@@ -586,8 +586,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                               onClick={() => setBeadWeight(active ? null : w)}
                               className={`px-2.5 py-1 rounded-full text-xs font-mono transition-colors ${
                                 active
-                                  ? "bg-[#0BA5C7] text-[#0D1117] font-semibold"
-                                  : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#0BA5C7]/50"
+                                  ? "bg-[var(--signal-live)] text-[var(--surface-page)] font-semibold"
+                                  : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--signal-live)]/50"
                               }`}
                             >
                               {w}mm
@@ -595,7 +595,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           );
                         })}
                       </div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6E7681] mb-1">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-meta)] mb-1">
                         Color
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -608,8 +608,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                               onClick={() => setBeadColor(active ? null : c)}
                               className={`px-2.5 py-1 rounded-full text-xs capitalize transition-colors ${
                                 active
-                                  ? "bg-[#0BA5C7] text-[#0D1117] font-semibold"
-                                  : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#0BA5C7]/50"
+                                  ? "bg-[var(--signal-live)] text-[var(--surface-page)] font-semibold"
+                                  : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--signal-live)]/50"
                               }`}
                             >
                               {c}
@@ -635,8 +635,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           onClick={() => setSelectedColor(active ? null : c)}
                           className={`px-3 py-1.5 rounded-full text-xs capitalize transition-colors ${
                             active
-                              ? "bg-[#E8923A] text-[#0D1117] font-semibold"
-                              : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/50"
+                              ? "bg-[var(--action)] text-[var(--surface-page)] font-semibold"
+                              : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/50"
                           }`}
                         >
                           {active && <Check className="inline h-3 w-3 mr-0.5" />}
@@ -650,13 +650,13 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
 
               {/* Quantity */}
               <Section label="How many tied?">
-                <div className="inline-flex items-center gap-3 bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-1.5">
+                <div className="inline-flex items-center gap-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-1.5">
                   <button
                     type="button"
                     onClick={() => bumpQty(-1)}
                     disabled={quantity === 0}
                     aria-label="Decrease quantity"
-                    className="inline-flex h-7 w-7 items-center justify-center rounded text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] disabled:opacity-30 transition-colors"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] disabled:opacity-30 transition-colors"
                   >
                     −
                   </button>
@@ -668,18 +668,18 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                       const v = parseInt(e.target.value, 10);
                       setQuantity(Math.max(0, isNaN(v) ? 0 : v));
                     }}
-                    className="w-14 bg-transparent text-center text-base font-semibold text-[#F0F6FC] focus:outline-none"
+                    className="w-14 bg-transparent text-center text-base font-semibold text-[var(--text-primary)] focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => bumpQty(1)}
                     aria-label="Increase quantity"
-                    className="inline-flex h-7 w-7 items-center justify-center rounded text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
                   >
                     +
                   </button>
                 </div>
-                <p className="text-[10px] text-[#6E7681] mt-1.5">
+                <p className="text-[10px] text-[var(--text-meta)] mt-1.5">
                   Leave at 0 if you don&apos;t have any tied yet — you can still add it to a box.
                 </p>
               </Section>
@@ -687,11 +687,11 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
               {/* Box picker */}
               <Section label="Add to box(es)" required>
                 {boxes.length === 0 ? (
-                  <div className="rounded-lg border border-[#21262D] bg-[#161B22] p-3 text-xs text-[#A8B2BD] flex items-start gap-2">
-                    <AlertCircle className="h-3.5 w-3.5 text-[#E8923A] flex-shrink-0 mt-0.5" />
+                  <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-3 text-xs text-[var(--text-body)] flex items-start gap-2">
+                    <AlertCircle className="h-3.5 w-3.5 text-[var(--action)] flex-shrink-0 mt-0.5" />
                     <div>
                       You don&apos;t have any fly boxes yet.{" "}
-                      <Link href="/flies/boxes" className="text-[#E8923A] hover:underline">
+                      <Link href="/flies/boxes" className="text-[var(--action)] hover:underline">
                         Create one
                       </Link>{" "}
                       to organize your flies.
@@ -720,8 +720,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                                   onClick={() => toggleBox(b.id)}
                                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-colors ${
                                     active
-                                      ? "text-[#0D1117] font-semibold"
-                                      : "bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/50"
+                                      ? "text-[var(--surface-page)] font-semibold"
+                                      : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/50"
                                   }`}
                                   style={
                                     active
@@ -756,7 +756,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 <button
                   type="button"
                   onClick={() => setAdvancedOpen((p) => !p)}
-                  className="text-xs text-[#6E7681] hover:text-[#E8923A] inline-flex items-center gap-1 transition-colors"
+                  className="text-xs text-[var(--text-meta)] hover:text-[var(--action)] inline-flex items-center gap-1 transition-colors"
                 >
                   {advancedOpen ? "−" : "+"} More options
                   <span className="text-[10px] opacity-70">
@@ -766,7 +766,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 {advancedOpen && (
                   <div className="mt-3 space-y-3">
                     <div>
-                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-body)] mb-1.5">
                         Custom name (optional)
                       </label>
                       <input
@@ -774,11 +774,11 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                         value={customName}
                         onChange={(e) => setCustomName(e.target.value)}
                         placeholder={`e.g. "Madison ${fly.name}"`}
-                        className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                        className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-body)] mb-1.5">
                         Tie-next target qty
                       </label>
                       <input
@@ -793,14 +793,14 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           )
                         }
                         placeholder="e.g. 8"
-                        className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                        className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
                       />
-                      <p className="text-[10px] text-[#6E7681] mt-1">
+                      <p className="text-[10px] text-[var(--text-meta)] mt-1">
                         Auto-queues for tying when stock drops below target.
                       </p>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#A8B2BD] mb-1.5">
+                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-body)] mb-1.5">
                         Notes
                       </label>
                       <textarea
@@ -808,15 +808,15 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                         onChange={(e) => setNotes(e.target.value)}
                         rows={2}
                         placeholder="Hot collar trick, where you fish it…"
-                        className="w-full bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                        className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
                       />
                     </div>
                     {fly.slug && (
-                      <p className="text-[10px] text-[#6E7681]">
+                      <p className="text-[10px] text-[var(--text-meta)]">
                         Need to override hook brand, thread denier, or specific materials?{" "}
                         <Link
                           href={`/flies/${fly.slug}`}
-                          className="text-[#E8923A] hover:underline"
+                          className="text-[var(--action)] hover:underline"
                         >
                           Open full personalize
                         </Link>
@@ -829,10 +829,10 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
 
               {/* Live label preview */}
               {suggestedLabel && (
-                <div className="rounded-lg border border-[#21262D] bg-[#161B22]/60 p-2.5 text-[11px] text-[#A8B2BD]">
+                <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)]/60 p-2.5 text-[11px] text-[var(--text-body)]">
                   Will save as:{" "}
-                  <span className="text-[#F0F6FC] font-medium">{fly.name}</span>{" "}
-                  <span className="text-[#E8923A]">· {suggestedLabel}</span>
+                  <span className="text-[var(--text-primary)] font-medium">{fly.name}</span>{" "}
+                  <span className="text-[var(--action)]">· {suggestedLabel}</span>
                 </div>
               )}
             </>
@@ -840,7 +840,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-[#21262D] bg-[#0D1117] space-y-2">
+        <div className="px-5 py-4 border-t border-[var(--border-rule)] bg-[var(--surface-page)] space-y-2">
           {error && (
             <p className="text-xs text-red-400 flex items-center gap-1.5">
               <AlertCircle className="h-3 w-3" /> {error}
@@ -889,9 +889,9 @@ function Section({
 }) {
   return (
     <section>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#F0F6FC] mb-2">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-primary)] mb-2">
         {label}
-        {required && <span className="text-[#E8923A] ml-1">*</span>}
+        {required && <span className="text-[var(--action)] ml-1">*</span>}
       </p>
       {children}
     </section>
@@ -902,12 +902,12 @@ function SignInPrompt({ flySlug }: { flySlug?: string }) {
   const redirect = flySlug ? `/flies/${flySlug}` : "/flies";
   return (
     <div className="py-6 text-center space-y-3">
-      <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#E8923A]/10 text-[#E8923A]">
+      <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[var(--action)]/10 text-[var(--action)]">
         <BoxIcon className="h-5 w-5" />
       </div>
       <div>
-        <p className="text-sm text-[#F0F6FC] font-medium">Sign in to save flies</p>
-        <p className="text-xs text-[#6E7681] mt-1">
+        <p className="text-sm text-[var(--text-primary)] font-medium">Sign in to save flies</p>
+        <p className="text-xs text-[var(--text-meta)] mt-1">
           Your fly box, your tying queue, your catch journal — all synced.
         </p>
       </div>

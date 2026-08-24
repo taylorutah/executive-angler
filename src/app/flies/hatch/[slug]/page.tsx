@@ -137,7 +137,7 @@ export default async function HatchInsectPage({ params }: Props) {
       />
 
       {/* Breadcrumbs */}
-      <div className="bg-[#0D1117] pt-6 pb-4">
+      <div className="bg-[var(--surface-page)] pt-6 pb-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
@@ -149,9 +149,9 @@ export default async function HatchInsectPage({ params }: Props) {
       </div>
 
       {/* Editorial header */}
-      <section className="bg-[#0D1117] pb-10">
+      <section className="bg-[var(--surface-page)] pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Hatch Imitations
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -167,7 +167,7 @@ export default async function HatchInsectPage({ params }: Props) {
       </section>
 
       {/* Fly grid */}
-      <section className="bg-[#161B22] border-t border-[#21262D] py-12">
+      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {flies.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,7 +200,7 @@ export default async function HatchInsectPage({ params }: Props) {
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-[#A8B2BD] text-lg">
+              <p className="text-[var(--text-body)] text-lg">
                 No patterns found for this insect yet. Check back soon.
               </p>
             </div>

@@ -93,9 +93,9 @@ export default async function FlyShopsPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Outfitted for the Water
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -109,9 +109,9 @@ export default async function FlyShopsPage() {
       </section>
 
       {/* ── Spotlight Shops ───────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
             Iconic Shops
           </p>
 
@@ -123,7 +123,7 @@ export default async function FlyShopsPage() {
                 <ScrollAnimation key={shop.id} delay={i * 0.08}>
                   <Link
                     href={`/fly-shops/${shop.slug}`}
-                    className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
+                    className="group block bg-[var(--surface-raised)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
                   >
                     <div className="relative h-48">
                       <SafeEntityImage
@@ -136,23 +136,23 @@ export default async function FlyShopsPage() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                       {shop.googleRating && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-[#161B22]/90 backdrop-blur-sm rounded-full px-2 py-1">
-                          <Star className="h-3 w-3 fill-[#E8923A] text-[#E8923A]" />
-                          <span className="text-[10px] font-semibold text-[#E8923A]">
+                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-[var(--surface-raised)]/90 backdrop-blur-sm rounded-full px-2 py-1">
+                          <Star className="h-3 w-3 fill-[var(--action)] text-[var(--action)]" />
+                          <span className="text-[10px] font-semibold text-[var(--action)]">
                             {shop.googleRating}
                           </span>
                         </div>
                       )}
                     </div>
                     <div className="p-5 flex flex-col h-full">
-                      <h3 className="font-heading text-lg font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors leading-snug">
+                      <h3 className="font-heading text-lg font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors leading-snug">
                         {shop.name}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
+                      <p className="mt-0.5 text-sm font-medium text-[var(--action)]">
                         {SHOP_HEADLINES[shop.slug]}
                       </p>
                       {(shop.address || dest) && (
-                        <div className="mt-1.5 flex items-start gap-1 text-[#6E7681] text-xs">
+                        <div className="mt-1.5 flex items-start gap-1 text-[var(--text-meta)] text-xs">
                           <MapPin className="h-3 w-3 flex-shrink-0 mt-0.5" />
                           <span className="line-clamp-1">
                             {shop.address ?? dest?.name}
@@ -163,18 +163,18 @@ export default async function FlyShopsPage() {
                         {shop.services.slice(0, 2).map((svc) => (
                           <span
                             key={svc}
-                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                            className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
                           >
                             {svc}
                           </span>
                         ))}
                       </div>
                       {shop.googleReviewCount && (
-                        <p className="mt-3 text-xs text-[#6E7681]">
+                        <p className="mt-3 text-xs text-[var(--text-meta)]">
                           {shop.googleReviewCount.toLocaleString()} Google reviews
                         </p>
                       )}
-                      <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
+                      <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
                         Visit Shop <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -187,17 +187,17 @@ export default async function FlyShopsPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[#161B22] border-t border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
             All Fly Shops
           </h2>
-          <p className="text-sm text-[#A8B2BD] mt-1">
+          <p className="text-sm text-[var(--text-body)] mt-1">
             {flyShops.length} shops — filterable by destination
           </p>
         </div>
       </div>
-      <section className="bg-[#161B22] pb-16 sm:pb-20">
+      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="fly-shops" />

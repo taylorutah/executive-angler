@@ -56,12 +56,12 @@ export default function RiverPhotosClient({
     <div className="space-y-10">
       {/* Submit Section */}
       <section id="submit-section">
-        <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
-          <div className="px-6 py-4 border-b border-[#21262D] flex items-center gap-3">
-            <Camera className="h-5 w-5 text-[#E8923A]" />
+        <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden">
+          <div className="px-6 py-4 border-b border-[var(--border-rule)] flex items-center gap-3">
+            <Camera className="h-5 w-5 text-[var(--action)]" />
             <div>
-              <h2 className="font-heading text-lg font-semibold text-[#E8923A]">Submit Your Photo</h2>
-              <p className="text-xs text-[#A8B2BD] mt-0.5">
+              <h2 className="font-heading text-lg font-semibold text-[var(--action)]">Submit Your Photo</h2>
+              <p className="text-xs text-[var(--text-body)] mt-0.5">
                 Share your best shots from {riverName}. Ideal: 2000px+ wide, JPEG or PNG, well-exposed. All photos are reviewed before publishing.
               </p>
             </div>
@@ -82,11 +82,11 @@ export default function RiverPhotosClient({
       {/* Photo Gallery */}
       <section>
         <div className="flex items-baseline justify-between mb-4">
-          <h2 className="font-heading text-lg font-semibold text-[#F0F6FC]">
+          <h2 className="font-heading text-lg font-semibold text-[var(--text-primary)]">
             Community Photos
-            <span className="ml-2 text-xs text-[#6E7681] font-mono font-normal">{photos.length}</span>
+            <span className="ml-2 text-xs text-[var(--text-meta)] font-mono font-normal">{photos.length}</span>
           </h2>
-          <p className="text-[11px] text-[#6E7681]">
+          <p className="text-[11px] text-[var(--text-meta)]">
             Submitted by anglers — never pulled from private catch logs.
           </p>
         </div>
@@ -94,13 +94,13 @@ export default function RiverPhotosClient({
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] rounded-xl bg-[#161B22] animate-pulse" />
+              <div key={i} className="aspect-[4/3] rounded-xl bg-[var(--surface-raised)] animate-pulse" />
             ))}
           </div>
         ) : photos.length === 0 ? (
           <div className="text-center py-16">
-            <Camera className="h-12 w-12 text-[#21262D] mx-auto mb-4" />
-            <p className="text-[#6E7681]">No photos yet. Be the first to submit one above.</p>
+            <Camera className="h-12 w-12 text-[var(--border-rule)] mx-auto mb-4" />
+            <p className="text-[var(--text-meta)]">No photos yet. Be the first to submit one above.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -108,7 +108,7 @@ export default function RiverPhotosClient({
               <button
                 key={photo.id}
                 onClick={() => setLightboxIndex(index)}
-                className="group relative text-left bg-[#161B22] rounded-xl overflow-hidden ring-1 ring-[#21262D] hover:ring-[#E8923A] transition-all focus:outline-none focus:ring-2 focus:ring-[#E8923A]"
+                className="group relative text-left bg-[var(--surface-raised)] rounded-xl overflow-hidden ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
               >
                 <div className="relative aspect-[4/3]">
                   <Image
@@ -122,9 +122,9 @@ export default function RiverPhotosClient({
                 </div>
                 <div className="p-3">
                   {photo.caption && (
-                    <p className="text-xs text-[#F0F6FC] line-clamp-2 mb-1.5">{photo.caption}</p>
+                    <p className="text-xs text-[var(--text-primary)] line-clamp-2 mb-1.5">{photo.caption}</p>
                   )}
-                  <div className="flex items-center justify-between text-[10px] text-[#6E7681]">
+                  <div className="flex items-center justify-between text-[10px] text-[var(--text-meta)]">
                     <span className="flex items-center gap-1">
                       <User className="h-2.5 w-2.5" />
                       {photo.submitterName || "Angler"}

@@ -56,7 +56,7 @@ function timeAgo(dateStr: string): string {
 
 export function CommentCount({ count }: { count: number }) {
   return (
-    <div className="flex items-center gap-1 text-[#6E7681]">
+    <div className="flex items-center gap-1 text-[var(--text-meta)]">
       <MessageCircle className="h-4 w-4" />
       {count > 0 && (
         <span className="font-['IBM_Plex_Mono'] text-xs">{count}</span>
@@ -178,7 +178,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
       {/* Toggle button */}
       <button
         onClick={handleToggle}
-        className="flex items-center gap-1 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+        className="flex items-center gap-1 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
       >
         <MessageCircle className="h-4 w-4" />
         {commentCount > 0 && (
@@ -188,9 +188,9 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
 
       {/* Expanded comments */}
       {expanded && (
-        <div className="mt-3 border-t border-[#21262D] pt-3 space-y-3">
+        <div className="mt-3 border-t border-[var(--border-rule)] pt-3 space-y-3">
           {loading && (
-            <div className="text-xs text-[#6E7681]">Loading comments...</div>
+            <div className="text-xs text-[var(--text-meta)]">Loading comments...</div>
           )}
 
           {comments.map((comment) => {
@@ -208,7 +208,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
                 className="object-cover w-full h-full"
               />
             ) : (
-              <span className="text-[10px] font-bold text-[#A8B2BD]">
+              <span className="text-[10px] font-bold text-[var(--text-body)]">
                 {(comment.profile?.display_name || "A").charAt(0).toUpperCase()}
               </span>
             );
@@ -218,12 +218,12 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
                 {profileHref ? (
                   <Link
                     href={profileHref}
-                    className="h-6 w-6 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 mt-0.5 hover:ring-1 hover:ring-[#E8923A] transition-all"
+                    className="h-6 w-6 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5 hover:ring-1 hover:ring-[var(--action)] transition-all"
                   >
                     {avatar}
                   </Link>
                 ) : (
-                  <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="h-6 w-6 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5">
                     {avatar}
                   </div>
                 )}
@@ -234,29 +234,29 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
                     {profileHref ? (
                       <Link
                         href={profileHref}
-                        className="text-xs font-semibold text-[#F0F6FC] hover:text-[#E8923A] transition-colors"
+                        className="text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--action)] transition-colors"
                       >
                         {nameLabel}
                       </Link>
                     ) : (
-                      <span className="text-xs font-semibold text-[#F0F6FC]">
+                      <span className="text-xs font-semibold text-[var(--text-primary)]">
                         {nameLabel}
                       </span>
                     )}
-                    <span className="text-[10px] text-[#6E7681]">
+                    <span className="text-[10px] text-[var(--text-meta)]">
                       {timeAgo(comment.created_at)}
                     </span>
                     {comment.user_id === userId && (
                       <button
                         onClick={() => deleteComment(comment.id)}
-                        className="opacity-0 group-hover:opacity-100 text-[#6E7681] hover:text-[#DA3633] transition-all ml-auto"
+                        className="opacity-0 group-hover:opacity-100 text-[var(--text-meta)] hover:text-[var(--state-negative)] transition-all ml-auto"
                         aria-label="Delete comment"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
                     )}
                   </div>
-                  <p className="text-xs text-[#A8B2BD] leading-relaxed">{comment.body}</p>
+                  <p className="text-xs text-[var(--text-body)] leading-relaxed">{comment.body}</p>
                 </div>
               </div>
             );
@@ -274,13 +274,13 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && postComment()}
                 placeholder="Add a comment..."
-                className="flex-1 bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-1.5 text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
+                className="flex-1 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
                 maxLength={500}
               />
               <button
                 onClick={postComment}
                 disabled={!newComment.trim() || posting}
-                className="text-[#E8923A] disabled:text-[#6E7681] hover:text-[#F0F6FC] transition-colors p-1"
+                className="text-[var(--action)] disabled:text-[var(--text-meta)] hover:text-[var(--text-primary)] transition-colors p-1"
                 aria-label="Post comment"
               >
                 <Send className="h-4 w-4" />
@@ -289,7 +289,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
           ) : loginHref ? (
             <Link
               href={loginHref}
-              className="flex items-center justify-center gap-2 mt-2 rounded-lg border border-dashed border-[#E8923A]/40 bg-[#E8923A]/5 px-3 py-2 text-xs text-[#E8923A] hover:bg-[#E8923A]/10 transition-colors"
+              className="flex items-center justify-center gap-2 mt-2 rounded-lg border border-dashed border-[var(--action)]/40 bg-[var(--action)]/5 px-3 py-2 text-xs text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors"
             >
               <MessageCircle className="h-3.5 w-3.5" />
               Sign in to join the conversation

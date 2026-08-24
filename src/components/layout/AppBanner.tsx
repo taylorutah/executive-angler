@@ -42,14 +42,14 @@ export default function AppBanner() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[60] flex items-center gap-3 px-3 border-b border-[#21262D]"
+      className="fixed top-0 left-0 right-0 z-[60] flex items-center gap-3 px-3 border-b border-[var(--border-rule)]"
       style={{ height: BANNER_HEIGHT, background: "#0D1117" }}
     >
       {/* Dismiss */}
       <button
         onClick={dismiss}
         aria-label="Dismiss app banner"
-        className="flex-shrink-0 p-1 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+        className="flex-shrink-0 p-1 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
       >
         <X className="h-4 w-4" />
       </button>
@@ -66,8 +66,8 @@ export default function AppBanner() {
 
       {/* App info */}
       <div className="flex-1 min-w-0">
-        <p className="text-[#F0F6FC] text-[13px] font-semibold leading-tight truncate">Executive Angler</p>
-        <p className="text-[#6E7681] text-[11px] leading-tight truncate font-['IBM_Plex_Mono']">
+        <p className="text-[var(--text-primary)] text-[13px] font-semibold leading-tight truncate">Executive Angler</p>
+        <p className="text-[var(--text-meta)] text-[11px] leading-tight truncate font-['IBM_Plex_Mono']">
           Free · Fly Fishing Intelligence
         </p>
       </div>
@@ -78,7 +78,7 @@ export default function AppBanner() {
         target="_blank"
         rel="noopener noreferrer"
         onClick={dismiss}
-        className="flex-shrink-0 px-4 py-1.5 bg-[#E8923A] text-white text-[13px] font-bold rounded-full hover:bg-[#d17d28] transition-colors tracking-wide"
+        className="flex-shrink-0 px-4 py-1.5 bg-[var(--action)] text-white text-[13px] font-bold rounded-full hover:bg-[#d17d28] transition-colors tracking-wide"
       >
         GET
       </a>

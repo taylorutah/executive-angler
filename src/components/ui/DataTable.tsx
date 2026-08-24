@@ -116,7 +116,7 @@ export default function DataTable<T>({
                     aria-label={allVisibleSelected ? "Deselect all" : "Select all"}
                     checked={allVisibleSelected}
                     onChange={selection.onToggleAllVisible}
-                    className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[#E8923A]"
+                    className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[var(--action)]"
                   />
                 </th>
               )}
@@ -194,7 +194,7 @@ export default function DataTable<T>({
                             checked={selection.selectedKeys.has(key)}
                             onChange={() => selection.onToggleKey(key)}
                             onClick={(e) => e.stopPropagation()}
-                            className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[#E8923A]"
+                            className="h-3.5 w-3.5 rounded border-[var(--color-border)] bg-[var(--color-surface)] cursor-pointer accent-[var(--action)]"
                           />
                         ) : null}
                       </td>

@@ -219,22 +219,22 @@ export default function FlyPicker({
             setOpen(true);
             setTimeout(() => inputRef.current?.focus(), 0);
           }}
-          className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[#161B22] border border-[#21262D] hover:border-[#E8923A]/40 text-left transition-colors"
+          className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] hover:border-[var(--action)]/40 text-left transition-colors"
         >
           <div className="flex items-center gap-2 min-w-0">
-            <Feather className="h-3.5 w-3.5 text-[#E8923A] shrink-0" />
-            <span className="text-sm text-[#F0F6FC] truncate">{value.name}</span>
+            <Feather className="h-3.5 w-3.5 text-[var(--action)] shrink-0" />
+            <span className="text-sm text-[var(--text-primary)] truncate">{value.name}</span>
             {value.size && (
-              <span className="text-[10px] text-[#6E7681] shrink-0">#{value.size}</span>
+              <span className="text-[10px] text-[var(--text-meta)] shrink-0">#{value.size}</span>
             )}
             {value.source === "personal" && (
-              <span className="text-[9px] font-bold uppercase tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full shrink-0">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded-full shrink-0">
                 Yours
               </span>
             )}
           </div>
           <X
-            className="h-3.5 w-3.5 text-[#6E7681] hover:text-[#F0F6FC] shrink-0"
+            className="h-3.5 w-3.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] shrink-0"
             onClick={(e) => {
               e.stopPropagation();
               onChange(null);
@@ -248,7 +248,7 @@ export default function FlyPicker({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681] pointer-events-none" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)] pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -256,15 +256,15 @@ export default function FlyPicker({
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#161B22] border border-[#21262D] text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+          className="w-full pl-8 pr-3 py-2 rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
         />
         {(bundleLoading || catalogLoading) && (
-          <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681] animate-spin" />
+          <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)] animate-spin" />
         )}
       </div>
 
       {open && (
-        <div className="absolute z-30 left-0 right-0 mt-1 rounded-lg bg-[#0D1117] border border-[#21262D] shadow-xl overflow-hidden">
+        <div className="absolute z-30 left-0 right-0 mt-1 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] shadow-xl overflow-hidden">
           {/* Step 2: size grid for the pushed pattern. */}
           {pushed ? (
             <SizeGrid
@@ -330,7 +330,7 @@ export default function FlyPicker({
                   rows.length === 0 &&
                   library.length === 0 &&
                   extraCatalogRows.length === 0 && (
-                    <p className="px-3 py-3 text-xs text-[#6E7681]">
+                    <p className="px-3 py-3 text-xs text-[var(--text-meta)]">
                       {query
                         ? `No matches for "${query}"`
                         : activeBoxId
@@ -360,7 +360,7 @@ function BoxChipBar({
 }) {
   if (!bundle || bundle.boxes.length === 0) return null;
   return (
-    <div className="flex items-center gap-1.5 px-2 py-2 border-b border-[#21262D] overflow-x-auto">
+    <div className="flex items-center gap-1.5 px-2 py-2 border-b border-[var(--border-rule)] overflow-x-auto">
       <ChipButton active={activeBoxId == null} onClick={() => onSelect(null)}>
         All flies
       </ChipButton>
@@ -392,8 +392,8 @@ function ChipButton({
       onClick={onClick}
       className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
         active
-          ? "bg-[#E8923A] text-[#0D1117]"
-          : "bg-transparent border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40 hover:text-[#F0F6FC]"
+          ? "bg-[var(--action)] text-[var(--surface-page)]"
+          : "bg-transparent border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40 hover:text-[var(--text-primary)]"
       }`}
     >
       {children}
@@ -417,7 +417,7 @@ function RowSection({
   return (
     <div>
       {title && (
-        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#6E7681]">
+        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[var(--text-meta)]">
           {title}
         </p>
       )}
@@ -428,35 +428,35 @@ function RowSection({
             key={`${r.source}-${r.pattern_id}`}
             type="button"
             onClick={() => onPick(r)}
-            className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[#161B22] ${
-              selected ? "bg-[#161B22]" : ""
+            className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[var(--surface-raised)] ${
+              selected ? "bg-[var(--surface-raised)]" : ""
             }`}
           >
-            <div className="h-7 w-7 rounded bg-[#161B22] border border-[#21262D] overflow-hidden shrink-0 flex items-center justify-center">
+            <div className="h-7 w-7 rounded bg-[var(--surface-raised)] border border-[var(--border-rule)] overflow-hidden shrink-0 flex items-center justify-center">
               {r.hero_image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.hero_image_url} alt="" className="w-full h-full object-cover" />
               ) : (
-                <Feather className="h-3 w-3 text-[#6E7681]" />
+                <Feather className="h-3 w-3 text-[var(--text-meta)]" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-[#F0F6FC] truncate">{r.name}</p>
-              <p className="text-[10px] text-[#6E7681] capitalize truncate">
+              <p className="text-sm text-[var(--text-primary)] truncate">{r.name}</p>
+              <p className="text-[10px] text-[var(--text-meta)] capitalize truncate">
                 {r.category ?? (r.isOrphan ? "Personal" : "")}
                 {r.sizes.length > 0 && (
-                  <span className="ml-1 text-[#6E7681]">
+                  <span className="ml-1 text-[var(--text-meta)]">
                     · {r.sizes.length} size{r.sizes.length === 1 ? "" : "s"}
                   </span>
                 )}
               </p>
             </div>
             {r.source === "personal" && !r.isOrphan && (
-              <span className="text-[9px] font-bold uppercase tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded-full shrink-0">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded-full shrink-0">
                 Yours
               </span>
             )}
-            {selected && <Check className="h-3.5 w-3.5 text-[#E8923A] shrink-0" />}
+            {selected && <Check className="h-3.5 w-3.5 text-[var(--action)] shrink-0" />}
           </button>
         );
       })}
@@ -479,15 +479,15 @@ function SizeGrid({
 }) {
   return (
     <div className="max-h-80 overflow-y-auto">
-      <div className="flex items-center gap-2 px-2 py-2 border-b border-[#21262D]">
+      <div className="flex items-center gap-2 px-2 py-2 border-b border-[var(--border-rule)]">
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-[#A8B2BD] hover:bg-[#161B22] hover:text-[#F0F6FC]"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-[var(--text-body)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
         >
           <ChevronLeft className="h-3.5 w-3.5" /> Back
         </button>
-        <p className="text-sm text-[#F0F6FC] font-semibold truncate flex-1">{row.name}</p>
+        <p className="text-sm text-[var(--text-primary)] font-semibold truncate flex-1">{row.name}</p>
       </div>
       <div className="grid grid-cols-3 gap-1.5 p-2">
         {row.sizes.map((s) => {
@@ -504,13 +504,13 @@ function SizeGrid({
               onClick={() => onPick(s)}
               className={`px-2 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 isCurrent
-                  ? "bg-[#E8923A] text-[#0D1117]"
-                  : "bg-[#161B22] border border-[#21262D] text-[#F0F6FC] hover:border-[#E8923A]/40"
+                  ? "bg-[var(--action)] text-[var(--surface-page)]"
+                  : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] hover:border-[var(--action)]/40"
               }`}
             >
               <div>#{s.size}</div>
               {s.bead_weight_mm != null && (
-                <div className="text-[9px] text-[#6E7681] font-normal mt-0.5">
+                <div className="text-[9px] text-[var(--text-meta)] font-normal mt-0.5">
                   {s.bead_weight_mm}mm bead
                 </div>
               )}

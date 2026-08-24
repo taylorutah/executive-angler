@@ -25,18 +25,18 @@ export default async function AboutPage() {
   return (
     <div className="pt-8 pb-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-6">
+        <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-6">
           About {SITE_NAME}
         </h1>
 
-        <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
-          <p className="text-xl text-[#A8B2BD] leading-relaxed">
+        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+          <p className="text-xl text-[var(--text-body)] leading-relaxed">
             {SITE_NAME} is the definitive fly fishing resource, built to connect
             anglers with the world&apos;s finest waters, lodges, guides, and expert
             instruction.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             Our Mission
           </h2>
           <p>
@@ -48,7 +48,7 @@ export default async function AboutPage() {
             unforgettable.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             What We Cover
           </h2>
           <p>
@@ -57,7 +57,7 @@ export default async function AboutPage() {
             trout waters of Tierra del Fuego, {SITE_NAME} covers every major fly
             fishing destination on Earth. Our content spans:
           </p>
-          <ul className="list-disc pl-6 space-y-2 text-[#F0F6FC]">
+          <ul className="list-disc pl-6 space-y-2 text-[var(--text-primary)]">
             <li>
               <strong>Destinations</strong> — In-depth profiles of {counts.destinations} fly fishing
               regions, with maps, best months, target species,
@@ -91,7 +91,7 @@ export default async function AboutPage() {
             </li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             No Middleman
           </h2>
           <p>
@@ -101,7 +101,7 @@ export default async function AboutPage() {
             contact information and website links go straight to them.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             Community
           </h2>
           <p>
@@ -111,7 +111,7 @@ export default async function AboutPage() {
             content after a brief review.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             A private journal
           </h2>
           <p>
@@ -121,14 +121,14 @@ export default async function AboutPage() {
             Read{" "}
             <Link
               href="/articles/why-your-fishing-journal-should-be-private"
-              className="text-[#E8923A] hover:underline"
+              className="text-[var(--action)] hover:underline"
             >
               why your fishing journal should be private
             </Link>
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             Conservation
           </h2>
           <p>

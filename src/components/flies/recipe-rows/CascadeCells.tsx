@@ -45,7 +45,7 @@ export function useBrands(category: MaterialCategory | undefined) {
 // Borderless select intended to live inside a shared bordered container with
 // its sibling cascade picker, so the two read as one cell.
 const groupedSelect =
-  'w-full h-7 bg-transparent px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none appearance-none cursor-pointer pr-5';
+  'w-full h-7 bg-transparent px-2 text-[12px] text-[var(--text-primary)] placeholder-[#6E7681] outline-none appearance-none cursor-pointer pr-5';
 
 interface BrandSelectProps {
   category: MaterialCategory;

@@ -128,21 +128,21 @@ export default function HatchReportsClient({
   };
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/dashboard" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex items-center gap-2">
-            <Bug className="h-6 w-6 text-[#E8923A]" />
-            <h1 className="font-serif text-2xl text-[#F0F6FC]">Hatch Reports</h1>
+            <Bug className="h-6 w-6 text-[var(--action)]" />
+            <h1 className="font-serif text-2xl text-[var(--text-primary)]">Hatch Reports</h1>
           </div>
         </div>
 
         <TipCard storageKey="hatch-reports-intro" title="What's hatching on your rivers">
           <p>We match the rivers you&apos;ve logged sessions on to our hatch database — by name — then show insects, sizes, and patterns for the month you pick.</p>
-          <p className="text-[#6E7681]">Your own catches for that month (across all years) appear below, so you can see which hatches you&apos;ve actually nailed.</p>
+          <p className="text-[var(--text-meta)]">Your own catches for that month (across all years) appear below, so you can see which hatches you&apos;ve actually nailed.</p>
         </TipCard>
 
         <div className="h-6" />
@@ -150,17 +150,17 @@ export default function HatchReportsClient({
         {/* Controls */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           {/* Month selector */}
-          <div className="flex gap-1 bg-[#161B22] rounded-lg p-1 border border-[#21262D] overflow-x-auto">
+          <div className="flex gap-1 bg-[var(--surface-raised)] rounded-lg p-1 border border-[var(--border-rule)] overflow-x-auto">
             {MONTH_SHORT.map((m, i) => (
               <button
                 key={m}
                 onClick={() => setSelectedMonth(i)}
                 className={`px-2.5 py-1.5 text-xs font-bold rounded-md transition-colors whitespace-nowrap ${
                   selectedMonth === i
-                    ? "bg-[#E8923A] text-white"
+                    ? "bg-[var(--action)] text-white"
                     : i === currentMonth
-                    ? "text-[#E8923A] hover:text-[#F0F6FC]"
-                    : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                    ? "text-[var(--action)] hover:text-[var(--text-primary)]"
+                    : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {m}
@@ -173,7 +173,7 @@ export default function HatchReportsClient({
             <select
               value={selectedRiver}
               onChange={e => setSelectedRiver(e.target.value)}
-              className="bg-[#161B22] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
+              className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]"
             >
               <option value="all">All Rivers</option>
               {matchedRivers.map(r => (
@@ -185,36 +185,36 @@ export default function HatchReportsClient({
 
         {/* Your data for this month */}
         {monthCatchData.sessions > 0 && (
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 mb-6">
-            <h2 className="text-xs font-bold text-[#6E7681] uppercase tracking-wider mb-3">
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 mb-6">
+            <h2 className="text-xs font-bold text-[var(--text-meta)] uppercase tracking-wider mb-3">
               Your {monthName} History
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
               <div>
-                <p className="text-xl font-bold font-mono text-[#E8923A]">{monthCatchData.sessions}</p>
-                <p className="text-[10px] text-[#6E7681] uppercase">Sessions</p>
+                <p className="text-xl font-bold font-mono text-[var(--action)]">{monthCatchData.sessions}</p>
+                <p className="text-[10px] text-[var(--text-meta)] uppercase">Sessions</p>
               </div>
               <div>
-                <p className="text-xl font-bold font-mono text-[#F0F6FC]">{monthCatchData.totalCatches}</p>
-                <p className="text-[10px] text-[#6E7681] uppercase">Fish Caught</p>
+                <p className="text-xl font-bold font-mono text-[var(--text-primary)]">{monthCatchData.totalCatches}</p>
+                <p className="text-[10px] text-[var(--text-meta)] uppercase">Fish Caught</p>
               </div>
               {monthCatchData.avgTemp && (
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-4 w-4 text-red-400" />
                   <div>
-                    <p className="text-xl font-bold font-mono text-[#F0F6FC]">{monthCatchData.avgTemp}°F</p>
-                    <p className="text-[10px] text-[#6E7681] uppercase">Avg Water Temp</p>
+                    <p className="text-xl font-bold font-mono text-[var(--text-primary)]">{monthCatchData.avgTemp}°F</p>
+                    <p className="text-[10px] text-[var(--text-meta)] uppercase">Avg Water Temp</p>
                   </div>
                 </div>
               )}
             </div>
             {monthCatchData.topFlies.length > 0 && (
               <div>
-                <p className="text-xs text-[#6E7681] mb-2">Your top flies this month:</p>
+                <p className="text-xs text-[var(--text-meta)] mb-2">Your top flies this month:</p>
                 <div className="flex flex-wrap gap-2">
                   {monthCatchData.topFlies.map(([fly, data]) => (
-                    <span key={fly} className="text-xs bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20 rounded-full px-3 py-1">
-                      {fly} <span className="text-[#6E7681]">({data.count})</span>
+                    <span key={fly} className="text-xs bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/20 rounded-full px-3 py-1">
+                      {fly} <span className="text-[var(--text-meta)]">({data.count})</span>
                     </span>
                   ))}
                 </div>
@@ -227,28 +227,28 @@ export default function HatchReportsClient({
         {currentHatches.length > 0 ? (
           <div className="space-y-4">
             {currentHatches.map(({ river, hatches }) => (
-              <div key={river.id} className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden">
-                <div className="px-5 py-3 border-b border-[#21262D] flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[#E8923A]" />
-                  <Link href={`/rivers/${river.slug}`} className="text-sm font-bold text-[#F0F6FC] hover:text-[#E8923A] transition-colors">
+              <div key={river.id} className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden">
+                <div className="px-5 py-3 border-b border-[var(--border-rule)] flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-[var(--action)]" />
+                  <Link href={`/rivers/${river.slug}`} className="text-sm font-bold text-[var(--text-primary)] hover:text-[var(--action)] transition-colors">
                     {river.name}
                   </Link>
-                  <span className="text-xs text-[#6E7681]">· {hatches.length} hatches</span>
+                  <span className="text-xs text-[var(--text-meta)]">· {hatches.length} hatches</span>
                 </div>
                 <div className="divide-y divide-[#21262D]">
                   {hatches.map((hatch, i) => (
                     <div key={i} className="px-5 py-3 flex items-center gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#F0F6FC]">{hatch.insect}</p>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-[#A8B2BD]">
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{hatch.insect}</p>
+                        <div className="flex items-center gap-3 mt-1 text-xs text-[var(--text-body)]">
                           <span>Size {hatch.size}</span>
                           <span>·</span>
-                          <span className="text-[#E8923A]">{hatch.pattern}</span>
+                          <span className="text-[var(--action)]">{hatch.pattern}</span>
                           {hatch.timeOfDay && <><span>·</span><span>{hatch.timeOfDay}</span></>}
                         </div>
                       </div>
                       {hatch.intensity && (
-                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${intensityColors[hatch.intensity] || "text-[#6E7681]"}`}>
+                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${intensityColors[hatch.intensity] || "text-[var(--text-meta)]"}`}>
                           {hatch.intensity}
                         </span>
                       )}
@@ -259,12 +259,12 @@ export default function HatchReportsClient({
             ))}
           </div>
         ) : (
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
-            <Calendar className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-12 text-center">
+            <Calendar className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
               No hatch data for {monthName}
             </h2>
-            <p className="text-sm text-[#A8B2BD]">
+            <p className="text-sm text-[var(--text-body)]">
               {matchedRivers.length === 0
                 ? "Start logging sessions on rivers in our database to see hatch reports."
                 : "No hatches recorded for this month on your rivers. Try a different month."}

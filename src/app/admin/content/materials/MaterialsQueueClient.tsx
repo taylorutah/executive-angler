@@ -80,21 +80,21 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl text-[#F0F6FC] mb-2">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl text-[var(--text-primary)] mb-2">
         Materials Review Queue
       </h1>
-      <p className="text-[#A8B2BD] text-sm mb-6">
+      <p className="text-[var(--text-body)] text-sm mb-6">
         {items.length} pending submission{items.length === 1 ? '' : 's'}. Edit any field, then Promote to add to the public catalog.
       </p>
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg border border-[#DA3633]/30 bg-[#DA3633]/10 text-[#FFA8A8] text-sm">
+        <div className="mb-4 p-3 rounded-lg border border-[var(--state-negative)]/30 bg-[var(--state-negative)]/10 text-[#FFA8A8] text-sm">
           {error}
         </div>
       )}
 
       {items.length === 0 ? (
-        <div className="text-center py-16 text-[#6E7681]">
+        <div className="text-center py-16 text-[var(--text-meta)]">
           <p>No pending submissions.</p>
         </div>
       ) : (
@@ -106,7 +106,7 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
             const isBusy = busy === item.id;
 
             return (
-              <div key={item.id} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4">
+              <div key={item.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1 min-w-0">
                     {isEditing ? (
@@ -114,19 +114,19 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
                         type="text"
                         value={merged.name || ''}
                         onChange={ev => updateEdit(item.id, { name: ev.target.value })}
-                        className="w-full bg-[#0D1117] border border-[#21262D] rounded px-2 py-1 text-[#F0F6FC] text-sm font-semibold"
+                        className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded px-2 py-1 text-[var(--text-primary)] text-sm font-semibold"
                       />
                     ) : (
-                      <p className="text-[#F0F6FC] font-semibold">{merged.name}</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{merged.name}</p>
                     )}
-                    <p className="text-[#A8B2BD] text-xs mt-1">
+                    <p className="text-[var(--text-body)] text-xs mt-1">
                       Submitted by {item.submitter_email || 'unknown'} · {new Date(item.created_at).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
                     <button
                       onClick={() => setEditing(isEditing ? null : item.id)}
-                      className="p-1.5 rounded border border-[#21262D] text-[#A8B2BD] hover:text-[#F0F6FC]"
+                      className="p-1.5 rounded border border-[var(--border-rule)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
                       title={isEditing ? 'Done editing' : 'Edit fields'}
                     >
                       {isEditing ? <Save size={14} /> : <Edit2 size={14} />}
@@ -134,7 +134,7 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
                     <button
                       onClick={() => reject(item.id)}
                       disabled={isBusy}
-                      className="p-1.5 rounded border border-[#DA3633]/30 text-[#FFA8A8] hover:bg-[#DA3633]/10 disabled:opacity-50"
+                      className="p-1.5 rounded border border-[var(--state-negative)]/30 text-[#FFA8A8] hover:bg-[var(--state-negative)]/10 disabled:opacity-50"
                       title="Reject (delete)"
                     >
                       <X size={14} />
@@ -196,16 +196,16 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
 
                 {(merged.description || isEditing) && (
                   <div className="mt-2">
-                    <label className="block text-[10px] uppercase tracking-wider text-[#6E7681] mb-1">Description</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[var(--text-meta)] mb-1">Description</label>
                     {isEditing ? (
                       <textarea
                         value={merged.description || ''}
                         onChange={ev => updateEdit(item.id, { description: ev.target.value })}
                         rows={2}
-                        className="w-full bg-[#0D1117] border border-[#21262D] rounded px-2 py-1 text-[#F0F6FC] text-xs"
+                        className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded px-2 py-1 text-[var(--text-primary)] text-xs"
                       />
                     ) : (
-                      <p className="text-[#A8B2BD] text-xs">{merged.description}</p>
+                      <p className="text-[var(--text-body)] text-xs">{merged.description}</p>
                     )}
                   </div>
                 )}
@@ -221,16 +221,16 @@ export default function MaterialsQueueClient({ pending: initial }: Props) {
 function Field({ label, value, editing, onChange }: { label: string; value: string; editing: boolean; onChange: (v: string) => void }) {
   return (
     <div>
-      <label className="block text-[10px] uppercase tracking-wider text-[#6E7681] mb-0.5">{label}</label>
+      <label className="block text-[10px] uppercase tracking-wider text-[var(--text-meta)] mb-0.5">{label}</label>
       {editing ? (
         <input
           type="text"
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="w-full bg-[#0D1117] border border-[#21262D] rounded px-2 py-1 text-[#F0F6FC] text-xs"
+          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded px-2 py-1 text-[var(--text-primary)] text-xs"
         />
       ) : (
-        <p className="text-[#F0F6FC]">{value || '—'}</p>
+        <p className="text-[var(--text-primary)]">{value || '—'}</p>
       )}
     </div>
   );
@@ -239,17 +239,17 @@ function Field({ label, value, editing, onChange }: { label: string; value: stri
 function ArrayField({ label, value, editing, onChange }: { label: string; value: string[]; editing: boolean; onChange: (v: string[]) => void }) {
   return (
     <div>
-      <label className="block text-[10px] uppercase tracking-wider text-[#6E7681] mb-0.5">{label}</label>
+      <label className="block text-[10px] uppercase tracking-wider text-[var(--text-meta)] mb-0.5">{label}</label>
       {editing ? (
         <input
           type="text"
           value={value.join(', ')}
           onChange={e => onChange(e.target.value.split(',').map(v => v.trim()).filter(Boolean))}
           placeholder="comma, separated"
-          className="w-full bg-[#0D1117] border border-[#21262D] rounded px-2 py-1 text-[#F0F6FC] text-xs"
+          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded px-2 py-1 text-[var(--text-primary)] text-xs"
         />
       ) : (
-        <p className="text-[#F0F6FC]">{value.length ? value.join(', ') : '—'}</p>
+        <p className="text-[var(--text-primary)]">{value.length ? value.join(', ') : '—'}</p>
       )}
     </div>
   );

@@ -121,7 +121,7 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
   switch (variant) {
     case "solid":
       return [
-        "bg-[#E8923A] text-white border border-transparent",
+        "bg-[var(--action)] text-white border border-transparent",
         loud ? "font-bold" : "font-semibold",
         caps,
         "rounded hover:bg-[#C97726] active:bg-[#B36620]",
@@ -129,24 +129,24 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
       ].join(" ");
     case "outline":
       return [
-        "bg-transparent text-[#E8923A] border-2 border-[#E8923A]",
+        "bg-transparent text-[var(--action)] border-2 border-[var(--action)]",
         loud ? "font-bold" : "font-semibold",
         caps,
-        "rounded hover:bg-[#E8923A] hover:text-white",
+        "rounded hover:bg-[var(--action)] hover:text-white",
         "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "brand":
       return [
-        "bg-gradient-to-b from-[#F5A65A] to-[#E8923A] text-white",
+        "bg-gradient-to-b from-[#F5A65A] to-[var(--action)] text-white",
         "border border-[#C97726] font-semibold",
         "rounded shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_1px_2px_rgba(0,0,0,0.15)]",
-        "hover:from-[#E8923A] hover:to-[#C97726]",
+        "hover:from-[var(--action)] hover:to-[#C97726]",
         "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "ghost":
       return [
-        "bg-transparent text-[#A8B2BD] border border-[#21262D] font-medium",
-        "rounded hover:text-[#F0F6FC] hover:border-[#6E7681]",
+        "bg-transparent text-[var(--text-body)] border border-[var(--border-rule)] font-medium",
+        "rounded hover:text-[var(--text-primary)] hover:border-[var(--text-meta)]",
       ].join(" ");
     case "neutral":
       return [
@@ -156,21 +156,21 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
       ].join(" ");
     case "pill":
       return [
-        "bg-[#E8923A]/[0.16] text-[#F5A65A] border border-[#E8923A]/30 font-semibold",
+        "bg-[var(--action)]/[0.16] text-[#F5A65A] border border-[var(--action)]/30 font-semibold",
         "rounded-full",
-        "hover:bg-[#E8923A]/[0.24]",
+        "hover:bg-[var(--action)]/[0.24]",
       ].join(" ");
     case "glass":
       return [
         "bg-white/10 backdrop-blur-md text-white border border-white/25 font-semibold",
         "rounded-lg",
-        "hover:bg-[#E8923A]/40 hover:border-[#E8923A]",
+        "hover:bg-[var(--action)]/40 hover:border-[var(--action)]",
       ].join(" ");
     case "hero":
       return [
-        "bg-transparent text-[#F0F6FC] border-[1.5px] border-[#F0F6FC] font-bold",
+        "bg-transparent text-[var(--text-primary)] border-[1.5px] border-[var(--text-primary)] font-bold",
         "rounded-md",
-        "hover:bg-[#E8923A] hover:border-[#E8923A] hover:text-white",
+        "hover:bg-[var(--action)] hover:border-[var(--action)] hover:text-white",
       ].join(" ");
     case "destructive":
       return [
@@ -185,7 +185,7 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
 const BASE =
   "inline-flex items-center justify-center gap-2 transition-all " +
   "disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none " +
-  "focus-visible:ring-2 focus-visible:ring-[#E8923A] focus-visible:ring-offset-2 " +
+  "focus-visible:ring-2 focus-visible:ring-[var(--action)] focus-visible:ring-offset-2 " +
   "focus-visible:ring-offset-[#0D1117] cursor-pointer select-none whitespace-nowrap";
 
 export function Button(props: ButtonProps) {
@@ -291,20 +291,20 @@ export function ButtonTile({
 
   const classes =
     `relative inline-flex flex-col items-start gap-1.5 ${padding} ${minWidth} ` +
-    "bg-[#161B22] text-[#F0F6FC] border border-[#21262D] rounded-xl " +
-    "hover:border-[#E8923A] hover:bg-[#E8923A]/[0.08] transition-all " +
+    "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-xl " +
+    "hover:border-[var(--action)] hover:bg-[var(--action)]/[0.08] transition-all " +
     "cursor-pointer focus-visible:outline-none focus-visible:ring-2 " +
-    "focus-visible:ring-[#E8923A] " +
+    "focus-visible:ring-[var(--action)] " +
     className;
 
   const inner = (
     <>
       <Icon className={iconSize} style={{ color: iconColor }} aria-hidden />
       <div className="text-[12.5px] font-semibold leading-tight">{label}</div>
-      {sub && <div className="text-[10.5px] text-[#A8B2BD] leading-tight">{sub}</div>}
+      {sub && <div className="text-[10.5px] text-[var(--text-body)] leading-tight">{sub}</div>}
       {badge != null && badge > 0 && (
         <span
-          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[#E8923A] text-white text-[10px] font-bold rounded-full inline-flex items-center justify-center border-2 border-[#0D1117] font-mono leading-none"
+          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[var(--action)] text-white text-[10px] font-bold rounded-full inline-flex items-center justify-center border-2 border-[var(--surface-page)] font-mono leading-none"
         >
           {badge}
         </span>
@@ -349,24 +349,24 @@ export function StatPill({
 }: StatPillProps) {
   const accentColor =
     accent === "teal"
-      ? "text-[#00B4D8]"
+      ? "text-[var(--signal-live)]"
       : accent === "white"
-        ? "text-[#F0F6FC]"
-        : "text-[#E8923A]";
+        ? "text-[var(--text-primary)]"
+        : "text-[var(--action)]";
   const padding =
     size === "sm" ? "px-2.5 py-1 text-[11px]" : size === "lg" ? "px-4 py-2.5 text-[14px]" : "px-3 py-1.5 text-[12px]";
 
   const classes =
     `inline-flex items-center gap-2 ${padding} font-mono ` +
-    "bg-[#161B22] text-[#F0F6FC] border border-[#21262D] rounded-full " +
-    "hover:border-[#E8923A]/60 hover:bg-[#1F2630] transition-all cursor-pointer " +
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8923A] " +
+    "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-full " +
+    "hover:border-[var(--action)]/60 hover:bg-[#1F2630] transition-all cursor-pointer " +
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--action)] " +
     className;
 
   const inner = (
     <>
       <span className={`${accentColor} font-bold tabular-nums`}>{value}</span>
-      <span className="text-[#A8B2BD] lowercase">{label}</span>
+      <span className="text-[var(--text-body)] lowercase">{label}</span>
     </>
   );
 
@@ -416,9 +416,9 @@ export function SplitButton({
   const wrap =
     `inline-flex items-stretch rounded shadow-sm border border-[#C97726] overflow-hidden ${className}`;
   const primaryCls =
-    `${padding} ${iconSize ? "" : ""} bg-[#E8923A] text-white font-semibold inline-flex items-center gap-2 hover:bg-[#C97726] cursor-pointer transition-colors`;
+    `${padding} ${iconSize ? "" : ""} bg-[var(--action)] text-white font-semibold inline-flex items-center gap-2 hover:bg-[#C97726] cursor-pointer transition-colors`;
   const caretCls =
-    `${caretPadding} bg-[#E8923A] text-white border-l border-[#C97726] inline-flex items-center hover:bg-[#C97726] cursor-pointer transition-colors`;
+    `${caretPadding} bg-[var(--action)] text-white border-l border-[#C97726] inline-flex items-center hover:bg-[#C97726] cursor-pointer transition-colors`;
 
   return (
     <div className={wrap}>

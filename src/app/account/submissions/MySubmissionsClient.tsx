@@ -31,13 +31,13 @@ interface Stats {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode; bg: string }> = {
-  draft: { label: "Draft", color: "text-[#A8B2BD]", icon: <FileEdit className="h-3.5 w-3.5" />, bg: "bg-[#21262D]" },
-  submitted: { label: "Submitted", color: "text-[#0BA5C7]", icon: <Send className="h-3.5 w-3.5" />, bg: "bg-[#0BA5C7]/15" },
-  in_review: { label: "In Review", color: "text-[#E8923A]", icon: <Eye className="h-3.5 w-3.5" />, bg: "bg-[#E8923A]/15" },
+  draft: { label: "Draft", color: "text-[var(--text-body)]", icon: <FileEdit className="h-3.5 w-3.5" />, bg: "bg-[var(--border-rule)]" },
+  submitted: { label: "Submitted", color: "text-[var(--signal-live)]", icon: <Send className="h-3.5 w-3.5" />, bg: "bg-[var(--signal-live)]/15" },
+  in_review: { label: "In Review", color: "text-[var(--action)]", icon: <Eye className="h-3.5 w-3.5" />, bg: "bg-[var(--action)]/15" },
   needs_info: { label: "Needs Info", color: "text-yellow-400", icon: <AlertCircle className="h-3.5 w-3.5" />, bg: "bg-yellow-400/15" },
-  approved: { label: "Approved", color: "text-[#2EA44F]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[#2EA44F]/15" },
+  approved: { label: "Approved", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[var(--state-positive)]/15" },
   rejected: { label: "Rejected", color: "text-red-400", icon: <XCircle className="h-3.5 w-3.5" />, bg: "bg-red-400/15" },
-  published: { label: "Published", color: "text-[#2EA44F]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[#2EA44F]/15" },
+  published: { label: "Published", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[var(--state-positive)]/15" },
 };
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -45,10 +45,10 @@ const TYPE_EMOJI: Record<string, string> = {
 };
 
 const TRUST_LABELS: Record<string, { label: string; color: string }> = {
-  new: { label: "New Contributor", color: "text-[#A8B2BD]" },
-  contributor: { label: "Contributor", color: "text-[#0BA5C7]" },
-  trusted: { label: "Trusted Contributor", color: "text-[#2EA44F]" },
-  verified: { label: "Verified", color: "text-[#E8923A]" },
+  new: { label: "New Contributor", color: "text-[var(--text-body)]" },
+  contributor: { label: "Contributor", color: "text-[var(--signal-live)]" },
+  trusted: { label: "Trusted Contributor", color: "text-[var(--state-positive)]" },
+  verified: { label: "Verified", color: "text-[var(--action)]" },
   moderator: { label: "Moderator", color: "text-purple-400" },
 };
 
@@ -70,19 +70,19 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Link href="/account" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+            <Link href="/account" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
               <ChevronLeft className="h-5 w-5" />
             </Link>
-            <h1 className="font-serif text-2xl text-[#F0F6FC]">My Submissions</h1>
+            <h1 className="font-serif text-2xl text-[var(--text-primary)]">My Submissions</h1>
           </div>
           <Link
             href="/contribute"
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#E8923A] text-white rounded-lg text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Submission
@@ -90,13 +90,13 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
         </div>
 
         {/* Contributor stats */}
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-[#E8923A]" />
+              <Shield className="h-5 w-5 text-[var(--action)]" />
               <div>
                 <p className={`text-sm font-semibold ${trustInfo.color}`}>{trustInfo.label}</p>
-                <p className="text-[11px] text-[#6E7681]">
+                <p className="text-[11px] text-[var(--text-meta)]">
                   {stats.submissions_approved} approved · {stats.submissions_rejected} rejected · {stats.submissions_total} total
                 </p>
               </div>
@@ -119,8 +119,8 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
               onClick={() => setFilter(tab.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                 filter === tab.key
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#161B22] text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
               }`}
             >
               {tab.label}
@@ -135,11 +135,11 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
 
         {/* Submissions list */}
         {filtered.length === 0 ? (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
-            <p className="text-[#6E7681] mb-3">
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
+            <p className="text-[var(--text-meta)] mb-3">
               {filter === "all" ? "No submissions yet" : `No ${filter} submissions`}
             </p>
-            <Link href="/contribute" className="text-sm text-[#E8923A] hover:underline">
+            <Link href="/contribute" className="text-sm text-[var(--action)] hover:underline">
               Start contributing →
             </Link>
           </div>
@@ -151,21 +151,21 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
               const canDelete = s.status === "draft";
 
               return (
-                <div key={s.id} className="bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#6E7681] transition-colors">
+                <div key={s.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 hover:border-[var(--text-meta)] transition-colors">
                   <div className="flex items-start gap-3">
                     {/* Type emoji */}
                     <span className="text-2xl mt-0.5">{TYPE_EMOJI[s.entity_type] || "📄"}</span>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-sm font-bold text-[#F0F6FC]">{s.name}</h3>
+                        <h3 className="text-sm font-bold text-[var(--text-primary)]">{s.name}</h3>
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${statusCfg.color} ${statusCfg.bg}`}>
                           {statusCfg.icon}
                           {statusCfg.label}
                         </span>
                       </div>
 
-                      <p className="text-xs text-[#6E7681] mt-1">
+                      <p className="text-xs text-[var(--text-meta)] mt-1">
                         {s.entity_type.replace("_", " ")} · v{s.version} · Updated {formatDate(s.updated_at)}
                       </p>
 
@@ -189,7 +189,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                       {canEdit && (
                         <Link
                           href={`/contribute/${s.entity_type}?edit=${s.id}`}
-                          className="p-2 bg-[#21262D] rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+                          className="p-2 bg-[var(--border-rule)] rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
                           title="Edit"
                         >
                           <FileEdit className="h-4 w-4" />
@@ -199,7 +199,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                         <button
                           onClick={() => handleDelete(s.id)}
                           disabled={deleting === s.id}
-                          className="p-2 bg-[#21262D] rounded-lg text-[#A8B2BD] hover:text-red-400 transition-colors disabled:opacity-50"
+                          className="p-2 bg-[var(--border-rule)] rounded-lg text-[var(--text-body)] hover:text-red-400 transition-colors disabled:opacity-50"
                           title="Delete draft"
                         >
                           {deleting === s.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}

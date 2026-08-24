@@ -174,15 +174,15 @@ export default function ConfigureSheet({
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-lg bg-[var(--color-surface,#fff)] dark:bg-[#161B22] rounded-t-xl sm:rounded-xl shadow-xl max-h-[90vh] overflow-y-auto"
+        className="w-full sm:max-w-lg bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)] rounded-t-xl sm:rounded-xl shadow-xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between px-5 pt-5 pb-3 bg-[var(--color-surface,#fff)] dark:bg-[#161B22]">
+        <div className="sticky top-0 flex items-center justify-between px-5 pt-5 pb-3 bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)]">
           <div>
             <h2 className="text-base font-semibold">{existing ? "Edit version" : "Add a version"}</h2>
             <p className="text-xs text-[var(--color-text-muted)]">{fly.name}</p>
           </div>
-          <button onClick={onClose} className="p-1 rounded-md hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D]">
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)]">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -195,7 +195,7 @@ export default function ConfigureSheet({
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               placeholder={autoSummary}
-              className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-transparent px-3 py-2 text-sm"
+              className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
             />
           </label>
 
@@ -213,7 +213,7 @@ export default function ConfigureSheet({
                 min={0}
                 value={tied}
                 onChange={(e) => setTied(e.target.value)}
-                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-transparent px-3 py-2 text-sm"
+                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
               />
             </label>
             <label className="block">
@@ -223,7 +223,7 @@ export default function ConfigureSheet({
                 min={0}
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
-                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-transparent px-3 py-2 text-sm"
+                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
               />
             </label>
           </div>
@@ -234,7 +234,7 @@ export default function ConfigureSheet({
               <select
                 value={pickedBoxId}
                 onChange={(e) => setPickedBoxId(e.target.value)}
-                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-transparent px-3 py-2 text-sm"
+                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
               >
                 {boxes.map((b) => (
                   <option key={b.id} value={b.id}>{b.name}</option>
@@ -250,7 +250,7 @@ export default function ConfigureSheet({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-3 py-2 text-xs"
+              className="rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] px-3 py-2 text-xs"
             >
               Cancel
             </button>
@@ -258,7 +258,7 @@ export default function ConfigureSheet({
               type="button"
               onClick={save}
               disabled={saving}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-2 text-xs font-medium text-white hover:bg-[#d17d28] disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-md bg-[var(--action)] px-3 py-2 text-xs font-medium text-white hover:bg-[#d17d28] disabled:opacity-60"
             >
               {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               {existing ? "Save changes" : "Save version"}
@@ -295,7 +295,7 @@ function Row({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-transparent px-3 py-2 text-sm"
+        className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
       />
       {suggestions.length > 0 && (
         <datalist id={listId}>

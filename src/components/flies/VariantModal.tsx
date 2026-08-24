@@ -264,22 +264,22 @@ export default function VariantModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#0D1117]/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[var(--surface-page)]/80 backdrop-blur-sm"
       onMouseDown={handleBackdropMouseDown}
       onMouseUp={handleBackdropMouseUp}
       role="presentation"
     >
       <div
-        className="w-full sm:max-w-2xl bg-[#161B22] border border-[#21262D] sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-hidden flex flex-col"
+        className="w-full sm:max-w-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)] sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label={`Create variant of ${parent.name}`}
       >
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#21262D]">
+        <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[var(--border-rule)]">
           <div className="flex items-center gap-3 min-w-0">
             {parent.heroImageUrl && (
-              <div className="relative h-11 w-11 rounded-lg overflow-hidden border border-[#21262D] flex-shrink-0">
+              <div className="relative h-11 w-11 rounded-lg overflow-hidden border border-[var(--border-rule)] flex-shrink-0">
                 <Image
                   src={parent.heroImageUrl}
                   alt={parent.name}
@@ -290,15 +290,15 @@ export default function VariantModal({
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-xs uppercase tracking-wide text-[#6E7681]">Create variant of</p>
-              <h2 className="font-heading text-lg font-bold text-[#F0F6FC] truncate">
+              <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Create variant of</p>
+              <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] truncate">
                 {parent.name}
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+            className="rounded-lg p-1.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
@@ -307,13 +307,13 @@ export default function VariantModal({
 
         {/* Mode toggle */}
         <div className="px-5 pt-4">
-          <div className="inline-flex rounded-lg border border-[#21262D] bg-[#0D1117] p-1 text-xs">
+          <div className="inline-flex rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-1 text-xs">
             <button
               onClick={() => setMode("single")}
               className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
                 mode === "single"
-                  ? "bg-[#E8923A] text-[#0D1117]"
-                  : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  ? "bg-[var(--action)] text-[var(--surface-page)]"
+                  : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Sparkles className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />
@@ -323,8 +323,8 @@ export default function VariantModal({
               onClick={() => setMode("bulk")}
               className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
                 mode === "bulk"
-                  ? "bg-[#E8923A] text-[#0D1117]"
-                  : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  ? "bg-[var(--action)] text-[var(--surface-page)]"
+                  : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Wand2 className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />
@@ -363,12 +363,12 @@ export default function VariantModal({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-[#21262D] px-5 py-3 bg-[#0D1117]">
+        <div className="border-t border-[var(--border-rule)] px-5 py-3 bg-[var(--surface-page)]">
           {error && <p className="text-xs text-red-400 mb-2">{error}</p>}
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/my-flies?tab=box"
-              className="text-xs text-[#6E7681] hover:text-[#E8923A] transition-colors"
+              className="text-xs text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
             >
               View fly box →
             </Link>
@@ -434,8 +434,8 @@ function SingleForm({
   const accentKeys = advancedKeys.filter((k) => FIELDS[k].group === "accent");
 
   const inputCls =
-    "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
-  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1";
+    "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:outline-none";
+  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[var(--text-body)] mb-1";
 
   return (
     <div className="space-y-4">
@@ -463,16 +463,16 @@ function SingleForm({
       </div>
 
       {/* No-bead toggle — above bead section so its intent is clear */}
-      <label className="flex items-start gap-2.5 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 cursor-pointer hover:border-[#E8923A]/40 transition-colors">
+      <label className="flex items-start gap-2.5 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 cursor-pointer hover:border-[var(--action)]/40 transition-colors">
         <input
           type="checkbox"
           checked={noBead}
           onChange={(e) => setNoBead(e.target.checked)}
-          className="mt-0.5 accent-[#E8923A]"
+          className="mt-0.5 accent-[var(--action)]"
         />
         <span className="text-sm">
-          <span className="font-medium text-[#F0F6FC]">Tie this variant without a bead</span>
-          <span className="block text-xs text-[#6E7681] mt-0.5">
+          <span className="font-medium text-[var(--text-primary)]">Tie this variant without a bead</span>
+          <span className="block text-xs text-[var(--text-meta)] mt-0.5">
             Forces bead_material = none and clears bead color/size. Useful for a stillwater or swinging riff.
           </span>
         </span>
@@ -482,7 +482,7 @@ function SingleForm({
       <button
         type="button"
         onClick={() => setShowAll(!showAll)}
-        className="text-xs font-medium text-[#00B4D8] hover:text-[#E8923A] transition-colors"
+        className="text-xs font-medium text-[var(--signal-live)] hover:text-[var(--action)] transition-colors"
       >
         {showAll
           ? "– Hide material fields"
@@ -528,8 +528,8 @@ function FieldGroup({
   disabled?: boolean;
 }) {
   return (
-    <div className={`rounded-lg border border-[#21262D] bg-[#0D1117] p-3 ${disabled ? "opacity-40 pointer-events-none" : ""}`}>
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-[#6E7681] mb-2">{label}</div>
+    <div className={`rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-3 ${disabled ? "opacity-40 pointer-events-none" : ""}`}>
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-meta)] mb-2">{label}</div>
       <div className="grid grid-cols-2 gap-3">
         {keys.map((k) => (
           <VariantFieldInput
@@ -554,8 +554,8 @@ function VariantFieldInput({
   onChange: (v: string) => void;
 }) {
   const inputCls =
-    "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
-  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[#A8B2BD] mb-1";
+    "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:outline-none";
+  const labelCls = "block text-xs font-semibold uppercase tracking-wide text-[var(--text-body)] mb-1";
   const listId = `variant-dl-${def.key}`;
 
   // Type gets a select since we have an enumerated list
@@ -657,10 +657,10 @@ function BulkForm({
 
   return (
     <div className="space-y-3">
-      <p className="text-xs text-[#6E7681] leading-snug">
+      <p className="text-xs text-[var(--text-meta)] leading-snug">
         Pick one or more material dimensions, add the values you want, and we'll spawn every
         combination. Every material role can be an axis — hook, bead (including
-        <span className="text-[#E8923A]">&nbsp;"none"</span> for no-bead), thread, body, rib, tail,
+        <span className="text-[var(--action)]">&nbsp;"none"</span> for no-bead), thread, body, rib, tail,
         thorax, collar, wing, hot spot.
       </p>
 
@@ -683,19 +683,19 @@ function BulkForm({
           <button
             type="button"
             onClick={() => setAddAxisOpen(!addAxisOpen)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[#21262D] bg-[#0D1117] px-3 py-2 text-xs text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A]/40 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-xs text-[var(--text-body)] hover:text-[var(--action)] hover:border-[var(--action)]/40 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             Vary another material (bead, body, thread, rib, tail, wing, hot spot…)
           </button>
           {addAxisOpen && (
-            <div className="absolute z-10 mt-1 w-full sm:w-80 rounded-lg border border-[#21262D] bg-[#161B22] shadow-2xl max-h-72 overflow-y-auto">
+            <div className="absolute z-10 mt-1 w-full sm:w-80 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-2xl max-h-72 overflow-y-auto">
               {(["core", "bead", "body", "tail", "wing", "accent"] as const).map((g) => {
                 const inGroup = availableAxisKeys.filter((k) => FIELDS[k].group === g);
                 if (inGroup.length === 0) return null;
                 return (
                   <div key={g} className="py-1.5">
-                    <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-[#6E7681]">
+                    <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-[var(--text-meta)]">
                       {groupLabel(g)}
                     </div>
                     {inGroup.map((k) => (
@@ -703,7 +703,7 @@ function BulkForm({
                         key={k}
                         type="button"
                         onClick={() => addAxis(k)}
-                        className="w-full text-left px-3 py-1.5 text-sm text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+                        className="w-full text-left px-3 py-1.5 text-sm text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
                       >
                         {FIELDS[k].label}
                       </button>
@@ -716,13 +716,13 @@ function BulkForm({
         </div>
       )}
 
-      <div className="rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-xs text-[#A8B2BD]">
-        <p className="font-medium text-[#F0F6FC] mb-0.5">
-          Will create <span className="text-[#E8923A]">{count}</span> variant
+      <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-xs text-[var(--text-body)]">
+        <p className="font-medium text-[var(--text-primary)] mb-0.5">
+          Will create <span className="text-[var(--action)]">{count}</span> variant
           {count === 1 ? "" : "s"}
         </p>
-        <p className="text-[#6E7681]">
-          Example name: <span className="text-[#A8B2BD]">{sampleBits.join(" ")}</span>
+        <p className="text-[var(--text-meta)]">
+          Example name: <span className="text-[var(--text-body)]">{sampleBits.join(" ")}</span>
         </p>
         {overLimit && (
           <p className="mt-1 text-red-400">Cap is 64 per batch — trim an axis.</p>
@@ -750,19 +750,19 @@ function AxisRow({
   onRemoveAxis: () => void;
 }) {
   const inputCls =
-    "flex-1 rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none";
+    "flex-1 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:outline-none";
   const listId = `variant-axis-dl-${def.key}`;
 
   return (
-    <div className="rounded-lg border border-[#21262D] bg-[#0D1117]/60 p-3">
+    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]/60 p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-[#A8B2BD]">
+        <span className="text-xs font-semibold uppercase tracking-wide text-[var(--text-body)]">
           {def.label}
         </span>
         <button
           type="button"
           onClick={onRemoveAxis}
-          className="text-[#6E7681] hover:text-red-400 transition-colors"
+          className="text-[var(--text-meta)] hover:text-red-400 transition-colors"
           aria-label={`Remove ${def.label} axis`}
         >
           <Trash2 className="h-3.5 w-3.5" />
@@ -785,7 +785,7 @@ function AxisRow({
         <button
           type="button"
           onClick={() => onAdd(input)}
-          className="rounded-lg border border-[#21262D] bg-[#161B22] px-3 text-sm text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A]/40 transition-colors"
+          className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-sm text-[var(--text-body)] hover:text-[var(--action)] hover:border-[var(--action)]/40 transition-colors"
         >
           Add
         </button>
@@ -804,7 +804,7 @@ function AxisRow({
               key={v}
               type="button"
               onClick={() => onRemove(v)}
-              className="group inline-flex items-center gap-1 rounded-full border border-[#E8923A]/30 bg-[#E8923A]/10 px-2.5 py-1 text-xs text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+              className="group inline-flex items-center gap-1 rounded-full border border-[var(--action)]/30 bg-[var(--action)]/10 px-2.5 py-1 text-xs text-[var(--action)] hover:bg-[var(--action)]/20 transition-colors"
             >
               {v === "none" ? "no bead" : v}
               <X className="h-3 w-3 opacity-60 group-hover:opacity-100" />
@@ -822,7 +822,7 @@ function AxisRow({
                 key={s}
                 type="button"
                 onClick={() => onAdd(s)}
-                className="rounded-full border border-[#21262D] bg-[#161B22] px-2 py-0.5 text-[11px] text-[#6E7681] hover:text-[#E8923A] hover:border-[#E8923A]/30 transition-colors"
+                className="rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-0.5 text-[11px] text-[var(--text-meta)] hover:text-[var(--action)] hover:border-[var(--action)]/30 transition-colors"
               >
                 + {s === "none" ? "no bead" : s}
               </button>

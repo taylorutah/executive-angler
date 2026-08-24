@@ -143,7 +143,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
   return (
     <div
       ref={mapContainer}
-      className={compact ? "h-[280px] w-full" : "h-64 lg:h-[calc(100vh-5rem)] w-full rounded-xl overflow-hidden border border-[#21262D]"}
+      className={compact ? "h-[280px] w-full" : "h-64 lg:h-[calc(100vh-5rem)] w-full rounded-xl overflow-hidden border border-[var(--border-rule)]"}
     />
   );
 }

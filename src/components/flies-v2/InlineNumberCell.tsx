@@ -71,7 +71,7 @@ export default function InlineNumberCell({
   const alignClass =
     align === "right" ? "text-right" : align === "center" ? "text-center" : "text-left";
   const flashClass =
-    flash === "saved" ? "ring-1 ring-[#2EA44F]/50 bg-[rgba(46,164,79,0.05)]" :
+    flash === "saved" ? "ring-1 ring-[var(--state-positive)]/50 bg-[rgba(46,164,79,0.05)]" :
     flash === "error" ? "ring-1 ring-[#F87171]/50 bg-[rgba(248,113,113,0.05)]" : "";
 
   if (editing) {
@@ -89,7 +89,7 @@ export default function InlineNumberCell({
           else if (e.key === "Escape") cancel();
         }}
         onClick={(e) => e.stopPropagation()}
-        className={`w-full bg-[#0D1117] border border-[#E8923A] rounded px-1 py-0 ${alignClass} font-['IBM_Plex_Mono'] text-[13px] text-[#F0F6FC] outline-none`}
+        className={`w-full bg-[var(--surface-page)] border border-[var(--action)] rounded px-1 py-0 ${alignClass} font-['IBM_Plex_Mono'] text-[13px] text-[var(--text-primary)] outline-none`}
       />
     );
   }
@@ -110,7 +110,7 @@ export default function InlineNumberCell({
         className={
           fadeZero && optimistic === 0
             ? "text-[#484F58]"
-            : "text-[#F0F6FC]"
+            : "text-[var(--text-primary)]"
         }
       >
         {optimistic}

@@ -5,7 +5,7 @@ import LazyHydrate from "@/components/ui/LazyHydrate";
 
 const FlowChart = dynamic(() => import("./FlowChart"), {
   ssr: false,
-  loading: () => <div className="h-[280px] rounded-xl bg-[#1F2937]" aria-hidden />,
+  loading: () => <div className="h-[280px] rounded-xl bg-[var(--surface-card)]" aria-hidden />,
 });
 
 type Props = React.ComponentProps<typeof FlowChart>;

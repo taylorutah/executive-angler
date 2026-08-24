@@ -53,7 +53,7 @@ export function AwardBadge({
   return (
     <div className={containerClasses}>
       <div
-        className={`${cls} rounded-full flex-shrink-0 flex items-center justify-center bg-[#0D1117] border-2`}
+        className={`${cls} rounded-full flex-shrink-0 flex items-center justify-center bg-[var(--surface-page)] border-2`}
         style={{ borderColor }}
         title={award.metadata.display_name}
       >
@@ -61,14 +61,14 @@ export function AwardBadge({
       </div>
       {showDetails && (
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-[#F0F6FC]">
+          <div className="font-semibold text-[var(--text-primary)]">
             {award.metadata.display_name}
           </div>
-          <div className="text-sm text-[#A8B2BD]">
+          <div className="text-sm text-[var(--text-body)]">
             {award.metadata.description}
           </div>
           {award.awarded_at && (
-            <div className="text-xs text-[#6E7681] mt-1">
+            <div className="text-xs text-[var(--text-meta)] mt-1">
               Earned {new Date(award.awarded_at).toLocaleDateString()}
             </div>
           )}

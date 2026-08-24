@@ -40,7 +40,7 @@ function BoxStatLine({ stats }: { stats?: BoxStats }) {
     .slice(0, 3);
   return (
     <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[#484F58]">
-      <span className="text-[#6E7681]">{stats.total} flies</span>
+      <span className="text-[var(--text-meta)]">{stats.total} flies</span>
       {top.map(([cat, count]) => (
         <span key={cat}>
           {count} {CATEGORY_SHORT[cat] ?? cat}
@@ -373,7 +373,7 @@ export default function BoxesManager({
                         maxLength={TIER_LABEL_MAX}
                         placeholder="Tier name"
                         disabled={tierBusy}
-                        className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] rounded border border-[#30363D] bg-[#0D1117] px-2 py-1 text-[#0BA5C7] focus:border-[#E8923A] focus:outline-none"
+                        className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-2 py-1 text-[var(--signal-live)] focus:border-[var(--action)] focus:outline-none"
                       />
                       <div className="flex items-start gap-2">
                         <input
@@ -387,14 +387,14 @@ export default function BoxesManager({
                           maxLength={TIER_DESCRIPTION_MAX}
                           placeholder="Description (optional)"
                           disabled={tierBusy}
-                          className="flex-1 rounded border border-[#30363D] bg-[#0D1117] px-2 py-1 text-xs text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                          className="flex-1 rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-2 py-1 text-xs text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                         />
                         <button
                           type="button"
                           onClick={saveTierEdit}
                           disabled={tierBusy}
                           aria-label="Save tier"
-                          className="rounded p-1 text-[#E8923A] hover:bg-[#1F2937] disabled:opacity-50"
+                          className="rounded p-1 text-[var(--action)] hover:bg-[var(--surface-card)] disabled:opacity-50"
                         >
                           <Check className="h-3.5 w-3.5" />
                         </button>
@@ -403,7 +403,7 @@ export default function BoxesManager({
                           onClick={cancelEditTier}
                           disabled={tierBusy}
                           aria-label="Cancel"
-                          className="rounded p-1 text-[#6E7681] hover:bg-[#1F2937] disabled:opacity-50"
+                          className="rounded p-1 text-[var(--text-meta)] hover:bg-[var(--surface-card)] disabled:opacity-50"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -411,7 +411,7 @@ export default function BoxesManager({
                     </div>
                   ) : (
                     <>
-                      <h2 className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[#0BA5C7]">
+                      <h2 className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--signal-live)]">
                         {t.label}
                       </h2>
                       <button
@@ -419,14 +419,14 @@ export default function BoxesManager({
                         onClick={() => startEditTier(t)}
                         aria-label={`Edit ${t.label} tier`}
                         title="Click to edit name or description"
-                        className="group inline-flex items-center gap-1.5 rounded text-left text-xs text-[#6E7681] hover:text-[#F0F6FC]"
+                        className="group inline-flex items-center gap-1.5 rounded text-left text-xs text-[var(--text-meta)] hover:text-[var(--text-primary)]"
                       >
                         <span className="border-b border-dashed border-transparent group-hover:border-[#484F58]">
                           {t.description || (
                             <em className="italic text-[#484F58]">Add description…</em>
                           )}
                         </span>
-                        <Pencil className="h-3 w-3 text-[#484F58] group-hover:text-[#E8923A]" />
+                        <Pencil className="h-3 w-3 text-[#484F58] group-hover:text-[var(--action)]" />
                       </button>
                     </>
                   )}
@@ -438,7 +438,7 @@ export default function BoxesManager({
                     disabled={tierBusy}
                     aria-label={`Delete ${t.label} tier`}
                     title="Delete this tier"
-                    className="rounded p-1 text-[#484F58] hover:text-red-400 hover:bg-[#1F2937] disabled:opacity-50"
+                    className="rounded p-1 text-[#484F58] hover:text-red-400 hover:bg-[var(--surface-card)] disabled:opacity-50"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -471,7 +471,7 @@ export default function BoxesManager({
               <h2 className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-red-400">
                 Other
               </h2>
-              <p className="text-xs text-[#6E7681]">
+              <p className="text-xs text-[var(--text-meta)]">
                 Boxes whose tier was removed. Re-assign them via Edit.
               </p>
             </div>
@@ -494,9 +494,9 @@ export default function BoxesManager({
         )}
 
         {boxes.length === 0 && (
-          <div className="rounded-lg border border-[#21262D] bg-[#161B22] p-10 text-center">
+          <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-10 text-center">
             <Plus className="h-8 w-8 text-[#484F58] mx-auto mb-3" />
-            <p className="text-[#A8B2BD] text-sm">No boxes yet.</p>
+            <p className="text-[var(--text-body)] text-sm">No boxes yet.</p>
             <div className="mt-3 inline-block">
               <Button variant="solid" size="sm" icon={Plus} onClick={openCreate}>
                 Create your first box
@@ -517,17 +517,17 @@ export default function BoxesManager({
           <form
             onClick={(e) => e.stopPropagation()}
             onSubmit={submitForm}
-            className="w-full max-w-md rounded-lg border border-[#30363D] bg-[#161B22] shadow-2xl"
+            className="w-full max-w-md rounded-lg border border-[var(--border-strong)] bg-[var(--surface-raised)] shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-[#21262D] px-4 py-3">
-              <h2 className="font-heading text-lg text-[#F0F6FC]">
+            <div className="flex items-center justify-between border-b border-[var(--border-rule)] px-4 py-3">
+              <h2 className="font-heading text-lg text-[var(--text-primary)]">
                 {editor.kind === "edit" ? "Edit box" : "New box"}
               </h2>
               <button
                 type="button"
                 onClick={closeEditor}
                 aria-label="Close"
-                className="rounded p-1 text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                className="rounded p-1 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -535,23 +535,23 @@ export default function BoxesManager({
 
             <div className="space-y-4 p-4">
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Name</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Name</span>
                 <input
                   required
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="e.g. Madison Summer"
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                 />
               </label>
 
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Tier</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Tier</span>
                 <select
                   value={form.tier}
                   onChange={(e) => setForm((f) => ({ ...f, tier: e.target.value }))}
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--action)] focus:outline-none"
                 >
                   {tiers.map((t) => (
                     <option key={t.key} value={t.key}>
@@ -562,18 +562,18 @@ export default function BoxesManager({
               </label>
 
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Description</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Description</span>
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                   rows={2}
                   placeholder="What lives in this box?"
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                 />
               </label>
 
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Capacity (optional)</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Capacity (optional)</span>
                 <input
                   type="number"
                   min={0}
@@ -581,7 +581,7 @@ export default function BoxesManager({
                   value={form.total_capacity}
                   onChange={(e) => setForm((f) => ({ ...f, total_capacity: e.target.value }))}
                   placeholder="e.g. 24"
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                 />
               </label>
 
@@ -590,7 +590,7 @@ export default function BoxesManager({
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
+            <div className="flex items-center justify-end gap-2 border-t border-[var(--border-rule)] px-4 py-3">
               <Button variant="outline" size="sm" onClick={closeEditor} disabled={busy}>
                 Cancel
               </Button>
@@ -613,16 +613,16 @@ export default function BoxesManager({
           <form
             onClick={(e) => e.stopPropagation()}
             onSubmit={submitNewTier}
-            className="w-full max-w-md rounded-lg border border-[#30363D] bg-[#161B22] shadow-2xl"
+            className="w-full max-w-md rounded-lg border border-[var(--border-strong)] bg-[var(--surface-raised)] shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-[#21262D] px-4 py-3">
-              <h2 className="font-heading text-lg text-[#F0F6FC]">Add Tier</h2>
+            <div className="flex items-center justify-between border-b border-[var(--border-rule)] px-4 py-3">
+              <h2 className="font-heading text-lg text-[var(--text-primary)]">Add Tier</h2>
               <button
                 type="button"
                 onClick={() => setAddTierOpen(false)}
                 disabled={tierBusy}
                 aria-label="Close"
-                className="rounded p-1 text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#1F2937] disabled:opacity-50"
+                className="rounded p-1 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)] disabled:opacity-50"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -630,7 +630,7 @@ export default function BoxesManager({
 
             <div className="space-y-4 p-4">
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Label</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Label</span>
                 <input
                   autoFocus
                   required
@@ -639,18 +639,18 @@ export default function BoxesManager({
                   onChange={(e) => setNewTierLabel(e.target.value)}
                   placeholder="e.g. Saltwater, Steelhead, Travel"
                   maxLength={TIER_LABEL_MAX}
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                 />
               </label>
               <label className="block">
-                <span className="text-xs font-medium text-[#A8B2BD]">Description (optional)</span>
+                <span className="text-xs font-medium text-[var(--text-body)]">Description (optional)</span>
                 <textarea
                   value={newTierDesc}
                   onChange={(e) => setNewTierDesc(e.target.value)}
                   rows={2}
                   placeholder="When and where this tier fits"
                   maxLength={TIER_DESCRIPTION_MAX}
-                  className="mt-1 w-full rounded border border-[#30363D] bg-[#0D1117] px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#484F58] focus:border-[#E8923A] focus:outline-none"
+                  className="mt-1 w-full rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#484F58] focus:border-[var(--action)] focus:outline-none"
                 />
               </label>
               {addTierError && (
@@ -658,7 +658,7 @@ export default function BoxesManager({
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-[#21262D] px-4 py-3">
+            <div className="flex items-center justify-end gap-2 border-t border-[var(--border-rule)] px-4 py-3">
               <Button variant="outline" size="sm" onClick={() => setAddTierOpen(false)} disabled={tierBusy}>
                 Cancel
               </Button>
@@ -693,23 +693,23 @@ function BoxCard({
   onSetDefault: (b: FlyBoxV2) => void;
 }) {
   return (
-    <div className="relative rounded-lg border border-[#21262D] bg-[#161B22] hover:border-[#E8923A]/40 transition-colors">
+    <div className="relative rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] hover:border-[var(--action)]/40 transition-colors">
       <Link href={`/flies/boxes/${b.id}`} className="block p-4 pr-12">
         <div className="flex items-start gap-3">
-          <div className="h-10 w-10 flex-shrink-0 rounded bg-[#0D1117] flex items-center justify-center">
-            <Box className="h-5 w-5 text-[#6E7681]" />
+          <div className="h-10 w-10 flex-shrink-0 rounded bg-[var(--surface-page)] flex items-center justify-center">
+            <Box className="h-5 w-5 text-[var(--text-meta)]" />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-[#F0F6FC] font-semibold text-sm truncate">
+            <h3 className="text-[var(--text-primary)] font-semibold text-sm truncate">
               {b.name}
               {b.is_default && (
-                <span className="ml-2 rounded bg-[#0BA5C7]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#0BA5C7]">
+                <span className="ml-2 rounded bg-[var(--signal-live)]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
                   Default
                 </span>
               )}
             </h3>
             {b.description && (
-              <p className="text-xs text-[#A8B2BD] mt-0.5 line-clamp-2">{b.description}</p>
+              <p className="text-xs text-[var(--text-body)] mt-0.5 line-clamp-2">{b.description}</p>
             )}
             <BoxStatLine stats={stats} />
           </div>
@@ -721,27 +721,27 @@ function BoxCard({
           type="button"
           aria-label="Box actions"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenuId(openMenuId === b.id ? null : b.id); }}
-          className="rounded p-1.5 text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+          className="rounded p-1.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
         >
           <MoreVertical className="h-4 w-4" />
         </button>
         {openMenuId === b.id && (
           <div
             role="menu"
-            className="absolute right-0 top-full mt-1 w-44 rounded-md border border-[#30363D] bg-[#161B22] shadow-lg z-20 py-1"
+            className="absolute right-0 top-full mt-1 w-44 rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] shadow-lg z-20 py-1"
             onClick={(e) => e.stopPropagation()}
           >
-            <button type="button" role="menuitem" onClick={() => onEdit(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-[#F0F6FC] hover:bg-[#1F2937]">
+            <button type="button" role="menuitem" onClick={() => onEdit(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-[var(--text-primary)] hover:bg-[var(--surface-card)]">
               <Pencil className="h-3.5 w-3.5" />
               Edit
             </button>
             {!b.is_default && (
-              <button type="button" role="menuitem" onClick={() => onSetDefault(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-[#F0F6FC] hover:bg-[#1F2937]">
+              <button type="button" role="menuitem" onClick={() => onSetDefault(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-[var(--text-primary)] hover:bg-[var(--surface-card)]">
                 <Star className="h-3.5 w-3.5" />
                 Set as default
               </button>
             )}
-            <button type="button" role="menuitem" onClick={() => onDelete(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-red-400 hover:bg-[#1F2937]">
+            <button type="button" role="menuitem" onClick={() => onDelete(b)} className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-red-400 hover:bg-[var(--surface-card)]">
               <Trash2 className="h-3.5 w-3.5" />
               Delete
             </button>

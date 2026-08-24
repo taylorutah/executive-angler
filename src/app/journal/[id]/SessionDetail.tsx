@@ -152,7 +152,7 @@ function SessionMap({
   }, [mounted, lat, lng, catches, routePoints, interactive, fitToBounds]);
 
   if (!mounted) {
-    return <div className={`${className} bg-gray-100 dark:bg-[#161B22]`} />;
+    return <div className={`${className} bg-gray-100 dark:bg-[var(--surface-raised)]`} />;
   }
 
   return <div ref={mapContainer} className={className} />;
@@ -214,7 +214,7 @@ function SessionMiniMap({
           aria-modal="true"
         >
           <div
-            className="relative w-full h-full max-w-6xl max-h-[90vh] rounded-xl overflow-hidden bg-[#0D1117]"
+            className="relative w-full h-full max-w-6xl max-h-[90vh] rounded-xl overflow-hidden bg-[var(--surface-page)]"
             onClick={(e) => e.stopPropagation()}
           >
             <SessionMap
@@ -376,11 +376,11 @@ function FishLightbox({ photos, initialIndex, onClose }: {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
-      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
+      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><X className="h-5 w-5" /></button>
       {photos.length > 1 && (
         <>
-          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronRight className="h-5 w-5" /></button>
         </>
       )}
       <div className="max-w-2xl w-full mx-16" onClick={e => e.stopPropagation()}>
@@ -389,8 +389,8 @@ function FishLightbox({ photos, initialIndex, onClose }: {
             <Image src={imageUrl} alt={c.species || "Fish"} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
           </div>
         ) : (
-          <div className="w-full aspect-[4/3] rounded-xl bg-[#1F2937] flex items-center justify-center">
-            <Fish className="h-16 w-16 text-[#A8B2BD]" />
+          <div className="w-full aspect-[4/3] rounded-xl bg-[var(--surface-card)] flex items-center justify-center">
+            <Fish className="h-16 w-16 text-[var(--text-body)]" />
           </div>
         )}
         <div className="mt-4 text-center">
@@ -437,7 +437,7 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
-      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><X className="h-5 w-5" /></button>
+      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><X className="h-5 w-5" /></button>
       {onDelete && (
         <div className="absolute top-4 right-16">
           <Button
@@ -456,8 +456,8 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
       )}
       {photos.length > 1 && (
         <>
-          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#161B22]/10 text-white hover:bg-[#161B22]/20"><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronRight className="h-5 w-5" /></button>
         </>
       )}
       <div className="max-w-3xl w-full mx-16" onClick={e => e.stopPropagation()}>
@@ -740,7 +740,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
         />
       )}
 
-      <div className="min-h-screen bg-[#0D1117]">
+      <div className="min-h-screen bg-[var(--surface-page)]">
 
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 pb-6">
 
@@ -752,12 +752,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             {isAnonymous && ownerProfile?.username ? (
               <Link
                 href={`/anglers/${ownerProfile.username}`}
-                className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+                className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" /> @{ownerProfile.username}
               </Link>
             ) : (
-              <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
+              <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
                 <ArrowLeft className="h-4 w-4" /> Back to Journal
               </Link>
             )}
@@ -778,12 +778,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
           </div>
 
           {/* ---- STRAVA-STYLE HEADER CARD ---- */}
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 sm:p-6 mb-5">
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 sm:p-6 mb-5">
             <div className="flex flex-col sm:flex-row sm:gap-8">
 
               {/* LEFT: title + meta + notes */}
               <div className="flex-1 min-w-0 mb-5 sm:mb-0">
-                <p className="text-xs text-[#6E7681] mb-1">
+                <p className="text-xs text-[var(--text-meta)] mb-1">
                   {formattedDate}
                   {sessionStartTime && <> · {sessionStartTime}</>}
                   {session.location && <> · <MapPin className="h-3 w-3 inline -mt-0.5" /> {session.river_name ? `${session.river_name}, ` : ""}{session.location}</>}
@@ -797,7 +797,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     href={ownerProfile.username ? `/anglers/${ownerProfile.username}` : "#"}
                     className="inline-flex items-center gap-2 mb-2 group/owner"
                   >
-                    <span className="h-7 w-7 rounded-full overflow-hidden bg-[#E8923A]/15 flex items-center justify-center flex-shrink-0 group-hover/owner:ring-1 group-hover/owner:ring-[#E8923A] transition-all">
+                    <span className="h-7 w-7 rounded-full overflow-hidden bg-[var(--action)]/15 flex items-center justify-center flex-shrink-0 group-hover/owner:ring-1 group-hover/owner:ring-[var(--action)] transition-all">
                       {ownerProfile.avatar_url ? (
                         <Image
                           src={ownerProfile.avatar_url}
@@ -807,24 +807,24 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           className="object-cover w-full h-full"
                         />
                       ) : (
-                        <span className="text-xs font-bold text-[#E8923A]">
+                        <span className="text-xs font-bold text-[var(--action)]">
                           {(ownerProfile.display_name || ownerProfile.username || "A").charAt(0).toUpperCase()}
                         </span>
                       )}
                     </span>
-                    <span className="text-sm font-semibold text-[#E8923A] group-hover/owner:underline">
+                    <span className="text-sm font-semibold text-[var(--action)] group-hover/owner:underline">
                       {ownerProfile.username ? `@${ownerProfile.username}` : (ownerProfile.display_name || "Angler")}
                     </span>
                   </Link>
                 )}
 
-                <h1 className="font-heading text-xl sm:text-2xl font-semibold text-[#F0F6FC] leading-tight mb-3 flex items-center gap-2 flex-wrap">
+                <h1 className="font-heading text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-tight mb-3 flex items-center gap-2 flex-wrap">
                   <span>{session.title || session.river_name || "Fishing Session"}</span>
                   {isOwner && (
                     session.privacy === "private" ? (
                       <span
                         title="Only you can see this session"
-                        className="inline-flex items-center gap-1 rounded-full border border-[#21262D] bg-[#0D1117] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#A8B2BD]"
+                        className="inline-flex items-center gap-1 rounded-full border border-[var(--border-rule)] bg-[var(--surface-page)] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-body)]"
                       >
                         <Lock className="h-3 w-3" />
                         Private
@@ -832,7 +832,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     ) : (
                       <span
                         title="Visible in the community feed"
-                        className="inline-flex items-center gap-1 rounded-full border border-[#21262D] bg-[#0D1117] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#A8B2BD]"
+                        className="inline-flex items-center gap-1 rounded-full border border-[var(--border-rule)] bg-[var(--surface-page)] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-body)]"
                       >
                         <Globe className="h-3 w-3" />
                         Public
@@ -845,7 +845,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 <div className="mb-3 max-w-lg group/notes relative">
                   {!isOwner ? (
                     notesValue ? (
-                      <p className="text-sm text-[#A8B2BD] leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
                         {notesValue}
                       </p>
                     ) : null
@@ -857,7 +857,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         value={notesValue}
                         onChange={e => setNotesValue(e.target.value)}
                         onKeyDown={e => { if (e.key === "Escape") { setNotesValue(session.notes || ""); setEditingNotes(false); } }}
-                        className="w-full text-sm text-[#A8B2BD] leading-relaxed rounded-lg border border-[#E8923A]/40 bg-[#161B22] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#E8923A]"
+                        className="w-full text-sm text-[var(--text-body)] leading-relaxed rounded-lg border border-[var(--action)]/40 bg-[var(--surface-raised)] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[var(--action)]"
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <Button
@@ -872,7 +872,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           {notesSaving ? "Saving…" : "Save"}
                         </Button>
                         <button onClick={() => { setNotesValue(session.notes || ""); setEditingNotes(false); }}
-                          className="flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#A8B2BD]">
+                          className="flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--text-body)]">
                           <RotateCcw className="h-3 w-3" /> Cancel
                         </button>
                       </div>
@@ -880,20 +880,20 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   ) : notesValue ? (
                     <div
                       onClick={() => setEditingNotes(true)}
-                      className="cursor-text rounded-lg border border-transparent hover:border-[#E8923A]/30 hover:bg-[#E8923A]/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
+                      className="cursor-text rounded-lg border border-transparent hover:border-[var(--action)]/30 hover:bg-[var(--action)]/5 px-2 py-1.5 -mx-2 transition-colors group/notesblock"
                       title="Click to edit notes"
                     >
-                      <p className="text-sm text-[#A8B2BD] leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
                         {notesValue}
                       </p>
-                      <p className="text-[10px] text-[#6E7681] mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
+                      <p className="text-[10px] text-[var(--text-meta)] mt-1 opacity-0 group-hover/notesblock:opacity-100 transition-opacity flex items-center gap-1">
                         <Pencil className="h-3 w-3" /> Click to edit
                       </p>
                     </div>
                   ) : (
                     <button onClick={() => setEditingNotes(true)}
-                      className="w-full text-left rounded-lg border border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-3 py-2.5 transition-colors">
-                      <span className="text-sm text-[#6E7681] hover:text-[#E8923A] flex items-center gap-1.5">
+                      className="w-full text-left rounded-lg border border-dashed border-[var(--border-rule)] hover:border-[var(--action)]/50 hover:bg-[var(--action)]/5 px-3 py-2.5 transition-colors">
+                      <span className="text-sm text-[var(--text-meta)] hover:text-[var(--action)] flex items-center gap-1.5">
                         <Pencil className="h-3.5 w-3.5" /> Add session notes…
                       </span>
                     </button>
@@ -904,10 +904,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {isOwner && (
                 <div className="mb-3 max-w-lg group/memo relative">
                   <div className="flex items-center gap-1 mb-1">
-                    <Lock className="h-3 w-3 text-[#6E7681]" />
-                    <span className="text-[10px] text-[#6E7681] uppercase tracking-wide font-semibold">Private Memo</span>
+                    <Lock className="h-3 w-3 text-[var(--text-meta)]" />
+                    <span className="text-[10px] text-[var(--text-meta)] uppercase tracking-wide font-semibold">Private Memo</span>
                     <HelpHint label="Private Memo vs Notes">
-                      <p className="text-[#F0F6FC] font-semibold">Only you see this.</p>
+                      <p className="text-[var(--text-primary)] font-semibold">Only you see this.</p>
                       <p>Notes above are public — anyone with this session&apos;s link can read them. Memo is for yourself: what to try next, why a rig didn&apos;t work, stuff you don&apos;t want to share.</p>
                     </HelpHint>
                     {memoSaved && <span className="text-[10px] text-green-400 ml-1">Saved</span>}
@@ -921,7 +921,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         onChange={e => setMemoValue(e.target.value)}
                         onKeyDown={e => { if (e.key === "Escape") { setMemoValue(session.private_memo || ""); setEditingMemo(false); } }}
                         placeholder="Personal notes only you can see…"
-                        className="w-full text-sm text-[#A8B2BD] leading-relaxed rounded-lg border border-[#6E7681]/40 bg-[#0D1117] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#6E7681]"
+                        className="w-full text-sm text-[var(--text-body)] leading-relaxed rounded-lg border border-[var(--text-meta)]/40 bg-[var(--surface-page)] px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[var(--text-meta)]"
                       />
                       <div className="flex items-center gap-2 mt-1.5">
                         <button onClick={saveMemo} disabled={memoSaving}
@@ -929,7 +929,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           <Check className="h-3 w-3" /> {memoSaving ? "Saving…" : "Save"}
                         </button>
                         <button onClick={() => { setMemoValue(session.private_memo || ""); setEditingMemo(false); }}
-                          className="flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#A8B2BD]">
+                          className="flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--text-body)]">
                           <RotateCcw className="h-3 w-3" /> Cancel
                         </button>
                       </div>
@@ -937,20 +937,20 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   ) : memoValue ? (
                     <div
                       onClick={() => setEditingMemo(true)}
-                      className="cursor-text rounded-lg border border-dashed border-[#6E7681]/20 hover:border-[#6E7681]/40 bg-[#0D1117] px-3 py-2 -mx-0 transition-colors group/memoblock"
+                      className="cursor-text rounded-lg border border-dashed border-[var(--text-meta)]/20 hover:border-[var(--text-meta)]/40 bg-[var(--surface-page)] px-3 py-2 -mx-0 transition-colors group/memoblock"
                       title="Click to edit private memo"
                     >
-                      <p className="text-sm text-[#6E7681] leading-relaxed whitespace-pre-wrap italic">
+                      <p className="text-sm text-[var(--text-meta)] leading-relaxed whitespace-pre-wrap italic">
                         {memoValue}
                       </p>
-                      <p className="text-[10px] text-[#6E7681] mt-1 opacity-0 group-hover/memoblock:opacity-100 transition-opacity flex items-center gap-1">
+                      <p className="text-[10px] text-[var(--text-meta)] mt-1 opacity-0 group-hover/memoblock:opacity-100 transition-opacity flex items-center gap-1">
                         <Pencil className="h-3 w-3" /> Click to edit
                       </p>
                     </div>
                   ) : (
                     <button onClick={() => setEditingMemo(true)}
-                      className="w-full text-left rounded-lg border border-dashed border-[#6E7681]/20 hover:border-[#6E7681]/40 hover:bg-[#0D1117] px-3 py-2 transition-colors">
-                      <span className="text-sm text-[#6E7681] hover:text-[#A8B2BD] flex items-center gap-1.5 italic">
+                      className="w-full text-left rounded-lg border border-dashed border-[var(--text-meta)]/20 hover:border-[var(--text-meta)]/40 hover:bg-[var(--surface-page)] px-3 py-2 transition-colors">
+                      <span className="text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] flex items-center gap-1.5 italic">
                         <Pencil className="h-3.5 w-3.5" /> Add private memo…
                       </span>
                     </button>
@@ -962,26 +962,26 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     The page-level guard at journal/[id]/page.tsx already 404s
                     non-owners; this guard is the second layer. */}
                 {isOwner && session.flies_notes && (
-                  <div className="text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] max-w-md">
-                    <span className="font-medium text-[#A8B2BD]">Rig: </span>{session.flies_notes}
+                  <div className="text-xs text-[var(--text-body)] bg-[var(--surface-page)] rounded-lg px-3 py-2 border border-[var(--border-rule)] max-w-md">
+                    <span className="font-medium text-[var(--text-body)]">Rig: </span>{session.flies_notes}
                   </div>
                 )}
 
                 {tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {tags.map(t => (
-                      <span key={t} className="text-[11px] bg-[#E8923A]/8 text-[#E8923A] border border-[#E8923A]/15 rounded-full px-2.5 py-0.5">{t}</span>
+                      <span key={t} className="text-[11px] bg-[var(--action)]/8 text-[var(--action)] border border-[var(--action)]/15 rounded-full px-2.5 py-0.5">{t}</span>
                     ))}
                   </div>
                 )}
 
                 {/* ---- FLIES THAT WORKED — elevated for instant scanning ---- */}
                 {usedFlies.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-[#21262D]">
-                    <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Flies That Worked</p>
+                  <div className="mt-4 pt-4 border-t border-[var(--border-rule)]">
+                    <p className="text-[11px] font-semibold text-[var(--text-meta)] uppercase tracking-wide mb-2">Flies That Worked</p>
                     <div className="flex flex-wrap gap-2">
                       {usedFlies.map(f => (
-                        <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#E8923A]/20 px-3 py-2 hover:border-[#E8923A]/40 transition-colors">
+                        <div key={f.name} className="flex items-center gap-2 rounded-lg bg-[var(--surface-page)] border border-[var(--action)]/20 px-3 py-2 hover:border-[var(--action)]/40 transition-colors">
                           {f.image ? (
                             <div className="relative h-9 w-9 rounded overflow-hidden flex-shrink-0">
                               <Image src={f.image} alt={f.name} fill sizes="36px" className="object-cover" />
@@ -989,7 +989,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           ) : (
                             <span className="text-lg flex-shrink-0">🪰</span>
                           )}
-                          <span className="text-sm font-medium text-[#E8923A]">{f.name}</span>
+                          <span className="text-sm font-medium text-[var(--action)]">{f.name}</span>
                           {f.patternId && (
                             <FlyBoxAddButton
                               fly={{ id: f.patternId, name: f.name, kind: "personal" }}
@@ -1004,20 +1004,20 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
                 {/* ---- MOBILE-ONLY: Quick Stats Bar ---- */}
                 <div className="sm:hidden mt-4 grid grid-cols-3 gap-2">
-                  <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
-                    <p className="text-2xl font-bold font-mono text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
-                    <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Fish</p>
+                  <div className="bg-[var(--surface-page)] rounded-lg px-3 py-2.5 text-center border border-[var(--border-rule)]">
+                    <p className="text-2xl font-bold font-mono text-[var(--action)] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-[10px] text-[var(--text-meta)] mt-1 uppercase tracking-wide">Fish</p>
                   </div>
                   {biggestFish > 0 && (
-                    <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
-                      <p className="text-2xl font-bold text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
-                      <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Biggest</p>
+                    <div className="bg-[var(--surface-page)] rounded-lg px-3 py-2.5 text-center border border-[var(--border-rule)]">
+                      <p className="text-2xl font-bold text-[var(--action)] leading-none">{biggestFish.toFixed(1)}&quot;</p>
+                      <p className="text-[10px] text-[var(--text-meta)] mt-1 uppercase tracking-wide">Biggest</p>
                     </div>
                   )}
                   {isOwner && session.water_clarity && (
-                    <div className="bg-[#0D1117] rounded-lg px-3 py-2.5 text-center border border-[#21262D]">
-                      <p className="text-lg font-bold text-[#E8923A] leading-none mt-0.5">{session.water_clarity}</p>
-                      <p className="text-[10px] text-[#6E7681] mt-1 uppercase tracking-wide">Clarity</p>
+                    <div className="bg-[var(--surface-page)] rounded-lg px-3 py-2.5 text-center border border-[var(--border-rule)]">
+                      <p className="text-lg font-bold text-[var(--action)] leading-none mt-0.5">{session.water_clarity}</p>
+                      <p className="text-[10px] text-[var(--text-meta)] mt-1 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}
                 </div>
@@ -1028,7 +1028,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     any future shared/public session restores them with no
                     code changes. */}
                 {session.privacy !== "private" && (
-                  <div className="mt-4 pt-4 border-t border-[#21262D]">
+                  <div className="mt-4 pt-4 border-t border-[var(--border-rule)]">
                     <div className="flex items-center gap-6">
                       <KudosButton
                         sessionId={session.id}
@@ -1051,18 +1051,18 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       const photoUrls = catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
                       const photoUrl = photoUrls[0];
                       return (
-                        <div key={i} className="flex items-center gap-2 rounded-lg bg-[#0D1117] border border-[#21262D] px-2.5 py-1.5 flex-shrink-0">
+                        <div key={i} className="flex items-center gap-2 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] px-2.5 py-1.5 flex-shrink-0">
                           {photoUrl ? (
                             <button onClick={() => setLightboxIdx(fishPhotoEntries.findIndex(p => p.catchRef.id === c.id))}
                               className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
                               <Image src={photoUrl} alt={c.species || "Fish"} fill sizes="32px" className="object-cover" />
                             </button>
                           ) : (
-                            <Fish className="h-4 w-4 text-[#E8923A] flex-shrink-0" />
+                            <Fish className="h-4 w-4 text-[var(--action)] flex-shrink-0" />
                           )}
                           <div className="min-w-0">
-                            <p className="text-xs font-medium text-[#F0F6FC] leading-tight">{c.species || "Fish"}</p>
-                            <div className="flex items-center gap-1.5 text-[10px] text-[#A8B2BD]">
+                            <p className="text-xs font-medium text-[var(--text-primary)] leading-tight">{c.species || "Fish"}</p>
+                            <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-body)]">
                               {c.length_inches && <span>{c.length_inches}&quot;</span>}
                               {c.fly_pattern?.name && <><span>·</span><span className="truncate max-w-[80px]">{c.fly_pattern.name}</span></>}
                             </div>
@@ -1101,91 +1101,91 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* 4 big stats */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4 mb-4">
                   <div>
-                    <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
-                    <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Fish Caught</p>
+                    <p className="text-2xl sm:text-3xl font-bold font-mono text-[var(--action)] leading-none">{totalFish > 0 ? totalFish : "—"}</p>
+                    <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Fish Caught</p>
                   </div>
                   {isOwner && session.water_temp_f && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{session.water_temp_f}</p>
-                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Water Temp</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[var(--action)] leading-none">{session.water_temp_f}</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Water Temp</p>
                     </div>
                   )}
                   {session.river_flow_cfs != null && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{Math.round(session.river_flow_cfs).toLocaleString()}</p>
-                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Flow (cfs)</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[var(--action)] leading-none">{Math.round(session.river_flow_cfs).toLocaleString()}</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Flow (cfs)</p>
                     </div>
                   )}
                   {session.gage_height_ft != null && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{session.gage_height_ft.toFixed(2)}</p>
-                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Gage (ft)</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[var(--action)] leading-none">{session.gage_height_ft.toFixed(2)}</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Gage (ft)</p>
                     </div>
                   )}
                   {biggestFish > 0 && (
                     <div>
-                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[#E8923A] leading-none">{biggestFish.toFixed(1)}&quot;</p>
-                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
+                      <p className="text-2xl sm:text-3xl font-bold font-mono text-[var(--action)] leading-none">{biggestFish.toFixed(1)}&quot;</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Biggest Fish</p>
                     </div>
                   )}
                   {isOwner && session.water_clarity && (
                     <div>
-                      <p className="text-xl font-bold font-mono text-[#E8923A] leading-none">{session.water_clarity}</p>
-                      <p className="text-xs text-[#6E7681] mt-0.5 uppercase tracking-wide">Clarity</p>
+                      <p className="text-xl font-bold font-mono text-[var(--action)] leading-none">{session.water_clarity}</p>
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5 uppercase tracking-wide">Clarity</p>
                     </div>
                   )}
                 </div>
 
                 {/* Weather conditions */}
                 {(session.weather_temp_f != null || session.weather != null) && (
-                  <div className="border-t border-[#21262D] pt-3 space-y-2">
+                  <div className="border-t border-[var(--border-rule)] pt-3 space-y-2">
                     {session.weather_temp_f != null ? (
                       <>
                         {/* Air temp + condition */}
-                        <div className="flex items-center gap-3 p-2.5 bg-[#0D1117] rounded-lg">
-                          <Cloud className="h-4 w-4 text-[#E8923A] flex-shrink-0" />
+                        <div className="flex items-center gap-3 p-2.5 bg-[var(--surface-page)] rounded-lg">
+                          <Cloud className="h-4 w-4 text-[var(--action)] flex-shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-[#F0F6FC]">
+                            <p className="text-sm font-semibold text-[var(--text-primary)]">
                               {Math.round(session.weather_temp_f)}°F
                               {session.weather_feels_like_f != null && (
-                                <span className="text-xs font-normal text-[#6E7681] ml-1.5">
+                                <span className="text-xs font-normal text-[var(--text-meta)] ml-1.5">
                                   feels like {Math.round(session.weather_feels_like_f)}°F
                                 </span>
                               )}
                             </p>
                             {session.weather_condition && (
-                              <p className="text-xs text-[#A8B2BD]">{session.weather_condition}</p>
+                              <p className="text-xs text-[var(--text-body)]">{session.weather_condition}</p>
                             )}
                           </div>
                         </div>
                         {/* Wind + Humidity + Pressure */}
                         <div className="grid grid-cols-3 gap-2">
                           {session.weather_wind_mph != null && (
-                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
-                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Wind</p>
-                              <p className="text-sm font-semibold text-[#F0F6FC]">{Math.round(session.weather_wind_mph)} <span className="text-xs font-normal text-[#6E7681]">mph</span></p>
-                              {session.weather_wind_dir && <p className="text-xs text-[#A8B2BD]">{session.weather_wind_dir}</p>}
+                            <div className="p-2 bg-[var(--surface-page)] rounded-lg text-center">
+                              <p className="text-xs text-[var(--text-meta)] uppercase tracking-wide">Wind</p>
+                              <p className="text-sm font-semibold text-[var(--text-primary)]">{Math.round(session.weather_wind_mph)} <span className="text-xs font-normal text-[var(--text-meta)]">mph</span></p>
+                              {session.weather_wind_dir && <p className="text-xs text-[var(--text-body)]">{session.weather_wind_dir}</p>}
                             </div>
                           )}
                           {session.weather_humidity != null && (
-                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
-                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Humidity</p>
-                              <p className="text-sm font-semibold text-[#F0F6FC]">{session.weather_humidity}<span className="text-xs font-normal text-[#6E7681]">%</span></p>
+                            <div className="p-2 bg-[var(--surface-page)] rounded-lg text-center">
+                              <p className="text-xs text-[var(--text-meta)] uppercase tracking-wide">Humidity</p>
+                              <p className="text-sm font-semibold text-[var(--text-primary)]">{session.weather_humidity}<span className="text-xs font-normal text-[var(--text-meta)]">%</span></p>
                             </div>
                           )}
                           {session.weather_pressure_hpa != null && (
-                            <div className="p-2 bg-[#0D1117] rounded-lg text-center">
-                              <p className="text-xs text-[#6E7681] uppercase tracking-wide">Pressure</p>
-                              <p className="text-sm font-semibold text-[#F0F6FC]">{(session.weather_pressure_hpa / 33.8639).toFixed(2)}</p>
-                              <p className="text-xs text-[#A8B2BD]">inHg</p>
+                            <div className="p-2 bg-[var(--surface-page)] rounded-lg text-center">
+                              <p className="text-xs text-[var(--text-meta)] uppercase tracking-wide">Pressure</p>
+                              <p className="text-sm font-semibold text-[var(--text-primary)]">{(session.weather_pressure_hpa / 33.8639).toFixed(2)}</p>
+                              <p className="text-xs text-[var(--text-body)]">inHg</p>
                             </div>
                           )}
                         </div>
                       </>
                     ) : (
                       /* Legacy fallback — old sessions only have the string */
-                      <div className="flex items-center gap-2 text-sm text-[#A8B2BD]">
-                        <Cloud className="h-4 w-4 text-[#6E7681] flex-shrink-0" />
+                      <div className="flex items-center gap-2 text-sm text-[var(--text-body)]">
+                        <Cloud className="h-4 w-4 text-[var(--text-meta)] flex-shrink-0" />
                         <span>{session.weather}</span>
                       </div>
                     )}
@@ -1209,9 +1209,9 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   ].filter(Boolean);
                   if (!gearParts.length) return null;
                   return (
-                    <div className="border-t border-[#21262D] pt-3 mt-3">
-                      <p className="text-[11px] font-semibold text-[#6E7681] uppercase tracking-wide mb-2">Gear</p>
-                      <p className="text-xs text-[#A8B2BD] leading-relaxed">{gearParts.join(" · ")}</p>
+                    <div className="border-t border-[var(--border-rule)] pt-3 mt-3">
+                      <p className="text-[11px] font-semibold text-[var(--text-meta)] uppercase tracking-wide mb-2">Gear</p>
+                      <p className="text-xs text-[var(--text-body)] leading-relaxed">{gearParts.join(" · ")}</p>
                     </div>
                   );
                 })()}
@@ -1222,10 +1222,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
 
           {/* ---- COMBINED PHOTO GALLERY (fish + session) ---- */}
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4 mb-5">
               {(fishPhotoEntries.length > 0 || allSessionPhotos.length > 0) && (
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-[#6E7681] uppercase tracking-wide">
+                <p className="text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">
                   Photos ({fishPhotoEntries.length + allSessionPhotos.length})
                 </p>
               </div>
@@ -1273,16 +1273,16 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {/* Add Photo Button — owner-only. Non-owners (including
                     anonymous visitors) see the gallery read-only. */}
                 {isOwner && (
-                  <label className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#21262D] hover:border-[#E8923A]/50 hover:bg-[#E8923A]/5 px-4 py-3 cursor-pointer transition-colors">
+                  <label className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[var(--border-rule)] hover:border-[var(--action)]/50 hover:bg-[var(--action)]/5 px-4 py-3 cursor-pointer transition-colors">
                     {uploadingSessionPhoto ? (
                       <>
-                        <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
-                        <span className="text-sm text-[#A8B2BD]">Uploading…</span>
+                        <Loader2 className="h-4 w-4 text-[var(--action)] animate-spin" />
+                        <span className="text-sm text-[var(--text-body)]">Uploading…</span>
                       </>
                     ) : (
                       <>
-                        <Camera className="h-4 w-4 text-[#6E7681]" />
-                        <span className="text-sm text-[#6E7681] hover:text-[#E8923A] transition-colors">Add photo</span>
+                        <Camera className="h-4 w-4 text-[var(--text-meta)]" />
+                        <span className="text-sm text-[var(--text-meta)] hover:text-[var(--action)] transition-colors">Add photo</span>
                       </>
                     )}
                     <input
@@ -1330,27 +1330,27 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           {/* ---- DRIFT VIEW: count-only session (no detailed catches logged) ---- */}
           {isDriftMode && (
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
-              <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
-                <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
-                <span className="inline-flex items-center gap-1 text-xs text-[#6E7681] bg-[#0D1117] rounded-full px-2 py-0.5">
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden mb-5">
+              <div className="px-4 py-3 border-b border-[var(--border-rule)] flex items-center justify-between">
+                <h2 className="text-sm font-bold text-[var(--text-primary)]">Fish Caught</h2>
+                <span className="inline-flex items-center gap-1 text-xs text-[var(--text-meta)] bg-[var(--surface-page)] rounded-full px-2 py-0.5">
                   Drift mode
                   <HelpHint label="About drift mode">
-                    <p className="text-[#F0F6FC] font-semibold">Total count, no per-catch details.</p>
-                    <p>You logged how many fish you caught without filling in each individual catch (species, length, fly). Tap <span className="text-[#E8923A]">Edit</span> to add details later.</p>
-                    <p className="text-[#6E7681] text-xs">Useful for fast days when you just want the count.</p>
+                    <p className="text-[var(--text-primary)] font-semibold">Total count, no per-catch details.</p>
+                    <p>You logged how many fish you caught without filling in each individual catch (species, length, fly). Tap <span className="text-[var(--action)]">Edit</span> to add details later.</p>
+                    <p className="text-[var(--text-meta)] text-xs">Useful for fast days when you just want the count.</p>
                   </HelpHint>
                 </span>
               </div>
               <div className="p-6 flex flex-col items-center text-center gap-3">
                 <div className="flex items-center gap-3">
-                  <Fish className="h-8 w-8 text-[#E8923A]" />
-                  <span className="text-5xl font-bold text-[#F0F6FC] font-['IBM_Plex_Mono']">{session.total_fish}</span>
+                  <Fish className="h-8 w-8 text-[var(--action)]" />
+                  <span className="text-5xl font-bold text-[var(--text-primary)] font-['IBM_Plex_Mono']">{session.total_fish}</span>
                 </div>
-                <p className="text-sm text-[#A8B2BD]">
+                <p className="text-sm text-[var(--text-body)]">
                   {session.total_fish === 1 ? "fish landed" : "fish landed"}
                 </p>
-                <p className="text-xs text-[#6E7681] max-w-xs">
+                <p className="text-xs text-[var(--text-meta)] max-w-xs">
                   This session was logged in drift mode — total count only, no per-catch details.
                 </p>
               </div>
@@ -1359,10 +1359,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           {/* ---- CATCHES TABLE (like Strava Segments) ---- */}
           {catches.length > 0 && (
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] overflow-hidden mb-5">
-              <div className="px-4 py-3 border-b border-[#21262D] flex items-center justify-between">
-                <h2 className="text-sm font-bold text-[#F0F6FC]">Fish Caught</h2>
-                <span className="text-xs text-[#6E7681]">{totalFish} total</span>
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden mb-5">
+              <div className="px-4 py-3 border-b border-[var(--border-rule)] flex items-center justify-between">
+                <h2 className="text-sm font-bold text-[var(--text-primary)]">Fish Caught</h2>
+                <span className="text-xs text-[var(--text-meta)]">{totalFish} total</span>
               </div>
               {/* Mobile: Stacked catch cards */}
               <div className="sm:hidden divide-y divide-[#21262D]">
@@ -1382,40 +1382,40 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             </div>
                           </button>
                         ) : isOwner ? (
-                          <label className="h-12 w-12 rounded-lg bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors">
+                          <label className="h-12 w-12 rounded-lg bg-[var(--surface-card)] hover:bg-[var(--action)]/10 flex items-center justify-center cursor-pointer transition-colors">
                             {isUploading ? (
-                              <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                              <Loader2 className="h-4 w-4 text-[var(--action)] animate-spin" />
                             ) : (
-                              <Camera className="h-4 w-4 text-[#6E7681]" />
+                              <Camera className="h-4 w-4 text-[var(--text-meta)]" />
                             )}
                             <input type="file" accept="image/*" className="hidden" disabled={isUploading}
                               onChange={e => { const file = e.target.files?.[0]; if (file) handleCatchPhotoUpload(c.id, file); }} />
                           </label>
                         ) : (
-                          <div className="h-12 w-12 rounded-lg bg-[#1F2937] flex items-center justify-center">
-                            <Fish className="h-4 w-4 text-[#6E7681]" />
+                          <div className="h-12 w-12 rounded-lg bg-[var(--surface-card)] flex items-center justify-center">
+                            <Fish className="h-4 w-4 text-[var(--text-meta)]" />
                           </div>
                         )}
                       </div>
                       {/* Details */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between">
-                          <p className="font-medium text-[#F0F6FC] text-sm truncate">
+                          <p className="font-medium text-[var(--text-primary)] text-sm truncate">
                             {c.species || "—"}
-                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#6E7681]">×{c.quantities}</span>}
+                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[var(--text-meta)]">×{c.quantities}</span>}
                           </p>
-                          {c.length_inches && <span className="text-sm font-mono text-[#E8923A] ml-2 flex-shrink-0">{c.length_inches}&quot;</span>}
+                          {c.length_inches && <span className="text-sm font-mono text-[var(--action)] ml-2 flex-shrink-0">{c.length_inches}&quot;</span>}
                         </div>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-[#A8B2BD]">
+                        <div className="flex items-center gap-2 mt-1 text-xs text-[var(--text-body)]">
                           {c.fly_pattern?.name && <span className="truncate">{c.fly_pattern.name}</span>}
                           {c.fly_position && (
-                            <span className="bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium flex-shrink-0">{c.fly_position}</span>
+                            <span className="bg-[var(--action)]/10 text-[var(--action)] rounded px-1.5 py-0.5 font-medium flex-shrink-0">{c.fly_position}</span>
                           )}
                           {c.fly_size && <span className="flex-shrink-0">#{String(c.fly_size).replace(/^#/, "")}</span>}
-                          {c.time_caught && <span className="flex-shrink-0 text-[#6E7681]">{formatCatchTime(c.time_caught)}</span>}
+                          {c.time_caught && <span className="flex-shrink-0 text-[var(--text-meta)]">{formatCatchTime(c.time_caught)}</span>}
                         </div>
                         {(c.weather_temp_f != null || c.weather_condition || c.weather_humidity != null || c.weather_pressure_hpa != null) && (
-                          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[10px] text-[#6E7681]">
+                          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[10px] text-[var(--text-meta)]">
                             {c.weather_temp_f != null && <span>{Math.round(c.weather_temp_f)}°F</span>}
                             {c.weather_condition && <span>· {c.weather_condition}</span>}
                             {c.weather_wind_mph != null && (
@@ -1435,28 +1435,28 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[#21262D]">
+                    <tr className="border-b border-[var(--border-rule)]">
                       <th className="w-10 py-2 px-3"></th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Species</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Length</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Fly</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Species</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Length</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Fly</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">
                         <span className="inline-flex items-center gap-0.5">
                           Position
                           <HelpHint label="Fly position on the rig">
-                            <p className="text-[#F0F6FC] font-semibold">Where the fly rode on your line.</p>
+                            <p className="text-[var(--text-primary)] font-semibold">Where the fly rode on your line.</p>
                             <ul className="text-xs space-y-0.5">
-                              <li><span className="text-[#E8923A]">Point</span> — bottom fly, closest to the weight</li>
-                              <li><span className="text-[#E8923A]">Dropper</span> — tied off a tag above the point</li>
-                              <li><span className="text-[#E8923A]">Tag</span> — a second dropper off a knot tag</li>
-                              <li><span className="text-[#E8923A]">Single</span> — the only fly on the line</li>
+                              <li><span className="text-[var(--action)]">Point</span> — bottom fly, closest to the weight</li>
+                              <li><span className="text-[var(--action)]">Dropper</span> — tied off a tag above the point</li>
+                              <li><span className="text-[var(--action)]">Tag</span> — a second dropper off a knot tag</li>
+                              <li><span className="text-[var(--action)]">Single</span> — the only fly on the line</li>
                             </ul>
                           </HelpHint>
                         </span>
                       </th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Size</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Time</th>
-                      <th className="text-left py-2 px-3 text-xs font-semibold text-[#6E7681] uppercase tracking-wide">Weather</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Size</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Time</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide">Weather</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1465,7 +1465,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       const photoUrl = photoUrls[0];
                       const isUploading = uploadingCatch === c.id;
                       return (
-                        <tr key={c.id} className="border-b border-[#21262D] last:border-0 hover:bg-[#0D1117]/50 transition-colors">
+                        <tr key={c.id} className="border-b border-[var(--border-rule)] last:border-0 hover:bg-[var(--surface-page)]/50 transition-colors">
                           <td className="py-2 px-3">
                             {photoUrl ? (
                               <div className="relative group/photo">
@@ -1490,11 +1490,11 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                 )}
                               </div>
                             ) : isOwner ? (
-                              <label className="h-8 w-8 rounded bg-[#1F2937] hover:bg-[#E8923A]/10 flex items-center justify-center cursor-pointer transition-colors group/upload">
+                              <label className="h-8 w-8 rounded bg-[var(--surface-card)] hover:bg-[var(--action)]/10 flex items-center justify-center cursor-pointer transition-colors group/upload">
                                 {isUploading ? (
-                                  <Loader2 className="h-4 w-4 text-[#E8923A] animate-spin" />
+                                  <Loader2 className="h-4 w-4 text-[var(--action)] animate-spin" />
                                 ) : (
-                                  <Camera className="h-4 w-4 text-[#6E7681] group-hover/upload:text-[#E8923A]" />
+                                  <Camera className="h-4 w-4 text-[var(--text-meta)] group-hover/upload:text-[var(--action)]" />
                                 )}
                                 <input
                                   type="file"
@@ -1508,29 +1508,29 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                 />
                               </label>
                             ) : (
-                              <div className="h-8 w-8 rounded bg-[#1F2937] flex items-center justify-center">
-                                <Fish className="h-3.5 w-3.5 text-[#6E7681]" />
+                              <div className="h-8 w-8 rounded bg-[var(--surface-card)] flex items-center justify-center">
+                                <Fish className="h-3.5 w-3.5 text-[var(--text-meta)]" />
                               </div>
                             )}
                           </td>
-                          <td className="py-2.5 px-3 font-medium text-[#F0F6FC]">
+                          <td className="py-2.5 px-3 font-medium text-[var(--text-primary)]">
                             {c.species || "—"}
-                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[#6E7681]">×{c.quantities}</span>}
+                            {(c.quantities || 1) > 1 && <span className="ml-1 text-xs text-[var(--text-meta)]">×{c.quantities}</span>}
                           </td>
-                          <td className="py-2.5 px-3 text-[#A8B2BD]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
-                          <td className="py-2.5 px-3 text-[#A8B2BD] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
+                          <td className="py-2.5 px-3 text-[var(--text-body)]">{c.length_inches ? `${c.length_inches}"` : "—"}</td>
+                          <td className="py-2.5 px-3 text-[var(--text-body)] max-w-[120px] truncate">{c.fly_pattern?.name || "—"}</td>
                           <td className="py-2.5 px-3">
                             {c.fly_position ? (
-                              <span className="text-xs bg-[#E8923A]/10 text-[#E8923A] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
-                            ) : <span className="text-[#6E7681]">—</span>}
+                              <span className="text-xs bg-[var(--action)]/10 text-[var(--action)] rounded px-1.5 py-0.5 font-medium">{c.fly_position}</span>
+                            ) : <span className="text-[var(--text-meta)]">—</span>}
                           </td>
-                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{c.fly_size || "—"}</td>
-                          <td className="py-2.5 px-3 text-[#A8B2BD] text-xs">{formatCatchTime(c.time_caught)}</td>
-                          <td className="py-2.5 px-3 text-xs text-[#6E7681]">
+                          <td className="py-2.5 px-3 text-[var(--text-body)] text-xs">{c.fly_size || "—"}</td>
+                          <td className="py-2.5 px-3 text-[var(--text-body)] text-xs">{formatCatchTime(c.time_caught)}</td>
+                          <td className="py-2.5 px-3 text-xs text-[var(--text-meta)]">
                             {(c.weather_temp_f != null || c.weather_humidity != null || c.weather_pressure_hpa != null) ? (
                               <div className="space-y-0.5">
                                 <div>
-                                  {c.weather_temp_f != null && <span className="text-[#A8B2BD]">{Math.round(c.weather_temp_f)}°F</span>}
+                                  {c.weather_temp_f != null && <span className="text-[var(--text-body)]">{Math.round(c.weather_temp_f)}°F</span>}
                                   {c.weather_condition && <span className="ml-1">{c.weather_condition}</span>}
                                   {c.weather_wind_mph != null && (
                                     <span className="ml-1">{Math.round(c.weather_wind_mph)}mph{c.weather_wind_dir ? ` ${c.weather_wind_dir}` : ''}</span>
@@ -1557,11 +1557,11 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           {/* ---- FLY PATTERNS (standalone, small cards) ---- */}
           {flies.length > 0 && (
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4 mb-5">
-              <h2 className="text-sm font-bold text-[#F0F6FC] mb-3">Fly Box</h2>
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4 mb-5">
+              <h2 className="text-sm font-bold text-[var(--text-primary)] mb-3">Fly Box</h2>
               <div className="flex flex-wrap gap-3">
                 {flies.map(fly => (
-                  <div key={fly.id} className="flex items-center gap-2 bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D]">
+                  <div key={fly.id} className="flex items-center gap-2 bg-[var(--surface-page)] rounded-lg px-3 py-2 border border-[var(--border-rule)]">
                     {fly.image_url ? (
                       <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
                         <Image src={fly.image_url} alt={fly.name} fill sizes="32px" className="object-cover" />
@@ -1570,8 +1570,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <span className="text-base flex-shrink-0">🪰</span>
                     )}
                     <div>
-                      <p className="text-xs font-medium text-[#F0F6FC]">{fly.name}</p>
-                      {fly.type && <p className="text-[10px] text-[#6E7681]">{fly.type}</p>}
+                      <p className="text-xs font-medium text-[var(--text-primary)]">{fly.name}</p>
+                      {fly.type && <p className="text-[10px] text-[var(--text-meta)]">{fly.type}</p>}
                     </div>
                   </div>
                 ))}

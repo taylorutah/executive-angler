@@ -278,28 +278,28 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
   return (
     <>
       <div
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#0D1117]/85 backdrop-blur-sm p-0 sm:p-4"
+        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[var(--surface-page)]/85 backdrop-blur-sm p-0 sm:p-4"
         onMouseDown={handleBackdropMouseDown}
         onMouseUp={handleBackdropMouseUp}
         role="presentation"
       >
         <div
-          className="w-full sm:max-w-xl bg-[#161B22] border border-[#21262D] sm:rounded-2xl rounded-t-2xl max-h-[94vh] overflow-hidden flex flex-col"
+          className="w-full sm:max-w-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] sm:rounded-2xl rounded-t-2xl max-h-[94vh] overflow-hidden flex flex-col"
           role="dialog"
           aria-modal="true"
           aria-label={`Recipe card for ${fly.name || "fly pattern"}`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between gap-4 px-5 py-3 border-b border-[#21262D]">
+          <div className="flex items-center justify-between gap-4 px-5 py-3 border-b border-[var(--border-rule)]">
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[#6E7681]">Recipe Card</p>
-              <h2 className="font-heading text-base font-bold text-[#F0F6FC] truncate">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-meta)]">Recipe Card</p>
+              <h2 className="font-heading text-base font-bold text-[var(--text-primary)] truncate">
                 {fly.name || "Untitled fly"}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-1.5 text-[#6E7681] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+              className="rounded-lg p-1.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
@@ -307,7 +307,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
           </div>
 
           {/* Card preview area (scrollable on tall content) */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#0D1117]/60 flex justify-center items-start">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[var(--surface-page)]/60 flex justify-center items-start">
             <div
               ref={cardRef}
               id="ea-fly-card-printable"
@@ -635,7 +635,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
           </div>
 
           {/* Action bar */}
-          <div className="border-t border-[#21262D] px-4 py-3 bg-[#0D1117]">
+          <div className="border-t border-[var(--border-rule)] px-4 py-3 bg-[var(--surface-page)]">
             {status && (
               <p
                 className={`text-xs mb-2 ${status.kind === "ok" ? "text-emerald-400" : "text-red-400"}`}
@@ -731,8 +731,8 @@ function ActionButton({
   primary?: boolean;
 }) {
   const cls = primary
-    ? "bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A45A] disabled:opacity-50"
-    : "border border-[#21262D] bg-[#161B22] text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#E8923A]/40 disabled:opacity-50";
+    ? "bg-[var(--action)] text-[var(--surface-page)] hover:bg-[#F0A45A] disabled:opacity-50"
+    : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-[var(--action)]/40 disabled:opacity-50";
   return (
     <button
       type="button"

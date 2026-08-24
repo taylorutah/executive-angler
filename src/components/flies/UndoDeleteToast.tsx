@@ -84,7 +84,7 @@ export default function UndoDeleteToast() {
           type="button"
           onClick={handleRestore}
           disabled={busy}
-          className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-md bg-[var(--action)] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
         >
           <Undo2 className="h-3.5 w-3.5" />
           {busy ? "Restoring…" : "Undo"}

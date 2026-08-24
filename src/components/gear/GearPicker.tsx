@@ -23,7 +23,7 @@ const TYPE_LABELS: Record<GearType, string> = {
 };
 
 const selectCls =
-  "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-[#F0F6FC] text-sm focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-[var(--text-primary)] text-sm focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
 
 export default function GearPicker({ type, value, onChange, label }: Props) {
   const [items, setItems] = useState<GearItem[]>([]);
@@ -72,7 +72,7 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
     <>
       <div>
         {label && (
-          <label className="block text-xs font-semibold text-[#A8B2BD] mb-1 uppercase tracking-wide">
+          <label className="block text-xs font-semibold text-[var(--text-body)] mb-1 uppercase tracking-wide">
             {label}
           </label>
         )}

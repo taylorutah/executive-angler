@@ -71,9 +71,9 @@ export default async function RiversPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Legendary Waters
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -90,13 +90,13 @@ export default async function RiversPage() {
       </section>
 
       {/* ── My Rivers / Spotlight Rivers ──────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {myRivers.length > 0 ? (
             <>
               <div className="flex items-center gap-2 mb-8">
-                <Heart className="h-4 w-4 text-[#E8923A] fill-[#E8923A]" />
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+                <Heart className="h-4 w-4 text-[var(--action)] fill-[var(--action)]" />
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
                   My Rivers
                 </p>
               </div>
@@ -105,7 +105,7 @@ export default async function RiversPage() {
                   <ScrollAnimation key={river.id} delay={i * 0.1}>
                     <Link
                       href={`/rivers/${river.slug}`}
-                      className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                      className="group block bg-[var(--surface-raised)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                     >
                       <div className="relative h-56">
                         <SafeEntityImage
@@ -119,37 +119,37 @@ export default async function RiversPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                         <div className="absolute bottom-4 left-4">
                           <span
-                            className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
+                            className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[var(--surface-card)] text-[var(--text-body)]"}`}
                           >
                             {river.difficulty}
                           </span>
                         </div>
                       </div>
                       <div className="p-5">
-                        <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
+                        <h3 className="font-heading text-xl font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors">
                           {river.name}
                         </h3>
-                        <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
+                        <p className="mt-2 text-sm text-[var(--text-body)] line-clamp-2">
                           {river.description?.substring(0, 120)}...
                         </p>
                         <div className="mt-3 flex flex-wrap gap-1.5">
                           {river.primarySpecies.slice(0, 3).map((sp) => (
                             <span
                               key={sp}
-                              className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                              className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
                             >
                               {sp}
                             </span>
                           ))}
-                          <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
+                          <span className="px-2 py-0.5 bg-[var(--surface-card)] text-[var(--text-body)] text-[10px] font-medium rounded-full capitalize">
                             {river.wadingType}
                           </span>
                         </div>
                         <div className="mt-4 flex items-center justify-between">
-                          <span className="text-xs text-[#6E7681]">
+                          <span className="text-xs text-[var(--text-meta)]">
                             Peak: {river.bestMonths.slice(0, 3).join(" · ")}
                           </span>
-                          <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
+                          <span className="text-sm font-semibold text-[var(--action)] flex items-center gap-1 group-hover:underline">
                             Explore <ChevronRight className="h-3.5 w-3.5" />
                           </span>
                         </div>
@@ -161,7 +161,7 @@ export default async function RiversPage() {
             </>
           ) : (
             <>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
                 Iconic Rivers
               </p>
               <div className="grid md:grid-cols-3 gap-6">
@@ -171,7 +171,7 @@ export default async function RiversPage() {
                     <ScrollAnimation key={river.id} delay={i * 0.1}>
                       <Link
                         href={`/rivers/${river.slug}`}
-                        className="group block bg-[#161B22] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                        className="group block bg-[var(--surface-raised)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                       >
                         <div className="relative h-56">
                           <SafeEntityImage
@@ -185,40 +185,40 @@ export default async function RiversPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                           <div className="absolute bottom-4 left-4">
                             <span
-                              className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[#1F2937] text-[#A8B2BD]"}`}
+                              className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide ${DIFFICULTY_STYLES[river.difficulty] ?? "bg-[var(--surface-card)] text-[var(--text-body)]"}`}
                             >
                               {river.difficulty}
                             </span>
                           </div>
                         </div>
                         <div className="p-5">
-                          <h3 className="font-heading text-xl font-bold text-[#E8923A] group-hover:text-[#E8923A] transition-colors">
+                          <h3 className="font-heading text-xl font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors">
                             {river.name}
                           </h3>
-                          <p className="mt-0.5 text-sm font-medium text-[#E8923A]">
+                          <p className="mt-0.5 text-sm font-medium text-[var(--action)]">
                             {RIVER_HEADLINES[river.slug]}
                           </p>
-                          <p className="mt-2 text-sm text-[#A8B2BD] line-clamp-2">
+                          <p className="mt-2 text-sm text-[var(--text-body)] line-clamp-2">
                             {river.description?.substring(0, 120)}...
                           </p>
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {river.primarySpecies.slice(0, 2).map((sp) => (
                               <span
                                 key={sp}
-                                className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                                className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
                               >
                                 {sp}
                               </span>
                             ))}
-                            <span className="px-2 py-0.5 bg-[#1F2937] text-[#A8B2BD] text-[10px] font-medium rounded-full capitalize">
+                            <span className="px-2 py-0.5 bg-[var(--surface-card)] text-[var(--text-body)] text-[10px] font-medium rounded-full capitalize">
                               {river.wadingType}
                             </span>
                           </div>
                           <div className="mt-4 flex items-center justify-between">
-                            <span className="text-xs text-[#6E7681]">
+                            <span className="text-xs text-[var(--text-meta)]">
                               Peak: {river.bestMonths.slice(0, 3).join(" · ")}
                             </span>
-                            <span className="text-sm font-semibold text-[#E8923A] flex items-center gap-1 group-hover:underline">
+                            <span className="text-sm font-semibold text-[var(--action)] flex items-center gap-1 group-hover:underline">
                               Explore <ChevronRight className="h-3.5 w-3.5" />
                             </span>
                           </div>
@@ -234,7 +234,7 @@ export default async function RiversPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <section className="bg-[#161B22] border-t border-[#21262D] pb-16 sm:pb-20">
+      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <RiversPageClient rivers={allRiversData} />
         </div>

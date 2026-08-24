@@ -36,9 +36,9 @@ const FLY_SOURCES = ["tied", "bought", "gifted"] as const;
 type FlySource = (typeof FLY_SOURCES)[number];
 
 const inputClass =
-  "w-full h-9 bg-[#0D1117] border border-[#30363D] rounded-md px-2.5 text-[13px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors";
+  "w-full h-9 bg-[var(--surface-page)] border border-[var(--border-strong)] rounded-md px-2.5 text-[13px] text-[var(--text-primary)] placeholder-[#6E7681] outline-none focus:border-[var(--action)] transition-colors";
 const labelClass =
-  "block text-[10px] font-bold uppercase tracking-widest text-[#6E7681] mb-1";
+  "block text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)] mb-1";
 
 export interface FlyPatternFormInitial {
   name?: string;
@@ -246,9 +246,9 @@ export default function FlyPatternForm({
   const backLabel = isCanonical ? "Back to library" : "Fly Patterns";
 
   return (
-    <div className={`min-h-screen pt-4 pb-32 ${isCanonical ? "bg-[#1a1208]" : "bg-[#0D1117]"}`}>
+    <div className={`min-h-screen pt-4 pb-32 ${isCanonical ? "bg-[#1a1208]" : "bg-[var(--surface-page)]"}`}>
       {isCanonical && (
-        <div className="bg-[#E8923A] text-[#0D1117] border-b-2 border-[#D17D28]">
+        <div className="bg-[var(--action)] text-[var(--surface-page)] border-b-2 border-[#D17D28]">
           <div className="mx-auto max-w-6xl px-4 lg:px-6 py-2 flex items-center gap-2">
             <BookOpen className="w-4 h-4 shrink-0" />
             <p className="text-[12px] font-semibold uppercase tracking-wider">
@@ -265,7 +265,7 @@ export default function FlyPatternForm({
         <div className="flex items-center justify-between mb-3 mt-2">
           <Link
             href={cancelHref}
-            className="inline-flex items-center gap-1.5 text-xs text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--action)] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {backLabel}
@@ -273,8 +273,8 @@ export default function FlyPatternForm({
           <span
             className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest ${
               isCanonical
-                ? "text-[#E8923A]"
-                : "text-[#0BA5C7]"
+                ? "text-[var(--action)]"
+                : "text-[var(--signal-live)]"
             }`}
           >
             {isCanonical ? (
@@ -293,14 +293,14 @@ export default function FlyPatternForm({
         {/* Title row */}
         <div
           className={`flex items-end justify-between pb-3 mb-4 gap-3 border-b-2 ${
-            isCanonical ? "border-[#E8923A]/40" : "border-[#21262D]"
+            isCanonical ? "border-[var(--action)]/40" : "border-[var(--border-rule)]"
           }`}
         >
           <div className="min-w-0">
-            <h1 className="font-heading text-2xl text-[#F0F6FC] leading-tight">
+            <h1 className="font-heading text-2xl text-[var(--text-primary)] leading-tight">
               {titleText}
             </h1>
-            <p className="text-[12px] text-[#6E7681] mt-0.5">
+            <p className="text-[12px] text-[var(--text-meta)] mt-0.5">
               {subtitleText}
             </p>
           </div>
@@ -325,9 +325,9 @@ export default function FlyPatternForm({
         <form id={formId} onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-3">
               {/* Pattern Info */}
-              <section className="border border-[#30363D] rounded-md bg-[#161B22]">
-                <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD]">
+              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
+                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
+                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
                     Pattern Info
                   </h2>
                 </header>
@@ -397,8 +397,8 @@ export default function FlyPatternForm({
                             onClick={() => setSource(s)}
                             className={`px-3 h-7 rounded-md text-[12px] font-medium transition-colors capitalize ${
                               source === s
-                                ? "bg-[#E8923A] text-white"
-                                : "bg-[#0D1117] border border-[#30363D] text-[#A8B2BD] hover:border-[#E8923A]/60"
+                                ? "bg-[var(--action)] text-white"
+                                : "bg-[var(--surface-page)] border border-[var(--border-strong)] text-[var(--text-body)] hover:border-[var(--action)]/60"
                             }`}
                           >
                             {s}
@@ -437,13 +437,13 @@ export default function FlyPatternForm({
               </section>
 
               {/* Tying Recipe */}
-              <section className="border border-[#30363D] rounded-md bg-[#161B22]">
-                <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
+              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
+                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
                   <div className="flex items-baseline gap-2">
-                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD]">
+                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
                       Tying Recipe
                     </h2>
-                    <span className="text-[11px] text-[#6E7681]">
+                    <span className="text-[11px] text-[var(--text-meta)]">
                       {useSimpleMode
                         ? "Free-text materials list"
                         : "Search 500+ materials by name or brand"}
@@ -452,7 +452,7 @@ export default function FlyPatternForm({
                   <button
                     type="button"
                     onClick={() => setUseSimpleMode(!useSimpleMode)}
-                    className="text-[11px] text-[#A8B2BD] hover:text-[#E8923A] transition-colors px-2 h-6 rounded border border-[#30363D] hover:border-[#E8923A]/40"
+                    className="text-[11px] text-[var(--text-body)] hover:text-[var(--action)] transition-colors px-2 h-6 rounded border border-[var(--border-strong)] hover:border-[var(--action)]/40"
                   >
                     {useSimpleMode ? "Use recipe builder" : "Use simple text"}
                   </button>
@@ -474,7 +474,7 @@ export default function FlyPatternForm({
                           className={`${inputClass} h-auto py-2 resize-none`}
                         />
                         {initial?.materials && (
-                          <p className="mt-1 text-[10px] text-[#6E7681]">
+                          <p className="mt-1 text-[10px] text-[var(--text-meta)]">
                             Legacy materials notes are preserved here. Switch to
                             the recipe builder to upgrade to structured rows.
                           </p>
@@ -491,9 +491,9 @@ export default function FlyPatternForm({
               </section>
 
               {/* Details */}
-              <section className="border border-[#30363D] rounded-md bg-[#161B22]">
-                <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD]">
+              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
+                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
+                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
                     Details
                   </h2>
                 </header>
@@ -529,9 +529,9 @@ export default function FlyPatternForm({
 
               {/* Photo — full-width section, uploader constrained so the 1:1
                   dropzone doesn't dominate the layout. */}
-              <section className="border border-[#30363D] rounded-md bg-[#161B22]">
-                <header className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#A8B2BD]">
+              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
+                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
+                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
                     Photo
                   </h2>
                 </header>
@@ -550,16 +550,16 @@ export default function FlyPatternForm({
               </section>
 
               {initial?.parentCanonical && (
-                <section className="border border-[#0BA5C7]/30 bg-[#0BA5C7]/5 rounded-md">
-                  <header className="border-b border-[#0BA5C7]/20 bg-[#0BA5C7]/5 px-3 py-1.5">
-                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[#0BA5C7]">
+                <section className="border border-[var(--signal-live)]/30 bg-[var(--signal-live)]/5 rounded-md">
+                  <header className="border-b border-[var(--signal-live)]/20 bg-[var(--signal-live)]/5 px-3 py-1.5">
+                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
                       Library Lineage
                     </h2>
                   </header>
                   <div className="p-3 flex items-center justify-between gap-3">
-                    <p className="text-[12px] text-[#A8B2BD] leading-snug">
+                    <p className="text-[12px] text-[var(--text-body)] leading-snug">
                       Forked from{" "}
-                      <span className="font-semibold text-[#F0F6FC]">
+                      <span className="font-semibold text-[var(--text-primary)]">
                         {initial.parentCanonical.name}
                       </span>
                     </p>
@@ -567,7 +567,7 @@ export default function FlyPatternForm({
                       href={`/flies/${initial.parentCanonical.slug}`}
                       target="_blank"
                       rel="noopener"
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#0BA5C7] hover:text-[#3FBED7] transition-colors shrink-0"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--signal-live)] hover:text-[#3FBED7] transition-colors shrink-0"
                     >
                       <ExternalLink className="w-3 h-3" /> View library reference
                     </Link>
@@ -596,8 +596,8 @@ export default function FlyPatternForm({
                   opacity: 0,
                 }}
               />
-              <div className="border border-[#30363D] rounded-md bg-[#161B22] p-3">
-                <p className="text-[11px] text-[#A8B2BD] mb-2">
+              <div className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)] p-3">
+                <p className="text-[11px] text-[var(--text-body)] mb-2">
                   Patterns submitted by community members go through a quick
                   review before joining the public library. Your personal copy
                   stays in your box right away.
@@ -616,13 +616,13 @@ export default function FlyPatternForm({
         <div
           className={`fixed bottom-0 left-0 right-0 z-40 border-t-2 ${
             isCanonical
-              ? "bg-[#1a1208] border-[#E8923A]"
-              : "bg-[#0D1117] border-[#21262D]"
+              ? "bg-[#1a1208] border-[var(--action)]"
+              : "bg-[var(--surface-page)] border-[var(--border-rule)]"
           }`}
         >
           <div className="mx-auto max-w-6xl px-3 py-2 flex items-center gap-2">
             {isCanonical && (
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-[#E8923A]/15 border border-[#E8923A]/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E8923A]">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-[var(--action)]/15 border border-[var(--action)]/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--action)]">
                 <BookOpen className="w-3 h-3" />
                 Editing library entry
               </span>
@@ -640,7 +640,7 @@ export default function FlyPatternForm({
             ) : (
               <Link
                 href={cancelHref}
-                className="px-3 h-9 inline-flex items-center text-[12px] text-[#A8B2BD] hover:text-[#F0F6FC] border border-[#30363D] rounded-md hover:border-[#E8923A]/40 transition-colors"
+                className="px-3 h-9 inline-flex items-center text-[12px] text-[var(--text-body)] hover:text-[var(--text-primary)] border border-[var(--border-strong)] rounded-md hover:border-[var(--action)]/40 transition-colors"
               >
                 Cancel
               </Link>
@@ -652,7 +652,7 @@ export default function FlyPatternForm({
                 busy ||
                 (showCaptcha && captchaAvailable && !turnstileToken)
               }
-              className="ml-auto h-9 px-4 inline-flex items-center bg-[#E8923A] text-white text-[12px] font-semibold rounded-md hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="ml-auto h-9 px-4 inline-flex items-center bg-[var(--action)] text-white text-[12px] font-semibold rounded-md hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               title={
                 showCaptcha && captchaAvailable && !turnstileToken
                   ? "Complete the captcha to continue"

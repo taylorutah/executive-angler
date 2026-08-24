@@ -22,8 +22,8 @@ import { summarizeVersion } from "./summarize-version";
 type ColumnKey = "wanted" | "at_vise" | "done";
 
 const COLUMNS: { key: ColumnKey; label: string; icon: React.ReactNode; tint: string }[] = [
-  { key: "wanted",  label: "Want to tie",         icon: <ListChecks className="h-4 w-4 text-[#00B4D8]" />,  tint: "border-[#00B4D8]/30 bg-[#00B4D8]/[0.04]" },
-  { key: "at_vise", label: "At the vise",         icon: <Wrench       className="h-4 w-4 text-[#E8923A]" />, tint: "border-[#E8923A]/30 bg-[#E8923A]/[0.04]" },
+  { key: "wanted",  label: "Want to tie",         icon: <ListChecks className="h-4 w-4 text-[var(--signal-live)]" />,  tint: "border-[var(--signal-live)]/30 bg-[var(--signal-live)]/[0.04]" },
+  { key: "at_vise", label: "At the vise",         icon: <Wrench       className="h-4 w-4 text-[var(--action)]" />, tint: "border-[var(--action)]/30 bg-[var(--action)]/[0.04]" },
   { key: "done",    label: "Done (last 14 days)", icon: <CheckCircle2 className="h-4 w-4 text-emerald-500" />, tint: "border-emerald-500/30 bg-emerald-500/[0.03]" },
 ];
 
@@ -160,17 +160,17 @@ function Card({
       ? `Target ${cfg.target_count}`
       : null;
   return (
-    <div className="rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] bg-[var(--color-surface,#fff)] dark:bg-[#161B22] p-2.5">
+    <div className="rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)] p-2.5">
       <div className="flex items-start gap-2.5">
         <Link href={`/flies/${cfg.fly.slug}`} className="flex-1 min-w-0 group">
           <div className="flex items-start gap-2.5">
-            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded bg-[var(--color-surface-hover,#f3f4f6)] dark:bg-[#0D1117]">
+            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded bg-[var(--color-surface-hover,#f3f4f6)] dark:bg-[var(--surface-page)]">
               {cfg.fly.hero_image_url && (
                 <Image src={cfg.fly.hero_image_url} alt={cfg.fly.name} fill className="object-cover" sizes="40px" />
               )}
             </div>
             <div className="min-w-0">
-              <p className="font-medium text-sm group-hover:text-[#E8923A] truncate">{cfg.fly.name}</p>
+              <p className="font-medium text-sm group-hover:text-[var(--action)] truncate">{cfg.fly.name}</p>
               <p className="text-[11px] text-[var(--color-text-muted)] truncate">{summary}</p>
               {targetText && (
                 <p className="text-[11px] text-[var(--color-text-muted)] mt-0.5">
@@ -187,7 +187,7 @@ function Card({
             type="button"
             disabled={busy}
             onClick={() => onAdvance("at_vise")}
-            className="inline-flex items-center gap-1 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2 py-1 text-[11px] text-[#E8923A] hover:bg-[#E8923A]/20 disabled:opacity-60"
+            className="inline-flex items-center gap-1 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-2 py-1 text-[11px] text-[var(--action)] hover:bg-[var(--action)]/20 disabled:opacity-60"
           >
             <ArrowRight className="h-3 w-3" /> Start
           </button>
@@ -206,7 +206,7 @@ function Card({
               type="button"
               disabled={busy}
               onClick={() => onAdvance("wanted")}
-              className="inline-flex items-center gap-1 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-2 py-1 text-[11px] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] disabled:opacity-60"
+              className="inline-flex items-center gap-1 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] px-2 py-1 text-[11px] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] disabled:opacity-60"
               title="Move back to wanted"
             >
               <Undo2 className="h-3 w-3" />
@@ -218,7 +218,7 @@ function Card({
             type="button"
             disabled={busy}
             onClick={() => onAdvance("at_vise")}
-            className="inline-flex items-center gap-1 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-2 py-1 text-[11px] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] disabled:opacity-60"
+            className="inline-flex items-center gap-1 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] px-2 py-1 text-[11px] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] disabled:opacity-60"
             title="Move back to vise"
           >
             <Undo2 className="h-3 w-3" /> Reopen

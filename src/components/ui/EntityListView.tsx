@@ -218,7 +218,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         >
           {sortedItems.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-[#A8B2BD] text-lg">
+              <p className="text-[var(--text-body)] text-lg">
                 {searchQuery ? "No results match your search." : "No results match your filters."}
               </p>
               <button
@@ -226,7 +226,7 @@ export default function EntityListView({ items, config, storageKey }: EntityList
                   config.filters.forEach((f) => handleFilterChange(f.key, null));
                   handleSearchChange("");
                 }}
-                className="mt-4 inline-block text-[#E8923A] font-medium hover:underline"
+                className="mt-4 inline-block text-[var(--action)] font-medium hover:underline"
               >
                 Clear all filters
               </button>

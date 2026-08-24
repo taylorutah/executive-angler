@@ -115,7 +115,7 @@ export default function ViewRail({
                 className={[
                   "ml-1 inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
                   hasUnsavedChanges
-                    ? "text-[#E8923A] hover:bg-[#E8923A]/10"
+                    ? "text-[var(--action)] hover:bg-[var(--action)]/10"
                     : "text-[var(--color-text-muted)] cursor-not-allowed",
                 ].join(" ")}
               >
@@ -142,7 +142,7 @@ export default function ViewRail({
                     if (e.key === "Enter") handleSave();
                   }}
                   placeholder="View name…"
-                  className="w-full rounded-md border border-[var(--color-border)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+                  className="w-full rounded-md border border-[var(--color-border)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/40"
                 />
                 {error && (
                   <p className="text-[11px] text-rose-500">{error}</p>
@@ -159,7 +159,7 @@ export default function ViewRail({
                     type="button"
                     onClick={handleSave}
                     disabled={busy}
-                    className="rounded-md bg-[#E8923A] px-3 py-1 text-xs font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
+                    className="rounded-md bg-[var(--action)] px-3 py-1 text-xs font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
                   >
                     {busy ? "Saving…" : "Save"}
                   </button>
@@ -223,7 +223,7 @@ function ViewChip({
         className={[
           "flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
           active
-            ? "bg-[#E8923A] text-white"
+            ? "bg-[var(--action)] text-white"
             : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text-primary)]",
         ].join(" ")}
       >
@@ -320,7 +320,7 @@ function ViewChip({
                         setError(null);
                       }
                     }}
-                    className="w-full rounded-md border border-[var(--color-border)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+                    className="w-full rounded-md border border-[var(--color-border)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/40"
                   />
                   {error && (
                     <p className="text-[11px] text-rose-500">{error}</p>
@@ -340,7 +340,7 @@ function ViewChip({
                       type="button"
                       disabled={busy}
                       onClick={handleRename}
-                      className="rounded-md bg-[#E8923A] px-2 py-1 text-xs font-semibold text-white disabled:opacity-60"
+                      className="rounded-md bg-[var(--action)] px-2 py-1 text-xs font-semibold text-white disabled:opacity-60"
                     >
                       Save
                     </button>

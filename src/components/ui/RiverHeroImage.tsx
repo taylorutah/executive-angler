@@ -49,7 +49,7 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <div className="relative w-full overflow-hidden bg-[#0D1117]" style={{ height: "240px" }}>
+      <div className="relative w-full overflow-hidden bg-[var(--surface-page)]" style={{ height: "240px" }}>
         {showPhoto ? (
           <Image
             src={heroImageUrl}

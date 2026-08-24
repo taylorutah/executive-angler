@@ -70,7 +70,7 @@ export default function SharedPanel({
           <div className="mt-1 flex items-center justify-end">
             <Link
               href={href}
-              className="text-xs text-[#E8923A] hover:underline"
+              className="text-xs text-[var(--action)] hover:underline"
             >
               Open
             </Link>

@@ -325,34 +325,34 @@ export default function InsightsClient({
   };
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/dashboard" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-[#E8923A]" />
-            <h1 className="font-serif text-2xl text-[#F0F6FC]">Insights</h1>
+            <Sparkles className="h-6 w-6 text-[var(--action)]" />
+            <h1 className="font-serif text-2xl text-[var(--text-primary)]">Insights</h1>
           </div>
         </div>
 
-        <p className="text-sm text-[#A8B2BD] mb-4">
+        <p className="text-sm text-[var(--text-body)] mb-4">
           Personalized analysis based on {sessions.length} sessions and {catches.length} catches.
         </p>
 
         <TipCard storageKey="dashboard-insights-intro" title="How these insights work" tone="premium">
           <p>Every insight is derived from <strong>your own logged sessions and catches</strong> — water temp buckets, time-of-day patterns, fly effectiveness, weather correlations.</p>
-          <p className="text-[#6E7681]">Insights unlock at 3+ sessions. Results sharpen as you log more — aim for 20+ sessions with catch details for the most reliable patterns.</p>
+          <p className="text-[var(--text-meta)]">Insights unlock at 3+ sessions. Results sharpen as you log more — aim for 20+ sessions with catch details for the most reliable patterns.</p>
         </TipCard>
 
         <div className="h-8" />
 
         {insights.length === 0 ? (
-          <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-12 text-center">
-            <Sparkles className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Not enough data yet</h2>
-            <p className="text-sm text-[#A8B2BD]">
+          <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-12 text-center">
+            <Sparkles className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Not enough data yet</h2>
+            <p className="text-sm text-[var(--text-body)]">
               Log at least 3 sessions with catch details to unlock your insights.
             </p>
           </div>
@@ -367,12 +367,12 @@ export default function InsightsClient({
                   <div className="flex-shrink-0 mt-0.5">{insight.icon}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5">
-                      <h3 className="text-sm font-bold text-[#F0F6FC]">{insight.title}</h3>
-                      <span className="text-[9px] font-semibold uppercase tracking-wider text-[#6E7681] bg-[#0D1117] px-2 py-0.5 rounded-full">
+                      <h3 className="text-sm font-bold text-[var(--text-primary)]">{insight.title}</h3>
+                      <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--text-meta)] bg-[var(--surface-page)] px-2 py-0.5 rounded-full">
                         {typeLabels[insight.type]}
                       </span>
                     </div>
-                    <p className="text-sm text-[#A8B2BD] leading-relaxed">{insight.body}</p>
+                    <p className="text-sm text-[var(--text-body)] leading-relaxed">{insight.body}</p>
                   </div>
                 </div>
               </div>

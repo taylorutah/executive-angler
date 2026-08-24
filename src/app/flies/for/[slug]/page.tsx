@@ -61,10 +61,10 @@ function sizeMeta(fly: CanonicalFly): string | undefined {
 
 function HatchTable({ chart, currentMonth }: { chart: HatchMonth[]; currentMonth: string }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-[#21262D]">
+    <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)]">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-[#161B22] text-left text-[#A8B2BD]">
+          <tr className="bg-[var(--surface-raised)] text-left text-[var(--text-body)]">
             <th className="px-4 py-3 font-medium">Month</th>
             <th className="px-4 py-3 font-medium">Insect</th>
             <th className="px-4 py-3 font-medium">Size</th>
@@ -76,16 +76,16 @@ function HatchTable({ chart, currentMonth }: { chart: HatchMonth[]; currentMonth
             (month.hatches ?? []).map((h, i) => (
               <tr
                 key={`${month.month}-${h.pattern}-${i}`}
-                className={`border-t border-[#21262D] ${
+                className={`border-t border-[var(--border-rule)] ${
                   month.month.toLowerCase() === currentMonth.toLowerCase()
-                    ? "bg-[#E8923A]/10"
+                    ? "bg-[var(--action)]/10"
                     : ""
                 }`}
               >
-                <td className="px-4 py-2.5 text-[#F0F6FC] whitespace-nowrap">{i === 0 ? month.month : ""}</td>
-                <td className="px-4 py-2.5 text-[#A8B2BD]">{h.insect}</td>
-                <td className="px-4 py-2.5 text-[#A8B2BD]">{h.size}</td>
-                <td className="px-4 py-2.5 text-[#F0F6FC]">{h.pattern}</td>
+                <td className="px-4 py-2.5 text-[var(--text-primary)] whitespace-nowrap">{i === 0 ? month.month : ""}</td>
+                <td className="px-4 py-2.5 text-[var(--text-body)]">{h.insect}</td>
+                <td className="px-4 py-2.5 text-[var(--text-body)]">{h.size}</td>
+                <td className="px-4 py-2.5 text-[var(--text-primary)]">{h.pattern}</td>
               </tr>
             ))
           )}
@@ -97,7 +97,7 @@ function HatchTable({ chart, currentMonth }: { chart: HatchMonth[]; currentMonth
 
 function FlyGrid({ flies }: { flies: CanonicalFly[] }) {
   if (flies.length === 0) {
-    return <p className="text-[#A8B2BD]">No catalog patterns in this group yet. Use the hatch chart and the river guide.</p>;
+    return <p className="text-[var(--text-body)]">No catalog patterns in this group yet. Use the hatch chart and the river guide.</p>;
   }
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -205,7 +205,7 @@ export default async function FliesForRiverPage({ params }: Props) {
       />
       <JsonLd data={faqPageJsonLd(faqs)} />
 
-      <div className="bg-[#0D1117] pt-6 pb-4">
+      <div className="bg-[var(--surface-page)] pt-6 pb-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
@@ -216,9 +216,9 @@ export default async function FliesForRiverPage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-[#0D1117] pb-10">
+      <section className="bg-[var(--surface-page)] pb-10">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Hatch-chart pattern list
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl font-bold text-white">
@@ -226,16 +226,16 @@ export default async function FliesForRiverPage({ params }: Props) {
             {h1Place}
           </h1>
           <p className="mt-5 text-lg text-white/75 leading-relaxed">{uniqueLede(river, place)}</p>
-          <p className="mt-4 text-sm text-[#6E7681]">
+          <p className="mt-4 text-sm text-[var(--text-meta)]">
             This is not a live report of other anglers&apos; catches. Presence and flow live on the{" "}
-            <Link href={`/rivers/${river.slug}`} className="text-[#E8923A] hover:underline">
+            <Link href={`/rivers/${river.slug}`} className="text-[var(--action)] hover:underline">
               {river.name} river page
             </Link>
             {dest ? (
               <>
                 {" "}
                 and the{" "}
-                <Link href={`/destinations/${dest.slug}`} className="text-[#E8923A] hover:underline">
+                <Link href={`/destinations/${dest.slug}`} className="text-[var(--action)] hover:underline">
                   {dest.name} destination guide
                 </Link>
               </>
@@ -245,11 +245,11 @@ export default async function FliesForRiverPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="bg-[#161B22] border-t border-[#21262D] py-12">
+      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
           <div>
             <h2 className="font-heading text-3xl font-bold text-white mb-3">What&apos;s hatching now</h2>
-            <p className="text-[#A8B2BD] mb-6 max-w-3xl">
+            <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Month, insect, size, and pattern from the {river.name} hatch chart
               {chart.length ? `. ${month} is highlighted when that month exists in the chart.` : "."}{" "}
               We do not invent a hatch that is not on the chart.
@@ -257,9 +257,9 @@ export default async function FliesForRiverPage({ params }: Props) {
             {chart.length > 0 ? (
               <HatchTable chart={chart} currentMonth={month} />
             ) : (
-              <p className="text-[#A8B2BD]">
+              <p className="text-[var(--text-body)]">
                 No month-by-month hatch chart is stored for this river yet. Use the nymph, dry, and streamer lists below, then read the{" "}
-                <Link href={`/rivers/${river.slug}`} className="text-[#E8923A] hover:underline">
+                <Link href={`/rivers/${river.slug}`} className="text-[var(--action)] hover:underline">
                   river guide
                 </Link>
                 .
@@ -269,7 +269,7 @@ export default async function FliesForRiverPage({ params }: Props) {
 
           <div>
             <h2 className="font-heading text-3xl font-bold text-white mb-3">Nymphs</h2>
-            <p className="text-[#A8B2BD] mb-6 max-w-3xl">
+            <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Subsurface patterns matched to this river&apos;s chart and catalog. Fish them at the size the chart lists, not the size that looks good in the bin.
             </p>
             <FlyGrid flies={grouped.nymphs} />
@@ -277,7 +277,7 @@ export default async function FliesForRiverPage({ params }: Props) {
 
           <div>
             <h2 className="font-heading text-3xl font-bold text-white mb-3">Dries</h2>
-            <p className="text-[#A8B2BD] mb-6 max-w-3xl">
+            <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Dries and terrestrials for the {river.name}. If the chart says a size 18 PMD, do not start with a 12.
             </p>
             <FlyGrid flies={grouped.dries} />
@@ -285,7 +285,7 @@ export default async function FliesForRiverPage({ params }: Props) {
 
           <div>
             <h2 className="font-heading text-3xl font-bold text-white mb-3">Streamers</h2>
-            <p className="text-[#A8B2BD] mb-6 max-w-3xl">
+            <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Streamers and wets for stained water, banks, and low light. This is not a claim that streamers are &quot;on&quot; today.
             </p>
             <FlyGrid flies={grouped.streamers} />
@@ -293,7 +293,7 @@ export default async function FliesForRiverPage({ params }: Props) {
 
           <div>
             <h2 className="font-heading text-3xl font-bold text-white mb-3">Setup</h2>
-            <p className="text-[#A8B2BD] max-w-3xl leading-relaxed">{setupCopy(river)}</p>
+            <p className="text-[var(--text-body)] max-w-3xl leading-relaxed">{setupCopy(river)}</p>
           </div>
 
           <div>
@@ -302,7 +302,7 @@ export default async function FliesForRiverPage({ params }: Props) {
               {faqs.map((f) => (
                 <div key={f.question}>
                   <dt className="font-heading text-xl text-white">{f.question}</dt>
-                  <dd className="mt-2 text-[#A8B2BD] leading-relaxed">{f.answer}</dd>
+                  <dd className="mt-2 text-[var(--text-body)] leading-relaxed">{f.answer}</dd>
                 </div>
               ))}
             </dl>
@@ -313,40 +313,40 @@ export default async function FliesForRiverPage({ params }: Props) {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link
                 href={`/rivers/${river.slug}`}
-                className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
               >
-                <p className="text-xs uppercase tracking-wide text-[#6E7681]">River guide</p>
+                <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">River guide</p>
                 <p className="mt-1 text-lg text-white font-semibold">{river.name}</p>
-                <p className="mt-2 text-sm text-[#A8B2BD]">Access, hatch chart, USGS gauge.</p>
+                <p className="mt-2 text-sm text-[var(--text-body)]">Access, hatch chart, USGS gauge.</p>
               </Link>
               {dest && (
                 <Link
                   href={`/destinations/${dest.slug}`}
-                  className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                  className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
-                  <p className="text-xs uppercase tracking-wide text-[#6E7681]">Destination</p>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Destination</p>
                   <p className="mt-1 text-lg text-white font-semibold">{dest.name}</p>
-                  <p className="mt-2 text-sm text-[#A8B2BD]">Trip planning for this region.</p>
+                  <p className="mt-2 text-sm text-[var(--text-body)]">Trip planning for this region.</p>
                 </Link>
               )}
               {relatedFlies.map((fly) => (
                 <Link
                   key={fly.id}
                   href={`/flies/${fly.slug}`}
-                  className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                  className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
-                  <p className="text-xs uppercase tracking-wide text-[#6E7681]">Pattern</p>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Pattern</p>
                   <p className="mt-1 text-lg text-white font-semibold">{fly.name}</p>
-                  <p className="mt-2 text-sm text-[#A8B2BD]">{CATEGORY_LABEL[fly.category] || fly.category}</p>
+                  <p className="mt-2 text-sm text-[var(--text-body)]">{CATEGORY_LABEL[fly.category] || fly.category}</p>
                 </Link>
               ))}
               {guides.slice(0, 2).map((g) => (
                 <Link
                   key={g.id}
                   href={`/guides/${g.slug}`}
-                  className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                  className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
-                  <p className="text-xs uppercase tracking-wide text-[#6E7681]">Guide</p>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Guide</p>
                   <p className="mt-1 text-lg text-white font-semibold">{g.name}</p>
                 </Link>
               ))}
@@ -354,22 +354,22 @@ export default async function FliesForRiverPage({ params }: Props) {
                 <Link
                   key={s.id}
                   href={`/fly-shops/${s.slug}`}
-                  className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                  className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
-                  <p className="text-xs uppercase tracking-wide text-[#6E7681]">Fly shop</p>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Fly shop</p>
                   <p className="mt-1 text-lg text-white font-semibold">{s.name}</p>
-                  <p className="mt-2 text-sm text-[#A8B2BD]">{s.address}</p>
+                  <p className="mt-2 text-sm text-[var(--text-body)]">{s.address}</p>
                 </Link>
               ))}
               {nearbyWaters.map((r) => (
                 <Link
                   key={r.id}
                   href={`/rivers/${r.slug}`}
-                  className="block rounded-xl border border-[#21262D] bg-[#0D1117] p-5 hover:border-[#E8923A]/40"
+                  className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
-                  <p className="text-xs uppercase tracking-wide text-[#6E7681]">Nearby water</p>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Nearby water</p>
                   <p className="mt-1 text-lg text-white font-semibold">{r.name}</p>
-                  <p className="mt-2 text-sm text-[#A8B2BD]">Open the river guide, then its fly list.</p>
+                  <p className="mt-2 text-sm text-[var(--text-body)]">Open the river guide, then its fly list.</p>
                 </Link>
               ))}
             </div>

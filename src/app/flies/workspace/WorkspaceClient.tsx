@@ -379,7 +379,7 @@ export default function WorkspaceClient({
           <span className="text-xs text-[var(--color-text-muted)]">
             Showing <span className="font-[var(--font-mono)] tabular-nums">{optimisticRows.length}</span> flies
             {hasUnsavedChanges && (
-              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#E8923A]/10 text-[#E8923A] px-2 py-0.5 text-[10px]">
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[var(--action)]/10 text-[var(--action)] px-2 py-0.5 text-[10px]">
                 Unsaved changes
               </span>
             )}

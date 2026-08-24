@@ -115,15 +115,15 @@ export default function EditEntityClient({
 
   if (loading) {
     return (
-      <div className="min-h-screen text-[#F0F6FC]">
-        <header className="border-b border-[#21262D] px-6 py-6">
+      <div className="min-h-screen text-[var(--text-primary)]">
+        <header className="border-b border-[var(--border-rule)] px-6 py-6">
           <h1 className="text-2xl font-bold tracking-tight">
             Edit {entityLabel}
           </h1>
         </header>
         <div className="flex items-center justify-center py-24">
-          <Loader2 className="h-6 w-6 animate-spin text-[#6E7681]" />
-          <span className="ml-3 text-sm text-[#6E7681]">Loading...</span>
+          <Loader2 className="h-6 w-6 animate-spin text-[var(--text-meta)]" />
+          <span className="ml-3 text-sm text-[var(--text-meta)]">Loading...</span>
         </div>
       </div>
     );
@@ -131,12 +131,12 @@ export default function EditEntityClient({
 
   if (error || !initialData) {
     return (
-      <div className="min-h-screen text-[#F0F6FC]">
-        <header className="border-b border-[#21262D] px-6 py-6">
+      <div className="min-h-screen text-[var(--text-primary)]">
+        <header className="border-b border-[var(--border-rule)] px-6 py-6">
           <div className="flex items-center gap-3">
             <Link
               href={`/admin/content/${entitySlug}`}
-              className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+              className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
@@ -155,13 +155,13 @@ export default function EditEntityClient({
   }
 
   return (
-    <div className="min-h-screen text-[#F0F6FC]">
+    <div className="min-h-screen text-[var(--text-primary)]">
       {/* Header */}
-      <header className="border-b border-[#21262D] px-6 py-6">
+      <header className="border-b border-[var(--border-rule)] px-6 py-6">
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/content/${entitySlug}`}
-            className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+            className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
@@ -169,7 +169,7 @@ export default function EditEntityClient({
             <h1 className="text-2xl font-bold tracking-tight">
               Edit {entityLabel}
             </h1>
-            <p className="mt-0.5 text-sm text-[#A8B2BD]">
+            <p className="mt-0.5 text-sm text-[var(--text-body)]">
               ID: {entityId}
             </p>
           </div>
@@ -183,7 +183,7 @@ export default function EditEntityClient({
       </header>
 
       <div className="px-6 py-6 max-w-5xl">
-        <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6">
+        <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6">
           <EntityForm
             fields={fields}
             initialData={initialData}

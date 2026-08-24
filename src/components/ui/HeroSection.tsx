@@ -32,7 +32,7 @@ export default function HeroSection({
   const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
 
   return (
-    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[#1F2937]" : ""}`}>
+    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[var(--surface-card)]" : ""}`}>
       <SafeEntityImage
         src={imageUrl}
         alt={imageAlt}

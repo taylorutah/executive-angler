@@ -98,9 +98,9 @@ export default async function LodgesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Premier Accommodations
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -114,9 +114,9 @@ export default async function LodgesPage() {
       </section>
 
       {/* ── Spotlight Lodges ──────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
             Editor&apos;s Selection
           </p>
 
@@ -139,8 +139,8 @@ export default async function LodgesPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden lg:block pointer-events-none" />
                   </div>
-                  <div className="bg-[#0D1117] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+                  <div className="bg-[var(--surface-page)] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
                       Featured Lodge
                     </p>
                     <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-white">
@@ -152,7 +152,7 @@ export default async function LodgesPage() {
                     </div>
                     {heroLodge.averageRating && (
                       <div className="mt-2 flex items-center gap-1.5">
-                        <Star className="h-4 w-4 fill-[#E8923A] text-[#E8923A]" />
+                        <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
                         <span className="text-white/90 text-sm font-medium">
                           {heroLodge.averageRating} · {heroLodge.reviewCount} reviews
                         </span>
@@ -165,18 +165,18 @@ export default async function LodgesPage() {
                       {heroLodge.amenities.slice(0, 4).map((a) => (
                         <span
                           key={a}
-                          className="px-2.5 py-1 bg-[#161B22]/10 text-white/80 text-[10px] font-medium rounded-full"
+                          className="px-2.5 py-1 bg-[var(--surface-raised)]/10 text-white/80 text-[10px] font-medium rounded-full"
                         >
                           {a}
                         </span>
                       ))}
                     </div>
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-[#E8923A] text-sm font-semibold">
+                      <span className="text-[var(--action)] text-sm font-semibold">
                         {heroLodge.priceRange}
                       </span>
                     </div>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#E8923A] group-hover:underline">
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] group-hover:underline">
                       View Lodge <ChevronRight className="h-4 w-4" />
                     </span>
                   </div>
@@ -193,7 +193,7 @@ export default async function LodgesPage() {
                 <ScrollAnimation key={lodge.id} delay={i * 0.1}>
                   <Link
                     href={`/lodges/${lodge.slug}`}
-                    className="group block bg-[#161B22] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                    className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
                   >
                     <div className="relative h-52">
                       <SafeEntityImage
@@ -209,7 +209,7 @@ export default async function LodgesPage() {
                           {lodge.name}
                         </h3>
                         {lodge.priceRange && (
-                          <p className="text-[#E8923A] text-xs mt-0.5 font-medium">
+                          <p className="text-[var(--action)] text-xs mt-0.5 font-medium">
                             {lodge.priceRange}
                           </p>
                         )}
@@ -220,7 +220,7 @@ export default async function LodgesPage() {
                         {lodge.amenities.slice(0, 3).map((a) => (
                           <span
                             key={a}
-                            className="px-2 py-0.5 bg-[#0D1117] text-[#E8923A] text-[10px] font-medium rounded-full"
+                            className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
                           >
                             {a}
                           </span>
@@ -228,13 +228,13 @@ export default async function LodgesPage() {
                       </div>
                       {lodge.averageRating && (
                         <div className="mt-3 flex items-center gap-1">
-                          <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                          <span className="text-[#A8B2BD] text-xs">
+                          <Star className="h-3.5 w-3.5 fill-[var(--action)] text-[var(--action)]" />
+                          <span className="text-[var(--text-body)] text-xs">
                             {lodge.averageRating} ({lodge.reviewCount} reviews)
                           </span>
                         </div>
                       )}
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
+                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
                         Explore <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -247,15 +247,15 @@ export default async function LodgesPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[#161B22] border-t border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Lodges</h2>
-          <p className="text-sm text-[#A8B2BD] mt-1">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Lodges</h2>
+          <p className="text-sm text-[var(--text-body)] mt-1">
             {lodges.length} world-class lodges — filter by destination, river &amp; price
           </p>
         </div>
       </div>
-      <section className="bg-[#161B22] pb-16 sm:pb-20">
+      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="lodges" />

@@ -223,9 +223,9 @@ export default function DeleteFlyPatternDialog({
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      <div className="relative w-full sm:max-w-xl bg-[#0D1117] border border-[#21262D] sm:rounded-2xl rounded-t-2xl flex flex-col shadow-2xl max-h-[92vh]">
+      <div className="relative w-full sm:max-w-xl bg-[var(--surface-page)] border border-[var(--border-rule)] sm:rounded-2xl rounded-t-2xl flex flex-col shadow-2xl max-h-[92vh]">
         {/* Header */}
-        <div className="flex items-start gap-3 px-5 py-4 border-b border-[#21262D]">
+        <div className="flex items-start gap-3 px-5 py-4 border-b border-[var(--border-rule)]">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15 text-red-400 flex-shrink-0">
             <Trash2 className="h-5 w-5" />
           </div>
@@ -233,14 +233,14 @@ export default function DeleteFlyPatternDialog({
             <p className="text-[10px] font-semibold uppercase tracking-wider text-red-400">
               Delete fly pattern
             </p>
-            <h2 id="delete-fly-title" className="font-heading text-lg text-[#F0F6FC] truncate">
+            <h2 id="delete-fly-title" className="font-heading text-lg text-[var(--text-primary)] truncate">
               {flyName}
             </h2>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-1.5 text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22] rounded transition-colors"
+            className="p-1.5 text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)] rounded transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -249,36 +249,36 @@ export default function DeleteFlyPatternDialog({
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
           {loading ? (
-            <div className="flex items-center gap-2 text-sm text-[#6E7681] py-8 justify-center">
+            <div className="flex items-center gap-2 text-sm text-[var(--text-meta)] py-8 justify-center">
               <Loader2 className="h-4 w-4 animate-spin" /> Checking your journal…
             </div>
           ) : (
             <>
               {/* Usage summary */}
               {hasCatches ? (
-                <div className="rounded-lg border border-[#E8923A]/30 bg-[#E8923A]/5 p-3 text-sm text-[#F0F6FC] flex items-start gap-2">
-                  <Anchor className="h-4 w-4 text-[#E8923A] flex-shrink-0 mt-0.5" />
+                <div className="rounded-lg border border-[var(--action)]/30 bg-[var(--action)]/5 p-3 text-sm text-[var(--text-primary)] flex items-start gap-2">
+                  <Anchor className="h-4 w-4 text-[var(--action)] flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <p>
                       This fly is in{" "}
-                      <span className="font-semibold text-[#E8923A]">
+                      <span className="font-semibold text-[var(--action)]">
                         {catchCount} {catchCount === 1 ? "catch" : "catches"}
                       </span>{" "}
                       across{" "}
-                      <span className="font-semibold text-[#E8923A]">
+                      <span className="font-semibold text-[var(--action)]">
                         {sessionCount} {sessionCount === 1 ? "session" : "sessions"}
                       </span>
                       .
                     </p>
                     {usage && usage.sessions.length > 0 && (
-                      <ul className="mt-2 space-y-1 text-xs text-[#A8B2BD]">
+                      <ul className="mt-2 space-y-1 text-xs text-[var(--text-body)]">
                         {usage.sessions.map((s) => (
                           <li key={s.id} className="flex items-center gap-1.5">
                             <Link
                               href={`/journal/${s.id}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="hover:text-[#E8923A] hover:underline truncate"
+                              className="hover:text-[var(--action)] hover:underline truncate"
                             >
                               {s.title ||
                                 [s.river_name, formatDate(s.fished_at)]
@@ -286,21 +286,21 @@ export default function DeleteFlyPatternDialog({
                                   .join(" · ") ||
                                 "Untitled session"}
                             </Link>
-                            <span className="text-[#6E7681]">
+                            <span className="text-[var(--text-meta)]">
                               · {s.catch_count}{" "}
                               {s.catch_count === 1 ? "catch" : "catches"}
                             </span>
                           </li>
                         ))}
                         {usage.truncated && (
-                          <li className="text-[#6E7681] italic">+ more sessions…</li>
+                          <li className="text-[var(--text-meta)] italic">+ more sessions…</li>
                         )}
                       </ul>
                     )}
                   </div>
                 </div>
               ) : (
-                <p className="rounded-lg border border-[#21262D] bg-[#161B22] p-3 text-xs text-[#A8B2BD]">
+                <p className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-3 text-xs text-[var(--text-body)]">
                   This fly isn&apos;t referenced in any journal catches.
                   Safe to delete.
                 </p>
@@ -309,7 +309,7 @@ export default function DeleteFlyPatternDialog({
               {/* Mode options */}
               {hasCatches && (
                 <div className="space-y-2">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[#A8B2BD]">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-body)]">
                     What should happen to those catches?
                   </p>
 
@@ -329,7 +329,7 @@ export default function DeleteFlyPatternDialog({
                     {mode === "reassign" && (
                       <div className="mt-3 space-y-2">
                         {otherFlies.length === 0 ? (
-                          <p className="text-xs text-[#6E7681]">
+                          <p className="text-xs text-[var(--text-meta)]">
                             You don&apos;t have any other personal flies to reassign to.
                           </p>
                         ) : (
@@ -339,11 +339,11 @@ export default function DeleteFlyPatternDialog({
                               placeholder="Search your flies…"
                               value={reassignQuery}
                               onChange={(e) => setReassignQuery(e.target.value)}
-                              className="w-full bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]/50"
+                              className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
                             />
-                            <div className="max-h-48 overflow-y-auto rounded-lg border border-[#21262D] bg-[#0D1117]">
+                            <div className="max-h-48 overflow-y-auto rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
                               {filteredFlies.length === 0 ? (
-                                <p className="p-3 text-xs text-[#6E7681]">
+                                <p className="p-3 text-xs text-[var(--text-meta)]">
                                   No matches.
                                 </p>
                               ) : (
@@ -356,8 +356,8 @@ export default function DeleteFlyPatternDialog({
                                       onClick={() => setReassignTarget(f.id)}
                                       className={`w-full flex items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
                                         active
-                                          ? "bg-[#E8923A]/15 text-[#E8923A]"
-                                          : "text-[#F0F6FC] hover:bg-[#161B22]"
+                                          ? "bg-[var(--action)]/15 text-[var(--action)]"
+                                          : "text-[var(--text-primary)] hover:bg-[var(--surface-raised)]"
                                       }`}
                                     >
                                       {active ? (
@@ -367,7 +367,7 @@ export default function DeleteFlyPatternDialog({
                                       )}
                                       <span className="flex-1 truncate">{f.name}</span>
                                       {f.type && (
-                                        <span className="text-[10px] text-[#6E7681] uppercase tracking-wider">
+                                        <span className="text-[10px] text-[var(--text-meta)] uppercase tracking-wider">
                                           {f.type}
                                         </span>
                                       )}
@@ -396,7 +396,7 @@ export default function DeleteFlyPatternDialog({
                           placeholder={`Type "${flyName}" to confirm`}
                           value={confirmText}
                           onChange={(e) => setConfirmText(e.target.value)}
-                          className="w-full bg-[#0D1117] border border-red-500/30 rounded-lg px-3 py-2 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-red-400"
+                          className="w-full bg-[var(--surface-page)] border border-red-500/30 rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-red-400"
                         />
                       </div>
                     )}
@@ -408,7 +408,7 @@ export default function DeleteFlyPatternDialog({
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-[#21262D] space-y-2">
+        <div className="px-5 py-4 border-t border-[var(--border-rule)] space-y-2">
           {error && (
             <p className="text-xs text-red-400 flex items-center gap-1.5">
               <AlertCircle className="h-3 w-3" /> {error}
@@ -419,7 +419,7 @@ export default function DeleteFlyPatternDialog({
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="flex-1 px-4 py-2.5 rounded-lg border border-[#21262D] text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22] transition-colors disabled:opacity-60"
+              className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--border-rule)] text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)] transition-colors disabled:opacity-60"
             >
               Cancel
             </button>
@@ -471,8 +471,8 @@ function ModeOption({
         active
           ? destructive
             ? "border-red-500/40 bg-red-500/5"
-            : "border-[#E8923A]/40 bg-[#E8923A]/5"
-          : "border-[#21262D] bg-[#161B22] hover:border-[#30363D]"
+            : "border-[var(--action)]/40 bg-[var(--action)]/5"
+          : "border-[var(--border-rule)] bg-[var(--surface-raised)] hover:border-[var(--border-strong)]"
       }`}
       onClick={onClick}
       role="button"
@@ -487,20 +487,20 @@ function ModeOption({
       <div className="flex items-start gap-2">
         <div
           className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded-full border-2 flex items-center justify-center ${
-            active ? "border-transparent" : "border-[#30363D]"
+            active ? "border-transparent" : "border-[var(--border-strong)]"
           }`}
           style={active ? { backgroundColor: accent } : undefined}
         >
-          {active && <span className="h-1.5 w-1.5 rounded-full bg-[#0D1117]" />}
+          {active && <span className="h-1.5 w-1.5 rounded-full bg-[var(--surface-page)]" />}
         </div>
         <div className="min-w-0 flex-1">
           <p
-            className="text-sm font-medium text-[#F0F6FC]"
+            className="text-sm font-medium text-[var(--text-primary)]"
             style={active ? { color: accent } : undefined}
           >
             {title}
           </p>
-          <p className="text-xs text-[#A8B2BD] mt-0.5 leading-relaxed">
+          <p className="text-xs text-[var(--text-body)] mt-0.5 leading-relaxed">
             {description}
           </p>
           {children}

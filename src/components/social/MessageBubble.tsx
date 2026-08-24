@@ -58,7 +58,7 @@ export function MessageBubble({
               className="rounded-full object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#A8B2BD] font-medium">
+            <div className="w-8 h-8 rounded-full bg-[var(--surface-card)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
               {(senderName || "?")[0]?.toUpperCase()}
             </div>
           )}
@@ -71,14 +71,14 @@ export function MessageBubble({
         <div
           className={`px-3 py-2 rounded-2xl text-sm leading-relaxed break-words ${
             isOwn
-              ? "bg-[#E8923A] text-white rounded-br-md"
-              : "bg-[#1F2937] text-[#F0F6FC] rounded-bl-md"
+              ? "bg-[var(--action)] text-white rounded-br-md"
+              : "bg-[var(--surface-card)] text-[var(--text-primary)] rounded-bl-md"
           }`}
         >
           {body}
         </div>
         <span
-          className={`text-[10px] font-['IBM_Plex_Mono'] text-[#6E7681] ${
+          className={`text-[10px] font-['IBM_Plex_Mono'] text-[var(--text-meta)] ${
             isOwn ? "text-right" : "text-left"
           }`}
         >

@@ -59,16 +59,16 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/admin" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <Shield className="h-5 w-5 text-[#E8923A]" />
-          <h1 className="font-serif text-2xl text-[#F0F6FC]">Submissions Queue</h1>
-          <span className="ml-auto px-3 py-1 bg-[#E8923A]/15 text-[#E8923A] rounded-full text-xs font-bold">
+          <Shield className="h-5 w-5 text-[var(--action)]" />
+          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Submissions Queue</h1>
+          <span className="ml-auto px-3 py-1 bg-[var(--action)]/15 text-[var(--action)] rounded-full text-xs font-bold">
             {pending.length} pending
           </span>
         </div>
@@ -83,10 +83,10 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
         {/* Pending submissions */}
         {pending.length === 0 ? (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
-            <CheckCircle className="h-10 w-10 text-[#2EA44F] mx-auto mb-3" />
-            <p className="text-[#F0F6FC] font-semibold">Queue is clear!</p>
-            <p className="text-sm text-[#A8B2BD] mt-1">No pending submissions to review.</p>
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
+            <CheckCircle className="h-10 w-10 text-[var(--state-positive)] mx-auto mb-3" />
+            <p className="text-[var(--text-primary)] font-semibold">Queue is clear!</p>
+            <p className="text-sm text-[var(--text-body)] mt-1">No pending submissions to review.</p>
           </div>
         ) : (
           <div className="space-y-3 mb-10">
@@ -96,27 +96,27 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
               const isLoading = (action: string) => actionLoading === `${s.id}-${action}`;
 
               return (
-                <div key={s.id} className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
+                <div key={s.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
                   {/* Main row */}
                   <div className="px-5 py-4 flex items-center gap-3">
                     <span className="text-2xl">{TYPE_EMOJI[s.entity_type] || "📄"}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-[#F0F6FC] truncate">{s.name}</h3>
+                        <h3 className="text-sm font-bold text-[var(--text-primary)] truncate">{s.name}</h3>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          s.status === "submitted" ? "bg-[#0BA5C7]/15 text-[#0BA5C7]"
-                            : s.status === "in_review" ? "bg-[#E8923A]/15 text-[#E8923A]"
+                          s.status === "submitted" ? "bg-[var(--signal-live)]/15 text-[var(--signal-live)]"
+                            : s.status === "in_review" ? "bg-[var(--action)]/15 text-[var(--action)]"
                               : "bg-yellow-400/15 text-yellow-400"
                         }`}>
                           {s.status.replace("_", " ").toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-xs text-[#6E7681] mt-0.5">
+                      <p className="text-xs text-[var(--text-meta)] mt-0.5">
                         {s.entity_type === "photo_update" ? (
                           <>
-                            <span className="text-[#E8923A] font-semibold">PHOTO UPDATE</span>
+                            <span className="text-[var(--action)] font-semibold">PHOTO UPDATE</span>
                             {s.entity_data?.target_entity_type && (
-                              <> · updating {s.entity_data.target_entity_type.replace("_", " ")} <span className="text-[#A8B2BD]">{s.entity_data.target_slug}</span></>
+                              <> · updating {s.entity_data.target_entity_type.replace("_", " ")} <span className="text-[var(--text-body)]">{s.entity_data.target_slug}</span></>
                             )}
                           </>
                         ) : (
@@ -143,7 +143,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                       </Button>
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : s.id)}
-                        className="p-2 bg-[#21262D] text-[#A8B2BD] rounded-lg hover:text-[#F0F6FC] transition-colors"
+                        className="p-2 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg hover:text-[var(--text-primary)] transition-colors"
                         title="More options"
                       >
                         <ChevronRight className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
@@ -153,9 +153,9 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
                   {/* Expanded detail */}
                   {isExpanded && (
-                    <div className="px-5 pb-4 border-t border-[#21262D] pt-4 space-y-3">
+                    <div className="px-5 pb-4 border-t border-[var(--border-rule)] pt-4 space-y-3">
                       {s.hero_image_url && (
-                        <div className="rounded-lg overflow-hidden border border-[#21262D]">
+                        <div className="rounded-lg overflow-hidden border border-[var(--border-rule)]">
                           {/* User-supplied URL — host may not be in next/image allowlist */}
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={s.hero_image_url} alt={`${s.name} hero photo`} className="w-full h-40 object-cover" />
@@ -164,7 +164,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
                       <Link
                         href={`/admin/submissions/${s.id}`}
-                        className="text-xs text-[#0BA5C7] hover:underline"
+                        className="text-xs text-[var(--signal-live)] hover:underline"
                       >
                         View full submission details →
                       </Link>
@@ -176,7 +176,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           value={feedback[s.id] || ""}
                           onChange={e => setFeedback(prev => ({ ...prev, [s.id]: e.target.value }))}
                           placeholder="Reason / feedback..."
-                          className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-xs text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
+                          className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
                         />
                         <Button
                           onClick={() => handleAction(s.id, "needs_info", { feedback: feedback[s.id] || "" })}
@@ -212,18 +212,18 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
         {/* Recent decisions */}
         {recent.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Recent Decisions</h2>
-            <div className="bg-[#161B22] border border-[#21262D] rounded-xl divide-y divide-[#21262D]">
+            <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Recent Decisions</h2>
+            <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl divide-y divide-[#21262D]">
               {recent.map(s => (
                 <div key={s.id} className="px-5 py-3 flex items-center gap-3">
                   <span>{TYPE_EMOJI[s.entity_type]}</span>
-                  <span className="text-sm text-[#F0F6FC] flex-1 truncate">{s.name}</span>
+                  <span className="text-sm text-[var(--text-primary)] flex-1 truncate">{s.name}</span>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    s.status === "approved" ? "bg-[#2EA44F]/15 text-[#2EA44F]" : "bg-red-400/15 text-red-400"
+                    s.status === "approved" ? "bg-[var(--state-positive)]/15 text-[var(--state-positive)]" : "bg-red-400/15 text-red-400"
                   }`}>
                     {s.status.toUpperCase()}
                   </span>
-                  <span className="text-xs text-[#6E7681]">{formatDate(s.reviewed_at || s.updated_at)}</span>
+                  <span className="text-xs text-[var(--text-meta)]">{formatDate(s.reviewed_at || s.updated_at)}</span>
                 </div>
               ))}
             </div>

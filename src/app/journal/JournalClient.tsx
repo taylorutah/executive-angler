@@ -26,14 +26,14 @@ function AvatarImage({ url, name, size = 56 }: { url?: string; name: string; siz
 
   if (!url || failed) {
     return (
-      <div className={`h-14 w-14 rounded-xl border-[3px] border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center`}>
-        <span className="text-lg font-bold text-[#E8923A]">{initial}</span>
+      <div className={`h-14 w-14 rounded-xl border-[3px] border-white bg-[var(--action)]/20 overflow-hidden shadow-md flex items-center justify-center`}>
+        <span className="text-lg font-bold text-[var(--action)]">{initial}</span>
       </div>
     );
   }
 
   return (
-    <div className="h-14 w-14 rounded-xl border-[3px] border-white bg-[#E8923A]/20 overflow-hidden shadow-md flex items-center justify-center">
+    <div className="h-14 w-14 rounded-xl border-[3px] border-white bg-[var(--action)]/20 overflow-hidden shadow-md flex items-center justify-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={url}
@@ -241,14 +241,14 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     filterRivers.length > 0 || filterYears.length > 0 || filterLocations.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Mobile header */}
-      <div className="lg:hidden border-b border-[#21262D] bg-[#161B22] px-4 py-4">
-        <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">Journal</h1>
+      <div className="lg:hidden border-b border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-4">
+        <h1 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">Journal</h1>
         <div className="flex gap-2">
           <Link
             href="/journal/stats"
-            className="flex-1 text-center rounded-md border border-[#0BA5C7] px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/10"
+            className="flex-1 text-center rounded-md border border-[var(--signal-live)] px-2 py-1.5 text-xs font-medium text-[var(--signal-live)] hover:bg-[var(--signal-live)]/10"
           >
             📊 Stats
           </Link>
@@ -257,7 +257,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           </Button>
           <Link
             href="/account/gear"
-            className="flex-1 text-center rounded-md border border-[#0BA5C7] px-2 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#0BA5C7]/10"
+            className="flex-1 text-center rounded-md border border-[var(--signal-live)] px-2 py-1.5 text-xs font-medium text-[var(--signal-live)] hover:bg-[var(--signal-live)]/10"
           >
             🎣 Gear
           </Link>
@@ -272,8 +272,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("list")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "list"
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#1F2937]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--surface-card)]"
               }`}
             >
               <ListIcon className="h-4 w-4" />
@@ -283,8 +283,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("calendar")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "calendar"
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#1F2937]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--surface-card)]"
               }`}
             >
               <CalendarIcon className="h-4 w-4" />
@@ -293,12 +293,12 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           </div>
           <button
             onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            className="flex items-center gap-1.5 rounded-lg bg-[#1F2937] px-3 py-2 text-sm font-medium text-[#A8B2BD] hover:bg-[#1F2937]"
+            className="flex items-center gap-1.5 rounded-lg bg-[var(--surface-card)] px-3 py-2 text-sm font-medium text-[var(--text-body)] hover:bg-[var(--surface-card)]"
           >
             <FilterIcon className="h-4 w-4" />
             Filters
             {hasActiveFilters && (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#E8923A] text-xs text-white">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--action)] text-xs text-white">
                 {filterRivers.length + filterYears.length + filterLocations.length}
               </span>
             )}
@@ -306,7 +306,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         </div>
 
         {/* Mobile stats */}
-        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-[#A8B2BD]">
+        <div className="mt-4 flex gap-4 overflow-x-auto text-sm text-[var(--text-body)]">
           <span>{totalSessions} Sessions</span>
           <span>·</span>
           <span>{totalFish} Fish</span>
@@ -318,23 +318,23 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
         {mobileFiltersOpen && (
           <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setMobileFiltersOpen(false)}>
             <div
-              className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-xl bg-[#161B22] p-6"
+              className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-xl bg-[var(--surface-raised)] p-6"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-heading text-xl font-semibold text-[#E8923A]">
+                <h2 className="font-heading text-xl font-semibold text-[var(--action)]">
                   Filters
                 </h2>
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="text-[#A8B2BD] hover:text-[#A8B2BD]"
+                  className="text-[var(--text-body)] hover:text-[var(--text-body)]"
                 >
                   ✕
                 </button>
               </div>
               <div className="space-y-5">
                 <div>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">Rivers</p>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-body)]">Rivers</p>
                   <FilterDropdown
                     label="Rivers"
                     options={riverFacets}
@@ -345,7 +345,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                   />
                 </div>
                 <div>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">Years</p>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-body)]">Years</p>
                   <FilterDropdown
                     label="Years"
                     options={yearFacets}
@@ -373,7 +373,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           <div className="sticky top-[4rem] flex flex-col gap-4 max-h-[calc(100vh-5rem)] overflow-y-auto pt-2 pb-4 pr-1">
 
             {/* Profile card */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D]">
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)]">
               <div className="h-16 bg-gradient-to-br from-forest to-forest-dark rounded-t-xl" />
               <div className="px-4 pb-4">
                 <Link href="/account" className="-mt-8 mb-3 block w-fit">
@@ -383,55 +383,55 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                     size={56}
                   />
                 </Link>
-                <p className="font-bold text-[#F0F6FC] text-sm leading-tight">
+                <p className="font-bold text-[var(--text-primary)] text-sm leading-tight">
                   {(userProfile?.displayName || "Angler").trim().split(/\s+/)[0]}
                 </p>
                 {userProfile?.username && (
-                  <p className="text-xs text-[#6E7681] mt-0.5 mb-3 truncate">@{userProfile.username}</p>
+                  <p className="text-xs text-[var(--text-meta)] mt-0.5 mb-3 truncate">@{userProfile.username}</p>
                 )}
-                <div className={`grid grid-cols-3 gap-1 text-center border-t border-[#21262D] pt-3 ${userProfile?.username ? "" : "mt-3"}`}>
+                <div className={`grid grid-cols-3 gap-1 text-center border-t border-[var(--border-rule)] pt-3 ${userProfile?.username ? "" : "mt-3"}`}>
                   <div>
-                    <p className="text-base font-bold text-[#F0F6FC]">{totalSessions}</p>
-                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Sessions</p>
+                    <p className="text-base font-bold text-[var(--text-primary)]">{totalSessions}</p>
+                    <p className="text-[10px] text-[var(--text-meta)] uppercase tracking-wide">Sessions</p>
                   </div>
                   <div>
-                    <p className="text-base font-bold text-[#F0F6FC]">{totalFish}</p>
-                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Fish</p>
+                    <p className="text-base font-bold text-[var(--text-primary)]">{totalFish}</p>
+                    <p className="text-[10px] text-[var(--text-meta)] uppercase tracking-wide">Fish</p>
                   </div>
                   <div>
-                    <p className="text-base font-bold text-[#F0F6FC]">{biggestFish > 0 ? `${biggestFish}"` : "—"}</p>
-                    <p className="text-[10px] text-[#6E7681] uppercase tracking-wide">Biggest</p>
+                    <p className="text-base font-bold text-[var(--text-primary)]">{biggestFish > 0 ? `${biggestFish}"` : "—"}</p>
+                    <p className="text-[10px] text-[var(--text-meta)] uppercase tracking-wide">Biggest</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Quick nav */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3 space-y-1">
-              <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#E8923A]/5 text-[#E8923A] text-sm font-medium">
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-3 space-y-1">
+              <Link href="/journal" className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[var(--action)]/5 text-[var(--action)] text-sm font-medium">
                 <BookOpen className="h-4 w-4" /> Journal
               </Link>
-              <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/stats" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <TrendingUp className="h-4 w-4" /> River Stats
               </Link>
-              <Link href="/journal/trophy-wall" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/trophy-wall" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Trophy className="h-4 w-4" /> Trophy Wall
               </Link>
-              <Link href="/journal/insights" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/insights" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Sparkles className="h-4 w-4" /> Insights
-                <span className="ml-auto text-[8px] font-bold tracking-wider text-[#E8923A] bg-[#E8923A]/10 px-1.5 py-0.5 rounded">PRO</span>
+                <span className="ml-auto text-[8px] font-bold tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded">PRO</span>
               </Link>
-              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Feather className="h-4 w-4" /> Fly Box
-                <span className="ml-auto text-xs text-[#6E7681]">{totalFlyPatterns}</span>
+                <span className="ml-auto text-xs text-[var(--text-meta)]">{totalFlyPatterns}</span>
               </Link>
-              <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/account/gear" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Package className="h-4 w-4" /> Gear Locker
               </Link>
-              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/favorites" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <span className="text-base">❤️</span> Favorites
               </Link>
-              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors">
+              <Link href="/account" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <span className="text-base">⚙️</span> Settings
               </Link>
             </div>
@@ -441,38 +441,38 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               <Button href="/journal/new" variant="solid" size="md" fullWidth>
                 + Log Session
               </Button>
-              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[#00B4D8] bg-[#00B4D8]/10 px-4 py-2.5 text-sm font-medium text-[#00B4D8] hover:bg-[#00B4D8]/20 transition-colors">
+              <Link href="/journal/flies/new" className="block w-full text-center rounded-xl border border-[var(--signal-live)] bg-[var(--signal-live)]/10 px-4 py-2.5 text-sm font-medium text-[var(--signal-live)] hover:bg-[var(--signal-live)]/20 transition-colors">
                 + Add Fly Pattern
               </Link>
             </div>
 
             {/* Import */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-[#6E7681] uppercase tracking-wide font-medium mb-1">
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--text-meta)] uppercase tracking-wide font-medium mb-1">
                 <Upload className="h-3.5 w-3.5" /> Import Journal
               </div>
               <Link
                 href="/journal/import"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors"
               >
                 Import from CSV →
               </Link>
             </div>
 
             {/* Export */}
-            <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-[#6E7681] uppercase tracking-wide font-medium mb-1">
+            <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--text-meta)] uppercase tracking-wide font-medium mb-1">
                 <Download className="h-3.5 w-3.5" /> Export Journal
               </div>
               <a
                 href="/api/export/csv"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors"
               >
                 CSV (Spreadsheet)
               </a>
               <a
                 href="/api/export/pdf"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#A8B2BD] text-sm hover:bg-[#0D1117] transition-colors"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors"
               >
                 PDF (Trip Report)
               </a>
@@ -499,15 +499,15 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 onClearAll={hasActiveFilters ? clearFilters : undefined}
                 rightSlot={
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-0.5 border border-[#21262D] rounded-lg p-0.5 bg-[#161B22]">
+                    <div className="flex items-center gap-0.5 border border-[var(--border-rule)] rounded-lg p-0.5 bg-[var(--surface-raised)]">
                       <button
                         onClick={() => setView("list")}
                         aria-label="List view"
                         aria-pressed={view === "list"}
                         className={`p-1.5 rounded-md transition-colors ${
                           view === "list"
-                            ? "bg-[#E8923A]/10 text-[#E8923A]"
-                            : "text-[#6E7681] hover:text-[#A8B2BD]"
+                            ? "bg-[var(--action)]/10 text-[var(--action)]"
+                            : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
                         }`}
                       >
                         <ListIcon className="h-4 w-4" />
@@ -518,14 +518,14 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                         aria-pressed={view === "calendar"}
                         className={`p-1.5 rounded-md transition-colors ${
                           view === "calendar"
-                            ? "bg-[#E8923A]/10 text-[#E8923A]"
-                            : "text-[#6E7681] hover:text-[#A8B2BD]"
+                            ? "bg-[var(--action)]/10 text-[var(--action)]"
+                            : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
                         }`}
                       >
                         <CalendarIcon className="h-4 w-4" />
                       </button>
                     </div>
-                    <span className="text-xs text-[#6E7681] hidden xl:inline tabular-nums">
+                    <span className="text-xs text-[var(--text-meta)] hidden xl:inline tabular-nums">
                       {filteredSessions.length === sortedSessions.length
                         ? `${sortedSessions.length} sessions`
                         : `${filteredSessions.length} of ${sortedSessions.length}`}
@@ -557,7 +557,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           <div className="mb-4">
             <TipCard storageKey="journal-feed-intro" title="Your fishing journal">
               <p>Every logged session shows up here. Tap a card to dive in — catches, photos, weather, notes, and kudos from people you follow.</p>
-              <p className="text-[#6E7681]">Toggle <span className="text-[#F0F6FC] font-semibold">List</span> / <span className="text-[#F0F6FC] font-semibold">Calendar</span> above. Filter by river, year, or location tag in the sidebar.</p>
+              <p className="text-[var(--text-meta)]">Toggle <span className="text-[var(--text-primary)] font-semibold">List</span> / <span className="text-[var(--text-primary)] font-semibold">Calendar</span> above. Filter by river, year, or location tag in the sidebar.</p>
             </TipCard>
           </div>
 
@@ -566,19 +566,19 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             <>
               {/* Compact map panel — shown when feedDisplay==="map", collapsible */}
               {feedDisplay === "map" && (
-                <div className="mb-4 rounded-xl overflow-hidden border border-[#21262D]">
+                <div className="mb-4 rounded-xl overflow-hidden border border-[var(--border-rule)]">
                   <JournalMapView sessions={filteredSessions} compact />
                 </div>
               )}
 
               {/* Session list — always visible */}
               {filteredSessions.length === 0 ? (
-                <div className="rounded-lg bg-[#161B22] p-12 text-center shadow-sm">
-                  <p className="text-[#A8B2BD]">No sessions match your filters</p>
+                <div className="rounded-lg bg-[var(--surface-raised)] p-12 text-center shadow-sm">
+                  <p className="text-[var(--text-body)]">No sessions match your filters</p>
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="mt-4 text-sm font-medium text-[#E8923A] hover:text-[#E8923A]"
+                      className="mt-4 text-sm font-medium text-[var(--action)] hover:text-[var(--action)]"
                     >
                       Clear filters
                     </button>

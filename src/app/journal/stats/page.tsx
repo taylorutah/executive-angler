@@ -18,7 +18,7 @@ export default async function StatsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
+    <div className="min-h-screen bg-[var(--surface-page)] pt-6 pb-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <RiverStatsView />
       </div>

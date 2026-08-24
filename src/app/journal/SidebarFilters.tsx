@@ -49,16 +49,16 @@ export function SidebarFilters({
       {/* Location Filter */}
       {locationOptions.length > 0 && (
         <div>
-          <h3 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-[#A8B2BD]">
+          <h3 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-[var(--text-body)]">
             Filter by Location
             <HelpHint label="What Location filter pulls from">
-              <p className="text-[#F0F6FC] font-semibold">Venue-type tags you added to sessions.</p>
-              <p>Things like <span className="text-[#E8923A]">walk-in</span>, <span className="text-[#E8923A]">tailwater</span>, <span className="text-[#E8923A]">below-dam</span>, <span className="text-[#E8923A]">public</span>. We pull them from your session tags so you can filter down to a specific kind of water.</p>
-              <p className="text-[#6E7681] text-xs">Nothing here? Start tagging sessions with where you fished (not just the river).</p>
+              <p className="text-[var(--text-primary)] font-semibold">Venue-type tags you added to sessions.</p>
+              <p>Things like <span className="text-[var(--action)]">walk-in</span>, <span className="text-[var(--action)]">tailwater</span>, <span className="text-[var(--action)]">below-dam</span>, <span className="text-[var(--action)]">public</span>. We pull them from your session tags so you can filter down to a specific kind of water.</p>
+              <p className="text-[var(--text-meta)] text-xs">Nothing here? Start tagging sessions with where you fished (not just the river).</p>
             </HelpHint>
           </h3>
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[var(--text-body)] cursor-pointer">
               <input
                 type="checkbox"
                 checked={filterLocations.length === 0}
@@ -70,30 +70,30 @@ export function SidebarFilters({
                     }
                   });
                 }}
-                className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
+                className="h-4 w-4 rounded border-[var(--border-rule)] text-[var(--action)] focus:ring-[var(--action)]"
               />
               <span>All Locations</span>
             </label>
             {visibleLocations.map(({ location, count }) => (
               <label
                 key={location}
-                className="flex items-center gap-2 text-sm text-[#A8B2BD] cursor-pointer"
+                className="flex items-center gap-2 text-sm text-[var(--text-body)] cursor-pointer"
               >
                 <input
                   type="checkbox"
                   checked={filterLocations.includes(location)}
                   onChange={() => onFilterChange("locations", location)}
-                  className="h-4 w-4 rounded border-[#21262D] text-[#E8923A] focus:ring-[#E8923A]"
+                  className="h-4 w-4 rounded border-[var(--border-rule)] text-[var(--action)] focus:ring-[var(--action)]"
                 />
                 <span>
-                  {location} <span className="text-[#A8B2BD]">({count})</span>
+                  {location} <span className="text-[var(--text-body)]">({count})</span>
                 </span>
               </label>
             ))}
             {locationOptions.length > 5 && (
               <button
                 onClick={() => setShowAllLocations(!showAllLocations)}
-                className="text-xs text-[#E8923A] hover:text-[#E8923A]"
+                className="text-xs text-[var(--action)] hover:text-[var(--action)]"
               >
                 {showAllLocations
                   ? "Show less"
@@ -104,7 +104,7 @@ export function SidebarFilters({
         </div>
       )}
 
-      <hr className="border-[#21262D]" />
+      <hr className="border-[var(--border-rule)]" />
 
     </div>
   );

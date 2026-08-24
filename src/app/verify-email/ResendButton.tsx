@@ -40,7 +40,7 @@ export default function ResendButton({ email }: { email: string }) {
       <button
         onClick={resend}
         disabled={state === "sending"}
-        className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#cf7d30] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#cf7d30] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {state === "sending" ? "Sending…" : "Resend confirmation email"}
       </button>

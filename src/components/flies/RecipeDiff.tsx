@@ -85,7 +85,7 @@ export default function RecipeDiff({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-[#21262D] bg-[#0D1117] px-4 py-3 text-xs text-[#6E7681]">
+      <div className="rounded-lg border border-dashed border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3 text-xs text-[var(--text-meta)]">
         No recipe differences — this variant is identical to its parent.
       </div>
     );
@@ -96,12 +96,12 @@ export default function RecipeDiff({
       <ul className="space-y-1 text-xs">
         {rows.map((r) => (
           <li key={r.key} className="flex flex-wrap items-center gap-1">
-            <span className="font-semibold text-[#A8B2BD]">{r.label}:</span>
-            <span className="rounded bg-[#21262D] px-1.5 py-0.5 text-[#6E7681] line-through decoration-[#6E7681]/50">
+            <span className="font-semibold text-[var(--text-body)]">{r.label}:</span>
+            <span className="rounded bg-[var(--border-rule)] px-1.5 py-0.5 text-[var(--text-meta)] line-through decoration-[var(--text-meta)]/50">
               {r.parentVal || "—"}
             </span>
-            <ArrowRight className="h-3 w-3 text-[#6E7681]" />
-            <span className="rounded bg-[#E8923A]/15 px-1.5 py-0.5 text-[#E8923A]">
+            <ArrowRight className="h-3 w-3 text-[var(--text-meta)]" />
+            <span className="rounded bg-[var(--action)]/15 px-1.5 py-0.5 text-[var(--action)]">
               {r.childVal || "—"}
             </span>
           </li>
@@ -111,16 +111,16 @@ export default function RecipeDiff({
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-[#21262D] bg-[#0D1117]">
+    <div className="overflow-hidden rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
       <div className="grid grid-cols-[auto_1fr_auto_1fr] items-stretch text-xs">
-        <div className="bg-[#161B22] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#6E7681]">
+        <div className="bg-[var(--surface-raised)] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-meta)]">
           Field
         </div>
-        <div className="bg-[#161B22] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#A8B2BD]">
+        <div className="bg-[var(--surface-raised)] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-body)]">
           {parentLabel}
         </div>
-        <div className="bg-[#161B22] px-2 py-2" />
-        <div className="bg-[#161B22] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#E8923A]">
+        <div className="bg-[var(--surface-raised)] px-2 py-2" />
+        <div className="bg-[var(--surface-raised)] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--action)]">
           {childLabel}
         </div>
         {rows.map((r) => (
@@ -142,17 +142,17 @@ function DiffRow({
 }) {
   return (
     <>
-      <div className="border-t border-[#21262D] px-3 py-2 font-medium text-[#A8B2BD]">
+      <div className="border-t border-[var(--border-rule)] px-3 py-2 font-medium text-[var(--text-body)]">
         {label}
       </div>
-      <div className="border-t border-[#21262D] px-3 py-2 text-[#6E7681] line-through decoration-[#6E7681]/40 break-words">
-        {parent || <span className="italic text-[#6E7681]/60">empty</span>}
+      <div className="border-t border-[var(--border-rule)] px-3 py-2 text-[var(--text-meta)] line-through decoration-[var(--text-meta)]/40 break-words">
+        {parent || <span className="italic text-[var(--text-meta)]/60">empty</span>}
       </div>
-      <div className="border-t border-[#21262D] px-2 py-2 flex items-center justify-center text-[#6E7681]">
+      <div className="border-t border-[var(--border-rule)] px-2 py-2 flex items-center justify-center text-[var(--text-meta)]">
         <ArrowRight className="h-3.5 w-3.5" />
       </div>
-      <div className="border-t border-[#21262D] px-3 py-2 text-[#F0F6FC] break-words">
-        {child || <span className="italic text-[#6E7681]/60">empty</span>}
+      <div className="border-t border-[var(--border-rule)] px-3 py-2 text-[var(--text-primary)] break-words">
+        {child || <span className="italic text-[var(--text-meta)]/60">empty</span>}
       </div>
     </>
   );

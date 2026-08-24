@@ -28,7 +28,7 @@ export default function MobileTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D1117]/95 backdrop-blur-md border-t border-[#21262D] pb-[env(safe-area-inset-bottom)]"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface-page)]/95 backdrop-blur-md border-t border-[var(--border-rule)] pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="grid grid-cols-5 h-14">
         {TABS.map((tab) => {
@@ -39,7 +39,7 @@ export default function MobileTabBar() {
               <Link
                 href={tab.href}
                 className={`flex h-full flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors ${
-                  active ? "text-[#E8923A]" : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  active ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.25 : 2} />
@@ -52,16 +52,16 @@ export default function MobileTabBar() {
           <Link
             href="/account"
             className={`flex h-full flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors ${
-              accountActive ? "text-[#E8923A]" : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+              accountActive ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
             }`}
           >
             {user.avatarUrl ? (
-              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[#E8923A]" : "ring-transparent"}`}>
+              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-transparent"}`}>
                 <Image src={user.avatarUrl} alt={`${user.displayName || "Your"} avatar`} width={24} height={24} className="object-cover w-full h-full" />
               </div>
             ) : (
-              <div className={`h-6 w-6 rounded-full bg-[#1F2937] flex items-center justify-center ring-2 ${accountActive ? "ring-[#E8923A]" : "ring-transparent"}`}>
-                <span className="text-[10px] font-bold text-[#A8B2BD]">{avatarInitial}</span>
+              <div className={`h-6 w-6 rounded-full bg-[var(--surface-card)] flex items-center justify-center ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-transparent"}`}>
+                <span className="text-[10px] font-bold text-[var(--text-body)]">{avatarInitial}</span>
               </div>
             )}
             <span>Me</span>

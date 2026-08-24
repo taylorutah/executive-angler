@@ -114,7 +114,7 @@ export default function FlyFavoriteButton({
     return (
       <button
         disabled
-        className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] text-[#6E7681] ${
+        className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-meta)] ${
           compact ? "p-2" : "px-4 py-2.5 text-sm font-medium"
         }`}
       >
@@ -131,7 +131,7 @@ export default function FlyFavoriteButton({
       className={`inline-flex items-center justify-center gap-2 rounded-lg border transition-all duration-200 ${
         isFavorite
           ? "border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-          : "border-[#21262D] bg-[#161B22] text-[#6E7681] hover:text-red-400 hover:border-red-500/30 hover:bg-red-500/5"
+          : "border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-meta)] hover:text-red-400 hover:border-red-500/30 hover:bg-red-500/5"
       } ${compact ? "p-2" : "px-4 py-2.5 text-sm font-medium"} ${
         loading ? "opacity-50 cursor-not-allowed" : ""
       }`}

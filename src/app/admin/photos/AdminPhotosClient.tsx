@@ -150,23 +150,23 @@ export default function AdminPhotosClient() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Header */}
-      <div className="bg-[#161B22] border-b border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 rounded-lg hover:bg-[#1F2937] transition-colors"
+              className="p-2 rounded-lg hover:bg-[var(--surface-card)] transition-colors"
               aria-label="Back to home"
             >
-              <ArrowLeft className="h-5 w-5 text-[#A8B2BD]" />
+              <ArrowLeft className="h-5 w-5 text-[var(--text-body)]" />
             </Link>
             <div>
-              <h1 className="font-heading text-2xl font-bold text-[#E8923A]">
+              <h1 className="font-heading text-2xl font-bold text-[var(--action)]">
                 Photo Submissions
               </h1>
-              <p className="text-sm text-[#A8B2BD] mt-0.5">
+              <p className="text-sm text-[var(--text-body)] mt-0.5">
                 Review and manage community photo submissions
               </p>
             </div>
@@ -183,8 +183,8 @@ export default function AdminPhotosClient() {
               onClick={() => setActiveTab(tab.key)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === tab.key
-                  ? "bg-[#E8923A] text-white shadow-sm"
-                  : "bg-[#161B22] text-[#A8B2BD] border border-[#21262D] hover:bg-[#0D1117]"
+                  ? "bg-[var(--action)] text-white shadow-sm"
+                  : "bg-[var(--surface-raised)] text-[var(--text-body)] border border-[var(--border-rule)] hover:bg-[var(--surface-page)]"
               }`}
             >
               {tab.icon}
@@ -193,10 +193,10 @@ export default function AdminPhotosClient() {
                 <span
                   className={`px-2 py-0.5 text-xs rounded-full font-semibold ${
                     activeTab === tab.key
-                      ? "bg-[#161B22]/20 text-white"
+                      ? "bg-[var(--surface-raised)]/20 text-white"
                       : tab.key === "pending"
                         ? "bg-amber-100 text-amber-700"
-                        : "bg-[#1F2937] text-[#A8B2BD]"
+                        : "bg-[var(--surface-card)] text-[var(--text-body)]"
                   }`}
                 >
                   {counts[tab.key]}
@@ -209,12 +209,12 @@ export default function AdminPhotosClient() {
         {/* Content */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin" />
           </div>
         ) : filteredPhotos.length === 0 ? (
           <div className="text-center py-20">
-            <Camera className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-            <p className="text-[#A8B2BD]">
+            <Camera className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+            <p className="text-[var(--text-body)]">
               No {activeTab} photo submissions yet.
             </p>
           </div>
@@ -223,10 +223,10 @@ export default function AdminPhotosClient() {
             {filteredPhotos.map((photo) => (
               <div
                 key={photo.id}
-                className="bg-[#161B22] rounded-xl shadow-sm border border-[#21262D] overflow-hidden"
+                className="bg-[var(--surface-raised)] rounded-xl shadow-sm border border-[var(--border-rule)] overflow-hidden"
               >
                 {/* Photo Thumbnail */}
-                <div className="relative h-56 bg-[#1F2937]">
+                <div className="relative h-56 bg-[var(--surface-card)]">
                   <Image
                     src={photo.photo_url}
                     alt={photo.caption || "Photo submission"}
@@ -255,14 +255,14 @@ export default function AdminPhotosClient() {
                 <div className="p-5 space-y-3">
                   {/* Submitter */}
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0">
-                      <User className="h-4 w-4 text-[#E8923A]" />
+                    <div className="w-8 h-8 rounded-full bg-[var(--action)]/10 flex items-center justify-center shrink-0">
+                      <User className="h-4 w-4 text-[var(--action)]" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#E8923A] truncate">
+                      <p className="text-sm font-medium text-[var(--action)] truncate">
                         {photo.submitter_name}
                       </p>
-                      <p className="text-xs text-[#A8B2BD] truncate flex items-center gap-1">
+                      <p className="text-xs text-[var(--text-body)] truncate flex items-center gap-1">
                         <Mail className="h-3 w-3" />
                         {photo.submitter_email}
                       </p>
@@ -270,25 +270,25 @@ export default function AdminPhotosClient() {
                   </div>
 
                   {/* Entity Info */}
-                  <div className="flex items-center gap-1.5 text-xs text-[#A8B2BD]">
+                  <div className="flex items-center gap-1.5 text-xs text-[var(--text-body)]">
                     <MapPin className="h-3 w-3" />
                     <span className="capitalize">{photo.entity_type}</span>
-                    <span className="text-[#6E7681]">|</span>
-                    <span className="truncate font-mono text-[#6E7681]">
+                    <span className="text-[var(--text-meta)]">|</span>
+                    <span className="truncate font-mono text-[var(--text-meta)]">
                       {photo.entity_id.substring(0, 8)}...
                     </span>
                   </div>
 
                   {/* Caption */}
                   {photo.caption && (
-                    <p className="text-sm text-[#A8B2BD] line-clamp-2 italic">
+                    <p className="text-sm text-[var(--text-body)] line-clamp-2 italic">
                       &ldquo;{photo.caption}&rdquo;
                     </p>
                   )}
 
                   {/* Camera Details */}
                   {(photo.camera_body || photo.lens) && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
+                    <div className="flex items-center gap-1.5 text-xs text-[var(--text-meta)]">
                       <Camera className="h-3 w-3" />
                       {[photo.camera_body, photo.lens]
                         .filter(Boolean)
@@ -296,7 +296,7 @@ export default function AdminPhotosClient() {
                     </div>
                   )}
                   {(photo.aperture || photo.shutter_speed || photo.iso) && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
+                    <div className="flex items-center gap-1.5 text-xs text-[var(--text-meta)]">
                       <Aperture className="h-3 w-3" />
                       {[
                         photo.aperture,
@@ -309,7 +309,7 @@ export default function AdminPhotosClient() {
                   )}
 
                   {/* Date */}
-                  <div className="flex items-center gap-1.5 text-xs text-[#6E7681]">
+                  <div className="flex items-center gap-1.5 text-xs text-[var(--text-meta)]">
                     <Calendar className="h-3 w-3" />
                     Submitted {formatDate(photo.submitted_at)}
                   </div>
@@ -319,7 +319,7 @@ export default function AdminPhotosClient() {
                     href={photo.photo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-[#E8923A] hover:text-[#E8923A]-light transition-colors"
+                    className="inline-flex items-center gap-1 text-xs text-[var(--action)] hover:text-[var(--action)]-light transition-colors"
                   >
                     <ExternalLink className="h-3 w-3" />
                     View full image
@@ -327,7 +327,7 @@ export default function AdminPhotosClient() {
 
                   {/* Action Buttons */}
                   {photo.status === "pending" && (
-                    <div className="flex gap-3 pt-2 border-t border-[#21262D]">
+                    <div className="flex gap-3 pt-2 border-t border-[var(--border-rule)]">
                       <Button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}
@@ -356,7 +356,7 @@ export default function AdminPhotosClient() {
 
                   {/* Reverse action for already-reviewed photos */}
                   {photo.status === "approved" && (
-                    <div className="pt-2 border-t border-[#21262D]">
+                    <div className="pt-2 border-t border-[var(--border-rule)]">
                       <Button
                         onClick={() => handleAction(photo.id, "reject")}
                         disabled={actionLoading === photo.id}
@@ -373,7 +373,7 @@ export default function AdminPhotosClient() {
                   )}
 
                   {photo.status === "rejected" && (
-                    <div className="pt-2 border-t border-[#21262D]">
+                    <div className="pt-2 border-t border-[var(--border-rule)]">
                       <Button
                         onClick={() => handleAction(photo.id, "approve")}
                         disabled={actionLoading === photo.id}

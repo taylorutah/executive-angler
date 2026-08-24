@@ -222,7 +222,7 @@ export default function CloneDrawer({
             type="button"
             onClick={handleSubmit}
             disabled={busy || loading || !source}
-            className="rounded-md bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
+            className="rounded-md bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
           >
             {busy ? "Cloning…" : "Save clone"}
           </button>
@@ -253,7 +253,7 @@ export default function CloneDrawer({
               value={name}
               maxLength={120}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/40"
               placeholder="e.g. PT — Provo size 18"
             />
           </div>
@@ -264,7 +264,7 @@ export default function CloneDrawer({
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/40"
             >
               <option value="">— inherit from source —</option>
               <option value="dry">Dry fly</option>
@@ -286,7 +286,7 @@ export default function CloneDrawer({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
-              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#E8923A]/40"
+              className="mt-1 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/40"
               placeholder="What did you change? Material swaps, bead size, color tweak…"
             />
           </div>

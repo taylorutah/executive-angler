@@ -32,7 +32,7 @@ export default function RiverStatsView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="h-6 w-6 animate-spin text-[#E8923A]" />
+        <Loader2 className="h-6 w-6 animate-spin text-[var(--action)]" />
       </div>
     );
   }
@@ -52,11 +52,11 @@ export default function RiverStatsView() {
     ? null
     : (
       <span className="inline-flex flex-wrap items-baseline gap-x-2">
-        <span><span className="text-[#E8923A] font-semibold">{stats.length}</span> rivers</span>
+        <span><span className="text-[var(--action)] font-semibold">{stats.length}</span> rivers</span>
         <span className="text-[#3a4150]">·</span>
-        <span><span className="text-[#F0F6FC] font-semibold">{totalSessions}</span> sessions</span>
+        <span><span className="text-[var(--text-primary)] font-semibold">{totalSessions}</span> sessions</span>
         <span className="text-[#3a4150]">·</span>
-        <span><span className="text-[#F0F6FC] font-semibold">{totalFish}</span> fish</span>
+        <span><span className="text-[var(--text-primary)] font-semibold">{totalFish}</span> fish</span>
       </span>
     );
 
@@ -69,12 +69,12 @@ export default function RiverStatsView() {
       <PageHeader eyebrow="Journal" title="River stats" meta={meta} />
 
       {stats.length === 0 ? (
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-10 text-center">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-10 text-center">
           <TrendingUp className="w-8 h-8 mx-auto mb-3 text-[#3a4150]" />
-          <p className="text-[14px] text-[#A8B2BD]">No stats yet. Log a session to start tracking your rivers.</p>
+          <p className="text-[14px] text-[var(--text-body)]">No stats yet. Log a session to start tracking your rivers.</p>
         </div>
       ) : (
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl divide-y divide-[#21262D] overflow-hidden">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl divide-y divide-[#21262D] overflow-hidden">
           {stats.map((s) => (
             <RiverRow key={s.river_name} stats={s} maxSessions={maxSessions} />
           ))}
@@ -104,14 +104,14 @@ function RiverRow({
     >
       {/* Copper accent rail — width scales with relative session count */}
       <span
-        className="pointer-events-none absolute left-0 top-0 bottom-0 w-[3px] bg-[#E8923A] transition-all group-hover:w-[5px]"
+        className="pointer-events-none absolute left-0 top-0 bottom-0 w-[3px] bg-[var(--action)] transition-all group-hover:w-[5px]"
         style={{ opacity: intensity }}
         aria-hidden
       />
 
       <div className="pl-3">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-heading text-[17px] text-[#F0F6FC] tracking-[-0.005em] truncate">
+          <h3 className="font-heading text-[17px] text-[var(--text-primary)] tracking-[-0.005em] truncate">
             {s.river_name}
           </h3>
           <div className="flex items-center gap-2 shrink-0">
@@ -120,29 +120,29 @@ function RiverRow({
                 ★ {s.awards.length}
               </span>
             )}
-            <ChevronRight className="h-3.5 w-3.5 text-[#3a4150] group-hover:text-[#E8923A] transition-colors" />
+            <ChevronRight className="h-3.5 w-3.5 text-[#3a4150] group-hover:text-[var(--action)] transition-colors" />
           </div>
         </div>
 
-        <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 font-mono text-[12px] text-[#6E7681] tabular-nums">
+        <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 font-mono text-[12px] text-[var(--text-meta)] tabular-nums">
           <span>
-            <span className="text-[#F0F6FC] font-semibold">{s.total_sessions}</span>{' '}
+            <span className="text-[var(--text-primary)] font-semibold">{s.total_sessions}</span>{' '}
             <span className="lowercase">{s.total_sessions === 1 ? 'session' : 'sessions'}</span>
           </span>
           <span className="text-[#3a4150]">·</span>
           <span>
-            <span className="text-[#0BA5C7] font-semibold">{s.total_fish}</span> fish
+            <span className="text-[var(--signal-live)] font-semibold">{s.total_fish}</span> fish
           </span>
           <span className="text-[#3a4150]">·</span>
           <span>
-            <span className="text-[#A8B2BD]">{s.avg_fish_per_session.toFixed(1)}</span>
-            <span className="text-[#6E7681]">/s</span>
+            <span className="text-[var(--text-body)]">{s.avg_fish_per_session.toFixed(1)}</span>
+            <span className="text-[var(--text-meta)]">/s</span>
           </span>
           {s.biggest_fish ? (
             <>
               <span className="text-[#3a4150]">·</span>
               <span>
-                <span className="text-[#E8923A] font-semibold">{s.biggest_fish}&quot;</span>{' '}
+                <span className="text-[var(--action)] font-semibold">{s.biggest_fish}&quot;</span>{' '}
                 <span className="lowercase">pb</span>
               </span>
             </>
@@ -162,7 +162,7 @@ function RiverRow({
             </>
           ) : null}
           <span className="text-[#3a4150]">·</span>
-          <span className="text-[#6E7681]">last fished {lastFished}</span>
+          <span className="text-[var(--text-meta)]">last fished {lastFished}</span>
         </div>
       </div>
     </Link>

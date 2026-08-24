@@ -81,20 +81,20 @@ export default function CatchMigrationBanner({
 
   if (migratedMsg) {
     return (
-      <div className="rounded-md border border-[#0BA5C7]/30 bg-[#0BA5C7]/5 px-3 py-2.5 text-[12px] text-[#A8B2BD]">
+      <div className="rounded-md border border-[var(--signal-live)]/30 bg-[var(--signal-live)]/5 px-3 py-2.5 text-[12px] text-[var(--text-body)]">
         {migratedMsg}
       </div>
     );
   }
 
   return (
-    <div className="rounded-md border border-[#E8923A]/30 bg-[#E8923A]/5 px-3 py-2.5 flex items-start gap-2.5">
-      <ArrowRightLeft className="h-4 w-4 text-[#E8923A] mt-0.5 shrink-0" />
+    <div className="rounded-md border border-[var(--action)]/30 bg-[var(--action)]/5 px-3 py-2.5 flex items-start gap-2.5">
+      <ArrowRightLeft className="h-4 w-4 text-[var(--action)] mt-0.5 shrink-0" />
       <div className="min-w-0 flex-1">
-        <p className="text-[12px] text-[#F0F6FC] leading-snug">
-          You have <span className="font-bold text-[#E8923A]">{count}</span>{" "}
+        <p className="text-[12px] text-[var(--text-primary)] leading-snug">
+          You have <span className="font-bold text-[var(--action)]">{count}</span>{" "}
           past {count === 1 ? "catch" : "catches"} on{" "}
-          <span className="font-mono text-[#E8923A]">{parentCanonicalName}</span>.
+          <span className="font-mono text-[var(--action)]">{parentCanonicalName}</span>.
           Move {count === 1 ? "it" : "them"} to this personal pattern so your stats line up?
         </p>
         <div className="mt-2 flex items-center gap-2">
@@ -112,12 +112,12 @@ export default function CatchMigrationBanner({
           <button
             type="button"
             onClick={dismiss}
-            className="inline-flex items-center gap-1 text-[11px] text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+            className="inline-flex items-center gap-1 text-[11px] text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
           >
             <X className="h-3 w-3" /> Skip
           </button>
         </div>
-        <p className="mt-1.5 text-[10px] text-[#6E7681]">
+        <p className="mt-1.5 text-[10px] text-[var(--text-meta)]">
           Forward-only — past catches will reference this pattern instead of the library version.
         </p>
       </div>

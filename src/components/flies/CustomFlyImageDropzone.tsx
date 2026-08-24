@@ -116,7 +116,7 @@ export default function CustomFlyImageDropzone({
           type="button"
           disabled={busy !== null}
           onClick={() => inputRef.current?.click()}
-          className="flex-1 inline-flex items-center justify-center gap-1 bg-black/70 hover:bg-[#E8923A] text-white text-[10px] font-semibold py-1.5 transition-colors disabled:opacity-60"
+          className="flex-1 inline-flex items-center justify-center gap-1 bg-black/70 hover:bg-[var(--action)] text-white text-[10px] font-semibold py-1.5 transition-colors disabled:opacity-60"
           title={hasCustomPhoto ? "Replace your fly photo" : "Upload your fly photo"}
         >
           {busy === "upload" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Camera className="h-3 w-3" />}

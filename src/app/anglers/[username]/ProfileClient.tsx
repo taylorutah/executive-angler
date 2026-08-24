@@ -155,13 +155,13 @@ export default function ProfileClient({
   );
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Top bar w/ overflow menu */}
-      <div className="bg-[#161B22] border-b border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
             href="/anglers"
-            className="text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors"
+            className="text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors"
           >
             ← All anglers
           </Link>
@@ -172,7 +172,7 @@ export default function ProfileClient({
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label="Profile actions"
-                className="p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+                className="p-2 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
               >
                 <MoreHorizontal className="h-5 w-5" />
               </button>
@@ -184,7 +184,7 @@ export default function ProfileClient({
                     className="fixed inset-0 z-10 cursor-default"
                     onClick={() => setMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 z-20 w-52 rounded-lg border border-[#21262D] bg-[#161B22] shadow-xl overflow-hidden">
+                  <div className="absolute right-0 top-full mt-2 z-20 w-52 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-xl overflow-hidden">
                     <button
                       type="button"
                       onClick={() => {
@@ -202,7 +202,7 @@ export default function ProfileClient({
                         setMenuOpen(false);
                         setBlockOpen(true);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-red-400 hover:bg-red-950/40 transition-colors border-t border-[#21262D]"
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-red-400 hover:bg-red-950/40 transition-colors border-t border-[var(--border-rule)]"
                     >
                       <Ban className="h-4 w-4" />
                       Block User
@@ -218,7 +218,7 @@ export default function ProfileClient({
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex flex-col items-center text-center">
-          <div className="h-20 w-20 rounded-full overflow-hidden bg-[#E8923A]/10 border-2 border-[#21262D] shadow-lg flex items-center justify-center">
+          <div className="h-20 w-20 rounded-full overflow-hidden bg-[var(--action)]/10 border-2 border-[var(--border-rule)] shadow-lg flex items-center justify-center">
             {profile.avatarUrl ? (
               <Image
                 src={profile.avatarUrl}
@@ -228,38 +228,38 @@ export default function ProfileClient({
                 className="object-cover w-full h-full"
               />
             ) : (
-              <span className="text-3xl font-bold text-[#E8923A]">
+              <span className="text-3xl font-bold text-[var(--action)]">
                 {initial}
               </span>
             )}
           </div>
 
-          <h1 className="font-heading text-2xl font-bold text-[#F0F6FC] mt-4">
+          <h1 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-4">
             {displayName}
           </h1>
           {profile.username && (
-            <p className="text-sm text-[#A8B2BD] mt-0.5 font-mono">
+            <p className="text-sm text-[var(--text-body)] mt-0.5 font-mono">
               @{profile.username}
             </p>
           )}
 
           {profile.homeLocation && (
-            <p className="flex items-center gap-1 text-xs text-[#6E7681] mt-1.5">
+            <p className="flex items-center gap-1 text-xs text-[var(--text-meta)] mt-1.5">
               <MapPin className="h-3 w-3" />
               {profile.homeLocation}
             </p>
           )}
 
           {profile.bio && (
-            <p className="text-sm text-[#A8B2BD] mt-3 max-w-md whitespace-pre-wrap">
+            <p className="text-sm text-[var(--text-body)] mt-3 max-w-md whitespace-pre-wrap">
               {profile.bio}
             </p>
           )}
 
           {profile.isPrivate && (
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#21262D] px-3 py-1">
-              <Lock className="h-3 w-3 text-[#A8B2BD]" />
-              <span className="text-xs text-[#A8B2BD]">Private profile</span>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--border-rule)] px-3 py-1">
+              <Lock className="h-3 w-3 text-[var(--text-body)]" />
+              <span className="text-xs text-[var(--text-body)]">Private profile</span>
             </div>
           )}
 
@@ -292,14 +292,14 @@ export default function ProfileClient({
         </div>
 
         {/* Stats row — primary */}
-        <div className="mt-8 grid grid-cols-3 rounded-xl border border-[#21262D] bg-[#161B22] divide-x divide-[#21262D] overflow-hidden">
+        <div className="mt-8 grid grid-cols-3 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] divide-x divide-[#21262D] overflow-hidden">
           <StatCell value={stats.sessions} label="Sessions" />
           <StatCell value={stats.fish} label="Fish" />
           <StatCell value={stats.rivers} label="Rivers" />
         </div>
 
         {/* Stats row — social */}
-        <div className="mt-3 grid grid-cols-2 rounded-xl border border-[#21262D] bg-[#161B22] divide-x divide-[#21262D] overflow-hidden">
+        <div className="mt-3 grid grid-cols-2 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] divide-x divide-[#21262D] overflow-hidden">
           <StatCell
             value={followerCount}
             label="Followers"
@@ -316,23 +316,23 @@ export default function ProfileClient({
 
         {/* Recent Sessions */}
         <div className="mt-10">
-          <h2 className="text-base font-semibold text-[#F0F6FC] mb-4">
+          <h2 className="text-base font-semibold text-[var(--text-primary)] mb-4">
             Recent Sessions
           </h2>
 
           {!sessionsVisible ? (
-            <div className="rounded-xl bg-[#161B22] border border-[#21262D] py-10 px-6 flex flex-col items-center text-center">
-              <Lock className="h-7 w-7 text-[#6E7681] mb-3" />
-              <p className="text-sm font-medium text-[#A8B2BD]">
+            <div className="rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] py-10 px-6 flex flex-col items-center text-center">
+              <Lock className="h-7 w-7 text-[var(--text-meta)] mb-3" />
+              <p className="text-sm font-medium text-[var(--text-body)]">
                 This profile is private
               </p>
-              <p className="text-xs text-[#6E7681] mt-1">
+              <p className="text-xs text-[var(--text-meta)] mt-1">
                 Follow this angler to see their sessions
               </p>
             </div>
           ) : sessions.length === 0 ? (
-            <div className="rounded-xl bg-[#161B22] border border-[#21262D] py-10 px-6 text-center">
-              <p className="text-sm text-[#A8B2BD]">
+            <div className="rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] py-10 px-6 text-center">
+              <p className="text-sm text-[var(--text-body)]">
                 No public sessions yet
               </p>
             </div>
@@ -343,18 +343,18 @@ export default function ProfileClient({
                   <li key={s.id}>
                     <Link
                       href={`/journal/${s.id}`}
-                      className="flex items-center gap-3 rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-3 hover:border-[#E8923A]/40 transition-colors"
+                      className="flex items-center gap-3 rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] px-4 py-3 hover:border-[var(--action)]/40 transition-colors"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[#F0F6FC] truncate">
+                        <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
                           {s.river_name || "Unknown river"}
                         </p>
-                        <div className="flex items-center gap-2 mt-0.5 text-xs text-[#6E7681]">
+                        <div className="flex items-center gap-2 mt-0.5 text-xs text-[var(--text-meta)]">
                           {s.date && <span>{formatDate(s.date)}</span>}
                           {s.total_fish != null && s.total_fish > 0 && (
                             <>
                               <span>·</span>
-                              <span className="text-[#E8923A] font-mono">
+                              <span className="text-[var(--action)] font-mono">
                                 {s.total_fish} fish
                               </span>
                             </>
@@ -362,14 +362,14 @@ export default function ProfileClient({
                         </div>
                       </div>
                       {(kudosCounts[s.id] ?? 0) > 0 && (
-                        <div className="flex items-center gap-1 text-xs text-[#6E7681]">
+                        <div className="flex items-center gap-1 text-xs text-[var(--text-meta)]">
                           <Heart className="h-3.5 w-3.5" />
                           <span className="font-mono">
                             {kudosCounts[s.id]}
                           </span>
                         </div>
                       )}
-                      <ChevronRight className="h-4 w-4 text-[#6E7681]" />
+                      <ChevronRight className="h-4 w-4 text-[var(--text-meta)]" />
                     </Link>
                   </li>
                 ))}
@@ -381,17 +381,17 @@ export default function ProfileClient({
               {isAnonymous && hasMoreSessions && (
                 <Link
                   href={loginHref}
-                  className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-[#161B22] border border-[#E8923A]/40 px-4 py-4 hover:bg-[#E8923A]/10 transition-colors"
+                  className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-[var(--surface-raised)] border border-[var(--action)]/40 px-4 py-4 hover:bg-[var(--action)]/10 transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-[#F0F6FC]">
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">
                       Sign in to see every session
                     </p>
-                    <p className="text-xs text-[#A8B2BD] mt-0.5">
+                    <p className="text-xs text-[var(--text-body)] mt-0.5">
                       Unlock the full feed, kudos, comments, and follow {displayName}.
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-[#E8923A]" />
+                  <ChevronRight className="h-4 w-4 text-[var(--action)]" />
                 </Link>
               )}
             </>
@@ -500,10 +500,10 @@ function StatCell({
 }) {
   const inner = (
     <div className="flex flex-col items-center py-3">
-      <span className="text-lg font-semibold text-[#E8923A] font-['IBM_Plex_Mono']">
+      <span className="text-lg font-semibold text-[var(--action)] font-['IBM_Plex_Mono']">
         {value}
       </span>
-      <span className="text-[10px] uppercase tracking-wider text-[#6E7681] mt-0.5">
+      <span className="text-[10px] uppercase tracking-wider text-[var(--text-meta)] mt-0.5">
         {label}
       </span>
     </div>
@@ -512,7 +512,7 @@ function StatCell({
     return (
       <Link
         href={href}
-        className="hover:bg-[#21262D]/60 transition-colors"
+        className="hover:bg-[var(--border-rule)]/60 transition-colors"
       >
         {inner}
       </Link>
@@ -523,7 +523,7 @@ function StatCell({
       <button
         type="button"
         onClick={onClick}
-        className="hover:bg-[#21262D]/60 transition-colors"
+        className="hover:bg-[var(--border-rule)]/60 transition-colors"
       >
         {inner}
       </button>
@@ -588,15 +588,15 @@ function FollowListDialog({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="w-full max-w-md max-h-[80vh] flex flex-col rounded-xl bg-[#161B22] border border-[#21262D] overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#21262D]">
-          <h3 className="text-sm font-semibold text-[#F0F6FC] capitalize">
+      <div className="w-full max-w-md max-h-[80vh] flex flex-col rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)]">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] capitalize">
             {mode}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded text-[#A8B2BD] hover:text-[#F0F6FC]"
+            className="p-1 rounded text-[var(--text-body)] hover:text-[var(--text-primary)]"
             aria-label="Close"
           >
             <X className="h-4 w-4" />
@@ -604,9 +604,9 @@ function FollowListDialog({
         </div>
         <div className="flex-1 overflow-y-auto">
           {users === null ? (
-            <p className="p-6 text-sm text-[#6E7681] text-center">Loading…</p>
+            <p className="p-6 text-sm text-[var(--text-meta)] text-center">Loading…</p>
           ) : users.length === 0 ? (
-            <p className="p-6 text-sm text-[#6E7681] text-center">
+            <p className="p-6 text-sm text-[var(--text-meta)] text-center">
               Nobody here yet.
             </p>
           ) : (
@@ -623,14 +623,14 @@ function FollowListDialog({
                 return (
                   <li
                     key={u.user_id}
-                    className="border-b border-[#21262D] last:border-0"
+                    className="border-b border-[var(--border-rule)] last:border-0"
                   >
                     <Link
                       href={href}
                       onClick={onClose}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-[#0D1117] transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--surface-page)] transition-colors"
                     >
-                      <div className="h-9 w-9 rounded-full overflow-hidden bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
+                      <div className="h-9 w-9 rounded-full overflow-hidden bg-[var(--action)]/10 flex items-center justify-center flex-shrink-0">
                         {u.avatar_url ? (
                           <Image
                             src={u.avatar_url}
@@ -640,17 +640,17 @@ function FollowListDialog({
                             className="object-cover w-full h-full"
                           />
                         ) : (
-                          <span className="text-sm font-bold text-[#E8923A]">
+                          <span className="text-sm font-bold text-[var(--action)]">
                             {initial}
                           </span>
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[#F0F6FC] truncate">
+                        <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
                           {u.display_name || u.username || "Angler"}
                         </p>
                         {u.username && (
-                          <p className="text-xs text-[#6E7681] truncate">
+                          <p className="text-xs text-[var(--text-meta)] truncate">
                             @{u.username}
                           </p>
                         )}
@@ -701,16 +701,16 @@ function ReportDialog({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-xl bg-[#161B22] border border-[#21262D] p-5 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-base font-semibold text-[#F0F6FC]">
+      <div className="w-full max-w-md rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] p-5 max-h-[90vh] overflow-y-auto">
+        <h3 className="text-base font-semibold text-[var(--text-primary)]">
           Report {targetName}
         </h3>
-        <p className="text-xs text-[#A8B2BD] mt-1">
+        <p className="text-xs text-[var(--text-body)] mt-1">
           Only our moderators see this. Reports are anonymous.
         </p>
 
         <fieldset className="mt-4 space-y-2">
-          <legend className="text-xs font-semibold uppercase tracking-wider text-[#6E7681] mb-2">
+          <legend className="text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)] mb-2">
             Reason
           </legend>
           {REPORT_REASONS.map((opt) => {
@@ -720,8 +720,8 @@ function ReportDialog({
                 key={opt.value}
                 className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
                   selected
-                    ? "border-[#E8923A]/60 bg-[#E8923A]/10"
-                    : "border-[#21262D] bg-[#0D1117] hover:border-[#21262D]/70"
+                    ? "border-[var(--action)]/60 bg-[var(--action)]/10"
+                    : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--border-rule)]/70"
                 }`}
               >
                 <input
@@ -730,13 +730,13 @@ function ReportDialog({
                   value={opt.value}
                   checked={selected}
                   onChange={() => setReason(opt.value)}
-                  className="mt-0.5 accent-[#E8923A]"
+                  className="mt-0.5 accent-[var(--action)]"
                 />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[#F0F6FC]">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     {opt.label}
                   </p>
-                  <p className="text-xs text-[#A8B2BD] mt-0.5">{opt.hint}</p>
+                  <p className="text-xs text-[var(--text-body)] mt-0.5">{opt.hint}</p>
                 </div>
               </label>
             );
@@ -744,7 +744,7 @@ function ReportDialog({
         </fieldset>
 
         <label className="block mt-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[#6E7681]">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)]">
             Details {reason === "other" ? "(required)" : "(optional)"}
           </span>
           <textarea
@@ -752,9 +752,9 @@ function ReportDialog({
             onChange={(e) => setText(e.target.value.slice(0, 500))}
             rows={3}
             placeholder="Anything else our team should know?"
-            className="mt-1.5 w-full rounded-lg bg-[#0D1117] border border-[#21262D] p-2.5 text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:border-[#E8923A]/60 focus:outline-none resize-none"
+            className="mt-1.5 w-full rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] p-2.5 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)]/60 focus:outline-none resize-none"
           />
-          <span className="mt-1 block text-[10px] text-[#6E7681] text-right">
+          <span className="mt-1 block text-[10px] text-[var(--text-meta)] text-right">
             {text.length}/500
           </span>
         </label>
@@ -770,7 +770,7 @@ function ReportDialog({
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
@@ -824,11 +824,11 @@ function BlockDialog({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm rounded-xl bg-[#161B22] border border-[#21262D] p-5">
-        <h3 className="text-base font-semibold text-[#F0F6FC]">
+      <div className="w-full max-w-sm rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] p-5">
+        <h3 className="text-base font-semibold text-[var(--text-primary)]">
           Block {targetName}?
         </h3>
-        <ul className="text-xs text-[#A8B2BD] mt-2 space-y-1 list-disc pl-4">
+        <ul className="text-xs text-[var(--text-body)] mt-2 space-y-1 list-disc pl-4">
           <li>They won&apos;t be able to follow you or see your sessions</li>
           <li>You won&apos;t see their content anywhere in the app</li>
           <li>Any existing follow between you will be removed</li>
@@ -846,7 +846,7 @@ function BlockDialog({
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
@@ -879,9 +879,9 @@ function NoticeDialog({
 }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm rounded-xl bg-[#161B22] border border-[#21262D] p-5">
-        <h3 className="text-base font-semibold text-[#F0F6FC]">{title}</h3>
-        <p className="text-sm text-[#A8B2BD] mt-2">{body}</p>
+      <div className="w-full max-w-sm rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] p-5">
+        <h3 className="text-base font-semibold text-[var(--text-primary)]">{title}</h3>
+        <p className="text-sm text-[var(--text-body)] mt-2">{body}</p>
         <div className="mt-5 flex items-center justify-end">
           <Button variant="solid" size="md" onClick={onClose}>
             OK

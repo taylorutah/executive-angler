@@ -37,12 +37,12 @@ export default function Header() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   const navLinkClass = (active: boolean) =>
-    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active ? "text-[#F0F6FC] bg-[#F0F6FC]/5" : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#F0F6FC]/5"}`;
+    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${active ? "text-[var(--text-primary)] bg-[var(--text-primary)]/5" : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--text-primary)]/5"}`;
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="ea-header-primary border-b border-[#21262D]">
+        <div className="ea-header-primary border-b border-[var(--border-rule)]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-14 items-center justify-between">
               {/* Logo */}
@@ -111,7 +111,7 @@ export default function Header() {
                 <ThemeToggle />
                 <Link
                   href="/search"
-                  className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[#1F2937] text-[#A8B2BD] hover:text-[#F0F6FC]"
+                  className="flex items-center px-2.5 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--surface-card)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
                   title="Search (Cmd+K)"
                 >
                   <Search className="h-4.5 w-4.5" />
@@ -119,18 +119,18 @@ export default function Header() {
 
                 {isLoading ? (
                   <div className="hidden sm:flex items-center ml-2">
-                    <div className="h-8 w-8 rounded-full bg-[#1F2937] animate-pulse" />
+                    <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
                   </div>
                 ) : user ? (
                   <div className="hidden sm:flex items-center gap-0.5">
                     <NotificationBell />
                     <MessageIcon />
-                    <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#1F2937] transition-colors ml-1">
-                      <div className="h-8 w-8 rounded-full overflow-hidden bg-[#1F2937] flex items-center justify-center flex-shrink-0 ring-2 ring-transparent hover:ring-[#E8923A]/40 transition-all">
+                    <Link href="/account" className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[var(--surface-card)] transition-colors ml-1">
+                      <div className="h-8 w-8 rounded-full overflow-hidden bg-[var(--surface-card)] flex items-center justify-center flex-shrink-0 ring-2 ring-transparent hover:ring-[var(--action)]/40 transition-all">
                         {user.avatarUrl ? (
                           <Image src={user.avatarUrl} alt="Profile" width={32} height={32} className="object-cover w-full h-full" />
                         ) : (
-                          <span className="text-xs font-bold text-[#A8B2BD]">
+                          <span className="text-xs font-bold text-[var(--text-body)]">
                             {(user.displayName || user.email || "A")[0].toUpperCase()}
                           </span>
                         )}
@@ -139,7 +139,7 @@ export default function Header() {
                   </div>
                 ) : (
                   <div className="hidden sm:flex items-center gap-2 ml-2">
-                    <Link href="/login" className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]">
+                    <Link href="/login" className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)]">
                       Sign In
                     </Link>
                     <Button href="/signup" variant="solid" size="sm">Join Free</Button>
@@ -152,22 +152,22 @@ export default function Header() {
                     <button
                       onClick={() => setPlusOpen(!plusOpen)}
                       aria-label="Quick actions"
-                      className={`flex items-center justify-center w-9 h-9 rounded-full bg-[#E8923A] text-white hover:bg-[#F0A65A] transition-all shadow-md hover:shadow-lg active:scale-95 ${plusOpen ? "rotate-45" : ""} duration-200`}
+                      className={`flex items-center justify-center w-9 h-9 rounded-full bg-[var(--action)] text-white hover:bg-[#F0A65A] transition-all shadow-md hover:shadow-lg active:scale-95 ${plusOpen ? "rotate-45" : ""} duration-200`}
                     >
                       <Plus className="h-5 w-5" strokeWidth={2.5} />
                     </button>
 
                     {plusOpen && (
-                      <div className="absolute right-0 top-full mt-2 w-52 bg-[#161B22] border border-[#21262D] rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
-                        <div className="h-0.5 bg-[#E8923A]" />
+                      <div className="absolute right-0 top-full mt-2 w-52 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
+                        <div className="h-0.5 bg-[var(--action)]" />
                         <div className="py-1">
-                          <Link href="/journal/new" className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
-                            <FishSymbol className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                          <Link href="/journal/new" className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] hover:bg-[var(--surface-page)] transition-colors">
+                            <FishSymbol className="h-5 w-5 text-[var(--action)] flex-shrink-0" />
                             Log a Session
                           </Link>
-                          <div className="h-px bg-[#21262D] mx-4" />
-                          <Link href="/journal/flies/new" className="flex items-center gap-3 px-4 py-3 text-sm text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
-                            <Bug className="h-5 w-5 text-[#E8923A] flex-shrink-0" />
+                          <div className="h-px bg-[var(--border-rule)] mx-4" />
+                          <Link href="/journal/flies/new" className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] hover:bg-[var(--surface-page)] transition-colors">
+                            <Bug className="h-5 w-5 text-[var(--action)] flex-shrink-0" />
                             New Fly Recipe
                           </Link>
                         </div>
@@ -179,7 +179,7 @@ export default function Header() {
                 {/* Mobile Menu Toggle */}
                 <button
                   onClick={() => setMobileOpen(!mobileOpen)}
-                  className="lg:hidden p-2 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#1F2937]"
+                  className="lg:hidden p-2 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
                   aria-label="Toggle menu"
                 >
                   {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -194,10 +194,10 @@ export default function Header() {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden" style={{ top: "56px" }}>
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-[#161B22] shadow-2xl overflow-y-auto animate-fade-in border-l border-[#21262D]">
+          <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-[var(--surface-raised)] shadow-2xl overflow-y-auto animate-fade-in border-l border-[var(--border-rule)]">
             <div className="p-5">
               {/* Search */}
-              <Link href="/search" className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors">
+              <Link href="/search" className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] transition-colors">
                 <Search className="h-5 w-5" />
                 Search
               </Link>
@@ -207,7 +207,7 @@ export default function Header() {
                 <Link
                   href="/dashboard"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/dashboard") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    isActive("/dashboard") ? "bg-[var(--surface-page)] text-[var(--text-primary)]" : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   Dashboard
@@ -217,7 +217,7 @@ export default function Header() {
                 <Link
                   href="/journal"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/journal") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    isActive("/journal") ? "bg-[var(--surface-page)] text-[var(--text-primary)]" : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   Journal
@@ -227,8 +227,8 @@ export default function Header() {
                 href={user ? "/flies" : "/flies/library"}
                 className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
                   pathname === "/flies" || pathname.startsWith("/flies/")
-                    ? "bg-[#0D1117] text-[#F0F6FC]"
-                    : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    ? "bg-[var(--surface-page)] text-[var(--text-primary)]"
+                    : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 Flies
@@ -237,7 +237,7 @@ export default function Header() {
                 <Link
                   href="/account/gear"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/account/gear") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    isActive("/account/gear") ? "bg-[var(--surface-page)] text-[var(--text-primary)]" : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   <Package className="h-5 w-5" />
@@ -248,7 +248,7 @@ export default function Header() {
                 <Link
                   href="/feed"
                   className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive("/feed") ? "bg-[#0D1117] text-[#F0F6FC]" : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    isActive("/feed") ? "bg-[var(--surface-page)] text-[var(--text-primary)]" : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   Feed
@@ -257,37 +257,37 @@ export default function Header() {
 
               {/* Quick actions — mobile */}
               {user && (
-                <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
-                  <p className="px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">Quick Actions</p>
-                  <Link href="/journal/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#F0F6FC] rounded-lg hover:bg-[#0D1117] transition-colors">
-                    <FishSymbol className="h-5 w-5 text-[#E8923A]" /> Log a Session
+                <div className="mt-4 pt-4 border-t border-[var(--border-rule)] space-y-1">
+                  <p className="px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">Quick Actions</p>
+                  <Link href="/journal/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-primary)] rounded-lg hover:bg-[var(--surface-page)] transition-colors">
+                    <FishSymbol className="h-5 w-5 text-[var(--action)]" /> Log a Session
                   </Link>
-                  <Link href="/journal/flies/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC] transition-colors">
-                    <Bug className="h-5 w-5 text-[#E8923A]" /> New Fly Recipe
+                  <Link href="/journal/flies/new" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] transition-colors">
+                    <Bug className="h-5 w-5 text-[var(--action)]" /> New Fly Recipe
                   </Link>
                 </div>
               )}
 
               {/* User section */}
-              <div className="mt-4 pt-4 border-t border-[#21262D] space-y-1">
+              <div className="mt-4 pt-4 border-t border-[var(--border-rule)] space-y-1">
                 {user ? (
                   <>
-                    <Link href="/notifications" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/notifications" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]">
                       <Bell className="h-5 w-5" /> Notifications
                     </Link>
-                    <Link href="/messages" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/messages" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]">
                       <MessageSquare className="h-5 w-5" /> Messages
                     </Link>
-                    <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/favorites" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]">
                       <Heart className="h-5 w-5" /> Favorites
                     </Link>
-                    <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/account" className="flex items-center gap-3 px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]">
                       <User className="h-5 w-5" /> Account
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className="block px-4 py-3 text-base font-medium text-[#A8B2BD] rounded-lg hover:bg-[#0D1117] hover:text-[#F0F6FC]">
+                    <Link href="/login" className="block px-4 py-3 text-base font-medium text-[var(--text-body)] rounded-lg hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]">
                       Sign In
                     </Link>
                     <div className="px-2 pt-2">

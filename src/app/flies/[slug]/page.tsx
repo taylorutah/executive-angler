@@ -88,7 +88,7 @@ export default async function FlyDetail({ params }: Props) {
       : null;
 
   return (
-    <main className="min-h-screen bg-[#0D1117] text-[#F0F6FC] pt-14">
+    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -104,7 +104,7 @@ export default async function FlyDetail({ params }: Props) {
       />
 
       {/* ── HERO BAND — image left + title/meta right on desktop, stacks on mobile ── */}
-      <div className="border-b border-[#21262D] bg-[#161B22]">
+      <div className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-3">
           <Breadcrumbs
             items={[
@@ -122,7 +122,7 @@ export default async function FlyDetail({ params }: Props) {
           )}
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[360px_1fr] gap-6 lg:gap-8 items-start">
             {/* Hero image — bigger, square, prominent */}
-            <div className="relative aspect-square w-full max-w-[280px] sm:max-w-none mx-auto md:mx-0 rounded-2xl overflow-hidden bg-gradient-to-br from-[#21262D] to-[#0D1117] shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full max-w-[280px] sm:max-w-none mx-auto md:mx-0 rounded-2xl overflow-hidden bg-gradient-to-br from-[var(--border-rule)] to-[var(--surface-page)] shadow-lg shadow-black/20">
               {fly.hero_image_url ? (
                 <Image
                   src={fly.hero_image_url}
@@ -134,7 +134,7 @@ export default async function FlyDetail({ params }: Props) {
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-heading text-5xl text-[#E8923A]/30">
+                  <span className="font-heading text-5xl text-[var(--action)]/30">
                     {fly.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                   </span>
                 </div>
@@ -145,10 +145,10 @@ export default async function FlyDetail({ params }: Props) {
             <div className="min-w-0 flex flex-col gap-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[#0BA5C7] mb-1.5">
+                  <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-[0.2em] text-[var(--signal-live)] mb-1.5">
                     {fly.category ?? "Fly Pattern"}
                   </p>
-                  <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl text-[#F0F6FC] tracking-tight leading-[1.05]">
+                  <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl text-[var(--text-primary)] tracking-tight leading-[1.05]">
                     {fly.name}
                   </h1>
                 </div>
@@ -163,7 +163,7 @@ export default async function FlyDetail({ params }: Props) {
                         ? target
                         : `/login?redirect=${encodeURIComponent(target)}`;
                     })()}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1.5 text-xs font-medium text-[#0BA5C7] hover:bg-[#00B4D8]/20 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-2.5 py-1.5 text-xs font-medium text-[var(--signal-live)] hover:bg-[var(--signal-live)]/20 transition-colors"
                     aria-label="Clone this fly into a new pattern"
                     title="Start a new fly pre-filled from this one"
                   >
@@ -186,7 +186,7 @@ export default async function FlyDetail({ params }: Props) {
                     return (
                       <Link
                         href={`/flies/${fly.slug}/edit?from=${encodeURIComponent(`/flies/${fly.slug}`)}`}
-                        className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1.5 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-2.5 py-1.5 text-xs font-medium text-[var(--action)] hover:bg-[var(--action)]/20 transition-colors"
                         aria-label="Edit this fly"
                       >
                         <Pencil className="h-3.5 w-3.5" />
@@ -205,7 +205,7 @@ export default async function FlyDetail({ params }: Props) {
               </div>
 
               {fly.description && (
-                <p className="text-[15px] text-[#A8B2BD] leading-relaxed max-w-2xl">{fly.description}</p>
+                <p className="text-[15px] text-[var(--text-body)] leading-relaxed max-w-2xl">{fly.description}</p>
               )}
 
               <div className="mt-1">
@@ -213,8 +213,8 @@ export default async function FlyDetail({ params }: Props) {
               </div>
 
               {fly.origin_credit && (
-                <p className="text-[12px] text-[#6E7681] mt-1">
-                  Originated by <span className="text-[#A8B2BD]">{fly.origin_credit}</span>
+                <p className="text-[12px] text-[var(--text-meta)] mt-1">
+                  Originated by <span className="text-[var(--text-body)]">{fly.origin_credit}</span>
                 </p>
               )}
             </div>
@@ -233,27 +233,27 @@ export default async function FlyDetail({ params }: Props) {
             />
 
             {(fly.history || fly.tying_overview || fly.fishing_tips) && (
-              <section className="mt-10 pt-8 border-t border-[#21262D] space-y-8">
+              <section className="mt-10 pt-8 border-t border-[var(--border-rule)] space-y-8">
                 {fly.history && (
                   <div>
-                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">History</h3>
-                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.history}</p>
+                    <h3 className="font-heading text-xl text-[var(--text-primary)] mb-3">History</h3>
+                    <p className="text-[var(--text-body)] text-[15px] leading-relaxed whitespace-pre-line">{fly.history}</p>
                   </div>
                 )}
                 {fly.tying_overview && (
                   <div>
-                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Tying overview</h3>
-                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.tying_overview}</p>
+                    <h3 className="font-heading text-xl text-[var(--text-primary)] mb-3">Tying overview</h3>
+                    <p className="text-[var(--text-body)] text-[15px] leading-relaxed whitespace-pre-line">{fly.tying_overview}</p>
                   </div>
                 )}
                 {fly.fishing_tips && (
                   <div>
-                    <h3 className="font-heading text-xl text-[#F0F6FC] mb-3">Fishing tips</h3>
-                    <p className="text-[#A8B2BD] text-[15px] leading-relaxed whitespace-pre-line">{fly.fishing_tips}</p>
+                    <h3 className="font-heading text-xl text-[var(--text-primary)] mb-3">Fishing tips</h3>
+                    <p className="text-[var(--text-body)] text-[15px] leading-relaxed whitespace-pre-line">{fly.fishing_tips}</p>
                   </div>
                 )}
-                <div className="pt-4 border-t border-[#21262D]">
-                  <Link href="/flies" className="text-[#0BA5C7] hover:text-[#E8923A] text-sm transition-colors">
+                <div className="pt-4 border-t border-[var(--border-rule)]">
+                  <Link href="/flies" className="text-[var(--signal-live)] hover:text-[var(--action)] text-sm transition-colors">
                     ← Browse all flies
                   </Link>
                 </div>
@@ -287,31 +287,31 @@ function Recipe({
   const hasMaterials = materials && materials.length > 0;
   return (
     <section className="my-8">
-      <h2 className="font-heading text-xl text-[#F0F6FC] mb-3">Recipe</h2>
+      <h2 className="font-heading text-xl text-[var(--text-primary)] mb-3">Recipe</h2>
       {hasMaterials ? (
-        <ul className="rounded-lg border border-[#21262D] bg-[#161B22] divide-y divide-[#21262D]">
+        <ul className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] divide-y divide-[#21262D]">
           {materials.map((m, i) => {
             const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
             const detail = [m.material, m.brand].filter(Boolean).join(" · ");
             return (
               <li key={i} className="px-4 py-2.5 text-sm flex items-baseline gap-3">
-                <span className="w-20 text-[#6E7681] text-xs uppercase tracking-wide flex-shrink-0">{slotLabel}</span>
-                <span className="text-[#F0F6FC]">{detail || "—"}</span>
+                <span className="w-20 text-[var(--text-meta)] text-xs uppercase tracking-wide flex-shrink-0">{slotLabel}</span>
+                <span className="text-[var(--text-primary)]">{detail || "—"}</span>
                 {m.description && (
-                  <span className="text-[#6E7681] text-xs">{m.description}</span>
+                  <span className="text-[var(--text-meta)] text-xs">{m.description}</span>
                 )}
               </li>
             );
           })}
         </ul>
       ) : (
-        <div className="rounded-lg border border-dashed border-[#21262D] bg-[#161B22] px-4 py-6 text-sm text-[#6E7681]">
+        <div className="rounded-lg border border-dashed border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-6 text-sm text-[var(--text-meta)]">
           {editHref ? (
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <span>Recipe not filled in yet.</span>
               <Link
                 href={editHref}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-2.5 py-1 text-xs font-medium text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-2.5 py-1 text-xs font-medium text-[var(--action)] hover:bg-[var(--action)]/20 transition-colors"
               >
                 + Add recipe
               </Link>

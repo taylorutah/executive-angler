@@ -11,7 +11,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
   return (
     <Link
       href={href}
-      className="group block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-lg"
+      className="group block card-hover rounded-xl overflow-hidden bg-[var(--surface-raised)] shadow-lg"
     >
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="relative h-64 md:h-auto min-h-[16rem] overflow-hidden">
@@ -28,7 +28,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {badges.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[#161B22]/90 backdrop-blur-sm text-[#E8923A] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full"
                 >
                   {badge}
                 </span>
@@ -38,31 +38,31 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
         </div>
         <div className="p-8 md:p-10 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 bg-[#E8923A] text-white text-xs font-medium rounded-full uppercase">
+            <span className="px-2.5 py-0.5 bg-[var(--action)] text-white text-xs font-medium rounded-full uppercase">
               Featured
             </span>
             {meta && (
-              <span className="text-xs text-[#6E7681] uppercase tracking-wider">{meta}</span>
+              <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider">{meta}</span>
             )}
             {accent && (
-              <span className="text-lg font-semibold text-[#E8923A] shrink-0 ml-auto">{accent}</span>
+              <span className="text-lg font-semibold text-[var(--action)] shrink-0 ml-auto">{accent}</span>
             )}
           </div>
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-2 text-lg text-[#A8B2BD] italic">{subtitle}</p>
+            <p className="mt-2 text-lg text-[var(--text-body)] italic">{subtitle}</p>
           )}
           {description && (
-            <p className="mt-3 text-[#A8B2BD] line-clamp-3">{description}</p>
+            <p className="mt-3 text-[var(--text-body)] line-clamp-3">{description}</p>
           )}
           {((badges && badges.length > 0) || (tags && tags.length > 0)) && (
             <div className="mt-5 flex flex-wrap gap-2 md:hidden">
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full"
                 >
                   {badge}
                 </span>
@@ -70,7 +70,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[#0D1117] text-[#E8923A] rounded-full border border-[#21262D]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-full border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>

@@ -1,0 +1,655 @@
+{
+  "generatedAt": "2026-08-24T01:50:31.511Z",
+  "leftovers": {
+    "#F0A65A": [
+      {
+        "file": "src/app/account/submissions/MySubmissionsClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/anglers/[username]/flies/page.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/contribute/[entityType]/SubmissionForm.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/contribute/photo-update/PhotoUpdateForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/dashboard/DashboardClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/dashboard/export/ExportClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/error.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/feedback/FeedbackClient.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/flies/_components/FliesShell.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/not-found.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/admin/EntityForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/admin/HeroImageEditor.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/flies/UndoDeleteToast.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies/workspace/CloneDrawer.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies/workspace/ViewRail.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/layout/Header.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/rivers/CollapsibleOverview.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/rivers/RiverConditionsCard.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/ui/FilterDropdown.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/ui/ImageEditor.tsx",
+        "count": 1
+      }
+    ],
+    "#3A4150": [
+      {
+        "file": "src/app/journal/stats/RiverStatsView.tsx",
+        "count": 10
+      },
+      {
+        "file": "src/app/journal/trophy-wall/TrophyWallClient.tsx",
+        "count": 5
+      },
+      {
+        "file": "src/components/dashboard/CompactStatsRow.tsx",
+        "count": 5
+      }
+    ],
+    "#484F58": [
+      {
+        "file": "src/app/gear/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/catch-logger/CatchLogger.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/flies/MaterialAutocomplete.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies/RecipeBuilder.tsx",
+        "count": 6
+      },
+      {
+        "file": "src/components/flies/recipe-rows/CascadeCells.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies-v2/BoxesManager.tsx",
+        "count": 6
+      },
+      {
+        "file": "src/components/flies-v2/InlineNumberCell.tsx",
+        "count": 1
+      }
+    ],
+    "#D17D28": [
+      {
+        "file": "src/app/feed/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/forgot-password/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/notifications/NotificationsClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/reset-password/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/catch-logger/CatchLoggerEntry.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies/FlyPatternForm.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/flies/SubmitMaterialForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies-v3/AddToBoxButton.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/flies-v3/ConfigureSheet.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/layout/AppBanner.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/marketing/PhoneHeroMockup.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/notifications/NotificationDropdown.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/sections/WaitlistForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/sections/WaitlistSection.tsx",
+        "count": 1
+      }
+    ],
+    "#FFD700": [
+      {
+        "file": "src/app/dashboard/analytics/AnalyticsClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/journal/trophy-wall/TrophyWallClient.tsx",
+        "count": 9
+      }
+    ],
+    "#2D333B": [
+      {
+        "file": "src/app/contribute/[entityType]/SubmissionForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/feedback/FeedbackClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/admin/DeleteConfirmModal.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/admin/EntityForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/admin/EntityTable.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/ui/ImageEditor.tsx",
+        "count": 1
+      }
+    ],
+    "#C97726": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 7
+      }
+    ],
+    "#111827": [
+      {
+        "file": "src/app/admin/email-preview/PreviewNav.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/SendTestButton.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 3
+      }
+    ],
+    "#D4CBB8": [
+      {
+        "file": "src/app/admin/email-preview/PreviewNav.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/SendTestButton.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 2
+      }
+    ],
+    "#4B5563": [
+      {
+        "file": "src/app/admin/email-preview/PreviewNav.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 3
+      }
+    ],
+    "#D4751F": [
+      {
+        "file": "src/app/admin/email-preview/PreviewNav.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/for-guides/page.tsx",
+        "count": 1
+      }
+    ],
+    "#8B949E": [
+      {
+        "file": "src/components/layout/Footer.tsx",
+        "count": 3
+      },
+      {
+        "file": "src/components/media/PlateFallback.tsx",
+        "count": 1
+      }
+    ],
+    "#3FB950": [
+      {
+        "file": "src/components/sections/WaitlistForm.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/sections/WaitlistSection.tsx",
+        "count": 2
+      }
+    ],
+    "#FFA8A8": [
+      {
+        "file": "src/app/admin/content/materials/MaterialsQueueClient.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/journal/flies/workbench/WorkbenchClient.tsx",
+        "count": 1
+      }
+    ],
+    "#6B7280": [
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 3
+      }
+    ],
+    "#C9D1D9": [
+      {
+        "file": "src/app/feed/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/messages/MessagesClient.tsx",
+        "count": 2
+      }
+    ],
+    "#1C2128": [
+      {
+        "file": "src/app/flies/materials/MaterialsBrowserClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/guides/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/ui/EntityCard.tsx",
+        "count": 1
+      }
+    ],
+    "#D4822E": [
+      {
+        "file": "src/app/journal/import/ImportClient.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/journal/AIInsightsCard.tsx",
+        "count": 1
+      }
+    ],
+    "#7BD9C2": [
+      {
+        "file": "src/app/journal/stats/RiverStatsView.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/journal/trophy-wall/TrophyWallClient.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/dashboard/RiverSectionCard.tsx",
+        "count": 1
+      }
+    ],
+    "#D4832E": [
+      {
+        "file": "src/app/messages/MessagesClient.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/app/messages/[threadId]/ThreadDetailClient.tsx",
+        "count": 1
+      }
+    ],
+    "#7F1D1D": [
+      {
+        "file": "src/components/catch-logger/CatchLogger.tsx",
+        "count": 2
+      },
+      {
+        "file": "src/components/gear-v2/AddToLockerButton.tsx",
+        "count": 1
+      }
+    ],
+    "#F87171": [
+      {
+        "file": "src/components/catch-logger/CatchLogger.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/catch-logger/UndoToast.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/flies-v2/InlineNumberCell.tsx",
+        "count": 1
+      }
+    ],
+    "#D4782A": [
+      {
+        "file": "src/app/account/AccountClient.tsx",
+        "count": 2
+      }
+    ],
+    "#F7F3EC": [
+      {
+        "file": "src/app/admin/email-preview/page.tsx",
+        "count": 2
+      }
+    ],
+    "#D4822F": [
+      {
+        "file": "src/app/journal/[id]/edit/page.tsx",
+        "count": 2
+      }
+    ],
+    "#1F2630": [
+      {
+        "file": "src/app/journal/stats/RiverStatsView.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 1
+      }
+    ],
+    "#C4B5FD": [
+      {
+        "file": "src/app/journal/stats/RiverStatsView.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/journal/trophy-wall/TrophyWallClient.tsx",
+        "count": 1
+      }
+    ],
+    "#CF7D30": [
+      {
+        "file": "src/app/signup/page.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/app/verify-email/ResendButton.tsx",
+        "count": 1
+      }
+    ],
+    "#E5484D": [
+      {
+        "file": "src/components/dashboard/RiverSectionCard.tsx",
+        "count": 2
+      }
+    ],
+    "#1A1208": [
+      {
+        "file": "src/components/flies/FlyPatternForm.tsx",
+        "count": 2
+      }
+    ],
+    "#F09D47": [
+      {
+        "file": "src/components/sections/WaitlistForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/sections/WaitlistSection.tsx",
+        "count": 1
+      }
+    ],
+    "#F85149": [
+      {
+        "file": "src/components/sections/WaitlistForm.tsx",
+        "count": 1
+      },
+      {
+        "file": "src/components/sections/WaitlistSection.tsx",
+        "count": 1
+      }
+    ],
+    "#F5A65A": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 2
+      }
+    ],
+    "#9CA3AF": [
+      {
+        "file": "src/app/admin/email-preview/SendTestButton.tsx",
+        "count": 1
+      }
+    ],
+    "#16A34A": [
+      {
+        "file": "src/app/admin/email-preview/SendTestButton.tsx",
+        "count": 1
+      }
+    ],
+    "#DC2626": [
+      {
+        "file": "src/app/admin/email-preview/SendTestButton.tsx",
+        "count": 1
+      }
+    ],
+    "#4285F4": [
+      {
+        "file": "src/app/admin/users/UsersClient.tsx",
+        "count": 1
+      }
+    ],
+    "#8AB4F8": [
+      {
+        "file": "src/app/admin/users/UsersClient.tsx",
+        "count": 1
+      }
+    ],
+    "#D4812E": [
+      {
+        "file": "src/app/feed/page.tsx",
+        "count": 1
+      }
+    ],
+    "#525B65": [
+      {
+        "file": "src/app/journal/[id]/SessionDetail.tsx",
+        "count": 1
+      }
+    ],
+    "#3D454D": [
+      {
+        "file": "src/app/journal/[id]/SessionDetail.tsx",
+        "count": 1
+      }
+    ],
+    "#0D2D1F": [
+      {
+        "file": "src/app/journal/flies/workbench/WorkbenchClient.tsx",
+        "count": 1
+      }
+    ],
+    "#7EE2A8": [
+      {
+        "file": "src/app/journal/flies/workbench/WorkbenchClient.tsx",
+        "count": 1
+      }
+    ],
+    "#2D0D0D": [
+      {
+        "file": "src/app/journal/flies/workbench/WorkbenchClient.tsx",
+        "count": 1
+      }
+    ],
+    "#1C2028": [
+      {
+        "file": "src/app/journal/import/ImportClient.tsx",
+        "count": 1
+      }
+    ],
+    "#FFD479": [
+      {
+        "file": "src/app/journal/stats/RiverStatsView.tsx",
+        "count": 1
+      }
+    ],
+    "#90EE90": [
+      {
+        "file": "src/components/dashboard/RiverSectionCard.tsx",
+        "count": 1
+      }
+    ],
+    "#F0A45A": [
+      {
+        "file": "src/components/flies/FlyCardModal.tsx",
+        "count": 1
+      }
+    ],
+    "#3FBED7": [
+      {
+        "file": "src/components/flies/FlyPatternForm.tsx",
+        "count": 1
+      }
+    ],
+    "#D07E31": [
+      {
+        "file": "src/components/gear/GearForm.tsx",
+        "count": 1
+      }
+    ],
+    "#1A1F2A": [
+      {
+        "file": "src/components/journal/AIInsightsCard.tsx",
+        "count": 1
+      }
+    ],
+    "#0A0D11": [
+      {
+        "file": "src/components/marketing/PhoneHeroMockup.tsx",
+        "count": 1
+      }
+    ],
+    "#3B82F6": [
+      {
+        "file": "src/components/rivers/WaterLevelChart.tsx",
+        "count": 1
+      }
+    ],
+    "#EF4444": [
+      {
+        "file": "src/components/rivers/WaterLevelChart.tsx",
+        "count": 1
+      }
+    ],
+    "#F0A050": [
+      {
+        "file": "src/components/social/FollowButton.tsx",
+        "count": 1
+      }
+    ],
+    "#A8551A": [
+      {
+        "file": "src/components/ui/AuthorAvatar.tsx",
+        "count": 1
+      }
+    ],
+    "#B36620": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 1
+      }
+    ],
+    "#1A1A1A": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 1
+      }
+    ],
+    "#C9CCD1": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 1
+      }
+    ],
+    "#F5F5F5": [
+      {
+        "file": "src/components/ui/Button.tsx",
+        "count": 1
+      }
+    ],
+    "#F5F0EA": [
+      {
+        "file": "src/components/ui/EntityCard.tsx",
+        "count": 1
+      }
+    ]
+  }
+}

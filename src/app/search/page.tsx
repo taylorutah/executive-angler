@@ -205,10 +205,10 @@ function SearchContent() {
 
   return (
     <>
-      <h1 className="font-heading text-4xl font-bold text-[#E8923A] mb-8">Search</h1>
+      <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-8">Search</h1>
 
       <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#6E7681]" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--text-meta)]" />
         <input
           ref={inputRef}
           id="search-q"
@@ -217,12 +217,12 @@ function SearchContent() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rivers, flies, hatches, destinations…"
           autoFocus
-          className="w-full rounded-xl border border-[#21262D] bg-[#161B22] pl-12 pr-12 py-4 text-lg text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/20 outline-none transition-colors shadow-sm"
+          className="w-full rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] pl-12 pr-12 py-4 text-lg text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors shadow-sm"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#A8B2BD]"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-body)]"
             aria-label="Clear search"
           >
             <X className="h-5 w-5" />
@@ -236,8 +236,8 @@ function SearchContent() {
           onClick={() => setType("all")}
           className={`px-3 py-1 rounded-full text-sm font-medium border ${
             typeParam === "all"
-              ? "bg-[#E8923A] text-[#0D1117] border-[#E8923A]"
-              : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/50"
+              ? "bg-[var(--action)] text-[var(--surface-page)] border-[var(--action)]"
+              : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/50"
           }`}
         >
           All
@@ -251,8 +251,8 @@ function SearchContent() {
               onClick={() => setType(type)}
               className={`px-3 py-1 rounded-full text-sm font-medium border ${
                 typeParam === type
-                  ? "bg-[#E8923A] text-[#0D1117] border-[#E8923A]"
-                  : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/50"
+                  ? "bg-[var(--action)] text-[var(--surface-page)] border-[var(--action)]"
+                  : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/50"
               }`}
             >
               {meta.label}
@@ -263,9 +263,9 @@ function SearchContent() {
 
       {emptyQuery && (
         <div className="space-y-10">
-          <p className="text-[#A8B2BD]">{catalogLine}</p>
+          <p className="text-[var(--text-body)]">{catalogLine}</p>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-3">
               Try
             </p>
             <div className="flex flex-wrap gap-2">
@@ -274,7 +274,7 @@ function SearchContent() {
                   key={q}
                   type="button"
                   onClick={() => setQuery(q)}
-                  className="px-3 py-1.5 rounded-full text-sm bg-[#161B22] border border-[#21262D] text-[#F0F6FC] hover:border-[#E8923A]/60"
+                  className="px-3 py-1.5 rounded-full text-sm bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] hover:border-[var(--action)]/60"
                 >
                   {q}
                 </button>
@@ -283,7 +283,7 @@ function SearchContent() {
           </div>
           {featuredRivers.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-3">
                 Featured rivers
               </p>
               <div className="space-y-2">
@@ -295,7 +295,7 @@ function SearchContent() {
           )}
           {hatchingNow.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-3">
                 Hatching now
               </p>
               <div className="space-y-2">
@@ -310,16 +310,16 @@ function SearchContent() {
 
       {!emptyQuery && ranked.total === 0 && (
         <div className="py-12">
-          <p className="text-lg text-[#A8B2BD]">
+          <p className="text-lg text-[var(--text-body)]">
             No matches in rivers, flies, hatches, destinations, articles, species, lodges,
             guides, or fly shops for &quot;{query}&quot;.
           </p>
           {ranked.suggestion && (
-            <p className="text-sm text-[#6E7681] mt-3">
+            <p className="text-sm text-[var(--text-meta)] mt-3">
               Did you mean{" "}
               <button
                 type="button"
-                className="text-[#E8923A] hover:underline font-medium"
+                className="text-[var(--action)] hover:underline font-medium"
                 onClick={() => setQuery(ranked.suggestion!.title)}
               >
                 {ranked.suggestion.title}
@@ -343,14 +343,14 @@ function SearchContent() {
                   <Icon className="h-4 w-4" />
                   {meta.label}
                 </span>
-                <span className="text-sm text-[#6E7681]">
+                <span className="text-sm text-[var(--text-meta)]">
                   {group.total} result{group.total !== 1 ? "s" : ""}
                 </span>
                 {group.total > group.items.length && (
                   <button
                     type="button"
                     onClick={() => setType(group.type)}
-                    className="ml-auto text-sm text-[#E8923A] hover:underline"
+                    className="ml-auto text-sm text-[var(--action)] hover:underline"
                   >
                     See all {group.total}
                   </button>
@@ -394,12 +394,12 @@ function ResultRow({
 
   return (
     <div
-      className={`flex items-center gap-4 p-3 rounded-lg hover:bg-[#0D1117] transition-colors group ${
-        active ? "bg-[#0D1117] ring-1 ring-[#E8923A]/40" : ""
+      className={`flex items-center gap-4 p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors group ${
+        active ? "bg-[var(--surface-page)] ring-1 ring-[var(--action)]/40" : ""
       }`}
     >
       <Link href={item.href} className="flex items-center gap-4 flex-1 min-w-0">
-        <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2937]">
+        <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0 bg-[var(--surface-card)]">
           <SafeEntityImage
             src={item.imageUrl}
             alt={item.title}
@@ -411,13 +411,13 @@ function ResultRow({
         </div>
         <div className="min-w-0">
           <p
-            className={`font-medium text-[#F0F6FC] group-hover:text-[#E8923A] truncate ${
-              exactFly ? "text-[#E8923A]" : ""
+            className={`font-medium text-[var(--text-primary)] group-hover:text-[var(--action)] truncate ${
+              exactFly ? "text-[var(--action)]" : ""
             }`}
           >
             {item.title}
           </p>
-          <p className="text-sm text-[#A8B2BD] truncate">{subtitle}</p>
+          <p className="text-sm text-[var(--text-body)] truncate">{subtitle}</p>
         </div>
       </Link>
       {item.type === "fly" && item.id && (
@@ -438,8 +438,8 @@ export default function SearchPage() {
         <Suspense
           fallback={
             <div className="text-center py-16">
-              <Search className="h-12 w-12 text-[#6E7681] mx-auto mb-4 animate-pulse" />
-              <p className="text-lg text-[#A8B2BD]">Loading search...</p>
+              <Search className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4 animate-pulse" />
+              <p className="text-lg text-[var(--text-body)]">Loading search...</p>
             </div>
           }
         >

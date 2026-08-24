@@ -16,7 +16,7 @@ interface Props {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-[#F0F6FC] text-sm focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
+  "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-[var(--text-primary)] text-sm focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
 
 export default function MakerCombobox({ value, onChange, disabled, placeholder }: Props) {
   const [open, setOpen] = useState(false);
@@ -81,7 +81,7 @@ export default function MakerCombobox({ value, onChange, disabled, placeholder }
           type="button"
           onClick={() => !disabled && setOpen((o) => !o)}
           disabled={disabled}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#6E7681] hover:text-[#F0F6FC] transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--text-meta)] hover:text-[var(--text-primary)] transition-colors"
           tabIndex={-1}
         >
           <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -89,7 +89,7 @@ export default function MakerCombobox({ value, onChange, disabled, placeholder }
       </div>
 
       {open && loaded && filtered.length > 0 && (
-        <div className="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto rounded-lg bg-[#161B22] border border-[#21262D] shadow-2xl">
+        <div className="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] shadow-2xl">
           {filtered.map((m) => {
             const selected = m.name.toLowerCase() === value.toLowerCase();
             return (
@@ -102,8 +102,8 @@ export default function MakerCombobox({ value, onChange, disabled, placeholder }
                 }}
                 className={`flex items-center justify-between w-full px-3 py-2 text-sm text-left transition-colors ${
                   selected
-                    ? "bg-[#E8923A]/10 text-[#E8923A]"
-                    : "text-[#A8B2BD] hover:bg-[#0D1117] hover:text-[#F0F6FC]"
+                    ? "bg-[var(--action)]/10 text-[var(--action)]"
+                    : "text-[var(--text-body)] hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <span>{m.name}</span>
@@ -112,8 +112,8 @@ export default function MakerCombobox({ value, onChange, disabled, placeholder }
             );
           })}
           {value && !exact && (
-            <div className="px-3 py-2 text-xs text-[#6E7681] border-t border-[#21262D]">
-              Press Enter to use <span className="text-[#F0F6FC] font-semibold">&ldquo;{value}&rdquo;</span>
+            <div className="px-3 py-2 text-xs text-[var(--text-meta)] border-t border-[var(--border-rule)]">
+              Press Enter to use <span className="text-[var(--text-primary)] font-semibold">&ldquo;{value}&rdquo;</span>
             </div>
           )}
         </div>

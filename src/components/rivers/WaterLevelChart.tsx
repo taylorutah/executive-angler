@@ -79,8 +79,8 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4">
-        <div className="flex items-center gap-2 text-[#6E7681]">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4">
+        <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading water levels…</span>
         </div>
@@ -100,9 +100,9 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
   };
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-4">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-[#F0F6FC]">12-Month Water Level</h3>
+        <h3 className="text-sm font-bold text-[var(--text-primary)]">12-Month Water Level</h3>
         <div className="flex items-center gap-2">
           <span
             className="text-xs font-semibold px-2 py-0.5 rounded-full"
@@ -119,28 +119,28 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
       {/* Current stats row */}
       <div className="grid grid-cols-4 gap-3 mb-4">
         <div>
-          <p className="text-lg font-bold font-mono text-[#E8923A] leading-none">
+          <p className="text-lg font-bold font-mono text-[var(--action)] leading-none">
             {stats.current.toLocaleString()}
           </p>
-          <p className="text-[10px] text-[#6E7681] mt-0.5">Current cfs</p>
+          <p className="text-[10px] text-[var(--text-meta)] mt-0.5">Current cfs</p>
         </div>
         <div>
-          <p className="text-lg font-bold font-mono text-[#F0F6FC] leading-none">
+          <p className="text-lg font-bold font-mono text-[var(--text-primary)] leading-none">
             {stats.avg.toLocaleString()}
           </p>
-          <p className="text-[10px] text-[#6E7681] mt-0.5">12mo Avg</p>
+          <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo Avg</p>
         </div>
         <div>
           <p className="text-lg font-bold font-mono text-[#3B82F6] leading-none">
             {stats.min.toLocaleString()}
           </p>
-          <p className="text-[10px] text-[#6E7681] mt-0.5">12mo Low</p>
+          <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo Low</p>
         </div>
         <div>
           <p className="text-lg font-bold font-mono text-[#EF4444] leading-none">
             {stats.max.toLocaleString()}
           </p>
-          <p className="text-[10px] text-[#6E7681] mt-0.5">12mo High</p>
+          <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo High</p>
         </div>
       </div>
 
@@ -151,12 +151,12 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
         ) : stats.trend < 0 ? (
           <TrendingDown className="h-3.5 w-3.5 text-red-400" />
         ) : (
-          <Minus className="h-3.5 w-3.5 text-[#6E7681]" />
+          <Minus className="h-3.5 w-3.5 text-[var(--text-meta)]" />
         )}
-        <span className={`text-xs font-medium ${stats.trend > 0 ? "text-green-400" : stats.trend < 0 ? "text-red-400" : "text-[#6E7681]"}`}>
+        <span className={`text-xs font-medium ${stats.trend > 0 ? "text-green-400" : stats.trend < 0 ? "text-red-400" : "text-[var(--text-meta)]"}`}>
           {stats.trend > 0 ? "+" : ""}{stats.trend.toLocaleString()} cfs vs 7 days ago
         </span>
-        <span className="text-xs text-[#6E7681] ml-1">
+        <span className="text-xs text-[var(--text-meta)] ml-1">
           ({stats.percentOfAvg}% of avg)
         </span>
       </div>
@@ -217,7 +217,7 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
         </ResponsiveContainer>
       </div>
 
-      <p className="text-[10px] text-[#6E7681] mt-2 text-center">
+      <p className="text-[10px] text-[var(--text-meta)] mt-2 text-center">
         Dashed line = 12-month average · Source: USGS NWIS
       </p>
     </div>

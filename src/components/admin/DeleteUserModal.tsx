@@ -55,7 +55,7 @@ export default function DeleteUserModal({
       onClick={onCancel}
     >
       <div
-        className="bg-[#161B22] border border-red-900/50 rounded-2xl shadow-2xl max-w-lg w-full p-6"
+        className="bg-[var(--surface-raised)] border border-red-900/50 rounded-2xl shadow-2xl max-w-lg w-full p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-4">
@@ -64,8 +64,8 @@ export default function DeleteUserModal({
               <AlertTriangle className="h-5 w-5 text-red-400" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-[#F0F6FC]">Delete user permanently?</h2>
-              <p className="text-xs text-[#A8B2BD] mt-0.5">
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Delete user permanently?</h2>
+              <p className="text-xs text-[var(--text-body)] mt-0.5">
                 {displayName || username || "No name"}
                 {username && ` · @${username}`}
                 {email && ` · ${email}`}
@@ -74,7 +74,7 @@ export default function DeleteUserModal({
           </div>
           <button
             onClick={onCancel}
-            className="text-[#6E7681] hover:text-[#F0F6FC] shrink-0"
+            className="text-[var(--text-meta)] hover:text-[var(--text-primary)] shrink-0"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
@@ -85,8 +85,8 @@ export default function DeleteUserModal({
           <p className="text-xs text-red-400 font-bold uppercase tracking-wider mb-2">
             This cannot be undone
           </p>
-          <p className="text-xs text-[#A8B2BD] mb-2">The following will be deleted:</p>
-          <ul className="text-xs text-[#A8B2BD] space-y-0.5 list-disc list-inside">
+          <p className="text-xs text-[var(--text-body)] mb-2">The following will be deleted:</p>
+          <ul className="text-xs text-[var(--text-body)] space-y-0.5 list-disc list-inside">
             <li>{sessionCount} fishing session{sessionCount === 1 ? "" : "s"}</li>
             <li>{catchCount} catch{catchCount === 1 ? "" : "es"}</li>
             <li>{flyBoxCount} fly pattern{flyBoxCount === 1 ? "" : "s"}</li>
@@ -107,7 +107,7 @@ export default function DeleteUserModal({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="px-4 py-2 bg-[#21262D] text-[#A8B2BD] rounded-lg text-sm font-bold hover:text-[#F0F6FC] disabled:opacity-50"
+            className="px-4 py-2 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-sm font-bold hover:text-[var(--text-primary)] disabled:opacity-50"
           >
             Cancel
           </button>

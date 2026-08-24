@@ -97,13 +97,13 @@ export default function CommunityPhotos({
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-8 w-48 bg-[#1F2937] rounded animate-pulse" />
+          <div className="h-8 w-48 bg-[var(--surface-card)] rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="aspect-[4/3] bg-[#1F2937] rounded-xl animate-pulse"
+              className="aspect-[4/3] bg-[var(--surface-card)] rounded-xl animate-pulse"
             />
           ))}
         </div>
@@ -126,11 +126,11 @@ export default function CommunityPhotos({
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <Camera className="h-5 w-5 text-[#E8923A]" />
-        <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+        <Camera className="h-5 w-5 text-[var(--action)]" />
+        <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
           Community Photos
         </h2>
-        <span className="px-2.5 py-0.5 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full">
+        <span className="px-2.5 py-0.5 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full">
           {photos.length}
         </span>
       </div>
@@ -141,7 +141,7 @@ export default function CommunityPhotos({
             key={photo.id}
             onClick={() => setLightboxIndex(index)}
             aria-label={`View photo${photo.caption ? `: ${photo.caption}` : ""} by ${photo.submitterName}`}
-            className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-offset-2"
+            className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[var(--surface-card)] focus:outline-none focus:ring-2 focus:ring-[var(--action)] focus:ring-offset-2"
           >
             <Image
               src={photo.photoUrl}

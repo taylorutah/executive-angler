@@ -26,16 +26,16 @@ export default function RiverSidebarPhotoWidget({
   }, [riverId]);
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 shadow-sm">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Camera className="h-4 w-4 text-[#E8923A]" />
-          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
+          <Camera className="h-4 w-4 text-[var(--action)]" />
+          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
             Community Photos
           </h3>
         </div>
         {photos.length > 0 && (
-          <span className="px-2 py-0.5 text-xs font-mono bg-[#E8923A]/10 text-[#E8923A] rounded-full">
+          <span className="px-2 py-0.5 text-xs font-mono bg-[var(--action)]/10 text-[var(--action)] rounded-full">
             {photos.length}
           </span>
         )}
@@ -44,15 +44,15 @@ export default function RiverSidebarPhotoWidget({
       {loading ? (
         <div className="grid grid-cols-2 gap-1.5">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="aspect-square rounded-lg bg-[#1F2937] animate-pulse" />
+            <div key={i} className="aspect-square rounded-lg bg-[var(--surface-card)] animate-pulse" />
           ))}
         </div>
       ) : photos.length === 0 ? (
         <div className="text-center py-4">
-          <p className="text-xs text-[#6E7681] mb-3">No photos yet.</p>
+          <p className="text-xs text-[var(--text-meta)] mb-3">No photos yet.</p>
           <Link
             href={`/rivers/${riverSlug}/photos#submit`}
-            className="inline-flex items-center gap-1.5 text-sm text-[#E8923A] hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--action)] hover:underline"
           >
             <Plus className="h-3.5 w-3.5" /> Be the first to submit
           </Link>
@@ -64,7 +64,7 @@ export default function RiverSidebarPhotoWidget({
               <Link
                 key={photo.id}
                 href={`/rivers/${riverSlug}/photos`}
-                className="relative aspect-square rounded-lg overflow-hidden group ring-1 ring-[#21262D] hover:ring-[#E8923A] transition-all"
+                className="relative aspect-square rounded-lg overflow-hidden group ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)] transition-all"
               >
                 <Image
                   src={photo.photoUrl}
@@ -80,13 +80,13 @@ export default function RiverSidebarPhotoWidget({
           <div className="flex items-center justify-between">
             <Link
               href={`/rivers/${riverSlug}/photos`}
-              className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+              className="text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
             >
               View all {photos.length} photos →
             </Link>
             <Link
               href={`/rivers/${riverSlug}/photos#submit`}
-              className="flex items-center gap-1 text-xs bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20 px-2 py-1 rounded-full transition-colors"
+              className="flex items-center gap-1 text-xs bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20 px-2 py-1 rounded-full transition-colors"
             >
               <Plus className="h-3 w-3" /> Add yours
             </Link>

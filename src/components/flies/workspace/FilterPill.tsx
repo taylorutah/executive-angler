@@ -50,13 +50,13 @@ export default function FilterPill({ label, options, selected, onChange }: Props
           className={[
             "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors",
             activeCount > 0
-              ? "border-[#E8923A]/40 bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/15"
+              ? "border-[var(--action)]/40 bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/15"
               : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-text-muted)]/40",
           ].join(" ")}
         >
           {label}
           {activeCount > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#E8923A] text-white text-[10px] font-semibold tabular-nums">
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[var(--action)] text-white text-[10px] font-semibold tabular-nums">
               {activeCount}
             </span>
           )}
@@ -102,7 +102,7 @@ export default function FilterPill({ label, options, selected, onChange }: Props
                       className={[
                         "flex items-center w-full gap-2 rounded-md px-2 py-1.5 text-sm transition-colors text-left",
                         checked
-                          ? "bg-[#E8923A]/10 text-[var(--color-text-primary)]"
+                          ? "bg-[var(--action)]/10 text-[var(--color-text-primary)]"
                           : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text-primary)]",
                       ].join(" ")}
                     >
@@ -110,7 +110,7 @@ export default function FilterPill({ label, options, selected, onChange }: Props
                         className={[
                           "flex h-4 w-4 items-center justify-center rounded border flex-shrink-0",
                           checked
-                            ? "bg-[#E8923A] border-[#E8923A] text-white"
+                            ? "bg-[var(--action)] border-[var(--action)] text-white"
                             : "border-[var(--color-border)]",
                         ].join(" ")}
                       >
