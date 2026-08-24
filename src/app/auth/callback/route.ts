@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendBrandedEmail } from "@/lib/email/client";
 import { buildWelcome } from "@/lib/email/senders";
+import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
 /**
  * GET /auth/callback
@@ -11,9 +12,10 @@ import { buildWelcome } from "@/lib/email/senders";
  * here with a `code` query param for PKCE exchange.
  */
 // Prevents open-redirect: only allow same-origin path redirects.
+
 function safeNext(raw: string | null): string {
-  if (!raw) return "/dashboard";
-  if (!raw.startsWith("/") || raw.startsWith("//")) return "/dashboard";
+  if (!raw) return POST_LOGIN_PATH;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return POST_LOGIN_PATH;
   return raw;
 }
 
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
     console.error("[AUTH CALLBACK POST] Unexpected content-type:", contentType);
   }
 
-  return handleCallback(code, "/dashboard", origin, "POST");
+  return handleCallback(code, POST_LOGIN_PATH, origin, "POST");
 }
 
 async function handleCallback(

@@ -14,7 +14,7 @@
     "fishing:import": "npx tsx scripts/import-notion-fishing.ts",
     "dedup-flies": "npx tsx scripts/dedup-flies.ts",
     "audit:images": "npx tsx scripts/audit-images.ts",
-    "test": "tsx --test src/lib/search/index.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts",
+    "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/register.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts",
     "check:contrast": "npx tsx scripts/check-contrast.ts",
     "check:contrast:rendered": "npx tsx scripts/check-contrast-rendered.ts",
     "check:hex": "npx tsx scripts/check-hex.ts",
