@@ -194,9 +194,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
           )}
 
           {comments.map((comment) => {
-            const profileHref = comment.profile?.username
-              ? `/anglers/${comment.profile.username}`
-              : null;
+            const profileHref = comment.user_id === userId ? "/account" : null;
             const nameLabel =
               comment.profile?.display_name || comment.profile?.username || "Angler";
             const avatar = comment.profile?.avatar_url ? (
@@ -214,7 +212,7 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
             );
             return (
               <div key={comment.id} className="flex gap-2 group">
-                {/* Avatar — tap-through to profile */}
+                {/* Avatar — own comments link to /account; others are identity only */}
                 {profileHref ? (
                   <Link
                     href={profileHref}
