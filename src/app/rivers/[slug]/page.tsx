@@ -203,7 +203,7 @@ export default async function RiverPage({ params }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-5 pb-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white leading-tight">
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight">
                 {river.name}
               </h1>
               {allDests.length > 0 && (
@@ -593,14 +593,14 @@ export default async function RiverPage({ params }: Props) {
               {/* 9. Regulations */}
               {river.regulations && (
                 <ScrollAnimation>
-                  <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6">
+                  <div className="bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl p-6">
                     <div className="flex items-start gap-3">
-                      <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+                      <AlertTriangle className="h-5 w-5 text-[var(--action)] shrink-0 mt-0.5" />
                       <div>
-                        <h3 className="font-heading text-lg font-semibold text-amber-400 mb-2">
+                        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-2">
                           Regulations
                         </h3>
-                        <p className="text-sm text-amber-200/80 leading-relaxed">
+                        <p className="text-sm text-[var(--text-body)] leading-relaxed">
                           {river.regulations}
                         </p>
                       </div>
@@ -812,7 +812,7 @@ export default async function RiverPage({ params }: Props) {
                         key={month}
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
-                            ? "bg-river text-white"
+                            ? "bg-[var(--action)] text-[var(--on-action)]"
                             : "bg-[var(--surface-card)] text-[var(--text-meta)]"
                         }`}
                       >

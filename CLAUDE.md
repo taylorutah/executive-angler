@@ -37,7 +37,7 @@
 | Icons | Lucide React | 0.575 |
 | Images | sharp | 0.34 (dev, for next/image optimization) |
 | Analytics | @vercel/analytics + @vercel/speed-insights | |
-| Fonts | Fraunces (display + prose) + Archivo (UI) + IBM Plex Mono (identifiers) | next/font/google |
+| Fonts | Fraunces (display) + Newsreader (`.prose` / `.article-body` only) + Archivo (`body` / UI) + IBM Plex Mono (identifiers) | next/font/google |
 
 ## Project Structure
 ```

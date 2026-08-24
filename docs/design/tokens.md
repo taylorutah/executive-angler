@@ -54,22 +54,25 @@ Register is **route-determined**, not a preference. See `src/lib/register.ts`.
 | Token | Face | Use |
 |---|---|---|
 | `--font-display` | Fraunces | headings, titles (`font-heading` alias) |
-| `--font-body` | Fraunces at text optical size | running prose. Newsreader was the spec face; the latin variable payload was ~2× Inter+DM Sans, so it was dropped per the brief's fallback. |
-| `--font-ui` | Archivo | nav, labels, buttons, tables; `.num` for tabular figures |
+| `--font-body` | Newsreader (variable, opsz, italic) | running prose only — `.prose` and `.article-body` |
+| `--font-ui` | Archivo | **default on `body`**. Nav, labels, buttons, tables; `.num` for tabular figures |
 | `--font-mono` | IBM Plex Mono | identifiers only |
+
+Serif is opt-in. Interface is the default. Mapbox popups use `--font-ui`.
+
+`.prose` is 19px / 1.7 / 68ch. Global `p` is 1rem / 1.6 (chrome, not long-form).
 
 Mono is not for quantities. `.num` is available; call sites are not migrated yet.
 
 ## Font payload (Google CSS, latin, Chrome UA)
 
-This is the unsubsetted CSS2 download, not next/font's per-page subset, but it is
-the right order of magnitude.
+Phase 1 dropped Newsreader because the unsubsetted latin payload was ~2× the
+previous stack. That inverted the type system: `--font-body` stayed bound to
+Fraunces and `body` inherited it, so the whole site painted in the display
+serif. This fix loads Newsreader and binds it **only** to long-form.
 
-| Stack | Bytes | Files |
-|---|---:|---:|
-| Before: Inter 400–800 + DM Sans 400–700 + IBM Plex Mono 400/600 | 376,788 | 19 |
-| Spec: Fraunces (opsz/wght/SOFT/WONK) + Newsreader (opsz) + Archivo + IBM Plex Mono | 690,316 | 19 |
-| Shipped: Fraunces + Archivo + IBM Plex Mono (Newsreader dropped) | 444,460 | 16 |
-
-Newsreader blew the budget (~1.8×). Fallback from the brief: long-form is Fraunces at its text optical size (`font-optical-sizing: auto` on `.article-body`).
+| Stack | Notes |
+|---|---|
+| Phase 1 shipped | Fraunces + Archivo + IBM Plex Mono. `body` used `--font-body` (Fraunces). |
+| This fix | Fraunces + Newsreader + Archivo + IBM Plex Mono. `body` uses `--font-ui`. |
 

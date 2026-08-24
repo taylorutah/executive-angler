@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Newsreader, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
@@ -20,6 +20,14 @@ const fraunces = Fraunces({
   display: "swap",
   variable: "--font-fraunces",
   axes: ["opsz", "SOFT", "WONK"],
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-newsreader",
+  style: ["normal", "italic"],
+  axes: ["opsz"],
 });
 
 const archivo = Archivo({
@@ -114,7 +122,7 @@ export default function RootLayout({
       lang="en"
       data-register="daylight"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`${fraunces.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: REGISTER_BOOTSTRAP }} />

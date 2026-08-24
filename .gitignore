@@ -45,3 +45,7 @@ next-env.d.ts
 # Gear image scraper output (large, regenerable)
 scripts/scraped-product-images.json
 scripts/match-report.json
+
+# Local agent / seed leftovers (do not commit)
+.claude/settings.local.json
+scripts/logs/

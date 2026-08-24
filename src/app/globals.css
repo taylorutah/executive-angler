@@ -84,7 +84,7 @@
   --font-heading: var(--font-fraunces), "Fraunces", serif;
   --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
   --font-display: var(--font-fraunces), "Fraunces", serif;
-  --font-body: var(--font-fraunces), "Fraunces", serif;
+  --font-body: var(--font-newsreader), "Newsreader", serif;
   --font-ui: var(--font-archivo), "Archivo", system-ui, sans-serif;
 
   --color-bg: var(--surface-page);
@@ -120,7 +120,7 @@
 
 @layer base {
   :root {
-    --font-body: var(--font-fraunces), "Fraunces", serif;
+    --font-body: var(--font-newsreader), "Newsreader", serif;
   }
 
   .ea-header-primary {
@@ -167,8 +167,8 @@
   body {
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-body);
-    line-height: 1.7;
+    font-family: var(--font-ui);
+    line-height: 1.6;
     min-height: 100vh;
   }
 
@@ -195,8 +195,8 @@
   h6 { font-size: 1rem; }
 
   p {
-    font-size: 1.0625rem;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   ::selection {
@@ -291,7 +291,7 @@
   .mapboxgl-popup-content {
     border-radius: 8px;
     padding: 12px 16px;
-    font-family: var(--font-body);
+    font-family: var(--font-ui);
     font-size: 0.875rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
@@ -394,6 +394,16 @@
 /* =============================================
    ARTICLE BODY — editorial style (dark mode)
    ============================================= */
+
+/* Long-form only. Interface stays on --font-ui; serif is opt-in. */
+.prose {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 19px;
+  line-height: 1.7;
+  max-width: 68ch;
+  color: var(--text-body);
+}
 
 .article-body {
   color: var(--text-body);
