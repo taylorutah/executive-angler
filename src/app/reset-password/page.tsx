@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
 import { Lock, CheckCircle, Eye, EyeOff } from "lucide-react";
+import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -62,9 +63,8 @@ export default function ResetPasswordPage() {
     setSuccess(true);
     setLoading(false);
 
-    // Redirect to dashboard after a moment
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push(POST_LOGIN_PATH);
     }, 3000);
   }
 

@@ -57,7 +57,7 @@ export const LEARN_LINK: NavItem = {
 
 /** Logged-in primary row. Flies is the workspace once you have an account. */
 export const MEMBER_NOUNS: NavItem[] = [
-  { label: "Today", href: "/dashboard", section: "/dashboard" },
+  { label: "Today", href: "/today", section: "/today" },
   { label: "Journal", href: "/journal", section: "/journal" },
   { label: "Rivers", href: "/rivers", section: "/rivers" },
   { label: "Flies", href: "/flies", section: "/flies" },

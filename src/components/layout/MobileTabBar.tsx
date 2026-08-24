@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { isSectionActive } from "./nav/links";
 
 const TABS = [
-  { href: "/dashboard", label: "Today", icon: Sunrise, section: "/dashboard" },
+  { href: "/today", label: "Today", icon: Sunrise, section: "/today" },
   { href: "/journal", label: "Journal", icon: BookOpen, section: "/journal" },
   { href: "/rivers", label: "Rivers", icon: Waves, section: "/rivers" },
   { href: "/flies", label: "Flies", icon: Leaf, section: "/flies" },

@@ -1,6 +1,14 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  EMAIL_VERIFIED_EXACT,
+  EMAIL_VERIFIED_REQUIRED,
+  PROTECTED_EXACT,
+  PROTECTED_PATHS,
+  pathMatches,
+  signedInPathRedirect,
+} from "@/lib/auth-paths";
 
 const LOGIN_STAMP_COOKIE = "ea-login-stamp";
 
@@ -56,25 +64,6 @@ async function captureLoginLocation(
   } catch (err) {
     console.warn("[LOGIN LOCATION] capture failed:", err);
   }
-}
-
-const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/notifications", "/messages", "/admin", "/flybox"];
-
-// Exact private routes that must not prefix-match public slugs
-// (e.g. /rivers/mine must not catch /rivers/minnesota).
-const PROTECTED_EXACT = ["/rivers/mine"];
-
-// Paths that require a verified email. Excludes /account (so users can manage
-// their email + resend confirmation) and /admin (admin gating is handled
-// inside the admin layout itself).
-const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed", "/flybox"];
-const EMAIL_VERIFIED_EXACT = ["/rivers/mine"];
-
-function pathMatches(pathname: string, prefixes: string[], exact: string[]) {
-  return (
-    prefixes.some((path) => pathname.startsWith(path)) ||
-    exact.some((path) => pathname === path || pathname.startsWith(`${path}/`))
-  );
 }
 
 export async function updateSession(request: NextRequest) {
@@ -151,10 +140,11 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Logged-in users land on their dashboard instead of the marketing home
-  if (user && pathname === "/") {
+  // `/dashboard` lands on `/today`. Public `/` stays reachable while signed in.
+  const bounce = user ? signedInPathRedirect(pathname) : null;
+  if (bounce) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = bounce;
     return NextResponse.redirect(url);
   }
 

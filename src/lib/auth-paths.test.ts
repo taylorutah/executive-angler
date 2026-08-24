@@ -1,0 +1,36 @@
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import {
+  EMAIL_VERIFIED_REQUIRED,
+  POST_LOGIN_PATH,
+  PROTECTED_EXACT,
+  PROTECTED_PATHS,
+  pathMatches,
+  signedInPathRedirect,
+} from "./auth-paths.ts";
+
+describe("auth paths — the gate for /today", () => {
+  it("protects /today and /rivers/mine before they exist as product surfaces", () => {
+    assert.ok((PROTECTED_PATHS as readonly string[]).includes("/today"));
+    assert.ok((PROTECTED_EXACT as readonly string[]).includes("/rivers/mine"));
+    assert.equal(pathMatches("/today", PROTECTED_PATHS, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/today/x", PROTECTED_PATHS, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/rivers/mine", PROTECTED_PATHS, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/rivers/mine/edit", PROTECTED_PATHS, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/rivers/minnesota", PROTECTED_PATHS, PROTECTED_EXACT), false);
+    assert.equal(pathMatches("/rivers/madison-river", PROTECTED_PATHS, PROTECTED_EXACT), false);
+  });
+
+  it("lands signed-in users on /today, never bounces public /", () => {
+    assert.equal(POST_LOGIN_PATH, "/today");
+    assert.equal(signedInPathRedirect("/dashboard"), "/today");
+    assert.equal(signedInPathRedirect("/"), null);
+    assert.equal(pathMatches("/", PROTECTED_PATHS, PROTECTED_EXACT), false);
+  });
+
+  it("requires a verified email on /today and /rivers/mine", () => {
+    assert.ok((EMAIL_VERIFIED_REQUIRED as readonly string[]).includes("/today"));
+    assert.equal(pathMatches("/today", EMAIL_VERIFIED_REQUIRED, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/rivers/mine", EMAIL_VERIFIED_REQUIRED, PROTECTED_EXACT), true);
+  });
+});

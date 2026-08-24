@@ -15,6 +15,7 @@ import ExploreMenu from "./nav/ExploreMenu";
 import MobileNavSheet from "./nav/MobileNavSheet";
 import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
+import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -61,7 +62,7 @@ export default function Header() {
           <div className="flex h-14 items-center gap-4">
             {/* Mark */}
             <Link
-              href={user ? "/dashboard" : "/"}
+              href={user ? POST_LOGIN_PATH : "/"}
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >

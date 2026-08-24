@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 import ResendButton from "./ResendButton";
 
 export const metadata = { title: "Verify your email — Executive Angler" };
@@ -19,7 +20,7 @@ export default async function VerifyEmailPage({
     redirect("/login");
   }
   if (user.email_confirmed_at) {
-    redirect(sp.next && sp.next.startsWith("/") ? sp.next : "/dashboard");
+    redirect(sp.next && sp.next.startsWith("/") ? sp.next : POST_LOGIN_PATH);
   }
 
   return (
