@@ -67,7 +67,7 @@ interface Props {
 }
 
 export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }: Props) {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   const [rows, setRows] = useState<RowState[]>(() =>
     publicRows.map((r) => ({ ...r, configurationId: null, stock: null, target: null })),
   );
@@ -186,8 +186,8 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
               Variants
             </h2>
           </div>
-          {!isLoading && !user && (
-            <p className="text-[13px] text-[var(--text-meta)]">
+          {!user && (
+            <p className="text-[13px] text-[var(--text-body)]">
               <Link
                 href={loginHref}
                 className="text-[var(--action)] underline-offset-4 hover:underline"
@@ -238,10 +238,10 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                       )}
                     </td>
                     <td className="px-3 text-right">
-                      {!isLoading && !user ? (
+                      {!user ? (
                         <Link
                           href={loginHref}
-                          className="text-[12px] text-[var(--action)] underline-offset-4 hover:underline"
+                          className="text-[13px] text-[var(--action)] underline-offset-4 hover:underline"
                         >
                           Sign in
                         </Link>

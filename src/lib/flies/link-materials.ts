@@ -25,7 +25,13 @@ function norm(s: string): string {
 export function matchCatalogMaterial(
   query: string,
   rows: CatalogMaterial[],
+  materialId?: string | null,
 ): CatalogMaterial | null {
+  if (materialId) {
+    const byId = rows.find((r) => r.id === materialId);
+    if (byId) return byId;
+  }
+
   const n = norm(query);
   if (n.length < 3) return null;
 
@@ -59,21 +65,31 @@ export async function linkRecipeMaterials(
       .eq("is_verified", true);
     if (error || !data) {
       if (error) console.error("[linkRecipeMaterials]", error);
-      return slots.map((s) => ({ ...s, href: null, catalogName: null }));
+      return slots.map((s) => ({
+        ...s,
+        href: s.material ? materialsHref(s.material) : "/flies/materials",
+        catalogName: null,
+      }));
     }
     const rows = data as CatalogMaterial[];
     return slots.map((s) => {
-      const hit = matchCatalogMaterial(s.material ?? "", rows)
-        ?? matchCatalogMaterial([s.brand, s.material].filter(Boolean).join(" "), rows);
-      if (!hit) return { ...s, href: null, catalogName: null };
+      const extraId = (s as MaterialSlot & { material_id?: string }).material_id;
+      const hit =
+        matchCatalogMaterial(s.material ?? "", rows, extraId)
+        ?? matchCatalogMaterial([s.brand, s.material].filter(Boolean).join(" "), rows, extraId);
+      const q = hit?.name || s.material || "";
       return {
         ...s,
-        href: materialsHref(hit.name),
-        catalogName: hit.name,
+        href: q ? materialsHref(q) : "/flies/materials",
+        catalogName: hit?.name ?? null,
       };
     });
   } catch (err) {
     console.error("[linkRecipeMaterials]", err);
-    return slots.map((s) => ({ ...s, href: null, catalogName: null }));
+    return slots.map((s) => ({
+      ...s,
+      href: s.material ? materialsHref(s.material) : "/flies/materials",
+      catalogName: null,
+    }));
   }
 }
