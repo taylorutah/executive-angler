@@ -10,7 +10,6 @@
  * 308-redirect to this page (with category query when applicable).
  */
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getAllGearProducts } from "@/lib/db/gear-products";
 import { getAllGearBrands } from "@/lib/db/gear-brands";
 import { createClient } from "@/lib/supabase/server";
@@ -153,9 +152,12 @@ export default async function GearCatalogPage({ searchParams }: Props) {
                   >
                     <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded bg-[var(--surface-raised)]">
                       {p.heroImageUrl ? (
-                        <Image src={p.heroImageUrl} alt="" fill sizes="36px" className="object-cover" />
+                        // next/image throws on hosts not in next.config. Do not
+                        // add hosts there from this lane; 36px thumbs use img.
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={p.heroImageUrl} alt="" className="h-full w-full object-cover" />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-[#484F58] text-[10px]">
+                        <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)] text-[10px]">
                           —
                         </div>
                       )}
