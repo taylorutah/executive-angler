@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import PlateFallback from "./PlateFallback";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 
 interface SafeEntityImageProps {
   src?: string | null;
@@ -47,6 +48,8 @@ export default function SafeEntityImage({
       unoptimized={unoptimized}
       priority={priority}
       sizes={sizes}
+      placeholder="blur"
+      blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
       className={
         className ??
         (contain ? "object-contain p-3" : "object-cover")

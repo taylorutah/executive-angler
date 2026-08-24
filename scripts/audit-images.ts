@@ -13,6 +13,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import sharp from "sharp";
 
 try {
   const env = readFileSync(".env.local", "utf8");
@@ -379,8 +380,126 @@ async function main() {
     .slice(0, 10)
     .forEach(([h, n]) => console.log(`  ${String(n).padStart(4)}  ${h}`));
 
+  if (!entityArg || entityArg === "canonical_flies") {
+    await reportFlyMacros(rows, dryRun);
+  }
+
   console.log(`\nWrote ${csvPath}`);
   console.log(`Wrote ${jsonPath}`);
+}
+
+type MacroFlag = {
+  slug: string;
+  name: string;
+  url: string;
+  flags: string[];
+  width: number;
+  height: number;
+  aspect: number;
+  fill: number;
+  minHook: number | null;
+};
+
+async function reportFlyMacros(rows: Row[], dry: boolean): Promise<void> {
+  const flies = rows.filter(
+    (r) => r.entity === "canonical_flies" && r.column === "hero_image_url" && r.status === "ok" && r.url,
+  );
+  if (flies.length === 0 || dry) {
+    console.log("\nFly-macro check skipped (no ok fly heroes, or --dry).");
+    return;
+  }
+
+  const sb = makeClient();
+  const { data, error } = await sb
+    .from("canonical_flies")
+    .select("slug, name, sizes, option_envelope, hero_image_url");
+  if (error) {
+    console.log(`\nFly-macro check: could not read sizes (${error.message}). Flagging geometry only.`);
+  }
+  const sizeBySlug = new Map<string, number[]>();
+  for (const rec of data ?? []) {
+    const raw =
+      (rec as { sizes?: unknown }).sizes ??
+      (rec as { option_envelope?: { sizes?: unknown } }).option_envelope?.sizes;
+    const nums = (Array.isArray(raw) ? raw : [])
+      .map((v) => Number(String(v).replace(/[^0-9.]/g, "")))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    sizeBySlug.set(String((rec as { slug?: string }).slug ?? ""), nums);
+  }
+
+  const flags: MacroFlag[] = [];
+  await runPool(flies, 4, async (row) => {
+    const target = row.url.startsWith("/") ? SITE + row.url : row.url;
+    try {
+      const res = await fetch(target, {
+        headers: { "User-Agent": "executive-angler-image-audit/1.0" },
+        signal: AbortSignal.timeout(12000),
+      });
+      if (!res.ok) return;
+      const buf = Buffer.from(await res.arrayBuffer());
+      const img = sharp(buf);
+      const meta = await img.metadata();
+      const width = meta.width ?? 0;
+      const height = meta.height ?? 0;
+      if (!width || !height) return;
+      const aspect = width / height;
+      const { data: raw, info } = await img
+        .resize(64, 64, { fit: "fill" })
+        .removeAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const paperish = (i: number) => {
+        const r = raw[i];
+        const g = raw[i + 1];
+        const b = raw[i + 2];
+        return r > 220 && g > 210 && b > 200 && Math.abs(r - g) < 25 && Math.abs(g - b) < 25;
+      };
+      const corners = [0, 63, 64 * 63, 64 * 64 - 1].map((px) => paperish(px * 3));
+      const cornersPaper = corners.filter(Boolean).length >= 3;
+      let subject = 0;
+      for (let i = 0; i < raw.length; i += info.channels) {
+        if (!paperish(i)) subject += 1;
+      }
+      const fill = subject / (64 * 64);
+      const hooks = sizeBySlug.get(row.slug) ?? [];
+      const minHook = hooks.length ? Math.min(...hooks) : null;
+      const found: string[] = [];
+      if (aspect < 0.8 || aspect > 1.25) found.push(`aspect ${aspect.toFixed(2)} (want ~1:1)`);
+      if (!cornersPaper) found.push("corners not paper/white");
+      if (minHook !== null && minHook >= 18 && fill > 0.55) {
+        found.push(`#${minHook} fills ${(fill * 100).toFixed(0)}% — midge should read smaller than a streamer`);
+      }
+      if (minHook !== null && minHook <= 6 && fill < 0.2) {
+        found.push(`#${minHook} fills ${(fill * 100).toFixed(0)}% — streamer looks undersized`);
+      }
+      if (found.length) {
+        flags.push({
+          slug: row.slug,
+          name: row.name,
+          url: row.url,
+          flags: found,
+          width,
+          height,
+          aspect,
+          fill,
+          minHook,
+        });
+      }
+    } catch {
+      /* skip undecodable */
+    }
+  });
+
+  flags.sort((a, b) => a.slug.localeCompare(b.slug));
+  const date = new Date().toISOString().slice(0, 10);
+  const macroPath = join(process.cwd(), "reports", `fly-macros-${date}.json`);
+  writeFileSync(macroPath, JSON.stringify({ generatedAt: new Date().toISOString(), flags }, null, 2));
+  console.log(`\nFly-macro check: ${flags.length} flagged of ${flies.length} ok heroes`);
+  for (const f of flags.slice(0, 15)) {
+    console.log(`  ${f.slug}: ${f.flags.join("; ")}`);
+  }
+  if (flags.length > 15) console.log(`  … ${flags.length - 15} more`);
+  console.log(`Wrote ${macroPath}`);
 }
 
 main().catch((err) => {

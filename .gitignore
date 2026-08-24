@@ -49,3 +49,6 @@ scripts/match-report.json
 # Local agent / seed leftovers (do not commit)
 .claude/settings.local.json
 scripts/logs/
+
+# Image-audit output (regenerable)
+/reports/

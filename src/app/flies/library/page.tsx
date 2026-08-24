@@ -163,6 +163,7 @@ export default async function FliesPage() {
                               meta={`${FLY_CATEGORY_LABELS[fly!.category] || fly!.category} · ${fly!.sizes[0]}–${fly!.sizes[fly!.sizes.length - 1]}`}
                               className="object-cover"
                               sizes="112px"
+                              priority={i < 3}
                             />
                           </div>
                       </div>

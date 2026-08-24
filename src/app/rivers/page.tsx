@@ -115,6 +115,7 @@ export default async function RiversPage() {
                           meta={[river.flowType, river.wadingType].filter(Boolean).join(" · ")}
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 33vw"
+                          priority={i < 3}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                         <div className="absolute bottom-4 left-4">
@@ -181,6 +182,7 @@ export default async function RiversPage() {
                             meta={[river.flowType, river.wadingType].filter(Boolean).join(" · ")}
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 33vw"
+                            priority={i < 3}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                           <div className="absolute bottom-4 left-4">

@@ -29,7 +29,7 @@ export default function PlateFallback({
         {title}
       </p>
       {meta ? (
-        <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-[#8B949E] line-clamp-2 sm:text-xs">
+        <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-[var(--text-meta)] line-clamp-2 sm:text-xs">
           {meta}
         </p>
       ) : null}

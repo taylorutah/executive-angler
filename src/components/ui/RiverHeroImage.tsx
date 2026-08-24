@@ -7,6 +7,7 @@ import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 
 interface RiverHeroImageProps {
   heroImageUrl?: string;
@@ -32,6 +33,7 @@ export default function RiverHeroImage({
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
@@ -49,7 +51,7 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <div className="relative w-full overflow-hidden bg-[var(--surface-page)]" style={{ height: "240px" }}>
+      <div className="relative w-full overflow-hidden bg-[var(--surface-raised)]" style={{ height: "240px" }}>
         {showPhoto ? (
           <Image
             src={heroImageUrl}
@@ -58,13 +60,18 @@ export default function RiverHeroImage({
             className="object-cover"
             priority
             sizes="100vw"
+            placeholder="blur"
+            blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+            onLoad={() => setLoaded(true)}
             onError={() => setFailed(true)}
           />
         ) : (
           <PlateFallback title={title} meta={meta} />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30 pointer-events-none" />
+        {loaded ? (
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30 pointer-events-none" />
+        ) : null}
 
         {totalCount > 1 && (
           <button
@@ -78,7 +85,7 @@ export default function RiverHeroImage({
           </button>
         )}
 
-        {showPhoto && heroImageCredit && (
+        {loaded && showPhoto && heroImageCredit && (
           <div className="absolute bottom-3 right-3 z-10">
             {heroImageCreditUrl ? (
               <a
