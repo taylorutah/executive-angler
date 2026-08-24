@@ -155,11 +155,20 @@ function SearchContent() {
       0,
       8,
     );
-    if (!sites.length) return;
-    fetch(`/api/search/flow?sites=${sites.join(",")}`)
+    if (!sites.length) {
+      setFlows({});
+      return;
+    }
+    const ac = new AbortController();
+    fetch(`/api/search/flow?sites=${sites.join(",")}`, { signal: ac.signal })
       .then((r) => r.json())
-      .then((data: Record<string, number>) => setFlows(data))
-      .catch(() => {});
+      .then((data: Record<string, number>) => {
+        if (!ac.signal.aborted) setFlows(data);
+      })
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+      });
+    return () => ac.abort();
   }, [ranked, featuredRivers]);
 
   const updateUrl = useCallback(
