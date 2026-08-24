@@ -7,6 +7,8 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllDestinations } from "@/lib/db";
 import { destinationListConfig, destinationRegionGroups } from "@/lib/list-configs";
+import { seasonsFromBestMonths, tripLengthFromPlace } from "@/lib/browse/place-filters";
+import { speciesTokens } from "@/lib/browse/species-tokens";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 export const revalidate = 3600;
@@ -53,6 +55,12 @@ export default async function DestinationsPage() {
       description: dest.description?.substring(0, 150),
       _filterValues: {
         region: getRegionGroup(dest.region),
+        season: seasonsFromBestMonths(dest.bestMonths).join(","),
+        species: speciesTokens(dest.primarySpecies).join(","),
+        tripLength: tripLengthFromPlace({
+          country: dest.country,
+          state: dest.state,
+        }),
       },
     })
   );
@@ -198,7 +206,7 @@ export default async function DestinationsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Destinations</h2>
           <p className="text-sm text-[var(--text-body)] mt-1">
-            {destinations.length} destinations — filterable by region
+            {destinations.length} destinations — region, season, species, trip length
           </p>
         </div>
       </div>

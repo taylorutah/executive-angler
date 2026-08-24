@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { LayoutGrid, Grid3X3, List, Newspaper, Search, X } from "lucide-react";
+import { useState, useEffect, type ReactNode } from "react";
+import { LayoutGrid, Grid3X3, List, Newspaper, Search, SlidersHorizontal, X } from "lucide-react";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
 
 interface ListToolbarProps {
@@ -20,6 +20,13 @@ interface ListToolbarProps {
   searchPlaceholder?: string;
   /** Restrict which view modes are shown (defaults to all) */
   availableViews?: ViewMode[];
+  /** Show filters marked `when: "authenticated"`. */
+  showOptionalFilters?: boolean;
+  /** Extra controls (near me, map) sit in the filter panel. */
+  toolbarExtra?: ReactNode;
+  /** Default true so the bar is a real filter surface, not a hidden drawer. */
+  filtersOpen?: boolean;
+  onFiltersOpenChange?: (open: boolean) => void;
 }
 
 const viewModes: { mode: ViewMode; icon: typeof LayoutGrid; label: string }[] = [
@@ -28,6 +35,11 @@ const viewModes: { mode: ViewMode; icon: typeof LayoutGrid; label: string }[] = 
   { mode: "list", icon: List, label: "List view" },
   { mode: "magazine", icon: Newspaper, label: "Magazine view" },
 ];
+
+function dimensionUi(dimension: FilterDimension): "chips" | "select" {
+  if (dimension.ui) return dimension.ui;
+  return dimension.options.length > 8 ? "select" : "chips";
+}
 
 export default function ListToolbar({
   filters,
@@ -44,14 +56,30 @@ export default function ListToolbar({
   onSearchChange,
   searchPlaceholder,
   availableViews,
+  showOptionalFilters = false,
+  toolbarExtra,
+  filtersOpen: filtersOpenProp,
+  onFiltersOpenChange,
 }: ListToolbarProps) {
-  // Filter view modes based on availableViews prop
   const filteredViewModes = availableViews
     ? viewModes.filter((v) => availableViews.includes(v.mode))
     : viewModes;
+
+  const visibleFilters = filters.filter((f) => {
+    if (f.options.length === 0) return false;
+    if (f.when === "authenticated" && !showOptionalFilters) return false;
+    return true;
+  });
+
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
-  // Debounced local search state
+  const [internalOpen, setInternalOpen] = useState(true);
+  const filtersOpen = filtersOpenProp ?? internalOpen;
+  const setFiltersOpen = (open: boolean) => {
+    onFiltersOpenChange?.(open);
+    if (filtersOpenProp === undefined) setInternalOpen(open);
+  };
+
   const [localSearch, setLocalSearch] = useState(searchQuery);
   useEffect(() => {
     setLocalSearch(searchQuery);
@@ -66,21 +94,25 @@ export default function ListToolbar({
 
   return (
     <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[var(--surface-page)] border-b border-[var(--border-rule)]/60 mb-8">
-      {/* Search bar */}
       {onSearchChange && (
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
           <input
-            type="text"
+            type="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder={searchPlaceholder ?? "Search..."}
-            className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:outline-none focus:ring-2 focus:ring-[var(--action)]/20 focus:border-[var(--action)] transition-colors"
+            className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] transition-colors"
           />
           {localSearch && (
             <button
-              onClick={() => { setLocalSearch(""); onSearchChange(""); }}
+              type="button"
+              onClick={() => {
+                setLocalSearch("");
+                onSearchChange("");
+              }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </button>
@@ -89,83 +121,58 @@ export default function ListToolbar({
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* Left: Filter pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide min-w-0 flex-1">
-          {filters.map((dimension) => (
-            <div key={dimension.key} className="flex items-center gap-1.5 shrink-0">
-              {dimension.options.length > 0 && (
-                <>
-                  <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider font-medium mr-0.5 hidden lg:inline">
-                    {dimension.label}
-                  </span>
-                  <button
-                    onClick={() => onFilterChange(dimension.key, null)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                      !activeFilters[dimension.key]
-                        ? "bg-[var(--action)] text-white shadow-sm"
-                        : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
-                    }`}
-                  >
-                    All
-                  </button>
-                  {dimension.options.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() =>
-                        onFilterChange(
-                          dimension.key,
-                          activeFilters[dimension.key] === opt.value ? null : opt.value
-                        )
-                      }
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                        activeFilters[dimension.key] === opt.value
-                          ? "bg-[var(--action)] text-white shadow-sm"
-                          : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                  {/* Separator between filter groups */}
-                  {filters.length > 1 && dimension.key !== filters[filters.length - 1].key && (
-                    <div className="w-px h-5 bg-[var(--border-rule)] mx-1 shrink-0" />
-                  )}
-                </>
-              )}
-            </div>
-          ))}
-
+        <div className="flex items-center gap-2 min-w-0">
+          <button
+            type="button"
+            aria-expanded={filtersOpen}
+            aria-controls="browse-filter-panel"
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+              filtersOpen || hasActiveFilters
+                ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
+                : "bg-[var(--surface-raised)] text-[var(--text-body)] border-[var(--border-rule)] hover:border-[var(--action)]"
+            }`}
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            Filters
+            {hasActiveFilters && (
+              <span className="num text-xs opacity-80">
+                {Object.keys(activeFilters).length}
+              </span>
+            )}
+          </button>
           {hasActiveFilters && (
-            <>
-              <div className="w-px h-5 bg-[var(--border-rule)] mx-1 shrink-0" />
-              <button
-                onClick={() => {
-                  filters.forEach((f) => onFilterChange(f.key, null));
-                }}
-                className="px-3 py-1.5 rounded-full text-sm font-medium text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors whitespace-nowrap"
-              >
-                Clear all
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => {
+                visibleFilters.forEach((f) => onFilterChange(f.key, null));
+              }}
+              className="px-2 py-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
+            >
+              Clear
+            </button>
           )}
         </div>
 
-        {/* Right: View toggle + Sort */}
         <div className="flex items-center gap-3 shrink-0">
-          {/* Result count */}
-          <span className="text-xs text-[var(--text-meta)] hidden sm:inline">
+          <span className="text-xs text-[var(--text-meta)] hidden sm:inline" aria-live="polite">
             {filteredCount === totalCount
               ? `${totalCount} results`
               : `${filteredCount} of ${totalCount}`}
           </span>
 
-          {/* View mode toggle */}
-          <div className="flex items-center gap-0.5 border border-[var(--border-rule)] rounded-lg p-0.5 bg-[var(--surface-raised)]">
+          <div
+            className="flex items-center gap-0.5 border border-[var(--border-rule)] rounded-lg p-0.5 bg-[var(--surface-raised)]"
+            role="group"
+            aria-label="View density"
+          >
             {filteredViewModes.map(({ mode, icon: Icon, label }) => (
               <button
                 key={mode}
+                type="button"
                 onClick={() => onViewChange(mode)}
                 aria-label={label}
+                aria-pressed={viewMode === mode}
                 title={label}
                 className={`p-1.5 rounded-md transition-colors ${
                   viewMode === mode
@@ -178,12 +185,15 @@ export default function ListToolbar({
             ))}
           </div>
 
-          {/* Sort dropdown */}
           <div className="relative">
+            <label className="sr-only" htmlFor="browse-sort">
+              Sort
+            </label>
             <select
+              id="browse-sort"
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--action)]/20 focus:border-[var(--action)] cursor-pointer"
+              className="appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] cursor-pointer"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -194,6 +204,75 @@ export default function ListToolbar({
           </div>
         </div>
       </div>
+
+      {filtersOpen && (
+        <div
+          id="browse-filter-panel"
+          className="mt-3 pt-3 border-t border-[var(--border-rule)]/60 flex flex-col gap-3"
+        >
+          {visibleFilters.map((dimension) => {
+            const ui = dimensionUi(dimension);
+            return (
+              <div key={dimension.key} className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider font-medium w-20 shrink-0">
+                  {dimension.label}
+                </span>
+                {ui === "select" ? (
+                  <select
+                    aria-label={dimension.label}
+                    value={activeFilters[dimension.key] ?? ""}
+                    onChange={(e) =>
+                      onFilterChange(dimension.key, e.target.value || null)
+                    }
+                    className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] rounded-lg px-3 py-1.5 text-sm min-w-[10rem] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
+                  >
+                    <option value="">All</option>
+                    {dimension.options.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => onFilterChange(dimension.key, null)}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                        !activeFilters[dimension.key]
+                          ? "bg-[var(--action)] text-[var(--on-action)] shadow-sm"
+                          : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
+                      }`}
+                    >
+                      All
+                    </button>
+                    {dimension.options.map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() =>
+                          onFilterChange(
+                            dimension.key,
+                            activeFilters[dimension.key] === opt.value ? null : opt.value,
+                          )
+                        }
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                          activeFilters[dimension.key] === opt.value
+                            ? "bg-[var(--action)] text-[var(--on-action)] shadow-sm"
+                            : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </>
+                )}
+              </div>
+            );
+          })}
+          {toolbarExtra}
+        </div>
+      )}
     </div>
   );
 }

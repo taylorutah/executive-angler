@@ -1,9 +1,17 @@
 export type ViewMode = "grid" | "compact" | "list" | "magazine";
 
+export type FilterMatch = "exact" | "contains" | "range" | "flag";
+
 export interface FilterDimension {
   key: string;
   label: string;
   options: FilterOption[];
+  /** Default exact — historical EntityListView behavior. */
+  match?: FilterMatch;
+  /** chips when short; select when the option list is long. */
+  ui?: "chips" | "select";
+  /** Hide unless the page says the viewer is signed in. */
+  when?: "always" | "authenticated";
 }
 
 export interface FilterOption {
@@ -47,6 +55,8 @@ export interface CardData {
     canonicalFlyId: string;
     flyName: string;
   };
+  _filterValues?: Record<string, string | number>;
+  _sortDistance?: number;
 }
 
 export interface EntityListConfig {
@@ -58,4 +68,6 @@ export interface EntityListConfig {
   availableViews?: ViewMode[];
   /** Placeholder text for the search input */
   searchPlaceholder?: string;
+  /** When set, results paginate with a Load more control. */
+  pageSize?: number;
 }

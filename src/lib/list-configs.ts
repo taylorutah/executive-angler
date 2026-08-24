@@ -1,10 +1,12 @@
 import type { EntityListConfig } from "@/types/list-config";
+import { SPECIES_FILTER_OPTIONS } from "@/lib/browse/species-tokens";
 
 export const destinationListConfig: EntityListConfig = {
   filters: [
     {
       key: "region",
       label: "Region",
+      ui: "select",
       options: [
         { value: "northern-rockies", label: "Northern Rockies" },
         { value: "central-rockies", label: "Central Rockies" },
@@ -13,6 +15,33 @@ export const destinationListConfig: EntityListConfig = {
         { value: "south-america", label: "South America" },
         { value: "europe", label: "Europe" },
         { value: "asia-pacific", label: "Asia & Pacific" },
+      ],
+    },
+    {
+      key: "season",
+      label: "Season",
+      match: "contains",
+      options: [
+        { value: "spring", label: "Spring" },
+        { value: "summer", label: "Summer" },
+        { value: "fall", label: "Fall" },
+        { value: "winter", label: "Winter" },
+      ],
+    },
+    {
+      key: "species",
+      label: "Species",
+      match: "contains",
+      ui: "select",
+      options: [...SPECIES_FILTER_OPTIONS],
+    },
+    {
+      key: "tripLength",
+      label: "Trip",
+      options: [
+        { value: "weekend", label: "Weekend" },
+        { value: "week", label: "A week" },
+        { value: "longer", label: "Longer trip" },
       ],
     },
   ],
@@ -24,6 +53,7 @@ export const destinationListConfig: EntityListConfig = {
   defaultSort: "featured",
   defaultView: "grid",
   searchPlaceholder: "Search destinations...",
+  pageSize: 24,
 };
 
 // Maps grouped region filter values to actual region strings in the data
@@ -60,6 +90,29 @@ export const destinationRegionGroups: Record<string, string[]> = {
 export const riverListConfig: EntityListConfig = {
   filters: [
     {
+      key: "state",
+      label: "State",
+      ui: "select",
+      options: [], // filled from DESTINATION_STATE_MAP at the page
+    },
+    {
+      key: "waterType",
+      label: "Water",
+      options: [
+        { value: "freestone", label: "Freestone" },
+        { value: "tailwater", label: "Tailwater" },
+        { value: "spring creek", label: "Spring creek" },
+        { value: "saltwater flat", label: "Saltwater flat" },
+      ],
+    },
+    {
+      key: "species",
+      label: "Species",
+      match: "contains",
+      ui: "select",
+      options: [...SPECIES_FILTER_OPTIONS],
+    },
+    {
       key: "difficulty",
       label: "Difficulty",
       options: [
@@ -69,23 +122,32 @@ export const riverListConfig: EntityListConfig = {
       ],
     },
     {
-      key: "wading",
-      label: "Wading Type",
+      key: "flow",
+      label: "Flow",
       options: [
-        { value: "wade", label: "Wade" },
-        { value: "float", label: "Float" },
-        { value: "both", label: "Both" },
+        { value: "low", label: "Low" },
+        { value: "normal", label: "Normal" },
+        { value: "high", label: "High" },
+        { value: "blown", label: "Blown" },
       ],
+    },
+    {
+      key: "near",
+      label: "Near me",
+      match: "flag",
+      options: [{ value: "1", label: "Near me" }],
     },
   ],
   sortOptions: [
     { value: "featured", label: "Featured First" },
     { value: "name-asc", label: "Name A–Z" },
     { value: "name-desc", label: "Name Z–A" },
+    { value: "distance", label: "Nearest" },
   ],
   defaultSort: "featured",
   defaultView: "grid",
   searchPlaceholder: "Search rivers...",
+  pageSize: 24,
 };
 
 export const speciesListConfig: EntityListConfig = {
@@ -203,6 +265,7 @@ export const flyListConfig: EntityListConfig = {
     {
       key: "imitates",
       label: "Imitates",
+      match: "contains",
       options: [
         { value: "mayfly", label: "Mayfly" },
         { value: "caddis", label: "Caddis" },
@@ -214,6 +277,39 @@ export const flyListConfig: EntityListConfig = {
         { value: "worm", label: "Worm / Egg" },
       ],
     },
+    {
+      key: "hatch",
+      label: "Hatch",
+      match: "contains",
+      options: [
+        { value: "mayfly", label: "Mayfly" },
+        { value: "caddis", label: "Caddis" },
+        { value: "midge", label: "Midge" },
+        { value: "stonefly", label: "Stonefly" },
+        { value: "terrestrial", label: "Terrestrial" },
+        { value: "baitfish", label: "Baitfish" },
+        { value: "attractor", label: "Attractor" },
+        { value: "egg", label: "Egg" },
+      ],
+    },
+    {
+      key: "size",
+      label: "Size",
+      match: "range",
+      options: [
+        { value: "18-22", label: "#18–22" },
+        { value: "14-16", label: "#14–16" },
+        { value: "10-12", label: "#10–12" },
+        { value: "4-8", label: "#4–8" },
+      ],
+    },
+    {
+      key: "canTie",
+      label: "Materials",
+      match: "flag",
+      when: "authenticated",
+      options: [{ value: "1", label: "I can tie it" }],
+    },
   ],
   sortOptions: [
     { value: "rank", label: "Most Popular" },
@@ -224,6 +320,7 @@ export const flyListConfig: EntityListConfig = {
   defaultSort: "rank",
   defaultView: "grid",
   searchPlaceholder: "Search flies...",
+  pageSize: 24,
 };
 
 export const articleListConfig: EntityListConfig = {
