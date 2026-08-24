@@ -21,12 +21,12 @@ export default function FiveFlyPlate({ flies }: { flies: LearnFly[] }) {
         return (
           <li key={fly.id}>
             <Link href={`/flies/${fly.slug}`} className="ea-focus-ring group block">
-              <div className="relative aspect-square w-full overflow-hidden rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)]">
+              <div className="relative aspect-square w-full overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
                 <SafeEntityImage
                   src={fly.heroImageUrl}
                   alt=""
                   title={fly.name}
-                  className="object-cover transition-transform duration-[160ms] ease-out group-hover:scale-[1.03]"
+                  className="object-cover"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                 />
               </div>

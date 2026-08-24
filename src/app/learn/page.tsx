@@ -17,6 +17,9 @@ import {
 } from "./data";
 import type { LearnFly, LearnRiver } from "./types";
 
+// Register: Daylight throughout, by omission from DUSK_PREFIXES in src/lib/register.ts.
+// /learn is an essay plus two lists, not a workbench — no live-data insets, no
+// logged-in surface, so it never earns Dusk. Do not add /learn to DUSK_PREFIXES.
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
