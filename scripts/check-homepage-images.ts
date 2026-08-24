@@ -40,26 +40,34 @@ async function main() {
 
   console.log("\nhomepage image uniqueness OK (logo pair excepted)");
 
-  const lanes = await page.evaluate(() => {
-    const nodes = [...document.querySelectorAll<HTMLElement>("[data-lane]")];
-    const totals: Record<string, number> = { resource: 0, app: 0, ethic: 0 };
-    for (const node of nodes) {
-      const lane = node.getAttribute("data-lane") ?? "";
-      if (!(lane in totals)) continue;
-      totals[lane] += node.getBoundingClientRect().height;
-    }
-    const sum = totals.resource + totals.app + totals.ethic;
-    const pct = (n: number) => (sum === 0 ? 0 : Math.round((n / sum) * 1000) / 10);
-    return {
-      bands: nodes.length,
-      px: totals,
-      pct: {
-        resource: pct(totals.resource),
-        app: pct(totals.app),
-        ethic: pct(totals.ethic),
-      },
-    };
-  });
+  const lanes = JSON.parse(
+    String(
+      await page.evaluate(`(() => {
+        const nodes = [...document.querySelectorAll("[data-lane]")];
+        const totals = { resource: 0, app: 0, ethic: 0 };
+        for (const node of nodes) {
+          const lane = node.getAttribute("data-lane");
+          if (!lane || !(lane in totals)) continue;
+          totals[lane] += node.getBoundingClientRect().height;
+        }
+        const sum = totals.resource + totals.app + totals.ethic;
+        const pct = (n) => (sum === 0 ? 0 : Math.round((n / sum) * 1000) / 10);
+        return JSON.stringify({
+          bands: nodes.length,
+          px: totals,
+          pct: {
+            resource: pct(totals.resource),
+            app: pct(totals.app),
+            ethic: pct(totals.ethic),
+          },
+        });
+      })()`),
+    ),
+  ) as {
+    bands: number;
+    px: { resource: number; app: number; ethic: number };
+    pct: { resource: number; app: number; ethic: number };
+  };
 
   console.log(
     `\nlane bands: ${lanes.bands}  resource ${lanes.pct.resource}% / app ${lanes.pct.app}% / ethic ${lanes.pct.ethic}%`,
