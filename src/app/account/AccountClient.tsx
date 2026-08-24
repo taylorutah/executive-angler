@@ -390,7 +390,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                 <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
                   <span className="font-semibold text-[var(--text-primary)]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </Link>
-                <span className="text-[var(--border-rule)]">·</span>
+                <span className="text-[var(--text-meta)]">·</span>
                 <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
                   <span className="font-semibold text-[var(--text-primary)]">{socialCounts.following}</span> following
                 </Link>

@@ -23,7 +23,7 @@ export default function Error({
         </p>
         <button
           onClick={reset}
-          className="px-6 py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#F0A65A] transition-colors"
+          className="px-6 py-3 bg-[var(--action)] text-[var(--on-action)] font-semibold rounded-lg hover:bg-[#F0A65A] transition-colors"
         >
           Try Again
         </button>

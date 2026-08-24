@@ -72,27 +72,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   marker: "Markers",
 };
 
-const CATEGORY_COLORS: Record<string, string> = {
-  hook: "bg-zinc-600",
-  bead: "bg-amber-700",
-  thread: "bg-purple-700",
-  dubbing: "bg-emerald-700",
-  feather: "bg-sky-700",
-  flash: "bg-yellow-600",
-  foam: "bg-pink-700",
-  wire: "bg-orange-700",
-  chenille: "bg-teal-700",
-  body: "bg-lime-700",
-  tail: "bg-indigo-700",
-  wing: "bg-cyan-700",
-  ribbing: "bg-rose-700",
-  synthetic: "bg-violet-700",
-  rubber: "bg-red-700",
-  eye: "bg-slate-600",
-  resin: "bg-blue-700",
-  marker: "bg-fuchsia-700",
-};
-
 const PAGE_SIZE = 60;
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -511,7 +490,7 @@ function MaterialCard({
     <div
       className={`group rounded-lg border transition-colors ${
         isExpanded
-          ? "border-[var(--action)]/30 bg-[#1C2128]"
+          ? "border-[var(--action)]/30 bg-[var(--surface-card)]"
           : "border-[var(--border-rule)] bg-[var(--surface-raised)] hover:border-[var(--border-strong)]"
       }`}
     >
@@ -524,9 +503,7 @@ function MaterialCard({
           {/* Category badge + brand */}
           <div className="mb-1.5 flex items-center gap-2">
             <span
-              className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white ${
-                CATEGORY_COLORS[material.category] || "bg-gray-600"
-              }`}
+              className="inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--border-rule)]"
             >
               {CATEGORY_LABELS[material.category] || material.category}
             </span>

@@ -94,10 +94,10 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
   }
 
   const levelColors: Record<string, string> = {
-    Low: "#3B82F6",
-    Normal: "#22C55E",
-    High: "#F59E0B",
-    "Very High": "#EF4444",
+    Low: "var(--signal-live)",
+    Normal: "var(--state-positive)",
+    High: "var(--action)",
+    "Very High": "var(--state-negative)",
   };
 
   return (
@@ -109,7 +109,7 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
             className="text-xs font-semibold px-2 py-0.5 rounded-full"
             style={{
               color: levelColors[stats.level],
-              backgroundColor: `${levelColors[stats.level]}15`,
+              backgroundColor: `color-mix(in srgb, ${levelColors[stats.level]} 14%, transparent)`,
             }}
           >
             {stats.level}
@@ -132,13 +132,13 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
           <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo Avg</p>
         </div>
         <div>
-          <p className="text-lg font-bold font-mono text-[#3B82F6] leading-none">
+          <p className="text-lg font-bold font-mono text-[var(--signal-live)] leading-none">
             {stats.min.toLocaleString()}
           </p>
           <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo Low</p>
         </div>
         <div>
-          <p className="text-lg font-bold font-mono text-[#EF4444] leading-none">
+          <p className="text-lg font-bold font-mono text-[var(--state-negative)] leading-none">
             {stats.max.toLocaleString()}
           </p>
           <p className="text-[10px] text-[var(--text-meta)] mt-0.5">12mo High</p>
@@ -148,13 +148,13 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
       {/* 7-day trend */}
       <div className="flex items-center gap-1.5 mb-3">
         {stats.trend > 0 ? (
-          <TrendingUp className="h-3.5 w-3.5 text-green-400" />
+          <TrendingUp className="h-3.5 w-3.5 text-[var(--state-positive)]" />
         ) : stats.trend < 0 ? (
-          <TrendingDown className="h-3.5 w-3.5 text-red-400" />
+          <TrendingDown className="h-3.5 w-3.5 text-[var(--state-negative)]" />
         ) : (
           <Minus className="h-3.5 w-3.5 text-[var(--text-meta)]" />
         )}
-        <span className={`text-xs font-medium ${stats.trend > 0 ? "text-green-400" : stats.trend < 0 ? "text-red-400" : "text-[var(--text-meta)]"}`}>
+        <span className={`text-xs font-medium ${stats.trend > 0 ? "text-[var(--state-positive)]" : stats.trend < 0 ? "text-[var(--state-negative)]" : "text-[var(--text-meta)]"}`}>
           {stats.trend > 0 ? "+" : ""}{stats.trend.toLocaleString()} cfs vs 7 days ago
         </span>
         <span className="text-xs text-[var(--text-meta)] ml-1">

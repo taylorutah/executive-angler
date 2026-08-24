@@ -39,14 +39,14 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
           <span className="text-[var(--text-primary)] font-semibold">{stats.totalFish}</span>{" "}
           <span className="lowercase">fish</span>
         </span>
-        <span className="text-[#3a4150]">·</span>
+        <span className="text-[var(--text-meta)]">·</span>
         <span>
           <span className="text-[var(--text-primary)] font-semibold">{stats.totalSessions}</span>{" "}
           <span className="lowercase">sessions</span>
         </span>
         {stats.monthFish > 0 && (
           <>
-            <span className="text-[#3a4150]">·</span>
+            <span className="text-[var(--text-meta)]">·</span>
             <span>
               <span className="text-[var(--action)] font-semibold">{stats.monthFish}</span>{" "}
               <span className="lowercase">this month</span>
@@ -55,7 +55,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
         )}
         {stats.biggestFish > 0 && (
           <>
-            <span className="text-[#3a4150]">·</span>
+            <span className="text-[var(--text-meta)]">·</span>
             <span>
               <span className="text-[var(--text-primary)] font-semibold">{stats.biggestFish}&quot;</span>{" "}
               <span className="lowercase">pb</span>
@@ -64,7 +64,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
         )}
         {stats.speciesCount > 0 && (
           <>
-            <span className="text-[#3a4150]">·</span>
+            <span className="text-[var(--text-meta)]">·</span>
             <span>
               <span className="text-[var(--text-primary)] font-semibold">{stats.speciesCount}</span>{" "}
               <span className="lowercase">species</span>
@@ -73,7 +73,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
         )}
         {stats.weeklyStreak > 0 && (
           <>
-            <span className="text-[#3a4150]">·</span>
+            <span className="text-[var(--text-meta)]">·</span>
             <span className="inline-flex items-baseline gap-1 text-orange-400">
               <Flame className="h-3 w-3 self-center" />
               <span className="font-semibold">{stats.weeklyStreak}</span>

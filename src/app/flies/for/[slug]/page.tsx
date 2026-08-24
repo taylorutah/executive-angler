@@ -248,7 +248,7 @@ export default async function FliesForRiverPage({ params }: Props) {
       <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-3">What&apos;s hatching now</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-3">What&apos;s hatching now</h2>
             <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Month, insect, size, and pattern from the {river.name} hatch chart
               {chart.length ? `. ${month} is highlighted when that month exists in the chart.` : "."}{" "}
@@ -268,7 +268,7 @@ export default async function FliesForRiverPage({ params }: Props) {
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-3">Nymphs</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-3">Nymphs</h2>
             <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Subsurface patterns matched to this river&apos;s chart and catalog. Fish them at the size the chart lists, not the size that looks good in the bin.
             </p>
@@ -276,7 +276,7 @@ export default async function FliesForRiverPage({ params }: Props) {
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-3">Dries</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-3">Dries</h2>
             <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Dries and terrestrials for the {river.name}. If the chart says a size 18 PMD, do not start with a 12.
             </p>
@@ -284,7 +284,7 @@ export default async function FliesForRiverPage({ params }: Props) {
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-3">Streamers</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-3">Streamers</h2>
             <p className="text-[var(--text-body)] mb-6 max-w-3xl">
               Streamers and wets for stained water, banks, and low light. This is not a claim that streamers are &quot;on&quot; today.
             </p>
@@ -292,16 +292,16 @@ export default async function FliesForRiverPage({ params }: Props) {
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-3">Setup</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-3">Setup</h2>
             <p className="text-[var(--text-body)] max-w-3xl leading-relaxed">{setupCopy(river)}</p>
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-6">FAQ</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-6">FAQ</h2>
             <dl className="space-y-6 max-w-3xl">
               {faqs.map((f) => (
                 <div key={f.question}>
-                  <dt className="font-heading text-xl text-white">{f.question}</dt>
+                  <dt className="font-heading text-xl text-[var(--text-primary)]">{f.question}</dt>
                   <dd className="mt-2 text-[var(--text-body)] leading-relaxed">{f.answer}</dd>
                 </div>
               ))}
@@ -309,14 +309,14 @@ export default async function FliesForRiverPage({ params }: Props) {
           </div>
 
           <div>
-            <h2 className="font-heading text-3xl font-bold text-white mb-6">Related</h2>
+            <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)] mb-6">Related</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link
                 href={`/rivers/${river.slug}`}
                 className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
               >
                 <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">River guide</p>
-                <p className="mt-1 text-lg text-white font-semibold">{river.name}</p>
+                <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{river.name}</p>
                 <p className="mt-2 text-sm text-[var(--text-body)]">Access, hatch chart, USGS gauge.</p>
               </Link>
               {dest && (
@@ -325,7 +325,7 @@ export default async function FliesForRiverPage({ params }: Props) {
                   className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
                   <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Destination</p>
-                  <p className="mt-1 text-lg text-white font-semibold">{dest.name}</p>
+                  <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{dest.name}</p>
                   <p className="mt-2 text-sm text-[var(--text-body)]">Trip planning for this region.</p>
                 </Link>
               )}
@@ -336,7 +336,7 @@ export default async function FliesForRiverPage({ params }: Props) {
                   className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
                   <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Pattern</p>
-                  <p className="mt-1 text-lg text-white font-semibold">{fly.name}</p>
+                  <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{fly.name}</p>
                   <p className="mt-2 text-sm text-[var(--text-body)]">{CATEGORY_LABEL[fly.category] || fly.category}</p>
                 </Link>
               ))}
@@ -347,7 +347,7 @@ export default async function FliesForRiverPage({ params }: Props) {
                   className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
                   <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Guide</p>
-                  <p className="mt-1 text-lg text-white font-semibold">{g.name}</p>
+                  <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{g.name}</p>
                 </Link>
               ))}
               {shops.slice(0, 2).map((s) => (
@@ -357,7 +357,7 @@ export default async function FliesForRiverPage({ params }: Props) {
                   className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
                   <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Fly shop</p>
-                  <p className="mt-1 text-lg text-white font-semibold">{s.name}</p>
+                  <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{s.name}</p>
                   <p className="mt-2 text-sm text-[var(--text-body)]">{s.address}</p>
                 </Link>
               ))}
@@ -368,7 +368,7 @@ export default async function FliesForRiverPage({ params }: Props) {
                   className="block rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-5 hover:border-[var(--action)]/40"
                 >
                   <p className="text-xs uppercase tracking-wide text-[var(--text-meta)]">Nearby water</p>
-                  <p className="mt-1 text-lg text-white font-semibold">{r.name}</p>
+                  <p className="mt-1 text-lg text-[var(--text-primary)] font-semibold">{r.name}</p>
                   <p className="mt-2 text-sm text-[var(--text-body)]">Open the river guide, then its fly list.</p>
                 </Link>
               ))}

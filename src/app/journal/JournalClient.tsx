@@ -272,7 +272,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("list")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "list"
-                  ? "bg-[var(--action)] text-white"
+                  ? "bg-[var(--action)] text-[var(--on-action)]"
                   : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--surface-card)]"
               }`}
             >
@@ -283,7 +283,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={() => setView("calendar")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 view === "calendar"
-                  ? "bg-[var(--action)] text-white"
+                  ? "bg-[var(--action)] text-[var(--on-action)]"
                   : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--surface-card)]"
               }`}
             >
@@ -298,7 +298,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             <FilterIcon className="h-4 w-4" />
             Filters
             {hasActiveFilters && (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--action)] text-xs text-white">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--action)] text-xs text-[var(--on-action)]">
                 {filterRivers.length + filterYears.length + filterLocations.length}
               </span>
             )}
