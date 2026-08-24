@@ -1,36 +1,39 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import {
-  Check, Smartphone, Activity, BarChart3, Bug, Droplets,
-  Wrench, Search as SearchIcon, Sparkles
-} from "lucide-react";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import PhoneHeroMockup from "@/components/marketing/PhoneHeroMockup";
-import { Button } from "@/components/ui/Button";
-import { SITE_NAME, SITE_URL, APP_STORE_URL } from "@/lib/constants";
+  getAllArticles,
+  getAllCanonicalFlies,
+  getAllDestinations,
+  getAllRivers,
+  getFeaturedFlies,
+} from "@/lib/db";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
-import DiscoveryNav from "@/components/seo/DiscoveryNav";
-
-const AppleSvg = () => (
-  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
-    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-  </svg>
-);
+import type { Article, CanonicalFly, Destination } from "@/types/entities";
+import ConditionsRail from "@/components/home/ConditionsRail";
+import FlyPlate from "@/components/home/FlyPlate";
+import FourDoors, { type Door } from "@/components/home/FourDoors";
+import HomeHero from "@/components/home/HomeHero";
+import JournalBand from "@/components/home/JournalBand";
+import OnTheWaterNow from "@/components/home/OnTheWaterNow";
+import ThisWeeksRead from "@/components/home/ThisWeeksRead";
+import WhatWeDontDo from "@/components/home/WhatWeDontDo";
+import WhereToGo from "@/components/home/WhereToGo";
+import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
+import { HERO_IMAGE } from "@/components/home/hero-copy";
 
 export const metadata: Metadata = {
-  title: brandedTitle("Fly Fishing Intelligence: Journal, Flies, Rivers"),
-  description: "Log every session, build structured fly recipes, track 200+ rivers with live USGS conditions, and see your own patterns across seasons. Private by default — we never publish locations or fish counts. Free fly fishing app — now on the App Store.",
+  title: brandedTitle("Rivers, Flies, and Hatches"),
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: `${SITE_NAME} — Log Catches, Tie Better Flies, Fish Smarter`,
-    description: "The fly fishing intelligence platform. Journal your sessions, build fly recipes, track river conditions, and analyze patterns. Free on iPhone and web.",
+    title: `${SITE_NAME} — Rivers, Flies, and Hatches`,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     images: [
       {
-        url: "/images/madison-river-three-dollar-bridge.jpg",
+        url: HERO_IMAGE.src,
         width: 1920,
         height: 1036,
-        alt: "The Madison River in Montana — Executive Angler",
+        alt: HERO_IMAGE.alt,
       },
     ],
   },
@@ -39,342 +42,123 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-const RIVERS = [
-  { name: "Green River", location: "UTAH", fish: 34, ago: "2h ago", href: "/rivers/green-river" },
-  { name: "Madison River", location: "MONTANA", fish: 142, ago: "45m ago", href: "/rivers/madison-river" },
-  { name: "Henry's Fork", location: "IDAHO", fish: 67, ago: "1h ago", href: "/rivers/henrys-fork" },
-  { name: "Yellowstone River", location: "WYOMING", fish: 28, ago: "3h ago", href: "/rivers/yellowstone-river" },
-];
+/** The month the seasonal copy is written against, in the register's home time zone. */
+function currentMonth(): string {
+  return new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" });
+}
 
-const PILLAR_FEATURES = [
-  { icon: Activity, text: "Log sessions with GPS, weather, and gear — automatically" },
-  { icon: Bug, text: "Build fly recipes, browse 500+ materials, track your tying" },
-  { icon: BarChart3, text: "Insights from your catch history — best flies, peak hours, conditions" },
-];
+function pickRead(articles: Article[]): { lead: Article; rest: Article[] } | null {
+  const sorted = [...articles].sort(
+    (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
+  );
+  const featured = sorted.filter((a) => a.featured);
+  const ordered = [...featured, ...sorted.filter((a) => !a.featured)];
+  if (ordered.length === 0) return null;
+  return { lead: ordered[0], rest: ordered.slice(1, 4) };
+}
 
-export default function HomePage() {
+function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[] {
+  const seen = new Set<string>();
+  const plate: CanonicalFly[] = [];
+  for (const fly of [...featured, ...all]) {
+    if (plate.length === 12) break;
+    if (!fly.heroImageUrl || seen.has(fly.id)) continue;
+    seen.add(fly.id);
+    plate.push(fly);
+  }
+  return plate;
+}
+
+function pickPlaces(destinations: Destination[], month: string): Destination[] {
+  const withImage = destinations.filter((d) => d.heroImageUrl);
+  const featured = withImage.filter((d) => d.featured);
+  const inSeason = featured.filter((d) => d.bestMonths?.includes(month));
+  const ordered = [
+    ...inSeason,
+    ...featured.filter((d) => !inSeason.includes(d)),
+    ...withImage.filter((d) => !d.featured),
+  ];
+  return ordered.slice(0, 3);
+}
+
+export default async function HomePage() {
+  const [rivers, allFlies, featuredFlies, destinations, articles] = await Promise.all([
+    getAllRivers().catch(() => []),
+    getAllCanonicalFlies().catch(() => []),
+    getFeaturedFlies().catch(() => []),
+    getAllDestinations().catch(() => []),
+    getAllArticles().catch(() => []),
+  ]);
+
+  const month = currentMonth();
+  const flagshipRivers = selectFlagshipRivers(rivers);
+  const snapshots = await getGaugeSnapshots(flagshipRivers);
+
+  const read = pickRead(articles);
+  const plate = pickPlate(featuredFlies, allFlies);
+  const places = pickPlaces(destinations, month);
+
+  const doors: Door[] = [
+    {
+      label: "Rivers",
+      href: "/rivers",
+      count: rivers.length,
+      noun: "rivers",
+      imageUrl: flagshipRivers[0]?.heroImageUrl ?? rivers.find((r) => r.heroImageUrl)?.heroImageUrl,
+    },
+    {
+      label: "Flies",
+      href: "/flies/library",
+      count: allFlies.length,
+      noun: "patterns",
+      imageUrl: plate[0]?.heroImageUrl,
+    },
+    {
+      label: "Destinations",
+      href: "/destinations",
+      count: destinations.length,
+      noun: "destinations",
+      imageUrl: places[0]?.heroImageUrl,
+    },
+    {
+      label: "Articles",
+      href: "/articles",
+      count: articles.length,
+      noun: "field notes",
+      imageUrl: read?.lead.heroImageUrl,
+    },
+  ];
+
   return (
     <>
-      {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden bg-[var(--surface-page)] flex items-center justify-center">
-        {/* Subtle river background — Taylor's Madison River photo */}
-        <Image
-          src="/images/madison-river-three-dollar-bridge.jpg"
-          alt=""
-          fill
-          priority
-          fetchPriority="high"
-          className="object-cover opacity-[0.09] pointer-events-none"
-          sizes="100vw"
-        />
-        {/* Dark gradient overlay to blend edges */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-page)] via-transparent to-[var(--surface-page)] pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--signal-live)] opacity-10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--action)] opacity-10 blur-[120px] rounded-full" />
+      {/* 1 — conditions rail */}
+      <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-10 lg:gap-16 items-center">
-            {/* LEFT — Copy + CTAs */}
-            <div className="text-center lg:text-left">
-              <ScrollAnimation>
-                <div className="inline-flex items-center gap-2 mb-6">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--action)] animate-pulse" />
-                  <span className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.2em]">
-                    Now on the App Store
-                  </span>
-                </div>
-              </ScrollAnimation>
-              <ScrollAnimation delay={0.1}>
-                <h1
-                  className="text-[var(--text-primary)] font-heading font-bold leading-[1.05] mb-6"
-                  style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
-                >
-                  Better data.{" "}
-                  <br />
-                  Better days on the water.
-                </h1>
-              </ScrollAnimation>
-              <ScrollAnimation delay={0.2}>
-                <p className="text-[var(--text-body)] text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
-                  The fly fishing intelligence platform. Journal every session, build fly recipes, track river conditions, and let your data show you what works.
-                </p>
-              </ScrollAnimation>
+      {/* 2 + 3 — the photograph, and the search on it */}
+      <HomeHero riverCount={rivers.length} />
 
-              {/* CTA buttons */}
-              <ScrollAnimation delay={0.3}>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
-                  <Button
-                    href={APP_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="solid"
-                    size="lg"
-                    loud
-                  >
-                    <AppleSvg />
-                    Download for iPhone
-                  </Button>
-                  <Button href="/signup" variant="hero" size="md" loud>
-                    Open Web App
-                  </Button>
-                </div>
-              </ScrollAnimation>
+      {/* 4 — four doors */}
+      <FourDoors doors={doors} />
 
-              {/* Feature bullets */}
-              <ScrollAnimation delay={0.35}>
-                <ul className="flex flex-col gap-2.5 mt-2 max-w-lg mx-auto lg:mx-0">
-                  {PILLAR_FEATURES.map((f) => (
-                    <li key={f.text} className="flex items-center gap-3 text-sm text-[var(--text-body)]">
-                      <f.icon className="h-4 w-4 text-[var(--action)] flex-shrink-0" strokeWidth={1.75} />
-                      <span className="text-left leading-snug">{f.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </ScrollAnimation>
-            </div>
+      {/* 5 — on the water now */}
+      <OnTheWaterNow rivers={flagshipRivers} snapshots={snapshots} month={month} />
 
-            {/* RIGHT — Phone mockup */}
-            <ScrollAnimation delay={0.2}>
-              <div className="flex justify-center lg:justify-end">
-                <PhoneHeroMockup />
-              </div>
-            </ScrollAnimation>
-          </div>
+      {/* 6 — this week's read */}
+      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
 
-          <div className="mt-10">
-            <DiscoveryNav />
-          </div>
+      {/* 7 — the fly plate */}
+      <FlyPlate flies={plate} flyCount={allFlies.length} />
 
-          {/* Four pillar nav cards (full-width below the split) */}
-          <ScrollAnimation delay={0.4}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mt-16">
-              {[
-                { label: "Journal", desc: "Log sessions", href: "/journal", icon: Smartphone, color: "#E8923A" },
-                { label: "Flies", desc: "Patterns & recipes", href: "/flies", icon: Bug, color: "#E8923A" },
-                { label: "Rivers", desc: "Live conditions", href: "/rivers", icon: Droplets, color: "#0BA5C7" },
-                { label: "Feed", desc: "Community", href: "/feed", icon: Activity, color: "#0BA5C7" },
-              ].map((p) => (
-                <Link key={p.label} href={p.href} className="group bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 hover:border-[var(--action)]/40 transition-colors text-left">
-                  <p.icon className="h-5 w-5 mb-2" style={{ color: p.color }} strokeWidth={1.5} />
-                  <p className="text-[var(--text-primary)] text-sm font-semibold group-hover:text-[var(--action)] transition-colors">{p.label}</p>
-                  <p className="text-[var(--text-meta)] text-xs">{p.desc}</p>
-                </Link>
-              ))}
-            </div>
-          </ScrollAnimation>
-        </div>
-      </section>
+      {/* 8 — where to go */}
+      <WhereToGo destinations={places} month={month} />
 
-      {/* ── 2. JOURNAL — Session card showcase ───────────────────────── */}
-      <section className="bg-[var(--surface-raised)] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Session card mockup */}
-            <ScrollAnimation>
-              <div className="bg-[var(--surface-card)] border border-[var(--border-rule)] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
-                <h3 className="font-heading text-[var(--text-primary)] text-2xl mb-1">Green River, Utah</h3>
-                <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
-                <div className="flex items-baseline justify-between mb-6">
-                  <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none">14</div>
-                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
-                  </div>
-                  <div className="h-8 w-px bg-[var(--border-rule)]" />
-                  <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none whitespace-nowrap">3<span className="text-2xl">h</span> 12<span className="text-2xl">m</span></div>
-                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
-                  </div>
-                  <div className="h-8 w-px bg-[var(--border-rule)]" />
-                  <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none">18<span className="text-2xl">&quot;</span></div>
-                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {["54\u00B0F", "#18 RS2", "Clear", "1,240 cfs"].map((tag) => (
-                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[var(--signal-live)] rounded-full px-3 py-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollAnimation>
+      {/* 9 — the journal */}
+      <JournalBand />
 
-            {/* Copy */}
-            <ScrollAnimation delay={0.2}>
-              <p className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.15em] mb-4">JOURNAL</p>
-              <h2 className="text-[var(--text-primary)] font-heading text-4xl mb-4">
-                Every session.<br />Every detail.<br />Always yours.
-              </h2>
-              <p className="text-[var(--text-body)] text-lg leading-relaxed mb-6">
-                One-tap session start with auto-detected river, weather, and GPS. Log catches with species, length, fly, and photo. Your data builds a personal fishing intelligence engine.
-              </p>
-              <div className="space-y-3 mb-8">
-                {[
-                  "GPS-tracked sessions with weather and water conditions",
-                  "Insights from your data: best fly, peak hour, optimal conditions",
-                  "Trophy wall, river stats, and year-over-year trends",
-                ].map((line) => (
-                  <div key={line} className="flex items-start gap-3">
-                    <Check className="h-4 w-4 text-[var(--state-positive)] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
-                    <span className="text-[var(--text-body)] text-sm">{line}</span>
-                  </div>
-                ))}
-              </div>
-              <Button href="/signup" variant="solid" size="lg" loud>
-                Start Logging Free
-              </Button>
-            </ScrollAnimation>
-          </div>
-        </div>
-      </section>
+      {/* 10 — what we don't do */}
+      <WhatWeDontDo />
 
-      {/* ── 3. FLIES — Tying Workbench + Library ─────────────────────── */}
-      <section className="bg-[var(--surface-page)] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollAnimation>
-            <p className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.15em] mb-4 text-center">FLIES</p>
-            <h2 className="text-[var(--text-primary)] font-heading text-4xl text-center mb-3">
-              Your Digital Fly Box &amp; Tying Workbench
-            </h2>
-            <p className="text-[var(--text-body)] text-center mb-12 max-w-xl mx-auto">
-              120+ catalog patterns with structured recipes, 500+ tying materials, and a personal fly box that tracks what works.
-            </p>
-          </ScrollAnimation>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { icon: Bug, title: "Fly Library", desc: "120+ patterns with photos, tying steps, materials, and fishing tips. Nymphs, dries, streamers, emergers, and more.", href: "/flies", cta: "Browse Library", color: "#E8923A" },
-              { icon: Wrench, title: "Tying Workbench", desc: "Structured recipes with real materials from our database. Track your inventory. See what you can tie with what you own.", href: "/my-flies?tab=workbench", cta: "Open Workbench", color: "#E8923A" },
-              { icon: SearchIcon, title: "Materials Database", desc: "500+ hooks, beads, threads, dubbing, and feathers from brands like Tiemco, Semperfli, and Fulling Mill.", href: "/flies/materials", cta: "Browse Materials", color: "#0BA5C7" },
-            ].map((item, i) => (
-              <ScrollAnimation key={item.title} delay={i * 0.1}>
-                <Link href={item.href} className="group block bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6 hover:border-[var(--action)]/40 transition-colors h-full">
-                  <item.icon className="h-7 w-7 mb-4" style={{ color: item.color }} strokeWidth={1.5} />
-                  <h3 className="text-[var(--text-primary)] font-semibold text-lg mb-2">{item.title}</h3>
-                  <p className="text-[var(--text-body)] text-sm leading-relaxed mb-4">{item.desc}</p>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--signal-live)] group-hover:text-[var(--action)] transition-colors">
-                    {item.cta} &rarr;
-                  </span>
-                </Link>
-              </ScrollAnimation>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. RIVERS — Live conditions ──────────────────────────────── */}
-      <section className="bg-[var(--surface-raised)] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollAnimation>
-            <p className="font-['IBM_Plex_Mono'] text-[var(--signal-live)] text-xs uppercase tracking-[0.15em] mb-4 text-center">RIVERS</p>
-            <h2 className="text-[var(--text-primary)] font-heading text-4xl text-center mb-3">
-              What&apos;s Happening on the Water
-            </h2>
-            <p className="text-[var(--text-body)] text-center mb-12 max-w-xl mx-auto">
-              Live USGS flow data, hatch charts, and catch reports across 200+ rivers.
-            </p>
-          </ScrollAnimation>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {RIVERS.map((r, i) => (
-              <ScrollAnimation key={r.name} delay={i * 0.08}>
-                <Link href={r.href} className="block bg-[var(--surface-card)] border border-[var(--border-rule)] rounded-2xl p-6 hover:border-[var(--action)] transition-colors group">
-                  <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs uppercase tracking-wider mb-1">{r.location}</p>
-                  <h3 className="font-heading text-[var(--text-primary)] text-xl mb-4">{r.name}</h3>
-                  <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs mb-4">Live flow &amp; weather</p>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--text-body)] group-hover:text-[var(--action)] transition-colors">
-                    View River &rarr;
-                  </span>
-                </Link>
-              </ScrollAnimation>
-            ))}
-          </div>
-          <ScrollAnimation delay={0.3}>
-            <div className="text-center">
-              <Link href="/rivers" className="text-[var(--signal-live)] hover:text-[var(--action)] font-medium transition-colors">
-                Explore all 200+ tracked rivers &rarr;
-              </Link>
-            </div>
-          </ScrollAnimation>
-        </div>
-      </section>
-
-      {/* ── 5. Intelligence layer ────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <ScrollAnimation>
-              <div className="inline-flex items-center gap-2 mb-6">
-                <Sparkles className="h-4 w-4 text-[var(--action)]" />
-                <span className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.2em]">
-                  Your Intelligence Layer
-                </span>
-              </div>
-              <h2 className="text-[var(--text-primary)] font-heading text-4xl mb-4">
-                See <em>your</em> patterns
-              </h2>
-              <p className="text-[var(--text-body)] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
-                Which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers. Free for every angler.
-              </p>
-              <p className="text-[var(--text-meta)] text-sm mb-10 max-w-xl mx-auto">
-                We never publish locations or fish counts. It deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
-              </p>
-            </ScrollAnimation>
-            <ScrollAnimation delay={0.15}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-                {[
-                  { title: "Per-river Scorecard", desc: "Your sessions, top fly, best section, best month, gear &mdash; for every river you log" },
-                  { title: "Best Window Calculator", desc: "Your catch history overlaid on live USGS flow &mdash; know when to drop everything and go" },
-                  { title: "Personal Insights", desc: "Time-of-day, weather, and hatch correlations across your full journal &mdash; export anytime" },
-                ].map((f) => (
-                  <div key={f.title} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 text-left">
-                    <h4 className="text-[var(--text-primary)] font-semibold text-sm mb-1">{f.title}</h4>
-                    <p className="text-[var(--text-meta)] text-xs leading-relaxed">{f.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </ScrollAnimation>
-            <ScrollAnimation delay={0.25}>
-              <Button href="/signup" variant="solid" size="lg" loud>
-                Start Your Journal — Free
-              </Button>
-            </ScrollAnimation>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 6. FINAL CTA ─────────────────────────────────────────────── */}
-      <section className="relative bg-[var(--surface-page)] border-t border-[var(--border-rule)] py-24 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[var(--action)] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
-        <div className="relative mx-auto max-w-3xl px-4 text-center">
-          <ScrollAnimation>
-            <h2 className="text-[var(--text-primary)] font-heading text-5xl mb-4">
-              Start fishing smarter.
-            </h2>
-            <p className="text-[var(--text-body)] text-lg mb-10 max-w-xl mx-auto">
-              Free to start. Log unlimited sessions. Every feature, every angler.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                href={APP_STORE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="solid"
-                size="lg"
-                loud
-              >
-                <AppleSvg />
-                Download for iPhone
-              </Button>
-              <Button href="/signup" variant="hero" size="md" loud>
-                Open Web App
-              </Button>
-            </div>
-            <p className="mt-6 font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs">
-              Available on iPhone &bull; Android coming soon
-            </p>
-          </ScrollAnimation>
-        </div>
-      </section>
+      {/* 11 — footer is rendered by the root layout */}
     </>
   );
 }
