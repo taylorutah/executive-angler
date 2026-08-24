@@ -164,7 +164,9 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
 
       {/* Chart */}
       <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
+        {/* initialDimension carries the wrapper's known height so the first
+            frame isn't measured as -1 × -1. */}
+        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: -1, height: 192 }}>
           <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradient" x1="0" y1="0" x2="0" y2="1">
