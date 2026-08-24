@@ -4,13 +4,25 @@ interface Props {
   article: Article;
 }
 
-/** First sentence of a real field note — no invented speech. */
+/** Dead positioning from Brand Bible v4 — never set this in display type. */
+const BANNED =
+  /river intelligence|intelligence platform|fly fishing intelligence|upgrade to|founders|premium tier/i;
+
+/** First sentence of a real field note — no invented speech, no banned copy. */
 export function quoteFromArticle(article: Article): string | null {
   const raw = (article.excerpt ?? "").replace(/\s+/g, " ").trim();
-  if (!raw) return null;
+  if (!raw || BANNED.test(raw)) return null;
   const match = raw.match(/^[\s\S]+?[.!?](?=\s|$)/);
   const text = (match?.[0] ?? raw).trim();
-  return text.length > 0 ? text : null;
+  if (!text || BANNED.test(text)) return null;
+  return text;
+}
+
+export function pickQuote(articles: Article[]): Article | null {
+  for (const article of articles) {
+    if (quoteFromArticle(article)) return article;
+  }
+  return null;
 }
 
 export default function PullQuote({ article }: Props) {

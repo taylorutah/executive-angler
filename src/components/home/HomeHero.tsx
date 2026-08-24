@@ -16,17 +16,24 @@ interface Props {
 }
 
 /**
- * The photograph and the search that sits on it. The hero <Image> is the LCP
- * element; nothing above it renders a skeleton. Type is display-sized; the
- * search chip is opaque so ink is not asked to sit on a 90% wash.
+ * Homepage overlay is darker through the lower two-thirds than the shared
+ * `.hero-overlay`. Display type is tall; content is in-flow so the section
+ * can grow and keep the stack in the dark band. Do not use `.prose` here —
+ * its unlayered `color: var(--text-body)` beats `text-white`.
+ *
+ * The 11px eyebrow sits on an opaque Vellum chip (slate on vellum is 5.03:1).
+ * Small caps on a scrim cannot make 4.5.
  */
+const HERO_SCRIM =
+  "linear-gradient(to bottom, rgba(15,43,31,0.28) 0%, rgba(15,43,31,0.70) 28%, rgba(15,43,31,0.86) 100%)";
+
 export default function HomeHero({ riverCount, cfs }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
 
   return (
     <section
       data-lane="resource"
-      className="relative min-h-[60svh] w-full overflow-hidden sm:min-h-[72vh]"
+      className="relative min-h-[70svh] w-full overflow-hidden sm:min-h-[85vh]"
     >
       <Image
         src={HERO_IMAGE.src}
@@ -37,12 +44,12 @@ export default function HomeHero({ riverCount, cfs }: Props) {
         sizes="100vw"
         className="object-cover"
       />
-      <div className="hero-overlay absolute inset-0" />
+      <div className="absolute inset-0" style={{ background: HERO_SCRIM }} aria-hidden />
 
-      <div className="absolute inset-0 flex items-end">
-        <div className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
-          <p className="mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white">
-            <span aria-hidden className="h-px w-8 bg-[var(--copper-400)]" />
+      <div className="relative z-10 flex min-h-[70svh] flex-col justify-end sm:min-h-[85vh]">
+        <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-[22vh] sm:px-6 sm:pb-16 lg:px-8">
+          <p className="mb-5 inline-flex items-center gap-3 bg-[var(--vellum)] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+            <span aria-hidden className="h-px w-6 bg-[var(--action)]" />
             {eyebrow}
           </p>
 
@@ -54,7 +61,7 @@ export default function HomeHero({ riverCount, cfs }: Props) {
           </h1>
 
           <p
-            className="prose mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
+            className="mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {HERO_DEK}
@@ -90,8 +97,7 @@ export default function HomeHero({ riverCount, cfs }: Props) {
             href="/rivers"
             className="mt-4 inline-block text-[14px] text-white underline-offset-4 transition-colors hover:underline"
           >
-            {riverCount > 0 ? `Browse ${riverCount} rivers` : "Browse the rivers"}{" "}
-            <span className="text-[var(--copper-400)]">&rarr;</span>
+            {riverCount > 0 ? `Browse ${riverCount} rivers` : "Browse the rivers"} &rarr;
           </Link>
         </div>
       </div>

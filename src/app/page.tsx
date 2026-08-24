@@ -16,7 +16,7 @@ import FourDoors, { type Door } from "@/components/home/FourDoors";
 import HomeHero from "@/components/home/HomeHero";
 import JournalBand from "@/components/home/JournalBand";
 import OnTheWaterNow from "@/components/home/OnTheWaterNow";
-import PullQuote from "@/components/home/PullQuote";
+import PullQuote, { pickQuote } from "@/components/home/PullQuote";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
@@ -49,12 +49,20 @@ function currentMonth(): string {
   return new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" });
 }
 
+const BANNED_EXCERPT =
+  /river intelligence|intelligence platform|fly fishing intelligence|upgrade to|founders|premium tier/i;
+
+function isPublicRead(article: Article): boolean {
+  return !BANNED_EXCERPT.test(article.excerpt ?? "");
+}
+
 function pickRead(articles: Article[]): { lead: Article; rest: Article[] } | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
-  const featured = sorted.filter((a) => a.featured);
-  const ordered = [...featured, ...sorted.filter((a) => !a.featured)];
+  const eligible = sorted.filter(isPublicRead);
+  const featured = eligible.filter((a) => a.featured);
+  const ordered = [...featured, ...eligible.filter((a) => !a.featured)];
   if (ordered.length === 0) return null;
   return { lead: ordered[0], rest: ordered.slice(1, 4) };
 }
@@ -99,6 +107,9 @@ export default async function HomePage() {
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
   const read = pickRead(articles);
+  const quote = pickQuote(
+    [...(read?.rest ?? []), ...articles.filter((a) => a.id !== read?.lead?.id)],
+  );
   const plate = pickPlate(featuredFlies, allFlies);
   const places = pickPlaces(destinations, month);
 
@@ -161,7 +172,7 @@ export default async function HomePage() {
 
       <FlyPlate flies={plate} flyCount={allFlies.length} />
 
-      {read && <PullQuote article={read.lead} />}
+      {quote && <PullQuote article={quote} />}
 
       <WhereToGo destinations={places} month={month} />
 

@@ -6,7 +6,7 @@ export default function JournalBand() {
   return (
     <section
       data-lane="app"
-      className="register-dusk bg-[var(--surface-page)] py-20 sm:py-28"
+      className="register-dusk flex min-h-[56vh] items-center bg-[var(--surface-page)] py-20 sm:py-28"
     >
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <p className="flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
