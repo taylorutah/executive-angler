@@ -106,6 +106,11 @@ function SearchContent() {
   );
   const [active, setActive] = useState(0);
 
+  const featuredRivers = useMemo(
+    () => index.filter((d) => d.type === "river" && d.featured).slice(0, 3),
+    [index],
+  );
+
   useEffect(() => {
     setActive(0);
   }, [query, typeParam]);
@@ -115,6 +120,7 @@ function SearchContent() {
       const t = e.target as HTMLElement | null;
       const inField =
         t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+      const inSearchBox = t?.id === "search-q";
       if (!resultHrefs.length) return;
       if (e.key === "j" || e.key === "ArrowDown") {
         if (inField && e.key === "j") return;
@@ -124,9 +130,12 @@ function SearchContent() {
         if (inField && e.key === "k") return;
         e.preventDefault();
         setActive((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Enter" && !inField) {
+      } else if (e.key === "Enter" && (!inField || inSearchBox)) {
         const href = resultHrefs[active];
-        if (href) router.push(href);
+        if (href) {
+          e.preventDefault();
+          router.push(href);
+        }
       }
     }
     window.addEventListener("keydown", onKey);
@@ -134,17 +143,24 @@ function SearchContent() {
   }, [resultHrefs, active, router]);
 
   useEffect(() => {
-    const sites = ranked.groups
-      .find((g) => g.type === "river")
-      ?.items.map((i) => i.doc.usgsGaugeId)
-      .filter((id): id is string => Boolean(id))
-      .slice(0, 8);
-    if (!sites?.length) return;
+    const rankedSites =
+      ranked.groups
+        .find((g) => g.type === "river")
+        ?.items.map((i) => i.doc.usgsGaugeId)
+        .filter((id): id is string => Boolean(id)) ?? [];
+    const featuredSites = featuredRivers
+      .map((d) => d.usgsGaugeId)
+      .filter((id): id is string => Boolean(id));
+    const sites = [...new Set(rankedSites.length > 0 ? rankedSites : featuredSites)].slice(
+      0,
+      8,
+    );
+    if (!sites.length) return;
     fetch(`/api/search/flow?sites=${sites.join(",")}`)
       .then((r) => r.json())
       .then((data: Record<string, number>) => setFlows(data))
       .catch(() => {});
-  }, [ranked]);
+  }, [ranked, featuredRivers]);
 
   const updateUrl = useCallback(
     (q: string, type: string) => {
@@ -164,11 +180,6 @@ function SearchContent() {
   const catalogLine = index.length
     ? `Search ${index.length} rivers, flies, hatches, destinations, articles, species, lodges, guides, and fly shops.`
     : "Search rivers, flies, hatches, destinations, articles, species, lodges, guides, and fly shops.";
-
-  const featuredRivers = useMemo(
-    () => index.filter((d) => d.type === "river" && d.featured).slice(0, 3),
-    [index],
-  );
 
   const hatchingNow = useMemo(() => {
     const month = MONTHS[new Date().getMonth()];

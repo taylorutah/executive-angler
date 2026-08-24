@@ -23,8 +23,10 @@ export function assembleSearchDocuments(input: {
   flies: CanonicalFly[];
 }): SearchDocument[] {
   const destById = Object.fromEntries(input.destinations.map((d) => [d.id, d]));
+  const riverById = Object.fromEntries(input.rivers.map((r) => [r.id, r]));
   const destName = (id: string) => destById[id]?.name ?? "";
   const destState = (id: string) => destById[id]?.state ?? destById[id]?.region ?? "";
+  const riverName = (id: string) => riverById[id]?.name ?? "";
 
   const destinationDocs: SearchDocument[] = input.destinations.map((d) => ({
     type: "destination",
@@ -91,7 +93,13 @@ export function assembleSearchDocuments(input: {
     subtitle: destName(l.destinationId),
     href: `/lodges/${l.slug}`,
     imageUrl: l.heroImageUrl,
-    keywords: [...(l.amenities ?? []), destName(l.destinationId)].filter(Boolean).join(" "),
+    keywords: [
+      ...(l.amenities ?? []),
+      destName(l.destinationId),
+      ...(l.nearbyRiverIds ?? []).map(riverName),
+    ]
+      .filter(Boolean)
+      .join(" "),
     featured: l.featured,
   }));
 

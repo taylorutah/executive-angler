@@ -1,8 +1,10 @@
+const APOSTROPHE = /['\u2018\u2019]/g;
 const PUNCT = /[^\p{L}\p{N}\s]+/gu;
 
 export function normalizeText(input: string): string {
   return input
     .toLowerCase()
+    .replace(APOSTROPHE, "")
     .replace(PUNCT, " ")
     .replace(/\s+/g, " ")
     .trim();

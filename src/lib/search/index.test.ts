@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import type { SearchDocument } from "./types";
 import { rankSearch } from "./rank";
 import { GROUP_ORDER } from "./types";
+import { buildHatchDocuments } from "./hatches";
+import { isUsgsSiteId } from "./usgs";
 
 function doc(
   partial: Omit<SearchDocument, "href" | "subtitle"> & { subtitle?: string },
@@ -254,5 +256,51 @@ describe("rankSearch", () => {
     for (const g of r.groups) {
       assert.ok(g.items.length <= 5);
     }
+  });
+
+  it("henry's fork: apostrophe and henrys fork both match Henry's Fork", () => {
+    const docs = [
+      doc({
+        type: "river",
+        slug: "henrys-fork",
+        title: "Henry's Fork",
+        subtitle: "Idaho — spring creek",
+        keywords: "the fork idaho",
+      }),
+      ...CORPUS,
+    ];
+    for (const q of ["henry's fork", "henrys fork", "Henry’s Fork"]) {
+      const r = rankSearch(q, docs);
+      const first = r.groups.find((g) => g.type === "river")?.items[0]?.doc;
+      assert.equal(first?.slug, "henrys-fork", q);
+    }
+  });
+
+  it("does not promote hatch-chart pattern names to hatch documents", () => {
+    const rivers = [
+      {
+        name: "Green River",
+        hatchChart: [
+          {
+            month: "July",
+            hatches: [{ insect: "PMD", pattern: "Sparkle Dun", size: "16" }],
+          },
+        ],
+      },
+    ] as Parameters<typeof buildHatchDocuments>[0];
+    const docs = buildHatchDocuments(rivers, []);
+    assert.equal(docs.length, 1);
+    assert.ok(
+      !docs.some((d) => /sparkle/i.test(d.title) || /sparkle/i.test(d.slug)),
+      "Sparkle Dun is a pattern, not a hatch",
+    );
+    assert.match(docs[0].title, /pale morning dun/i);
+  });
+
+  it("accepts only 8–15 digit USGS site ids", () => {
+    assert.equal(isUsgsSiteId("06041000"), true);
+    assert.equal(isUsgsSiteId("06041000&period=P120D"), false);
+    assert.equal(isUsgsSiteId("abc"), false);
+    assert.equal(isUsgsSiteId("123"), false);
   });
 });

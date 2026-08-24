@@ -85,7 +85,6 @@ export function buildHatchDocuments(
     for (const month of river.hatchChart ?? []) {
       for (const h of month.hatches ?? []) {
         if (h.insect) bump(h.insect, { month: month.month, river: river.name });
-        if (h.pattern) bump(h.pattern);
       }
     }
   }

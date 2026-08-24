@@ -1,3 +1,5 @@
+import { normalizeText } from "./normalize";
+
 /**
  * Bidirectional search aliases.
  *
@@ -95,8 +97,8 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
 const INDEX: Map<string, Set<string>> = (() => {
   const map = new Map<string, Set<string>>();
   const add = (from: string, to: string) => {
-    const a = from.trim().toLowerCase();
-    const b = to.trim().toLowerCase();
+    const a = normalizeText(from);
+    const b = normalizeText(to);
     if (!a || !b || a === b) return;
     if (!map.has(a)) map.set(a, new Set());
     map.get(a)!.add(b);
@@ -112,7 +114,7 @@ const INDEX: Map<string, Set<string>> = (() => {
 
 /** Original token plus every alias (does not recurse). */
 export function expandTerm(term: string): string[] {
-  const t = term.trim().toLowerCase();
+  const t = normalizeText(term);
   if (!t) return [];
   const extra = INDEX.get(t);
   if (!extra) return [t];
