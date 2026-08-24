@@ -33,7 +33,7 @@ export default function FiveFlyPlate({ flies }: { flies: LearnFly[] }) {
               <h3 className="mt-3 font-heading text-[17px] font-semibold leading-tight text-[var(--text-primary)] underline decoration-transparent underline-offset-4 group-hover:text-[var(--action)] group-hover:decoration-[var(--action)]">
                 {fly.name}
               </h3>
-              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-body)]">
                 {[fly.category, size, imitates].filter(Boolean).join(" · ")}
               </p>
               <p className="mt-2 text-[14px] leading-relaxed text-[var(--text-body)]">
