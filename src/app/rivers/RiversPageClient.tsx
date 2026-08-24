@@ -1,55 +1,42 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DynamicRiversMapView from "@/components/maps/DynamicRiversMapView";
+import EntityListView from "@/components/ui/EntityListView";
+import { FLOW_STATE_LABEL, type FlowState } from "@/lib/browse/flow-state";
+import { haversineKm, NEAR_ME_KM } from "@/lib/browse/geo";
+import type { RiverBrowseItem } from "@/lib/browse/river-items";
+import { riverListConfig } from "@/lib/list-configs";
+import type { EntityListConfig } from "@/types/list-config";
 import { US_STATES } from "@/lib/us-states";
-import { DESTINATION_STATE_MAP } from "@/lib/destination-state-map";
 import type { River } from "@/types/entities";
-import SafeEntityImage from "@/components/media/SafeEntityImage";
-
-// ── Types ───────────────────────────────────────────────────────────────────
 
 interface UserLocation {
   lat: number;
   lng: number;
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
-
-function haversineKm(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+interface FlowStateRow {
+  siteId: string;
+  cfs: number;
+  median30: number;
+  state: FlowState;
 }
-
-const DIFFICULTY_STYLES: Record<string, string> = {
-  beginner: "bg-emerald-100 text-emerald-800",
-  intermediate: "bg-amber-100 text-amber-800",
-  advanced: "bg-red-100 text-red-800",
-};
-
-// ── Component ────────────────────────────────────────────────────────────────
 
 interface RiversPageClientProps {
-  rivers: River[];
+  items: RiverBrowseItem[];
+  stateOptions: { value: string; label: string }[];
 }
 
-export default function RiversPageClient({ rivers }: RiversPageClientProps) {
-  const [view, setView] = useState<"list" | "map">("list");
-  const [selectedStateName, setSelectedStateName] = useState("");
+export default function RiversPageClient({ items, stateOptions }: RiversPageClientProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [showMap, setShowMap] = useState(false);
+  const [flows, setFlows] = useState<Record<string, FlowStateRow>>({});
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [nearbyIds, setNearbyIds] = useState<Set<string>>(new Set());
   const [locating, setLocating] = useState(false);
@@ -57,55 +44,52 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
   const [zipInput, setZipInput] = useState("");
   const [zipLoading, setZipLoading] = useState(false);
 
-  // Filtered + sorted rivers
-  const filteredRivers = useMemo(() => {
-    let result = rivers;
+  const config: EntityListConfig = useMemo(
+    () => ({
+      ...riverListConfig,
+      filters: riverListConfig.filters.map((f) =>
+        f.key === "state" ? { ...f, options: stateOptions } : f,
+      ),
+    }),
+    [stateOptions],
+  );
 
-    if (selectedStateName) {
-      result = result.filter((r) => {
-        const primaryState = DESTINATION_STATE_MAP[r.destinationId ?? ""];
-        if (primaryState === selectedStateName) return true;
-        // Also check additional destination IDs (e.g. Green River: Wyoming + Utah)
-        return (r.additionalDestinationIds ?? []).some(
-          (id) => DESTINATION_STATE_MAP[id] === selectedStateName
-        );
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/rivers/flow-states")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { rivers?: Record<string, FlowStateRow> } | null) => {
+        if (!cancelled && data?.rivers) setFlows(data.rivers);
+      })
+      .catch(() => {
+        /* gauges are optional — cards stay filterable on everything else */
       });
-    }
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-    if (nearbyIds.size > 0 && !selectedStateName) {
-      result = [...result].sort((a, b) => {
-        const aNear = nearbyIds.has(a.id) ? 0 : 1;
-        const bNear = nearbyIds.has(b.id) ? 0 : 1;
-        return aNear - bNear;
-      });
-    }
-
-    return result;
-  }, [rivers, selectedStateName, nearbyIds]);
-
-  // Shared: given a lat/lng, find nearby rivers and zoom map
   const applyLocation = (lat: number, lng: number) => {
     setUserLocation({ lat, lng });
     setGeoError("");
-
-    const withDist = rivers
-      .filter((r) => r.latitude && r.longitude)
-      .map((r) => ({
-        ...r,
-        dist: haversineKm(lat, lng, Number(r.latitude), Number(r.longitude)),
-      }))
-      .sort((a, b) => a.dist - b.dist)
-      .slice(0, 8);
-
-    setNearbyIds(new Set(withDist.map((r) => r.id)));
-    setSelectedStateName(""); // clear state filter when using location
-    setView("map");
+    const near = new Set<string>();
+    for (const item of items) {
+      if (!item.latitude || !item.longitude) continue;
+      if (haversineKm(lat, lng, item.latitude, item.longitude) <= NEAR_ME_KM) {
+        near.add(item.riverId);
+      }
+    }
+    setNearbyIds(near);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("near", "1");
+    params.set("sort", "distance");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // Near Me handler — browser geolocation
   const handleNearMe = () => {
     if (!navigator.geolocation) {
-      setGeoError("Geolocation not supported by your browser.");
+      setGeoError("Geolocation is not available. Enter a ZIP code.");
+      setFiltersOpen(true);
       return;
     }
     setLocating(true);
@@ -117,19 +101,21 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
       },
       (err) => {
         setLocating(false);
+        setFiltersOpen(true);
         if (err.code === 1) {
-          setGeoError("Location access denied. In Safari, go to Settings → Privacy → Location Services and allow your browser. Or enter a ZIP code.");
+          setGeoError(
+            "Location access denied. Enter a ZIP code, or allow location in the browser.",
+          );
         } else if (err.code === 2) {
-          setGeoError("Location unavailable. Try entering a ZIP code instead.");
+          setGeoError("Location unavailable. Try a ZIP code.");
         } else {
-          setGeoError("Location request timed out. Try a ZIP code instead.");
+          setGeoError("Location timed out. Try a ZIP code.");
         }
       },
-      { timeout: 10000, maximumAge: 60000 }
+      { timeout: 10000, maximumAge: 60000 },
     );
   };
 
-  // ZIP code lookup via free geocoding API
   const handleZipSearch = async () => {
     const zip = zipInput.trim();
     if (!zip) return;
@@ -137,8 +123,12 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
     setGeoError("");
     try {
       const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      if (!token) {
+        setGeoError("ZIP lookup needs a Mapbox token in this environment.");
+        return;
+      }
       const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(zip)}.json?country=US&types=postcode&access_token=${token}`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(zip)}.json?country=US&types=postcode&access_token=${token}`,
       );
       const data = await res.json();
       if (data.features?.length > 0) {
@@ -154,258 +144,143 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
     }
   };
 
-  const selectedStateObj =
-    US_STATES.find((s) => s.name === selectedStateName) ?? null;
+  const decoratedItems = useMemo(() => {
+    return items.map((item) => {
+      const flow = flows[item.riverId];
+      const dist =
+        userLocation && item.latitude && item.longitude
+          ? haversineKm(userLocation.lat, userLocation.lng, item.latitude, item.longitude)
+          : undefined;
+      const flowLabel = flow ? FLOW_STATE_LABEL[flow.state] : undefined;
+      return {
+        ...item,
+        badges: [item.badges?.[0], item.badges?.[1], flowLabel].filter(
+          (v, i, arr): v is string => Boolean(v) && arr.indexOf(v) === i,
+        ),
+        meta: [item.meta, flowLabel].filter(Boolean).join(" · "),
+        _filterValues: {
+          ...(item._filterValues ?? {}),
+          flow: flow?.state ?? "",
+          near: nearbyIds.has(item.riverId) ? "1" : "0",
+        } as Record<string, string | number>,
+        _sortDistance: dist,
+      };
+    });
+  }, [items, flows, nearbyIds, userLocation]);
 
-  // Rivers to list below the map — nearby first (ordered), otherwise top filtered, capped at 8
-  const MAP_LIST_LIMIT = 8;
-
-  interface RiverWithDist extends River { dist?: number }
-
-  const mapListRivers = useMemo((): RiverWithDist[] => {
-    if (nearbyIds.size > 0 && userLocation) {
-      return rivers
-        .filter((r) => nearbyIds.has(r.id) && r.latitude && r.longitude)
-        .map((r): RiverWithDist => ({
-          ...r,
-          dist: haversineKm(
-            userLocation.lat,
-            userLocation.lng,
-            Number(r.latitude),
-            Number(r.longitude)
-          ),
-        }))
-        .sort((a, b) => (a.dist ?? 0) - (b.dist ?? 0))
-        .slice(0, MAP_LIST_LIMIT);
+  const liveValues = useMemo(() => {
+    const out: Record<string, Record<string, string>> = {};
+    for (const item of decoratedItems) {
+      out[item.href] = {
+        flow: String(item._filterValues?.flow ?? ""),
+        near: String(item._filterValues?.near ?? "0"),
+      };
     }
-    return filteredRivers.slice(0, MAP_LIST_LIMIT);
-  }, [rivers, nearbyIds, userLocation, filteredRivers]);
+    return out;
+  }, [decoratedItems]);
+
+  const selectedStateName = searchParams.get("state") ?? "";
+  const selectedStateObj = US_STATES.find((s) => s.name === selectedStateName) ?? null;
+
+  const mapRivers: River[] = useMemo(() => {
+    return decoratedItems
+      .filter((item) => {
+        if (searchParams.get("near") === "1" && !nearbyIds.has(item.riverId)) return false;
+        if (selectedStateName && item._filterValues?.state !== selectedStateName) return false;
+        return true;
+      })
+      .map((item) => ({
+        id: item.riverId,
+        slug: item.href.replace("/rivers/", ""),
+        name: item.title,
+        destinationId: "",
+        description: item.description ?? "",
+        heroImageUrl: item.imageUrl,
+        flowType: String(item._filterValues?.waterType ?? ""),
+        difficulty: (item._filterValues?.difficulty as River["difficulty"]) ?? "intermediate",
+        wadingType: "wade",
+        primarySpecies: item.tags ?? [],
+        accessPoints: [],
+        bestMonths: [],
+        latitude: item.latitude,
+        longitude: item.longitude,
+        featured: Boolean(item.featured),
+      }));
+  }, [decoratedItems, nearbyIds, searchParams, selectedStateName]);
 
   return (
-    <div>
-      {/* ── Controls Bar ─────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        {/* View toggle */}
-        <div className="flex rounded-lg overflow-hidden border border-[var(--border-rule)]">
+    <EntityListView
+      items={decoratedItems}
+      config={config}
+      storageKey="rivers"
+      liveValues={liveValues}
+      filtersOpen={filtersOpen}
+      onFiltersOpenChange={setFiltersOpen}
+      toolbarExtra={
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider font-medium w-20 shrink-0">
+            Near me
+          </span>
           <button
-            onClick={() => setView("list")}
-            className={
-              view === "list"
-                ? "bg-[var(--action)] text-white px-4 py-2 text-sm font-medium"
-                : "bg-[var(--surface-raised)] text-[var(--text-body)] px-4 py-2 text-sm font-medium hover:text-white transition-colors"
-            }
+            type="button"
+            onClick={handleNearMe}
+            disabled={locating}
+            className="px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--action)] text-[var(--action)] hover:bg-[var(--action)] hover:text-[var(--on-action)] transition-colors disabled:opacity-50"
           >
-            ☰ List
+            {locating ? "Locating…" : "Use location"}
           </button>
-          <button
-            onClick={() => setView("map")}
-            className={
-              view === "map"
-                ? "bg-[var(--action)] text-white px-4 py-2 text-sm font-medium border-l border-[var(--border-rule)]"
-                : "bg-[var(--surface-raised)] text-[var(--text-body)] px-4 py-2 text-sm font-medium border-l border-[var(--border-rule)] hover:text-white transition-colors"
-            }
-          >
-            🗺 Map
-          </button>
-        </div>
-
-        {/* State filter */}
-        <select
-          value={selectedStateName}
-          onChange={(e) => setSelectedStateName(e.target.value)}
-          className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm min-w-[160px]"
-        >
-          <option value="">All States</option>
-          {US_STATES.map((s) => (
-            <option key={s.abbrev} value={s.name}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Near Me */}
-        <button
-          onClick={handleNearMe}
-          disabled={locating}
-          className="border border-[var(--action)] text-[var(--action)] hover:bg-[var(--action)] hover:text-white rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
-        >
-          {locating ? (
-            <span className="flex items-center gap-1.5">
-              <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-              </svg>
-              Locating…
-            </span>
-          ) : "📍 Near Me"}
-        </button>
-
-        {/* ZIP input */}
-        <div className="flex items-center gap-1.5">
           <input
             type="text"
+            inputMode="numeric"
             value={zipInput}
             onChange={(e) => setZipInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleZipSearch()}
-            placeholder="ZIP code"
+            placeholder="ZIP"
             maxLength={5}
-            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] placeholder-[#6E7681] rounded-lg px-3 py-2 text-sm w-28 focus:border-[var(--action)] focus:outline-none"
+            aria-label="ZIP code"
+            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] rounded-lg px-3 py-1.5 text-sm w-24 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
           />
           <button
+            type="button"
             onClick={handleZipSearch}
             disabled={zipLoading || !zipInput.trim()}
-            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:text-[var(--action)] hover:border-[var(--action)] rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-40"
+            className="px-3 py-1.5 rounded-lg text-sm border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)] disabled:opacity-40"
           >
             {zipLoading ? "…" : "Go"}
           </button>
+          <button
+            type="button"
+            aria-pressed={showMap}
+            onClick={() => setShowMap((v) => !v)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+              showMap
+                ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
+                : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]"
+            }`}
+          >
+            Map
+          </button>
+          {geoError && <p className="w-full text-sm text-[var(--state-negative)]">{geoError}</p>}
         </div>
-
-        {/* Result count */}
-        <span className="text-sm text-[var(--text-meta)] ml-auto">
-          {filteredRivers.length} river{filteredRivers.length !== 1 ? "s" : ""}
-          {selectedStateName ? ` in ${selectedStateName}` : ""}
-          {nearbyIds.size > 0 && !selectedStateName ? " · showing nearby" : ""}
-        </span>
-      </div>
-
-      {/* Error message */}
-      {geoError && (
-        <p className="text-sm text-red-400 mb-4 -mt-2">{geoError}</p>
-      )}
-
-      {/* ── List View ────────────────────────────────────────────────────── */}
-      {view === "list" && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {filteredRivers.map((river, i) => (
-            <Link
-              key={river.id}
-              href={`/rivers/${river.slug}`}
-              className={`group block bg-[var(--surface-page)] rounded-xl overflow-hidden hover:shadow-lg transition-shadow${
-                nearbyIds.has(river.id) ? " ring-2 ring-[var(--action)]" : ""
-              }`}
-            >
-              <div className="relative h-36">
-                <SafeEntityImage
-                  src={river.heroImageUrl}
-                  alt={river.name}
-                  title={river.name}
-                  meta={[river.flowType, DESTINATION_STATE_MAP[river.destinationId ?? ""]].filter(Boolean).join(" · ")}
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  priority={i < 4}
-                  scrimClassName="bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-                />
-                <div className="absolute bottom-2 left-2">
-                  <span
-                    className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide ${
-                      DIFFICULTY_STYLES[river.difficulty] ??
-                      "bg-[var(--surface-card)] text-[var(--text-body)]"
-                    }`}
-                  >
-                    {river.difficulty}
-                  </span>
-                </div>
-              </div>
-              <div className="p-3">
-                <h3 className="font-heading font-bold text-[var(--text-primary)] text-sm leading-tight line-clamp-1 group-hover:text-[var(--action)] transition-colors">
-                  {river.name}
-                </h3>
-                <p className="mt-0.5 text-[11px] text-[var(--text-body)] line-clamp-1">
-                  {river.primarySpecies.slice(0, 2).join(", ")}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-[10px] text-[var(--text-meta)] capitalize">
-                    {river.flowType}
-                  </span>
-                  <ChevronRight className="h-3 w-3 text-[var(--action)] opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-              </div>
-            </Link>
-          ))}
-
-          {filteredRivers.length === 0 && (
-            <div className="col-span-2 md:col-span-4 py-16 text-center text-[var(--text-meta)]">
-              No rivers found
-              {selectedStateName ? ` in ${selectedStateName}` : ""}.
+      }
+      resultsOverride={
+        showMap ? (
+          <div>
+            <div className="h-[350px] md:h-[520px]">
+              <DynamicRiversMapView
+                rivers={mapRivers}
+                selectedState={selectedStateObj}
+                userLocation={userLocation}
+                className="w-full h-full rounded-xl overflow-hidden"
+              />
             </div>
-          )}
-        </div>
-      )}
-
-      {/* ── Map View ─────────────────────────────────────────────────────── */}
-      {view === "map" && (
-        <div>
-          <div className="h-[350px] md:h-[520px]">
-            <DynamicRiversMapView
-              rivers={filteredRivers}
-              selectedState={selectedStateObj}
-              userLocation={userLocation}
-              className="w-full h-full rounded-xl overflow-hidden"
-            />
+            <p className="mt-3 text-sm text-[var(--text-meta)]">
+              {mapRivers.length} river{mapRivers.length === 1 ? "" : "s"} on the map
+              {nearbyIds.size > 0 ? " · within about 200 miles" : ""}
+            </p>
           </div>
-
-          {/* Rivers below the map */}
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
-                {nearbyIds.size > 0 && userLocation
-                  ? "Nearest Rivers"
-                  : selectedStateName
-                  ? `Rivers in ${selectedStateName}`
-                  : "Rivers"}
-              </h3>
-              {filteredRivers.length > MAP_LIST_LIMIT && (
-                <span className="text-xs text-[var(--text-meta)]">
-                  Showing {mapListRivers.length} of {filteredRivers.length} —{" "}
-                  <button
-                    onClick={() => setView("list")}
-                    className="text-[var(--action)] hover:underline"
-                  >
-                    view all
-                  </button>
-                </span>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {mapListRivers.map((river) => (
-                <Link
-                  key={river.id}
-                  href={`/rivers/${river.slug}`}
-                  className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden hover:shadow-lg transition-shadow ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)]"
-                >
-                  <div className="relative h-28">
-                    <SafeEntityImage
-                      src={river.heroImageUrl}
-                      alt={river.name}
-                      title={river.name}
-                      meta={[river.flowType, DESTINATION_STATE_MAP[river.destinationId ?? ""]].filter(Boolean).join(" · ")}
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      scrimClassName="bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-                    />
-                    {river.dist != null && (
-                      <div className="absolute top-2 right-2">
-                        <span className="bg-black/60 text-[var(--action)] text-[10px] font-mono px-1.5 py-0.5 rounded-full">
-                          {Math.round(river.dist)} km
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-2.5">
-                    <h4 className="font-heading font-bold text-[var(--text-primary)] text-xs leading-tight line-clamp-1 group-hover:text-[var(--action)] transition-colors">
-                      {river.name}
-                    </h4>
-                    <p className="mt-0.5 text-[10px] text-[var(--text-body)] line-clamp-1">
-                      {river.primarySpecies.slice(0, 2).join(", ")}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        ) : undefined
+      }
+    />
   );
 }

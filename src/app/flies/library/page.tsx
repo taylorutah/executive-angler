@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import EntityListView from "@/components/ui/EntityListView";
+import FlyLibraryClient from "./FlyLibraryClient";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FlyCardForkOverlay from "@/components/flies/FlyCardForkOverlay";
 import { formatHookSize } from "@/lib/flies/variant-format";
+import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
-import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 export const revalidate = 3600;
@@ -94,6 +94,12 @@ export default async function FliesPage() {
         imitates: (fly.imitates || [])
           .map((i) => i.toLowerCase().split(" ")[0])
           .join(","),
+        hatch: hatchTokens({
+          imitates: fly.imitates,
+          hatchAssociations: fly.hatchAssociations,
+        }).join(","),
+        size: sizeListValue(fly.sizes),
+        canTie: "0",
       },
     }));
 
@@ -105,13 +111,13 @@ export default async function FliesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             The Complete Reference
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Trout Fly Library
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70">
-            {allFlies.length} proven patterns — dry flies, nymphs, streamers,
-            emergers, and more. Every pattern includes sizes, materials, tying
-            videos, and where to fish it.
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
+            {allFlies.length} patterns — dry flies, nymphs, streamers,
+            emergers, and more. Filter by hatch, size, and, when you are signed
+            in, what you can tie from your own materials.
           </p>
         </div>
       </section>
@@ -191,11 +197,7 @@ export default async function FliesPage() {
       <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <Suspense>
-            <EntityListView
-              items={items}
-              config={flyListConfig}
-              storageKey="flies"
-            />
+            <FlyLibraryClient items={items} />
           </Suspense>
         </div>
       </section>

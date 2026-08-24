@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { CardData, EntityListConfig, ViewMode } from "@/types/list-config";
@@ -9,18 +9,41 @@ import EntityCard from "./EntityCard";
 import CompactCard from "./CompactCard";
 import ListCard from "./ListCard";
 import MagazineGrid from "./MagazineGrid";
-import Link from "next/link";
+import { itemMatchesFilters } from "@/lib/browse/match";
 
 const VIEW_STORAGE_KEY = "ea-view-mode";
+
+export type BrowseCard = CardData & {
+  _filterValues?: Record<string, string | number>;
+  _sortDistance?: number;
+};
 
 interface EntityListViewProps {
   items: CardData[];
   config: EntityListConfig;
   /** Unique key for localStorage (e.g., "destinations", "rivers") */
   storageKey: string;
+  /** Overlay live values (flow, canTie, near) keyed by href. */
+  liveValues?: Record<string, Record<string, string>>;
+  showOptionalFilters?: boolean;
+  toolbarExtra?: ReactNode;
+  filtersOpen?: boolean;
+  onFiltersOpenChange?: (open: boolean) => void;
+  /** When set, replace the card grid (e.g. river map). */
+  resultsOverride?: ReactNode;
 }
 
-export default function EntityListView({ items, config, storageKey }: EntityListViewProps) {
+export default function EntityListView({
+  items,
+  config,
+  storageKey,
+  liveValues,
+  showOptionalFilters = false,
+  toolbarExtra,
+  filtersOpen,
+  onFiltersOpenChange,
+  resultsOverride,
+}: EntityListViewProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -103,6 +126,12 @@ export default function EntityListView({ items, config, storageKey }: EntityList
     [updateParams, config.defaultSort]
   );
 
+  const [visibleCount, setVisibleCount] = useState(config.pageSize ?? items.length);
+
+  useEffect(() => {
+    setVisibleCount(config.pageSize ?? items.length);
+  }, [searchQuery, activeFilters, activeSort, config.pageSize, items.length]);
+
   // Filter items
   const filteredItems = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -126,18 +155,11 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         if (!haystackMatchesQuery(haystack, queryWords)) return false;
       }
 
-      // Each CardData item has a _filterValues map injected by the page
-      const filterVals = (item as CardData & { _filterValues?: Record<string, string | number> })._filterValues;
-      if (!filterVals) return true;
-
-      for (const [key, activeVal] of Object.entries(activeFilters)) {
-        const itemVal = filterVals[key];
-        if (itemVal === undefined) return false;
-        if (String(itemVal) !== activeVal) return false;
-      }
-      return true;
+      const base = (item as BrowseCard)._filterValues ?? {};
+      const live = liveValues?.[item.href] ?? {};
+      return itemMatchesFilters({ ...base, ...live }, activeFilters, config.filters);
     });
-  }, [items, activeFilters, searchQuery]);
+  }, [items, activeFilters, searchQuery, liveValues, config.filters]);
 
   // Sort items
   const sortedItems = useMemo(() => {
@@ -176,8 +198,19 @@ export default function EntityListView({ items, config, storageKey }: EntityList
       }
       case "newest": {
         const dv = (item: CardData) =>
-          ((item as CardData & { _filterValues?: Record<string, string | number> })._filterValues?.publishedAt as string) ?? "";
+          ((item as BrowseCard)._filterValues?.publishedAt as string) ?? "";
         sorted.sort((a, b) => dv(b).localeCompare(dv(a)));
+        break;
+      }
+      case "distance": {
+        sorted.sort((a, b) => {
+          const da = (a as BrowseCard)._sortDistance;
+          const db = (b as BrowseCard)._sortDistance;
+          if (da == null && db == null) return a.title.localeCompare(b.title);
+          if (da == null) return 1;
+          if (db == null) return -1;
+          return da - db;
+        });
         break;
       }
       default:
@@ -185,6 +218,11 @@ export default function EntityListView({ items, config, storageKey }: EntityList
     }
     return sorted;
   }, [filteredItems, activeSort]);
+
+  const pageSize = config.pageSize;
+  const visibleItems =
+    pageSize && !resultsOverride ? sortedItems.slice(0, visibleCount) : sortedItems;
+  const canLoadMore = Boolean(pageSize && !resultsOverride && visibleCount < sortedItems.length);
 
   // Use defaultView on server, real viewMode only after mount
   const displayView = mounted ? viewMode : config.defaultView;
@@ -206,6 +244,10 @@ export default function EntityListView({ items, config, storageKey }: EntityList
         onSearchChange={handleSearchChange}
         searchPlaceholder={config.searchPlaceholder}
         availableViews={config.availableViews}
+        showOptionalFilters={showOptionalFilters}
+        toolbarExtra={toolbarExtra}
+        filtersOpen={filtersOpen}
+        onFiltersOpenChange={onFiltersOpenChange}
       />
 
       <AnimatePresence mode="wait">
@@ -216,12 +258,15 @@ export default function EntityListView({ items, config, storageKey }: EntityList
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          {sortedItems.length === 0 ? (
+          {resultsOverride ? (
+            resultsOverride
+          ) : sortedItems.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-[var(--text-body)] text-lg">
                 {searchQuery ? "No results match your search." : "No results match your filters."}
               </p>
               <button
+                type="button"
                 onClick={() => {
                   config.filters.forEach((f) => handleFilterChange(f.key, null));
                   handleSearchChange("");
@@ -232,23 +277,23 @@ export default function EntityListView({ items, config, storageKey }: EntityList
               </button>
             </div>
           ) : displayView === "magazine" ? (
-            <MagazineGrid items={sortedItems} />
+            <MagazineGrid items={visibleItems} />
           ) : displayView === "list" ? (
             <div className="divide-y-0">
-              {sortedItems.map((item) => (
+              {visibleItems.map((item) => (
                 <ListCard key={item.href} {...item} />
               ))}
             </div>
           ) : displayView === "compact" ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sortedItems.map((item) => (
+              {visibleItems.map((item) => (
                 <CompactCard key={item.href} {...item} />
               ))}
             </div>
           ) : (
             /* Grid view (default) */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedItems.map((item) => (
+              {visibleItems.map((item) => (
                 <EntityCard
                   key={item.href}
                   href={item.href}
@@ -261,12 +306,28 @@ export default function EntityListView({ items, config, storageKey }: EntityList
                   iconOnly={item.iconOnly}
                   imageContain={item.imageContain}
                   imageZoom={(item as { imageZoom?: number }).imageZoom}
+                  actionSlot={item.actionSlot}
                 />
               ))}
             </div>
           )}
         </motion.div>
       </AnimatePresence>
+
+      {canLoadMore && (
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setVisibleCount((n) => n + (pageSize ?? 24))}
+            className="px-5 py-2.5 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] text-sm font-medium text-[var(--text-primary)] hover:border-[var(--action)] hover:text-[var(--action)] transition-colors"
+          >
+            Load more
+            <span className="num text-[var(--text-meta)] ml-2">
+              {sortedItems.length - visibleCount} left
+            </span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
