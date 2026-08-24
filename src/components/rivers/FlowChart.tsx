@@ -465,11 +465,11 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
       )}
 
       {/* SVG Chart */}
-      <div className="relative min-h-48">
+      <div className="relative h-48 w-full">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-          className="w-full h-auto min-h-48"
+          className="h-48 w-full"
           onMouseMove={handleMouseMove}
           onMouseLeave={() => {
             setHoveredIndex(null);

@@ -183,10 +183,14 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
       )}
 
       {/* Chart with catch markers */}
-      <div className="h-56">
-        {/* initialDimension carries the wrapper's known height so the first
-            frame isn't measured as -1 × -1. */}
-        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: -1, height: 224 }}>
+      <div className="h-56 w-full">
+        {/* Resolved height (not min) so Recharts cannot compute 0 on first paint.
+            Seed a real width — `-1` still collapses the container. */}
+        <ResponsiveContainer
+          width="100%"
+          height={224}
+          initialDimension={{ width: 640, height: 224 }}
+        >
           <ComposedChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradientPersonal" x1="0" y1="0" x2="0" y2="1">
