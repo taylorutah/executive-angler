@@ -17,7 +17,7 @@ interface Props {
 export default function SearchResultRow({ item, cfs, exactFly, active }: Props) {
   return (
     <div
-      className={`group flex items-center gap-4 rounded-md px-2 py-2.5 transition-colors duration-[120ms] ease-out ${
+      className={`group flex items-center gap-4 px-2 py-2.5 transition-colors duration-[120ms] ease-out ${
         active
           ? "bg-[var(--surface-raised)] ring-1 ring-[var(--signal-live)]"
           : "hover:bg-[var(--surface-raised)]"

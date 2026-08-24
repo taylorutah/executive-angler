@@ -316,9 +316,9 @@ export function SearchPageFallback() {
       </span>
       <div aria-hidden className="relative">
         <Search
-          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-meta)]"
+          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-body)]"
         />
-        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-meta)]">
+        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-body)]">
           Search a river, a fly, a hatch, a place.
         </div>
       </div>
