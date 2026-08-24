@@ -1,6 +1,6 @@
 export const SITE_NAME = "Executive Angler";
 export const SITE_DESCRIPTION =
-  "The definitive fly fishing resource — destinations, rivers, lodges, guides, and expert instruction from around the world.";
+  "Rivers, flies, and hatches — a public desk for the water, and a private notebook for your own days on it.";
 
 const FALLBACK_SITE_URL = "https://www.executiveangler.com";
 
