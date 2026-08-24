@@ -18,6 +18,8 @@ export default function robots(): MetadataRoute.Robots {
           "/dashboard",
           "/feed",
           "/favorites/",
+          "/flybox",
+          "/rivers/mine",
           "/messages/",
           "/notifications",
           "/anglers/",

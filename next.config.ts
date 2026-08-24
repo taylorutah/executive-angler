@@ -13,6 +13,81 @@ const nextConfig: NextConfig = {
         destination: "/rivers/madison-river",
         permanent: true,
       },
+      // Phase 1 — fly-box surfaces collapse to /flybox (inventory)
+      // and /flies/workbench (tying). permanent: true → 308.
+      {
+        source: "/my-flies",
+        has: [{ type: "query", key: "tab", value: "workbench" }],
+        destination: "/flies/workbench",
+        permanent: true,
+      },
+      {
+        source: "/flies/boxes",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/flies/workspace",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/flies/shared",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/my-boxes",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/my-boxes/:id",
+        destination: "/flies/boxes/:id",
+        permanent: true,
+      },
+      {
+        source: "/my-flies",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/journal/flies",
+        destination: "/flybox",
+        permanent: true,
+      },
+      {
+        source: "/journal/flies/workbench",
+        destination: "/flies/workbench",
+        permanent: true,
+      },
+      // Phase 1 — analytics stacks collapse to /journal/insights
+      {
+        source: "/dashboard/insights",
+        destination: "/journal/insights",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/analytics",
+        destination: "/journal/insights",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/hatch-reports",
+        destination: "/journal/insights",
+        permanent: true,
+      },
+      {
+        source: "/journal/stats",
+        destination: "/journal/insights",
+        permanent: true,
+      },
+      // Phase 1 — /favorites → /rivers/mine
+      {
+        source: "/favorites",
+        destination: "/rivers/mine",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "executiveangler.com" }],
