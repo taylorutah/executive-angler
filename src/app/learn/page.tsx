@@ -109,7 +109,7 @@ export default async function LearnPage() {
     <div className="bg-[var(--surface-page)]">
       <header className="mx-auto max-w-3xl px-4 pt-10 pb-16 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
-        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
           The beginner path
         </p>
         <h1 className="mt-4 font-heading text-4xl font-bold leading-[1.15] text-[var(--text-primary)] sm:text-5xl">
@@ -127,7 +127,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
             01
           </p>
           <h2
@@ -143,7 +143,7 @@ export default async function LearnPage() {
           <ol className="mt-10 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
             {GEAR_ITEMS.map((item, i) => (
               <li key={item.title} className="py-6">
-                <p className="font-mono text-[11px] tabular-nums text-[var(--text-meta)]">
+                <p className="font-mono text-[11px] tabular-nums text-[var(--text-body)]">
                   {String(i + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-2 font-heading text-[20px] font-semibold text-[var(--text-primary)]">
@@ -168,7 +168,7 @@ export default async function LearnPage() {
 
       <section aria-labelledby="water" className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
             02
           </p>
           <h2
@@ -188,7 +188,7 @@ export default async function LearnPage() {
                 <h3 className="font-heading text-[20px] font-semibold text-[var(--text-primary)]">
                   {feat.name}
                 </h3>
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--text-meta)]">
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--text-body)]">
                   {feat.look}
                 </p>
                 <p className="mt-3 text-[15px] leading-relaxed text-[var(--text-body)]">
@@ -214,7 +214,7 @@ export default async function LearnPage() {
       >
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
               03
             </p>
             <h2
@@ -244,7 +244,7 @@ export default async function LearnPage() {
 
       <section aria-labelledby="rivers" className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
             04
           </p>
           <h2
@@ -269,7 +269,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
             05
           </p>
           <h2
@@ -286,13 +286,13 @@ export default async function LearnPage() {
             {ETIQUETTE.map((row) => (
               <li key={row.do} className="grid gap-3 py-5 sm:grid-cols-2 sm:gap-8">
                 <p className="text-[15px] leading-relaxed text-[var(--text-primary)]">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)]">
                     Do
                   </span>
                   <span className="mt-1 block">{row.do}</span>
                 </p>
                 <p className="text-[15px] leading-relaxed text-[var(--text-body)]">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)]">
                     Don&apos;t
                   </span>
                   <span className="mt-1 block">{row.dont}</span>
@@ -316,7 +316,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-page)]"
       >
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
             Take these with you
           </p>
           <h2

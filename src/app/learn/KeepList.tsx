@@ -83,7 +83,7 @@ export default function KeepList({ flies, rivers }: Props) {
                   href={`/flies/${fly.slug}`}
                   className="ea-focus-ring flex items-baseline gap-4 py-3.5"
                 >
-                  <span className="num w-6 shrink-0 font-mono text-[12px] tabular-nums text-[var(--text-meta)]">
+                  <span className="num w-6 shrink-0 font-mono text-[12px] tabular-nums text-[var(--text-body)]">
                     {i + 1}
                   </span>
                   <span className="min-w-0">
@@ -114,7 +114,7 @@ export default function KeepList({ flies, rivers }: Props) {
                   href={`/rivers/${river.slug}`}
                   className="ea-focus-ring flex items-baseline gap-4 py-3.5"
                 >
-                  <span className="num w-6 shrink-0 font-mono text-[12px] tabular-nums text-[var(--text-meta)]">
+                  <span className="num w-6 shrink-0 font-mono text-[12px] tabular-nums text-[var(--text-body)]">
                     {i + 1}
                   </span>
                   <span className="min-w-0">
