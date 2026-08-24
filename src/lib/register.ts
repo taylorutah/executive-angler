@@ -1,11 +1,12 @@
 /**
  * Route-determined register. Not a user preference.
- * Daylight = public reading; Dusk = the logged-in product + live-data insets.
+ * Daylight = public reading; Dusk = the logged-in product, /app, and live-data insets.
  */
 
 export type Register = "daylight" | "dusk";
 
 const DUSK_PREFIXES = [
+  "/app",
   "/dashboard",
   "/journal",
   "/flies/boxes",
@@ -28,4 +29,4 @@ export function registerForPath(pathname: string): Register {
 }
 
 /** Inline bootstrap — runs before paint so the first frame is the right register. */
-export const REGISTER_BOOTSTRAP = `(function(){try{var p=location.pathname;var dusk=/^\\/(dashboard|journal|account|feed|messages|admin|favorites|notifications|my-boxes|my-flies)(\\/|$)/.test(p)||/^\\/flies\\/boxes(\\/|$)/.test(p);document.documentElement.setAttribute("data-register",dusk?"dusk":"daylight");}catch(e){document.documentElement.setAttribute("data-register","daylight");}})();`;
+export const REGISTER_BOOTSTRAP = `(function(){try{var p=location.pathname;var dusk=/^\\/(app|dashboard|journal|account|feed|messages|admin|favorites|notifications|my-boxes|my-flies)(\\/|$)/.test(p)||/^\\/flies\\/boxes(\\/|$)/.test(p);document.documentElement.setAttribute("data-register",dusk?"dusk":"daylight");}catch(e){document.documentElement.setAttribute("data-register","daylight");}})();`;

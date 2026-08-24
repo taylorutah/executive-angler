@@ -5,6 +5,7 @@ type FooterLink = { label: string; href: string; external?: boolean };
 
 const footerColumns: Record<string, FooterLink[]> = {
   Product: [
+    { label: "App", href: "/app" },
     { label: "Journal", href: "/journal" },
     { label: "Rivers", href: "/rivers" },
     { label: "Flies", href: "/flies" },
@@ -96,6 +97,9 @@ export default function Footer() {
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-body)]">
               Rivers, flies and hatches, documented. Plus a private journal that remembers what you
               learned.
+            </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-[var(--text-body)]">
+              Every feature, free.
             </p>
 
             {/* App badges — light-mode store chips, not dusk leftovers */}
