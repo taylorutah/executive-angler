@@ -206,7 +206,7 @@ export default async function GuidePage({ params }: Props) {
           {guide.googleRating && (
             <div className="mt-6 flex items-center gap-1.5">
               <Star className="h-5 w-5 fill-[var(--action)] text-[var(--action)]" />
-              <span className="text-white font-semibold">{guide.googleRating}</span>
+              <span className="text-[var(--text-primary)] font-semibold">{guide.googleRating}</span>
               {guide.googleReviewCount && (
                 <span className="text-[var(--text-meta)] text-sm">({guide.googleReviewCount} reviews)</span>
               )}
@@ -371,11 +371,11 @@ export default async function GuidePage({ params }: Props) {
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
 
-              <div className="bg-[var(--action)] rounded-xl p-6 text-white shadow-lg">
+              <div className="bg-[var(--action)] rounded-xl p-6 text-[var(--on-action)] shadow-lg">
                 <h3 className="font-heading text-xl font-bold mb-3">
                   Book a Trip
                 </h3>
-                <p className="text-sm text-white/80 mb-6">
+                <p className="text-sm text-[var(--on-action)]/80 mb-6">
                   Contact {guide.name} directly to book your guided trip.
                 </p>
                 {guide.websiteUrl && (
@@ -395,7 +395,7 @@ export default async function GuidePage({ params }: Props) {
                   {guide.phone && (
                     <a
                       href={`tel:${guide.phone}`}
-                      className="flex items-center gap-2 text-white/80 hover:text-white"
+                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
                     >
                       <Phone className="h-4 w-4" />
                       {guide.phone}
@@ -404,7 +404,7 @@ export default async function GuidePage({ params }: Props) {
                   {guide.email && (
                     <a
                       href={`mailto:${guide.email}`}
-                      className="flex items-center gap-2 text-white/80 hover:text-white"
+                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
                     >
                       <Mail className="h-4 w-4" />
                       {guide.email}

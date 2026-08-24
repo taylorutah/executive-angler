@@ -85,10 +85,10 @@ export default async function GuidesPage() {
                 <ScrollAnimation key={guide.id} delay={i * 0.1}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-xl border-l-4 border-[var(--action)] shadow-lg hover:bg-[#1C2128] transition-colors"
+                    className="group block bg-[var(--surface-raised)] rounded-xl border-l-4 border-[var(--action)] shadow-lg hover:bg-[var(--surface-card)] transition-colors"
                   >
                     <div className="p-6">
-                      <h3 className="font-heading text-2xl font-bold text-white group-hover:text-[var(--action)] transition-colors leading-tight">
+                      <h3 className="font-heading text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors leading-tight">
                         {guide.name}
                       </h3>
                       <p className="mt-2 text-sm font-medium text-[var(--action)] italic">

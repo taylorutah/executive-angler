@@ -304,7 +304,7 @@ export function ButtonTile({
       {sub && <div className="text-[10.5px] text-[var(--text-body)] leading-tight">{sub}</div>}
       {badge != null && badge > 0 && (
         <span
-          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[var(--action)] text-white text-[10px] font-bold rounded-full inline-flex items-center justify-center border-2 border-[var(--surface-page)] font-mono leading-none"
+          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[var(--action)] text-[var(--on-action)] text-[10px] font-bold rounded-full inline-flex items-center justify-center border-2 border-[var(--surface-page)] font-mono leading-none"
         >
           {badge}
         </span>

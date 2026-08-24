@@ -390,7 +390,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                 <span className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
                   <span className="font-semibold text-[var(--text-primary)]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </span>
-                <span className="text-[var(--border-rule)]">·</span>
+                <span className="text-[var(--text-meta)]">·</span>
                 <span className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
                   <span className="font-semibold text-[var(--text-primary)]">{socialCounts.following}</span> following
                 </span>
