@@ -2,10 +2,7 @@
 /**
  * CommandPalette — Cmd+K (Ctrl+K) global launcher.
  *
- * Reuses the existing /api/search-index endpoint (already feeds /search)
- * so the palette mirrors the same data source. Adds a few quick actions
- * at the top — "New fly pattern", "New session", "Open workspace" — so
- * the palette is also a navigation hub, not just a search box.
+ * Reuses /api/search-index so the palette ranks with the same module as /search.
  */
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -23,39 +20,25 @@ import {
   Plus,
   Layers,
   ChevronRight,
+  Feather,
 } from "lucide-react";
+import {
+  rankSearch,
+  GROUP_ORDER,
+  type SearchDocument,
+  type SearchType,
+} from "@/lib/search";
 
-interface SearchResult {
-  type:
-    | "destination"
-    | "river"
-    | "species"
-    | "lodge"
-    | "guide"
-    | "fly-shop"
-    | "article"
-    | "fly";
-  id?: string;
-  slug: string;
-  title: string;
-  subtitle: string;
-  imageUrl?: string;
-  href: string;
-  keywords?: string;
-}
-
-const TYPE_META: Record<
-  SearchResult["type"],
-  { label: string; Icon: typeof MapPin }
-> = {
-  destination: { label: "Destination", Icon: MapPin },
+const TYPE_META: Record<SearchType, { label: string; Icon: typeof MapPin }> = {
   river: { label: "River", Icon: Compass },
+  fly: { label: "Fly Pattern", Icon: Bug },
+  hatch: { label: "Hatch", Icon: Feather },
+  destination: { label: "Destination", Icon: MapPin },
+  article: { label: "Article", Icon: BookOpen },
   species: { label: "Species", Icon: Fish },
   lodge: { label: "Lodge", Icon: Home },
   guide: { label: "Guide", Icon: Users },
   "fly-shop": { label: "Fly Shop", Icon: Store },
-  article: { label: "Article", Icon: BookOpen },
-  fly: { label: "Fly Pattern", Icon: Bug },
 };
 
 const QUICK_ACTIONS: { id: string; label: string; href: string; Icon: typeof Plus }[] = [
@@ -70,14 +53,14 @@ export default function CommandPalette() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [index, setIndex] = useState<SearchResult[]>([]);
+  const [index, setIndex] = useState<SearchDocument[]>([]);
 
   // Lazy-load the search index the first time the palette opens.
   useEffect(() => {
     if (!open || index.length > 0) return;
     fetch("/api/search-index")
       .then((r) => r.json())
-      .then((data: SearchResult[]) => setIndex(data))
+      .then((data: SearchDocument[]) => setIndex(Array.isArray(data) ? data : []))
       .catch(() => {});
   }, [open, index.length]);
 
@@ -92,10 +75,17 @@ export default function CommandPalette() {
           target.tagName === "TEXTAREA" ||
           target.isContentEditable);
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        // Even inside an input the user often wants the palette — Linear
-        // and Raycast both override this; match that expectation.
         e.preventDefault();
         setOpen((o) => !o);
+      } else if (e.key === "/" && !isTextField && !e.metaKey && !e.ctrlKey) {
+        const searchInput = document.getElementById("search-q");
+        if (searchInput instanceof HTMLInputElement) {
+          e.preventDefault();
+          searchInput.focus();
+          return;
+        }
+        e.preventDefault();
+        setOpen(true);
       } else if (e.key === "Escape" && open && !isTextField) {
         setOpen(false);
       }
@@ -107,28 +97,20 @@ export default function CommandPalette() {
   // Filter results client-side. cmdk does its own fuzzy ranking under the
   // hood; we just pre-narrow obvious mismatches so a 5000-item index
   // doesn't drown the matcher.
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return index.slice(0, 30); // Show some recent-ish defaults
-    return index
-      .filter(
-        (r) =>
-          r.title.toLowerCase().includes(q) ||
-          r.subtitle.toLowerCase().includes(q) ||
-          r.keywords?.toLowerCase().includes(q),
-      )
-      .slice(0, 50);
-  }, [index, query]);
+  const ranked = useMemo(() => rankSearch(query, index), [index, query]);
 
-  const byType = useMemo(() => {
-    const groups = new Map<SearchResult["type"], SearchResult[]>();
-    for (const r of filtered) {
-      const arr = groups.get(r.type) ?? [];
-      arr.push(r);
-      groups.set(r.type, arr);
+  const groups = useMemo(() => {
+    if (!query.trim()) {
+      return GROUP_ORDER.map((type) => ({
+        type,
+        items: index.filter((d) => d.type === type).slice(0, 5),
+      })).filter((g) => g.items.length > 0);
     }
-    return Array.from(groups.entries());
-  }, [filtered]);
+    return ranked.groups.map((g) => ({
+      type: g.type,
+      items: g.items.map((i) => i.doc),
+    }));
+  }, [query, index, ranked]);
 
   function close() {
     setOpen(false);
@@ -191,11 +173,11 @@ export default function CommandPalette() {
             </Command.Group>
           )}
 
-          {byType.map(([type, items]) => {
-            const meta = TYPE_META[type];
+          {groups.map((group) => {
+            const meta = TYPE_META[group.type];
             return (
-              <Command.Group key={type} heading={meta.label + "s"}>
-                {items.slice(0, 8).map((r) => (
+              <Command.Group key={group.type} heading={meta.label + "s"}>
+                {group.items.map((r) => (
                   <Command.Item
                     key={r.href + r.slug}
                     value={`${meta.label} ${r.title} ${r.subtitle} ${r.keywords ?? ""}`}

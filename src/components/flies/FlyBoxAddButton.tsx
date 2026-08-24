@@ -23,6 +23,8 @@
  */
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Plus, Check, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
@@ -50,6 +52,7 @@ export default function FlyBoxAddButton({
   className,
 }: Props) {
   const { user, isLoading } = useAuth();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [variantCount, setVariantCount] = useState<number | null>(null);
   const [checking, setChecking] = useState(true);
@@ -98,6 +101,23 @@ export default function FlyBoxAddButton({
 
   // Render based on variant
   const inBox = (variantCount ?? 0) > 0;
+
+  if (!isLoading && !user) {
+    return (
+      <Link
+        href={`/login?next=${encodeURIComponent(pathname || "/search")}`}
+        onClick={(e) => {
+          if (stopPropagation) {
+            e.stopPropagation();
+          }
+        }}
+        className={`inline-flex items-center text-xs font-medium text-[#A8B2BD] hover:text-[#E8923A] underline-offset-2 hover:underline ${className ?? ""}`}
+        title="Sign in to save this fly to your box"
+      >
+        Sign in to save
+      </Link>
+    );
+  }
 
   const Trigger = () => {
     if (variant === "icon") {

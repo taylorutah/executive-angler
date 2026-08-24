@@ -13,7 +13,8 @@
     "fishing:migrate": "npx tsx scripts/migrate-fishing-log.ts",
     "fishing:import": "npx tsx scripts/import-notion-fishing.ts",
     "dedup-flies": "npx tsx scripts/dedup-flies.ts",
-    "audit:images": "npx tsx scripts/audit-images.ts"
+    "audit:images": "npx tsx scripts/audit-images.ts",
+    "test": "tsx --test src/lib/search/index.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

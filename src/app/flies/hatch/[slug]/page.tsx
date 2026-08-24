@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllCanonicalFlies, getFliesByImitates } from "@/lib/db";
+import { getAllRivers } from "@/lib/db/rivers";
+import { hatchMatchesSlug, hatchSlugsFor } from "@/lib/search";
 import { SITE_URL } from "@/lib/constants";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
@@ -41,11 +43,23 @@ function unslugify(slug: string): string {
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const allFlies = await getAllCanonicalFlies();
+  const [allFlies, rivers] = await Promise.all([
+    getAllCanonicalFlies(),
+    getAllRivers(),
+  ]);
   const insectSet = new Set<string>();
   for (const fly of allFlies) {
     for (const im of fly.imitates) {
-      insectSet.add(slugify(im));
+      for (const s of hatchSlugsFor(im)) insectSet.add(s);
+    }
+  }
+  for (const river of rivers) {
+    for (const month of river.hatchChart ?? []) {
+      for (const h of month.hatches ?? []) {
+        if (h.insect) {
+          for (const s of hatchSlugsFor(h.insect)) insectSet.add(s);
+        }
+      }
     }
   }
   return Array.from(insectSet).map((slug) => ({ slug }));
@@ -75,18 +89,30 @@ export default async function HatchInsectPage({ params }: Props) {
   const { slug } = await params;
   const displayName = unslugify(slug);
 
-  // Find the original imitates value(s) that match this slug
-  const allFlies = await getAllCanonicalFlies();
+  const [allFlies, rivers] = await Promise.all([
+    getAllCanonicalFlies(),
+    getAllRivers(),
+  ]);
   const matchingImitates = new Set<string>();
   for (const fly of allFlies) {
     for (const im of fly.imitates) {
-      if (slugify(im) === slug) {
+      if (hatchMatchesSlug(im, slug) || slugify(im) === slug) {
         matchingImitates.add(im);
       }
     }
   }
+  let mentionedOnRiver = false;
+  for (const river of rivers) {
+    for (const month of river.hatchChart ?? []) {
+      for (const h of month.hatches ?? []) {
+        if (h.insect && (hatchMatchesSlug(h.insect, slug) || slugify(h.insect) === slug)) {
+          mentionedOnRiver = true;
+        }
+      }
+    }
+  }
 
-  if (matchingImitates.size === 0) notFound();
+  if (matchingImitates.size === 0 && !mentionedOnRiver) notFound();
 
   // Query flies for each matching imitates value and deduplicate
   const flyMap = new Map<string, (typeof allFlies)[number]>();
