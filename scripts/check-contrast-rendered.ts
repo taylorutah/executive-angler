@@ -521,7 +521,24 @@ async function main() {
     allow404 = false,
   ) {
     const url = `${BASE}${route}`;
-    const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
+    let res: import("playwright").Response | null = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        res = await page.goto(url, {
+          waitUntil: attempt === 0 ? "load" : "domcontentloaded",
+          timeout: 60_000,
+        });
+        break;
+      } catch (err) {
+        if (attempt === 2) {
+          console.error(
+            `${route.padEnd(36)} @${vp.name.padStart(4)}  SKIP  ${err instanceof Error ? err.message : err}`,
+          );
+          return;
+        }
+        await page.waitForTimeout(800);
+      }
+    }
     const status = res?.status() ?? 0;
     const ok = allow404
       ? status === 200 || status === 404
