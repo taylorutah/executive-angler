@@ -419,7 +419,6 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               </Link>
               <Link href="/journal/insights" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Sparkles className="h-4 w-4" /> Insights
-                <span className="ml-auto text-[8px] font-bold tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded">PRO</span>
               </Link>
               <Link href="/journal/flies" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[var(--text-body)] text-sm hover:bg-[var(--surface-page)] transition-colors">
                 <Feather className="h-4 w-4" /> Fly Box

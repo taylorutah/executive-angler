@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle,
-  Lock, Smartphone, Wind, Droplets, Gauge
+  Wind, Droplets, Gauge
 } from "lucide-react";
-import { APP_STORE_URL } from "@/lib/constants";
 import { fetchOnce } from "./fetch-once";
 
 // ── USGS types ──────────────────────────────────────────────────────────────
@@ -203,10 +202,6 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
   const flow = active.discharge ? getFlowLabel(active.discharge.value) : null;
   const hasMultipleSections = gauges.length > 1;
   const weather = matchWeather(active.section, weatherSections);
-  // Conditions (USGS flow + weather) are free for everyone per the
-  // 2026-04-24 freemium plan. The Pro feature is the Best Window
-  // Calculator on the flow chart, not the conditions panel.
-  const showLiveData = true;
 
   return (
     <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
@@ -215,17 +210,10 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
         <h3 className="font-heading text-lg font-semibold text-[var(--action)]">
           River Conditions
         </h3>
-        {showLiveData ? (
-          <span className="flex items-center gap-1.5 text-[10px] text-[var(--signal-live)] bg-[var(--signal-live)]/10 px-2.5 py-1 rounded-full font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-live)] animate-pulse inline-block" />
-            Live
-          </span>
-        ) : (
-          <span className="flex items-center gap-1.5 text-[10px] text-[var(--action)] bg-[var(--action)]/10 px-2.5 py-1 rounded-full font-semibold uppercase tracking-wide">
-            <Lock className="w-2.5 h-2.5" />
-            Pro
-          </span>
-        )}
+        <span className="flex items-center gap-1.5 text-[10px] text-[var(--signal-live)] bg-[var(--signal-live)]/10 px-2.5 py-1 rounded-full font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-live)] animate-pulse inline-block" />
+          Live
+        </span>
       </div>
 
       {/* Shared section tabs — one click updates BOTH flows and weather */}
@@ -247,8 +235,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
         </div>
       )}
 
-      {showLiveData ? (
-        <>
+      <>
           {/* Stale warning */}
           {active.stale && (
             <div className="flex items-center gap-2 mb-3 p-2 bg-[var(--surface-raised)] rounded-lg text-xs text-[var(--action)]">
@@ -398,47 +385,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             <Clock className="h-3 w-3" />
             <span>{formatTimestamp(active.timestamp)} · USGS {active.siteId}</span>
           </div>
-        </>
-      ) : (
-        <>
-          {/* Blurred teaser */}
-          <div className="space-y-3 relative">
-            <div className="blur-[6px] select-none pointer-events-none space-y-3">
-              {[
-                { icon: <Waves className="h-4 w-4 text-[var(--signal-live)]" />, bg: "bg-[var(--signal-live)]/10", label: "Streamflow", value: active.discharge ? `${active.discharge.value.toLocaleString()} cfs` : "--- cfs", badge: "Normal" },
-                { icon: <ArrowUpDown className="h-4 w-4 text-[var(--action)]" />, bg: "bg-[var(--action)]/10", label: "Gage Height", value: active.gageHeight ? `${active.gageHeight.value} ft` : "-.-- ft" },
-                { icon: <Thermometer className="h-4 w-4 text-[var(--state-positive)]" />, bg: "bg-[var(--state-positive)]/10", label: "Water Temp", value: active.waterTemp ? `${active.waterTemp.valueFahrenheit}°F` : "--°F" },
-                { icon: <Thermometer className="h-4 w-4 text-[var(--signal-live)]" />, bg: "bg-[var(--signal-live)]/10", label: "Air Temp", value: "62°F feels like 58°F" },
-                { icon: <Gauge className="h-4 w-4 text-[var(--action)]" />, bg: "bg-[var(--action)]/10", label: "Barometric Pressure", value: "29.94 inHg" },
-              ].map(({ icon, bg, label, value, badge }) => (
-                <div key={label} className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center`}>{icon}</div>
-                    <div>
-                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">{label}</p>
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">{value}</p>
-                    </div>
-                  </div>
-                  {badge && <span className="text-xs font-semibold text-[var(--state-positive)]">{badge}</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[var(--action)] hover:bg-[#F0A65A] text-white text-sm font-semibold rounded-lg transition-colors"
-          >
-            <Smartphone className="h-4 w-4" />
-            Unlock with Pro
-          </a>
-          <p className="mt-2 text-center text-[10px] text-[var(--text-meta)]">
-            Live flow, gage height, water temp, weather &amp; barometric pressure
-          </p>
-        </>
-      )}
+      </>
     </div>
   );
 }
