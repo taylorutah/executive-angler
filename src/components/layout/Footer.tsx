@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { SITE_NAME, SOCIAL_LINKS, APP_STORE_URL } from "@/lib/constants";
 
-const footerColumns: Record<string, { label: string; href: string }[]> = {
+type FooterLink = { label: string; href: string; external?: boolean };
+
+const footerColumns: Record<string, FooterLink[]> = {
   Product: [
     { label: "Journal", href: "/journal" },
     { label: "Rivers", href: "/rivers" },
@@ -9,8 +11,10 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "Gear Locker", href: "/account/gear" },
     { label: "Feed", href: "/feed" },
     { label: "Import & Export", href: "/journal/import" },
+    { label: "Get the app", href: APP_STORE_URL, external: true },
   ],
-  Discover: [
+  Explore: [
+    { label: "Learn", href: "/learn" },
     { label: "Madison River", href: "/rivers/madison-river" },
     { label: "Montana", href: "/destinations/montana" },
     { label: "Fly Library", href: "/flies/library" },
@@ -19,9 +23,9 @@ const footerColumns: Record<string, { label: string; href: string }[]> = {
     { label: "Destinations", href: "/destinations" },
     { label: "Articles", href: "/articles" },
   ],
-  Directory: [
-    { label: "Lodges", href: "/lodges" },
+  "Find a guide": [
     { label: "Guides", href: "/guides" },
+    { label: "Lodges", href: "/lodges" },
     { label: "Fly Shops", href: "/fly-shops" },
     { label: "Gear Catalog", href: "/gear" },
     { label: "Search", href: "/search" },
@@ -68,7 +72,7 @@ export default function Footer() {
           <div className="max-w-md">
             <Link
               href="/"
-              className="inline-block"
+              className="ea-focus-ring inline-block"
               aria-label={SITE_NAME}
             >
               {/* Raw SVGs — next/image optimizer + lazy-load can leave this looking like alt text. */}
@@ -90,7 +94,8 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-body)]">
-              The fly fishing intelligence platform. Journal every session, build fly recipes, and read river conditions before you tie on.
+              Rivers, flies and hatches, documented. Plus a private journal that remembers what you
+              learned.
             </p>
 
             {/* App badges */}
@@ -145,7 +150,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="group flex h-9 w-9 items-center justify-center rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] transition-all hover:border-[var(--action)]/50 hover:bg-[var(--surface-card)]"
+                  className="ea-focus-ring group flex h-9 w-9 items-center justify-center rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] transition-all hover:border-[var(--action)]/50 hover:bg-[var(--surface-card)]"
                 >
                   <svg
                     className="h-4 w-4 text-[var(--text-body)] transition-colors group-hover:text-[var(--text-primary)]"
@@ -170,12 +175,23 @@ export default function Footer() {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
-                      >
-                        {link.label}
-                      </Link>
+                      {link.external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -204,16 +220,16 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[var(--text-meta)]">
-            <Link href="/privacy" className="hover:text-[var(--text-primary)] transition-colors">
+            <Link href="/privacy" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-[var(--text-primary)] transition-colors">
+            <Link href="/terms" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
               Terms
             </Link>
-            <Link href="/contact" className="hover:text-[var(--text-primary)] transition-colors">
+            <Link href="/contact" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
               Contact
             </Link>
-            <Link href="/sitemap.xml" className="hover:text-[var(--text-primary)] transition-colors">
+            <Link href="/sitemap.xml" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
               Sitemap
             </Link>
           </div>

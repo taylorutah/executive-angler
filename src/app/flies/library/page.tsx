@@ -10,8 +10,6 @@ import { getAllCanonicalFlies } from "@/lib/db";
 import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
-import DiscoveryNav from "@/components/seo/DiscoveryNav";
-
 export const revalidate = 3600;
 
 const FLY_CATEGORY_LABELS: Record<string, string> = {
@@ -115,9 +113,6 @@ export default async function FliesPage() {
             emergers, and more. Every pattern includes sizes, materials, tying
             videos, and where to fish it.
           </p>
-          <div className="mt-8">
-            <DiscoveryNav />
-          </div>
         </div>
       </section>
 

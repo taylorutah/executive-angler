@@ -24,7 +24,7 @@ export const authors: Author[] = [
     name: "Taylor Warnick",
     articleAuthorName: "Executive Angler Staff",
     role: "Founder & Editor-in-Chief",
-    bio: `Taylor Warnick is the founder of Executive Angler, a fly fishing intelligence platform built for serious anglers. He designed and built the product himself — web, iOS, and the data systems behind it — out of a simple idea: the things anglers actually care about (flows, hatches, sessions, flies) deserve to be treated as data worth keeping.
+    bio: `Taylor Warnick is the founder of Executive Angler — rivers, flies and hatches, documented, plus a private journal that remembers what you learned. He designed and built the product himself — web, iOS, and the data systems behind it — out of a simple idea: the things anglers actually care about (flows, hatches, sessions, flies) deserve to be treated as data worth keeping.
 
 He lives in Sandy, Utah, and spends most of his time on the water euro nymphing the region's rivers. Executive Angler is the tool he wished existed.`,
     shortBio:

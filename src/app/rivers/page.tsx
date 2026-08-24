@@ -7,8 +7,6 @@ import { getAllRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
-import DiscoveryNav from "@/components/seo/DiscoveryNav";
-
 export const revalidate = 3600;
 
 const SPOTLIGHT_SLUGS = ["madison-river", "snake-river-wyoming", "henrys-fork"] as const;
@@ -83,9 +81,6 @@ export default async function RiversPage() {
             {rivers.length} rivers documented from source to sea — access points, hatch charts,
             and everything a serious angler needs.
           </p>
-          <div className="mt-8">
-            <DiscoveryNav />
-          </div>
         </div>
       </section>
 
