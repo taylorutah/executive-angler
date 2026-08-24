@@ -30,7 +30,7 @@ export default function SearchResultGroup({
           {TYPE_LABELS[group.type]}
         </h2>
         <div className="flex items-baseline gap-3">
-          <span className="num text-[13px] text-[var(--text-meta)]">
+          <span className="num text-[13px] text-[var(--text-body)]">
             {group.total}
           </span>
           {showSeeAll ? (
