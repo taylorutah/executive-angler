@@ -97,6 +97,9 @@ export default function Footer() {
               Rivers, flies and hatches, documented. Plus a private journal that remembers what you
               learned.
             </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-[var(--text-body)]">
+              Every feature, free.
+            </p>
 
             {/* App badges */}
             <div className="mt-7 flex flex-wrap gap-3">
