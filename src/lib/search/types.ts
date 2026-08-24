@@ -49,10 +49,14 @@ export interface SearchDocument {
   sizes?: string;
 }
 
+/** Strict AND hit vs fallback closest-match pass. */
+export type MatchQuality = "exact" | "closest";
+
 export interface ScoredDocument {
   doc: SearchDocument;
   score: number;
   coverage: number;
+  matchQuality?: MatchQuality;
 }
 
 export interface RankedGroup {
@@ -66,4 +70,6 @@ export interface RankedSearch {
   total: number;
   /** Populated when the query scores nothing. */
   suggestion?: SearchDocument;
+  /** Exact when every content term hit; closest after the relaxed AND fallback. */
+  matchQuality?: MatchQuality;
 }

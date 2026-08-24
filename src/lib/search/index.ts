@@ -1,4 +1,5 @@
 export type {
+  MatchQuality,
   RankedGroup,
   RankedSearch,
   ScoredDocument,

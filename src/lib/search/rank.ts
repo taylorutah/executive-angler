@@ -1,4 +1,5 @@
 import type {
+  MatchQuality,
   RankedGroup,
   RankedSearch,
   SearchDocument,
@@ -10,6 +11,22 @@ import { suggestDocument } from "./suggest";
 import { tokenize } from "./normalize";
 
 export { GROUP_CAP, GROUP_ORDER, RELEVANCE_FLOOR };
+
+function scorePool(
+  query: string,
+  pool: SearchDocument[],
+  ctx: ReturnType<typeof buildScoreContext>,
+  matchQuality: MatchQuality,
+) {
+  const relaxed = matchQuality === "closest";
+  return pool
+    .map((doc) => {
+      const { score, coverage } = scoreDocument(query, doc, ctx, { relaxed });
+      return { doc, score, coverage, matchQuality };
+    })
+    .filter((s) => s.score >= RELEVANCE_FLOOR)
+    .sort((a, b) => b.score - a.score || a.doc.title.localeCompare(b.doc.title));
+}
 
 export function rankSearch(
   query: string,
@@ -27,13 +44,12 @@ export function rankSearch(
   const pool = typeFilter ? docs.filter((d) => d.type === typeFilter) : docs;
   const ctx = buildScoreContext(pool);
 
-  const scored = pool
-    .map((doc) => {
-      const { score, coverage } = scoreDocument(query, doc, ctx);
-      return { doc, score, coverage };
-    })
-    .filter((s) => s.score >= RELEVANCE_FLOOR)
-    .sort((a, b) => b.score - a.score || a.doc.title.localeCompare(b.doc.title));
+  let matchQuality: MatchQuality = "exact";
+  let scored = scorePool(query, pool, ctx, "exact");
+  if (scored.length === 0) {
+    scored = scorePool(query, pool, ctx, "closest");
+    matchQuality = "closest";
+  }
 
   if (scored.length === 0) {
     return {
@@ -61,7 +77,7 @@ export function rankSearch(
     });
   }
 
-  return { groups, total: scored.length };
+  return { groups, total: scored.length, matchQuality };
 }
 
 export function flattenRanked(ranked: RankedSearch): SearchDocument[] {
