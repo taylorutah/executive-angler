@@ -56,7 +56,7 @@ export default function HomePage() {
   return (
     <>
       {/* ── 1. HERO — FOUR PILLARS ───────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden bg-[#0D1117] flex items-center justify-center">
+      <section className="relative min-h-screen w-full overflow-hidden bg-[var(--surface-page)] flex items-center justify-center">
         {/* Subtle river background — Taylor's Madison River photo */}
         <Image
           src="/images/madison-river-three-dollar-bridge.jpg"
@@ -68,9 +68,9 @@ export default function HomePage() {
           sizes="100vw"
         />
         {/* Dark gradient overlay to blend edges */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0D1117] via-transparent to-[#0D1117] pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0BA5C7] opacity-10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#E8923A] opacity-10 blur-[120px] rounded-full" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-page)] via-transparent to-[var(--surface-page)] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--signal-live)] opacity-10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--action)] opacity-10 blur-[120px] rounded-full" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-10 lg:gap-16 items-center">
@@ -78,15 +78,15 @@ export default function HomePage() {
             <div className="text-center lg:text-left">
               <ScrollAnimation>
                 <div className="inline-flex items-center gap-2 mb-6">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E8923A] animate-pulse" />
-                  <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--action)] animate-pulse" />
+                  <span className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.2em]">
                     Now on the App Store
                   </span>
                 </div>
               </ScrollAnimation>
               <ScrollAnimation delay={0.1}>
                 <h1
-                  className="text-[#F0F6FC] font-heading font-bold leading-[1.05] mb-6"
+                  className="text-[var(--text-primary)] font-heading font-bold leading-[1.05] mb-6"
                   style={{ fontSize: "clamp(2.75rem, 7vw, 4.75rem)", letterSpacing: "-0.02em" }}
                 >
                   Better data.{" "}
@@ -95,7 +95,7 @@ export default function HomePage() {
                 </h1>
               </ScrollAnimation>
               <ScrollAnimation delay={0.2}>
-                <p className="text-[#A8B2BD] text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
+                <p className="text-[var(--text-body)] text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
                   The fly fishing intelligence platform. Journal every session, build fly recipes, track river conditions, and let your data show you what works.
                 </p>
               </ScrollAnimation>
@@ -124,8 +124,8 @@ export default function HomePage() {
               <ScrollAnimation delay={0.35}>
                 <ul className="flex flex-col gap-2.5 mt-2 max-w-lg mx-auto lg:mx-0">
                   {PILLAR_FEATURES.map((f) => (
-                    <li key={f.text} className="flex items-center gap-3 text-sm text-[#A8B2BD]">
-                      <f.icon className="h-4 w-4 text-[#E8923A] flex-shrink-0" strokeWidth={1.75} />
+                    <li key={f.text} className="flex items-center gap-3 text-sm text-[var(--text-body)]">
+                      <f.icon className="h-4 w-4 text-[var(--action)] flex-shrink-0" strokeWidth={1.75} />
                       <span className="text-left leading-snug">{f.text}</span>
                     </li>
                   ))}
@@ -154,10 +154,10 @@ export default function HomePage() {
                 { label: "Rivers", desc: "Live conditions", href: "/rivers", icon: Droplets, color: "#0BA5C7" },
                 { label: "Feed", desc: "Community", href: "/feed", icon: Activity, color: "#0BA5C7" },
               ].map((p) => (
-                <Link key={p.label} href={p.href} className="group bg-[#161B22] border border-[#21262D] rounded-xl p-4 hover:border-[#E8923A]/40 transition-colors text-left">
+                <Link key={p.label} href={p.href} className="group bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 hover:border-[var(--action)]/40 transition-colors text-left">
                   <p.icon className="h-5 w-5 mb-2" style={{ color: p.color }} strokeWidth={1.5} />
-                  <p className="text-[#F0F6FC] text-sm font-semibold group-hover:text-[#E8923A] transition-colors">{p.label}</p>
-                  <p className="text-[#6E7681] text-xs">{p.desc}</p>
+                  <p className="text-[var(--text-primary)] text-sm font-semibold group-hover:text-[var(--action)] transition-colors">{p.label}</p>
+                  <p className="text-[var(--text-meta)] text-xs">{p.desc}</p>
                 </Link>
               ))}
             </div>
@@ -166,33 +166,33 @@ export default function HomePage() {
       </section>
 
       {/* ── 2. JOURNAL — Session card showcase ───────────────────────── */}
-      <section className="bg-[#161B22] py-20">
+      <section className="bg-[var(--surface-raised)] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Session card mockup */}
             <ScrollAnimation>
-              <div className="bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
-                <h3 className="font-heading text-[#F0F6FC] text-2xl mb-1">Green River, Utah</h3>
-                <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
+              <div className="bg-[var(--surface-card)] border border-[var(--border-rule)] rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md mx-auto lg:mx-0">
+                <h3 className="font-heading text-[var(--text-primary)] text-2xl mb-1">Green River, Utah</h3>
+                <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs mb-6">March 8, 2026 &bull; 7:42 AM</p>
                 <div className="flex items-baseline justify-between mb-6">
                   <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">14</div>
-                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
+                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none">14</div>
+                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Fish</div>
                   </div>
-                  <div className="h-8 w-px bg-[#21262D]" />
+                  <div className="h-8 w-px bg-[var(--border-rule)]" />
                   <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none whitespace-nowrap">3<span className="text-2xl">h</span> 12<span className="text-2xl">m</span></div>
-                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
+                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none whitespace-nowrap">3<span className="text-2xl">h</span> 12<span className="text-2xl">m</span></div>
+                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Duration</div>
                   </div>
-                  <div className="h-8 w-px bg-[#21262D]" />
+                  <div className="h-8 w-px bg-[var(--border-rule)]" />
                   <div className="text-center">
-                    <div className="font-['IBM_Plex_Mono'] text-[#E8923A] text-4xl font-normal leading-none">18<span className="text-2xl">&quot;</span></div>
-                    <div className="text-[#A8B2BD] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
+                    <div className="font-['IBM_Plex_Mono'] text-[var(--action)] text-4xl font-normal leading-none">18<span className="text-2xl">&quot;</span></div>
+                    <div className="text-[var(--text-body)] text-[11px] mt-1.5 uppercase tracking-wider">Best</div>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {["54\u00B0F", "#18 RS2", "Clear", "1,240 cfs"].map((tag) => (
-                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[#0BA5C7] rounded-full px-3 py-1">
+                    <span key={tag} className="font-['IBM_Plex_Mono'] text-xs bg-[rgba(0,180,216,0.1)] border border-[rgba(0,180,216,0.2)] text-[var(--signal-live)] rounded-full px-3 py-1">
                       {tag}
                     </span>
                   ))}
@@ -202,11 +202,11 @@ export default function HomePage() {
 
             {/* Copy */}
             <ScrollAnimation delay={0.2}>
-              <p className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.15em] mb-4">JOURNAL</p>
-              <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
+              <p className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.15em] mb-4">JOURNAL</p>
+              <h2 className="text-[var(--text-primary)] font-heading text-4xl mb-4">
                 Every session.<br />Every detail.<br />Always yours.
               </h2>
-              <p className="text-[#A8B2BD] text-lg leading-relaxed mb-6">
+              <p className="text-[var(--text-body)] text-lg leading-relaxed mb-6">
                 One-tap session start with auto-detected river, weather, and GPS. Log catches with species, length, fly, and photo. Your data builds a personal fishing intelligence engine.
               </p>
               <div className="space-y-3 mb-8">
@@ -216,8 +216,8 @@ export default function HomePage() {
                   "Trophy wall, river stats, and year-over-year trends",
                 ].map((line) => (
                   <div key={line} className="flex items-start gap-3">
-                    <Check className="h-4 w-4 text-[#2EA44F] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
-                    <span className="text-[#A8B2BD] text-sm">{line}</span>
+                    <Check className="h-4 w-4 text-[var(--state-positive)] mt-0.5 flex-shrink-0" strokeWidth={2.5} />
+                    <span className="text-[var(--text-body)] text-sm">{line}</span>
                   </div>
                 ))}
               </div>
@@ -230,14 +230,14 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. FLIES — Tying Workbench + Library ─────────────────────── */}
-      <section className="bg-[#0D1117] py-20">
+      <section className="bg-[var(--surface-page)] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
-            <p className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.15em] mb-4 text-center">FLIES</p>
-            <h2 className="text-[#F0F6FC] font-heading text-4xl text-center mb-3">
+            <p className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.15em] mb-4 text-center">FLIES</p>
+            <h2 className="text-[var(--text-primary)] font-heading text-4xl text-center mb-3">
               Your Digital Fly Box &amp; Tying Workbench
             </h2>
-            <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
+            <p className="text-[var(--text-body)] text-center mb-12 max-w-xl mx-auto">
               120+ catalog patterns with structured recipes, 500+ tying materials, and a personal fly box that tracks what works.
             </p>
           </ScrollAnimation>
@@ -248,11 +248,11 @@ export default function HomePage() {
               { icon: SearchIcon, title: "Materials Database", desc: "500+ hooks, beads, threads, dubbing, and feathers from brands like Tiemco, Semperfli, and Fulling Mill.", href: "/flies/materials", cta: "Browse Materials", color: "#0BA5C7" },
             ].map((item, i) => (
               <ScrollAnimation key={item.title} delay={i * 0.1}>
-                <Link href={item.href} className="group block bg-[#161B22] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A]/40 transition-colors h-full">
+                <Link href={item.href} className="group block bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6 hover:border-[var(--action)]/40 transition-colors h-full">
                   <item.icon className="h-7 w-7 mb-4" style={{ color: item.color }} strokeWidth={1.5} />
-                  <h3 className="text-[#F0F6FC] font-semibold text-lg mb-2">{item.title}</h3>
-                  <p className="text-[#A8B2BD] text-sm leading-relaxed mb-4">{item.desc}</p>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#0BA5C7] group-hover:text-[#E8923A] transition-colors">
+                  <h3 className="text-[var(--text-primary)] font-semibold text-lg mb-2">{item.title}</h3>
+                  <p className="text-[var(--text-body)] text-sm leading-relaxed mb-4">{item.desc}</p>
+                  <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--signal-live)] group-hover:text-[var(--action)] transition-colors">
                     {item.cta} &rarr;
                   </span>
                 </Link>
@@ -263,25 +263,25 @@ export default function HomePage() {
       </section>
 
       {/* ── 4. RIVERS — Live conditions ──────────────────────────────── */}
-      <section className="bg-[#161B22] py-20">
+      <section className="bg-[var(--surface-raised)] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
-            <p className="font-['IBM_Plex_Mono'] text-[#0BA5C7] text-xs uppercase tracking-[0.15em] mb-4 text-center">RIVERS</p>
-            <h2 className="text-[#F0F6FC] font-heading text-4xl text-center mb-3">
+            <p className="font-['IBM_Plex_Mono'] text-[var(--signal-live)] text-xs uppercase tracking-[0.15em] mb-4 text-center">RIVERS</p>
+            <h2 className="text-[var(--text-primary)] font-heading text-4xl text-center mb-3">
               What&apos;s Happening on the Water
             </h2>
-            <p className="text-[#A8B2BD] text-center mb-12 max-w-xl mx-auto">
+            <p className="text-[var(--text-body)] text-center mb-12 max-w-xl mx-auto">
               Live USGS flow data, hatch charts, and catch reports across 200+ rivers.
             </p>
           </ScrollAnimation>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {RIVERS.map((r, i) => (
               <ScrollAnimation key={r.name} delay={i * 0.08}>
-                <Link href={r.href} className="block bg-[#1F2937] border border-[#21262D] rounded-2xl p-6 hover:border-[#E8923A] transition-colors group">
-                  <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs uppercase tracking-wider mb-1">{r.location}</p>
-                  <h3 className="font-heading text-[#F0F6FC] text-xl mb-4">{r.name}</h3>
-                  <p className="font-['IBM_Plex_Mono'] text-[#A8B2BD] text-xs mb-4">Live flow &amp; weather</p>
-                  <span className="font-['IBM_Plex_Mono'] text-xs text-[#A8B2BD] group-hover:text-[#E8923A] transition-colors">
+                <Link href={r.href} className="block bg-[var(--surface-card)] border border-[var(--border-rule)] rounded-2xl p-6 hover:border-[var(--action)] transition-colors group">
+                  <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs uppercase tracking-wider mb-1">{r.location}</p>
+                  <h3 className="font-heading text-[var(--text-primary)] text-xl mb-4">{r.name}</h3>
+                  <p className="font-['IBM_Plex_Mono'] text-[var(--text-body)] text-xs mb-4">Live flow &amp; weather</p>
+                  <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--text-body)] group-hover:text-[var(--action)] transition-colors">
                     View River &rarr;
                   </span>
                 </Link>
@@ -290,7 +290,7 @@ export default function HomePage() {
           </div>
           <ScrollAnimation delay={0.3}>
             <div className="text-center">
-              <Link href="/rivers" className="text-[#0BA5C7] hover:text-[#E8923A] font-medium transition-colors">
+              <Link href="/rivers" className="text-[var(--signal-live)] hover:text-[var(--action)] font-medium transition-colors">
                 Explore all 200+ tracked rivers &rarr;
               </Link>
             </div>
@@ -299,23 +299,23 @@ export default function HomePage() {
       </section>
 
       {/* ── 5. Intelligence layer ────────────────────────────────────── */}
-      <section className="bg-[#0D1117] py-20">
+      <section className="bg-[var(--surface-page)] py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <ScrollAnimation>
               <div className="inline-flex items-center gap-2 mb-6">
-                <Sparkles className="h-4 w-4 text-[#E8923A]" />
-                <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
+                <Sparkles className="h-4 w-4 text-[var(--action)]" />
+                <span className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.2em]">
                   Your Intelligence Layer
                 </span>
               </div>
-              <h2 className="text-[#F0F6FC] font-heading text-4xl mb-4">
+              <h2 className="text-[var(--text-primary)] font-heading text-4xl mb-4">
                 See <em>your</em> patterns
               </h2>
-              <p className="text-[#A8B2BD] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
+              <p className="text-[var(--text-body)] text-lg leading-relaxed mb-4 max-w-xl mx-auto">
                 Which flies work for you, your best rivers, your best windows on the water — built from your own data, never crowdsourced from other anglers. Free for every angler.
               </p>
-              <p className="text-[#6E7681] text-sm mb-10 max-w-xl mx-auto">
+              <p className="text-[var(--text-meta)] text-sm mb-10 max-w-xl mx-auto">
                 We never publish locations or fish counts. It deepens your own journal — it doesn&apos;t harvest anyone else&apos;s.
               </p>
             </ScrollAnimation>
@@ -326,9 +326,9 @@ export default function HomePage() {
                   { title: "Best Window Calculator", desc: "Your catch history overlaid on live USGS flow &mdash; know when to drop everything and go" },
                   { title: "Personal Insights", desc: "Time-of-day, weather, and hatch correlations across your full journal &mdash; export anytime" },
                 ].map((f) => (
-                  <div key={f.title} className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 text-left">
-                    <h4 className="text-[#F0F6FC] font-semibold text-sm mb-1">{f.title}</h4>
-                    <p className="text-[#6E7681] text-xs leading-relaxed">{f.desc}</p>
+                  <div key={f.title} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 text-left">
+                    <h4 className="text-[var(--text-primary)] font-semibold text-sm mb-1">{f.title}</h4>
+                    <p className="text-[var(--text-meta)] text-xs leading-relaxed">{f.desc}</p>
                   </div>
                 ))}
               </div>
@@ -343,14 +343,14 @@ export default function HomePage() {
       </section>
 
       {/* ── 6. FINAL CTA ─────────────────────────────────────────────── */}
-      <section className="relative bg-[#0D1117] border-t border-[#21262D] py-24 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
+      <section className="relative bg-[var(--surface-page)] border-t border-[var(--border-rule)] py-24 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[var(--action)] opacity-[0.09] blur-[120px] rounded-full pointer-events-none" />
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <ScrollAnimation>
-            <h2 className="text-[#F0F6FC] font-heading text-5xl mb-4">
+            <h2 className="text-[var(--text-primary)] font-heading text-5xl mb-4">
               Start fishing smarter.
             </h2>
-            <p className="text-[#A8B2BD] text-lg mb-10 max-w-xl mx-auto">
+            <p className="text-[var(--text-body)] text-lg mb-10 max-w-xl mx-auto">
               Free to start. Log unlimited sessions. Every feature, every angler.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -369,7 +369,7 @@ export default function HomePage() {
                 Open Web App
               </Button>
             </div>
-            <p className="mt-6 font-['IBM_Plex_Mono'] text-[#6E7681] text-xs">
+            <p className="mt-6 font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs">
               Available on iPhone &bull; Android coming soon
             </p>
           </ScrollAnimation>

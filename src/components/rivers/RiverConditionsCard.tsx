@@ -191,14 +191,14 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
 
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm animate-pulse">
-        <div className="h-5 w-40 bg-[#21262D] rounded mb-4" />
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm animate-pulse">
+        <div className="h-5 w-40 bg-[var(--border-rule)] rounded mb-4" />
         <div className="flex gap-2 mb-4">
-          <div className="h-8 w-28 bg-[#21262D] rounded-lg" />
-          <div className="h-8 w-24 bg-[#21262D] rounded-lg" />
+          <div className="h-8 w-28 bg-[var(--border-rule)] rounded-lg" />
+          <div className="h-8 w-24 bg-[var(--border-rule)] rounded-lg" />
         </div>
         <div className="space-y-3">
-          {[1,2,3,4,5].map(i => <div key={i} className="h-12 bg-[#21262D] rounded" />)}
+          {[1,2,3,4,5].map(i => <div key={i} className="h-12 bg-[var(--border-rule)] rounded" />)}
         </div>
       </div>
     );
@@ -216,19 +216,19 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
   const showLiveData = true;
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
+        <h3 className="font-heading text-lg font-semibold text-[var(--action)]">
           River Conditions
         </h3>
         {showLiveData ? (
-          <span className="flex items-center gap-1.5 text-[10px] text-[#00B4D8] bg-[#00B4D8]/10 px-2.5 py-1 rounded-full font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00B4D8] animate-pulse inline-block" />
+          <span className="flex items-center gap-1.5 text-[10px] text-[var(--signal-live)] bg-[var(--signal-live)]/10 px-2.5 py-1 rounded-full font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-live)] animate-pulse inline-block" />
             Live
           </span>
         ) : (
-          <span className="flex items-center gap-1.5 text-[10px] text-[#E8923A] bg-[#E8923A]/10 px-2.5 py-1 rounded-full font-semibold uppercase tracking-wide">
+          <span className="flex items-center gap-1.5 text-[10px] text-[var(--action)] bg-[var(--action)]/10 px-2.5 py-1 rounded-full font-semibold uppercase tracking-wide">
             <Lock className="w-2.5 h-2.5" />
             Pro
           </span>
@@ -244,8 +244,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
               onClick={() => setSection(g.siteId)}
               className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
                 idx === selectedIdx
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#0D1117] text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-page)] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)]"
               }`}
             >
               {g.section}
@@ -267,16 +267,16 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           {/* ── USGS Flow metrics ── */}
           <div className="space-y-3">
             {active.discharge && (
-              <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
                     <Waves className="h-4 w-4 text-blue-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Streamflow</p>
-                    <p className="text-sm font-semibold text-[#F0F6FC]">
+                    <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Streamflow</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">
                       {active.discharge.value.toLocaleString()}{" "}
-                      <span className="text-[#6E7681] font-normal">cfs</span>
+                      <span className="text-[var(--text-meta)] font-normal">cfs</span>
                     </p>
                   </div>
                 </div>
@@ -285,16 +285,16 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             )}
 
             {active.gageHeight && (
-              <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#E8923A]/10 flex items-center justify-center">
-                    <ArrowUpDown className="h-4 w-4 text-[#E8923A]" />
+                  <div className="w-9 h-9 rounded-lg bg-[var(--action)]/10 flex items-center justify-center">
+                    <ArrowUpDown className="h-4 w-4 text-[var(--action)]" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Gage Height</p>
-                    <p className="text-sm font-semibold text-[#F0F6FC]">
+                    <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Gage Height</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">
                       {active.gageHeight.value}{" "}
-                      <span className="text-[#6E7681] font-normal">ft</span>
+                      <span className="text-[var(--text-meta)] font-normal">ft</span>
                     </p>
                   </div>
                 </div>
@@ -302,16 +302,16 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             )}
 
             {active.waterTemp && (
-              <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                     <Thermometer className="h-4 w-4 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Water Temp</p>
-                    <p className="text-sm font-semibold text-[#F0F6FC]">
+                    <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Water Temp</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">
                       {active.waterTemp.valueFahrenheit}°F{" "}
-                      <span className="text-[#6E7681] font-normal">/ {active.waterTemp.valueCelsius}°C</span>
+                      <span className="text-[var(--text-meta)] font-normal">/ {active.waterTemp.valueCelsius}°C</span>
                     </p>
                   </div>
                 </div>
@@ -323,77 +323,77 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           {weather && (
             <>
               <div className="flex items-center gap-3 my-4">
-                <div className="h-px flex-1 bg-[#21262D]" />
-                <span className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wider flex items-center gap-1.5">
+                <div className="h-px flex-1 bg-[var(--border-rule)]" />
+                <span className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wider flex items-center gap-1.5">
                   <span className="text-base leading-none">{weather.weatherIcon}</span>
                   {weather.weatherLabel} · {weather.tempF}°F
                 </span>
-                <div className="h-px flex-1 bg-[#21262D]" />
+                <div className="h-px flex-1 bg-[var(--border-rule)]" />
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center">
                       <Thermometer className="h-4 w-4 text-sky-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Air Temp</p>
-                      <p className="text-sm font-semibold text-[#F0F6FC]">
+                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Air Temp</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
                         {weather.tempF}°F{" "}
-                        <span className="text-[#6E7681] font-normal">feels like {weather.feelsLikeF}°F</span>
+                        <span className="text-[var(--text-meta)] font-normal">feels like {weather.feelsLikeF}°F</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center">
                       <Wind className="h-4 w-4 text-violet-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Wind</p>
-                      <p className="text-sm font-semibold text-[#F0F6FC]">
+                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Wind</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
                         {weather.windMph}{" "}
-                        <span className="text-[#6E7681] font-normal">mph {weather.windDirectionLabel}</span>
+                        <span className="text-[var(--text-meta)] font-normal">mph {weather.windDirectionLabel}</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-teal-500/10 flex items-center justify-center">
                       <Droplets className="h-4 w-4 text-teal-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Humidity</p>
-                      <p className="text-sm font-semibold text-[#F0F6FC]">
-                        {weather.humidity}<span className="text-[#6E7681] font-normal">%</span>
+                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Humidity</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
+                        {weather.humidity}<span className="text-[var(--text-meta)] font-normal">%</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
                       <Gauge className="h-4 w-4 text-amber-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">Barometric Pressure</p>
-                      <p className="text-sm font-semibold text-[#F0F6FC]">
+                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Barometric Pressure</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
                         {weather.pressureInHg.toFixed(2)}{" "}
-                        <span className="text-[#6E7681] font-normal">inHg</span>
-                        <span className="text-[#6E7681] font-normal text-xs ml-1.5">({Math.round(weather.pressureHpa)} hPa)</span>
+                        <span className="text-[var(--text-meta)] font-normal">inHg</span>
+                        <span className="text-[var(--text-meta)] font-normal text-xs ml-1.5">({Math.round(weather.pressureHpa)} hPa)</span>
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-3 flex items-center gap-1.5 text-[10px] text-[#6E7681]">
+              <div className="mt-3 flex items-center gap-1.5 text-[10px] text-[var(--text-meta)]">
                 <Clock className="h-3 w-3" />
                 <span>Weather updated {formatTime(weather.fetchedAt)} · Open-Meteo</span>
               </div>
@@ -401,7 +401,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           )}
 
           {/* USGS Footer */}
-          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-[#6E7681]">
+          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-[var(--text-meta)]">
             <Clock className="h-3 w-3" />
             <span>{formatTimestamp(active.timestamp)} · USGS {active.siteId}</span>
           </div>
@@ -413,17 +413,17 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             <div className="blur-[6px] select-none pointer-events-none space-y-3">
               {[
                 { icon: <Waves className="h-4 w-4 text-blue-400" />, bg: "bg-blue-500/10", label: "Streamflow", value: active.discharge ? `${active.discharge.value.toLocaleString()} cfs` : "--- cfs", badge: "Normal" },
-                { icon: <ArrowUpDown className="h-4 w-4 text-[#E8923A]" />, bg: "bg-[#E8923A]/10", label: "Gage Height", value: active.gageHeight ? `${active.gageHeight.value} ft` : "-.-- ft" },
+                { icon: <ArrowUpDown className="h-4 w-4 text-[var(--action)]" />, bg: "bg-[var(--action)]/10", label: "Gage Height", value: active.gageHeight ? `${active.gageHeight.value} ft` : "-.-- ft" },
                 { icon: <Thermometer className="h-4 w-4 text-emerald-400" />, bg: "bg-emerald-500/10", label: "Water Temp", value: active.waterTemp ? `${active.waterTemp.valueFahrenheit}°F` : "--°F" },
                 { icon: <Thermometer className="h-4 w-4 text-sky-400" />, bg: "bg-sky-500/10", label: "Air Temp", value: "62°F feels like 58°F" },
                 { icon: <Gauge className="h-4 w-4 text-amber-400" />, bg: "bg-amber-500/10", label: "Barometric Pressure", value: "29.94 inHg" },
               ].map(({ icon, bg, label, value, badge }) => (
-                <div key={label} className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
+                <div key={label} className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center`}>{icon}</div>
                     <div>
-                      <p className="text-[10px] text-[#6E7681] font-medium uppercase tracking-wide">{label}</p>
-                      <p className="text-sm font-semibold text-[#F0F6FC]">{value}</p>
+                      <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">{label}</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">{value}</p>
                     </div>
                   </div>
                   {badge && <span className="text-xs font-semibold text-emerald-400">{badge}</span>}
@@ -436,12 +436,12 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             href={APP_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#E8923A] hover:bg-[#F0A65A] text-white text-sm font-semibold rounded-lg transition-colors"
+            className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[var(--action)] hover:bg-[#F0A65A] text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <Smartphone className="h-4 w-4" />
             Unlock with Pro
           </a>
-          <p className="mt-2 text-center text-[10px] text-[#6E7681]">
+          <p className="mt-2 text-center text-[10px] text-[var(--text-meta)]">
             Live flow, gage height, water temp, weather &amp; barometric pressure
           </p>
         </>

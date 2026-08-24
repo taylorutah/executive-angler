@@ -50,7 +50,7 @@ export default function FlyCardForkOverlay({ canonicalFlyId, flySlug }: Props) {
     "absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-md backdrop-blur px-2 py-1 text-[10px] font-semibold opacity-0 group-hover:opacity-100 focus:opacity-100 disabled:opacity-60 transition-opacity";
   const stateClasses = error
     ? "border border-red-500/50 bg-red-500/15 text-red-300 hover:bg-red-500/25"
-    : "border border-[#0BA5C7]/40 bg-[#0BA5C7]/15 text-[#0BA5C7] hover:bg-[#0BA5C7]/25";
+    : "border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/15 text-[var(--signal-live)] hover:bg-[var(--signal-live)]/25";
 
   return (
     <button

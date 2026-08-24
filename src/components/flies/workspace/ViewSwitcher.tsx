@@ -46,7 +46,7 @@ export default function ViewSwitcher({ value, onChange }: Props) {
             className={[
               "inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors",
               active
-                ? "bg-[#E8923A] text-white"
+                ? "bg-[var(--action)] text-white"
                 : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg)]",
             ].join(" ")}
           >

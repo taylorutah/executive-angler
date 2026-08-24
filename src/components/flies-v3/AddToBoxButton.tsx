@@ -81,8 +81,8 @@ export default function AddToBoxButton({
   }
 
   const buttonClass = compact
-    ? "inline-flex items-center gap-1.5 rounded-md bg-[#E8923A] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#d17d28] transition-colors disabled:opacity-60"
-    : "inline-flex items-center gap-2 rounded-md bg-[#E8923A] px-4 py-2 text-sm font-medium text-white hover:bg-[#d17d28] transition-colors disabled:opacity-60";
+    ? "inline-flex items-center gap-1.5 rounded-md bg-[var(--action)] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#d17d28] transition-colors disabled:opacity-60"
+    : "inline-flex items-center gap-2 rounded-md bg-[var(--action)] px-4 py-2 text-sm font-medium text-white hover:bg-[#d17d28] transition-colors disabled:opacity-60";
 
   if (done) {
     return (
@@ -126,7 +126,7 @@ export default function AddToBoxButton({
           onClick={() => setPicker(null)}
         >
           <div
-            className="w-full sm:max-w-md bg-[var(--color-surface,#fff)] dark:bg-[#161B22] rounded-t-xl sm:rounded-xl p-5 shadow-xl"
+            className="w-full sm:max-w-md bg-[var(--color-surface,#fff)] dark:bg-[var(--surface-raised)] rounded-t-xl sm:rounded-xl p-5 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 id="box-picker-title" className="text-base font-semibold mb-1">
@@ -142,7 +142,7 @@ export default function AddToBoxButton({
                     type="button"
                     onClick={() => attemptAdd(b.id)}
                     disabled={pending}
-                    className="w-full flex items-center justify-between gap-3 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-3 py-2.5 text-sm hover:border-[#E8923A] hover:bg-[#E8923A]/5 transition-colors text-left disabled:opacity-60"
+                    className="w-full flex items-center justify-between gap-3 rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] px-3 py-2.5 text-sm hover:border-[var(--action)] hover:bg-[var(--action)]/5 transition-colors text-left disabled:opacity-60"
                   >
                     <span className="font-medium">{b.name}</span>
                     <span className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
@@ -155,7 +155,7 @@ export default function AddToBoxButton({
             <button
               type="button"
               onClick={() => setPicker(null)}
-              className="mt-4 w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[#30363D] px-3 py-2 text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[#21262D] transition-colors"
+              className="mt-4 w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] px-3 py-2 text-xs hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] transition-colors"
             >
               Cancel
             </button>

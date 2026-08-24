@@ -121,14 +121,14 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // No gauges linked
   if (gauges.length === 0) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-3 mb-2">
-          <Droplets className="h-5 w-5 text-[#6E7681]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">
+          <Droplets className="h-5 w-5 text-[var(--text-meta)]" />
+          <h3 className="text-sm font-bold text-[var(--text-primary)]">
             River Flow — {riverName}
           </h3>
         </div>
-        <p className="text-sm text-[#6E7681]">
+        <p className="text-sm text-[var(--text-meta)]">
           No USGS gauge linked to this river.
         </p>
       </div>
@@ -378,8 +378,8 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // Loading state
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-2 text-[#6E7681]">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+        <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading 30-day flow data...</span>
         </div>
@@ -390,14 +390,14 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // Error state
   if (error || chartPoints.length === 0) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-3 mb-2">
-          <Droplets className="h-5 w-5 text-[#6E7681]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">
+          <Droplets className="h-5 w-5 text-[var(--text-meta)]" />
+          <h3 className="text-sm font-bold text-[var(--text-primary)]">
             River Flow — {riverName}
           </h3>
         </div>
-        <p className="text-sm text-[#6E7681]">
+        <p className="text-sm text-[var(--text-meta)]">
           {error || "No flow data available for this gauge."}
         </p>
       </div>
@@ -408,17 +408,17 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const activeGauge = gauges.find((g) => g.site_id === activeSiteId);
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <Droplets className="h-5 w-5 text-[#00B4D8]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">
+          <Droplets className="h-5 w-5 text-[var(--signal-live)]" />
+          <h3 className="text-sm font-bold text-[var(--text-primary)]">
             30-Day Flow
           </h3>
         </div>
-        <div className="flex items-center gap-3 text-xs text-[#6E7681]">
-          <span className="font-mono text-[#E8923A] font-bold">
+        <div className="flex items-center gap-3 text-xs text-[var(--text-meta)]">
+          <span className="font-mono text-[var(--action)] font-bold">
             {currentFlow.value.toLocaleString()} cfs
           </span>
           <span>now</span>
@@ -430,7 +430,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
         <div className="relative mb-4">
           <button
             onClick={() => setSelectorOpen(!selectorOpen)}
-            className="flex items-center gap-2 text-xs text-[#A8B2BD] bg-[#0D1117] rounded-lg px-3 py-2 border border-[#21262D] hover:border-[#E8923A]/40 transition-colors w-full"
+            className="flex items-center gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] rounded-lg px-3 py-2 border border-[var(--border-rule)] hover:border-[var(--action)]/40 transition-colors w-full"
           >
             <span className="truncate">
               {activeGauge?.section || activeGauge?.name || activeSiteId}
@@ -440,7 +440,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
             />
           </button>
           {selectorOpen && (
-            <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-[#0D1117] border border-[#21262D] rounded-lg shadow-xl overflow-hidden">
+            <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg shadow-xl overflow-hidden">
               {gauges.map((g) => (
                 <button
                   key={g.site_id}
@@ -450,12 +450,12 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                   }}
                   className={`block w-full text-left px-3 py-2 text-xs transition-colors ${
                     g.site_id === activeSiteId
-                      ? "text-[#E8923A] bg-[#E8923A]/5"
-                      : "text-[#A8B2BD] hover:bg-[#161B22]"
+                      ? "text-[var(--action)] bg-[var(--action)]/5"
+                      : "text-[var(--text-body)] hover:bg-[var(--surface-raised)]"
                   }`}
                 >
                   <span className="font-medium">{g.section}</span>
-                  <span className="text-[#6E7681] ml-2">{g.name}</span>
+                  <span className="text-[var(--text-meta)] ml-2">{g.name}</span>
                 </button>
               ))}
             </div>
@@ -635,17 +635,17 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
         {/* Hover tooltip */}
         {hoveredIndex !== null && chartPoints[hoveredIndex] && (
           <div
-            className="absolute pointer-events-none bg-[#0D1117] border border-[#21262D] rounded-lg px-3 py-2 text-xs shadow-lg z-10"
+            className="absolute pointer-events-none bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-xs shadow-lg z-10"
             style={{
               left: `${(xScale(chartPoints[hoveredIndex].datetime) / CHART_WIDTH) * 100}%`,
               top: `${(yScale(chartPoints[hoveredIndex].value) / CHART_HEIGHT) * 100 - 14}%`,
               transform: "translateX(-50%)",
             }}
           >
-            <p className="text-[#F0F6FC] font-mono font-bold">
+            <p className="text-[var(--text-primary)] font-mono font-bold">
               {chartPoints[hoveredIndex].value.toLocaleString()} cfs
             </p>
-            <p className="text-[#6E7681]">
+            <p className="text-[var(--text-meta)]">
               {formatFullDate(chartPoints[hoveredIndex].datetime)}
             </p>
           </div>
@@ -654,28 +654,28 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
         {/* Session hover tooltip */}
         {hoveredSession && (
           <div
-            className="absolute pointer-events-none bg-[#0D1117] border border-[#E8923A]/30 rounded-lg px-3 py-2 text-xs shadow-lg z-20"
+            className="absolute pointer-events-none bg-[var(--surface-page)] border border-[var(--action)]/30 rounded-lg px-3 py-2 text-xs shadow-lg z-20"
             style={{
               left: `${(hoveredSession.x / CHART_WIDTH) * 100}%`,
               top: `${(hoveredSession.y / CHART_HEIGHT) * 100 - 20}%`,
               transform: "translateX(-50%)",
             }}
           >
-            <p className="text-[#E8923A] font-bold">
+            <p className="text-[var(--action)] font-bold">
               {hoveredSession.fishCount} fish caught
             </p>
-            <p className="text-[#F0F6FC]">
+            <p className="text-[var(--text-primary)]">
               {formatShortDate(hoveredSession.date + "T12:00:00")}
             </p>
             {hoveredSession.topFly && (
-              <p className="text-[#6E7681]">Fly: {hoveredSession.topFly}</p>
+              <p className="text-[var(--text-meta)]">Fly: {hoveredSession.topFly}</p>
             )}
             {hoveredSession.species.length > 0 && (
-              <p className="text-[#6E7681]">
+              <p className="text-[var(--text-meta)]">
                 {hoveredSession.species.join(", ")}
               </p>
             )}
-            <p className="text-[#6E7681] font-mono">
+            <p className="text-[var(--text-meta)] font-mono">
               {hoveredSession.flow.toLocaleString()} cfs
             </p>
           </div>
@@ -684,9 +684,9 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
       {/* Footer */}
       <div className="flex items-center justify-between mt-3">
-        <p className="text-[10px] text-[#6E7681]">
+        <p className="text-[10px] text-[var(--text-meta)]">
           {sessionMarkers.length > 0 && (
-            <span className="text-[#E8923A]">
+            <span className="text-[var(--action)]">
               {sessionMarkers.length} session{sessionMarkers.length !== 1 ? "s" : ""} overlaid
               {" · "}
             </span>
@@ -694,7 +694,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           Dashed line = 30-day avg ({meanFlow.toLocaleString()} cfs) · Source: USGS NWIS
         </p>
         {siteName && (
-          <p className="text-[10px] text-[#6E7681] truncate max-w-[200px]">
+          <p className="text-[10px] text-[var(--text-meta)] truncate max-w-[200px]">
             {siteName}
           </p>
         )}

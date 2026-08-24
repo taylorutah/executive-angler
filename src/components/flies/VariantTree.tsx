@@ -86,14 +86,14 @@ export default function VariantTree({ patternId, canonicalId, createVariantHref 
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-4 text-xs text-[#6E7681]">
+      <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 text-xs text-[var(--text-meta)]">
         Loading lineage…
       </div>
     );
   }
   if (error) {
     return (
-      <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-4 text-xs text-red-400">
+      <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 text-xs text-red-400">
         {error}
       </div>
     );
@@ -118,9 +118,9 @@ function PersonalTree({
 
   if (!hasAny) {
     return (
-      <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
+      <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
         <Header title="Variant lineage" createVariantHref={createVariantHref} />
-        <p className="mt-2 text-xs text-[#6E7681]">
+        <p className="mt-2 text-xs text-[var(--text-meta)]">
           This pattern has no parent and no variants yet. Create a variant to fork a size or color.
         </p>
       </div>
@@ -128,7 +128,7 @@ function PersonalTree({
   }
 
   return (
-    <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
+    <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
       <Header title="Variant lineage" createVariantHref={createVariantHref} />
 
       {/* Parent */}
@@ -156,11 +156,11 @@ function PersonalTree({
       {/* Current */}
       <div className="mt-4">
         <SectionLabel>You are here</SectionLabel>
-        <div className="rounded-lg border border-[#E8923A]/40 bg-[#E8923A]/5 p-3">
+        <div className="rounded-lg border border-[var(--action)]/40 bg-[var(--action)]/5 p-3">
           <div className="flex items-center gap-3">
             <Thumb url={pattern.image_url ?? pattern.my_tied_fly_photo_url ?? null} alt={pattern.name} />
             <div className="min-w-0 flex-1">
-              <p className="truncate font-semibold text-[#F0F6FC]">{pattern.name}</p>
+              <p className="truncate font-semibold text-[var(--text-primary)]">{pattern.name}</p>
               <MetaLine pattern={pattern} />
             </div>
           </div>
@@ -227,11 +227,11 @@ function CanonicalTree({
   if (!canonical) return null;
 
   return (
-    <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-5">
+    <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
       <Header title={`Community variants of ${canonical.name}`} createVariantHref={createVariantHref} />
 
       {variants.length === 0 ? (
-        <p className="mt-2 text-xs text-[#6E7681]">
+        <p className="mt-2 text-xs text-[var(--text-meta)]">
           No public variants yet. Create one and share it to become the first.
         </p>
       ) : (
@@ -248,19 +248,19 @@ function CanonicalTree({
 function Header({ title, createVariantHref }: { title: string; createVariantHref?: string }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-2">
-      <h3 className="flex items-center gap-1.5 font-heading text-base font-bold text-[#F0F6FC]">
-        <GitBranch className="h-4 w-4 text-[#00B4D8]" />
+      <h3 className="flex items-center gap-1.5 font-heading text-base font-bold text-[var(--text-primary)]">
+        <GitBranch className="h-4 w-4 text-[var(--signal-live)]" />
         {title}
         <HelpHint label="About variant lineage">
-          <p className="text-[#F0F6FC] font-semibold">Variants are linked children of a parent pattern.</p>
+          <p className="text-[var(--text-primary)] font-semibold">Variants are linked children of a parent pattern.</p>
           <p>Forking a fly captures what&apos;s different (size, bead, color) and remembers where it came from — so you can tell <em>Frenchie #16 olive</em> from <em>Frenchie #14 red-collar</em> at a glance.</p>
-          <p className="text-[#6E7681] text-xs">Public canonical patterns also show community variants here.</p>
+          <p className="text-[var(--text-meta)] text-xs">Public canonical patterns also show community variants here.</p>
         </HelpHint>
       </h3>
       {createVariantHref && (
         <Link
           href={createVariantHref}
-          className="inline-flex items-center gap-1 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1 text-xs font-semibold text-[#00B4D8] hover:bg-[#00B4D8]/20"
+          className="inline-flex items-center gap-1 rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--signal-live)] hover:bg-[var(--signal-live)]/20"
         >
           <Sparkles className="h-3 w-3" /> New variant
         </Link>
@@ -271,7 +271,7 @@ function Header({ title, createVariantHref }: { title: string; createVariantHref
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#6E7681]">
+    <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--text-meta)]">
       {children}
     </div>
   );
@@ -279,7 +279,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Thumb({ url, alt }: { url: string | null; alt: string }) {
   return (
-    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-[#0D1117]">
+    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--surface-page)]">
       {url ? (
         <Image src={url} alt={alt} fill className="object-cover" sizes="48px" />
       ) : (
@@ -297,7 +297,7 @@ function MetaLine({ pattern }: { pattern: FlyPattern }) {
     pattern.bead_color ? `${pattern.bead_color} bead` : null,
   ].filter(Boolean);
   if (parts.length === 0) return null;
-  return <p className="truncate text-xs text-[#6E7681]">{parts.join(" · ")}</p>;
+  return <p className="truncate text-xs text-[var(--text-meta)]">{parts.join(" · ")}</p>;
 }
 
 function PersonalNode({
@@ -316,20 +316,20 @@ function PersonalNode({
   const [open, setOpen] = useState(false);
   const badgeClass =
     badgeTone === "parent"
-      ? "bg-[#0BA5C7]/10 text-[#0BA5C7]"
+      ? "bg-[var(--signal-live)]/10 text-[var(--signal-live)]"
       : badgeTone === "child"
-        ? "bg-[#E8923A]/10 text-[#E8923A]"
-        : "bg-[#21262D] text-[#A8B2BD]";
+        ? "bg-[var(--action)]/10 text-[var(--action)]"
+        : "bg-[var(--border-rule)] text-[var(--text-body)]";
 
   return (
-    <div className="rounded-lg border border-[#21262D] bg-[#0D1117]">
+    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
       <div className="flex items-start gap-3 p-3">
         <Thumb url={pattern.image_url ?? pattern.my_tied_fly_photo_url ?? null} alt={pattern.name} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <Link
               href={href}
-              className="truncate font-semibold text-[#F0F6FC] hover:text-[#E8923A]"
+              className="truncate font-semibold text-[var(--text-primary)] hover:text-[var(--action)]"
             >
               {pattern.name}
             </Link>
@@ -344,7 +344,7 @@ function PersonalNode({
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-[#00B4D8] hover:text-[#0BA5C7]"
+              className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-[var(--signal-live)] hover:text-[var(--signal-live)]"
             >
               {open ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
               {open ? "Hide diff" : "Show diff"}
@@ -353,7 +353,7 @@ function PersonalNode({
         </div>
       </div>
       {open && diffAgainst && (
-        <div className="border-t border-[#21262D] p-3">
+        <div className="border-t border-[var(--border-rule)] p-3">
           <RecipeDiff
             parent={diffAgainst}
             child={pattern}
@@ -371,18 +371,18 @@ function CanonicalNode({ canonical, badge }: { canonical: CanonicalLite; badge: 
   return (
     <Link
       href={`/flies/${canonical.slug}`}
-      className="flex items-start gap-3 rounded-lg border border-[#21262D] bg-[#0D1117] p-3 hover:border-[#00B4D8]/40"
+      className="flex items-start gap-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-3 hover:border-[var(--signal-live)]/40"
     >
       <Thumb url={canonical.hero_image_url ?? null} alt={canonical.name} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="truncate font-semibold text-[#F0F6FC]">{canonical.name}</span>
-          <span className="rounded-full bg-[#0BA5C7]/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0BA5C7]">
+          <span className="truncate font-semibold text-[var(--text-primary)]">{canonical.name}</span>
+          <span className="rounded-full bg-[var(--signal-live)]/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--signal-live)]">
             {badge}
           </span>
         </div>
         {canonical.tagline && (
-          <p className="truncate text-xs text-[#6E7681]">{canonical.tagline}</p>
+          <p className="truncate text-xs text-[var(--text-meta)]">{canonical.tagline}</p>
         )}
       </div>
     </Link>
@@ -399,12 +399,12 @@ function CommunityVariantNode({
   const [open, setOpen] = useState(false);
   const image = variant.image_url ?? variant.my_tied_fly_photo_url ?? null;
   return (
-    <div className="rounded-lg border border-[#21262D] bg-[#0D1117]">
+    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
       <div className="flex items-start gap-3 p-3">
         <Thumb url={image} alt={variant.name} />
         <div className="min-w-0 flex-1">
-          <p className="truncate font-semibold text-[#F0F6FC]">{variant.name}</p>
-          <p className="truncate text-xs text-[#6E7681]">
+          <p className="truncate font-semibold text-[var(--text-primary)]">{variant.name}</p>
+          <p className="truncate text-xs text-[var(--text-meta)]">
             {[variant.type, variant.size ? `#${variant.size}` : null, variant.fly_color]
               .filter(Boolean)
               .join(" · ") || "Community variant"}
@@ -412,7 +412,7 @@ function CommunityVariantNode({
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-[#00B4D8] hover:text-[#0BA5C7]"
+            className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-[var(--signal-live)] hover:text-[var(--signal-live)]"
           >
             {open ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
             {open ? "Hide diff" : "What's different"}
@@ -420,7 +420,7 @@ function CommunityVariantNode({
         </div>
       </div>
       {open && (
-        <div className="border-t border-[#21262D] p-3">
+        <div className="border-t border-[var(--border-rule)] p-3">
           <RecipeDiff
             parent={{
               name: canonical.name,
@@ -463,7 +463,7 @@ export function NewVariantPill({ href }: { href: string }) {
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1 rounded-md border border-[#00B4D8]/40 bg-[#00B4D8]/10 px-2.5 py-1 text-xs font-semibold text-[#00B4D8] hover:bg-[#00B4D8]/20"
+      className="inline-flex items-center gap-1 rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--signal-live)] hover:bg-[var(--signal-live)]/20"
     >
       <Plus className="h-3 w-3" /> Variant
     </Link>

@@ -111,7 +111,7 @@ export default function FlyBoxAddButton({
             e.stopPropagation();
           }
         }}
-        className={`inline-flex items-center text-xs font-medium text-[#A8B2BD] hover:text-[#E8923A] underline-offset-2 hover:underline ${className ?? ""}`}
+        className={`inline-flex items-center text-xs font-medium text-[var(--text-body)] hover:text-[var(--action)] underline-offset-2 hover:underline ${className ?? ""}`}
         title="Sign in to save this fly to your box"
       >
         Sign in to save
@@ -130,8 +130,8 @@ export default function FlyBoxAddButton({
           title={inBox ? `In your box · ${variantCount}` : "Add to fly box"}
           className={`inline-flex items-center justify-center h-7 w-7 rounded-full transition-colors ${
             inBox
-              ? "bg-[#E8923A]/15 text-[#E8923A] border border-[#E8923A]/30 hover:bg-[#E8923A]/25"
-              : "bg-[#161B22]/90 text-[#A8B2BD] border border-[#21262D] hover:text-[#E8923A] hover:border-[#E8923A]/50 backdrop-blur-sm"
+              ? "bg-[var(--action)]/15 text-[var(--action)] border border-[var(--action)]/30 hover:bg-[var(--action)]/25"
+              : "bg-[var(--surface-raised)]/90 text-[var(--text-body)] border border-[var(--border-rule)] hover:text-[var(--action)] hover:border-[var(--action)]/50 backdrop-blur-sm"
           } ${className ?? ""}`}
         >
           {checking ? (
@@ -150,9 +150,9 @@ export default function FlyBoxAddButton({
         <button
           type="button"
           onClick={handleClick}
-          className={`w-full text-left px-3 py-2 text-sm text-[#F0F6FC] hover:bg-[#21262D] flex items-center gap-2 transition-colors ${className ?? ""}`}
+          className={`w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-rule)] flex items-center gap-2 transition-colors ${className ?? ""}`}
         >
-          <Plus className="h-4 w-4 text-[#E8923A]" />
+          <Plus className="h-4 w-4 text-[var(--action)]" />
           {inBox ? `Add another variant (${variantCount} in box)` : "Add to fly box"}
         </button>
       );

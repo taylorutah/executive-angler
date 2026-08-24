@@ -35,7 +35,7 @@ export default function CollapsibleOverview({
 
         {/* Gradient fade overlay — inside the relative wrapper so it stays over content */}
         {needsTruncation && !expanded && (
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0D1117] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[var(--surface-page)] to-transparent pointer-events-none" />
         )}
       </div>
 
@@ -43,7 +43,7 @@ export default function CollapsibleOverview({
       {needsTruncation && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[#E8923A] hover:text-[#F0A65A] transition-colors"
+          className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] hover:text-[#F0A65A] transition-colors"
         >
           <span>{expanded ? "Show less" : "Read more"}</span>
           <ChevronDown

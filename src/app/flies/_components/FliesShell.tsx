@@ -59,13 +59,13 @@ export default function FliesShell({
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Link
               href="/flies/library"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[#E8923A]/40 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--action)]/40 transition-colors"
             >
               Browse Library
             </Link>
             <Link
               href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
             >
               <Plus className="h-4 w-4" /> New Pattern
             </Link>

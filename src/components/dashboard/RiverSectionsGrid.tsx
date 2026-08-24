@@ -135,12 +135,12 @@ export default function RiverSectionsGrid({ initialFavorites, yourRivers, allRiv
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <div className="inline-flex rounded-lg bg-[#161B22] border border-[#21262D] p-0.5 text-sm">
+        <div className="inline-flex rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] p-0.5 text-sm">
           <button
             type="button"
             onClick={() => setTab("favorites")}
             className={`px-3 py-1.5 rounded-md font-medium transition ${
-              tab === "favorites" ? "bg-[#E8923A] text-[#0D1117]" : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+              tab === "favorites" ? "bg-[var(--action)] text-[var(--surface-page)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
             }`}
           >
             Favorites {favorites.length > 0 && <span className="ml-1 opacity-70">{favorites.length}</span>}
@@ -149,7 +149,7 @@ export default function RiverSectionsGrid({ initialFavorites, yourRivers, allRiv
             type="button"
             onClick={() => setTab("yours")}
             className={`px-3 py-1.5 rounded-md font-medium transition ${
-              tab === "yours" ? "bg-[#E8923A] text-[#0D1117]" : "text-[#A8B2BD] hover:text-[#F0F6FC]"
+              tab === "yours" ? "bg-[var(--action)] text-[var(--surface-page)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
             }`}
           >
             Your Rivers {yourRivers.length > 0 && <span className="ml-1 opacity-70">{yourRivers.length}</span>}
@@ -159,7 +159,7 @@ export default function RiverSectionsGrid({ initialFavorites, yourRivers, allRiv
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#161B22] border border-[#21262D] hover:border-[#E8923A]/50 px-3 py-1.5 text-sm text-[#F0F6FC]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] hover:border-[var(--action)]/50 px-3 py-1.5 text-sm text-[var(--text-primary)]"
           >
             <Plus className="h-4 w-4" /> Pin section
           </button>
@@ -167,14 +167,14 @@ export default function RiverSectionsGrid({ initialFavorites, yourRivers, allRiv
       </div>
 
       {showEmptyState ? (
-        <div className="rounded-2xl border border-dashed border-[#21262D] bg-[#0D1117]/40 px-6 py-10 text-center">
-          <MapPin className="h-7 w-7 text-[#6E7681] mx-auto mb-2" />
-          <p className="text-[#F0F6FC] font-medium">Pin a river section to track its flow</p>
-          <p className="text-sm text-[#A8B2BD] mt-1">Live discharge, water temp, weather, and 12-month history — all in one place.</p>
+        <div className="rounded-2xl border border-dashed border-[var(--border-rule)] bg-[var(--surface-page)]/40 px-6 py-10 text-center">
+          <MapPin className="h-7 w-7 text-[var(--text-meta)] mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] font-medium">Pin a river section to track its flow</p>
+          <p className="text-sm text-[var(--text-body)] mt-1">Live discharge, water temp, weather, and 12-month history — all in one place.</p>
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] text-[#0D1117] hover:bg-[#E8923A]/90 px-4 py-2 text-sm font-medium"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] text-[var(--surface-page)] hover:bg-[var(--action)]/90 px-4 py-2 text-sm font-medium"
           >
             <Plus className="h-4 w-4" /> Pin your first section
           </button>
@@ -188,8 +188,8 @@ export default function RiverSectionsGrid({ initialFavorites, yourRivers, allRiv
           </SortableContext>
         </DndContext>
       ) : yourRivers.length === 0 ? (
-        <div className="rounded-2xl border border-[#21262D] bg-[#0D1117]/40 px-6 py-8 text-center">
-          <p className="text-[#A8B2BD] text-sm">Log a session to see your rivers here.</p>
+        <div className="rounded-2xl border border-[var(--border-rule)] bg-[var(--surface-page)]/40 px-6 py-8 text-center">
+          <p className="text-[var(--text-body)] text-sm">Log a session to see your rivers here.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

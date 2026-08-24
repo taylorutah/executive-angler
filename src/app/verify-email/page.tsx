@@ -23,26 +23,26 @@ export default async function VerifyEmailPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl shadow-md p-8 text-center">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl shadow-md p-8 text-center">
           <div className="text-4xl mb-4">📬</div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">
+          <h1 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">
             Confirm your email
           </h1>
-          <p className="text-[#A8B2BD] mb-2">
+          <p className="text-[var(--text-body)] mb-2">
             We sent a confirmation link to{" "}
-            <span className="font-mono text-[#F0F6FC]">{user.email}</span>.
+            <span className="font-mono text-[var(--text-primary)]">{user.email}</span>.
           </p>
-          <p className="text-sm text-[#6E7681] mb-6">
+          <p className="text-sm text-[var(--text-meta)] mb-6">
             Click the link in that email to unlock your journal, fly box, and feed. Check spam if you don&apos;t see it within a minute.
           </p>
 
           <ResendButton email={user.email || ""} />
 
-          <p className="text-xs text-[#6E7681] mt-6">
+          <p className="text-xs text-[var(--text-meta)] mt-6">
             Wrong address?{" "}
-            <Link href="/account" className="text-[#E8923A] hover:underline">
+            <Link href="/account" className="text-[var(--action)] hover:underline">
               Update it in Account
             </Link>
             .

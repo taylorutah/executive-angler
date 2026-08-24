@@ -95,18 +95,18 @@ export default function SetupClient({
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/admin" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <h1 className="font-serif text-2xl text-[#F0F6FC]">Database Setup</h1>
+          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Database Setup</h1>
         </div>
 
         {/* Schema checks */}
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
-          <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Schema Status</h2>
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
+          <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Schema Status</h2>
           <div className="space-y-2">
             {Object.entries(checks).map(([key, ok]) => (
               <div key={key} className="flex items-center gap-2">
@@ -129,9 +129,9 @@ export default function SetupClient({
           </div>
         ) : (
           <>
-            <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-4">
+            <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-4">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider">Migration SQL</h2>
+                <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider">Migration SQL</h2>
                 <div className="flex gap-2">
                   <Button
                     onClick={handleCopy}
@@ -154,11 +154,11 @@ export default function SetupClient({
                   </Button>
                 </div>
               </div>
-              <pre className="text-xs text-[#A8B2BD] bg-[#0D1117] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">
+              <pre className="text-xs text-[var(--text-body)] bg-[var(--surface-page)] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">
                 {MIGRATION_SQL}
               </pre>
             </div>
-            <p className="text-xs text-[#6E7681] text-center">
+            <p className="text-xs text-[var(--text-meta)] text-center">
               Copy the SQL above → paste in Supabase SQL Editor → click Run → refresh this page
             </p>
           </>

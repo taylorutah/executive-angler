@@ -10,13 +10,13 @@ export default function DiscoveryNav({ className = "" }: { className?: string })
       {DISCOVERY_LINKS.map((link, i) => (
         <span key={link.href} className="inline-flex items-center gap-4">
           {i > 0 && (
-            <span className="text-[#6E7681]" aria-hidden="true">
+            <span className="text-[var(--text-meta)]" aria-hidden="true">
               ·
             </span>
           )}
           <Link
             href={link.href}
-            className="text-[#E8923A] hover:text-[#F0F6FC] underline-offset-4 hover:underline"
+            className="text-[var(--action)] hover:text-[var(--text-primary)] underline-offset-4 hover:underline"
           >
             {link.label}
           </Link>

@@ -265,8 +265,8 @@ export default function MaterialsBrowserClient({
     <div className="flex flex-col gap-6 lg:flex-row">
       {/* ── Sidebar: Categories ─────────────────────────────────────────── */}
       <aside className="w-full shrink-0 lg:w-64">
-        <div className="rounded-lg border border-[#21262D] bg-[#161B22] p-4">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#A8B2BD]">
+        <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
             Categories
           </h2>
 
@@ -278,8 +278,8 @@ export default function MaterialsBrowserClient({
             }}
             className={`mb-1 flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${
               activeCategory === null
-                ? "bg-[#E8923A]/15 text-[#E8923A]"
-                : "text-[#A8B2BD] hover:bg-[#21262D] hover:text-[#F0F6FC]"
+                ? "bg-[var(--action)]/15 text-[var(--action)]"
+                : "text-[var(--text-body)] hover:bg-[var(--border-rule)] hover:text-[var(--text-primary)]"
             }`}
           >
             <span>All Materials</span>
@@ -294,8 +294,8 @@ export default function MaterialsBrowserClient({
               onClick={() => handleCategoryClick(category)}
               className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                 activeCategory === category
-                  ? "bg-[#E8923A]/15 text-[#E8923A]"
-                  : "text-[#A8B2BD] hover:bg-[#21262D] hover:text-[#F0F6FC]"
+                  ? "bg-[var(--action)]/15 text-[var(--action)]"
+                  : "text-[var(--text-body)] hover:bg-[var(--border-rule)] hover:text-[var(--text-primary)]"
               }`}
             >
               <span>{CATEGORY_LABELS[category] || category}</span>
@@ -329,7 +329,7 @@ export default function MaterialsBrowserClient({
 
         {/* Search bar */}
         <div className="relative mb-6">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6E7681]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-meta)]" />
           <input
             ref={searchInputRef}
             type="text"
@@ -341,15 +341,15 @@ export default function MaterialsBrowserClient({
             placeholder="Search by name, brand, or color — results appear as you type"
             autoComplete="off"
             spellCheck={false}
-            className="w-full rounded-lg border border-[#21262D] bg-[#161B22] py-3 pl-11 pr-10 text-[#F0F6FC] placeholder-[#6E7681] outline-none transition-colors focus:border-[#E8923A]/50 focus:ring-1 focus:ring-[#E8923A]/30"
+            className="w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-3 pl-11 pr-10 text-[var(--text-primary)] placeholder-[#6E7681] outline-none transition-colors focus:border-[var(--action)]/50 focus:ring-1 focus:ring-[var(--action)]/30"
           />
           {/* Right side: spinner while searching, X when idle with a query */}
           {loading && (searchQuery || activeCategory) ? (
-            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#E8923A]" />
+            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[var(--action)]" />
           ) : searchQuery ? (
             <button
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#F0F6FC]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-primary)]"
               title="Clear (Esc)"
             >
               <X className="h-4 w-4" />
@@ -359,21 +359,21 @@ export default function MaterialsBrowserClient({
 
         {/* Active filter + result count (grid stays visible; spinner lives in search input) */}
         <div className="mb-4 flex items-center gap-3">
-          <p className="text-sm text-[#6E7681]">
+          <p className="text-sm text-[var(--text-meta)]">
             Showing{" "}
-            <span className="text-[#A8B2BD]">{materials.length}</span>
+            <span className="text-[var(--text-body)]">{materials.length}</span>
             {visibleCount > materials.length && <> of {visibleCount}</>}{" "}
             materials
             {searchQuery && (
               <>
-                {" "}for <span className="text-[#F0F6FC]">“{searchQuery}”</span>
+                {" "}for <span className="text-[var(--text-primary)]">“{searchQuery}”</span>
               </>
             )}
           </p>
           {activeCategory && (
             <button
               onClick={() => setActiveCategory(null)}
-              className="inline-flex items-center gap-1 rounded-full bg-[#E8923A]/15 px-2.5 py-0.5 text-xs font-medium text-[#E8923A] transition-colors hover:bg-[#E8923A]/25"
+              className="inline-flex items-center gap-1 rounded-full bg-[var(--action)]/15 px-2.5 py-0.5 text-xs font-medium text-[var(--action)] transition-colors hover:bg-[var(--action)]/25"
             >
               {CATEGORY_LABELS[activeCategory] || activeCategory}
               <X className="h-3 w-3" />
@@ -383,12 +383,12 @@ export default function MaterialsBrowserClient({
 
         {/* Empty state — only when we finished loading AND have no results */}
         {!loading && materials.length === 0 && (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-[#21262D] bg-[#161B22] py-20">
-            <Package className="mb-4 h-12 w-12 text-[#6E7681]" />
-            <p className="text-lg font-medium text-[#A8B2BD]">
+          <div className="flex flex-col items-center justify-center rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-20">
+            <Package className="mb-4 h-12 w-12 text-[var(--text-meta)]" />
+            <p className="text-lg font-medium text-[var(--text-body)]">
               No materials found
             </p>
-            <p className="mt-1 text-sm text-[#6E7681]">
+            <p className="mt-1 text-sm text-[var(--text-meta)]">
               Try adjusting your search or filters.
             </p>
             <button
@@ -396,7 +396,7 @@ export default function MaterialsBrowserClient({
                 setSearchQuery("");
                 setActiveCategory(null);
               }}
-              className="mt-4 text-sm font-medium text-[#E8923A] hover:underline"
+              className="mt-4 text-sm font-medium text-[var(--action)] hover:underline"
             >
               Clear all filters
             </button>
@@ -444,22 +444,22 @@ export default function MaterialsBrowserClient({
           onClick={() => setSubmitModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-lg rounded-xl border border-[#21262D] bg-[#161B22] p-6 shadow-2xl"
+            className="relative w-full max-w-lg rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSubmitModalOpen(false)}
-              className="absolute right-4 top-4 text-[#6E7681] hover:text-[#F0F6FC]"
+              className="absolute right-4 top-4 text-[var(--text-meta)] hover:text-[var(--text-primary)]"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="mb-4">
-              <h2 className="font-heading text-xl font-semibold text-[#F0F6FC]">
+              <h2 className="font-heading text-xl font-semibold text-[var(--text-primary)]">
                 Submit a New Material
               </h2>
-              <p className="mt-1 text-sm text-[#A8B2BD]">
+              <p className="mt-1 text-sm text-[var(--text-body)]">
                 Add a material that&apos;s missing from the catalog. Submissions are
                 reviewed before appearing in search.
               </p>
@@ -511,8 +511,8 @@ function MaterialCard({
     <div
       className={`group rounded-lg border transition-colors ${
         isExpanded
-          ? "border-[#E8923A]/30 bg-[#1C2128]"
-          : "border-[#21262D] bg-[#161B22] hover:border-[#30363D]"
+          ? "border-[var(--action)]/30 bg-[#1C2128]"
+          : "border-[var(--border-rule)] bg-[var(--surface-raised)] hover:border-[var(--border-strong)]"
       }`}
     >
       {/* Card header — always visible */}
@@ -531,14 +531,14 @@ function MaterialCard({
               {CATEGORY_LABELS[material.category] || material.category}
             </span>
             {material.brand && (
-              <span className="truncate text-xs text-[#6E7681]">
+              <span className="truncate text-xs text-[var(--text-meta)]">
                 {material.brand}
               </span>
             )}
           </div>
 
           {/* Name */}
-          <h3 className="text-sm font-semibold leading-tight text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+          <h3 className="text-sm font-semibold leading-tight text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
             {material.name}
           </h3>
 
@@ -548,13 +548,13 @@ function MaterialCard({
               {previewSizes.map((size) => (
                 <span
                   key={size}
-                  className="rounded bg-[#21262D] px-1.5 py-0.5 text-[11px] text-[#A8B2BD]"
+                  className="rounded bg-[var(--border-rule)] px-1.5 py-0.5 text-[11px] text-[var(--text-body)]"
                 >
                   {size}
                 </span>
               ))}
               {hasMoreSizes && (
-                <span className="px-1 text-[11px] text-[#6E7681]">
+                <span className="px-1 text-[11px] text-[var(--text-meta)]">
                   +{sizes.length - 4}
                 </span>
               )}
@@ -567,13 +567,13 @@ function MaterialCard({
               {previewColors.map((color) => (
                 <span
                   key={color}
-                  className="rounded bg-[#0D1117] px-1.5 py-0.5 text-[11px] text-[#6E7681]"
+                  className="rounded bg-[var(--surface-page)] px-1.5 py-0.5 text-[11px] text-[var(--text-meta)]"
                 >
                   {color}
                 </span>
               ))}
               {hasMoreColors && (
-                <span className="px-1 text-[11px] text-[#6E7681]">
+                <span className="px-1 text-[11px] text-[var(--text-meta)]">
                   +{colors.length - 4}
                 </span>
               )}
@@ -582,7 +582,7 @@ function MaterialCard({
         </div>
 
         {/* Expand chevron */}
-        <div className="mt-1 shrink-0 text-[#6E7681]">
+        <div className="mt-1 shrink-0 text-[var(--text-meta)]">
           {isExpanded ? (
             <ChevronUp className="h-4 w-4" />
           ) : (
@@ -593,10 +593,10 @@ function MaterialCard({
 
       {/* Expanded details */}
       {isExpanded && (
-        <div className="border-t border-[#21262D] px-4 pb-4 pt-3">
+        <div className="border-t border-[var(--border-rule)] px-4 pb-4 pt-3">
           {/* Description */}
           {material.description && (
-            <p className="mb-3 text-sm leading-relaxed text-[#A8B2BD]">
+            <p className="mb-3 text-sm leading-relaxed text-[var(--text-body)]">
               {material.description}
             </p>
           )}
@@ -605,26 +605,26 @@ function MaterialCard({
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
             {material.material_type && (
               <div>
-                <span className="text-[#6E7681]">Type</span>
-                <p className="text-[#F0F6FC]">{material.material_type}</p>
+                <span className="text-[var(--text-meta)]">Type</span>
+                <p className="text-[var(--text-primary)]">{material.material_type}</p>
               </div>
             )}
             {material.weight && (
               <div>
-                <span className="text-[#6E7681]">Weight</span>
-                <p className="text-[#F0F6FC]">{material.weight}</p>
+                <span className="text-[var(--text-meta)]">Weight</span>
+                <p className="text-[var(--text-primary)]">{material.weight}</p>
               </div>
             )}
             {material.finish && (
               <div>
-                <span className="text-[#6E7681]">Finish</span>
-                <p className="text-[#F0F6FC]">{material.finish}</p>
+                <span className="text-[var(--text-meta)]">Finish</span>
+                <p className="text-[var(--text-primary)]">{material.finish}</p>
               </div>
             )}
             {material.subcategory && (
               <div>
-                <span className="text-[#6E7681]">Subcategory</span>
-                <p className="text-[#F0F6FC]">{material.subcategory}</p>
+                <span className="text-[var(--text-meta)]">Subcategory</span>
+                <p className="text-[var(--text-primary)]">{material.subcategory}</p>
               </div>
             )}
           </div>
@@ -632,14 +632,14 @@ function MaterialCard({
           {/* All sizes */}
           {sizes.length > 4 && (
             <div className="mt-3">
-              <span className="mb-1 block text-xs font-medium text-[#6E7681]">
+              <span className="mb-1 block text-xs font-medium text-[var(--text-meta)]">
                 All Sizes ({sizes.length})
               </span>
               <div className="flex flex-wrap gap-1">
                 {sizes.map((size) => (
                   <span
                     key={size}
-                    className="rounded bg-[#21262D] px-1.5 py-0.5 text-[11px] text-[#A8B2BD]"
+                    className="rounded bg-[var(--border-rule)] px-1.5 py-0.5 text-[11px] text-[var(--text-body)]"
                   >
                     {size}
                   </span>
@@ -651,14 +651,14 @@ function MaterialCard({
           {/* All colors */}
           {colors.length > 4 && (
             <div className="mt-3">
-              <span className="mb-1 block text-xs font-medium text-[#6E7681]">
+              <span className="mb-1 block text-xs font-medium text-[var(--text-meta)]">
                 All Colors ({colors.length})
               </span>
               <div className="flex flex-wrap gap-1">
                 {colors.map((color) => (
                   <span
                     key={color}
-                    className="rounded bg-[#0D1117] px-1.5 py-0.5 text-[11px] text-[#6E7681]"
+                    className="rounded bg-[var(--surface-page)] px-1.5 py-0.5 text-[11px] text-[var(--text-meta)]"
                   >
                     {color}
                   </span>
@@ -679,7 +679,7 @@ function MaterialCard({
                 className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                   isInInventory
                     ? "bg-emerald-900/30 text-emerald-400 cursor-default"
-                    : "bg-[#E8923A]/15 text-[#E8923A] hover:bg-[#E8923A]/25"
+                    : "bg-[var(--action)]/15 text-[var(--action)] hover:bg-[var(--action)]/25"
                 } disabled:opacity-60`}
               >
                 {isAdding ? (
@@ -698,7 +698,7 @@ function MaterialCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1 text-xs text-[#6E7681] hover:text-[#E8923A] transition-colors"
+                className="inline-flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
               >
                 View at vendor
                 <ExternalLink className="h-3 w-3" />

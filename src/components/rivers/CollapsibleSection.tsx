@@ -37,18 +37,18 @@ export default function CollapsibleSection({
         aria-expanded={open}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          {icon && <span className="shrink-0 text-[#E8923A]">{icon}</span>}
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] text-left">
+          {icon && <span className="shrink-0 text-[var(--action)]">{icon}</span>}
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] text-left">
             {title}
           </h2>
           {subtitle && (
-            <span className="text-xs text-[#6E7681] font-mono tracking-wide uppercase truncate">
+            <span className="text-xs text-[var(--text-meta)] font-mono tracking-wide uppercase truncate">
               {subtitle}
             </span>
           )}
         </div>
         <ChevronDown
-          className={`h-5 w-5 text-[#A8B2BD] shrink-0 transition-transform duration-300 ${
+          className={`h-5 w-5 text-[var(--text-body)] shrink-0 transition-transform duration-300 ${
             open ? "rotate-180" : ""
           }`}
         />

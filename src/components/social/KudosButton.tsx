@@ -132,14 +132,14 @@ export function KudosButton({
         <Link
           href={loginHref}
           aria-label="Sign in to give kudos"
-          className="flex items-center gap-1 text-[#6E7681] hover:text-[#DA3633] transition-colors"
+          className="flex items-center gap-1 text-[var(--text-meta)] hover:text-[var(--state-negative)] transition-colors"
         >
           {inner}
         </Link>
       );
     }
     return (
-      <div className="flex items-center gap-1 text-[#6E7681]">
+      <div className="flex items-center gap-1 text-[var(--text-meta)]">
         {inner}
       </div>
     );
@@ -151,8 +151,8 @@ export function KudosButton({
       disabled={loading}
       className={`flex items-center gap-1 transition-colors duration-150 ${
         liked
-          ? "text-[#DA3633]"
-          : "text-[#6E7681] hover:text-[#DA3633]"
+          ? "text-[var(--state-negative)]"
+          : "text-[var(--text-meta)] hover:text-[var(--state-negative)]"
       } ${loading ? "opacity-50" : ""}`}
       aria-label={liked ? "Remove kudos" : "Give kudos"}
     >

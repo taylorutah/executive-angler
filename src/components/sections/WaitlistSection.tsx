@@ -45,42 +45,42 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
   }
 
   return (
-    <section className="relative bg-[#0D1117] py-24 overflow-hidden">
+    <section className="relative bg-[var(--surface-page)] py-24 overflow-hidden">
       {/* Atmospheric glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#E8923A] opacity-[0.07] blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute top-0 right-1/4 w-[400px] h-[300px] bg-[#00B4D8] opacity-[0.05] blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[var(--action)] opacity-[0.07] blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[300px] bg-[var(--signal-live)] opacity-[0.05] blur-[100px] rounded-full pointer-events-none" />
 
       <div className="relative mx-auto max-w-2xl px-4 sm:px-6 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#E8923A] animate-pulse" />
-          <span className="font-['IBM_Plex_Mono'] text-[#E8923A] text-xs uppercase tracking-[0.2em]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--action)] animate-pulse" />
+          <span className="font-['IBM_Plex_Mono'] text-[var(--action)] text-xs uppercase tracking-[0.2em]">
             Closed Beta · Coming to App Store
           </span>
         </div>
 
         {/* Headline */}
-        <h2 className="text-[#F0F6FC] font-heading font-bold leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
+        <h2 className="text-[var(--text-primary)] font-heading font-bold leading-[1.05] mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
           Be first on the water.
         </h2>
 
         {/* Subheadline */}
-        <p className="text-[#A8B2BD] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+        <p className="text-[var(--text-body)] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
           Executive Angler is heading to the App Store. Join the waitlist and we&apos;ll reach out the moment closed beta opens — spots are limited.
         </p>
 
         {state === "success" ? (
           /* Success state */
-          <div className="bg-[#161B22] border border-[#3FB950]/30 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--surface-raised)] border border-[#3FB950]/30 rounded-2xl p-8 text-center">
             <CheckCircle className="h-12 w-12 text-[#3FB950] mx-auto mb-4" strokeWidth={1.5} />
-            <h3 className="text-[#F0F6FC] font-heading text-2xl mb-2">
+            <h3 className="text-[var(--text-primary)] font-heading text-2xl mb-2">
               You&apos;re on the list.
             </h3>
-            <p className="text-[#A8B2BD] text-sm">
+            <p className="text-[var(--text-body)] text-sm">
               We&apos;ll email you when closed beta opens. Get your rod ready.
             </p>
             {count > 0 && (
-              <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-4">
+              <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-4">
                 {count.toLocaleString()} anglers ahead of the hatch
               </p>
             )}
@@ -94,7 +94,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 placeholder="First name (optional)"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl px-4 py-3.5 text-[var(--text-primary)] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/30 transition-colors font-['DM_Sans']"
               />
               <input
                 type="email"
@@ -102,14 +102,14 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+                className="flex-1 bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl px-4 py-3.5 text-[var(--text-primary)] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/30 transition-colors font-['DM_Sans']"
               />
             </div>
 
             <button
               type="submit"
               disabled={state === "loading"}
-              className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[#E8923A] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
+              className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
             >
               {state === "loading" ? (
                 <>
@@ -131,12 +131,12 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
 
         {/* Social proof counter */}
         {count > 0 && state !== "success" && (
-          <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-5">
+          <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-5">
             {count.toLocaleString()} anglers already on the list
           </p>
         )}
 
-        <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-4">
+        <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-4">
           No spam. One email when beta opens. That&apos;s it.
         </p>
       </div>

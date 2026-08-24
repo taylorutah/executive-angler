@@ -102,9 +102,9 @@ export default async function FliesPage() {
   return (
     <>
       {/* Editorial header */}
-      <section className="bg-[#0D1117] pt-6 pb-10">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             The Complete Reference
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -123,9 +123,9 @@ export default async function FliesPage() {
 
       {/* Spotlight flies */}
       {spotlightFlies.length > 0 && (
-        <section className="bg-[#0D1117] pt-2 pb-10">
+        <section className="bg-[var(--surface-page)] pt-2 pb-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
               {spotlightLabel}
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -138,24 +138,24 @@ export default async function FliesPage() {
                     />
                   <Link
                     href={`/flies/${fly!.slug}`}
-                    className="block bg-[#161B22] rounded-xl border border-[#21262D] group-hover:border-[#E8923A]/30 transition-all duration-300 overflow-hidden"
+                    className="block bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] group-hover:border-[var(--action)]/30 transition-all duration-300 overflow-hidden"
                   >
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
-                          <span className="inline-block px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full mb-3">
+                          <span className="inline-block px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full mb-3">
                             {FLY_CATEGORY_LABELS[fly!.category] ||
                               fly!.category}
                           </span>
-                          <h3 className="font-heading text-xl font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                          <h3 className="font-heading text-xl font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                             {fly!.name}
                           </h3>
-                          <p className="mt-1 text-sm text-[#A8B2BD]">
+                          <p className="mt-1 text-sm text-[var(--text-body)]">
                             Sizes{" "}
                             {fly!.sizes[0]}–{fly!.sizes[fly!.sizes.length - 1]}
                           </p>
                         </div>
-                          <div className="relative flex-shrink-0 w-28 rounded-lg overflow-hidden bg-[#1F2937]" style={{aspectRatio: '3/2'}}>
+                          <div className="relative flex-shrink-0 w-28 rounded-lg overflow-hidden bg-[var(--surface-card)]" style={{aspectRatio: '3/2'}}>
                             <SafeEntityImage
                               src={fly!.heroImageUrl}
                               alt={`${fly!.name} fly pattern`}
@@ -166,7 +166,7 @@ export default async function FliesPage() {
                             />
                           </div>
                       </div>
-                      <p className="mt-3 text-sm text-[#A8B2BD] line-clamp-2">
+                      <p className="mt-3 text-sm text-[var(--text-body)] line-clamp-2">
                         {fly!.description?.substring(0, 120)}
                       </p>
                       {fly!.imitates.length > 0 && (
@@ -174,7 +174,7 @@ export default async function FliesPage() {
                           {fly!.imitates.slice(0, 3).map((im) => (
                             <span
                               key={im}
-                              className="px-2 py-0.5 text-xs bg-[#21262D] text-[#A8B2BD] rounded"
+                              className="px-2 py-0.5 text-xs bg-[var(--border-rule)] text-[var(--text-body)] rounded"
                             >
                               {im}
                             </span>
@@ -192,7 +192,7 @@ export default async function FliesPage() {
       )}
 
       {/* Full catalog */}
-      <section className="bg-[#161B22] border-t border-[#21262D] pb-16">
+      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <Suspense>
             <EntityListView

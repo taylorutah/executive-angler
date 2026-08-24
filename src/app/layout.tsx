@@ -1,30 +1,31 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import CommandPalette from "@/components/CommandPalette";
+import RegisterBinder from "@/components/system/RegisterBinder";
 import { ThemeProvider } from "@/lib/theme-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import { organizationJsonLd } from "@/lib/seo";
+import { REGISTER_BOOTSTRAP } from "@/lib/register";
 import "./globals.css";
 
-const inter = Inter({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-inter",
   display: "swap",
+  variable: "--font-fraunces",
+  axes: ["opsz", "SOFT", "WONK"],
 });
 
-const dmSans = DM_Sans({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
   display: "swap",
+  variable: "--font-archivo",
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -109,23 +110,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}>
+    <html
+      lang="en"
+      data-register="daylight"
+      suppressHydrationWarning
+      className={`${fraunces.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+    >
       <head>
-        {/* Theme bootstrap — runs synchronously before paint to prevent FOUC.
-            Reads saved preference from localStorage; falls back to system
-            preference (prefers-color-scheme), defaulting to light. The
-            ThemeProvider hydrates from this same source after mount. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('ea-theme');var l;if(s==='light'||s==='dark'){l=s==='light';}else{l=!window.matchMedia('(prefers-color-scheme: dark)').matches;}if(l){document.documentElement.classList.add('light-mode');}}catch(e){}})();`,
-          }}
-        />
-        {/* Apple native Smart App Banner — Safari iOS only. Auto-detects whether
-            the app is installed and shows "Open" vs "View" accordingly. We
-            prefer this over a custom banner because it's install-aware and
-            rendered natively by iOS above the page chrome. */}
+        <script dangerouslySetInnerHTML={{ __html: REGISTER_BOOTSTRAP }} />
         <meta name="apple-itunes-app" content="app-id=6760311036" />
-        {/* Preconnect to critical third-party origins */}
         <link rel="preconnect" href="https://qlasxtfbodyxbcuchvxz.supabase.co" />
         <link rel="preconnect" href="https://api.mapbox.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
@@ -151,9 +144,10 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="antialiased min-h-screen flex flex-col">
+      <body className="antialiased min-h-screen flex flex-col bg-[var(--surface-page)] text-[var(--text-primary)]">
         <AuthProvider>
           <ThemeProvider>
+            <RegisterBinder />
             <Header />
             <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
             <Footer />

@@ -242,9 +242,9 @@ export function QuickVariantModal({ material, isOwnPending, onClose, onSaved }: 
         </div>
 
         {status === 'error' && (
-          <div className="flex items-start gap-2 mt-3 rounded-lg border border-[#DA3633]/30 bg-[#DA3633]/10 p-2">
-            <AlertCircle className="w-4 h-4 text-[#DA3633] shrink-0 mt-0.5" />
-            <p className="text-xs text-[#DA3633]">{errorMsg}</p>
+          <div className="flex items-start gap-2 mt-3 rounded-lg border border-[var(--state-negative)]/30 bg-[var(--state-negative)]/10 p-2">
+            <AlertCircle className="w-4 h-4 text-[var(--state-negative)] shrink-0 mt-0.5" />
+            <p className="text-xs text-[var(--state-negative)]">{errorMsg}</p>
           </div>
         )}
 

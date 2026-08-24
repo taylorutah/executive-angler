@@ -79,7 +79,7 @@ export default function FlyImageUploader({
     <div className="space-y-3">
       {previewUrl ? (
         <div className="space-y-3">
-          <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-[#21262D] bg-[#0D1117]">
+          <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-page)]">
             <Image
               src={previewUrl}
               alt="Fly preview"
@@ -112,26 +112,26 @@ export default function FlyImageUploader({
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="flex flex-col items-center justify-center w-full aspect-square bg-[#0D1117] border-2 border-dashed border-[#21262D] rounded-xl cursor-pointer hover:border-[#E8923A]/40 transition-colors"
+          className="flex flex-col items-center justify-center w-full aspect-square bg-[var(--surface-page)] border-2 border-dashed border-[var(--border-rule)] rounded-xl cursor-pointer hover:border-[var(--action)]/40 transition-colors"
           onDragOver={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.add("border-[#E8923A]");
+            e.currentTarget.classList.add("border-[var(--action)]");
           }}
           onDragLeave={(e) => {
-            e.currentTarget.classList.remove("border-[#E8923A]");
+            e.currentTarget.classList.remove("border-[var(--action)]");
           }}
           onDrop={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.remove("border-[#E8923A]");
+            e.currentTarget.classList.remove("border-[var(--action)]");
             const f = e.dataTransfer.files[0];
             if (f) handleFileSelect(f);
           }}
         >
-          <Camera className="h-8 w-8 text-[#6E7681] mb-2" />
-          <span className="text-sm text-[#A8B2BD] font-medium">
+          <Camera className="h-8 w-8 text-[var(--text-meta)] mb-2" />
+          <span className="text-sm text-[var(--text-body)] font-medium">
             Drop photo here or click to browse
           </span>
-          <span className="text-[10px] text-[#6E7681] mt-1">
+          <span className="text-[10px] text-[var(--text-meta)] mt-1">
             Crop · zoom · rotate · 1:1 · JPEG/PNG/WebP · 15 MB max
           </span>
         </button>
@@ -156,7 +156,7 @@ export default function FlyImageUploader({
       ) : null}
 
       {!previewUrl && !error ? (
-        <p className="text-[10px] text-[#6E7681] flex items-center gap-1">
+        <p className="text-[10px] text-[var(--text-meta)] flex items-center gap-1">
           <Upload className="h-3 w-3" /> 1:1 looks best in the fly box
         </p>
       ) : null}

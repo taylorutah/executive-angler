@@ -87,8 +87,8 @@ export default function AdminFlySubmissionsClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-cream">
-      <div className="border-b border-white/10 bg-[#161B22]">
+    <div className="min-h-screen bg-[var(--surface-page)] text-cream">
+      <div className="border-b border-white/10 bg-[var(--surface-raised)]">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-3">
           <Link
             href="/admin"
@@ -112,7 +112,7 @@ export default function AdminFlySubmissionsClient() {
                 onClick={() => setTab(t.key)}
                 className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
                   isActive
-                    ? "border-[#E8923A] text-cream"
+                    ? "border-[var(--action)] text-cream"
                     : "border-transparent text-cream/60 hover:text-cream"
                 }`}
               >
@@ -136,7 +136,7 @@ export default function AdminFlySubmissionsClient() {
             {rows.map((sub) => (
               <div
                 key={sub.id}
-                className="bg-[#161B22] border border-white/10 rounded-lg p-5 flex gap-5"
+                className="bg-[var(--surface-raised)] border border-white/10 rounded-lg p-5 flex gap-5"
               >
                 {sub.hero_image_url ? (
                   <div className="relative w-32 h-32 flex-shrink-0 rounded overflow-hidden bg-black/30">
@@ -171,7 +171,7 @@ export default function AdminFlySubmissionsClient() {
                     {sub.promoted_canonical_id && (
                       <Link
                         href={`/flies/${sub.promoted_canonical_id}`}
-                        className="text-xs text-[#00B4D8] hover:underline"
+                        className="text-xs text-[var(--signal-live)] hover:underline"
                       >
                         view canonical →
                       </Link>
@@ -205,7 +205,7 @@ export default function AdminFlySubmissionsClient() {
                           setNotesById((m) => ({ ...m, [sub.id]: e.target.value }))
                         }
                         rows={2}
-                        className="w-full bg-[#0D1117] border border-white/10 rounded px-3 py-2 text-sm placeholder:text-cream/30"
+                        className="w-full bg-[var(--surface-page)] border border-white/10 rounded px-3 py-2 text-sm placeholder:text-cream/30"
                       />
                       <div className="flex gap-2">
                         <Button

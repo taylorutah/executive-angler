@@ -190,33 +190,33 @@ export default function ExportClient({
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <Link href="/dashboard" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/dashboard" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex items-center gap-2">
-            <Download className="h-6 w-6 text-[#0BA5C7]" />
-            <h1 className="font-serif text-2xl text-[#F0F6FC]">Export Data</h1>
+            <Download className="h-6 w-6 text-[var(--signal-live)]" />
+            <h1 className="font-serif text-2xl text-[var(--text-primary)]">Export Data</h1>
           </div>
         </div>
 
         {/* Data summary */}
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-[#A8B2BD] uppercase tracking-wider mb-1">Sessions</p>
-              <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{sessions.length}</p>
+              <p className="text-xs text-[var(--text-body)] uppercase tracking-wider mb-1">Sessions</p>
+              <p className="text-2xl font-bold text-[var(--text-primary)] font-mono">{sessions.length}</p>
             </div>
             <div>
-              <p className="text-xs text-[#A8B2BD] uppercase tracking-wider mb-1">Catches</p>
-              <p className="text-2xl font-bold text-[#F0F6FC] font-mono">{catches.length}</p>
+              <p className="text-xs text-[var(--text-body)] uppercase tracking-wider mb-1">Catches</p>
+              <p className="text-2xl font-bold text-[var(--text-primary)] font-mono">{catches.length}</p>
             </div>
           </div>
           {sessions.length > 0 && (
-            <p className="text-xs text-[#6E7681] mt-3">
+            <p className="text-xs text-[var(--text-meta)] mt-3">
               {sessions[sessions.length - 1].date} → {sessions[0].date}
             </p>
           )}
@@ -224,14 +224,14 @@ export default function ExportClient({
 
         {/* Format picker */}
         <div className="mb-6">
-          <p className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Format</p>
+          <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Format</p>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setFormat("csv")}
               className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                 format === "csv"
-                  ? "bg-[#E8923A]/10 border-[#E8923A] text-[#E8923A]"
-                  : "bg-[#161B22] border-[#21262D] text-[#A8B2BD] hover:border-[#6E7681]"
+                  ? "bg-[var(--action)]/10 border-[var(--action)] text-[var(--action)]"
+                  : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--text-meta)]"
               }`}
             >
               <Table className="h-6 w-6" />
@@ -245,8 +245,8 @@ export default function ExportClient({
               onClick={() => setFormat("pdf")}
               className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                 format === "pdf"
-                  ? "bg-[#0BA5C7]/10 border-[#0BA5C7] text-[#0BA5C7]"
-                  : "bg-[#161B22] border-[#21262D] text-[#A8B2BD] hover:border-[#6E7681]"
+                  ? "bg-[var(--signal-live)]/10 border-[var(--signal-live)] text-[var(--signal-live)]"
+                  : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--text-meta)]"
               }`}
             >
               <FileText className="h-6 w-6" />
@@ -259,19 +259,19 @@ export default function ExportClient({
         </div>
 
         {/* What's included */}
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5 mb-6">
-          <p className="text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-3">Includes</p>
-          <ul className="space-y-2 text-sm text-[#F0F6FC]">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
+          <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Includes</p>
+          <ul className="space-y-2 text-sm text-[var(--text-primary)]">
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[#2EA44F] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
               All sessions with date, river, fish count, weather, water data
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[#2EA44F] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
               Individual catches with species, length, fly pattern, fly size
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[#2EA44F] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
               Session notes and location data
             </li>
           </ul>
@@ -281,7 +281,7 @@ export default function ExportClient({
         <button
           onClick={handleExport}
           disabled={exporting || sessions.length === 0}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#E8923A] text-white text-base font-bold rounded-xl hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {exporting ? (
             <>
@@ -302,7 +302,7 @@ export default function ExportClient({
         </button>
 
         {format === "pdf" && (
-          <p className="text-xs text-[#6E7681] mt-3 text-center">
+          <p className="text-xs text-[var(--text-meta)] mt-3 text-center">
             Opens a formatted report in a new tab — use your browser&apos;s Print → Save as PDF
           </p>
         )}

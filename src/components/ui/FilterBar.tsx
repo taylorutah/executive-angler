@@ -26,7 +26,7 @@ export default function FilterBar({
   const containerClasses = [
     sticky ? "sticky top-14 z-30" : "",
     inline ? "" : "-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8",
-    "py-3 bg-[#0D1117]/95 backdrop-blur-sm border-b border-[#21262D]/60 mb-4",
+    "py-3 bg-[var(--surface-page)]/95 backdrop-blur-sm border-b border-[var(--border-rule)]/60 mb-4",
   ]
     .filter(Boolean)
     .join(" ");
@@ -50,7 +50,7 @@ export default function FilterBar({
               <button
                 type="button"
                 onClick={onClearAll}
-                className="text-xs text-[#6E7681] hover:text-[#A8B2BD] transition-colors px-2 py-1"
+                className="text-xs text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors px-2 py-1"
               >
                 Clear all
               </button>

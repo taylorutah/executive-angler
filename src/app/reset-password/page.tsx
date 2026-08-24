@@ -71,55 +71,55 @@ export default function ResetPasswordPage() {
   // Strength indicator
   const getStrength = (pw: string): { label: string; color: string; width: string } => {
     if (pw.length === 0) return { label: "", color: "", width: "w-0" };
-    if (pw.length < 6) return { label: "Weak", color: "bg-[#DA3633]", width: "w-1/4" };
-    if (pw.length < 8) return { label: "Fair", color: "bg-[#E8923A]", width: "w-2/4" };
+    if (pw.length < 6) return { label: "Weak", color: "bg-[var(--state-negative)]", width: "w-1/4" };
+    if (pw.length < 8) return { label: "Fair", color: "bg-[var(--action)]", width: "w-2/4" };
     const hasUpper = /[A-Z]/.test(pw);
     const hasNumber = /[0-9]/.test(pw);
     const hasSpecial = /[^A-Za-z0-9]/.test(pw);
     const score = [hasUpper, hasNumber, hasSpecial, pw.length >= 12].filter(Boolean).length;
     if (score >= 3) return { label: "Strong", color: "bg-green-500", width: "w-full" };
-    return { label: "Good", color: "bg-[#0BA5C7]", width: "w-3/4" };
+    return { label: "Good", color: "bg-[var(--signal-live)]", width: "w-3/4" };
   };
 
   const strength = getStrength(password);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">
+          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
             {SITE_NAME}
           </Link>
         </div>
 
-        <div className="bg-[#161B22] rounded-xl shadow-md p-8">
+        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8">
           {success ? (
             <div className="text-center space-y-4">
               <div className="mx-auto w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
                 <CheckCircle className="h-7 w-7 text-green-500" />
               </div>
-              <h1 className="text-xl font-bold text-[#F0F6FC]">Password updated</h1>
-              <p className="text-sm text-[#A8B2BD]">
+              <h1 className="text-xl font-bold text-[var(--text-primary)]">Password updated</h1>
+              <p className="text-sm text-[var(--text-body)]">
                 Your password has been reset successfully. Redirecting to your dashboard…
               </p>
               <div className="flex justify-center">
-                <div className="h-1 w-24 bg-[#21262D] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#E8923A] animate-[grow_3s_ease-in-out]" style={{ animation: "grow 3s ease-in-out forwards" }} />
+                <div className="h-1 w-24 bg-[var(--border-rule)] rounded-full overflow-hidden">
+                  <div className="h-full bg-[var(--action)] animate-[grow_3s_ease-in-out]" style={{ animation: "grow 3s ease-in-out forwards" }} />
                 </div>
               </div>
             </div>
           ) : !sessionReady ? (
             <div className="text-center space-y-4">
-              <div className="mx-auto w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center">
-                <Lock className="h-7 w-7 text-[#E8923A] animate-pulse" />
+              <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center">
+                <Lock className="h-7 w-7 text-[var(--action)] animate-pulse" />
               </div>
-              <h1 className="text-xl font-bold text-[#F0F6FC]">Verifying your link…</h1>
-              <p className="text-sm text-[#A8B2BD]">
+              <h1 className="text-xl font-bold text-[var(--text-primary)]">Verifying your link…</h1>
+              <p className="text-sm text-[var(--text-body)]">
                 Please wait while we verify your reset token.
               </p>
-              <p className="text-xs text-[#6E7681]">
+              <p className="text-xs text-[var(--text-meta)]">
                 If this takes too long,{" "}
-                <Link href="/forgot-password" className="text-[#E8923A] hover:underline">
+                <Link href="/forgot-password" className="text-[var(--action)] hover:underline">
                   request a new link
                 </Link>
                 .
@@ -128,18 +128,18 @@ export default function ResetPasswordPage() {
           ) : (
             <div className="space-y-5">
               <div className="text-center">
-                <div className="mx-auto w-14 h-14 rounded-full bg-[#E8923A]/10 flex items-center justify-center mb-4">
-                  <Lock className="h-7 w-7 text-[#E8923A]" />
+                <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center mb-4">
+                  <Lock className="h-7 w-7 text-[var(--action)]" />
                 </div>
-                <h1 className="text-xl font-bold text-[#F0F6FC]">Set new password</h1>
-                <p className="text-sm text-[#A8B2BD] mt-1">
+                <h1 className="text-xl font-bold text-[var(--text-primary)]">Set new password</h1>
+                <p className="text-sm text-[var(--text-body)] mt-1">
                   Choose a strong password for your account.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+                  <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                     New password
                   </label>
                   <div className="relative">
@@ -149,14 +149,14 @@ export default function ResetPasswordPage() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-3 pr-12 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#6E7681]"
+                      className="w-full px-4 py-3 pr-12 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] placeholder-[#6E7681]"
                       placeholder="Min. 8 characters"
                       autoFocus
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#A8B2BD] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -164,16 +164,16 @@ export default function ResetPasswordPage() {
                   {/* Strength bar */}
                   {password.length > 0 && (
                     <div className="mt-2 space-y-1">
-                      <div className="h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[var(--border-rule)] rounded-full overflow-hidden">
                         <div className={`h-full ${strength.color} ${strength.width} transition-all duration-300 rounded-full`} />
                       </div>
-                      <p className="text-xs text-[#6E7681]">{strength.label}</p>
+                      <p className="text-xs text-[var(--text-meta)]">{strength.label}</p>
                     </div>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="confirm" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+                  <label htmlFor="confirm" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                     Confirm password
                   </label>
                   <input
@@ -182,12 +182,12 @@ export default function ResetPasswordPage() {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-lg border bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] placeholder-[#6E7681] ${
+                    className={`w-full px-4 py-3 rounded-lg border bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] placeholder-[#6E7681] ${
                       confirmPassword.length > 0 && confirmPassword !== password
-                        ? "border-[#DA3633]"
+                        ? "border-[var(--state-negative)]"
                         : confirmPassword.length > 0 && confirmPassword === password
                         ? "border-green-500"
-                        : "border-[#21262D]"
+                        : "border-[var(--border-rule)]"
                     }`}
                     placeholder="Re-enter your password"
                   />
@@ -199,7 +199,7 @@ export default function ResetPasswordPage() {
                 </div>
 
                 {error && (
-                  <p className="text-sm text-[#DA3633] bg-[#DA3633]/10 px-4 py-2.5 rounded-lg">
+                  <p className="text-sm text-[var(--state-negative)] bg-[var(--state-negative)]/10 px-4 py-2.5 rounded-lg">
                     {error}
                   </p>
                 )}
@@ -207,7 +207,7 @@ export default function ResetPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading || password.length < 8 || password !== confirmPassword}
-                  className="w-full py-3 bg-[#E8923A] text-white font-semibold rounded-lg hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Updating…" : "Update Password"}
                 </button>

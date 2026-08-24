@@ -281,25 +281,25 @@ export function FollowButton({
     not_following: {
       Icon: UserPlus,
       label: "Follow",
-      className: "bg-[#E8923A] text-[#0D1117] hover:bg-[#F0A050]",
+      className: "bg-[var(--action)] text-[var(--surface-page)] hover:bg-[#F0A050]",
     },
     pending: {
       Icon: Clock,
       label: "Requested",
       className:
-        "bg-[#21262D] text-[#A8B2BD] border border-[#21262D] cursor-default",
+        "bg-[var(--border-rule)] text-[var(--text-body)] border border-[var(--border-rule)] cursor-default",
     },
     following: {
       Icon: UserCheck,
       label: "Following",
       className:
-        "bg-transparent text-[#F0F6FC] border border-[#21262D] hover:border-[#DA3633]/60 hover:text-[#F0F6FC]",
+        "bg-transparent text-[var(--text-primary)] border border-[var(--border-rule)] hover:border-[var(--state-negative)]/60 hover:text-[var(--text-primary)]",
     },
     blocked: {
       Icon: UserX,
       label: "Blocked",
       className:
-        "bg-[#21262D] text-[#A8B2BD] border border-[#21262D] opacity-70 cursor-not-allowed",
+        "bg-[var(--border-rule)] text-[var(--text-body)] border border-[var(--border-rule)] opacity-70 cursor-not-allowed",
     },
   };
 
@@ -311,7 +311,7 @@ export function FollowButton({
         type="button"
         disabled
         aria-label="Loading follow state"
-        className={`inline-flex items-center rounded-lg font-semibold opacity-60 bg-[#21262D] text-[#A8B2BD] ${sizeClasses}`}
+        className={`inline-flex items-center rounded-lg font-semibold opacity-60 bg-[var(--border-rule)] text-[var(--text-body)] ${sizeClasses}`}
       >
         <Loader2 className={`${iconSize} animate-spin`} />
       </button>
@@ -348,17 +348,17 @@ export function FollowButton({
           ref={confirmRef}
           role="dialog"
           aria-label="Confirm unfollow"
-          className="absolute top-full right-0 mt-2 z-30 w-60 rounded-lg border border-[#21262D] bg-[#161B22] shadow-xl p-3"
+          className="absolute top-full right-0 mt-2 z-30 w-60 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-xl p-3"
         >
-          <p className="text-sm text-[#F0F6FC] font-semibold">Unfollow?</p>
-          <p className="text-xs text-[#A8B2BD] mt-1">
+          <p className="text-sm text-[var(--text-primary)] font-semibold">Unfollow?</p>
+          <p className="text-xs text-[var(--text-body)] mt-1">
             You will no longer see their sessions in your feed.
           </p>
           <div className="mt-3 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={() => setConfirmingUnfollow(false)}
-              className="px-3 py-1.5 rounded-md text-xs font-semibold text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D] transition-colors"
+              className="px-3 py-1.5 rounded-md text-xs font-semibold text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
             >
               Cancel
             </button>

@@ -45,11 +45,11 @@ export function ActivityFeed({ sessions }: Props) {
   if (sessions.length === 0) {
     return (
       <div className="text-center py-16">
-        <Fish className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-        <p className="text-[#A8B2BD] text-sm">
+        <Fish className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+        <p className="text-[var(--text-body)] text-sm">
           No anglers on the water right now.
         </p>
-        <p className="text-[#6E7681] text-xs mt-2">
+        <p className="text-[var(--text-meta)] text-xs mt-2">
           Logging a session? Toggle &ldquo;Show me on the feed&rdquo; to appear here.
         </p>
       </div>
@@ -71,13 +71,13 @@ function FeedCard({ session }: { session: FeedSession }) {
   const username = profile?.username;
 
   return (
-    <article className="bg-[#161B22] rounded-lg border border-[#21262D] overflow-hidden hover:border-[#6E7681] transition-colors duration-200">
+    <article className="bg-[var(--surface-raised)] rounded-lg border border-[var(--border-rule)] overflow-hidden hover:border-[var(--text-meta)] transition-colors duration-200">
       {/* User header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
         {username ? (
           <Link
             href={`/anglers/${username}`}
-            className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0 hover:ring-1 hover:ring-[#E8923A] transition-all"
+            className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 hover:ring-1 hover:ring-[var(--action)] transition-all"
           >
             {profile?.avatar_url ? (
               <Image
@@ -88,7 +88,7 @@ function FeedCard({ session }: { session: FeedSession }) {
                 className="object-cover w-full h-full"
               />
             ) : (
-              <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
+              <span className="text-sm font-bold text-[var(--text-body)] font-['IBM_Plex_Mono']">
                 {avatarInitials(
                   profile?.display_name ?? null,
                   profile?.username ?? null
@@ -97,7 +97,7 @@ function FeedCard({ session }: { session: FeedSession }) {
             )}
           </Link>
         ) : (
-          <div className="h-9 w-9 rounded-full overflow-hidden bg-[#21262D] flex items-center justify-center flex-shrink-0">
+          <div className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0">
             {profile?.avatar_url ? (
               <Image
                 src={profile.avatar_url}
@@ -107,7 +107,7 @@ function FeedCard({ session }: { session: FeedSession }) {
                 className="object-cover w-full h-full"
               />
             ) : (
-              <span className="text-sm font-bold text-[#A8B2BD] font-['IBM_Plex_Mono']">
+              <span className="text-sm font-bold text-[var(--text-body)] font-['IBM_Plex_Mono']">
                 {avatarInitials(
                   profile?.display_name ?? null,
                   profile?.username ?? null
@@ -122,22 +122,22 @@ function FeedCard({ session }: { session: FeedSession }) {
             {username ? (
               <Link
                 href={`/anglers/${username}`}
-                className="flex items-center gap-1.5 flex-wrap hover:text-[#E8923A] transition-colors"
+                className="flex items-center gap-1.5 flex-wrap hover:text-[var(--action)] transition-colors"
               >
-                <span className="text-sm font-semibold text-[#F0F6FC] truncate hover:text-[#E8923A] transition-colors">
+                <span className="text-sm font-semibold text-[var(--text-primary)] truncate hover:text-[var(--action)] transition-colors">
                   {displayName}
                 </span>
-                <span className="text-xs text-[#6E7681] truncate">
+                <span className="text-xs text-[var(--text-meta)] truncate">
                   @{username}
                 </span>
               </Link>
             ) : (
-              <span className="text-sm font-semibold text-[#F0F6FC] truncate">
+              <span className="text-sm font-semibold text-[var(--text-primary)] truncate">
                 {displayName}
               </span>
             )}
           </div>
-          <span className="text-[11px] text-[#6E7681]">
+          <span className="text-[11px] text-[var(--text-meta)]">
             {relativeTime(session.created_at || session.date)}
           </span>
         </div>
@@ -148,12 +148,12 @@ function FeedCard({ session }: { session: FeedSession }) {
         {/* River name + section */}
         {session.river_name && (
           <div className="flex items-center gap-1.5 mb-2">
-            <MapPin className="h-3.5 w-3.5 text-[#E8923A] flex-shrink-0" />
-            <span className="text-sm font-medium text-[#F0F6FC]">
+            <MapPin className="h-3.5 w-3.5 text-[var(--action)] flex-shrink-0" />
+            <span className="text-sm font-medium text-[var(--text-primary)]">
               {session.river_name}
             </span>
             {session.section && (
-              <span className="text-xs text-[#A8B2BD]">
+              <span className="text-xs text-[var(--text-body)]">
                 &middot; {session.section}
               </span>
             )}
@@ -162,14 +162,14 @@ function FeedCard({ session }: { session: FeedSession }) {
 
         {/* Weather only — no water temp, no clarity, no notes, no coords, no fish count */}
         {session.weather && (
-          <div className="flex items-center gap-1 text-[11px] text-[#A8B2BD] mb-3">
+          <div className="flex items-center gap-1 text-[11px] text-[var(--text-body)] mb-3">
             <Cloud className="h-3 w-3" />
             {session.weather}
           </div>
         )}
 
         {/* Kudos only — no comments (DMs exist for private convos) */}
-        <div className="flex items-center gap-4 pt-2 border-t border-[#21262D]">
+        <div className="flex items-center gap-4 pt-2 border-t border-[var(--border-rule)]">
           <KudosButton
             sessionId={session.id}
             initialCount={session.like_count}

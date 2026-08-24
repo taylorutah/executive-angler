@@ -17,17 +17,17 @@ export default function RatingStars({ rating, count, size = "sm" }: RatingStarsP
             key={star}
             className={`${starSize} ${
               star <= Math.round(rating)
-                ? "text-[#E8923A] fill-[#E8923A]"
-                : "text-[#6E7681]"
+                ? "text-[var(--action)] fill-[var(--action)]"
+                : "text-[var(--text-meta)]"
             }`}
           />
         ))}
       </div>
-      <span className="text-sm font-medium text-[#F0F6FC]">
+      <span className="text-sm font-medium text-[var(--text-primary)]">
         {rating.toFixed(1)}
       </span>
       {count !== undefined && (
-        <span className="text-sm text-[#A8B2BD]">({count} reviews)</span>
+        <span className="text-sm text-[var(--text-body)]">({count} reviews)</span>
       )}
     </div>
   );

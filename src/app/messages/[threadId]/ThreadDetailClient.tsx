@@ -104,10 +104,10 @@ export function ThreadDetailClient({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[#21262D] bg-[#161B22] safe-area-top">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border-rule)] bg-[var(--surface-raised)] safe-area-top">
         <Link
           href="/messages"
-          className="p-1 text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+          className="p-1 text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
@@ -120,11 +120,11 @@ export function ThreadDetailClient({
             className="rounded-full object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-xs text-[#A8B2BD] font-medium">
+          <div className="w-8 h-8 rounded-full bg-[var(--surface-card)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
             {otherName[0]?.toUpperCase()}
           </div>
         )}
-        <span className="text-sm font-semibold text-[#F0F6FC]">
+        <span className="text-sm font-semibold text-[var(--text-primary)]">
           {otherName}
         </span>
       </div>
@@ -132,7 +132,7 @@ export function ThreadDetailClient({
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-[#6E7681] py-12">
+          <p className="text-center text-sm text-[var(--text-meta)] py-12">
             No messages yet. Say hello!
           </p>
         )}
@@ -157,7 +157,7 @@ export function ThreadDetailClient({
       </div>
 
       {/* Input */}
-      <div className="px-4 py-3 border-t border-[#21262D] bg-[#161B22] safe-area-bottom">
+      <div className="px-4 py-3 border-t border-[var(--border-rule)] bg-[var(--surface-raised)] safe-area-bottom">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -171,12 +171,12 @@ export function ThreadDetailClient({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-[#0D1117] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] transition-colors"
+            className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
           />
           <button
             type="submit"
             disabled={!body.trim() || sending}
-            className="p-2 rounded-lg bg-[#E8923A] text-white hover:bg-[#d4832e] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-2 rounded-lg bg-[var(--action)] text-white hover:bg-[#d4832e] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             {sending ? (
               <Loader2 className="h-4 w-4 animate-spin" />

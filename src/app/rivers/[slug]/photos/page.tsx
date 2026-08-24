@@ -33,22 +33,22 @@ export default async function RiverPhotosPage({ params }: Props) {
   if (!river) notFound();
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Header */}
-      <div className="bg-[#161B22] border-b border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
         <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-[#6E7681] mb-3">
-            <Link href="/rivers" className="hover:text-[#E8923A] transition-colors">Rivers</Link>
+          <nav className="flex items-center gap-2 text-sm text-[var(--text-meta)] mb-3">
+            <Link href="/rivers" className="hover:text-[var(--action)] transition-colors">Rivers</Link>
             <span>/</span>
-            <Link href={`/rivers/${slug}`} className="hover:text-[#E8923A] transition-colors">{river.name}</Link>
+            <Link href={`/rivers/${slug}`} className="hover:text-[var(--action)] transition-colors">{river.name}</Link>
             <span>/</span>
-            <span className="text-[#A8B2BD]">Photos</span>
+            <span className="text-[var(--text-body)]">Photos</span>
           </nav>
-          <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">
+          <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)]">
             {river.name} — Community Photos
           </h1>
-          <p className="mt-2 text-[#A8B2BD]">
+          <p className="mt-2 text-[var(--text-body)]">
             Photos submitted by anglers and catches logged in the app.
           </p>
         </div>

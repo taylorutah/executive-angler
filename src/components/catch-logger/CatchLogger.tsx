@@ -138,60 +138,60 @@ export default function CatchLogger({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4" onClick={onClose}>
       <div
-        className="relative w-full sm:max-w-2xl rounded-t-2xl sm:rounded-2xl border border-[#21262D] bg-[#0D1117] shadow-2xl flex flex-col max-h-[90vh]"
+        className="relative w-full sm:max-w-2xl rounded-t-2xl sm:rounded-2xl border border-[var(--border-rule)] bg-[var(--surface-page)] shadow-2xl flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#21262D] px-4 py-3">
+        <div className="flex items-center justify-between border-b border-[var(--border-rule)] px-4 py-3">
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1 text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
           >
             <ChevronLeft className="h-4 w-4" /> Cancel
           </button>
-          <h2 className="text-[#F0F6FC] font-semibold text-sm">Log catch</h2>
-          <span className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-widest text-[#6E7681]">
+          <h2 className="text-[var(--text-primary)] font-semibold text-sm">Log catch</h2>
+          <span className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-widest text-[var(--text-meta)]">
             {activeBoxName ?? "No box active"}
           </span>
         </div>
 
         {/* Sticky form: species + length + search */}
-        <div className="border-b border-[#21262D] px-4 py-3 space-y-2 bg-[#0D1117]">
+        <div className="border-b border-[var(--border-rule)] px-4 py-3 space-y-2 bg-[var(--surface-page)]">
           <div className="flex items-center gap-2">
             <div className="flex-1">
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-[#6E7681]">Species</label>
+              <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)]">Species</label>
               <input
                 type="text"
                 value={species}
                 onChange={(e) => setSpecies(e.target.value)}
                 list="catch-logger-species"
-                className="mt-1 w-full rounded-md border border-[#30363D] bg-[#161B22] px-2.5 py-1.5 text-sm text-[#F0F6FC] focus:border-[#E8923A] outline-none"
+                className="mt-1 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none"
               />
               <datalist id="catch-logger-species">
                 {COMMON_SPECIES.map((s) => <option key={s} value={s} />)}
               </datalist>
             </div>
             <div className="w-24">
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-[#6E7681]">Length (in)</label>
+              <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)]">Length (in)</label>
               <input
                 type="number"
                 step="0.5"
                 value={length}
                 onChange={(e) => setLength(e.target.value)}
                 placeholder="—"
-                className="mt-1 w-full rounded-md border border-[#30363D] bg-[#161B22] px-2.5 py-1.5 text-sm text-[#F0F6FC] focus:border-[#E8923A] outline-none font-['IBM_Plex_Mono']"
+                className="mt-1 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none font-['IBM_Plex_Mono']"
               />
             </div>
           </div>
 
           {/* Lost-the-fly toggle */}
-          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <input
               type="checkbox"
               checked={lost}
               onChange={(e) => setLost(e.target.checked)}
-              className="h-3.5 w-3.5 cursor-pointer accent-[#E8923A]"
+              className="h-3.5 w-3.5 cursor-pointer accent-[var(--action)]"
             />
             <span>I lost the fly on this catch (decrement stock)</span>
           </label>
@@ -202,7 +202,7 @@ export default function CatchLogger({
               type="button"
               onClick={() => commit(lastCatch.variant_id!)}
               disabled={pending}
-              className="w-full flex items-center justify-center gap-2 rounded-md bg-[#E8923A]/10 border border-[#E8923A]/30 px-3 py-2 text-sm text-[#E8923A] hover:bg-[#E8923A]/20 transition-colors disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 rounded-md bg-[var(--action)]/10 border border-[var(--action)]/30 px-3 py-2 text-sm text-[var(--action)] hover:bg-[var(--action)]/20 transition-colors disabled:opacity-60"
             >
               <Repeat className="h-3.5 w-3.5" />
               Repeat last fly · {lastCatch.fly_name}
@@ -212,14 +212,14 @@ export default function CatchLogger({
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6E7681]" />
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)]" />
             <input
               ref={searchRef}
               type="text"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Search variants…"
-              className="w-full rounded-md border border-[#30363D] bg-[#161B22] pl-7 pr-2.5 py-1.5 text-sm text-[#F0F6FC] focus:border-[#E8923A] outline-none placeholder:text-[#484F58]"
+              className="w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] pl-7 pr-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none placeholder:text-[#484F58]"
             />
           </div>
         </div>
@@ -227,21 +227,21 @@ export default function CatchLogger({
         {/* Variant grid */}
         <div className="flex-1 overflow-y-auto px-4 py-3">
           {activeBoxVariants.length === 0 ? (
-            <div className="py-12 text-center text-sm text-[#A8B2BD]">
+            <div className="py-12 text-center text-sm text-[var(--text-body)]">
               <p>No variants in your active box.</p>
-              <p className="text-xs text-[#6E7681] mt-1">
-                <Link href="/flies?tab=boxes" className="text-[#0BA5C7] hover:text-[#E8923A]">
+              <p className="text-xs text-[var(--text-meta)] mt-1">
+                <Link href="/flies?tab=boxes" className="text-[var(--signal-live)] hover:text-[var(--action)]">
                   Pick a box
                 </Link>{" "}
                 or{" "}
-                <Link href="/flies" className="text-[#0BA5C7] hover:text-[#E8923A]">
+                <Link href="/flies" className="text-[var(--signal-live)] hover:text-[var(--action)]">
                   browse patterns
                 </Link>{" "}
                 to add variants.
               </p>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="py-8 text-center text-xs text-[#6E7681]">
+            <div className="py-8 text-center text-xs text-[var(--text-meta)]">
               No variants match &ldquo;{filter}&rdquo;.
             </div>
           ) : (
@@ -257,32 +257,32 @@ export default function CatchLogger({
                     type="button"
                     onClick={() => commit(v.id)}
                     disabled={pending}
-                    className={`group relative aspect-square overflow-hidden rounded-lg border bg-[#161B22] hover:border-[#E8923A] transition-all ${
-                      isCommitting ? "border-[#E8923A] ring-2 ring-[#E8923A]" : "border-[#30363D]"
+                    className={`group relative aspect-square overflow-hidden rounded-lg border bg-[var(--surface-raised)] hover:border-[var(--action)] transition-all ${
+                      isCommitting ? "border-[var(--action)] ring-2 ring-[var(--action)]" : "border-[var(--border-strong)]"
                     } ${pending && !isCommitting ? "opacity-40" : ""}`}
                     title={`Log a ${v.pattern?.name ?? ""} #${v.size}`}
                   >
                     {url ? (
                       <Image src={url} alt="" fill sizes="160px" className="object-cover" />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-[#161B22]">
+                      <div className="absolute inset-0 flex items-center justify-center bg-[var(--surface-raised)]">
                         <span className="font-heading text-[#484F58] text-2xl">
                           {(v.pattern?.name ?? "?")[0]}
                         </span>
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-2 pt-6 pb-1.5">
-                      <p className="text-[#F0F6FC] text-[11px] font-medium truncate">
+                      <p className="text-[var(--text-primary)] text-[11px] font-medium truncate">
                         {v.pattern?.name ?? "Unknown"}
                       </p>
-                      <p className="font-['IBM_Plex_Mono'] text-[10px] text-[#A8B2BD] flex items-center justify-between">
+                      <p className="font-['IBM_Plex_Mono'] text-[10px] text-[var(--text-body)] flex items-center justify-between">
                         <span>#{v.size}</span>
                         {target > 0 ? (
-                          <span className={stocked < target ? "text-[#E8923A]" : "text-[#0BA5C7]"}>
+                          <span className={stocked < target ? "text-[var(--action)]" : "text-[var(--signal-live)]"}>
                             {stocked}/{target}
                           </span>
                         ) : (
-                          <span className="text-[#6E7681]">{stocked}</span>
+                          <span className="text-[var(--text-meta)]">{stocked}</span>
                         )}
                       </p>
                     </div>

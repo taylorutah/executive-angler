@@ -165,7 +165,7 @@ export default function CommandPalette() {
                   onSelect={() => go(a.href)}
                   className="flex items-center gap-2 rounded-md px-2.5 py-2 text-sm cursor-pointer text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text-primary)] aria-selected:bg-[var(--color-bg)] aria-selected:text-[var(--color-text-primary)]"
                 >
-                  <a.Icon className="h-4 w-4 text-[#E8923A]" />
+                  <a.Icon className="h-4 w-4 text-[var(--action)]" />
                   <span className="flex-1">{a.label}</span>
                   <ChevronRight className="h-3 w-3 opacity-40" />
                 </Command.Item>

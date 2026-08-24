@@ -38,8 +38,8 @@ const TYPE_LABELS: Record<GearType, string> = {
 };
 
 const inputCls =
-  "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-3 py-2.5 text-[#F0F6FC] text-sm focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A]";
-const labelCls = "block text-xs font-semibold text-[#A8B2BD] mb-1 uppercase tracking-wide";
+  "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-[var(--text-primary)] text-sm focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
+const labelCls = "block text-xs font-semibold text-[var(--text-body)] mb-1 uppercase tracking-wide";
 const selectCls = inputCls;
 
 export default function GearForm({ open, onClose, onSaved, initialType = "rod", editItem = null, isFirstOfType = false, presetProduct = null }: Props) {
@@ -235,17 +235,17 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
 
       {/* Sheet */}
-      <div className="relative w-full sm:max-w-xl max-h-[92dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[#161B22] border border-[#21262D] shadow-2xl">
+      <div className="relative w-full sm:max-w-xl max-h-[92dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)] shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#21262D] sticky top-0 bg-[#161B22] z-10">
-          <h2 className="font-heading font-bold text-[#F0F6FC] text-lg">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-rule)] sticky top-0 bg-[var(--surface-raised)] z-10">
+          <h2 className="font-heading font-bold text-[var(--text-primary)] text-lg">
             {editItem
               ? `Edit ${TYPE_LABELS[type]}`
               : presetProduct
                 ? `Add ${presetProduct.brandName} ${presetProduct.modelName}`
                 : `Add ${TYPE_LABELS[initialType]}`}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#0D1117] transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-page)] transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -253,11 +253,11 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {/* Catalog context banner */}
           {presetProduct && !editItem && (
-            <div className="rounded-lg bg-[#E8923A]/10 border border-[#E8923A]/20 px-3 py-2.5 flex items-start gap-2.5">
-              <Lock className="h-3.5 w-3.5 text-[#E8923A] mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-[#A8B2BD] leading-relaxed">
-                From the <span className="text-[#F0F6FC] font-semibold">{presetProduct.brandName} {presetProduct.modelName}</span> catalog page.
-                Fill in <span className="text-[#F0F6FC] font-semibold">your</span> SKU&apos;s length, weight, and pieces below so we can track it with your sessions.
+            <div className="rounded-lg bg-[var(--action)]/10 border border-[var(--action)]/20 px-3 py-2.5 flex items-start gap-2.5">
+              <Lock className="h-3.5 w-3.5 text-[var(--action)] mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-[var(--text-body)] leading-relaxed">
+                From the <span className="text-[var(--text-primary)] font-semibold">{presetProduct.brandName} {presetProduct.modelName}</span> catalog page.
+                Fill in <span className="text-[var(--text-primary)] font-semibold">your</span> SKU&apos;s length, weight, and pieces below so we can track it with your sessions.
               </p>
             </div>
           )}
@@ -447,13 +447,13 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
               type="checkbox"
               checked={isDefault}
               onChange={(e) => setIsDefault(e.target.checked)}
-              className="mt-0.5 rounded border-[#21262D] accent-[#E8923A]"
+              className="mt-0.5 rounded border-[var(--border-rule)] accent-[var(--action)]"
             />
             <span>
-              <span className="text-sm font-medium text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+              <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                 Set as default for new sessions
               </span>
-              <span className="block text-xs text-[#6E7681] mt-0.5">
+              <span className="block text-xs text-[var(--text-meta)] mt-0.5">
                 Like Strava&apos;s gear — this {TYPE_LABELS[type].toLowerCase()} will auto-attach whenever you log a new session.
               </span>
             </span>
@@ -462,10 +462,10 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-[#21262D] py-2.5 text-sm text-[#A8B2BD] hover:text-[#F0F6FC] hover:border-[#6E7681] transition-colors">
+            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-[var(--border-rule)] py-2.5 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-[var(--text-meta)] transition-colors">
               Cancel
             </button>
-            <button type="submit" disabled={saving} className="flex-1 rounded-lg bg-[#E8923A] py-2.5 text-sm font-semibold text-white hover:bg-[#d07e31] disabled:opacity-60 transition-colors">
+            <button type="submit" disabled={saving} className="flex-1 rounded-lg bg-[var(--action)] py-2.5 text-sm font-semibold text-white hover:bg-[#d07e31] disabled:opacity-60 transition-colors">
               {saving ? "Saving…" : editItem ? "Save Changes" : "Add Gear"}
             </button>
           </div>

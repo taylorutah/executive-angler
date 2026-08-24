@@ -46,16 +46,16 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
 
   if (state === "success") {
     return (
-      <div className="bg-[#161B22] border border-[#3FB950]/30 rounded-2xl p-6 text-center">
+      <div className="bg-[var(--surface-raised)] border border-[#3FB950]/30 rounded-2xl p-6 text-center">
         <CheckCircle className="h-10 w-10 text-[#3FB950] mx-auto mb-3" strokeWidth={1.5} />
-        <h3 className="text-[#F0F6FC] font-heading text-xl mb-1">
+        <h3 className="text-[var(--text-primary)] font-heading text-xl mb-1">
           You&apos;re on the list.
         </h3>
-        <p className="text-[#A8B2BD] text-sm">
+        <p className="text-[var(--text-body)] text-sm">
           We&apos;ll email you when closed beta opens. Get your rod ready.
         </p>
         {count > 0 && (
-          <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-3">
+          <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-3">
             {count.toLocaleString()} anglers ahead of the hatch
           </p>
         )}
@@ -72,7 +72,7 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
             placeholder="First name (optional)"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+            className="flex-1 bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl px-4 py-3.5 text-[var(--text-primary)] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/30 transition-colors font-['DM_Sans']"
           />
           <input
             type="email"
@@ -80,14 +80,14 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="flex-1 bg-[#161B22] border border-[#30363D] rounded-xl px-4 py-3.5 text-[#F0F6FC] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[#E8923A] focus:ring-2 focus:ring-[#E8923A]/30 transition-colors font-['DM_Sans']"
+            className="flex-1 bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl px-4 py-3.5 text-[var(--text-primary)] placeholder-[#A8B2BD] text-sm focus:outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/30 transition-colors font-['DM_Sans']"
           />
         </div>
 
         <button
           type="submit"
           disabled={state === "loading"}
-          className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[#E8923A] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
+          className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
         >
           {state === "loading" ? (
             <>
@@ -107,7 +107,7 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
       </form>
 
       {count > 0 && (
-        <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-4 text-center">
+        <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-4 text-center">
           {count.toLocaleString()} anglers already on the list
         </p>
       )}

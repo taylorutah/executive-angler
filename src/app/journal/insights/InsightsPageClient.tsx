@@ -121,7 +121,7 @@ export default function InsightsPageClient() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-6 pb-12">
+    <div className="min-h-screen bg-[var(--surface-page)] pt-6 pb-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <PageHeader
           eyebrow="Journal"
@@ -169,9 +169,9 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
 
   if (isEmpty) {
     return (
-      <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-12 text-center">
+      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
         <BarChart3 className="h-12 w-12 mx-auto mb-4 text-slate-600" />
-        <h2 className="font-heading text-xl text-[#F0F6FC] mb-2">No data yet</h2>
+        <h2 className="font-heading text-xl text-[var(--text-primary)] mb-2">No data yet</h2>
         <p className="text-slate-400">
           Log some fishing sessions to see your insights here.
         </p>
@@ -212,11 +212,11 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
           <div className="space-y-3 mt-2">
             {data.flyEffectiveness.map((f, i) => (
               <div key={f.flyName} className="flex items-center gap-3">
-                <span className="text-xs font-bold text-[#E8923A] w-5 text-right">
+                <span className="text-xs font-bold text-[var(--action)] w-5 text-right">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-[#F0F6FC] truncate">
+                  <div className="text-sm text-[var(--text-primary)] truncate">
                     {f.flyName}
                   </div>
                   <div className="text-xs text-slate-500">
@@ -226,7 +226,7 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-mono font-bold text-[#F0F6FC]">
+                  <div className="text-sm font-mono font-bold text-[var(--text-primary)]">
                     {f.fishPerSession.toFixed(1)}
                   </div>
                   <div className="text-[10px] text-slate-500 uppercase tracking-wide">
@@ -254,8 +254,8 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
                   className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                   style={{ backgroundColor: TIME_SLOT_COLORS[b.slot] || "#6E7681" }}
                 />
-                <span className="text-sm text-[#F0F6FC] w-20">{b.slot}</span>
-                <div className="flex-1 h-2 rounded-full bg-[#21262D] overflow-hidden">
+                <span className="text-sm text-[var(--text-primary)] w-20">{b.slot}</span>
+                <div className="flex-1 h-2 rounded-full bg-[var(--border-rule)] overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
@@ -288,13 +288,13 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-[#F0F6FC]">{w.condition}</div>
+                  <div className="text-sm text-[var(--text-primary)]">{w.condition}</div>
                   <div className="text-xs text-slate-500">
                     {w.sessionCount} session{w.sessionCount !== 1 ? "s" : ""}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-mono font-bold text-[#F0F6FC]">
+                  <div className="text-sm font-mono font-bold text-[var(--text-primary)]">
                     {w.avgFishPerSession}
                   </div>
                   <div className="text-[10px] text-slate-500 uppercase tracking-wide">
@@ -323,13 +323,13 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-[#F0F6FC] truncate">{r.river}</div>
+                  <div className="text-sm text-[var(--text-primary)] truncate">{r.river}</div>
                   <div className="text-xs text-slate-500">
                     {r.totalFish} fish in {r.sessionCount} sessions
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-mono font-bold text-[#F0F6FC]">
+                  <div className="text-sm font-mono font-bold text-[var(--text-primary)]">
                     {r.avgFishPerSession}
                   </div>
                   <div className="text-[10px] text-slate-500 uppercase tracking-wide">
@@ -352,7 +352,7 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
         ) : (
           <>
             {/* Simple donut-like bar */}
-            <div className="flex h-3 rounded-full overflow-hidden mt-3 mb-4 bg-[#21262D]">
+            <div className="flex h-3 rounded-full overflow-hidden mt-3 mb-4 bg-[var(--border-rule)]">
               {data.speciesBreakdown.map((s, i) => (
                 <div
                   key={s.species}
@@ -374,7 +374,7 @@ function InsightsGrid({ data }: { data: InsightsPayload }) {
                       backgroundColor: SPECIES_COLORS[i % SPECIES_COLORS.length],
                     }}
                   />
-                  <span className="text-sm text-[#F0F6FC] flex-1 truncate">
+                  <span className="text-sm text-[var(--text-primary)] flex-1 truncate">
                     {s.species}
                   </span>
                   <span className="text-xs font-mono text-slate-400">
@@ -424,7 +424,7 @@ function MonthlyChart({ trends }: { trends: MonthlyTrendPoint[] }) {
               className="flex-1 flex flex-col items-center justify-end h-full group relative"
             >
               {/* Tooltip */}
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#21262D] text-[#F0F6FC] text-xs font-mono px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--border-rule)] text-[var(--text-primary)] text-xs font-mono px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                 {t.fish} fish / {t.sessions} sessions
               </div>
               <div
@@ -470,10 +470,10 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-5">
+    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5">
       <div className="flex items-center gap-2 mb-1">
         {icon}
-        <h2 className="text-sm font-bold text-[#F0F6FC]">{title}</h2>
+        <h2 className="text-sm font-bold text-[var(--text-primary)]">{title}</h2>
       </div>
       {subtitle && (
         <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">
@@ -488,7 +488,7 @@ function Card({
 function StatNumber({ value, label }: { value: number; label: string }) {
   return (
     <div className="text-center">
-      <div className="text-3xl font-mono font-bold text-[#F0F6FC]">{value}</div>
+      <div className="text-3xl font-mono font-bold text-[var(--text-primary)]">{value}</div>
       <div className="text-xs text-slate-500 mt-0.5">{label}</div>
     </div>
   );
@@ -503,18 +503,18 @@ function EmptyNote({ children }: { children: React.ReactNode }) {
 function SkeletonCard({ tall }: { tall?: boolean }) {
   return (
     <div
-      className={`bg-[#161B22] border border-[#21262D] rounded-xl p-5 animate-pulse ${
+      className={`bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 animate-pulse ${
         tall ? "md:col-span-2 xl:col-span-3" : ""
       }`}
     >
       <div className="flex items-center gap-2 mb-4">
-        <div className="w-5 h-5 rounded bg-[#21262D]" />
-        <div className="h-4 w-32 rounded bg-[#21262D]" />
+        <div className="w-5 h-5 rounded bg-[var(--border-rule)]" />
+        <div className="h-4 w-32 rounded bg-[var(--border-rule)]" />
       </div>
       <div className="space-y-3">
-        <div className="h-3 w-full rounded bg-[#21262D]" />
-        <div className="h-3 w-3/4 rounded bg-[#21262D]" />
-        <div className="h-3 w-1/2 rounded bg-[#21262D]" />
+        <div className="h-3 w-full rounded bg-[var(--border-rule)]" />
+        <div className="h-3 w-3/4 rounded bg-[var(--border-rule)]" />
+        <div className="h-3 w-1/2 rounded bg-[var(--border-rule)]" />
       </div>
     </div>
   );

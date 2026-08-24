@@ -69,17 +69,17 @@ export default async function AnglerFliesPage({ params }: Props) {
   }));
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
         <header className="flex flex-wrap items-end justify-between gap-3 mb-6">
           <div>
-            <Link href={`/anglers/${profile.username}`} className="text-xs text-[#A8B2BD] hover:text-[#E8923A]">
+            <Link href={`/anglers/${profile.username}`} className="text-xs text-[var(--text-body)] hover:text-[var(--action)]">
               ← @{profile.username}
             </Link>
-            <h1 className="font-heading text-3xl font-bold text-[#F0F6FC] mt-1">
+            <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)] mt-1">
               {profile.display_name ? `${profile.display_name}'s flies` : `@${profile.username}'s flies`}
             </h1>
-            <p className="text-sm text-[#6E7681] mt-1">
+            <p className="text-sm text-[var(--text-meta)] mt-1">
               {list.length} pattern{list.length === 1 ? "" : "s"}
               {!isOwner && !viewerIsAdmin && " (public only)"}
             </p>
@@ -87,7 +87,7 @@ export default async function AnglerFliesPage({ params }: Props) {
           {isOwner && (
             <Link
               href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors"
             >
               <Plus className="h-4 w-4" /> New pattern
             </Link>
@@ -102,9 +102,9 @@ export default async function AnglerFliesPage({ params }: Props) {
               <Link
                 key={fly.id}
                 href={`/anglers/${profile.username}/flies/${fly.slug}`}
-                className="group flex flex-col rounded-xl border border-[#21262D] bg-[#161B22] overflow-hidden hover:border-[#E8923A]/40 transition-all"
+                className="group flex flex-col rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] overflow-hidden hover:border-[var(--action)]/40 transition-all"
               >
-                <div className="aspect-square bg-[#0D1117] relative overflow-hidden">
+                <div className="aspect-square bg-[var(--surface-page)] relative overflow-hidden">
                   {fly.image_url ? (
                     <Image
                       src={fly.image_url}
@@ -114,7 +114,7 @@ export default async function AnglerFliesPage({ params }: Props) {
                       sizes="180px"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-[#6E7681]">
+                    <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)]">
                       <Feather className="h-8 w-8" />
                     </div>
                   )}
@@ -126,10 +126,10 @@ export default async function AnglerFliesPage({ params }: Props) {
                   )}
                 </div>
                 <div className="p-2">
-                  <p className="text-xs font-semibold text-[#F0F6FC] truncate group-hover:text-[#E8923A] transition-colors">
+                  <p className="text-xs font-semibold text-[var(--text-primary)] truncate group-hover:text-[var(--action)] transition-colors">
                     {fly.name}
                   </p>
-                  <p className="text-[10px] text-[#6E7681] truncate mt-0.5">
+                  <p className="text-[10px] text-[var(--text-meta)] truncate mt-0.5">
                     {[fly.type, fly.size].filter(Boolean).join(" · ") || "—"}
                   </p>
                 </div>
@@ -144,12 +144,12 @@ export default async function AnglerFliesPage({ params }: Props) {
 
 function EmptyState({ isOwner }: { isOwner: boolean }) {
   return (
-    <div className="rounded-xl border border-dashed border-[#21262D] bg-[#161B22] px-6 py-14 text-center">
-      <Feather className="mx-auto h-10 w-10 text-[#6E7681]" />
-      <h2 className="mt-4 font-heading text-lg font-bold text-[#F0F6FC]">
+    <div className="rounded-xl border border-dashed border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 py-14 text-center">
+      <Feather className="mx-auto h-10 w-10 text-[var(--text-meta)]" />
+      <h2 className="mt-4 font-heading text-lg font-bold text-[var(--text-primary)]">
         {isOwner ? "You haven't created any patterns yet" : "No public patterns to show"}
       </h2>
-      <p className="mx-auto mt-1 max-w-md text-sm text-[#6E7681]">
+      <p className="mx-auto mt-1 max-w-md text-sm text-[var(--text-meta)]">
         {isOwner
           ? "Design your own fly from scratch in the Workbench, or save canonical patterns to your fly box."
           : "Patterns appear here when this angler chooses to share them publicly."}
@@ -157,7 +157,7 @@ function EmptyState({ isOwner }: { isOwner: boolean }) {
       {isOwner && (
         <Link
           href="/journal/flies/new"
-          className="mt-6 inline-flex items-center gap-1.5 rounded-lg bg-[#E8923A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A]"
+          className="mt-6 inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A]"
         >
           <Plus className="h-4 w-4" /> New pattern
         </Link>

@@ -119,8 +119,8 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-2 text-[#6E7681]">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+        <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading personal flow data...</span>
         </div>
@@ -148,31 +148,31 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
   }
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
       <div className="flex items-center gap-3 mb-4">
-        <Fish className="h-5 w-5 text-[#E8923A]" />
-        <h3 className="text-sm font-bold text-[#F0F6FC]">Your Catches vs. Flow</h3>
+        <Fish className="h-5 w-5 text-[var(--action)]" />
+        <h3 className="text-sm font-bold text-[var(--text-primary)]">Your Catches vs. Flow</h3>
         <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
       </div>
 
       {/* Correlation stats */}
       {correlationStats && (
         <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="bg-[#0D1117] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-[#E8923A]">{correlationStats.totalSessions}</p>
-            <p className="text-[10px] text-[#6E7681]">Sessions</p>
+          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
+            <p className="text-lg font-bold font-mono text-[var(--action)]">{correlationStats.totalSessions}</p>
+            <p className="text-[10px] text-[var(--text-meta)]">Sessions</p>
           </div>
-          <div className="bg-[#0D1117] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-[#00B4D8]">
+          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
+            <p className="text-lg font-bold font-mono text-[var(--signal-live)]">
               {correlationStats.sweetSpotMin}–{correlationStats.sweetSpotMax}
             </p>
-            <p className="text-[10px] text-[#6E7681]">Sweet Spot (cfs)</p>
+            <p className="text-[10px] text-[var(--text-meta)]">Sweet Spot (cfs)</p>
           </div>
-          <div className="bg-[#0D1117] rounded-lg p-3 text-center">
+          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
             <p className="text-lg font-bold font-mono text-green-400">
               {correlationStats.bestDayFish} fish
             </p>
-            <p className="text-[10px] text-[#6E7681]">
+            <p className="text-[10px] text-[var(--text-meta)]">
               Best @ {correlationStats.bestDayFlow} cfs
             </p>
           </div>
@@ -263,7 +263,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
         </ResponsiveContainer>
       </div>
 
-      <p className="text-[10px] text-[#6E7681] mt-2 text-center">
+      <p className="text-[10px] text-[var(--text-meta)] mt-2 text-center">
         Bubbles = your sessions · Size = fish count · Flow data: USGS NWIS
       </p>
     </div>

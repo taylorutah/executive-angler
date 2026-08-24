@@ -33,16 +33,16 @@ export default function ViewModeToggle({ current }: Props) {
 
   const yoursActive = current === "yours";
   const baseBtn =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E8923A]/60";
-  const activeCls = "bg-[#E8923A] text-[#0D1117]";
+    "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--action)]/60";
+  const activeCls = "bg-[var(--action)] text-[var(--surface-page)]";
   const inactiveCls =
-    "bg-transparent text-[#A8B2BD] hover:text-[#F0F6FC]";
+    "bg-transparent text-[var(--text-body)] hover:text-[var(--text-primary)]";
 
   return (
     <div
       role="tablist"
       aria-label="Fly view mode"
-      className="inline-flex rounded-lg overflow-hidden border border-[#21262D] bg-[#0D1117]"
+      className="inline-flex rounded-lg overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-page)]"
     >
       <button
         type="button"

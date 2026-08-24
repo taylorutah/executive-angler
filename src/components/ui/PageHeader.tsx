@@ -30,15 +30,15 @@ export default function PageHeader({ eyebrow, title, meta, actions, className = 
     >
       <div className="min-w-0">
         {eyebrow && (
-          <div className="font-mono text-[10px] text-[#6E7681] uppercase tracking-[0.18em] mb-1.5">
+          <div className="font-mono text-[10px] text-[var(--text-meta)] uppercase tracking-[0.18em] mb-1.5">
             {eyebrow}
           </div>
         )}
-        <h1 className="font-heading text-[26px] sm:text-[28px] text-[#F0F6FC] leading-tight tracking-[-0.01em]">
+        <h1 className="font-heading text-[26px] sm:text-[28px] text-[var(--text-primary)] leading-tight tracking-[-0.01em]">
           {title}
         </h1>
         {meta && (
-          <div className="font-mono text-[12px] text-[#6E7681] mt-1.5 tabular-nums">{meta}</div>
+          <div className="font-mono text-[12px] text-[var(--text-meta)] mt-1.5 tabular-nums">{meta}</div>
         )}
       </div>
       {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}

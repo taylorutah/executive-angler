@@ -71,8 +71,8 @@ export default function BestWindowCalculator({ riverId }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6">
-        <div className="flex items-center gap-2 text-[#6E7681]">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+        <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Calculating your best window...</span>
         </div>
@@ -100,25 +100,25 @@ export default function BestWindowCalculator({ riverId }: Props) {
   return (
     <div className="space-y-4">
       {/* Best Window Card */}
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
         <div className="flex items-center gap-3 mb-4">
-          <Target className="h-5 w-5 text-[#E8923A]" />
-          <h3 className="text-sm font-bold text-[#F0F6FC]">Your Best Window</h3>
+          <Target className="h-5 w-5 text-[var(--action)]" />
+          <h3 className="text-sm font-bold text-[var(--text-primary)]">Your Best Window</h3>
           <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
         </div>
 
-        <p className="text-xs text-[#6E7681] mb-4">
+        <p className="text-xs text-[var(--text-meta)] mb-4">
           Based on your top sessions ({bestWindow.session_count} total):
         </p>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
           {bestWindow.flow_min !== null && bestWindow.flow_max !== null && (
-            <div className="bg-[#0D1117] rounded-lg p-3">
+            <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <Waves className="h-3.5 w-3.5 text-[#00B4D8]" />
-                <span className="text-[10px] text-[#6E7681]">Optimal Flow</span>
+                <Waves className="h-3.5 w-3.5 text-[var(--signal-live)]" />
+                <span className="text-[10px] text-[var(--text-meta)]">Optimal Flow</span>
               </div>
-              <p className="text-sm font-bold text-[#F0F6FC]">
+              <p className="text-sm font-bold text-[var(--text-primary)]">
                 {bestWindow.flow_min}–{bestWindow.flow_max} cfs
               </p>
               {currentFlow !== null && (
@@ -130,12 +130,12 @@ export default function BestWindowCalculator({ riverId }: Props) {
           )}
 
           {bestWindow.temp_min !== null && bestWindow.temp_max !== null && (
-            <div className="bg-[#0D1117] rounded-lg p-3">
+            <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
                 <Thermometer className="h-3.5 w-3.5 text-red-400" />
-                <span className="text-[10px] text-[#6E7681]">Optimal Temp</span>
+                <span className="text-[10px] text-[var(--text-meta)]">Optimal Temp</span>
               </div>
-              <p className="text-sm font-bold text-[#F0F6FC]">
+              <p className="text-sm font-bold text-[var(--text-primary)]">
                 {bestWindow.temp_min}–{bestWindow.temp_max}°F
               </p>
               {currentTemp !== null && (
@@ -147,23 +147,23 @@ export default function BestWindowCalculator({ riverId }: Props) {
           )}
 
           {bestWindow.best_fly && (
-            <div className="bg-[#0D1117] rounded-lg p-3">
+            <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <TrendingUp className="h-3.5 w-3.5 text-[#E8923A]" />
-                <span className="text-[10px] text-[#6E7681]">Top Fly</span>
+                <TrendingUp className="h-3.5 w-3.5 text-[var(--action)]" />
+                <span className="text-[10px] text-[var(--text-meta)]">Top Fly</span>
               </div>
-              <p className="text-sm font-bold text-[#F0F6FC] truncate">{bestWindow.best_fly}</p>
-              <p className="text-[10px] text-[#6E7681]">{bestWindow.avg_fish} fish/session avg</p>
+              <p className="text-sm font-bold text-[var(--text-primary)] truncate">{bestWindow.best_fly}</p>
+              <p className="text-[10px] text-[var(--text-meta)]">{bestWindow.avg_fish} fish/session avg</p>
             </div>
           )}
 
           {bestWindow.best_species && (
-            <div className="bg-[#0D1117] rounded-lg p-3">
+            <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
                 <CloudSun className="h-3.5 w-3.5 text-green-400" />
-                <span className="text-[10px] text-[#6E7681]">Primary Target</span>
+                <span className="text-[10px] text-[var(--text-meta)]">Primary Target</span>
               </div>
-              <p className="text-sm font-bold text-[#F0F6FC] truncate">{bestWindow.best_species}</p>
+              <p className="text-sm font-bold text-[var(--text-primary)] truncate">{bestWindow.best_species}</p>
             </div>
           )}
         </div>
@@ -187,26 +187,26 @@ export default function BestWindowCalculator({ riverId }: Props) {
 
       {/* Fly Performance — actual catch counts per canonical fly */}
       {hatchCorrelation.length > 0 && (
-        <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-5">
-          <h3 className="text-sm font-bold text-[#F0F6FC] mb-1">Your Fly Performance</h3>
-          <p className="text-[10px] text-[#6E7681] mb-3">
+        <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-1">Your Fly Performance</h3>
+          <p className="text-[10px] text-[var(--text-meta)] mb-3">
             Real catch counts per fly across your sessions on this river.
           </p>
           <div className="space-y-2">
             {hatchCorrelation.slice(0, 5).map((h) => (
               <div key={h.fly_name} className="flex items-center justify-between py-1.5">
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium text-[#F0F6FC] truncate">{h.fly_name}</p>
-                  <p className="text-[10px] text-[#6E7681]">
+                  <p className="text-xs font-medium text-[var(--text-primary)] truncate">{h.fly_name}</p>
+                  <p className="text-[10px] text-[var(--text-meta)]">
                     {h.months.slice(0, 4).join(", ")}
                     {h.months.length > 4 ? "…" : ""}
                   </p>
                 </div>
                 <div className="text-right shrink-0 ml-3">
-                  <p className="text-xs font-bold text-[#E8923A]">
+                  <p className="text-xs font-bold text-[var(--action)]">
                     {h.catch_count} {h.catch_count === 1 ? "catch" : "catches"}
                   </p>
-                  <p className="text-[10px] text-[#6E7681]">
+                  <p className="text-[10px] text-[var(--text-meta)]">
                     {h.pct_of_catches}% · {h.session_count}{" "}
                     {h.session_count === 1 ? "session" : "sessions"}
                   </p>

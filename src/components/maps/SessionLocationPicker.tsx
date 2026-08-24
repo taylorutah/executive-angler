@@ -130,7 +130,7 @@ export default function SessionLocationPicker({
           ))}
         </div>
       </div>
-      <p className="mt-1.5 text-xs text-[#6E7681] font-['IBM_Plex_Mono']">
+      <p className="mt-1.5 text-xs text-[var(--text-meta)] font-['IBM_Plex_Mono']">
         {formatCoord(coords.lat, true)}, {formatCoord(coords.lng, false)}
       </p>
     </div>

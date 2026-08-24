@@ -528,9 +528,9 @@ export default function WorkbenchClient({
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
         <div className="mb-4">
           <TipCard storageKey="workbench-intro-v2" title="Two ways to start — no inventory required">
-            <p><span className="text-[#F0F6FC] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
-            <p><span className="text-[#F0F6FC] font-semibold">Or start with your box →</span> Drop what you already own into <em>My Inventory</em>, then flip to <em>What Can I Tie?</em> to see recipes ranked by the % of materials you have.</p>
-            <p className="text-[#6E7681]">Add materials as you go — the Workbench works either direction.</p>
+            <p><span className="text-[var(--text-primary)] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
+            <p><span className="text-[var(--text-primary)] font-semibold">Or start with your box →</span> Drop what you already own into <em>My Inventory</em>, then flip to <em>What Can I Tie?</em> to see recipes ranked by the % of materials you have.</p>
+            <p className="text-[var(--text-meta)]">Add materials as you go — the Workbench works either direction.</p>
           </TipCard>
         </div>
 
@@ -1001,8 +1001,8 @@ export default function WorkbenchClient({
           aria-live="polite"
           className={`fixed bottom-4 right-4 z-[60] max-w-sm px-4 py-3 rounded-lg shadow-lg border text-sm font-medium ${
             toast.kind === 'success'
-              ? 'bg-[#0d2d1f] border-[#2EA44F] text-[#7EE2A8]'
-              : 'bg-[#2d0d0d] border-[#DA3633] text-[#FFA8A8]'
+              ? 'bg-[#0d2d1f] border-[var(--state-positive)] text-[#7EE2A8]'
+              : 'bg-[#2d0d0d] border-[var(--state-negative)] text-[#FFA8A8]'
           }`}
         >
           <div className="flex items-start gap-2">
@@ -1331,13 +1331,13 @@ function MaterialCard({
   const isOwned = ownedCount > 0;
   const hasSizes = !!(material.sizes && material.sizes.length > 0);
   return (
-    <div className={`bg-surface rounded-md border p-3 flex flex-col ${isPending ? 'border-[#E8923A]/40' : 'border-border'}`}>
+    <div className={`bg-surface rounded-md border p-3 flex flex-col ${isPending ? 'border-[var(--action)]/40' : 'border-border'}`}>
       <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-text-primary text-sm font-medium truncate">{material.name}</p>
           {isPending && (
-            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#E8923A]/15 text-[#E8923A] font-semibold flex-shrink-0">
+            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--action)]/15 text-[var(--action)] font-semibold flex-shrink-0">
               Pending
             </span>
           )}

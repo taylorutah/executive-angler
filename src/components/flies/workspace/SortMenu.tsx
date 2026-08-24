@@ -58,12 +58,12 @@ export default function SortMenu({ sort, onChange }: Props) {
                     className={[
                       "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-left transition-colors",
                       active
-                        ? "bg-[#E8923A]/10 text-[var(--color-text-primary)]"
+                        ? "bg-[var(--action)]/10 text-[var(--color-text-primary)]"
                         : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text-primary)]",
                     ].join(" ")}
                   >
                     <span className="h-3 w-3 flex-shrink-0">
-                      {active && <Check className="h-3 w-3 text-[#E8923A]" />}
+                      {active && <Check className="h-3 w-3 text-[var(--action)]" />}
                     </span>
                     {f.label}
                   </button>
@@ -79,7 +79,7 @@ export default function SortMenu({ sort, onChange }: Props) {
               className={[
                 "flex-1 rounded-md px-2 py-1 text-xs",
                 sort.direction === "asc"
-                  ? "bg-[#E8923A] text-white"
+                  ? "bg-[var(--action)] text-white"
                   : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)]",
               ].join(" ")}
             >
@@ -91,7 +91,7 @@ export default function SortMenu({ sort, onChange }: Props) {
               className={[
                 "flex-1 rounded-md px-2 py-1 text-xs",
                 sort.direction === "desc"
-                  ? "bg-[#E8923A] text-white"
+                  ? "bg-[var(--action)] text-white"
                   : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)]",
               ].join(" ")}
             >

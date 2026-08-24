@@ -37,12 +37,12 @@ export default async function FeedPage() {
   /* ── Unauthenticated gate ── */
   if (!user) {
     return (
-      <main className="min-h-screen bg-[#0D1117]">
+      <main className="min-h-screen bg-[var(--surface-page)]">
         <div className="mx-auto max-w-xl px-4 pt-12 pb-24 text-center">
           {/* Icon */}
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#161B22] border border-[#21262D]">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)]">
             <svg
-              className="h-8 w-8 text-[#E8923A]"
+              className="h-8 w-8 text-[var(--action)]"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -56,13 +56,13 @@ export default async function FeedPage() {
             </svg>
           </div>
 
-          <h1 className="text-3xl font-bold text-[#F0F6FC] mb-3">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-3">
             On The Water
           </h1>
-          <p className="text-[#A8B2BD] text-lg mb-3 max-w-md mx-auto">
+          <p className="text-[var(--text-body)] text-lg mb-3 max-w-md mx-auto">
             See who&apos;s fishing right now — river, section, and weather only.
           </p>
-          <p className="text-[#6E7681] text-sm mb-10 max-w-md mx-auto">
+          <p className="text-[var(--text-meta)] text-sm mb-10 max-w-md mx-auto">
             We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
 
@@ -70,21 +70,21 @@ export default async function FeedPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
             <Link
               href="/login?redirect=/feed"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E8923A] px-6 py-3 text-sm font-semibold text-[#0D1117] hover:bg-[#D4812E] transition-colors w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--action)] px-6 py-3 text-sm font-semibold text-[var(--surface-page)] hover:bg-[#D4812E] transition-colors w-full sm:w-auto"
             >
               Sign In
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#21262D] bg-[#161B22] px-6 py-3 text-sm font-semibold text-[#F0F6FC] hover:bg-[#1F2937] transition-colors w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)] transition-colors w-full sm:w-auto"
             >
               Create Free Account
             </Link>
           </div>
 
           {/* What you get */}
-          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6 text-left mb-12">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#E8923A] mb-4">
+          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6 text-left mb-12">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--action)] mb-4">
               What you get with an account
             </h2>
             <ul className="space-y-3">
@@ -124,30 +124,30 @@ export default async function FeedPage() {
           </div>
 
           {/* App download */}
-          <div className="rounded-xl border border-[#21262D] bg-[#161B22] p-6">
+          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="inline-flex items-center rounded-full bg-[#2EA44F]/10 px-3 py-1 text-xs font-medium text-[#2EA44F] border border-[#2EA44F]/20">
+              <span className="inline-flex items-center rounded-full bg-[var(--state-positive)]/10 px-3 py-1 text-xs font-medium text-[var(--state-positive)] border border-[var(--state-positive)]/20">
                 Live on the App Store
               </span>
             </div>
-            <h2 className="text-lg font-bold text-[#F0F6FC] mb-1">
+            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">
               Get the iPhone App
             </h2>
-            <p className="text-sm text-[#A8B2BD] mb-4">
+            <p className="text-sm text-[var(--text-body)] mb-4">
               Log fish on-stream, track GPS sessions, and sync everything to your account.
             </p>
             <a
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-7 py-3 bg-[#E8923A] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-7 py-3 bg-[var(--action)] text-white font-semibold rounded-xl hover:bg-[#d17d28] transition-colors"
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
               </svg>
               Download for iPhone
             </a>
-            <p className="font-['IBM_Plex_Mono'] text-[#6E7681] text-xs mt-3 text-center">
+            <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-3 text-center">
               Android coming soon
             </p>
           </div>
@@ -227,16 +227,16 @@ export default async function FeedPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-[#0D1117]">
+    <main className="min-h-screen bg-[var(--surface-page)]">
       <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
         <header className="mb-8">
-          <h1 className="text-2xl font-bold text-[#F0F6FC] mb-1">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">
             On The Water
           </h1>
-          <p className="text-sm text-[#A8B2BD] mb-1">
+          <p className="text-sm text-[var(--text-body)] mb-1">
             Anglers currently fishing — river, section, and weather only.
           </p>
-          <p className="text-xs text-[#6E7681]">
+          <p className="text-xs text-[var(--text-meta)]">
             We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
         </header>

@@ -165,26 +165,26 @@ function SignupForm() {
       ? "border-green-500"
       : usernameStatus === "taken" || usernameStatus === "invalid"
       ? "border-red-500"
-      : "border-[#21262D]";
+      : "border-[var(--border-rule)]";
 
   const usernameMessageColor =
     usernameStatus === "available"
       ? "text-green-400"
       : usernameStatus === "taken" || usernameStatus === "invalid"
       ? "text-red-400"
-      : "text-[#6E7681]";
+      : "text-[var(--text-meta)]";
 
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
     return (
-      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <div className="bg-[#161B22] rounded-xl shadow-md p-8">
+          <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8">
             <div className="text-4xl mb-4">🎣</div>
-            <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-3">
+            <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">
               Welcome, {firstName}!
             </h2>
-            <p className="text-[#A8B2BD]">
+            <p className="text-[var(--text-body)]">
               Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
             <div className="mt-6">
@@ -199,27 +199,27 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">
+          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
             {SITE_NAME}
           </Link>
-          <p className="mt-2 text-[#A8B2BD]">
+          <p className="mt-2 text-[var(--text-body)]">
             Create a free account to save favorites and log your sessions.
           </p>
         </div>
 
-        <div className="bg-[#161B22] rounded-xl shadow-md p-8 space-y-5">
+        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8 space-y-5">
           {/* OAuth — fastest path for new users */}
           <OAuthButtons redirectTo={postSignupRedirect} />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#21262D]" />
+              <div className="w-full border-t border-[var(--border-rule)]" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#161B22] px-3 text-[#6E7681] tracking-wider">
+              <span className="bg-[var(--surface-raised)] px-3 text-[var(--text-meta)] tracking-wider">
                 or sign up with email
               </span>
             </div>
@@ -228,7 +228,7 @@ function SignupForm() {
           <form onSubmit={handleSignup} className="space-y-4">
             {/* Full name — primary identity */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+              <label htmlFor="fullName" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                 Your Name
               </label>
               <input
@@ -249,7 +249,7 @@ function SignupForm() {
                     triggerUsernameCheck(suggested);
                   }
                 }}
-                className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
                 placeholder="John Smith"
                 autoComplete="name"
               />
@@ -257,9 +257,9 @@ function SignupForm() {
 
             {/* Username — optional, auto-suggested from name */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                 USERNAME{" "}
-                <span className="text-[#6E7681] font-normal">· optional</span>
+                <span className="text-[var(--text-meta)] font-normal">· optional</span>
               </label>
               <div className="relative">
                 <input
@@ -271,7 +271,7 @@ function SignupForm() {
                     setUsername(e.target.value);
                     triggerUsernameCheck(e.target.value);
                   }}
-                  className={`w-full px-4 py-3 rounded-lg border ${usernameBorder} bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none pr-10`}
+                  className={`w-full px-4 py-3 rounded-lg border ${usernameBorder} bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none pr-10`}
                   placeholder="yourhandle"
                   autoComplete="username"
                   autoCapitalize="none"
@@ -279,7 +279,7 @@ function SignupForm() {
                 {/* Status indicator */}
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   {usernameStatus === "checking" && (
-                    <svg className="animate-spin h-4 w-4 text-[#6E7681]" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-[var(--text-meta)]" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
@@ -302,7 +302,7 @@ function SignupForm() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                 Email
               </label>
               <input
@@ -311,13 +311,13 @@ function SignupForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#F0F6FC] mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                 Password
               </label>
               <input
@@ -327,7 +327,7 @@ function SignupForm() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[#21262D] bg-[#0D1117] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC] outline-none"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
                 placeholder="At least 8 characters"
               />
             </div>
@@ -363,11 +363,11 @@ function SignupForm() {
             </Button>
           </form>
 
-          <p className="text-center text-sm text-[#A8B2BD]">
+          <p className="text-center text-sm text-[var(--text-body)]">
             Already have an account?{" "}
             <Link
               href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"}
-              className="text-[#E8923A] font-medium hover:text-[#cf7d30]"
+              className="text-[var(--action)] font-medium hover:text-[#cf7d30]"
             >
               Sign in
             </Link>
@@ -382,8 +382,8 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
-          <div className="animate-pulse text-[#E8923A]">Loading…</div>
+        <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center">
+          <div className="animate-pulse text-[var(--action)]">Loading…</div>
         </div>
       }
     >

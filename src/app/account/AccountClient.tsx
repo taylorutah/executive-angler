@@ -323,8 +323,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     router.push("/");
   }
 
-  const inputCls = "w-full rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A] focus:outline-none focus:ring-1 focus:ring-[#E8923A] transition-colors";
-  const labelCls = "block text-sm font-medium text-[#A8B2BD] mb-1.5";
+  const inputCls = "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)] transition-colors";
+  const labelCls = "block text-sm font-medium text-[var(--text-body)] mb-1.5";
 
   const hasDemoContent = demoSessionCount > 0 || demoCatchCount > 0;
 
@@ -338,20 +338,20 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
   // ─── Quick nav cards ───
   const quickLinks = [
-    { href: "/journal", icon: BookOpen, label: "Fishing Journal", sub: `${stats.totalSessions} sessions`, color: "text-[#E8923A]", bg: "bg-[#E8923A]/10" },
+    { href: "/journal", icon: BookOpen, label: "Fishing Journal", sub: `${stats.totalSessions} sessions`, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10" },
     { href: "/journal/flies", icon: Feather, label: "Fly Patterns", sub: `${stats.totalFlies} patterns`, color: "text-purple-400", bg: "bg-purple-400/10" },
-    { href: "/account/gear", icon: Package, label: "Gear Locker", sub: "Rods, reels & more", color: "text-[#0BA5C7]", bg: "bg-[#0BA5C7]/10" },
-    { href: "/favorites", icon: Star, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-[#E8923A]", bg: "bg-[#E8923A]/10" },
+    { href: "/account/gear", icon: Package, label: "Gear Locker", sub: "Rods, reels & more", color: "text-[var(--signal-live)]", bg: "bg-[var(--signal-live)]/10" },
+    { href: "/favorites", icon: Star, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {cropSrc && <AvatarCropModal imageSrc={cropSrc} onSave={handleCropSave} onCancel={() => setCropSrc(null)} />}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Welcome banner */}
         {showWelcome && (
-          <div className="bg-gradient-to-r from-[#E8923A] to-[#D4782A] text-white rounded-xl p-4 mb-8 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-[var(--action)] to-[#D4782A] text-white rounded-xl p-4 mb-8 flex items-center justify-between">
             <p className="font-medium">Welcome to Executive Angler! Set up your profile below to get started.</p>
             <button onClick={() => setShowWelcome(false)} className="text-white/80 hover:text-white transition-colors ml-4 flex-shrink-0">
               <X className="h-5 w-5" />
@@ -362,11 +362,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
         {/* ─── Profile header (full width) ─── */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8">
           <label className="cursor-pointer group relative flex-shrink-0">
-            <div className="h-20 w-20 rounded-2xl overflow-hidden bg-[#E8923A]/10 border-2 border-[#21262D] shadow-lg flex items-center justify-center">
+            <div className="h-20 w-20 rounded-2xl overflow-hidden bg-[var(--action)]/10 border-2 border-[var(--border-rule)] shadow-lg flex items-center justify-center">
               {avatarUrl ? (
                 <Image src={avatarUrl} alt="Avatar" width={80} height={80} className="object-cover w-full h-full" />
               ) : (
-                <span className="text-3xl font-bold text-[#E8923A]">{(displayName || user.email)[0].toUpperCase()}</span>
+                <span className="text-3xl font-bold text-[var(--action)]">{(displayName || user.email)[0].toUpperCase()}</span>
               )}
             </div>
             <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -381,24 +381,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
-              <h1 className="font-heading text-2xl font-bold text-[#F0F6FC] truncate">{displayName || "Angler"}</h1>
-              {username && <span className="text-sm text-[#A8B2BD] font-mono">@{username}</span>}
+              <h1 className="font-heading text-2xl font-bold text-[var(--text-primary)] truncate">{displayName || "Angler"}</h1>
+              {username && <span className="text-sm text-[var(--text-body)] font-mono">@{username}</span>}
             </div>
-            <p className="text-sm text-[#6E7681] mt-0.5">{user.email}</p>
+            <p className="text-sm text-[var(--text-meta)] mt-0.5">{user.email}</p>
             {socialCounts && (
               <div className="flex items-center gap-4 mt-2">
-                <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
+                <Link href={`/anglers/${username || user.id}?tab=followers`} className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
+                  <span className="font-semibold text-[var(--text-primary)]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </Link>
-                <span className="text-[#21262D]">·</span>
-                <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[#A8B2BD] hover:text-[#E8923A] transition-colors">
-                  <span className="font-semibold text-[#F0F6FC]">{socialCounts.following}</span> following
+                <span className="text-[var(--border-rule)]">·</span>
+                <Link href={`/anglers/${username || user.id}?tab=following`} className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
+                  <span className="font-semibold text-[var(--text-primary)]">{socialCounts.following}</span> following
                 </Link>
               </div>
             )}
           </div>
 
-          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[#6E7681] hover:text-red-400 transition-colors border border-[#21262D] rounded-lg px-4 py-2 hover:border-red-800">
+          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[var(--text-meta)] hover:text-red-400 transition-colors border border-[var(--border-rule)] rounded-lg px-4 py-2 hover:border-red-800">
             <LogOut className="h-4 w-4" /> Sign Out
           </button>
         </div>
@@ -414,8 +414,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   onClick={() => navigateSection(key)}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                     activeSection === key
-                      ? "bg-[#E8923A]/10 text-[#E8923A] border border-[#E8923A]/20"
-                      : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22]"
+                      ? "bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/20"
+                      : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]"
                   }`}
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
@@ -426,7 +426,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
               {/* Admin link — only visible to admins */}
               {isAdmin && (
                 <>
-                  <div className="h-px bg-[#21262D] my-2" />
+                  <div className="h-px bg-[var(--border-rule)] my-2" />
                   <Link
                     href="/admin"
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors"
@@ -443,8 +443,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
           <main className="flex-1 min-w-0">
             {/* ═══════ EDIT PROFILE ═══════ */}
             {activeSection === "profile" && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Edit Profile</h2>
+              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Edit Profile</h2>
                 <form onSubmit={handleSaveProfile} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
@@ -454,7 +454,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <div>
                       <label className={labelCls}>Username</label>
                       <div className="relative flex items-center">
-                        <span className="absolute left-4 text-[#6E7681] pointer-events-none select-none">@</span>
+                        <span className="absolute left-4 text-[var(--text-meta)] pointer-events-none select-none">@</span>
                         <input
                           className={inputCls + " pl-8 pr-10"}
                           value={username}
@@ -464,7 +464,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         />
                         {username.length >= 3 && (
                           <span className="absolute right-3 text-sm pointer-events-none">
-                            {usernameChecking ? <span className="text-[#A8B2BD]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
+                            {usernameChecking ? <span className="text-[var(--text-body)]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
                           </span>
                         )}
                       </div>
@@ -475,7 +475,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   <div>
                     <label className={labelCls}>Bio</label>
                     <textarea className={inputCls + " resize-none"} rows={3} maxLength={160} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Tell other anglers about yourself…" />
-                    <p className="text-xs text-[#6E7681] mt-1 text-right">{bio.length}/160</p>
+                    <p className="text-xs text-[var(--text-meta)] mt-1 text-right">{bio.length}/160</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -492,7 +492,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelCls}>Profile Visibility</label>
-                      <p className="text-xs text-[#6E7681] mb-2 -mt-1">
+                      <p className="text-xs text-[var(--text-meta)] mb-2 -mt-1">
                         {profileVisibility === "public" && "Anyone can see your session feed."}
                         {profileVisibility === "followers_only" && "Only accepted followers see your session feed."}
                         {profileVisibility === "private" && "Only you can see your session feed and sessions."}
@@ -507,8 +507,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                               onClick={() => setProfileVisibility(v)}
                               className={`flex-1 rounded-lg border py-2 text-xs font-medium transition-colors ${
                                 profileVisibility === v
-                                  ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]"
-                                  : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"
+                                  ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]"
+                                  : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"
                               }`}
                             >
                               {labels[v]}
@@ -521,11 +521,11 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                       <label className={labelCls}>Journal Feed Display</label>
                       <div className="flex gap-2">
                         <button type="button" onClick={() => setFeedDisplay("collage")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
                           Collage
                         </button>
                         <button type="button" onClick={() => setFeedDisplay("map")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
                           Map
                         </button>
                       </div>
@@ -539,15 +539,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   <div>
                     <label className={labelCls}>Search &amp; Discovery</label>
                     <div
-                      className={`flex items-center justify-between rounded-lg border border-[#21262D] bg-[#0D1117] px-4 py-3 ${
+                      className={`flex items-center justify-between rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3 ${
                         profileVisibility !== "public" ? "opacity-60" : ""
                       }`}
                     >
                       <div className="min-w-0 pr-4">
-                        <p className="text-sm font-medium text-[#F0F6FC]">
+                        <p className="text-sm font-medium text-[var(--text-primary)]">
                           Show my profile in search results
                         </p>
-                        <p className="text-xs text-[#6E7681] mt-0.5">
+                        <p className="text-xs text-[var(--text-meta)] mt-0.5">
                           {profileVisibility !== "public"
                             ? "Non-public profiles are never indexed by search engines."
                             : "Allow search engines to index your profile and include you in Executive Angler\u2019s angler search."}
@@ -560,7 +560,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         aria-pressed={profileVisibility === "public" && searchable}
                         aria-label="Show my profile in search results"
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 disabled:cursor-not-allowed ${
-                          profileVisibility === "public" && searchable ? "bg-[#E8923A]" : "bg-[#21262D]"
+                          profileVisibility === "public" && searchable ? "bg-[var(--action)]" : "bg-[var(--border-rule)]"
                         }`}
                       >
                         <span
@@ -574,14 +574,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
                   <div>
                     <label className={labelCls}>Fly Tying Workbench</label>
-                    <p className="text-xs text-[#6E7681] mb-2">Hide the workbench and tie-next tabs if you don&apos;t tie your own flies. Your fly box and shared patterns still work normally.</p>
+                    <p className="text-xs text-[var(--text-meta)] mb-2">Hide the workbench and tie-next tabs if you don&apos;t tie your own flies. Your fly box and shared patterns still work normally.</p>
                     <div className="flex gap-2">
                       <button type="button" onClick={() => setTiesOwnFlies(true)}
-                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${tiesOwnFlies ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${tiesOwnFlies ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
                         I tie my own flies
                       </button>
                       <button type="button" onClick={() => setTiesOwnFlies(false)}
-                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!tiesOwnFlies ? "border-[#E8923A] bg-[#E8923A]/10 text-[#E8923A]" : "border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"}`}>
+                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!tiesOwnFlies ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
                         I buy my flies
                       </button>
                     </div>
@@ -606,26 +606,26 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ NOTIFICATIONS ═══════ */}
             {activeSection === "notifications" && (
-              <div id="notifications" className="bg-[#161B22] border border-[#21262D] rounded-xl p-6 scroll-mt-24">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Email Notifications</h2>
-                <p className="text-sm text-[#A8B2BD] mb-6">Choose what emails you receive from Executive Angler.</p>
+              <div id="notifications" className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6 scroll-mt-24">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Email Notifications</h2>
+                <p className="text-sm text-[var(--text-body)] mb-6">Choose what emails you receive from Executive Angler.</p>
 
                 <div className="space-y-1">
                   {/* Activity section */}
-                  <p className="text-xs font-semibold text-[#A8B2BD] uppercase tracking-wider mb-3">Activity</p>
+                  <p className="text-xs font-semibold text-[var(--text-body)] uppercase tracking-wider mb-3">Activity</p>
 
                   {[
                     { label: "New followers", desc: "When someone starts following you", value: notifyFollows, set: setNotifyFollows },
                     { label: "Session comments", desc: "When someone comments on your session", value: notifyComments, set: setNotifyComments },
                     { label: "Session kudos", desc: "When someone gives kudos on your session", value: notifyLikes, set: setNotifyLikes },
                   ].map(({ label, desc, value, set }) => (
-                    <div key={label} className="flex items-center justify-between py-3 border-b border-[#21262D] last:border-0">
+                    <div key={label} className="flex items-center justify-between py-3 border-b border-[var(--border-rule)] last:border-0">
                       <div>
-                        <p className="text-sm font-medium text-[#F0F6FC]">{label}</p>
-                        <p className="text-xs text-[#6E7681]">{desc}</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{label}</p>
+                        <p className="text-xs text-[var(--text-meta)]">{desc}</p>
                       </div>
                       <button type="button" onClick={() => set(!value)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${value ? "bg-[#E8923A]" : "bg-[#21262D]"}`}>
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${value ? "bg-[var(--action)]" : "bg-[var(--border-rule)]"}`}>
                         <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${value ? "translate-x-6" : "translate-x-1"}`} />
                       </button>
                     </div>
@@ -633,19 +633,19 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
                   {/* Digest section */}
                   <div className="pt-4 mt-4">
-                    <p className="text-xs font-semibold text-[#A8B2BD] uppercase tracking-wider mb-3">Digest</p>
+                    <p className="text-xs font-semibold text-[var(--text-body)] uppercase tracking-wider mb-3">Digest</p>
                     <div className="flex items-center justify-between py-3">
                       <div>
-                        <p className="text-sm font-medium text-[#F0F6FC]">Activity digest</p>
-                        <p className="text-xs text-[#6E7681]">Summary of activity on your profile</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)]">Activity digest</p>
+                        <p className="text-xs text-[var(--text-meta)]">Summary of activity on your profile</p>
                       </div>
                       <div className="flex gap-1.5">
                         {(["none", "daily", "weekly"] as const).map((freq) => (
                           <button key={freq} type="button" onClick={() => setDigestFrequency(freq)}
                             className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors capitalize ${
                               digestFrequency === freq
-                                ? "bg-[#E8923A] text-white"
-                                : "bg-[#0D1117] border border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/40"
+                                ? "bg-[var(--action)] text-white"
+                                : "bg-[var(--surface-page)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"
                             }`}>
                             {freq}
                           </button>
@@ -655,7 +655,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#21262D]">
+                <div className="mt-6 pt-4 border-t border-[var(--border-rule)]">
                   <Button
                     type="button"
                     onClick={handleSaveNotifications}
@@ -674,8 +674,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ SECURITY ═══════ */}
             {activeSection === "security" && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Change Password</h2>
+              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Change Password</h2>
                 <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
                   <div>
                     <label className={labelCls}>New Password</label>
@@ -695,10 +695,10 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ CONNECTED ACCOUNTS ═══════ */}
             {activeSection === "connected" && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-6">Connected Accounts</h2>
+              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Connected Accounts</h2>
 
-                <div className="rounded-lg bg-[#0D1117] border border-[#21262D] p-4 flex items-center justify-between">
+                <div className="rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] p-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -707,13 +707,13 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                     <div>
-                      <p className="text-sm font-medium text-[#F0F6FC]">Google</p>
-                      <p className="text-xs text-[#6E7681]">{googleLinked ? "Connected" : "Not connected"}</p>
+                      <p className="text-sm font-medium text-[var(--text-primary)]">Google</p>
+                      <p className="text-xs text-[var(--text-meta)]">{googleLinked ? "Connected" : "Not connected"}</p>
                     </div>
                   </div>
                   {!googleLinked ? (
                     <button type="button" onClick={handleLinkGoogle} disabled={googleLinking}
-                      className="text-sm font-medium text-[#E8923A] hover:text-[#D4782A] transition-colors disabled:opacity-50">
+                      className="text-sm font-medium text-[var(--action)] hover:text-[#D4782A] transition-colors disabled:opacity-50">
                       {googleLinking ? "Connecting…" : "Connect"}
                     </button>
                   ) : (
@@ -725,34 +725,34 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ DATA ═══════ */}
             {activeSection === "data" && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[#F0F6FC] mb-2">Data</h2>
-                <p className="text-sm text-[#A8B2BD] mb-6">Manage sample content added to your account during onboarding.</p>
+              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Data</h2>
+                <p className="text-sm text-[var(--text-body)] mb-6">Manage sample content added to your account during onboarding.</p>
 
                 {demoProbed && !hasDemoContent ? (
-                  <div className="rounded-lg border border-[#21262D] bg-[#0D1117] p-4 text-sm text-[#A8B2BD]">
+                  <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 text-sm text-[var(--text-body)]">
                     No demo content on your account. Your journal is clean.
                   </div>
                 ) : (
-                  <div className="rounded-lg border border-[#21262D] bg-[#0D1117] p-5">
+                  <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-5">
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="h-10 w-10 rounded-lg bg-[#E8923A]/10 flex items-center justify-center flex-shrink-0">
-                        <Database className="h-5 w-5 text-[#E8923A]" />
+                      <div className="h-10 w-10 rounded-lg bg-[var(--action)]/10 flex items-center justify-center flex-shrink-0">
+                        <Database className="h-5 w-5 text-[var(--action)]" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[#F0F6FC]">Sample sessions</p>
-                        <p className="text-xs text-[#A8B2BD] mt-0.5">
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">Sample sessions</p>
+                        <p className="text-xs text-[var(--text-body)] mt-0.5">
                           {demoProbed
                             ? `${demoSessionCount} session${demoSessionCount === 1 ? "" : "s"} · ${demoCatchCount} catch${demoCatchCount === 1 ? "" : "es"} were added to your journal to help you explore the app.`
                             : "Checking for demo content…"}
                         </p>
-                        <p className="text-xs text-[#6E7681] mt-1">
+                        <p className="text-xs text-[var(--text-meta)] mt-1">
                           Clearing won&apos;t touch any sessions you logged yourself.
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-2 border-t border-[#21262D]">
+                    <div className="flex items-center gap-3 pt-2 border-t border-[var(--border-rule)]">
                       <Button
                         type="button"
                         onClick={handleClearDemoContent}
@@ -765,7 +765,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         {demoClearing ? "Clearing…" : demoCleared ? "Cleared ✓" : "Clear Demo Content"}
                       </Button>
                       {demoCleared && (
-                        <span className="text-xs text-[#2EA44F]">Your journal is empty and ready.</span>
+                        <span className="text-xs text-[var(--state-positive)]">Your journal is empty and ready.</span>
                       )}
                     </div>
                   </div>

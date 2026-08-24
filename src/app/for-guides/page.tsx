@@ -9,24 +9,24 @@ export const metadata: Metadata = {
 
 export default function ForGuidesPage() {
   return (
-    <div className="pt-8 pb-20 bg-[#0D1117] min-h-screen">
+    <div className="pt-8 pb-20 bg-[var(--surface-page)] min-h-screen">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="inline-flex items-center gap-2 mb-6">
-          <span className="font-mono text-[#E8923A] text-xs uppercase tracking-[0.2em]">
+          <span className="font-mono text-[var(--action)] text-xs uppercase tracking-[0.2em]">
             For Professional Guides
           </span>
         </div>
-        <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[#F0F6FC] mb-4">
+        <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
           Claim your guide profile.
         </h1>
-        <p className="text-lg text-[#A8B2BD] mb-10 leading-relaxed">
+        <p className="text-lg text-[var(--text-body)] mb-10 leading-relaxed">
           {SITE_NAME} is free for everyone &mdash; every feature, no payment, no
           tiers. If you guide water we cover, claim your directory profile so
           clients can find you.
         </p>
 
-        <div className="prose prose-lg max-w-none text-[#F0F6FC] space-y-6">
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             Why we do this
           </h2>
           <p>
@@ -37,22 +37,22 @@ export default function ForGuidesPage() {
             the whole thing is free, for you and for everyone.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             What you get
           </h2>
           <ul className="list-disc pl-6 space-y-2">
             <li>Everything in the app: Personal Insights Dashboard, Per-River Scorecard, Best Window Calculator, Trophy Wall+, year-over-year, streak stats, gear stats &mdash; all built from your own data, never crowdsourced.</li>
-            <li>A claimed directory profile at <code className="text-[#E8923A]">{`/guides/your-name`}</code> with your bio, specialties, rivers you guide, rates, and contact info.</li>
+            <li>A claimed directory profile at <code className="text-[var(--action)]">{`/guides/your-name`}</code> with your bio, specialties, rivers you guide, rates, and contact info.</li>
             <li>Early access to new features before public launch.</li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
             How to claim
           </h2>
           <ol className="list-decimal pl-6 space-y-2">
             <li>
               Create a free account at{" "}
-              <Link href="/signup" className="text-[#E8923A] hover:underline">
+              <Link href="/signup" className="text-[var(--action)] hover:underline">
                 /signup
               </Link>
               .
@@ -61,7 +61,7 @@ export default function ForGuidesPage() {
               Submit your claim through our{" "}
               <Link
                 href="/contact?subject=Guide%20Profile%20Claim"
-                className="text-[#E8923A] hover:underline"
+                className="text-[var(--action)] hover:underline"
               >
                 Contact page
               </Link>{" "}
@@ -80,16 +80,16 @@ export default function ForGuidesPage() {
             </li>
           </ol>
 
-          <div className="rounded-xl border border-[#E8923A]/30 bg-[#E8923A]/5 p-6 mt-10">
-            <p className="font-heading text-lg text-[#F0F6FC] mb-2">
+          <div className="rounded-xl border border-[var(--action)]/30 bg-[var(--action)]/5 p-6 mt-10">
+            <p className="font-heading text-lg text-[var(--text-primary)] mb-2">
               Ready to claim your profile?
             </p>
-            <p className="text-[#A8B2BD] mb-4">
+            <p className="text-[var(--text-body)] mb-4">
               One short message. We handle the rest.
             </p>
             <Link
               href="/contact?subject=Guide%20Profile%20Claim"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#E8923A] text-[#0D1117] font-bold hover:bg-[#D4751F] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--action)] text-[var(--surface-page)] font-bold hover:bg-[#D4751F] transition-colors"
             >
               Submit your claim
             </Link>

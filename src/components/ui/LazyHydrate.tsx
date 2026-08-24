@@ -33,7 +33,7 @@ export default function LazyHydrate({
 
   return (
     <div ref={ref} className={className}>
-      {show ? children : <div className="rounded-xl bg-[#1F2937]" style={{ minHeight }} aria-hidden />}
+      {show ? children : <div className="rounded-xl bg-[var(--surface-card)]" style={{ minHeight }} aria-hidden />}
     </div>
   );
 }

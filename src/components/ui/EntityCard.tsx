@@ -47,7 +47,7 @@ export default function EntityCard({
     return (
       <Link
         href={href}
-        className="group relative block rounded-xl overflow-hidden bg-[#161B22] border-l-4 border-[#E8923A] shadow-md hover:bg-[#1C2128] hover:shadow-lg transition-all"
+        className="group relative block rounded-xl overflow-hidden bg-[var(--surface-raised)] border-l-4 border-[var(--action)] shadow-md hover:bg-[#1C2128] hover:shadow-lg transition-all"
       >
         {actionSlot?.kind === "add-to-fly-box" && (
           <CardActionSlot
@@ -58,24 +58,24 @@ export default function EntityCard({
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+              <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                 {title}
               </h3>
               {subtitle && (
-                <p className="mt-1 text-sm text-[#A8B2BD]">{subtitle}</p>
+                <p className="mt-1 text-sm text-[var(--text-body)]">{subtitle}</p>
               )}
             </div>
             {accent && (
-              <span className="text-sm font-semibold text-[#E8923A] shrink-0">
+              <span className="text-sm font-semibold text-[var(--action)] shrink-0">
                 {accent}
               </span>
             )}
           </div>
           {description && (
-            <p className="mt-3 text-sm text-[#6E7681] line-clamp-2">{description}</p>
+            <p className="mt-3 text-sm text-[var(--text-meta)] line-clamp-2">{description}</p>
           )}
           {meta && (
-            <p className="mt-2 text-xs font-medium text-[#6E7681] uppercase tracking-wider">
+            <p className="mt-2 text-xs font-medium text-[var(--text-meta)] uppercase tracking-wider">
               {meta}
             </p>
           )}
@@ -84,7 +84,7 @@ export default function EntityCard({
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full"
                 >
                   {badge}
                 </span>
@@ -92,7 +92,7 @@ export default function EntityCard({
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[#0D1117] text-[#E8923A] rounded-full border border-[#21262D]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-full border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>
@@ -105,7 +105,7 @@ export default function EntityCard({
   }
 
   return (
-    <Link href={href} className="group relative block card-hover rounded-xl overflow-hidden bg-[#161B22] shadow-md">
+    <Link href={href} className="group relative block card-hover rounded-xl overflow-hidden bg-[var(--surface-raised)] shadow-md">
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
           canonicalFlyId={actionSlot.canonicalFlyId}
@@ -128,7 +128,7 @@ export default function EntityCard({
             {badges.map((badge) => (
               <span
                 key={badge}
-                className="px-2.5 py-1 text-xs font-medium bg-[#161B22]/90 backdrop-blur-sm text-[#E8923A] rounded-full"
+                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full"
               >
                 {badge}
               </span>
@@ -137,14 +137,14 @@ export default function EntityCard({
         )}
       </div>
       <div className="p-5">
-        <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
           {title}
         </h3>
         {subtitle && (
-          <p className="mt-1.5 text-sm text-[#A8B2BD] line-clamp-2">{subtitle}</p>
+          <p className="mt-1.5 text-sm text-[var(--text-body)] line-clamp-2">{subtitle}</p>
         )}
         {meta && (
-          <p className="mt-2 text-xs font-medium text-[#6E7681] uppercase tracking-wider">
+          <p className="mt-2 text-xs font-medium text-[var(--text-meta)] uppercase tracking-wider">
             {meta}
           </p>
         )}

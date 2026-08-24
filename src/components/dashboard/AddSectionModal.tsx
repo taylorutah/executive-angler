@@ -47,26 +47,26 @@ export default function AddSectionModal({ rivers, alreadyPinned, onClose }: Prop
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-2xl bg-[#161B22] border border-[#21262D] shadow-2xl max-h-[80vh] flex flex-col"
+        className="w-full max-w-lg rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)] shadow-2xl max-h-[80vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-[#21262D]">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-[var(--border-rule)]">
           {selectedRiver && (
             <button
               type="button"
               onClick={() => { setSelectedRiver(null); setPendingSites(new Set()); }}
-              className="p-1 rounded hover:bg-[#21262D] text-[#A8B2BD]"
+              className="p-1 rounded hover:bg-[var(--border-rule)] text-[var(--text-body)]"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
           )}
-          <h2 className="text-[#F0F6FC] font-medium flex-1">
+          <h2 className="text-[var(--text-primary)] font-medium flex-1">
             {selectedRiver ? selectedRiver.name : "Pin a river section"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded hover:bg-[#21262D] text-[#A8B2BD]"
+            className="p-1 rounded hover:bg-[var(--border-rule)] text-[var(--text-body)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -74,31 +74,31 @@ export default function AddSectionModal({ rivers, alreadyPinned, onClose }: Prop
 
         {!selectedRiver ? (
           <>
-            <div className="px-5 py-3 border-b border-[#21262D]">
+            <div className="px-5 py-3 border-b border-[var(--border-rule)]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
                 <input
                   type="text"
                   autoFocus
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search rivers…"
-                  className="w-full bg-[#0D1117] border border-[#21262D] rounded-lg pl-9 pr-3 py-2 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:border-[#E8923A]/60 focus:outline-none"
+                  className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg pl-9 pr-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)]/60 focus:outline-none"
                 />
               </div>
             </div>
             <div className="overflow-y-auto flex-1 px-2 py-2">
               {filtered.length === 0 ? (
-                <p className="px-3 py-6 text-center text-sm text-[#A8B2BD]">No matches.</p>
+                <p className="px-3 py-6 text-center text-sm text-[var(--text-body)]">No matches.</p>
               ) : filtered.map((r) => (
                 <button
                   key={r.id}
                   type="button"
                   onClick={() => setSelectedRiver(r)}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#21262D] flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-[var(--border-rule)] flex items-center justify-between"
                 >
-                  <span className="text-sm text-[#F0F6FC]">{r.name}</span>
-                  <span className="text-[10px] text-[#6E7681]">{r.gauges.length} section{r.gauges.length === 1 ? "" : "s"}</span>
+                  <span className="text-sm text-[var(--text-primary)]">{r.name}</span>
+                  <span className="text-[10px] text-[var(--text-meta)]">{r.gauges.length} section{r.gauges.length === 1 ? "" : "s"}</span>
                 </button>
               ))}
             </div>
@@ -113,7 +113,7 @@ export default function AddSectionModal({ rivers, alreadyPinned, onClose }: Prop
                 return (
                   <label
                     key={g.site_id}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${isPinned ? "opacity-50" : "hover:bg-[#21262D] cursor-pointer"}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${isPinned ? "opacity-50" : "hover:bg-[var(--border-rule)] cursor-pointer"}`}
                   >
                     <input
                       type="checkbox"
@@ -124,26 +124,26 @@ export default function AddSectionModal({ rivers, alreadyPinned, onClose }: Prop
                         if (e.target.checked) next.add(g.site_id); else next.delete(g.site_id);
                         setPendingSites(next);
                       }}
-                      className="h-4 w-4 accent-[#E8923A]"
+                      className="h-4 w-4 accent-[var(--action)]"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-[#F0F6FC] truncate">{g.section}</p>
-                      <p className="text-[11px] text-[#6E7681] truncate">{g.name} · {g.site_id}</p>
+                      <p className="text-sm text-[var(--text-primary)] truncate">{g.section}</p>
+                      <p className="text-[11px] text-[var(--text-meta)] truncate">{g.name} · {g.site_id}</p>
                     </div>
-                    {isPinned && <span className="text-[10px] text-[#6E7681]">Pinned</span>}
+                    {isPinned && <span className="text-[10px] text-[var(--text-meta)]">Pinned</span>}
                   </label>
                 );
               })}
             </div>
-            <div className="px-5 py-3 border-t border-[#21262D] flex items-center justify-between gap-3">
-              <span className="text-xs text-[#A8B2BD]">
+            <div className="px-5 py-3 border-t border-[var(--border-rule)] flex items-center justify-between gap-3">
+              <span className="text-xs text-[var(--text-body)]">
                 {pendingSites.size > 0 ? `${pendingSites.size} selected` : "Select one or more"}
               </span>
               <button
                 type="button"
                 disabled={pendingSites.size === 0 || submitting}
                 onClick={handleSubmit}
-                className="rounded-lg bg-[#E8923A] text-[#0D1117] hover:bg-[#E8923A]/90 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-1.5 text-sm font-medium"
+                className="rounded-lg bg-[var(--action)] text-[var(--surface-page)] hover:bg-[var(--action)]/90 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-1.5 text-sm font-medium"
               >
                 {submitting ? "Pinning…" : "Pin"}
               </button>

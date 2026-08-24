@@ -133,10 +133,10 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
         onClick={onClose}
       >
         <div
-          className="bg-[#161B22] border border-[#21262D] rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+          className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="sticky top-0 z-10 bg-[#161B22] border-b border-[#21262D] px-5 py-4 flex items-start justify-between gap-3">
+          <div className="sticky top-0 z-10 bg-[var(--surface-raised)] border-b border-[var(--border-rule)] px-5 py-4 flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               {owner?.avatar_url ? (
                 <Image
@@ -148,24 +148,24 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                   unoptimized
                 />
               ) : (
-                <div className="w-9 h-9 rounded-full bg-[#E8923A]/15 flex items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-[#E8923A]">
+                <div className="w-9 h-9 rounded-full bg-[var(--action)]/15 flex items-center justify-center shrink-0">
+                  <span className="text-sm font-bold text-[var(--action)]">
                     {(owner?.display_name || owner?.username || "?")[0]?.toUpperCase()}
                   </span>
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#F0F6FC] truncate">
+                <p className="text-sm font-bold text-[var(--text-primary)] truncate">
                   {session?.river_name || session?.location || "Session"}
                 </p>
-                <p className="text-xs text-[#A8B2BD] truncate flex items-center gap-2">
+                <p className="text-xs text-[var(--text-body)] truncate flex items-center gap-2">
                   {owner ? (
                     <span>{owner.display_name || "—"}{owner.username ? ` · @${owner.username}` : ""}</span>
                   ) : (
                     <span>{sessionId.slice(0, 8)}</span>
                   )}
                   {session?.date && (
-                    <span className="inline-flex items-center gap-1 text-[#6E7681]">
+                    <span className="inline-flex items-center gap-1 text-[var(--text-meta)]">
                       <Calendar className="h-3 w-3" /> {formatDate(session.date)}
                     </span>
                   )}
@@ -174,7 +174,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
             </div>
             <button
               onClick={onClose}
-              className="text-[#6E7681] hover:text-[#F0F6FC] shrink-0"
+              className="text-[var(--text-meta)] hover:text-[var(--text-primary)] shrink-0"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
@@ -183,7 +183,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
 
           {loading && (
             <div className="p-12 flex items-center justify-center">
-              <Loader2 className="h-6 w-6 text-[#E8923A] animate-spin" />
+              <Loader2 className="h-6 w-6 text-[var(--action)] animate-spin" />
             </div>
           )}
 
@@ -200,17 +200,17 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
               {/* Stats row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <StatTile
-                  icon={<Fish className="h-4 w-4 text-[#0BA5C7]" />}
+                  icon={<Fish className="h-4 w-4 text-[var(--signal-live)]" />}
                   label="Fish"
                   value={session.total_fish != null ? String(session.total_fish) : "—"}
                 />
                 <StatTile
-                  icon={<Thermometer className="h-4 w-4 text-[#E8923A]" />}
+                  icon={<Thermometer className="h-4 w-4 text-[var(--action)]" />}
                   label="Water Temp"
                   value={session.water_temp_f != null ? `${session.water_temp_f}°F` : "—"}
                 />
                 <StatTile
-                  icon={<Droplets className="h-4 w-4 text-[#0BA5C7]" />}
+                  icon={<Droplets className="h-4 w-4 text-[var(--signal-live)]" />}
                   label="Clarity"
                   value={session.water_clarity || "—"}
                 />
@@ -222,7 +222,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
               </div>
 
               {/* Meta line */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#A8B2BD]">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--text-body)]">
                 {session.weather && (
                   <span className="inline-flex items-center gap-1">
                     <Cloud className="h-3 w-3" /> {session.weather}
@@ -248,7 +248,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                   {session.tags.map((t, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8923A]/15 text-[#E8923A]"
+                      className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--action)]/15 text-[var(--action)]"
                     >
                       {t}
                     </span>
@@ -259,14 +259,14 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
               {/* Notes */}
               {session.notes && (
                 <Block title="Notes">
-                  <p className="text-sm text-[#F0F6FC] whitespace-pre-wrap">{session.notes}</p>
+                  <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap">{session.notes}</p>
                 </Block>
               )}
 
               {/* Rig notes */}
               {session.flies_notes && (
                 <Block title="Rig notes">
-                  <p className="text-sm text-[#F0F6FC] whitespace-pre-wrap">{session.flies_notes}</p>
+                  <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap">{session.flies_notes}</p>
                 </Block>
               )}
 
@@ -278,7 +278,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                       <button
                         key={p.id}
                         onClick={() => setLightboxIndex(i)}
-                        className="relative h-24 w-24 shrink-0 rounded-lg overflow-hidden border border-[#21262D] hover:border-[#E8923A] transition-colors"
+                        className="relative h-24 w-24 shrink-0 rounded-lg overflow-hidden border border-[var(--border-rule)] hover:border-[var(--action)] transition-colors"
                       >
                         <Image
                           src={p.url}
@@ -300,7 +300,7 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="text-left text-[#6E7681] uppercase text-[10px] tracking-wider border-b border-[#21262D]">
+                        <tr className="text-left text-[var(--text-meta)] uppercase text-[10px] tracking-wider border-b border-[var(--border-rule)]">
                           <th className="py-2 pr-3">Species</th>
                           <th className="py-2 pr-3">Length</th>
                           <th className="py-2 pr-3">Fly</th>
@@ -310,18 +310,18 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                       </thead>
                       <tbody>
                         {catches.map((c) => (
-                          <tr key={c.id} className="border-b border-[#21262D]/50 last:border-0">
-                            <td className="py-2 pr-3 text-[#F0F6FC]">{c.species || "—"}</td>
-                            <td className="py-2 pr-3 text-[#A8B2BD] font-mono">
+                          <tr key={c.id} className="border-b border-[var(--border-rule)]/50 last:border-0">
+                            <td className="py-2 pr-3 text-[var(--text-primary)]">{c.species || "—"}</td>
+                            <td className="py-2 pr-3 text-[var(--text-body)] font-mono">
                               {c.length_inches != null ? `${c.length_inches}"` : "—"}
                             </td>
-                            <td className="py-2 pr-3 text-[#A8B2BD]">
+                            <td className="py-2 pr-3 text-[var(--text-body)]">
                               {c.fly_pattern?.name || c.fly_name || "—"}
                             </td>
-                            <td className="py-2 pr-3 text-[#6E7681] font-mono">
+                            <td className="py-2 pr-3 text-[var(--text-meta)] font-mono">
                               {c.time ? formatTime(c.time) : "—"}
                             </td>
-                            <td className="py-2 pr-3 text-[#A8B2BD] max-w-[200px] truncate">
+                            <td className="py-2 pr-3 text-[var(--text-body)] max-w-[200px] truncate">
                               {c.notes || ""}
                             </td>
                           </tr>
@@ -339,9 +339,9 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
                     {rigs.map((r) => (
                       <span
                         key={r.id}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] bg-[#0D1117] border border-[#21262D] text-[#F0F6FC]"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] bg-[var(--surface-page)] border border-[var(--border-rule)] text-[var(--text-primary)]"
                       >
-                        <Feather className="h-3 w-3 text-[#0BA5C7]" />
+                        <Feather className="h-3 w-3 text-[var(--signal-live)]" />
                         {r.position ? `#${r.position} ` : ""}{r.fly_name || "—"}
                       </span>
                     ))}
@@ -350,12 +350,12 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
               )}
 
               {/* Footer */}
-              <div className="pt-3 border-t border-[#21262D] flex items-center justify-between text-xs text-[#6E7681]">
+              <div className="pt-3 border-t border-[var(--border-rule)] flex items-center justify-between text-xs text-[var(--text-meta)]">
                 <span className="font-mono">id: {session.id.slice(0, 8)}…</span>
                 <Link
                   href={`/journal/${session.id}`}
                   target="_blank"
-                  className="inline-flex items-center gap-1 text-[#E8923A] hover:underline"
+                  className="inline-flex items-center gap-1 text-[var(--action)] hover:underline"
                 >
                   Open in /journal <ExternalLink className="h-3 w-3" />
                 </Link>
@@ -383,12 +383,12 @@ export default function AdminSessionDetailModal({ sessionId, onClose }: Props) {
 
 function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="bg-[#0D1117] border border-[#21262D] rounded-lg p-3">
+    <div className="bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg p-3">
       <div className="flex items-center gap-1.5 mb-1">
         {icon}
-        <span className="text-[10px] text-[#6E7681] uppercase tracking-wider">{label}</span>
+        <span className="text-[10px] text-[var(--text-meta)] uppercase tracking-wider">{label}</span>
       </div>
-      <p className="text-lg font-bold text-[#F0F6FC] font-mono">{value}</p>
+      <p className="text-lg font-bold text-[var(--text-primary)] font-mono">{value}</p>
     </div>
   );
 }
@@ -396,7 +396,7 @@ function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-[10px] font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">{title}</h3>
+      <h3 className="text-[10px] font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">{title}</h3>
       {children}
     </div>
   );

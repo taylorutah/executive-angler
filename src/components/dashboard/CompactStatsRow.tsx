@@ -29,26 +29,26 @@ interface Props {
  */
 export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCount, milestoneCount }: Props) {
   return (
-    <div className="rounded-xl bg-[#161B22] border border-[#21262D] px-4 py-3 flex flex-col gap-3">
+    <div className="rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] px-4 py-3 flex flex-col gap-3">
       {/* Thin stat bezel — single mono line, sits quietly under the river cards */}
       <Link
         href="/journal"
-        className="group inline-flex flex-wrap items-baseline gap-x-3 gap-y-0.5 font-mono text-[12px] text-[#6E7681] hover:text-[#A8B2BD] transition-colors tabular-nums"
+        className="group inline-flex flex-wrap items-baseline gap-x-3 gap-y-0.5 font-mono text-[12px] text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors tabular-nums"
       >
         <span>
-          <span className="text-[#F0F6FC] font-semibold">{stats.totalFish}</span>{" "}
+          <span className="text-[var(--text-primary)] font-semibold">{stats.totalFish}</span>{" "}
           <span className="lowercase">fish</span>
         </span>
         <span className="text-[#3a4150]">·</span>
         <span>
-          <span className="text-[#F0F6FC] font-semibold">{stats.totalSessions}</span>{" "}
+          <span className="text-[var(--text-primary)] font-semibold">{stats.totalSessions}</span>{" "}
           <span className="lowercase">sessions</span>
         </span>
         {stats.monthFish > 0 && (
           <>
             <span className="text-[#3a4150]">·</span>
             <span>
-              <span className="text-[#E8923A] font-semibold">{stats.monthFish}</span>{" "}
+              <span className="text-[var(--action)] font-semibold">{stats.monthFish}</span>{" "}
               <span className="lowercase">this month</span>
             </span>
           </>
@@ -57,7 +57,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
           <>
             <span className="text-[#3a4150]">·</span>
             <span>
-              <span className="text-[#F0F6FC] font-semibold">{stats.biggestFish}&quot;</span>{" "}
+              <span className="text-[var(--text-primary)] font-semibold">{stats.biggestFish}&quot;</span>{" "}
               <span className="lowercase">pb</span>
             </span>
           </>
@@ -66,7 +66,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
           <>
             <span className="text-[#3a4150]">·</span>
             <span>
-              <span className="text-[#F0F6FC] font-semibold">{stats.speciesCount}</span>{" "}
+              <span className="text-[var(--text-primary)] font-semibold">{stats.speciesCount}</span>{" "}
               <span className="lowercase">species</span>
             </span>
           </>

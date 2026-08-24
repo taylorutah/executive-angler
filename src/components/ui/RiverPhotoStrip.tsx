@@ -46,7 +46,7 @@ export default function RiverPhotoStrip({
 
   return (
     <>
-      <div className="bg-[#0D1117] border-b border-[#21262D]">
+      <div className="bg-[var(--surface-page)] border-b border-[var(--border-rule)]">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-2">
             {/* Thumbnails */}
@@ -55,14 +55,14 @@ export default function RiverPhotoStrip({
                 ? Array.from({ length: 8 }).map((_, i) => (
                     <div
                       key={i}
-                      className="w-16 h-16 rounded-md bg-[#161B22] animate-pulse shrink-0"
+                      className="w-16 h-16 rounded-md bg-[var(--surface-raised)] animate-pulse shrink-0"
                     />
                   ))
                 : displayPhotos.map((photo, index) => (
                     <button
                       key={photo.id}
                       onClick={() => setLightboxIndex(index)}
-                      className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 group ring-1 ring-[#21262D] hover:ring-[#E8923A] transition-all"
+                      className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 group ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)] transition-all"
                     >
                       <Image
                         src={photo.photoUrl}
@@ -80,14 +80,14 @@ export default function RiverPhotoStrip({
               {photos.length > 0 && (
                 <Link
                   href={`/rivers/${riverSlug}/photos`}
-                  className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] whitespace-nowrap transition-colors"
+                  className="text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] whitespace-nowrap transition-colors"
                 >
                   View all {photos.length} →
                 </Link>
               )}
               <Link
                 href={`/rivers/${riverSlug}/photos#submit`}
-                className="flex items-center gap-1 text-xs bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20 px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap"
+                className="flex items-center gap-1 text-xs bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20 px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap"
               >
                 <Plus className="h-3 w-3" /> Add yours
               </Link>

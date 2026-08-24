@@ -172,7 +172,7 @@ export default async function DestinationPage({ params }: Props) {
           </div>
         </div>
       ) : (
-        <div className="bg-[#0D1117] pt-6">
+        <div className="bg-[var(--surface-page)] pt-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <HeroCompact
               heroImageUrl={dest.heroImageUrl}
@@ -199,7 +199,7 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       )}
 
-      <div className="bg-[#0D1117]">
+      <div className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
@@ -213,7 +213,7 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-[#0D1117] pb-20">
+      <section className="bg-[var(--surface-page)] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
@@ -221,12 +221,12 @@ export default async function DestinationPage({ params }: Props) {
               {/* Overview */}
               <ScrollAnimation>
                 <div>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                     Overview
                   </h2>
                   <div className="destination-body">
                     {dest.description.split("\n\n").map((paragraph, i) => (
-                      <p key={i} className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                      <p key={i} className="text-[var(--text-body)] text-base leading-[1.8] mb-4">
                         {paragraph}
                       </p>
                     ))}
@@ -256,20 +256,20 @@ export default async function DestinationPage({ params }: Props) {
               {dest.slug === "montana" && destRivers.length > 0 && (
                 <ScrollAnimation>
                   <div>
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                       Montana rivers at a glance
                     </h2>
-                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                    <p className="text-[var(--text-body)] text-base leading-[1.8] mb-4">
                       Use this as a trip-planning table, not a live report. Open each river for the hatch chart and gauge. Fly lists live at{" "}
-                      <Link href="/flies/for/madison-river" className="text-[#E8923A] hover:underline">
+                      <Link href="/flies/for/madison-river" className="text-[var(--action)] hover:underline">
                         /flies/for/[slug]
                       </Link>
                       .
                     </p>
-                    <div className="overflow-x-auto rounded-xl border border-[#21262D]">
+                    <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)]">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="bg-[#161B22] text-left text-[#A8B2BD]">
+                          <tr className="bg-[var(--surface-raised)] text-left text-[var(--text-body)]">
                             <th className="px-4 py-3 font-medium">River</th>
                             <th className="px-4 py-3 font-medium">Flow</th>
                             <th className="px-4 py-3 font-medium">Wade / float</th>
@@ -279,19 +279,19 @@ export default async function DestinationPage({ params }: Props) {
                         </thead>
                         <tbody>
                           {destRivers.slice(0, 8).map((r) => (
-                            <tr key={r.id} className="border-t border-[#21262D]">
+                            <tr key={r.id} className="border-t border-[var(--border-rule)]">
                               <td className="px-4 py-2.5">
-                                <Link href={`/rivers/${r.slug}`} className="text-white hover:text-[#E8923A]">
+                                <Link href={`/rivers/${r.slug}`} className="text-white hover:text-[var(--action)]">
                                   {r.name}
                                 </Link>
                               </td>
-                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.flowType}</td>
-                              <td className="px-4 py-2.5 text-[#A8B2BD]">{r.wadingType}</td>
-                              <td className="px-4 py-2.5 text-[#A8B2BD]">
+                              <td className="px-4 py-2.5 text-[var(--text-body)]">{r.flowType}</td>
+                              <td className="px-4 py-2.5 text-[var(--text-body)]">{r.wadingType}</td>
+                              <td className="px-4 py-2.5 text-[var(--text-body)]">
                                 {(r.bestMonths ?? []).slice(0, 3).join(", ") || "—"}
                               </td>
                               <td className="px-4 py-2.5">
-                                <Link href={`/flies/for/${r.slug}`} className="text-[#E8923A] hover:underline">
+                                <Link href={`/flies/for/${r.slug}`} className="text-[var(--action)] hover:underline">
                                   Fly list
                                 </Link>
                               </td>
@@ -307,24 +307,24 @@ export default async function DestinationPage({ params }: Props) {
               {dest.slug === "belize" && (
                 <ScrollAnimation>
                   <div>
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                    <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                       Permit, bonefish, and tarpon
                     </h2>
-                    <p className="text-[#A8B2BD] text-base leading-[1.8] mb-4">
+                    <p className="text-[var(--text-body)] text-base leading-[1.8] mb-4">
                       Belize is permit country that also holds bonefish and tarpon. Plan a week around tides and a guide, not around a morning that has to be a grand slam. Species pages for{" "}
-                      <Link href="/species/permit" className="text-[#E8923A] hover:underline">
+                      <Link href="/species/permit" className="text-[var(--action)] hover:underline">
                         permit
                       </Link>
                       ,{" "}
-                      <Link href="/species/bonefish" className="text-[#E8923A] hover:underline">
+                      <Link href="/species/bonefish" className="text-[var(--action)] hover:underline">
                         bonefish
                       </Link>
                       , and{" "}
-                      <Link href="/species/tarpon" className="text-[#E8923A] hover:underline">
+                      <Link href="/species/tarpon" className="text-[var(--action)] hover:underline">
                         tarpon
                       </Link>
                       {" "}sit next to the{" "}
-                      <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[#E8923A] hover:underline">
+                      <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[var(--action)] hover:underline">
                         Belize flats guide
                       </Link>
                       . We do not publish other anglers&apos; fish or GPS.
@@ -336,7 +336,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Map */}
               {mapMarkers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                     Map
                   </h2>
                   <LazyMapView
@@ -346,12 +346,12 @@ export default async function DestinationPage({ params }: Props) {
                     markers={mapMarkers}
                     className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
                   />
-                  <div className="mt-3 flex gap-4 text-xs text-[#A8B2BD]">
+                  <div className="mt-3 flex gap-4 text-xs text-[var(--text-body)]">
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full bg-river" /> Rivers
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-[#E8923A]" /> Lodges
+                      <span className="w-3 h-3 rounded-full bg-[var(--action)]" /> Lodges
                     </span>
                   </div>
                 </ScrollAnimation>
@@ -361,12 +361,12 @@ export default async function DestinationPage({ params }: Props) {
               {destRivers.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+                    <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
                       Rivers & Waters
                     </h2>
                     <Link
                       href="/rivers"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
+                      className="text-sm text-[var(--action)] font-medium hover:text-[var(--action)] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -392,12 +392,12 @@ export default async function DestinationPage({ params }: Props) {
               {destLodges.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+                    <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
                       Lodges & Outfitters
                     </h2>
                     <Link
                       href="/lodges"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
+                      className="text-sm text-[var(--action)] font-medium hover:text-[var(--action)] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -421,7 +421,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Guides */}
               {destGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
                     Guides
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -429,20 +429,20 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={guide.id}
                         href={`/guides/${guide.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
                       >
-                        <div className="w-16 h-16 rounded-full bg-[#E8923A]/10 flex items-center justify-center shrink-0">
-                          <MapPin className="h-6 w-6 text-[#E8923A]" />
+                        <div className="w-16 h-16 rounded-full bg-[var(--action)]/10 flex items-center justify-center shrink-0">
+                          <MapPin className="h-6 w-6 text-[var(--action)]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
                             {guide.name}
                           </h3>
-                          <p className="text-sm text-[#A8B2BD] mt-0.5">
+                          <p className="text-sm text-[var(--text-body)] mt-0.5">
                             {(guide.specialties || []).slice(0, 3).join(", ")}
                           </p>
                           {guide.dailyRate && (
-                            <p className="text-sm font-medium text-[#E8923A] mt-1">
+                            <p className="text-sm font-medium text-[var(--action)] mt-1">
                               {guide.dailyRate}
                             </p>
                           )}
@@ -457,12 +457,12 @@ export default async function DestinationPage({ params }: Props) {
               {destFlyShops.length > 0 && (
                 <ScrollAnimation>
                   <div className="flex items-end justify-between mb-6">
-                    <h2 className="font-heading text-2xl font-bold text-[#E8923A]">
+                    <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
                       Fly Shops
                     </h2>
                     <Link
                       href="/fly-shops"
-                      className="text-sm text-[#E8923A] font-medium hover:text-[#E8923A] inline-flex items-center gap-1"
+                      className="text-sm text-[var(--action)] font-medium hover:text-[var(--action)] inline-flex items-center gap-1"
                     >
                       View All <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -472,23 +472,23 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center justify-between p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
+                        className="flex items-center justify-between p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
                       >
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[#A8B2BD] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
                           {(shop.services || []).length > 0 && (
-                            <p className="text-xs text-[#6E7681] mt-1">
+                            <p className="text-xs text-[var(--text-meta)] mt-1">
                               {(shop.services || []).slice(0, 3).join(" · ")}
                             </p>
                           )}
                         </div>
                         {shop.googleRating && (
                           <div className="flex items-center gap-1 shrink-0 ml-4">
-                            <Star className="h-3.5 w-3.5 fill-[#E8923A] text-[#E8923A]" />
-                            <span className="text-sm font-medium text-[#A8B2BD]">
+                            <Star className="h-3.5 w-3.5 fill-[var(--action)] text-[var(--action)]" />
+                            <span className="text-sm font-medium text-[var(--text-body)]">
                               {shop.googleRating}
                             </span>
                           </div>
@@ -502,7 +502,7 @@ export default async function DestinationPage({ params }: Props) {
               {/* Essential Flies */}
               {destFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-lg font-semibold text-[var(--action)] mb-6">
                     Essential Flies for {dest.name}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -532,8 +532,8 @@ export default async function DestinationPage({ params }: Props) {
               <QuickFacts facts={quickFacts} />
 
               {/* Best Months Calendar */}
-              <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+              <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
+                <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
                   Best Months
                 </h3>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -554,8 +554,8 @@ export default async function DestinationPage({ params }: Props) {
                         key={month}
                         className={`text-center py-2 rounded text-xs font-medium ${
                           isGood
-                            ? "bg-[#E8923A] text-white"
-                            : "bg-[#1F2937] text-[#6E7681]"
+                            ? "bg-[var(--action)] text-white"
+                            : "bg-[var(--surface-card)] text-[var(--text-meta)]"
                         }`}
                       >
                         {month}
@@ -567,8 +567,8 @@ export default async function DestinationPage({ params }: Props) {
 
               {/* Related Articles */}
               {destArticles.length > 0 && (
-                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -576,12 +576,12 @@ export default async function DestinationPage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
+                        className="block p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]">
+                        <p className="text-sm font-medium text-[var(--action)]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#A8B2BD] mt-1">
+                        <p className="text-xs text-[var(--text-body)] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

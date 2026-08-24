@@ -84,7 +84,7 @@ export default function EntityListClient({
                   Yes
                 </span>
               ) : (
-                <span className="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-[#21262D] text-[#6E7681]">
+                <span className="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-[var(--border-rule)] text-[var(--text-meta)]">
                   No
                 </span>
               )
@@ -123,28 +123,28 @@ export default function EntityListClient({
 
   if (loading) {
     return (
-      <div className="min-h-screen text-[#F0F6FC]">
-        <header className="border-b border-[#21262D] px-6 py-6">
+      <div className="min-h-screen text-[var(--text-primary)]">
+        <header className="border-b border-[var(--border-rule)] px-6 py-6">
           <h1 className="text-2xl font-bold tracking-tight">{entityLabel}</h1>
         </header>
         <div className="flex items-center justify-center py-24">
-          <Loader2 className="h-6 w-6 animate-spin text-[#6E7681]" />
-          <span className="ml-3 text-sm text-[#6E7681]">Loading...</span>
+          <Loader2 className="h-6 w-6 animate-spin text-[var(--text-meta)]" />
+          <span className="ml-3 text-sm text-[var(--text-meta)]">Loading...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-[#F0F6FC]">
+    <div className="min-h-screen text-[var(--text-primary)]">
       {/* Header */}
-      <header className="border-b border-[#21262D] px-6 py-6">
+      <header className="border-b border-[var(--border-rule)] px-6 py-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
               {entityLabel}
             </h1>
-            <p className="mt-1 text-sm text-[#A8B2BD]">
+            <p className="mt-1 text-sm text-[var(--text-body)]">
               {rows.length} record{rows.length !== 1 ? "s" : ""}
             </p>
           </div>

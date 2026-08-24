@@ -75,17 +75,17 @@ export default function AIInsightsCard() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-[#161B22] to-[#1a1f2a] rounded-2xl border border-[#E8923A]/20 p-6">
+    <div className="bg-gradient-to-br from-[var(--surface-raised)] to-[#1a1f2a] rounded-2xl border border-[var(--action)]/20 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-[#E8923A]" />
-          <h2 className="text-base font-bold text-[#F0F6FC]">Fishing Insights</h2>
+          <Sparkles className="h-5 w-5 text-[var(--action)]" />
+          <h2 className="text-base font-bold text-[var(--text-primary)]">Fishing Insights</h2>
         </div>
         {generated && !loading && (
           <button
             onClick={generate}
-            className="text-[#6E7681] hover:text-[#F0F6FC] transition-colors"
+            className="text-[var(--text-meta)] hover:text-[var(--text-primary)] transition-colors"
             title="Regenerate insights"
           >
             <RefreshCw className="h-4 w-4" />
@@ -96,8 +96,8 @@ export default function AIInsightsCard() {
       {/* Content states */}
       {loading ? (
         <div className="flex items-center gap-3 py-8 justify-center">
-          <Loader2 className="h-5 w-5 text-[#E8923A] animate-spin" />
-          <span className="text-sm text-[#A8B2BD]">
+          <Loader2 className="h-5 w-5 text-[var(--action)] animate-spin" />
+          <span className="text-sm text-[var(--text-body)]">
             Analyzing your fishing data...
           </span>
         </div>
@@ -106,14 +106,14 @@ export default function AIInsightsCard() {
           <p className="text-sm text-red-400 mb-3">{error}</p>
           <button
             onClick={generate}
-            className="text-xs text-[#E8923A] hover:underline"
+            className="text-xs text-[var(--action)] hover:underline"
           >
             Try again
           </button>
         </div>
       ) : message ? (
         <div className="text-center py-6">
-          <p className="text-sm text-[#A8B2BD]">{message}</p>
+          <p className="text-sm text-[var(--text-body)]">{message}</p>
         </div>
       ) : insights.length > 0 ? (
         <div className="space-y-3">
@@ -128,14 +128,14 @@ export default function AIInsightsCard() {
                   <div className="flex-shrink-0 mt-0.5">{config.icon}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-sm font-bold text-[#F0F6FC]">
+                      <h3 className="text-sm font-bold text-[var(--text-primary)]">
                         {item.title}
                       </h3>
-                      <span className="text-[9px] font-semibold uppercase tracking-wider text-[#6E7681] bg-[#0D1117] px-2 py-0.5 rounded-full">
+                      <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--text-meta)] bg-[var(--surface-page)] px-2 py-0.5 rounded-full">
                         {config.label}
                       </span>
                     </div>
-                    <p className="text-sm text-[#A8B2BD] leading-relaxed">
+                    <p className="text-sm text-[var(--text-body)] leading-relaxed">
                       {item.insight}
                     </p>
                   </div>
@@ -147,13 +147,13 @@ export default function AIInsightsCard() {
       ) : (
         /* Initial state — show generate button */
         <div className="text-center py-4">
-          <p className="text-sm text-[#6E7681] mb-4">
+          <p className="text-sm text-[var(--text-meta)] mb-4">
             Claude analyzes your sessions, catches, and conditions to find patterns and
             deliver personalized coaching.
           </p>
           <button
             onClick={generate}
-            className="inline-flex items-center gap-2 bg-[#E8923A] hover:bg-[#d4822e] text-white text-sm font-semibold rounded-xl px-5 py-2.5 transition-colors"
+            className="inline-flex items-center gap-2 bg-[var(--action)] hover:bg-[#d4822e] text-white text-sm font-semibold rounded-xl px-5 py-2.5 transition-colors"
           >
             <Sparkles className="h-4 w-4" />
             Generate Insights

@@ -38,12 +38,12 @@ export default function AdminContentPage() {
   const entries = Object.entries(ENTITY_CONFIGS);
 
   return (
-    <div className="min-h-screen text-[#F0F6FC]">
-      <header className="border-b border-[#21262D] px-6 py-6">
+    <div className="min-h-screen text-[var(--text-primary)]">
+      <header className="border-b border-[var(--border-rule)] px-6 py-6">
         <h1 className="text-2xl font-bold tracking-tight">
           Content Management
         </h1>
-        <p className="mt-1 text-sm text-[#A8B2BD]">
+        <p className="mt-1 text-sm text-[var(--text-body)]">
           Select an entity type to manage its records.
         </p>
       </header>
@@ -54,20 +54,20 @@ export default function AdminContentPage() {
             <Link
               key={slug}
               href={`/admin/content/${slug}`}
-              className="group flex items-center gap-4 rounded-xl border border-[#21262D] bg-[#161B22] p-5 hover:border-[#E8923A] transition-colors"
+              className="group flex items-center gap-4 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5 hover:border-[var(--action)] transition-colors"
             >
-              <div className="shrink-0 text-[#6E7681] group-hover:text-[#E8923A] transition-colors">
+              <div className="shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors">
                 {ENTITY_ICONS[slug] ?? <FileText className="h-6 w-6" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                   {config.label}
                 </p>
-                <p className="text-xs text-[#6E7681] mt-0.5">
+                <p className="text-xs text-[var(--text-meta)] mt-0.5">
                   Table: {config.table}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-[#6E7681] group-hover:text-[#E8923A] transition-colors" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors" />
             </Link>
           ))}
         </div>

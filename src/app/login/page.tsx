@@ -61,16 +61,16 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[#E8923A]">
+          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
             {SITE_NAME}
           </Link>
-          <p className="mt-2 text-[#A8B2BD]">Sign in to your account.</p>
+          <p className="mt-2 text-[var(--text-body)]">Sign in to your account.</p>
         </div>
 
-        <div className="bg-[#161B22] rounded-xl shadow-md p-8 space-y-5">
+        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8 space-y-5">
           {/* OAuth error from callback */}
           {authErrorMessage && (
             <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900 text-center">
@@ -84,33 +84,33 @@ function LoginForm() {
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#21262D]" />
+              <div className="w-full border-t border-[var(--border-rule)]" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#161B22] px-3 text-[#6E7681] tracking-wider">or</span>
+              <span className="bg-[var(--surface-raised)] px-3 text-[var(--text-meta)] tracking-wider">or</span>
             </div>
           </div>
 
           {/* Email/password */}
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#F0F6FC] mb-1">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-1">Email</label>
               <input
                 id="email" type="email" required value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[#21262D] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC]"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)]"
                 placeholder="you@example.com"
               />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label htmlFor="password" className="block text-sm font-medium text-[#F0F6FC]">Password</label>
-                <Link href="/forgot-password" className="text-xs text-[#E8923A] hover:text-[#F0F6FC] transition-colors">Forgot password?</Link>
+                <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)]">Password</label>
+                <Link href="/forgot-password" className="text-xs text-[var(--action)] hover:text-[var(--text-primary)] transition-colors">Forgot password?</Link>
               </div>
               <input
                 id="password" type="password" required value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[#21262D] focus:ring-2 focus:ring-[#E8923A] focus:border-[#E8923A] text-[#F0F6FC]"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)]"
                 placeholder="Your password"
               />
             </div>
@@ -136,11 +136,11 @@ function LoginForm() {
             </Button>
           </form>
 
-          <p className="text-center text-sm text-[#A8B2BD]">
+          <p className="text-center text-sm text-[var(--text-body)]">
             Don&apos;t have an account?{" "}
             <Link
               href={redirect !== "/dashboard" ? `/signup?next=${encodeURIComponent(redirect)}` : "/signup"}
-              className="text-[#E8923A] font-medium hover:text-[#E8923A]"
+              className="text-[var(--action)] font-medium hover:text-[var(--action)]"
             >
               Create one
             </Link>
@@ -153,7 +153,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0D1117] flex items-center justify-center"><div className="animate-pulse text-[#E8923A]">Loading…</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center"><div className="animate-pulse text-[var(--action)]">Loading…</div></div>}>
       <LoginForm />
     </Suspense>
   );

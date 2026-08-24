@@ -151,7 +151,7 @@ export default async function GuidePage({ params }: Props) {
       />
 
       {/* Text Hero */}
-      <section className="bg-[#0D1117] pt-6 pb-10">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
@@ -173,18 +173,18 @@ export default async function GuidePage({ params }: Props) {
           {/* Badge Row: Destination, Experience, Rate */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
             {dest && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#161B22] text-[#A8B2BD] text-sm font-medium rounded-full border border-[#21262D]">
-                <MapPin className="h-4 w-4 text-[#E8923A]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--surface-raised)] text-[var(--text-body)] text-sm font-medium rounded-full border border-[var(--border-rule)]">
+                <MapPin className="h-4 w-4 text-[var(--action)]" />
                 {dest.name}
               </span>
             )}
             {guide.yearsExperience && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[#161B22] text-[#A8B2BD] text-sm font-medium rounded-full border border-[#21262D]">
+              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--surface-raised)] text-[var(--text-body)] text-sm font-medium rounded-full border border-[var(--border-rule)]">
                 {guide.yearsExperience}+ years experience
               </span>
             )}
             {guide.dailyRate && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[#E8923A]/10 text-[#E8923A] text-sm font-semibold rounded-full border border-[#E8923A]/30">
+              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--action)]/10 text-[var(--action)] text-sm font-semibold rounded-full border border-[var(--action)]/30">
                 {guide.dailyRate}
               </span>
             )}
@@ -195,7 +195,7 @@ export default async function GuidePage({ params }: Props) {
             {(guide.specialties || []).map((s) => (
               <span
                 key={s}
-                className="px-3 py-1 bg-[#0D1117] text-[#E8923A] text-sm font-medium rounded-full border border-[#21262D]"
+                className="px-3 py-1 bg-[var(--surface-page)] text-[var(--action)] text-sm font-medium rounded-full border border-[var(--border-rule)]"
               >
                 {s}
               </span>
@@ -205,33 +205,33 @@ export default async function GuidePage({ params }: Props) {
           {/* Rating */}
           {guide.googleRating && (
             <div className="mt-6 flex items-center gap-1.5">
-              <Star className="h-5 w-5 fill-[#E8923A] text-[#E8923A]" />
+              <Star className="h-5 w-5 fill-[var(--action)] text-[var(--action)]" />
               <span className="text-white font-semibold">{guide.googleRating}</span>
               {guide.googleReviewCount && (
-                <span className="text-[#6E7681] text-sm">({guide.googleReviewCount} reviews)</span>
+                <span className="text-[var(--text-meta)] text-sm">({guide.googleReviewCount} reviews)</span>
               )}
             </div>
           )}
         </div>
       </section>
 
-      <section className="bg-[#0D1117] pb-20">
+      <section className="bg-[var(--surface-page)] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[#A8B2BD] leading-relaxed mb-4">
+                  <p key={i} className="text-[var(--text-body)] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -246,7 +246,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-4">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
                     Rivers & Waters
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -254,14 +254,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={river.id}
                         href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-3 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-3 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
                       >
                         <MapPin className="h-5 w-5 text-river shrink-0" />
                         <div>
-                          <h3 className="font-medium text-[#E8923A]">
+                          <h3 className="font-medium text-[var(--action)]">
                             {river.name}
                           </h3>
-                          <p className="text-xs text-[#A8B2BD]">
+                          <p className="text-xs text-[var(--text-body)]">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -274,7 +274,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Lodges in This Area */}
               {areaLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
                     Lodges in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -282,18 +282,18 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={lodge.id}
                         href={`/lodges/${lodge.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
                       >
-                        <div className="w-12 h-12 rounded-lg bg-[#E8923A]/10 flex items-center justify-center shrink-0 text-lg">
+                        <div className="w-12 h-12 rounded-lg bg-[var(--action)]/10 flex items-center justify-center shrink-0 text-lg">
                           🏕
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
                             {lodge.name}
                           </h3>
-                          <p className="text-sm text-[#A8B2BD] mt-0.5">{lodge.priceRange}</p>
+                          <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
                           {lodge.seasonStart && (
-                            <p className="text-xs text-[#6E7681] mt-0.5">
+                            <p className="text-xs text-[var(--text-meta)] mt-0.5">
                               {lodge.seasonStart}–{lodge.seasonEnd}
                             </p>
                           )}
@@ -307,7 +307,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {areaFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -315,14 +315,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[#161B22] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
                       >
-                        <MapPin className="h-5 w-5 text-[#E8923A] shrink-0" />
+                        <MapPin className="h-5 w-5 text-[var(--action)] shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[#E8923A]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[#A8B2BD] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -332,7 +332,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[#E8923A] mb-6">
+                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -371,7 +371,7 @@ export default async function GuidePage({ params }: Props) {
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
 
-              <div className="bg-[#E8923A] rounded-xl p-6 text-white shadow-lg">
+              <div className="bg-[var(--action)] rounded-xl p-6 text-white shadow-lg">
                 <h3 className="font-heading text-xl font-bold mb-3">
                   Book a Trip
                 </h3>
@@ -414,8 +414,8 @@ export default async function GuidePage({ params }: Props) {
               </div>
 
               {guideArticles.length > 0 && (
-                <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
+                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -423,12 +423,12 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-[#0D1117] transition-colors"
+                        className="block p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[#E8923A]">
+                        <p className="text-sm font-medium text-[var(--action)]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[#A8B2BD] mt-1">
+                        <p className="text-xs text-[var(--text-body)] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

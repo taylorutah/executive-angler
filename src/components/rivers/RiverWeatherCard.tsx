@@ -84,13 +84,13 @@ export default function RiverWeatherCard({ riverId }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm animate-pulse">
-        <div className="h-5 w-36 bg-[#21262D] rounded mb-4" />
+      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm animate-pulse">
+        <div className="h-5 w-36 bg-[var(--border-rule)] rounded mb-4" />
         <div className="space-y-3">
-          <div className="h-16 bg-[#21262D] rounded" />
-          <div className="h-12 bg-[#21262D] rounded" />
-          <div className="h-12 bg-[#21262D] rounded" />
-          <div className="h-12 bg-[#21262D] rounded" />
+          <div className="h-16 bg-[var(--border-rule)] rounded" />
+          <div className="h-12 bg-[var(--border-rule)] rounded" />
+          <div className="h-12 bg-[var(--border-rule)] rounded" />
+          <div className="h-12 bg-[var(--border-rule)] rounded" />
         </div>
       </div>
     );
@@ -108,13 +108,13 @@ export default function RiverWeatherCard({ riverId }: Props) {
   const w = active.weather;
 
   return (
-    <div className="bg-[#161B22] rounded-xl border border-[#21262D] p-6 shadow-sm">
+    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-heading text-lg font-semibold text-[#E8923A]">
+        <h3 className="font-heading text-lg font-semibold text-[var(--action)]">
           Current Weather
         </h3>
-        <span className="flex items-center gap-1.5 text-[10px] text-[#00B4D8] bg-[#00B4D8]/10 px-2.5 py-1 rounded-full font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00B4D8] animate-pulse inline-block" />
+        <span className="flex items-center gap-1.5 text-[10px] text-[var(--signal-live)] bg-[var(--signal-live)]/10 px-2.5 py-1 rounded-full font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-live)] animate-pulse inline-block" />
           Live
         </span>
       </div>
@@ -128,8 +128,8 @@ export default function RiverWeatherCard({ riverId }: Props) {
               onClick={() => setSelectedIdx(idx)}
               className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors shrink-0 ${
                 idx === selectedIdx
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#0D1117] text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#21262D]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-page)] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)]"
               }`}
             >
               {s.section}
@@ -141,36 +141,36 @@ export default function RiverWeatherCard({ riverId }: Props) {
       {/* Condition header — icon + temp */}
       <div className="text-center mb-4">
         <div className="text-4xl mb-1">{w.weatherIcon}</div>
-        <p className="text-sm text-[#A8B2BD] mb-1">{w.weatherLabel}</p>
-        <p className="text-3xl font-bold text-[#F0F6FC]">
+        <p className="text-sm text-[var(--text-body)] mb-1">{w.weatherLabel}</p>
+        <p className="text-3xl font-bold text-[var(--text-primary)]">
           {w.tempF}°F
         </p>
-        <p className="text-sm text-[#A8B2BD]">
+        <p className="text-sm text-[var(--text-body)]">
           Feels like {w.feelsLikeF}°F
         </p>
       </div>
 
       {/* Metric rows */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
-          <span className="text-sm text-[#A8B2BD]">💨 Wind</span>
-          <span className="text-sm font-semibold text-[#F0F6FC]">
+        <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
+          <span className="text-sm text-[var(--text-body)]">💨 Wind</span>
+          <span className="text-sm font-semibold text-[var(--text-primary)]">
             {w.windMph} mph {w.windDirectionLabel}
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
-          <span className="text-sm text-[#A8B2BD]">💧 Humidity</span>
-          <span className="text-sm font-semibold text-[#F0F6FC]">
+        <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
+          <span className="text-sm text-[var(--text-body)]">💧 Humidity</span>
+          <span className="text-sm font-semibold text-[var(--text-primary)]">
             {w.humidity}%
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-3 bg-[#0D1117] rounded-lg">
-          <span className="text-sm text-[#A8B2BD]">🌡️ Barometric Pressure</span>
-          <span className="text-sm font-semibold text-[#F0F6FC]">
+        <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
+          <span className="text-sm text-[var(--text-body)]">🌡️ Barometric Pressure</span>
+          <span className="text-sm font-semibold text-[var(--text-primary)]">
             {w.pressureInHg} inHg{" "}
-            <span className="text-[#6E7681] font-normal text-xs">
+            <span className="text-[var(--text-meta)] font-normal text-xs">
               ({w.pressureHpa} hPa)
             </span>
           </span>
@@ -178,7 +178,7 @@ export default function RiverWeatherCard({ riverId }: Props) {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 flex items-center gap-1.5 text-[10px] text-[#6E7681]">
+      <div className="mt-4 flex items-center gap-1.5 text-[10px] text-[var(--text-meta)]">
         <Clock className="h-3 w-3" />
         <span>Open-Meteo · Updated {formatTime(w.fetchedAt)}</span>
       </div>

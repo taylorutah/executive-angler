@@ -56,9 +56,9 @@ export default async function GuidesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-6 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Expert Voices
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
@@ -72,9 +72,9 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
-      <section className="bg-[#0D1117] pt-2 pb-10 sm:pb-12">
+      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8923A] mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
             Featured Guides
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -85,56 +85,56 @@ export default async function GuidesPage() {
                 <ScrollAnimation key={guide.id} delay={i * 0.1}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group block bg-[#161B22] rounded-xl border-l-4 border-[#E8923A] shadow-lg hover:bg-[#1C2128] transition-colors"
+                    className="group block bg-[var(--surface-raised)] rounded-xl border-l-4 border-[var(--action)] shadow-lg hover:bg-[#1C2128] transition-colors"
                   >
                     <div className="p-6">
-                      <h3 className="font-heading text-2xl font-bold text-white group-hover:text-[#E8923A] transition-colors leading-tight">
+                      <h3 className="font-heading text-2xl font-bold text-white group-hover:text-[var(--action)] transition-colors leading-tight">
                         {guide.name}
                       </h3>
-                      <p className="mt-2 text-sm font-medium text-[#E8923A] italic">
+                      <p className="mt-2 text-sm font-medium text-[var(--action)] italic">
                         {GUIDE_HEADLINES[guide.slug]}
                       </p>
                       {dest && (
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[#6E7681]">
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)]">
                           {dest.name}
                         </p>
                       )}
-                      <p className="mt-4 text-sm text-[#A8B2BD] leading-relaxed line-clamp-3">
+                      <p className="mt-4 text-sm text-[var(--text-body)] leading-relaxed line-clamp-3">
                         {guide.bio.substring(0, 150)}...
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {guide.specialties.slice(0, 3).map((sp) => (
                           <span
                             key={sp}
-                            className="px-2.5 py-1 bg-[#0D1117] text-[#E8923A] text-xs font-medium rounded-full border border-[#21262D]"
+                            className="px-2.5 py-1 bg-[var(--surface-page)] text-[var(--action)] text-xs font-medium rounded-full border border-[var(--border-rule)]"
                           >
                             {sp}
                           </span>
                         ))}
                       </div>
-                      <div className="mt-5 flex items-center justify-between border-t border-[#21262D] pt-4">
+                      <div className="mt-5 flex items-center justify-between border-t border-[var(--border-rule)] pt-4">
                         <div className="flex items-center gap-4">
                           {guide.googleRating && (
                             <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 fill-[#E8923A] text-[#E8923A]" />
-                              <span className="text-sm text-[#A8B2BD]">
+                              <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
+                              <span className="text-sm text-[var(--text-body)]">
                                 {guide.googleRating}
                               </span>
                             </div>
                           )}
                           {guide.yearsExperience && (
-                            <span className="text-xs text-[#6E7681]">
+                            <span className="text-xs text-[var(--text-meta)]">
                               {guide.yearsExperience}+ yrs
                             </span>
                           )}
                         </div>
                         {guide.dailyRate && (
-                          <span className="text-sm font-semibold text-[#E8923A]">
+                          <span className="text-sm font-semibold text-[var(--action)]">
                             {guide.dailyRate}
                           </span>
                         )}
                       </div>
-                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#E8923A] group-hover:underline">
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
                         View Profile <ChevronRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -147,15 +147,15 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[#161B22] border-t border-[#21262D]">
+      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[#E8923A]">All Guides</h2>
-          <p className="text-sm text-[#A8B2BD] mt-1">
+          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Guides</h2>
+          <p className="text-sm text-[var(--text-body)] mt-1">
             {guides.length} guides sorted A–Z
           </p>
         </div>
       </div>
-      <section className="bg-[#161B22] pb-16 sm:pb-20">
+      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ul className="divide-y divide-[#21262D]">
             {sortedGuides.map((guide) => {
@@ -164,18 +164,18 @@ export default async function GuidesPage() {
                 <li key={guide.id}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group flex items-start justify-between gap-4 py-5 px-2 -mx-2 rounded-lg hover:bg-[#161B22]/50 transition-colors"
+                    className="group flex items-start justify-between gap-4 py-5 px-2 -mx-2 rounded-lg hover:bg-[var(--surface-raised)]/50 transition-colors"
                   >
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-heading text-lg font-semibold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                      <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                         {guide.name}
                       </h3>
-                      <p className="mt-0.5 text-sm text-[#A8B2BD]">
+                      <p className="mt-0.5 text-sm text-[var(--text-body)]">
                         {dest?.name}
                         {guide.dailyRate && (
                           <>
-                            <span className="mx-2 text-[#6E7681]">·</span>
-                            <span className="font-semibold text-[#E8923A]">{guide.dailyRate}</span>
+                            <span className="mx-2 text-[var(--text-meta)]">·</span>
+                            <span className="font-semibold text-[var(--action)]">{guide.dailyRate}</span>
                           </>
                         )}
                       </p>
@@ -184,18 +184,18 @@ export default async function GuidesPage() {
                           {guide.specialties.slice(0, 3).map((sp) => (
                             <span
                               key={sp}
-                              className="px-2 py-0.5 text-[10px] font-medium text-[#E8923A] bg-[#0D1117] border border-[#21262D] rounded-full"
+                              className="px-2 py-0.5 text-[10px] font-medium text-[var(--action)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-full"
                             >
                               {sp}
                             </span>
                           ))}
                         </div>
                       )}
-                      <p className="mt-1 text-sm text-[#6E7681] line-clamp-2">
+                      <p className="mt-1 text-sm text-[var(--text-meta)] line-clamp-2">
                         {truncateBio(guide.bio)}
                       </p>
                     </div>
-                    <span className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[#E8923A] pt-1 group-hover:underline">
+                    <span className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[var(--action)] pt-1 group-hover:underline">
                       View Profile <ChevronRight className="h-4 w-4" />
                     </span>
                   </Link>

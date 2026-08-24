@@ -231,14 +231,14 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/contribute" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/contribute" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <h1 className="font-serif text-2xl text-[#F0F6FC]">Add {entityLabel}</h1>
+          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Add {entityLabel}</h1>
         </div>
 
         {/* Status messages */}
@@ -257,21 +257,21 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
 
         {/* Prefill banner */}
         {showPrefillBanner && (
-          <div className="mb-4 px-4 py-3 bg-[#E8923A]/10 border border-[#E8923A]/30 rounded-lg flex items-center justify-between">
-            <p className="text-sm text-[#E8923A]">Pre-filled from your fly box — review and complete the details below.</p>
-            <button onClick={() => setShowPrefillBanner(false)} className="text-[#E8923A] hover:text-[#F0A65A] text-lg leading-none ml-3">&times;</button>
+          <div className="mb-4 px-4 py-3 bg-[var(--action)]/10 border border-[var(--action)]/30 rounded-lg flex items-center justify-between">
+            <p className="text-sm text-[var(--action)]">Pre-filled from your fly box — review and complete the details below.</p>
+            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--action)] hover:text-[#F0A65A] text-lg leading-none ml-3">&times;</button>
           </div>
         )}
 
         {/* Hero image upload */}
         <div className="mb-6">
-          <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+          <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
             <ImageIcon className="h-3 w-3 inline mr-1" />
-            Hero Image <span className="text-[#E8923A]">*strongly recommended</span>
+            Hero Image <span className="text-[var(--action)]">*strongly recommended</span>
           </label>
 
           {heroImage ? (
-            <div className="relative rounded-xl overflow-hidden border border-[#21262D]">
+            <div className="relative rounded-xl overflow-hidden border border-[var(--border-rule)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={heroImage} alt="Preview" className="w-full h-48 object-cover" />
               <button
@@ -283,14 +283,14 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
             </div>
           ) : (
             <label
-              className={`flex flex-col items-center justify-center w-full h-48 bg-[#161B22] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#6E7681]"
+              className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface-raised)] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                uploading ? "border-[var(--action)] bg-[var(--action)]/5" : "border-[var(--border-rule)] hover:border-[var(--text-meta)]"
               }`}
-              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[#E8923A]", "bg-[#E8923A]/5"); }}
-              onDragLeave={e => { e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5"); }}
+              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[var(--action)]", "bg-[var(--action)]/5"); }}
+              onDragLeave={e => { e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5"); }}
               onDrop={async e => {
                 e.preventDefault();
-                e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5");
+                e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5");
                 const file = e.dataTransfer.files[0];
                 if (file) await handleImageUpload(file);
               }}
@@ -306,26 +306,26 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
               />
               {uploading ? (
                 <>
-                  <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin mb-2" />
-                  <span className="text-sm text-[#E8923A] font-medium">Uploading...</span>
+                  <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin mb-2" />
+                  <span className="text-sm text-[var(--action)] font-medium">Uploading...</span>
                 </>
               ) : (
                 <>
-                  <Upload className="h-8 w-8 text-[#6E7681] mb-2" />
-                  <span className="text-sm text-[#A8B2BD] font-medium">Drop an image here or click to browse</span>
-                  <span className="text-[10px] text-[#6E7681] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
+                  <Upload className="h-8 w-8 text-[var(--text-meta)] mb-2" />
+                  <span className="text-sm text-[var(--text-body)] font-medium">Drop an image here or click to browse</span>
+                  <span className="text-[10px] text-[var(--text-meta)] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
                 </>
               )}
             </label>
           )}
-          <p className="text-[10px] text-[#6E7681] mt-1.5">A great photo dramatically increases approval chances</p>
+          <p className="text-[10px] text-[var(--text-meta)] mt-1.5">A great photo dramatically increases approval chances</p>
         </div>
 
         {/* Dynamic fields */}
         <div className="space-y-5">
           {fields.map(field => (
             <div key={field.key}>
-              <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
                 {field.label}
                 {field.required && <span className="text-red-400 ml-1">*</span>}
               </label>
@@ -336,7 +336,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
+                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
                 />
               )}
 
@@ -346,7 +346,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A] resize-none"
+                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
                 />
               )}
 
@@ -354,7 +354,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                 <select
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
-                  className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] focus:outline-none focus:border-[#E8923A]"
+                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]"
                 >
                   <option value="">Select...</option>
                   {field.options?.map(opt => (
@@ -370,9 +370,9 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                     value={formData[field.key] || ""}
                     onChange={e => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
+                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
                   />
-                  <p className="text-[10px] text-[#6E7681] mt-1">Separate with commas</p>
+                  <p className="text-[10px] text-[var(--text-meta)] mt-1">Separate with commas</p>
                 </>
               )}
             </div>
@@ -384,7 +384,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
           <button
             onClick={() => handleSave(false)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[#21262D] text-[#F0F6FC] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Draft
@@ -392,7 +392,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
           <button
             onClick={() => handleSave(true)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[#E8923A] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Submit for Review

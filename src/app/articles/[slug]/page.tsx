@@ -218,7 +218,7 @@ export default async function ArticlePage({ params }: Props) {
             )}
             <div className="mt-5 flex flex-wrap items-center gap-5 text-[13px] text-white/60">
               {authorData ? (
-                <Link href={`/authors/${authorData.slug}`} className="flex items-center gap-1.5 hover:text-[#E8923A] transition-colors">
+                <Link href={`/authors/${authorData.slug}`} className="flex items-center gap-1.5 hover:text-[var(--action)] transition-colors">
                   <User className="h-3.5 w-3.5" />Written by {authorData.name}
                 </Link>
               ) : (
@@ -234,17 +234,17 @@ export default async function ArticlePage({ params }: Props) {
       </section>
 
       {/* Article page */}
-      <div className="bg-[#0D1117] min-h-screen">
+      <div className="bg-[var(--surface-page)] min-h-screen">
         <div className="max-w-5xl mx-auto px-4 sm:px-8">
 
           {/* Breadcrumb + favorite — same width as content */}
-          <div className="flex items-center justify-between py-5 border-b border-[#21262D] mb-10">
-            <nav className="flex items-center gap-1.5 text-[13px] text-[#6E7681]">
-              <Link href="/" className="hover:text-[#E8923A] transition-colors">Home</Link>
+          <div className="flex items-center justify-between py-5 border-b border-[var(--border-rule)] mb-10">
+            <nav className="flex items-center gap-1.5 text-[13px] text-[var(--text-meta)]">
+              <Link href="/" className="hover:text-[var(--action)] transition-colors">Home</Link>
               <span>/</span>
-              <Link href="/articles" className="hover:text-[#E8923A] transition-colors">Articles</Link>
+              <Link href="/articles" className="hover:text-[var(--action)] transition-colors">Articles</Link>
               <span>/</span>
-              <span className="text-[#A8B2BD] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
+              <span className="text-[var(--text-body)] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
             </nav>
             <FavoriteButton entityType="article" entityId={article.id} />
           </div>
@@ -255,9 +255,9 @@ export default async function ArticlePage({ params }: Props) {
 
             {/* Related Destinations */}
             {relatedDests.length > 0 && (
-              <div className="mt-16 pt-10 border-t border-[#21262D]">
-                <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6 flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-[#E8923A]" />
+              <div className="mt-16 pt-10 border-t border-[var(--border-rule)]">
+                <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-[var(--action)]" />
                   Related Destinations
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -278,9 +278,9 @@ export default async function ArticlePage({ params }: Props) {
 
             {/* Related Rivers */}
             {relatedRivers.length > 0 && (
-              <div className="mt-16 pt-10 border-t border-[#21262D]">
-                <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6 flex items-center gap-2">
-                  <Fish className="h-5 w-5 text-[#E8923A]" />
+              <div className="mt-16 pt-10 border-t border-[var(--border-rule)]">
+                <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
+                  <Fish className="h-5 w-5 text-[var(--action)]" />
                   Related Rivers
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -302,7 +302,7 @@ export default async function ArticlePage({ params }: Props) {
             {/* Related Fly Patterns */}
             {relatedFlies.length > 0 && (
               <div className="mt-12">
-                <h2 className="font-heading text-lg font-semibold text-[#E8923A] mb-4">
+                <h2 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
                   Related Fly Patterns
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -325,12 +325,12 @@ export default async function ArticlePage({ params }: Props) {
 
             {/* Author bio box */}
             {authorData && (
-              <div className="mt-16 pt-10 border-t border-[#21262D]">
+              <div className="mt-16 pt-10 border-t border-[var(--border-rule)]">
                 <Link
                   href={`/authors/${authorData.slug}`}
-                  className="group flex gap-5 bg-[#161B22] rounded-xl border border-[#21262D] hover:border-[#E8923A]/30 p-5 transition-all"
+                  className="group flex gap-5 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] hover:border-[var(--action)]/30 p-5 transition-all"
                 >
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#E8923A]/30 flex-shrink-0">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[var(--action)]/30 flex-shrink-0">
                     <AuthorAvatar
                       name={authorData.name}
                       imageUrl={authorData.imageUrl}
@@ -339,13 +339,13 @@ export default async function ArticlePage({ params }: Props) {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-[#6E7681] uppercase tracking-wide mb-0.5">
+                    <p className="text-[11px] text-[var(--text-meta)] uppercase tracking-wide mb-0.5">
                       Written by
                     </p>
-                    <h3 className="font-heading text-base font-bold text-[#F0F6FC] group-hover:text-[#E8923A] transition-colors">
+                    <h3 className="font-heading text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
                       {authorData.name}
                     </h3>
-                    <p className="text-sm text-[#A8B2BD] mt-1 leading-relaxed line-clamp-2">
+                    <p className="text-sm text-[var(--text-body)] mt-1 leading-relaxed line-clamp-2">
                       {authorData.shortBio}
                     </p>
                   </div>
@@ -354,13 +354,13 @@ export default async function ArticlePage({ params }: Props) {
             )}
 
             {/* Divider */}
-            <div className="mt-16 pt-10 border-t border-[#21262D]">
-              <h2 className="font-heading text-lg font-bold text-[#F0F6FC] mb-6">More Articles</h2>
+            <div className="mt-16 pt-10 border-t border-[var(--border-rule)]">
+              <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] mb-6">More Articles</h2>
               {otherArticles.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                   {otherArticles.map((a) => (
                     <Link key={a.id} href={`/articles/${a.slug}`}
-                      className="group block bg-[#161B22] rounded-xl overflow-hidden border border-[#21262D] hover:border-[#E8923A]/30 hover:shadow-md transition-all">
+                      className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden border border-[var(--border-rule)] hover:border-[var(--action)]/30 hover:shadow-md transition-all">
                       <div className="relative h-36 w-full overflow-hidden">
                         <SafeEntityImage
                           src={a.heroImageUrl}
@@ -372,9 +372,9 @@ export default async function ArticlePage({ params }: Props) {
                         />
                       </div>
                       <div className="p-4">
-                        <span className="text-[11px] text-[#E8923A] font-semibold uppercase tracking-wide">{a.category}</span>
-                        <h3 className="mt-1 font-heading text-sm font-bold text-[#F0F6FC] leading-snug group-hover:text-[#E8923A] transition-colors">{a.title}</h3>
-                        <p className="mt-1.5 text-xs text-[#6E7681]">{a.readingTimeMinutes} min read</p>
+                        <span className="text-[11px] text-[var(--action)] font-semibold uppercase tracking-wide">{a.category}</span>
+                        <h3 className="mt-1 font-heading text-sm font-bold text-[var(--text-primary)] leading-snug group-hover:text-[var(--action)] transition-colors">{a.title}</h3>
+                        <p className="mt-1.5 text-xs text-[var(--text-meta)]">{a.readingTimeMinutes} min read</p>
                       </div>
                     </Link>
                   ))}

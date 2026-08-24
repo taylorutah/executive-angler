@@ -49,7 +49,7 @@ export function RecipePdfButton({ flyId, flyName }: RecipePdfButtonProps) {
     <button
       onClick={handleDownload}
       disabled={downloading}
-      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E8923A]/10 text-[#E8923A] hover:bg-[#E8923A]/20 border border-[#E8923A]/20 transition-colors disabled:opacity-50"
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20 border border-[var(--action)]/20 transition-colors disabled:opacity-50"
     >
       <Download className="h-3.5 w-3.5" />
       {downloading ? 'Generating...' : 'Download PDF'}

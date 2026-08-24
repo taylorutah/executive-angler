@@ -44,7 +44,7 @@ export default function JsonField({ value, onChange, label }: JsonFieldProps) {
   return (
     <div>
       {label && (
-        <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+        <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
           {label}
         </label>
       )}
@@ -57,10 +57,10 @@ export default function JsonField({ value, onChange, label }: JsonFieldProps) {
         onBlur={handleBlur}
         rows={8}
         spellCheck={false}
-        className={`w-full px-3 py-2 bg-[#0D1117] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] font-mono focus:outline-none transition-colors ${
+        className={`w-full px-3 py-2 bg-[var(--surface-page)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] font-mono focus:outline-none transition-colors ${
           error
             ? "border-2 border-red-500"
-            : "border border-[#21262D] focus:border-[#E8923A]"
+            : "border border-[var(--border-rule)] focus:border-[var(--action)]"
         }`}
       />
       {error && (

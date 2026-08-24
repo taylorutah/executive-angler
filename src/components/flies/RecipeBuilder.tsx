@@ -195,7 +195,7 @@ function createEmptyStep(role: RecipeRole = 'hook'): RecipeStep {
 const CASCADE_ROLES = new Set<RecipeRole>(['thread', 'hook']);
 
 const cellInput =
-  'w-full h-7 bg-[#0D1117] border border-[#30363D] rounded px-2 text-[12px] text-[#F0F6FC] placeholder-[#6E7681] outline-none focus:border-[#E8923A] transition-colors';
+  'w-full h-7 bg-[var(--surface-page)] border border-[var(--border-strong)] rounded px-2 text-[12px] text-[var(--text-primary)] placeholder-[#6E7681] outline-none focus:border-[var(--action)] transition-colors';
 const cellSelect = `${cellInput} appearance-none cursor-pointer pr-5`;
 
 // Fixed Salesforce-style grid: drag(20) | #(28) | role(110) | material(1.4fr) | size(90) | color(110) | detail(110) | notes(1fr) | opt(28) | del(24)
@@ -388,23 +388,23 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
   };
 
   return (
-    <div className="bg-[#161B22]">
+    <div className="bg-[var(--surface-raised)]">
       {/* Toolbar */}
-      <div className="flex items-center justify-between border-b border-[#30363D] bg-[#0D1117] px-2 py-1.5">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-[#6E7681]">
+      <div className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-2 py-1.5">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
           {steps.length} {steps.length === 1 ? 'step' : 'steps'}
         </span>
         <button
           type="button"
           onClick={() => addStep()}
-          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#A8B2BD] hover:text-[#E8923A] transition-colors uppercase tracking-wide"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--text-body)] hover:text-[var(--action)] transition-colors uppercase tracking-wide"
         >
           <Plus className="w-3 h-3" /> Add Step
         </button>
       </div>
 
       {/* Header row — real column labels */}
-      <div className={`${ROW_GRID} border-b border-[#30363D] bg-[#0D1117] text-[10px] font-bold uppercase tracking-widest text-[#6E7681]`}>
+      <div className={`${ROW_GRID} border-b border-[var(--border-strong)] bg-[var(--surface-page)] text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]`}>
         <span />
         <span className="text-center">#</span>
         <span>Role</span>
@@ -427,12 +427,12 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
             onDragStart={() => handleDragStart(idx)}
             onDragOver={(e) => handleDragOver(e, idx)}
             onDragEnd={handleDragEnd}
-            className={`border-b border-[#21262D] last:border-b-0 ${
+            className={`border-b border-[var(--border-rule)] last:border-b-0 ${
               dragIdx === idx
                 ? 'opacity-60 bg-[rgba(232,146,58,0.08)]'
                 : idx % 2 === 1
-                ? 'bg-[#0D1117]'
-                : 'bg-[#161B22]'
+                ? 'bg-[var(--surface-page)]'
+                : 'bg-[var(--surface-raised)]'
             } hover:bg-[rgba(232,146,58,0.05)] transition-colors`}
           >
             {/* Desktop dense row */}
@@ -440,14 +440,14 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
               {/* Drag */}
               <button
                 type="button"
-                className="cursor-grab active:cursor-grabbing text-[#484F58] hover:text-[#A8B2BD]"
+                className="cursor-grab active:cursor-grabbing text-[#484F58] hover:text-[var(--text-body)]"
                 aria-label="Drag to reorder"
               >
                 <GripVertical className="w-3.5 h-3.5" />
               </button>
 
               {/* Step number */}
-              <span className="text-[11px] font-mono tabular-nums text-[#6E7681] text-center">
+              <span className="text-[11px] font-mono tabular-nums text-[var(--text-meta)] text-center">
                 {idx + 1}
               </span>
 
@@ -482,7 +482,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   cellSelect={cellSelect}
                 />
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
-                <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
+                <div className="border border-[var(--border-strong)] rounded divide-y divide-[#21262D] bg-[var(--surface-page)] focus-within:border-[var(--action)] transition-colors">
                   <BrandSelect
                     category={cfg.materialCategory}
                     value={step.brandChoice || step.material?.brand || ''}
@@ -597,7 +597,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   type="checkbox"
                   checked={step.isOptional}
                   onChange={(e) => updateStep(idx, { isOptional: e.target.checked })}
-                  className="rounded border-[#30363D] bg-[#0D1117] text-[#E8923A] h-3.5 w-3.5"
+                  className="rounded border-[var(--border-strong)] bg-[var(--surface-page)] text-[var(--action)] h-3.5 w-3.5"
                 />
               </label>
 
@@ -615,7 +615,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
             {/* Mobile stacked layout */}
             <div className="md:hidden p-2 space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono tabular-nums text-[#6E7681]">
+                <span className="text-[11px] font-mono tabular-nums text-[var(--text-meta)]">
                   {idx + 1}
                 </span>
                 <div className="relative flex-1">
@@ -642,7 +642,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                 <>
                   <div className="grid grid-cols-2 gap-1.5">
                     <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Material</label>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Material</label>
                       <BeadMaterialSelect
                         step={step}
                         onChange={(patch) => {
@@ -654,7 +654,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Shape</label>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Shape</label>
                       <BeadShapeSelect
                         step={step}
                         onChange={(patch) => {
@@ -668,7 +668,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size (mm)</label>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Size (mm)</label>
                       <BeadSizeInput
                         step={step}
                         onChange={(patch) => {
@@ -680,7 +680,7 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Color</label>
                       <BeadColorInput
                         step={step}
                         onChange={(patch) => {
@@ -696,10 +696,10 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
               ) : CASCADE_ROLES.has(step.role) && cfg.materialCategory ? (
                 <>
                   <div>
-                    <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">
                       Brand · {step.role === 'hook' ? 'Model' : 'Product'}
                     </label>
-                    <div className="border border-[#30363D] rounded divide-y divide-[#21262D] bg-[#0D1117] focus-within:border-[#E8923A] transition-colors">
+                    <div className="border border-[var(--border-strong)] rounded divide-y divide-[#21262D] bg-[var(--surface-page)] focus-within:border-[var(--action)] transition-colors">
                       <BrandSelect
                         category={cfg.materialCategory}
                         value={step.brandChoice || step.material?.brand || ''}
@@ -731,19 +731,19 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   <div className="grid grid-cols-3 gap-1.5">
                     {cfg.showSize && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Size</label>
                         {renderSize(idx, step)}
                       </div>
                     )}
                     {cfg.showColor && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Color</label>
                         {renderColor(idx, step)}
                       </div>
                     )}
                     {cfg.detail && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">{detailLabel(cfg.detail)}</label>
                         {renderDetail(idx, step)}
                       </div>
                     )}
@@ -767,19 +767,19 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   <div className="grid grid-cols-3 gap-1.5">
                     {cfg.showSize && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Size</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Size</label>
                         {renderSize(idx, step)}
                       </div>
                     )}
                     {cfg.showColor && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">Color</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">Color</label>
                         {renderColor(idx, step)}
                       </div>
                     )}
                     {cfg.detail && (
                       <div>
-                        <label className="text-[9px] font-bold uppercase tracking-widest text-[#6E7681] block mb-0.5">{detailLabel(cfg.detail)}</label>
+                        <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)] block mb-0.5">{detailLabel(cfg.detail)}</label>
                         {renderDetail(idx, step)}
                       </div>
                     )}
@@ -798,9 +798,9 @@ export function RecipeBuilder({ initialSteps, onChange }: RecipeBuilderProps) {
                   type="checkbox"
                   checked={step.isOptional}
                   onChange={(e) => updateStep(idx, { isOptional: e.target.checked })}
-                  className="rounded border-[#30363D] bg-[#0D1117] text-[#E8923A] h-3.5 w-3.5"
+                  className="rounded border-[var(--border-strong)] bg-[var(--surface-page)] text-[var(--action)] h-3.5 w-3.5"
                 />
-                <span className="text-[11px] text-[#A8B2BD]">Optional step</span>
+                <span className="text-[11px] text-[var(--text-body)]">Optional step</span>
               </label>
             </div>
           </div>

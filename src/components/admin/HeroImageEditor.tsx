@@ -139,7 +139,7 @@ export default function HeroImageEditor({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E8923A] text-white rounded-lg text-xs font-semibold hover:bg-[#F0A65A] transition-colors shadow-lg"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--action)] text-white rounded-lg text-xs font-semibold hover:bg-[#F0A65A] transition-colors shadow-lg"
         title="Edit hero image (admin)"
       >
         <Pencil className="h-3 w-3" />
@@ -154,17 +154,17 @@ export default function HeroImageEditor({
       onClick={() => setIsOpen(false)}
     >
       <div
-        className="bg-[#161B22] border border-[#21262D] rounded-2xl max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#21262D]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-rule)]">
           <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-[#E8923A]" />
-            <h2 className="text-base font-bold text-[#F0F6FC]">Edit Hero Image</h2>
+            <ImageIcon className="h-5 w-5 text-[var(--action)]" />
+            <h2 className="text-base font-bold text-[var(--text-primary)]">Edit Hero Image</h2>
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-[#6E7681] hover:text-[#F0F6FC]"
+            className="text-[var(--text-meta)] hover:text-[var(--text-primary)]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -195,7 +195,7 @@ export default function HeroImageEditor({
           <button
             onClick={handleSave}
             disabled={saving || !imageUrl || !altText.trim()}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[#E8923A] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Hero Image

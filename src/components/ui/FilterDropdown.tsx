@@ -169,13 +169,13 @@ export default function FilterDropdown({
         title={isEmpty ? emptyMessage : undefined}
         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap border ${
           selected.length > 0
-            ? "bg-[#E8923A]/10 border-[#E8923A]/40 text-[#E8923A]"
-            : "bg-[#161B22] border-[#21262D] text-[#A8B2BD] hover:border-[#E8923A]/30 hover:text-[#F0F6FC]"
+            ? "bg-[var(--action)]/10 border-[var(--action)]/40 text-[var(--action)]"
+            : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/30 hover:text-[var(--text-primary)]"
         } ${isEmpty ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <span className="truncate max-w-[140px]">{triggerLabel}</span>
         {selected.length > 0 && (
-          <span className="font-mono text-[10px] bg-[#E8923A] text-white rounded-full min-w-[16px] h-4 inline-flex items-center justify-center px-1">
+          <span className="font-mono text-[10px] bg-[var(--action)] text-white rounded-full min-w-[16px] h-4 inline-flex items-center justify-center px-1">
             {selected.length}
           </span>
         )}
@@ -185,11 +185,11 @@ export default function FilterDropdown({
       {open && (
         <div
           ref={popoverRef}
-          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[#0D1117] border border-[#21262D] rounded-xl shadow-xl shadow-black/60 overflow-hidden`}
+          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-xl shadow-xl shadow-black/60 overflow-hidden`}
         >
           {isSearchable && (
-            <div className="relative border-b border-[#21262D]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+            <div className="relative border-b border-[var(--border-rule)]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
               <input
                 ref={searchRef}
                 type="text"
@@ -197,7 +197,7 @@ export default function FilterDropdown({
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onListKeyDown}
                 placeholder={`Search ${label.toLowerCase()}...`}
-                className="w-full bg-transparent pl-9 pr-3 py-2.5 text-sm text-[#F0F6FC] placeholder:text-[#6E7681] focus:outline-none"
+                className="w-full bg-transparent pl-9 pr-3 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:outline-none"
                 aria-label={`Search ${label}`}
               />
             </div>
@@ -214,7 +214,7 @@ export default function FilterDropdown({
             style={{ maxHeight }}
           >
             {filteredOptions.length === 0 ? (
-              <li className="px-3 py-6 text-center text-sm text-[#6E7681]">
+              <li className="px-3 py-6 text-center text-sm text-[var(--text-meta)]">
                 {query ? "No matches" : emptyMessage}
               </li>
             ) : (
@@ -229,15 +229,15 @@ export default function FilterDropdown({
                     onClick={() => toggle(opt.value)}
                     onMouseEnter={() => setFocusIdx(idx)}
                     className={`flex items-center justify-between gap-3 px-3 py-2 cursor-pointer text-sm ${
-                      isFocused ? "bg-[#161B22]" : ""
-                    } ${isSelected ? "text-[#F0F6FC]" : "text-[#A8B2BD]"}`}
+                      isFocused ? "bg-[var(--surface-raised)]" : ""
+                    } ${isSelected ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"}`}
                   >
                     <span className="flex items-center gap-2 min-w-0 flex-1">
                       <span
                         className={`flex items-center justify-center w-4 h-4 rounded border shrink-0 ${
                           isSelected
-                            ? "bg-[#E8923A] border-[#E8923A]"
-                            : "border-[#30363D] bg-[#0D1117]"
+                            ? "bg-[var(--action)] border-[var(--action)]"
+                            : "border-[var(--border-strong)] bg-[var(--surface-page)]"
                         }`}
                         aria-hidden
                       >
@@ -245,11 +245,11 @@ export default function FilterDropdown({
                       </span>
                       <span className="truncate" title={opt.label}>{opt.label}</span>
                       {opt.meta && (
-                        <span className="text-xs text-[#6E7681] truncate">{opt.meta}</span>
+                        <span className="text-xs text-[var(--text-meta)] truncate">{opt.meta}</span>
                       )}
                     </span>
                     {typeof opt.count === "number" && (
-                      <span className="font-mono text-xs text-[#6E7681] tabular-nums shrink-0">
+                      <span className="font-mono text-xs text-[var(--text-meta)] tabular-nums shrink-0">
                         {opt.count}
                       </span>
                     )}
@@ -259,19 +259,19 @@ export default function FilterDropdown({
             )}
           </ul>
 
-          <div className="border-t border-[#21262D] px-3 py-2 flex items-center justify-between text-xs">
+          <div className="border-t border-[var(--border-rule)] px-3 py-2 flex items-center justify-between text-xs">
             <button
               type="button"
               onClick={() => onChange([])}
               disabled={selected.length === 0}
-              className="text-[#6E7681] hover:text-[#A8B2BD] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="text-[var(--text-meta)] hover:text-[var(--text-body)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Clear
             </button>
             <button
               type="button"
               onClick={close}
-              className="text-[#E8923A] hover:text-[#F0A65A] font-medium transition-colors"
+              className="text-[var(--action)] hover:text-[#F0A65A] font-medium transition-colors"
             >
               Done
             </button>
@@ -290,7 +290,7 @@ export function FilterChip({
   onRemove: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#E8923A]/10 border border-[#E8923A]/40 text-[#E8923A] text-xs">
+    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--action)]/10 border border-[var(--action)]/40 text-[var(--action)] text-xs">
       <span className="truncate max-w-[180px]">{label}</span>
       <button
         type="button"

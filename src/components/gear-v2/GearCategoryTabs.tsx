@@ -20,7 +20,7 @@ export default function GearCategoryTabs({ categories }: Props) {
   const tabs = [{ slug: "all", label: "All", count: total }, ...categories];
 
   return (
-    <div className="flex flex-wrap gap-1 border-b border-[#21262D] mb-4 -mx-1">
+    <div className="flex flex-wrap gap-1 border-b border-[var(--border-rule)] mb-4 -mx-1">
       {tabs.map((t) => {
         const isActive = active === t.slug;
         const href = t.slug === "all" ? "/gear" : `/gear?category=${t.slug}`;
@@ -31,12 +31,12 @@ export default function GearCategoryTabs({ categories }: Props) {
             scroll={false}
             className={`px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
               isActive
-                ? "bg-[#161B22] text-[#F0F6FC] border-x border-t border-[#21262D] -mb-px"
-                : "text-[#A8B2BD] hover:text-[#F0F6FC] hover:bg-[#161B22]/50"
+                ? "bg-[var(--surface-raised)] text-[var(--text-primary)] border-x border-t border-[var(--border-rule)] -mb-px"
+                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]/50"
             }`}
           >
             {t.label}{" "}
-            <span className="font-['IBM_Plex_Mono'] text-[#6E7681]">{t.count}</span>
+            <span className="font-['IBM_Plex_Mono'] text-[var(--text-meta)]">{t.count}</span>
           </Link>
         );
       })}

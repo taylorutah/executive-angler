@@ -186,13 +186,13 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
       {/* ── Controls Bar ─────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-3 mb-6">
         {/* View toggle */}
-        <div className="flex rounded-lg overflow-hidden border border-[#21262D]">
+        <div className="flex rounded-lg overflow-hidden border border-[var(--border-rule)]">
           <button
             onClick={() => setView("list")}
             className={
               view === "list"
-                ? "bg-[#E8923A] text-white px-4 py-2 text-sm font-medium"
-                : "bg-[#161B22] text-[#A8B2BD] px-4 py-2 text-sm font-medium hover:text-white transition-colors"
+                ? "bg-[var(--action)] text-white px-4 py-2 text-sm font-medium"
+                : "bg-[var(--surface-raised)] text-[var(--text-body)] px-4 py-2 text-sm font-medium hover:text-white transition-colors"
             }
           >
             ☰ List
@@ -201,8 +201,8 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
             onClick={() => setView("map")}
             className={
               view === "map"
-                ? "bg-[#E8923A] text-white px-4 py-2 text-sm font-medium border-l border-[#21262D]"
-                : "bg-[#161B22] text-[#A8B2BD] px-4 py-2 text-sm font-medium border-l border-[#21262D] hover:text-white transition-colors"
+                ? "bg-[var(--action)] text-white px-4 py-2 text-sm font-medium border-l border-[var(--border-rule)]"
+                : "bg-[var(--surface-raised)] text-[var(--text-body)] px-4 py-2 text-sm font-medium border-l border-[var(--border-rule)] hover:text-white transition-colors"
             }
           >
             🗺 Map
@@ -213,7 +213,7 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
         <select
           value={selectedStateName}
           onChange={(e) => setSelectedStateName(e.target.value)}
-          className="bg-[#161B22] border border-[#21262D] text-[#F0F6FC] rounded-lg px-3 py-2 text-sm min-w-[160px]"
+          className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm min-w-[160px]"
         >
           <option value="">All States</option>
           {US_STATES.map((s) => (
@@ -227,7 +227,7 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
         <button
           onClick={handleNearMe}
           disabled={locating}
-          className="border border-[#E8923A] text-[#E8923A] hover:bg-[#E8923A] hover:text-white rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
+          className="border border-[var(--action)] text-[var(--action)] hover:bg-[var(--action)] hover:text-white rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
         >
           {locating ? (
             <span className="flex items-center gap-1.5">
@@ -249,19 +249,19 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
             onKeyDown={(e) => e.key === "Enter" && handleZipSearch()}
             placeholder="ZIP code"
             maxLength={5}
-            className="bg-[#161B22] border border-[#21262D] text-[#F0F6FC] placeholder-[#6E7681] rounded-lg px-3 py-2 text-sm w-28 focus:border-[#E8923A] focus:outline-none"
+            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] placeholder-[#6E7681] rounded-lg px-3 py-2 text-sm w-28 focus:border-[var(--action)] focus:outline-none"
           />
           <button
             onClick={handleZipSearch}
             disabled={zipLoading || !zipInput.trim()}
-            className="bg-[#161B22] border border-[#21262D] text-[#A8B2BD] hover:text-[#E8923A] hover:border-[#E8923A] rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-40"
+            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-body)] hover:text-[var(--action)] hover:border-[var(--action)] rounded-lg px-3 py-2 text-sm transition-colors disabled:opacity-40"
           >
             {zipLoading ? "…" : "Go"}
           </button>
         </div>
 
         {/* Result count */}
-        <span className="text-sm text-[#6E7681] ml-auto">
+        <span className="text-sm text-[var(--text-meta)] ml-auto">
           {filteredRivers.length} river{filteredRivers.length !== 1 ? "s" : ""}
           {selectedStateName ? ` in ${selectedStateName}` : ""}
           {nearbyIds.size > 0 && !selectedStateName ? " · showing nearby" : ""}
@@ -280,8 +280,8 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
             <Link
               key={river.id}
               href={`/rivers/${river.slug}`}
-              className={`group block bg-[#0D1117] rounded-xl overflow-hidden hover:shadow-lg transition-shadow${
-                nearbyIds.has(river.id) ? " ring-2 ring-[#E8923A]" : ""
+              className={`group block bg-[var(--surface-page)] rounded-xl overflow-hidden hover:shadow-lg transition-shadow${
+                nearbyIds.has(river.id) ? " ring-2 ring-[var(--action)]" : ""
               }`}
             >
               <div className="relative h-36">
@@ -298,7 +298,7 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                   <span
                     className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide ${
                       DIFFICULTY_STYLES[river.difficulty] ??
-                      "bg-[#1F2937] text-[#A8B2BD]"
+                      "bg-[var(--surface-card)] text-[var(--text-body)]"
                     }`}
                   >
                     {river.difficulty}
@@ -306,24 +306,24 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                 </div>
               </div>
               <div className="p-3">
-                <h3 className="font-heading font-bold text-[#F0F6FC] text-sm leading-tight line-clamp-1 group-hover:text-[#E8923A] transition-colors">
+                <h3 className="font-heading font-bold text-[var(--text-primary)] text-sm leading-tight line-clamp-1 group-hover:text-[var(--action)] transition-colors">
                   {river.name}
                 </h3>
-                <p className="mt-0.5 text-[11px] text-[#A8B2BD] line-clamp-1">
+                <p className="mt-0.5 text-[11px] text-[var(--text-body)] line-clamp-1">
                   {river.primarySpecies.slice(0, 2).join(", ")}
                 </p>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="text-[10px] text-[#6E7681] capitalize">
+                  <span className="text-[10px] text-[var(--text-meta)] capitalize">
                     {river.flowType}
                   </span>
-                  <ChevronRight className="h-3 w-3 text-[#E8923A] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="h-3 w-3 text-[var(--action)] opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             </Link>
           ))}
 
           {filteredRivers.length === 0 && (
-            <div className="col-span-2 md:col-span-4 py-16 text-center text-[#6E7681]">
+            <div className="col-span-2 md:col-span-4 py-16 text-center text-[var(--text-meta)]">
               No rivers found
               {selectedStateName ? ` in ${selectedStateName}` : ""}.
             </div>
@@ -346,7 +346,7 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
           {/* Rivers below the map */}
           <div className="mt-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-[#F0F6FC]">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 {nearbyIds.size > 0 && userLocation
                   ? "Nearest Rivers"
                   : selectedStateName
@@ -354,11 +354,11 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                   : "Rivers"}
               </h3>
               {filteredRivers.length > MAP_LIST_LIMIT && (
-                <span className="text-xs text-[#6E7681]">
+                <span className="text-xs text-[var(--text-meta)]">
                   Showing {mapListRivers.length} of {filteredRivers.length} —{" "}
                   <button
                     onClick={() => setView("list")}
-                    className="text-[#E8923A] hover:underline"
+                    className="text-[var(--action)] hover:underline"
                   >
                     view all
                   </button>
@@ -371,7 +371,7 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                 <Link
                   key={river.id}
                   href={`/rivers/${river.slug}`}
-                  className="group block bg-[#161B22] rounded-xl overflow-hidden hover:shadow-lg transition-shadow ring-1 ring-[#21262D] hover:ring-[#E8923A]"
+                  className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden hover:shadow-lg transition-shadow ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)]"
                 >
                   <div className="relative h-28">
                     <SafeEntityImage
@@ -385,17 +385,17 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     {river.dist != null && (
                       <div className="absolute top-2 right-2">
-                        <span className="bg-black/60 text-[#E8923A] text-[10px] font-mono px-1.5 py-0.5 rounded-full">
+                        <span className="bg-black/60 text-[var(--action)] text-[10px] font-mono px-1.5 py-0.5 rounded-full">
                           {Math.round(river.dist)} km
                         </span>
                       </div>
                     )}
                   </div>
                   <div className="p-2.5">
-                    <h4 className="font-heading font-bold text-[#F0F6FC] text-xs leading-tight line-clamp-1 group-hover:text-[#E8923A] transition-colors">
+                    <h4 className="font-heading font-bold text-[var(--text-primary)] text-xs leading-tight line-clamp-1 group-hover:text-[var(--action)] transition-colors">
                       {river.name}
                     </h4>
-                    <p className="mt-0.5 text-[10px] text-[#A8B2BD] line-clamp-1">
+                    <p className="mt-0.5 text-[10px] text-[var(--text-body)] line-clamp-1">
                       {river.primarySpecies.slice(0, 2).join(", ")}
                     </p>
                   </div>

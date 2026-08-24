@@ -119,11 +119,11 @@ export default function FavoritesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0D1117] pt-6 px-4">
+      <div className="min-h-screen bg-[var(--surface-page)] pt-6 px-4">
         <div className="mx-auto max-w-3xl">
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-[#161B22] rounded-xl" />
+              <div key={i} className="h-16 bg-[var(--surface-raised)] rounded-xl" />
             ))}
           </div>
         </div>
@@ -132,27 +132,27 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] pt-6 pb-20 px-4">
+    <div className="min-h-screen bg-[var(--surface-page)] pt-6 pb-20 px-4">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center gap-3 mb-8">
-          <Star className="h-8 w-8 text-[#E8923A] fill-[#E8923A]" />
-          <h1 className="font-heading text-3xl font-bold text-[#E8923A]">
+          <Star className="h-8 w-8 text-[var(--action)] fill-[var(--action)]" />
+          <h1 className="font-heading text-3xl font-bold text-[var(--action)]">
             Your Favorites
           </h1>
         </div>
 
         {favorites.length === 0 ? (
-          <div className="text-center py-16 bg-[#161B22] rounded-xl shadow-sm">
-            <Star className="h-12 w-12 text-[#6E7681] mx-auto mb-4" />
-            <h2 className="font-heading text-xl font-semibold text-[#A8B2BD] mb-2">
+          <div className="text-center py-16 bg-[var(--surface-raised)] rounded-xl shadow-sm">
+            <Star className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-4" />
+            <h2 className="font-heading text-xl font-semibold text-[var(--text-body)] mb-2">
               No favorites yet
             </h2>
-            <p className="text-[#6E7681] mb-6">
+            <p className="text-[var(--text-meta)] mb-6">
               Explore destinations, rivers, and lodges — save the ones you love.
             </p>
             <Link
               href="/destinations"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#E8923A] text-white font-medium rounded-lg hover:bg-[#E8923A]-light transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--action)] text-white font-medium rounded-lg hover:bg-[var(--action)]-light transition-colors"
             >
               Explore Destinations
             </Link>
@@ -168,25 +168,25 @@ export default function FavoritesPage() {
               return (
                 <div
                   key={fav.id}
-                  className="flex items-center justify-between p-4 bg-[#161B22] rounded-xl shadow-sm"
+                  className="flex items-center justify-between p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm"
                 >
                   <Link
                     href={details.href}
-                    className="flex items-center gap-3 flex-1 hover:text-[#E8923A] transition-colors"
+                    className="flex items-center gap-3 flex-1 hover:text-[var(--action)] transition-colors"
                   >
-                    <Icon className="h-5 w-5 text-[#E8923A] shrink-0" />
+                    <Icon className="h-5 w-5 text-[var(--action)] shrink-0" />
                     <div>
-                      <p className="font-medium text-[#E8923A]">
+                      <p className="font-medium text-[var(--action)]">
                         {details.name}
                       </p>
-                      <p className="text-xs text-[#A8B2BD] capitalize">
+                      <p className="text-xs text-[var(--text-body)] capitalize">
                         {fav.entity_type.replace("_", " ")}
                       </p>
                     </div>
                   </Link>
                   <button
                     onClick={() => removeFavorite(fav.id)}
-                    className="p-2 text-[#6E7681] hover:text-red-500 transition-colors"
+                    className="p-2 text-[var(--text-meta)] hover:text-red-500 transition-colors"
                     aria-label="Remove favorite"
                   >
                     <Trash2 className="h-4 w-4" />

@@ -140,7 +140,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
             <button
               type="button"
               onClick={clearSelection}
-              className="inline-flex items-center gap-1 rounded-md border border-[#30363D] px-2 py-1 text-xs text-[#A8B2BD] hover:bg-[#21262D]"
+              className="inline-flex items-center gap-1 rounded-md border border-[var(--border-strong)] px-2 py-1 text-xs text-[var(--text-body)] hover:bg-[var(--border-rule)]"
             >
               <X className="h-3 w-3" />
               Clear
@@ -153,9 +153,9 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
         <p className="mb-2 text-xs text-rose-400">{error}</p>
       )}
 
-      <div className="overflow-hidden rounded-lg border border-[#21262D] bg-[#0D1117]">
+      <div className="overflow-hidden rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
         <table className="w-full text-sm">
-          <thead className="bg-[#161B22] text-[#6E7681] text-[10px] uppercase tracking-wide">
+          <thead className="bg-[var(--surface-raised)] text-[var(--text-meta)] text-[10px] uppercase tracking-wide">
             <tr>
               <th className="w-10 px-3 py-2 text-left">
                 <input
@@ -166,7 +166,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                   }}
                   onChange={toggleAll}
                   aria-label="Select all"
-                  className="h-4 w-4 accent-[#E8923A] cursor-pointer"
+                  className="h-4 w-4 accent-[var(--action)] cursor-pointer"
                 />
               </th>
               <th className="text-left px-4 py-2 font-medium">Fly</th>
@@ -187,7 +187,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                 <tr
                   key={e.id}
                   className={`transition-colors ${
-                    isSelected ? "bg-[#E8923A]/5" : "hover:bg-[#161B22]/60"
+                    isSelected ? "bg-[var(--action)]/5" : "hover:bg-[var(--surface-raised)]/60"
                   } ${isBusy ? "opacity-50" : ""}`}
                 >
                   <td className="px-3 py-2">
@@ -196,25 +196,25 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                       checked={isSelected}
                       onChange={() => toggleSelect(cfg.id)}
                       aria-label={`Select ${cfg.fly.name}`}
-                      className="h-4 w-4 accent-[#E8923A] cursor-pointer"
+                      className="h-4 w-4 accent-[var(--action)] cursor-pointer"
                     />
                   </td>
                   <td className="px-4 py-2">
-                    <Link href={`/flies/${cfg.fly.slug}`} className="flex items-center gap-2.5 hover:text-[#E8923A]">
-                      <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-[#21262D]">
+                    <Link href={`/flies/${cfg.fly.slug}`} className="flex items-center gap-2.5 hover:text-[var(--action)]">
+                      <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-[var(--border-rule)]">
                         {cfg.fly.hero_image_url && (
                           <Image src={cfg.fly.hero_image_url} alt={cfg.fly.name} fill className="object-cover" sizes="32px" />
                         )}
                       </div>
                       <span className="font-medium">{cfg.fly.name}</span>
                       {cfg.is_favorite && <span className="text-rose-400 text-xs">♥</span>}
-                      {cfg.is_tie_next && <span className="text-[#E8923A] text-xs">⚒</span>}
+                      {cfg.is_tie_next && <span className="text-[var(--action)] text-xs">⚒</span>}
                     </Link>
                   </td>
-                  <td className="px-4 py-2 text-[#A8B2BD]">{summarizeVersion(cfg)}</td>
+                  <td className="px-4 py-2 text-[var(--text-body)]">{summarizeVersion(cfg)}</td>
                   <td className="px-4 py-2 text-right tabular-nums">{cfg.tied_count}</td>
                   <td className="px-4 py-2 text-right tabular-nums">{cfg.target_count}</td>
-                  <td className={`px-4 py-2 text-right tabular-nums ${deficit > 0 ? "text-[#E8923A]" : "text-[#6E7681]"}`}>
+                  <td className={`px-4 py-2 text-right tabular-nums ${deficit > 0 ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`}>
                     {deficit > 0 ? `+${deficit}` : "—"}
                   </td>
                   <td className="px-2 py-2 text-right">
@@ -223,7 +223,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                       onClick={() => removeOne(cfg.id)}
                       disabled={isBusy}
                       title={`Remove from ${boxName}`}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[#30363D] text-[#6E7681] hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/40 disabled:opacity-60"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border-strong)] text-[var(--text-meta)] hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/40 disabled:opacity-60"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>

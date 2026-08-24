@@ -165,17 +165,17 @@ export default function PhotoUpdateForm({ userId }: Props) {
   const canSubmit = !!selectedEntity && !!heroImage && !uploading && !submitting;
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/contribute" className="text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors">
+          <Link href="/contribute" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <h1 className="font-serif text-2xl text-[#F0F6FC]">Update a Listing Photo</h1>
+          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Update a Listing Photo</h1>
         </div>
 
-        <p className="text-sm text-[#A8B2BD] mb-8">
+        <p className="text-sm text-[var(--text-body)] mb-8">
           Submit a hero photo for an existing shop, guide, lodge, or river. Once approved, it will replace the listing&apos;s current hero image.
         </p>
 
@@ -196,13 +196,13 @@ export default function PhotoUpdateForm({ userId }: Props) {
         <div className="space-y-6">
           {/* Step 1: Entity type */}
           <div>
-            <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
               Step 1 — What type of listing?
             </label>
             <select
               value={targetEntityType}
               onChange={e => handleEntityTypeChange(e.target.value)}
-              className="w-full px-4 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] focus:outline-none focus:border-[#E8923A]"
+              className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]"
             >
               <option value="">Select listing type...</option>
               {ENTITY_TYPE_OPTIONS.map(opt => (
@@ -214,26 +214,26 @@ export default function PhotoUpdateForm({ userId }: Props) {
           {/* Step 2: Search for entity */}
           {targetEntityType && (
             <div>
-              <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
                 Step 2 — Search for the {entityTypeOption?.label}
               </label>
               <div className="relative" ref={dropdownRef}>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E7681]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); setSelectedEntity(null); }}
                     placeholder={`Type to search ${entityTypeOption?.label.toLowerCase()} names...`}
-                    className="w-full pl-9 pr-10 py-3 bg-[#161B22] border border-[#21262D] rounded-lg text-sm text-[#F0F6FC] placeholder-[#6E7681] focus:outline-none focus:border-[#E8923A]"
+                    className="w-full pl-9 pr-10 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
                   />
                   {searching && (
-                    <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#E8923A] animate-spin" />
+                    <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--action)] animate-spin" />
                   )}
                   {selectedEntity && !searching && (
                     <button
                       onClick={() => { setSelectedEntity(null); setSearchQuery(""); }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E7681] hover:text-[#F0F6FC]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-primary)]"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -241,29 +241,29 @@ export default function PhotoUpdateForm({ userId }: Props) {
                 </div>
 
                 {showDropdown && searchResults.length > 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-[#161B22] border border-[#21262D] rounded-lg shadow-lg overflow-hidden">
+                  <div className="absolute z-10 w-full mt-1 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg shadow-lg overflow-hidden">
                     {searchResults.map(entity => (
                       <button
                         key={entity.id}
                         onClick={() => handleSelectEntity(entity)}
-                        className="w-full px-4 py-3 text-left text-sm text-[#F0F6FC] hover:bg-[#21262D] transition-colors border-b border-[#21262D] last:border-0"
+                        className="w-full px-4 py-3 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors border-b border-[var(--border-rule)] last:border-0"
                       >
                         <span className="font-medium">{entity.name}</span>
-                        <span className="ml-2 text-[10px] text-[#6E7681]">/{entity.slug}</span>
+                        <span className="ml-2 text-[10px] text-[var(--text-meta)]">/{entity.slug}</span>
                       </button>
                     ))}
                   </div>
                 )}
 
                 {showDropdown && searchResults.length === 0 && !searching && searchQuery.trim().length >= 2 && (
-                  <div className="absolute z-10 w-full mt-1 bg-[#161B22] border border-[#21262D] rounded-lg px-4 py-3">
-                    <p className="text-sm text-[#6E7681]">No results for &ldquo;{searchQuery}&rdquo;</p>
+                  <div className="absolute z-10 w-full mt-1 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg px-4 py-3">
+                    <p className="text-sm text-[var(--text-meta)]">No results for &ldquo;{searchQuery}&rdquo;</p>
                   </div>
                 )}
               </div>
 
               {selectedEntity && (
-                <p className="mt-2 text-xs text-[#2EA44F]">
+                <p className="mt-2 text-xs text-[var(--state-positive)]">
                   ✓ Selected: <strong>{selectedEntity.name}</strong>
                 </p>
               )}
@@ -273,13 +273,13 @@ export default function PhotoUpdateForm({ userId }: Props) {
           {/* Step 3: Upload photo */}
           {selectedEntity && (
             <div>
-              <label className="block text-xs font-bold text-[#A8B2BD] uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
                 <ImageIcon className="h-3 w-3 inline mr-1" />
-                Step 3 — Upload the photo <span className="text-[#E8923A]">*required</span>
+                Step 3 — Upload the photo <span className="text-[var(--action)]">*required</span>
               </label>
 
               {heroImage ? (
-                <div className="relative rounded-xl overflow-hidden border border-[#21262D]">
+                <div className="relative rounded-xl overflow-hidden border border-[var(--border-rule)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={heroImage} alt="Preview" className="w-full h-56 object-cover" />
                   <button
@@ -291,14 +291,14 @@ export default function PhotoUpdateForm({ userId }: Props) {
                 </div>
               ) : (
                 <label
-                  className={`flex flex-col items-center justify-center w-full h-48 bg-[#161B22] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                    uploading ? "border-[#E8923A] bg-[#E8923A]/5" : "border-[#21262D] hover:border-[#6E7681]"
+                  className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface-raised)] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                    uploading ? "border-[var(--action)] bg-[var(--action)]/5" : "border-[var(--border-rule)] hover:border-[var(--text-meta)]"
                   }`}
-                  onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[#E8923A]", "bg-[#E8923A]/5"); }}
-                  onDragLeave={e => { e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5"); }}
+                  onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[var(--action)]", "bg-[var(--action)]/5"); }}
+                  onDragLeave={e => { e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5"); }}
                   onDrop={async e => {
                     e.preventDefault();
-                    e.currentTarget.classList.remove("border-[#E8923A]", "bg-[#E8923A]/5");
+                    e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5");
                     const file = e.dataTransfer.files[0];
                     if (file) await handleImageUpload(file);
                   }}
@@ -314,19 +314,19 @@ export default function PhotoUpdateForm({ userId }: Props) {
                   />
                   {uploading ? (
                     <>
-                      <Loader2 className="h-8 w-8 text-[#E8923A] animate-spin mb-2" />
-                      <span className="text-sm text-[#E8923A] font-medium">Uploading...</span>
+                      <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin mb-2" />
+                      <span className="text-sm text-[var(--action)] font-medium">Uploading...</span>
                     </>
                   ) : (
                     <>
-                      <Upload className="h-8 w-8 text-[#6E7681] mb-2" />
-                      <span className="text-sm text-[#A8B2BD] font-medium">Drop an image here or click to browse</span>
-                      <span className="text-[10px] text-[#6E7681] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
+                      <Upload className="h-8 w-8 text-[var(--text-meta)] mb-2" />
+                      <span className="text-sm text-[var(--text-body)] font-medium">Drop an image here or click to browse</span>
+                      <span className="text-[10px] text-[var(--text-meta)] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
                     </>
                   )}
                 </label>
               )}
-              <p className="text-[10px] text-[#6E7681] mt-1.5">Landscape orientation works best. High resolution preferred.</p>
+              <p className="text-[10px] text-[var(--text-meta)] mt-1.5">Landscape orientation works best. High resolution preferred.</p>
             </div>
           )}
         </div>
@@ -336,7 +336,7 @@ export default function PhotoUpdateForm({ userId }: Props) {
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[#E8923A] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Submit Photo for Review

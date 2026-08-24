@@ -199,7 +199,7 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
                 <td className="px-3 py-2">
                   <Link
                     href={href}
-                    className="inline-flex items-center gap-2 hover:text-[#E8923A]"
+                    className="inline-flex items-center gap-2 hover:text-[var(--action)]"
                   >
                     <span className="relative h-7 w-7 overflow-hidden rounded bg-[var(--color-bg)] flex-shrink-0">
                       {r.fly.hero_image_url && (
@@ -216,7 +216,7 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
                       {r.fly.name}
                     </span>
                     {r.is_custom && (
-                      <Sparkles className="h-3 w-3 text-[#0BA5C7] flex-shrink-0" />
+                      <Sparkles className="h-3 w-3 text-[var(--signal-live)] flex-shrink-0" />
                     )}
                     {r.favorite_any && (
                       <Heart
@@ -243,7 +243,7 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
                 <td
                   className={[
                     "px-3 py-2 text-right font-[var(--font-mono)] tabular-nums",
-                    r.deficit > 0 ? "text-[#E8923A] font-semibold" : "text-[var(--color-text-muted)]",
+                    r.deficit > 0 ? "text-[var(--action)] font-semibold" : "text-[var(--color-text-muted)]",
                   ].join(" ")}
                 >
                   {r.deficit}
@@ -253,7 +253,7 @@ export function TableDisplay({ rows, viewerUsername }: BaseProps) {
                 </td>
                 <td className="px-3 py-2 text-right">
                   {r.tie_next_count > 0 ? (
-                    <span className="inline-flex items-center gap-1 rounded-md border border-[#E8923A]/40 bg-[#E8923A]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#E8923A]">
+                    <span className="inline-flex items-center gap-1 rounded-md border border-[var(--action)]/40 bg-[var(--action)]/10 px-1.5 py-0.5 text-[10px] font-medium text-[var(--action)]">
                       <Wrench className="h-3 w-3" /> {r.tie_next_count}
                     </span>
                   ) : (
@@ -439,7 +439,7 @@ export function KanbanDisplay({ rows, viewerUsername }: BaseProps) {
             className={[
               "rounded-lg border bg-[var(--color-surface)]/40 p-3 transition-colors",
               isDropTarget
-                ? "border-[#E8923A] bg-[#E8923A]/[0.06] ring-2 ring-[#E8923A]/30"
+                ? "border-[var(--action)] bg-[var(--action)]/[0.06] ring-2 ring-[var(--action)]/30"
                 : "border-[var(--color-border)]",
             ].join(" ")}
             data-kanban-column={col.id}

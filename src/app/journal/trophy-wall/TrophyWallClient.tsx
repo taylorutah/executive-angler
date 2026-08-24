@@ -177,7 +177,7 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
   if (catches.length === 0 && sessions.length === 0) {
     return (
-      <div className="bg-[#161B22] border border-[#21262D] rounded-lg p-12 text-center">
+      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg p-12 text-center">
         <Trophy className="w-12 h-12 mx-auto mb-4 text-slate-600" />
         <h3 className="font-heading text-xl text-cream mb-2">No trophies yet</h3>
         <p className="text-slate-400">Log sessions and catches with measurements to build your trophy wall!</p>
@@ -188,23 +188,23 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
   return (
     <div className="space-y-6">
       {/* Bezel stat line — quiet totals under the page header */}
-      <div className="font-mono text-[12px] text-[#6E7681] flex flex-wrap items-baseline gap-x-3 -mt-2">
-        <span><span className="text-[#E8923A] font-semibold">{totalMeasured}</span> measured fish</span>
+      <div className="font-mono text-[12px] text-[var(--text-meta)] flex flex-wrap items-baseline gap-x-3 -mt-2">
+        <span><span className="text-[var(--action)] font-semibold">{totalMeasured}</span> measured fish</span>
         <span className="text-[#3a4150]">·</span>
         <span><span className="text-[#7BD9C2] font-semibold">{totalSpecies}</span> species</span>
         <span className="text-[#3a4150]">·</span>
-        <span><span className="text-[#0BA5C7] font-semibold">{totalRivers}</span> rivers</span>
+        <span><span className="text-[var(--signal-live)] font-semibold">{totalRivers}</span> rivers</span>
       </div>
 
       {/* Hero trophy — the one thing this page is about. Tighter padding, no big title row. */}
       {biggestOverall && (
-        <div className="relative bg-gradient-to-br from-[#FFD700]/10 via-[#E8923A]/[0.04] to-[#0D1117] border border-[#FFD700]/30 rounded-xl p-5 md:p-6 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-[#FFD700]/10 via-[var(--action)]/[0.04] to-[var(--surface-page)] border border-[#FFD700]/30 rounded-xl p-5 md:p-6 overflow-hidden">
           <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#FFD700]">
             <Trophy className="w-3 h-3" /> Personal best
           </span>
           <div className="flex flex-col md:flex-row gap-5 items-stretch">
             {biggestOverall.fish_image_url && (
-              <div className="w-full md:w-52 h-40 relative rounded-lg overflow-hidden border border-[#21262D] shrink-0">
+              <div className="w-full md:w-52 h-40 relative rounded-lg overflow-hidden border border-[var(--border-rule)] shrink-0">
                 <Image
                   src={biggestOverall.fish_image_url}
                   alt="Personal best catch"
@@ -216,19 +216,19 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
             )}
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline gap-3">
-                <div className="font-mono text-[44px] leading-none font-bold text-[#F0F6FC] tabular-nums">
+                <div className="font-mono text-[44px] leading-none font-bold text-[var(--text-primary)] tabular-nums">
                   {biggestOverall.length_inches}&quot;
                 </div>
                 {biggestOverall.species && (
-                  <div className="font-heading text-[18px] text-[#E8923A] tracking-[-0.005em]">
+                  <div className="font-heading text-[18px] text-[var(--action)] tracking-[-0.005em]">
                     {biggestOverall.species}
                   </div>
                 )}
               </div>
-              <div className="mt-3 font-mono text-[12px] text-[#A8B2BD] flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <div className="mt-3 font-mono text-[12px] text-[var(--text-body)] flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 {biggestSession?.river_name && (
                   <span className="inline-flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-[#6E7681]" />
+                    <MapPin className="w-3 h-3 text-[var(--text-meta)]" />
                     {biggestSession.river_name}
                   </span>
                 )}
@@ -236,7 +236,7 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                   <>
                     {biggestSession?.river_name && <span className="text-[#3a4150]">·</span>}
                     <span className="inline-flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-[#6E7681]" />
+                      <Calendar className="w-3 h-3 text-[var(--text-meta)]" />
                       {new Date(biggestSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </>
@@ -245,9 +245,9 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                   <>
                     <span className="text-[#3a4150]">·</span>
                     <span className="inline-flex items-center gap-1">
-                      <Star className="w-3 h-3 text-[#6E7681]" />
+                      <Star className="w-3 h-3 text-[var(--text-meta)]" />
                       <span className="text-[#C4B5FD]">{biggestOverall.fly_name}</span>
-                      {biggestOverall.fly_size && <span className="text-[#6E7681]"> #{String(biggestOverall.fly_size).replace(/^#/, "")}</span>}
+                      {biggestOverall.fly_size && <span className="text-[var(--text-meta)]"> #{String(biggestOverall.fly_size).replace(/^#/, "")}</span>}
                     </span>
                   </>
                 )}
@@ -256,28 +256,28 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
             {/* Runner-up — fills the otherwise-empty right side when there's no PB photo */}
             {!biggestOverall.fish_image_url && runnerUp && (
-              <div className="relative md:w-60 md:border-l md:border-[#FFD700]/25 md:pl-6 pt-3 md:pt-0 border-t md:border-t-0 border-[#FFD700]/20 bg-[#0D1117]/40 md:bg-transparent rounded-md md:rounded-none p-3 md:p-0">
-                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#A8B2BD] mb-2">
+              <div className="relative md:w-60 md:border-l md:border-[#FFD700]/25 md:pl-6 pt-3 md:pt-0 border-t md:border-t-0 border-[#FFD700]/20 bg-[var(--surface-page)]/40 md:bg-transparent rounded-md md:rounded-none p-3 md:p-0">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-body)] mb-2">
                   Runner-up
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <div className="font-mono text-[28px] leading-none font-bold text-[#F0F6FC] tabular-nums">
+                  <div className="font-mono text-[28px] leading-none font-bold text-[var(--text-primary)] tabular-nums">
                     {runnerUp.length_inches}&quot;
                   </div>
                   {runnerUp.species && (
-                    <div className="font-heading text-[15px] text-[#E8923A] tracking-[-0.005em]">
+                    <div className="font-heading text-[15px] text-[var(--action)] tracking-[-0.005em]">
                       {runnerUp.species}
                     </div>
                   )}
                 </div>
-                <div className="mt-2 font-mono text-[11px] text-[#A8B2BD] flex flex-wrap items-baseline gap-x-2">
+                <div className="mt-2 font-mono text-[11px] text-[var(--text-body)] flex flex-wrap items-baseline gap-x-2">
                   {runnerUpSession?.river_name && (
-                    <span className="text-[#A8B2BD]">{runnerUpSession.river_name}</span>
+                    <span className="text-[var(--text-body)]">{runnerUpSession.river_name}</span>
                   )}
                   {runnerUpSession?.date && (
                     <>
                       {runnerUpSession?.river_name && <span className="text-[#3a4150]">·</span>}
-                      <span className="text-[#6E7681]">
+                      <span className="text-[var(--text-meta)]">
                         {new Date(runnerUpSession.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                       </span>
                     </>
@@ -292,9 +292,9 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Biggest by species */}
         {biggestBySpecies.size > 0 && (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#21262D] flex items-center gap-2">
-              <Fish className="w-5 h-5 text-[#00B4D8]" />
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[var(--border-rule)] flex items-center gap-2">
+              <Fish className="w-5 h-5 text-[var(--signal-live)]" />
               <h3 className="font-heading text-lg text-cream">Personal Records by Species</h3>
             </div>
             <div className="divide-y divide-[#21262D]">
@@ -305,29 +305,29 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                   return (
                     <div key={species} className="px-5 py-3 flex items-center gap-4">
                       {c.fish_image_url ? (
-                        <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-[#21262D] shrink-0">
+                        <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-[var(--border-rule)] shrink-0">
                           <Image src={c.fish_image_url} alt={species} fill className="object-cover" sizes="48px" />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center shrink-0">
-                          <Fish className="w-5 h-5 text-[#6E7681]" />
+                        <div className="w-12 h-12 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] flex items-center justify-center shrink-0">
+                          <Fish className="w-5 h-5 text-[var(--text-meta)]" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-cream">{species}</div>
-                        <div className="text-xs text-[#6E7681]">
+                        <div className="text-xs text-[var(--text-meta)]">
                           {session?.river_name && <span>{session.river_name}</span>}
                           {session?.river_name && c.fly_name && <span> &mdash; </span>}
                           {c.fly_name && <span>{c.fly_name}</span>}
                         </div>
                         {session?.date && (
-                          <div className="text-xs text-[#6E7681] mt-0.5">
+                          <div className="text-xs text-[var(--text-meta)] mt-0.5">
                             {new Date(session.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </div>
                         )}
                       </div>
                       <div className="text-right shrink-0">
-                        <div className="text-xl font-bold font-mono text-[#E8923A]">{c.length_inches}&quot;</div>
+                        <div className="text-xl font-bold font-mono text-[var(--action)]">{c.length_inches}&quot;</div>
                       </div>
                     </div>
                   );
@@ -338,9 +338,9 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
         {/* Biggest by river */}
         {biggestByRiver.size > 0 && (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#21262D] flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#E8923A]" />
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[var(--border-rule)] flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-[var(--action)]" />
               <h3 className="font-heading text-lg text-cream">River Records</h3>
             </div>
             <div className="divide-y divide-[#21262D]">
@@ -349,29 +349,29 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                 .map(([river, { catch: c, session }]) => (
                   <div key={river} className="px-5 py-3 flex items-center gap-4">
                     {c.fish_image_url ? (
-                      <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-[#21262D] shrink-0">
+                      <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-[var(--border-rule)] shrink-0">
                         <Image src={c.fish_image_url} alt={river} fill className="object-cover" sizes="48px" />
                       </div>
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center shrink-0">
-                        <Ruler className="w-5 h-5 text-[#6E7681]" />
+                      <div className="w-12 h-12 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] flex items-center justify-center shrink-0">
+                        <Ruler className="w-5 h-5 text-[var(--text-meta)]" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-cream">{river}</div>
-                      <div className="text-xs text-[#6E7681]">
+                      <div className="text-xs text-[var(--text-meta)]">
                         {c.species && <span>{c.species}</span>}
                         {c.species && c.fly_name && <span> &mdash; </span>}
                         {c.fly_name && <span>{c.fly_name}</span>}
                       </div>
                       {session?.date && (
-                        <div className="text-xs text-[#6E7681] mt-0.5">
+                        <div className="text-xs text-[var(--text-meta)] mt-0.5">
                           {new Date(session.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </div>
                       )}
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-xl font-bold font-mono text-[#00B4D8]">{c.length_inches}&quot;</div>
+                      <div className="text-xl font-bold font-mono text-[var(--signal-live)]">{c.length_inches}&quot;</div>
                     </div>
                   </div>
                 ))}
@@ -384,8 +384,8 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top sessions by fish count */}
         {topSessions.length > 0 && (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#21262D] flex items-center gap-2">
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[var(--border-rule)] flex items-center gap-2">
               <Target className="w-5 h-5 text-[#FFD700]" />
               <h3 className="font-heading text-lg text-cream">Best Sessions</h3>
             </div>
@@ -393,20 +393,20 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
               {topSessions.map((s, i) => (
                 <div key={s.id} className="px-5 py-3 flex items-center gap-4">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                    i === 0 ? 'bg-[#FFD700]/10 text-[#FFD700]' : 'bg-[#21262D] text-[#6E7681]'
+                    i === 0 ? 'bg-[#FFD700]/10 text-[#FFD700]' : 'bg-[var(--border-rule)] text-[var(--text-meta)]'
                   }`}>
                     <span className="text-sm font-bold">#{i + 1}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-cream">{s.title || s.river_name || 'Session'}</div>
-                    <div className="text-xs text-[#6E7681]">
+                    <div className="text-xs text-[var(--text-meta)]">
                       {s.river_name && <span>{s.river_name} &mdash; </span>}
                       {new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <div className="text-xl font-bold font-mono text-[#FFD700]">{s.total_fish}</div>
-                    <div className="text-[10px] text-[#6E7681]">fish</div>
+                    <div className="text-[10px] text-[var(--text-meta)]">fish</div>
                   </div>
                 </div>
               ))}
@@ -416,21 +416,21 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
         {/* Most species in one session */}
         {mostSpeciesSession && (
-          <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#21262D] flex items-center gap-2">
-              <Fish className="w-5 h-5 text-[#00B4D8]" />
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[var(--border-rule)] flex items-center gap-2">
+              <Fish className="w-5 h-5 text-[var(--signal-live)]" />
               <h3 className="font-heading text-lg text-cream">Most Species in One Session</h3>
             </div>
             <div className="p-5">
-              <div className="text-4xl font-bold font-mono text-[#00B4D8] mb-2">{mostSpeciesSession.count} species</div>
+              <div className="text-4xl font-bold font-mono text-[var(--signal-live)] mb-2">{mostSpeciesSession.count} species</div>
               <div className="text-sm text-cream">{mostSpeciesSession.session.title || mostSpeciesSession.session.river_name || 'Session'}</div>
-              <div className="text-xs text-[#6E7681] mt-1">
+              <div className="text-xs text-[var(--text-meta)] mt-1">
                 {mostSpeciesSession.session.river_name && <span>{mostSpeciesSession.session.river_name} &mdash; </span>}
                 {new Date(mostSpeciesSession.session.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {Array.from(speciesBySession.get(mostSpeciesSession.session.id) || []).map((sp) => (
-                  <span key={sp} className="px-2 py-0.5 text-xs rounded-full bg-[#00B4D8]/10 text-[#00B4D8] border border-[#00B4D8]/20">
+                  <span key={sp} className="px-2 py-0.5 text-xs rounded-full bg-[var(--signal-live)]/10 text-[var(--signal-live)] border border-[var(--signal-live)]/20">
                     {sp}
                   </span>
                 ))}
@@ -442,13 +442,13 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
 
       {/* Photo Gallery */}
       {galleryPhotos.length > 0 && (
-        <div className="bg-[#161B22] border border-[#21262D] rounded-xl overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#21262D] flex items-center justify-between">
+        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-[var(--border-rule)] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Camera className="w-5 h-5 text-[#E8923A]" />
+              <Camera className="w-5 h-5 text-[var(--action)]" />
               <h3 className="font-heading text-lg text-cream">Trophy Gallery</h3>
             </div>
-            <span className="text-xs text-[#6E7681]">{galleryPhotos.length} photo{galleryPhotos.length !== 1 ? 's' : ''}</span>
+            <span className="text-xs text-[var(--text-meta)]">{galleryPhotos.length} photo{galleryPhotos.length !== 1 ? 's' : ''}</span>
           </div>
           <div className="p-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -456,7 +456,7 @@ export default function TrophyWallClient({ catches, sessions, photoCatches }: Tr
                 <button
                   key={`${photo.catchRecord.id}-${photo.url}`}
                   onClick={() => setLightboxIdx(i)}
-                  className="group relative aspect-square rounded-lg overflow-hidden border border-[#21262D] hover:border-[#E8923A]/50 transition-colors"
+                  className="group relative aspect-square rounded-lg overflow-hidden border border-[var(--border-rule)] hover:border-[var(--action)]/50 transition-colors"
                 >
                   <Image
                     src={photo.url}

@@ -30,7 +30,7 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
 
   if (inLocker) {
     return (
-      <span className="inline-flex items-center gap-1 rounded bg-[#0BA5C7]/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#0BA5C7]">
+      <span className="inline-flex items-center gap-1 rounded bg-[var(--signal-live)]/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
         <Check className="h-3 w-3" /> In locker
       </span>
     );
@@ -42,7 +42,7 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
         type="button"
         onClick={click}
         disabled={pending}
-        className="inline-flex items-center gap-1 rounded-md bg-[#1F2937] border border-[#30363D] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#F0F6FC] hover:bg-[#E8923A] hover:border-[#E8923A] hover:text-white transition-colors disabled:opacity-60"
+        className="inline-flex items-center gap-1 rounded-md bg-[var(--surface-card)] border border-[var(--border-strong)] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--text-primary)] hover:bg-[var(--action)] hover:border-[var(--action)] hover:text-white transition-colors disabled:opacity-60"
       >
         <Plus className="h-3 w-3" /> {pending ? "Adding…" : "Add"}
       </button>

@@ -49,11 +49,11 @@ export default function HeroCompact({
 
   return (
     <>
-      <div className="group relative flex items-stretch gap-3 sm:gap-4 bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-lg">
+      <div className="group relative flex items-stretch gap-3 sm:gap-4 bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-lg">
         <button
           type="button"
           onClick={() => totalCount > 0 && setLightboxOpen(true)}
-          className="relative shrink-0 w-[112px] sm:w-[200px] h-[112px] sm:h-[120px] bg-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#E8923A] focus:ring-inset"
+          className="relative shrink-0 w-[112px] sm:w-[200px] h-[112px] sm:h-[120px] bg-[var(--surface-card)] focus:outline-none focus:ring-2 focus:ring-[var(--action)] focus:ring-inset"
           aria-label={
             totalCount > 0
               ? `View ${totalCount} photo${totalCount === 1 ? "" : "s"} of ${title}`
@@ -80,11 +80,11 @@ export default function HeroCompact({
 
         {/* Text block */}
         <div className={`flex-1 min-w-0 py-2.5 sm:py-3 pr-3 sm:pr-4 flex flex-col justify-center ${children ? "pt-9 sm:pt-3" : ""}`}>
-          <h1 className="font-heading text-lg sm:text-3xl font-bold text-[#F0F6FC] tracking-tight leading-tight line-clamp-2 sm:truncate">
+          <h1 className="font-heading text-lg sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight leading-tight line-clamp-2 sm:truncate">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-0.5 sm:mt-1 text-xs sm:text-base text-[#A8B2BD] truncate">
+            <p className="mt-0.5 sm:mt-1 text-xs sm:text-base text-[var(--text-body)] truncate">
               {subtitle}
             </p>
           )}
@@ -98,7 +98,7 @@ export default function HeroCompact({
               {visibleChips.map((chip) => (
                 <span
                   key={chip}
-                  className="inline-flex shrink-0 items-center px-2 py-0.5 rounded-full bg-[#0D1117] border border-[#30363D] text-[11px] sm:text-xs text-[#A8B2BD] whitespace-nowrap"
+                  className="inline-flex shrink-0 items-center px-2 py-0.5 rounded-full bg-[var(--surface-page)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-body)] whitespace-nowrap"
                 >
                   {chip}
                 </span>
@@ -112,7 +112,7 @@ export default function HeroCompact({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0D1117] border border-[#30363D] text-sm text-[#A8B2BD] hover:text-white hover:border-[#E8923A] transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--surface-page)] border border-[var(--border-strong)] text-sm text-[var(--text-body)] hover:text-white hover:border-[var(--action)] transition-colors"
           >
             <Images className="h-4 w-4" />
             View gallery

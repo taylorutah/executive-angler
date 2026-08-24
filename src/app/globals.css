@@ -1,75 +1,135 @@
 @import "tailwindcss";
 
 /* =============================================
-   THEME — Executive Angler Brand Spec v1.1 (March 2026)
+   THEME — tokens (Lane A)
+   Commit A holds TODAY's hardcoded hexes so the class rewrite is
+   pixel-identical. Commit B flips the values and binds registers.
    ============================================= */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: var(--font-inter), system-ui, sans-serif;
-  --font-heading: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), monospace;
+:root {
+  /* Primitive — Daylight */
+  --paper: #FAF6F0;
+  --vellum: #F2EDE4;
+  --card: #FFFFFF;
+  --rule: #E2DACD;
+  --ink: #141814;
+  --graphite: #3E4649;
+  --slate: #6C7679;
 
-  /* Brand Colors — Abyss Dark Palette (v1.1) */
-  --color-bg: #0D1117;          /* Abyss — primary background */
-  --color-surface: #161B22;     /* Depth — cards, panels, nav */
-  --color-surface-raised: #1F2937; /* Stone — elevated surfaces */
-  --color-dusk: #2C1F14;        /* Dusk — warm surfaces, hover, selected */
-  --color-accent: #E8923A;      /* Copper Dawn — primary CTA, data accent */
-  --color-signal: #0BA5C7;      /* River Teal — text/labels (desaturated) */
-  --color-signal-pip: #00B4D8;  /* River Teal full-sat — indicator dots, badges ONLY */
-  --color-text-primary: #F0F6FC; /* Chalk */
-  --color-text-secondary: #A8B2BD; /* Slate — bumped from #A8B2BD for 5.2:1 WCAG AA contrast */
-  --color-text-muted: #6E7681;  /* Muted — bumped from #484F58 for 3.5:1 readability */
-  --color-border: #21262D;      /* Tide */
-  --color-success: #2EA44F;     /* Rise — shifted from GitHub green */
-  --color-danger: #DA3633;      /* Cutthroat — shifted from GitHub red */
+  /* Primitive — Dusk */
+  --riverbed: #0B1112;
+  --pool: #131B1D;
+  --shelf: #1C2629;
+  --chalk: #EEF2F1;
+  --fog: #8B979A;
+
+  /* Signal */
+  --copper-700: #A85C18;
+  --copper-400: #E8923A;
+  --teal-700: #0E7C93;
+  --teal-300: #22C1DE;
+  --rise-700: #1F7A3D;
+  --rise-400: #3FB863;
+  --cut-700: #B3261E;
+  --cut-400: #F87171;
+
+  --background: var(--surface-page);
+  --foreground: var(--text-primary);
+  --font-inter: var(--font-fraunces), "Fraunces", serif;
+  --font-dm-sans: var(--font-archivo), "Archivo", sans-serif;
+}
+
+/* Default + daylight public pages */
+:root,
+[data-register="daylight"] {
+  --surface-page: var(--paper);
+  --surface-raised: var(--vellum);
+  --surface-card: var(--card);
+  --border-rule: var(--rule);
+  --border-strong: #C9BFAE;
+  --text-primary: var(--ink);
+  --text-body: var(--graphite);
+  --text-meta: var(--slate);
+  --action: var(--copper-700);
+  --action-hover: #8A4A12;
+  --on-action: #FFFFFF;
+  --signal-live: var(--teal-700);
+  --state-positive: var(--rise-700);
+  --state-negative: var(--cut-700);
+}
+
+[data-register="dusk"],
+.register-dusk {
+  --surface-page: var(--riverbed);
+  --surface-raised: var(--pool);
+  --surface-card: var(--shelf);
+  --border-rule: #243033;
+  --border-strong: #3A474A;
+  --text-primary: var(--chalk);
+  --text-body: #C5CECF;
+  --text-meta: var(--fog);
+  --action: var(--copper-400);
+  --action-hover: #F0A65A;
+  --on-action: var(--riverbed);
+  --signal-live: var(--teal-300);
+  --state-positive: var(--rise-400);
+  --state-negative: var(--cut-400);
+}
+
+@theme inline {
+  --color-background: var(--surface-page);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), "Fraunces", serif;
+  --font-heading: var(--font-fraunces), "Fraunces", serif;
+  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
+  --font-display: var(--font-fraunces), "Fraunces", serif;
+  --font-body: var(--font-fraunces), "Fraunces", serif;
+  --font-ui: var(--font-archivo), "Archivo", system-ui, sans-serif;
+
+  --color-bg: var(--surface-page);
+  --color-surface: var(--surface-raised);
+  --color-surface-raised: var(--surface-card);
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-dusk: #2C1F14;
+  --color-accent: var(--action);
+  --color-signal: var(--signal-live);
+  --color-signal-pip: var(--signal-live);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-body);
+  --color-text-muted: var(--text-meta);
+  --color-border: var(--border-rule);
+  --color-border-rule: var(--border-rule);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--state-positive);
+  --color-danger: var(--state-negative);
+  --color-action: var(--action);
+  --color-on-action: var(--on-action);
 }
 
 /* =============================================
    BASE LAYER — overridable by Tailwind utilities
    ============================================= */
 
+/* Tabular numerals — available; call sites migrate in later lanes */
+.num {
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
 @layer base {
   :root {
-    --background: #0D1117;
-    --foreground: #F0F6FC;
-    --font-body: var(--font-dm-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-body: var(--font-fraunces), "Fraunces", serif;
   }
 
-  /* Light mode override */
-  .light-mode {
-    --background: #F7F3EC;
-    --foreground: #111827;
-    --color-bg: #F7F3EC;
-    --color-surface: #FFFFFF;
-    --color-surface-raised: #EDE8DF;
-    --color-accent: #D4751F;
-    --color-signal: #0090A8;
-    --color-text-primary: #111827;
-    --color-text-secondary: #4B5563;
-    --color-text-muted: #9CA3AF;
-    --color-border: #D4CBB8;
-    --color-success: #16A34A;
-    --color-danger: #DC2626;
-  }
-
-  /* Header theming — two-tier nav */
   .ea-header-primary {
-    background: #0D1117;
+    background: var(--surface-page);
+    border-color: var(--border-rule);
   }
   .ea-header-category {
-    background: #161B22;
-  }
-  .light-mode .ea-header-primary {
-    background: #EDE8DF;
-    border-color: #D4CBB8;
-  }
-  .light-mode .ea-header-category {
-    background: #FFFFFF;
-    border-color: #D4CBB8;
+    background: var(--surface-raised);
+    border-color: var(--border-rule);
   }
 
   /* Mobile category bar scroll fade */
@@ -114,14 +174,14 @@
 
   /* Typography defaults — Tailwind classes override these */
   h1, h2 {
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-display);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.02em;
   }
 
   h3, h4, h5, h6 {
-    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.01em;
@@ -140,8 +200,8 @@
   }
 
   ::selection {
-    background: #E8923A;
-    color: #0D1117;
+    background: var(--action);
+    color: var(--on-action);
   }
 
   ::-webkit-scrollbar {
@@ -149,16 +209,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #161B22;
+    background: var(--surface-raised);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #484F58;
+    background: var(--border-strong);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #A8B2BD;
+    background: var(--text-meta);
   }
 
   a:focus-visible,
@@ -166,7 +226,7 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: 2px solid #E8923A;
+    outline: 2px solid var(--action);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -261,23 +321,23 @@
   }
 
   .text-accent {
-    color: #E8923A;
+    color: var(--action);
   }
 
   .text-signal {
-    color: #0BA5C7;
+    color: var(--signal-live);
   }
 
   .bg-surface {
-    background: #161B22;
+    background: var(--surface-raised);
   }
 
   .bg-surface-raised {
-    background: #1F2937;
+    background: var(--surface-card);
   }
 
   .border-tide {
-    border-color: #21262D;
+    border-color: var(--border-rule);
   }
 }
 
@@ -312,13 +372,13 @@
   }
 }
 
-/* =============================================
+/* Reading progress */
 .reading-progress-bar {
   position: fixed;
   top: 0;
   left: 0;
   height: 3px;
-  background: #E8923A;
+  background: var(--action);
   width: 100%;
   transform-origin: left;
   transform: scaleX(0);
@@ -336,7 +396,9 @@
    ============================================= */
 
 .article-body {
-  color: #D8DEE4;
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
   font-size: 1rem;
   line-height: 1.8;
   max-width: 100%;
@@ -344,32 +406,32 @@
 
 .article-body > p:first-of-type::first-letter {
   float: left;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-display);
   font-size: 3.5rem;
   line-height: 0.85;
   margin-right: 0.1em;
   margin-top: 0.05em;
-  color: #E8923A;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .article-body h2 {
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
-  color: #F0F6FC;
+  color: var(--text-primary);
   margin-top: 2.5rem;
   margin-bottom: 0.6rem;
   line-height: 1.3;
   padding-bottom: 0.4rem;
-  border-bottom: 1px solid #21262D;
+  border-bottom: 1px solid var(--border-rule);
 }
 
 .article-body h3 {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-ui);
   font-size: 1.125rem;
   font-weight: 600;
-  color: #F0F6FC;
+  color: var(--text-primary);
   margin-top: 1.75rem;
   margin-bottom: 0.4rem;
   line-height: 1.35;
@@ -378,7 +440,7 @@
 .article-body h4 {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #A8B2BD;
+  color: var(--text-meta);
   margin-top: 1.25rem;
   margin-bottom: 0.25rem;
   text-transform: uppercase;
@@ -410,7 +472,7 @@
 
 .article-body ul > li::marker,
 .article-body ol > li::marker {
-  color: #E8923A;
+  color: var(--action);
 }
 
 .article-body li {
@@ -419,27 +481,25 @@
 
 .article-body strong {
   font-weight: 700;
-  color: #F0F6FC;
+  color: var(--text-primary);
 }
 
 .article-body a {
-  color: #0BA5C7;
+  color: var(--text-primary);
   font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-color: rgba(0, 180, 216, 0.4);
+  text-decoration: underline 1px;
+  text-underline-offset: 0.15em;
 }
 
 .article-body a:hover {
-  color: #E8923A;
-  text-decoration-color: rgba(232, 146, 58, 0.4);
+  color: var(--action);
 }
 
 .article-body blockquote {
-  border-left: 3px solid #E8923A;
+  border-left: 3px solid var(--action);
   padding: 0.75rem 1.25rem;
   margin: 1.5rem 0;
-  background: rgba(232, 146, 58, 0.06);
+  background: color-mix(in srgb, var(--action) 8%, transparent);
   border-radius: 0 8px 8px 0;
   color: #D4DAE0 !important;
   font-style: italic;
@@ -470,11 +530,11 @@
 .article-body .text-gray-700,
 .article-body .text-gray-800,
 .article-body .text-gray-900 {
-  color: #D8DEE4 !important;
+  color: var(--text-body) !important;
 }
 
 .article-body .text-forest-dark {
-  color: #F0F6FC !important;
+  color: var(--text-primary) !important;
 }
 
 /* Amber-toned text (used inside Pro-tip callouts) → warm light copper */
@@ -497,8 +557,8 @@
 .article-body .bg-slate-100,
 .article-body .bg-gray-50,
 .article-body .bg-gray-100 {
-  background-color: #161B22 !important;
-  border: 1px solid #21262D;
+  background-color: var(--surface-raised) !important;
+  border: 1px solid var(--border-rule);
   color: #D8DEE4 !important;
 }
 
@@ -524,11 +584,11 @@
 .article-body .border-slate-200,
 .article-body .border-gray-100,
 .article-body .border-gray-200 {
-  border-color: #21262D !important;
+  border-color: var(--border-rule) !important;
 }
 
 .article-body .border-amber-400 {
-  border-color: #E8923A !important;
+  border-color: var(--action) !important;
 }
 
 .article-body .border-forest {
@@ -564,12 +624,12 @@
   margin: 1.25rem 0;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid #21262D;
+  border: 1px solid var(--border-rule);
 }
 
 .article-body th {
-  background: #161B22;
-  color: #F0F6FC;
+  background: var(--surface-raised);
+  color: var(--text-primary);
   font-weight: 600;
   text-align: left;
   padding: 0.625rem 0.875rem;
@@ -693,412 +753,24 @@
   }
 }
 
-/* =============================================
-   LIGHT MODE — Override hardcoded Tailwind hex classes
-   MUST be top-level CSS (outside @layer) so it wins
-   over @layer utilities via !important cascade.
-   ============================================= */
 
-/* ── Backgrounds — escaped selectors ── */
-.light-mode .bg-\[\#0D1117\] { background-color: #F7F3EC !important; }
-.light-mode .bg-\[\#161B22\] { background-color: #FFFFFF !important; }
-.light-mode .bg-\[\#1F2937\] { background-color: #EDE8DF !important; }
-.light-mode .bg-\[\#21262D\] { background-color: #E5DDD0 !important; }
+[data-register="daylight"] .dark-logo { display: none !important; }
+[data-register="daylight"] .light-logo { display: block !important; }
+[data-register="dusk"] .dark-logo { display: block; }
+[data-register="dusk"] .light-logo { display: none; }
 
-/* ── Backgrounds — attribute contains (Safari iOS) ── */
-.light-mode [class*="bg-[#0D1117]"] { background-color: #F7F3EC !important; }
-.light-mode [class*="bg-[#161B22]"] { background-color: #FFFFFF !important; }
-.light-mode [class*="bg-[#1F2937]"] { background-color: #EDE8DF !important; }
-.light-mode [class*="bg-[#21262D]"] { background-color: #E5DDD0 !important; }
-
-/* ── Hover backgrounds ── */
-.light-mode .hover\:bg-\[\#0D1117\]:hover { background-color: #F0ECE4 !important; }
-.light-mode .hover\:bg-\[\#161B22\]:hover { background-color: #F5F1EB !important; }
-.light-mode .hover\:bg-\[\#1F2937\]:hover { background-color: #E5DDD0 !important; }
-.light-mode .hover\:bg-\[\#21262D\]:hover { background-color: #D8CFC4 !important; }
-
-/* ── Text colors — escaped class selectors (desktop Chrome/Firefox) ── */
-.light-mode .text-\[\#F0F6FC\] { color: #111827 !important; }
-.light-mode .text-\[\#A8B2BD\] { color: #4B5563 !important; }
-.light-mode .text-\[\#6E7681\] { color: #6B7280 !important; }
-.light-mode .text-\[\#8B949E\] { color: #6B7280 !important; }
-.light-mode .text-\[\#C9D1D9\] { color: #374151 !important; }
-.light-mode .text-\[\#D8DEE4\] { color: #374151 !important; }
-
-/* Note: NOT inverting [class*="F0F6FC"] globally because that pattern
-   matches both text-[#F0F6FC] (should flip) and bg-[#F0F6FC] (light surface,
-   should NOT flip). We rely on the escaped-selector rule above plus an
-   article-body specific override for text-only contexts. */
-.light-mode [class*="A8B2BD"] { color: #4B5563 !important; }
-.light-mode [class*="6E7681"] { color: #6B7280 !important; }
-.light-mode [class*="8B949E"] { color: #6B7280 !important; }
-.light-mode [class*="C9D1D9"] { color: #374151 !important; }
-.light-mode [class*="D8DEE4"] { color: #374151 !important; }
-
-/* ── Additional dark surface variants ── */
-.light-mode .bg-\[\#0A0D11\] { background-color: #F0ECE4 !important; }
-.light-mode .bg-\[\#1C2028\] { background-color: #F5F1EB !important; }
-.light-mode .bg-\[\#1C2128\] { background-color: #F5F1EB !important; }
-.light-mode .bg-\[\#2D333B\] { background-color: #E5DDD0 !important; }
-.light-mode [class*="bg-[#0A0D11]"] { background-color: #F0ECE4 !important; }
-.light-mode [class*="bg-[#1C2028]"] { background-color: #F5F1EB !important; }
-.light-mode [class*="bg-[#1C2128]"] { background-color: #F5F1EB !important; }
-.light-mode [class*="bg-[#2D333B]"] { background-color: #E5DDD0 !important; }
-
-/* Light copper hover/highlight variants — shift to deeper copper for AA on cream */
-.light-mode .text-\[\#F0A65A\] { color: #B86417 !important; }
-.light-mode .hover\:text-\[\#F0A65A\]:hover { color: #B86417 !important; }
-.light-mode .bg-\[\#F0A65A\] { background-color: #D4751F !important; }
-.light-mode .hover\:bg-\[\#F0A65A\]:hover { background-color: #B86417 !important; }
-
-/* Gold (Awards / Trophy Wall) — leave pip golden but darken text on cream */
-.light-mode .text-\[\#FFD700\] { color: #B8860B !important; }
-
-/* ── Hover text ── */
-.light-mode .hover\:text-\[\#F0F6FC\]:hover { color: #111827 !important; }
-.light-mode .hover\:text-\[\#A8B2BD\]:hover { color: #4B5563 !important; }
-
-/* ── Borders ── */
-.light-mode .border-\[\#21262D\] { border-color: #D4CBB8 !important; }
-.light-mode .border-\[\#30363D\] { border-color: #D4CBB8 !important; }
-.light-mode .border-\[\#484F58\] { border-color: #B0A898 !important; }
-.light-mode [class*="border-[#21262D]"] { border-color: #D4CBB8 !important; }
-.light-mode [class*="border-[#30363D]"] { border-color: #D4CBB8 !important; }
-.light-mode [class*="border-[#484F58]"] { border-color: #B0A898 !important; }
-
-/* Canonical (admin) fly edit page — was a near-black brown; in light mode
-   use the same cream as the rest of the page so the form doesn't sit on
-   a dark slab. */
-.light-mode .bg-\[\#1a1208\] { background-color: #F7F3EC !important; }
-.light-mode [class*="bg-[#1a1208]"] { background-color: #F7F3EC !important; }
-
-/* ── Hover borders ── */
-.light-mode .hover\:border-\[\#484F58\]:hover { border-color: #B0A898 !important; }
-
-/* ── Body / root background ── */
-.light-mode body { background-color: #F7F3EC !important; }
-.light-mode main { background-color: #F7F3EC !important; }
-
-/* ── rgba tinted backgrounds ── */
-.light-mode [class*="bg-[rgba(0,180,216"] { background-color: rgba(0, 144, 168, 0.06) !important; }
-.light-mode [class*="bg-[rgba(232,146,58"] { background-color: rgba(212, 117, 31, 0.06) !important; }
-
-/* ── Copper CTA buttons: ensure white text ── */
-.light-mode .bg-\[\#E8923A\] { color: #FFFFFF; }
-.light-mode .bg-\[\#d17d28\] { color: #FFFFFF; }
-.light-mode .hover\:bg-\[\#d17d28\]:hover { color: #FFFFFF; }
-
-/* ── text-white / text-white/70 inside dark sections → dark in light mode ──
-   Targets editorial list-page headers (h1, p) that sit inside bg-[#0D1117]
-   sections. Excludes buttons/links (those use <a>/<button> not headings).
-   HeroSection (photo + overlay) is unaffected — it has no bg-[#0D1117] class.
-*/
-/* Escaped selectors (Chrome/Firefox) */
-.light-mode .bg-\[\#0D1117\] h1,
-.light-mode .bg-\[\#0D1117\] h2,
-.light-mode .bg-\[\#0D1117\] h3,
-.light-mode .bg-\[\#0D1117\] h4,
-.light-mode .bg-\[\#0D1117\] p,
-.light-mode .bg-\[\#161B22\] h1,
-.light-mode .bg-\[\#161B22\] h2,
-.light-mode .bg-\[\#161B22\] h3,
-.light-mode .bg-\[\#161B22\] h4,
-.light-mode .bg-\[\#1F2937\] h1,
-.light-mode .bg-\[\#1F2937\] h2,
-.light-mode .bg-\[\#1F2937\] h3,
-.light-mode .bg-\[\#1F2937\] h4 { color: #111827 !important; }
-/* Attribute-contains selectors (Safari iOS — escaped selectors unreliable) */
-.light-mode [class*="bg-[#0D1117]"] h1,
-.light-mode [class*="bg-[#0D1117]"] h2,
-.light-mode [class*="bg-[#0D1117]"] h3,
-.light-mode [class*="bg-[#0D1117]"] h4,
-.light-mode [class*="bg-[#0D1117]"] p,
-.light-mode [class*="bg-[#161B22]"] h1,
-.light-mode [class*="bg-[#161B22]"] h2,
-.light-mode [class*="bg-[#161B22]"] h3,
-.light-mode [class*="bg-[#161B22]"] h4,
-.light-mode [class*="bg-[#1F2937]"] h1,
-.light-mode [class*="bg-[#1F2937]"] h2,
-.light-mode [class*="bg-[#1F2937]"] h3,
-.light-mode [class*="bg-[#1F2937]"] h4 { color: #111827 !important; }
-
-/* Subtitles using text-white/70 opacity variant */
-.light-mode .bg-\[\#0D1117\] .text-white\/70,
-.light-mode .bg-\[\#0D1117\] .text-white\/80,
-.light-mode .bg-\[\#0D1117\] .text-white\/90,
-.light-mode .bg-\[\#161B22\] .text-white\/70,
-.light-mode .bg-\[\#161B22\] .text-white\/80,
-.light-mode .bg-\[\#1F2937\] .text-white\/70,
-.light-mode [class*="bg-[#0D1117]"] .text-white\/70,
-.light-mode [class*="bg-[#0D1117]"] .text-white\/80,
-.light-mode [class*="bg-[#0D1117]"] .text-white\/90,
-.light-mode [class*="bg-[#161B22]"] .text-white\/70,
-.light-mode [class*="bg-[#161B22]"] .text-white\/80,
-.light-mode [class*="bg-[#1F2937]"] .text-white\/70 { color: #4B5563 !important; }
-
-/* Photo-overlay exception: text-white must stay white in light mode when
-   it's actually overlaying a photograph (photo cards, hero sections with
-   background imagery). Detected via :has(img) — Next.js Image renders an
-   <img> element so this matches the real photo-card pattern, not generic
-   "text-white inside a dark section" cases (those should flip to dark). */
-.light-mode .relative:has(img) .text-white,
-.light-mode .relative:has(img) .text-white\/70,
-.light-mode .relative:has(img) .text-white\/80,
-.light-mode .relative:has(img) .text-white\/90,
-.light-mode [class*="overflow-hidden"]:has(img) .text-white,
-.light-mode [class*="overflow-hidden"]:has(img) .text-white\/70,
-.light-mode [class*="overflow-hidden"]:has(img) .text-white\/80,
-.light-mode [class*="overflow-hidden"]:has(img) .text-white\/90 { color: #FFFFFF !important; }
-.light-mode .relative:has(img) .text-white\/70 { color: rgba(255, 255, 255, 0.7) !important; }
-.light-mode .relative:has(img) .text-white\/80 { color: rgba(255, 255, 255, 0.8) !important; }
-.light-mode .relative:has(img) .text-white\/90 { color: rgba(255, 255, 255, 0.9) !important; }
-
-/* ── Tailwind v4 token classes — light-mode overrides ──
-   With `@theme inline` Tailwind bakes hex values into utilities at build
-   time, so redefining --color-bg etc. under .light-mode doesn't reach
-   bg-bg / bg-surface / text-text-primary token classes. We override them
-   explicitly here, mirroring the hex-selector overrides above. */
-
-.light-mode .bg-bg { background-color: #F7F3EC !important; }
-.light-mode .bg-surface { background-color: #FFFFFF !important; }
-.light-mode .bg-surface-raised { background-color: #EDE8DF !important; }
-.light-mode .bg-dusk { background-color: #F5EFE5 !important; }
-.light-mode .bg-border { background-color: #D4CBB8 !important; }
-
-.light-mode .hover\:bg-bg:hover { background-color: #F0ECE4 !important; }
-.light-mode .hover\:bg-surface:hover { background-color: #FAF7F2 !important; }
-.light-mode .hover\:bg-surface-raised:hover { background-color: #E5DDD0 !important; }
-
-.light-mode .text-text-primary { color: #111827 !important; }
-.light-mode .text-text-secondary { color: #4B5563 !important; }
-.light-mode .text-text-muted { color: #6B7280 !important; }
-.light-mode .hover\:text-text-primary:hover { color: #111827 !important; }
-.light-mode .hover\:text-text-secondary:hover { color: #4B5563 !important; }
-
-.light-mode .border-border { border-color: #D4CBB8 !important; }
-.light-mode .hover\:border-border:hover { border-color: #C4B9A4 !important; }
-
-/* Accent / signal tokens — use darker variants for AA contrast on cream */
-.light-mode .bg-accent { background-color: #D4751F !important; }
-.light-mode .text-accent { color: #D4751F !important; }
-.light-mode .border-accent { border-color: #D4751F !important; }
-.light-mode .hover\:bg-accent:hover { background-color: #B86417 !important; }
-.light-mode .hover\:text-accent:hover { color: #B86417 !important; }
-.light-mode .hover\:border-accent:hover { border-color: #B86417 !important; }
-
-.light-mode .bg-signal { background-color: #0090A8 !important; }
-.light-mode .text-signal { color: #0090A8 !important; }
-.light-mode .border-signal { border-color: #0090A8 !important; }
-.light-mode .bg-signal-pip { background-color: #00B4D8 !important; } /* indicator dots stay vivid */
-
-.light-mode .text-success { color: #16A34A !important; }
-.light-mode .bg-success { background-color: #16A34A !important; }
-.light-mode .text-danger { color: #DC2626 !important; }
-.light-mode .bg-danger { background-color: #DC2626 !important; }
-
-/* placeholder color in form inputs that use text-text-muted */
-.light-mode .placeholder\:text-text-muted::placeholder { color: #9CA3AF !important; }
-
-/* ── Article body — light-mode overrides ── */
-.light-mode .article-body { color: #374151 !important; }
-.light-mode .article-body h2 { color: #111827 !important; }
-.light-mode .article-body h3 { color: #111827 !important; }
-.light-mode .article-body h4 { color: #4B5563 !important; }
-.light-mode .article-body strong { color: #111827 !important; }
-.light-mode .article-body blockquote { color: #374151 !important; background: rgba(212, 117, 31, 0.06) !important; border-left-color: #D4751F !important; }
-.light-mode .article-body blockquote p,
-.light-mode .article-body blockquote { color: #1F2937 !important; }
-.light-mode .article-body a { color: #0090A8 !important; text-decoration-color: rgba(0, 144, 168, 0.4) !important; }
-.light-mode .article-body a:hover { color: #D4751F !important; text-decoration-color: rgba(212, 117, 31, 0.4) !important; }
-.light-mode .article-body td { color: #374151 !important; }
-.light-mode .article-body th { background: #EDE8DF !important; color: #111827 !important; }
-.light-mode .article-body table { border-color: #D4CBB8 !important; }
-.light-mode .article-body td { border-color: #D4CBB8 !important; }
-.light-mode .article-body h2 { border-color: #D4CBB8 !important; }
-.light-mode .article-body tr:nth-child(even) td { background: rgba(237, 232, 223, 0.5) !important; }
-
-/* ── Article callouts — light-mode overrides ──
-   Articles were authored with light-friendly Tailwind classes (bg-slate-50,
-   text-slate-700, etc). Dark mode repaints those to dark surfaces / light text
-   via the rules above (lines 444-542). In light mode we need to repaint them
-   BACK to actual light surfaces with dark legible text. */
-
-/* Slate text → readable dark on light */
-.light-mode .article-body .text-slate-400 { color: #6B7280 !important; }
-.light-mode .article-body .text-slate-500 { color: #6B7280 !important; }
-.light-mode .article-body .text-slate-600 { color: #4B5563 !important; }
-.light-mode .article-body .text-slate-700 { color: #374151 !important; }
-.light-mode .article-body .text-slate-800 { color: #1F2937 !important; }
-.light-mode .article-body .text-slate-900 { color: #111827 !important; }
-.light-mode .article-body .text-gray-400 { color: #6B7280 !important; }
-.light-mode .article-body .text-gray-500 { color: #6B7280 !important; }
-.light-mode .article-body .text-gray-600 { color: #4B5563 !important; }
-.light-mode .article-body .text-gray-700 { color: #374151 !important; }
-.light-mode .article-body .text-gray-800 { color: #1F2937 !important; }
-.light-mode .article-body .text-gray-900 { color: #111827 !important; }
-.light-mode .article-body .text-forest-dark { color: #111827 !important; }
-
-/* Amber-toned text — darker copper on cream for legibility */
-.light-mode .article-body .text-amber-600 { color: #B45309 !important; }
-.light-mode .article-body .text-amber-700 { color: #92400E !important; }
-.light-mode .article-body .text-amber-800 { color: #78350F !important; }
-.light-mode .article-body .text-amber-900 { color: #451A03 !important; }
-
-/* Red-toned text — darker crimson */
-.light-mode .article-body .text-red-600 { color: #B91C1C !important; }
-.light-mode .article-body .text-red-700 { color: #991B1B !important; }
-.light-mode .article-body .text-red-800 { color: #7F1D1D !important; }
-
-/* Slate / gray callout backgrounds → restore to white-on-cream surfaces */
-.light-mode .article-body .bg-slate-50,
-.light-mode .article-body .bg-gray-50 {
-  background-color: #FFFFFF !important;
-  border: 1px solid #D4CBB8 !important;
-  color: #1F2937 !important;
+.article-body a,
+.river-body a,
+.destination-body a {
+  color: var(--text-primary);
+  text-decoration: underline 1px;
+  text-underline-offset: 0.15em;
 }
-.light-mode .article-body .bg-slate-100,
-.light-mode .article-body .bg-gray-100 {
-  background-color: #FAF7F2 !important;
-  border: 1px solid #D4CBB8 !important;
-  color: #1F2937 !important;
+.article-body a:hover,
+.river-body a:hover,
+.destination-body a:hover {
+  color: var(--action);
 }
-
-/* Amber callout backgrounds → soft cream-amber */
-.light-mode .article-body .bg-amber-50 {
-  background-color: #FFFBEB !important;
-  color: #78350F !important;
-}
-.light-mode .article-body .bg-amber-100 {
-  background-color: #FEF3C7 !important;
-  color: #78350F !important;
-}
-
-/* Red callout backgrounds → soft pink */
-.light-mode .article-body .bg-red-50 {
-  background-color: #FEF2F2 !important;
-  color: #7F1D1D !important;
-}
-.light-mode .article-body .bg-red-100 {
-  background-color: #FEE2E2 !important;
-  color: #7F1D1D !important;
-}
-
-/* Forest-tinted callout backgrounds → soft cream */
-.light-mode .article-body .bg-forest\/5,
-.light-mode .article-body [class*="bg-forest"] {
-  background-color: rgba(212, 117, 31, 0.06) !important;
-}
-
-/* Borders → cream stone */
-.light-mode .article-body .border-slate-100,
-.light-mode .article-body .border-slate-200,
-.light-mode .article-body .border-gray-100,
-.light-mode .article-body .border-gray-200 {
-  border-color: #D4CBB8 !important;
-}
-.light-mode .article-body .border-amber-400 {
-  border-color: #D4751F !important;
-}
-.light-mode .article-body .border-forest {
-  border-color: #D4751F !important;
-}
-
-/* Inside slate/gray callouts — restore high-contrast headings + strong */
-.light-mode .article-body .bg-slate-50 strong,
-.light-mode .article-body .bg-slate-100 strong,
-.light-mode .article-body .bg-gray-50 strong,
-.light-mode .article-body .bg-gray-100 strong,
-.light-mode .article-body .bg-slate-50 h2,
-.light-mode .article-body .bg-slate-50 h3,
-.light-mode .article-body .bg-slate-50 h4,
-.light-mode .article-body .bg-slate-100 h2,
-.light-mode .article-body .bg-slate-100 h3,
-.light-mode .article-body .bg-slate-100 h4,
-.light-mode .article-body .bg-gray-50 h2,
-.light-mode .article-body .bg-gray-50 h3,
-.light-mode .article-body .bg-gray-50 h4,
-.light-mode .article-body .bg-gray-100 h2,
-.light-mode .article-body .bg-gray-100 h3,
-.light-mode .article-body .bg-gray-100 h4 {
-  color: #111827 !important;
-}
-
-/* Inside amber callouts — darker copper headings + strong */
-.light-mode .article-body .bg-amber-50 strong,
-.light-mode .article-body .bg-amber-100 strong,
-.light-mode .article-body .bg-amber-50 h2,
-.light-mode .article-body .bg-amber-50 h3,
-.light-mode .article-body .bg-amber-50 h4,
-.light-mode .article-body .bg-amber-100 h2,
-.light-mode .article-body .bg-amber-100 h3,
-.light-mode .article-body .bg-amber-100 h4 {
-  color: #78350F !important;
-}
-
-/* ── Article body — hardcoded hex Tailwind classes baked into article HTML ──
-   Articles in src/data/articles.ts use explicit Tailwind hex utilities
-   (e.g. `text-[#D8DEE4]`, `text-[#F0F6FC]`, `bg-[#1F1610]`) for body text,
-   strong tags, and warning callouts. In dark mode these render correctly.
-   In light mode they need to flip to dark text on light surfaces. */
-
-/* Body / list text inside articles */
-.light-mode .article-body .text-\[\#D8DEE4\] { color: #374151 !important; }
-.light-mode .article-body [class*="text-[#D8DEE4]"] { color: #374151 !important; }
-
-/* Strong / heading text inside articles */
-.light-mode .article-body .text-\[\#F0F6FC\] { color: #111827 !important; }
-.light-mode .article-body [class*="text-[#F0F6FC]"] { color: #111827 !important; }
-
-/* Forest-dark text → dark slate for headings on cream */
-.light-mode .article-body .text-forest-dark { color: #111827 !important; }
-
-/* Copper-toned text inside warning/note callouts → deeper copper for AA on cream */
-.light-mode .article-body .text-\[\#F4B26B\] { color: #92400E !important; }
-.light-mode .article-body [class*="text-[#F4B26B]"] { color: #92400E !important; }
-.light-mode .article-body .text-\[\#F8D7A8\] { color: #78350F !important; }
-.light-mode .article-body [class*="text-[#F8D7A8]"] { color: #78350F !important; }
-
-/* Coral/red text inside error/warning callouts → deeper red */
-.light-mode .article-body .text-\[\#FCA5A5\] { color: #991B1B !important; }
-.light-mode .article-body [class*="text-[#FCA5A5]"] { color: #991B1B !important; }
-
-/* Dark warning callout backgrounds → soft cream-amber */
-.light-mode .article-body .bg-\[\#1F1610\] {
-  background-color: #FFFBEB !important;
-  border-left-color: #D4751F !important;
-}
-.light-mode .article-body [class*="bg-[#1F1610]"] {
-  background-color: #FFFBEB !important;
-  border-left-color: #D4751F !important;
-}
-
-/* Dark red-warning circle backgrounds (numbered "wrong way" callouts) */
-.light-mode .article-body .bg-\[\#1F1115\] {
-  background-color: #FEE2E2 !important;
-}
-.light-mode .article-body [class*="bg-[#1F1115]"] {
-  background-color: #FEE2E2 !important;
-}
-
-/* Forest-tinted callouts (success / pro-tip) → soft cream-green */
-.light-mode .article-body .bg-forest\/5 {
-  background-color: rgba(22, 163, 74, 0.06) !important;
-  border-left-color: #16A34A !important;
-}
-.light-mode .article-body .border-forest {
-  border-color: #16A34A !important;
-}
-.light-mode .article-body .bg-forest {
-  background-color: #16A34A !important;
-}
-
-/* ── Destination + River body — light-mode overrides ── */
-.light-mode .destination-body p,
-.light-mode .river-body p { color: #374151 !important; }
-
-/* ── Logo swap: dark/light mode ── */
-.light-mode .dark-logo { display: none !important; }
-.light-mode .light-logo { display: block !important; }
 
 /* =============================================
    FORM CONTROLS — normalize select appearance
@@ -1122,21 +794,18 @@ select {
 }
 
 /* Light mode — darker chevron for contrast on parchment */
-.light-mode select {
+[data-register="daylight"] select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234B5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
 }
 
 /* Focus ring — copper, consistent with input focus */
 select:focus {
   outline: none;
-  border-color: #E8923A !important;
-  box-shadow: 0 0 0 1px #E8923A;
+  border-color: var(--action) !important;
+  box-shadow: 0 0 0 1px var(--action);
 }
 
 /* ── Dashboard Stats Card gradient ── */
 .ea-stats-card {
-  background: linear-gradient(135deg, rgba(232,146,58,0.04) 0%, #161B22 40%, #0D1117 100%) !important;
-}
-.light-mode .ea-stats-card {
-  background: linear-gradient(135deg, rgba(212,117,31,0.06) 0%, #FFFFFF 40%, #F7F3EC 100%) !important;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--action) 6%, var(--surface-raised)) 0%, var(--surface-raised) 40%, var(--surface-page) 100%) !important;
 }

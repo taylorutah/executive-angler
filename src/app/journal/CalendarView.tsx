@@ -134,19 +134,19 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
       {/* Calendar header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <button onClick={handlePrevMonth} className="rounded-lg p-2 hover:bg-[#1F2937] transition-colors" aria-label="Previous month">
-            <ChevronLeftIcon className="h-5 w-5 text-[#A8B2BD]" />
+          <button onClick={handlePrevMonth} className="rounded-lg p-2 hover:bg-[var(--surface-card)] transition-colors" aria-label="Previous month">
+            <ChevronLeftIcon className="h-5 w-5 text-[var(--text-body)]" />
           </button>
           <div className="min-w-[200px] text-center">
-            <h2 className="font-serif text-2xl text-[#E8923A]">{monthName} {currentYear}</h2>
+            <h2 className="font-serif text-2xl text-[var(--action)]">{monthName} {currentYear}</h2>
             {monthSessionCount > 0 && (
-              <p className="text-xs text-[#A8B2BD] mt-0.5">
+              <p className="text-xs text-[var(--text-body)] mt-0.5">
                 {monthSessionCount} session{monthSessionCount !== 1 ? "s" : ""} &middot; {monthFishCount} fish
               </p>
             )}
           </div>
-          <button onClick={handleNextMonth} className="rounded-lg p-2 hover:bg-[#1F2937] transition-colors" aria-label="Next month">
-            <ChevronRightIcon className="h-5 w-5 text-[#A8B2BD]" />
+          <button onClick={handleNextMonth} className="rounded-lg p-2 hover:bg-[var(--surface-card)] transition-colors" aria-label="Next month">
+            <ChevronRightIcon className="h-5 w-5 text-[var(--text-body)]" />
           </button>
         </div>
 
@@ -158,8 +158,8 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
               onClick={() => handleYearClick(year)}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 year === currentYear
-                  ? "bg-[#E8923A] text-white"
-                  : "bg-[#1F2937] text-[#A8B2BD] hover:bg-[#21262D]"
+                  ? "bg-[var(--action)] text-white"
+                  : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--border-rule)]"
               }`}
             >
               {year}
@@ -180,10 +180,10 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
               onClick={() => { setCurrentMonth(i); setExpandedDate(null); }}
               className={`text-[10px] px-1.5 py-0.5 rounded transition-colors ${
                 isCurrent
-                  ? "bg-[#E8923A] text-white font-semibold"
+                  ? "bg-[var(--action)] text-white font-semibold"
                   : hasSession
-                    ? "text-[#0BA5C7] hover:bg-[#1F2937] font-medium"
-                    : "text-[#6E7681] hover:bg-[#1F2937]"
+                    ? "text-[var(--signal-live)] hover:bg-[var(--surface-card)] font-medium"
+                    : "text-[var(--text-meta)] hover:bg-[var(--surface-card)]"
               }`}
               title={`${monthAbbr} ${currentYear}`}
             >
@@ -194,11 +194,11 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
       </div>
 
       {/* Calendar grid */}
-      <div className="overflow-hidden rounded-xl border border-[#21262D] bg-[#161B22]">
+      <div className="overflow-hidden rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)]">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-[#21262D] bg-[#0D1117]">
+        <div className="grid grid-cols-7 border-b border-[var(--border-rule)] bg-[var(--surface-page)]">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="p-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#A8B2BD]">
+            <div key={day} className="p-2 text-center text-[10px] font-bold uppercase tracking-wider text-[var(--text-body)]">
               {day}
             </div>
           ))}
@@ -207,10 +207,10 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
         {/* Calendar weeks */}
         {weeks.map((week, weekIdx) => (
           <div key={weekIdx}>
-            <div className="grid grid-cols-7 border-b border-[#21262D] last:border-b-0">
+            <div className="grid grid-cols-7 border-b border-[var(--border-rule)] last:border-b-0">
               {week.map((day, dayIdx) => {
                 if (day === null) {
-                  return <div key={dayIdx} className="border-r border-[#21262D] last:border-r-0 p-2 min-h-[90px] bg-[#0D1117]/30" />;
+                  return <div key={dayIdx} className="border-r border-[var(--border-rule)] last:border-r-0 p-2 min-h-[90px] bg-[var(--surface-page)]/30" />;
                 }
 
                 const dateKey = getDateKey(day);
@@ -231,17 +231,17 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                   <button
                     key={dayIdx}
                     onClick={() => hasSession && setExpandedDate(isExpanded ? null : dateKey)}
-                    className={`border-r border-[#21262D] last:border-r-0 p-1.5 sm:p-2 min-h-[90px] text-left transition-all relative ${
-                      hasSession ? "cursor-pointer hover:bg-[#0D1117]" : "cursor-default"
-                    } ${isToday(day) ? "ring-2 ring-inset ring-[#0BA5C7]/40" : ""} ${
-                      isExpanded ? "bg-[#0D1117] border-b-2 border-b-[#E8923A]" : ""
+                    className={`border-r border-[var(--border-rule)] last:border-r-0 p-1.5 sm:p-2 min-h-[90px] text-left transition-all relative ${
+                      hasSession ? "cursor-pointer hover:bg-[var(--surface-page)]" : "cursor-default"
+                    } ${isToday(day) ? "ring-2 ring-inset ring-[var(--signal-live)]/40" : ""} ${
+                      isExpanded ? "bg-[var(--surface-page)] border-b-2 border-b-[#E8923A]" : ""
                     }`}
                     style={hasSession ? { backgroundColor: `rgba(11, 165, 199, ${intensity})` } : undefined}
                   >
                     <div className="flex flex-col h-full gap-1">
                       {/* Day number */}
                       <span className={`text-xs font-medium ${
-                        isToday(day) ? "text-[#0BA5C7] font-bold" : hasSession ? "text-[#F0F6FC]" : "text-[#6E7681]"
+                        isToday(day) ? "text-[var(--signal-live)] font-bold" : hasSession ? "text-[var(--text-primary)]" : "text-[var(--text-meta)]"
                       }`}>
                         {day}
                       </span>
@@ -251,26 +251,26 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                           {/* River names */}
                           {rivers.slice(0, 2).map((river, i) => (
                             <div key={i} className="flex items-center gap-0.5 min-w-0">
-                              <MapPin className="h-2 w-2 text-[#E8923A] shrink-0" />
-                              <span className="text-[9px] text-[#F0F6FC] truncate leading-tight font-medium">
+                              <MapPin className="h-2 w-2 text-[var(--action)] shrink-0" />
+                              <span className="text-[9px] text-[var(--text-primary)] truncate leading-tight font-medium">
                                 {river}
                               </span>
                             </div>
                           ))}
                           {rivers.length > 2 && (
-                            <span className="text-[8px] text-[#6E7681]">+{rivers.length - 2} more</span>
+                            <span className="text-[8px] text-[var(--text-meta)]">+{rivers.length - 2} more</span>
                           )}
 
                           {/* Fish count + session count */}
                           <div className="flex items-center gap-1.5 mt-0.5">
                             {totalFish > 0 && (
                               <div className="flex items-center gap-0.5">
-                                <Fish className="h-2.5 w-2.5 text-[#0BA5C7]" />
-                                <span className="text-[10px] font-bold text-[#0BA5C7] font-mono">{totalFish}</span>
+                                <Fish className="h-2.5 w-2.5 text-[var(--signal-live)]" />
+                                <span className="text-[10px] font-bold text-[var(--signal-live)] font-mono">{totalFish}</span>
                               </div>
                             )}
                             {daySessions.length > 1 && (
-                              <span className="text-[9px] text-[#A8B2BD]">
+                              <span className="text-[9px] text-[var(--text-body)]">
                                 {daySessions.length} trips
                               </span>
                             )}
@@ -285,9 +285,9 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
             {/* Expanded session detail below the week row */}
             {expandedDate && week.some(day => day !== null && getDateKey(day) === expandedDate) && (
-              <div className="border-b border-[#21262D] bg-[#0D1117] p-4">
+              <div className="border-b border-[var(--border-rule)] bg-[var(--surface-page)] p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-[#E8923A]">
+                  <h3 className="text-sm font-semibold text-[var(--action)]">
                     {parseLocalDate(expandedDate).toLocaleDateString("en-US", {
                       weekday: "long",
                       month: "long",
@@ -297,7 +297,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                   </h3>
                   <button
                     onClick={() => setExpandedDate(null)}
-                    className="text-xs text-[#A8B2BD] hover:text-[#F0F6FC] transition-colors"
+                    className="text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
                   >
                     Close
                   </button>
@@ -305,7 +305,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
                 {/* Quick summary */}
                 {sessionsByDate[expandedDate] && (
-                  <div className="flex items-center gap-4 mb-3 text-xs text-[#A8B2BD]">
+                  <div className="flex items-center gap-4 mb-3 text-xs text-[var(--text-body)]">
                     <span>{sessionsByDate[expandedDate].length} session{sessionsByDate[expandedDate].length !== 1 ? "s" : ""}</span>
                     <span>&middot;</span>
                     <span>{sessionsByDate[expandedDate].reduce((s, d) => s + (d.session.total_fish || 0), 0)} fish total</span>
@@ -333,11 +333,11 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
       {/* Empty month state */}
       {monthSessionCount === 0 && (
-        <div className="text-center py-8 text-[#A8B2BD]">
-          <Fish className="h-8 w-8 mx-auto mb-2 text-[#6E7681]" />
+        <div className="text-center py-8 text-[var(--text-body)]">
+          <Fish className="h-8 w-8 mx-auto mb-2 text-[var(--text-meta)]" />
           <p className="text-sm">No sessions in {monthName} {currentYear}</p>
           {monthsWithSessions.size > 0 && (
-            <p className="text-xs text-[#6E7681] mt-1">
+            <p className="text-xs text-[var(--text-meta)] mt-1">
               Try {[...monthsWithSessions].map(m =>
                 new Date(currentYear, m, 1).toLocaleDateString("en-US", { month: "short" })
               ).join(", ")}
