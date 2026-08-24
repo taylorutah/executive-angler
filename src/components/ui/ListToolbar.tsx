@@ -36,7 +36,7 @@ const viewModes: { mode: ViewMode; icon: typeof LayoutGrid; label: string }[] = 
   { mode: "magazine", icon: Newspaper, label: "Magazine view" },
 ];
 
-function dimensionUi(dimension: FilterDimension): "chips" | "select" {
+function dimensionUi(dimension: FilterDimension): "chips" | "select" | "hidden" {
   if (dimension.ui) return dimension.ui;
   return dimension.options.length > 8 ? "select" : "chips";
 }
@@ -67,6 +67,12 @@ export default function ListToolbar({
 
   const visibleFilters = filters.filter((f) => {
     if (f.options.length === 0) return false;
+    if (f.ui === "hidden") return false;
+    if (f.when === "authenticated" && !showOptionalFilters) return false;
+    return true;
+  });
+
+  const clearableFilters = filters.filter((f) => {
     if (f.when === "authenticated" && !showOptionalFilters) return false;
     return true;
   });
@@ -145,7 +151,7 @@ export default function ListToolbar({
             <button
               type="button"
               onClick={() => {
-                visibleFilters.forEach((f) => onFilterChange(f.key, null));
+                clearableFilters.forEach((f) => onFilterChange(f.key, null));
               }}
               className="px-2 py-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
             >
