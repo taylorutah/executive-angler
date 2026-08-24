@@ -10,9 +10,8 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 import type { Article, CanonicalFly, Destination } from "@/types/entities";
 import ConditionsRail from "@/components/home/ConditionsRail";
-import CountsBand from "@/components/home/CountsBand";
+import CategoryIndex from "@/components/home/CategoryIndex";
 import FlyPlate from "@/components/home/FlyPlate";
-import FourDoors, { type Door } from "@/components/home/FourDoors";
 import HomeHero from "@/components/home/HomeHero";
 import JournalBand from "@/components/home/JournalBand";
 import OnTheWaterNow from "@/components/home/OnTheWaterNow";
@@ -22,6 +21,7 @@ import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
 import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
+import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
 export const metadata: Metadata = {
   title: brandedTitle("Rivers, Flies, and Hatches"),
@@ -56,31 +56,49 @@ function isPublicRead(article: Article): boolean {
   return !BANNED_EXCERPT.test(article.excerpt ?? "");
 }
 
-function pickRead(articles: Article[]): { lead: Article; rest: Article[] } | null {
+function pickRead(
+  articles: Article[],
+  used: Set<string>,
+): { lead: Article; rest: Article[] } | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
   const eligible = sorted.filter(isPublicRead);
   const featured = eligible.filter((a) => a.featured);
   const ordered = [...featured, ...eligible.filter((a) => !a.featured)];
-  if (ordered.length === 0) return null;
-  return { lead: ordered[0], rest: ordered.slice(1, 4) };
+  const lead = ordered.find((article) => imageAvailable(article.heroImageUrl, used));
+  if (!lead) return null;
+  claimImageUrl(lead.heroImageUrl, used);
+  return {
+    lead,
+    rest: ordered.filter((article) => article.id !== lead.id).slice(0, 3),
+  };
 }
 
-function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[] {
+function pickPlate(
+  featured: CanonicalFly[],
+  all: CanonicalFly[],
+  used: Set<string>,
+): CanonicalFly[] {
   const seen = new Set<string>();
   const plate: CanonicalFly[] = [];
   for (const fly of [...featured, ...all]) {
     if (plate.length === 12) break;
     if (!fly.heroImageUrl || seen.has(fly.id)) continue;
+    if (!imageAvailable(fly.heroImageUrl, used)) continue;
     seen.add(fly.id);
+    claimImageUrl(fly.heroImageUrl, used);
     plate.push(fly);
   }
   return plate;
 }
 
-function pickPlaces(destinations: Destination[], month: string): Destination[] {
-  const withImage = destinations.filter((d) => d.heroImageUrl);
+function pickPlaces(
+  destinations: Destination[],
+  month: string,
+  used: Set<string>,
+): Destination[] {
+  const withImage = destinations.filter((d) => imageAvailable(d.heroImageUrl, used));
   const featured = withImage.filter((d) => d.featured);
   const inSeason = featured.filter((d) => d.bestMonths?.includes(month));
   const ordered = [
@@ -88,7 +106,11 @@ function pickPlaces(destinations: Destination[], month: string): Destination[] {
     ...featured.filter((d) => !inSeason.includes(d)),
     ...withImage.filter((d) => !d.featured),
   ];
-  return ordered.slice(0, 3);
+  const picked = ordered.slice(0, 3);
+  for (const destination of picked) {
+    claimImageUrl(destination.heroImageUrl, used);
+  }
+  return picked;
 }
 
 export default async function HomePage() {
@@ -106,43 +128,15 @@ export default async function HomePage() {
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
-  const read = pickRead(articles);
+  const usedImages = new Set<string>();
+  claimImageUrl(HERO_IMAGE.src, usedImages);
+
+  const plate = pickPlate(featuredFlies, allFlies, usedImages);
+  const places = pickPlaces(destinations, month, usedImages);
+  const read = pickRead(articles, usedImages);
   const quote = pickQuote(
     [...(read?.rest ?? []), ...articles.filter((a) => a.id !== read?.lead?.id)],
   );
-  const plate = pickPlate(featuredFlies, allFlies);
-  const places = pickPlaces(destinations, month);
-
-  const doors: Door[] = [
-    {
-      label: "Rivers",
-      href: "/rivers",
-      count: rivers.length,
-      noun: "rivers",
-      imageUrl: flagshipRivers[0]?.heroImageUrl ?? rivers.find((r) => r.heroImageUrl)?.heroImageUrl,
-    },
-    {
-      label: "Flies",
-      href: "/flies/library",
-      count: allFlies.length,
-      noun: "patterns",
-      imageUrl: plate[0]?.heroImageUrl,
-    },
-    {
-      label: "Destinations",
-      href: "/destinations",
-      count: destinations.length,
-      noun: "destinations",
-      imageUrl: places[0]?.heroImageUrl,
-    },
-    {
-      label: "Articles",
-      href: "/articles",
-      count: articles.length,
-      noun: "field notes",
-      imageUrl: read?.lead.heroImageUrl,
-    },
-  ];
 
   const waterRivers = madison
     ? [madison, ...flagshipRivers.filter((r) => r.id !== madison.id)]
@@ -157,15 +151,11 @@ export default async function HomePage() {
 
       <HomeHero riverCount={rivers.length} cfs={madisonCfs} />
 
-      <FourDoors doors={doors} />
-
-      <CountsBand
-        counts={[
-          { value: rivers.length, noun: "rivers documented" },
-          { value: allFlies.length, noun: "patterns, with recipes" },
-          { value: destinations.length, noun: "destinations" },
-          { value: articles.length, noun: "field notes" },
-        ]}
+      <CategoryIndex
+        rivers={rivers.length}
+        flies={allFlies.length}
+        places={destinations.length}
+        notes={articles.length}
       />
 
       <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
