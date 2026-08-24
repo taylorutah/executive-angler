@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Camera, Plus } from "lucide-react";
 import type { RiverPhoto } from "@/app/api/photos/river/[riverId]/route";
+import { fetchOnce } from "@/components/rivers/fetch-once";
 
 interface RiverSidebarPhotoWidgetProps {
   riverId: string;
@@ -19,7 +20,7 @@ export default function RiverSidebarPhotoWidget({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/photos/river/${riverId}`)
+    fetchOnce(`/api/photos/river/${riverId}`)
       .then((r) => r.json())
       .then((d) => { setPhotos(d.photos || []); setLoading(false); })
       .catch(() => setLoading(false));

@@ -254,18 +254,20 @@ export default async function RiverPage({ params }: Props) {
 
       <section className="bg-[var(--surface-page)] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-10">
-              {/* 1. Fishability / live conditions — mobile-only inline from sidebar */}
-              <div className="lg:hidden space-y-6">
-                <RiverSidebarLive
-                  riverId={river.id}
-                  riverLatitude={river.latitude}
-                  riverLongitude={river.longitude}
-                />
-              </div>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:grid-rows-[auto_1fr]">
+            {/* 1. Fishability / live conditions. Exactly one instance: first on
+                mobile, top of the sidebar column on desktop. Mirroring it into
+                both columns gave Recharts a 0×0 container in the hidden copy. */}
+            <div className="order-1 space-y-6 lg:order-none lg:col-start-3 lg:row-start-1">
+              <RiverSidebarLive
+                riverId={river.id}
+                riverLatitude={river.latitude}
+                riverLongitude={river.longitude}
+              />
+            </div>
 
+            {/* Main Content */}
+            <div className="order-2 space-y-10 lg:order-none lg:col-span-2 lg:col-start-1 lg:row-span-2 lg:row-start-1">
               {/* 2. Flow history chart (7D/30D/6M/1Y toggles built-in) */}
               <ScrollAnimation>
                 <LazyFlowChart
@@ -284,10 +286,10 @@ export default async function RiverPage({ params }: Props) {
                 ) : null}
               </ScrollAnimation>
 
-              {/* Personal Flow Overlay — 12-month catch correlation (premium) */}
+              {/* Personal Flow Overlay — 12-month catch correlation, signed-in only */}
               <PersonalFlowOverlay riverId={river.id} />
 
-              {/* Personal River Scorecard — your patterns on THIS river (premium) */}
+              {/* Personal River Scorecard — your patterns on THIS river, signed-in only */}
               <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
 
               {/* Community photo strip — moved here from above the grid */}
@@ -771,18 +773,10 @@ export default async function RiverPage({ params }: Props) {
             </div>
 
             {/* Sidebar — on mobile this stacks below the main column. The widgets
-                that are mirrored inline above (RiverSidebarLive, QuickFacts,
+                that are mirrored inline above (QuickFacts,
                 RiverSidebarPhotoWidget) are hidden on mobile to avoid
                 double-rendering. */}
-            <div className="space-y-6 lg:sticky lg:top-24">
-              <div className="hidden lg:block space-y-6">
-                <RiverSidebarLive
-                  riverId={river.id}
-                  riverLatitude={river.latitude}
-                  riverLongitude={river.longitude}
-                />
-              </div>
-
+            <div className="order-3 space-y-6 lg:order-none lg:col-start-3 lg:row-start-2 lg:self-start lg:sticky lg:top-24">
               <BestWindowCalculator riverId={river.id} />
 
               <div className="hidden lg:block">
@@ -810,10 +804,10 @@ export default async function RiverPage({ params }: Props) {
                     return (
                       <div
                         key={month}
-                        className={`text-center py-2 rounded text-xs font-medium ${
+                        className={`text-center py-2 rounded border text-xs ${
                           isGood
-                            ? "bg-[var(--action)] text-[var(--on-action)]"
-                            : "bg-[var(--surface-card)] text-[var(--text-meta)]"
+                            ? "border-[var(--action)] bg-[var(--action)] font-semibold text-[var(--on-action)]"
+                            : "border-[var(--border-rule)] font-medium text-[var(--text-meta)]"
                         }`}
                       >
                         {month}

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Radio } from "lucide-react";
+import { fetchOnce } from "./fetch-once";
 
 /**
  * iOS / Android parity: horizontal pill picker for rivers with multiple
@@ -37,7 +38,7 @@ export default function RiverSectionPills({ riverId }: Props) {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/river-conditions/${riverId}`);
+        const res = await fetchOnce(`/api/river-conditions/${riverId}`);
         if (!res.ok) {
           if (!cancelled) setGauges([]);
           return;

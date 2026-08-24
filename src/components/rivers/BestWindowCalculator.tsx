@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Target, Loader2, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { fetchOnce } from "./fetch-once";
+import SignedOutInsight from "./SignedOutInsight";
 
 interface BestWindow {
   flow_min: number | null;
@@ -31,27 +34,28 @@ interface Props {
 }
 
 export default function BestWindowCalculator({ riverId }: Props) {
+  const { user, isLoading: authLoading } = useAuth();
   const [bestWindow, setBestWindow] = useState<BestWindow | null>(null);
   const [hatchCorrelation, setHatchCorrelation] = useState<HatchCorrelation[]>([]);
   const [currentFlow, setCurrentFlow] = useState<number | null>(null);
   const [currentTemp, setCurrentTemp] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [authState, setAuthState] = useState<"loading" | "none" | "ready">("loading");
 
   useEffect(() => {
+    // The insights endpoint is owner-scoped; a guest would only earn a 401.
+    if (authLoading) return;
+    if (!user) { setLoading(false); return; }
+
     async function load() {
       try {
-        // Fetch insights
-        const res = await fetch(`/api/insights/river-conditions?riverId=${riverId}`);
-        if (res.status === 401) { setAuthState("none"); return; }
+        const res = await fetchOnce(`/api/insights/river-conditions?riverId=${riverId}`);
         if (!res.ok) return;
-        setAuthState("ready");
         const data = await res.json();
         setBestWindow(data.bestWindow);
         setHatchCorrelation(data.hatchCorrelation || []);
 
         // Fetch current conditions
-        const condRes = await fetch(`/api/river-conditions/${riverId}`);
+        const condRes = await fetchOnce(`/api/river-conditions/${riverId}`);
         if (condRes.ok) {
           const condData = await condRes.json();
           const gauge = condData.gauges?.[0];
@@ -67,9 +71,19 @@ export default function BestWindowCalculator({ riverId }: Props) {
       }
     }
     load();
-  }, [riverId]);
+  }, [riverId, user, authLoading]);
 
-  if (loading) {
+  if (!authLoading && !user) {
+    return (
+      <SignedOutInsight
+        icon={<Target className="h-4 w-4 text-[var(--action)]" />}
+        title="Your Best Window"
+        description="With an account, this card reads your logged sessions on this river and tells you the flow and water-temperature range you actually catch fish in — then compares it to the gauge reading right now."
+      />
+    );
+  }
+
+  if (loading || authLoading) {
     return (
       <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
@@ -79,8 +93,6 @@ export default function BestWindowCalculator({ riverId }: Props) {
       </div>
     );
   }
-
-  if (authState === "none") return null;
 
   if (!bestWindow || bestWindow.session_count < 3) return null;
 
@@ -104,7 +116,6 @@ export default function BestWindowCalculator({ riverId }: Props) {
         <div className="flex items-center gap-3 mb-4">
           <Target className="h-5 w-5 text-[var(--action)]" />
           <h3 className="text-sm font-bold text-[var(--text-primary)]">Your Best Window</h3>
-          <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
         </div>
 
         <p className="text-xs text-[var(--text-meta)] mb-4">

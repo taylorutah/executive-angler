@@ -6,8 +6,8 @@ import {
   Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle,
   Lock, Smartphone, Wind, Droplets, Gauge
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { APP_STORE_URL } from "@/lib/constants";
+import { fetchOnce } from "./fetch-once";
 
 // ── USGS types ──────────────────────────────────────────────────────────────
 
@@ -107,7 +107,6 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
   const [loadingConditions, setLoadingConditions] = useState(true);
   const [loadingWeather, setLoadingWeather] = useState(true);
   const [conditionsError, setConditionsError] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // URL is the single source of truth for section selection — both this card
   // and <RiverSectionPills> read/write `?section=<siteId>`, keeping FlowChart,
@@ -138,18 +137,12 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   };
 
-  // Auth check
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setIsAuthenticated(!!data.user));
-  }, []);
-
   // Fetch USGS conditions
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/river-conditions/${riverId}`);
+        const res = await fetchOnce(`/api/river-conditions/${riverId}`);
         if (!res.ok) { setConditionsError(true); return; }
         const data = await res.json();
         if (!cancelled && data.gauges) {
@@ -172,7 +165,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/river-weather/${riverId}`);
+        const res = await fetchOnce(`/api/river-weather/${riverId}`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled && data.sections) setWeatherSections(data.sections);
@@ -187,7 +180,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
     return () => { cancelled = true; clearInterval(interval); };
   }, [riverId, riverLatitude, riverLongitude]);
 
-  const loading = loadingConditions || loadingWeather || isAuthenticated === null;
+  const loading = loadingConditions || loadingWeather;
 
   if (loading) {
     return (
