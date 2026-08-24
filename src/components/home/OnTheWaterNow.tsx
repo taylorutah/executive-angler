@@ -57,7 +57,8 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
                 {heroSnap?.cfs != null ? (
                   <>
                     {heroSnap.cfs.toLocaleString("en-US")} cfs
-                    {hero.gauge ? ` at ${hero.gauge.section}` : ""}. {WATER_JUDGEMENT}.
+                    {hero.gauge ? ` at ${hero.gauge.section}` : ""}
+                    {heroSnap.stale ? " (last seen)" : ""}. {WATER_JUDGEMENT}.
                   </>
                 ) : (
                   <>
@@ -106,7 +107,7 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
             <div className="text-right">
               {heroSnap?.cfs != null ? (
                 <p>
-                  <span className="num text-5xl font-bold leading-none text-[var(--signal-live)] sm:text-6xl">
+                  <span className={`num text-5xl font-bold leading-none sm:text-6xl ${heroSnap.stale ? "text-[var(--text-primary)]" : "text-[var(--signal-live)]"}`}>
                     {heroSnap.cfs.toLocaleString("en-US")}
                   </span>
                   <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
@@ -171,7 +172,7 @@ function RiverCard({
         <div className="mt-3 flex items-baseline gap-2">
           {snapshot?.cfs != null ? (
             <>
-              <span className="num text-3xl font-bold leading-none text-[var(--signal-live)]">
+              <span className={`num text-3xl font-bold leading-none ${snapshot.stale ? "text-[var(--text-primary)]" : "text-[var(--signal-live)]"}`}>
                 {snapshot.cfs.toLocaleString("en-US")}
               </span>
               <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
@@ -208,14 +209,18 @@ function CompactRiver({
     >
       <span className="font-heading text-xl font-bold text-[var(--text-primary)]">{river.label}</span>
       {snapshot?.cfs != null ? (
-        <span className="num text-[var(--signal-live)]">
+        <span className={`num ${snapshot.stale ? "text-[var(--text-meta)]" : "text-[var(--signal-live)]"}`}>
           {snapshot.cfs.toLocaleString("en-US")}
           <span className="ml-1 text-[var(--text-meta)]">cfs</span>
-          {delta && <span className="ml-2 text-[13px] text-[var(--text-meta)]">{delta}</span>}
+          {snapshot.stale ? (
+            <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.1em]">last seen</span>
+          ) : (
+            delta && <span className="ml-2 text-[13px] text-[var(--text-meta)]">{delta}</span>
+          )}
         </span>
       ) : (
         <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
-          gauge offline
+          no reading
         </span>
       )}
     </Link>
