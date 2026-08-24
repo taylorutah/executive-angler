@@ -9,6 +9,8 @@
  * Requires a running app at BASE_URL (default http://localhost:3000)
  * and Playwright Chromium (`npx playwright install chromium`).
  *
+ * The evaluate payload is a string so tsx cannot inject helpers into it.
+ *
  * Exits 1 when any failure is reported. The Phase 1 type/contrast fix
  * covers the six worst river-page cases, not all routes.
  */
@@ -59,125 +61,103 @@ type Sample = {
   large: boolean;
 };
 
-async function samplePage(page: Page): Promise<Sample[]> {
-  return page.evaluate(() => {
-    const parse = (raw: string): [number, number, number, number] | null => {
-      const m = raw.match(
-        /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/,
-      );
-      if (!m) return null;
-      return [Number(m[1]), Number(m[2]), Number(m[3]), m[4] === undefined ? 1 : Number(m[4])];
-    };
-
-    const over = (
-      fg: [number, number, number, number],
-      bg: [number, number, number],
-    ): [number, number, number] => {
-      const a = fg[3];
-      return [
-        fg[0] * a + bg[0] * (1 - a),
-        fg[1] * a + bg[1] * (1 - a),
-        fg[2] * a + bg[2] * (1 - a),
-      ];
-    };
-
-    const bodyBg = parse(getComputedStyle(document.body).backgroundColor) ?? [
-      250, 246, 240, 1,
-    ];
-    const pageOpaque: [number, number, number] = [bodyBg[0], bodyBg[1], bodyBg[2]];
-
-    const effectiveBg = (el: Element): [number, number, number] => {
-      let acc: [number, number, number] | null = null;
-      let node: Element | null = el;
-      const stack: [number, number, number, number][] = [];
-      while (node && node !== document.documentElement) {
-        const bg = parse(getComputedStyle(node).backgroundColor);
-        if (bg && bg[3] > 0) stack.push(bg);
-        node = node.parentElement;
-      }
-      for (let i = stack.length - 1; i >= 0; i--) {
-        const layer = stack[i];
-        if (!acc) {
-          acc = [layer[0], layer[1], layer[2]];
-          if (layer[3] < 1) acc = over(layer, pageOpaque);
-        } else {
-          acc = over(layer, acc);
-        }
-      }
-      return acc ?? pageOpaque;
-    };
-
-    const cssPath = (el: Element): string => {
-      const parts: string[] = [];
-      let node: Element | null = el;
-      while (node && node !== document.body && parts.length < 4) {
-        const id = node.id ? `#${node.id}` : "";
-        const cls = node.className && typeof node.className === "string"
-          ? "." + node.className.trim().split(/\s+/).slice(0, 2).join(".")
-          : "";
-        parts.unshift(`${node.tagName.toLowerCase()}${id}${cls}`);
-        node = node.parentElement;
-      }
-      return parts.join(" > ");
-    };
-
-    const out: Sample[] = [];
-    const seen = new Set<string>();
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
-
-    while (walker.nextNode()) {
-      const el = walker.currentNode as HTMLElement;
-      if (!(el instanceof HTMLElement)) continue;
-      const style = getComputedStyle(el);
-      if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") {
-        continue;
-      }
-      const rect = el.getBoundingClientRect();
-      if (rect.width < 2 || rect.height < 2) continue;
-
-      const own = Array.from(el.childNodes)
-        .filter((n) => n.nodeType === Node.TEXT_NODE)
-        .map((n) => (n.textContent ?? "").replace(/\s+/g, " ").trim())
-        .filter(Boolean)
-        .join(" ");
-      if (!own) continue;
-
-      const color = parse(style.color);
-      if (!color) continue;
-
-      const bg = effectiveBg(el);
-      const painted = color[3] < 1 ? over(color, bg) : ([color[0], color[1], color[2]] as [number, number, number]);
-      const l1 =
-        0.2126 * (painted[0] / 255 <= 0.04045 ? painted[0] / 255 / 12.92 : ((painted[0] / 255 + 0.055) / 1.055) ** 2.4) +
-        0.7152 * (painted[1] / 255 <= 0.04045 ? painted[1] / 255 / 12.92 : ((painted[1] / 255 + 0.055) / 1.055) ** 2.4) +
-        0.0722 * (painted[2] / 255 <= 0.04045 ? painted[2] / 255 / 12.92 : ((painted[2] / 255 + 0.055) / 1.055) ** 2.4);
-      const l2 =
-        0.2126 * (bg[0] / 255 <= 0.04045 ? bg[0] / 255 / 12.92 : ((bg[0] / 255 + 0.055) / 1.055) ** 2.4) +
-        0.7152 * (bg[1] / 255 <= 0.04045 ? bg[1] / 255 / 12.92 : ((bg[1] / 255 + 0.055) / 1.055) ** 2.4) +
-        0.0722 * (bg[2] / 255 <= 0.04045 ? bg[2] / 255 / 12.92 : ((bg[2] / 255 + 0.055) / 1.055) ** 2.4);
-      const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-
-      const size = parseFloat(style.fontSize);
-      const weight = parseInt(style.fontWeight, 10) || 400;
-      const large = size >= 24 || (size >= 18.66 && weight >= 700);
-      const min = large ? 3 : 4.5;
-
-      const key = `${cssPath(el)}|${own.slice(0, 40)}|${ratio.toFixed(2)}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-
-      out.push({
-        text: own.slice(0, 80),
-        selector: cssPath(el),
-        fg: `rgba(${color.map((n) => Math.round(n * 1000) / 1000).join(",")})`,
-        bg: `rgb(${bg.map((n) => Math.round(n)).join(",")})`,
-        ratio,
-        min,
-        large,
-      });
+const SAMPLE_PAGE = `(() => {
+  function parse(raw) {
+    const m = raw.match(/rgba?\\(\\s*([\\d.]+)\\s*,\\s*([\\d.]+)\\s*,\\s*([\\d.]+)(?:\\s*,\\s*([\\d.]+))?\\s*\\)/);
+    if (!m) return null;
+    return [Number(m[1]), Number(m[2]), Number(m[3]), m[4] === undefined ? 1 : Number(m[4])];
+  }
+  function over(fg, bg) {
+    const a = fg[3];
+    return [fg[0] * a + bg[0] * (1 - a), fg[1] * a + bg[1] * (1 - a), fg[2] * a + bg[2] * (1 - a)];
+  }
+  function lin(c) {
+    const x = c / 255;
+    return x <= 0.04045 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+  }
+  function lum(rgb) {
+    return 0.2126 * lin(rgb[0]) + 0.7152 * lin(rgb[1]) + 0.0722 * lin(rgb[2]);
+  }
+  const bodyBg = parse(getComputedStyle(document.body).backgroundColor) || [250, 246, 240, 1];
+  const pageOpaque = [bodyBg[0], bodyBg[1], bodyBg[2]];
+  function effectiveBg(el) {
+    let acc = null;
+    let node = el;
+    const stack = [];
+    while (node && node !== document.documentElement) {
+      const bg = parse(getComputedStyle(node).backgroundColor);
+      if (bg && bg[3] > 0) stack.push(bg);
+      node = node.parentElement;
     }
-    return out;
-  });
+    for (let i = stack.length - 1; i >= 0; i--) {
+      const layer = stack[i];
+      if (!acc) {
+        acc = [layer[0], layer[1], layer[2]];
+        if (layer[3] < 1) acc = over(layer, pageOpaque);
+      } else {
+        acc = over(layer, acc);
+      }
+    }
+    return acc || pageOpaque;
+  }
+  function cssPath(el) {
+    const parts = [];
+    let node = el;
+    while (node && node !== document.body && parts.length < 4) {
+      const id = node.id ? "#" + node.id : "";
+      const cls = node.className && typeof node.className === "string"
+        ? "." + node.className.trim().split(/\\s+/).slice(0, 2).join(".")
+        : "";
+      parts.unshift(node.tagName.toLowerCase() + id + cls);
+      node = node.parentElement;
+    }
+    return parts.join(" > ");
+  }
+  const out = [];
+  const seen = new Set();
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
+  while (walker.nextNode()) {
+    const el = walker.currentNode;
+    if (!(el instanceof HTMLElement)) continue;
+    const style = getComputedStyle(el);
+    if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) continue;
+    const own = Array.from(el.childNodes)
+      .filter(function (n) { return n.nodeType === Node.TEXT_NODE; })
+      .map(function (n) { return (n.textContent || "").replace(/\\s+/g, " ").trim(); })
+      .filter(Boolean)
+      .join(" ");
+    if (!own) continue;
+    const color = parse(style.color);
+    if (!color) continue;
+    const bg = effectiveBg(el);
+    const painted = color[3] < 1 ? over(color, bg) : [color[0], color[1], color[2]];
+    const l1 = lum(painted);
+    const l2 = lum(bg);
+    const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    const size = parseFloat(style.fontSize);
+    const weight = parseInt(style.fontWeight, 10) || 400;
+    const large = size >= 24 || (size >= 18.66 && weight >= 700);
+    const min = large ? 3 : 4.5;
+    const key = cssPath(el) + "|" + own.slice(0, 40) + "|" + ratio.toFixed(2);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      text: own.slice(0, 80),
+      selector: cssPath(el),
+      fg: "rgba(" + color.map(function (n) { return Math.round(n * 1000) / 1000; }).join(",") + ")",
+      bg: "rgb(" + bg.map(function (n) { return Math.round(n); }).join(",") + ")",
+      ratio: ratio,
+      min: min,
+      large: large,
+    });
+  }
+  return out;
+})()`;
+
+async function samplePage(page: Page): Promise<Sample[]> {
+  return page.evaluate(SAMPLE_PAGE);
 }
 
 async function main() {
