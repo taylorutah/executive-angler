@@ -4,12 +4,16 @@ const LINES = [
   "there is no leaderboard here",
 ];
 
-/** Band 10 — typographic only. No image, no card, no button. */
+/** Typographic only. No image, no card, no button. */
 export default function WhatWeDontDo() {
   return (
-    <section className="flex min-h-[40vh] items-center border-t border-[var(--border-rule)] bg-[var(--surface-page)] py-20 sm:py-24">
+    <section
+      data-lane="ethic"
+      className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] py-20 sm:py-24"
+    >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+        <h2 className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <span aria-hidden className="h-px w-8 bg-[var(--action)]" />
           What we don&apos;t do
         </h2>
         <ul className="mt-8 space-y-3">
