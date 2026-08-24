@@ -13,6 +13,8 @@ interface Props {
 /**
  * Chips narrow a query. They are never the only view — All stays first,
  * and an empty field still teaches rather than becoming a type catalog.
+ * Square, hairline border, no fill-on-hover shadow — the Water Desk chip,
+ * not the rounded-pill filter used elsewhere on the site.
  */
 export default function SearchTypeChips({ selected, onSelect, counts }: Props) {
   return (
@@ -58,7 +60,7 @@ function Chip({
       role="tab"
       aria-selected={pressed}
       onClick={onClick}
-      className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors duration-[120ms] ease-out ${
+      className={`ea-focus-ring ${FOCUS_VISIBLE} border px-3 py-1.5 text-[13px] font-medium transition-colors duration-[120ms] ease-out ${
         pressed
           ? "border-[var(--action)] bg-[var(--action)] text-[var(--on-action)]"
           : "border-[var(--border-rule)] bg-[var(--surface-card)] text-[var(--text-body)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"

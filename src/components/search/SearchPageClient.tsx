@@ -1,9 +1,22 @@
 "use client";
 
+/**
+ * Lane N — /search, the Water Desk's finding tool.
+ *
+ * Registers: Daylight throughout, no exceptions. The rest of the site keeps
+ * live data (river flow, gauge readouts) in a Dusk inset even on light pages
+ * — see ConditionsRail — but a search result is a pointer to a page, not an
+ * instrument reading. Switching registers mid-row would tell a stranger this
+ * is a workbench when it is a lookup. `SearchResultRow`'s live-flow chip
+ * renders in Daylight tokens (teal-700, already AA on vellum/card) instead
+ * of borrowing `.register-dusk`.
+ */
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import {
+  GROUP_ORDER,
   rankSearch,
   type SearchDocument,
   type SearchType,
@@ -245,7 +258,7 @@ export default function SearchPageClient() {
                 key={q}
                 type="button"
                 onClick={() => setQuery(q)}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-full border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
               >
                 {q}
               </button>
@@ -289,11 +302,36 @@ export default function SearchPageClient() {
   );
 }
 
+/**
+ * Suspense fallback for the instant the client hooks up. A static echo of
+ * the real field + chips, not a spinner — the finding tool should look
+ * ready, not loading. No paywall, no pulse; Daylight only, same as the page
+ * it stands in for.
+ */
 export function SearchPageFallback() {
   return (
-    <div className="py-16 text-center">
-      <Search className="mx-auto mb-4 h-10 w-10 animate-pulse text-[var(--text-meta)]" />
-      <p className="text-[15px] text-[var(--text-body)]">Loading search…</p>
-    </div>
+    <>
+      <span className="sr-only" role="status">
+        Loading search
+      </span>
+      <div aria-hidden className="relative">
+        <Search
+          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-meta)]"
+        />
+        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-meta)]">
+          Search a river, a fly, a hatch, a place.
+        </div>
+      </div>
+      <div aria-hidden className="mt-5 mb-8 flex flex-wrap gap-2">
+        {["All", ...GROUP_ORDER.map((t) => TYPE_LABELS[t])].map((label) => (
+          <span
+            key={label}
+            className="border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-body)]"
+          >
+            {label}
+          </span>
+        ))}
+      </div>
+    </>
   );
 }

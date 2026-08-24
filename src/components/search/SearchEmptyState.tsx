@@ -37,7 +37,7 @@ export default function SearchEmptyState({
               key={q}
               type="button"
               onClick={() => onExample(q)}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-full border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
             >
               {q}
             </button>

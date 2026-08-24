@@ -147,17 +147,26 @@ function WorthChoosing({
   );
 }
 
+/**
+ * Daylight, deliberately — no `.register-dusk` here. Every other live-data
+ * inset on the site (ConditionsRail, the river page) goes dark on purpose;
+ * this one stays in the page's own register because a search row is a
+ * pointer to read, not a gauge to watch. teal-700 (`--signal-live` in
+ * Daylight) clears 4.5:1 on vellum and card without it. `--text-body`
+ * carries the unit/status label instead of `--text-meta` — it is read as
+ * data here, not a throwaway caption.
+ */
 function LiveFlow({ cfs }: { cfs?: number }) {
   if (cfs == null) {
     return (
-      <span className="register-dusk hidden shrink-0 rounded-sm bg-[var(--surface-raised)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)] sm:inline">
+      <span className="hidden shrink-0 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
         Gauge offline
       </span>
     );
   }
 
   return (
-    <span className="register-dusk inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-[var(--surface-raised)] px-2 py-1">
+    <span className="inline-flex shrink-0 items-center gap-1.5 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1">
       <span
         aria-hidden
         className="h-1.5 w-1.5 rounded-full bg-[var(--signal-live)]"
@@ -165,7 +174,7 @@ function LiveFlow({ cfs }: { cfs?: number }) {
       <span className="num text-[14px] font-semibold text-[var(--signal-live)]">
         {Math.round(cfs).toLocaleString("en-US")}
       </span>
-      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)]">
         cfs
       </span>
     </span>
