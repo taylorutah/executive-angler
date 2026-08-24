@@ -2,7 +2,7 @@ export default function Loading() {
   return (
     <>
       {/* Hero skeleton */}
-      <div className="h-[65vh] bg-[var(--surface-card)] animate-pulse" />
+      <div className="h-[70vh] bg-[var(--surface-card)] animate-pulse" />
 
       {/* Breadcrumb skeleton */}
       <div className="bg-[var(--surface-page)]">
