@@ -15,12 +15,19 @@ interface RiverHeroImageProps {
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
   galleryPhotos: ApprovedPhoto[];
-  /** Shown on the plate when the photo is missing. */
+  /** River name — painted over the photograph in Fraunces. */
   title: string;
+  /** Destination / water-type line under the name. */
+  subtitle?: string;
   meta?: string;
   children?: React.ReactNode;
 }
 
+/**
+ * Full-bleed river hero. The name sits in the 0.8-alpha band of `.hero-overlay`
+ * (8.45:1 on Vellum if the photo never loads). Do not move the title up
+ * into the thinner scrim, and do not repaint it dark.
+ */
 export default function RiverHeroImage({
   heroImageUrl,
   heroImageAlt,
@@ -28,6 +35,7 @@ export default function RiverHeroImage({
   heroImageCreditUrl,
   galleryPhotos,
   title,
+  subtitle,
   meta,
   children,
 }: RiverHeroImageProps) {
@@ -51,7 +59,7 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <div className="relative w-full overflow-hidden bg-[var(--surface-raised)]" style={{ height: "240px" }}>
+      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
         {showPhoto ? (
           <Image
             src={heroImageUrl}
@@ -66,18 +74,33 @@ export default function RiverHeroImage({
             onError={() => setFailed(true)}
           />
         ) : (
-          <PlateFallback title={title} meta={meta} />
+          <PlateFallback title="" meta={meta} />
         )}
 
-        {loaded ? (
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30 pointer-events-none" />
-        ) : null}
+        {/* Unconditional scrim — title is items-end in the 0.8 band. */}
+        <div className="hero-overlay absolute inset-0 pointer-events-none" />
+
+        <div className="absolute inset-0 flex items-end">
+          <div className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+            {subtitle ? (
+              <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-white">
+                {subtitle}
+              </p>
+            ) : null}
+            <h1
+              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white drop-shadow-lg"
+              style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
+            >
+              {title}
+            </h1>
+          </div>
+        </div>
 
         {totalCount > 1 && (
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--ink)] text-[var(--card)] text-xs font-medium hover:opacity-90 transition-opacity"
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[var(--card)]/80 px-2.5 py-1.5 text-[11px] font-medium text-[var(--ink)] backdrop-blur-sm hover:bg-[var(--card)]/95"
             aria-label={`View ${totalCount} photos`}
           >
             <Images className="h-3.5 w-3.5" />
@@ -92,13 +115,13 @@ export default function RiverHeroImage({
                 href={heroImageCreditUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] hover:opacity-90 transition-opacity text-[10px] font-medium"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--card)]/80 px-2.5 py-1 text-[11px] font-medium text-[var(--ink)] backdrop-blur-sm hover:bg-[var(--card)]/95"
               >
                 <Camera className="h-2.5 w-2.5" />
                 {heroImageCredit}
               </a>
             ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] text-[10px] font-medium">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card)]/80 px-2.5 py-1 text-[11px] font-medium text-[var(--ink)] backdrop-blur-sm">
                 <Camera className="h-2.5 w-2.5" />
                 {heroImageCredit}
               </span>
@@ -109,7 +132,7 @@ export default function RiverHeroImage({
         {children && (
           <div className="absolute top-3 right-3 z-20">{children}</div>
         )}
-      </div>
+      </section>
 
       {lightboxOpen && allPhotos.length > 0 && (
         <PhotoLightbox
