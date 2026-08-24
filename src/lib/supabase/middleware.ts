@@ -58,7 +58,7 @@ async function captureLoginLocation(
   }
 }
 
-const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/notifications", "/messages", "/admin", "/flybox"];
+const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/today", "/notifications", "/messages", "/admin", "/flybox"];
 
 // Exact private routes that must not prefix-match public slugs
 // (e.g. /rivers/mine must not catch /rivers/minnesota).
@@ -67,7 +67,7 @@ const PROTECTED_EXACT = ["/rivers/mine"];
 // Paths that require a verified email. Excludes /account (so users can manage
 // their email + resend confirmation) and /admin (admin gating is handled
 // inside the admin layout itself).
-const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed", "/flybox"];
+const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/today", "/favorites", "/notifications", "/messages", "/flies", "/feed", "/flybox"];
 const EMAIL_VERIFIED_EXACT = ["/rivers/mine"];
 
 function pathMatches(pathname: string, prefixes: string[], exact: string[]) {
@@ -151,12 +151,7 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Logged-in users land on their dashboard instead of the marketing home
-  if (user && pathname === "/") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
-  }
-
+  // `/` stays public and byte-identical. The logo targets the logged-in
+  // home; a signed-in angler is allowed to read the front page.
   return supabaseResponse;
 }

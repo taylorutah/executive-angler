@@ -1,18 +1,16 @@
 /**
- * /rivers/mine — the signed-in user's saved rivers.
- *
- * Replaces /favorites as the canonical "my rivers" URL. Lists
- * user_favorites rows where entity_type is river; hydrates names via
- * getRiversByIds. Private — not in the sitemap.
+ * /rivers/mine — the signed-in user's watched rivers.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getRiversByIds } from "@/lib/db";
+import { brandedTitle } from "@/lib/seo";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 export const metadata: Metadata = {
-  title: "My Rivers",
+  title: brandedTitle("Watchlist"),
   robots: { index: false, follow: false },
 };
 
@@ -40,34 +38,37 @@ export default async function MyRiversPage() {
     .filter((r): r is NonNullable<typeof r> => Boolean(r));
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] pt-6 pb-20 px-4">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="font-heading text-3xl font-bold text-[var(--color-text-primary)] mb-8">
-          My Rivers
+    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-body)]">
+      <div className="mx-auto w-full max-w-[780px] px-6 py-10 sm:py-14">
+        <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+          Watchlist
+        </p>
+        <h1 className="mt-3 font-heading text-[clamp(2rem,5vw,2.75rem)] font-semibold text-[var(--text-primary)]">
+          Rivers you watch.
         </h1>
 
         {ordered.length === 0 ? (
-          <div className="text-center py-16 bg-[var(--color-surface)] rounded-xl">
-            <h2 className="font-heading text-xl font-semibold text-[var(--color-text-secondary)] mb-2">
-              No saved rivers yet
-            </h2>
-            <p className="text-[var(--color-text-muted)] mb-6">
-              Save a river from its page to see it here.
+          <div className="mt-10">
+            <p className="text-[17px] leading-relaxed text-[var(--text-body)]">
+              Save a river from its page. Flow relative to the last time you
+              fished it shows up on Today.
             </p>
-            <Link
-              href="/rivers"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-accent)] text-white font-medium rounded-lg"
-            >
-              Browse rivers
-            </Link>
+            <p className="mt-6">
+              <Link
+                href="/rivers"
+                className={`inline-flex items-center rounded-md border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--text-primary)] ${FOCUS_VISIBLE}`}
+              >
+                Browse rivers
+              </Link>
+            </p>
           </div>
         ) : (
-          <ul className="space-y-3">
+          <ul className="mt-10 divide-y divide-[var(--border-rule)]">
             {ordered.map((river) => (
               <li key={river.id}>
                 <Link
                   href={`/rivers/${river.slug}`}
-                  className="block p-4 bg-[var(--color-surface)] rounded-xl font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors"
+                  className={`block py-4 font-heading text-xl text-[var(--text-primary)] hover:text-[var(--action)] ${FOCUS_VISIBLE}`}
                 >
                   {river.name}
                 </Link>
@@ -76,6 +77,6 @@ export default async function MyRiversPage() {
           </ul>
         )}
       </div>
-    </div>
+    </main>
   );
 }

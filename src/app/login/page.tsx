@@ -33,7 +33,7 @@ function LoginForm() {
   const redirect =
     safeNext(searchParams.get("next")) ??
     safeNext(searchParams.get("redirect")) ??
-    "/dashboard";
+    "/today";
   const authError = searchParams.get("error");
 
   // Show OAuth callback errors
@@ -139,7 +139,7 @@ function LoginForm() {
           <p className="text-center text-sm text-[var(--text-body)]">
             Don&apos;t have an account?{" "}
             <Link
-              href={redirect !== "/dashboard" ? `/signup?next=${encodeURIComponent(redirect)}` : "/signup"}
+              href={redirect !== "/today" ? `/signup?next=${encodeURIComponent(redirect)}` : "/signup"}
               className="text-[var(--action)] font-medium hover:text-[var(--action)]"
             >
               Create one
