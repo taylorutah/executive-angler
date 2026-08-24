@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import {
-  HERO_DEK,
   HERO_HEADLINE,
   HERO_IMAGE,
   SEARCH_PLACEHOLDER,
   formatHeroEyebrow,
+  heroDek,
 } from "./hero-copy";
 
 interface Props {
@@ -64,7 +64,7 @@ export default function HomeHero({ riverCount, cfs }: Props) {
             className="mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            {HERO_DEK}
+            {heroDek(cfs)}
           </p>
 
           <form

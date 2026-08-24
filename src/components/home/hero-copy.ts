@@ -9,6 +9,9 @@ export const HERO_HEADLINE =
 export const HERO_DEK =
   "The photograph is Three Dollar Bridge. The number in the eyebrow is the gauge, not a guess.";
 
+export const HERO_DEK_QUIET =
+  "The photograph is Three Dollar Bridge. The gauge is quiet; we are not guessing a number.";
+
 export const HERO_PLACE = "Montana";
 
 export const WATER_JUDGEMENT = "low and clear; fish early";
@@ -29,4 +32,9 @@ export function formatHeroEyebrow(cfs: number | null, now = new Date()): string 
   const place = HERO_PLACE.toUpperCase();
   if (cfs == null) return `${month} ${day} · ${place}`;
   return `${month} ${day} · ${place} · ${cfs.toLocaleString("en-US")} CFS`;
+}
+
+/** Never claim a number that is not on the page. */
+export function heroDek(cfs: number | null): string {
+  return cfs == null ? HERO_DEK_QUIET : HERO_DEK;
 }
