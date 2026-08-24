@@ -49,11 +49,11 @@ export default function SeasonalChart({
           return (
             <li key={month.short} className="flex flex-col items-center gap-2">
               <div
-                className="flex h-20 w-full items-end rounded-sm bg-[var(--surface-card)] sm:h-24"
+                className="flex h-20 w-full items-end bg-[var(--surface-card)] sm:h-24"
                 aria-hidden="true"
               >
                 <div
-                  className={`w-full rounded-sm ${
+                  className={`w-full ${
                     best
                       ? "h-full bg-[var(--action)]"
                       : "h-[18%] bg-[var(--border-rule)]"
@@ -64,7 +64,7 @@ export default function SeasonalChart({
                 className={`text-[10px] font-medium uppercase tracking-wider ${
                   best
                     ? "text-[var(--text-primary)]"
-                    : "text-[var(--text-meta)]"
+                    : "text-[var(--text-body)]"
                 }`}
               >
                 {month.short}

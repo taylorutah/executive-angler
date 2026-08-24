@@ -1,18 +1,33 @@
+/**
+ * /destinations/[slug] — place page: essay + river catalog.
+ *
+ * Register: Daylight throughout. `registerForPath` (src/lib/register.ts)
+ * only flips to Dusk for /app, /journal, /favorites, and other logged-in
+ * product routes — /destinations is not one of them, and nothing on this
+ * page asks for that treatment either.
+ *
+ * No Dusk switch here, on purpose: a place page is an essay and a catalog
+ * of rivers, lodges, guides, and shops, not a workbench. There is no live
+ * gauge, personal scorecard, or stock/variant tool the way /rivers/[slug]
+ * and /flies/[slug] justify a dusk-styled module. The one piece of
+ * per-user data on this page — which of these rivers you've fished — is a
+ * plain client-fetched line in ordinary Daylight tokens (see
+ * PlaceRiverGrid), not a register change.
+ */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Fish, Star } from "lucide-react";
+import { Waves } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import SeasonalChart from "@/components/destinations/SeasonalChart";
 import PlaceEssay from "@/components/destinations/PlaceEssay";
 import PlaceRiverGrid from "@/components/destinations/PlaceRiverGrid";
@@ -24,10 +39,7 @@ import {
   getRiversByDestination,
   getLodgesByDestination,
   getGuidesByDestination,
-  getArticlesByDestination,
   getFlyShopsByDestination,
-  getSpeciesByCommonNames,
-  getFliesForDestination,
   getApprovedPhotosByEntity,
 } from "@/lib/db";
 
@@ -77,14 +89,11 @@ export default async function DestinationPage({ params }: Props) {
   const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
-  const [destRivers, destLodges, destGuides, destArticles, destFlyShops, destSpecies, destFlies, galleryPhotos] = await Promise.all([
+  const [destRivers, destLodges, destGuides, destFlyShops, galleryPhotos] = await Promise.all([
     getRiversByDestination(dest.id),
     getLodgesByDestination(dest.id),
     getGuidesByDestination(dest.id),
-    getArticlesByDestination(dest.id),
     getFlyShopsByDestination(dest.id),
-    getSpeciesByCommonNames(dest.primarySpecies || []),
-    getFliesForDestination(dest.id),
     getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
@@ -119,14 +128,12 @@ export default async function DestinationPage({ params }: Props) {
       longitude: r.longitude,
       title: r.name,
       description: `${r.flowType} · ${(r.primarySpecies || []).join(", ")}`,
-      color: "#2563EB",
     })),
     ...destLodges.map((l) => ({
       latitude: l.latitude,
       longitude: l.longitude,
       title: l.name,
       description: l.priceRange || "Lodge",
-      color: "#B8860B",
     })),
   ];
 
@@ -166,6 +173,7 @@ export default async function DestinationPage({ params }: Props) {
           height="h-[70vh]"
           imageCredit={dest.heroImageCredit}
           imageCreditUrl={dest.heroImageCreditUrl}
+          creditStyle="overlay"
         />
         <div className="absolute top-4 right-4 z-20">
           <AdminHeroEditor
@@ -195,36 +203,13 @@ export default async function DestinationPage({ params }: Props) {
 
       <section className="bg-[var(--surface-page)] pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <SeasonalChart placeName={dest.name} bestMonths={dest.bestMonths || []} />
-          </div>
+          <SeasonalChart placeName={dest.name} bestMonths={dest.bestMonths || []} />
         </div>
       </section>
 
       <section className="bg-[var(--surface-page)] pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <PlaceEssay description={dest.description} images={essayImages} />
-
-          {(dest.primarySpecies || []).length > 0 && (
-            <div className="entity-tags mt-8">
-              {(dest.primarySpecies || []).map((speciesName) => {
-                const matched = destSpecies.find(
-                  (s) => s.commonName.toLowerCase() === speciesName.toLowerCase()
-                );
-                const badge = (
-                  <Badge key={speciesName} variant="forest" size="md">
-                    <Fish className="h-3.5 w-3.5 mr-1.5" />
-                    {speciesName}
-                  </Badge>
-                );
-                return matched ? (
-                  <Link key={speciesName} href={`/species/${matched.slug}`}>
-                    {badge}
-                  </Link>
-                ) : badge;
-              })}
-            </div>
-          )}
 
           {(dest.licenseInfo || dest.elevationRange || dest.climateNotes || dest.regulationsSummary) && (
             <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
@@ -322,63 +307,6 @@ export default async function DestinationPage({ params }: Props) {
                 }))}
               />
             </ScrollAnimation>
-
-            {dest.slug === "montana" && (
-              <ScrollAnimation>
-                <div className="mt-12">
-                  <h3 className="font-heading text-xl font-bold text-[var(--text-primary)] mb-4">
-                    Montana rivers at a glance
-                  </h3>
-                  <p className="text-[var(--text-body)] text-base leading-[1.8] mb-4">
-                    Use this as a trip-planning table, not a live report. Open each river for the hatch chart and gauge. Fly lists live at{" "}
-                    <Link href="/flies/for/madison-river" className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]">
-                      /flies/for/[slug]
-                    </Link>
-                    .
-                  </p>
-                  <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)]">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="bg-[var(--surface-raised)] text-left text-[var(--text-body)]">
-                          <th className="px-4 py-3 font-medium">River</th>
-                          <th className="px-4 py-3 font-medium">Flow</th>
-                          <th className="px-4 py-3 font-medium">Wade / float</th>
-                          <th className="px-4 py-3 font-medium">Best months</th>
-                          <th className="px-4 py-3 font-medium">Flies</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {destRivers.slice(0, 8).map((r) => (
-                          <tr key={r.id} className="border-t border-[var(--border-rule)]">
-                            <td className="px-4 py-2.5">
-                              <Link
-                                href={`/rivers/${r.slug}`}
-                                className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]"
-                              >
-                                {r.name}
-                              </Link>
-                            </td>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">{r.flowType}</td>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">{r.wadingType}</td>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">
-                              {(r.bestMonths ?? []).slice(0, 3).join(", ") || "—"}
-                            </td>
-                            <td className="px-4 py-2.5">
-                              <Link
-                                href={`/flies/for/${r.slug}`}
-                                className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]"
-                              >
-                                Fly list
-                              </Link>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </ScrollAnimation>
-            )}
           </div>
         </section>
       )}
@@ -390,21 +318,17 @@ export default async function DestinationPage({ params }: Props) {
               <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mb-4">
                 Map
               </h2>
+              <p className="mb-3 text-sm text-[var(--text-body)]">
+                Rivers and lodges for this place. Vellum land and Teal water — a desk chart, not a satellite.
+              </p>
               <LazyMapView
                 latitude={dest.latitude}
                 longitude={dest.longitude}
                 zoom={7}
                 markers={mapMarkers}
-                className="h-[450px] w-full rounded-xl overflow-hidden shadow-md"
+                tone="desk"
+                className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
               />
-              <div className="mt-3 flex gap-4 text-xs text-[var(--text-body)]">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-river" /> Rivers
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-[var(--action)]" /> Lodges
-                </span>
-              </div>
             </ScrollAnimation>
           </div>
         </section>
@@ -427,17 +351,36 @@ export default async function DestinationPage({ params }: Props) {
                 <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-6">
                   Lodges
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {destLodges.map((lodge) => (
-                    <EntityCard
+                    <Link
                       key={lodge.id}
                       href={`/lodges/${lodge.slug}`}
-                      imageUrl={lodge.heroImageUrl}
-                      imageAlt={lodge.name}
-                      title={lodge.name}
-                      subtitle={lodge.priceRange}
-                      meta={`${lodge.seasonStart}–${lodge.seasonEnd}`}
-                    />
+                      className="flex gap-4 border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
+                    >
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden bg-[var(--surface-card)]">
+                        <SafeEntityImage
+                          src={lodge.heroImageUrl}
+                          alt={lodge.name}
+                          title={lodge.name}
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+                          {lodge.name}
+                        </h4>
+                        {lodge.priceRange && (
+                          <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
+                        )}
+                        {lodge.seasonStart && lodge.seasonEnd && (
+                          <p className="text-xs text-[var(--text-meta)] mt-1">
+                            {lodge.seasonStart}–{lodge.seasonEnd}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </ScrollAnimation>
@@ -448,26 +391,24 @@ export default async function DestinationPage({ params }: Props) {
                 <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-6">
                   Guides
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {destGuides.map((guide) => (
                     <Link
                       key={guide.id}
                       href={`/guides/${guide.slug}`}
-                      className="flex items-center gap-4 p-4 bg-[var(--surface-page)] rounded-xl border border-[var(--border-rule)] card-hover"
+                      className="block border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
                     >
-                      <div>
-                        <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-                          {guide.name}
-                        </h4>
-                        <p className="text-sm text-[var(--text-body)] mt-0.5">
-                          {(guide.specialties || []).slice(0, 3).join(", ")}
+                      <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+                        {guide.name}
+                      </h4>
+                      <p className="text-sm text-[var(--text-body)] mt-0.5">
+                        {(guide.specialties || []).slice(0, 3).join(", ")}
+                      </p>
+                      {guide.dailyRate && (
+                        <p className="text-sm font-medium text-[var(--text-body)] mt-1">
+                          {guide.dailyRate}
                         </p>
-                        {guide.dailyRate && (
-                          <p className="text-sm font-medium text-[var(--text-body)] mt-1">
-                            {guide.dailyRate}
-                          </p>
-                        )}
-                      </div>
+                      )}
                     </Link>
                   ))}
                 </div>
@@ -484,12 +425,20 @@ export default async function DestinationPage({ params }: Props) {
                     <Link
                       key={shop.id}
                       href={`/fly-shops/${shop.slug}`}
-                      className="flex items-center justify-between p-4 bg-[var(--surface-page)] rounded-xl border border-[var(--border-rule)] card-hover"
+                      className="flex items-start gap-4 border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
                     >
-                      <div>
-                        <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-                          {shop.name}
-                        </h4>
+                      <Waves className="h-5 w-5 shrink-0 mt-0.5 text-[var(--signal-live)]" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline justify-between gap-3">
+                          <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+                            {shop.name}
+                          </h4>
+                          {shop.googleRating && (
+                            <span className="shrink-0 text-xs text-[var(--text-meta)]">
+                              {shop.googleRating} rating
+                            </span>
+                          )}
+                        </div>
                         <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
                         {(shop.services || []).length > 0 && (
                           <p className="text-xs text-[var(--text-meta)] mt-1">
@@ -497,71 +446,11 @@ export default async function DestinationPage({ params }: Props) {
                           </p>
                         )}
                       </div>
-                      {shop.googleRating && (
-                        <div className="flex items-center gap-1 shrink-0 ml-4">
-                          <Star className="h-3.5 w-3.5 fill-[var(--action)] text-[var(--action)]" />
-                          <span className="text-sm font-medium text-[var(--text-body)]">
-                            {shop.googleRating}
-                          </span>
-                        </div>
-                      )}
                     </Link>
                   ))}
                 </div>
               </ScrollAnimation>
             )}
-          </div>
-        </section>
-      )}
-
-      {destFlies.length > 0 && (
-        <section className="bg-[var(--surface-page)] py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <ScrollAnimation>
-              <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mb-6">
-                Flies for {dest.name}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {destFlies.slice(0, 8).map((fly) => (
-                  <EntityCard
-                    key={fly.id}
-                    href={`/flies/${fly.slug}`}
-                    imageUrl={fly.heroImageUrl || ""}
-                    imageAlt={fly.name}
-                    title={fly.name}
-                    subtitle={fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
-                    meta={(fly.effectiveSpecies || []).slice(0, 3).join(" · ") || undefined}
-                    iconOnly={!fly.heroImageUrl}
-                  />
-                ))}
-              </div>
-            </ScrollAnimation>
-          </div>
-        </section>
-      )}
-
-      {destArticles.length > 0 && (
-        <section className="bg-[var(--surface-page)] pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mb-6">
-              Field notes
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {destArticles.map((article) => (
-                <Link
-                  key={article.id}
-                  href={`/articles/${article.slug}`}
-                  className="block p-4 rounded-xl border border-[var(--border-rule)] hover:border-[var(--border-strong)] transition-colors"
-                >
-                  <p className="text-base font-heading font-semibold text-[var(--text-primary)]">
-                    {article.title}
-                  </p>
-                  <p className="text-xs text-[var(--text-meta)] mt-1">
-                    {article.readingTimeMinutes} min read
-                  </p>
-                </Link>
-              ))}
-            </div>
           </div>
         </section>
       )}

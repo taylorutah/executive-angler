@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import EntityCard from "@/components/ui/EntityCard";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -82,16 +83,33 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
   const fishedCount = fishedIds.size;
   const total = rivers.length;
 
+  // Public HTML must never contain another angler's fished set, so this
+  // client-only fetch only ever resolves after hydration for the signed-in
+  // owner. Everyone else — including the pre-hydration paint — gets the
+  // designed sign-in line below, never a blank gap and never a spinner.
+  const showFishedLine = ready && user;
+
   return (
     <div>
-      {ready && user ? (
+      {showFishedLine ? (
         <p className="mb-6 text-sm text-[var(--text-body)]">
           You&apos;ve fished{" "}
           <span className="num text-[var(--text-primary)]">{fishedCount}</span> of
           these <span className="num text-[var(--text-primary)]">{total}</span>{" "}
           rivers.
         </p>
-      ) : null}
+      ) : (
+        <p className="mb-6 text-sm text-[var(--text-body)]">
+          <Link
+            href="/login"
+            className="font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+          >
+            Sign in
+          </Link>{" "}
+          to mark which of these you&apos;ve fished. Free — every feature on
+          Executive Angler costs nothing.
+        </p>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rivers.map((river) => {

@@ -15,6 +15,13 @@ interface HeroSectionProps {
   imageCredit?: string;
   /** Optional link to photographer's site or portfolio */
   imageCreditUrl?: string;
+  /**
+   * "chip" (default) — the existing solid-ink rounded credit pill, used by
+   * fly-shops/species/lodges heroes. "overlay" — a plain white/80 text line
+   * under the title, in the same scrim band. Do not use "chip" on the place
+   * page; a solid pill reads as app chrome over the essay-style hero.
+   */
+  creditStyle?: "chip" | "overlay";
 }
 
 export default function HeroSection({
@@ -28,6 +35,7 @@ export default function HeroSection({
   imageContain = false,
   imageCredit,
   imageCreditUrl,
+  creditStyle = "chip",
 }: HeroSectionProps) {
   const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
 
@@ -58,10 +66,26 @@ export default function HeroSection({
             </p>
           )}
           {children}
+          {showCredit && creditStyle === "overlay" && (
+            <p className="mt-3 text-[11px] tracking-wide text-white/80">
+              {imageCreditUrl ? (
+                <a
+                  href={imageCreditUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+                >
+                  {imageCredit}
+                </a>
+              ) : (
+                imageCredit
+              )}
+            </p>
+          )}
         </div>
       </div>
 
-      {showCredit && (
+      {showCredit && creditStyle === "chip" && (
         <div className="absolute bottom-3 right-4 z-10">
           {imageCreditUrl ? (
             <a
