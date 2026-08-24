@@ -392,10 +392,12 @@
 }
 
 /* =============================================
-   ARTICLE BODY — editorial style (dark mode)
+   ARTICLE / DESTINATION / RIVER BODIES
+   Stored HTML must not depend on Tailwind utilities.
+   Colour and type live on the wrapper, unlayered so they
+   beat leftover class attributes until those are stripped.
    ============================================= */
 
-/* Long-form only. Interface stays on --font-ui; serif is opt-in. */
 .prose {
   font-family: var(--font-body);
   font-optical-sizing: auto;
@@ -405,7 +407,9 @@
   color: var(--text-body);
 }
 
-.article-body {
+.article-body,
+.destination-body,
+.river-body {
   color: var(--text-body);
   font-family: var(--font-body);
   font-optical-sizing: auto;
@@ -425,7 +429,9 @@
   font-weight: 700;
 }
 
-.article-body h2 {
+.article-body h2,
+.destination-body h2,
+.river-body h2 {
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
@@ -437,7 +443,9 @@
   border-bottom: 1px solid var(--border-rule);
 }
 
-.article-body h3 {
+.article-body h3,
+.destination-body h3,
+.river-body h3 {
   font-family: var(--font-ui);
   font-size: 1.125rem;
   font-weight: 600;
@@ -447,7 +455,9 @@
   line-height: 1.35;
 }
 
-.article-body h4 {
+.article-body h4,
+.destination-body h4,
+.river-body h4 {
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--text-meta);
@@ -457,177 +467,120 @@
   letter-spacing: 0.06em;
 }
 
-.article-body p {
+.article-body p,
+.destination-body p,
+.river-body p {
   margin-top: 0;
   margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-body);
 }
 
-.article-body ul {
+.article-body ul,
+.destination-body ul,
+.river-body ul {
   list-style-type: disc;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   padding-left: 1.5rem;
 }
 
-.article-body ol {
+.article-body ol,
+.destination-body ol,
+.river-body ol {
   list-style-type: decimal;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   padding-left: 1.5rem;
 }
 
-.article-body ul ul {
+.article-body ul ul,
+.destination-body ul ul,
+.river-body ul ul {
   list-style-type: circle;
 }
 
 .article-body ul > li::marker,
-.article-body ol > li::marker {
+.article-body ol > li::marker,
+.destination-body ul > li::marker,
+.destination-body ol > li::marker,
+.river-body ul > li::marker,
+.river-body ol > li::marker {
   color: var(--action);
 }
 
-.article-body li {
+.article-body li,
+.destination-body li,
+.river-body li {
   margin-bottom: 0.4rem;
+  color: var(--text-body);
 }
 
-.article-body strong {
+.article-body strong,
+.destination-body strong,
+.river-body strong {
   font-weight: 700;
   color: var(--text-primary);
 }
 
-.article-body a {
+.article-body em,
+.destination-body em,
+.river-body em {
+  font-style: italic;
+}
+
+.article-body a,
+.destination-body a,
+.river-body a {
   color: var(--text-primary);
   font-weight: 500;
   text-decoration: underline 1px;
   text-underline-offset: 0.15em;
 }
 
-.article-body a:hover {
+.article-body a:hover,
+.destination-body a:hover,
+.river-body a:hover {
   color: var(--action);
 }
 
-.article-body blockquote {
+.article-body figcaption,
+.destination-body figcaption,
+.river-body figcaption {
+  margin-top: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--text-meta);
+}
+
+.article-body blockquote,
+.destination-body blockquote,
+.river-body blockquote,
+.article-body aside,
+.destination-body aside,
+.river-body aside {
   border-left: 3px solid var(--action);
   padding: 0.75rem 1.25rem;
   margin: 1.5rem 0;
-  background: color-mix(in srgb, var(--action) 8%, transparent);
+  background: color-mix(in srgb, var(--action) 8%, var(--surface-raised));
   border-radius: 0 8px 8px 0;
-  color: #D4DAE0 !important;
+  color: var(--text-body);
   font-style: italic;
 }
 
 .article-body blockquote p,
-.article-body blockquote {
-  color: #E0E6EC !important;
+.article-body aside p,
+.destination-body blockquote p,
+.destination-body aside p,
+.river-body blockquote p,
+.river-body aside p {
+  color: var(--text-body);
 }
 
-/* =============================================
-   Override light-themed Tailwind classes baked into legacy article HTML.
-   Articles were authored in light mode; site is now dark (#0D1117).
-   These overrides repaint light callout boxes / dark text as dark-mode
-   surfaces and light text — all targets clear WCAG AAA (≥7:1) on #0D1117.
-   ============================================= */
-
-/* Text colors — recolor "dark on light" Tailwind classes to readable light */
-.article-body .text-slate-400,
-.article-body .text-slate-500,
-.article-body .text-slate-600,
-.article-body .text-slate-700,
-.article-body .text-slate-800,
-.article-body .text-slate-900,
-.article-body .text-gray-400,
-.article-body .text-gray-500,
-.article-body .text-gray-600,
-.article-body .text-gray-700,
-.article-body .text-gray-800,
-.article-body .text-gray-900 {
-  color: var(--text-body) !important;
-}
-
-.article-body .text-forest-dark {
-  color: var(--text-primary) !important;
-}
-
-/* Amber-toned text (used inside Pro-tip callouts) → warm light copper */
-.article-body .text-amber-600,
-.article-body .text-amber-700,
-.article-body .text-amber-800,
-.article-body .text-amber-900 {
-  color: #F4B26B !important;
-}
-
-/* Red-toned text → readable coral */
-.article-body .text-red-600,
-.article-body .text-red-700,
-.article-body .text-red-800 {
-  color: #FCA5A5 !important;
-}
-
-/* Background callouts — repaint near-white surfaces as dark-mode panels */
-.article-body .bg-slate-50,
-.article-body .bg-slate-100,
-.article-body .bg-gray-50,
-.article-body .bg-gray-100 {
-  background-color: var(--surface-raised) !important;
-  border: 1px solid var(--border-rule);
-  color: #D8DEE4 !important;
-}
-
-.article-body .bg-amber-50,
-.article-body .bg-amber-100 {
-  background-color: rgba(232, 146, 58, 0.08) !important;
-  color: #F4B26B !important;
-}
-
-.article-body .bg-red-50,
-.article-body .bg-red-100 {
-  background-color: rgba(252, 165, 165, 0.08) !important;
-  color: #FCA5A5 !important;
-}
-
-.article-body .bg-forest\/5,
-.article-body [class*="bg-forest"] {
-  background-color: rgba(232, 146, 58, 0.06) !important;
-}
-
-/* Border classes — light slate borders → dark mode dividers */
-.article-body .border-slate-100,
-.article-body .border-slate-200,
-.article-body .border-gray-100,
-.article-body .border-gray-200 {
-  border-color: var(--border-rule) !important;
-}
-
-.article-body .border-amber-400 {
-  border-color: var(--action) !important;
-}
-
-.article-body .border-forest {
-  border-color: #E8923A !important;
-}
-
-/* Inside callout boxes, ensure headings and strong tags pick up high-contrast light */
-.article-body .bg-slate-50 strong,
-.article-body .bg-slate-100 strong,
-.article-body .bg-gray-50 strong,
-.article-body .bg-gray-100 strong,
-.article-body .bg-slate-50 h2,
-.article-body .bg-slate-50 h3,
-.article-body .bg-slate-50 h4,
-.article-body .bg-slate-100 h2,
-.article-body .bg-slate-100 h3,
-.article-body .bg-slate-100 h4 {
-  color: #F0F6FC !important;
-}
-
-.article-body .bg-amber-50 strong,
-.article-body .bg-amber-100 strong,
-.article-body .bg-amber-50 h2,
-.article-body .bg-amber-50 h3,
-.article-body .bg-amber-50 h4 {
-  color: #F8D7A8 !important;
-}
-
-.article-body table {
+.article-body table,
+.destination-body table,
+.river-body table {
   width: 100%;
   font-size: 0.875rem;
   border-collapse: collapse;
@@ -637,7 +590,9 @@
   border: 1px solid var(--border-rule);
 }
 
-.article-body th {
+.article-body th,
+.destination-body th,
+.river-body th {
   background: var(--surface-raised);
   color: var(--text-primary);
   font-weight: 600;
@@ -648,45 +603,25 @@
   letter-spacing: 0.06em;
 }
 
-.article-body td {
+.article-body td,
+.destination-body td,
+.river-body td {
   padding: 0.5rem 0.875rem;
-  border-bottom: 1px solid #21262D;
+  border-bottom: 1px solid var(--border-rule);
   vertical-align: top;
-  color: #C9D1D9;
+  color: var(--text-body);
 }
 
-.article-body tr:last-child td {
+.article-body tr:last-child td,
+.destination-body tr:last-child td,
+.river-body tr:last-child td {
   border-bottom: none;
 }
 
-.article-body tr:nth-child(even) td {
-  background: rgba(22, 27, 34, 0.5);
-}
-
-/* =============================================
-   DESTINATION & RIVER BODY — description/overview text
-   ============================================= */
-
-/* Base: proper line-height and readable size for dark-bg body text */
-.destination-body p,
-.river-body p {
-  font-size: 1rem;       /* floor — never smaller than 16px */
-  line-height: 1.8;
-  color: #D8DEE4;
-  margin-bottom: 1rem;
-}
-
-/* Mobile: prevent viewport scaling from shrinking text */
-@media (max-width: 639px) {
-  .destination-body,
-  .river-body {
-    /* container already has px-4 from parent — no extra padding needed */
-  }
-  .destination-body p,
-  .river-body p {
-    font-size: 1rem;
-    line-height: 1.8;
-  }
+.article-body tr:nth-child(even) td,
+.destination-body tr:nth-child(even) td,
+.river-body tr:nth-child(even) td {
+  background: var(--surface-raised);
 }
 
 /* =============================================
@@ -769,17 +704,56 @@
 [data-register="dusk"] .dark-logo { display: block; }
 [data-register="dusk"] .light-logo { display: none; }
 
-.article-body a,
-.river-body a,
-.destination-body a {
-  color: var(--text-primary);
-  text-decoration: underline 1px;
-  text-underline-offset: 0.15em;
+/* Solid CTA — unlayered so the fill cannot lose to Button utilities. */
+.ea-btn-solid {
+  background: var(--action) !important;
+  color: var(--on-action) !important;
+  border-color: transparent !important;
 }
-.article-body a:hover,
-.river-body a:hover,
-.destination-body a:hover {
-  color: var(--action);
+.ea-btn-solid:hover {
+  background: var(--action-hover) !important;
+  color: var(--on-action) !important;
+}
+
+/* Light-mode store badges — never inherit dusk greys. */
+.ea-store-badge {
+  display: inline-flex;
+  height: 52px;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-card);
+  padding: 0 1rem;
+  color: var(--text-primary);
+}
+.ea-store-badge-kicker {
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+}
+.ea-store-badge-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+.ea-store-badge-soon {
+  margin-left: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-rule);
+  background: var(--surface-raised);
+  padding: 0.125rem 0.375rem;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.ea-status-line {
+  color: var(--text-meta);
 }
 
 /* =============================================

@@ -163,7 +163,7 @@ export default async function FlyDetail({ params }: Props) {
                         ? target
                         : `/login?redirect=${encodeURIComponent(target)}`;
                     })()}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-2.5 py-1.5 text-xs font-medium text-[var(--signal-live)] hover:bg-[var(--signal-live)]/20 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-body)] hover:border-[var(--text-meta)] hover:text-[var(--text-primary)] transition-colors"
                     aria-label="Clone this fly into a new pattern"
                     title="Start a new fly pre-filled from this one"
                   >

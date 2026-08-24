@@ -121,10 +121,10 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
   switch (variant) {
     case "solid":
       return [
-        "bg-[var(--action)] text-white border border-transparent",
+        "ea-btn-solid bg-[var(--action)] text-[var(--on-action)] border border-transparent",
         loud ? "font-bold" : "font-semibold",
         caps,
-        "rounded hover:bg-[#C97726] active:bg-[#B36620]",
+        "rounded hover:bg-[var(--action-hover)] active:bg-[var(--action-hover)]",
         "shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "outline":

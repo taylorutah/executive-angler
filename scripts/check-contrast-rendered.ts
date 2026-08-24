@@ -33,13 +33,14 @@ import { chromium, type Page } from "playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 
-const ROUTES = [
+const DEFAULT_ROUTES = [
   "/",
   "/rivers",
   "/rivers/madison-river",
   "/destinations",
   "/destinations/montana",
   "/flies/library",
+  "/flies/pheasant-tail",
   "/articles",
   "/guides",
   "/lodges",
@@ -47,7 +48,12 @@ const ROUTES = [
   "/species",
   "/about",
   "/search",
+  "/login",
 ] as const;
+
+const ROUTES = (process.env.CONTRAST_ROUTES
+  ? process.env.CONTRAST_ROUTES.split(",").map((r) => r.trim()).filter(Boolean)
+  : DEFAULT_ROUTES) as readonly string[];
 
 const VIEWPORTS = [
   { name: "1440", width: 1440, height: 900 },

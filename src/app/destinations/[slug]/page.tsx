@@ -281,7 +281,7 @@ export default async function DestinationPage({ params }: Props) {
                           {destRivers.slice(0, 8).map((r) => (
                             <tr key={r.id} className="border-t border-[var(--border-rule)]">
                               <td className="px-4 py-2.5">
-                                <Link href={`/rivers/${r.slug}`} className="text-white hover:text-[var(--action)]">
+                                <Link href={`/rivers/${r.slug}`} className="text-[var(--text-primary)] hover:text-[var(--action)]">
                                   {r.name}
                                 </Link>
                               </td>

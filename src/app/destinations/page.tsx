@@ -106,26 +106,26 @@ export default async function DestinationsPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
                       Featured Destination
                     </p>
-                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-white">
+                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-[var(--text-primary)]">
                       {heroDestination.name}
                     </h2>
                     <p className="mt-1 text-base font-medium text-[var(--action)]/90">
                       {heroDestination.tagline}
                     </p>
-                    <div className="mt-3 flex items-center gap-1.5 text-white/60 text-sm">
+                    <div className="mt-3 flex items-center gap-1.5 text-[var(--text-meta)] text-sm">
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
                       <span>
                         {heroDestination.region} · {heroDestination.country}
                       </span>
                     </div>
-                    <p className="mt-4 text-white/75 text-sm leading-relaxed line-clamp-3">
+                    <p className="mt-4 text-[var(--text-body)] text-sm leading-relaxed line-clamp-3">
                       {heroDestination.description?.substring(0, 240)}...
                     </p>
                     <div className="mt-5 flex flex-wrap gap-1.5">
                       {heroDestination.primarySpecies.slice(0, 4).map((sp) => (
                         <span
                           key={sp}
-                          className="px-2.5 py-1 bg-[var(--surface-raised)]/10 text-white/80 text-[10px] font-medium rounded-full"
+                          className="px-2.5 py-1 bg-[var(--surface-raised)] text-[var(--text-body)] text-[10px] font-medium rounded-full"
                         >
                           {sp}
                         </span>

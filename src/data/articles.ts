@@ -17,10 +17,10 @@ export const articles: Article[] = [
 
 <p>Euro nymphing is a family of tight-line nymphing techniques developed in European competitive fly fishing circuits during the 1980s and 90s. The core idea: eliminate fly line from the water and maintain direct contact with your flies through a long, thin leader. The result is strike detection, depth control, and drag-free drifts that traditional indicator setups simply cannot match.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Why It Works</p>
-  <p class="text-[#D8DEE4] text-sm">Trout can inhale and reject a nymph in as little as a quarter second. Direct contact gives you a fighting chance of detecting takes that are invisible with an indicator.</p>
-</div>
+<aside>
+  <p>Why It Works</p>
+  <p>Trout can inhale and reject a nymph in as little as a quarter second. Direct contact gives you a fighting chance of detecting takes that are invisible with an indicator.</p>
+</aside>
 
 <p>The technique has roots in Czech, French, and Spanish competition teams, each contributing distinct refinements. By the mid-2010s it had become one of the fastest-adopted techniques in American fly fishing history.</p>
 
@@ -49,40 +49,40 @@ export const articles: Article[] = [
 <h3>The Leader System</h3>
 <p>This is where euro nymphing gets specific. A complete leader has four components:</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Section</th>
-        <th class="text-left p-3">Material</th>
-        <th class="text-left p-3">Length</th>
-        <th class="text-left p-3">Purpose</th>
+      <tr>
+        <th>Section</th>
+        <th>Material</th>
+        <th>Length</th>
+        <th>Purpose</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-medium">Butt</td>
-        <td class="p-3">20–25lb stiff mono (Maxima)</td>
-        <td class="p-3">4–5 ft</td>
-        <td class="p-3">Transfers casting energy</td>
+      <tr>
+        <td>Butt</td>
+        <td>20–25lb stiff mono (Maxima)</td>
+        <td>4–5 ft</td>
+        <td>Transfers casting energy</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-medium">Sighter</td>
-        <td class="p-3">Bi-color mono (red/chartreuse)</td>
-        <td class="p-3">18–24 in</td>
-        <td class="p-3">Visual strike detection</td>
+      <tr>
+        <td>Sighter</td>
+        <td>Bi-color mono (red/chartreuse)</td>
+        <td>18–24 in</td>
+        <td>Visual strike detection</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-medium">Tippet ring</td>
-        <td class="p-3">2mm metal ring</td>
-        <td class="p-3">—</td>
-        <td class="p-3">Connection point, saves sighter</td>
+      <tr>
+        <td>Tippet ring</td>
+        <td>2mm metal ring</td>
+        <td>—</td>
+        <td>Connection point, saves sighter</td>
       </tr>
-      <tr class="bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-medium">Tippet</td>
-        <td class="p-3">5X–6X fluorocarbon</td>
-        <td class="p-3">4–6 ft</td>
-        <td class="p-3">To the fly/flies</td>
+      <tr>
+        <td>Tippet</td>
+        <td>5X–6X fluorocarbon</td>
+        <td>4–6 ft</td>
+        <td>To the fly/flies</td>
       </tr>
     </tbody>
   </table>
@@ -101,16 +101,16 @@ export const articles: Article[] = [
 <h3>French Nymph</h3>
 <p>Middle ground between perdigon and Czech. Slender body with sparse soft hackle or CDC. Imitates mayfly and caddis nymphs. Versatile in all water types.</p>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Fly Box Essentials</p>
-  <ul class="text-[#F4B26B] text-sm space-y-1">
+<aside>
+  <p>Fly Box Essentials</p>
+  <ul>
     <li>Perdigons in olive, brown, black (sizes 14–18)</li>
     <li>Czech nymphs in tan and olive (sizes 10–14)</li>
     <li>Jig-hook pheasant tails (sizes 14–18)</li>
     <li>Green caddis larva (sizes 14–16)</li>
     <li>Midge larva/pupa in red and black (sizes 18–22)</li>
   </ul>
-</div>
+</aside>
 
 <h2>The Technique: Four Phases</h2>
 
@@ -123,16 +123,16 @@ export const articles: Article[] = [
 <h3>3. The Drift</h3>
 <p>Lead the flies downstream with your rod tip, tracking at current speed. The sighter should hold a gentle curve just at or above the water surface. If the sighter straightens: you're leading too fast. If it piles up: too much slack.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-2">Reading the Sighter</p>
-  <ul class="text-[#D8DEE4] text-sm space-y-1">
+<aside>
+  <p>Reading the Sighter</p>
+  <ul>
     <li><strong>Pause or hesitation</strong> → Set immediately</li>
     <li><strong>Jump forward</strong> → Set immediately</li>
     <li><strong>Sideways slide</strong> → Set immediately</li>
     <li><strong>Sudden straightening</strong> → Set immediately</li>
     <li>When in doubt, set the hook</li>
   </ul>
-</div>
+</aside>
 
 <h3>4. The Set</h3>
 <p>A quick, firm upstream lift — not a sweeping sidearm motion. You need very little force because you're in direct contact with the fly. Set the hook on anything that looks unusual.</p>
@@ -150,26 +150,26 @@ export const articles: Article[] = [
 
 <h2>Common Mistakes</h2>
 
-<div class="space-y-4 my-6">
-  <div class="flex gap-4">
-    <div class="w-8 h-8 rounded-full bg-[#1F1115] text-[#FCA5A5] flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
-    <div><p class="font-semibold text-[#F0F6FC]">Too much slack</p><p class="text-[#D8DEE4] text-sm">Sighter piled on water = zero strike detection. Raise rod tip until there's a gentle tension curve.</p></div>
+<div>
+  <div>
+    <div>✗</div>
+    <div><p>Too much slack</p><p>Sighter piled on water = zero strike detection. Raise rod tip until there's a gentle tension curve.</p></div>
   </div>
-  <div class="flex gap-4">
-    <div class="w-8 h-8 rounded-full bg-[#1F1115] text-[#FCA5A5] flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
-    <div><p class="font-semibold text-[#F0F6FC]">Setting downstream</p><p class="text-[#D8DEE4] text-sm">Pulls the fly away from the fish. Always set upstream with a rod lift.</p></div>
+  <div>
+    <div>✗</div>
+    <div><p>Setting downstream</p><p>Pulls the fly away from the fish. Always set upstream with a rod lift.</p></div>
   </div>
-  <div class="flex gap-4">
-    <div class="w-8 h-8 rounded-full bg-[#1F1115] text-[#FCA5A5] flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
-    <div><p class="font-semibold text-[#F0F6FC]">Flies not deep enough</p><p class="text-[#D8DEE4] text-sm">Cast further upstream, lengthen tippet, or use heavier flies. You should occasionally tick the bottom.</p></div>
+  <div>
+    <div>✗</div>
+    <div><p>Flies not deep enough</p><p>Cast further upstream, lengthen tippet, or use heavier flies. You should occasionally tick the bottom.</p></div>
   </div>
-  <div class="flex gap-4">
-    <div class="w-8 h-8 rounded-full bg-[#1F1115] text-[#FCA5A5] flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
-    <div><p class="font-semibold text-[#F0F6FC]">Casting too far</p><p class="text-[#D8DEE4] text-sm">50 feet is unreachable. Fish at 15–25 feet. Wade closer instead of casting further.</p></div>
+  <div>
+    <div>✗</div>
+    <div><p>Casting too far</p><p>50 feet is unreachable. Fish at 15–25 feet. Wade closer instead of casting further.</p></div>
   </div>
-  <div class="flex gap-4">
-    <div class="w-8 h-8 rounded-full bg-[#1F1115] text-[#FCA5A5] flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">✗</div>
-    <div><p class="font-semibold text-[#F0F6FC]">Moving too fast</p><p class="text-[#D8DEE4] text-sm">Make multiple drifts through each lane before moving. Slow, methodical coverage beats covering water quickly.</p></div>
+  <div>
+    <div>✗</div>
+    <div><p>Moving too fast</p><p>Make multiple drifts through each lane before moving. Slow, methodical coverage beats covering water quickly.</p></div>
   </div>
 </div>
 
@@ -184,16 +184,16 @@ export const articles: Article[] = [
 
 <h2>Beginner Setup</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold text-forest-dark mb-3">Recommended First Setup</p>
-  <ul class="space-y-2 text-sm text-[#D8DEE4]">
+<aside>
+  <p>Recommended First Setup</p>
+  <ul>
     <li><strong>Rod:</strong> 10 ft, 3-weight euro rod ($200–400)</li>
     <li><strong>Reel:</strong> Lightweight click-and-pawl or disc drag</li>
     <li><strong>Line:</strong> Euro-specific level or competition line</li>
     <li><strong>Leader:</strong> 4 ft 20lb butt → 20 in sighter → tippet ring → 5 ft 5X fluoro</li>
     <li><strong>Flies:</strong> Size 12 Czech nymph (point) + size 16 perdigon (dropper)</li>
   </ul>
-</div>
+</aside>
 
 <p>Find water that's 1–4 feet deep with moderate current. Cast no more than 15–20 feet upstream. Focus entirely on maintaining sighter contact throughout the drift. Set the hook on every unusual movement.</p>
 
@@ -231,10 +231,10 @@ export const articles: Article[] = [
 
 <p>A skilled angler can walk up to any trout stream and, within minutes, identify the spots most likely to hold fish. This ability is not magic or instinct — it is a learned skill built on understanding how water moves, how trout feed and shelter, and how the physical features of a river create the conditions that fish depend on for survival.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The #1 Skill in Fly Fishing</p>
-  <p class="text-[#D8DEE4] text-sm">Reading water is more valuable than perfect casting form, encyclopedic fly selection, or expensive gear. An angler who reads water well but casts poorly will still find fish. An angler who casts beautifully into unproductive water will not.</p>
-</div>
+<aside>
+  <p>The #1 Skill in Fly Fishing</p>
+  <p>Reading water is more valuable than perfect casting form, encyclopedic fly selection, or expensive gear. An angler who reads water well but casts poorly will still find fish. An angler who casts beautifully into unproductive water will not.</p>
+</aside>
 
 <h3>The Trout Energy Equation</h3>
 
@@ -252,58 +252,58 @@ export const articles: Article[] = [
 
 <p>Most trout streams follow a repeating pattern of riffles, runs, and pools. Understanding this sequence is the first step in reading any piece of water.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Feature</th>
-        <th class="text-left p-3">Riffle</th>
-        <th class="text-left p-3">Run</th>
-        <th class="text-left p-3">Pool</th>
+      <tr>
+        <th>Feature</th>
+        <th>Riffle</th>
+        <th>Run</th>
+        <th>Pool</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Depth</td>
-        <td class="p-3">Shallow (6–18 in.)</td>
-        <td class="p-3">Moderate (2–5 ft)</td>
-        <td class="p-3">Deep (4–10+ ft)</td>
+      <tr>
+        <td>Depth</td>
+        <td>Shallow (6–18 in.)</td>
+        <td>Moderate (2–5 ft)</td>
+        <td>Deep (4–10+ ft)</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Current Speed</td>
-        <td class="p-3">Fast, turbulent</td>
-        <td class="p-3">Moderate, steady</td>
-        <td class="p-3">Slow, often still</td>
+      <tr>
+        <td>Current Speed</td>
+        <td>Fast, turbulent</td>
+        <td>Moderate, steady</td>
+        <td>Slow, often still</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Surface</td>
-        <td class="p-3">Broken, choppy</td>
-        <td class="p-3">Smooth with subtle texture</td>
-        <td class="p-3">Glassy, flat</td>
+      <tr>
+        <td>Surface</td>
+        <td>Broken, choppy</td>
+        <td>Smooth with subtle texture</td>
+        <td>Glassy, flat</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Substrate</td>
-        <td class="p-3">Gravel, small cobble</td>
-        <td class="p-3">Mixed gravel and cobble</td>
-        <td class="p-3">Sand, silt, or bedrock</td>
+      <tr>
+        <td>Substrate</td>
+        <td>Gravel, small cobble</td>
+        <td>Mixed gravel and cobble</td>
+        <td>Sand, silt, or bedrock</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Fish Behavior</td>
-        <td class="p-3">Active feeding in deeper channels</td>
-        <td class="p-3">Steady feeding stations</td>
-        <td class="p-3">Resting; selective feeding</td>
+      <tr>
+        <td>Fish Behavior</td>
+        <td>Active feeding in deeper channels</td>
+        <td>Steady feeding stations</td>
+        <td>Resting; selective feeding</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Best Technique</td>
-        <td class="p-3">Short-line nymphing, dry-dropper</td>
-        <td class="p-3">Nymphing, dry flies during hatches</td>
-        <td class="p-3">Dry flies, streamers to head/tail</td>
+      <tr>
+        <td>Best Technique</td>
+        <td>Short-line nymphing, dry-dropper</td>
+        <td>Nymphing, dry flies during hatches</td>
+        <td>Dry flies, streamers to head/tail</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Why Fish Hold Here</td>
-        <td class="p-3">Rich food factory; broken surface = cover</td>
-        <td class="p-3">Ideal balance of food, depth, and current</td>
-        <td class="p-3">Security and resting habitat</td>
+      <tr>
+        <td>Why Fish Hold Here</td>
+        <td>Rich food factory; broken surface = cover</td>
+        <td>Ideal balance of food, depth, and current</td>
+        <td>Security and resting habitat</td>
       </tr>
     </tbody>
   </table>
@@ -343,55 +343,55 @@ export const articles: Article[] = [
   <li><strong>Boulder channels</strong> — The narrow chute threading between two boulders accelerates and concentrates drifting insects</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Warning: Surface Currents Can Be Deceiving</p>
-  <p class="text-[#D8DEE4] text-sm">Surface currents do not always represent what is happening near the bottom where trout hold and nymphs drift. In many sections, the surface current is significantly faster than the bottom current due to friction with the streambed. The best water readers visualize the bottom — imagining the contour of the streambed, the location of boulders and depressions, and the current speed at the depth where fish are holding — rather than focusing solely on the surface.</p>
-</div>
+<aside>
+  <p>Warning: Surface Currents Can Be Deceiving</p>
+  <p>Surface currents do not always represent what is happening near the bottom where trout hold and nymphs drift. In many sections, the surface current is significantly faster than the bottom current due to friction with the streambed. The best water readers visualize the bottom — imagining the contour of the streambed, the location of boulders and depressions, and the current speed at the depth where fish are holding — rather than focusing solely on the surface.</p>
+</aside>
 
 <h2>Structure and How Trout Use It</h2>
 
 <p>Physical structure in and around the water creates the specific holding spots where trout position themselves. Each type of structure offers different advantages.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Structure Type</th>
-        <th class="text-left p-3">Description</th>
-        <th class="text-left p-3">Where Trout Hold</th>
-        <th class="text-left p-3">Best Approach</th>
+      <tr>
+        <th>Structure Type</th>
+        <th>Description</th>
+        <th>Where Trout Hold</th>
+        <th>Best Approach</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Boulders</td>
-        <td class="p-3">Mid-stream rocks that break current and create multiple micro-habitats</td>
-        <td class="p-3">Cushion in front (slow water where current piles up), eddy behind (calm pocket), seams on both sides</td>
-        <td class="p-3">Fish all three zones — front cushion, back eddy, and side seams. A single large boulder may hold 3–4 trout.</td>
+      <tr>
+        <td>Boulders</td>
+        <td>Mid-stream rocks that break current and create multiple micro-habitats</td>
+        <td>Cushion in front (slow water where current piles up), eddy behind (calm pocket), seams on both sides</td>
+        <td>Fish all three zones — front cushion, back eddy, and side seams. A single large boulder may hold 3–4 trout.</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Submerged Logs &amp; Woody Debris</td>
-        <td class="p-3">Root wads, fallen trees, and branches that create complex current breaks at multiple depths</td>
-        <td class="p-3">Tight to the wood, often in surprisingly shallow water. Branching structure provides cover and insect habitat.</td>
-        <td class="p-3">Accurate casting required — place flies within inches of the wood. Accept that some flies will be lost. The payoff in fish size is worth it.</td>
+      <tr>
+        <td>Submerged Logs &amp; Woody Debris</td>
+        <td>Root wads, fallen trees, and branches that create complex current breaks at multiple depths</td>
+        <td>Tight to the wood, often in surprisingly shallow water. Branching structure provides cover and insect habitat.</td>
+        <td>Accurate casting required — place flies within inches of the wood. Accept that some flies will be lost. The payoff in fish size is worth it.</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Undercut Banks</td>
-        <td class="p-3">Eroded streambanks with overhanging shelves of earth and vegetation, especially on meadow creeks</td>
-        <td class="p-3">Tucked under the overhang in relatively shallow water with excellent overhead cover and access to bank-edge food.</td>
-        <td class="p-3">Precise, delicate presentation within inches of the bank. Some of the largest trout in any stream live here.</td>
+      <tr>
+        <td>Undercut Banks</td>
+        <td>Eroded streambanks with overhanging shelves of earth and vegetation, especially on meadow creeks</td>
+        <td>Tucked under the overhang in relatively shallow water with excellent overhead cover and access to bank-edge food.</td>
+        <td>Precise, delicate presentation within inches of the bank. Some of the largest trout in any stream live here.</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Weed Beds</td>
-        <td class="p-3">Submerged aquatic vegetation that harbors insects and creates current variation</td>
-        <td class="p-3">Along the edges of weed beds and in channels between vegetation clumps</td>
-        <td class="p-3">Drift flies along weed edges. Use weedless patterns or ride flies high to avoid snagging.</td>
+      <tr>
+        <td>Weed Beds</td>
+        <td>Submerged aquatic vegetation that harbors insects and creates current variation</td>
+        <td>Along the edges of weed beds and in channels between vegetation clumps</td>
+        <td>Drift flies along weed edges. Use weedless patterns or ride flies high to avoid snagging.</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Ledges &amp; Shelf Rock</td>
-        <td class="p-3">Bedrock shelves that create sudden depth changes and current breaks</td>
-        <td class="p-3">In the deeper water just downstream of the ledge, where the current slows and food settles</td>
-        <td class="p-3">Nymph deeply along the drop-off. Streamers swung across the ledge can trigger aggressive strikes.</td>
+      <tr>
+        <td>Ledges &amp; Shelf Rock</td>
+        <td>Bedrock shelves that create sudden depth changes and current breaks</td>
+        <td>In the deeper water just downstream of the ledge, where the current slows and food settles</td>
+        <td>Nymph deeply along the drop-off. Streamers swung across the ledge can trigger aggressive strikes.</td>
       </tr>
     </tbody>
   </table>
@@ -419,10 +419,10 @@ export const articles: Article[] = [
 
 <h3>Water Temperature: The Invisible Governor</h3>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Carry a Stream Thermometer</p>
-  <p class="text-[#D8DEE4] text-sm">Checking water temperature regularly throughout the day is a practice that separates good anglers from great ones, particularly during summer. Trout are cold-blooded — their metabolism, feeding activity, and oxygen needs are all directly controlled by water temperature.</p>
-</div>
+<aside>
+  <p>Carry a Stream Thermometer</p>
+  <p>Checking water temperature regularly throughout the day is a practice that separates good anglers from great ones, particularly during summer. Trout are cold-blooded — their metabolism, feeding activity, and oxygen needs are all directly controlled by water temperature.</p>
+</aside>
 
 <ul>
   <li><strong>Optimal range (50–65 °F)</strong> — Trout are most active and feed most aggressively</li>
@@ -472,9 +472,9 @@ export const articles: Article[] = [
 
 <h2>Putting It All Together</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">Step-by-Step: Reading a New Piece of Water</p>
-  <ol class="list-decimal list-inside space-y-2 text-sm text-[#D8DEE4]">
+<aside>
+  <p>Step-by-Step: Reading a New Piece of Water</p>
+  <ol>
     <li><strong>Stop and observe</strong> — Spend ten minutes watching the water before making your first cast</li>
     <li><strong>Map the current</strong> — Note where speed increases and decreases. Identify seams and transition zones.</li>
     <li><strong>Identify depth changes</strong> — Look for color variations that indicate deeper water (darker) versus shallows (lighter)</li>
@@ -483,7 +483,7 @@ export const articles: Article[] = [
     <li><strong>Start at the tail</strong> — Work upstream so your presence does not spook fish above you</li>
     <li><strong>Fish systematically</strong> — Cover each promising spot thoroughly before moving to the next</li>
   </ol>
-</div>
+</aside>
 
 <h3>Post-Catch Analysis</h3>
 
@@ -499,70 +499,70 @@ export const articles: Article[] = [
 
 <h2>Quick Reference: Water Features at a Glance</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Water Feature</th>
-        <th class="text-left p-3">What to Look For</th>
-        <th class="text-left p-3">Why Trout Hold There</th>
-        <th class="text-left p-3">Priority</th>
+      <tr>
+        <th>Water Feature</th>
+        <th>What to Look For</th>
+        <th>Why Trout Hold There</th>
+        <th>Priority</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Head of run</td>
-        <td class="p-3">Where riffle deepens into run</td>
-        <td class="p-3">Food delivery + moderate current</td>
-        <td class="p-3">High</td>
+      <tr>
+        <td>Head of run</td>
+        <td>Where riffle deepens into run</td>
+        <td>Food delivery + moderate current</td>
+        <td>High</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Current seam</td>
-        <td class="p-3">Visible line between fast/slow water</td>
-        <td class="p-3">Efficient feeding position</td>
-        <td class="p-3">High</td>
+      <tr>
+        <td>Current seam</td>
+        <td>Visible line between fast/slow water</td>
+        <td>Efficient feeding position</td>
+        <td>High</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Boulder pocket</td>
-        <td class="p-3">Calm water behind or in front of rocks</td>
-        <td class="p-3">Current break + food delivery on seams</td>
-        <td class="p-3">High</td>
+      <tr>
+        <td>Boulder pocket</td>
+        <td>Calm water behind or in front of rocks</td>
+        <td>Current break + food delivery on seams</td>
+        <td>High</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Pool head</td>
-        <td class="p-3">Where current enters a pool</td>
-        <td class="p-3">Food funnels into deeper water</td>
-        <td class="p-3">High</td>
+      <tr>
+        <td>Pool head</td>
+        <td>Where current enters a pool</td>
+        <td>Food funnels into deeper water</td>
+        <td>High</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Tailout</td>
-        <td class="p-3">Where pool shallows before next riffle</td>
-        <td class="p-3">Concentrating food lane</td>
-        <td class="p-3">Medium–High</td>
+      <tr>
+        <td>Tailout</td>
+        <td>Where pool shallows before next riffle</td>
+        <td>Concentrating food lane</td>
+        <td>Medium–High</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Undercut bank</td>
-        <td class="p-3">Overhanging earth/vegetation along bank</td>
-        <td class="p-3">Prime overhead cover + bank-edge food</td>
-        <td class="p-3">Medium–High</td>
+      <tr>
+        <td>Undercut bank</td>
+        <td>Overhanging earth/vegetation along bank</td>
+        <td>Prime overhead cover + bank-edge food</td>
+        <td>Medium–High</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Submerged wood</td>
-        <td class="p-3">Logs, root wads, debris piles</td>
-        <td class="p-3">Complex cover + insect habitat</td>
-        <td class="p-3">Medium</td>
+      <tr>
+        <td>Submerged wood</td>
+        <td>Logs, root wads, debris piles</td>
+        <td>Complex cover + insect habitat</td>
+        <td>Medium</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Confluence</td>
-        <td class="p-3">Where tributaries enter main river</td>
-        <td class="p-3">Temperature refuge + food convergence</td>
-        <td class="p-3">Medium (seasonal)</td>
+      <tr>
+        <td>Confluence</td>
+        <td>Where tributaries enter main river</td>
+        <td>Temperature refuge + food convergence</td>
+        <td>Medium (seasonal)</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Mid-pool</td>
-        <td class="p-3">Deep, slow center of a pool</td>
-        <td class="p-3">Security, but slow food delivery</td>
-        <td class="p-3">Low</td>
+      <tr>
+        <td>Mid-pool</td>
+        <td>Deep, slow center of a pool</td>
+        <td>Security, but slow food delivery</td>
+        <td>Low</td>
       </tr>
     </tbody>
   </table>
@@ -611,66 +611,66 @@ export const articles: Article[] = [
 
 <h2>Montana's Premier Rivers at a Glance</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">River</th>
-        <th class="text-left p-3">Type</th>
-        <th class="text-left p-3">Primary Species</th>
-        <th class="text-left p-3">Best Months</th>
-        <th class="text-left p-3">Difficulty</th>
-        <th class="text-left p-3">Access</th>
+      <tr>
+        <th>River</th>
+        <th>Type</th>
+        <th>Primary Species</th>
+        <th>Best Months</th>
+        <th>Difficulty</th>
+        <th>Access</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Madison</td>
-        <td class="p-3">Freestone (upper) / Tailwater (lower)</td>
-        <td class="p-3">Rainbow, Brown</td>
-        <td class="p-3">Jun–Oct</td>
-        <td class="p-3">Intermediate</td>
-        <td class="p-3">Excellent — multiple FAS sites</td>
+      <tr>
+        <td>Madison</td>
+        <td>Freestone (upper) / Tailwater (lower)</td>
+        <td>Rainbow, Brown</td>
+        <td>Jun–Oct</td>
+        <td>Intermediate</td>
+        <td>Excellent — multiple FAS sites</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Gallatin</td>
-        <td class="p-3">Freestone (pocket water)</td>
-        <td class="p-3">Rainbow, Brown, Cutthroat</td>
-        <td class="p-3">Jul–Oct</td>
-        <td class="p-3">Beginner–Intermediate</td>
-        <td class="p-3">Excellent — Hwy 191 parallels river</td>
+      <tr>
+        <td>Gallatin</td>
+        <td>Freestone (pocket water)</td>
+        <td>Rainbow, Brown, Cutthroat</td>
+        <td>Jul–Oct</td>
+        <td>Beginner–Intermediate</td>
+        <td>Excellent — Hwy 191 parallels river</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Yellowstone</td>
-        <td class="p-3">Freestone</td>
-        <td class="p-3">Yellowstone Cutthroat, Rainbow, Brown</td>
-        <td class="p-3">Jul–Sep</td>
-        <td class="p-3">Intermediate–Advanced</td>
-        <td class="p-3">Good — boat ramps, Paradise Valley</td>
+      <tr>
+        <td>Yellowstone</td>
+        <td>Freestone</td>
+        <td>Yellowstone Cutthroat, Rainbow, Brown</td>
+        <td>Jul–Sep</td>
+        <td>Intermediate–Advanced</td>
+        <td>Good — boat ramps, Paradise Valley</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Missouri</td>
-        <td class="p-3">Tailwater</td>
-        <td class="p-3">Rainbow, Brown</td>
-        <td class="p-3">May–Oct</td>
-        <td class="p-3">Advanced</td>
-        <td class="p-3">Good — boat access preferred</td>
+      <tr>
+        <td>Missouri</td>
+        <td>Tailwater</td>
+        <td>Rainbow, Brown</td>
+        <td>May–Oct</td>
+        <td>Advanced</td>
+        <td>Good — boat access preferred</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Big Hole</td>
-        <td class="p-3">Freestone</td>
-        <td class="p-3">Brown, Rainbow, Arctic Grayling</td>
-        <td class="p-3">Jun–Oct</td>
-        <td class="p-3">Intermediate</td>
-        <td class="p-3">Moderate — remote location</td>
+      <tr>
+        <td>Big Hole</td>
+        <td>Freestone</td>
+        <td>Brown, Rainbow, Arctic Grayling</td>
+        <td>Jun–Oct</td>
+        <td>Intermediate</td>
+        <td>Moderate — remote location</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Rock Creek</td>
-        <td class="p-3">Freestone</td>
-        <td class="p-3">Rainbow, Brown, Cutthroat, Bull Trout</td>
-        <td class="p-3">Jun–Sep</td>
-        <td class="p-3">Beginner–Intermediate</td>
-        <td class="p-3">Excellent — road follows creek</td>
+      <tr>
+        <td>Rock Creek</td>
+        <td>Freestone</td>
+        <td>Rainbow, Brown, Cutthroat, Bull Trout</td>
+        <td>Jun–Sep</td>
+        <td>Beginner–Intermediate</td>
+        <td>Excellent — road follows creek</td>
       </tr>
     </tbody>
   </table>
@@ -698,10 +698,10 @@ export const articles: Article[] = [
   <li><strong>Between hatches</strong> — Nymphing riffles and runs with stonefly and caddis patterns is consistently productive year-round</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Best Time to Visit the Madison</p>
-  <p class="text-[#D8DEE4] text-sm">June for the legendary salmonfly hatch if you want peak excitement (and peak crowds). July through August for more consistent day-to-day fishing with caddis and terrestrials. September and October for solitude and aggressive pre-spawn browns.</p>
-</div>
+<aside>
+  <p>Best Time to Visit the Madison</p>
+  <p>June for the legendary salmonfly hatch if you want peak excitement (and peak crowds). July through August for more consistent day-to-day fishing with caddis and terrestrials. September and October for solitude and aggressive pre-spawn browns.</p>
+</aside>
 
 <h2>The Gallatin River</h2>
 
@@ -725,10 +725,10 @@ export const articles: Article[] = [
   <li><strong>Best approach</strong> — Wade fishing, working upstream through individual pockets and plunge pools</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Expect Company on the Gallatin</p>
-  <p class="text-[#D8DEE4] text-sm">The Gallatin's easy highway access makes it a favorite of Bozeman-area anglers. Expect considerable pressure during peak season (July–August). Early mornings and weekdays offer the best chance at uncrowded water.</p>
-</div>
+<aside>
+  <p>Expect Company on the Gallatin</p>
+  <p>The Gallatin's easy highway access makes it a favorite of Bozeman-area anglers. Expect considerable pressure during peak season (July–August). Early mornings and weekdays offer the best chance at uncrowded water.</p>
+</aside>
 
 <h2>The Yellowstone River</h2>
 
@@ -751,10 +751,10 @@ export const articles: Article[] = [
   <li><strong>Best approach</strong> — Float fishing for coverage; wading in park sections and canyon access points</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Best Time to Visit the Yellowstone</p>
-  <p class="text-[#D8DEE4] text-sm">July is the prime month, with the salmonfly hatch and warm weather. The cutthroat fishing in the park is best from mid-July through September. Fall brings fewer anglers and aggressive brown trout in the lower Paradise Valley sections.</p>
-</div>
+<aside>
+  <p>Best Time to Visit the Yellowstone</p>
+  <p>July is the prime month, with the salmonfly hatch and warm weather. The cutthroat fishing in the park is best from mid-July through September. Fall brings fewer anglers and aggressive brown trout in the lower Paradise Valley sections.</p>
+</aside>
 
 <h2>The Missouri River</h2>
 
@@ -781,10 +781,10 @@ export const articles: Article[] = [
   <li><strong>Fall streamers</strong> — Produce some of the largest brown trout caught in Montana</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">The Missouri Is Not Easy Water</p>
-  <p class="text-[#D8DEE4] text-sm">The trout see a lot of flies and can be maddeningly selective during heavy hatches. This is technical water that rewards fine tippets, precise presentations, and accurate fly selection. Consider hiring a guide for your first visit.</p>
-</div>
+<aside>
+  <p>The Missouri Is Not Easy Water</p>
+  <p>The trout see a lot of flies and can be maddeningly selective during heavy hatches. This is technical water that rewards fine tippets, precise presentations, and accurate fly selection. Consider hiring a guide for your first visit.</p>
+</aside>
 
 <h2>The Big Hole River</h2>
 
@@ -831,64 +831,64 @@ export const articles: Article[] = [
 
 <h2>Montana Hatch Calendar</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Month</th>
-        <th class="text-left p-3">Major Hatches</th>
-        <th class="text-left p-3">Best Rivers</th>
-        <th class="text-left p-3">Key Patterns</th>
+      <tr>
+        <th>Month</th>
+        <th>Major Hatches</th>
+        <th>Best Rivers</th>
+        <th>Key Patterns</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">March–April</td>
-        <td class="p-3">BWOs, Midges</td>
-        <td class="p-3">Missouri</td>
-        <td class="p-3">Parachute Adams #18–20, Griffith's Gnat #20–22</td>
+      <tr>
+        <td>March–April</td>
+        <td>BWOs, Midges</td>
+        <td>Missouri</td>
+        <td>Parachute Adams #18–20, Griffith's Gnat #20–22</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">May</td>
-        <td class="p-3">BWOs, Mother's Day Caddis, March Browns</td>
-        <td class="p-3">Missouri, Yellowstone</td>
-        <td class="p-3">Elk Hair Caddis #14–16, BWO Parachute #16–18</td>
+      <tr>
+        <td>May</td>
+        <td>BWOs, Mother's Day Caddis, March Browns</td>
+        <td>Missouri, Yellowstone</td>
+        <td>Elk Hair Caddis #14–16, BWO Parachute #16–18</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">June</td>
-        <td class="p-3">Salmonfly, Golden Stonefly, PMDs</td>
-        <td class="p-3">Madison, Big Hole, Rock Creek, Yellowstone</td>
-        <td class="p-3">Chubby Chernobyl #6–8, Sofa Pillow #4–6, PMD Sparkle Dun #16</td>
+      <tr>
+        <td>June</td>
+        <td>Salmonfly, Golden Stonefly, PMDs</td>
+        <td>Madison, Big Hole, Rock Creek, Yellowstone</td>
+        <td>Chubby Chernobyl #6–8, Sofa Pillow #4–6, PMD Sparkle Dun #16</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">July</td>
-        <td class="p-3">Salmonfly (Yellowstone), Caddis, PMDs, Terrestrials begin</td>
-        <td class="p-3">Yellowstone, Madison, Gallatin, Missouri</td>
-        <td class="p-3">Elk Hair Caddis #14–16, Hopper #8–10, PMD Comparadun #16</td>
+      <tr>
+        <td>July</td>
+        <td>Salmonfly (Yellowstone), Caddis, PMDs, Terrestrials begin</td>
+        <td>Yellowstone, Madison, Gallatin, Missouri</td>
+        <td>Elk Hair Caddis #14–16, Hopper #8–10, PMD Comparadun #16</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">August</td>
-        <td class="p-3">Caddis, Tricos, Terrestrials (hoppers, ants, beetles)</td>
-        <td class="p-3">Missouri, Madison, Gallatin</td>
-        <td class="p-3">Trico Spinner #20–22, Dave's Hopper #8–10, Flying Ant #14–16</td>
+      <tr>
+        <td>August</td>
+        <td>Caddis, Tricos, Terrestrials (hoppers, ants, beetles)</td>
+        <td>Missouri, Madison, Gallatin</td>
+        <td>Trico Spinner #20–22, Dave's Hopper #8–10, Flying Ant #14–16</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">September</td>
-        <td class="p-3">BWOs, Tricos, October Caddis begin, Terrestrials</td>
-        <td class="p-3">Missouri, Madison, Big Hole</td>
-        <td class="p-3">BWO Parachute #18–20, October Caddis #8, Hopper #10</td>
+      <tr>
+        <td>September</td>
+        <td>BWOs, Tricos, October Caddis begin, Terrestrials</td>
+        <td>Missouri, Madison, Big Hole</td>
+        <td>BWO Parachute #18–20, October Caddis #8, Hopper #10</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">October</td>
-        <td class="p-3">October Caddis, BWOs, Streamers for browns</td>
-        <td class="p-3">Madison, Big Hole, Missouri</td>
-        <td class="p-3">October Caddis #8, Woolly Bugger #6, Zonker #4–6</td>
+      <tr>
+        <td>October</td>
+        <td>October Caddis, BWOs, Streamers for browns</td>
+        <td>Madison, Big Hole, Missouri</td>
+        <td>October Caddis #8, Woolly Bugger #6, Zonker #4–6</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">November–February</td>
-        <td class="p-3">Midges, BWOs (sparse)</td>
-        <td class="p-3">Missouri, Lower Madison</td>
-        <td class="p-3">Zebra Midge #18–22, Griffith's Gnat #20, BWO Emerger #20</td>
+      <tr>
+        <td>November–February</td>
+        <td>Midges, BWOs (sparse)</td>
+        <td>Missouri, Lower Madison</td>
+        <td>Zebra Midge #18–22, Griffith's Gnat #20, BWO Emerger #20</td>
       </tr>
     </tbody>
   </table>
@@ -896,47 +896,47 @@ export const articles: Article[] = [
 
 <h2>Planning Your Montana Trip</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">Trip Planning Essentials</p>
-  <ul class="space-y-2 text-sm text-[#D8DEE4]">
+<aside>
+  <p>Trip Planning Essentials</p>
+  <ul>
     <li><strong>License</strong> — A nonresident Montana fishing license is required for all anglers over age 12. Purchase online through the Montana Fish, Wildlife and Parks (FWP) website.</li>
     <li><strong>Regulations</strong> — Most rivers have specific rules regarding catch limits, tackle restrictions, and seasonal closures. Check current FWP regulations for each river you plan to fish.</li>
     <li><strong>Guides</strong> — Hiring a local guide for at least one or two days is highly recommended, especially for first-time visitors. A good guide provides river-specific knowledge that takes years to accumulate.</li>
     <li><strong>Stream access</strong> — Montana law allows public access on any waterway navigable by canoe. You may wade and fish between the high-water marks.</li>
     <li><strong>Conservation</strong> — Practice catch and release on wild trout waters. Use barbless hooks and handle fish with wet hands to maximize survival rates.</li>
   </ul>
-</div>
+</aside>
 
 <h3>When to Go</h3>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Season</th>
-        <th class="text-left p-3">What to Expect</th>
-        <th class="text-left p-3">Crowds</th>
-        <th class="text-left p-3">Best For</th>
+      <tr>
+        <th>Season</th>
+        <th>What to Expect</th>
+        <th>Crowds</th>
+        <th>Best For</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">June</td>
-        <td class="p-3">Salmonfly and golden stonefly hatches — the most exciting dry fly fishing of the year</td>
-        <td class="p-3">Heavy</td>
-        <td class="p-3">Big dry flies, adrenaline, bucket-list hatches</td>
+      <tr>
+        <td>June</td>
+        <td>Salmonfly and golden stonefly hatches — the most exciting dry fly fishing of the year</td>
+        <td>Heavy</td>
+        <td>Big dry flies, adrenaline, bucket-list hatches</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">July–August</td>
-        <td class="p-3">Consistent caddis, PMD, and terrestrial fishing; warmer weather</td>
-        <td class="p-3">Moderate–Heavy</td>
-        <td class="p-3">Reliable day-to-day fishing, variety of techniques</td>
+      <tr>
+        <td>July–August</td>
+        <td>Consistent caddis, PMD, and terrestrial fishing; warmer weather</td>
+        <td>Moderate–Heavy</td>
+        <td>Reliable day-to-day fishing, variety of techniques</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">September–October</td>
-        <td class="p-3">Fall colors, aggressive pre-spawn browns, BWO and October caddis hatches</td>
-        <td class="p-3">Light</td>
-        <td class="p-3">Solitude, big fish, streamer fishing, beautiful scenery</td>
+      <tr>
+        <td>September–October</td>
+        <td>Fall colors, aggressive pre-spawn browns, BWO and October caddis hatches</td>
+        <td>Light</td>
+        <td>Solitude, big fish, streamer fishing, beautiful scenery</td>
       </tr>
     </tbody>
   </table>
@@ -981,10 +981,10 @@ export const articles: Article[] = [
 
 <p>Matching the hatch is the art and science of identifying the insects trout are feeding on and presenting an artificial fly that closely imitates the natural. It is the intellectual heart of dry fly fishing — the puzzle that has captivated anglers for centuries and continues to reward careful observation over brute force.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">You Don't Need a PhD in Entomology</p>
-  <p class="text-[#D8DEE4] text-sm">Trout respond to the size, shape, color, and behavior of an insect rather than its precise taxonomic classification. An angler who can distinguish a size 14 mayfly dun from a size 16 caddis adult and select an appropriately sized and shaped imitation is well on the way to consistent success during hatches.</p>
-</div>
+<aside>
+  <p>You Don't Need a PhD in Entomology</p>
+  <p>Trout respond to the size, shape, color, and behavior of an insect rather than its precise taxonomic classification. An angler who can distinguish a size 14 mayfly dun from a size 16 caddis adult and select an appropriately sized and shaped imitation is well on the way to consistent success during hatches.</p>
+</aside>
 
 <h3>The Four Major Insect Orders</h3>
 
@@ -999,50 +999,50 @@ export const articles: Article[] = [
 
 <h2>Major Insect Orders Compared</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Order</th>
-        <th class="text-left p-3">Wing Shape</th>
-        <th class="text-left p-3">Size Range</th>
-        <th class="text-left p-3">Rise Form</th>
-        <th class="text-left p-3">Peak Season</th>
-        <th class="text-left p-3">Key Patterns</th>
+      <tr>
+        <th>Order</th>
+        <th>Wing Shape</th>
+        <th>Size Range</th>
+        <th>Rise Form</th>
+        <th>Peak Season</th>
+        <th>Key Patterns</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Mayflies</td>
-        <td class="p-3">Upright, sail-like</td>
-        <td class="p-3">#8–#22</td>
-        <td class="p-3">Steady head-and-tail rise</td>
-        <td class="p-3">Spring, Summer, Fall</td>
-        <td class="p-3">Parachute Adams, Comparadun, Sparkle Dun, RS2</td>
+      <tr>
+        <td>Mayflies</td>
+        <td>Upright, sail-like</td>
+        <td>#8–#22</td>
+        <td>Steady head-and-tail rise</td>
+        <td>Spring, Summer, Fall</td>
+        <td>Parachute Adams, Comparadun, Sparkle Dun, RS2</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Caddisflies</td>
-        <td class="p-3">Tent / inverted V</td>
-        <td class="p-3">#8–#20</td>
-        <td class="p-3">Splashy, aggressive</td>
-        <td class="p-3">Late Spring through Fall</td>
-        <td class="p-3">Elk Hair Caddis, X-Caddis, Goddard Caddis, CDC Caddis</td>
+      <tr>
+        <td>Caddisflies</td>
+        <td>Tent / inverted V</td>
+        <td>#8–#20</td>
+        <td>Splashy, aggressive</td>
+        <td>Late Spring through Fall</td>
+        <td>Elk Hair Caddis, X-Caddis, Goddard Caddis, CDC Caddis</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3 font-semibold">Stoneflies</td>
-        <td class="p-3">Flat, folded over body</td>
-        <td class="p-3">#4–#10</td>
-        <td class="p-3">Explosive, bank-side</td>
-        <td class="p-3">Late Spring–Early Summer</td>
-        <td class="p-3">Chubby Chernobyl, Sofa Pillow, Stimulator, Pat's Rubber Legs</td>
+      <tr>
+        <td>Stoneflies</td>
+        <td>Flat, folded over body</td>
+        <td>#4–#10</td>
+        <td>Explosive, bank-side</td>
+        <td>Late Spring–Early Summer</td>
+        <td>Chubby Chernobyl, Sofa Pillow, Stimulator, Pat's Rubber Legs</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3 font-semibold">Midges</td>
-        <td class="p-3">Proportionally large, flat</td>
-        <td class="p-3">#20–#28</td>
-        <td class="p-3">Slow, rhythmic sipping</td>
-        <td class="p-3">Year-round (esp. Winter)</td>
-        <td class="p-3">Griffith's Gnat, CDC Midge Emerger, Zebra Midge, WD-40</td>
+      <tr>
+        <td>Midges</td>
+        <td>Proportionally large, flat</td>
+        <td>#20–#28</td>
+        <td>Slow, rhythmic sipping</td>
+        <td>Year-round (esp. Winter)</td>
+        <td>Griffith's Gnat, CDC Midge Emerger, Zebra Midge, WD-40</td>
       </tr>
     </tbody>
   </table>
@@ -1073,10 +1073,10 @@ export const articles: Article[] = [
   <li><strong>Tricos (sizes 20–24)</strong> — Tiny morning spinners that produce incredibly selective surface feeding from mid-summer through fall</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Mayfly Identification Trick</p>
-  <p class="text-[#D8DEE4] text-sm">Mayflies are the only common aquatic insect with upright wings (like tiny sailboats) and long tails (usually 2 or 3). If you see an insect sitting on the water with wings pointing straight up, it is almost certainly a mayfly dun.</p>
-</div>
+<aside>
+  <p>Mayfly Identification Trick</p>
+  <p>Mayflies are the only common aquatic insect with upright wings (like tiny sailboats) and long tails (usually 2 or 3). If you see an insect sitting on the water with wings pointing straight up, it is almost certainly a mayfly dun.</p>
+</aside>
 
 <h2>Caddisflies: The Underappreciated Order</h2>
 
@@ -1151,21 +1151,21 @@ export const articles: Article[] = [
   <li><strong>Year-round importance</strong> — Arguably the most important food source for trout over a full year, even though individual hatches rarely produce dramatic surface events</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Winter Fishing Tip</p>
-  <p class="text-[#D8DEE4] text-sm">When no other insects are hatching in the dead of winter, midges are still emerging. If you see trout making tiny, rhythmic sips on an otherwise quiet winter river, they are almost certainly eating midges. A Griffith's Gnat in size 20–22 fished in the film is often all you need.</p>
-</div>
+<aside>
+  <p>Winter Fishing Tip</p>
+  <p>When no other insects are hatching in the dead of winter, midges are still emerging. If you see trout making tiny, rhythmic sips on an otherwise quiet winter river, they are almost certainly eating midges. A Griffith's Gnat in size 20–22 fished in the film is often all you need.</p>
+</aside>
 
 <h2>Practical Hatch-Matching Strategy</h2>
 
 <p>When you arrive at the river and find trout rising, follow this logical sequence:</p>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">Step-by-Step: Matching the Hatch on the Water</p>
-  <ol class="list-decimal list-inside space-y-3 text-sm text-[#D8DEE4]">
+<aside>
+  <p>Step-by-Step: Matching the Hatch on the Water</p>
+  <ol>
     <li><strong>Observe the insects</strong> — Look at the water surface and the air above it. Note size, wing shape, color, and behavior. Are they sitting on the water (mayfly duns)? Skittering across the surface (caddis)? Clustered in dense clouds (midges)?</li>
     <li><strong>Read the rise form</strong> — Match the trout's rise to the insect type:
-      <ul class="list-disc list-inside ml-5 mt-1 space-y-1">
+      <ul>
         <li>Gentle sipping rise → small insects (midges or spent spinners)</li>
         <li>Splashy, aggressive rise → caddis or stoneflies</li>
         <li>Steady, confident head-and-tail rise → mayfly duns drifting in the film</li>
@@ -1176,89 +1176,89 @@ export const articles: Article[] = [
     <li><strong>Present with a drag-free drift</strong> — Even a perfectly matched fly will be refused if it drags unnaturally. Position yourself for the longest possible drag-free drift over the rising fish.</li>
     <li><strong>Adjust if refused</strong> — If the fish refuses despite a good drift, downsize one hook size before changing patterns entirely. A fly slightly too small will often be accepted; a fly slightly too large will be refused.</li>
   </ol>
-</div>
+</aside>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Common Mistake: Changing Flies Too Quickly</p>
-  <p class="text-[#D8DEE4] text-sm">Before switching patterns, make sure your drift is truly drag-free. Many refusals are caused by micro-drag that the angler cannot see but the trout can detect. Try changing your casting angle or adding a reach cast before reaching for the fly box. Also consider that trout may be feeding on emergers just below the film — invisible to you but clearly visible from below.</p>
-</div>
+<aside>
+  <p>Common Mistake: Changing Flies Too Quickly</p>
+  <p>Before switching patterns, make sure your drift is truly drag-free. Many refusals are caused by micro-drag that the angler cannot see but the trout can detect. Try changing your casting angle or adding a reach cast before reaching for the fly box. Also consider that trout may be feeding on emergers just below the film — invisible to you but clearly visible from below.</p>
+</aside>
 
 <h2>Fly Selection Quick Reference</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Insect</th>
-        <th class="text-left p-3">Hook Size</th>
-        <th class="text-left p-3">Go-To Pattern</th>
-        <th class="text-left p-3">Color</th>
-        <th class="text-left p-3">When</th>
+      <tr>
+        <th>Insect</th>
+        <th>Hook Size</th>
+        <th>Go-To Pattern</th>
+        <th>Color</th>
+        <th>When</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">BWO (Baetis)</td>
-        <td class="p-3">#18–22</td>
-        <td class="p-3">Parachute BWO, RS2 Emerger</td>
-        <td class="p-3">Olive body, gray wing</td>
-        <td class="p-3">Spring, Fall; overcast days</td>
+      <tr>
+        <td>BWO (Baetis)</td>
+        <td>#18–22</td>
+        <td>Parachute BWO, RS2 Emerger</td>
+        <td>Olive body, gray wing</td>
+        <td>Spring, Fall; overcast days</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Pale Morning Dun</td>
-        <td class="p-3">#14–18</td>
-        <td class="p-3">PMD Sparkle Dun, Comparadun</td>
-        <td class="p-3">Pale yellow body, light gray wing</td>
-        <td class="p-3">Summer mornings</td>
+      <tr>
+        <td>Pale Morning Dun</td>
+        <td>#14–18</td>
+        <td>PMD Sparkle Dun, Comparadun</td>
+        <td>Pale yellow body, light gray wing</td>
+        <td>Summer mornings</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Green Drake</td>
-        <td class="p-3">#8–12</td>
-        <td class="p-3">Parachute Green Drake, Extended Body Drake</td>
-        <td class="p-3">Olive-green body, dark gray wing</td>
-        <td class="p-3">Late spring; short intense hatches</td>
+      <tr>
+        <td>Green Drake</td>
+        <td>#8–12</td>
+        <td>Parachute Green Drake, Extended Body Drake</td>
+        <td>Olive-green body, dark gray wing</td>
+        <td>Late spring; short intense hatches</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Trico</td>
-        <td class="p-3">#20–24</td>
-        <td class="p-3">Trico Spinner, CDC Trico</td>
-        <td class="p-3">Black body, clear spent wings</td>
-        <td class="p-3">Mid-summer to fall; early morning</td>
+      <tr>
+        <td>Trico</td>
+        <td>#20–24</td>
+        <td>Trico Spinner, CDC Trico</td>
+        <td>Black body, clear spent wings</td>
+        <td>Mid-summer to fall; early morning</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Elk Hair Caddis</td>
-        <td class="p-3">#12–18</td>
-        <td class="p-3">Elk Hair Caddis, X-Caddis</td>
-        <td class="p-3">Tan, olive, or brown body</td>
-        <td class="p-3">Late spring through fall</td>
+      <tr>
+        <td>Elk Hair Caddis</td>
+        <td>#12–18</td>
+        <td>Elk Hair Caddis, X-Caddis</td>
+        <td>Tan, olive, or brown body</td>
+        <td>Late spring through fall</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">October Caddis</td>
-        <td class="p-3">#6–10</td>
-        <td class="p-3">Orange Stimulator, October Caddis</td>
-        <td class="p-3">Orange body, brown wing</td>
-        <td class="p-3">September–October; evenings</td>
+      <tr>
+        <td>October Caddis</td>
+        <td>#6–10</td>
+        <td>Orange Stimulator, October Caddis</td>
+        <td>Orange body, brown wing</td>
+        <td>September–October; evenings</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Salmonfly</td>
-        <td class="p-3">#4–8</td>
-        <td class="p-3">Chubby Chernobyl, Sofa Pillow</td>
-        <td class="p-3">Orange/dark brown body</td>
-        <td class="p-3">June; fish tight to banks</td>
+      <tr>
+        <td>Salmonfly</td>
+        <td>#4–8</td>
+        <td>Chubby Chernobyl, Sofa Pillow</td>
+        <td>Orange/dark brown body</td>
+        <td>June; fish tight to banks</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3">Golden Stonefly</td>
-        <td class="p-3">#6–10</td>
-        <td class="p-3">Stimulator, Yellow Sally</td>
-        <td class="p-3">Yellow-gold body</td>
-        <td class="p-3">June–July; follows salmonfly</td>
+      <tr>
+        <td>Golden Stonefly</td>
+        <td>#6–10</td>
+        <td>Stimulator, Yellow Sally</td>
+        <td>Yellow-gold body</td>
+        <td>June–July; follows salmonfly</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3">Midges</td>
-        <td class="p-3">#20–28</td>
-        <td class="p-3">Griffith's Gnat, CDC Midge Emerger</td>
-        <td class="p-3">Black, olive, or cream body</td>
-        <td class="p-3">Year-round; especially winter</td>
+      <tr>
+        <td>Midges</td>
+        <td>#20–28</td>
+        <td>Griffith's Gnat, CDC Midge Emerger</td>
+        <td>Black, olive, or cream body</td>
+        <td>Year-round; especially winter</td>
       </tr>
     </tbody>
   </table>
@@ -1274,17 +1274,17 @@ export const articles: Article[] = [
   <li><strong>Cripples</strong> — Insects that failed to emerge properly and remain stuck in the surface film. These easy targets are often preferred over healthy duns. Try a trailing-shuck pattern or a cripple imitation.</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">The Hatch-Matching Framework</p>
-  <p class="text-sm text-[#D8DEE4] mb-3">No matter the river, the insect, or the conditions, the fundamental approach stays the same:</p>
-  <ol class="list-decimal list-inside space-y-1 text-sm text-[#D8DEE4]">
+<aside>
+  <p>The Hatch-Matching Framework</p>
+  <p>No matter the river, the insect, or the conditions, the fundamental approach stays the same:</p>
+  <ol>
     <li><strong>Observe</strong> — Watch the insects and the rise forms</li>
     <li><strong>Identify</strong> — Determine type, size, and color</li>
     <li><strong>Imitate</strong> — Select the closest matching fly</li>
     <li><strong>Present</strong> — Deliver with a natural, drag-free drift</li>
   </ol>
-  <p class="text-sm text-[#D8DEE4] mt-3">The more time you spend watching insects and watching trout respond to them, the better you will become at solving the endlessly fascinating puzzle of matching the hatch.</p>
-</div>`,
+  <p>The more time you spend watching insects and watching trout respond to them, the better you will become at solving the endlessly fascinating puzzle of matching the hatch.</p>
+</aside>`,
     readingTimeMinutes: 14,
     tags: [
       "dry fly",
@@ -1329,67 +1329,67 @@ export const articles: Article[] = [
   <li><strong>A single fly</strong> — traditionally a reverse-hackle kebari pattern</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">A Brief History</p>
-  <p class="text-[#D8DEE4] text-sm">Tenkara was virtually unknown outside Japan until the late 2000s, when Western anglers discovered the technique and began importing rods. By the mid-2010s, several American and European companies were manufacturing tenkara rods, and the method had developed a dedicated global following among anglers seeking a return to fundamentals.</p>
-</div>
+<aside>
+  <p>A Brief History</p>
+  <p>Tenkara was virtually unknown outside Japan until the late 2000s, when Western anglers discovered the technique and began importing rods. By the mid-2010s, several American and European companies were manufacturing tenkara rods, and the method had developed a dedicated global following among anglers seeking a return to fundamentals.</p>
+</aside>
 
 <h2>Tenkara vs. Western Fly Fishing</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Aspect</th>
-        <th class="text-left p-3">Tenkara</th>
-        <th class="text-left p-3">Western Fly Fishing</th>
+      <tr>
+        <th>Aspect</th>
+        <th>Tenkara</th>
+        <th>Western Fly Fishing</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Reel</strong></td>
-        <td class="p-3">None</td>
-        <td class="p-3">Required (single-action or multiplier)</td>
+      <tr>
+        <td><strong>Reel</strong></td>
+        <td>None</td>
+        <td>Required (single-action or multiplier)</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Line System</strong></td>
-        <td class="p-3">Fixed-length level or furled line</td>
-        <td class="p-3">Weighted fly line + backing + leader</td>
+      <tr>
+        <td><strong>Line System</strong></td>
+        <td>Fixed-length level or furled line</td>
+        <td>Weighted fly line + backing + leader</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Rod Length</strong></td>
-        <td class="p-3">10.5–14.5 ft (telescoping)</td>
-        <td class="p-3">7.5–10 ft (multi-piece)</td>
+      <tr>
+        <td><strong>Rod Length</strong></td>
+        <td>10.5–14.5 ft (telescoping)</td>
+        <td>7.5–10 ft (multi-piece)</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Casting Distance</strong></td>
-        <td class="p-3">~25–35 ft max</td>
-        <td class="p-3">30–80+ ft</td>
+      <tr>
+        <td><strong>Casting Distance</strong></td>
+        <td>~25–35 ft max</td>
+        <td>30–80+ ft</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Fly Selection</strong></td>
-        <td class="p-3">Minimalist — one fly philosophy (kebari)</td>
-        <td class="p-3">Match-the-hatch — extensive fly boxes</td>
+      <tr>
+        <td><strong>Fly Selection</strong></td>
+        <td>Minimalist — one fly philosophy (kebari)</td>
+        <td>Match-the-hatch — extensive fly boxes</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Primary Technique</strong></td>
-        <td class="p-3">Active fly manipulation</td>
-        <td class="p-3">Dead-drift presentation</td>
+      <tr>
+        <td><strong>Primary Technique</strong></td>
+        <td>Active fly manipulation</td>
+        <td>Dead-drift presentation</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Setup Time</strong></td>
-        <td class="p-3">Under 1 minute</td>
-        <td class="p-3">5–15 minutes</td>
+      <tr>
+        <td><strong>Setup Time</strong></td>
+        <td>Under 1 minute</td>
+        <td>5–15 minutes</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Best Water</strong></td>
-        <td class="p-3">Small to medium mountain streams</td>
-        <td class="p-3">All water types</td>
+      <tr>
+        <td><strong>Best Water</strong></td>
+        <td>Small to medium mountain streams</td>
+        <td>All water types</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Portability</strong></td>
-        <td class="p-3">Collapses to ~20 in; fits in a daypack</td>
-        <td class="p-3">Rod tube + reel case + vest/pack</td>
+      <tr>
+        <td><strong>Portability</strong></td>
+        <td>Collapses to ~20 in; fits in a daypack</td>
+        <td>Rod tube + reel case + vest/pack</td>
       </tr>
     </tbody>
   </table>
@@ -1410,39 +1410,39 @@ export const articles: Article[] = [
 
 <h3>Rod Selection by Water Type</h3>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Rod Length</th>
-        <th class="text-left p-3">Best Water Type</th>
-        <th class="text-left p-3">Notes</th>
+      <tr>
+        <th>Rod Length</th>
+        <th>Best Water Type</th>
+        <th>Notes</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>10.5–11.5 ft</strong></td>
-        <td class="p-3">Small, brushy streams</td>
-        <td class="p-3">Maximum maneuverability in tight quarters with low canopy</td>
+      <tr>
+        <td><strong>10.5–11.5 ft</strong></td>
+        <td>Small, brushy streams</td>
+        <td>Maximum maneuverability in tight quarters with low canopy</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>12–13 ft</strong></td>
-        <td class="p-3">Open meadow streams, medium rivers</td>
-        <td class="p-3">Ideal balance of reach and control — the most versatile length</td>
+      <tr>
+        <td><strong>12–13 ft</strong></td>
+        <td>Open meadow streams, medium rivers</td>
+        <td>Ideal balance of reach and control — the most versatile length</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>14–14.5 ft</strong></td>
-        <td class="p-3">Larger water, competitive fishing</td>
-        <td class="p-3">Specialized tool for maximum reach; requires more open casting space</td>
+      <tr>
+        <td><strong>14–14.5 ft</strong></td>
+        <td>Larger water, competitive fishing</td>
+        <td>Specialized tool for maximum reach; requires more open casting space</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Beginner Tip: Start with One Rod</p>
-  <p class="text-[#D8DEE4] text-sm">A 12-foot rod is the best starting point for most anglers. It handles the widest range of water types and provides the right balance of reach, control, and castability. Many experienced tenkara anglers eventually accumulate several rods, but one quality 12-footer will serve you well on 80% of the streams you encounter.</p>
-</div>
+<aside>
+  <p>Beginner Tip: Start with One Rod</p>
+  <p>A 12-foot rod is the best starting point for most anglers. It handles the widest range of water types and provides the right balance of reach, control, and castability. Many experienced tenkara anglers eventually accumulate several rods, but one quality 12-footer will serve you well on 80% of the streams you encounter.</p>
+</aside>
 
 <h2>Line, Tippet, and Flies</h2>
 
@@ -1450,50 +1450,50 @@ export const articles: Article[] = [
 
 <p>The tenkara line is a fixed length of material — there is no running line, no reel to strip from, and no ability to extend or shorten the line during a fight. The line is typically the same length as the rod, or slightly longer.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Feature</th>
-        <th class="text-left p-3">Level Line</th>
-        <th class="text-left p-3">Furled Line</th>
+      <tr>
+        <th>Feature</th>
+        <th>Level Line</th>
+        <th>Furled Line</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Material</strong></td>
-        <td class="p-3">Single strand of fluorocarbon (size 3–4)</td>
-        <td class="p-3">Twisted strands of monofilament or thread</td>
+      <tr>
+        <td><strong>Material</strong></td>
+        <td>Single strand of fluorocarbon (size 3–4)</td>
+        <td>Twisted strands of monofilament or thread</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Weight</strong></td>
-        <td class="p-3">Lighter</td>
-        <td class="p-3">Heavier</td>
+      <tr>
+        <td><strong>Weight</strong></td>
+        <td>Lighter</td>
+        <td>Heavier</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Wind Resistance</strong></td>
-        <td class="p-3">Better — cuts through wind more effectively</td>
-        <td class="p-3">More affected by wind</td>
+      <tr>
+        <td><strong>Wind Resistance</strong></td>
+        <td>Better — cuts through wind more effectively</td>
+        <td>More affected by wind</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Sensitivity</strong></td>
-        <td class="p-3">Higher — better feel for strikes and drift</td>
-        <td class="p-3">Moderate</td>
+      <tr>
+        <td><strong>Sensitivity</strong></td>
+        <td>Higher — better feel for strikes and drift</td>
+        <td>Moderate</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Casting Ease</strong></td>
-        <td class="p-3">Requires more skill to load the rod</td>
-        <td class="p-3">Easier for beginners — loads the rod more readily</td>
+      <tr>
+        <td><strong>Casting Ease</strong></td>
+        <td>Requires more skill to load the rod</td>
+        <td>Easier for beginners — loads the rod more readily</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Delicacy</strong></td>
-        <td class="p-3">Superior — lighter landing on the water</td>
-        <td class="p-3">Good but slightly heavier presentation</td>
+      <tr>
+        <td><strong>Delicacy</strong></td>
+        <td>Superior — lighter landing on the water</td>
+        <td>Good but slightly heavier presentation</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Best For</strong></td>
-        <td class="p-3">Experienced anglers; versatile conditions</td>
-        <td class="p-3">Beginners; calm conditions</td>
+      <tr>
+        <td><strong>Best For</strong></td>
+        <td>Experienced anglers; versatile conditions</td>
+        <td>Beginners; calm conditions</td>
       </tr>
     </tbody>
   </table>
@@ -1516,10 +1516,10 @@ export const articles: Article[] = [
   <li><strong>Tenkara approach</strong> — The angler's skill in presenting and manipulating the fly matters far more than the specific pattern; one fly (or a small handful of variations) is sufficient</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Beginner Tip: Don't Overthink Fly Selection</p>
-  <p class="text-[#D8DEE4] text-sm">Start with three or four kebari patterns in different sizes (10, 12, and 14) and focus on mastering your presentation technique. The tenkara philosophy teaches that how you fish the fly matters far more than which fly you fish.</p>
-</div>
+<aside>
+  <p>Beginner Tip: Don't Overthink Fly Selection</p>
+  <p>Start with three or four kebari patterns in different sizes (10, 12, and 14) and focus on mastering your presentation technique. The tenkara philosophy teaches that how you fish the fly matters far more than which fly you fish.</p>
+</aside>
 
 <h2>Tenkara Technique</h2>
 
@@ -1557,10 +1557,10 @@ export const articles: Article[] = [
   <li><strong>The dap</strong> — On tight water, extend the rod and lower the fly directly into a pocket or along a seam without making a formal cast</li>
 </ol>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">Why Manipulation Works</p>
+<aside>
+  <p>Why Manipulation Works</p>
   <p>The long rod keeps most or all of the line off the water, giving the angler direct control over the fly's movement. This direct connection enables a variety of presentations far greater than most Western anglers realize — and triggers aggressive strikes from trout that might ignore a static presentation.</p>
-</div>
+</aside>
 
 <h2>Where Tenkara Excels</h2>
 
@@ -1577,10 +1577,10 @@ export const articles: Article[] = [
 
 <h2>Limitations and Honest Assessment</h2>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Know Before You Commit</p>
-  <p class="text-[#D8DEE4] text-sm">Tenkara is not a universal technique. Understanding its limitations is as important as appreciating its strengths. Buying a tenkara rod expecting it to replace all your Western gear will lead to frustration.</p>
-</div>
+<aside>
+  <p>Know Before You Commit</p>
+  <p>Tenkara is not a universal technique. Understanding its limitations is as important as appreciating its strengths. Buying a tenkara rod expecting it to replace all your Western gear will lead to frustration.</p>
+</aside>
 
 <ul>
   <li><strong>Limited casting distance</strong> — The fixed line length limits reach to roughly 30–35 feet, making tenkara impractical on large rivers where fish hold at greater distances</li>
@@ -1590,10 +1590,10 @@ export const articles: Article[] = [
   <li><strong>Selective feeding situations</strong> — The minimalist fly approach, while philosophically appealing, may be a disadvantage during highly selective hatches where precise imitation matters</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The Bottom Line</p>
-  <p class="text-[#D8DEE4] text-sm">Despite these limitations, tenkara has earned its place in the modern fly fishing world. For the right water, the right fish, and the right angler, there is nothing quite like the purity and elegance of a long rod, a simple line, and a single fly. Tenkara reminds us that at its core, fly fishing is about the connection between an angler, a current, and a wild fish — and that everything else is just details.</p>
-</div>`,
+<aside>
+  <p>The Bottom Line</p>
+  <p>Despite these limitations, tenkara has earned its place in the modern fly fishing world. For the right water, the right fish, and the right angler, there is nothing quite like the purity and elegance of a long rod, a simple line, and a single fly. Tenkara reminds us that at its core, fly fishing is about the connection between an angler, a current, and a wild fish — and that everything else is just details.</p>
+</aside>`,
     readingTimeMinutes: 10,
     tags: [
       "tenkara",
@@ -1637,10 +1637,10 @@ export const articles: Article[] = [
 
 <p>Streamer fishing targets this predatory behavior by presenting large, articulated fly patterns that imitate these high-calorie prey items, appealing to the aggressive instincts of a river's biggest residents.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The Streamer Trade-Off</p>
-  <p class="text-[#D8DEE4] text-sm">A nymph angler might catch twenty fish in a day, but most will be average-sized. A streamer angler working the same river might move only three or four fish — but those fish are disproportionately likely to be the largest trout the river holds. Fewer strikes, bigger fish.</p>
-</div>
+<aside>
+  <p>The Streamer Trade-Off</p>
+  <p>A nymph angler might catch twenty fish in a day, but most will be average-sized. A streamer angler working the same river might move only three or four fish — but those fish are disproportionately likely to be the largest trout the river holds. Fewer strikes, bigger fish.</p>
+</aside>
 
 <h2>Understanding Predatory Trout Behavior</h2>
 
@@ -1672,66 +1672,66 @@ export const articles: Article[] = [
   <li><strong>Reaction</strong> — The streamer surprises the trout — appearing suddenly or changing direction abruptly — triggering an instinctive predatory response before the fish can evaluate the presentation</li>
 </ol>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">The Best Streamer Anglers</p>
+<aside>
+  <p>The Best Streamer Anglers</p>
   <p>Design their presentations to trigger all three response types throughout the course of a day. If hunger isn't working, switch to aggressive retrieves. If fish are following but not committing, trigger a reaction strike with an abrupt direction change.</p>
-</div>
+</aside>
 
 <h2>Streamer Gear and Setup</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Component</th>
-        <th class="text-left p-3">Specification</th>
-        <th class="text-left p-3">Notes</th>
+      <tr>
+        <th>Component</th>
+        <th>Specification</th>
+        <th>Notes</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Rod</strong></td>
-        <td class="p-3">6- or 7-weight, 9–9.5 ft, fast action</td>
-        <td class="p-3">Backbone for large flies; line speed for heavy articulated patterns</td>
+      <tr>
+        <td><strong>Rod</strong></td>
+        <td>6- or 7-weight, 9–9.5 ft, fast action</td>
+        <td>Backbone for large flies; line speed for heavy articulated patterns</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Reel</strong></td>
-        <td class="p-3">Large-arbor with reliable disc drag</td>
-        <td class="p-3">Smooth, consistent drag is critical for big fish in heavy current</td>
+      <tr>
+        <td><strong>Reel</strong></td>
+        <td>Large-arbor with reliable disc drag</td>
+        <td>Smooth, consistent drag is critical for big fish in heavy current</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Floating Line</strong></td>
-        <td class="p-3">WF with long leader</td>
-        <td class="p-3">Shallow water and along banks</td>
+      <tr>
+        <td><strong>Floating Line</strong></td>
+        <td>WF with long leader</td>
+        <td>Shallow water and along banks</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Sink-Tip Line</strong></td>
-        <td class="p-3">Sinking front + floating running line</td>
-        <td class="p-3">Most versatile option — covers the majority of streamer situations</td>
+      <tr>
+        <td><strong>Sink-Tip Line</strong></td>
+        <td>Sinking front + floating running line</td>
+        <td>Most versatile option — covers the majority of streamer situations</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Full-Sinking Line</strong></td>
-        <td class="p-3">Various sink rates (Type II–VI)</td>
-        <td class="p-3">Deep pools, fast runs, lake environments</td>
+      <tr>
+        <td><strong>Full-Sinking Line</strong></td>
+        <td>Various sink rates (Type II–VI)</td>
+        <td>Deep pools, fast runs, lake environments</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Leader</strong></td>
-        <td class="p-3">4–7 ft total, 0X to 3X tippet</td>
-        <td class="p-3">Short and stout — must turn over heavy flies and absorb aggressive strikes</td>
+      <tr>
+        <td><strong>Leader</strong></td>
+        <td>4–7 ft total, 0X to 3X tippet</td>
+        <td>Short and stout — must turn over heavy flies and absorb aggressive strikes</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Simple Leader Setup</strong></td>
-        <td class="p-3">3–4 ft of 20 lb mono → 3 ft of 10–12 lb fluoro</td>
-        <td class="p-3">Loop-to-loop connection; reliable and fast to rig</td>
+      <tr>
+        <td><strong>Simple Leader Setup</strong></td>
+        <td>3–4 ft of 20 lb mono → 3 ft of 10–12 lb fluoro</td>
+        <td>Loop-to-loop connection; reliable and fast to rig</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Match Your Tackle to the Water</p>
-  <p class="text-[#D8DEE4] text-sm">Fishing heavy articulated streamers on a 5-weight rod is a common beginner mistake. Under-gunned tackle leads to poor casting, missed hooksets, and lost fish. If you're throwing big flies at big trout, gear up accordingly — a 7-weight is not overkill, it's the right tool for the job.</p>
-</div>
+<aside>
+  <p>Match Your Tackle to the Water</p>
+  <p>Fishing heavy articulated streamers on a 5-weight rod is a common beginner mistake. Under-gunned tackle leads to poor casting, missed hooksets, and lost fish. If you're throwing big flies at big trout, gear up accordingly — a 7-weight is not overkill, it's the right tool for the job.</p>
+</aside>
 
 <h2>Fly Selection: The Modern Streamer Box</h2>
 
@@ -1739,73 +1739,73 @@ export const articles: Article[] = [
 
 <p>The streamer category has undergone a revolution in the past two decades, evolving from simple featherwing and bucktail patterns into elaborate articulated creations that push water, change direction, and exhibit lifelike swimming action.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Pattern</th>
-        <th class="text-left p-3">Type</th>
-        <th class="text-left p-3">Best Colors</th>
-        <th class="text-left p-3">Size Range</th>
-        <th class="text-left p-3">Target / Notes</th>
+      <tr>
+        <th>Pattern</th>
+        <th>Type</th>
+        <th>Best Colors</th>
+        <th>Size Range</th>
+        <th>Target / Notes</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Drunk & Disorderly</strong></td>
-        <td class="p-3">Articulated</td>
-        <td class="p-3">Olive, white, sculpin</td>
-        <td class="p-3">#2–#2/0</td>
-        <td class="p-3">Trophy browns; erratic action triggers reaction strikes</td>
+      <tr>
+        <td><strong>Drunk & Disorderly</strong></td>
+        <td>Articulated</td>
+        <td>Olive, white, sculpin</td>
+        <td>#2–#2/0</td>
+        <td>Trophy browns; erratic action triggers reaction strikes</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Circus Peanut</strong></td>
-        <td class="p-3">Articulated</td>
-        <td class="p-3">Black, olive, white</td>
-        <td class="p-3">#2–#2/0</td>
-        <td class="p-3">Big water; excellent swimming profile</td>
+      <tr>
+        <td><strong>Circus Peanut</strong></td>
+        <td>Articulated</td>
+        <td>Black, olive, white</td>
+        <td>#2–#2/0</td>
+        <td>Big water; excellent swimming profile</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Sex Dungeon</strong></td>
-        <td class="p-3">Articulated</td>
-        <td class="p-3">Olive/white, black, tan</td>
-        <td class="p-3">#4–#1/0</td>
-        <td class="p-3">Versatile baitfish imitation; aggressive predators</td>
+      <tr>
+        <td><strong>Sex Dungeon</strong></td>
+        <td>Articulated</td>
+        <td>Olive/white, black, tan</td>
+        <td>#4–#1/0</td>
+        <td>Versatile baitfish imitation; aggressive predators</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Woolly Bugger</strong></td>
-        <td class="p-3">Classic</td>
-        <td class="p-3">Black, olive, brown</td>
-        <td class="p-3">#4–#10</td>
-        <td class="p-3">Most versatile fly ever tied; effective everywhere</td>
+      <tr>
+        <td><strong>Woolly Bugger</strong></td>
+        <td>Classic</td>
+        <td>Black, olive, brown</td>
+        <td>#4–#10</td>
+        <td>Most versatile fly ever tied; effective everywhere</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Zonker</strong></td>
-        <td class="p-3">Classic</td>
-        <td class="p-3">Natural, olive, white</td>
-        <td class="p-3">#4–#8</td>
-        <td class="p-3">Excellent baitfish profile; rabbit strip action</td>
+      <tr>
+        <td><strong>Zonker</strong></td>
+        <td>Classic</td>
+        <td>Natural, olive, white</td>
+        <td>#4–#8</td>
+        <td>Excellent baitfish profile; rabbit strip action</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Muddler Minnow</strong></td>
-        <td class="p-3">Classic</td>
-        <td class="p-3">Natural, gold</td>
-        <td class="p-3">#4–#10</td>
-        <td class="p-3">Sculpin imitation; deadly fished near the bottom</td>
+      <tr>
+        <td><strong>Muddler Minnow</strong></td>
+        <td>Classic</td>
+        <td>Natural, gold</td>
+        <td>#4–#10</td>
+        <td>Sculpin imitation; deadly fished near the bottom</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Clouser Minnow</strong></td>
-        <td class="p-3">Classic</td>
-        <td class="p-3">Chartreuse/white, olive/white</td>
-        <td class="p-3">#4–#8</td>
-        <td class="p-3">Jigging action; versatile for all water types</td>
+      <tr>
+        <td><strong>Clouser Minnow</strong></td>
+        <td>Classic</td>
+        <td>Chartreuse/white, olive/white</td>
+        <td>#4–#8</td>
+        <td>Jigging action; versatile for all water types</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Articulated Sculpin</strong></td>
-        <td class="p-3">Articulated</td>
-        <td class="p-3">Olive, brown, tan</td>
-        <td class="p-3">#2–#2/0</td>
-        <td class="p-3">Bottom-bouncing; imitates primary forage in rocky rivers</td>
+      <tr>
+        <td><strong>Articulated Sculpin</strong></td>
+        <td>Articulated</td>
+        <td>Olive, brown, tan</td>
+        <td>#2–#2/0</td>
+        <td>Bottom-bouncing; imitates primary forage in rocky rivers</td>
       </tr>
     </tbody>
   </table>
@@ -1835,10 +1835,10 @@ export const articles: Article[] = [
   <li><strong>Vary the rhythm</strong> — Change strip speed and pause length throughout the day</li>
 </ol>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The Pause Is Everything</p>
-  <p class="text-[#D8DEE4] text-sm">Most streamer strikes occur during the pause, when the fly hangs motionless or begins to drop, imitating a wounded or disoriented baitfish. If you're not getting strikes, try longer pauses before speeding up your retrieve.</p>
-</div>
+<aside>
+  <p>The Pause Is Everything</p>
+  <p>Most streamer strikes occur during the pause, when the fly hangs motionless or begins to drop, imitating a wounded or disoriented baitfish. If you're not getting strikes, try longer pauses before speeding up your retrieve.</p>
+</aside>
 
 <h3>The Swing</h3>
 
@@ -1868,58 +1868,58 @@ export const articles: Article[] = [
 
 <h2>Timing and Conditions</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Condition</th>
-        <th class="text-left p-3">Productivity</th>
-        <th class="text-left p-3">Why</th>
-        <th class="text-left p-3">Best Approach</th>
+      <tr>
+        <th>Condition</th>
+        <th>Productivity</th>
+        <th>Why</th>
+        <th>Best Approach</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Overcast skies</strong></td>
-        <td class="p-3">Excellent</td>
-        <td class="p-3">Low light emboldens big trout to leave cover and hunt actively</td>
-        <td class="p-3">Fish all day; work banks and structure methodically</td>
+      <tr>
+        <td><strong>Overcast skies</strong></td>
+        <td>Excellent</td>
+        <td>Low light emboldens big trout to leave cover and hunt actively</td>
+        <td>Fish all day; work banks and structure methodically</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Rising water / off-color</strong></td>
-        <td class="p-3">Excellent</td>
-        <td class="p-3">Reduced visibility gives predatory trout a sense of security</td>
-        <td class="p-3">Bright colors; slower retrieves to help fish locate the fly</td>
+      <tr>
+        <td><strong>Rising water / off-color</strong></td>
+        <td>Excellent</td>
+        <td>Reduced visibility gives predatory trout a sense of security</td>
+        <td>Bright colors; slower retrieves to help fish locate the fly</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Falling barometer</strong></td>
-        <td class="p-3">Very Good</td>
-        <td class="p-3">Pre-storm pressure drops trigger increased predatory activity</td>
-        <td class="p-3">Fish the hours before the front arrives</td>
+      <tr>
+        <td><strong>Falling barometer</strong></td>
+        <td>Very Good</td>
+        <td>Pre-storm pressure drops trigger increased predatory activity</td>
+        <td>Fish the hours before the front arrives</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Bright, sunny days</strong></td>
-        <td class="p-3">Fair</td>
-        <td class="p-3">Big trout stay deep in cover; less willing to chase</td>
-        <td class="p-3">Focus on deep structure; sink-tip or full-sinking lines</td>
+      <tr>
+        <td><strong>Bright, sunny days</strong></td>
+        <td>Fair</td>
+        <td>Big trout stay deep in cover; less willing to chase</td>
+        <td>Focus on deep structure; sink-tip or full-sinking lines</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Fall (Oct–Nov)</strong></td>
-        <td class="p-3">Prime season</td>
-        <td class="p-3">Pre-spawn browns abandon caution; peak aggression</td>
-        <td class="p-3">Jerk-strips; large articulated patterns; fish all day</td>
+      <tr>
+        <td><strong>Fall (Oct–Nov)</strong></td>
+        <td>Prime season</td>
+        <td>Pre-spawn browns abandon caution; peak aggression</td>
+        <td>Jerk-strips; large articulated patterns; fish all day</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Spring runoff</strong></td>
-        <td class="p-3">Very Good</td>
-        <td class="p-3">Rising, off-color water activates predatory behavior</td>
-        <td class="p-3">Dark or bright streamers; heavy sink-tips</td>
+      <tr>
+        <td><strong>Spring runoff</strong></td>
+        <td>Very Good</td>
+        <td>Rising, off-color water activates predatory behavior</td>
+        <td>Dark or bright streamers; heavy sink-tips</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Summer</strong></td>
-        <td class="p-3">Moderate</td>
-        <td class="p-3">Fish hold deep during midday; active at dawn and dusk</td>
-        <td class="p-3">Early morning and late evening; fish the transitions</td>
+      <tr>
+        <td><strong>Summer</strong></td>
+        <td>Moderate</td>
+        <td>Fish hold deep during midday; active at dawn and dusk</td>
+        <td>Early morning and late evening; fish the transitions</td>
       </tr>
     </tbody>
   </table>
@@ -1927,10 +1927,10 @@ export const articles: Article[] = [
 
 <h2>Bank Fishing: Where Big Trout Live</h2>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The #1 Rule of Streamer Fishing</p>
-  <p class="text-[#D8DEE4] text-sm">Fish the banks. The majority of a river's largest predatory trout hold along or under the banks, where undercut edges, root wads, overhanging vegetation, and submerged structure provide the cover and ambush points that big fish require. A streamer cast within inches of the bank is exponentially more productive than one that lands three feet away.</p>
-</div>
+<aside>
+  <p>The #1 Rule of Streamer Fishing</p>
+  <p>Fish the banks. The majority of a river's largest predatory trout hold along or under the banks, where undercut edges, root wads, overhanging vegetation, and submerged structure provide the cover and ambush points that big fish require. A streamer cast within inches of the bank is exponentially more productive than one that lands three feet away.</p>
+</aside>
 
 <h3>From a Drift Boat</h3>
 
@@ -1950,10 +1950,10 @@ export const articles: Article[] = [
   <li><strong>The critical factor</strong> — Getting the fly close to structure. A streamer that lands three feet from the bank catches fish occasionally. A streamer that lands three inches from the bank catches fish consistently. The difference in distance is trivial, but the difference in results is profound</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">The Movement Trigger</p>
+<aside>
+  <p>The Movement Trigger</p>
   <p>The fly moving away from the bank imitates a baitfish fleeing from shallow water toward deeper current. This triggers aggressive pursuit strikes from territorial fish — they see prey escaping their territory and react instinctively. This is why stripping away from the bank is far more effective than swinging parallel to it.</p>
-</div>`,
+</aside>`,
     readingTimeMinutes: 14,
     tags: [
       "streamers",
@@ -1998,119 +1998,119 @@ export const articles: Article[] = [
   <li><strong>Dramatic scenery</strong> — Volcanic peaks, ancient forests, glacial lakes, and windswept steppe create a landscape unlike any other fishing destination</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">Why Anglers Return</p>
-  <p class="text-[#D8DEE4] text-sm">There is a rawness and authenticity to Patagonian fly fishing that hooks anglers on their first visit and pulls them back year after year. The combination of quality fishing, dramatic scenery, and genuine remoteness is becoming harder to find in heavily fished destinations worldwide.</p>
-</div>
+<aside>
+  <p>Why Anglers Return</p>
+  <p>There is a rawness and authenticity to Patagonian fly fishing that hooks anglers on their first visit and pulls them back year after year. The combination of quality fishing, dramatic scenery, and genuine remoteness is becoming harder to find in heavily fished destinations worldwide.</p>
+</aside>
 
 <h2>When to Go</h2>
 
 <p>Patagonia sits in the Southern Hemisphere, so seasons are reversed from North America. The fly fishing season runs from approximately <strong>November through April</strong>.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Month</th>
-        <th class="text-left p-3">Conditions</th>
-        <th class="text-left p-3">Best Fishing</th>
-        <th class="text-left p-3">Crowds</th>
+      <tr>
+        <th>Month</th>
+        <th>Conditions</th>
+        <th>Best Fishing</th>
+        <th>Crowds</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>November</strong></td>
-        <td class="p-3">Early season; water often high and cold from snowmelt</td>
-        <td class="p-3">Nymphs and streamers; hungry post-winter fish</td>
-        <td class="p-3">Very low — rivers nearly empty</td>
+      <tr>
+        <td><strong>November</strong></td>
+        <td>Early season; water often high and cold from snowmelt</td>
+        <td>Nymphs and streamers; hungry post-winter fish</td>
+        <td>Very low — rivers nearly empty</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>December</strong></td>
-        <td class="p-3">Warming water; prolific insect hatches begin</td>
-        <td class="p-3">Dry flies and nymphs; increasingly consistent</td>
-        <td class="p-3">Low to moderate</td>
+      <tr>
+        <td><strong>December</strong></td>
+        <td>Warming water; prolific insect hatches begin</td>
+        <td>Dry flies and nymphs; increasingly consistent</td>
+        <td>Low to moderate</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>January</strong></td>
-        <td class="p-3">Warm water; stable weather patterns emerging</td>
-        <td class="p-3">Excellent dry fly fishing; strong hatches</td>
-        <td class="p-3">Moderate — holiday season</td>
+      <tr>
+        <td><strong>January</strong></td>
+        <td>Warm water; stable weather patterns emerging</td>
+        <td>Excellent dry fly fishing; strong hatches</td>
+        <td>Moderate — holiday season</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>February</strong></td>
-        <td class="p-3">Prime conditions; most settled weather</td>
-        <td class="p-3">Peak terrestrials — big beetles and hoppers bring large fish to the surface</td>
-        <td class="p-3">Moderate</td>
+      <tr>
+        <td><strong>February</strong></td>
+        <td>Prime conditions; most settled weather</td>
+        <td>Peak terrestrials — big beetles and hoppers bring large fish to the surface</td>
+        <td>Moderate</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>March</strong></td>
-        <td class="p-3">Prime conditions continue; slightly cooler evenings</td>
-        <td class="p-3">Terrestrials and dry flies; excellent all-around</td>
-        <td class="p-3">Moderate to low</td>
+      <tr>
+        <td><strong>March</strong></td>
+        <td>Prime conditions continue; slightly cooler evenings</td>
+        <td>Terrestrials and dry flies; excellent all-around</td>
+        <td>Moderate to low</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>April</strong></td>
-        <td class="p-3">Late season; shorter days, cooling temperatures</td>
-        <td class="p-3">Streamer fishing for aggressive pre-winter browns</td>
-        <td class="p-3">Very low</td>
+      <tr>
+        <td><strong>April</strong></td>
+        <td>Late season; shorter days, cooling temperatures</td>
+        <td>Streamer fishing for aggressive pre-winter browns</td>
+        <td>Very low</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#F8D7A8] mb-1">Prepare for Patagonian Weather</p>
-  <p class="text-[#D8DEE4] text-sm">Weather in Patagonia is notoriously variable. Wind is a constant companion, often sustained at 20–40 mph, changing direction multiple times in a single day. Rain, sun, and even snow can occur within the same afternoon. Layered clothing, quality rain gear, and the ability to cast accurately in wind are non-negotiable. The upside: overcast, breezy days that would suppress hatches elsewhere often stimulate feeding activity in Patagonian trout.</p>
-</div>
+<aside>
+  <p>Prepare for Patagonian Weather</p>
+  <p>Weather in Patagonia is notoriously variable. Wind is a constant companion, often sustained at 20–40 mph, changing direction multiple times in a single day. Rain, sun, and even snow can occur within the same afternoon. Layered clothing, quality rain gear, and the ability to cast accurately in wind are non-negotiable. The upside: overcast, breezy days that would suppress hatches elsewhere often stimulate feeding activity in Patagonian trout.</p>
+</aside>
 
 <h2>Choosing a Region</h2>
 
 <p>Patagonia covers an enormous geographic area, and different regions offer distinctly different fishing experiences.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Region</th>
-        <th class="text-left p-3">Country</th>
-        <th class="text-left p-3">Access</th>
-        <th class="text-left p-3">Price Level</th>
-        <th class="text-left p-3">Key Species</th>
-        <th class="text-left p-3">Character</th>
+      <tr>
+        <th>Region</th>
+        <th>Country</th>
+        <th>Access</th>
+        <th>Price Level</th>
+        <th>Key Species</th>
+        <th>Character</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Lake District (Bariloche / San Martin)</strong></td>
-        <td class="p-3">Argentina</td>
-        <td class="p-3">Easy — well-developed infrastructure</td>
-        <td class="p-3">$$–$$$</td>
-        <td class="p-3">Browns, rainbows</td>
-        <td class="p-3">Most popular region; dense concentration of world-class rivers and lakes</td>
+      <tr>
+        <td><strong>Lake District (Bariloche / San Martin)</strong></td>
+        <td>Argentina</td>
+        <td>Easy — well-developed infrastructure</td>
+        <td>$$–$$$</td>
+        <td>Browns, rainbows</td>
+        <td>Most popular region; dense concentration of world-class rivers and lakes</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Chubut Province</strong></td>
-        <td class="p-3">Argentina</td>
-        <td class="p-3">Moderate — longer drives, some unpaved roads</td>
-        <td class="p-3">$$</td>
-        <td class="p-3">Browns, rainbows</td>
-        <td class="p-3">More remote; less angling pressure; excellent value</td>
+      <tr>
+        <td><strong>Chubut Province</strong></td>
+        <td>Argentina</td>
+        <td>Moderate — longer drives, some unpaved roads</td>
+        <td>$$</td>
+        <td>Browns, rainbows</td>
+        <td>More remote; less angling pressure; excellent value</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Aysen Region</strong></td>
-        <td class="p-3">Chile</td>
-        <td class="p-3">Challenging — dense forest, limited roads</td>
-        <td class="p-3">$–$$</td>
-        <td class="p-3">Browns, rainbows</td>
-        <td class="p-3">Wild and undeveloped; very few other anglers; genuinely exploratory</td>
+      <tr>
+        <td><strong>Aysen Region</strong></td>
+        <td>Chile</td>
+        <td>Challenging — dense forest, limited roads</td>
+        <td>$–$$</td>
+        <td>Browns, rainbows</td>
+        <td>Wild and undeveloped; very few other anglers; genuinely exploratory</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Tierra del Fuego</strong></td>
-        <td class="p-3">Argentina/Chile</td>
-        <td class="p-3">Moderate — established lodges on key rivers</td>
-        <td class="p-3">$$$$</td>
-        <td class="p-3">Sea-run browns (20+ lbs)</td>
-        <td class="p-3">Specialized destination; exclusive lodges; the Rio Grande is world-famous</td>
+      <tr>
+        <td><strong>Tierra del Fuego</strong></td>
+        <td>Argentina/Chile</td>
+        <td>Moderate — established lodges on key rivers</td>
+        <td>$$$$</td>
+        <td>Sea-run browns (20+ lbs)</td>
+        <td>Specialized destination; exclusive lodges; the Rio Grande is world-famous</td>
       </tr>
     </tbody>
   </table>
@@ -2173,74 +2173,74 @@ export const articles: Article[] = [
   <li><strong>Wading gear</strong> — Breathable waders and sturdy wading boots with felt or rubber soles (check local regulations — some areas restrict felt soles to prevent didymo spread)</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">First-Timer Tip: Pack for All Four Seasons</p>
-  <p class="text-[#D8DEE4] text-sm">Even in February (peak summer), mornings can be near freezing and afternoons can reach 75F. You will use every layer you bring. A day on a Patagonian river can feel like a full year of weather compressed into 12 hours.</p>
-</div>
+<aside>
+  <p>First-Timer Tip: Pack for All Four Seasons</p>
+  <p>Even in February (peak summer), mornings can be near freezing and afternoons can reach 75F. You will use every layer you bring. A day on a Patagonian river can feel like a full year of weather compressed into 12 hours.</p>
+</aside>
 
 <h2>Guided vs. Independent Fishing</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
+<div>
+  <table>
     <thead>
-      <tr class="bg-forest text-white">
-        <th class="text-left p-3">Factor</th>
-        <th class="text-left p-3">Guided / Lodge</th>
-        <th class="text-left p-3">Independent</th>
+      <tr>
+        <th>Factor</th>
+        <th>Guided / Lodge</th>
+        <th>Independent</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Time on the water</strong></td>
-        <td class="p-3">Maximized — guide handles logistics</td>
-        <td class="p-3">More time scouting and driving</td>
+      <tr>
+        <td><strong>Time on the water</strong></td>
+        <td>Maximized — guide handles logistics</td>
+        <td>More time scouting and driving</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Local knowledge</strong></td>
-        <td class="p-3">Guides know seasonal patterns, fish movements, and insect activity</td>
-        <td class="p-3">Must learn as you go; risk missing the best water</td>
+      <tr>
+        <td><strong>Local knowledge</strong></td>
+        <td>Guides know seasonal patterns, fish movements, and insect activity</td>
+        <td>Must learn as you go; risk missing the best water</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Access</strong></td>
-        <td class="p-3">Private estancias and unmarked waters accessible</td>
-        <td class="p-3">Limited to public water; some rivers require permission you may not know how to obtain</td>
+      <tr>
+        <td><strong>Access</strong></td>
+        <td>Private estancias and unmarked waters accessible</td>
+        <td>Limited to public water; some rivers require permission you may not know how to obtain</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Cost</strong></td>
-        <td class="p-3">Higher — lodge packages or daily guide rates</td>
-        <td class="p-3">Significantly lower — rental vehicle, accommodations, self-guided</td>
+      <tr>
+        <td><strong>Cost</strong></td>
+        <td>Higher — lodge packages or daily guide rates</td>
+        <td>Significantly lower — rental vehicle, accommodations, self-guided</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Flexibility</strong></td>
-        <td class="p-3">Structured schedule; guide sets the plan</td>
-        <td class="p-3">Complete freedom to explore at your own pace</td>
+      <tr>
+        <td><strong>Flexibility</strong></td>
+        <td>Structured schedule; guide sets the plan</td>
+        <td>Complete freedom to explore at your own pace</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Language</strong></td>
-        <td class="p-3">Guides typically speak English</td>
-        <td class="p-3">Basic Spanish skills essential</td>
+      <tr>
+        <td><strong>Language</strong></td>
+        <td>Guides typically speak English</td>
+        <td>Basic Spanish skills essential</td>
       </tr>
-      <tr class="border-b border-[#21262D]">
-        <td class="p-3"><strong>Satisfaction</strong></td>
-        <td class="p-3">Reliable; more fish per day</td>
-        <td class="p-3">Greater sense of discovery; reward of finding your own water</td>
+      <tr>
+        <td><strong>Satisfaction</strong></td>
+        <td>Reliable; more fish per day</td>
+        <td>Greater sense of discovery; reward of finding your own water</td>
       </tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]">
-        <td class="p-3"><strong>Vehicle needs</strong></td>
-        <td class="p-3">Usually provided or arranged</td>
-        <td class="p-3">Rental with good clearance required; many unpaved roads</td>
+      <tr>
+        <td><strong>Vehicle needs</strong></td>
+        <td>Usually provided or arranged</td>
+        <td>Rental with good clearance required; many unpaved roads</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">First-Timer Tip: The Best Compromise</p>
-  <p class="text-[#D8DEE4] text-sm">Book guided fishing for the first two or three days of your trip to learn the area and gather local intelligence, then fish independently for the remainder. You'll maximize your fishing time early while building the knowledge base to explore on your own later.</p>
-</div>
+<aside>
+  <p>First-Timer Tip: The Best Compromise</p>
+  <p>Book guided fishing for the first two or three days of your trip to learn the area and gather local intelligence, then fish independently for the remainder. You'll maximize your fishing time early while building the knowledge base to explore on your own later.</p>
+</aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-  <p class="font-semibold mb-2">Budget Planning</p>
+<aside>
+  <p>Budget Planning</p>
   <ul>
     <li><strong>All-inclusive lodge (Argentine Lake District)</strong> — $4,000–$7,000/week including guiding, meals, and accommodation</li>
     <li><strong>Daily guided fishing (hire locally)</strong> — $350–$600/day for guide, vehicle, and lunch</li>
@@ -2249,7 +2249,7 @@ export const articles: Article[] = [
     <li><strong>Flights</strong> — $800–$1,500 round trip from North America to Buenos Aires; additional $200–$400 for domestic flight to Bariloche or other regional airports</li>
     <li><strong>Fishing license</strong> — Required in all Argentine provinces and Chilean regions; available locally for approximately $30–$80 depending on duration and region</li>
   </ul>
-</div>
+</aside>
 
 <h2>Conservation and Ethics</h2>
 
@@ -2271,10 +2271,10 @@ export const articles: Article[] = [
   <li><strong>Minimize your footprint</strong> — Pack out all waste; respect private property boundaries; leave access points as you found them</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">More Than a Fishing Trip</p>
-  <p class="text-[#D8DEE4] text-sm">A trip to Patagonia is an encounter with one of the last great wild places on earth. The rivers are clean, the trout are wild and strong, the mountains are ancient, and the silence is vast. For the fly angler who has dreamed of casting in truly wild water surrounded by genuinely untamed landscape, Patagonia delivers on the promise. Go once, and you will spend the rest of your fishing life planning your return.</p>
-</div>`,
+<aside>
+  <p>More Than a Fishing Trip</p>
+  <p>A trip to Patagonia is an encounter with one of the last great wild places on earth. The rivers are clean, the trout are wild and strong, the mountains are ancient, and the silence is vast. For the fly angler who has dreamed of casting in truly wild water surrounded by genuinely untamed landscape, Patagonia delivers on the promise. Go once, and you will spend the rest of your fishing life planning your return.</p>
+</aside>`,
     readingTimeMinutes: 14,
     tags: [
       "patagonia",
@@ -2325,30 +2325,30 @@ export const articles: Article[] = [
 
 <h2>Master Pattern Reference</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">#</th><th class="text-left p-3">Pattern</th><th class="text-left p-3">Category</th><th class="text-left p-3">Sizes</th><th class="text-left p-3">Key Colors</th><th class="text-left p-3">Imitates</th><th class="text-left p-3">When to Use</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>#</th><th>Pattern</th><th>Category</th><th>Sizes</th><th>Key Colors</th><th>Imitates</th><th>When to Use</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3">1</td><td class="p-3">Parachute Adams</td><td class="p-3">Dry</td><td class="p-3">12-20</td><td class="p-3">Gray body, grizzly hackle</td><td class="p-3">General mayfly</td><td class="p-3">Unidentified rises, searching</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">2</td><td class="p-3">Elk Hair Caddis</td><td class="p-3">Dry</td><td class="p-3">12-18</td><td class="p-3">Tan, olive</td><td class="p-3">Adult caddisflies</td><td class="p-3">Caddis hatches, summer searching</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">3</td><td class="p-3">Stimulator</td><td class="p-3">Dry</td><td class="p-3">6-14</td><td class="p-3">Orange, yellow, tan</td><td class="p-3">Stoneflies, large caddis, hoppers</td><td class="p-3">Fast water, dry-dropper rigs</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">4</td><td class="p-3">Griffith's Gnat</td><td class="p-3">Dry</td><td class="p-3">18-24</td><td class="p-3">Peacock herl, grizzly</td><td class="p-3">Midge clusters</td><td class="p-3">Winter fishing, slow sipping rises</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">5</td><td class="p-3">CDC Blue-Winged Olive</td><td class="p-3">Dry</td><td class="p-3">18-22</td><td class="p-3">Olive, gray</td><td class="p-3">Baetis mayflies</td><td class="p-3">Overcast spring/fall days</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">6</td><td class="p-3">Pheasant Tail Nymph</td><td class="p-3">Nymph</td><td class="p-3">14-20</td><td class="p-3">Natural pheasant tail</td><td class="p-3">Mayfly nymphs (broad range)</td><td class="p-3">Year-round subsurface</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">7</td><td class="p-3">Hare's Ear Nymph</td><td class="p-3">Nymph</td><td class="p-3">10-18</td><td class="p-3">Natural hare's ear dubbing</td><td class="p-3">Mayflies, caddis, small stones</td><td class="p-3">Between hatches, opportunistic feeding</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">8</td><td class="p-3">Zebra Midge</td><td class="p-3">Nymph</td><td class="p-3">18-24</td><td class="p-3">Black, red, olive</td><td class="p-3">Midge larvae and pupae</td><td class="p-3">Tailwaters, spring creeks year-round</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">9</td><td class="p-3">Pat's Rubber Legs</td><td class="p-3">Nymph</td><td class="p-3">4-10</td><td class="p-3">Brown, black, golden</td><td class="p-3">Large stonefly nymphs</td><td class="p-3">Heavy point fly in nymph rigs</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">10</td><td class="p-3">Perdigon</td><td class="p-3">Nymph</td><td class="p-3">14-20</td><td class="p-3">Olive, black, red hot spot</td><td class="p-3">General nymph</td><td class="p-3">Euro nymphing, fast-sinking dropper</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">11</td><td class="p-3">RS2</td><td class="p-3">Emerger</td><td class="p-3">18-24</td><td class="p-3">Gray, olive</td><td class="p-3">Mayfly/midge emergers</td><td class="p-3">Trout rising but refusing dries</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">12</td><td class="p-3">Soft Hackle Partridge &amp; Orange</td><td class="p-3">Wet Fly</td><td class="p-3">12-16</td><td class="p-3">Orange silk, partridge</td><td class="p-3">Emerging caddis pupae</td><td class="p-3">Swung at end of drift, before/during caddis hatches</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">13</td><td class="p-3">Sparkle Dun</td><td class="p-3">Emerger</td><td class="p-3">14-20</td><td class="p-3">Olive, pale yellow, gray</td><td class="p-3">Hatching mayflies</td><td class="p-3">Selective fish during mayfly hatches</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">14</td><td class="p-3">Woolly Bugger</td><td class="p-3">Streamer</td><td class="p-3">4-10</td><td class="p-3">Olive, black, white</td><td class="p-3">Leeches, crayfish, baitfish</td><td class="p-3">Year-round, all water types</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">15</td><td class="p-3">Sculpin Pattern</td><td class="p-3">Streamer</td><td class="p-3">2-8</td><td class="p-3">Olive, brown</td><td class="p-3">Sculpin baitfish</td><td class="p-3">Targeting large trout near structure</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">16</td><td class="p-3">Dave's Hopper</td><td class="p-3">Terrestrial</td><td class="p-3">6-12</td><td class="p-3">Tan, yellow</td><td class="p-3">Grasshoppers</td><td class="p-3">July-September along grassy banks</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">17</td><td class="p-3">Black Ant</td><td class="p-3">Terrestrial</td><td class="p-3">14-20</td><td class="p-3">Black</td><td class="p-3">Ants</td><td class="p-3">Summer/fall prospecting, nothing else working</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">18</td><td class="p-3">San Juan Worm</td><td class="p-3">Specialty</td><td class="p-3">8-14</td><td class="p-3">Red, pink, wine</td><td class="p-3">Aquatic worms</td><td class="p-3">Spring runoff, rain events, tailwaters</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">19</td><td class="p-3">Egg Pattern</td><td class="p-3">Specialty</td><td class="p-3">10-16</td><td class="p-3">Peach, orange, pale pink</td><td class="p-3">Drifting trout/salmon eggs</td><td class="p-3">Fall/spring near spawning areas</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">20</td><td class="p-3">Chubby Chernobyl</td><td class="p-3">Specialty</td><td class="p-3">8-14</td><td class="p-3">Tan, orange, purple</td><td class="p-3">Stoneflies, terrestrials, attractor</td><td class="p-3">Dry-dropper indicator, rough water</td></tr>
+      <tr><td>1</td><td>Parachute Adams</td><td>Dry</td><td>12-20</td><td>Gray body, grizzly hackle</td><td>General mayfly</td><td>Unidentified rises, searching</td></tr>
+      <tr><td>2</td><td>Elk Hair Caddis</td><td>Dry</td><td>12-18</td><td>Tan, olive</td><td>Adult caddisflies</td><td>Caddis hatches, summer searching</td></tr>
+      <tr><td>3</td><td>Stimulator</td><td>Dry</td><td>6-14</td><td>Orange, yellow, tan</td><td>Stoneflies, large caddis, hoppers</td><td>Fast water, dry-dropper rigs</td></tr>
+      <tr><td>4</td><td>Griffith's Gnat</td><td>Dry</td><td>18-24</td><td>Peacock herl, grizzly</td><td>Midge clusters</td><td>Winter fishing, slow sipping rises</td></tr>
+      <tr><td>5</td><td>CDC Blue-Winged Olive</td><td>Dry</td><td>18-22</td><td>Olive, gray</td><td>Baetis mayflies</td><td>Overcast spring/fall days</td></tr>
+      <tr><td>6</td><td>Pheasant Tail Nymph</td><td>Nymph</td><td>14-20</td><td>Natural pheasant tail</td><td>Mayfly nymphs (broad range)</td><td>Year-round subsurface</td></tr>
+      <tr><td>7</td><td>Hare's Ear Nymph</td><td>Nymph</td><td>10-18</td><td>Natural hare's ear dubbing</td><td>Mayflies, caddis, small stones</td><td>Between hatches, opportunistic feeding</td></tr>
+      <tr><td>8</td><td>Zebra Midge</td><td>Nymph</td><td>18-24</td><td>Black, red, olive</td><td>Midge larvae and pupae</td><td>Tailwaters, spring creeks year-round</td></tr>
+      <tr><td>9</td><td>Pat's Rubber Legs</td><td>Nymph</td><td>4-10</td><td>Brown, black, golden</td><td>Large stonefly nymphs</td><td>Heavy point fly in nymph rigs</td></tr>
+      <tr><td>10</td><td>Perdigon</td><td>Nymph</td><td>14-20</td><td>Olive, black, red hot spot</td><td>General nymph</td><td>Euro nymphing, fast-sinking dropper</td></tr>
+      <tr><td>11</td><td>RS2</td><td>Emerger</td><td>18-24</td><td>Gray, olive</td><td>Mayfly/midge emergers</td><td>Trout rising but refusing dries</td></tr>
+      <tr><td>12</td><td>Soft Hackle Partridge &amp; Orange</td><td>Wet Fly</td><td>12-16</td><td>Orange silk, partridge</td><td>Emerging caddis pupae</td><td>Swung at end of drift, before/during caddis hatches</td></tr>
+      <tr><td>13</td><td>Sparkle Dun</td><td>Emerger</td><td>14-20</td><td>Olive, pale yellow, gray</td><td>Hatching mayflies</td><td>Selective fish during mayfly hatches</td></tr>
+      <tr><td>14</td><td>Woolly Bugger</td><td>Streamer</td><td>4-10</td><td>Olive, black, white</td><td>Leeches, crayfish, baitfish</td><td>Year-round, all water types</td></tr>
+      <tr><td>15</td><td>Sculpin Pattern</td><td>Streamer</td><td>2-8</td><td>Olive, brown</td><td>Sculpin baitfish</td><td>Targeting large trout near structure</td></tr>
+      <tr><td>16</td><td>Dave's Hopper</td><td>Terrestrial</td><td>6-12</td><td>Tan, yellow</td><td>Grasshoppers</td><td>July-September along grassy banks</td></tr>
+      <tr><td>17</td><td>Black Ant</td><td>Terrestrial</td><td>14-20</td><td>Black</td><td>Ants</td><td>Summer/fall prospecting, nothing else working</td></tr>
+      <tr><td>18</td><td>San Juan Worm</td><td>Specialty</td><td>8-14</td><td>Red, pink, wine</td><td>Aquatic worms</td><td>Spring runoff, rain events, tailwaters</td></tr>
+      <tr><td>19</td><td>Egg Pattern</td><td>Specialty</td><td>10-16</td><td>Peach, orange, pale pink</td><td>Drifting trout/salmon eggs</td><td>Fall/spring near spawning areas</td></tr>
+      <tr><td>20</td><td>Chubby Chernobyl</td><td>Specialty</td><td>8-14</td><td>Tan, orange, purple</td><td>Stoneflies, terrestrials, attractor</td><td>Dry-dropper indicator, rough water</td></tr>
     </tbody>
   </table>
 </div>
@@ -2366,7 +2366,7 @@ export const articles: Article[] = [
 <li><strong>Why it works</strong> — Drag-free drift through productive water covers the widest range of mayfly hatches with a single pattern</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">First Fly On</p><p class="text-[#D8DEE4] text-sm">When you arrive at a river and see trout rising but cannot identify the specific insect, a Parachute Adams in the approximate right size is always the first fly to tie on.</p></div>
+<aside><p>First Fly On</p><p>When you arrive at a river and see trout rising but cannot identify the specific insect, a Parachute Adams in the approximate right size is always the first fly to tie on.</p></aside>
 
 <h3>2. Elk Hair Caddis (sizes 12-18)</h3>
 
@@ -2425,7 +2425,7 @@ export const articles: Article[] = [
 <li><strong>Must-have sizes</strong> — 16 and 18 at minimum; add larger and smaller for specific situations</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">The Universal Nymph</p><p class="text-[#D8DEE4] text-sm">If you carry only two nymph patterns, make the Pheasant Tail one of them. Its slim profile and natural color scheme imitate the widest range of subsurface food items of any single nymph pattern.</p></div>
+<aside><p>The Universal Nymph</p><p>If you carry only two nymph patterns, make the Pheasant Tail one of them. Its slim profile and natural color scheme imitate the widest range of subsurface food items of any single nymph pattern.</p></aside>
 
 <h3>7. Hare's Ear Nymph (sizes 10-18)</h3>
 
@@ -2484,7 +2484,7 @@ export const articles: Article[] = [
 <li><strong>Deceptive simplicity</strong> — Looks fragile but consistently outperforms flashier patterns on difficult fish</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">The Refusal Solver</p><p class="text-[#D8DEE4] text-sm">When trout are rising but refusing every dry fly you throw, switch to an RS2. More often than not, fish are keyed on emergers trapped in the film rather than fully hatched adults sitting on top.</p></div>
+<aside><p>The Refusal Solver</p><p>When trout are rising but refusing every dry fly you throw, switch to an RS2. More often than not, fish are keyed on emergers trapped in the film rather than fully hatched adults sitting on top.</p></aside>
 
 <h3>12. Soft Hackle Partridge and Orange (sizes 12-16)</h3>
 
@@ -2521,7 +2521,7 @@ export const articles: Article[] = [
 <li><strong>Species range</strong> — Catches every species of freshwater fish that swims</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">The Desert Island Fly</p><p class="text-[#D8DEE4] text-sm">If you could carry only one fly for the rest of your fishing life, a black Woolly Bugger in size 6 would be a defensible choice. No other pattern covers as many species, water types, and situations.</p></div>
+<aside><p>The Desert Island Fly</p><p>If you could carry only one fly for the rest of your fishing life, a black Woolly Bugger in size 6 would be a defensible choice. No other pattern covers as many species, water types, and situations.</p></aside>
 
 <h3>15. Sculpin Pattern (sizes 2-8)</h3>
 
@@ -2597,32 +2597,32 @@ export const articles: Article[] = [
 
 <p>When you arrive at the water, use this table to quickly match the situation to the right fly.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Situation</th><th class="text-left p-3">First Choice</th><th class="text-left p-3">Backup</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>Situation</th><th>First Choice</th><th>Backup</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Rising trout, unknown insect</td><td class="p-3">Parachute Adams (14-18)</td><td class="p-3">Elk Hair Caddis (14-16)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Rising trout, refusing dries</td><td class="p-3">RS2 (18-22)</td><td class="p-3">Sparkle Dun (16-18)</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">No hatch, no rises, riffles</td><td class="p-3">Pheasant Tail (16-18) under indicator</td><td class="p-3">Hare's Ear (14-16)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Deep, fast water</td><td class="p-3">Pat's Rubber Legs + Perdigon (2-fly rig)</td><td class="p-3">Woolly Bugger (6-8)</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Winter, slow flat water</td><td class="p-3">Zebra Midge (20-22)</td><td class="p-3">Griffith's Gnat (20-22)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Caddis hatch</td><td class="p-3">Elk Hair Caddis (14-16)</td><td class="p-3">Soft Hackle P&amp;O (14) swung</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Stonefly hatch / fast pocket water</td><td class="p-3">Stimulator (6-10)</td><td class="p-3">Chubby Chernobyl (10-12)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Summer afternoon, grassy banks</td><td class="p-3">Dave's Hopper (8-10)</td><td class="p-3">Black Ant (16-18)</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Targeting large trout near structure</td><td class="p-3">Sculpin Pattern (4-6)</td><td class="p-3">Woolly Bugger (4-6, olive)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Overcast spring/fall, BWO weather</td><td class="p-3">CDC Blue-Winged Olive (18-20)</td><td class="p-3">RS2 (20-22)</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Near spawning redds</td><td class="p-3">Egg Pattern (12-14)</td><td class="p-3">San Juan Worm (10-12)</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Dry-dropper rig setup</td><td class="p-3">Chubby Chernobyl + Perdigon</td><td class="p-3">Stimulator + Pheasant Tail</td></tr>
+      <tr><td>Rising trout, unknown insect</td><td>Parachute Adams (14-18)</td><td>Elk Hair Caddis (14-16)</td></tr>
+      <tr><td>Rising trout, refusing dries</td><td>RS2 (18-22)</td><td>Sparkle Dun (16-18)</td></tr>
+      <tr><td>No hatch, no rises, riffles</td><td>Pheasant Tail (16-18) under indicator</td><td>Hare's Ear (14-16)</td></tr>
+      <tr><td>Deep, fast water</td><td>Pat's Rubber Legs + Perdigon (2-fly rig)</td><td>Woolly Bugger (6-8)</td></tr>
+      <tr><td>Winter, slow flat water</td><td>Zebra Midge (20-22)</td><td>Griffith's Gnat (20-22)</td></tr>
+      <tr><td>Caddis hatch</td><td>Elk Hair Caddis (14-16)</td><td>Soft Hackle P&amp;O (14) swung</td></tr>
+      <tr><td>Stonefly hatch / fast pocket water</td><td>Stimulator (6-10)</td><td>Chubby Chernobyl (10-12)</td></tr>
+      <tr><td>Summer afternoon, grassy banks</td><td>Dave's Hopper (8-10)</td><td>Black Ant (16-18)</td></tr>
+      <tr><td>Targeting large trout near structure</td><td>Sculpin Pattern (4-6)</td><td>Woolly Bugger (4-6, olive)</td></tr>
+      <tr><td>Overcast spring/fall, BWO weather</td><td>CDC Blue-Winged Olive (18-20)</td><td>RS2 (20-22)</td></tr>
+      <tr><td>Near spawning redds</td><td>Egg Pattern (12-14)</td><td>San Juan Worm (10-12)</td></tr>
+      <tr><td>Dry-dropper rig setup</td><td>Chubby Chernobyl + Perdigon</td><td>Stimulator + Pheasant Tail</td></tr>
     </tbody>
   </table>
 </div>
 
 <h2>Building Your Box</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6"><p class="font-semibold mb-2">Building Your Box: Priority Guide</p>
-<p class="text-sm text-[#D8DEE4] mb-3">Start with the must-haves and add the rest over time. This ranking reflects versatility across the widest range of waters and seasons.</p>
-<p class="mb-2"><strong>Tier 1 — Must-Haves (buy these first):</strong></p>
-<ul class="text-sm text-[#D8DEE4] mb-3">
+<aside><p>Building Your Box: Priority Guide</p>
+<p>Start with the must-haves and add the rest over time. This ranking reflects versatility across the widest range of waters and seasons.</p>
+<p><strong>Tier 1 — Must-Haves (buy these first):</strong></p>
+<ul>
 <li>Parachute Adams (14, 16, 18)</li>
 <li>Elk Hair Caddis (14, 16 in tan and olive)</li>
 <li>Pheasant Tail Nymph (16, 18 in standard and bead-head)</li>
@@ -2630,8 +2630,8 @@ export const articles: Article[] = [
 <li>Woolly Bugger (6, 8 in olive and black)</li>
 <li>Chubby Chernobyl (10, 12)</li>
 </ul>
-<p class="mb-2"><strong>Tier 2 — Core Expansion (essential for most trips):</strong></p>
-<ul class="text-sm text-[#D8DEE4] mb-3">
+<p><strong>Tier 2 — Core Expansion (essential for most trips):</strong></p>
+<ul>
 <li>Zebra Midge (20, 22 in black and red)</li>
 <li>Pat's Rubber Legs (6, 8)</li>
 <li>Stimulator (8, 10, 12)</li>
@@ -2639,8 +2639,8 @@ export const articles: Article[] = [
 <li>RS2 (20, 22)</li>
 <li>San Juan Worm (10, 12 in red)</li>
 </ul>
-<p class="mb-2"><strong>Tier 3 — Targeted Additions (for specific situations):</strong></p>
-<ul class="text-sm text-[#D8DEE4] mb-3">
+<p><strong>Tier 3 — Targeted Additions (for specific situations):</strong></p>
+<ul>
 <li>Griffith's Gnat (20, 22) — winter/midge specialists</li>
 <li>CDC Blue-Winged Olive (18, 20) — spring/fall tailwaters</li>
 <li>Perdigon (16, 18) — euro nymphing enthusiasts</li>
@@ -2649,7 +2649,7 @@ export const articles: Article[] = [
 <li>Sculpin Pattern (4, 6) — trophy trout hunters</li>
 <li>Black Ant (16, 18) — summer secret weapon</li>
 <li>Egg Pattern (12, 14) — spawning season</li>
-</ul></div>
+</ul></aside>
 
 <p>These twenty patterns, carried in a reasonable range of sizes and a few color variations, will cover the vast majority of fishing situations you will encounter on trout waters across North America. The total investment is modest compared to boxes full of dozens of specialized patterns that many anglers accumulate over years of fly shop visits.</p>
 
@@ -2716,18 +2716,18 @@ export const articles: Article[] = [
 
 <h2>Threats to Wild Trout</h2>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Threat</th><th class="text-left p-3">Mechanism</th><th class="text-left p-3">Severity</th><th class="text-left p-3">What Helps</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>Threat</th><th>Mechanism</th><th>Severity</th><th>What Helps</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Rising water temperatures</td><td class="p-3">Air temp increases translate directly to water temp increases, shrinking thermally suitable habitat</td><td class="p-3">Critical</td><td class="p-3">Shade restoration, groundwater protection, beaver habitat</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Drought cycles</td><td class="p-3">Reduced stream flows during critical summer months compound thermal stress</td><td class="p-3">High</td><td class="p-3">Water conservation policy, wetland protection, flow agreements</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Wildfire</td><td class="p-3">Strips hillside vegetation; sends sediment and ash into streams, smothering spawning gravel</td><td class="p-3">High</td><td class="p-3">Forest management, post-fire restoration, riparian buffers</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Agricultural runoff</td><td class="p-3">Sediment, nutrients, and pesticides degrade water quality and smother substrate</td><td class="p-3">High</td><td class="p-3">Riparian buffers, best management practices, policy enforcement</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Livestock grazing</td><td class="p-3">Destroys streamside vegetation that provides shade, bank stability, and insect input</td><td class="p-3">Moderate-High</td><td class="p-3">Riparian fencing, managed grazing, stream setbacks</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Urban development</td><td class="p-3">Increased impervious surfaces amplify stormwater runoff, raise temps, introduce pollutants</td><td class="p-3">Moderate-High</td><td class="p-3">Green infrastructure, stormwater management, development setbacks</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Road building and logging</td><td class="p-3">Sediment from roads and clearcuts accumulates in spawning gravel</td><td class="p-3">Moderate</td><td class="p-3">Improved road design, decommissioning, best management practices</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Barrier culverts</td><td class="p-3">Block fish passage, fragment populations, prevent access to spawning/rearing habitat</td><td class="p-3">Moderate</td><td class="p-3">Culvert replacement, barrier removal, passage design</td></tr>
+      <tr><td>Rising water temperatures</td><td>Air temp increases translate directly to water temp increases, shrinking thermally suitable habitat</td><td>Critical</td><td>Shade restoration, groundwater protection, beaver habitat</td></tr>
+      <tr><td>Drought cycles</td><td>Reduced stream flows during critical summer months compound thermal stress</td><td>High</td><td>Water conservation policy, wetland protection, flow agreements</td></tr>
+      <tr><td>Wildfire</td><td>Strips hillside vegetation; sends sediment and ash into streams, smothering spawning gravel</td><td>High</td><td>Forest management, post-fire restoration, riparian buffers</td></tr>
+      <tr><td>Agricultural runoff</td><td>Sediment, nutrients, and pesticides degrade water quality and smother substrate</td><td>High</td><td>Riparian buffers, best management practices, policy enforcement</td></tr>
+      <tr><td>Livestock grazing</td><td>Destroys streamside vegetation that provides shade, bank stability, and insect input</td><td>Moderate-High</td><td>Riparian fencing, managed grazing, stream setbacks</td></tr>
+      <tr><td>Urban development</td><td>Increased impervious surfaces amplify stormwater runoff, raise temps, introduce pollutants</td><td>Moderate-High</td><td>Green infrastructure, stormwater management, development setbacks</td></tr>
+      <tr><td>Road building and logging</td><td>Sediment from roads and clearcuts accumulates in spawning gravel</td><td>Moderate</td><td>Improved road design, decommissioning, best management practices</td></tr>
+      <tr><td>Barrier culverts</td><td>Block fish passage, fragment populations, prevent access to spawning/rearing habitat</td><td>Moderate</td><td>Culvert replacement, barrier removal, passage design</td></tr>
     </tbody>
   </table>
 </div>
@@ -2736,14 +2736,14 @@ export const articles: Article[] = [
 
 <p>The fundamental challenge of climate change for trout is thermal. As air temperatures rise, water temperatures follow, and the amount of stream habitat within the suitable thermal range for trout shrinks.</p>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6"><p class="font-semibold mb-2">Trout Thermal Thresholds</p>
-<ul class="text-sm text-[#D8DEE4]">
+<aside><p>Trout Thermal Thresholds</p>
+<ul>
 <li><strong>Optimal range</strong> — 50-63 degrees F for most trout species (feeding and growth)</li>
 <li><strong>Stress threshold</strong> — 65-68 degrees F (feeding slows, stress increases)</li>
 <li><strong>Lethal zone</strong> — Prolonged exposure above 70 degrees F can be fatal</li>
 <li><strong>Moderate warming scenario</strong> — 30-50% of currently suitable Western U.S. trout habitat could become thermally unsuitable by century's end</li>
 <li><strong>High warming scenario</strong> — Losses could exceed 60% of current habitat</li>
-</ul></div>
+</ul></aside>
 
 <h3>Vulnerability Is Not Uniform</h3>
 
@@ -2755,7 +2755,7 @@ export const articles: Article[] = [
 <li><strong>Thermal refugia</strong> — Localized pockets of cold water from springs and groundwater inputs where trout retreat during high temperatures</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">Protecting Thermal Refugia</p><p class="text-[#D8DEE4] text-sm">Identifying, protecting, and enhancing cold-water refugia is one of the most important strategies for maintaining trout populations in a warming climate. Practical actions include planting shade trees along stream banks, protecting wetlands that recharge groundwater, and maintaining beaver populations that create deep, cool pools.</p></div>
+<aside><p>Protecting Thermal Refugia</p><p>Identifying, protecting, and enhancing cold-water refugia is one of the most important strategies for maintaining trout populations in a warming climate. Practical actions include planting shade trees along stream banks, protecting wetlands that recharge groundwater, and maintaining beaver populations that create deep, cool pools.</p></aside>
 
 <h2>Habitat Degradation</h2>
 
@@ -2789,7 +2789,7 @@ export const articles: Article[] = [
 <li><strong>Cumulative effects</strong> — Any single impact may be minor, but the combined effect can degrade a stream beyond the point where wild populations sustain themselves</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg"><p class="font-semibold text-[#F8D7A8] mb-1">The Cumulative Threat</p><p class="text-[#D8DEE4] text-sm">No single land use impact may seem catastrophic on its own. But the cumulative effect of agricultural runoff, livestock grazing, development pressure, and road sediment can degrade a trout stream to the point where wild populations can no longer sustain themselves. Every small degradation matters.</p></div>
+<aside><p>The Cumulative Threat</p><p>No single land use impact may seem catastrophic on its own. But the cumulative effect of agricultural runoff, livestock grazing, development pressure, and road sediment can degrade a trout stream to the point where wild populations can no longer sustain themselves. Every small degradation matters.</p></aside>
 
 <h2>What Anglers Can Do</h2>
 
@@ -2806,15 +2806,15 @@ export const articles: Article[] = [
 <li><strong>License purchases</strong> — Fishing license fees fund state fish and wildlife agency conservation work</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6"><p class="font-semibold mb-2">Key Conservation Organizations</p>
-<ul class="text-sm text-[#D8DEE4]">
+<aside><p>Key Conservation Organizations</p>
+<ul>
 <li><strong>Trout Unlimited (TU)</strong> — The largest coldwater fisheries conservation organization; chapters nationwide doing stream restoration, barrier removal, and policy work</li>
 <li><strong>Theodore Roosevelt Conservation Partnership</strong> — Advocates for sportsmen's access and habitat protection at the federal level</li>
 <li><strong>Native Fish Society</strong> — Focused on wild, native fish recovery in the Pacific Northwest</li>
 <li><strong>Wild Salmon Center</strong> — Protects the strongest wild salmon and steelhead ecosystems in the Pacific Rim</li>
 <li><strong>American Rivers</strong> — Works on dam removal, clean water, and river restoration nationwide</li>
 <li><strong>State and regional groups</strong> — Numerous local organizations do critical on-the-ground work in specific watersheds</li>
-</ul></div>
+</ul></aside>
 
 <h3>On-the-Water Practices</h3>
 
@@ -2828,7 +2828,7 @@ export const articles: Article[] = [
 <li><strong>Revive fish properly</strong> — Face upstream in current until they swim away strongly</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg"><p class="font-semibold text-[#F8D7A8] mb-1">Warm Water Fishing Ethics</p><p class="text-[#D8DEE4] text-sm">During summer months, respect voluntary or mandatory hoot-owl restrictions — closures that prohibit fishing during the hottest afternoon hours. Trout caught and released when water temperatures exceed 65-68 degrees F experience significantly higher mortality, even with careful handling. Consider carrying a stream thermometer and stopping fishing when temperatures enter the stress zone. Avoiding fishing during peak heat protects trout during the most physiologically stressful period of the day.</p></div>
+<aside><p>Warm Water Fishing Ethics</p><p>During summer months, respect voluntary or mandatory hoot-owl restrictions — closures that prohibit fishing during the hottest afternoon hours. Trout caught and released when water temperatures exceed 65-68 degrees F experience significantly higher mortality, even with careful handling. Consider carrying a stream thermometer and stopping fishing when temperatures enter the stress zone. Avoiding fishing during peak heat protects trout during the most physiologically stressful period of the day.</p></aside>
 
 <h3>Political Engagement</h3>
 
@@ -2841,7 +2841,7 @@ export const articles: Article[] = [
 <li><strong>Local engagement</strong> — County and municipal water and land use decisions often have the most direct impact on local streams</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">Individual Actions That Add Up</p><p class="text-[#D8DEE4] text-sm">Beyond organizations and politics, consider these personal actions: volunteer for stream cleanup days, report water quality violations and poaching, reduce your own water consumption, plant native vegetation on any streamside property you own, and introduce a new angler to the sport who will become another voice for cold water conservation.</p></div>
+<aside><p>Individual Actions That Add Up</p><p>Beyond organizations and politics, consider these personal actions: volunteer for stream cleanup days, report water quality violations and poaching, reduce your own water consumption, plant native vegetation on any streamside property you own, and introduce a new angler to the sport who will become another voice for cold water conservation.</p></aside>
 
 <h2>Hope and Resilience</h2>
 
@@ -2917,18 +2917,18 @@ export const articles: Article[] = [
 
 <p>The narrative that women are newcomers to fly fishing is historically inaccurate. Women have been fly fishing — and writing about it, innovating within it, and competing at the highest levels — for far longer than popular culture acknowledges.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Pioneer</th><th class="text-left p-3">Era</th><th class="text-left p-3">Contribution</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>Pioneer</th><th>Era</th><th>Contribution</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Dame Juliana Berners</td><td class="p-3">15th century</td><td class="p-3">English noblewoman traditionally credited as author of the earliest known treatise on sport fishing, including descriptions of artificial flies</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Mary Orvis Marbury</td><td class="p-3">Late 1800s</td><td class="p-3">Daughter of Charles Orvis; wrote the definitive catalog of American fly patterns in 1892; one of the most knowledgeable fly fishing authorities of her era</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Joan Wulff</td><td class="p-3">1926-2023</td><td class="p-3">Greatest fly caster of her generation (male or female); won national casting championships; pioneered casting instruction techniques that remain the foundation of modern teaching</td></tr>
+      <tr><td>Dame Juliana Berners</td><td>15th century</td><td>English noblewoman traditionally credited as author of the earliest known treatise on sport fishing, including descriptions of artificial flies</td></tr>
+      <tr><td>Mary Orvis Marbury</td><td>Late 1800s</td><td>Daughter of Charles Orvis; wrote the definitive catalog of American fly patterns in 1892; one of the most knowledgeable fly fishing authorities of her era</td></tr>
+      <tr><td>Joan Wulff</td><td>1926-2023</td><td>Greatest fly caster of her generation (male or female); won national casting championships; pioneered casting instruction techniques that remain the foundation of modern teaching</td></tr>
     </tbody>
   </table>
 </div>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">Not a Beginning — An Amplification</p><p class="text-[#D8DEE4] text-sm">These women, and many others whose contributions have been underrecognized, established that fly fishing was never exclusively a man's sport. What has changed is not women's interest — that has always existed — but the visibility, community infrastructure, and institutional support available to women who pursue the sport. The current movement is an amplification of a tradition stretching back centuries.</p></div>
+<aside><p>Not a Beginning — An Amplification</p><p>These women, and many others whose contributions have been underrecognized, established that fly fishing was never exclusively a man's sport. What has changed is not women's interest — that has always existed — but the visibility, community infrastructure, and institutional support available to women who pursue the sport. The current movement is an amplification of a tradition stretching back centuries.</p></aside>
 
 <h2>The Growth of Women's Fly Fishing Communities</h2>
 
@@ -2943,8 +2943,8 @@ export const articles: Article[] = [
 <li><strong>Mentorship networks</strong> — Experienced women anglers paired with beginners for ongoing support</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6"><p class="font-semibold mb-2">Why Women-Centered Spaces Matter</p>
-<p class="text-sm text-[#D8DEE4]">Research consistently shows that women are more likely to try a new outdoor activity when they can learn in a supportive social context rather than as isolated individuals in an unfamiliar, male-dominated space. Women-focused organizations address a real barrier to entry by creating environments where questions are welcomed, pacing is appropriate, and the social dynamic is encouraging rather than competitive or condescending.</p></div>
+<aside><p>Why Women-Centered Spaces Matter</p>
+<p>Research consistently shows that women are more likely to try a new outdoor activity when they can learn in a supportive social context rather than as isolated individuals in an unfamiliar, male-dominated space. Women-focused organizations address a real barrier to entry by creating environments where questions are welcomed, pacing is appropriate, and the social dynamic is encouraging rather than competitive or condescending.</p></aside>
 
 <h3>Social Media as Accelerator</h3>
 
@@ -2961,16 +2961,16 @@ export const articles: Article[] = [
 
 <p>The economic impact of women's increasing participation has not gone unnoticed by the fly fishing industry. Gear design has evolved from simply offering men's products in smaller sizes to genuine women-specific engineering.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Gear Category</th><th class="text-left p-3">Old Approach</th><th class="text-left p-3">Modern Approach</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>Gear Category</th><th>Old Approach</th><th>Modern Approach</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Waders</td><td class="p-3">Men's waders in smaller sizes; poor fit through hips and torso</td><td class="p-3">Anatomically correct fits designed from women's body measurements</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Boots</td><td class="p-3">Men's boots in smaller sizes; too wide, poor heel fit</td><td class="p-3">Boots designed for narrower feet with proper arch and heel geometry</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Fly Lines</td><td class="p-3">Same lines for all anglers regardless of casting stroke</td><td class="p-3">Head profiles designed for shorter casting strokes typical of many women anglers</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Rods</td><td class="p-3">Standard actions only; smaller grip diameters as afterthought</td><td class="p-3">Action profiles, grip sizing, and swing weight optimized for different body mechanics</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3">Packs &amp; Vests</td><td class="p-3">Men's packs with adjusted straps</td><td class="p-3">Designed for women's torso lengths and shoulder widths</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Marketing</td><td class="p-3">"Shrink it and pink it" — smaller men's gear in feminine colors</td><td class="p-3">Recognition that women are a core customer base, not a niche market</td></tr>
+      <tr><td>Waders</td><td>Men's waders in smaller sizes; poor fit through hips and torso</td><td>Anatomically correct fits designed from women's body measurements</td></tr>
+      <tr><td>Boots</td><td>Men's boots in smaller sizes; too wide, poor heel fit</td><td>Boots designed for narrower feet with proper arch and heel geometry</td></tr>
+      <tr><td>Fly Lines</td><td>Same lines for all anglers regardless of casting stroke</td><td>Head profiles designed for shorter casting strokes typical of many women anglers</td></tr>
+      <tr><td>Rods</td><td>Standard actions only; smaller grip diameters as afterthought</td><td>Action profiles, grip sizing, and swing weight optimized for different body mechanics</td></tr>
+      <tr><td>Packs &amp; Vests</td><td>Men's packs with adjusted straps</td><td>Designed for women's torso lengths and shoulder widths</td></tr>
+      <tr><td>Marketing</td><td>"Shrink it and pink it" — smaller men's gear in feminine colors</td><td>Recognition that women are a core customer base, not a niche market</td></tr>
     </tbody>
   </table>
 </div>
@@ -3003,7 +3003,7 @@ export const articles: Article[] = [
 <li><strong>Novelty framing</strong> — Women's fishing stories sometimes emphasize the novelty of their gender rather than the substance of their fishing, unintentionally reinforcing the idea that participation is exceptional rather than normal</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">The Best Representation</p><p class="text-[#D8DEE4] text-sm">The most effective media representation is simply showing women fishing as a routine, unremarkable part of the sport's landscape — without commentary on the fact that the angler happens to be female. Normalizing women's presence is more powerful than celebrating it as exceptional.</p></div>
+<aside><p>The Best Representation</p><p>The most effective media representation is simply showing women fishing as a routine, unremarkable part of the sport's landscape — without commentary on the fact that the angler happens to be female. Normalizing women's presence is more powerful than celebrating it as exceptional.</p></aside>
 
 <h3>The Mentorship Gap</h3>
 
@@ -3015,10 +3015,10 @@ export const articles: Article[] = [
 <li><strong>Male allies matter</strong> — Male anglers can be intentional about welcoming and supporting women in their fishing circles</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg"><p class="font-semibold text-forest-dark mb-1">How to Be an Ally</p><p class="text-[#D8DEE4] text-sm">Inviting a colleague, partner, or friend fishing and teaching them with patience and without condescension is one of the simplest and most powerful ways to grow the sport. Let women set the pace of instruction. Ask before offering tips on the water. Recommend women-owned guide services and fly shops. Amplify women's voices in fishing conversations rather than speaking for them. Support women-led conservation organizations.</p></div>
+<aside><p>How to Be an Ally</p><p>Inviting a colleague, partner, or friend fishing and teaching them with patience and without condescension is one of the simplest and most powerful ways to grow the sport. Let women set the pace of instruction. Ask before offering tips on the water. Recommend women-owned guide services and fly shops. Amplify women's voices in fishing conversations rather than speaking for them. Support women-led conservation organizations.</p></aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6"><p class="font-semibold mb-2">Resources for Women in Fly Fishing</p>
-<ul class="text-sm text-[#D8DEE4]">
+<aside><p>Resources for Women in Fly Fishing</p>
+<ul>
 <li><strong>Casting for Recovery</strong> — Fly fishing retreats for women with breast cancer; combines healing with learning</li>
 <li><strong>International Women Fly Fishers (IWFF)</strong> — Global organization promoting women's fly fishing through education, conservation, and community</li>
 <li><strong>She Fishes</strong> — Programs and events designed to introduce women to fly fishing in supportive settings</li>
@@ -3026,7 +3026,7 @@ export const articles: Article[] = [
 <li><strong>Brown Girls Fly Fish</strong> — Community building and representation for women of color in fly fishing</li>
 <li><strong>Local TU chapters</strong> — Many Trout Unlimited chapters run women's programs, clinics, and fishing days</li>
 <li><strong>Social media communities</strong> — Search Instagram, Facebook, and online forums for active women's fly fishing groups in your region</li>
-</ul></div>
+</ul></aside>
 
 <h2>The Future Is Flowing</h2>
 
@@ -3094,10 +3094,10 @@ export const articles: Article[] = [
 <li><strong>Shaping Perception</strong> — The images that appear in fishing magazines, social media feeds, and conservation campaigns shape how the public perceives fly fishing and the landscapes it depends on.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Why It Matters Beyond the Sport</p>
-<p class="text-[#D8DEE4] text-sm">In an increasingly visual culture, the way we photograph our fishing experiences has real consequences for how the broader world values rivers, fish, and the wild places where they meet. Every image you share is an ambassador for the sport.</p>
-</div>
+<aside>
+<p>Why It Matters Beyond the Sport</p>
+<p>In an increasingly visual culture, the way we photograph our fishing experiences has real consequences for how the broader world values rivers, fish, and the wild places where they meet. Every image you share is an ambassador for the sport.</p>
+</aside>
 
 <h2>Camera Choice: From Phone to Professional</h2>
 
@@ -3105,15 +3105,15 @@ export const articles: Article[] = [
 
 <h3>Camera Comparison</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Camera Type</th><th class="text-left p-3">Pros</th><th class="text-left p-3">Cons</th><th class="text-left p-3">Best For</th><th class="text-left p-3">Price Range</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Camera Type</th><th>Pros</th><th>Cons</th><th>Best For</th><th>Price Range</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Smartphone</td><td class="p-3">Always with you, lightweight, instant sharing, surprisingly good image quality</td><td class="p-3">Limited zoom, small sensor, less control in difficult light</td><td class="p-3">Everyday fishing photos, social media, quick grip shots</td><td class="p-3">$0 (you already own it)</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Mirrorless Camera</td><td class="p-3">Excellent image quality, interchangeable lenses, weather-sealed options, lighter than DSLR</td><td class="p-3">Expensive, requires carrying extra gear, risk of water damage</td><td class="p-3">Serious fishing photography, magazine-quality landscapes, fish portraits</td><td class="p-3">$800 - $3,000+</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">DSLR</td><td class="p-3">Outstanding image quality, vast lens selection, rugged build, long battery life</td><td class="p-3">Heavy, bulky, expensive, intimidating to carry wading</td><td class="p-3">Professional assignments, portfolio work, large prints</td><td class="p-3">$1,000 - $5,000+</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Action Camera (GoPro)</td><td class="p-3">Waterproof, ultra-durable, unique POV angles, great for video</td><td class="p-3">Wide-angle distortion, poor in low light, tiny sensor</td><td class="p-3">Action footage, rod-tip/chest-mount video, underwater shots</td><td class="p-3">$200 - $500</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Waterproof Compact</td><td class="p-3">Built-in waterproofing, decent zoom, pocketable</td><td class="p-3">Smaller sensor than mirrorless, limited manual controls</td><td class="p-3">Rainy conditions, wading-heavy days, travel-light trips</td><td class="p-3">$300 - $600</td></tr>
+<tr><td>Smartphone</td><td>Always with you, lightweight, instant sharing, surprisingly good image quality</td><td>Limited zoom, small sensor, less control in difficult light</td><td>Everyday fishing photos, social media, quick grip shots</td><td>$0 (you already own it)</td></tr>
+<tr><td>Mirrorless Camera</td><td>Excellent image quality, interchangeable lenses, weather-sealed options, lighter than DSLR</td><td>Expensive, requires carrying extra gear, risk of water damage</td><td>Serious fishing photography, magazine-quality landscapes, fish portraits</td><td>$800 - $3,000+</td></tr>
+<tr><td>DSLR</td><td>Outstanding image quality, vast lens selection, rugged build, long battery life</td><td>Heavy, bulky, expensive, intimidating to carry wading</td><td>Professional assignments, portfolio work, large prints</td><td>$1,000 - $5,000+</td></tr>
+<tr><td>Action Camera (GoPro)</td><td>Waterproof, ultra-durable, unique POV angles, great for video</td><td>Wide-angle distortion, poor in low light, tiny sensor</td><td>Action footage, rod-tip/chest-mount video, underwater shots</td><td>$200 - $500</td></tr>
+<tr><td>Waterproof Compact</td><td>Built-in waterproofing, decent zoom, pocketable</td><td>Smaller sensor than mirrorless, limited manual controls</td><td>Rainy conditions, wading-heavy days, travel-light trips</td><td>$300 - $600</td></tr>
 </tbody>
 </table>
 </div>
@@ -3135,28 +3135,28 @@ export const articles: Article[] = [
 
 <h3>Light Conditions Guide</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Condition</th><th class="text-left p-3">Quality</th><th class="text-left p-3">Best Subjects</th><th class="text-left p-3">Tips</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Condition</th><th>Quality</th><th>Best Subjects</th><th>Tips</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Golden Hour (sunrise/sunset)</td><td class="p-3">Warm, directional, three-dimensional</td><td class="p-3">Landscapes, angler portraits, casting silhouettes, river scenes</td><td class="p-3">Shoot with the sun behind you for warm glow, or into the sun for dramatic silhouettes</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Midday Sun</td><td class="p-3">Harsh, overhead, contrasty</td><td class="p-3">Underwater fish shots, fish-in-water portraits, overhead detail shots</td><td class="p-3">Use a hat or hand to shade the lens; overhead light penetrates water and illuminates underwater details</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Overcast / Cloud Cover</td><td class="p-3">Soft, diffused, even, universally flattering</td><td class="p-3">Fish close-ups, portraits, detail shots, macro, subtle landscapes</td><td class="p-3">A gift for photography — eliminates harsh shadows and brings out subtle colors in fish and landscapes</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Backlight (shooting toward sun)</td><td class="p-3">Dramatic, high contrast, rim-lit</td><td class="p-3">Casting sprays, silhouettes, translucent fins, water droplets</td><td class="p-3">Overexpose slightly to prevent foreground from becoming pure black silhouette</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Dappled Light (tree canopy)</td><td class="p-3">Patchy, high contrast spots</td><td class="p-3">Stream scenes, detail shots in shade, atmospheric forest water</td><td class="p-3">Expose for the shade areas; avoid placing faces in mixed light patches</td></tr>
+<tr><td>Golden Hour (sunrise/sunset)</td><td>Warm, directional, three-dimensional</td><td>Landscapes, angler portraits, casting silhouettes, river scenes</td><td>Shoot with the sun behind you for warm glow, or into the sun for dramatic silhouettes</td></tr>
+<tr><td>Midday Sun</td><td>Harsh, overhead, contrasty</td><td>Underwater fish shots, fish-in-water portraits, overhead detail shots</td><td>Use a hat or hand to shade the lens; overhead light penetrates water and illuminates underwater details</td></tr>
+<tr><td>Overcast / Cloud Cover</td><td>Soft, diffused, even, universally flattering</td><td>Fish close-ups, portraits, detail shots, macro, subtle landscapes</td><td>A gift for photography — eliminates harsh shadows and brings out subtle colors in fish and landscapes</td></tr>
+<tr><td>Backlight (shooting toward sun)</td><td>Dramatic, high contrast, rim-lit</td><td>Casting sprays, silhouettes, translucent fins, water droplets</td><td>Overexpose slightly to prevent foreground from becoming pure black silhouette</td></tr>
+<tr><td>Dappled Light (tree canopy)</td><td>Patchy, high contrast spots</td><td>Stream scenes, detail shots in shade, atmospheric forest water</td><td>Expose for the shade areas; avoid placing faces in mixed light patches</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Golden Hour Tip</p>
-<p class="text-[#D8DEE4] text-sm">The first hour after sunrise and the last hour before sunset produce warm, directional light that transforms ordinary scenes into extraordinary images. Low sun angles create long shadows, warm tones, and a three-dimensional quality that makes landscapes and people glow. If you can photograph your fishing during the golden hours, you have a significant advantage before you even press the shutter.</p>
-</div>
+<aside>
+<p>Golden Hour Tip</p>
+<p>The first hour after sunrise and the last hour before sunset produce warm, directional light that transforms ordinary scenes into extraordinary images. Low sun angles create long shadows, warm tones, and a three-dimensional quality that makes landscapes and people glow. If you can photograph your fishing during the golden hours, you have a significant advantage before you even press the shutter.</p>
+</aside>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Backlighting Technique</p>
-<p class="text-[#D8DEE4] text-sm">A backlit angler casting into a spray of golden light, a silhouetted rod against a sunset sky, or the glow of sunlight through a trout's translucent fins creates dramatic, memorable images. Backlighting requires exposure adjustment — overexpose by +0.5 to +1.0 stops to prevent the foreground subject from becoming a dark silhouette. The visual impact is worth the technical challenge.</p>
-</div>
+<aside>
+<p>Backlighting Technique</p>
+<p>A backlit angler casting into a spray of golden light, a silhouetted rod against a sunset sky, or the glow of sunlight through a trout's translucent fins creates dramatic, memorable images. Backlighting requires exposure adjustment — overexpose by +0.5 to +1.0 stops to prevent the foreground subject from becoming a dark silhouette. The visual impact is worth the technical challenge.</p>
+</aside>
 
 <h2>Composition: Beyond the Grip-and-Grin</h2>
 
@@ -3194,10 +3194,10 @@ export const articles: Article[] = [
 
 <p>Fish photography carries an ethical obligation that other subjects do not. A trout out of water is a fish in danger, and the time spent posing for photographs is time the fish cannot breathe.</p>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-[#F8D7A8] mb-1">Warning: Fish Handling During Photos</p>
-<p class="text-[#D8DEE4] text-sm">Never squeeze a fish tightly, never hold a fish vertically by the jaw, and never place a fish on dry ground for a photograph. These practices damage the fish and, increasingly, they damage the angler's reputation in a fishing community that is ever more conscious of responsible fish handling. Mortality rates increase dramatically when fish are held out of water for more than 30 seconds.</p>
-</div>
+<aside>
+<p>Warning: Fish Handling During Photos</p>
+<p>Never squeeze a fish tightly, never hold a fish vertically by the jaw, and never place a fish on dry ground for a photograph. These practices damage the fish and, increasingly, they damage the angler's reputation in a fishing community that is ever more conscious of responsible fish handling. Mortality rates increase dramatically when fish are held out of water for more than 30 seconds.</p>
+</aside>
 
 <h3>Step-by-Step Responsible Fish Photography</h3>
 
@@ -3210,10 +3210,10 @@ export const articles: Article[] = [
 <li><strong>Support the Release</strong> — Hold the fish upright in gentle current, facing upstream, until it swims away under its own power.</li>
 </ol>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">The Better Image Is the Ethical One</p>
-<p class="text-[#D8DEE4] text-sm">An underwater or partially submerged fish photograph is not only more ethical than a grip-and-grin — it is also a more beautiful and compelling image. The water provides a natural background, the fish's colors are at their most vibrant, and the entire image communicates respect for the animal and its environment.</p>
-</div>
+<aside>
+<p>The Better Image Is the Ethical One</p>
+<p>An underwater or partially submerged fish photograph is not only more ethical than a grip-and-grin — it is also a more beautiful and compelling image. The water provides a natural background, the fish's colors are at their most vibrant, and the entire image communicates respect for the animal and its environment.</p>
+</aside>
 
 <h2>Telling the Whole Story</h2>
 
@@ -3237,8 +3237,8 @@ export const articles: Article[] = [
 <li><strong>Food and Drink</strong> — Streamside coffee, a sandwich on a boulder, a flask shared at the end of a cold day.</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Shot List: Must-Get Photos Per Trip</p>
+<aside>
+<p>Shot List: Must-Get Photos Per Trip</p>
 <ul>
 <li><strong>Scene-Setters</strong> — Wide establishing shot of the river or lake, the landscape, the weather conditions.</li>
 <li><strong>The Gear</strong> — Rod and reel rigged and ready, fly box open, waders by the truck.</li>
@@ -3249,7 +3249,7 @@ export const articles: Article[] = [
 <li><strong>The Moments</strong> — Coffee at dawn, lunch break, sunset on the water, the walk back to the truck.</li>
 <li><strong>The Atmosphere</strong> — Weather (fog, rain, golden light), wildlife encounters, reflections on the water.</li>
 </ul>
-</div>
+</aside>
 
 <h2>Balancing the Rod and the Camera</h2>
 
@@ -3312,13 +3312,13 @@ export const articles: Article[] = [
 
 <h3>Species Comparison</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Species</th><th class="text-left p-3">Typical Size</th><th class="text-left p-3">Tackle</th><th class="text-left p-3">Key Flies</th><th class="text-left p-3">Difficulty</th><th class="text-left p-3">Behavior</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Species</th><th>Typical Size</th><th>Tackle</th><th>Key Flies</th><th>Difficulty</th><th>Behavior</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Bonefish</td><td class="p-3">3 - 8 lbs</td><td class="p-3">8-weight</td><td class="p-3">Gotcha, Crazy Charlie, Christmas Island Special</td><td class="p-3">Moderate</td><td class="p-3">Schools on flats, tailing and rooting; explosive runs when hooked</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Permit</td><td class="p-3">10 - 30 lbs (up to 40+)</td><td class="p-3">10-weight</td><td class="p-3">Merkin, Raghead Crab, Spawning Shrimp</td><td class="p-3">Extreme</td><td class="p-3">Wary and selective; inspects flies closely; 10-15% hookup rate considered excellent</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Tarpon</td><td class="p-3">60 - 120 lbs (up to 150+)</td><td class="p-3">11- or 12-weight</td><td class="p-3">Tarpon Toad, Black Death, Cockroach, EP Baitfish</td><td class="p-3">Hard (physically demanding)</td><td class="p-3">Rolling on flats; spectacular leaps; multiple powerful runs; fights can last over an hour</td></tr>
+<tr><td>Bonefish</td><td>3 - 8 lbs</td><td>8-weight</td><td>Gotcha, Crazy Charlie, Christmas Island Special</td><td>Moderate</td><td>Schools on flats, tailing and rooting; explosive runs when hooked</td></tr>
+<tr><td>Permit</td><td>10 - 30 lbs (up to 40+)</td><td>10-weight</td><td>Merkin, Raghead Crab, Spawning Shrimp</td><td>Extreme</td><td>Wary and selective; inspects flies closely; 10-15% hookup rate considered excellent</td></tr>
+<tr><td>Tarpon</td><td>60 - 120 lbs (up to 150+)</td><td>11- or 12-weight</td><td>Tarpon Toad, Black Death, Cockroach, EP Baitfish</td><td>Hard (physically demanding)</td><td>Rolling on flats; spectacular leaps; multiple powerful runs; fights can last over an hour</td></tr>
 </tbody>
 </table>
 </div>
@@ -3355,10 +3355,10 @@ export const articles: Article[] = [
 <li><strong>Key Principle</strong> — Too heavy and the fly crashes noisily onto the flat, spooking the fish; too light and the fly does not reach the bottom where bonefish are feeding.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Bonefish Tip: Reading the Water</p>
-<p class="text-[#D8DEE4] text-sm">Bonefish are generally willing feeders once you get a fly in front of them without spooking the school. Focus your energy on spotting and presentation rather than fly selection. Polarized sunglasses in amber or copper are essential for seeing fish against the sand.</p>
-</div>
+<aside>
+<p>Bonefish Tip: Reading the Water</p>
+<p>Bonefish are generally willing feeders once you get a fly in front of them without spooking the school. Focus your energy on spotting and presentation rather than fly selection. Polarized sunglasses in amber or copper are essential for seeing fish against the sand.</p>
+</aside>
 
 <h2>Permit: The Holy Grail</h2>
 
@@ -3374,10 +3374,10 @@ export const articles: Article[] = [
 <li><strong>Refusal Rate</strong> — Staggeringly high. Even the best permit anglers consider a 10 to 15 percent hookup-to-shot ratio to be excellent.</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-[#F8D7A8] mb-1">Warning: Set Realistic Expectations for Permit</p>
-<p class="text-[#D8DEE4] text-sm">A permit will follow a perfectly presented fly, inspect it from every angle, and refuse it with a dismissive turn that reduces experienced anglers to despair. Landing a permit on fly is an achievement that many dedicated saltwater anglers pursue for years before accomplishing. Do not expect to close the grand slam on your first attempt — or your tenth. The pursuit is what makes the eventual success legendary.</p>
-</div>
+<aside>
+<p>Warning: Set Realistic Expectations for Permit</p>
+<p>A permit will follow a perfectly presented fly, inspect it from every angle, and refuse it with a dismissive turn that reduces experienced anglers to despair. Landing a permit on fly is an achievement that many dedicated saltwater anglers pursue for years before accomplishing. Do not expect to close the grand slam on your first attempt — or your tenth. The pursuit is what makes the eventual success legendary.</p>
+</aside>
 
 <h3>Key Techniques</h3>
 
@@ -3427,23 +3427,23 @@ export const articles: Article[] = [
 <li><strong>Colors</strong> — Black, purple, orange, and natural baitfish colors depending on water clarity and light conditions.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Tarpon Tip: Bow to the King</p>
-<p class="text-[#D8DEE4] text-sm">When a tarpon jumps, immediately lower your rod tip and push it toward the fish — this is called "bowing to the king." The slack prevents the violent head shakes from popping the tippet or throwing the hook. It is the single most important fighting technique in tarpon fishing.</p>
-</div>
+<aside>
+<p>Tarpon Tip: Bow to the King</p>
+<p>When a tarpon jumps, immediately lower your rod tip and push it toward the fish — this is called "bowing to the king." The slack prevents the violent head shakes from popping the tippet or throwing the hook. It is the single most important fighting technique in tarpon fishing.</p>
+</aside>
 
 <h2>Tackle Setup by Species</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Component</th><th class="text-left p-3">Bonefish</th><th class="text-left p-3">Permit</th><th class="text-left p-3">Tarpon</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Component</th><th>Bonefish</th><th>Permit</th><th>Tarpon</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Rod Weight</td><td class="p-3">8-weight</td><td class="p-3">10-weight</td><td class="p-3">11- or 12-weight</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Rod Features</td><td class="p-3">Fast action, 9 ft</td><td class="p-3">Fast action, extra backbone for wind and heavy crab flies</td><td class="p-3">Fast action with fighting butt, 9 ft</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Line</td><td class="p-3">Weight-forward floating</td><td class="p-3">Weight-forward floating</td><td class="p-3">Weight-forward floating or intermediate</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Leader Length</td><td class="p-3">9 - 10 ft</td><td class="p-3">9 - 10 ft</td><td class="p-3">10 - 12 ft (with bite tippet)</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Tippet</td><td class="p-3">12 lb fluorocarbon</td><td class="p-3">16 - 20 lb fluorocarbon</td><td class="p-3">60 - 80 lb fluorocarbon bite tippet (to withstand abrasive gill plates)</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Reel</td><td class="p-3">Large-arbor, quality drag, 150+ yards backing</td><td class="p-3">Large-arbor, strong drag, 200+ yards backing</td><td class="p-3">Large-arbor, powerful disc drag, 250+ yards backing minimum</td></tr>
+<tr><td>Rod Weight</td><td>8-weight</td><td>10-weight</td><td>11- or 12-weight</td></tr>
+<tr><td>Rod Features</td><td>Fast action, 9 ft</td><td>Fast action, extra backbone for wind and heavy crab flies</td><td>Fast action with fighting butt, 9 ft</td></tr>
+<tr><td>Line</td><td>Weight-forward floating</td><td>Weight-forward floating</td><td>Weight-forward floating or intermediate</td></tr>
+<tr><td>Leader Length</td><td>9 - 10 ft</td><td>9 - 10 ft</td><td>10 - 12 ft (with bite tippet)</td></tr>
+<tr><td>Tippet</td><td>12 lb fluorocarbon</td><td>16 - 20 lb fluorocarbon</td><td>60 - 80 lb fluorocarbon bite tippet (to withstand abrasive gill plates)</td></tr>
+<tr><td>Reel</td><td>Large-arbor, quality drag, 150+ yards backing</td><td>Large-arbor, strong drag, 200+ yards backing</td><td>Large-arbor, powerful disc drag, 250+ yards backing minimum</td></tr>
 </tbody>
 </table>
 </div>
@@ -3461,15 +3461,15 @@ export const articles: Article[] = [
 <li><strong>Golden Hour: Last Chances</strong> — If permit have been elusive, the final hours offer one last window. Permit sometimes feed more aggressively in the late afternoon as light angles change on the flats.</li>
 </ol>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Grand Slam Reality Check</p>
+<aside>
+<p>Grand Slam Reality Check</p>
 <ul>
 <li><strong>Most Likely Outcome</strong> — A "double slam" (two of the three species) because permit are so difficult and unpredictable.</li>
 <li><strong>Bonefish + Tarpon</strong> — A tremendous achievement on its own. This is a great day of flats fishing by any measure.</li>
 <li><strong>Adding the Permit</strong> — Elevates the day into the realm of legend. Some of the most experienced saltwater anglers in the world have never completed a grand slam despite decades of trying.</li>
 <li><strong>The Real Reward</strong> — The pursuit itself — the planning, the anticipation, the heartbreaking refusals, and the rare moments of perfect execution — is what makes the grand slam the pinnacle of fly fishing achievement.</li>
 </ul>
-</div>
+</aside>
 
 <h2>The Addiction of the Flats</h2>
 
@@ -3531,10 +3531,10 @@ export const articles: Article[] = [
 <li><strong>Strict Management</strong> — Rivers managed with a level of care and restriction that puts most other fishing nations to shame.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">First-Timer Tip: Book Early</p>
-<p class="text-[#D8DEE4] text-sm">The most famous Icelandic salmon rivers require booking years in advance. If this is your first trip, consider starting with a less exclusive river or a char-focused trip — the fishing quality is still outstanding, the experience is more accessible, and the cost is dramatically lower.</p>
-</div>
+<aside>
+<p>First-Timer Tip: Book Early</p>
+<p>The most famous Icelandic salmon rivers require booking years in advance. If this is your first trip, consider starting with a less exclusive river or a char-focused trip — the fishing quality is still outstanding, the experience is more accessible, and the cost is dramatically lower.</p>
+</aside>
 
 <h2>Atlantic Salmon: The King of Sport Fish</h2>
 
@@ -3559,8 +3559,8 @@ export const articles: Article[] = [
 <li><strong>Booking</strong> — Book a "beat" (a designated section of river) for 3 to 7 days, fishing with a local guide who knows every pool, lie, and seasonal pattern.</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Famous Salmon Rivers of Iceland</p>
+<aside>
+<p>Famous Salmon Rivers of Iceland</p>
 <ul>
 <li><strong>Laxa in Adaldal (North)</strong> — One of the most storied Atlantic salmon rivers in the world. Known for consistent multi-sea-winter fish and classic pool-and-riffle water. Peak: July - August.</li>
 <li><strong>Nordura (West)</strong> — A prolific river with large runs and diverse water types. Excellent early-season fishing. Peak: June - July.</li>
@@ -3568,7 +3568,7 @@ export const articles: Article[] = [
 <li><strong>Haffjardara (Southwest)</strong> — A smaller, intimate river with strong runs of grilse and multi-sea-winter fish. Peak: July - August.</li>
 <li><strong>Midfjardara (North)</strong> — Renowned for large fish and dramatic canyon scenery. Limited rods, high demand. Peak: July - August.</li>
 </ul>
-</div>
+</aside>
 
 <h2>Arctic Char: A Fish of Otherworldly Beauty</h2>
 
@@ -3601,21 +3601,21 @@ export const articles: Article[] = [
 <li><strong>Fight</strong> — A combination of speed and acrobatics that surpasses most freshwater trout species.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Char Tip: The Hidden Value</p>
-<p class="text-[#D8DEE4] text-sm">Many visiting anglers focus exclusively on salmon and overlook char fishing entirely. This is a mistake. Char fishing offers outstanding sport at a fraction of the cost, with far less booking pressure. A mixed trip that combines salmon beats with char lake or sea-run days gives you the full Icelandic experience.</p>
-</div>
+<aside>
+<p>Char Tip: The Hidden Value</p>
+<p>Many visiting anglers focus exclusively on salmon and overlook char fishing entirely. This is a mistake. Char fishing offers outstanding sport at a fraction of the cost, with far less booking pressure. A mixed trip that combines salmon beats with char lake or sea-run days gives you the full Icelandic experience.</p>
+</aside>
 
 <h2>Fishing Seasons at a Glance</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Month</th><th class="text-left p-3">Salmon Status</th><th class="text-left p-3">Char Status</th><th class="text-left p-3">Weather</th><th class="text-left p-3">Daylight</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Month</th><th>Salmon Status</th><th>Char Status</th><th>Weather</th><th>Daylight</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">June</td><td class="p-3">Early-season rivers open (south/west); fresh, aggressive fish entering</td><td class="p-3">Lake char becoming active; sea-run char beginning to appear</td><td class="p-3">Cool, 45-55 F; variable rain/sun</td><td class="p-3">~21 hours (near midnight sun)</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">July</td><td class="p-3">Peak season for most rivers; strongest runs; best overall month</td><td class="p-3">Lake fishing excellent; sea-run char in peak form</td><td class="p-3">Warmest month, 50-60 F; long dry spells possible</td><td class="p-3">~20 hours (midnight sun fading)</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">August</td><td class="p-3">Northern/eastern rivers peak; late-run fish; some rivers slowing</td><td class="p-3">Outstanding across the board; char feeding heavily pre-spawn</td><td class="p-3">Cooling, 48-58 F; increasing rain</td><td class="p-3">~17 hours</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">September</td><td class="p-3">Season winding down; colored-up fish; limited availability</td><td class="p-3">Char spawning begins; spectacular coloration; aggressive takes</td><td class="p-3">Cool, 40-50 F; rain and wind common</td><td class="p-3">~13 hours</td></tr>
+<tr><td>June</td><td>Early-season rivers open (south/west); fresh, aggressive fish entering</td><td>Lake char becoming active; sea-run char beginning to appear</td><td>Cool, 45-55 F; variable rain/sun</td><td>~21 hours (near midnight sun)</td></tr>
+<tr><td>July</td><td>Peak season for most rivers; strongest runs; best overall month</td><td>Lake fishing excellent; sea-run char in peak form</td><td>Warmest month, 50-60 F; long dry spells possible</td><td>~20 hours (midnight sun fading)</td></tr>
+<tr><td>August</td><td>Northern/eastern rivers peak; late-run fish; some rivers slowing</td><td>Outstanding across the board; char feeding heavily pre-spawn</td><td>Cooling, 48-58 F; increasing rain</td><td>~17 hours</td></tr>
+<tr><td>September</td><td>Season winding down; colored-up fish; limited availability</td><td>Char spawning begins; spectacular coloration; aggressive takes</td><td>Cool, 40-50 F; rain and wind common</td><td>~13 hours</td></tr>
 </tbody>
 </table>
 </div>
@@ -3624,30 +3624,30 @@ export const articles: Article[] = [
 
 <h3>Cost Comparison</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Experience</th><th class="text-left p-3">Daily Cost (Rod Fee)</th><th class="text-left p-3">What's Included</th><th class="text-left p-3">Booking Lead Time</th><th class="text-left p-3">Best For</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Experience</th><th>Daily Cost (Rod Fee)</th><th>What's Included</th><th>Booking Lead Time</th><th>Best For</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Premium Salmon Rivers</td><td class="p-3">$1,000 - $3,000+</td><td class="p-3">Guiding, lodging, meals, transport to river</td><td class="p-3">1 - 3 years in advance</td><td class="p-3">Experienced salmon anglers; bucket-list trips</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Mid-Tier Salmon Rivers</td><td class="p-3">$500 - $1,000</td><td class="p-3">Guiding, lodging, meals</td><td class="p-3">6 - 12 months</td><td class="p-3">First-time Iceland salmon anglers; excellent value</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Guided Char Lakes</td><td class="p-3">$200 - $500</td><td class="p-3">Guide, transport to lakes, lunch</td><td class="p-3">1 - 3 months</td><td class="p-3">Budget-conscious anglers; mixed-species trips</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Sea-Run Char Rivers</td><td class="p-3">$300 - $700</td><td class="p-3">Guide, river access, often lodging</td><td class="p-3">3 - 6 months</td><td class="p-3">Anglers seeking variety; excellent fighting fish</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">DIY Char (Highland Lakes)</td><td class="p-3">$0 - $50 (permit fee)</td><td class="p-3">Access only; self-guided</td><td class="p-3">None</td><td class="p-3">Adventurous anglers with 4WD; backpacking trips</td></tr>
+<tr><td>Premium Salmon Rivers</td><td>$1,000 - $3,000+</td><td>Guiding, lodging, meals, transport to river</td><td>1 - 3 years in advance</td><td>Experienced salmon anglers; bucket-list trips</td></tr>
+<tr><td>Mid-Tier Salmon Rivers</td><td>$500 - $1,000</td><td>Guiding, lodging, meals</td><td>6 - 12 months</td><td>First-time Iceland salmon anglers; excellent value</td></tr>
+<tr><td>Guided Char Lakes</td><td>$200 - $500</td><td>Guide, transport to lakes, lunch</td><td>1 - 3 months</td><td>Budget-conscious anglers; mixed-species trips</td></tr>
+<tr><td>Sea-Run Char Rivers</td><td>$300 - $700</td><td>Guide, river access, often lodging</td><td>3 - 6 months</td><td>Anglers seeking variety; excellent fighting fish</td></tr>
+<tr><td>DIY Char (Highland Lakes)</td><td>$0 - $50 (permit fee)</td><td>Access only; self-guided</td><td>None</td><td>Adventurous anglers with 4WD; backpacking trips</td></tr>
 </tbody>
 </table>
 </div>
 
 <h3>Tackle Guide: Salmon vs. Char</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Component</th><th class="text-left p-3">Atlantic Salmon</th><th class="text-left p-3">Lake Char</th><th class="text-left p-3">Sea-Run Char</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Component</th><th>Atlantic Salmon</th><th>Lake Char</th><th>Sea-Run Char</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Rod</td><td class="p-3">Single-handed 7- or 8-weight, 9 - 10 ft</td><td class="p-3">5- or 6-weight, 9 ft</td><td class="p-3">6- or 7-weight, 9 ft</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Line</td><td class="p-3">Floating (primary); intermediate for deep pools</td><td class="p-3">Floating or intermediate sink-tip</td><td class="p-3">Floating or intermediate</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Leader</td><td class="p-3">9 - 12 ft tapered, 10 - 15 lb tippet</td><td class="p-3">9 ft tapered, 4 - 6 lb tippet</td><td class="p-3">9 ft tapered, 6 - 10 lb tippet</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Key Flies</td><td class="p-3">Hitch tubes, small doubles, Frances, Collie Dog (sizes 8 - 16)</td><td class="p-3">Midge nymphs, black fly larvae, small wet flies (sizes 10 - 14)</td><td class="p-3">Small streamers, nymphs, dry flies (sizes 8 - 12)</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Specialty</td><td class="p-3">Hitch tubes for surface skating</td><td class="p-3">Slow-sinking patterns for cruising fish</td><td class="p-3">Streamer patterns imitating small baitfish</td></tr>
+<tr><td>Rod</td><td>Single-handed 7- or 8-weight, 9 - 10 ft</td><td>5- or 6-weight, 9 ft</td><td>6- or 7-weight, 9 ft</td></tr>
+<tr><td>Line</td><td>Floating (primary); intermediate for deep pools</td><td>Floating or intermediate sink-tip</td><td>Floating or intermediate</td></tr>
+<tr><td>Leader</td><td>9 - 12 ft tapered, 10 - 15 lb tippet</td><td>9 ft tapered, 4 - 6 lb tippet</td><td>9 ft tapered, 6 - 10 lb tippet</td></tr>
+<tr><td>Key Flies</td><td>Hitch tubes, small doubles, Frances, Collie Dog (sizes 8 - 16)</td><td>Midge nymphs, black fly larvae, small wet flies (sizes 10 - 14)</td><td>Small streamers, nymphs, dry flies (sizes 8 - 12)</td></tr>
+<tr><td>Specialty</td><td>Hitch tubes for surface skating</td><td>Slow-sinking patterns for cruising fish</td><td>Streamer patterns imitating small baitfish</td></tr>
 </tbody>
 </table>
 </div>
@@ -3682,10 +3682,10 @@ export const articles: Article[] = [
 <li><strong>Midnight Sun</strong> — During peak summer, the sun barely sets. Bring a sleep mask and embrace the surreal experience of casting to rising salmon at midnight under a golden sky.</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">First-Timer Tip: Embrace the Weather</p>
-<p class="text-[#D8DEE4] text-sm">Iceland's weather is maritime and unpredictable. Rain, wind, and sudden changes are normal — not exceptions. Anglers who come prepared with quality rain gear, layered clothing, and a tolerance for fishing in less-than-ideal conditions will have a far better trip than those who expect Mediterranean sunshine. The upside: some of the best fishing happens in the worst weather.</p>
-</div>
+<aside>
+<p>First-Timer Tip: Embrace the Weather</p>
+<p>Iceland's weather is maritime and unpredictable. Rain, wind, and sudden changes are normal — not exceptions. Anglers who come prepared with quality rain gear, layered clothing, and a tolerance for fishing in less-than-ideal conditions will have a far better trip than those who expect Mediterranean sunshine. The upside: some of the best fishing happens in the worst weather.</p>
+</aside>
 
 <h2>Conservation and Sustainability</h2>
 
@@ -3701,10 +3701,10 @@ export const articles: Article[] = [
 <li><strong>No Stocking</strong> — Wild fish only. No hatchery supplementation that could dilute wild genetics.</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-[#F8D7A8] mb-1">Warning: The Aquaculture Threat</p>
-<p class="text-[#D8DEE4] text-sm">The greatest current threat to Icelandic fisheries is aquaculture — specifically, open-net pen farming of Atlantic salmon in fjords adjacent to wild salmon rivers. Escaped farmed salmon interbreed with wild populations, diluting genetic adaptations evolved over thousands of years. Disease and parasites from farmed fish can also devastate wild stocks. Icelandic anglers and conservation organizations are actively working to restrict aquaculture expansion, and this issue is likely the defining conservation battle of Icelandic fisheries for the coming decade. Visiting anglers can support this effort by choosing lodges and outfitters that actively oppose open-net pen expansion.</p>
-</div>
+<aside>
+<p>Warning: The Aquaculture Threat</p>
+<p>The greatest current threat to Icelandic fisheries is aquaculture — specifically, open-net pen farming of Atlantic salmon in fjords adjacent to wild salmon rivers. Escaped farmed salmon interbreed with wild populations, diluting genetic adaptations evolved over thousands of years. Disease and parasites from farmed fish can also devastate wild stocks. Icelandic anglers and conservation organizations are actively working to restrict aquaculture expansion, and this issue is likely the defining conservation battle of Icelandic fisheries for the coming decade. Visiting anglers can support this effort by choosing lodges and outfitters that actively oppose open-net pen expansion.</p>
+</aside>
 
 <h2>The Iceland Experience</h2>
 
@@ -3718,8 +3718,8 @@ export const articles: Article[] = [
 <li><strong>Deep Fishing Culture</strong> — A nation that takes fisheries management seriously and treats wild fish as a national treasure.</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Iceland at a Glance</p>
+<aside>
+<p>Iceland at a Glance</p>
 <ul>
 <li><strong>Location</strong> — North Atlantic, just below the Arctic Circle</li>
 <li><strong>Population</strong> — ~380,000 (island the size of Kentucky)</li>
@@ -3731,7 +3731,7 @@ export const articles: Article[] = [
 <li><strong>Language</strong> — Icelandic (English universally spoken)</li>
 <li><strong>Best Value</strong> — Highland char lakes (free or minimal fee) to premium salmon beats ($3,000+/day)</li>
 </ul>
-</div>`,
+</aside>`,
     readingTimeMinutes: 10,
     tags: [
       "iceland",
@@ -3772,29 +3772,29 @@ export const articles: Article[] = [
 
 <p>A trout in 40-degree water in January is a fundamentally different animal than the same trout in 58-degree water in July. Understanding these seasonal shifts is one of the most valuable skills an angler can develop, because it allows you to adjust your tactics, fly selection, and water choice to match what the fish are actually doing rather than what you wish they were doing.</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Seasons Follow Temperature, Not the Calendar</p>
-<p class="text-[#D8DEE4] text-sm">The four seasons of trout behavior do not correspond neatly to calendar months. Trout respond to water temperature and photoperiod, not human calendars, and the timing varies dramatically depending on latitude, elevation, and water source. A tailwater below a deep reservoir may maintain stable temperatures year-round, while a high-elevation freestone stream may experience extreme temperature swings that produce distinct behavioral phases within a single week.</p>
-</div>
+<aside>
+<p>Seasons Follow Temperature, Not the Calendar</p>
+<p>The four seasons of trout behavior do not correspond neatly to calendar months. Trout respond to water temperature and photoperiod, not human calendars, and the timing varies dramatically depending on latitude, elevation, and water source. A tailwater below a deep reservoir may maintain stable temperatures year-round, while a high-elevation freestone stream may experience extreme temperature swings that produce distinct behavioral phases within a single week.</p>
+</aside>
 
 <h2>Seasonal Overview</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Season</th><th class="text-left p-3">Water Temp Range</th><th class="text-left p-3">Metabolism</th><th class="text-left p-3">Primary Behavior</th><th class="text-left p-3">Best Technique</th><th class="text-left p-3">Best Water</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Season</th><th>Water Temp Range</th><th>Metabolism</th><th>Primary Behavior</th><th>Best Technique</th><th>Best Water</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Spring</td><td class="p-3">42 - 55&deg;F</td><td class="p-3">Increasing</td><td class="p-3">Transitioning to feeding lanes; spawning (rainbow/cutthroat)</td><td class="p-3">Nymphing, then emerging dries</td><td class="p-3">Moderate runs, riffle tailouts</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Summer</td><td class="p-3">55 - 65&deg;F</td><td class="p-3">Peak</td><td class="p-3">Aggressive feeding across all water types</td><td class="p-3">Dry flies, terrestrials, nymphs</td><td class="p-3">Riffles, banks, current seams</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Fall</td><td class="p-3">48 - 58&deg;F</td><td class="p-3">High</td><td class="p-3">Pre-winter feeding frenzy; spawning (brown/brook)</td><td class="p-3">Streamers, large nymphs</td><td class="p-3">Banks, deep pools, logjams</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Winter</td><td class="p-3">33 - 42&deg;F</td><td class="p-3">Minimum</td><td class="p-3">Energy conservation; opportunistic feeding only</td><td class="p-3">Slow nymphing (midges, small mayflies)</td><td class="p-3">Deep, slow pools and runs</td></tr>
+<tr><td>Spring</td><td>42 - 55&deg;F</td><td>Increasing</td><td>Transitioning to feeding lanes; spawning (rainbow/cutthroat)</td><td>Nymphing, then emerging dries</td><td>Moderate runs, riffle tailouts</td></tr>
+<tr><td>Summer</td><td>55 - 65&deg;F</td><td>Peak</td><td>Aggressive feeding across all water types</td><td>Dry flies, terrestrials, nymphs</td><td>Riffles, banks, current seams</td></tr>
+<tr><td>Fall</td><td>48 - 58&deg;F</td><td>High</td><td>Pre-winter feeding frenzy; spawning (brown/brook)</td><td>Streamers, large nymphs</td><td>Banks, deep pools, logjams</td></tr>
+<tr><td>Winter</td><td>33 - 42&deg;F</td><td>Minimum</td><td>Energy conservation; opportunistic feeding only</td><td>Slow nymphing (midges, small mayflies)</td><td>Deep, slow pools and runs</td></tr>
 </tbody>
 </table>
 </div>
 
 <h2>Temperature Thresholds</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Key Temperature Breakpoints for Trout</p>
+<aside>
+<p>Key Temperature Breakpoints for Trout</p>
 <ul>
 <li><strong>33 - 38&deg;F</strong> — Near-dormant; minimal feeding, extremely slow digestion</li>
 <li><strong>39 - 44&deg;F</strong> — Sluggish but will eat food drifted directly to them; winter nymphing territory</li>
@@ -3805,7 +3805,7 @@ export const articles: Article[] = [
 <li><strong>68&deg;F+</strong> — Thermal stress begins; fish stop feeding and seek cold refuges</li>
 <li><strong>70&deg;F+</strong> — Danger zone; physiological stress is severe, mortality risk increases significantly</li>
 </ul>
-</div>
+</aside>
 
 <h2>Spring: The Awakening</h2>
 
@@ -3840,10 +3840,10 @@ export const articles: Article[] = [
 <li><strong>Dry flies</strong> — Increasingly effective as the season progresses; target afternoon hatch windows with BWOs and midges</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Spring Spawning Ethics</p>
-<p class="text-[#D8DEE4] text-sm">Rainbow and cutthroat trout spawn from March through May in most Western rivers. Spawning fish on active redds are often highly visible and may appear easy to catch, but ethical anglers avoid targeting them to protect reproductive success. Instead, focus on the non-spawning fish that position themselves downstream of redds to feed on drifting eggs and disturbed nymphs.</p>
-</div>
+<aside>
+<p>Spring Spawning Ethics</p>
+<p>Rainbow and cutthroat trout spawn from March through May in most Western rivers. Spawning fish on active redds are often highly visible and may appear easy to catch, but ethical anglers avoid targeting them to protect reproductive success. Instead, focus on the non-spawning fish that position themselves downstream of redds to feed on drifting eggs and disturbed nymphs.</p>
+</aside>
 
 <h2>Summer: Peak Activity</h2>
 
@@ -3880,10 +3880,10 @@ export const articles: Article[] = [
 <li><strong>Streamers</strong> — Effective in early morning and late evening when larger trout are actively hunting</li>
 </ul>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-[#F8D7A8] mb-1">Warning: Thermal Stress &amp; Fishing Ethics</p>
-<p class="text-[#D8DEE4] text-sm">When water temperatures exceed 68&deg;F, trout become physiologically stressed. Above 70&deg;F, they stop feeding and seek thermal refuge. Fishing for trout in water above 68&deg;F is ethically problematic because even carefully released fish suffer increased mortality. Carry a stream thermometer, check water temperature regularly, and stop fishing when temperatures enter the danger zone. On many Western rivers, voluntary or mandatory hoot-owl closures restrict fishing to morning hours during the hottest weeks.</p>
-</div>
+<aside>
+<p>Warning: Thermal Stress &amp; Fishing Ethics</p>
+<p>When water temperatures exceed 68&deg;F, trout become physiologically stressed. Above 70&deg;F, they stop feeding and seek thermal refuge. Fishing for trout in water above 68&deg;F is ethically problematic because even carefully released fish suffer increased mortality. Carry a stream thermometer, check water temperature regularly, and stop fishing when temperatures enter the danger zone. On many Western rivers, voluntary or mandatory hoot-owl closures restrict fishing to morning hours during the hottest weeks.</p>
+</aside>
 
 <h2>Fall: Aggression and Preparation</h2>
 
@@ -3919,10 +3919,10 @@ export const articles: Article[] = [
 <li><strong>Peak trophy window</strong> — Mid-September through early November (varies by latitude) represents the best chance at fish over 20 inches</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Fall Transition Tip</p>
-<p class="text-[#D8DEE4] text-sm">The shift from summer to fall fishing is not abrupt. Watch for the first cold nights that drop water temps below 55 degrees and shorten the days noticeably. When you see the first male brown trout with intensified coloring, the pre-spawn window has opened. Switch from dry flies and terrestrials to streamers and large nymphs, and fish slower, deeper water where big fish stage before moving to spawning gravel.</p>
-</div>
+<aside>
+<p>Fall Transition Tip</p>
+<p>The shift from summer to fall fishing is not abrupt. Watch for the first cold nights that drop water temps below 55 degrees and shorten the days noticeably. When you see the first male brown trout with intensified coloring, the pre-spawn window has opened. Switch from dry flies and terrestrials to streamers and large nymphs, and fish slower, deeper water where big fish stage before moving to spawning gravel.</p>
+</aside>
 
 <h2>Winter: Survival Mode</h2>
 
@@ -3958,21 +3958,21 @@ export const articles: Article[] = [
 <li><strong>Patience required</strong> — Expect slow action; the rewards are solitude and the satisfaction of solving a difficult puzzle</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Winter Rewards</p>
-<p class="text-[#D8DEE4] text-sm">Rivers that are crowded in summer are empty in winter. The fish you catch are earned through patience, precise technique, and deep understanding of trout behavior. Winter fishing teaches lessons about presentation, depth control, and reading water that carry over into every other season. The angler who can catch trout in January can catch trout anytime.</p>
-</div>
+<aside>
+<p>Winter Rewards</p>
+<p>Rivers that are crowded in summer are empty in winter. The fish you catch are earned through patience, precise technique, and deep understanding of trout behavior. Winter fishing teaches lessons about presentation, depth control, and reading water that carry over into every other season. The angler who can catch trout in January can catch trout anytime.</p>
+</aside>
 
 <h2>Spawning Calendar</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Species</th><th class="text-left p-3">Spawning Months</th><th class="text-left p-3">Spawning Behavior</th><th class="text-left p-3">Angler Ethics</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Species</th><th>Spawning Months</th><th>Spawning Behavior</th><th>Angler Ethics</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Rainbow Trout</td><td class="p-3">March - May</td><td class="p-3">Females dig redds in clean gravel in riffle tailouts and shallow runs; males fertilize eggs</td><td class="p-3">Avoid targeting fish on active redds; fish downstream of redds for opportunistic feeders using egg patterns</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Cutthroat Trout</td><td class="p-3">March - May</td><td class="p-3">Similar to rainbows; spawn in tributary streams and riffle tailouts</td><td class="p-3">Same as rainbow trout; protect spawning gravel by staying off redds</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Brown Trout</td><td class="p-3">October - December</td><td class="p-3">Males develop kypes and vivid coloring; highly territorial and aggressive pre-spawn; females build redds in gravel</td><td class="p-3">Pre-spawn fish are fair game with streamers and nymphs; avoid targeting fish actively on redds</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Brook Trout</td><td class="p-3">September - November</td><td class="p-3">Brilliant spawning colors; males become territorial; spawn in cold, clean gravel, often in spring-fed areas</td><td class="p-3">Enjoy pre-spawn aggression; give spawning pairs on redds a wide berth</td></tr>
+<tr><td>Rainbow Trout</td><td>March - May</td><td>Females dig redds in clean gravel in riffle tailouts and shallow runs; males fertilize eggs</td><td>Avoid targeting fish on active redds; fish downstream of redds for opportunistic feeders using egg patterns</td></tr>
+<tr><td>Cutthroat Trout</td><td>March - May</td><td>Similar to rainbows; spawn in tributary streams and riffle tailouts</td><td>Same as rainbow trout; protect spawning gravel by staying off redds</td></tr>
+<tr><td>Brown Trout</td><td>October - December</td><td>Males develop kypes and vivid coloring; highly territorial and aggressive pre-spawn; females build redds in gravel</td><td>Pre-spawn fish are fair game with streamers and nymphs; avoid targeting fish actively on redds</td></tr>
+<tr><td>Brook Trout</td><td>September - November</td><td>Brilliant spawning colors; males become territorial; spawn in cold, clean gravel, often in spring-fed areas</td><td>Enjoy pre-spawn aggression; give spawning pairs on redds a wide berth</td></tr>
 </tbody>
 </table>
 </div>
@@ -4041,17 +4041,17 @@ export const articles: Article[] = [
 <li><strong>Wind handling</strong> — How well the rod performs in challenging conditions</li>
 </ul>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Weight</th><th class="text-left p-3">Length</th><th class="text-left p-3">Target Species</th><th class="text-left p-3">Fly Size</th><th class="text-left p-3">Best For</th><th class="text-left p-3">Wind Handling</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Weight</th><th>Length</th><th>Target Species</th><th>Fly Size</th><th>Best For</th><th>Wind Handling</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">3 wt</td><td class="p-3">7'6" - 10'</td><td class="p-3">Small trout (8-12")</td><td class="p-3">#14 - #22</td><td class="p-3">Small streams, euro nymphing, spring creeks</td><td class="p-3">Poor</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">4 wt</td><td class="p-3">8'6" - 9'</td><td class="p-3">Trout (10-16")</td><td class="p-3">#12 - #20</td><td class="p-3">Small to medium streams, dry flies</td><td class="p-3">Fair</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">5 wt</td><td class="p-3">9'</td><td class="p-3">Trout (10-20")</td><td class="p-3">#8 - #20</td><td class="p-3">All-around trout fishing, dries/nymphs/small streamers</td><td class="p-3">Good</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">6 wt</td><td class="p-3">9' - 9'6"</td><td class="p-3">Large trout (14-24"), smallmouth bass</td><td class="p-3">#4 - #16</td><td class="p-3">Large rivers, float trips, heavier nymph rigs, wind</td><td class="p-3">Very good</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">7 wt</td><td class="p-3">9' - 9'6"</td><td class="p-3">Steelhead, bass, large trout</td><td class="p-3">#1/0 - #10</td><td class="p-3">Streamer fishing, big water, light steelhead</td><td class="p-3">Excellent</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">8 wt</td><td class="p-3">9'</td><td class="p-3">Bonefish, steelhead, salmon, bass</td><td class="p-3">#2/0 - #8</td><td class="p-3">Saltwater flats, steelhead, salmon rivers</td><td class="p-3">Excellent</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">9-12 wt</td><td class="p-3">9'</td><td class="p-3">Tarpon, permit, billfish, GT</td><td class="p-3">#4/0 - #2</td><td class="p-3">Serious saltwater species, heavy surf, extreme conditions</td><td class="p-3">Outstanding</td></tr>
+<tr><td>3 wt</td><td>7'6" - 10'</td><td>Small trout (8-12")</td><td>#14 - #22</td><td>Small streams, euro nymphing, spring creeks</td><td>Poor</td></tr>
+<tr><td>4 wt</td><td>8'6" - 9'</td><td>Trout (10-16")</td><td>#12 - #20</td><td>Small to medium streams, dry flies</td><td>Fair</td></tr>
+<tr><td>5 wt</td><td>9'</td><td>Trout (10-20")</td><td>#8 - #20</td><td>All-around trout fishing, dries/nymphs/small streamers</td><td>Good</td></tr>
+<tr><td>6 wt</td><td>9' - 9'6"</td><td>Large trout (14-24"), smallmouth bass</td><td>#4 - #16</td><td>Large rivers, float trips, heavier nymph rigs, wind</td><td>Very good</td></tr>
+<tr><td>7 wt</td><td>9' - 9'6"</td><td>Steelhead, bass, large trout</td><td>#1/0 - #10</td><td>Streamer fishing, big water, light steelhead</td><td>Excellent</td></tr>
+<tr><td>8 wt</td><td>9'</td><td>Bonefish, steelhead, salmon, bass</td><td>#2/0 - #8</td><td>Saltwater flats, steelhead, salmon rivers</td><td>Excellent</td></tr>
+<tr><td>9-12 wt</td><td>9'</td><td>Tarpon, permit, billfish, GT</td><td>#4/0 - #2</td><td>Serious saltwater species, heavy surf, extreme conditions</td><td>Outstanding</td></tr>
 </tbody>
 </table>
 </div>
@@ -4068,10 +4068,10 @@ export const articles: Article[] = [
 <li><strong>9+ weight</strong> — Specialized for serious saltwater species, Atlantic salmon, and steelhead in heavy water</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">First Rod Recommendation</p>
-<p class="text-[#D8DEE4] text-sm">If you will own only one rod, buy a 9-foot 5-weight. It is the Swiss Army knife of fly rods — not the best tool for any single specialized task, but a capable tool for nearly all of them. It handles dry flies, nymphs, and small streamers, casts at all practical distances, and fights trout up to 20 inches without difficulty.</p>
-</div>
+<aside>
+<p>First Rod Recommendation</p>
+<p>If you will own only one rod, buy a 9-foot 5-weight. It is the Swiss Army knife of fly rods — not the best tool for any single specialized task, but a capable tool for nearly all of them. It handles dry flies, nymphs, and small streamers, casts at all practical distances, and fights trout up to 20 inches without difficulty.</p>
+</aside>
 
 <h2>Rod Length</h2>
 
@@ -4087,13 +4087,13 @@ export const articles: Article[] = [
 
 <p>Rod action describes how and where a rod flexes under load. It has a significant impact on casting feel, accuracy, and what types of fishing the rod handles best.</p>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Action</th><th class="text-left p-3">Flex Point</th><th class="text-left p-3">Casting Feel</th><th class="text-left p-3">Distance</th><th class="text-left p-3">Accuracy (Close)</th><th class="text-left p-3">Best For</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Action</th><th>Flex Point</th><th>Casting Feel</th><th>Distance</th><th>Accuracy (Close)</th><th>Best For</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Fast (Tip-Flex)</td><td class="p-3">Upper 1/3 of blank</td><td class="p-3">Crisp, powerful; stiff mid-section and butt</td><td class="p-3">Excellent</td><td class="p-3">Moderate (requires refined stroke)</td><td class="p-3">Long casts, wind, versatility, streamers, nymphing</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Moderate (Mid-Flex)</td><td class="p-3">Upper 1/2 of blank</td><td class="p-3">Smooth, relaxed; progressive loading</td><td class="p-3">Good</td><td class="p-3">Very good</td><td class="p-3">Dry flies, light tippet, spring creeks, small streams</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Slow (Full-Flex)</td><td class="p-3">Entire blank</td><td class="p-3">Deep, connected; full-body bend under load</td><td class="p-3">Limited</td><td class="p-3">Good (at short range)</td><td class="p-3">Classic casting, bamboo/fiberglass, aesthetic enjoyment</td></tr>
+<tr><td>Fast (Tip-Flex)</td><td>Upper 1/3 of blank</td><td>Crisp, powerful; stiff mid-section and butt</td><td>Excellent</td><td>Moderate (requires refined stroke)</td><td>Long casts, wind, versatility, streamers, nymphing</td></tr>
+<tr><td>Moderate (Mid-Flex)</td><td>Upper 1/2 of blank</td><td>Smooth, relaxed; progressive loading</td><td>Good</td><td>Very good</td><td>Dry flies, light tippet, spring creeks, small streams</td></tr>
+<tr><td>Slow (Full-Flex)</td><td>Entire blank</td><td>Deep, connected; full-body bend under load</td><td>Limited</td><td>Good (at short range)</td><td>Classic casting, bamboo/fiberglass, aesthetic enjoyment</td></tr>
 </tbody>
 </table>
 </div>
@@ -4108,71 +4108,71 @@ export const articles: Article[] = [
 
 <h2>Materials and Price</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Material</th><th class="text-left p-3">Weight</th><th class="text-left p-3">Durability</th><th class="text-left p-3">Feel</th><th class="text-left p-3">Price Range</th><th class="text-left p-3">Best For</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Material</th><th>Weight</th><th>Durability</th><th>Feel</th><th>Price Range</th><th>Best For</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Graphite (Carbon Fiber)</td><td class="p-3">Lightest</td><td class="p-3">Excellent</td><td class="p-3">Crisp, sensitive</td><td class="p-3">$100 - $1,000+</td><td class="p-3">All-around use; the dominant material at every skill level and price point</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Fiberglass</td><td class="p-3">Moderate</td><td class="p-3">Very good</td><td class="p-3">Slow, full-flex, nostalgic</td><td class="p-3">$150 - $500</td><td class="p-3">Small streams, dry flies, anglers who value feel over performance</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Bamboo (Split Cane)</td><td class="p-3">Heaviest</td><td class="p-3">Fragile</td><td class="p-3">Deep, tactile, luxurious</td><td class="p-3">$1,500 - $5,000+</td><td class="p-3">Collectors, purists, aesthetic enjoyment; handcrafted works of art</td></tr>
+<tr><td>Graphite (Carbon Fiber)</td><td>Lightest</td><td>Excellent</td><td>Crisp, sensitive</td><td>$100 - $1,000+</td><td>All-around use; the dominant material at every skill level and price point</td></tr>
+<tr><td>Fiberglass</td><td>Moderate</td><td>Very good</td><td>Slow, full-flex, nostalgic</td><td>$150 - $500</td><td>Small streams, dry flies, anglers who value feel over performance</td></tr>
+<tr><td>Bamboo (Split Cane)</td><td>Heaviest</td><td>Fragile</td><td>Deep, tactile, luxurious</td><td>$1,500 - $5,000+</td><td>Collectors, purists, aesthetic enjoyment; handcrafted works of art</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Budget Guide: What You Get at Each Price Tier</p>
+<aside>
+<p>Budget Guide: What You Get at Each Price Tier</p>
 <ul>
 <li><strong>Under $150 (Entry Level)</strong> — Functional but noticeably heavy, with less sensitivity and rougher finishes; adequate for learning but you will outgrow it quickly</li>
 <li><strong>$200 - $400 (Mid-Range)</strong> — The sweet spot for most anglers; genuinely excellent performance from reputable manufacturers; will serve faithfully for many years; the best value in fly fishing</li>
 <li><strong>$400 - $700 (Upper Mid-Range)</strong> — Noticeable but diminishing improvements in weight, sensitivity, and casting feel over the mid-range tier; where most serious anglers settle</li>
 <li><strong>$700 - $1,000+ (Premium)</strong> — Subtle refinements that experienced casters appreciate but beginners may not notice; the lightest weights, finest finishes, and most precise actions available</li>
 </ul>
-<p class="text-[#D8DEE4] text-sm mt-3">The wisest investment for a new angler is a quality mid-range rod ($200-$400) paired with a good line and several hours of casting instruction, rather than a premium rod fished without proper technique.</p>
-</div>
+<p>The wisest investment for a new angler is a quality mid-range rod ($200-$400) paired with a good line and several hours of casting instruction, rather than a premium rod fished without proper technique.</p>
+</aside>
 
 <h2>Building Your Rod Arsenal</h2>
 
 <p>Most active fly anglers eventually accumulate multiple rods optimized for different situations. Here is how to build a versatile quiver one rod at a time:</p>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Start With One</p>
-<p class="text-[#D8DEE4] text-sm">A single excellent rod, well matched to your primary fishing, is worth more than a rack of mediocre rods. Start with the rod that covers the fishing you do most often, and add specialized rods as your interests expand and your budget allows.</p>
-</div>
+<aside>
+<p>Start With One</p>
+<p>A single excellent rod, well matched to your primary fishing, is worth more than a rack of mediocre rods. Start with the rod that covers the fishing you do most often, and add specialized rods as your interests expand and your budget allows.</p>
+</aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">1-Rod Quiver: The Essential</p>
+<aside>
+<p>1-Rod Quiver: The Essential</p>
 <ul>
 <li><strong>9-foot 5-weight (fast or moderate action)</strong> — Handles dry flies, nymphs, and small streamers; effective from 15 to 60 feet; fights trout to 20 inches; the single rod that covers the broadest range of trout fishing</li>
 </ul>
-</div>
+</aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">2-Rod Quiver: The Versatile Pair</p>
+<aside>
+<p>2-Rod Quiver: The Versatile Pair</p>
 <ul>
 <li><strong>9-foot 5-weight</strong> — All-around workhorse for standard trout fishing</li>
 <li><strong>10-foot 3-weight</strong> — Euro nymphing specialist that doubles as a small-stream and spring-creek rod; complements the 5-weight by covering the lighter, more technical end of the spectrum</li>
 </ul>
-</div>
+</aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">3-Rod Quiver: The Complete Trout Angler</p>
+<aside>
+<p>3-Rod Quiver: The Complete Trout Angler</p>
 <ul>
 <li><strong>9-foot 5-weight</strong> — All-around workhorse</li>
 <li><strong>10-foot 3-weight</strong> — Euro nymphing, small streams, spring creeks</li>
 <li><strong>9-foot 7-weight</strong> — Streamer fishing, larger water, wind, and bigger fish; covers the aggressive end of trout fishing from fall browns to lake-run fish</li>
 </ul>
-<p class="text-[#D8DEE4] text-sm mt-3">This three-rod setup covers the vast majority of freshwater trout fishing situations from delicate dry fly work to aggressive streamer fishing.</p>
-</div>
+<p>This three-rod setup covers the vast majority of freshwater trout fishing situations from delicate dry fly work to aggressive streamer fishing.</p>
+</aside>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">4-Rod Quiver: The Do-Everything Arsenal</p>
+<aside>
+<p>4-Rod Quiver: The Do-Everything Arsenal</p>
 <ul>
 <li><strong>9-foot 5-weight</strong> — All-around trout workhorse</li>
 <li><strong>10-foot 3-weight</strong> — Euro nymphing and small streams</li>
 <li><strong>9-foot 7-weight</strong> — Streamers and big water</li>
 <li><strong>9-foot 8-weight</strong> — Extends into saltwater (bonefish, sea trout), bass, and steelhead; with these four rods you can fish confidently for virtually any species in any environment, from a tiny Appalachian brook to a Bahamian bonefish flat</li>
 </ul>
-</div>`,
+</aside>`,
     readingTimeMinutes: 10,
     tags: [
       "fly rods",
@@ -4212,14 +4212,14 @@ export const articles: Article[] = [
 <li><strong>Conservation ethic</strong> — We can enjoy the challenge of catching wild fish without depleting the populations that make catching possible</li>
 </ul>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">The Survival Rate Reality</p>
+<aside>
+<p>The Survival Rate Reality</p>
 <ul>
 <li><strong>Done well</strong> — Catch-and-release survival rates exceed 95% for most trout species in most conditions</li>
 <li><strong>Done poorly</strong> — Mortality rates can approach those of harvest fishing due to delayed death from stress, injury, or depleted energy reserves</li>
 <li><strong>The difference</strong> — Proper technique at every stage, from hook selection to release, determines whether your catch-and-release practice is truly conservation or just a feel-good gesture</li>
 </ul>
-</div>
+</aside>
 
 <h2>The Complete Catch-and-Release Process</h2>
 
@@ -4227,8 +4227,8 @@ export const articles: Article[] = [
 
 <h3>Step 1: Prepare Before You Fish</h3>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Pre-Fishing Checklist</p>
+<aside>
+<p>Pre-Fishing Checklist</p>
 <ul>
 <li><strong>Barbless hooks</strong> — Use barbless hooks or crush barbs with hemostats on every fly before tying it on</li>
 <li><strong>Matched tackle</strong> — Use a rod weight appropriate for the target species so you can land fish quickly</li>
@@ -4237,7 +4237,7 @@ export const articles: Article[] = [
 <li><strong>Stream thermometer</strong> — Essential for warm-weather fishing; know the water temperature before you start</li>
 <li><strong>Camera ready</strong> — If you want photos, have settings dialed and the camera accessible before you hook a fish</li>
 </ul>
-</div>
+</aside>
 
 <h3>Step 2: Use Barbless Hooks</h3>
 
@@ -4287,23 +4287,23 @@ export const articles: Article[] = [
 
 <h3>Step 7: Photograph Quickly (If At All)</h3>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Air Exposure Time</th><th class="text-left p-3">Impact on Fish</th><th class="text-left p-3">Recommendation</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Air Exposure Time</th><th>Impact on Fish</th><th>Recommendation</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">0 seconds (in-water photo)</td><td class="p-3">Zero additional stress</td><td class="p-3">Best option: photograph in the net or at the water's surface</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Under 10 seconds</td><td class="p-3">Minimal stress increase</td><td class="p-3">Acceptable: lift, snap 2-3 shots, return immediately</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">10 - 30 seconds</td><td class="p-3">Significant stress hormone increase</td><td class="p-3">Avoid if possible; have camera settings pre-dialed</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">30 - 60 seconds</td><td class="p-3">Sharply increased delayed mortality</td><td class="p-3">Unacceptable: rethink your photo process</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Over 60 seconds</td><td class="p-3">Severe physiological damage</td><td class="p-3">Never: this is not catch and release, it is catch and kill slowly</td></tr>
+<tr><td>0 seconds (in-water photo)</td><td>Zero additional stress</td><td>Best option: photograph in the net or at the water's surface</td></tr>
+<tr><td>Under 10 seconds</td><td>Minimal stress increase</td><td>Acceptable: lift, snap 2-3 shots, return immediately</td></tr>
+<tr><td>10 - 30 seconds</td><td>Significant stress hormone increase</td><td>Avoid if possible; have camera settings pre-dialed</td></tr>
+<tr><td>30 - 60 seconds</td><td>Sharply increased delayed mortality</td><td>Unacceptable: rethink your photo process</td></tr>
+<tr><td>Over 60 seconds</td><td>Severe physiological damage</td><td>Never: this is not catch and release, it is catch and kill slowly</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Quick Photo Tip</p>
-<p class="text-[#D8DEE4] text-sm">Have the camera ready and settings dialed before you lift the fish. Better yet, photograph the fish while it is still in the water or in the net. These in-water images are often more beautiful than traditional grip-and-grin shots and cause zero additional stress.</p>
-</div>
+<aside>
+<p>Quick Photo Tip</p>
+<p>Have the camera ready and settings dialed before you lift the fish. Better yet, photograph the fish while it is still in the water or in the net. These in-water images are often more beautiful than traditional grip-and-grin shots and cause zero additional stress.</p>
+</aside>
 
 <h3>Step 8: Release and Recover</h3>
 
@@ -4320,49 +4320,49 @@ export const articles: Article[] = [
 
 <h2>Fish Handling Do's and Don'ts</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Do</th><th class="text-left p-3">Don't</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Do</th><th>Don't</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Wet your hands before touching the fish</td><td class="p-3">Handle with dry hands, gloves, or towels</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Support the fish horizontally with two hands</td><td class="p-3">Hold vertically by the jaw or lip</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Keep the fish in the water as much as possible</td><td class="p-3">Hold out of water for extended photography</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Use a rubber mesh net</td><td class="p-3">Use knotted nylon nets or bare hands to land</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Remove hooks with hemostats, gripping the fly</td><td class="p-3">Twist hooks out by hand while gripping the fish</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Cut the tippet on deep-hooked fish</td><td class="p-3">Attempt traumatic extraction of throat/gill hooks</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Release in calm, sheltered water</td><td class="p-3">Release into the fastest current available</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Hold steady in current and let the fish recover</td><td class="p-3">Move the fish back and forth through the water</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">Use appropriately sized tackle for quick fights</td><td class="p-3">Use ultra-light tackle for the "sport" of a long fight</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Carry and use a stream thermometer</td><td class="p-3">Fish for trout in water above 68&deg;F</td></tr>
+<tr><td>Wet your hands before touching the fish</td><td>Handle with dry hands, gloves, or towels</td></tr>
+<tr><td>Support the fish horizontally with two hands</td><td>Hold vertically by the jaw or lip</td></tr>
+<tr><td>Keep the fish in the water as much as possible</td><td>Hold out of water for extended photography</td></tr>
+<tr><td>Use a rubber mesh net</td><td>Use knotted nylon nets or bare hands to land</td></tr>
+<tr><td>Remove hooks with hemostats, gripping the fly</td><td>Twist hooks out by hand while gripping the fish</td></tr>
+<tr><td>Cut the tippet on deep-hooked fish</td><td>Attempt traumatic extraction of throat/gill hooks</td></tr>
+<tr><td>Release in calm, sheltered water</td><td>Release into the fastest current available</td></tr>
+<tr><td>Hold steady in current and let the fish recover</td><td>Move the fish back and forth through the water</td></tr>
+<tr><td>Use appropriately sized tackle for quick fights</td><td>Use ultra-light tackle for the "sport" of a long fight</td></tr>
+<tr><td>Carry and use a stream thermometer</td><td>Fish for trout in water above 68&deg;F</td></tr>
 </tbody>
 </table>
 </div>
 
 <h2>Water Temperature Action Guide</h2>
 
-<div class="overflow-x-auto my-6">
-<table class="w-full text-sm border-collapse">
-<thead><tr class="bg-forest text-white"><th class="text-left p-3">Temp Range</th><th class="text-left p-3">Trout Status</th><th class="text-left p-3">Angler Action</th></tr></thead>
+<div>
+<table>
+<thead><tr><th>Temp Range</th><th>Trout Status</th><th>Angler Action</th></tr></thead>
 <tbody>
-<tr class="border-b border-[#21262D]"><td class="p-3">Below 45&deg;F</td><td class="p-3">Low metabolism, sluggish, minimal feeding</td><td class="p-3">Fish with care; cold fish are slow to recover; handle minimally and release quickly</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">45 - 55&deg;F</td><td class="p-3">Active and comfortable, moderate metabolism</td><td class="p-3">Standard best practices; fish are resilient and recover well</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">55 - 63&deg;F</td><td class="p-3">Optimal; peak metabolism and activity</td><td class="p-3">Standard best practices; ideal conditions for both fishing and fish survival</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">63 - 65&deg;F</td><td class="p-3">Approaching stress threshold</td><td class="p-3">Shorten fights; minimize handling; be extra careful with release</td></tr>
-<tr class="border-b border-[#21262D]"><td class="p-3">65 - 68&deg;F</td><td class="p-3">Thermal stress beginning</td><td class="p-3">Fish only in the morning; land fish as fast as possible; minimize all handling; consider stopping</td></tr>
-<tr class="border-b border-[#21262D] bg-[#161B22] border border-[#21262D]"><td class="p-3">Above 68&deg;F</td><td class="p-3">Severe stress; fish stop feeding; seek thermal refuge</td><td class="p-3">Stop fishing for trout entirely; even careful release results in elevated mortality</td></tr>
+<tr><td>Below 45&deg;F</td><td>Low metabolism, sluggish, minimal feeding</td><td>Fish with care; cold fish are slow to recover; handle minimally and release quickly</td></tr>
+<tr><td>45 - 55&deg;F</td><td>Active and comfortable, moderate metabolism</td><td>Standard best practices; fish are resilient and recover well</td></tr>
+<tr><td>55 - 63&deg;F</td><td>Optimal; peak metabolism and activity</td><td>Standard best practices; ideal conditions for both fishing and fish survival</td></tr>
+<tr><td>63 - 65&deg;F</td><td>Approaching stress threshold</td><td>Shorten fights; minimize handling; be extra careful with release</td></tr>
+<tr><td>65 - 68&deg;F</td><td>Thermal stress beginning</td><td>Fish only in the morning; land fish as fast as possible; minimize all handling; consider stopping</td></tr>
+<tr><td>Above 68&deg;F</td><td>Severe stress; fish stop feeding; seek thermal refuge</td><td>Stop fishing for trout entirely; even careful release results in elevated mortality</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-[#F8D7A8] mb-1">Warning: Warm Water Kills</p>
-<p class="text-[#D8DEE4] text-sm">When water temperatures exceed 65&deg;F, trout are already under thermal stress. The additional stress of being caught, fought, and handled can push them past the point of recovery. During warm-water periods, shorten fights, minimize handling, and stop fishing entirely above 68&deg;F. Many fisheries managers implement mandatory afternoon closures (hoot-owl restrictions) during heat events. Voluntary compliance even where not mandated is the mark of a responsible angler. Carry a stream thermometer and check regularly throughout the day.</p>
-</div>
+<aside>
+<p>Warning: Warm Water Kills</p>
+<p>When water temperatures exceed 65&deg;F, trout are already under thermal stress. The additional stress of being caught, fought, and handled can push them past the point of recovery. During warm-water periods, shorten fights, minimize handling, and stop fishing entirely above 68&deg;F. Many fisheries managers implement mandatory afternoon closures (hoot-owl restrictions) during heat events. Voluntary compliance even where not mandated is the mark of a responsible angler. Carry a stream thermometer and check regularly throughout the day.</p>
+</aside>
 
 <h2>Deep-Hooked Fish</h2>
 
-<div class="bg-[#161B22] border border-[#21262D] rounded-xl p-6 my-6">
-<p class="font-semibold mb-2">Decision Guide: What to Do When a Fish Swallows the Fly</p>
+<aside>
+<p>Decision Guide: What to Do When a Fish Swallows the Fly</p>
 <ul>
 <li><strong>Can you see the hook?</strong>
   <ul>
@@ -4381,12 +4381,12 @@ export const articles: Article[] = [
 <li><strong>Hook fate</strong> — The fly will corrode and dissolve within one to two weeks; the fish will heal</li>
 <li><strong>Bottom line</strong> — Your desire to retrieve a fifty-cent fly is not worth the fish's life</li>
 </ul>
-</div>
+</aside>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-<p class="font-semibold text-forest-dark mb-1">Prevent Deep Hooking</p>
-<p class="text-[#D8DEE4] text-sm">Deep hooking is most common when anglers delay the hook set while nymphing or when using bait-style presentations. Set the hook promptly on any indication of a take. Using barbless hooks also reduces the severity of deep hooking, as they can sometimes be backed out more easily even from deeper positions.</p>
-</div>
+<aside>
+<p>Prevent Deep Hooking</p>
+<p>Deep hooking is most common when anglers delay the hook set while nymphing or when using bait-style presentations. Set the hook promptly on any indication of a take. Using barbless hooks also reduces the severity of deep hooking, as they can sometimes be backed out more easily even from deeper positions.</p>
+</aside>
 
 <h2>The Conservation Covenant</h2>
 
@@ -4453,10 +4453,10 @@ export const articles: Article[] = [
 <li><strong>A couple problem solvers</strong> — worm, mop, junk patterns for when the technical game isn't working</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">The Kill Box rule</p>
-  <p class="text-[#D8DEE4] text-sm">If you hesitate whether a fly belongs here, it doesn't. Hesitation is the signal. Confidence patterns don't generate doubt — they generate "tie it on, move on."</p>
-</div>
+<aside>
+  <p>The Kill Box rule</p>
+  <p>If you hesitate whether a fly belongs here, it doesn't. Hesitation is the signal. Confidence patterns don't generate doubt — they generate "tie it on, move on."</p>
+</aside>
 
 <p>Most anglers carry fifty or more flies on their chest. I carry twelve to twenty. The reduction isn't restraint — it's the entire mechanism. A smaller, sharper Kill Box forces you to actually <em>fish</em> instead of standing in the water shopping through patterns.</p>
 
@@ -4489,15 +4489,15 @@ export const articles: Article[] = [
 
 <p>Organize the inserts to match how you'll actually deploy them.</p>
 
-<div class="overflow-x-auto my-6">
-  <table class="w-full text-sm border-collapse">
-    <thead><tr class="bg-forest text-white"><th class="text-left p-3">Insert</th><th class="text-left p-3">Role</th><th class="text-left p-3">Contents</th></tr></thead>
+<div>
+  <table>
+    <thead><tr><th>Insert</th><th>Role</th><th>Contents</th></tr></thead>
     <tbody>
-      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Deep / Fast Water Ammo</td><td class="p-3">Get down, get down hard</td><td class="p-3">Heavy anchors, oversized tungsten, weird profiles you don't fish often</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22]"><td class="p-3 font-semibold">Low / Clear Water</td><td class="p-3">When fish are spooky</td><td class="p-3">Micro nymphs, sparse patterns, tiny profiles</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Weird / Experimental</td><td class="p-3">Testing ground</td><td class="p-3">Bugs you tied or bought but don't trust yet</td></tr>
-      <tr class="border-b border-[#21262D] bg-[#161B22]"><td class="p-3 font-semibold">Hatch-Specific / Seasonal</td><td class="p-3">Match the calendar</td><td class="p-3">BWO, PMD, caddis, stones — only when the season demands it</td></tr>
-      <tr class="border-b border-[#21262D]"><td class="p-3 font-semibold">Dry Fly Reserve</td><td class="p-3">Surface options</td><td class="p-3">Extras and patterns you don't run often, kept ready</td></tr>
+      <tr><td>Deep / Fast Water Ammo</td><td>Get down, get down hard</td><td>Heavy anchors, oversized tungsten, weird profiles you don't fish often</td></tr>
+      <tr><td>Low / Clear Water</td><td>When fish are spooky</td><td>Micro nymphs, sparse patterns, tiny profiles</td></tr>
+      <tr><td>Weird / Experimental</td><td>Testing ground</td><td>Bugs you tied or bought but don't trust yet</td></tr>
+      <tr><td>Hatch-Specific / Seasonal</td><td>Match the calendar</td><td>BWO, PMD, caddis, stones — only when the season demands it</td></tr>
+      <tr><td>Dry Fly Reserve</td><td>Surface options</td><td>Extras and patterns you don't run often, kept ready</td></tr>
     </tbody>
   </table>
 </div>
@@ -4520,10 +4520,10 @@ export const articles: Article[] = [
 <li>Demote anything that sat untouched for multiple trips — back to the Archive, or out of the Kill Box and into Support</li>
 </ul>
 
-<div class="bg-forest/5 border-l-4 border-forest p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-forest-dark mb-1">This is the edge</p>
-  <p class="text-[#D8DEE4] text-sm">A static fly box stays the same season after season. A tier system that breathes evolves into a personal record of what actually works on your water. After a year of intentional transfers, your Kill Box is a curated weapon — not a generic loadout.</p>
-</div>
+<aside>
+  <p>This is the edge</p>
+  <p>A static fly box stays the same season after season. A tier system that breathes evolves into a personal record of what actually works on your water. After a year of intentional transfers, your Kill Box is a curated weapon — not a generic loadout.</p>
+</aside>
 
 <h2>Insert strategy: treat them like magazines</h2>
 
@@ -4541,10 +4541,10 @@ export const articles: Article[] = [
 
 <p>Before every trip, ask yourself one question:</p>
 
-<div class="bg-[#1F1610] border-l-4 border-[#E8923A] p-5 my-6 rounded-r-lg">
-  <p class="font-semibold text-[#E8923A] mb-1">The thirty-second rule</p>
-  <p class="text-[#D8DEE4] text-sm italic">If I had thirty seconds to rig for money, what flies would I want directly in front of me?</p>
-</div>
+<aside>
+  <p>The thirty-second rule</p>
+  <p>If I had thirty seconds to rig for money, what flies would I want directly in front of me?</p>
+</aside>
 
 <p>That answer is your Kill Box. Everything else is support.</p>
 
