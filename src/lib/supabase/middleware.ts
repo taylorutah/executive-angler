@@ -58,12 +58,24 @@ async function captureLoginLocation(
   }
 }
 
-const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/notifications", "/messages", "/admin"];
+const PROTECTED_PATHS = ["/favorites", "/account", "/journal", "/dashboard", "/notifications", "/messages", "/admin", "/flybox"];
+
+// Exact private routes that must not prefix-match public slugs
+// (e.g. /rivers/mine must not catch /rivers/minnesota).
+const PROTECTED_EXACT = ["/rivers/mine"];
 
 // Paths that require a verified email. Excludes /account (so users can manage
 // their email + resend confirmation) and /admin (admin gating is handled
 // inside the admin layout itself).
-const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed"];
+const EMAIL_VERIFIED_REQUIRED = ["/journal", "/dashboard", "/favorites", "/notifications", "/messages", "/flies", "/feed", "/flybox"];
+const EMAIL_VERIFIED_EXACT = ["/rivers/mine"];
+
+function pathMatches(pathname: string, prefixes: string[], exact: string[]) {
+  return (
+    prefixes.some((path) => pathname.startsWith(path)) ||
+    exact.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+  );
+}
 
 export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -73,7 +85,7 @@ export async function updateSession(request: NextRequest) {
     .some((c) => c.name.includes("-auth-token") || c.name.startsWith("sb-"));
 
   if (!hasAuthCookie) {
-    const isProtectedPath = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+    const isProtectedPath = pathMatches(pathname, PROTECTED_PATHS, PROTECTED_EXACT);
     if (isProtectedPath) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
@@ -116,9 +128,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Redirect unauthenticated users from protected paths
-  const isProtectedPath = PROTECTED_PATHS.some((path) =>
-    pathname.startsWith(path)
-  );
+  const isProtectedPath = pathMatches(pathname, PROTECTED_PATHS, PROTECTED_EXACT);
 
   if (!user && isProtectedPath) {
     const url = request.nextUrl.clone();
@@ -132,7 +142,7 @@ export async function updateSession(request: NextRequest) {
   // email_confirmed_at automatically, so this only catches email/password
   // signups that skipped confirmation.
   if (user && !user.email_confirmed_at && pathname !== "/verify-email") {
-    const needsVerify = EMAIL_VERIFIED_REQUIRED.some((p) => pathname.startsWith(p));
+    const needsVerify = pathMatches(pathname, EMAIL_VERIFIED_REQUIRED, EMAIL_VERIFIED_EXACT);
     if (needsVerify) {
       const url = request.nextUrl.clone();
       url.pathname = "/verify-email";

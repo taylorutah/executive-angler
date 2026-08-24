@@ -1,8 +1,9 @@
 /**
- * /flies/boxes — physical fly-box management (was /flies?tab=boxes).
+ * /flybox — authenticated fly-box inventory.
  *
- * Renders BoxesManager inside the shared FliesShell so the page header
- * and sub-nav stay consistent with the rest of /flies.
+ * Canonical URL for the former /flies/boxes (and overlapping /my-boxes,
+ * /my-flies, /flies/workspace, /flies/shared, /journal/flies surfaces).
+ * Reuses BoxesManager; does not restyle the inventory UI.
  */
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -10,17 +11,20 @@ import { createClient } from "@/lib/supabase/server";
 import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
 import { resolveTierDefinitions } from "@/lib/flies/tier-definitions";
 import BoxesManager from "@/components/flies-v2/BoxesManager";
-import FliesShell from "../_components/FliesShell";
+import FliesShell from "@/app/flies/_components/FliesShell";
 
-export const metadata: Metadata = { title: "My Boxes" };
+export const metadata: Metadata = {
+  title: "My Boxes",
+  robots: { index: false, follow: false },
+};
 export const dynamic = "force-dynamic";
 
-export default async function FliesBoxesPage() {
+export default async function FlyboxPage() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login?redirect=/flies/boxes");
+  if (!user) redirect("/login?redirect=/flybox");
 
   const [{ data: profile }, boxes] = await Promise.all([
     supabase

@@ -1,120 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
-import { Crown } from "lucide-react";
-import Image from "next/image";
-import { FollowButton } from "@/components/social/FollowButton";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Angler Directory",
-  description: "Browse the angler directory. Find anglers on your rivers and follow their session reports.",
+  title: "Anglers",
+  robots: { index: false, follow: false },
 };
 
-export const dynamic = "force-dynamic";
-
-export default async function AnglersPage() {
-  const awardsVisible = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === "true";
-  const supabase = await createClient();
-
-  // Directory is a discovery surface: hide private profiles *and* anyone
-  // who flipped off "Show my profile in search results" (column default
-  // true, so NULL is treated as opt-in). Banned users are always excluded.
-  const { data: anglers } = await supabase
-    .from("profiles")
-    .select("user_id, username, display_name, home_location, bio, avatar_url")
-    .or("is_private.is.null,is_private.eq.false")
-    .or("searchable.is.null,searchable.eq.true")
-    .or("is_banned.is.null,is_banned.eq.false")
-    .order("created_at", { ascending: false })
-    .limit(50);
-
-  // Fetch active crowns for all anglers (only if awards are visible)
-  const anglerUserIds = (anglers || []).map((a) => a.user_id);
-  const { data: allCrowns } = awardsVisible && anglerUserIds.length > 0
-    ? await supabase
-        .from("user_awards")
-        .select("user_id, award_key, river_name, metadata, expires_at")
-        .in("user_id", anglerUserIds)
-        .eq("award_type", "river_milestone")
-        .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-    : { data: [] };
-
-  type AwardRow = { user_id: string; award_key: string; river_name: string | null; metadata: Record<string, unknown>; expires_at: string | null };
-  const crownsByUser = new Map<string, AwardRow[]>();
-  (allCrowns || []).forEach((c) => {
-    const row = c as AwardRow;
-    if (!crownsByUser.has(row.user_id)) crownsByUser.set(row.user_id, []);
-    crownsByUser.get(row.user_id)!.push(row);
-  });
-
-  return (
-    <div className="min-h-screen bg-[#0D1117]">
-      <div className="bg-[#161B22] border-b border-[#21262D]">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="font-heading text-3xl font-bold text-[#F0F6FC]">Angler Directory</h1>
-          <p className="text-[#A8B2BD] mt-2">Browse anglers and follow their river reports.</p>
-        </div>
-      </div>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {(!anglers || anglers.length === 0) ? (
-          <div className="text-center py-16 text-[#6E7681]">
-            <p>No public angler profiles yet.</p>
-            <p className="mt-2 text-sm">Be the first to join!</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {anglers.map((a) => {
-              const crowns = crownsByUser.get(a.user_id) || [];
-              const initials = String((a.display_name || a.username || "A").charAt(0)).toUpperCase();
-              return (
-                <div key={a.user_id} className="bg-[#161B22] rounded-xl border border-[#21262D] p-5 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#E8923A]/10 flex items-center justify-center shrink-0 overflow-hidden">
-                    {a.avatar_url ? (
-                      <Image
-                        src={a.avatar_url}
-                        alt={a.display_name || a.username || "Angler"}
-                        width={48}
-                        height={48}
-                        className="object-cover w-full h-full"
-                      />
-                    ) : (
-                      <span className="text-lg font-bold text-[#E8923A]">{initials}</span>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-[#F0F6FC] flex-1">{a.display_name || a.username}</p>
-                      <FollowButton targetUserId={a.user_id} compact />
-                      {awardsVisible && crowns.slice(0, 3).map((c) => (
-                        <span key={c.award_key + c.river_name} title={`${(c.metadata as { display_name?: string })?.display_name ?? c.award_key}${c.river_name ? ` — ${c.river_name}` : ""}`}>
-                          <span className="text-sm">{(c.metadata as { badge_icon?: string })?.badge_icon ?? "🏆"}</span>
-                        </span>
-                      ))}
-                      {awardsVisible && crowns.length > 3 && (
-                        <span className="text-[10px] text-[#6E7681]">+{crowns.length - 3}</span>
-                      )}
-                    </div>
-                    {a.username && (
-                      <p className="text-xs text-[#6E7681] mt-0.5">@{a.username}</p>
-                    )}
-                    {a.home_location && (
-                      <p className="text-xs text-[#A8B2BD] mt-0.5">{a.home_location}</p>
-                    )}
-                    {a.bio && (
-                      <p className="text-xs text-[#A8B2BD] mt-1 line-clamp-2">{a.bio}</p>
-                    )}
-                    {awardsVisible && crowns.length > 0 && (
-                      <div className="flex items-center gap-1 mt-2">
-                        <Crown className="h-3 w-3 text-[#E8923A]" />
-                        <span className="text-[10px] text-[#6E7681]">{crowns.length} milestone{crowns.length !== 1 ? "s" : ""}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+/**
+ * Public angler directory is disabled pending a privacy decision.
+ * See docs/decisions/anglers-public-profiles.md.
+ */
+export default function AnglersPage() {
+  notFound();
 }

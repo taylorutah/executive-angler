@@ -2,12 +2,10 @@
  * /flies — root of the authenticated flies hub.
  *
  * Logged-in users: redirect to the appropriate sibling route.
- *   - default / no params       → /flies/workspace
- *   - ?tab=patterns             → /flies/workspace  (legacy alias)
- *   - ?tab=boxes                → /flies/boxes
+ *   - default / no params       → /flybox
+ *   - ?tab=patterns|workspace|boxes|shared → /flybox
  *   - ?tab=workbench            → /flies/workbench
  *   - ?tab=tie-next             → /flies/tie-next
- *   - ?tab=shared               → /flies/shared
  *
  * Logged-out users: redirect to /flies/library (public canonical catalog).
  */
@@ -19,12 +17,12 @@ export const dynamic = "force-dynamic";
 type SearchParams = { tab?: string; [k: string]: string | undefined };
 
 const TAB_TO_ROUTE: Record<string, string> = {
-  patterns: "/flies/workspace",
-  workspace: "/flies/workspace",
-  boxes: "/flies/boxes",
+  patterns: "/flybox",
+  workspace: "/flybox",
+  boxes: "/flybox",
   workbench: "/flies/workbench",
   "tie-next": "/flies/tie-next",
-  shared: "/flies/shared",
+  shared: "/flybox",
 };
 
 export default async function FliesHubRedirect({
@@ -39,7 +37,7 @@ export default async function FliesHubRedirect({
   if (!user) permanentRedirect("/flies/library");
 
   const sp = await searchParams;
-  const target = TAB_TO_ROUTE[sp.tab ?? ""] ?? "/flies/workspace";
+  const target = TAB_TO_ROUTE[sp.tab ?? ""] ?? "/flybox";
 
   // Forward any non-tab params (clone, view, sort, etc.) onto the
   // destination so deep links keep working.
