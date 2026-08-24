@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import { EXPLORE_ITEMS, isSectionActive } from "./links";
+import { EXPLORE_ITEMS, FOCUS_VISIBLE, isSectionActive } from "./links";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
 /**
@@ -59,7 +59,7 @@ export default function ExploreMenu() {
         aria-expanded={open}
         aria-haspopup="menu"
         onClick={() => setOpen((o) => !o)}
-        className="ea-focus-ring inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-[15px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:text-[var(--text-primary)]"
+        className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-[15px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:text-[var(--text-primary)]`}
       >
         Explore
         <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
@@ -78,7 +78,7 @@ export default function ExploreMenu() {
               href={item.href}
               role="menuitem"
               aria-current={isSectionActive(pathname, item.section) ? "page" : undefined}
-              className="ea-focus-ring block px-4 py-2.5 text-[14px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] aria-[current=page]:text-[var(--text-primary)]"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} block px-4 py-2.5 text-[14px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] aria-[current=page]:text-[var(--text-primary)]`}
               onClick={() => setOpen(false)}
             >
               {item.label}

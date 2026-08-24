@@ -16,6 +16,10 @@ export type NavItem = {
 
 export const SEARCH_PLACEHOLDER = "River, fly, hatch, destination";
 
+/** Visible ring at every keyboard stop — 2px --signal-live, 3px offset. */
+export const FOCUS_VISIBLE =
+  "focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px]";
+
 /** Logged-out primary row. Flies points at the public catalogue, not the workspace. */
 export const PUBLIC_NOUNS: NavItem[] = [
   {

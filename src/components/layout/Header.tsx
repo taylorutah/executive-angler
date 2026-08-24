@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import HeaderSearch from "./nav/HeaderSearch";
 import ExploreMenu from "./nav/ExploreMenu";
 import MobileNavSheet from "./nav/MobileNavSheet";
-import { LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
+import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 
 export default function Header() {
@@ -221,7 +221,7 @@ export default function Header() {
                 onClick={() => setMobileOpen(true)}
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
-                className="ea-focus-ring lg:hidden inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-[var(--text-body)]"
+                className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-[var(--text-body)]`}
               >
                 <Menu className="h-5 w-5" aria-hidden />
                 Menu

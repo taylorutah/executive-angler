@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { SEARCH_PLACEHOLDER, searchHref } from "./links";
+import { FOCUS_VISIBLE, SEARCH_PLACEHOLDER, searchHref } from "./links";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
@@ -62,8 +62,18 @@ export default function HeaderSearch() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={SEARCH_PLACEHOLDER}
             aria-label="Search Executive Angler"
-            className="ea-focus-ring h-9 w-[280px] rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] pl-9 pr-3 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none"
+            className={`ea-focus-ring ${FOCUS_VISIBLE} h-9 w-[280px] rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] pl-9 ${query ? "pr-9" : "pr-3"} text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
           />
+          {query ? (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} absolute right-1.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-sm text-[var(--text-meta)] hover:text-[var(--text-primary)]`}
+            >
+              <X className="h-3.5 w-3.5" aria-hidden />
+            </button>
+          ) : null}
         </div>
       </form>
 
@@ -75,7 +85,7 @@ export default function HeaderSearch() {
           setOverlayQuery(query);
           setOverlayOpen(true);
         }}
-        className="ea-focus-ring lg:hidden inline-flex h-9 items-center gap-2 rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]"
+        className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-2 rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]`}
       >
         <Search className="h-4 w-4" aria-hidden />
         Search
@@ -97,7 +107,7 @@ export default function HeaderSearch() {
               type="button"
               onClick={() => setOverlayOpen(false)}
               aria-label="Close search"
-              className="ea-focus-ring -mr-2 flex h-11 w-11 items-center justify-center rounded-md text-[var(--text-body)]"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} -mr-2 flex h-11 w-11 items-center justify-center rounded-md text-[var(--text-body)]`}
             >
               <X className="h-5 w-5" />
             </button>
@@ -115,16 +125,28 @@ export default function HeaderSearch() {
             <label htmlFor="mobile-search-q" className="sr-only">
               Search Executive Angler
             </label>
-            <input
-              id="mobile-search-q"
-              data-autofocus
-              type="search"
-              name="q"
-              value={overlayQuery}
-              onChange={(e) => setOverlayQuery(e.target.value)}
-              placeholder={SEARCH_PLACEHOLDER}
-              className="ea-focus-ring w-full border-b border-[var(--border-rule)] bg-transparent pb-3 text-2xl text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none"
-            />
+            <div className="relative">
+              <input
+                id="mobile-search-q"
+                data-autofocus
+                type="search"
+                name="q"
+                value={overlayQuery}
+                onChange={(e) => setOverlayQuery(e.target.value)}
+                placeholder={SEARCH_PLACEHOLDER}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} w-full border-b border-[var(--border-rule)] bg-transparent pb-3 ${overlayQuery ? "pr-10" : ""} text-2xl text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
+              />
+              {overlayQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setOverlayQuery("")}
+                  aria-label="Clear search"
+                  className={`ea-focus-ring ${FOCUS_VISIBLE} absolute right-0 top-1 flex h-8 w-8 items-center justify-center rounded-sm text-[var(--text-meta)] hover:text-[var(--text-primary)]`}
+                >
+                  <X className="h-4 w-4" aria-hidden />
+                </button>
+              ) : null}
+            </div>
             <p className="mt-4 text-[13px] text-[var(--text-meta)]">
               Press enter to see every match.
             </p>

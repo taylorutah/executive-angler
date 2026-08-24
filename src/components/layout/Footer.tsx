@@ -94,8 +94,8 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-body)]">
-              A public desk for rivers, flies, and hatches &mdash; and a private notebook for your
-              own days on the water.
+              Rivers, flies and hatches, documented. Plus a private journal that remembers what you
+              learned.
             </p>
 
             {/* App badges */}
