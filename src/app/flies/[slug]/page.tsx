@@ -19,7 +19,6 @@ import {
 import { SITE_URL } from "@/lib/constants";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import FlyFavoriteButton from "@/components/flies/FlyFavoriteButton";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import FlyVariantTable from "@/components/fly-detail/FlyVariantTable";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
@@ -105,7 +104,7 @@ export default async function FlyDetail({ params }: Props) {
         : null;
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
+    <div className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)]">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -155,22 +154,17 @@ export default async function FlyDetail({ params }: Props) {
         </div>
 
         <div className="mx-auto mt-8 w-full md:w-[50vw] md:max-w-xl">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)]">
-                {fly.category ?? "Fly pattern"}
-              </p>
-              <h1 className="font-heading mt-1 text-4xl leading-[1.05] text-[var(--text-primary)] sm:text-5xl">
-                {fly.name}
-              </h1>
-            </div>
-            <FlyFavoriteButton canonicalFlyId={fly.id} />
-          </div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-body)]">
+            {fly.category ?? "Fly pattern"}
+          </p>
+          <h1 className="font-heading mt-1 text-4xl leading-[1.05] text-[var(--text-primary)] sm:text-5xl">
+            {fly.name}
+          </h1>
 
           <dl className="mt-6 border-t border-[var(--border-rule)] pt-4">
             {sizes && (
               <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
                   Sizes
                 </dt>
                 <dd className="num text-[15px] text-[var(--text-primary)]">{sizes}</dd>
@@ -178,7 +172,7 @@ export default async function FlyDetail({ params }: Props) {
             )}
             {imitation && (
               <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
                   Imitates
                 </dt>
                 <dd className="text-[15px] text-[var(--text-primary)]">{imitation}</dd>
@@ -186,7 +180,7 @@ export default async function FlyDetail({ params }: Props) {
             )}
             {fly.origin_credit && (
               <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
                   Origin
                 </dt>
                 <dd className="text-[15px] text-[var(--text-body)]">{fly.origin_credit}</dd>
@@ -242,7 +236,7 @@ export default async function FlyDetail({ params }: Props) {
           <h2 id="fishing-now-heading" className="font-heading text-2xl text-[var(--text-primary)]">
             Fishing now on
           </h2>
-          <p className="mt-1 max-w-[68ch] text-[13px] text-[var(--text-meta)]">
+          <p className="mt-1 max-w-[68ch] text-[13px] text-[var(--text-body)]">
             Rivers whose hatch chart names this pattern this month. Names and sizes only.
           </p>
           {fishingNow.length > 0 ? (
@@ -255,7 +249,7 @@ export default async function FlyDetail({ params }: Props) {
                   >
                     {river.name}
                   </Link>
-                  <span className="num shrink-0 text-[13px] text-[var(--text-meta)]">
+                  <span className="num shrink-0 text-[13px] text-[var(--text-body)]">
                     {river.sizes.length ? river.sizes.join(" · ") : "—"}
                   </span>
                 </li>
@@ -293,7 +287,7 @@ export default async function FlyDetail({ params }: Props) {
           </Link>
         </p>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -317,7 +311,7 @@ function Recipe({
             const detail = [m.material, m.brand].filter(Boolean).join(" · ");
             return (
               <li key={i} className="flex items-baseline gap-3 py-2.5 text-[14px]">
-                <span className="w-24 shrink-0 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)]">
                   {slotLabel}
                 </span>
                 {m.href ? (
@@ -331,14 +325,14 @@ function Recipe({
                   <span className="text-[var(--text-primary)]">{detail || "—"}</span>
                 )}
                 {m.description && (
-                  <span className="text-[12px] text-[var(--text-meta)]">{m.description}</span>
+                  <span className="text-[13px] text-[var(--text-body)]">{m.description}</span>
                 )}
               </li>
             );
           })}
         </ul>
       ) : (
-        <p className="mt-3 text-[15px] text-[var(--text-meta)]">Recipe not filled in yet.</p>
+        <p className="mt-3 text-[15px] text-[var(--text-body)]">Recipe not filled in yet.</p>
       )}
       {notes && (
         <p className="mt-4 max-w-[68ch] whitespace-pre-line text-[14px] leading-relaxed text-[var(--text-body)]">
