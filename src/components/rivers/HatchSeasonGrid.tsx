@@ -91,7 +91,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: P
             Filled months are when that insect is on the chart. Best months for this river are lit.
           </p>
         </div>
-        <ul className="flex items-center gap-3 text-[11px] text-[var(--text-meta)]">
+        <ul className="flex items-center gap-3 text-[11px] text-[var(--text-body)]">
           <li className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-sm bg-[var(--signal-live)]/35" /> Sparse
           </li>
@@ -119,7 +119,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: P
                     className={`px-1 py-2 text-center text-[11px] font-semibold ${
                       on
                         ? "bg-[var(--action)] text-[var(--on-action)]"
-                        : "text-[var(--text-meta)]"
+                        : "text-[var(--text-body)]"
                     }`}
                   >
                     {SHORT[i]}
@@ -179,7 +179,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: P
                 key={`${month.month}-${hatch.insect}-${hi}`}
                 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-[var(--border-rule)] py-2 text-sm last:border-0"
               >
-                <span className="w-20 shrink-0 text-[12px] font-semibold text-[var(--text-meta)]">
+                <span className="w-20 shrink-0 text-[12px] font-semibold text-[var(--text-body)]">
                   {month.month}
                 </span>
                 <span className="font-medium text-[var(--text-primary)]">{hatch.insect}</span>
