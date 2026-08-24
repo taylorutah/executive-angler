@@ -17,7 +17,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Waves } from "lucide-react";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -215,7 +214,7 @@ export default async function DestinationPage({ params }: Props) {
             <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
               {dest.elevationRange ? (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
                     Elevation
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.elevationRange}</dd>
@@ -223,7 +222,7 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.licenseInfo ? (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
                     License
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.licenseInfo}</dd>
@@ -231,7 +230,7 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.climateNotes ? (
                 <div className="sm:col-span-2">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
                     Climate
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.climateNotes}</dd>
@@ -239,9 +238,9 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.regulationsSummary ? (
                 <div className="sm:col-span-2">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
                     Regulations
-                    <span className="ml-2 font-normal normal-case tracking-normal text-[var(--text-meta)]">
+                    <span className="ml-2 font-normal normal-case tracking-normal text-[var(--text-body)]">
                       check current rules before you go
                     </span>
                   </dt>
@@ -375,7 +374,7 @@ export default async function DestinationPage({ params }: Props) {
                           <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
                         )}
                         {lodge.seasonStart && lodge.seasonEnd && (
-                          <p className="text-xs text-[var(--text-meta)] mt-1">
+                          <p className="text-xs text-[var(--text-body)] mt-1">
                             {lodge.seasonStart}–{lodge.seasonEnd}
                           </p>
                         )}
@@ -427,21 +426,20 @@ export default async function DestinationPage({ params }: Props) {
                       href={`/fly-shops/${shop.slug}`}
                       className="flex items-start gap-4 border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
                     >
-                      <Waves className="h-5 w-5 shrink-0 mt-0.5 text-[var(--signal-live)]" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-baseline justify-between gap-3">
                           <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
                             {shop.name}
                           </h4>
                           {shop.googleRating && (
-                            <span className="shrink-0 text-xs text-[var(--text-meta)]">
+                            <span className="shrink-0 text-xs text-[var(--text-body)]">
                               {shop.googleRating} rating
                             </span>
                           )}
                         </div>
                         <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
                         {(shop.services || []).length > 0 && (
-                          <p className="text-xs text-[var(--text-meta)] mt-1">
+                          <p className="text-xs text-[var(--text-body)] mt-1">
                             {(shop.services || []).slice(0, 3).join(" · ")}
                           </p>
                         )}

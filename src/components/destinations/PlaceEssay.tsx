@@ -42,7 +42,7 @@ export default function PlaceEssay({ description, images = [] }: PlaceEssayProps
 function InlinePhoto({ image }: { image: PlaceEssayImage }) {
   return (
     <figure className="my-10">
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-[var(--surface-card)]">
+      <div className="relative aspect-[3/2] overflow-hidden bg-[var(--surface-card)]">
         <SafeEntityImage
           src={image.src}
           alt={image.alt}
@@ -52,7 +52,7 @@ function InlinePhoto({ image }: { image: PlaceEssayImage }) {
         />
       </div>
       {image.caption ? (
-        <figcaption className="mt-2 font-sans text-[13px] text-[var(--text-meta)]">
+        <figcaption className="mt-2 font-sans text-[13px] text-[var(--text-body)]">
           {image.caption}
         </figcaption>
       ) : null}

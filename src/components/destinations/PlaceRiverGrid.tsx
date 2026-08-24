@@ -117,7 +117,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
           return (
             <div
               key={river.id}
-              className={`relative ${fished ? "ring-2 ring-[var(--action)] rounded-xl" : ""}`}
+              className={`relative ${fished ? "ring-2 ring-[var(--action)]" : ""}`}
             >
               <EntityCard
                 href={`/rivers/${river.slug}`}
@@ -129,7 +129,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
                 badges={[river.wadingType]}
               />
               {fished ? (
-                <span className="absolute top-3 right-3 z-10 rounded-full bg-[var(--action)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                <span className="absolute top-3 right-3 z-10 bg-[var(--action)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--on-action)]">
                   Fished
                 </span>
               ) : null}

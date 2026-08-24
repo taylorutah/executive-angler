@@ -18,7 +18,7 @@ export default function SeasonalChart({
 
   return (
     <section aria-labelledby="place-season-heading">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)]">
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
         Season
       </p>
       <h2
@@ -31,14 +31,14 @@ export default function SeasonalChart({
         <p className="mt-2 text-sm text-[var(--text-body)]">
           {placeName}: {span}
           {marked.length > 0 ? (
-            <span className="text-[var(--text-meta)]">
+            <span className="text-[var(--text-body)]">
               {" "}
               · {marked.length} of 12 months
             </span>
           ) : null}
         </p>
       ) : (
-        <p className="mt-2 text-sm text-[var(--text-meta)]">
+        <p className="mt-2 text-sm text-[var(--text-body)]">
           Best months are not listed for this place yet.
         </p>
       )}
