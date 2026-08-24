@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/Button";
 import { APP_STORE_URL } from "@/lib/constants";
 
-/** Band 9 — the only place on the page that asks anything of you. */
+/** The only place on the page that asks anything of you. */
 export default function JournalBand() {
   return (
-    <section className="register-dusk flex min-h-[69vh] items-center bg-[var(--surface-page)] py-20 sm:py-28">
+    <section
+      data-lane="app"
+      className="register-dusk flex min-h-[56vh] items-center bg-[var(--surface-page)] py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+        <p className="flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+          <span aria-hidden className="h-px w-8 bg-[var(--action)]" />
           The journal
         </p>
         <h2 className="mt-5 font-heading text-3xl font-bold leading-[1.15] text-[var(--text-primary)] sm:text-5xl">

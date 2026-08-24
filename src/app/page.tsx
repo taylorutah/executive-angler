@@ -10,11 +10,13 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 import type { Article, CanonicalFly, Destination } from "@/types/entities";
 import ConditionsRail from "@/components/home/ConditionsRail";
+import CountsBand from "@/components/home/CountsBand";
 import FlyPlate from "@/components/home/FlyPlate";
 import FourDoors, { type Door } from "@/components/home/FourDoors";
 import HomeHero from "@/components/home/HomeHero";
 import JournalBand from "@/components/home/JournalBand";
 import OnTheWaterNow from "@/components/home/OnTheWaterNow";
+import PullQuote, { pickQuote } from "@/components/home/PullQuote";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
@@ -47,12 +49,20 @@ function currentMonth(): string {
   return new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" });
 }
 
+const BANNED_EXCERPT =
+  /river intelligence|intelligence platform|fly fishing intelligence|upgrade to|founders|premium tier/i;
+
+function isPublicRead(article: Article): boolean {
+  return !BANNED_EXCERPT.test(article.excerpt ?? "");
+}
+
 function pickRead(articles: Article[]): { lead: Article; rest: Article[] } | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
-  const featured = sorted.filter((a) => a.featured);
-  const ordered = [...featured, ...sorted.filter((a) => !a.featured)];
+  const eligible = sorted.filter(isPublicRead);
+  const featured = eligible.filter((a) => a.featured);
+  const ordered = [...featured, ...eligible.filter((a) => !a.featured)];
   if (ordered.length === 0) return null;
   return { lead: ordered[0], rest: ordered.slice(1, 4) };
 }
@@ -93,8 +103,13 @@ export default async function HomePage() {
   const month = currentMonth();
   const flagshipRivers = selectFlagshipRivers(rivers);
   const snapshots = await getGaugeSnapshots(flagshipRivers);
+  const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
+  const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
   const read = pickRead(articles);
+  const quote = pickQuote(
+    [...(read?.rest ?? []), ...articles.filter((a) => a.id !== read?.lead?.id)],
+  );
   const plate = pickPlate(featuredFlies, allFlies);
   const places = pickPlaces(destinations, month);
 
@@ -129,36 +144,43 @@ export default async function HomePage() {
     },
   ];
 
+  const waterRivers = madison
+    ? [madison, ...flagshipRivers.filter((r) => r.id !== madison.id)]
+    : flagshipRivers;
+
   return (
     <>
-      {/* 1 — conditions rail */}
-      <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
+      {/* glance — do not restyle the rail */}
+      <div data-lane="resource">
+        <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
+      </div>
 
-      {/* 2 + 3 — the photograph, and the search on it */}
-      <HomeHero riverCount={rivers.length} />
+      <HomeHero riverCount={rivers.length} cfs={madisonCfs} />
 
-      {/* 4 — four doors */}
       <FourDoors doors={doors} />
 
-      {/* 5 — on the water now */}
-      <OnTheWaterNow rivers={flagshipRivers} snapshots={snapshots} month={month} />
+      <CountsBand
+        counts={[
+          { value: rivers.length, noun: "rivers documented" },
+          { value: allFlies.length, noun: "patterns, with recipes" },
+          { value: destinations.length, noun: "destinations" },
+          { value: articles.length, noun: "field notes" },
+        ]}
+      />
 
-      {/* 6 — this week's read */}
-      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
+      <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
 
-      {/* 7 — the fly plate */}
       <FlyPlate flies={plate} flyCount={allFlies.length} />
 
-      {/* 8 — where to go */}
+      {quote && <PullQuote article={quote} />}
+
       <WhereToGo destinations={places} month={month} />
 
-      {/* 9 — the journal */}
+      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
+
       <JournalBand />
 
-      {/* 10 — what we don't do */}
       <WhatWeDontDo />
-
-      {/* 11 — footer is rendered by the root layout */}
     </>
   );
 }

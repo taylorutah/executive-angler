@@ -13,10 +13,10 @@ interface Props {
   doors: Door[];
 }
 
-/** Band 4 — the four doors into the reference, as photographs rather than icons. */
+/** The four doors into the reference, as photographs rather than icons. */
 export default function FourDoors({ doors }: Props) {
   return (
-    <section className="bg-[var(--surface-page)] py-16 sm:py-20">
+    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {doors.map((door) => (
@@ -40,6 +40,7 @@ export default function FourDoors({ doors }: Props) {
                 {door.count > 0 && (
                   <p className="num mt-1 text-[13px] text-white/85">
                     {door.count.toLocaleString("en-US")} {door.noun}
+                    <span className="ml-1 text-[var(--copper-400)]">&rarr;</span>
                   </p>
                 )}
               </div>
