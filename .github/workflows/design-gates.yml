@@ -18,4 +18,5 @@ jobs:
       - run: npm run check:contrast
       - run: npm run check:hex
       - run: npm run check:stored-html
+      - run: npm run check:image-hosts
       - run: npm test

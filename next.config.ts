@@ -101,6 +101,9 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Phase 1 freeze: 45 unique hosts. Do not shrink this list until
+    // `npm run audit:images` prints PHASE2_EXTERNAL_ROWS=0. See
+    // scripts/image-hosts-target.json and src/lib/media/phase2-hosts.ts.
     remotePatterns: [
       {
         protocol: "https",

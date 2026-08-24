@@ -1,32 +1,28 @@
 /**
- * Fail CI if next.config.ts remotePatterns grows beyond the committed baseline.
+ * Fail CI if next.config.ts remotePatterns grows, or if it shrinks
+ * before audit:images reports PHASE2_EXTERNAL_ROWS=0.
  *
  *   npm run check:image-hosts
  *
- * To allow a new host: add it to scripts/image-hosts-baseline.json in the
- * same PR as the config change. That is the reviewable act. The post-migration
- * target (storage + Google avatars only) lives in image-hosts-target.json
- * and is not enforced until Unsplash ingest lands.
+ * Phase 1 (now): 45 unique hosts. Growth is a reviewable baseline edit.
+ * Phase 2 (later): shrink to the six in image-hosts-target.json, but only
+ * when the audit measurement is the integer 0. Editing the baseline file
+ * downward does not bypass that — the freeze is PHASE1_UNIQUE_HOST_COUNT.
  */
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  PHASE1_UNIQUE_HOST_COUNT,
+  evaluateRemotePatterns,
+} from "../src/lib/media/phase2-hosts";
 
-interface Pattern {
-  host: string;
-}
-
-function parseRemotePatterns(configPath: string): Pattern[] {
+function parseRemotePatterns(configPath: string): string[] {
   const text = readFileSync(configPath, "utf8");
-  const patterns: Pattern[] = [];
+  const hosts: string[] = [];
   const re = /hostname:\s*"([^"]+)"/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) {
-    patterns.push({ host: m[1] });
-  }
-  return patterns;
-}
-
-function unique(hosts: string[]): string[] {
+  while ((m = re.exec(text))) hosts.push(m[1]);
   const seen = new Set<string>();
   const out: string[] = [];
   for (const h of hosts) {
@@ -37,38 +33,52 @@ function unique(hosts: string[]): string[] {
   return out;
 }
 
+function measureExternalRows(): number | null {
+  const r = spawnSync("npx", ["tsx", "scripts/audit-images.ts", "--dry"], {
+    encoding: "utf8",
+  });
+  const text = `${r.stdout ?? ""}\n${r.stderr ?? ""}`;
+  const m = text.match(/PHASE2_EXTERNAL_ROWS=(\d+)/);
+  if (!m) return null;
+  return Number(m[1]);
+}
+
 function main() {
   const root = process.cwd();
-  const configHosts = unique(
-    parseRemotePatterns(resolve(root, "next.config.ts")).map((p) => p.host),
-  );
+  const configHosts = parseRemotePatterns(resolve(root, "next.config.ts"));
   const baseline = JSON.parse(
     readFileSync(resolve(root, "scripts/image-hosts-baseline.json"), "utf8"),
   ) as { hosts: string[] };
-  const allowed = new Set(baseline.hosts);
-
-  const extra = configHosts.filter((h) => !allowed.has(h));
-  const missing = baseline.hosts.filter((h) => !configHosts.includes(h));
-
-  if (extra.length) {
-    console.error("next.config.ts remotePatterns grew beyond the baseline:\n");
-    for (const h of extra) console.error("  + " + h);
-    console.error("\nAdd the host to scripts/image-hosts-baseline.json only with a reason.");
-    process.exit(1);
-  }
-
-  if (missing.length) {
-    console.error("Baseline lists hosts that are no longer in next.config.ts:\n");
-    for (const h of missing) console.error("  - " + h);
-    console.error("\nUpdate the baseline in the same PR that removed them.");
-    process.exit(1);
-  }
-
-  const target = JSON.parse(
+  const targetFile = JSON.parse(
     readFileSync(resolve(root, "scripts/image-hosts-target.json"), "utf8"),
   ) as { hosts: Array<{ hostname: string }> };
+  const targetHosts = targetFile.hosts.map((h) => h.hostname);
+
+  const needsMeasurement = configHosts.length < PHASE1_UNIQUE_HOST_COUNT;
+  const externalRows = needsMeasurement ? measureExternalRows() : null;
+
+  const verdict = evaluateRemotePatterns({
+    configHosts,
+    baselineHosts: baseline.hosts,
+    targetHosts,
+    externalRows,
+  });
+
+  if (!verdict.ok) {
+    console.error(verdict.message);
+    process.exit(1);
+  }
+
+  if (verdict.reason === "phase1") {
+    console.log(
+      `image-hosts OK — Phase 1 freeze ${configHosts.length} unique hosts. ` +
+        `Phase 2 shrink to ${targetHosts.length} is blocked until audit:images prints PHASE2_EXTERNAL_ROWS=0.`,
+    );
+    return;
+  }
+
   console.log(
-    `image-hosts OK — ${configHosts.length} unique hosts (target after ingest: ${target.hosts.length})`,
+    `image-hosts OK — Phase 2. remotePatterns is the six targets. PHASE2_EXTERNAL_ROWS=0.`,
   );
 }
 

@@ -1,5 +1,5 @@
 {
-  "note": "Post-migration next/image allowlist. Do not shrink remotePatterns to this until Unsplash and readable-licence Wikimedia files live in our storage. Google avatars stay as the fetch source.",
+  "note": "Post-migration next/image allowlist. Do not shrink remotePatterns to this until `npm run audit:images` prints PHASE2_EXTERNAL_ROWS=0 (hosts outside these six, Google avatars excepted). Editing image-hosts-baseline.json downward does not count as that measurement.",
   "hosts": [
     { "hostname": "executiveangler.com" },
     { "hostname": "www.executiveangler.com" },

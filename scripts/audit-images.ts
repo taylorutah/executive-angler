@@ -14,6 +14,10 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import sharp from "sharp";
+import {
+  classifyImageUrl,
+  countPhase2ExternalRows,
+} from "../src/lib/media/phase2-hosts";
 
 try {
   const env = readFileSync(".env.local", "utf8");
@@ -29,6 +33,8 @@ const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.executiveangler.c
 const argv = process.argv.slice(2);
 const entityArg = argv.find((a) => a.startsWith("--entity="))?.slice("--entity=".length);
 const dryRun = argv.includes("--dry");
+const phase2Only = argv.includes("--phase2-only");
+const gatePhase2 = argv.includes("--gate-phase2");
 
 type Status = "ok" | "null" | "dead" | "host-not-allowlisted";
 
@@ -222,6 +228,60 @@ function csvCell(value: string): string {
   return value;
 }
 
+function loadTargetHostnames(): string[] {
+  const raw = JSON.parse(
+    readFileSync(join(process.cwd(), "scripts/image-hosts-target.json"), "utf8"),
+  ) as { hosts: Array<{ hostname: string }> };
+  return raw.hosts.map((h) => h.hostname);
+}
+
+/**
+ * The Phase 2 gate. Prints PHASE2_EXTERNAL_ROWS=N so CI and humans
+ * read the same integer. N is rows whose URL host sits outside the
+ * target six; Google avatars and local /images paths are not external.
+ */
+function reportPhase2(urls: string[]): number {
+  const target = loadTargetHostnames();
+  const external = countPhase2ExternalRows(urls, target);
+  const classes = { empty: 0, local: 0, target: 0, avatar: 0, external: 0 };
+  const byHost = new Map<string, number>();
+  for (const url of urls) {
+    const c = classifyImageUrl(url, target);
+    classes[c] += 1;
+    if (c === "external") {
+      let host = "(unparseable)";
+      try {
+        host = new URL(url.trim()).hostname;
+      } catch {
+        /* keep fallback */
+      }
+      byHost.set(host, (byHost.get(host) || 0) + 1);
+    }
+  }
+
+  console.log(`PHASE2_EXTERNAL_ROWS=${external}`);
+  console.log(
+    `  empty=${classes.empty}  local=${classes.local}  target=${classes.target}  avatar=${classes.avatar}  external=${classes.external}`,
+  );
+  if (byHost.size) {
+    console.log("  external hosts:");
+    [...byHost.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([h, n]) => console.log(`    ${String(n).padStart(4)}  ${h}`));
+  }
+  if (external === 0) {
+    console.log("Phase 2 shrink: CLEAR — remotePatterns may move to the six.");
+  } else {
+    console.log(
+      "Phase 2 shrink: BLOCKED until PHASE2_EXTERNAL_ROWS=0. remotePatterns stays at 45.",
+    );
+  }
+  if (gatePhase2 && external !== 0) {
+    process.exit(1);
+  }
+  return external;
+}
+
 async function main() {
   const allow = parseRemotePatterns(join(process.cwd(), "next.config.ts"));
   const sb = makeClient();
@@ -271,6 +331,9 @@ async function main() {
       }
     }
   }
+
+  reportPhase2(pending.map((p) => p.url));
+  if (phase2Only) return;
 
   const toCheck = pending.filter((p) => p.url.trim().length > 0);
   if (!dryRun) {
