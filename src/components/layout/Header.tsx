@@ -198,7 +198,7 @@ export default function Header() {
                     href="/login"
                     variant="ghost"
                     size="sm"
-                    className="ea-focus-ring focus-visible:ring-0"
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
                   >
                     Sign in
                   </Button>
@@ -208,7 +208,7 @@ export default function Header() {
                     rel="noopener noreferrer"
                     variant="solid"
                     size="sm"
-                    className="ea-focus-ring focus-visible:ring-0"
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
                   >
                     Get the app
                   </Button>

@@ -877,9 +877,13 @@ select:focus {
   background: var(--border-rule);
 }
 
-/* Every chrome control gets the same ring — mark, input, avatar, buttons. */
+/* Every chrome control gets the same ring — mark, input, avatar, buttons.
+   !important beats Button's outline-none and outline-2's currentColor default. */
+a.ea-focus-ring:focus-visible,
+button.ea-focus-ring:focus-visible,
+input.ea-focus-ring:focus-visible,
 .ea-focus-ring:focus-visible {
-  outline: 2px solid var(--signal-live);
-  outline-offset: 3px;
+  outline: 2px solid var(--signal-live) !important;
+  outline-offset: 3px !important;
   border-radius: 2px;
 }
