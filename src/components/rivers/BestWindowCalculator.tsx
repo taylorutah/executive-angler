@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Target, Loader2, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
+import { Target, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import SignedOutInsight from "./SignedOutInsight";
@@ -73,7 +73,7 @@ export default function BestWindowCalculator({ riverId }: Props) {
     load();
   }, [riverId, user, authLoading]);
 
-  if (!authLoading && !user) {
+  if (!user) {
     return (
       <SignedOutInsight
         icon={<Target className="h-4 w-4 text-[var(--action)]" />}
@@ -83,16 +83,7 @@ export default function BestWindowCalculator({ riverId }: Props) {
     );
   }
 
-  if (loading || authLoading) {
-    return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
-        <div className="flex items-center gap-2 text-[var(--text-meta)]">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-sm">Calculating your best window...</span>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   if (!bestWindow || bestWindow.session_count < 3) return null;
 

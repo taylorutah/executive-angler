@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
@@ -217,30 +218,34 @@ export default async function RiverPage({ params }: Props) {
         </div>
       </div>
 
-      <RiverSectionPills riverId={river.id} />
+      <Suspense fallback={null}>
+        <RiverSectionPills riverId={river.id} />
+      </Suspense>
 
-      <RiverLiveInset
-        riverId={river.id}
-        riverLatitude={river.latitude}
-        riverLongitude={river.longitude}
-      >
-        <div className="mt-6">
-          <LazyFlowChart
-            usgsGaugeId={river.usgsGaugeId ?? null}
-            riverName={river.name}
-            riverId={river.id}
-          />
-          {river.usgsGaugeId ? (
-            <p className="mt-3 text-sm text-[var(--text-body)]">
-              New to hydrographs?{" "}
-              <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--action)] underline-offset-4 hover:underline">
-                How to read a USGS gauge for fly fishing
-              </Link>
-              .
-            </p>
-          ) : null}
-        </div>
-      </RiverLiveInset>
+      <Suspense fallback={null}>
+        <RiverLiveInset
+          riverId={river.id}
+          riverLatitude={river.latitude}
+          riverLongitude={river.longitude}
+        >
+          <div className="mt-6">
+            <LazyFlowChart
+              usgsGaugeId={river.usgsGaugeId ?? null}
+              riverName={river.name}
+              riverId={river.id}
+            />
+            {river.usgsGaugeId ? (
+              <p className="mt-3 text-sm text-[var(--text-body)]">
+                New to hydrographs?{" "}
+                <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--action)] underline-offset-4 hover:underline">
+                  How to read a USGS gauge for fly fishing
+                </Link>
+                .
+              </p>
+            ) : null}
+          </div>
+        </RiverLiveInset>
+      </Suspense>
 
       <section className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">

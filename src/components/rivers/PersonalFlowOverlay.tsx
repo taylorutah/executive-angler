@@ -5,7 +5,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
   ReferenceLine, Scatter, ScatterChart, ZAxis, ComposedChart,
 } from "recharts";
-import { Fish, Loader2 } from "lucide-react";
+import { Fish } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import SignedOutInsight from "./SignedOutInsight";
@@ -114,7 +114,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
     };
   }, [catchPoints]);
 
-  if (!authLoading && !user) {
+  if (!user) {
     return (
       <SignedOutInsight
         icon={<Fish className="h-4 w-4 text-[var(--action)]" />}
@@ -124,16 +124,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
     );
   }
 
-  if (loading || authLoading) {
-    return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
-        <div className="flex items-center gap-2 text-[var(--text-meta)]">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-sm">Loading personal flow data...</span>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   // No catch data yet
   if (catchPoints.length === 0) return null;

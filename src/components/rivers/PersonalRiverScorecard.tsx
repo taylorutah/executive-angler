@@ -33,7 +33,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
     return () => { cancelled = true; };
   }, [riverId, user, authLoading]);
 
-  if (!authLoading && !user) {
+  if (!user) {
     return (
       <SignedOutInsight
         icon={<Sparkles className="h-4 w-4 text-[var(--action)]" />}
@@ -43,11 +43,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
     );
   }
 
-  if (authLoading || loadState === "loading") {
-    return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 animate-pulse h-48" />
-    );
-  }
+  if (loadState === "loading") return null;
 
   if (loadState === "failed") return null;
 
