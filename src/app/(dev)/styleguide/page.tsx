@@ -47,9 +47,9 @@ const DAYLIGHT: Swatch[] = [
   { name: "rule", hex: "#E2DACD", role: "border (non-text)", against: "paper", againstHex: "#FAF6F0", min: 3 },
   { name: "ink", hex: "#141814", role: "headings", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
   { name: "graphite", hex: "#3E4649", role: "body", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
-  { name: "slate", hex: "#6C7679", role: "labels only", against: "paper", againstHex: "#FAF6F0", min: 3 },
-  { name: "copper-700", hex: "#A85C18", role: "ACTION only", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
-  { name: "teal-700", hex: "#0E7C93", role: "LIVE DATA only", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
+  { name: "slate", hex: "#5E6669", role: "meta / 13px captions", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
+  { name: "copper-700", hex: "#9E5615", role: "ACTION only", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
+  { name: "teal-700", hex: "#0C7286", role: "LIVE DATA only", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
   { name: "rise-700", hex: "#1F7A3D", role: "positive", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
   { name: "cut-700", hex: "#B3261E", role: "negative", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
 ];

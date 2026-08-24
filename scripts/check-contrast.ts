@@ -4,39 +4,118 @@
  *
  *   npm run check:contrast
  *
- * Thresholds: 4.5:1 for running text, 3:1 for large text / non-text
- * boundaries (declared per pair).
+ * Every Daylight foreground is tested against paper, vellum, and card.
+ * Every Dusk foreground is tested against riverbed, pool, and shelf.
+ * Small text (including --text-meta / slate captions) gates at 4.5.
+ * Only genuinely large or non-text roles may declare 3.0, and the role
+ * string must say why. On-action pairs (white on copper-700, riverbed
+ * on copper-400) are fill-on-fill, still 4.5.
  */
 
-const PAIRS: Array<{
+type Pair = {
   fg: string;
   bg: string;
   fgHex: string;
   bgHex: string;
   min: number;
   role: string;
-}> = [
-  // Daylight text
-  { fg: "ink", bg: "paper", fgHex: "#141814", bgHex: "#FAF6F0", min: 4.5, role: "heading text" },
-  { fg: "graphite", bg: "paper", fgHex: "#3E4649", bgHex: "#FAF6F0", min: 4.5, role: "body text" },
-  { fg: "slate", bg: "paper", fgHex: "#6C7679", bgHex: "#FAF6F0", min: 3, role: "labels only (large / non-text)" },
-  { fg: "copper-700", bg: "paper", fgHex: "#A85C18", bgHex: "#FAF6F0", min: 4.5, role: "action on light" },
-  { fg: "white", bg: "copper-700", fgHex: "#FFFFFF", bgHex: "#A85C18", min: 4.5, role: "on-action" },
-  { fg: "teal-700", bg: "paper", fgHex: "#0E7C93", bgHex: "#FAF6F0", min: 4.5, role: "live data on light" },
-  { fg: "rise-700", bg: "paper", fgHex: "#1F7A3D", bgHex: "#FAF6F0", min: 4.5, role: "positive on light" },
-  { fg: "cut-700", bg: "paper", fgHex: "#B3261E", bgHex: "#FAF6F0", min: 4.5, role: "negative on light" },
-  { fg: "ink", bg: "card", fgHex: "#141814", bgHex: "#FFFFFF", min: 4.5, role: "heading on card" },
-  { fg: "graphite", bg: "vellum", fgHex: "#3E4649", bgHex: "#F2EDE4", min: 4.5, role: "body on raised" },
+};
 
-  // Dusk text
-  { fg: "chalk", bg: "riverbed", fgHex: "#EEF2F1", bgHex: "#0B1112", min: 4.5, role: "heading on dusk" },
-  { fg: "fog", bg: "riverbed", fgHex: "#8B979A", bgHex: "#0B1112", min: 4.5, role: "meta on dusk" },
-  { fg: "copper-400", bg: "riverbed", fgHex: "#E8923A", bgHex: "#0B1112", min: 4.5, role: "action on dusk" },
-  { fg: "teal-300", bg: "riverbed", fgHex: "#22C1DE", bgHex: "#0B1112", min: 4.5, role: "live data on dusk" },
-  { fg: "rise-400", bg: "riverbed", fgHex: "#3FB863", bgHex: "#0B1112", min: 4.5, role: "positive on dusk" },
-  { fg: "cut-400", bg: "riverbed", fgHex: "#F87171", bgHex: "#0B1112", min: 4.5, role: "negative on dusk" },
-  { fg: "chalk", bg: "shelf", fgHex: "#EEF2F1", bgHex: "#1C2629", min: 4.5, role: "heading on raised dusk" },
-  { fg: "riverbed", bg: "copper-400", fgHex: "#0B1112", bgHex: "#E8923A", min: 4.5, role: "on-action dusk" },
+const PAPER = "#FAF6F0";
+const VELLUM = "#F2EDE4";
+const CARD = "#FFFFFF";
+const RIVERBED = "#0B1112";
+const POOL = "#131B1D";
+const SHELF = "#1C2629";
+
+const INK = "#141814";
+const GRAPHITE = "#3E4649";
+const SLATE = "#5E6669";
+const COPPER_700 = "#9E5615";
+const TEAL_700 = "#0C7286";
+const RISE_700 = "#1F7A3D";
+const CUT_700 = "#B3261E";
+const WHITE = "#FFFFFF";
+
+const CHALK = "#EEF2F1";
+const FOG = "#8B979A";
+const COPPER_400 = "#E8923A";
+const TEAL_300 = "#22C1DE";
+const RISE_400 = "#3FB863";
+const CUT_400 = "#F87171";
+
+const DAYLIGHT_GROUNDS: Array<{ name: string; hex: string }> = [
+  { name: "paper", hex: PAPER },
+  { name: "vellum", hex: VELLUM },
+  { name: "card", hex: CARD },
+];
+
+const DUSK_GROUNDS: Array<{ name: string; hex: string }> = [
+  { name: "riverbed", hex: RIVERBED },
+  { name: "pool", hex: POOL },
+  { name: "shelf", hex: SHELF },
+];
+
+function expand(
+  fgs: Array<{ name: string; hex: string; role: string }>,
+  grounds: Array<{ name: string; hex: string }>,
+): Pair[] {
+  const out: Pair[] = [];
+  for (const fg of fgs) {
+    for (const bg of grounds) {
+      out.push({
+        fg: fg.name,
+        bg: bg.name,
+        fgHex: fg.hex,
+        bgHex: bg.hex,
+        min: 4.5,
+        role: fg.role,
+      });
+    }
+  }
+  return out;
+}
+
+const PAIRS: Pair[] = [
+  ...expand(
+    [
+      { name: "ink", hex: INK, role: "heading / primary text" },
+      { name: "graphite", hex: GRAPHITE, role: "body text" },
+      { name: "slate", hex: SLATE, role: "meta / 13px captions (small text)" },
+      { name: "copper-700", hex: COPPER_700, role: "action on light" },
+      { name: "teal-700", hex: TEAL_700, role: "live data on light" },
+      { name: "rise-700", hex: RISE_700, role: "positive on light" },
+      { name: "cut-700", hex: CUT_700, role: "negative on light" },
+    ],
+    DAYLIGHT_GROUNDS,
+  ),
+  {
+    fg: "white",
+    bg: "copper-700",
+    fgHex: WHITE,
+    bgHex: COPPER_700,
+    min: 4.5,
+    role: "on-action fill",
+  },
+  ...expand(
+    [
+      { name: "chalk", hex: CHALK, role: "heading on dusk" },
+      { name: "fog", hex: FOG, role: "meta on dusk" },
+      { name: "copper-400", hex: COPPER_400, role: "action on dusk" },
+      { name: "teal-300", hex: TEAL_300, role: "live data on dusk" },
+      { name: "rise-400", hex: RISE_400, role: "positive on dusk" },
+      { name: "cut-400", hex: CUT_400, role: "negative on dusk" },
+    ],
+    DUSK_GROUNDS,
+  ),
+  {
+    fg: "riverbed",
+    bg: "copper-400",
+    fgHex: RIVERBED,
+    bgHex: COPPER_400,
+    min: 4.5,
+    role: "on-action dusk fill",
+  },
 ];
 
 function hexToRgb(hex: string): [number, number, number] {
