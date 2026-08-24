@@ -18,3 +18,50 @@ jobs:
       - run: npm run check:contrast
       - run: npm run check:hex
       - run: npm test
+
+  # Painted-contrast gate. The script already exits 1 on `failures` only —
+  # `unverifiable` (image-backed, no computable overlay) is never a gate.
+  # The current site still has pre-existing failures (index h1s, Lane I/J/K).
+  # This job reports them; it does not fail the workflow until that count is 0.
+  contrast-rendered:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
+      NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run start -- -p 3000 &
+      - run: npx --yes wait-on http://localhost:3000 --timeout 60000
+      - run: npm run check:contrast:rendered
+        continue-on-error: true
+        env:
+          BASE_URL: http://localhost:3000
+
+  harness:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
+      NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:e2e
+        env:
+          CI: "1"
+          EA_QA_EMAIL: test@executiveangler.com
+          EA_QA_PASSWORD: TestEA2026!
