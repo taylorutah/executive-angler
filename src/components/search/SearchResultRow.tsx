@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 import { formatReadingTime } from "@/lib/utils";
@@ -43,13 +42,6 @@ export default function SearchResultRow({ item, cfs, exactFly, active }: Props) 
         </div>
         <WorthChoosing item={item} cfs={cfs} />
       </Link>
-      {item.type === "fly" && item.id ? (
-        <FlyBoxAddButton
-          fly={{ id: item.id, slug: item.slug, name: item.title }}
-          variant="icon"
-          stopPropagation
-        />
-      ) : null}
     </div>
   );
 }
@@ -89,7 +81,7 @@ function Media({ item }: { item: SearchDocument }) {
   if (item.type === "article" || item.type === "hatch") {
     return (
       <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-[var(--surface-raised)]">
-        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text-body)]">
           {item.type === "article" ? "Note" : "Hatch"}
         </span>
       </div>
@@ -124,7 +116,7 @@ function WorthChoosing({
   if (item.type === "article") {
     const minutes = item.readingTimeMinutes;
     return (
-      <span className="num shrink-0 text-[13px] text-[var(--text-meta)]">
+      <span className="num shrink-0 text-[13px] text-[var(--text-body)]">
         {minutes != null ? formatReadingTime(minutes) : TYPE_LABELS.article}
       </span>
     );
@@ -132,7 +124,7 @@ function WorthChoosing({
 
   if (item.type === "fly") {
     return (
-      <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)] sm:inline">
+      <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
         {item.sizes ? `#${item.sizes}` : item.category ?? "Fly"}
       </span>
     );
@@ -140,14 +132,16 @@ function WorthChoosing({
 
   if (item.type === "hatch" && item.riverCount != null) {
     return (
-      <span className="num hidden shrink-0 text-[13px] text-[var(--text-meta)] sm:inline">
+      <span className="num hidden shrink-0 text-[13px] text-[var(--text-body)] sm:inline">
         {item.riverCount} {item.riverCount === 1 ? "river" : "rivers"}
       </span>
     );
   }
 
+  if (item.type === "destination") return null;
+
   return (
-    <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)] sm:inline">
+    <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
       {TYPE_LABELS[item.type]}
     </span>
   );

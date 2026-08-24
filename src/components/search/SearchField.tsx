@@ -31,7 +31,7 @@ export default function SearchField({ inputRef, value, onChange, onClear }: Prop
         autoComplete="off"
         spellCheck={false}
         aria-label="Search Executive Angler"
-        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full rounded-md border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 ${value ? "pr-12" : "pr-4"} text-[18px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full rounded-md border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 ${value ? "pr-12" : "pr-4"} text-[18px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none [&::-webkit-search-cancel-button]:hidden`}
       />
       {value ? (
         <button

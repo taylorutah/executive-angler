@@ -28,7 +28,7 @@ export default function SearchEmptyState({
       <p className="text-[15px] text-[var(--text-body)]">{catalogLine}</p>
 
       <section>
-        <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
+        <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
           Try a real query
         </h2>
         <div className="flex flex-wrap gap-2">
@@ -47,7 +47,7 @@ export default function SearchEmptyState({
 
       {mostRead.length > 0 && (
         <section>
-          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
+          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
             Most-read rivers
           </h2>
           <div className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
@@ -64,7 +64,7 @@ export default function SearchEmptyState({
 
       {hatchingNow.length > 0 && (
         <section>
-          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
+          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
             Hatching now
           </h2>
           <div className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
