@@ -1,0 +1,130 @@
+[
+  {
+    "brand": "Alaska Fly Fishing Goods",
+    "asset": "https://alaskaflyfishinggoods.com/wp-content/uploads/Sapsuk-coho-scaled.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Orvis",
+    "asset": "https://assets.orvis.com/is/image/orvisprd/2CBR_Montana_Angler_Fly_Fishing_004?wid=1280&qlt=85",
+    "entity": "fly_shops",
+    "route": "media_kit",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Jack Dennis Outdoor Shop / Simpleview",
+    "asset": "https://assets.simpleviewinc.com/simpleview/image/upload/crm/jacksonholewy/JD-High-Country-Outfitters_169D6583-E017-CFB5-DBF3DA0F9E00F96B-169d6521a87226e_169d67b0-b8ab-be47-86af515ec2baf50d.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Blue Ribbon Flies / Lightspeed",
+    "asset": "https://cdn.shoplightspeed.com/shops/625472/files/12215935/slide-2.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Gates Au Sable Lodge",
+    "asset": "https://gateslodge.com/wp-content/uploads/2022/04/Gates-Fly-Shop-Header.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Minturn Anglers",
+    "asset": "https://minturnanglers.com/wp-content/uploads/2023/08/Minturn-Anglers-Fly-Shop-Minturn-e1711056662374.jpeg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Pacific Fly Fishers",
+    "asset": "https://pacificflyfishers.com/cdn/shop/files/Pacific-Fly-Fishers_Home-Page-Header_4_850x.png?v=1613725758",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "South Platte Fly Shop",
+    "asset": "https://s3-us-west-2.amazonaws.com/spfs-assets/images/slider/shop-front-carousel.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Silver Creek Outfitters",
+    "asset": "https://silver-creek.com/wp-content/uploads/2024/09/store.spring.SCOLodge1-1200x-web.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "World Cast Anglers",
+    "asset": "https://worldcastanglers.com/wp-content/uploads/2021/04/fly-shop-header-1.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Belize River Lodge",
+    "asset": "https://www.belizeriverlodge.com/wp-content/uploads/2017/07/BelizeRiverLodgeBanner_1240x480_NEW-01b.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "The Fly Shop (Bend)",
+    "asset": "https://www.bendflyshop.com/wp-content/uploads/2026/01/Bend-Fly-Shop-in-Bend-Oregon.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Nervous Waters",
+    "asset": "https://www.nervouswaters.com/wp-content/uploads/2021/02/Our-Story_2.jpg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "Sweetwater Fly Shop",
+    "asset": "https://www.sweetwaterflyshop.com/wp-content/uploads/2024/05/image3-scaled.jpeg",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "TCO Fly Shop",
+    "asset": "https://www.tcoflyfishing.com/cdn/shop/files/State_College_Full_Store_2022_1350x450.jpg?v=1661282055",
+    "entity": "fly_shops",
+    "route": "ask",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  },
+  {
+    "brand": "BigCommerce (gear catalogue)",
+    "asset": "cdn11.bigcommerce.com — 12 gear_products.hero_image_url rows; host is not even allowlisted, so next/image already refuses them",
+    "entity": "gear_products",
+    "route": "plate",
+    "status": "unresolved",
+    "flagged_for_taylor": true
+  }
+]

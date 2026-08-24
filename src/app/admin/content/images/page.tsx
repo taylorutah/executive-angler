@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { listImageGaps, type ImageGap } from "@/lib/db/image-gaps";
 
 export const metadata: Metadata = {
@@ -29,6 +31,23 @@ function groupByEntity(gaps: ImageGap[]): Map<string, ImageGap[]> {
   return map;
 }
 
+type BrandPermission = {
+  brand: string;
+  asset: string;
+  entity: string;
+  route: string;
+  status: string;
+  flagged_for_taylor: boolean;
+};
+
+function loadBrandPermissions(): BrandPermission[] {
+  const raw = readFileSync(
+    join(process.cwd(), "scripts/tier3-image-permissions.json"),
+    "utf8",
+  );
+  return JSON.parse(raw) as BrandPermission[];
+}
+
 export default async function AdminImageGapsPage() {
   const gaps = await listImageGaps();
   const grouped = groupByEntity(gaps);
@@ -36,17 +55,54 @@ export default async function AdminImageGapsPage() {
     ...ENTITY_ORDER.filter((e) => grouped.has(e)),
     ...[...grouped.keys()].filter((e) => !ENTITY_ORDER.includes(e)),
   ];
+  const permissions = loadBrandPermissions();
+  const flagged = permissions.filter((p) => p.flagged_for_taylor).length;
 
   return (
     <div className="min-h-screen text-[var(--text-primary)]">
       <header className="border-b border-[var(--border-rule)] px-6 py-6">
         <h1 className="text-2xl font-bold tracking-tight">Image gaps</h1>
         <p className="mt-1 text-sm text-[var(--text-body)] max-w-2xl">
-          Null heroes and Unsplash URLs, grouped by entity. Rehost is listed
-          but disabled until Taylor confirms the write path (EXIF including GPS
-          must be stripped on ingest). Rivers are expected to be empty.
+          We host every image. Unsplash ingest strips EXIF including GPS.
+          Gear-brand and lodge shots are not bulk-downloaded — they sit in the
+          permissions table until Taylor picks a route. Rehost stays disabled
+          until a service-role ingest has proven the EXIF strip.
         </p>
       </header>
+
+      <section className="px-6 pt-8 max-w-5xl">
+        <h2 className="font-heading text-lg font-semibold">Tier 3 — ask, don’t copy</h2>
+        <p className="text-xs text-[var(--text-meta)] mb-3">
+          {flagged} unresolved items flagged for Taylor. Removing a hotlink
+          does not remove the copyright.
+        </p>
+        <div className="overflow-x-auto rounded-lg border border-[var(--border-rule)] mb-10">
+          <table className="w-full text-sm">
+            <thead className="bg-[var(--surface-raised)] text-left text-[10px] uppercase tracking-wider text-[var(--text-meta)]">
+              <tr>
+                <th className="px-3 py-2 font-medium">Brand</th>
+                <th className="px-3 py-2 font-medium">Entity</th>
+                <th className="px-3 py-2 font-medium">Route</th>
+                <th className="px-3 py-2 font-medium">Status</th>
+                <th className="px-3 py-2 font-medium">Asset</th>
+              </tr>
+            </thead>
+            <tbody>
+              {permissions.map((p) => (
+                <tr key={p.asset} className="border-t border-[var(--border-rule)]">
+                  <td className="px-3 py-2">{p.brand}</td>
+                  <td className="px-3 py-2 font-mono text-xs">{p.entity}</td>
+                  <td className="px-3 py-2">{p.route}</td>
+                  <td className="px-3 py-2 text-[var(--state-negative)]">{p.status}</td>
+                  <td className="px-3 py-2 font-mono text-xs text-[var(--text-meta)] max-w-[280px] truncate">
+                    {p.asset}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <div className="px-6 py-8 space-y-10 max-w-5xl">
         {entities.map((entity) => {

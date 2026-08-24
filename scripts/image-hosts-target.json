@@ -1,0 +1,11 @@
+{
+  "note": "Post-migration next/image allowlist. Do not shrink remotePatterns to this until Unsplash and readable-licence Wikimedia files live in our storage. Google avatars stay as the fetch source.",
+  "hosts": [
+    { "hostname": "executiveangler.com" },
+    { "hostname": "www.executiveangler.com" },
+    { "hostname": "qlasxtfbodyxbcuchvxz.supabase.co", "pathname": "/storage/v1/object/public/**" },
+    { "hostname": "api.executiveangler.com", "pathname": "/storage/v1/object/public/**" },
+    { "hostname": "lh3.googleusercontent.com", "reason": "Google OAuth avatars — fetch source only; cache to storage on first login" },
+    { "hostname": "*.googleusercontent.com", "reason": "Google OAuth avatars" }
+  ]
+}

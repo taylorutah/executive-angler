@@ -133,6 +133,8 @@ Unchanged from v3 §4: **the intentional angler**, defined by mindset rather tha
 
 ### 5.3 Photography
 
+**We host every image.** No hotlinking to third parties. Unsplash and Wikimedia files whose licence we can read are ingested into our storage (EXIF including GPS stripped, blur hash stored, credit on the row). A row without a readable licence does not publish. Gear-brand and lodge photography is not bulk-downloaded — ask, substitute, or ship the typographic plate. Google OAuth avatars are the one fetch exception; cache them to storage on first login.
+
 One hero per page **at full strength** — the image is the image, never faded to 12% behind a headline. Cool shadows, warm highlights, greens held down so copper reads. Water, light, structure; people only as distant silhouettes.
 
 **Fly macros** cut out on paper, 1:1, light from upper left, no drop shadow, scaled so a #20 midge reads smaller than a #4 streamer. This is the strongest asset the brand owns and it is why the fly plate works. **Species keep scientific illustration** — the most distinctive choice in the identity.
