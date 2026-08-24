@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "30+ Fly Fishing Destinations Worldwide",
     description: "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Plan your next adventure.",
-    images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=30%20World-Class%20Waters&type=destination"],
+    images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=Thirty%20places%2C%20documented&type=destination"],
   },
 };
 
@@ -63,13 +63,13 @@ export default async function DestinationsPage() {
       <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Explore the World
+            Places
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Where Great Fly Fishing Begins
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
-            Thirty handpicked destinations — from Montana&apos;s spring creeks to the wild salmon
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
+            Thirty destinations — from Montana&apos;s spring creeks to the wild salmon
             rivers of Kamchatka.
           </p>
         </div>
@@ -79,7 +79,7 @@ export default async function DestinationsPage() {
       <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
-            Premier Destinations
+            Featured places
           </p>
 
           {/* Alaska — hero editorial card */}
@@ -104,28 +104,28 @@ export default async function DestinationsPage() {
                   </div>
                   <div className="bg-[var(--surface-page)] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-                      Featured Destination
+                      Featured place
                     </p>
-                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-white">
+                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-[var(--text-primary)]">
                       {heroDestination.name}
                     </h2>
-                    <p className="mt-1 text-base font-medium text-[var(--action)]/90">
+                    <p className="mt-1 text-base font-medium text-[var(--text-body)]">
                       {heroDestination.tagline}
                     </p>
-                    <div className="mt-3 flex items-center gap-1.5 text-white/60 text-sm">
+                    <div className="mt-3 flex items-center gap-1.5 text-[var(--text-meta)] text-sm">
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
                       <span>
                         {heroDestination.region} · {heroDestination.country}
                       </span>
                     </div>
-                    <p className="mt-4 text-white/75 text-sm leading-relaxed line-clamp-3">
+                    <p className="mt-4 text-[var(--text-body)] text-sm leading-relaxed line-clamp-3">
                       {heroDestination.description?.substring(0, 240)}...
                     </p>
                     <div className="mt-5 flex flex-wrap gap-1.5">
                       {heroDestination.primarySpecies.slice(0, 4).map((sp) => (
                         <span
                           key={sp}
-                          className="px-2.5 py-1 bg-[var(--surface-raised)]/10 text-white/80 text-[10px] font-medium rounded-full"
+                          className="px-2.5 py-1 bg-[var(--surface-raised)] text-[var(--text-body)] text-[10px] font-medium rounded-full"
                         >
                           {sp}
                         </span>

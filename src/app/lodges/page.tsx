@@ -143,29 +143,29 @@ export default async function LodgesPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
                       Featured Lodge
                     </p>
-                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-white">
+                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-[var(--text-primary)]">
                       {heroLodge.name}
                     </h2>
-                    <div className="mt-2 flex items-center gap-1.5 text-white/60 text-sm">
+                    <div className="mt-2 flex items-center gap-1.5 text-[var(--text-meta)] text-sm">
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
                       <span>West Yellowstone, Montana</span>
                     </div>
                     {heroLodge.averageRating && (
                       <div className="mt-2 flex items-center gap-1.5">
                         <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
-                        <span className="text-white/90 text-sm font-medium">
+                        <span className="text-[var(--text-body)] text-sm font-medium">
                           {heroLodge.averageRating} · {heroLodge.reviewCount} reviews
                         </span>
                       </div>
                     )}
-                    <p className="mt-4 text-white/75 text-sm leading-relaxed line-clamp-3">
+                    <p className="mt-4 text-[var(--text-body)] text-sm leading-relaxed line-clamp-3">
                       {heroLodge.description?.substring(0, 240)}...
                     </p>
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {heroLodge.amenities.slice(0, 4).map((a) => (
                         <span
                           key={a}
-                          className="px-2.5 py-1 bg-[var(--surface-raised)]/10 text-white/80 text-[10px] font-medium rounded-full"
+                          className="px-2.5 py-1 bg-[var(--surface-raised)] text-[var(--text-body)] text-[10px] font-medium rounded-full"
                         >
                           {a}
                         </span>
