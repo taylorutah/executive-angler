@@ -3,43 +3,53 @@
 import { useState, useEffect } from "react";
 import { Sparkles, Lock, Fish, Ruler, MapPin, Sunrise, Calendar, Wrench, Feather, TrendingUp } from "lucide-react";
 import type { PersonalRiverScorecard } from "@/app/api/insights/personal-river/[riverId]/route";
+import { useAuth } from "@/lib/auth-context";
+import { fetchOnce } from "./fetch-once";
+import SignedOutInsight from "./SignedOutInsight";
 
 interface Props {
   riverId: string;
   riverName: string;
 }
 
-type AuthState = "loading" | "none" | "ready";
+type LoadState = "loading" | "failed" | "ready";
 
 export default function PersonalRiverScorecardCard({ riverId, riverName }: Props) {
+  const { user, isLoading: authLoading } = useAuth();
   const [data, setData] = useState<PersonalRiverScorecard | null>(null);
-  const [authState, setAuthState] = useState<AuthState>("loading");
+  const [loadState, setLoadState] = useState<LoadState>("loading");
 
   useEffect(() => {
+    // Owner-scoped insights — never requested without a session.
+    if (authLoading || !user) return;
     let cancelled = false;
-    fetch(`/api/insights/personal-river/${riverId}`).then(async (res) => {
+    fetchOnce(`/api/insights/personal-river/${riverId}`).then(async (res) => {
       if (cancelled) return;
-      if (res.status === 401) return setAuthState("none");
-      if (!res.ok) return setAuthState("none");
+      if (!res.ok) return setLoadState("failed");
       const json = (await res.json()) as PersonalRiverScorecard;
       setData(json);
-      setAuthState("ready");
-    }).catch(() => setAuthState("none"));
+      setLoadState("ready");
+    }).catch(() => setLoadState("failed"));
     return () => { cancelled = true; };
-  }, [riverId]);
+  }, [riverId, user, authLoading]);
 
-  if (authState === "loading") {
+  if (!authLoading && !user) {
+    return (
+      <SignedOutInsight
+        icon={<Sparkles className="h-4 w-4 text-[var(--action)]" />}
+        title="Your River Scorecard"
+        description={`Sign in and this card keeps your running record on ${riverName} — sessions fished, fish per trip, your biggest, your top fly, and the section and time of day that produce for you. It stays private to you.`}
+      />
+    );
+  }
+
+  if (authLoading || loadState === "loading") {
     return (
       <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 animate-pulse h-48" />
     );
   }
 
-  if (authState === "none") {
-    // Anonymous — render nothing; the unauth experience for the river
-    // page already shows static intel. Personal stats only matter when
-    // logged in.
-    return null;
-  }
+  if (loadState === "failed") return null;
 
   // Signed in, with data
   if (!data || data.totalSessions === 0) {

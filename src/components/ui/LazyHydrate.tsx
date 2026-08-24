@@ -31,8 +31,10 @@ export default function LazyHydrate({
     return () => io.disconnect();
   }, []);
 
+  // minHeight stays on the wrapper after hydration so charts that measure
+  // their container never resolve to a zero-height box.
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={{ minHeight }}>
       {show ? children : <div className="rounded-xl bg-[var(--surface-card)]" style={{ minHeight }} aria-hidden />}
     </div>
   );

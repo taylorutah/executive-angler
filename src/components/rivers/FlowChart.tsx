@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Droplets, ChevronDown } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { fetchOnce } from "./fetch-once";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -10,6 +12,11 @@ interface FlowPoint {
   datetime: string;
   value: number;
   unit: string;
+}
+
+interface DailyReading {
+  date: string;
+  discharge: number;
 }
 
 interface SessionMarker {
@@ -54,16 +61,6 @@ function formatShortDate(iso: string): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function formatFullDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
 function downsample(points: FlowPoint[], maxPoints: number): FlowPoint[] {
   if (points.length <= maxPoints) return points;
   const step = Math.ceil(points.length / maxPoints);
@@ -84,10 +81,14 @@ const PADDING = { top: 20, right: 16, bottom: 36, left: 56 };
 const PLOT_W = CHART_WIDTH - PADDING.left - PADDING.right;
 const PLOT_H = CHART_HEIGHT - PADDING.top - PADDING.bottom;
 
+/** Daily means from the history API, trimmed to the window this card claims. */
+const WINDOW_DAYS = 30;
+
 /* ── Component ─────────────────────────────────────────── */
 
 export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const gauges = useMemo(() => parseGauges(usgsGaugeId), [usgsGaugeId]);
+  const { user } = useAuth();
 
   // Shared URL state with <RiverSectionPills> at the top of the river page.
   // When the angler picks a section up top, FlowChart switches gauges too —
@@ -111,10 +112,8 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const [sessions, setSessions] = useState<SessionMarker[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [siteName, setSiteName] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredSession, setHoveredSession] = useState<SessionMarker | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -137,7 +136,8 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   /* eslint-disable react-hooks/rules-of-hooks */
 
-  // Fetch flow data when gauge changes
+  // Fetch flow data when gauge changes. `/api/river-history` is the public
+  // endpoint — `/api/rivers/flow` 401s for signed-out readers.
   useEffect(() => {
     if (!activeSiteId) return;
     let cancelled = false;
@@ -146,20 +146,26 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
     (async () => {
       try {
-        const res = await fetch(
-          `/api/rivers/flow?siteId=${activeSiteId}&days=30`
+        const res = await fetchOnce(
+          `/api/river-history/${riverId}?siteId=${activeSiteId}`
         );
         if (!res.ok) {
-          setError("Unable to load flow data");
+          if (!cancelled) setError("Unable to load flow data");
           return;
         }
         const data = await res.json();
+        const readings: DailyReading[] = data.readings || [];
         if (!cancelled) {
-          setFlowData(data.discharge || []);
-          setSiteName(data.siteName || "");
+          setFlowData(
+            readings.slice(-WINDOW_DAYS).map((r) => ({
+              datetime: `${r.date}T12:00:00`,
+              value: r.discharge,
+              unit: "cfs",
+            }))
+          );
         }
       } catch {
-        if (!cancelled) setError("Failed to fetch flow data");
+        if (!cancelled) setError("Unable to load flow data");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -168,29 +174,23 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [activeSiteId]);
+  }, [activeSiteId, riverId]);
 
-  // Fetch user sessions on this river (auth-aware)
+  // Overlay the reader's own sessions. Insights are owner-scoped, so a
+  // signed-out visitor must never hit the endpoint.
   useEffect(() => {
+    if (!user) {
+      setSessions([]);
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(
+        const res = await fetchOnce(
           `/api/insights/river-conditions?riverId=${riverId}`
         );
-        if (res.status === 401) {
-          // Not logged in — just skip session overlay
-          setIsAuthenticated(false);
-          return;
-        }
-        if (res.status === 403) {
-          // Free user — still show chart without overlay
-          setIsAuthenticated(true);
-          return;
-        }
         if (!res.ok) return;
 
-        setIsAuthenticated(true);
         const data = await res.json();
         const catches: SessionMarker[] = (data.catches || []).map(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -209,7 +209,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [riverId]);
+  }, [riverId, user]);
 
   // Downsample for rendering
   const chartPoints = useMemo(() => downsample(flowData, 300), [flowData]);
@@ -378,7 +378,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // Loading state
   if (loading) {
     return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+      <div className="min-h-48 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading 30-day flow data...</span>
@@ -387,10 +387,10 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
     );
   }
 
-  // Error state
+  // A failed request and an empty series are different facts — say which.
   if (error || chartPoints.length === 0) {
     return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+      <div className="min-h-48 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-3 mb-2">
           <Droplets className="h-5 w-5 text-[var(--text-meta)]" />
           <h3 className="text-sm font-bold text-[var(--text-primary)]">
@@ -398,7 +398,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           </h3>
         </div>
         <p className="text-sm text-[var(--text-meta)]">
-          {error || "No flow data available for this gauge."}
+          {error || "No flow data for this gauge."}
         </p>
       </div>
     );
@@ -406,6 +406,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   const currentFlow = chartPoints[chartPoints.length - 1];
   const activeGauge = gauges.find((g) => g.site_id === activeSiteId);
+  const siteName = activeGauge?.name || "";
 
   return (
     <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
@@ -421,7 +422,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           <span className="font-mono text-[var(--action)] font-bold">
             {currentFlow.value.toLocaleString()} cfs
           </span>
-          <span>now</span>
+          <span>latest daily mean</span>
         </div>
       </div>
 
@@ -464,11 +465,11 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
       )}
 
       {/* SVG Chart */}
-      <div className="relative">
+      <div className="relative h-48 w-full">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-          className="w-full h-auto"
+          className="h-48 w-full"
           onMouseMove={handleMouseMove}
           onMouseLeave={() => {
             setHoveredIndex(null);
@@ -646,7 +647,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
               {chartPoints[hoveredIndex].value.toLocaleString()} cfs
             </p>
             <p className="text-[var(--text-meta)]">
-              {formatFullDate(chartPoints[hoveredIndex].datetime)}
+              {formatShortDate(chartPoints[hoveredIndex].datetime)}
             </p>
           </div>
         )}
@@ -691,7 +692,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
               {" · "}
             </span>
           )}
-          Dashed line = 30-day avg ({meanFlow.toLocaleString()} cfs) · Source: USGS NWIS
+          Daily means · Dashed line = 30-day avg ({meanFlow.toLocaleString()} cfs) · Source: USGS NWIS
         </p>
         {siteName && (
           <p className="text-[10px] text-[var(--text-meta)] truncate max-w-[200px]">

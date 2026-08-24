@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { TrendingUp, TrendingDown, Minus, Loader2 } from "lucide-react";
+import { fetchOnce } from "./fetch-once";
 
 interface DailyReading {
   date: string;
@@ -33,7 +34,7 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
     async function load() {
       try {
         const params = siteId ? `?siteId=${siteId}` : "";
-        const res = await fetch(`/api/river-history/${riverId}${params}`);
+        const res = await fetchOnce(`/api/river-history/${riverId}${params}`);
         if (!res.ok) {
           setError("No historical data available");
           return;
@@ -79,7 +80,7 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4">
+      <div className="min-h-48 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-4">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading water levels…</span>
@@ -162,8 +163,14 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
       </div>
 
       {/* Chart */}
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-48 w-full">
+        {/* Resolved height (not min) so Recharts cannot compute 0 on first paint.
+            Seed a real width — `-1` still collapses the container. */}
+        <ResponsiveContainer
+          width="100%"
+          height={192}
+          initialDimension={{ width: 640, height: 192 }}
+        >
           <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradient" x1="0" y1="0" x2="0" y2="1">
@@ -194,7 +201,7 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
                 fontSize: "12px",
                 color: "#F0F6FC",
               }}
-              labelFormatter={(label: any) => formatDate(String(label))}
+              labelFormatter={(label) => formatDate(String(label))}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter={(value: any) => [`${Number(value).toLocaleString()} cfs`, "Flow"]}
             />

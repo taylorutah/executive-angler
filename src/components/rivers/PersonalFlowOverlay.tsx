@@ -6,6 +6,9 @@ import {
   ReferenceLine, Scatter, ScatterChart, ZAxis, ComposedChart,
 } from "recharts";
 import { Fish, Loader2 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { fetchOnce } from "./fetch-once";
+import SignedOutInsight from "./SignedOutInsight";
 
 interface CatchPoint {
   date: string;
@@ -29,44 +32,38 @@ interface Props {
 }
 
 export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
+  const { user, isLoading: authLoading } = useAuth();
   const [flowReadings, setFlowReadings] = useState<DailyReading[]>([]);
   const [catchPoints, setCatchPoints] = useState<CatchPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [authState, setAuthState] = useState<"loading" | "none" | "ready">("loading");
 
   useEffect(() => {
+    // Owner-scoped insights — never requested without a session.
+    if (authLoading) return;
+    if (!user) { setLoading(false); return; }
+
     async function load() {
       try {
-        // Fetch personal catch correlation data
-        const insightsRes = await fetch(`/api/insights/river-conditions?riverId=${riverId}`);
-        if (insightsRes.status === 401) {
-          setAuthState("none");
-          return;
-        }
-        if (!insightsRes.ok) {
-          setError("Could not load personal data");
-          return;
-        }
-        setAuthState("ready");
+        const insightsRes = await fetchOnce(`/api/insights/river-conditions?riverId=${riverId}`);
+        if (!insightsRes.ok) return;
         const insightsData = await insightsRes.json();
         setCatchPoints(insightsData.catches || []);
 
         // Fetch 12-month flow history
         const params = siteId ? `?siteId=${siteId}` : "";
-        const flowRes = await fetch(`/api/river-history/${riverId}${params}`);
+        const flowRes = await fetchOnce(`/api/river-history/${riverId}${params}`);
         if (flowRes.ok) {
           const flowData = await flowRes.json();
           setFlowReadings(flowData.readings || []);
         }
       } catch {
-        setError("Failed to load data");
+        // Silent — this panel is additive to the public flow chart above it.
       } finally {
         setLoading(false);
       }
     }
     load();
-  }, [riverId, siteId]);
+  }, [riverId, siteId, user, authLoading]);
 
   // Merge flow + catch data
   const chartData = useMemo(() => {
@@ -117,7 +114,17 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
     };
   }, [catchPoints]);
 
-  if (loading) {
+  if (!authLoading && !user) {
+    return (
+      <SignedOutInsight
+        icon={<Fish className="h-4 w-4 text-[var(--action)]" />}
+        title="Your Catches vs. Flow"
+        description="Log a session and this chart plots every fish you have landed here on top of the twelve-month hydrograph, so you can see the flow band your best days sit in."
+      />
+    );
+  }
+
+  if (loading || authLoading) {
     return (
       <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
@@ -127,9 +134,6 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
       </div>
     );
   }
-
-  // Not logged in
-  if (authState === "none") return null;
 
   // No catch data yet
   if (catchPoints.length === 0) return null;
@@ -152,7 +156,6 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
       <div className="flex items-center gap-3 mb-4">
         <Fish className="h-5 w-5 text-[var(--action)]" />
         <h3 className="text-sm font-bold text-[var(--text-primary)]">Your Catches vs. Flow</h3>
-        <span className="text-[10px] font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">PRO</span>
       </div>
 
       {/* Correlation stats */}
@@ -180,8 +183,14 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
       )}
 
       {/* Chart with catch markers */}
-      <div className="h-56">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-56 w-full">
+        {/* Resolved height (not min) so Recharts cannot compute 0 on first paint.
+            Seed a real width — `-1` still collapses the container. */}
+        <ResponsiveContainer
+          width="100%"
+          height={224}
+          initialDimension={{ width: 640, height: 224 }}
+        >
           <ComposedChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradientPersonal" x1="0" y1="0" x2="0" y2="1">
