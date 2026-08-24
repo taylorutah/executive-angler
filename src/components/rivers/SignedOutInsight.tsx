@@ -27,12 +27,12 @@ export default function SignedOutInsight({ icon, title, description }: Props) {
         </Link>
         <Link
           href="/login"
-          className="text-sm font-semibold text-[var(--action)] hover:underline"
+          className="text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
         >
           Sign in
         </Link>
       </div>
-      <p className="mt-2 text-[11px] text-[var(--text-meta)]">
+      <p className="mt-2 text-[11px] text-[var(--text-body)]">
         Free — every feature on Executive Angler costs nothing.
       </p>
     </div>
