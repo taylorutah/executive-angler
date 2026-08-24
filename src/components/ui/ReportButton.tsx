@@ -63,7 +63,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-1.5 text-xs text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
+        className="flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
         title="Report an issue"
       >
         <Flag className="h-3.5 w-3.5" />
