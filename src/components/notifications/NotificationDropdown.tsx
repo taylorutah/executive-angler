@@ -63,9 +63,7 @@ function getNotificationHref(n: AppNotification): string {
     case "follow_request":
       return "/notifications";
     case "follow_accepted":
-      return n.actor_profile?.username
-        ? `/anglers/${n.actor_profile.username}`
-        : "/notifications";
+      return "/feed";
     case "kudos":
     case "comment":
     case "mention":
