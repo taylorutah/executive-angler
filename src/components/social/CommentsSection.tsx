@@ -194,9 +194,6 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
           )}
 
           {comments.map((comment) => {
-            const profileHref = comment.profile?.username
-              ? `/anglers/${comment.profile.username}`
-              : null;
             const nameLabel =
               comment.profile?.display_name || comment.profile?.username || "Angler";
             const avatar = comment.profile?.avatar_url ? (
@@ -214,35 +211,17 @@ export function CommentsSection({ sessionId, initialCount, sessionOwnerId, login
             );
             return (
               <div key={comment.id} className="flex gap-2 group">
-                {/* Avatar — tap-through to profile */}
-                {profileHref ? (
-                  <Link
-                    href={profileHref}
-                    className="h-6 w-6 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5 hover:ring-1 hover:ring-[var(--action)] transition-all"
-                  >
-                    {avatar}
-                  </Link>
-                ) : (
-                  <div className="h-6 w-6 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5">
-                    {avatar}
-                  </div>
-                )}
+                {/* Avatar — name only; public profiles are retired */}
+                <div className="h-6 w-6 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {avatar}
+                </div>
 
                 {/* Comment body */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    {profileHref ? (
-                      <Link
-                        href={profileHref}
-                        className="text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--action)] transition-colors"
-                      >
-                        {nameLabel}
-                      </Link>
-                    ) : (
-                      <span className="text-xs font-semibold text-[var(--text-primary)]">
-                        {nameLabel}
-                      </span>
-                    )}
+                    <span className="text-xs font-semibold text-[var(--text-primary)]">
+                      {nameLabel}
+                    </span>
                     <span className="text-[10px] text-[var(--text-meta)]">
                       {timeAgo(comment.created_at)}
                     </span>

@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
 }
 
 /**
- * Public angler profiles are disabled pending a privacy decision.
+ * Public angler profiles are retired permanently.
  * See docs/decisions/anglers-public-profiles.md.
  *
  * Previously leaked: stats.fish, per-session total_fish, river_name,

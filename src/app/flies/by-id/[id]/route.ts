@@ -11,17 +11,20 @@ import { createClient } from "@/lib/supabase/server";
  * caller had the "wrong" id type.
  *
  * Resolution order (first hit wins):
- *   1. fly_patterns_v2 by id
- *      - owner null + slug → /flies/<slug>
- *      - owner set + slug  → /anglers/<username>/flies/<slug>
+ *   1. fly_patterns_v2 / flies by id
+ *      - any slug → /flies/<slug>
  *   2. canonical_flies by id (legacy canonical) → mirror lookup
  *      → /flies/<slug>
  *   3. fly_patterns by id (legacy personal)
  *      → if promoted_to_canonical_id → recurse via canonical
  *      → if owner is current user → /journal/flies/<id>/edit
- *      → else /anglers/<username>/flies/<slug>
+ *      → else /flies/<slug>
  *
  * Falls back to /flies on a complete miss so we never throw at the user.
+ *
+ * Old /anglers/<username>/flies/<slug> bookmarks are handled by the
+ * dedicated redirect at src/app/anglers/[username]/flies/[slug]/page.tsx
+ * and are not minted here.
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,10 +42,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     .maybeSingle();
 
   if (v2?.slug) {
-    if (v2.owner_user_id == null) return redirectTo(`/flies/${v2.slug}`);
-    const username = await usernameFor(supabase, v2.owner_user_id as string);
-    if (username) return redirectTo(`/anglers/${username}/flies/${v2.slug}`);
-    // Owner has no public username — best we can do is canonical.
     return redirectTo(`/flies/${v2.slug}`);
   }
 
@@ -73,22 +72,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       return redirectTo(`/journal/flies/${id}/edit`);
     }
     if (legacyPersonal.slug) {
-      const username = await usernameFor(supabase, legacyPersonal.user_id as string);
-      if (username) return redirectTo(`/anglers/${username}/flies/${legacyPersonal.slug}`);
+      return redirectTo(`/flies/${legacyPersonal.slug}`);
     }
   }
 
   return redirectTo("/flies");
-}
-
-async function usernameFor(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  userId: string,
-): Promise<string | null> {
-  const { data } = await supabase
-    .from("angler_profiles")
-    .select("username")
-    .eq("user_id", userId)
-    .maybeSingle();
-  return (data?.username as string | null) ?? null;
 }

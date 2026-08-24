@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Fish, MapPin, Cloud } from "lucide-react";
 import type { FeedSession } from "@/app/feed/page";
 import { KudosButton } from "@/components/social/KudosButton";
@@ -72,68 +71,35 @@ function FeedCard({ session }: { session: FeedSession }) {
 
   return (
     <article className="bg-[var(--surface-raised)] rounded-lg border border-[var(--border-rule)] overflow-hidden hover:border-[var(--text-meta)] transition-colors duration-200">
-      {/* User header */}
+      {/* User header — name/avatar only; public profiles are retired */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        {username ? (
-          <Link
-            href={`/anglers/${username}`}
-            className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 hover:ring-1 hover:ring-[var(--action)] transition-all"
-          >
-            {profile?.avatar_url ? (
-              <Image
-                src={profile.avatar_url}
-                alt={displayName}
-                width={36}
-                height={36}
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <span className="text-sm font-bold text-[var(--text-body)] font-['IBM_Plex_Mono']">
-                {avatarInitials(
-                  profile?.display_name ?? null,
-                  profile?.username ?? null
-                )}
-              </span>
-            )}
-          </Link>
-        ) : (
-          <div className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0">
-            {profile?.avatar_url ? (
-              <Image
-                src={profile.avatar_url}
-                alt={displayName}
-                width={36}
-                height={36}
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <span className="text-sm font-bold text-[var(--text-body)] font-['IBM_Plex_Mono']">
-                {avatarInitials(
-                  profile?.display_name ?? null,
-                  profile?.username ?? null
-                )}
-              </span>
-            )}
-          </div>
-        )}
+        <div className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0">
+          {profile?.avatar_url ? (
+            <Image
+              src={profile.avatar_url}
+              alt={displayName}
+              width={36}
+              height={36}
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <span className="text-sm font-bold text-[var(--text-body)] font-['IBM_Plex_Mono']">
+              {avatarInitials(
+                profile?.display_name ?? null,
+                profile?.username ?? null
+              )}
+            </span>
+          )}
+        </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 flex-wrap">
-            {username ? (
-              <Link
-                href={`/anglers/${username}`}
-                className="flex items-center gap-1.5 flex-wrap hover:text-[var(--action)] transition-colors"
-              >
-                <span className="text-sm font-semibold text-[var(--text-primary)] truncate hover:text-[var(--action)] transition-colors">
-                  {displayName}
-                </span>
-                <span className="text-xs text-[var(--text-meta)] truncate">
-                  @{username}
-                </span>
-              </Link>
-            ) : (
-              <span className="text-sm font-semibold text-[var(--text-primary)] truncate">
-                {displayName}
+            <span className="text-sm font-semibold text-[var(--text-primary)] truncate">
+              {displayName}
+            </span>
+            {username && (
+              <span className="text-xs text-[var(--text-meta)] truncate">
+                @{username}
               </span>
             )}
           </div>

@@ -1,19 +1,15 @@
 /**
  * flyPermalink — single source of truth for fly URLs across the app.
  *
- * The fly identity model has three layers (see project_fly_identity_model.md):
- *   - canonical (`fly_patterns_v2` with owner null, mirrored to `canonical_flies`)
- *       → /flies/[slug]
- *   - personal pattern (`fly_patterns_v2` with owner set, or legacy `fly_patterns`)
- *       → /anglers/[username]/flies/[slug]   (public view)
- *       → /journal/flies/[id]/edit            (owner's edit view)
- *   - legacy personal that has been PROMOTED to canonical
- *       → /flies/[promoted-canonical-slug]
+ * Every fly has one canonical public URL at /flies/[slug].
+ * /anglers/[username]/flies/[slug] remains as a bookmark redirect only
+ * (see src/app/anglers/[username]/flies/[slug]/page.tsx) and must not be
+ * minted as a permalink.
  *
- * Callers pass whichever fields they have. The helper degrades gracefully and
- * falls back to the by-id resolver only when nothing better is known — the
- * resolver route exists for deep links from email, iOS, and pre-migration
- * shares, NOT as the everyday link shape inside the app.
+ * Fallbacks:
+ *   - promoted_to_canonical_id without joined slug → /flies/by-id/[id]
+ *   - owner viewing a personal row without slug → /journal/flies/[id]/edit
+ *   - last resort → /flies/by-id/[id] or /flies
  */
 export type FlyPermalinkRow = {
   /** Row id — required to fall back to the by-id resolver. */
@@ -28,7 +24,7 @@ export type FlyPermalinkRow = {
   promotedCanonicalSlug?: string | null;
   /** Owner of the row (null for canonical, uuid for personal). */
   ownerUserId?: string | null;
-  /** Public username of the owner — needed for /anglers/<u>/flies/<slug>. */
+  /** Retained for callers; unused — personal flies no longer have public profile URLs. */
   ownerUsername?: string | null;
   /** True when the current viewer authored this row. */
   viewerIsOwner?: boolean;
@@ -44,22 +40,16 @@ export function flyPermalink(row: FlyPermalinkRow): string {
   if (row.promoted_to_canonical_id && row.id) {
     return `/flies/by-id/${row.id}`;
   }
-  // 3. Canonical row with a slug.
-  if (row.isCanonical && row.slug) {
+  // 3. Any row with a slug — canonical library URL.
+  if (row.slug) {
     return `/flies/${row.slug}`;
   }
-  // 4. Personal pattern with username + slug — public detail page. This is the
-  //    primary surface for personal flies, even for the owner. Edit access is
-  //    a button on the detail page, never the default link.
-  if (row.ownerUsername && row.slug) {
-    return `/anglers/${row.ownerUsername}/flies/${row.slug}`;
-  }
-  // 5. Owner viewing their own personal pattern but slug/username missing —
+  // 4. Owner viewing their own personal pattern but slug missing —
   //    fall back to the edit form so they can still reach it.
   if (row.viewerIsOwner && row.id) {
     return `/journal/flies/${row.id}/edit`;
   }
-  // 6. Last resort: the by-id resolver.
+  // 5. Last resort: the by-id resolver.
   if (row.id) {
     return `/flies/by-id/${row.id}`;
   }
@@ -70,8 +60,8 @@ export function flyPermalink(row: FlyPermalinkRow): string {
  * Convenience for the common case: a legacy `fly_patterns` row owned by the
  * current viewer. Most My Flies / Tie Next / dashboard surfaces use this.
  *
- * Pass `ownerUsername` + `slug` whenever available so the link routes to the
- * detail page; without them it falls back to the edit form.
+ * Pass `slug` whenever available so the link routes to /flies/[slug];
+ * without it the helper falls back to the edit form.
  */
 export function ownerPatternPermalink(pattern: {
   id: string;

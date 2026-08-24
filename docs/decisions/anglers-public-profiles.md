@@ -1,8 +1,14 @@
 # Decision: public angler profiles (`/anglers`, `/anglers/[username]`)
 
-**Status:** disabled pending Taylor's decision  
+**Status:** resolved — profiles retired  
 **Date:** 2026-08-24  
-**Lane:** Wave 0 / Phase 1 routes (Lane D)
+**Lane:** W (Build Brief III)
+
+## Decision
+
+Public angler profiles stay off, permanently.
+
+Being the anti-Fishbrain is the differentiator; a public profile is the surface that erodes it. Nothing in the product needs one. Presence on `/feed` is the only public social surface — river, section, weather, nothing else.
 
 ## What these routes exposed
 
@@ -27,10 +33,12 @@ Left in place (already a redirect, not a profile): `/anglers/[username]/flies/[s
 
 ## What we did
 
-`/anglers`, `/anglers/[username]`, and `/anglers/[username]/flies` now call `notFound()` for everyone, including the owner. Implementations were not deleted, so the routes can be restored after a product decision.
+`/anglers`, `/anglers/[username]`, and `/anglers/[username]/flies` call `notFound()` for everyone, including the owner. Implementations (`ProfileClient.tsx` and any directory clients) are deleted. Thin route files remain so the URLs stay 404 with `robots: noindex`.
+
+Live `/anglers/${username}` hrefs on `/feed`, comments, notifications, session detail, and account follow tabs were removed or retargeted to `/account` (own follow counts only). Fly permalinks and `/flies/by-id` resolve to `/flies/[slug]`, not angler URLs.
 
 `robots.ts` already disallowed `/anglers/`. Sitemap never listed these URLs.
 
-## Open question for Taylor
+Follow graph and `like_count` stay. They are not aggregated into rankings or public totals.
 
-Should a public angler profile exist at all? If yes, which fields are allowed (display name / avatar / bio only)? Owner-only view of `/anglers/[username]` vs. keep 404 until a private profile lives under `/account`?
+`/feed` is unchanged except for the profile href removal. It reads `session_presence` (river, section, weather only) and is the only public social surface.

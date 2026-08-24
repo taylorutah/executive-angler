@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
 }
 
 /**
- * Public per-angler fly indexes are disabled with the parent profile route.
+ * Public per-angler fly indexes are retired with the parent profile route.
  * See docs/decisions/anglers-public-profiles.md.
  */
 export default function AnglerFliesPage() {

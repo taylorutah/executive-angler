@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Public angler directory is disabled pending a privacy decision.
+ * Public angler directory is retired permanently.
  * See docs/decisions/anglers-public-profiles.md.
  */
 export default function AnglersPage() {

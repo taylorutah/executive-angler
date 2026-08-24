@@ -744,18 +744,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 pb-6">
 
-          {/* Breadcrumb + Edit. Anonymous visitors landed here via a
-              shareable link, so "Back to Journal" (which requires auth)
-              would be a dead end — route them to the session owner's
-              public profile instead, matching Strava-style share flows. */}
+          {/* Breadcrumb + Edit. Session detail is owner/admin-only;
+              public profiles are retired, so never link out to /anglers. */}
           <div className="flex items-center justify-between mb-4">
             {isAnonymous && ownerProfile?.username ? (
-              <Link
-                href={`/anglers/${ownerProfile.username}`}
-                className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors"
-              >
+              <span className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
                 <ArrowLeft className="h-4 w-4" /> @{ownerProfile.username}
-              </Link>
+              </span>
             ) : (
               <Link href="/journal" className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
                 <ArrowLeft className="h-4 w-4" /> Back to Journal
@@ -791,13 +786,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </p>
 
                 {/* Session owner chip — only when viewing someone else's session. */}
-                {/* Mirrors iOS SessionDetailView (avatar + @username tap through to profile). */}
+                {/* Public profiles are retired; name/avatar are not links. */}
                 {!isOwner && ownerProfile && (ownerProfile.username || ownerProfile.display_name) && (
-                  <Link
-                    href={ownerProfile.username ? `/anglers/${ownerProfile.username}` : "#"}
-                    className="inline-flex items-center gap-2 mb-2 group/owner"
-                  >
-                    <span className="h-7 w-7 rounded-full overflow-hidden bg-[var(--action)]/15 flex items-center justify-center flex-shrink-0 group-hover/owner:ring-1 group-hover/owner:ring-[var(--action)] transition-all">
+                  <div className="inline-flex items-center gap-2 mb-2">
+                    <span className="h-7 w-7 rounded-full overflow-hidden bg-[var(--action)]/15 flex items-center justify-center flex-shrink-0">
                       {ownerProfile.avatar_url ? (
                         <Image
                           src={ownerProfile.avatar_url}
@@ -812,10 +804,10 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                         </span>
                       )}
                     </span>
-                    <span className="text-sm font-semibold text-[var(--action)] group-hover/owner:underline">
+                    <span className="text-sm font-semibold text-[var(--text-primary)]">
                       {ownerProfile.username ? `@${ownerProfile.username}` : (ownerProfile.display_name || "Angler")}
                     </span>
-                  </Link>
+                  </div>
                 )}
 
                 <h1 className="font-heading text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-tight mb-3 flex items-center gap-2 flex-wrap">
