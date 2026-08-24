@@ -163,8 +163,9 @@ export default async function DestinationsPage() {
                         meta={`${dest.region} · ${dest.country}`}
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 33vw"
+                        priority
+                        scrimClassName="bg-gradient-to-t from-black/80 via-black/40 to-black/10"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 pointer-events-none" />
                       <div className="absolute bottom-4 left-4 right-4">
                         <h3 className="font-heading text-xl font-bold text-white leading-tight">
                           {dest.name}

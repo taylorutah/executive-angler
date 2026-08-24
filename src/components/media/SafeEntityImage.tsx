@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import PlateFallback from "./PlateFallback";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 
 interface SafeEntityImageProps {
   src?: string | null;
@@ -16,6 +17,8 @@ interface SafeEntityImageProps {
   priority?: boolean;
   /** object-contain + padding for illustrations */
   contain?: boolean;
+  /** Overlay painted only after the photo has loaded. */
+  scrimClassName?: string;
 }
 
 /**
@@ -32,26 +35,36 @@ export default function SafeEntityImage({
   unoptimized,
   priority,
   contain,
+  scrimClassName,
 }: SafeEntityImageProps) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   if (!isUsableImageUrl(src) || failed) {
     return <PlateFallback title={title} meta={meta} />;
   }
 
   return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      unoptimized={unoptimized}
-      priority={priority}
-      sizes={sizes}
-      className={
-        className ??
-        (contain ? "object-contain p-3" : "object-cover")
-      }
-      onError={() => setFailed(true)}
-    />
+    <>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        unoptimized={unoptimized}
+        priority={priority}
+        sizes={sizes}
+        placeholder="blur"
+        blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+        className={
+          className ??
+          (contain ? "object-contain p-3" : "object-cover")
+        }
+        onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
+      />
+      {loaded && scrimClassName ? (
+        <div className={`absolute inset-0 pointer-events-none ${scrimClassName}`} />
+      ) : null}
+    </>
   );
 }

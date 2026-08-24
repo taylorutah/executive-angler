@@ -90,8 +90,8 @@ export default async function ArticlesPage() {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       priority
+                      scrimClassName="bg-gradient-to-t from-black/40 to-transparent"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
                     <span className="absolute top-4 left-4 px-3 py-1 bg-[var(--action)] text-white text-xs font-semibold uppercase tracking-wide rounded-full">
                       {heroArticle.category}
                     </span>
@@ -138,6 +138,7 @@ export default async function ArticlesPage() {
                           meta={`${article.category} · ${article.readingTimeMinutes} min`}
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, 50vw"
+                          priority={i < 2}
                         />
                         <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--action)] text-white text-[10px] font-semibold uppercase tracking-wide rounded-full">
                           {article.category}

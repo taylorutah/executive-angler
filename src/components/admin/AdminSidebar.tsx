@@ -17,6 +17,7 @@ import {
   Mail,
   Feather,
   Wrench,
+  Images,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -49,6 +50,12 @@ const photosLink: NavItem = {
   href: "/admin/photos",
   label: "Photos",
   icon: <Camera className="h-4 w-4" />,
+};
+
+const imageGapsLink: NavItem = {
+  href: "/admin/content/images",
+  label: "Image gaps",
+  icon: <Images className="h-4 w-4" />,
 };
 
 const emailPreviewLink: NavItem = {
@@ -107,6 +114,7 @@ export default function AdminSidebar() {
         <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
           Moderation
         </p>
+        <NavLink item={imageGapsLink} pathname={pathname} />
         <NavLink item={photosLink} pathname={pathname} />
         <NavLink
           item={{ href: "/admin/flies/submissions", label: "Fly Submissions", icon: <Feather className="h-4 w-4" /> }}
