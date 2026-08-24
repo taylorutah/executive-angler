@@ -412,7 +412,7 @@ async function reportFlyMacros(rows: Row[], dry: boolean): Promise<void> {
   const sb = makeClient();
   const { data, error } = await sb
     .from("canonical_flies")
-    .select("slug, name, sizes, option_envelope, hero_image_url");
+    .select("slug, name, sizes, hero_image_url");
   if (error) {
     console.log(`\nFly-macro check: could not read sizes (${error.message}). Flagging geometry only.`);
   }

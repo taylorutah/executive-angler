@@ -28,10 +28,6 @@ const SOURCES: {
   { entity: "species", table: "species", nameCol: "common_name", column: "image_url" },
 ];
 
-function isBlank(value: unknown): boolean {
-  return typeof value !== "string" || value.trim().length === 0;
-}
-
 function isUnsplash(url: string): boolean {
   try {
     return new URL(url).hostname === "images.unsplash.com";
@@ -50,12 +46,14 @@ export async function listImageGaps(): Promise<ImageGap[]> {
       .select(`id, slug, ${src.nameCol}, ${src.column}`);
     if (error) throw new Error(`${src.table}: ${error.message}`);
 
-    for (const rec of data ?? []) {
-      const raw = rec[src.column] as string | null;
+    const records = (data as unknown as Record<string, unknown>[] | null) ?? [];
+    for (const rec of records) {
+      const columnVal = rec[src.column];
+      const raw = typeof columnVal === "string" ? columnVal.trim() : "";
       const name = String(rec[src.nameCol] ?? "");
       const id = String(rec.id ?? "");
       const slug = String(rec.slug ?? "");
-      if (isBlank(raw)) {
+      if (!raw) {
         gaps.push({
           entity: src.entity,
           id,
@@ -67,7 +65,7 @@ export async function listImageGaps(): Promise<ImageGap[]> {
         });
         continue;
       }
-      const url = raw.trim();
+      const url = raw;
       if (isUnsplash(url)) {
         gaps.push({
           entity: src.entity,
