@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
@@ -20,6 +19,7 @@ import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import RiverLiveInset from "@/components/rivers/RiverLiveInset";
 import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
+import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { SITE_URL } from "@/lib/constants";
 import {
@@ -37,11 +37,6 @@ import {
   getApprovedPhotosByEntity,
   getRiversByDestination,
 } from "@/lib/db";
-
-const YourRecordHere = dynamic(
-  () => import("@/components/rivers/YourRecordHere"),
-  { ssr: false },
-);
 
 interface Props {
   params: Promise<{ slug: string }>;
