@@ -33,7 +33,7 @@ import { chromium, type Page } from "playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 
-const DEFAULT_ROUTES = [
+export const DEFAULT_ROUTES = [
   "/",
   "/rivers",
   "/rivers/madison-river",
@@ -42,13 +42,44 @@ const DEFAULT_ROUTES = [
   "/flies/library",
   "/flies/pheasant-tail",
   "/articles",
+  "/articles/introduction-to-euro-nymphing",
   "/guides",
+  "/guides/bud-lillys-guide-service",
   "/lodges",
+  "/lodges/firehole-ranch",
   "/fly-shops",
+  "/fly-shops/blue-ribbon-flies",
   "/species",
+  "/species/rainbow-trout",
   "/about",
+  "/contact",
+  "/for-guides",
+  "/feed",
   "/search",
+  "/search?q=green+river",
+  "/learn",
+  "/signup",
   "/login",
+  "/privacy",
+  "/terms",
+  "/flies",
+  "/flies/materials",
+  "/flies/hatch/caddis",
+  "/flies/for/madison-river",
+  "/flies/category/nymph",
+  "/authors",
+  "/gear",
+  "/ea-contrast-404-probe",
+] as const;
+
+export const DUSK_ROUTES = [
+  "/dashboard",
+  "/journal",
+  "/journal/insights",
+  "/flies/boxes",
+  "/account",
+  "/notifications",
+  "/messages",
 ] as const;
 
 const ROUTES = (process.env.CONTRAST_ROUTES
@@ -92,6 +123,11 @@ type Sample = {
 };
 
 /**
+ * Overlay exclusion uses the text element's own rect, not its container.
+ * A sibling photograph that covers the card but sits beside the text panel
+ * must not hide that panel. Exclude only when the layer overlaps more than
+ * half of the text rect (threshold 0.5 inside SAMPLE_PAGE).
+ *
  * Browser payload. Must remain a template literal whose contents contain
  * no backticks — a backtick in a comment here would terminate this string
  * and tsc would still pass.
@@ -233,7 +269,7 @@ export const SAMPLE_PAGE = `(() => {
         if (cs.visibility === "hidden" || cs.display === "none") continue;
         if (Number(cs.opacity) < 0.01) continue;
         var r = child.getBoundingClientRect();
-        if (overlapRatio(rect, r) < 0.9) continue;
+        if (overlapRatio(rect, r) <= 0.5) continue;
         if (!layerPaintsCss(child) && !layerHasRaster(child)) continue;
         if (!paintsBehind(child, el)) continue;
         seen.add(child);
@@ -390,11 +426,153 @@ async function samplePage(page: Page): Promise<Sample[]> {
   return page.evaluate(SAMPLE_PAGE);
 }
 
+const QA_EMAIL = process.env.QA_EMAIL ?? "test@executiveangler.com";
+const QA_PASSWORD = process.env.QA_PASSWORD ?? "TestEA2026!";
+
+async function hasAuthCookie(page: Page): Promise<boolean> {
+  const cookies = await page.context().cookies();
+  return cookies.some(
+    (c) => c.name.includes("-auth-token") || c.name.startsWith("sb-"),
+  );
+}
+
+async function signIn(page: Page): Promise<boolean> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (supabaseUrl && anonKey) {
+    try {
+      const res = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
+        method: "POST",
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: QA_EMAIL, password: QA_PASSWORD }),
+      });
+      if (res.ok) {
+        const session = (await res.json()) as {
+          access_token?: string;
+          refresh_token?: string;
+          expires_at?: number;
+          expires_in?: number;
+          token_type?: string;
+          user?: unknown;
+        };
+        const ref = new URL(supabaseUrl).hostname.split(".")[0];
+        const host = new URL(BASE).hostname;
+        await page.context().addCookies([
+          {
+            name: `sb-${ref}-auth-token`,
+            value: JSON.stringify({
+              access_token: session.access_token,
+              refresh_token: session.refresh_token,
+              expires_at: session.expires_at,
+              expires_in: session.expires_in,
+              token_type: session.token_type ?? "bearer",
+              user: session.user,
+            }),
+            domain: host,
+            path: "/",
+            httpOnly: false,
+            secure: BASE.startsWith("https"),
+            sameSite: "Lax",
+          },
+        ]);
+        await page.goto(`${BASE}/journal`, {
+          waitUntil: "domcontentloaded",
+          timeout: 45_000,
+        });
+        if (!page.url().includes("/login")) return true;
+      } else {
+        console.log(`QA grant HTTP ${res.status} — falling back to /login`);
+      }
+    } catch (err) {
+      console.log(`QA grant failed (${err}) — falling back to /login`);
+    }
+  }
+
+  await page.goto(`${BASE}/login`, { waitUntil: "load", timeout: 60_000 });
+  await page.locator("#email").fill(QA_EMAIL);
+  await page.locator("#password").fill(QA_PASSWORD);
+  await page
+    .waitForFunction(() => {
+      const button = document.querySelector<HTMLButtonElement>(
+        "form button[type='submit']",
+      );
+      return Boolean(button && !button.disabled);
+    }, { timeout: 25_000 })
+    .catch(() => undefined);
+  await page.locator("form button[type='submit']").click();
+  await page.waitForTimeout(2500);
+  return !page.url().includes("/login") || (await hasAuthCookie(page));
+}
+
 async function main() {
   const browser = await chromium.launch();
   const failures: Failure[] = [];
   const unverifiable: Unverifiable[] = [];
   let samples = 0;
+
+  async function auditRoute(
+    page: Page,
+    route: string,
+    vp: { name: string; width: number; height: number },
+    allow404 = false,
+  ) {
+    const url = `${BASE}${route}`;
+    const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
+    const status = res?.status() ?? 0;
+    const ok = allow404
+      ? status === 200 || status === 404
+      : Boolean(res && res.ok());
+    if (!ok) {
+      console.error(
+        `${route.padEnd(36)} @${vp.name.padStart(4)}  SKIP  HTTP ${status || "none"}`,
+      );
+      return;
+    }
+    // Transparent body = user-agent background (CSS not applied yet).
+    // Sampling then reports default link-blue on rgb(0,0,0).
+    await page.waitForFunction(() => {
+      const bg = getComputedStyle(document.body).backgroundColor;
+      return Boolean(bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent");
+    }, undefined, { timeout: 15_000 });
+    await page.waitForTimeout(200);
+    const found = await samplePage(page);
+    samples += found.length;
+    let routeFails = 0;
+    let routeUnver = 0;
+    for (const s of found) {
+      if (s.unverifiable) {
+        routeUnver += 1;
+        unverifiable.push({
+          route,
+          viewport: vp.name,
+          text: s.text,
+          selector: s.selector,
+          reason: s.reason,
+        });
+        continue;
+      }
+      if (s.ratio + 1e-9 < s.min) {
+        routeFails += 1;
+        failures.push({
+          route,
+          viewport: vp.name,
+          text: s.text,
+          ratio: s.ratio,
+          min: s.min,
+          fg: s.fg,
+          bg: s.bg,
+          selector: s.selector,
+        });
+      }
+    }
+    console.log(
+      `${route.padEnd(36)} @${vp.name.padStart(4)}  ${String(found.length).padStart(4)} samples  ${routeFails} fail  ${routeUnver} unverifiable`,
+    );
+  }
 
   try {
     for (const vp of VIEWPORTS) {
@@ -403,53 +581,41 @@ async function main() {
       });
       const page = await context.newPage();
       for (const route of ROUTES) {
-        const url = `${BASE}${route}`;
-        const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
-        if (!res || !res.ok()) {
-          console.error(`SKIP ${route} @${vp.name} — HTTP ${res?.status() ?? "no response"}`);
-          continue;
-        }
-        // Transparent body = user-agent background (CSS not applied yet).
-        // Sampling then reports default link-blue on rgb(0,0,0).
-        await page.waitForFunction(() => {
-          const bg = getComputedStyle(document.body).backgroundColor;
-          return Boolean(bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent");
-        }, undefined, { timeout: 15_000 });
-        await page.waitForTimeout(200);
-        const found = await samplePage(page);
-        samples += found.length;
-        let routeFails = 0;
-        let routeUnver = 0;
-        for (const s of found) {
-          if (s.unverifiable) {
-            routeUnver += 1;
-            unverifiable.push({
-              route,
-              viewport: vp.name,
-              text: s.text,
-              selector: s.selector,
-              reason: s.reason,
-            });
-            continue;
-          }
-          if (s.ratio + 1e-9 < s.min) {
-            routeFails += 1;
-            failures.push({
-              route,
-              viewport: vp.name,
-              text: s.text,
-              ratio: s.ratio,
-              min: s.min,
-              fg: s.fg,
-              bg: s.bg,
-              selector: s.selector,
-            });
-          }
-        }
-        console.log(
-          `${route.padEnd(28)} @${vp.name.padStart(4)}  ${String(found.length).padStart(4)} samples  ${routeFails} fail  ${routeUnver} unverifiable`,
-        );
+        await auditRoute(page, route, vp, route.includes("404-probe"));
       }
+
+      console.log(
+        `${"error.tsx".padEnd(36)} @${vp.name.padStart(4)}  SKIP  Next.js error boundary is not a crawlable route`,
+      );
+
+      const signedIn = await signIn(page);
+      if (signedIn) {
+        const dusk: string[] = [...DUSK_ROUTES];
+        await page.goto(`${BASE}/journal`, {
+          waitUntil: "domcontentloaded",
+          timeout: 45_000,
+        });
+        await page.waitForTimeout(600);
+        const sessionHref = await page.evaluate(() => {
+          const a = document.querySelector<HTMLAnchorElement>(
+            'a[href^="/journal/"]',
+          );
+          return a?.getAttribute("href") ?? "";
+        });
+        if (sessionHref && !sessionHref.startsWith("/journal/insights")) {
+          dusk.push(sessionHref);
+        } else {
+          console.log(
+            `${"/journal/[id]".padEnd(36)} @${vp.name.padStart(4)}  SKIP  no session`,
+          );
+        }
+        for (const route of dusk) {
+          await auditRoute(page, route, vp);
+        }
+      } else {
+        console.log(`dusk routes @${vp.name} SKIP  QA login failed`);
+      }
+
       await context.close();
     }
   } finally {
