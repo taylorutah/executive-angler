@@ -69,11 +69,11 @@ function formatTime(iso: string): string {
 }
 
 function getFlowLabel(cfs: number): { label: string; color: string } {
-  if (cfs < 100) return { label: "Low", color: "text-amber-400" };
-  if (cfs < 500) return { label: "Normal", color: "text-emerald-400" };
-  if (cfs < 2000) return { label: "Moderate", color: "text-blue-400" };
-  if (cfs < 5000) return { label: "High", color: "text-orange-400" };
-  return { label: "Flood Stage", color: "text-red-400" };
+  if (cfs < 100) return { label: "Low", color: "text-[var(--action)]" };
+  if (cfs < 500) return { label: "Normal", color: "text-[var(--state-positive)]" };
+  if (cfs < 2000) return { label: "Moderate", color: "text-[var(--signal-live)]" };
+  if (cfs < 5000) return { label: "High", color: "text-[var(--action)]" };
+  return { label: "Flood Stage", color: "text-[var(--state-negative)]" };
 }
 
 // Find the weather section that best matches a USGS gauge section name.
@@ -258,7 +258,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
         <>
           {/* Stale warning */}
           {active.stale && (
-            <div className="flex items-center gap-2 mb-3 p-2 bg-amber-500/10 rounded-lg text-xs text-amber-400">
+            <div className="flex items-center gap-2 mb-3 p-2 bg-[var(--surface-raised)] rounded-lg text-xs text-[var(--action)]">
               <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
               <span>Reading may be delayed — last update {formatTimestamp(active.timestamp)}</span>
             </div>
@@ -269,8 +269,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             {active.discharge && (
               <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                    <Waves className="h-4 w-4 text-blue-400" />
+                  <div className="w-9 h-9 rounded-lg bg-[var(--signal-live)]/10 flex items-center justify-center">
+                    <Waves className="h-4 w-4 text-[var(--signal-live)]" />
                   </div>
                   <div>
                     <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Streamflow</p>
@@ -304,8 +304,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             {active.waterTemp && (
               <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                    <Thermometer className="h-4 w-4 text-emerald-400" />
+                  <div className="w-9 h-9 rounded-lg bg-[var(--state-positive)]/10 flex items-center justify-center">
+                    <Thermometer className="h-4 w-4 text-[var(--state-positive)]" />
                   </div>
                   <div>
                     <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Water Temp</p>
@@ -334,8 +334,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center">
-                      <Thermometer className="h-4 w-4 text-sky-400" />
+                    <div className="w-9 h-9 rounded-lg bg-[var(--signal-live)]/10 flex items-center justify-center">
+                      <Thermometer className="h-4 w-4 text-[var(--signal-live)]" />
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Air Temp</p>
@@ -349,8 +349,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
 
                 <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center">
-                      <Wind className="h-4 w-4 text-violet-400" />
+                    <div className="w-9 h-9 rounded-lg bg-[var(--signal-live)]/10 flex items-center justify-center">
+                      <Wind className="h-4 w-4 text-[var(--signal-live)]" />
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Wind</p>
@@ -364,8 +364,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
 
                 <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-teal-500/10 flex items-center justify-center">
-                      <Droplets className="h-4 w-4 text-teal-400" />
+                    <div className="w-9 h-9 rounded-lg bg-[var(--signal-live)]/10 flex items-center justify-center">
+                      <Droplets className="h-4 w-4 text-[var(--signal-live)]" />
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Humidity</p>
@@ -378,8 +378,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
 
                 <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                      <Gauge className="h-4 w-4 text-amber-400" />
+                    <div className="w-9 h-9 rounded-lg bg-[var(--action)]/10 flex items-center justify-center">
+                      <Gauge className="h-4 w-4 text-[var(--action)]" />
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Barometric Pressure</p>
@@ -412,11 +412,11 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           <div className="space-y-3 relative">
             <div className="blur-[6px] select-none pointer-events-none space-y-3">
               {[
-                { icon: <Waves className="h-4 w-4 text-blue-400" />, bg: "bg-blue-500/10", label: "Streamflow", value: active.discharge ? `${active.discharge.value.toLocaleString()} cfs` : "--- cfs", badge: "Normal" },
+                { icon: <Waves className="h-4 w-4 text-[var(--signal-live)]" />, bg: "bg-[var(--signal-live)]/10", label: "Streamflow", value: active.discharge ? `${active.discharge.value.toLocaleString()} cfs` : "--- cfs", badge: "Normal" },
                 { icon: <ArrowUpDown className="h-4 w-4 text-[var(--action)]" />, bg: "bg-[var(--action)]/10", label: "Gage Height", value: active.gageHeight ? `${active.gageHeight.value} ft` : "-.-- ft" },
-                { icon: <Thermometer className="h-4 w-4 text-emerald-400" />, bg: "bg-emerald-500/10", label: "Water Temp", value: active.waterTemp ? `${active.waterTemp.valueFahrenheit}°F` : "--°F" },
-                { icon: <Thermometer className="h-4 w-4 text-sky-400" />, bg: "bg-sky-500/10", label: "Air Temp", value: "62°F feels like 58°F" },
-                { icon: <Gauge className="h-4 w-4 text-amber-400" />, bg: "bg-amber-500/10", label: "Barometric Pressure", value: "29.94 inHg" },
+                { icon: <Thermometer className="h-4 w-4 text-[var(--state-positive)]" />, bg: "bg-[var(--state-positive)]/10", label: "Water Temp", value: active.waterTemp ? `${active.waterTemp.valueFahrenheit}°F` : "--°F" },
+                { icon: <Thermometer className="h-4 w-4 text-[var(--signal-live)]" />, bg: "bg-[var(--signal-live)]/10", label: "Air Temp", value: "62°F feels like 58°F" },
+                { icon: <Gauge className="h-4 w-4 text-[var(--action)]" />, bg: "bg-[var(--action)]/10", label: "Barometric Pressure", value: "29.94 inHg" },
               ].map(({ icon, bg, label, value, badge }) => (
                 <div key={label} className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                   <div className="flex items-center gap-3">
@@ -426,7 +426,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
                       <p className="text-sm font-semibold text-[var(--text-primary)]">{value}</p>
                     </div>
                   </div>
-                  {badge && <span className="text-xs font-semibold text-emerald-400">{badge}</span>}
+                  {badge && <span className="text-xs font-semibold text-[var(--state-positive)]">{badge}</span>}
                 </div>
               ))}
             </div>

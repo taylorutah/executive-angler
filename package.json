@@ -16,6 +16,7 @@
     "audit:images": "npx tsx scripts/audit-images.ts",
     "test": "tsx --test src/lib/search/index.test.ts",
     "check:contrast": "npx tsx scripts/check-contrast.ts",
+    "check:contrast:rendered": "npx tsx scripts/check-contrast-rendered.ts",
     "check:hex": "npx tsx scripts/check-hex.ts",
     "codemod:tokens": "npx tsx scripts/codemod-tokens.ts"
   },

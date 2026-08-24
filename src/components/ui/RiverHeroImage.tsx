@@ -70,7 +70,7 @@ export default function RiverHeroImage({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white/90 text-xs font-medium hover:bg-black/80 transition-colors"
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--ink)] text-[var(--card)] text-xs font-medium hover:opacity-90 transition-opacity"
             aria-label={`View ${totalCount} photos`}
           >
             <Images className="h-3.5 w-3.5" />
@@ -85,13 +85,13 @@ export default function RiverHeroImage({
                 href={heroImageCreditUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-black/50 backdrop-blur-sm text-white/60 hover:text-white/90 transition-colors text-[10px] font-medium"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] hover:opacity-90 transition-opacity text-[10px] font-medium"
               >
                 <Camera className="h-2.5 w-2.5" />
                 {heroImageCredit}
               </a>
             ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-black/50 backdrop-blur-sm text-white/50 text-[10px] font-medium">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] text-[10px] font-medium">
                 <Camera className="h-2.5 w-2.5" />
                 {heroImageCredit}
               </span>
