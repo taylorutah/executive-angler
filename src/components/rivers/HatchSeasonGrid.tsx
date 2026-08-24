@@ -1,6 +1,4 @@
-import Link from "next/link";
-import type { CanonicalFly, HatchMonth } from "@/types/entities";
-import FlyBoxAddButton from "@/components/flies/FlyBoxAddButton";
+import type { HatchMonth } from "@/types/entities";
 
 const MONTHS = [
   "January",
@@ -45,14 +43,13 @@ function intensityClass(intensity?: Intensity): string {
 interface Props {
   hatchChart: HatchMonth[];
   bestMonths: string[];
-  flyByName: Map<string, CanonicalFly>;
 }
 
 /**
  * Seasonal hatch grid. Columns are the year; best months read as on
  * (filled headers), not as the leftover chips.
  */
-export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: Props) {
+export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
   const best = new Set(
     bestMonths.map(monthKey).filter((m): m is (typeof MONTHS)[number] => m != null),
   );
@@ -104,7 +101,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: P
         </ul>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)] bg-[var(--surface-card)]">
+      <div className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]">
         <table className="w-full min-w-[720px] border-collapse text-sm">
           <thead>
             <tr>
@@ -169,49 +166,6 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths, flyByName }: P
           </tbody>
         </table>
       </div>
-
-      <ul className="mt-5 space-y-2">
-        {hatchChart.flatMap((month) =>
-          month.hatches.map((hatch, hi) => {
-            const matchedFly = flyByName.get(hatch.pattern?.toLowerCase());
-            return (
-              <li
-                key={`${month.month}-${hatch.insect}-${hi}`}
-                className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-[var(--border-rule)] py-2 text-sm last:border-0"
-              >
-                <span className="w-20 shrink-0 text-[12px] font-semibold text-[var(--text-body)]">
-                  {month.month}
-                </span>
-                <span className="font-medium text-[var(--text-primary)]">{hatch.insect}</span>
-                {hatch.size ? (
-                  <span className="font-mono text-[12px] text-[var(--text-body)]">{hatch.size}</span>
-                ) : null}
-                {hatch.pattern ? (
-                  <span className="min-w-0 flex-1 text-[var(--text-body)]">
-                    {matchedFly ? (
-                      <Link href={`/flies/${matchedFly.slug}`} className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
-                        {hatch.pattern}
-                      </Link>
-                    ) : (
-                      hatch.pattern
-                    )}
-                  </span>
-                ) : null}
-                {matchedFly ? (
-                  <FlyBoxAddButton
-                    fly={{
-                      id: matchedFly.id,
-                      slug: matchedFly.slug,
-                      name: matchedFly.name,
-                    }}
-                    variant="icon"
-                  />
-                ) : null}
-              </li>
-            );
-          }),
-        )}
-      </ul>
     </div>
   );
 }

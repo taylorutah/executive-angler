@@ -12,8 +12,8 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
-import RiverAnglerIntel from "@/components/ui/RiverAnglerIntel";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
+import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
 import LazyFlowChart from "@/components/rivers/LazyFlowChart";
 import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
@@ -30,9 +30,7 @@ import {
   getLodgesByDestination,
   getGuidesByRiver,
   getFlyShopsByDestination,
-  getArticlesByRiver,
   getSpeciesByCommonNames,
-  getFliesForRiver,
   getAllCanonicalFlies,
   getApprovedPhotosByEntity,
   getRiversByDestination,
@@ -80,16 +78,14 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverArticles, riverSpecies, riverFlies, allFlies, galleryPhotos, destRivers] = await Promise.all([
+  const [dest, additionalDests, riverLodges, destLodges, nearbyGuides, destFlyShops, riverSpecies, allFlies, galleryPhotos, destRivers] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     Promise.all((river.additionalDestinationIds ?? []).map((id) => getDestinationById(id))),
     getLodgesByRiver(river.id),
     river.destinationId ? getLodgesByDestination(river.destinationId) : Promise.resolve([]),
     getGuidesByRiver(river.id),
     river.destinationId ? getFlyShopsByDestination(river.destinationId) : Promise.resolve([]),
-    getArticlesByRiver(river.id),
     getSpeciesByCommonNames(river.primarySpecies || []),
-    getFliesForRiver(river.id),
     getAllCanonicalFlies(),
     getApprovedPhotosByEntity("river", river.id),
     river.destinationId ? getRiversByDestination(river.destinationId) : Promise.resolve([]),
@@ -111,9 +107,16 @@ export default async function RiverPage({ params }: Props) {
       longitude: ap.longitude,
       title: ap.name,
       description: ap.description || (ap.parking ? "Parking available" : ""),
-      color: "#0E7C93",
     })),
   ];
+
+  const monthNow = new Date().toLocaleString("en-US", {
+    month: "long",
+    timeZone: "America/Denver",
+  });
+  const fishingNow = (river.hatchChart ?? []).find(
+    (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
+  )?.hatches ?? [];
 
   const heroSubtitle = [destinationLabel, (river.flowType ?? "").replace(/-/g, " ")]
     .filter(Boolean)
@@ -199,7 +202,7 @@ export default async function RiverPage({ params }: Props) {
                   .map((chip) => (
                     <span
                       key={chip}
-                      className="inline-flex items-center rounded-full border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-0.5 text-[12px] text-[var(--text-body)]"
+                      className="inline-flex items-center border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-0.5 text-[12px] text-[var(--text-body)]"
                     >
                       {chip}
                     </span>
@@ -243,6 +246,7 @@ export default async function RiverPage({ params }: Props) {
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
+          <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
           <BestWindowCalculator riverId={river.id} />
         </div>
       </section>
@@ -386,7 +390,6 @@ export default async function RiverPage({ params }: Props) {
               <HatchSeasonGrid
                 hatchChart={river.hatchChart}
                 bestMonths={river.bestMonths || []}
-                flyByName={flyByName}
               />
             </ScrollAnimation>
           )}
@@ -412,15 +415,15 @@ export default async function RiverPage({ params }: Props) {
                 markers={mapMarkers}
                 bounds={river.mapBounds}
                 tone="desk"
-                className="h-[450px] w-full overflow-hidden rounded-xl shadow-md"
+                className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
               />
-              <div className="mt-6 space-y-3">
+              <div className="mt-6 space-y-0 border-t border-[var(--border-rule)]">
                 {(river.accessPoints || []).map((ap, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 rounded-xl bg-[var(--surface-raised)] p-4 shadow-sm"
+                    className="flex items-start gap-3 border-b border-[var(--border-rule)] py-4"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--signal-live)] text-sm font-bold text-[var(--card)]">
+                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--border-rule)] bg-[var(--signal-live)] text-sm font-bold text-[var(--card)]">
                       {i + 1}
                     </div>
                     <div>
@@ -448,15 +451,52 @@ export default async function RiverPage({ params }: Props) {
             </div>
           </ScrollAnimation>
 
-          <ScrollAnimation>
-            <RiverAnglerIntel riverId={river.id} riverName={river.name} />
-          </ScrollAnimation>
+          {fishingNow.length > 0 && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-2 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                  Flies fishing now
+                </h2>
+                <p className="mb-5 text-sm text-[var(--text-body)]">
+                  {monthNow} on the hatch chart — names and sizes, not a catch report.
+                </p>
+                <ul className="border-t border-[var(--border-rule)]">
+                  {fishingNow.map((hatch, i) => {
+                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
+                    return (
+                      <li
+                        key={`${hatch.insect}-${hatch.pattern}-${i}`}
+                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border-rule)] py-3"
+                      >
+                        <span className="font-medium text-[var(--text-primary)]">{hatch.insect}</span>
+                        {hatch.size ? (
+                          <span className="font-mono text-[12px] text-[var(--text-body)]">{hatch.size}</span>
+                        ) : null}
+                        {hatch.pattern ? (
+                          matchedFly ? (
+                            <Link
+                              href={`/flies/${matchedFly.slug}`}
+                              className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                            >
+                              {hatch.pattern}
+                            </Link>
+                          ) : (
+                            <span className="text-[var(--text-body)]">{hatch.pattern}</span>
+                          )
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </ScrollAnimation>
+          )}
 
           <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 
           {river.regulations && (
             <ScrollAnimation>
-              <div className="rounded-xl border border-[var(--border-strong)] bg-[var(--surface-raised)] p-6">
+              <div className="border border-[var(--border-strong)] bg-[var(--surface-raised)] p-6">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--action)]" />
                   <div>
@@ -512,7 +552,7 @@ export default async function RiverPage({ params }: Props) {
                           <Link
                             key={guide.id}
                             href={`/guides/${guide.slug}`}
-                            className="block rounded-xl bg-[var(--surface-raised)] p-4 shadow-sm transition-colors hover:bg-[var(--surface-card)]"
+                            className="block border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 transition-colors hover:bg-[var(--surface-card)]"
                           >
                             <p className="text-sm font-medium text-[var(--text-primary)]">{guide.name}</p>
                             {guide.dailyRate ? (
@@ -534,7 +574,7 @@ export default async function RiverPage({ params }: Props) {
                           <Link
                             key={shop.id}
                             href={`/fly-shops/${shop.slug}`}
-                            className="card-hover flex items-center gap-4 rounded-xl bg-[var(--surface-raised)] p-4 shadow-sm"
+                            className="flex items-center gap-4 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4"
                           >
                             <Waves className="h-5 w-5 shrink-0 text-[var(--signal-live)]" />
                             <div>
@@ -577,7 +617,7 @@ export default async function RiverPage({ params }: Props) {
           )}
 
           <ScrollAnimation>
-            <div className="mb-5 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
+            <div className="border-t border-[var(--border-rule)] pt-8">
               <h2 className="mb-2 font-heading text-2xl font-bold text-[var(--text-primary)]">
                 Best flies for {river.name}
               </h2>
@@ -592,65 +632,6 @@ export default async function RiverPage({ params }: Props) {
               </Link>
             </div>
           </ScrollAnimation>
-
-          {riverFlies.length > 0 && (
-            <ScrollAnimation>
-              <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
-                Catalog flies tied to {river.name}
-              </h2>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                {riverFlies.slice(0, 8).map((fly) => (
-                  <Link
-                    key={fly.id}
-                    href={`/flies/${fly.slug}`}
-                    className="group flex items-center gap-2.5 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-2.5 transition-colors hover:border-[var(--action)]/40"
-                  >
-                    {fly.heroImageUrl ? (
-                      <img
-                        src={fly.heroImageUrl}
-                        alt={fly.name}
-                        className="h-8 w-8 shrink-0 rounded object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[var(--border-rule)]">
-                        <Fish className="h-3.5 w-3.5 text-[var(--text-meta)]" />
-                      </div>
-                    )}
-                    <div className="min-w-0">
-                      <p className="truncate text-xs font-semibold text-[var(--text-primary)] transition-colors group-hover:text-[var(--action)]">
-                        {fly.name}
-                      </p>
-                      <p className="truncate text-[10px] text-[var(--text-meta)]">
-                        {fly.category.charAt(0).toUpperCase() + fly.category.slice(1)}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </ScrollAnimation>
-          )}
-
-          {riverArticles.length > 0 && (
-            <ScrollAnimation>
-              <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
-                Reading for this river
-              </h2>
-              <div className="space-y-3">
-                {riverArticles.slice(0, 4).map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/articles/${article.slug}`}
-                    className="block rounded-xl bg-[var(--surface-raised)] p-4 shadow-sm transition-colors hover:bg-[var(--surface-card)]"
-                  >
-                    <p className="text-sm font-medium text-[var(--text-primary)]">{article.title}</p>
-                    <p className="mt-1 text-xs text-[var(--text-body)]">
-                      {article.readingTimeMinutes} min read
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </ScrollAnimation>
-          )}
         </div>
       </section>
     </>

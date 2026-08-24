@@ -507,7 +507,7 @@ function Metric({
   badgeClass?: string;
 }) {
   return (
-    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-3">
+    <div className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-3">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
           {icon}

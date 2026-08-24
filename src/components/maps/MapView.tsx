@@ -58,7 +58,7 @@ export default function MapView({
   longitude,
   zoom = 10,
   markers = [],
-  className = "h-[400px] w-full rounded-xl overflow-hidden",
+  className = "h-[400px] w-full overflow-hidden",
   bounds,
   tone = "default",
 }: MapViewProps) {
@@ -71,7 +71,9 @@ export default function MapView({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        const bg = tone === "desk" ? "var(--vellum)" : "var(--surface-card)";
+        const fg = "var(--text-meta)";
+        mapContainer.current.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:${bg};color:${fg};font-size:0.875rem">Map unavailable</div>`;
       }
       return;
     }
@@ -119,7 +121,11 @@ export default function MapView({
             }</div>`
           );
 
-          new mapboxgl.Marker({ color: marker.color || "#E8923A" })
+          const styles = getComputedStyle(document.documentElement);
+          const deskMarker = styles.getPropertyValue("--teal-700").trim() || "#0C7286";
+          new mapboxgl.Marker({
+            color: marker.color || (tone === "desk" ? deskMarker : "#E8923A"),
+          })
             .setLngLat([marker.longitude, marker.latitude])
             .setPopup(popup)
             .addTo(map.current!);

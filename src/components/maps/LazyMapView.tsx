@@ -34,8 +34,8 @@ export default function LazyMapView(props: MapProps) {
         <DynamicMapView {...props} />
       ) : (
         <div
-          className={props.className ?? "h-[400px] w-full rounded-xl"}
-          style={{ background: "var(--vellum)" }}
+          className={props.className ?? "h-[400px] w-full"}
+          style={{ background: props.tone === "desk" ? "var(--vellum)" : "var(--surface-card)" }}
           aria-hidden
         />
       )}

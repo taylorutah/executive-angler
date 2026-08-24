@@ -43,15 +43,15 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
   }, [riverId, user, authLoading]);
 
   if (authLoading || !user) return null;
-  if (loadState === "failed") return null;
+  if (loadState === "failed" || loadState === "loading" || !data) return null;
 
-  const timesFished = data?.totalSessions ?? 0;
-  const bestMonth = data?.bestMonth?.month ?? "—";
-  const topFly = data?.topFlyName ?? "—";
+  const timesFished = data.totalSessions ?? 0;
+  const bestMonth = data.bestMonth?.month ?? "—";
+  const topFly = data.topFlyName ?? "—";
 
   return (
     <section
-      className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-card)] p-5 sm:p-6"
+      className="border border-[var(--border-rule)] bg-[var(--surface-card)] p-5 sm:p-6"
       aria-label="Your record here"
     >
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
@@ -72,9 +72,7 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
         </Link>
       </div>
 
-      {loadState === "loading" || !data ? (
-        <div className="h-20 animate-pulse rounded-lg bg-[var(--surface-raised)]" />
-      ) : timesFished === 0 ? (
+      {timesFished === 0 ? (
         <p className="text-sm text-[var(--text-body)]">
           No sessions logged on {riverName} yet. The first one you save will fill in times fished, your best month, and your top fly.
         </p>
@@ -85,18 +83,17 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
           <Stat label="Your top fly" value={topFly} />
         </dl>
       )}
-
     </section>
   );
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-3">
+    <div className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-3">
       <dt className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-meta)]">
         {label}
       </dt>
-      <dd className="mt-1 font-heading text-xl font-semibold text-[var(--text-primary)]">
+      <dd className="num mt-1 font-heading text-xl font-semibold text-[var(--text-primary)]">
         {value}
       </dd>
     </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Images, Camera } from "lucide-react";
+import { Images } from "lucide-react";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
@@ -88,11 +88,27 @@ export default function RiverHeroImage({
               </p>
             ) : null}
             <h1
-              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white drop-shadow-lg"
+              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white"
               style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
             >
               {title}
             </h1>
+            {loaded && showPhoto && heroImageCredit ? (
+              <p className="mt-3 text-[11px] tracking-wide text-white/80">
+                {heroImageCreditUrl ? (
+                  <a
+                    href={heroImageCreditUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+                  >
+                    {heroImageCredit}
+                  </a>
+                ) : (
+                  heroImageCredit
+                )}
+              </p>
+            ) : null}
           </div>
         </div>
 
@@ -100,33 +116,12 @@ export default function RiverHeroImage({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[var(--card)] px-2.5 py-1.5 text-[11px] font-medium text-[var(--ink)] hover:opacity-90"
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 text-[11px] font-medium text-white/90 underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
             aria-label={`View ${totalCount} photos`}
           >
             <Images className="h-3.5 w-3.5" />
-            {totalCount} photos
+            {totalCount} photographs
           </button>
-        )}
-
-        {loaded && showPhoto && heroImageCredit && (
-          <div className="absolute bottom-3 right-3 z-10">
-            {heroImageCreditUrl ? (
-              <a
-                href={heroImageCreditUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--card)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)] hover:opacity-90"
-              >
-                <Camera className="h-2.5 w-2.5" />
-                {heroImageCredit}
-              </a>
-            ) : (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card)] px-2.5 py-1 text-[11px] font-medium text-[var(--ink)]">
-                <Camera className="h-2.5 w-2.5" />
-                {heroImageCredit}
-              </span>
-            )}
-          </div>
         )}
 
         {children && (
