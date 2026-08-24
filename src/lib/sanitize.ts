@@ -11,12 +11,13 @@ const ALLOWED_TAGS = [
   "table", "thead", "tbody", "tr", "th", "td",
   "figure", "figcaption",
   "div", "span",
+  "aside",
 ];
 
 const ALLOWED_ATTRIBUTES: sanitizeHtmlLib.IOptions["allowedAttributes"] = {
   a: ["href", "title", "target", "rel"],
   img: ["src", "alt", "width", "height", "loading"],
-  "*": ["class", "id"],
+  "*": ["id"],
 };
 
 export function sanitizeHtml(html: string): string {

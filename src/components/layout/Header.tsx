@@ -208,7 +208,7 @@ export default function Header() {
                     rel="noopener noreferrer"
                     variant="solid"
                     size="sm"
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
+                    className={`ea-btn-solid ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
                   >
                     Get the app
                   </Button>

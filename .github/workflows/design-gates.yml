@@ -17,4 +17,5 @@ jobs:
       - run: npm ci
       - run: npm run check:contrast
       - run: npm run check:hex
+      - run: npm run check:stored-html
       - run: npm test
