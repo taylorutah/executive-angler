@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import EntityListView from "@/components/ui/EntityListView";
 import { useAuth } from "@/lib/auth-context";
 import { flyListConfig } from "@/lib/list-configs";
@@ -61,6 +62,19 @@ export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
       storageKey="flies"
       liveValues={liveValues}
       showOptionalFilters={!isLoading && Boolean(user)}
+      toolbarExtra={
+        !user ? (
+          <p className="text-[13px] text-[var(--text-body)]">
+            <Link
+              href="/login?redirect=/flies/library"
+              className="text-[var(--action)] underline-offset-4 hover:underline"
+            >
+              Sign in
+            </Link>{" "}
+            to filter by what you can tie from your materials.
+          </p>
+        ) : null
+      }
     />
   );
 }

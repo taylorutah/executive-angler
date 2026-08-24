@@ -52,6 +52,7 @@ export const destinationListConfig: EntityListConfig = {
   ],
   defaultSort: "featured",
   defaultView: "grid",
+  availableViews: ["grid", "compact", "list", "magazine"],
   searchPlaceholder: "Search destinations...",
   pageSize: 24,
 };
@@ -147,6 +148,7 @@ export const riverListConfig: EntityListConfig = {
   ],
   defaultSort: "featured",
   defaultView: "grid",
+  availableViews: ["grid", "compact", "list", "magazine"],
   searchPlaceholder: "Search rivers...",
   pageSize: 24,
 };
@@ -320,6 +322,7 @@ export const flyListConfig: EntityListConfig = {
   ],
   defaultSort: "rank",
   defaultView: "grid",
+  availableViews: ["grid", "compact", "list", "magazine"],
   searchPlaceholder: "Search flies...",
   pageSize: 24,
 };

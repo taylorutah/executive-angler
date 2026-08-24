@@ -102,13 +102,13 @@ export default function ListToolbar({
     <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[var(--surface-page)] border-b border-[var(--border-rule)]/60 mb-8">
       {onSearchChange && (
         <div className="relative mb-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-body)]" />
           <input
             type="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder={searchPlaceholder ?? "Search..."}
-            className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] transition-colors"
+            className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
           />
           {localSearch && (
             <button
@@ -133,7 +133,7 @@ export default function ListToolbar({
             aria-expanded={filtersOpen}
             aria-controls="browse-filter-panel"
             onClick={() => setFiltersOpen(!filtersOpen)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border ${
               filtersOpen || hasActiveFilters
                 ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
                 : "bg-[var(--surface-raised)] text-[var(--text-body)] border-[var(--border-rule)] hover:border-[var(--action)]"
@@ -161,14 +161,14 @@ export default function ListToolbar({
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <span className="text-xs text-[var(--text-meta)] hidden sm:inline" aria-live="polite">
+          <span className="hidden text-xs text-[var(--text-body)] sm:inline" aria-live="polite">
             {filteredCount === totalCount
               ? `${totalCount} results`
               : `${filteredCount} of ${totalCount}`}
           </span>
 
           <div
-            className="flex items-center gap-0.5 border border-[var(--border-rule)] rounded-lg p-0.5 bg-[var(--surface-raised)]"
+            className="flex items-center gap-0.5 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-0.5"
             role="group"
             aria-label="View density"
           >
@@ -180,10 +180,10 @@ export default function ListToolbar({
                 aria-label={label}
                 aria-pressed={viewMode === mode}
                 title={label}
-                className={`p-1.5 rounded-md transition-colors ${
+                className={`p-1.5 ${
                   viewMode === mode
                     ? "bg-[var(--action)]/10 text-[var(--action)]"
-                    : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                    : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -199,7 +199,7 @@ export default function ListToolbar({
               id="browse-sort"
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] cursor-pointer"
+              className="appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] cursor-pointer"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -220,7 +220,7 @@ export default function ListToolbar({
             const ui = dimensionUi(dimension);
             return (
               <div key={dimension.key} className="flex flex-wrap items-center gap-2">
-                <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider font-medium w-20 shrink-0">
+                <span className="w-20 shrink-0 text-xs font-medium uppercase tracking-wider text-[var(--text-body)]">
                   {dimension.label}
                 </span>
                 {ui === "select" ? (
@@ -230,7 +230,7 @@ export default function ListToolbar({
                     onChange={(e) =>
                       onFilterChange(dimension.key, e.target.value || null)
                     }
-                    className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] rounded-lg px-3 py-1.5 text-sm min-w-[10rem] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
+                    className="min-w-[10rem] border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--signal-live)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30"
                   >
                     <option value="">All</option>
                     {dimension.options.map((opt) => (
@@ -244,10 +244,10 @@ export default function ListToolbar({
                     <button
                       type="button"
                       onClick={() => onFilterChange(dimension.key, null)}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                      className={`whitespace-nowrap px-3 py-1.5 text-sm font-medium ${
                         !activeFilters[dimension.key]
-                          ? "bg-[var(--action)] text-[var(--on-action)] shadow-sm"
-                          : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
+                          ? "bg-[var(--action)] text-[var(--on-action)]"
+                          : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
                       }`}
                     >
                       All
@@ -262,10 +262,10 @@ export default function ListToolbar({
                             activeFilters[dimension.key] === opt.value ? null : opt.value,
                           )
                         }
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                        className={`whitespace-nowrap px-3 py-1.5 text-sm font-medium ${
                           activeFilters[dimension.key] === opt.value
-                            ? "bg-[var(--action)] text-[var(--on-action)] shadow-sm"
-                            : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--action)]/10 hover:text-[var(--action)] border border-[var(--border-rule)]"
+                            ? "bg-[var(--action)] text-[var(--on-action)]"
+                            : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
                         }`}
                       >
                         {opt.label}

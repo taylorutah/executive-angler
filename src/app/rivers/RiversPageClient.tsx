@@ -218,14 +218,14 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
       onFiltersOpenChange={setFiltersOpen}
       toolbarExtra={
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-[var(--text-meta)] uppercase tracking-wider font-medium w-20 shrink-0">
+          <span className="w-20 shrink-0 text-xs font-medium uppercase tracking-wider text-[var(--text-body)]">
             Near me
           </span>
           <button
             type="button"
             onClick={handleNearMe}
             disabled={locating}
-            className="px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--action)] text-[var(--action)] hover:bg-[var(--action)] hover:text-[var(--on-action)] transition-colors disabled:opacity-50"
+            className="border border-[var(--action)] px-3 py-1.5 text-sm font-medium text-[var(--action)] hover:bg-[var(--action)] hover:text-[var(--on-action)] disabled:opacity-50"
           >
             {locating ? "Locating…" : "Use location"}
           </button>
@@ -238,13 +238,13 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             placeholder="ZIP"
             maxLength={5}
             aria-label="ZIP code"
-            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] rounded-lg px-3 py-1.5 text-sm w-24 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
+            className="w-24 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] focus:border-[var(--signal-live)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30"
           />
           <button
             type="button"
             onClick={handleZipSearch}
             disabled={zipLoading || !zipInput.trim()}
-            className="px-3 py-1.5 rounded-lg text-sm border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)] disabled:opacity-40"
+            className="border border-[var(--border-rule)] px-3 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)] disabled:opacity-40"
           >
             {zipLoading ? "…" : "Go"}
           </button>
@@ -252,9 +252,9 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             type="button"
             aria-pressed={showMap}
             onClick={() => setShowMap((v) => !v)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+            className={`border px-3 py-1.5 text-sm font-medium ${
               showMap
-                ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
+                ? "border-[var(--action)] bg-[var(--action)] text-[var(--on-action)]"
                 : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]"
             }`}
           >
@@ -271,10 +271,10 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
                 rivers={mapRivers}
                 selectedState={selectedStateObj}
                 userLocation={userLocation}
-                className="w-full h-full rounded-xl overflow-hidden"
+                className="h-full w-full overflow-hidden"
               />
             </div>
-            <p className="mt-3 text-sm text-[var(--text-meta)]">
+            <p className="mt-3 text-sm text-[var(--text-body)]">
               {mapRivers.length} river{mapRivers.length === 1 ? "" : "s"} on the map
               {nearbyIds.size > 0 ? " · within about 200 miles" : ""}
             </p>

@@ -297,7 +297,7 @@ export default function EntityListView({
                 <EntityCard
                   key={item.href}
                   href={item.href}
-                  imageUrl={item.imageUrl || "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"}
+                  imageUrl={item.imageUrl}
                   imageAlt={item.imageAlt}
                   title={item.title}
                   subtitle={item.subtitle}
@@ -319,7 +319,7 @@ export default function EntityListView({
           <button
             type="button"
             onClick={() => setVisibleCount((n) => n + (pageSize ?? 24))}
-            className="px-5 py-2.5 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] text-sm font-medium text-[var(--text-primary)] hover:border-[var(--action)] hover:text-[var(--action)] transition-colors"
+            className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-5 py-2.5 text-sm font-medium text-[var(--text-primary)] hover:border-[var(--action)] hover:text-[var(--action)]"
           >
             Load more
             <span className="num text-[var(--text-meta)] ml-2">
