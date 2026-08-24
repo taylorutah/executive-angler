@@ -221,11 +221,11 @@ export default async function FliesForRiverPage({ params }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Hatch-chart pattern list
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl font-bold text-[var(--text-primary)]">
             Best Flies for {river.name}
             {h1Place}
           </h1>
-          <p className="mt-5 text-lg text-white/75 leading-relaxed">{uniqueLede(river, place)}</p>
+          <p className="mt-5 text-lg text-[var(--text-body)] leading-relaxed">{uniqueLede(river, place)}</p>
           <p className="mt-4 text-sm text-[var(--text-meta)]">
             This is not a live report of other anglers&apos; catches. Presence and flow live on the{" "}
             <Link href={`/rivers/${river.slug}`} className="text-[var(--action)] hover:underline">

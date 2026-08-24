@@ -398,12 +398,18 @@ async function main() {
       const page = await context.newPage();
       for (const route of ROUTES) {
         const url = `${BASE}${route}`;
-        const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+        const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
         if (!res || !res.ok()) {
           console.error(`SKIP ${route} @${vp.name} — HTTP ${res?.status() ?? "no response"}`);
           continue;
         }
-        await page.waitForTimeout(400);
+        // Transparent body = user-agent background (CSS not applied yet).
+        // Sampling then reports default link-blue on rgb(0,0,0).
+        await page.waitForFunction(() => {
+          const bg = getComputedStyle(document.body).backgroundColor;
+          return Boolean(bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent");
+        }, undefined, { timeout: 15_000 });
+        await page.waitForTimeout(200);
         const found = await samplePage(page);
         samples += found.length;
         let routeFails = 0;

@@ -103,10 +103,10 @@ export default async function LodgesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Premier Accommodations
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Stay Where the Fishing Is Finest
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
             World-class lodges at the world&apos;s greatest fisheries — from remote Alaskan
             fly-outs to Scottish castle beats.
           </p>

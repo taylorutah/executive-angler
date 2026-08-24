@@ -61,10 +61,10 @@ export default async function GuidesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Expert Voices
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Your Guide Makes the Trip
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
             {guides.length} certified professionals with decades of experience on the
             world&apos;s most storied waters.
           </p>

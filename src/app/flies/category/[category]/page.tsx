@@ -125,10 +125,10 @@ export default async function FlyCategoryPage({ params }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Fly Library
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             {label}
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
             {description}
           </p>
           <p className="mt-3 text-sm text-[var(--text-meta)]">

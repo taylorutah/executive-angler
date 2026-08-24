@@ -59,10 +59,10 @@ export default async function ArticlesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Insights &amp; Stories
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Stories from the Water
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
             Expert instruction, destination dispatches, and stories from the world's greatest
             fisheries — curated for the discerning fly fisher.
           </p>

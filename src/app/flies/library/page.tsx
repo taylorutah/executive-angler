@@ -105,10 +105,10 @@ export default async function FliesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             The Complete Reference
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Trout Fly Library
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
             {allFlies.length} proven patterns — dry flies, nymphs, streamers,
             emergers, and more. Every pattern includes sizes, materials, tying
             videos, and where to fish it.

@@ -154,10 +154,10 @@ export default async function HatchInsectPage({ params }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Hatch Imitations
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Flies That Imitate {displayName}
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
             {flies.length} proven pattern{flies.length !== 1 ? "s" : ""} designed
             to match {displayName.toLowerCase()} across multiple life stages.
             From subsurface nymphs to surface duns, these are the flies that

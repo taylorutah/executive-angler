@@ -74,10 +74,10 @@ export default async function RiversPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
             Legendary Waters
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Rivers That Define the Sport
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-white/70 leading-relaxed">
+          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
             {rivers.length} rivers documented from source to sea — access points, hatch charts,
             and everything a serious angler needs.
           </p>
