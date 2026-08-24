@@ -293,8 +293,8 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 25vw"
                   priority={i < 4}
+                  scrimClassName="bg-gradient-to-t from-black/70 via-black/20 to-transparent"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-2 left-2">
                   <span
                     className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide ${
@@ -382,8 +382,8 @@ export default function RiversPageClient({ rivers }: RiversPageClientProps) {
                       meta={[river.flowType, DESTINATION_STATE_MAP[river.destinationId ?? ""]].filter(Boolean).join(" · ")}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, 25vw"
+                      scrimClassName="bg-gradient-to-t from-black/70 via-black/20 to-transparent"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     {river.dist != null && (
                       <div className="absolute top-2 right-2">
                         <span className="bg-black/60 text-[var(--action)] text-[10px] font-mono px-1.5 py-0.5 rounded-full">
