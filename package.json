@@ -15,7 +15,7 @@
     "dedup-flies": "npx tsx scripts/dedup-flies.ts",
     "audit:images": "npx tsx scripts/audit-images.ts",
     "ingest:images": "npx tsx scripts/ingest-images.ts",
-    "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/register.test.ts src/lib/media/licence.test.ts src/lib/media/phase2-hosts.test.ts src/components/home/conditions.test.ts src/components/home/homepage-images.test.ts src/lib/browse/match.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts scripts/check-home-rail.test.ts",
+    "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/register.test.ts src/lib/media/licence.test.ts src/lib/media/phase2-hosts.test.ts src/components/home/conditions.test.ts src/components/home/homepage-images.test.ts src/lib/browse/match.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts scripts/check-home-rail.test.ts src/app/learn/keep-response.test.ts",
     "check:home-rail": "npx tsx scripts/check-home-rail.ts",
     "check:homepage-images": "npx tsx scripts/check-homepage-images.ts",
     "check:image-hosts": "npx tsx scripts/check-image-hosts.ts",

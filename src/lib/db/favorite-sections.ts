@@ -95,6 +95,50 @@ export async function listMyFavoriteSections(): Promise<FavoriteSection[]> {
   return result;
 }
 
+/**
+ * Rivers the user asked to keep (heart / Learn "Keep this list") that are not
+ * already a pinned section. `/favorites` permanently redirects to
+ * `/rivers/mine`, so this list is the only surface those rows have.
+ * Today still reads `listMyFavoriteSections` only — no gauge, no flow.
+ */
+export async function listMyFavoritedRiversMissingSections(): Promise<FavoriteSection[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data: favs, error: favError } = await supabase
+    .from("user_favorites")
+    .select("entity_id")
+    .eq("user_id", user.id)
+    .eq("entity_type", "river");
+  if (favError || !favs?.length) return [];
+
+  const { data: sectionRows } = await supabase
+    .from("user_favorite_sections")
+    .select("river_id")
+    .eq("user_id", user.id);
+  const covered = new Set((sectionRows ?? []).map((r) => r.river_id));
+  const missingIds = [...new Set(favs.map((f) => f.entity_id).filter((id) => !covered.has(id)))];
+  if (missingIds.length === 0) return [];
+
+  const { data: rivers } = await supabase
+    .from("rivers")
+    .select("id, name, slug")
+    .in("id", missingIds);
+  if (!rivers?.length) return [];
+
+  return rivers.map((r) => ({
+    id: `favorite:${r.id}`,
+    river_id: r.id,
+    river_name: r.name,
+    river_slug: r.slug,
+    usgs_site_id: "",
+    section_name: "",
+    gauge_name: "",
+    position: Number.MAX_SAFE_INTEGER,
+  }));
+}
+
 /** Insert a favorite section at the end of the user's list. */
 export async function addFavoriteSection(
   riverId: string,
@@ -124,7 +168,19 @@ export async function addFavoriteSection(
     .select("id")
     .single();
 
-  if (error) return { error: error.message };
+  if (error) {
+    if (error.code === "23505") {
+      const { data: existing } = await supabase
+        .from("user_favorite_sections")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("river_id", riverId)
+        .eq("usgs_site_id", usgsSiteId)
+        .maybeSingle();
+      if (existing?.id) return { id: existing.id };
+    }
+    return { error: error.message };
+  }
   return { id: data.id };
 }
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { listMyFavoriteSections } from "@/lib/db/favorite-sections";
+import { listMyFavoriteSections, listMyFavoritedRiversMissingSections } from "@/lib/db/favorite-sections";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,10 @@ export default async function MyRiversPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/rivers/mine");
 
-  const sections = await listMyFavoriteSections();
+  const sections = [
+    ...(await listMyFavoriteSections()),
+    ...(await listMyFavoritedRiversMissingSections()),
+  ];
 
   return (
     <article className="min-h-[70vh] bg-[var(--surface-page)]">

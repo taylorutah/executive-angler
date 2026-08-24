@@ -16,6 +16,7 @@ import {
   WATER_FEATURES,
 } from "./data";
 import type { LearnFly, LearnRiver } from "./types";
+import { primaryGauge } from "@/components/home/conditions";
 
 // Register: Daylight throughout, by omission from DUSK_PREFIXES in src/lib/register.ts.
 // /learn is an essay plus two lists, not a workbench — no live-data insets, no
@@ -56,6 +57,7 @@ function toLearnRiver(
     primarySpecies: string[];
     latitude: number;
     longitude: number;
+    usgsGaugeId?: string | null;
   },
   destName: string,
 ): LearnRiver {
@@ -70,6 +72,7 @@ function toLearnRiver(
     excerpt: firstSentence(river.description),
     latitude: river.latitude,
     longitude: river.longitude,
+    usgsSiteId: primaryGauge(river.usgsGaugeId, river.name)?.siteId ?? null,
   };
 }
 

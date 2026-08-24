@@ -5,12 +5,64 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/lib/auth-context";
+import { keepResponseOk } from "./keep-response";
 import type { LearnFly, LearnRiver } from "./types";
 
 type Props = {
   flies: LearnFly[];
   rivers: LearnRiver[];
 };
+
+async function postKeep(url: string, body: unknown): Promise<void> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (res.ok) return;
+  const json = (await res.json().catch(() => ({}))) as { error?: string };
+  if (keepResponseOk(res.status, json.error)) return;
+  throw new Error(json.error || `HTTP ${res.status}`);
+}
+
+async function keepFly(flyId: string): Promise<void> {
+  const existing = await fetch(
+    `/api/fishing/fly-configurations?fly_id=${encodeURIComponent(flyId)}`,
+  );
+  if (!existing.ok) {
+    throw new Error(`fly lookup HTTP ${existing.status}`);
+  }
+  const json = (await existing.json()) as {
+    configurations?: Array<{ id: string; is_favorite?: boolean }>;
+  };
+  const row = json.configurations?.[0];
+  if (row?.id) {
+    if (row.is_favorite) return;
+    const patch = await fetch("/api/fishing/fly-configurations", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: row.id, is_favorite: true }),
+    });
+    if (!patch.ok) throw new Error(`fly patch HTTP ${patch.status}`);
+    return;
+  }
+  const created = await fetch("/api/fishing/fly-configurations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fly_id: flyId, is_favorite: true }),
+  });
+  if (!created.ok) throw new Error(`fly create HTTP ${created.status}`);
+}
+
+async function keepRiver(river: LearnRiver): Promise<void> {
+  await postKeep("/api/favorites", { entity_type: "river", entity_id: river.id });
+  if (river.usgsSiteId) {
+    await postKeep("/api/dashboard/favorite-sections", {
+      riverId: river.id,
+      usgsSiteId: river.usgsSiteId,
+    });
+  }
+}
 
 export default function KeepList({ flies, rivers }: Props) {
   const { user, isLoading } = useAuth();
@@ -25,41 +77,7 @@ export default function KeepList({ flies, rivers }: Props) {
     }
     setState("saving");
     try {
-      const riverPosts = rivers.map((r) =>
-        fetch("/api/favorites", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ entity_type: "river", entity_id: r.id }),
-        }),
-      );
-
-      const flyPosts = flies.map(async (f) => {
-        const existing = await fetch(
-          `/api/fishing/fly-configurations?fly_id=${encodeURIComponent(f.id)}`,
-        );
-        if (existing.ok) {
-          const json = (await existing.json()) as {
-            configurations?: Array<{ id: string; is_favorite?: boolean }>;
-          };
-          const row = json.configurations?.[0];
-          if (row?.id) {
-            if (row.is_favorite) return;
-            await fetch("/api/fishing/fly-configurations", {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ id: row.id, is_favorite: true }),
-            });
-            return;
-          }
-        }
-        await fetch("/api/fishing/fly-configurations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fly_id: f.id, is_favorite: true }),
-        });
-      });
-
-      await Promise.all([...riverPosts, ...flyPosts]);
+      await Promise.all([...rivers.map(keepRiver), ...flies.map((f) => keepFly(f.id))]);
       setState("kept");
     } catch {
       setState("error");

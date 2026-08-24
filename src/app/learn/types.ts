@@ -20,4 +20,6 @@ export type LearnRiver = {
   excerpt: string;
   latitude: number;
   longitude: number;
+  /** Primary USGS site when the river has a gauge — used to pin My Rivers. */
+  usgsSiteId: string | null;
 };
