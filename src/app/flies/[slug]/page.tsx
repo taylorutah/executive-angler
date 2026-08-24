@@ -189,7 +189,7 @@ export default async function FlyDetail({ params }: Props) {
           </dl>
 
           {fly.description && (
-            <p className="mt-6 text-[15px] leading-relaxed text-[var(--text-body)]">
+            <p className="mt-6 max-w-[68ch] text-[15px] leading-relaxed text-[var(--text-body)]">
               {fly.description}
             </p>
           )}
@@ -207,11 +207,9 @@ export default async function FlyDetail({ params }: Props) {
         <Recipe materials={linkedMaterials} notes={fly.recipe_notes} />
 
         {fly.tying_overview && (
-          <section className="mt-12 max-w-[68ch]">
-            <h2 className="font-heading text-2xl text-[var(--text-primary)]">At the vise</h2>
-            <p className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-[var(--text-body)]">
-              {fly.tying_overview}
-            </p>
+          <section className="prose mt-12">
+            <h2>At the vise</h2>
+            <p className="whitespace-pre-line">{fly.tying_overview}</p>
           </section>
         )}
 
@@ -335,9 +333,9 @@ function Recipe({
         <p className="mt-3 text-[15px] text-[var(--text-body)]">Recipe not filled in yet.</p>
       )}
       {notes && (
-        <p className="mt-4 max-w-[68ch] whitespace-pre-line text-[14px] leading-relaxed text-[var(--text-body)]">
-          {notes}
-        </p>
+        <div className="prose mt-6">
+          <p className="whitespace-pre-line">{notes}</p>
+        </div>
       )}
     </section>
   );

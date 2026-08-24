@@ -252,7 +252,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                             disabled={busyKey === row.key || row.stock === 0}
                             onClick={() => setTied(row, (row.stock ?? 0) - 1)}
                             aria-label={`Remove one ${flyName} ${row.size}`}
-                            className="inline-flex h-7 w-7 items-center justify-center rounded border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
+                            className="inline-flex h-7 w-7 items-center justify-center border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
                           >
                             −
                           </button>
@@ -264,7 +264,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                             disabled={busyKey === row.key}
                             onClick={() => setTied(row, (row.stock ?? 0) + 1)}
                             aria-label={`Add one ${flyName} ${row.size}`}
-                            className="inline-flex h-7 w-7 items-center justify-center rounded border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
+                            className="inline-flex h-7 w-7 items-center justify-center border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
                           >
                             +
                           </button>
@@ -274,7 +274,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                           type="button"
                           disabled={!!busyKey}
                           onClick={() => addSize(row.size)}
-                          className="rounded bg-[var(--action)] px-2.5 py-1 text-[12px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:opacity-50"
+                          className="bg-[var(--action)] px-2.5 py-1 text-[12px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:opacity-50"
                         >
                           {busyKey === row.size ? "Adding…" : "Add"}
                         </button>
@@ -317,7 +317,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                     <button
                       type="button"
                       onClick={() => addSize(picker.size, b.id)}
-                      className="flex w-full items-center justify-between rounded border border-[var(--border-rule)] px-3 py-2 text-left text-[13px] hover:border-[var(--action)]"
+                      className="flex w-full items-center justify-between border border-[var(--border-rule)] px-3 py-2 text-left text-[13px] hover:border-[var(--action)]"
                     >
                       <span>{b.name}</span>
                       {b.tier && (
