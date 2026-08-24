@@ -135,6 +135,7 @@ export const riverListConfig: EntityListConfig = {
       key: "near",
       label: "Near me",
       match: "flag",
+      ui: "hidden",
       options: [{ value: "1", label: "Near me" }],
     },
   ],

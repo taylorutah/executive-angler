@@ -8,8 +8,8 @@ export interface FilterDimension {
   options: FilterOption[];
   /** Default exact — historical EntityListView behavior. */
   match?: FilterMatch;
-  /** chips when short; select when the option list is long. */
-  ui?: "chips" | "select";
+  /** chips when short; select when the option list is long. hidden = match-only. */
+  ui?: "chips" | "select" | "hidden";
   /** Hide unless the page says the viewer is signed in. */
   when?: "always" | "authenticated";
 }
