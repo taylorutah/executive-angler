@@ -595,7 +595,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
           <div className="mb-4">
             <TipCard storageKey="journal-feed-intro" title="Your fishing journal">
               <p>Every logged session shows up here. Tap a card to dive in — catches, photos, weather, notes, and kudos from people you follow.</p>
-              <p className="text-[var(--text-meta)]">Toggle <span className="text-[var(--text-primary)] font-semibold">List</span> / <span className="text-[var(--text-primary)] font-semibold">Calendar</span> above. Filter by river, year, or location tag in the sidebar.</p>
+              <p className="text-[var(--text-meta)]">Toggle <span className="text-[var(--text-primary)] font-semibold">List</span>, <span className="text-[var(--text-primary)] font-semibold">Calendar</span>, or <span className="text-[var(--text-primary)] font-semibold">Table</span> above. Filter by river, year, or location tag in the sidebar.</p>
             </TipCard>
           </div>
 

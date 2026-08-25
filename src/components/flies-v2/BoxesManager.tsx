@@ -40,7 +40,7 @@ function BoxStatLine({ stats }: { stats?: BoxStats }) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
   return (
-    <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[#484F58]">
+    <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[var(--text-meta)]">
       <span className="text-[var(--text-meta)]">{stats.total} flies</span>
       {top.map(([cat, count]) => (
         <span key={cat}>

@@ -38,6 +38,15 @@ export default function WorkbenchFilter({
         ref={inputRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          // Esc in a filter box clears the box. The grid's own Esc still means
+          // "drop the selection" — this only fires while the field has focus,
+          // and the query has to go somewhere before the grid gets a turn.
+          if (e.key !== "Escape") return;
+          e.stopPropagation();
+          if (value) onChange("");
+          else e.currentTarget.blur();
+        }}
         placeholder={placeholder}
         data-workbench-filter="true"
         className={`ea-focus-ring w-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1.5 pr-7 text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] ${FOCUS_VISIBLE}`}
