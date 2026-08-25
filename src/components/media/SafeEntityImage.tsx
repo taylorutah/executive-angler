@@ -56,6 +56,7 @@ export default function SafeEntityImage({
         unoptimized={unoptimized}
         priority={priority}
         loading={loading}
+        fetchPriority={priority ? "high" : undefined}
         sizes={sizes}
         placeholder="blur"
         blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}

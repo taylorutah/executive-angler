@@ -26,6 +26,7 @@ const fraunces = Fraunces({
 const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   variable: "--font-newsreader",
   style: ["normal", "italic"],
   axes: ["opsz"],
@@ -42,6 +43,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["400", "600"],
   variable: "--font-ibm-plex-mono",
   display: "swap",
+  preload: false,
 });
 
 const GA_MEASUREMENT_ID = "G-RY19PKC2WQ";
