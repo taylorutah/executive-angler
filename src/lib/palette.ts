@@ -5,13 +5,16 @@
  * (Mapbox, OG images, Recharts fallbacks, global-error).
  */
 
-export const PAPER = "#F8F6F4";
+export const PAPER = "#FAF6F0";
 export const VELLUM = "#F2EDE4";
 export const CARD = "#FFFFFF";
 export const RULE = "#E2DACD";
-export const INK = "#141814";
-export const GRAPHITE = "#3E4649";
-export const SLATE = "#5E6669";
+/** oklch(0.26 0.02 50) — warm brown-black, same family as paper */
+export const INK = "#2C211B";
+/** oklch(0.40 0.016 50) — body; sRGB rounds to hue ~48 */
+export const GRAPHITE = "#4F4540";
+/** oklch(0.51 0.014 50) — meta; sRGB rounds to hue ~51 */
+export const SLATE = "#6D645F";
 
 export const RIVERBED = "#0B1112";
 export const POOL = "#131B1D";

@@ -92,17 +92,17 @@ Unchanged from v3 §4: **the intentional angler**, defined by mindset rather tha
 
 ### 5.1 Colour
 
-Re-chromatised 2026-08-25. The previous copper sat 22° from paper and at chroma 0.120 — AA-legal and visually absent. Copper moved toward red-orange (hue 40) and chroma 0.160; paper's chroma dropped so the ground stops competing. Contrast improved; presence is the point.
+Re-chromatised 2026-08-25, then corrected the same day. Paper stays `#FAF6F0` — measured against runcabinet.com it is effectively the same ground (Cabinet `#FAF6F1`). The dead page was not the cream. It was Ink at hue 145 (green-black) and Graphite/Slate at hue 222 (blue) sitting on a warm ground 127° away. Ink/Graphite/Slate now share paper's warm family (hue ~50). Copper and teal changes stand.
 
 | Token | Hex | OKLCH | Role |
 |---|---|---|---|
-| Paper | `#F8F6F4` | 0.974 / 0.003 / 67.8 | Daylight ground — ink on it 16.64:1 |
+| Paper | `#FAF6F0` | 0.975 / 0.009 / 78.3 | Daylight ground — same colour as Cabinet's, kept on purpose |
 | Vellum | `#F2EDE4` | 0.948 / 0.013 / 82.4 | raised, alternating bands |
 | Card | `#FFFFFF` | — | |
 | Rule | `#E2DACD` | — | borders |
-| Ink | `#141814` | 0.203 / 0.010 / 145.2 | headings |
-| Graphite | `#3E4649` | 0.388 / 0.012 / 222.3 | body — 9.0:1 |
-| Slate | `#5E6669` | 0.504 / 0.011 / 222.2 | meta, labels — **never running text** |
+| Ink | `#2C211B` | 0.259 / 0.020 / 50.1 | headings — oklch(0.26 0.02 50); 14.55:1 on paper (was 16.64:1 and harsher) |
+| Graphite | `#4F4540` | 0.399 / 0.016 / 48.3 | body — target oklch(0.40 0.016 50); 8.64:1 paper, 7.98:1 vellum |
+| Slate | `#6D645F` | 0.510 / 0.014 / 51.1 | meta, labels — target oklch(0.51 0.014 50); 5.36:1 paper, 4.95:1 vellum — **never running text** |
 | **Copper 700** | `#B4410D` | **0.530 / 0.160 / 40.1** | **action only, on light** — 5.26:1 paper, 4.86:1 vellum; white on it 5.67:1 |
 | Copper 400 | `#FD8358` | 0.739 / 0.160 / 39.8 | action on dark — 7.76:1 riverbed, 7.12:1 pool, 6.30:1 shelf |
 | Copper hover 700 | `#9B3300` | 0.469 / 0.148 / 39.9 | `--action-hover` Daylight (target 0.47 / 0.16 / 40 clips; max in-gamut chroma) |
@@ -117,7 +117,7 @@ Re-chromatised 2026-08-25. The previous copper sat 22° from paper and at chroma
 | Rise | `#1F7A3D` / `#3FB863` | — | positive delta |
 | Cutthroat | `#B3261E` / `#F87171` | — | error, destructive |
 
-**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper, Copper 700 `#9E5615`, Copper 400 `#E8923A`, Paper `#FAF6F0`, Teal 300 `#22C1DE` (neon cyan at hue 214), hover literals `#8A4A12` / `#F0A65A` / `#C97726`.
+**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper, Copper 700 `#9E5615`, Copper 400 `#E8923A`, Ink `#141814` (hue 145 green-black), Graphite `#3E4649` / Slate `#5E6669` (hue 222 blue), Teal 300 `#22C1DE` (neon cyan at hue 214), hover literals `#8A4A12` / `#F0A65A` / `#C97726`. Paper `#FAF6F0` is **not** retired — a same-day `#F8F6F4` experiment was cancelled; Cabinet's ground is the same colour.
 
 **The rule that outranks the hexes:** copper is the action colour and nothing else. Headings are Ink. Links are Ink with a 1px underline that turns Copper on hover. Live readings are Teal. When everything is the accent, nothing is. AA compliance is not visual presence.
 
@@ -152,7 +152,7 @@ The original budget — 120–180ms ease-out on hover and press, one 400ms cross
 
 **Still in budget (tokens, both registers):**
 
-1. **Depth scale.** `--elev-1` through `--elev-4` — layered contact + ambient shadows, copper-tinted on Daylight, riverbed-tinted on Dusk. Tailwind `shadow-sm|md|lg|xl` bind to these. No raw `rgba` drop shadows.
+1. **Depth scale.** `--elev-1` through `--elev-4` — inset top highlight (white on Daylight, warm vellum on Dusk) plus a 1px light ring, then layered contact + ambient shadows, copper-tinted on Daylight, riverbed-tinted on Dusk. Tailwind `shadow-sm|md|lg|xl` bind to these. No raw `rgba` drop shadows.
 2. **Ground wash.** `--surface-page-wash` — a ~1.5% lighter top falling to the base colour. Imperceptible as a gradient, perceptible as depth. `--surface-page` stays the solid darkest hex; that is what contrast is measured against.
 3. **Photograph treatment.** Hero and card scrims are gradients — transparent at the top, readable ground at the bottom where text sits. On a card or tile whose whole surface is a link, the image scales to `--photo-zoom-scale` (1.03) over `--photo-zoom-duration` (400ms) on `--ease-out-expo`. The container clips overflow.
 4. **Staged entrance.** Content blocks fade in and rise `--enter-rise` (12px), `--enter-stagger` (60ms) between siblings, `--enter-duration` (500ms), once on first intersection, never again on re-scroll. IntersectionObserver only. Entirely absent under `prefers-reduced-motion`.
@@ -268,7 +268,8 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-25** | Ink/Graphite/Slate pulled into paper's warm family (hue ~50) after measuring runcabinet.com. Cabinet's ground is `#FAF6F1` and its display face is Fraunces — the same paper and the same type we already had. Their text is `#3B2F2F` (hue 18, warm). Ours was `#141814` at hue 145 (green) on a warm cream, 127° apart, and 16.66:1 — harsher, not better. Paper change to `#F8F6F4` cancelled. Ink is now `#2C211B` (14.55:1). `--elev-*` gained an inset top highlight.
 - **2026-08-25** | Motion budget widened because the original §5.4 rule — 120–180ms hover/press plus one 400ms live-reading crossfade — produced a flat, lifeless page. Depth scale, ground wash, photograph treatment, staged entrance, and 2–4px hero parallax are now in budget as tokens. The banned list (count-ups, text parallax, scroll-jacking, self-drawing charts, animated logo, table motion) stays explicit.
-- **2026-08-25** | Palette re-chromatised. Copper 700 / paper / copper 400 / teal 300 / action-hover rewritten because AA compliance had been achieved at the cost of presence: the old copper (`#9E5615`, chroma 0.120, hue 56) sat 22° from paper and could not carry a composition. New copper is hue 40 / chroma 0.160; paper chroma dropped to 0.003; teal 300 pulled from neon cyan (hue 214) to water (hue 200). Contrast improved on every legal pair.
+- **2026-08-25** | Palette re-chromatised. Copper 700 / copper 400 / teal 300 / action-hover rewritten because AA compliance had been achieved at the cost of presence: the old copper (`#9E5615`, chroma 0.120, hue 56) sat 22° from paper and could not carry a composition. New copper is hue 40 / chroma 0.160; teal 300 pulled from neon cyan (hue 214) to water (hue 200). Paper stayed `#FAF6F0`.
 - **2026-08-25** | §5.1 token table corrected to shipped `globals.css` values (Paper, Ink, Slate, Copper 700, Teal 700). Copper 400 and Teal 300 unchanged. §5.6 added: Dusk is an instrument on the paper page, not a floor.
 - **2026-08-24** | v4 created. Reorganised around The Water Desk: the desk/notebook duality as the organising idea, the 78/14/8 ratio and Daylight/Dusk promoted into the identity, public angler profiles formally retired, the newcomer made a first-class design target, Inter added to the retired-type list, the domain move deferred pending organic recovery.

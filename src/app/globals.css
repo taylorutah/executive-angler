@@ -8,13 +8,13 @@
 
 :root {
   /* Primitive — Daylight */
-  --paper: #F8F6F4;
+  --paper: #FAF6F0;
   --vellum: #F2EDE4;
   --card: #FFFFFF;
   --rule: #E2DACD;
-  --ink: #141814;
-  --graphite: #3E4649;
-  --slate: #5E6669;
+  --ink: #2C211B;
+  --graphite: #4F4540;
+  --slate: #6D645F;
 
   /* Primitive — Dusk */
   --riverbed: #0B1112;
@@ -86,11 +86,28 @@
     var(--paper) 100%
   );
 
-  /* Elevation — copper-tinted contact + ambient. Never raw black. */
-  --elev-1: 0 1px 2px rgb(180 65 13 / 0.06), 0 4px 12px rgb(180 65 13 / 0.04);
-  --elev-2: 0 1px 2px rgb(180 65 13 / 0.07), 0 8px 20px rgb(180 65 13 / 0.06);
-  --elev-3: 0 2px 4px rgb(180 65 13 / 0.08), 0 16px 32px rgb(180 65 13 / 0.08);
-  --elev-4: 0 2px 6px rgb(180 65 13 / 0.10), 0 24px 48px rgb(180 65 13 / 0.12);
+  /* Elevation — inset top highlight (a light source on a raised edge)
+     plus copper-tinted contact + ambient. Never raw black. */
+  --elev-1:
+    inset 0 1px 0 rgb(255 255 255 / 0.90),
+    0 0 0 1px rgb(255 255 255 / 0.22),
+    0 1px 2px rgb(180 65 13 / 0.06),
+    0 4px 12px rgb(180 65 13 / 0.04);
+  --elev-2:
+    inset 0 1px 0 rgb(255 255 255 / 0.90),
+    0 0 0 1px rgb(255 255 255 / 0.22),
+    0 1px 2px rgb(180 65 13 / 0.07),
+    0 8px 20px rgb(180 65 13 / 0.06);
+  --elev-3:
+    inset 0 1px 0 rgb(255 255 255 / 0.90),
+    0 0 0 1px rgb(255 255 255 / 0.22),
+    0 2px 4px rgb(180 65 13 / 0.08),
+    0 16px 32px rgb(180 65 13 / 0.08);
+  --elev-4:
+    inset 0 1px 0 rgb(255 255 255 / 0.90),
+    0 0 0 1px rgb(255 255 255 / 0.22),
+    0 2px 6px rgb(180 65 13 / 0.10),
+    0 24px 48px rgb(180 65 13 / 0.12);
 }
 
 [data-register="dusk"],
@@ -117,11 +134,27 @@
     var(--riverbed) 100%
   );
 
-  /* Elevation — riverbed-tinted contact + ambient. */
-  --elev-1: 0 1px 2px rgb(11 17 18 / 0.35), 0 4px 12px rgb(11 17 18 / 0.28);
-  --elev-2: 0 1px 2px rgb(11 17 18 / 0.40), 0 8px 20px rgb(11 17 18 / 0.36);
-  --elev-3: 0 2px 4px rgb(11 17 18 / 0.45), 0 16px 32px rgb(11 17 18 / 0.42);
-  --elev-4: 0 2px 8px rgb(11 17 18 / 0.50), 0 24px 48px rgb(11 17 18 / 0.48);
+  /* Elevation — warm top highlight on Dusk, then riverbed ambient. */
+  --elev-1:
+    inset 0 1px 0 rgb(242 237 228 / 0.16),
+    0 0 0 1px rgb(242 237 228 / 0.10),
+    0 1px 2px rgb(11 17 18 / 0.35),
+    0 4px 12px rgb(11 17 18 / 0.28);
+  --elev-2:
+    inset 0 1px 0 rgb(242 237 228 / 0.16),
+    0 0 0 1px rgb(242 237 228 / 0.10),
+    0 1px 2px rgb(11 17 18 / 0.40),
+    0 8px 20px rgb(11 17 18 / 0.36);
+  --elev-3:
+    inset 0 1px 0 rgb(242 237 228 / 0.18),
+    0 0 0 1px rgb(242 237 228 / 0.12),
+    0 2px 4px rgb(11 17 18 / 0.45),
+    0 16px 32px rgb(11 17 18 / 0.42);
+  --elev-4:
+    inset 0 1px 0 rgb(242 237 228 / 0.20),
+    0 0 0 1px rgb(242 237 228 / 0.12),
+    0 2px 8px rgb(11 17 18 / 0.50),
+    0 24px 48px rgb(11 17 18 / 0.48);
 }
 
 @theme inline {
