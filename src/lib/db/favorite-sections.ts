@@ -200,6 +200,25 @@ export async function removeFavoriteSection(
   return { ok: true };
 }
 
+/** Set one row's sort position directly — the inline edit on /rivers/mine. */
+export async function setFavoriteSectionPosition(
+  id: string,
+  position: number
+): Promise<{ ok: true } | { error: string }> {
+  if (!Number.isFinite(position)) return { error: "Position must be a number." };
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const { error } = await supabase
+    .from("user_favorite_sections")
+    .update({ position: Math.max(0, Math.floor(position)) })
+    .eq("id", id)
+    .eq("user_id", user.id);
+  if (error) return { error: error.message };
+  return { ok: true };
+}
+
 /** Apply a new ordering. `orderedIds` is the new sequence of row ids. */
 export async function reorderFavoriteSections(
   orderedIds: string[]
