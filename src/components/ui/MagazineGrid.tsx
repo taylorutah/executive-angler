@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CardData } from "@/types/list-config";
 import EntityCard from "./EntityCard";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import ScrollAnimation from "./ScrollAnimation";
 
 interface MagazineGridProps {
   items: CardData[];
@@ -100,8 +101,10 @@ export default function MagazineGrid({ items }: MagazineGridProps) {
       {/* Featured cards */}
       {displayFeatured.length > 0 && (
         <div className={`mb-8 ${displayFeatured.length > 1 ? "space-y-6" : ""}`}>
-          {displayFeatured.map((item) => (
-            <FeaturedCard key={item.href} {...item} />
+          {displayFeatured.map((item, i) => (
+            <ScrollAnimation key={item.href} index={i}>
+              <FeaturedCard {...item} />
+            </ScrollAnimation>
           ))}
         </div>
       )}
@@ -109,20 +112,21 @@ export default function MagazineGrid({ items }: MagazineGridProps) {
       {/* Rest in standard grid */}
       {displayRest.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayRest.map((item) => (
-            <EntityCard
-              key={item.href}
-              href={item.href}
-              imageUrl={item.imageUrl}
-              imageAlt={item.imageAlt}
-              title={item.title}
-              subtitle={item.subtitle}
-              meta={item.meta}
-              badges={item.badges}
-              tags={item.tags}
-              accent={item.accent}
-              description={item.description}
-            />
+          {displayRest.map((item, i) => (
+            <ScrollAnimation key={item.href} index={i}>
+              <EntityCard
+                href={item.href}
+                imageUrl={item.imageUrl}
+                imageAlt={item.imageAlt}
+                title={item.title}
+                subtitle={item.subtitle}
+                meta={item.meta}
+                badges={item.badges}
+                tags={item.tags}
+                accent={item.accent}
+                description={item.description}
+              />
+            </ScrollAnimation>
           ))}
         </div>
       )}

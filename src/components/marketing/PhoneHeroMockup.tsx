@@ -35,7 +35,7 @@ export default function PhoneHeroMockup() {
 
       {/* Phone body */}
       <div
-        className="relative bg-[#0A0D11] rounded-[44px] p-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]"
+        className="relative bg-[#0A0D11] rounded-[44px] p-[10px] shadow-[var(--elev-4)]"
         style={{ transform: "rotate(-2deg)" }}
       >
         {/* Screen */}

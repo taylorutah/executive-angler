@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Images } from "lucide-react";
+import HeroParallax from "./HeroParallax";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
@@ -59,20 +60,25 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
+      <section
+        data-hero-parallax-host
+        className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]"
+      >
         {showPhoto ? (
-          <Image
-            src={heroImageUrl}
-            alt={heroImageAlt}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-            placeholder="blur"
-            blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
-            onLoad={() => setLoaded(true)}
-            onError={() => setFailed(true)}
-          />
+          <HeroParallax>
+            <Image
+              src={heroImageUrl}
+              alt={heroImageAlt}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+              onLoad={() => setLoaded(true)}
+              onError={() => setFailed(true)}
+            />
+          </HeroParallax>
         ) : (
           <PlateFallback title="" meta={meta} />
         )}

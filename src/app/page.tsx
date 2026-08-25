@@ -19,6 +19,7 @@ import PullQuote, { pickQuote } from "@/components/home/PullQuote";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
@@ -151,26 +152,46 @@ export default async function HomePage() {
 
       <HomeHero riverCount={rivers.length} cfs={madisonCfs} />
 
-      <CategoryIndex
-        rivers={rivers.length}
-        flies={allFlies.length}
-        places={destinations.length}
-        notes={articles.length}
-      />
+      <ScrollAnimation index={0}>
+        <CategoryIndex
+          rivers={rivers.length}
+          flies={allFlies.length}
+          places={destinations.length}
+          notes={articles.length}
+        />
+      </ScrollAnimation>
 
-      <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
+      <ScrollAnimation index={1}>
+        <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
+      </ScrollAnimation>
 
-      <FlyPlate flies={plate} flyCount={allFlies.length} />
+      <ScrollAnimation index={2}>
+        <FlyPlate flies={plate} flyCount={allFlies.length} />
+      </ScrollAnimation>
 
-      {quote && <PullQuote article={quote} />}
+      {quote && (
+        <ScrollAnimation index={3}>
+          <PullQuote article={quote} />
+        </ScrollAnimation>
+      )}
 
-      <WhereToGo destinations={places} month={month} />
+      <ScrollAnimation index={4}>
+        <WhereToGo destinations={places} month={month} />
+      </ScrollAnimation>
 
-      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
+      {read && (
+        <ScrollAnimation index={5}>
+          <ThisWeeksRead lead={read.lead} rest={read.rest} />
+        </ScrollAnimation>
+      )}
 
-      <JournalBand />
+      <ScrollAnimation index={0}>
+        <JournalBand />
+      </ScrollAnimation>
 
-      <WhatWeDontDo />
+      <ScrollAnimation index={1}>
+        <WhatWeDontDo />
+      </ScrollAnimation>
     </>
   );
 }

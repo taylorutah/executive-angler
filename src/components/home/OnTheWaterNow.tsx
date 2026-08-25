@@ -92,7 +92,7 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
 
       <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-6 py-10 shadow-[0_12px_32px_rgba(11,17,18,0.22)] sm:px-8 sm:py-12">
+          <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-6 py-10 shadow-[var(--elev-4)] sm:px-8 sm:py-12">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">

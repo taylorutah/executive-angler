@@ -87,7 +87,7 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
         <button
           type="submit"
           disabled={state === "loading"}
-          className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(232,146,58,0.35)] hover:shadow-[0_0_40px_rgba(232,146,58,0.5)] text-base tracking-wide"
+          className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[var(--elev-glow)] hover:shadow-[var(--elev-glow-strong)] text-base tracking-wide"
         >
           {state === "loading" ? (
             <>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import HeroParallax from "@/components/ui/HeroParallax";
 import {
   HERO_HEADLINE,
   HERO_IMAGE,
@@ -25,7 +26,7 @@ interface Props {
  * Small caps on a scrim cannot make 4.5.
  */
 const HERO_SCRIM =
-  "linear-gradient(to bottom, rgba(15,43,31,0.28) 0%, rgba(15,43,31,0.70) 28%, rgba(15,43,31,0.86) 100%)";
+  "linear-gradient(to bottom, rgba(15,43,31,0) 0%, rgba(15,43,31,0.45) 32%, rgba(15,43,31,0.86) 100%)";
 
 export default function HomeHero({ riverCount, cfs }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
@@ -33,17 +34,20 @@ export default function HomeHero({ riverCount, cfs }: Props) {
   return (
     <section
       data-lane="resource"
+      data-hero-parallax-host
       className="relative min-h-[70svh] w-full overflow-hidden sm:min-h-[85vh]"
     >
-      <Image
-        src={HERO_IMAGE.src}
-        alt={HERO_IMAGE.alt}
-        fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
-        className="object-cover"
-      />
+      <HeroParallax>
+        <Image
+          src={HERO_IMAGE.src}
+          alt={HERO_IMAGE.alt}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover"
+        />
+      </HeroParallax>
       <div className="absolute inset-0" style={{ background: HERO_SCRIM }} aria-hidden />
 
       <div className="relative z-10 flex min-h-[70svh] flex-col justify-end sm:min-h-[85vh]">

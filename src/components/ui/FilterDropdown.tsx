@@ -185,7 +185,7 @@ export default function FilterDropdown({
       {open && (
         <div
           ref={popoverRef}
-          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-xl shadow-xl shadow-black/60 overflow-hidden`}
+          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-xl shadow-xl overflow-hidden`}
         >
           {isSearchable && (
             <div className="relative border-b border-[var(--border-rule)]">

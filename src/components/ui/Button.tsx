@@ -139,7 +139,7 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
       return [
         "bg-gradient-to-b from-[color-mix(in_oklch,var(--action)_72%,white)] to-[var(--action)] text-[var(--on-action)]",
         "border border-[var(--action)] font-semibold",
-        "rounded shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_1px_2px_rgba(0,0,0,0.15)]",
+        "rounded shadow-[var(--elev-inset)]",
         "hover:from-[var(--action)] hover:to-[var(--action-hover)]",
         "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
@@ -151,7 +151,7 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
     case "neutral":
       return [
         "bg-white text-[#1A1A1A] border border-[#C9CCD1] font-medium",
-        "rounded shadow-[0_1px_1px_rgba(0,0,0,0.04)]",
+        "rounded shadow-[var(--elev-hairline)]",
         "hover:bg-[#F5F5F5]",
       ].join(" ");
     case "pill":

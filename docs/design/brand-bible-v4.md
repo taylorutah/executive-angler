@@ -148,9 +148,29 @@ One hero per page **at full strength** — the image is the image, never faded t
 
 ### 5.4 Motion
 
-120–180ms ease-out on hover and press. One 400ms crossfade when a live reading updates. That is the entire budget.
+The original budget — 120–180ms ease-out on hover and press, one 400ms crossfade when a live reading updates — stopped cheap animation and produced a flat, lifeless page. The budget is now the tokens in `globals.css`, not one-off classes.
 
-**Never animates:** page transitions, scroll reveals, parallax, number count-ups, charts drawing themselves, the logo, anything in a data table. A count-up on a flow reading is a lie about how the data arrived.
+**Still in budget (tokens, both registers):**
+
+1. **Depth scale.** `--elev-1` through `--elev-4` — layered contact + ambient shadows, copper-tinted on Daylight, riverbed-tinted on Dusk. Tailwind `shadow-sm|md|lg|xl` bind to these. No raw `rgba` drop shadows.
+2. **Ground wash.** `--surface-page-wash` — a ~1.5% lighter top falling to the base colour. Imperceptible as a gradient, perceptible as depth. `--surface-page` stays the solid darkest hex; that is what contrast is measured against.
+3. **Photograph treatment.** Hero and card scrims are gradients — transparent at the top, readable ground at the bottom where text sits. On a card or tile whose whole surface is a link, the image scales to `--photo-zoom-scale` (1.03) over `--photo-zoom-duration` (400ms) on `--ease-out-expo`. The container clips overflow.
+4. **Staged entrance.** Content blocks fade in and rise `--enter-rise` (12px), `--enter-stagger` (60ms) between siblings, `--enter-duration` (500ms), once on first intersection, never again on re-scroll. IntersectionObserver only. Entirely absent under `prefers-reduced-motion`.
+5. **Hero depth.** On the homepage and river hero photographs only: 2–4px of cursor-parallax on the image layer (`--hero-parallax`), never on the text layer. Disabled under `prefers-reduced-motion` and on touch.
+
+Hover and press remain 120–180ms ease-out (`--hover-duration` / `--hover-ease`). Live readings still crossfade once at `--crossfade-duration` (400ms).
+
+**Never animates — this list is not permission to animate everything:**
+
+- Count-ups on live readings (a count-up is a lie about how the data arrived)
+- Parallax on text
+- Scroll-jacking
+- Charts drawing themselves
+- The logo
+- Anything inside a data table
+- Page transitions
+
+`prefers-reduced-motion: reduce` fully disables items 3 (image scale), 4 (entrance), and 5 (hero parallax). Scrim gradients stay — they are not motion.
 
 ### 5.5 Logo
 
@@ -248,6 +268,7 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-25** | Motion budget widened because the original §5.4 rule — 120–180ms hover/press plus one 400ms live-reading crossfade — produced a flat, lifeless page. Depth scale, ground wash, photograph treatment, staged entrance, and 2–4px hero parallax are now in budget as tokens. The banned list (count-ups, text parallax, scroll-jacking, self-drawing charts, animated logo, table motion) stays explicit.
 - **2026-08-25** | Palette re-chromatised. Copper 700 / paper / copper 400 / teal 300 / action-hover rewritten because AA compliance had been achieved at the cost of presence: the old copper (`#9E5615`, chroma 0.120, hue 56) sat 22° from paper and could not carry a composition. New copper is hue 40 / chroma 0.160; paper chroma dropped to 0.003; teal 300 pulled from neon cyan (hue 214) to water (hue 200). Contrast improved on every legal pair.
 - **2026-08-25** | §5.1 token table corrected to shipped `globals.css` values (Paper, Ink, Slate, Copper 700, Teal 700). Copper 400 and Teal 300 unchanged. §5.6 added: Dusk is an instrument on the paper page, not a floor.
 - **2026-08-24** | v4 created. Reorganised around The Water Desk: the desk/notebook duality as the organising idea, the 78/14/8 ratio and Daylight/Dusk promoted into the identity, public angler profiles formally retired, the newcomer made a first-class design target, Inter added to the retired-type list, the domain move deferred pending organic recovery.
