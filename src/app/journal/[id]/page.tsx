@@ -6,6 +6,8 @@ import SessionDetail from "./SessionDetail";
 import { isAdmin } from "@/lib/admin";
 import CatchLoggerEntry from "@/components/catch-logger/CatchLoggerEntry";
 import { listMyBoxes, listVariantsInBox } from "@/lib/db/fly-v2";
+import DayFlowTrace from "./DayFlowTrace";
+import { fetchDayFlow, catchMinutes } from "@/lib/journal/day-flow";
 
 // Never cache — always fetch fresh data from Supabase
 export const dynamic = "force-dynamic";
@@ -218,6 +220,56 @@ export default async function SessionDetailPage({ params }: Props) {
     }
   }
 
+  // Right-rail day context. All of it is owner-scoped: the neighbouring days
+  // are queried through `reader` (RLS-bound for non-admins) and the flow trace
+  // is only fetched inside this branch, so a non-owner request never issues it.
+  let prevDay: { id: string; date: string } | null = null;
+  let nextDay: { id: string; date: string } | null = null;
+  let flowTrace: React.ReactNode = null;
+
+  if (isOwner) {
+    const [prevRes, nextRes] = await Promise.all([
+      reader
+        .from("fishing_sessions")
+        .select("id, date")
+        .eq("user_id", session.user_id)
+        .lt("date", session.date)
+        .order("date", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      reader
+        .from("fishing_sessions")
+        .select("id, date")
+        .eq("user_id", session.user_id)
+        .gt("date", session.date)
+        .order("date", { ascending: true })
+        .limit(1)
+        .maybeSingle(),
+    ]);
+    prevDay = prevRes.data ?? null;
+    nextDay = nextRes.data ?? null;
+
+    let gaugeConfig: string | null = null;
+    if (session.river_id) {
+      const { data: river } = await reader
+        .from("rivers")
+        .select("usgs_gauge_id")
+        .eq("id", session.river_id)
+        .maybeSingle();
+      gaugeConfig = (river?.usgs_gauge_id as string | null) ?? null;
+    }
+    const dayFlow = await fetchDayFlow(gaugeConfig, session.date, session.section);
+    flowTrace = (
+      <DayFlowTrace
+        flow={dayFlow}
+        catchMinutes={catchesArr
+          .map((c) => catchMinutes((c as { time_caught?: string | null; time?: string | null }).time_caught
+            ?? (c as { time?: string | null }).time))
+          .filter((m): m is number => m !== null)}
+      />
+    );
+  }
+
   return (
     <>
       {isOwner && (
@@ -241,6 +293,9 @@ export default async function SessionDetailPage({ params }: Props) {
         isOwner={isOwner}
         ownerProfile={ownerProfileForDetail}
         isAnonymous={isAnonymous}
+        flowTrace={flowTrace}
+        prevDay={prevDay}
+        nextDay={nextDay}
       />
     </>
   );

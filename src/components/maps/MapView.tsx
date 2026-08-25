@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -21,6 +21,8 @@ interface MapViewProps {
   bounds?: { sw: [number, number]; ne: [number, number] };
   /** Vellum land / Teal water — the desk two-tone. */
   tone?: "default" | "desk";
+  /** GPS track as [lat, lng] pairs, drawn as a single line. */
+  route?: number[][];
 }
 
 function applyDeskPalette(map: mapboxgl.Map) {
@@ -61,9 +63,12 @@ export default function MapView({
   className = "h-[400px] w-full overflow-hidden",
   bounds,
   tone = "default",
+  route = [],
 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  // The pan hint is only true once a map actually exists to pan.
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -98,6 +103,7 @@ export default function MapView({
       // Resize after map loads — fixes 0-dimension init on mobile Safari
       map.current.on("load", () => {
         map.current?.resize();
+        setLive(true);
         if (tone === "desk" && map.current) applyDeskPalette(map.current);
 
         // Require 2 fingers to pan on touch devices
@@ -112,6 +118,31 @@ export default function MapView({
         canvas.addEventListener("touchend", () => {
           map.current!.dragPan.enable(); // re-enable after lift
         });
+
+        const routeStyles = getComputedStyle(document.documentElement);
+
+        if (route.length >= 2 && map.current) {
+          map.current.addSource("route", {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: { type: "LineString", coordinates: route.map((p) => [p[1], p[0]]) },
+            },
+          });
+          map.current.addLayer({
+            id: "route-line",
+            type: "line",
+            source: "route",
+            layout: { "line-join": "round", "line-cap": "round" },
+            paint: {
+              "line-color":
+                routeStyles.getPropertyValue(tone === "desk" ? "--teal-700" : "--copper-400").trim() ||
+                "#0C7286",
+              "line-width": 3,
+            },
+          });
+        }
 
         // Add markers after load for reliable placement on mobile
         markers.forEach((marker) => {
@@ -137,10 +168,11 @@ export default function MapView({
             [[bounds.sw[1], bounds.sw[0]], [bounds.ne[1], bounds.ne[0]]],
             { padding: 50, maxZoom: 12 }
           );
-        } else if (markers.length > 1) {
+        } else if (markers.length + route.length > 1) {
           const markerBounds = new mapboxgl.LngLatBounds();
           markers.forEach((m) => markerBounds.extend([m.longitude, m.latitude]));
-          map.current!.fitBounds(markerBounds, { padding: 50, maxZoom: 12 });
+          route.forEach((p) => markerBounds.extend([p[1], p[0]]));
+          map.current!.fitBounds(markerBounds, { padding: 50, maxZoom: 14 });
         }
       });
 
@@ -166,14 +198,16 @@ export default function MapView({
     return () => {
       map.current?.remove();
     };
-  }, [latitude, longitude, zoom, markers, bounds, tone]);
+  }, [latitude, longitude, zoom, markers, bounds, tone, route]);
 
   return (
     <div className="relative">
       <div ref={mapContainer} className={className} />
-      <div className="absolute bottom-2 right-2 bg-black/50 text-white/60 text-xs px-2 py-1 rounded-full pointer-events-none">
-        Two fingers to pan
-      </div>
+      {live && (
+        <div className="absolute bottom-2 right-2 bg-black/50 text-white/60 text-xs px-2 py-1 rounded-full pointer-events-none">
+          Two fingers to pan
+        </div>
+      )}
     </div>
   );
 }
