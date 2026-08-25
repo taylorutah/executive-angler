@@ -1,11 +1,16 @@
 /**
  * Fail if a committed visual baseline is a magenta rectangle, a near-blank
- * paper field, or a byte-duplicate of another baseline.
+ * capture, or a byte-duplicate of another baseline.
  *
  *   npm run check:baseline-quality
  *
  * For every PNG under tests/**snapshots**:
- *   - no single RGB exceeds 60 % of pixels
+ *   - Playwright mask fill #FF00FF must stay under 2 %
+ *   - a single RGB over 60 % fails unless it is a declared page fill
+ *     (paper / vellum / riverbed / pool). #32's home was 94 % magenta.
+ *     Paper-first index pages and dusk /today honestly exceed 60 % paper
+ *     or riverbed — that is the brand, not a blank capture. See
+ *     docs/decisions/p4-lane0-harness.md.
  *   - distinct RGB colours ≥ 500
  *   - no two files share an md5
  *
@@ -19,7 +24,17 @@ import sharp from "sharp";
 const ROOT = process.cwd();
 const MIN_BASELINES = 20;
 const MAX_DOMINANT_SHARE = 0.6;
+const MAX_MASK_SHARE = 0.02;
 const MIN_DISTINCT = 500;
+
+/** Declared page fills from globals.css. Anti-aliasing may land 1 off. */
+const PAGE_FILLS = new Set([
+  "250,246,240", // --paper
+  "242,237,228", // --vellum
+  "11,17,18", // --riverbed
+  "19,27,29", // --pool
+]);
+const MASK_FILL = "255,0,255";
 
 function walk(dir: string, out: string[] = []): string[] {
   if (!fs.existsSync(dir)) return out;
@@ -36,6 +51,7 @@ async function analyze(file: string): Promise<{
   distinct: number;
   dominantShare: number;
   dominant: string;
+  maskShare: number;
 }> {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const counts = new Map<string, number>();
@@ -58,6 +74,7 @@ async function analyze(file: string): Promise<{
     distinct: counts.size,
     dominantShare: pixels === 0 ? 1 : dominantCount / pixels,
     dominant,
+    maskShare: pixels === 0 ? 0 : (counts.get(MASK_FILL) ?? 0) / pixels,
   };
 }
 
@@ -86,11 +103,16 @@ async function main() {
     const stats = await analyze(file);
     const pct = (stats.dominantShare * 100).toFixed(1);
     console.log(
-      `  ${rel}  ${stats.pixels} px  ${stats.distinct} colours  dominant rgb(${stats.dominant}) ${pct}%`,
+      `  ${rel}  ${stats.pixels} px  ${stats.distinct} colours  dominant rgb(${stats.dominant}) ${pct}%  mask ${(stats.maskShare * 100).toFixed(2)}%`,
     );
-    if (stats.dominantShare > MAX_DOMINANT_SHARE) {
+    if (stats.maskShare > MAX_MASK_SHARE) {
       failures.push(
-        `${rel}  dominant rgb(${stats.dominant}) is ${pct}% (max ${(MAX_DOMINANT_SHARE * 100).toFixed(0)}%)`,
+        `${rel}  Playwright mask #FF00FF is ${(stats.maskShare * 100).toFixed(1)}% (max ${(MAX_MASK_SHARE * 100).toFixed(0)}%)`,
+      );
+    }
+    if (stats.dominantShare > MAX_DOMINANT_SHARE && !PAGE_FILLS.has(stats.dominant)) {
+      failures.push(
+        `${rel}  dominant rgb(${stats.dominant}) is ${pct}% (max ${(MAX_DOMINANT_SHARE * 100).toFixed(0)}% unless paper/vellum/riverbed/pool)`,
       );
     }
     if (stats.distinct < MIN_DISTINCT) {

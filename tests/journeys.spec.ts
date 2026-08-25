@@ -12,16 +12,12 @@ test.describe("journey smoke", () => {
 
   test('"pmd hatch" returns hatches and flies, not fly shops first', async ({ page }) => {
     await page.goto("/search?q=pmd+hatch", { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".mb-10").filter({ hasText: /^Hatches/ }).first()).toBeVisible({
-      timeout: 15_000,
-    });
-    await expect(page.locator(".mb-10").filter({ hasText: /^Flies/ }).first()).toBeVisible();
-    const order = await page.locator(".mb-10").evaluateAll((els) =>
-      els.map((el) => el.querySelector("span")?.textContent?.trim() ?? ""),
-    );
+    await expect(page.getByRole("heading", { name: "Hatches" })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: "Flies" })).toBeVisible();
+    const order = await page.getByRole("heading", { level: 2 }).allTextContents();
     const hatch = order.indexOf("Hatches");
     const flies = order.indexOf("Flies");
-    const shops = order.indexOf("Fly Shops");
+    const shops = order.indexOf("Fly shops");
     expect(hatch).toBeGreaterThanOrEqual(0);
     expect(flies).toBeGreaterThanOrEqual(0);
     if (shops >= 0) expect(Math.min(hatch, flies)).toBeLessThan(shops);

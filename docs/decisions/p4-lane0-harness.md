@@ -33,7 +33,22 @@ Stub `/auth/v1/authorize`. Assert `provider=google` and `redirect_to` contains `
 
 ### Visual masks
 
-Mask maps, charts, `<time>`, `[data-live]`. Do **not** mask `img`. Images we host that change between runs are a finding.
+Mask maps, charts, `<time>`, `[data-live]`. Do **not** mask `img`. Self-hosted `/images` and Supabase storage still render. Remote hosts (Unsplash, Wikimedia) are fulfilled from `tests/fixtures/stable-photo.jpg` — those URLs 404 or race and took destinations/rivers 1440 from 0.15 / 0.11 pixel-diff to stable. That race is the finding; the fixture is so the layout gate can run.
+
+### Baseline quality — 60 % page-fill exception
+
+Measured on 28 freshly captured baselines (current `main` palette, no `img` mask):
+
+- Home 1440 is 57,492 colours, 6.7 % dominant, 0 % magenta. That is a photograph, not #32's 9,291-byte rectangle.
+- `/today` 1440 is 95.6 % `--riverbed`. The briefing is real (Madison / Gallatin / Green, three desk notes). Dusk *is* a dark page.
+- `/login` 1440 is 77.2 % `--paper`. The form is the page.
+- `/rivers` 1440 is 75.0 % `--paper`. The index is a filter desk above a card row.
+
+A literal "any colour > 60 %" rejects the brand. The gate still fails a non-fill colour over 60 %, `#FF00FF` over 2 %, distinct colours under 500, and any md5 collision. Paper / vellum / riverbed / pool may exceed 60 %.
+
+### Baseline capture
+
+28 PNGs, current `main` palette (`--slate #5E6669`, `--copper-700 #9E5615`, `--teal-700 #0C7286`). Home 1440 is 1,052,167 bytes (not 9,291). Captured after `npm run build` on this branch; SHA is the commit that adds the PNGs.
 
 ### `tokens` job union
 
