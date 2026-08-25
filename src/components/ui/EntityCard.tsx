@@ -118,7 +118,6 @@ export default function EntityCard({
           alt={imageAlt}
           title={title}
           meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
-          unoptimized
           contain={imageContain}
           className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

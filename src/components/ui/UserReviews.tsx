@@ -287,7 +287,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   {review.author_avatar ? (
-                    <Image src={review.author_avatar} alt={`${review.author_name} avatar`} width={32} height={32} className="w-8 h-8 rounded-full object-cover" unoptimized />
+                    <Image src={review.author_avatar} alt={`${review.author_name} avatar`} width={32} height={32} className="w-8 h-8 rounded-full object-cover" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-[var(--border-rule)] flex items-center justify-center">
                       <User className="h-4 w-4 text-[var(--text-meta)]" />

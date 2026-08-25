@@ -362,6 +362,7 @@ export default function PhotoSubmissionForm({
                           alt="Photo preview"
                           fill
                           className="object-contain"
+                          // blob: object-URL from the file picker — optimizer cannot fetch it
                           unoptimized
                         />
                       </div>
