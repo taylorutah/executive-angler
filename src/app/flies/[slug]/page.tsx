@@ -1,9 +1,14 @@
 /**
  * /flies/[slug] — specimen-first fly pattern template (Lane J).
  *
- * Order: macro on Paper → name + spec → Dusk variant table → recipe
- * (materials linked to the catalog) → tying video → fishing now on
- * (river names + sizes, no counts) → history in .prose below a hard rule.
+ * Order: macro on Paper → name + spec → Dusk variant table → description
+ * in .prose → recipe (materials linked to the catalog) → tying video →
+ * fishing now on (river names + sizes, no counts) → history in .prose
+ * below a hard rule.
+ *
+ * The specimen column stays spec type. Every editorial paragraph reads in
+ * .prose in the wide column below, so the 68ch measure actually applies —
+ * 77 of 162 approved flies carry no field but description.
  *
  * Public HTML stays cookie-free so the page remains CDN-cacheable.
  * Stock counts hydrate in the variant table after auth.
@@ -188,11 +193,6 @@ export default async function FlyDetail({ params }: Props) {
             )}
           </dl>
 
-          {fly.description && (
-            <p className="mt-6 max-w-[68ch] text-[15px] leading-relaxed text-[var(--text-body)]">
-              {fly.description}
-            </p>
-          )}
         </div>
       </header>
 
@@ -204,6 +204,12 @@ export default async function FlyDetail({ params }: Props) {
       />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        {fly.description && (
+          <div className="prose mb-12">
+            <p className="whitespace-pre-line">{fly.description}</p>
+          </div>
+        )}
+
         <Recipe materials={linkedMaterials} notes={fly.recipe_notes} />
 
         {fly.tying_overview && (
