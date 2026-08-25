@@ -444,6 +444,19 @@
   font-weight: 700;
 }
 
+/* A field note's body is split into segments so a pull quote or stat block can
+   sit between them. Only the first segment opens the piece, so the drop cap
+   must not restart on every one. */
+.article-body--continued > p:first-of-type::first-letter {
+  float: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  color: inherit;
+}
+
 .article-body h2,
 .destination-body h2,
 .river-body h2 {
