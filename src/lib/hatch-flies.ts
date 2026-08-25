@@ -1,4 +1,9 @@
 import type { CanonicalFly, HatchMonth, River } from "@/types/entities";
+import { firstUsgsSiteId } from "@/lib/search/usgs";
+
+function riverHasGauge(river: River): boolean {
+  return Boolean(firstUsgsSiteId(river.usgsGaugeId));
+}
 
 function norm(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -155,7 +160,9 @@ export function riverFaqs(
       question: `When is the best time to fly fish the ${name}?`,
       answer: (river.bestMonths ?? []).length
         ? `The editorial window we list is ${(river.bestMonths ?? []).join(", ")}. That is a planning month range, not a guarantee. Shoulder months can fish well if flows and water temperature cooperate.`
-        : `Use the hatch chart on this page and the live USGS gauge on the ${name} river page. We do not publish other anglers' catch timing.`,
+        : riverHasGauge(river)
+          ? `Use the hatch chart on this page and the live USGS gauge on the ${name} river page. We do not publish other anglers' catch timing.`
+          : `Use the hatch chart on this page. The ${name} river page has no USGS gauge mapped yet — we are not guessing a number. We do not publish other anglers' catch timing.`,
     },
     {
       question: `Do I need a guide on the ${name}?`,
@@ -163,7 +170,9 @@ export function riverFaqs(
     },
     {
       question: `Where can I see live flow for the ${name}?`,
-      answer: `Open the ${name} river page for the USGS gauge, access notes, and the same hatch chart this fly list is built from. We do not publish other people's spots or fish counts.`,
+      answer: riverHasGauge(river)
+        ? `Open the ${name} river page for the USGS gauge, access notes, and the same hatch chart this fly list is built from. We do not publish other people's spots or fish counts.`
+        : `The ${name} has no USGS gauge mapped yet. The river page says so; we are not guessing a number. Access notes and the hatch chart are on that page. We do not publish other people's spots or fish counts.`,
     },
     {
       question: `Is this a report of what's working now on the ${name}?`,
