@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, useId, type ReactNode } from "react";
 import { LayoutGrid, Grid3X3, List, Newspaper, Search, SlidersHorizontal, X } from "lucide-react";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 interface ListToolbarProps {
   filters: FilterDimension[];
@@ -86,6 +87,7 @@ export default function ListToolbar({
     if (filtersOpenProp === undefined) setInternalOpen(open);
   };
 
+  const searchId = useId();
   const [localSearch, setLocalSearch] = useState(searchQuery);
   useEffect(() => {
     setLocalSearch(searchQuery);
@@ -102,13 +104,17 @@ export default function ListToolbar({
     <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[var(--surface-page)] border-b border-[var(--border-rule)]/60 mb-8">
       {onSearchChange && (
         <div className="relative mb-3">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-body)]" />
+          <label htmlFor={searchId} className="sr-only">
+            {searchPlaceholder ?? "Filter results"}
+          </label>
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-body)]" aria-hidden />
           <input
+            id={searchId}
             type="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder={searchPlaceholder ?? "Search..."}
-            className="w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)]"
+            className={`ea-focus-ring ${FOCUS_VISIBLE} w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] outline-none`}
           />
           {localSearch && (
             <button
@@ -117,10 +123,10 @@ export default function ListToolbar({
                 setLocalSearch("");
                 onSearchChange("");
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors`}
               aria-label="Clear search"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden />
             </button>
           )}
         </div>
@@ -133,13 +139,13 @@ export default function ListToolbar({
             aria-expanded={filtersOpen}
             aria-controls="browse-filter-panel"
             onClick={() => setFiltersOpen(!filtersOpen)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border ${
+            className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border ${
               filtersOpen || hasActiveFilters
                 ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
                 : "bg-[var(--surface-raised)] text-[var(--text-body)] border-[var(--border-rule)] hover:border-[var(--action)]"
             }`}
           >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
+            <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
             Filters
             {hasActiveFilters && (
               <span className="num text-xs opacity-80">
@@ -153,7 +159,7 @@ export default function ListToolbar({
               onClick={() => {
                 clearableFilters.forEach((f) => onFilterChange(f.key, null));
               }}
-              className="px-2 py-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} px-2 py-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors`}
             >
               Clear
             </button>
@@ -180,13 +186,13 @@ export default function ListToolbar({
                 aria-label={label}
                 aria-pressed={viewMode === mode}
                 title={label}
-                className={`p-1.5 ${
+                className={`ea-focus-ring ${FOCUS_VISIBLE} p-1.5 ${
                   viewMode === mode
                     ? "bg-[var(--action)]/10 text-[var(--action)]"
                     : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4" aria-hidden />
               </button>
             ))}
           </div>
@@ -199,7 +205,7 @@ export default function ListToolbar({
               id="browse-sort"
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30 focus:border-[var(--signal-live)] cursor-pointer"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 outline-none cursor-pointer`}
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -230,7 +236,7 @@ export default function ListToolbar({
                     onChange={(e) =>
                       onFilterChange(dimension.key, e.target.value || null)
                     }
-                    className="min-w-[10rem] border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--signal-live)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30"
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} min-w-[10rem] border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] outline-none`}
                   >
                     <option value="">All</option>
                     {dimension.options.map((opt) => (
@@ -244,7 +250,7 @@ export default function ListToolbar({
                     <button
                       type="button"
                       onClick={() => onFilterChange(dimension.key, null)}
-                      className={`whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
+                      className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
                         !activeFilters[dimension.key]
                           ? "bg-[var(--action)] text-[var(--on-action)]"
                           : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
@@ -262,7 +268,7 @@ export default function ListToolbar({
                             activeFilters[dimension.key] === opt.value ? null : opt.value,
                           )
                         }
-                        className={`whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
+                        className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
                           activeFilters[dimension.key] === opt.value
                             ? "bg-[var(--action)] text-[var(--on-action)]"
                             : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"

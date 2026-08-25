@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LayoutGrid, Rows3 } from "lucide-react";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 export type ViewMode = "grid" | "table";
 
@@ -65,13 +66,13 @@ export default function ViewModeToggle({
         onClick={() => set("grid")}
         aria-pressed={mode === "grid"}
         className={[
-          "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors",
+          `ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1 rounded px-2 py-1 transition-colors`,
           mode === "grid"
             ? "bg-[var(--action)] text-white"
             : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
         ].join(" ")}
       >
-        <LayoutGrid size={14} />
+        <LayoutGrid size={14} aria-hidden />
         <span>Grid</span>
       </button>
       <button
@@ -79,13 +80,13 @@ export default function ViewModeToggle({
         onClick={() => set("table")}
         aria-pressed={mode === "table"}
         className={[
-          "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors",
+          `ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1 rounded px-2 py-1 transition-colors`,
           mode === "table"
             ? "bg-[var(--action)] text-white"
             : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
         ].join(" ")}
       >
-        <Rows3 size={14} />
+        <Rows3 size={14} aria-hidden />
         <span>Table</span>
       </button>
     </div>

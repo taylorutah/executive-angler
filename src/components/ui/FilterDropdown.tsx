@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useMemo, useRef, useState, useCallback } from "react";
 import { Check, ChevronDown, Search, X } from "lucide-react";
+import { FOCUS_VISIBLE, MOTION_SAFE } from "@/components/layout/nav/links";
+import { useModalChrome } from "@/components/layout/nav/useModalChrome";
 
 export type FilterOption = {
   value: string;
@@ -72,10 +74,17 @@ export default function FilterDropdown({
     setOpen(false);
     setQuery("");
     setFocusIdx(0);
-    triggerRef.current?.focus();
   }, []);
 
-  // Outside click + Escape
+  useModalChrome({
+    open,
+    containerRef: popoverRef,
+    onClose: close,
+    returnFocusTo: triggerRef,
+    lockScroll: false,
+  });
+
+  // Outside click. Escape / Tab cycle / return-focus live in useModalChrome.
   useEffect(() => {
     if (!open) return;
     function onDocClick(e: MouseEvent) {
@@ -85,21 +94,12 @@ export default function FilterDropdown({
         triggerRef.current &&
         !triggerRef.current.contains(e.target as Node)
       ) {
-        setOpen(false);
-        setQuery("");
-      }
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.preventDefault();
         close();
       }
     }
     document.addEventListener("mousedown", onDocClick);
-    document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("mousedown", onDocClick);
-      document.removeEventListener("keydown", onKey);
     };
   }, [open, close]);
 
@@ -167,7 +167,7 @@ export default function FilterDropdown({
         aria-controls={open ? listboxId : undefined}
         aria-label={isEmpty ? `${label}: ${emptyMessage}` : `${label} filter, ${selected.length} selected`}
         title={isEmpty ? emptyMessage : undefined}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-sm font-medium transition-colors whitespace-nowrap border ${
+        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-sm font-medium transition-colors whitespace-nowrap border ${
           selected.length > 0
             ? "bg-[var(--action)]/10 border-[var(--action)]/40 text-[var(--action)]"
             : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/30 hover:text-[var(--text-primary)]"
@@ -179,7 +179,7 @@ export default function FilterDropdown({
             {selected.length}
           </span>
         )}
-        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${MOTION_SAFE} ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
 
       {open && (
@@ -187,17 +187,23 @@ export default function FilterDropdown({
           ref={popoverRef}
           className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-xl shadow-xl overflow-hidden`}
         >
+          <p role="status" aria-live="polite" className="sr-only">
+            {filteredOptions.length === 1
+              ? `1 ${label} option`
+              : `${filteredOptions.length} ${label} options`}
+          </p>
           {isSearchable && (
             <div className="relative border-b border-[var(--border-rule)]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" aria-hidden />
               <input
                 ref={searchRef}
+                data-autofocus
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onListKeyDown}
                 placeholder={`Search ${label.toLowerCase()}...`}
-                className="w-full bg-transparent pl-9 pr-3 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:outline-none"
+                className={`ea-focus-ring ${FOCUS_VISIBLE} w-full bg-transparent pl-9 pr-3 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
                 aria-label={`Search ${label}`}
               />
             </div>
@@ -208,7 +214,7 @@ export default function FilterDropdown({
             role="listbox"
             aria-multiselectable
             aria-label={label}
-            tabIndex={-1}
+            tabIndex={0}
             onKeyDown={onListKeyDown}
             className="overflow-y-auto py-1"
             style={{ maxHeight }}
@@ -264,14 +270,14 @@ export default function FilterDropdown({
               type="button"
               onClick={() => onChange([])}
               disabled={selected.length === 0}
-              className="text-[var(--text-meta)] hover:text-[var(--text-body)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-meta)] hover:text-[var(--text-body)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
             >
               Clear
             </button>
             <button
               type="button"
               onClick={close}
-              className="text-[var(--action)] hover:text-[var(--action-hover)] font-medium transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--action)] hover:text-[var(--action-hover)] font-medium transition-colors`}
             >
               Done
             </button>
@@ -296,9 +302,9 @@ export function FilterChip({
         type="button"
         onClick={onRemove}
         aria-label={`Remove filter: ${label}`}
-        className="hover:text-white transition-colors"
+        className={`ea-focus-ring ${FOCUS_VISIBLE} hover:text-[var(--text-primary)] transition-colors`}
       >
-        <X className="h-3 w-3" />
+        <X className="h-3 w-3" aria-hidden />
       </button>
     </span>
   );

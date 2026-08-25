@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Flag, X, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
+import { useModalChrome } from "@/components/layout/nav/useModalChrome";
 
 interface ReportButtonProps {
   entityType: string;
@@ -27,6 +29,15 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useModalChrome({
+    open: isOpen,
+    containerRef: dialogRef,
+    onClose: () => setIsOpen(false),
+    returnFocusTo: triggerRef,
+  });
 
   async function handleSubmit() {
     if (!reason) return;
@@ -62,17 +73,26 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
   return (
     <>
       <button
+        ref={triggerRef}
+        type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+        className={`ea-focus-ring ${FOCUS_VISIBLE} flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors`}
         title="Report an issue"
       >
-        <Flag className="h-3.5 w-3.5" />
+        <Flag className="h-3.5 w-3.5" aria-hidden />
         Report
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
-          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl max-w-md w-full p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Report an issue"
+            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl max-w-md w-full p-6 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
             {submitted ? (
               <div className="text-center py-4">
                 <CheckCircle className="h-10 w-10 text-[var(--state-positive)] mx-auto mb-3" />
@@ -83,8 +103,14 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
               <>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-base font-bold text-[var(--text-primary)]">Report an Issue</h3>
-                  <button onClick={() => setIsOpen(false)} className="text-[var(--text-meta)] hover:text-[var(--text-primary)]">
-                    <X className="h-5 w-5" />
+                  <button
+                    type="button"
+                    data-autofocus
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close report form"
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-meta)] hover:text-[var(--text-primary)]`}
+                  >
+                    <X className="h-5 w-5" aria-hidden />
                   </button>
                 </div>
 
@@ -108,12 +134,16 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
                 </div>
 
                 <div className="mb-4">
+                  <label htmlFor="report-details" className="sr-only">
+                    Additional details
+                  </label>
                   <textarea
+                    id="report-details"
                     value={details}
                     onChange={e => setDetails(e.target.value)}
                     placeholder="Additional details (optional)..."
                     rows={3}
-                    className="w-full px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} w-full px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none resize-none`}
                   />
                 </div>
 

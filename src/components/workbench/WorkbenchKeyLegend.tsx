@@ -7,6 +7,7 @@ import { WORKBENCH_KEYMAP } from "@/lib/workbench/keymap";
 export default function WorkbenchKeyLegend({ className = "" }: { className?: string }) {
   return (
     <p
+      aria-label="Keyboard shortcuts"
       className={`mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[var(--text-meta)] ${className}`}
     >
       {WORKBENCH_KEYMAP.map((binding) => (

@@ -4,6 +4,7 @@ import * as Popover from "@radix-ui/react-popover";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { HelpCircle, Info } from "lucide-react";
 import type { ReactNode } from "react";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 type Size = "sm" | "md";
 type Icon = "help" | "info";
@@ -46,9 +47,9 @@ export default function HelpHint({
               <button
                 type="button"
                 aria-label={label}
-                className={`inline-flex ${btnSize} items-center justify-center rounded-full text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors ${className}`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex ${btnSize} items-center justify-center rounded-full text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors motion-reduce:transition-none ${className}`}
               >
-                <Icn size={iconSize} strokeWidth={2} />
+                <Icn size={iconSize} strokeWidth={2} aria-hidden />
               </button>
             </Popover.Trigger>
           </Tooltip.Trigger>

@@ -183,10 +183,10 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
 }
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 transition-all " +
-  "disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none " +
-  "focus-visible:ring-2 focus-visible:ring-[var(--action)] focus-visible:ring-offset-2 " +
-  "focus-visible:ring-offset-[#0D1117] cursor-pointer select-none whitespace-nowrap";
+  "ea-focus-ring inline-flex items-center justify-center gap-2 transition-all " +
+  "disabled:opacity-50 disabled:cursor-not-allowed " +
+  "focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
+  "cursor-pointer select-none whitespace-nowrap motion-reduce:transition-none motion-reduce:transform-none";
 
 export function Button(props: ButtonProps) {
   const {
@@ -293,8 +293,9 @@ export function ButtonTile({
     `relative inline-flex flex-col items-start gap-1.5 ${padding} ${minWidth} ` +
     "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-xl " +
     "hover:border-[var(--action)] hover:bg-[var(--action)]/[0.08] transition-all " +
-    "cursor-pointer focus-visible:outline-none focus-visible:ring-2 " +
-    "focus-visible:ring-[var(--action)] " +
+    "ea-focus-ring cursor-pointer focus-visible:outline-2 " +
+    "focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
+    "motion-reduce:transition-none " +
     className;
 
   const inner = (
@@ -359,8 +360,9 @@ export function StatPill({
   const classes =
     `inline-flex items-center gap-2 ${padding} font-mono ` +
     "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-full " +
-    "hover:border-[var(--action)]/60 hover:bg-[#1F2630] transition-all cursor-pointer " +
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--action)] " +
+    "hover:border-[var(--action)]/60 hover:bg-[var(--surface-card)] transition-all cursor-pointer " +
+    "ea-focus-ring focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
+    "motion-reduce:transition-none " +
     className;
 
   const inner = (
@@ -433,8 +435,8 @@ export function SplitButton({
           {label}
         </button>
       )}
-      <button type="button" onClick={onCaret} className={caretCls} aria-label="More options">
-        <ChevronDown className={iconSize} />
+      <button type="button" onClick={onCaret} className={`ea-focus-ring ${caretCls}`} aria-label="More options">
+        <ChevronDown className={iconSize} aria-hidden />
       </button>
     </div>
   );
