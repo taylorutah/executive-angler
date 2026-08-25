@@ -64,6 +64,8 @@ export {
 
 export { getApprovedPhotosByEntity } from "./photos";
 export type { ApprovedPhoto } from "./photos";
+export { getPublishedMediaAsset } from "./media-assets";
+export type { PublishedMediaAsset } from "./media-assets";
 
 export {
   getAllGearBrands,

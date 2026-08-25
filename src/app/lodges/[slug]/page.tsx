@@ -161,6 +161,8 @@ export default async function LodgePage({ params }: Props) {
           title={lodge.name}
           subtitle={lodge.priceRange}
           height="h-[60vh]"
+          imageCredit={lodge.heroImageCredit}
+          imageCreditUrl={lodge.heroImageCreditUrl}
         />
         {true && (
           <div className="absolute top-4 right-4 z-20">

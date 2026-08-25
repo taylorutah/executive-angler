@@ -5,15 +5,20 @@
  *   npx tsx scripts/ingest-images.ts --dry
  *   npx tsx scripts/ingest-images.ts --unsplash
  *   npx tsx scripts/ingest-images.ts --wikimedia
+ *   npx tsx scripts/ingest-images.ts --credits
  *   npx tsx scripts/ingest-images.ts --crop-flies
  *
  * Uploads need SUPABASE_SERVICE_ROLE_KEY. --dry classifies with the anon key.
+ * --credits writes photographer / Commons attribution onto entity credit
+ * columns without downloading bytes.
  * sharp.rotate() without withMetadata() strips EXIF including GPS.
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
 import sharp from "sharp";
-import { publishStatus } from "../src/lib/media/licence";
+import { attributionHref, formatAttribution, publishStatus } from "../src/lib/media/licence";
+import { fetchUnsplashCredit } from "../src/lib/media/unsplash-credit";
+import { commonsFilePageUrl, fetchCommonsMeta } from "../src/lib/media/wikimedia-credit";
 
 try {
   const env = readFileSync(".env.local", "utf8");
@@ -29,7 +34,35 @@ const argv = process.argv.slice(2);
 const dryRun = argv.includes("--dry") || argv.length === 0;
 const doUnsplash = argv.includes("--unsplash");
 const doWikimedia = argv.includes("--wikimedia");
+const doCredits = argv.includes("--credits");
 const doCrop = argv.includes("--crop-flies");
+
+const ENTITY_CREDIT: Record<string, { credit: string; url: string }> = {
+  destinations: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  rivers: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  articles: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  lodges: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  fly_shops: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  guides: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  species: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+  gear_products: { credit: "hero_image_credit", url: "hero_image_credit_url" },
+};
+
+async function writeEntityCredit(
+  write: SupabaseClient,
+  table: string,
+  id: unknown,
+  credit: string,
+  creditUrl: string | undefined,
+) {
+  const cols = ENTITY_CREDIT[table];
+  if (!cols || !credit) return;
+  const { error } = await write
+    .from(table)
+    .update({ [cols.credit]: credit, [cols.url]: creditUrl ?? null })
+    .eq("id", id);
+  if (error) console.error("credit", table, id, error.message);
+}
 
 const BUCKET = "media";
 const UNSPLASH_LICENCE = "Unsplash License";
@@ -183,6 +216,16 @@ async function ingestUnsplash(sb: SupabaseClient, write: SupabaseClient) {
         continue;
       }
       if (!service) continue;
+      const photo = await fetchUnsplashCredit(raw);
+      const creditLabel = formatAttribution({
+        creditName: photo.name,
+        licence: UNSPLASH_LICENCE,
+      });
+      const creditHref = attributionHref({
+        creditUrl: photo.url,
+        licenceUrl: UNSPLASH_LICENCE_URL,
+        licence: UNSPLASH_LICENCE,
+      });
       const res = await fetch(raw);
       if (!res.ok) continue;
       const { jpeg, blur } = await processImage(Buffer.from(await res.arrayBuffer()));
@@ -204,8 +247,8 @@ async function ingestUnsplash(sb: SupabaseClient, write: SupabaseClient) {
           column_name: src.column,
           storage_path: path,
           source_url: raw,
-          credit_name: "Unsplash",
-          credit_url: raw,
+          credit_name: photo.name,
+          credit_url: photo.url,
           licence: UNSPLASH_LICENCE,
           licence_url: UNSPLASH_LICENCE_URL,
           acquired_at: new Date().toISOString(),
@@ -216,16 +259,11 @@ async function ingestUnsplash(sb: SupabaseClient, write: SupabaseClient) {
         { onConflict: "entity_type,entity_id,column_name" },
       );
       await write.from(src.table).update({ [src.column]: pub }).eq("id", rec.id);
+      await writeEntityCredit(write, src.table, rec.id, creditLabel, creditHref);
       ingested++;
     }
   }
   console.log(`unsplash ingested ${ingested}, dead ${dead}`);
-}
-
-function commonsTitle(url: string): string | null {
-  const m = url.match(/\/commons\/(?:.\/..\/)?([^?]+)$/);
-  if (!m) return null;
-  return decodeURIComponent(m[1]);
 }
 
 async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
@@ -236,20 +274,12 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
   for (const rec of rows) {
     const raw = typeof rec.image_url === "string" ? rec.image_url.trim() : "";
     if (classify(raw) !== "wikimedia") continue;
-    const title = commonsTitle(raw);
-    if (!title) {
+    const meta = await fetchCommonsMeta(raw);
+    if (!meta) {
       flagged++;
       continue;
     }
-    const api = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent("File:" + title)}&prop=imageinfo&iiprop=extmetadata|url&format=json`;
-    const json = (await (await fetch(api, { headers: { "User-Agent": "ExecutiveAngler/1.0" } })).json()) as {
-      query?: { pages?: Record<string, { imageinfo?: Array<{ extmetadata?: Record<string, { value?: string }> }> }> };
-    };
-    const page = json.query?.pages ? Object.values(json.query.pages)[0] : undefined;
-    const meta = page?.imageinfo?.[0]?.extmetadata ?? {};
-    const licence = meta.LicenseShortName?.value ?? meta.UsageTerms?.value ?? "";
-    const licenceUrl = meta.LicenseUrl?.value ?? "";
-    const artist = (meta.Artist?.value ?? "").replace(/<[^>]+>/g, "").trim();
+    const { licence, licenceUrl, artist } = meta;
     if (!licence) {
       flagged++;
       await write.from("media_assets").upsert(
@@ -313,8 +343,76 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
       { onConflict: "entity_type,entity_id,column_name" },
     );
     await write.from("species").update({ image_url: pub }).eq("id", rec.id);
+    const creditLabel = formatAttribution({
+      creditName: artist || "Wikimedia Commons",
+      licence,
+    });
+    const creditHref = attributionHref({
+      creditUrl: commonsFilePageUrl(raw),
+      licenceUrl: licenceUrl || null,
+      licence,
+    });
+    await writeEntityCredit(write, "species", rec.id, creditLabel, creditHref);
   }
   console.log(`wikimedia licensed ${licensed}, flagged ${flagged}`);
+}
+
+async function writeCredits(sb: SupabaseClient, write: SupabaseClient) {
+  const service = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  if (!service) {
+    console.error("--credits needs SUPABASE_SERVICE_ROLE_KEY to write. Printing only.");
+  }
+  let unsplash = 0;
+  let commons = 0;
+  let flagged = 0;
+  for (const src of SOURCES) {
+    const rows = await allRows(sb, src.table, `id, slug, ${src.nameCol}, ${src.column}`);
+    for (const rec of rows) {
+      const raw = typeof rec[src.column] === "string" ? (rec[src.column] as string).trim() : "";
+      const kind = classify(raw);
+      if (kind === "unsplash") {
+        const photo = await fetchUnsplashCredit(raw);
+        const label = formatAttribution({
+          creditName: photo.name,
+          licence: UNSPLASH_LICENCE,
+        });
+        const href = attributionHref({
+          creditUrl: photo.url,
+          licenceUrl: UNSPLASH_LICENCE_URL,
+          licence: UNSPLASH_LICENCE,
+        });
+        console.log(`  unsplash  ${src.entity}/${rec.slug}: ${label}`);
+        if (service) {
+          await writeEntityCredit(write, src.table, rec.id, label, href);
+          unsplash++;
+        }
+        continue;
+      }
+      if (kind === "wikimedia") {
+        const meta = await fetchCommonsMeta(raw);
+        if (!meta?.licence) {
+          flagged++;
+          console.log(`  flagged   ${src.entity}/${rec.slug}: no readable Commons licence`);
+          continue;
+        }
+        const label = formatAttribution({
+          creditName: meta.artist || "Wikimedia Commons",
+          licence: meta.licence,
+        });
+        const href = attributionHref({
+          creditUrl: commonsFilePageUrl(raw),
+          licenceUrl: meta.licenceUrl || null,
+          licence: meta.licence,
+        });
+        console.log(`  commons   ${src.entity}/${rec.slug}: ${label}`);
+        if (service) {
+          await writeEntityCredit(write, src.table, rec.id, label, href);
+          commons++;
+        }
+      }
+    }
+  }
+  console.log(`credits written: unsplash ${unsplash}, commons ${commons}, flagged ${flagged}`);
 }
 
 async function cropFlies(sb: SupabaseClient, write: SupabaseClient) {
@@ -362,11 +460,12 @@ async function main() {
   const read = client(false);
   const write = client(Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY));
   await report(read);
-  if (dryRun && !doUnsplash && !doWikimedia && !doCrop) {
-    console.log("\n--dry only. Pass --unsplash / --wikimedia / --crop-flies to write.");
+  if (dryRun && !doUnsplash && !doWikimedia && !doCredits && !doCrop) {
+    console.log("\n--dry only. Pass --unsplash / --wikimedia / --credits / --crop-flies to write.");
     console.log("Do not shrink remotePatterns until Unsplash ingest lands.");
     return;
   }
+  if (doCredits) await writeCredits(read, write);
   if (doUnsplash) await ingestUnsplash(read, write);
   if (doWikimedia) await ingestWikimedia(read, write);
   if (doCrop) await cropFlies(read, write);
