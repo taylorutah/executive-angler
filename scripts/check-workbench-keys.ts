@@ -198,7 +198,7 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   const afterK = await focusedRow(page);
   check(
     `${surface.name}: k moves focus up`,
-    afterK === tripleTarget,
+    afterK === Math.max(0, afterDown - 1),
     `row ${afterK}`,
   );
 
@@ -206,7 +206,7 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   const afterJ = await focusedRow(page);
   check(
     `${surface.name}: j moves focus down`,
-    afterJ === expectedDown,
+    afterJ === afterDown,
     `row ${afterJ}`,
   );
 
@@ -268,6 +268,50 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   await page.waitForTimeout(200);
 }
 
+async function exerciseErrorFlash(page: Page, surface: Surface, column: string) {
+  const cell = page.getByRole("button", { name: new RegExp(`^Edit ${column}, row`) }).first();
+  if ((await cell.count()) === 0) {
+    check(`${surface.name}: error-flash affordance`, false, `no editable "${column}" cell`);
+    return;
+  }
+  await cell.click();
+  const input = page.getByRole("textbox", { name: new RegExp(`^${column}, row`) });
+  await input.fill("");
+  await input.press("Enter");
+  const flashed = await page
+    .locator(".ea-wb-flash-error")
+    .first()
+    .waitFor({ state: "attached", timeout: 5000 })
+    .then(() => true)
+    .catch(() => false);
+  check(`${surface.name}: a rejected inline save flashes red`, flashed);
+  const cleared = await page
+    .locator(".ea-wb-flash-error")
+    .first()
+    .waitFor({ state: "detached", timeout: 2000 })
+    .then(() => true)
+    .catch(() => false);
+  check(`${surface.name}: the red flash clears after animationend`, cleared);
+}
+
+async function exerciseReducedMotion(page: Page) {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const duration = await page.evaluate(() => {
+    const el = document.createElement("span");
+    el.className = "ea-wb-flash-saved";
+    document.body.appendChild(el);
+    const ms = parseFloat(getComputedStyle(el).animationDuration) * 1000;
+    el.remove();
+    return ms;
+  });
+  check(
+    "prefers-reduced-motion suppresses the save flash",
+    duration > 0 && duration <= 20,
+    `animation-duration ${duration}ms`,
+  );
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+}
+
 /**
  * Round-trips a real inline edit and asserts the optimistic green flash.
  * Only run where a rename is harmless and reversible.
@@ -291,6 +335,14 @@ async function exerciseInlineEdit(page: Page, surface: Surface, column: string) 
     .then(() => true)
     .catch(() => false);
   check(`${surface.name}: a successful inline save flashes green`, flashed);
+
+  const cleared = await page
+    .locator(".ea-wb-flash-saved")
+    .first()
+    .waitFor({ state: "detached", timeout: 2000 })
+    .then(() => true)
+    .catch(() => false);
+  check(`${surface.name}: the green flash clears after animationend`, cleared);
 
   // Put it back.
   await page.waitForTimeout(1200);
@@ -325,8 +377,12 @@ async function main() {
       await page.waitForTimeout(400);
     }
     await exerciseKeyboard(page, surface);
+    if (surface.name === "journal") {
+      await exerciseErrorFlash(page, surface, "Session");
+    }
     if (surface.name === "gear-locker") {
       await exerciseInlineEdit(page, surface, "Item");
+      await exerciseReducedMotion(page);
     }
     await page.screenshot({ path: `${OUT}/${surface.name}-1440.png`, fullPage: true });
 
