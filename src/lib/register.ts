@@ -11,6 +11,7 @@ const DUSK_PREFIXES = [
   "/today",
   "/journal",
   "/flies/boxes",
+  "/flybox",
   "/my-boxes",
   "/my-flies",
   "/account",
@@ -31,4 +32,4 @@ export function registerForPath(pathname: string): Register {
 }
 
 /** Inline bootstrap — runs before paint so the first frame is the right register. */
-export const REGISTER_BOOTSTRAP = `(function(){try{var p=location.pathname;var dusk=/^\\/(app|dashboard|today|journal|account|feed|messages|admin|favorites|notifications|my-boxes|my-flies)(\\/|$)/.test(p)||/^\\/flies\\/boxes(\\/|$)/.test(p)||p==="/rivers/mine"||p.indexOf("/rivers/mine/")===0;document.documentElement.setAttribute("data-register",dusk?"dusk":"daylight");}catch(e){document.documentElement.setAttribute("data-register","daylight");}})();`;
+export const REGISTER_BOOTSTRAP = `(function(){try{var p=location.pathname;var dusk=/^\\/(app|dashboard|today|journal|account|feed|messages|admin|favorites|notifications|flybox|my-boxes|my-flies)(\\/|$)/.test(p)||/^\\/flies\\/boxes(\\/|$)/.test(p)||p==="/rivers/mine"||p.indexOf("/rivers/mine/")===0;document.documentElement.setAttribute("data-register",dusk?"dusk":"daylight");}catch(e){document.documentElement.setAttribute("data-register","daylight");}})();`;

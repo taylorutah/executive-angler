@@ -97,7 +97,10 @@ export const DUSK_ROUTES = [
   "/journal",
   "/journal/insights",
   "/flies/boxes",
+  "/flybox",
+  "/rivers/mine",
   "/account",
+  "/account/gear",
   "/notifications",
   "/messages",
 ] as const;
