@@ -1,7 +1,7 @@
 {
   "name": "executive-angler",
   "version": "0.1.0",
-  "description": "Executive Angler \u2014 rivers, flies, and hatches, plus a private notebook for your own days on the water.",
+  "description": "Executive Angler — rivers, flies, and hatches, plus a private notebook for your own days on the water.",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,6 +17,8 @@
     "audit:images": "npx tsx scripts/audit-images.ts",
     "ingest:images": "npx tsx scripts/ingest-images.ts",
     "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/register.test.ts src/lib/plan/window.test.ts src/lib/media/licence.test.ts src/lib/media/unsplash-credit.test.ts src/lib/media/wikimedia-credit.test.ts src/lib/media/phase2-hosts.test.ts src/lib/media/place-paths.test.ts src/components/home/conditions.test.ts src/components/home/homepage-images.test.ts src/lib/browse/match.test.ts src/lib/workbench/keymap.test.ts src/lib/workbench/optimistic.test.ts src/lib/articles/subject.test.ts src/lib/authors.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts scripts/check-home-rail.test.ts src/app/learn/keep-response.test.ts",
+    "test:e2e": "playwright test --project=e2e",
+    "test:visual": "playwright test --project=visual",
     "check:home-rail": "npx tsx scripts/check-home-rail.ts",
     "check:homepage-images": "npx tsx scripts/check-homepage-images.ts",
     "check:place-images": "npx tsx scripts/check-place-images.ts",
@@ -27,7 +29,9 @@
     "check:stored-html": "npx tsx scripts/check-stored-html.ts",
     "check:authored-bodies": "npx tsx scripts/check-authored-bodies.ts",
     "codemod:tokens": "npx tsx scripts/codemod-tokens.ts",
-    "check:workbench": "npx tsx scripts/check-workbench-keys.ts"
+    "check:workbench": "npx tsx scripts/check-workbench-keys.ts",
+    "check:no-review-account": "npx tsx scripts/check-no-review-account.ts",
+    "check:baseline-quality": "npx tsx scripts/check-baseline-quality.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",
@@ -63,6 +67,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/papaparse": "^5.5.2",

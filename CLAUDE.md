@@ -20,8 +20,8 @@
 - **Dev:** `npm run dev` → http://localhost:3000
 - **Build:** `npm run build`
 - **Seed DB:** `npm run seed` (runs `npx tsx scripts/seed-all.ts`)
-- **QA test account (App Store review — do not write to it):** `test@executiveangler.com` / `TestEA2026!` — the account submitted to App Store review. Sign-in-only automated tests may use it. **Never insert, update, or delete its rows** without explicit instruction.
-- **Fixture account (screenshots, workbench, populated-row demos):** `fixture@executiveangler.com` / `FixtureEA2026!` — rebuild with `npm run seed:fixture` (`scripts/seed-fixture-account.ts`, idempotent). Any PR that needs populated journal / flybox / gear / watched-river rows uses this account. Never the review account.
+- **App Store review account:** sign-in-only, never write its rows, never put its address or password in this tree. Automated tests do not use it.
+- **Fixture account (screenshots, workbench, e2e, visual):** `fixture@executiveangler.com` — rebuild with `npm run seed:fixture`. Credentials come from `EA_FIXTURE_EMAIL` / `EA_FIXTURE_PASSWORD`. Never the review account.
 - **Deferred (files frozen — first unfrozen pass):** add `/plan` to `src/app/sitemap.ts`. 138 prerendered trip briefs are currently invisible to crawlers. Do not edit `sitemap.ts` / `robots.ts` / `llms.txt` until they are unfrozen.
 
 ## Tech Stack

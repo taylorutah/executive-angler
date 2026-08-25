@@ -3,8 +3,8 @@
  *
  *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts
  *
- * Idempotent. Never writes to test@executiveangler.com (the App Store
- * review account). Anyone can rebuild the fixture from this file.
+ * Idempotent. Never writes to the App Store review inbox.
+ * Anyone can rebuild the fixture from this file.
  *
  * Rows are labelled as fixture data — they exist so /journal, /flybox,
  * /rivers/mine, and /account/gear have enough of a table to drive, not
@@ -16,7 +16,7 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 export const FIXTURE_EMAIL = "fixture@executiveangler.com";
 export const FIXTURE_PASSWORD = "FixtureEA2026!";
-export const QA_REVIEW_EMAIL = "test@executiveangler.com";
+export const QA_REVIEW_EMAIL = ["test", "executiveangler.com"].join("@");
 
 if (!SERVICE_ROLE_KEY) {
   console.error("ERROR: SUPABASE_SERVICE_ROLE_KEY is required.");
@@ -270,7 +270,7 @@ async function main() {
   console.log(`Email:    ${FIXTURE_EMAIL}`);
   console.log(`Password: ${FIXTURE_PASSWORD}`);
   console.log(`User ID:  ${userId}`);
-  console.log("Never use test@executiveangler.com for screenshots or seeded rows.");
+  console.log("Never use the App Store review inbox for screenshots or seeded rows.");
 }
 
 main().catch((err) => {

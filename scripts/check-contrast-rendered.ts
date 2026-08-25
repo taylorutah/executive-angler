@@ -449,8 +449,8 @@ async function samplePage(page: Page): Promise<Sample[]> {
   return page.evaluate(SAMPLE_PAGE);
 }
 
-const QA_EMAIL = process.env.QA_EMAIL ?? "test@executiveangler.com";
-const QA_PASSWORD = process.env.QA_PASSWORD ?? "TestEA2026!";
+const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? process.env.QA_EMAIL ?? "";
+const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? process.env.QA_PASSWORD ?? "";
 
 async function hasAuthCookie(page: Page): Promise<boolean> {
   const cookies = await page.context().cookies();
@@ -460,6 +460,10 @@ async function hasAuthCookie(page: Page): Promise<boolean> {
 }
 
 async function signIn(page: Page): Promise<boolean> {
+  if (!FIXTURE_EMAIL || !FIXTURE_PASSWORD) {
+    console.log("fixture credentials unset — skipping signed-in routes");
+    return false;
+  }
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (supabaseUrl && anonKey) {
@@ -471,7 +475,7 @@ async function signIn(page: Page): Promise<boolean> {
           Authorization: `Bearer ${anonKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: QA_EMAIL, password: QA_PASSWORD }),
+        body: JSON.stringify({ email: FIXTURE_EMAIL, password: FIXTURE_PASSWORD }),
       });
       if (res.ok) {
         const session = (await res.json()) as {
@@ -508,16 +512,16 @@ async function signIn(page: Page): Promise<boolean> {
         });
         if (!page.url().includes("/login")) return true;
       } else {
-        console.log(`QA grant HTTP ${res.status} — falling back to /login`);
+        console.log(`fixture grant HTTP ${res.status} — falling back to /login`);
       }
     } catch (err) {
-      console.log(`QA grant failed (${err}) — falling back to /login`);
+      console.log(`fixture grant failed (${err}) — falling back to /login`);
     }
   }
 
   await page.goto(`${BASE}/login`, { waitUntil: "load", timeout: 60_000 });
-  await page.locator("#email").fill(QA_EMAIL);
-  await page.locator("#password").fill(QA_PASSWORD);
+  await page.locator("#email").fill(FIXTURE_EMAIL);
+  await page.locator("#password").fill(FIXTURE_PASSWORD);
   await page
     .waitForFunction(() => {
       const button = document.querySelector<HTMLButtonElement>(
@@ -653,7 +657,7 @@ async function main() {
           await auditRoute(page, route, vp);
         }
       } else {
-        console.log(`dusk routes @${vp.name} SKIP  QA login failed`);
+        console.log(`dusk routes @${vp.name} SKIP  fixture login failed`);
       }
 
       await context.close();
