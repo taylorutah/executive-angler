@@ -10,8 +10,9 @@ interface Props {
 }
 
 /**
- * Dusk instrument band at full content width. Live readings stay dusk
- * even on a Daylight river page — the desk's one memorable switch.
+ * Contained Dusk instrument on a Daylight page. The section keeps the
+ * paper ground; .register-dusk lives on the inset panel — radiused,
+ * edged, shadowed — the way an instrument sits on a desk.
  */
 export default function RiverLiveInset({
   riverId,
@@ -20,15 +21,17 @@ export default function RiverLiveInset({
   children,
 }: Props) {
   return (
-    <section className="register-dusk bg-[var(--surface-page)]">
+    <section className="bg-[var(--surface-page)]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-        <RiverConditionsCard
-          riverId={riverId}
-          riverLatitude={riverLatitude}
-          riverLongitude={riverLongitude}
-          layout="band"
-        />
-        {children}
+        <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-6 shadow-[0_12px_32px_rgba(11,17,18,0.22)] sm:p-8">
+          <RiverConditionsCard
+            riverId={riverId}
+            riverLatitude={riverLatitude}
+            riverLongitude={riverLongitude}
+            layout="band"
+          />
+          {children}
+        </div>
       </div>
     </section>
   );

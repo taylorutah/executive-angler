@@ -90,60 +90,59 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
         </div>
       </section>
 
-      <section
-        data-lane="resource"
-        className="register-dusk bg-[var(--surface-page)] py-16 sm:py-24"
-      >
+      <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
-                River of the day
-              </p>
-              <h2 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl">
-                {hero.name}
-              </h2>
-            </div>
-            <div className="text-right">
-              {heroSnap?.cfs != null ? (
-                <p>
-                  <span className={`num text-5xl font-bold leading-none sm:text-6xl ${heroSnap.stale ? "text-[var(--text-primary)]" : "text-[var(--signal-live)]"}`}>
-                    {heroSnap.cfs.toLocaleString("en-US")}
-                  </span>
-                  <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
-                    cfs
-                  </span>
+          <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-6 py-10 shadow-[0_12px_32px_rgba(11,17,18,0.22)] sm:px-8 sm:py-12">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+                  River of the day
                 </p>
-              ) : (
-                <p className="text-[14px] text-[var(--text-meta)]">No live reading right now</p>
-              )}
-              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
-                {hero.gauge ? `USGS ${hero.gauge.siteId} · ${hero.gauge.section}` : "No USGS gauge"}
-                {observed ? ` · ${observed}` : ""}
-              </p>
+                <h2 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl">
+                  {hero.name}
+                </h2>
+              </div>
+              <div className="text-right">
+                {heroSnap?.cfs != null ? (
+                  <p>
+                    <span className={`num text-5xl font-bold leading-none sm:text-6xl ${heroSnap.stale ? "text-[var(--text-primary)]" : "text-[var(--signal-live)]"}`}>
+                      {heroSnap.cfs.toLocaleString("en-US")}
+                    </span>
+                    <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                      cfs
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-[14px] text-[var(--text-meta)]">No live reading right now</p>
+                )}
+                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                  {hero.gauge ? `USGS ${hero.gauge.siteId} · ${hero.gauge.section}` : "No USGS gauge"}
+                  {observed ? ` · ${observed}` : ""}
+                </p>
+              </div>
             </div>
+
+            {hero.gauge && (
+              <div className="mt-10">
+                <HomeHydrograph riverId={hero.id} siteId={hero.gauge.siteId} />
+              </div>
+            )}
+
+            <p className="mt-8 max-w-[68ch] text-[18px] leading-relaxed text-[var(--text-body)]">
+              {WATER_JUDGEMENT}.
+              {heroHatches.length > 0 ? ` Hatch on: ${heroHatches.slice(0, 3).join(", ")}.` : ""}
+            </p>
+
+            {remainder.length > 0 && (
+              <ul className="mt-10 grid gap-4 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
+                {remainder.map((river) => (
+                  <li key={river.id}>
+                    <CompactRiver river={river} snapshot={snapshots.get(river.id)} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-
-          {hero.gauge && (
-            <div className="mt-10">
-              <HomeHydrograph riverId={hero.id} siteId={hero.gauge.siteId} />
-            </div>
-          )}
-
-          <p className="mt-8 max-w-[68ch] text-[18px] leading-relaxed text-[var(--text-body)]">
-            {WATER_JUDGEMENT}.
-            {heroHatches.length > 0 ? ` Hatch on: ${heroHatches.slice(0, 3).join(", ")}.` : ""}
-          </p>
-
-          {remainder.length > 0 && (
-            <ul className="mt-10 grid gap-4 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
-              {remainder.map((river) => (
-                <li key={river.id}>
-                  <CompactRiver river={river} snapshot={snapshots.get(river.id)} />
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </section>
     </>

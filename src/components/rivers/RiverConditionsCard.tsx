@@ -68,11 +68,13 @@ function formatTime(iso: string): string {
 }
 
 function getFlowLabel(cfs: number): { label: string; color: string } {
-  if (cfs < 100) return { label: "Low", color: "text-[var(--action)]" };
-  if (cfs < 500) return { label: "Normal", color: "text-[var(--state-positive)]" };
-  if (cfs < 2000) return { label: "Moderate", color: "text-[var(--signal-live)]" };
-  if (cfs < 5000) return { label: "High", color: "text-[var(--action)]" };
-  return { label: "Flood Stage", color: "text-[var(--state-negative)]" };
+  // Measurement, not status. Thresholds are unchanged; colour is meta.
+  const color = "text-[var(--text-meta)]";
+  if (cfs < 100) return { label: "Low", color };
+  if (cfs < 500) return { label: "Normal", color };
+  if (cfs < 2000) return { label: "Moderate", color };
+  if (cfs < 5000) return { label: "High", color };
+  return { label: "Flood Stage", color };
 }
 
 // Find the weather section that best matches a USGS gauge section name.
@@ -227,25 +229,6 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             Live
           </span>
         </div>
-
-        {hasMultipleSections && (
-          <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">
-            {gauges.map((g, idx) => (
-              <button
-                key={g.siteId}
-                type="button"
-                onClick={() => setSection(g.siteId)}
-                className={`ea-focus-ring shrink-0 px-3 py-1.5 text-[12px] font-medium transition-colors ${
-                  idx === selectedIdx
-                    ? "bg-[var(--action)] text-[var(--on-action)]"
-                    : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
-                }`}
-              >
-                {g.section}
-              </button>
-            ))}
-          </div>
-        )}
 
         {active.stale && (
           <div className="mb-4 flex items-center gap-2 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-2 text-xs text-[var(--action)]">

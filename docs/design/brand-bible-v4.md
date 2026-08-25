@@ -2,7 +2,7 @@
 type: concept
 title: "Brand Bible v4 — The Water Desk"
 project: executive-angler
-updated: 2026-08-24
+updated: 2026-08-25
 tags: [ea, brand, privacy, water-desk, design-system]
 ---
 
@@ -10,6 +10,7 @@ tags: [ea, brand, privacy, water-desk, design-system]
 ## The Water Desk edition
 
 **Status:** Current. Supersedes [[Brand-Bible-v3.1]] and [[Brand-Bible-v3]] — archive both.
+**Revised 2026-08-25 — §5.1 token table corrected to shipped values (five rows held pre-fix hexes); §5.6 added.**
 **Companion specs:** [[Website-Design-Review-2026-08-23]] (design) · [[EA-Build-Brief-III-2026-08-24]] (build) · [[Workbench-Style-Guide]] (needs a token refresh)
 
 ---
@@ -93,16 +94,16 @@ Unchanged from v3 §4: **the intentional angler**, defined by mindset rather tha
 
 | Token | Hex | Role |
 |---|---|---|
-| Paper | `#FAF7F2` | Daylight ground |
+| Paper | `#FAF6F0` | Daylight ground |
 | Vellum | `#F2EDE4` | raised, alternating bands |
 | Card | `#FFFFFF` | |
 | Rule | `#E2DACD` | borders |
-| Ink | `#14181A` | headings — 16.7:1 |
+| Ink | `#141814` | headings — 16.7:1 on paper |
 | Graphite | `#3E4649` | body — 9.0:1 |
-| Slate | `#6C7679` | meta, labels — 4.4:1, **never running text** |
-| **Copper 700** | `#A85C18` | **action only, on light** — 4.7:1; white on it 5.0:1 |
+| Slate | `#5E6669` | meta, labels — 5.45:1 paper, 5.03:1 vellum, **never running text** |
+| **Copper 700** | `#9E5615` | **action only, on light** — 5.14:1 paper, 4.74:1 vellum; white on it 5.53:1 |
 | Copper 400 | `#E8923A` | action on dark — 7.8:1 |
-| **Teal 700** | `#0E7C93` | **live data only**, on light — 4.6:1 |
+| **Teal 700** | `#0C7286` | **live data only**, on light — 5.18:1 paper, 4.78:1 vellum |
 | Teal 300 | `#22C1DE` | live data on dark — 8.8:1 |
 | Riverbed | `#0B1112` | Dusk ground |
 | Pool | `#131B1D` | Dusk surface, zebra rows |
@@ -150,6 +151,22 @@ One hero per page **at full strength** — the image is the image, never faded t
 ### 5.5 Logo
 
 Mark-only in app chrome and small headers. The full lockup is reserved for editorial contexts and the footer, so the word "Executive" is not the first thing on every screen.
+
+### 5.6 How the registers meet
+
+Dusk is an instrument, not a floor. Live data lives in a **contained dark panel** — inset from the page gutter, radiused, with a defined edge and its own shadow — sitting on the paper page the way an instrument sits on a desk. Dusk never full-bleeds across a public editorial page and never splits it in half. The paper register is the page; Dusk is an object on it.
+
+**Rule 1 — Containment.** A Dusk panel on a Daylight page is inset on all four sides, has `border-radius`, a `--border-rule` edge, and a shadow lifting it off the paper. Its parent stays Daylight. `.register-dusk` goes on the panel, never on the section containing it.
+
+**Rule 2 — One hue across registers.** A control that exists in both registers uses the same accent hue, tonally adjusted for its ground — never a different colour. Copper is `#9E5615` on paper and `#E8923A` on riverbed, both bound through `--action`. No component hardcodes either.
+
+**Rule 3 — No status colour outside the palette, and no stoplight.** Flow state is carried by the copper/teal system and by type weight, not by green. `--state-positive` means a positive **delta**, not a healthy river. A flow reading is a measurement, not a success. `--action` is the action colour and is never a status colour.
+
+**Rule 4 — One render per control.** A control that appears in both the Daylight page and the Dusk panel is a duplicate, not a convenience. Render it once, in the register that owns it.
+
+**Where Dusk owns the whole ground.** On `/today`, `/journal`, `/flybox`, and `/rivers/mine` — the private notebook — the page *is* Dusk. There is no seam to manage.
+
+**The one exception.** A thin Dusk **rail** docked to the header (the ~40px sticky conditions ticker) is chrome, not content, and is exempt. The test is whether it sits against the header or interrupts the reading column: a rail is docked; a band interrupts.
 
 ---
 
@@ -227,4 +244,5 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-25** | §5.1 token table corrected to shipped `globals.css` values (Paper, Ink, Slate, Copper 700, Teal 700). Copper 400 and Teal 300 unchanged. §5.6 added: Dusk is an instrument on the paper page, not a floor.
 - **2026-08-24** | v4 created. Reorganised around The Water Desk: the desk/notebook duality as the organising idea, the 78/14/8 ratio and Daylight/Dusk promoted into the identity, public angler profiles formally retired, the newcomer made a first-class design target, Inter added to the retired-type list, the domain move deferred pending organic recovery.
