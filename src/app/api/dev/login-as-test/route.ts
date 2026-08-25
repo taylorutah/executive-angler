@@ -7,9 +7,10 @@
  *   The service role key never leaves the server, and the client must
  *   proxy through this route.
  *
- * Sets the @supabase/ssr session cookie for the test@executiveangler.com
- * user so we can drive the UI flows during QA without depending on the
- * production Cloudflare Turnstile gate or the publishable-key handshake.
+ * Sets the @supabase/ssr session cookie for the fixture account
+ * (EA_FIXTURE_EMAIL / EA_FIXTURE_PASSWORD) so we can drive UI flows
+ * during QA without depending on Turnstile or the publishable-key handshake.
+ * No default account — missing env vars fail closed.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
@@ -45,9 +46,15 @@ export async function GET(req: NextRequest) {
     },
   );
 
+  const email = process.env.EA_FIXTURE_EMAIL;
+  const password = process.env.EA_FIXTURE_PASSWORD;
+  if (!email || !password) {
+    return NextResponse.json({ error: "fixture credentials unset" }, { status: 500 });
+  }
+
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: "test@executiveangler.com",
-    password: "TestEA2026!",
+    email,
+    password,
   });
 
   if (error || !data.session) {

@@ -20,3 +20,79 @@ jobs:
       - run: npm run check:stored-html
       - run: npm run check:image-hosts
       - run: npm test
+      - run: npm run check:no-review-account
+      - run: npm run check:baseline-quality
+
+  # Painted-contrast gate. The script exits 1 on `failures` only —
+  # `unverifiable` (image-backed, no computable overlay) is never a gate.
+  # Measured 0 failures / 8,548 samples. This is a hard gate.
+  contrast-rendered:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
+      NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
+      EA_FIXTURE_EMAIL: ${{ secrets.EA_FIXTURE_EMAIL }}
+      EA_FIXTURE_PASSWORD: ${{ secrets.EA_FIXTURE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run start -- -p 3000 &
+      - run: npx --yes wait-on http://localhost:3000 --timeout 60000
+      - run: npm run check:contrast:rendered
+        env:
+          BASE_URL: http://localhost:3000
+
+  harness:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
+      NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
+      EA_FIXTURE_EMAIL: ${{ secrets.EA_FIXTURE_EMAIL }}
+      EA_FIXTURE_PASSWORD: ${{ secrets.EA_FIXTURE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:e2e
+        env:
+          CI: "1"
+
+  visual:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
+      NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
+      EA_FIXTURE_EMAIL: ${{ secrets.EA_FIXTURE_EMAIL }}
+      EA_FIXTURE_PASSWORD: ${{ secrets.EA_FIXTURE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:visual
+        env:
+          CI: "1"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-report
+          path: playwright-report/
+          retention-days: 7
