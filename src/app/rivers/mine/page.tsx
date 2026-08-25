@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { listMyFavoriteSections, listMyFavoritedRiversMissingSections } from "@/lib/db/favorite-sections";
+import MyRiversTable from "./MyRiversTable";
 
 export const dynamic = "force-dynamic";
 
@@ -44,26 +45,14 @@ export default async function MyRiversPage() {
             and pin a section.
           </p>
         ) : (
-          <ul className="mt-10 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
-            {sections.map((s) => (
-              <li key={s.id}>
-                <Link
-                  href={`/rivers/${s.river_slug}`}
-                  className="flex items-baseline justify-between gap-4 py-4 hover:text-[var(--action)]"
-                >
-                  <span className="text-[17px] text-[var(--text-primary)]">
-                    {s.river_name}
-                    {s.section_name ? (
-                      <span className="ml-2 text-[13px] text-[var(--text-meta)]">
-                        {s.section_name}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="text-[var(--action)]">→</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MyRiversTable
+            sections={sections.map((s) => ({
+              id: s.id,
+              river_slug: s.river_slug,
+              river_name: s.river_name,
+              section_name: s.section_name ?? null,
+            }))}
+          />
         )}
       </div>
     </article>
