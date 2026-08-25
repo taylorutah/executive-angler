@@ -1,42 +1,51 @@
 import Link from "next/link";
 import { SITE_NAME, SOCIAL_LINKS, APP_STORE_URL } from "@/lib/constants";
 
-type FooterLink = { label: string; href: string; external?: boolean };
+type FooterLink = { label: string; href: string };
 
-const footerColumns: Record<string, FooterLink[]> = {
-  Product: [
-    { label: "App", href: "/app" },
-    { label: "Journal", href: "/journal" },
-    { label: "Rivers", href: "/rivers" },
-    { label: "Flies", href: "/flies" },
-    { label: "Gear Locker", href: "/account/gear" },
-    { label: "Feed", href: "/feed" },
-    { label: "Import & Export", href: "/journal/import" },
-    { label: "Get the app", href: APP_STORE_URL, external: true },
-  ],
-  Explore: [
-    { label: "Learn", href: "/learn" },
-    { label: "Madison River", href: "/rivers/madison-river" },
-    { label: "Montana", href: "/destinations/montana" },
-    { label: "Fly Library", href: "/flies/library" },
-    { label: "Green River", href: "/rivers/green-river" },
-    { label: "Belize", href: "/destinations/belize" },
-    { label: "Places", href: "/destinations" },
-    { label: "Field Notes", href: "/articles" },
-  ],
-  "Find a guide": [
-    { label: "Guides", href: "/guides" },
-    { label: "Lodges", href: "/lodges" },
-    { label: "Fly Shops", href: "/fly-shops" },
-    { label: "Gear Catalog", href: "/gear" },
-    { label: "Search", href: "/search" },
-  ],
-  Company: [
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-    { label: "For Guides", href: "/for-guides" },
-  ],
-};
+const footerColumns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "The Desk",
+    links: [
+      { label: "Rivers", href: "/rivers" },
+      { label: "Flies", href: "/flies/library" },
+      { label: "Species", href: "/species" },
+      { label: "Places", href: "/destinations" },
+      { label: "Field Notes", href: "/articles" },
+      { label: "Learn", href: "/learn" },
+    ],
+  },
+  {
+    title: "Your Notebook",
+    links: [
+      { label: "Today", href: "/today" },
+      { label: "Journal", href: "/journal" },
+      { label: "Fly Box", href: "/flybox" },
+      { label: "Your Rivers", href: "/rivers/mine" },
+      { label: "Gear Locker", href: "/account/gear" },
+      { label: "Import & Export", href: "/journal/import" },
+      { label: "Feed", href: "/feed" },
+    ],
+  },
+  {
+    title: "Directory",
+    links: [
+      { label: "Guides", href: "/guides" },
+      { label: "Lodges", href: "/lodges" },
+      { label: "Fly Shops", href: "/fly-shops" },
+      { label: "Gear Catalog", href: "/gear" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "For Guides", href: "/for-guides" },
+      { label: "Contribute", href: "/contribute" },
+    ],
+  },
+];
 
 const socials = [
   {
@@ -161,7 +170,7 @@ export default function Footer() {
 
           {/* Link grid */}
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
-            {Object.entries(footerColumns).map(([title, links]) => (
+            {footerColumns.map(({ title, links }) => (
               <div key={title}>
                 <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-primary)] mb-5">
                   {title}
@@ -169,25 +178,24 @@ export default function Footer() {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.href}>
-                      {link.external ? (
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <Link
-                          href={link.href}
-                          className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
-                        >
-                          {link.label}
-                        </Link>
-                      )}
+                      <Link
+                        href={link.href}
+                        className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                      >
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
+                  {title === "Your Notebook" && (
+                    <li>
+                      <Link
+                        href="/app"
+                        className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                      >
+                        Mobile App
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
@@ -199,19 +207,9 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-col-reverse items-start gap-3 sm:flex-row sm:items-center sm:gap-5">
-            <p className="text-[11px] text-[var(--text-meta)] font-mono tracking-wide whitespace-nowrap">
-              © {year} {SITE_NAME}
-            </p>
-            <span className="hidden sm:block h-3 w-px bg-[var(--border-rule)]" aria-hidden="true" />
-            <span className="ea-status-line inline-flex items-center gap-2 text-[11px]">
-              <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-[var(--state-positive)] opacity-60 animate-ping" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--state-positive)]" />
-              </span>
-              All systems operational
-            </span>
-          </div>
+          <p className="text-[11px] text-[var(--text-meta)] font-mono tracking-wide whitespace-nowrap">
+            © {year} {SITE_NAME}
+          </p>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[var(--text-meta)]">
             <Link href="/privacy" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
@@ -219,12 +217,6 @@ export default function Footer() {
             </Link>
             <Link href="/terms" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
               Terms
-            </Link>
-            <Link href="/contact" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
-              Contact
-            </Link>
-            <Link href="/sitemap.xml" className="ea-focus-ring hover:text-[var(--text-primary)] transition-colors">
-              Sitemap
             </Link>
           </div>
         </div>
