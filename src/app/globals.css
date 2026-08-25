@@ -889,3 +889,50 @@ input.ea-focus-ring:focus-visible,
   outline-offset: 3px !important;
   border-radius: 2px;
 }
+
+/* =============================================
+   WORKBENCH TABLES
+   The save flash is an animation, not a static colour: `WorkbenchTable`
+   clears the flash state on `animationend`, so without keyframes here a
+   saved cell would stay green forever.
+   Row focus keeps the standard ring but draws it inset — the 3px offset
+   would be clipped by the row's own bottom border.
+   ============================================= */
+@keyframes ea-wb-flash-saved {
+  from {
+    background-color: color-mix(in srgb, var(--state-positive) 30%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes ea-wb-flash-error {
+  from {
+    background-color: color-mix(in srgb, var(--state-negative) 30%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.ea-wb-flash-saved {
+  animation: ea-wb-flash-saved 900ms ease-out;
+}
+
+.ea-wb-flash-error {
+  animation: ea-wb-flash-error 900ms ease-out;
+}
+
+/* Reduced motion still needs the animation to *run*, because animationend is
+   what clears the flash — it just runs too fast to read as movement. */
+@media (prefers-reduced-motion: reduce) {
+  .ea-wb-flash-saved,
+  .ea-wb-flash-error {
+    animation-duration: 1ms;
+  }
+}
+
+.ea-wb-row.ea-focus-ring:focus-visible {
+  outline-offset: -2px !important;
+}

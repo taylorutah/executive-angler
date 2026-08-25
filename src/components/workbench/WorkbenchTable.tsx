@@ -13,6 +13,10 @@
  *
  * The keyboard behaviour and the rollback path live in tested pure modules;
  * this component is the rendering and the wiring.
+ *
+ * Rows are real focus stops: roving tabindex, DOM focus, and `ea-focus-ring`
+ * at every stop. A drawn highlight is not a keyboard stop — screen readers and
+ * browser focus tracking both need the row to actually hold focus.
  */
 import {
   useCallback,
@@ -105,6 +109,9 @@ export default function WorkbenchTable<T>({
   const [edits, setEdits] = useState<EditState<string>>(emptyEditState<string>);
   const [editing, setEditing] = useState<{ rowId: string; field: string } | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  /** Set when the cursor moved by keyboard, so focus follows without stealing it from a click. */
+  const pullFocus = useRef(false);
   const statusId = useId();
 
   const ids = useMemo(() => rows.map(rowId), [rows, rowId]);
@@ -114,6 +121,14 @@ export default function WorkbenchTable<T>({
   useEffect(() => {
     setCursor((c) => reconcileSelection(c, idsKey ? idsKey.split("\u0000") : []));
   }, [idsKey]);
+
+  // Move real DOM focus with the cursor. Guarded so a re-render does not yank
+  // focus away from, say, an open cell editor.
+  useEffect(() => {
+    if (!pullFocus.current) return;
+    pullFocus.current = false;
+    if (cursor.active >= 0) rowRefs.current[cursor.active]?.focus();
+  }, [cursor.active]);
 
   const commit = useCallback(
     async (row: T, col: WorkbenchColumn<T>, next: string) => {
@@ -153,6 +168,7 @@ export default function WorkbenchTable<T>({
         case "move-up":
         case "move-down": {
           e.preventDefault();
+          pullFocus.current = true;
           setCursor((c) => moveCursor(c, action === "move-down" ? 1 : -1, rows.length));
           break;
         }
@@ -181,7 +197,8 @@ export default function WorkbenchTable<T>({
           e.preventDefault();
           if (editing) {
             setEditing(null);
-            gridRef.current?.focus();
+            pullFocus.current = true;
+            setCursor((c) => ({ ...c }));
             return;
           }
           setCursor(cancelCursor);
@@ -210,7 +227,10 @@ export default function WorkbenchTable<T>({
       </p>
 
       {showBulk && (
-        <div className="sticky top-0 z-20 flex h-10 items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[var(--surface-card)] px-3">
+        <div
+          data-workbench-bulkbar
+          className="sticky top-0 z-20 flex h-10 items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[var(--surface-card)] px-3"
+        >
           <span className="num text-xs text-[var(--text-body)]">
             {selectionLabel(cursor.selected.size)}
           </span>
@@ -220,7 +240,7 @@ export default function WorkbenchTable<T>({
                 key={a.label}
                 type="button"
                 onClick={() => a.onClick(selectedRows)}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-colors ${FOCUS_VISIBLE} ${
+                className={`ea-focus-ring inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-colors ${FOCUS_VISIBLE} ${
                   a.tone === "primary"
                     ? "bg-[var(--action)] text-[var(--on-action)] hover:bg-[var(--action-hover)]"
                     : a.tone === "danger"
@@ -242,9 +262,8 @@ export default function WorkbenchTable<T>({
         aria-label={label}
         aria-describedby={statusId}
         aria-rowcount={rows.length + 1}
-        tabIndex={0}
         onKeyDown={onKeyDown}
-        className={`outline-none ${FOCUS_VISIBLE}`}
+        className="outline-none"
       >
         <div
           role="row"
@@ -286,9 +305,15 @@ export default function WorkbenchTable<T>({
                 role="row"
                 aria-rowindex={i + 2}
                 aria-selected={selectable ? isSelected : undefined}
+                data-workbench-row={i}
+                ref={(el) => {
+                  rowRefs.current[i] = el;
+                }}
+                tabIndex={isActive || (cursor.active < 0 && i === 0) ? 0 : -1}
+                onFocus={() => setCursor((c) => (c.active === i ? c : { ...c, active: i }))}
                 onClick={() => setCursor((c) => ({ ...c, active: i }))}
                 onDoubleClick={() => onActivate?.(row)}
-                className={`grid h-8 items-center border-b border-[var(--border-rule)] ${zebra} ${
+                className={`ea-wb-row ea-focus-ring grid h-8 items-center border-b border-[var(--border-rule)] ${zebra} ${
                   isActive ? "ring-1 ring-inset ring-[var(--signal-live)]" : ""
                 }`}
                 style={{ gridTemplateColumns: gridTemplate }}
@@ -300,7 +325,9 @@ export default function WorkbenchTable<T>({
                       checked={isSelected}
                       onChange={() => setCursor((c) => toggleSelection(c, id))}
                       aria-label={`Select row ${i + 1}`}
-                      className={`h-3.5 w-3.5 cursor-pointer ${FOCUS_VISIBLE}`}
+                      tabIndex={isActive ? 0 : -1}
+                      onClick={(e) => e.stopPropagation()}
+                      className={`ea-focus-ring h-3.5 w-3.5 cursor-pointer ${FOCUS_VISIBLE}`}
                     />
                   </span>
                 )}
@@ -324,7 +351,13 @@ export default function WorkbenchTable<T>({
                       onAnimationEnd={() => setEdits((s) => clearFlash(s, id, col.key))}
                       className={`truncate px-2 text-[13px] ${tone} ${
                         col.numeric ? "num text-right" : "text-left"
-                      } ${pending ? "opacity-70" : ""}`}
+                      } ${pending ? "opacity-70" : ""} ${
+                        flash === "saved"
+                          ? "ea-wb-flash-saved"
+                          : flash === "error"
+                            ? "ea-wb-flash-error"
+                            : ""
+                      }`}
                       title={edits.errors[`${id}:${col.key}`]}
                     >
                       {isEditingCell ? (
@@ -339,13 +372,18 @@ export default function WorkbenchTable<T>({
                             }
                           }}
                           aria-label={`${col.label}, row ${i + 1}`}
-                          className={`w-full bg-[var(--surface-card)] px-1 text-[13px] text-[var(--text-primary)] ${FOCUS_VISIBLE}`}
+                          className={`ea-focus-ring w-full bg-[var(--surface-card)] px-1 text-[13px] text-[var(--text-primary)] ${FOCUS_VISIBLE}`}
                         />
                       ) : col.editable ? (
                         <button
                           type="button"
-                          onClick={() => setEditing({ rowId: id, field: col.key })}
-                          className={`w-full text-left ${col.numeric ? "text-right" : ""} ${FOCUS_VISIBLE}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditing({ rowId: id, field: col.key });
+                          }}
+                          tabIndex={isActive ? 0 : -1}
+                          aria-label={`Edit ${col.label}, row ${i + 1}`}
+                          className={`ea-focus-ring w-full text-left ${col.numeric ? "text-right" : ""} ${FOCUS_VISIBLE}`}
                         >
                           {col.render ? col.render(row) : value}
                         </button>
