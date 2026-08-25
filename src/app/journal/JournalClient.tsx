@@ -6,7 +6,8 @@ import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
-import { ListIcon, CalendarIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles, Upload } from "lucide-react";
+import { JournalTable } from "./JournalTable";
+import { ListIcon, CalendarIcon, TableIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles, Upload } from "lucide-react";
 import Link from "next/link";
 import TipCard from "@/components/ui/TipCard";
 import FilterDropdown from "@/components/ui/FilterDropdown";
@@ -90,7 +91,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
   });
 
   // State
-  const [view, setView] = useState<"list" | "calendar">("list");
+  const [view, setView] = useState<"list" | "calendar" | "table">("list");
   const [filterRivers, setFilterRivers] = useState<string[]>([]);
   const [filterYears, setFilterYears] = useState<number[]>([]);
   const [filterLocations, setFilterLocations] = useState<string[]>([]);
@@ -99,7 +100,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
   // Load view preference from localStorage
   useEffect(() => {
     const savedView = localStorage.getItem("journal-view");
-    if (savedView === "list" || savedView === "calendar") {
+    if (savedView === "list" || savedView === "calendar" || savedView === "table") {
       setView(savedView);
     }
   }, []);
@@ -108,6 +109,21 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
   useEffect(() => {
     localStorage.setItem("journal-view", view);
   }, [view]);
+
+  // Logged catches per session. The table shows what was actually logged,
+  // which can differ from the session's own total_fish tally.
+  const fishBySession = useMemo(() => {
+    const counts: Record<string, number> = {};
+    catchesMap.forEach((list, sid) => {
+      counts[sid] = list.reduce((sum, c) => {
+        const q = (c as Catch & { quantities?: number }).quantities;
+        return sum + (typeof q === "number" && q > 0 ? q : 1);
+      }, 0);
+    });
+    return counts;
+    // catchesMap is rebuilt each render from the `catches` prop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catches]);
 
   // Calculate stats
   const totalSessions = sessions.length;
@@ -289,6 +305,17 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
             >
               <CalendarIcon className="h-4 w-4" />
               Calendar
+            </button>
+            <button
+              onClick={() => setView("table")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                view === "table"
+                  ? "bg-[var(--action)] text-[var(--on-action)]"
+                  : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--surface-card)]"
+              }`}
+            >
+              <TableIcon className="h-4 w-4" />
+              Table
             </button>
           </div>
           <button
@@ -523,6 +550,18 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                       >
                         <CalendarIcon className="h-4 w-4" />
                       </button>
+                      <button
+                        onClick={() => setView("table")}
+                        aria-label="Table view"
+                        aria-pressed={view === "table"}
+                        className={`p-1.5 rounded-md transition-colors ${
+                          view === "table"
+                            ? "bg-[var(--action)]/10 text-[var(--action)]"
+                            : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                        }`}
+                      >
+                        <TableIcon className="h-4 w-4" />
+                      </button>
                     </div>
                     <span className="text-xs text-[var(--text-meta)] hidden xl:inline tabular-nums">
                       {filteredSessions.length === sortedSessions.length
@@ -600,6 +639,8 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
                 </div>
               )}
             </>
+          ) : view === "table" ? (
+            <JournalTable sessions={filteredSessions} fishBySession={fishBySession} />
           ) : (
             <CalendarView
               sessions={filteredSessions}
