@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
-import { getAllAuthors } from "@/data/authors";
+import { getAllArticles } from "@/lib/db";
+import { articlesByAuthorSlug, listAuthors } from "@/lib/authors";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Our Authors & Contributors",
@@ -17,14 +19,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AuthorsPage() {
-  const authors = getAllAuthors();
+export default async function AuthorsPage() {
+  const articles = await getAllArticles();
+  const authors = listAuthors(articles);
 
   return (
     <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-[13px] text-[var(--text-meta)] mb-8">
+        <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
           <Link href="/" className="hover:text-[var(--action)] transition-colors">
             Home
           </Link>
@@ -32,45 +34,55 @@ export default function AuthorsPage() {
           <span className="text-[var(--text-body)]">Authors</span>
         </nav>
 
-        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-3">
+        <h1 className="font-heading text-[34px] sm:text-[44px] font-bold leading-[1.05] text-[var(--text-primary)]">
           Our Authors
         </h1>
-        <p className="text-[var(--text-body)] text-lg mb-10 max-w-2xl leading-relaxed">
-          Meet the expert anglers and writers behind {SITE_NAME}. Every article
-          is crafted by experienced fly fishers with real, on-the-water
-          knowledge.
+        <p className="mt-4 max-w-[68ch] font-body text-lg leading-relaxed text-[var(--text-body)]">
+          Every field note on {SITE_NAME} is written by someone who fishes.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {authors.map((author) => (
-            <Link
-              key={author.slug}
-              href={`/authors/${author.slug}`}
-              className="group flex gap-5 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 hover:border-[var(--action)]/30 hover:shadow-md transition-all"
-            >
-              <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--action)]/30 flex-shrink-0">
-                <AuthorAvatar
-                  name={author.name}
-                  imageUrl={author.imageUrl}
-                  sizes="80px"
-                  fallbackTextClass="text-2xl"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
-                  {author.name}
-                </h2>
-                <p className="text-sm text-[var(--action)] mb-2">{author.role}</p>
-                <p className="text-sm text-[var(--text-body)] leading-relaxed line-clamp-2">
-                  {author.shortBio}
-                </p>
-                <span className="inline-flex items-center gap-1 mt-3 text-xs text-[var(--action)] font-medium group-hover:gap-2 transition-all">
-                  View profile <ChevronRight className="h-3 w-3" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ul className="mt-12 border-t border-[var(--border-rule)]">
+          {authors.map((author) => {
+            const count = articlesByAuthorSlug(author.slug, articles).length;
+            return (
+              <li key={author.slug} className="border-b border-[var(--border-rule)]">
+                <Link
+                  href={`/authors/${author.slug}`}
+                  className="group flex gap-5 py-6 items-start"
+                >
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
+                    <AuthorAvatar
+                      name={author.name}
+                      imageUrl={author.imageUrl}
+                      sizes="56px"
+                      fallbackTextClass="text-lg"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                      {author.name}
+                    </h2>
+                    {author.role && (
+                      <p className="font-ui text-[13px] text-[var(--text-meta)]">
+                        {author.role}
+                      </p>
+                    )}
+                    {author.shortBio && (
+                      <p className="mt-2 max-w-[60ch] font-body text-[15px] leading-relaxed text-[var(--text-body)]">
+                        {author.shortBio}
+                      </p>
+                    )}
+                    <p className="mt-2 font-ui text-[13px] text-[var(--text-meta)]">
+                      {count === 0
+                        ? "No field notes published yet"
+                        : `${count} field note${count === 1 ? "" : "s"}`}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

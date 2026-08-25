@@ -1,28 +1,35 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import SafeEntityImage from "@/components/media/SafeEntityImage";
-import { Globe, Instagram, Twitter, Linkedin, Youtube, BookOpen, Award, ChevronRight } from "lucide-react";
+import { Globe, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
-import { getAuthorBySlug, getAllAuthors } from "@/data/authors";
 import { getAllArticles } from "@/lib/db";
+import {
+  articlesByAuthorSlug,
+  listAuthors,
+  resolveAuthorSlug,
+} from "@/lib/authors";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const author = getAuthorBySlug(slug);
+  const author = resolveAuthorSlug(slug, await getAllArticles());
   if (!author) return { title: "Author Not Found" };
+  const description =
+    author.shortBio ?? `Field notes by ${author.name} on ${SITE_NAME}.`;
   return {
-    title: `${author.name} — ${author.role}`,
-    description: author.shortBio,
+    title: author.role ? `${author.name} — ${author.role}` : author.name,
+    description,
     openGraph: {
-      title: `${author.name} — ${author.role} | ${SITE_NAME}`,
-      description: author.shortBio,
+      title: `${author.name} | ${SITE_NAME}`,
+      description,
       ...(author.imageUrl ? { images: [author.imageUrl] } : {}),
       type: "profile",
     },
@@ -32,21 +39,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export function generateStaticParams() {
-  return getAllAuthors().map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  const articles = await getAllArticles();
+  return listAuthors(articles).map((a) => ({ slug: a.slug }));
 }
 
 export default async function AuthorPage({ params }: Props) {
   const { slug } = await params;
-  const author = getAuthorBySlug(slug);
+  const articles = await getAllArticles();
+  const author = resolveAuthorSlug(slug, articles);
   if (!author) notFound();
 
-  const allArticles = await getAllArticles();
-  const authorArticles = allArticles.filter(
-    (a) => a.author === author.articleAuthorName
+  const authorArticles = articlesByAuthorSlug(author.slug, articles).sort(
+    (a, b) => b.publishedAt.localeCompare(a.publishedAt),
   );
-
-  const sameAsLinks = Object.values(author.socialLinks).filter(Boolean) as string[];
+  const profile = author.profile;
+  const socialLinks = profile?.socialLinks ?? {};
+  const sameAsLinks = Object.values(socialLinks).filter(Boolean) as string[];
 
   return (
     <>
@@ -56,7 +65,7 @@ export default async function AuthorPage({ params }: Props) {
           "@type": "Person",
           name: author.name,
           url: `${SITE_URL}/authors/${author.slug}`,
-          description: author.shortBio,
+          ...(author.shortBio ? { description: author.shortBio } : {}),
           ...(author.imageUrl
             ? {
                 image: author.imageUrl.startsWith("/")
@@ -64,21 +73,22 @@ export default async function AuthorPage({ params }: Props) {
                   : author.imageUrl,
               }
             : {}),
-          jobTitle: author.role,
-          sameAs: sameAsLinks,
+          ...(author.role ? { jobTitle: author.role } : {}),
+          ...(sameAsLinks.length > 0 ? { sameAs: sameAsLinks } : {}),
           worksFor: {
             "@type": "Organization",
             name: SITE_NAME,
             url: SITE_URL,
           },
-          knowsAbout: author.expertise,
+          ...(profile?.expertise?.length
+            ? { knowsAbout: profile.expertise }
+            : {}),
         }}
       />
 
       <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-[13px] text-[var(--text-meta)] mb-8">
+          <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
             <Link href="/" className="hover:text-[var(--action)] transition-colors">
               Home
             </Link>
@@ -90,182 +100,151 @@ export default async function AuthorPage({ params }: Props) {
             <span className="text-[var(--text-body)]">{author.name}</span>
           </nav>
 
-          {/* Author header */}
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start mb-12">
-            <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-[var(--action)]/40 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden flex-shrink-0">
               <AuthorAvatar
                 name={author.name}
                 imageUrl={author.imageUrl}
-                sizes="144px"
-                fallbackTextClass="text-4xl sm:text-5xl"
+                sizes="112px"
+                fallbackTextClass="text-3xl sm:text-4xl"
               />
             </div>
             <div className="flex-1">
-              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
+              <h1 className="font-heading text-[34px] sm:text-[44px] font-bold leading-[1.05] text-[var(--text-primary)]">
                 {author.name}
               </h1>
-              <p className="mt-1 text-[var(--action)] font-medium text-lg">
-                {author.role}
-              </p>
-              <p className="mt-3 text-[var(--text-body)] leading-relaxed">
-                {author.shortBio}
-              </p>
+              {author.role && (
+                <p className="mt-2 font-ui text-sm text-[var(--text-meta)]">
+                  {author.role}
+                </p>
+              )}
 
-              {/* Social links */}
-              <div className="mt-4 flex items-center gap-3">
-                {author.socialLinks.website && (
-                  <a
-                    href={author.socialLinks.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                    aria-label="Website"
-                  >
-                    <Globe className="h-5 w-5" />
-                  </a>
-                )}
-                {author.socialLinks.instagram && (
-                  <a
-                    href={author.socialLinks.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="h-5 w-5" />
-                  </a>
-                )}
-                {author.socialLinks.twitter && (
-                  <a
-                    href={author.socialLinks.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                    aria-label="Twitter / X"
-                  >
-                    <Twitter className="h-5 w-5" />
-                  </a>
-                )}
-                {author.socialLinks.linkedin && (
-                  <a
-                    href={author.socialLinks.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin className="h-5 w-5" />
-                  </a>
-                )}
-                {author.socialLinks.youtube && (
-                  <a
-                    href={author.socialLinks.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                    aria-label="YouTube"
-                  >
-                    <Youtube className="h-5 w-5" />
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Bio + sidebar */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
-            {/* Full bio */}
-            <div className="lg:col-span-2">
-              <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] mb-4">
-                About {author.name.split(" ")[0]}
-              </h2>
-              <div className="space-y-4 text-[var(--text-body)] leading-relaxed">
-                {author.bio.split("\n\n").map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-
-            {/* Sidebar: expertise + credentials */}
-            <div className="space-y-8">
-              {/* Expertise */}
-              <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
-                <h3 className="font-heading text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                  <BookOpen className="h-4 w-4 text-[var(--action)]" />
-                  Expertise
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {author.expertise.map((area) => (
-                    <span
-                      key={area}
-                      className="inline-block text-xs px-2.5 py-1 rounded-full bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/20"
+              {sameAsLinks.length > 0 && (
+                <div className="mt-4 flex items-center gap-3">
+                  {socialLinks.website && (
+                    <a
+                      href={socialLinks.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      aria-label="Website"
                     >
-                      {area}
-                    </span>
-                  ))}
+                      <Globe className="h-5 w-5" />
+                    </a>
+                  )}
+                  {socialLinks.instagram && (
+                    <a
+                      href={socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                  )}
+                  {socialLinks.twitter && (
+                    <a
+                      href={socialLinks.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      aria-label="Twitter / X"
+                    >
+                      <Twitter className="h-5 w-5" />
+                    </a>
+                  )}
+                  {socialLinks.linkedin && (
+                    <a
+                      href={socialLinks.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin className="h-5 w-5" />
+                    </a>
+                  )}
+                  {socialLinks.youtube && (
+                    <a
+                      href={socialLinks.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      aria-label="YouTube"
+                    >
+                      <Youtube className="h-5 w-5" />
+                    </a>
+                  )}
                 </div>
-              </div>
-
-              {/* Credentials */}
-              <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
-                <h3 className="font-heading text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                  <Award className="h-4 w-4 text-[var(--action)]" />
-                  Credentials
-                </h3>
-                <ul className="space-y-2">
-                  {author.credentials.map((cred) => (
-                    <li
-                      key={cred}
-                      className="text-sm text-[var(--text-body)] flex items-start gap-2"
-                    >
-                      <ChevronRight className="h-3.5 w-3.5 text-[var(--action)] mt-0.5 flex-shrink-0" />
-                      {cred}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              )}
             </div>
           </div>
 
-          {/* Articles by this author */}
-          {authorArticles.length > 0 && (
-            <div className="border-t border-[var(--border-rule)] pt-10">
-              <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] mb-6">
-                Articles by {author.name}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {authorArticles.map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/articles/${article.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden border border-[var(--border-rule)] hover:border-[var(--action)]/30 hover:shadow-md transition-all"
-                  >
-                    <div className="relative h-40 w-full overflow-hidden">
-                      <SafeEntityImage
-                        src={article.heroImageUrl}
-                        alt={article.title}
-                        title={article.title}
-                        meta={article.category}
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <span className="text-[11px] text-[var(--action)] font-semibold uppercase tracking-wide">
-                        {article.category}
-                      </span>
-                      <h3 className="mt-1 font-heading text-sm font-bold text-[var(--text-primary)] leading-snug group-hover:text-[var(--action)] transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="mt-1.5 text-xs text-[var(--text-meta)]">
-                        {article.readingTimeMinutes} min read
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+          {profile?.bio && (
+            <div className="prose mt-10">
+              {profile.bio.split("\n\n").map((paragraph, i) => (
+                <p key={i} className={i > 0 ? "mt-4" : undefined}>
+                  {paragraph}
+                </p>
+              ))}
             </div>
           )}
+
+          {profile?.expertise?.length ? (
+            <div className="mt-10">
+              <h2 className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                Writes about
+              </h2>
+              <p className="mt-2 max-w-[68ch] font-body text-[var(--text-body)]">
+                {profile.expertise.join(" · ")}
+              </p>
+            </div>
+          ) : null}
+
+          <div className="mt-14 border-t border-[var(--border-rule)] pt-8">
+            <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+              Field notes by {author.name}
+            </h2>
+            {authorArticles.length === 0 ? (
+              <p className="mt-3 font-body text-[var(--text-body)]">
+                Nothing published yet.{" "}
+                <Link
+                  href="/articles"
+                  className="text-[var(--action)] hover:underline"
+                >
+                  Read the rest of the field notes
+                </Link>
+                .
+              </p>
+            ) : (
+              <ul className="mt-6">
+                {authorArticles.map((article) => (
+                  <li
+                    key={article.id}
+                    className="border-t border-[var(--border-rule)] first:border-t-0"
+                  >
+                    <Link href={`/articles/${article.slug}`} className="group block py-5">
+                      <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                        {article.category}
+                      </p>
+                      <h3 className="mt-1 font-heading text-xl font-bold leading-snug text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                        {article.title}
+                      </h3>
+                      {article.subtitle && (
+                        <p className="mt-1 max-w-[60ch] font-body text-[15px] leading-relaxed text-[var(--text-body)]">
+                          {article.subtitle}
+                        </p>
+                      )}
+                      <p className="mt-2 font-ui text-[13px] text-[var(--text-meta)]">
+                        {article.readingTimeMinutes} min read
+                      </p>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </>
