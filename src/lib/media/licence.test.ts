@@ -98,6 +98,24 @@ describe("attributionHref", () => {
       "https://unsplash.com/@jane",
     );
   });
+
+  it("does not send a public-domain plate to a licence-mark URL", () => {
+    assert.equal(
+      attributionHref({
+        creditUrl: "https://commons.wikimedia.org/wiki/File:Brook_trout_freshwater_fish.jpg",
+        licenceUrl: "https://creativecommons.org/publicdomain/mark/1.0/",
+        licence: "Public domain",
+      }),
+      "https://commons.wikimedia.org/wiki/File:Brook_trout_freshwater_fish.jpg",
+    );
+    assert.equal(
+      attributionHref({
+        licenceUrl: "https://creativecommons.org/publicdomain/mark/1.0/",
+        licence: "Public domain",
+      }),
+      undefined,
+    );
+  });
 });
 
 describe("attributionRequired", () => {
