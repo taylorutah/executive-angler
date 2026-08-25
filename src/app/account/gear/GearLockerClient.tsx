@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Pencil, Trash2, Star, Plus } from "lucide-react";
 import type { GearItem, GearType } from "@/types/gear";
 import GearForm from "@/components/gear/GearForm";
+import GearLockerTable from "./GearLockerTable";
 
 const GEAR_TYPES: { type: GearType; label: string; emoji: string; desc: string }[] = [
   { type: "rod", label: "Rods", emoji: "🎣", desc: "Fly rods" },
@@ -179,6 +180,7 @@ export default function GearLockerClient() {
   const [formOpen, setFormOpen] = useState(false);
   const [editItem, setEditItem] = useState<GearItem | null>(null);
   const [activeType, setActiveType] = useState<GearType>("rod");
+  const [layout, setLayout] = useState<"cards" | "table">("cards");
 
   const fetchGear = useCallback(async () => {
     try {
@@ -290,6 +292,23 @@ export default function GearLockerClient() {
                 Track your rods, reels, lines, and leaders. Mark a default per type and it auto-attaches to every new session you log.
               </p>
             </div>
+            <div className="flex shrink-0 items-center gap-0.5 border border-[var(--border-rule)] bg-[var(--surface-page)] p-0.5">
+              {(["cards", "table"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setLayout(mode)}
+                  aria-pressed={layout === mode}
+                  className={`ea-focus-ring px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
+                    layout === mode
+                      ? "bg-[var(--action)]/10 text-[var(--action)]"
+                      : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
             {!loading && totalItems > 0 && (
               <div className="flex items-center gap-4 text-xs text-[var(--text-meta)] shrink-0">
                 <div>
@@ -313,6 +332,22 @@ export default function GearLockerClient() {
           <div className="flex items-center justify-center py-20">
             <div className="h-6 w-6 rounded-full border-2 border-[var(--action)]/30 border-t-[#E8923A] animate-spin" />
           </div>
+        ) : layout === "table" ? (
+          <GearLockerTable
+            items={items}
+            onItemSaved={handleSaved}
+            onEdit={openEdit}
+            onToggleDefault={handleToggleDefault}
+            onDeleteMany={async (selected) => {
+              const ids = new Set(selected.map((i) => i.id));
+              setItems((prev) => prev.filter((i) => !ids.has(i.id)));
+              await Promise.all(
+                selected.map((i) =>
+                  fetch(`/api/gear?id=${i.id}`, { method: "DELETE" }).catch(() => null),
+                ),
+              );
+            }}
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
             {GEAR_TYPES.map(({ type, label, emoji }) => {

@@ -51,6 +51,7 @@ export default async function MyRiversPage() {
               river_slug: s.river_slug,
               river_name: s.river_name,
               section_name: s.section_name ?? null,
+              position: s.position,
             }))}
           />
         )}

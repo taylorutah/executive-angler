@@ -1,7 +1,7 @@
 {
   "name": "executive-angler",
   "version": "0.1.0",
-  "description": "Executive Angler — rivers, flies, and hatches, plus a private notebook for your own days on the water.",
+  "description": "Executive Angler \u2014 rivers, flies, and hatches, plus a private notebook for your own days on the water.",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "npx tsx scripts/seed-all.ts",
+    "seed:fixture": "npx tsx scripts/seed-fixture-account.ts",
     "seed:supabase": "npx tsx scripts/seed-supabase.ts",
     "fishing:migrate": "npx tsx scripts/migrate-fishing-log.ts",
     "fishing:import": "npx tsx scripts/import-notion-fishing.ts",
@@ -25,7 +26,8 @@
     "check:hex": "npx tsx scripts/check-hex.ts",
     "check:stored-html": "npx tsx scripts/check-stored-html.ts",
     "check:authored-bodies": "npx tsx scripts/check-authored-bodies.ts",
-    "codemod:tokens": "npx tsx scripts/codemod-tokens.ts"
+    "codemod:tokens": "npx tsx scripts/codemod-tokens.ts",
+    "check:workbench": "npx tsx scripts/check-workbench-keys.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

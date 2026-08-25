@@ -26,6 +26,11 @@ describe("registerForPath", () => {
     assert.equal(registerForPath("/journal"), "dusk");
     assert.equal(registerForPath("/dashboard"), "dusk");
   });
+
+  it("dusks /flybox — the canonical home of /flies/boxes", () => {
+    assert.equal(registerForPath("/flybox"), "dusk");
+    assert.match(REGISTER_BOOTSTRAP, /flybox/);
+  });
 });
 
 describe("REGISTER_BOOTSTRAP", () => {

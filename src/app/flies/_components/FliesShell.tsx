@@ -65,7 +65,7 @@ export default function FliesShell({
             </Link>
             <Link
               href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] transition-colors shadow-sm"
             >
               <Plus className="h-4 w-4" /> New Pattern
             </Link>

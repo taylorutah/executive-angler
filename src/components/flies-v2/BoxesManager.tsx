@@ -8,6 +8,7 @@
  * via PUT /api/profile/tier-definitions. Box mutations call /api/fly-boxes.
  */
 import Link from "next/link";
+import BoxesTable from "./BoxesTable";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "lucide-react";
@@ -39,7 +40,7 @@ function BoxStatLine({ stats }: { stats?: BoxStats }) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
   return (
-    <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[#484F58]">
+    <div className="mt-1.5 flex items-center gap-2 font-['IBM_Plex_Mono'] text-[10px] text-[var(--text-meta)]">
       <span className="text-[var(--text-meta)]">{stats.total} flies</span>
       {top.map(([cat, count]) => (
         <span key={cat}>
@@ -81,6 +82,7 @@ export default function BoxesManager({
     description: "",
     total_capacity: "",
   };
+  const [layout, setLayout] = useState<"grid" | "table">("grid");
   const [editor, setEditor] = useState<EditorMode>({ kind: "closed" });
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
@@ -342,6 +344,23 @@ export default function BoxesManager({
   return (
     <>
       <div className="mb-6 flex items-center justify-end gap-2">
+        <div className="mr-auto flex items-center gap-0.5 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-0.5">
+          {(["grid", "table"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setLayout(mode)}
+              aria-pressed={layout === mode}
+              className={`ea-focus-ring px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
+                layout === mode
+                  ? "bg-[var(--action)]/10 text-[var(--action)]"
+                  : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
+              }`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
         <Button variant="outline" size="sm" icon={Plus} onClick={openAddTier}>
           Add Tier
         </Button>
@@ -350,6 +369,27 @@ export default function BoxesManager({
         </Button>
       </div>
 
+      {layout === "table" ? (
+        <BoxesTable
+          boxes={boxes}
+          stats={stats}
+          tiers={tiers}
+          onBoxSaved={(saved) =>
+            setBoxes((prev) => prev.map((b) => (b.id === saved.id ? saved : b)))
+          }
+          onSetDefault={setDefault}
+          onDeleteMany={async (selected) => {
+            const ids = new Set(selected.map((b) => b.id));
+            setBoxes((prev) => prev.filter((b) => !ids.has(b.id)));
+            await Promise.all(
+              selected.map((b) =>
+                fetch(`/api/fly-boxes?id=${b.id}`, { method: "DELETE" }).catch(() => null),
+              ),
+            );
+            router.refresh();
+          }}
+        />
+      ) : (
       <section className="space-y-8">
         {tiers.map((t) => {
           const items = groups[t.key] ?? [];
@@ -505,6 +545,7 @@ export default function BoxesManager({
           </div>
         )}
       </section>
+      )}
 
       {editor.kind !== "closed" && (
         <div
