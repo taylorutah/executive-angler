@@ -127,6 +127,14 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                 ? `. Last fished ${daysAgo(data.worthGoing.lastFished)} days ago.`
                 : ". You have not logged a day here yet."}
             </p>
+            <p className="mt-3">
+              <Link
+                href={`/plan/${data.worthGoing.slug}`}
+                className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)] hover:text-[var(--action)]"
+              >
+                Trip brief →
+              </Link>
+            </p>
           </Line>
         )}
 
