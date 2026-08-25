@@ -149,6 +149,8 @@ export default async function FlyShopPage({ params }: Props) {
           title={shop.name}
           subtitle={shop.address}
           height="h-[50vh]"
+          imageCredit={shop.heroImageCredit}
+          imageCreditUrl={shop.heroImageCreditUrl}
         />
         {true && (
           <div className="absolute top-4 right-4 z-20">

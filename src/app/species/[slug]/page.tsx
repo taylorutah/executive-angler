@@ -25,7 +25,9 @@ import {
   getRiversByIds,
   getFliesByEffectiveSpecies,
   getApprovedPhotosByEntity,
+  getPublishedMediaAsset,
 } from "@/lib/db";
+import { attributionHref, formatAttribution } from "@/lib/media/licence";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -86,12 +88,27 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const heroTier: HeroTier = "anonymous";
   const heroHeight = getHeroHeight("species", heroTier);
 
-  const [relatedDests, relatedRivers, speciesFlies, galleryPhotos] = await Promise.all([
+  const [relatedDests, relatedRivers, speciesFlies, galleryPhotos, mediaAsset] = await Promise.all([
     sp.relatedDestinationIds ? getDestinationsByIds(sp.relatedDestinationIds) : Promise.resolve([]),
     sp.relatedRiverIds ? getRiversByIds(sp.relatedRiverIds) : Promise.resolve([]),
     getFliesByEffectiveSpecies(sp.commonName),
     getApprovedPhotosByEntity("species", sp.id),
+    getPublishedMediaAsset("species", sp.id, "image_url"),
   ]);
+
+  const imageCredit = mediaAsset
+    ? formatAttribution({
+        creditName: mediaAsset.creditName,
+        licence: mediaAsset.licence,
+      }) || sp.heroImageCredit
+    : sp.heroImageCredit;
+  const imageCreditUrl = mediaAsset
+    ? attributionHref({
+        creditUrl: mediaAsset.creditUrl,
+        licenceUrl: mediaAsset.licenceUrl,
+        licence: mediaAsset.licence,
+      }) || sp.heroImageCreditUrl
+    : sp.heroImageCreditUrl;
 
   const mapMarkers = sp.distributionCoordinates
     ? sp.distributionCoordinates.map((coord) => ({
@@ -157,6 +174,8 @@ export default async function SpeciesDetailPage({ params }: Props) {
             subtitle={sp.scientificName || undefined}
             height={heroHeight}
             imageContain={true}
+            imageCredit={imageCredit}
+            imageCreditUrl={imageCreditUrl}
           />
           {true && (
             <div className="absolute top-4 right-4 z-20">
@@ -177,7 +196,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
             <HeroCompact
               heroImageUrl={sp.imageUrl}
               heroImageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
-              heroImageCredit={sp.heroImageCredit}
+              heroImageCredit={imageCredit}
               title={sp.commonName}
               subtitle={sp.scientificName || undefined}
               chips={[
