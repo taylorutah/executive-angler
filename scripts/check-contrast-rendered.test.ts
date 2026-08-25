@@ -4,7 +4,35 @@ import {
   DEFAULT_ROUTES,
   DUSK_ROUTES,
   SAMPLE_PAGE,
+  pickSessionHref,
 } from "./check-contrast-rendered.ts";
+
+describe("pickSessionHref", () => {
+  const id = "8e202a7f-0638-48f5-a26f-11d0a63d858c";
+
+  it("ignores sibling journal routes that are not a session day", () => {
+    assert.equal(
+      pickSessionHref(["/journal/stats", "/journal/insights", "/journal/import"]),
+      null,
+    );
+  });
+
+  it("takes the session even when a sibling route is listed first", () => {
+    assert.equal(
+      pickSessionHref(["/journal/stats", "/journal/insights", `/journal/${id}`]),
+      `/journal/${id}`,
+    );
+  });
+
+  it("strips a query, hash, or trailing slash", () => {
+    assert.equal(pickSessionHref([`/journal/${id}?from=feed`]), `/journal/${id}`);
+    assert.equal(pickSessionHref([`/journal/${id}/`]), `/journal/${id}`);
+  });
+
+  it("returns null for an empty list", () => {
+    assert.equal(pickSessionHref([]), null);
+  });
+});
 
 describe("check-contrast-rendered SAMPLE_PAGE", () => {
   it("contains no backticks that would truncate the template literal", () => {

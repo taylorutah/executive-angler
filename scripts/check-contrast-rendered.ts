@@ -73,6 +73,25 @@ export const DEFAULT_ROUTES = [
   "/ea-contrast-404-probe",
 ] as const;
 
+/**
+ * Pick a real session day out of the links on `/journal`.
+ *
+ * Taking the first `/journal/*` link and excluding only `/journal/insights`
+ * let sibling routes like `/journal/stats` stand in for a session: the sweep
+ * audited those and still printed a pass, so the day template was never
+ * covered. A session id is a uuid, so match that shape instead of maintaining
+ * a list of everything it is not.
+ */
+const SESSION_HREF = /^\/journal\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export function pickSessionHref(hrefs: readonly string[]): string | null {
+  for (const href of hrefs) {
+    const clean = (href ?? "").split("?")[0].split("#")[0].replace(/\/$/, "");
+    if (SESSION_HREF.test(clean)) return clean;
+  }
+  return null;
+}
+
 export const DUSK_ROUTES = [
   "/dashboard",
   "/journal",
@@ -614,13 +633,13 @@ async function main() {
           timeout: 45_000,
         });
         await page.waitForTimeout(600);
-        const sessionHref = await page.evaluate(() => {
-          const a = document.querySelector<HTMLAnchorElement>(
-            'a[href^="/journal/"]',
-          );
-          return a?.getAttribute("href") ?? "";
-        });
-        if (sessionHref && !sessionHref.startsWith("/journal/insights")) {
+        const journalHrefs = await page.evaluate(() =>
+          [...document.querySelectorAll<HTMLAnchorElement>('a[href^="/journal/"]')].map(
+            (a) => a.getAttribute("href") ?? "",
+          ),
+        );
+        const sessionHref = pickSessionHref(journalHrefs);
+        if (sessionHref) {
           dusk.push(sessionHref);
         } else {
           console.log(

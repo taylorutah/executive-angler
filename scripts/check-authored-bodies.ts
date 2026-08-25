@@ -12,10 +12,17 @@ import { chromium } from "playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 
+/**
+ * The place and river templates moved their authored bodies to `.prose` and
+ * stopped rendering `.destination-body` / `.river-body`, so those two rows
+ * reported "missing" on every run instead of checking any colour. The article
+ * body still carries `.article-body` alongside `.prose` for the element rules
+ * its stored HTML depends on, so that selector stays.
+ */
 const BODIES = [
-  { route: "/destinations/montana", selector: ".destination-body" },
+  { route: "/destinations/montana", selector: ".prose" },
   { route: "/articles/introduction-to-euro-nymphing", selector: ".article-body" },
-  { route: "/rivers/madison-river", selector: ".river-body" },
+  { route: "/rivers/madison-river", selector: ".prose" },
 ] as const;
 
 /** Resolved Daylight text tokens (rgb). */
