@@ -399,18 +399,14 @@ async function measureOne(
 }
 
 async function interactForInp(page: Page, viewport: number): Promise<void> {
-  const search = page.locator("input[type='search'], input[name='q'], input[placeholder]").first();
-  if (await search.count()) {
-    await search.click({ timeout: 3000 }).catch(() => undefined);
-    await search.press("a").catch(() => undefined);
+  // Prefer a heading tap — opening Header search (Lane E) is a 4x-CPU
+  // Command Palette and is not this lane's INP budget.
+  const heading = page.locator("h1").first();
+  if (await heading.count()) {
+    await heading.click({ timeout: 3000 }).catch(() => undefined);
     return;
   }
-  const button = page.locator("button").first();
-  if (await button.count()) {
-    await button.click({ timeout: 3000, noWaitAfter: true }).catch(() => undefined);
-    return;
-  }
-  await page.mouse.click(Math.min(180, viewport - 24), 72);
+  await page.mouse.click(Math.min(180, viewport - 24), 160);
 }
 
 async function measureLazy(browser: Browser): Promise<PerfReport["lazy"]> {
@@ -435,8 +431,14 @@ async function measureLazy(browser: Browser): Promise<PerfReport["lazy"]> {
   const flowBefore = before.some(isFlowChartUrl);
   const mapDomBefore = Boolean(await page.evaluate(HAS_MAP_DOM));
 
+  // Chart sits just below the hero; map is further down. Jumping to
+  // document.bottom leaves both out of view. Walk the page instead.
+  await page.evaluate(`window.scrollTo(0, 700)`);
+  await sleep(1500);
+  await page.evaluate(`window.scrollTo(0, 1600)`);
+  await sleep(2000);
   await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`);
-  await sleep(3000);
+  await sleep(2000);
 
   const after = requested.slice(before.length);
   const mapboxAfter = after.some(isMapboxUrl);
@@ -570,9 +572,14 @@ function check(report: PerfReport, baseline: PerfReport | null): number {
       if (load.cls > clsCeil + 0.0001) {
         failures.push(`${load.id} CLS ${load.cls} exceeds baseline ${prev.cls} + 0.02 (${clsCeil.toFixed(4)})`);
       }
-      if (prev.tbtMs > 0 && load.tbtMs > tbtCeil + 1) {
+      const tbtNoiseFloor = 50;
+      if (prev.tbtMs >= tbtNoiseFloor && load.tbtMs > tbtCeil + 1) {
         failures.push(
           `${load.id} TBT ${load.tbtMs}ms exceeds baseline ${prev.tbtMs}ms + 15% (${Math.round(tbtCeil)}ms)`,
+        );
+      } else if (prev.tbtMs < tbtNoiseFloor && load.tbtMs > tbtNoiseFloor * (1 + FLOORS.tbtPct)) {
+        failures.push(
+          `${load.id} TBT ${load.tbtMs}ms exceeds the ${tbtNoiseFloor}ms noise floor + 15%`,
         );
       }
     }

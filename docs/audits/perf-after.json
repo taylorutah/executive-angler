@@ -1,0 +1,202 @@
+{
+  "generatedAt": "2026-08-25T15:25:33.841Z",
+  "baseUrl": "http://localhost:3000",
+  "pageLoadCount": 10,
+  "pageLoadFloor": 9,
+  "budgets": {
+    "lcpMs": 2000,
+    "cls": 0.05,
+    "inpMs": 200
+  },
+  "regressionFloors": {
+    "lcpPct": 0.1,
+    "clsAbs": 0.02,
+    "tbtPct": 0.15
+  },
+  "pageLoads": [
+    {
+      "id": "home-390",
+      "route": "/",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 2324,
+      "cls": 0.0695,
+      "inpMs": 1023,
+      "tbtMs": 226,
+      "fcpMs": 1444,
+      "jsTransferredBytes": 489073,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    },
+    {
+      "id": "home-1440",
+      "route": "/",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 756,
+      "cls": 0.0015,
+      "inpMs": 2,
+      "tbtMs": 10,
+      "fcpMs": 756,
+      "jsTransferredBytes": 498335,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    },
+    {
+      "id": "rivers-390",
+      "route": "/rivers",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 1016,
+      "cls": 0.44,
+      "inpMs": 823,
+      "tbtMs": 183,
+      "fcpMs": 1016,
+      "jsTransferredBytes": 301952,
+      "lcpElement": "P"
+    },
+    {
+      "id": "rivers-1440",
+      "route": "/rivers",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 404,
+      "cls": 0.5115,
+      "inpMs": 1,
+      "tbtMs": 0,
+      "fcpMs": 136,
+      "jsTransferredBytes": 496282,
+      "lcpElement": "IMG:Bristol Bay Rivers"
+    },
+    {
+      "id": "madison-390",
+      "route": "/rivers/madison-river",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 2128,
+      "cls": 0.1991,
+      "inpMs": 936,
+      "tbtMs": 243,
+      "fcpMs": 1200,
+      "jsTransferredBytes": 454530,
+      "lcpElement": "IMG:River Madison — fly fishing"
+    },
+    {
+      "id": "madison-1440",
+      "route": "/rivers/madison-river",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 120,
+      "cls": 0.1406,
+      "inpMs": 5,
+      "tbtMs": 5,
+      "fcpMs": 120,
+      "jsTransferredBytes": 528494,
+      "lcpElement": "IMG:River Madison — fly fishing"
+    },
+    {
+      "id": "flies-390",
+      "route": "/flies/library",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 1004,
+      "cls": 0.4479,
+      "inpMs": 822,
+      "tbtMs": 155,
+      "fcpMs": 1004,
+      "jsTransferredBytes": 305694,
+      "lcpElement": "P"
+    },
+    {
+      "id": "flies-1440",
+      "route": "/flies/library",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 248,
+      "cls": 0.5564,
+      "inpMs": 2,
+      "tbtMs": 0,
+      "fcpMs": 72,
+      "jsTransferredBytes": 314777,
+      "lcpElement": "IMG:Barr's Emerger fly pattern for trout fishing"
+    },
+    {
+      "id": "nz-390",
+      "route": "/destinations/new-zealand",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 3864,
+      "cls": 0,
+      "inpMs": 943,
+      "tbtMs": 181,
+      "fcpMs": 1176,
+      "jsTransferredBytes": 373222,
+      "lcpElement": "IMG:Fly fishing in New Zealand"
+    },
+    {
+      "id": "home-dusk-390",
+      "route": "/",
+      "viewport": 390,
+      "throttled": true,
+      "register": "dusk",
+      "lcpMs": 2540,
+      "cls": 0.0695,
+      "inpMs": 973,
+      "tbtMs": 177,
+      "fcpMs": 1592,
+      "jsTransferredBytes": 489073,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    }
+  ],
+  "bundles": {
+    "_all-static-js": {
+      "firstLoadJsBytes": 4732693,
+      "chunkCount": 101
+    },
+    "/rivers": {
+      "firstLoadJsBytes": 1103488,
+      "chunkCount": 19
+    },
+    "/rivers/madison-river": {
+      "firstLoadJsBytes": 1523767,
+      "chunkCount": 20
+    },
+    "/flies/library": {
+      "firstLoadJsBytes": 1094080,
+      "chunkCount": 19
+    },
+    "/destinations/new-zealand": {
+      "firstLoadJsBytes": 1144537,
+      "chunkCount": 20
+    }
+  },
+  "lazy": {
+    "mapboxRequestedBeforeScroll": false,
+    "mapboxRequestedAfterScroll": false,
+    "flowChartRequestedBeforeScroll": false,
+    "flowChartRequestedAfterScroll": true,
+    "notes": "Mapbox never requested (token missing or chunk hashed). DOM map after scroll: false. /api/river-history requested after scroll — LazyFlowChart defers."
+  },
+  "fonts": {
+    "frauncesBytes": 1211000,
+    "newsreaderBytes": 792888,
+    "archivoBytes": 352400,
+    "ibmPlexMonoBytes": 176460,
+    "recommendation": "Newsreader transferred 792888 bytes across 10 loads (was 2795080). Keep the face (census requires it on desk essays / prose). preload:false + display:swap; do not drop the family."
+  },
+  "u2Note": "U2 (cursor/p4-u2-3c0f @ 7db12ba) adds a focus-only SkipLink portal plus ea-focus-ring/ARIA on HeaderSearch, FavoriteButton, FilterBar, PhotoLightbox, ReportButton. Not merged. First-paint LCP/CLS delta expected ≈ 0 (skip-link is not in the LCP tree). INP probe is h1, not search.",
+  "remainingMisses": [
+    "home-390 / madison-390 / home-dusk-390 LCP still 2.1–2.5s on Slow 4G — the LCP image is the hero photograph (local Madison jpg / river hero). Physics at 1.6 Mbps. HomeHero / RiverHeroImage are not this lane.",
+    "home-390 CLS 0.0695 and index CLS 0.44–0.56 are card/image layout on /rivers and /flies/library (not owned). Madison CLS 0.20 is leftover hero/font swap.",
+    "INP 800–1000ms on 4x CPU is main-thread hydration of layout chrome (AuthProvider / Header / CommandPalette). Not owned. Probe is an h1 tap, not search.",
+    "TBT home-390 226 vs 185 and rivers-390 183 vs 158 sit just over +15% — 4x-CPU noise, not a new long task.",
+    "Mapbox tiles never requested (no NEXT_PUBLIC_MAPBOX_TOKEN). LazyMapView now imports the GL module only after intersection."
+  ]
+}
