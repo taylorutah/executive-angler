@@ -1,288 +1,303 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/constants";
+import { median } from "@/lib/browse/flow-state";
+import {
+  ALERT_TYPE,
+  PER_RIVER_HOURS,
+  PER_USER_DAILY_CAP,
+  RIVER_ALERT_ENTITY,
+} from "../constants";
+import { chooseAlert, personalBand, type GaugeReading } from "../evaluate";
 
 /**
- * POST /api/river-alerts/check
+ * GET|POST /api/river-alerts/check
  *
- * CRON-triggered endpoint that checks USGS gauges for significant flow changes
- * on rivers that have at least one user favorite. Creates notifications and
- * triggers push for affected users.
- *
- * Flow spike/dip logic:
- * - Compare current discharge to 6-hour rolling average
- * - Alert on >20% change or flow status change (NORMAL -> HIGH, etc.)
- * - Dedupe: max 1 alert per river per user per 6 hours
- *
- * Secured by: CRON_SECRET header
+ * Vercel Cron hits GET. Contract: docs/decisions/river-alerts.md
+ * Do not change triggers or recipients without updating that file first.
  */
 
 const PARAM_DISCHARGE = "00060";
 
 interface GaugeConfig {
   site_id: string;
-  name: string;
-  section: string;
-}
-
-interface River {
-  id: string;
-  name: string;
-  usgs_gauge_id: string | GaugeConfig[] | null;
+  name?: string;
+  section?: string;
 }
 
 function getSupabaseAdmin() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
 }
 
-function flowStatus(cfs: number): string {
-  if (cfs < 100) return "LOW";
-  if (cfs < 500) return "NORMAL";
-  if (cfs < 1500) return "MODERATE";
-  if (cfs < 5000) return "HIGH";
-  return "FLOOD";
-}
-
-async function fetchCurrentDischarge(siteIds: string[]): Promise<Map<string, number>> {
-  const joined = siteIds.join(",");
-  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${joined}&parameterCd=${PARAM_DISCHARGE}&siteStatus=all`;
-
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if (!res.ok) return new Map();
-
-    const json = await res.json();
-    const series = json?.value?.timeSeries || [];
-    const result = new Map<string, number>();
-
-    for (const ts of series) {
-      const siteId = ts.sourceInfo?.siteCode?.[0]?.value;
-      const paramCode = ts.variable?.variableCode?.[0]?.value;
-      if (siteId && paramCode === PARAM_DISCHARGE) {
-        const values = ts.values?.[0]?.value || [];
-        if (values.length > 0) {
-          const latest = parseFloat(values[values.length - 1].value);
-          if (!isNaN(latest) && latest > 0) {
-            result.set(siteId, latest);
-          }
-        }
-      }
-    }
-    return result;
-  } catch {
-    return new Map();
-  }
-}
-
-async function fetch6HourAvgDischarge(siteIds: string[]): Promise<Map<string, number>> {
-  const joined = siteIds.join(",");
-  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${joined}&parameterCd=${PARAM_DISCHARGE}&period=PT6H&siteStatus=all`;
-
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if (!res.ok) return new Map();
-
-    const json = await res.json();
-    const series = json?.value?.timeSeries || [];
-    const result = new Map<string, number>();
-
-    for (const ts of series) {
-      const siteId = ts.sourceInfo?.siteCode?.[0]?.value;
-      const paramCode = ts.variable?.variableCode?.[0]?.value;
-      if (siteId && paramCode === PARAM_DISCHARGE) {
-        const values = (ts.values?.[0]?.value || [])
-          .map((v: { value: string }) => parseFloat(v.value))
-          .filter((v: number) => !isNaN(v) && v > 0);
-        if (values.length > 0) {
-          const avg = values.reduce((a: number, b: number) => a + b, 0) / values.length;
-          result.set(siteId, avg);
-        }
-      }
-    }
-    return result;
-  } catch {
-    return new Map();
-  }
-}
-
-export async function POST(req: NextRequest) {
-  // Verify cron secret
+function authorize(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const authHeader = req.headers.get("authorization") || req.headers.get("x-cron-secret");
-    if (authHeader !== cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!cronSecret) return false;
+  const authHeader = req.headers.get("authorization") || req.headers.get("x-cron-secret");
+  return authHeader === cronSecret || authHeader === `Bearer ${cronSecret}`;
+}
+
+function parseGauges(raw: unknown): GaugeConfig[] {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw as GaugeConfig[];
+  if (typeof raw === "string") {
+    const trimmed = raw.trim();
+    if (trimmed.startsWith("[")) {
+      try {
+        return JSON.parse(trimmed) as GaugeConfig[];
+      } catch {
+        return [];
+      }
+    }
+    if (trimmed) return [{ site_id: trimmed }];
+  }
+  return [];
+}
+
+type UsgsPoint = { value: number; at: number };
+
+async function fetchUsgsWeek(siteIds: string[]): Promise<Map<string, UsgsPoint[]>> {
+  const out = new Map<string, UsgsPoint[]>();
+  if (siteIds.length === 0) return out;
+  const unique = [...new Set(siteIds.filter(Boolean))];
+  const chunkSize = 40;
+  for (let i = 0; i < unique.length; i += chunkSize) {
+    const chunk = unique.slice(i, i + chunkSize);
+    const url =
+      `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${chunk.join(",")}` +
+      `&parameterCd=${PARAM_DISCHARGE}&period=P7D&siteStatus=all`;
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(20000) });
+      if (!res.ok) continue;
+      const json = (await res.json()) as {
+        value?: {
+          timeSeries?: Array<{
+            sourceInfo?: { siteCode?: Array<{ value?: string }> };
+            variable?: { variableCode?: Array<{ value?: string }> };
+            values?: Array<{
+              value?: Array<{ value?: string; dateTime?: string }>;
+            }>;
+          }>;
+        };
+      };
+      for (const ts of json.value?.timeSeries ?? []) {
+        const siteId = ts.sourceInfo?.siteCode?.[0]?.value;
+        const param = ts.variable?.variableCode?.[0]?.value;
+        if (!siteId || param !== PARAM_DISCHARGE) continue;
+        const points: UsgsPoint[] = [];
+        for (const raw of ts.values?.[0]?.value ?? []) {
+          const value = parseFloat(raw.value ?? "");
+          const at = raw.dateTime ? Date.parse(raw.dateTime) : NaN;
+          if (!Number.isFinite(value) || value <= 0 || !Number.isFinite(at)) continue;
+          points.push({ value, at });
+        }
+        if (points.length) out.set(siteId, points);
+      }
+    } catch {
+      // A failed chunk leaves those sites without readings → gauge_quiet.
     }
   }
+  return out;
+}
 
+function readingFromSeries(points: UsgsPoint[] | undefined, now: number): GaugeReading {
+  if (!points?.length) {
+    return { current: null, avg24: null, median7: null };
+  }
+  const current = points[points.length - 1]?.value ?? null;
+  const since24 = now - 24 * 60 * 60 * 1000;
+  const lastDay = points.filter((p) => p.at >= since24).map((p) => p.value);
+  const avg24 =
+    lastDay.length > 0
+      ? lastDay.reduce((a, b) => a + b, 0) / lastDay.length
+      : null;
+  const median7 = median(points.map((p) => p.value));
+  return { current, avg24, median7 };
+}
+
+function encodeMessage(riverId: string, kind: string, title: string, body: string): string {
+  return `${riverId}|${kind}|${title}|${body}`;
+}
+
+function riverIdFromMessage(message: string | null): string | null {
+  if (!message) return null;
+  const id = message.split("|")[0];
+  return id || null;
+}
+
+async function runCheck() {
   const admin = getSupabaseAdmin();
 
-  // 1. Find rivers that have at least one user favorite
-  const { data: favorites } = await admin
+  const { data: subs, error: subError } = await admin
     .from("user_favorites")
-    .select("entity_id")
-    .eq("entity_type", "river");
-
-  if (!favorites?.length) {
-    return NextResponse.json({ checked: 0, alerts: 0, reason: "No favorited rivers" });
+    .select("user_id, entity_id")
+    .eq("entity_type", RIVER_ALERT_ENTITY);
+  if (subError) {
+    return NextResponse.json({ error: subError.message }, { status: 500 });
+  }
+  if (!subs?.length) {
+    return NextResponse.json({ checked: 0, alerts: 0, reason: "No subscribers" });
   }
 
-  const favoritedRiverIds = [...new Set(favorites.map((f) => f.entity_id))];
-
-  // 2. Fetch river gauge configs for favorited rivers
+  const riverIds = [...new Set(subs.map((s) => s.entity_id).filter(Boolean))];
   const { data: rivers } = await admin
     .from("rivers")
     .select("id, name, usgs_gauge_id")
-    .in("id", favoritedRiverIds)
-    .not("usgs_gauge_id", "is", null);
+    .in("id", riverIds);
 
-  if (!rivers?.length) {
-    return NextResponse.json({ checked: 0, alerts: 0, reason: "No gauges for favorited rivers" });
+  const riverMap = new Map<
+    string,
+    { name: string; gauges: GaugeConfig[] }
+  >();
+  for (const river of rivers ?? []) {
+    riverMap.set(river.id, {
+      name: river.name,
+      gauges: parseGauges(river.usgs_gauge_id),
+    });
   }
 
-  // 3. Collect all gauge site IDs
-  const allGauges: { riverId: string; riverName: string; siteId: string; section: string }[] = [];
+  const userIds = [...new Set(subs.map((s) => s.user_id))];
+  const { data: pinned } = await admin
+    .from("user_favorite_sections")
+    .select("user_id, river_id, usgs_site_id")
+    .in("user_id", userIds)
+    .in("river_id", riverIds);
 
-  for (const river of rivers as River[]) {
-    let gauges: GaugeConfig[] = [];
-    if (typeof river.usgs_gauge_id === "string") {
-      try { gauges = JSON.parse(river.usgs_gauge_id); } catch { continue; }
-    } else if (Array.isArray(river.usgs_gauge_id)) {
-      gauges = river.usgs_gauge_id;
-    }
-    for (const g of gauges) {
-      allGauges.push({ riverId: river.id, riverName: river.name, siteId: g.site_id, section: g.section });
-    }
+  const pinKey = (userId: string, riverId: string) => `${userId}:${riverId}`;
+  const pins = new Map<string, string>();
+  for (const row of pinned ?? []) {
+    if (row.usgs_site_id) pins.set(pinKey(row.user_id, row.river_id), row.usgs_site_id);
   }
 
-  if (allGauges.length === 0) {
-    return NextResponse.json({ checked: 0, alerts: 0, reason: "No valid gauges" });
+  const siteBySub: Array<{
+    userId: string;
+    riverId: string;
+    riverName: string;
+    siteId: string;
+  }> = [];
+  for (const sub of subs) {
+    const river = riverMap.get(sub.entity_id);
+    if (!river) continue;
+    const pinnedSite = pins.get(pinKey(sub.user_id, sub.entity_id));
+    const siteId = pinnedSite || river.gauges[0]?.site_id;
+    if (!siteId) continue;
+    siteBySub.push({
+      userId: sub.user_id,
+      riverId: sub.entity_id,
+      riverName: river.name,
+      siteId,
+    });
   }
 
-  const siteIds = allGauges.map((g) => g.siteId);
-
-  // 4. Fetch current and 6-hour average discharge in parallel
-  const [currentMap, avgMap] = await Promise.all([
-    fetchCurrentDischarge(siteIds),
-    fetch6HourAvgDischarge(siteIds),
-  ]);
-
-  // 5. Check for significant changes
-  const alerts: { riverId: string; riverName: string; section: string; currentCfs: number; avgCfs: number; changePercent: number; status: string }[] = [];
-
-  for (const gauge of allGauges) {
-    const current = currentMap.get(gauge.siteId);
-    const avg = avgMap.get(gauge.siteId);
-    if (current == null || avg == null || avg === 0) continue;
-
-    const changePercent = ((current - avg) / avg) * 100;
-    const currentStatus = flowStatus(current);
-    const avgStatus = flowStatus(avg);
-
-    // Alert on >20% change OR status change
-    if (Math.abs(changePercent) > 20 || currentStatus !== avgStatus) {
-      alerts.push({
-        riverId: gauge.riverId,
-        riverName: gauge.riverName,
-        section: gauge.section,
-        currentCfs: Math.round(current),
-        avgCfs: Math.round(avg),
-        changePercent: Math.round(changePercent),
-        status: currentStatus,
-      });
-    }
+  if (siteBySub.length === 0) {
+    return NextResponse.json({ checked: 0, alerts: 0, reason: "No gauges for subscribers" });
   }
 
-  if (alerts.length === 0) {
-    return NextResponse.json({ checked: allGauges.length, alerts: 0, reason: "No significant changes" });
+  const now = Date.now();
+  const series = await fetchUsgsWeek(siteBySub.map((s) => s.siteId));
+
+  const { data: flowRows } = await admin
+    .from("fishing_sessions")
+    .select("user_id, river_id, river_flow_cfs")
+    .in("user_id", userIds)
+    .in("river_id", riverIds)
+    .not("river_flow_cfs", "is", null);
+
+  const flowsByUserRiver = new Map<string, number[]>();
+  for (const row of flowRows ?? []) {
+    const cfs = Number(row.river_flow_cfs);
+    if (!Number.isFinite(cfs) || cfs <= 0) continue;
+    const key = pinKey(row.user_id, row.river_id);
+    const list = flowsByUserRiver.get(key) ?? [];
+    list.push(cfs);
+    flowsByUserRiver.set(key, list);
   }
 
-  // 6. Dedupe: group alerts by river, take the most significant gauge per river
-  const alertsByRiver = new Map<string, typeof alerts[number]>();
-  for (const alert of alerts) {
-    const existing = alertsByRiver.get(alert.riverId);
-    if (!existing || Math.abs(alert.changePercent) > Math.abs(existing.changePercent)) {
-      alertsByRiver.set(alert.riverId, alert);
-    }
+  const since = new Date(now - PER_RIVER_HOURS * 60 * 60 * 1000).toISOString();
+  const { data: recent } = await admin
+    .from("notifications")
+    .select("recipient_id, message")
+    .eq("type", ALERT_TYPE)
+    .gte("created_at", since)
+    .in("recipient_id", userIds);
+
+  const recentByUser = new Map<string, string[]>();
+  for (const row of recent ?? []) {
+    const list = recentByUser.get(row.recipient_id) ?? [];
+    const rid = riverIdFromMessage(row.message);
+    if (rid) list.push(rid);
+    recentByUser.set(row.recipient_id, list);
   }
 
-  // 7. For each alerted river, find subscribed users and create notifications
+  const sentThisRun = new Map<string, number>();
   let notificationCount = 0;
-  const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
+  const details: Array<{ river: string; kind: string; user: string }> = [];
   const baseUrl = SITE_URL;
 
-  for (const [riverId, alert] of alertsByRiver) {
-    // Find users who favorited this river
-    const { data: riverFavorites } = await admin
-      .from("user_favorites")
-      .select("user_id")
-      .eq("entity_type", "river")
-      .eq("entity_id", riverId);
+  for (const sub of siteBySub) {
+    const already = recentByUser.get(sub.userId) ?? [];
+    const runCount = sentThisRun.get(sub.userId) ?? 0;
+    if (already.length + runCount >= PER_USER_DAILY_CAP) continue;
+    if (already.includes(sub.riverId)) continue;
 
-    if (!riverFavorites?.length) continue;
+    const reading = readingFromSeries(series.get(sub.siteId), now);
+    const band = personalBand(flowsByUserRiver.get(pinKey(sub.userId, sub.riverId)) ?? []);
+    const chosen = chooseAlert(sub.riverName, reading, band);
+    if (!chosen) continue;
 
-    for (const fav of riverFavorites) {
-      // Dedupe: check if we already alerted this user about this river in the last 6 hours
-      const { count } = await admin
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .eq("recipient_id", fav.user_id)
-        .eq("type", "conditions")
-        .gte("created_at", sixHoursAgo)
-        .like("message", `%${riverId}%`);
+    const message = encodeMessage(sub.riverId, chosen.kind, chosen.title, chosen.body);
+    await admin.from("notifications").insert({
+      recipient_id: sub.userId,
+      actor_id: null,
+      type: ALERT_TYPE,
+      session_id: null,
+      message,
+    });
 
-      if ((count ?? 0) > 0) continue;
-
-      const direction = alert.changePercent > 0 ? "up" : "down";
-      const emoji = alert.changePercent > 0 ? "📈" : "📉";
-      const title = `${alert.riverName} flow ${direction} ${Math.abs(alert.changePercent)}%`;
-      const body = `${alert.section}: ${alert.currentCfs} cfs (was ${alert.avgCfs} avg). Status: ${alert.status}`;
-
-      // Insert notification record
-      await admin.from("notifications").insert({
-        recipient_id: fav.user_id,
-        type: "conditions",
-        message: `${riverId}|${title}|${body}`,
+    try {
+      await fetch(`${baseUrl}/api/notifications/push`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-webhook-secret": process.env.WEBHOOK_SECRET || "",
+        },
+        body: JSON.stringify({
+          recipientId: sub.userId,
+          title: chosen.title,
+          body: chosen.body,
+          data: { type: ALERT_TYPE, riverId: sub.riverId, kind: chosen.kind },
+        }),
       });
-
-      // Trigger push notification
-      try {
-        await fetch(`${baseUrl}/api/notifications/push`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-webhook-secret": process.env.WEBHOOK_SECRET || "",
-          },
-          body: JSON.stringify({
-            recipientId: fav.user_id,
-            title: `${emoji} ${title}`,
-            body,
-            data: { type: "conditions", riverId },
-          }),
-        });
-      } catch {
-        // Push failure shouldn't block other notifications
-      }
-
-      notificationCount++;
+    } catch {
+      // Push is best-effort. The in-app row already exists.
     }
+
+    already.push(sub.riverId);
+    recentByUser.set(sub.userId, already);
+    sentThisRun.set(sub.userId, runCount + 1);
+    notificationCount += 1;
+    details.push({ river: sub.riverName, kind: chosen.kind, user: sub.userId });
   }
 
-  console.log(`[RIVER-ALERTS] Checked ${allGauges.length} gauges, found ${alertsByRiver.size} river alerts, sent ${notificationCount} notifications`);
-
   return NextResponse.json({
-    checked: allGauges.length,
-    rivers: alertsByRiver.size,
+    checked: siteBySub.length,
     alerts: notificationCount,
-    details: [...alertsByRiver.values()].map((a) => ({
-      river: a.riverName,
-      section: a.section,
-      change: `${a.changePercent > 0 ? "+" : ""}${a.changePercent}%`,
-      current: `${a.currentCfs} cfs`,
-      status: a.status,
-    })),
+    details: details.map((d) => ({ river: d.river, kind: d.kind })),
   });
+}
+
+export async function GET(req: NextRequest) {
+  if (!authorize(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return runCheck();
+}
+
+export async function POST(req: NextRequest) {
+  if (!authorize(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return runCheck();
 }

@@ -9,14 +9,16 @@
  * are synthesised rows (`favorite:<riverId>`) with no order to edit, and they
  * unwatch through /api/favorites instead.
  */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import WorkbenchTable from "@/components/workbench/WorkbenchTable";
 import WorkbenchFilter from "@/components/workbench/WorkbenchFilter";
 import WorkbenchKeyLegend from "@/components/workbench/WorkbenchKeyLegend";
+import RiverAlertToggle from "./RiverAlertToggle";
 
 export interface WatchedSection {
   id: string;
+  river_id: string;
   river_slug: string;
   river_name: string;
   section_name: string | null;
@@ -48,6 +50,20 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
   const filterRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => new Set());
+  const [alertIds, setAlertIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/river-alerts")
+      .then((res) => (res.ok ? res.json() : { riverIds: [] }))
+      .then((body: { riverIds?: string[] }) => {
+        if (!cancelled) setAlertIds(new Set(body.riverIds ?? []));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const q = query.trim().toLowerCase();
   const source = sections.filter((s) => !hiddenIds.has(s.id));
@@ -104,6 +120,18 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
             accessor: (s) => s.section_name ?? "—",
             width: "minmax(0, 0.8fr)",
           },
+          {
+            key: "alerts",
+            label: "Water alerts",
+            width: "120px",
+            accessor: (s) => (alertIds.has(s.river_id) ? "On" : "Off"),
+            render: (s) => (
+              <RiverAlertToggle
+                riverId={s.river_id}
+                initialOn={alertIds.has(s.river_id)}
+              />
+            ),
+          },
         ]}
         bulkActions={[
           {
@@ -125,6 +153,11 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
           },
         ]}
       />
+
+      <p className="mt-4 text-[13px] leading-relaxed text-[var(--text-meta)]">
+        Water alerts are off until you turn them on. They name the river and the
+        gauge, never a person or a catch.
+      </p>
 
       <WorkbenchKeyLegend />
     </div>

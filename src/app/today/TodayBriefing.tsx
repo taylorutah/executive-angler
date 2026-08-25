@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import FirstRunEmpty from "./FirstRunEmpty";
 
 export type TodayBriefingData = {
+  sessionCount: number;
   unfinished: Array<{ kind: "notes" | "fly"; href: string; label: string; date: string }>;
   water: Array<{ name: string; section: string; slug: string; cfs: number | null; href: string }>;
   worthGoing: { name: string; slug: string; cfs: number | null; lastFished: string | null } | null;
@@ -48,6 +50,16 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
         <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)] sm:text-5xl">
           Today
         </h1>
+
+        {data.water.length === 0 && data.sessionCount === 0 && (
+          <FirstRunEmpty
+            surface="today"
+            purpose="Today is a briefing for the water you watch and the days you have logged."
+            actionHref="/rivers"
+            actionLabel="Watch a river"
+            example="The Madison is on the river index. Pin a section and its flow lands here."
+          />
+        )}
 
         {data.unfinished.length > 0 && (
           <Line kicker="Unfinished">

@@ -9,13 +9,12 @@ import {
   Fish,
   TrendingUp,
   Flame,
-  BarChart3,
-  Loader2,
   AlertCircle,
 } from "lucide-react";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
 import PageHeader from "@/components/ui/PageHeader";
 import { COPPER_400 } from "@/lib/palette";
+import FirstRunEmpty, { INSIGHTS_SESSION_FLOOR } from "@/app/today/FirstRunEmpty";
 
 // =============================================
 // Types matching API response
@@ -166,17 +165,15 @@ export default function InsightsPageClient() {
 // =============================================
 
 function InsightsGrid({ data }: { data: InsightsPayload }) {
-  const isEmpty = data.totalSessions === 0;
-
-  if (isEmpty) {
+  if (data.totalSessions < INSIGHTS_SESSION_FLOOR) {
     return (
-      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
-        <BarChart3 className="h-12 w-12 mx-auto mb-4 text-slate-600" />
-        <h2 className="font-heading text-xl text-[var(--text-primary)] mb-2">No data yet</h2>
-        <p className="text-slate-400">
-          Log some fishing sessions to see your insights here.
-        </p>
-      </div>
+      <FirstRunEmpty
+        surface="insights"
+        purpose="Insights read patterns from your own sessions only. A number here is not a pattern until there is volume."
+        actionHref="/journal/new"
+        actionLabel="Log a session"
+        example={`Weather and temperature wait until ${INSIGHTS_SESSION_FLOOR} sessions. ${data.totalSessions} so far. A single day is a note, not a trend.`}
+      />
     );
   }
 

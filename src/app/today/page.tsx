@@ -62,7 +62,7 @@ export default async function TodayPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?redirect=${POST_LOGIN_PATH}`);
 
-  const [favoriteSections, tieNext, openSessions, bareCatches] = await Promise.all([
+  const [favoriteSections, tieNext, openSessions, bareCatches, sessionCount] = await Promise.all([
     listMyFavoriteSections(),
     listMyConfigurationsWithFly({ tieNextOnly: true }),
     supabase
@@ -80,6 +80,11 @@ export default async function TodayPage() {
       .or("fly_name.is.null,fly_name.eq.")
       .limit(5)
       .then(({ data }) => data ?? []),
+    supabase
+      .from("fishing_sessions")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .then(({ count }) => count ?? 0),
   ]);
 
   const watched = favoriteSections.slice(0, 6);
@@ -119,6 +124,7 @@ export default async function TodayPage() {
   ].slice(0, 4);
 
   const data: TodayBriefingData = {
+    sessionCount,
     unfinished,
     water: watched.map((s) => {
       const live = gauges.get(s.usgs_site_id);

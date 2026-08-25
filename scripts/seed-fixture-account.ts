@@ -2,21 +2,27 @@
  * Seed the screenshot / workbench fixture account.
  *
  *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts
+ *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts --empty
  *
  * Idempotent. Never writes to the App Store review inbox.
  * Anyone can rebuild the fixture from this file.
  *
- * Rows are labelled as fixture data — they exist so /journal, /flybox,
+ * Default: rows labelled as fixture data so /journal, /flybox,
  * /rivers/mine, and /account/gear have enough of a table to drive, not
  * as a fishing log.
+ *
+ * --empty: a second user with zero rows (first-run surfaces).
  */
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qlasxtfbodyxbcuchvxz.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 export const FIXTURE_EMAIL = "fixture@executiveangler.com";
-export const FIXTURE_PASSWORD = "FixtureEA2026!";
+export const FIXTURE_EMPTY_EMAIL = "fixture-empty@executiveangler.com";
+export const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD || "FixtureEA2026!";
 export const QA_REVIEW_EMAIL = ["test", "executiveangler.com"].join("@");
+
+const EMPTY_MODE = process.argv.includes("--empty");
 
 if (!SERVICE_ROLE_KEY) {
   console.error("ERROR: SUPABASE_SERVICE_ROLE_KEY is required.");
@@ -134,12 +140,18 @@ const SESSIONS = [
   },
 ];
 
-async function findOrCreateUser(): Promise<string> {
+async function findOrCreateUser(email: string, displayName: string, purpose: string): Promise<string> {
+  if (email === QA_REVIEW_EMAIL) {
+    throw new Error("Refusing to write the App Store review account.");
+  }
   const list = (await (
     await admin("/auth/v1/admin/users?page=1&per_page=200")
   ).json()) as { users?: Array<{ id: string; email?: string }> };
-  const existing = list.users?.find((u) => u.email === FIXTURE_EMAIL);
+  const existing = list.users?.find((u) => u.email === email);
   if (existing) {
+    if (existing.email === QA_REVIEW_EMAIL) {
+      throw new Error("Refusing to write the App Store review account.");
+    }
     console.log(`User exists: ${existing.id}`);
     return existing.id;
   }
@@ -150,12 +162,12 @@ async function findOrCreateUser(): Promise<string> {
   const createRes = await admin("/auth/v1/admin/users", {
     method: "POST",
     body: JSON.stringify({
-      email: FIXTURE_EMAIL,
+      email,
       password: FIXTURE_PASSWORD,
       email_confirm: true,
       user_metadata: {
-        purpose: "screenshots_and_workbench_demos",
-        display_name: "Fixture Angler",
+        purpose,
+        display_name: displayName,
       },
     }),
   });
@@ -168,6 +180,59 @@ async function findOrCreateUser(): Promise<string> {
   }
   console.log(`User created: ${created.id}`);
   return created.id;
+}
+
+async function refuseIfReviewInbox(userId: string): Promise<void> {
+  const qaCheck = (await (
+    await admin(`/auth/v1/admin/users/${userId}`)
+  ).json()) as { email?: string };
+  if (qaCheck.email === QA_REVIEW_EMAIL) {
+    throw new Error("Refusing to write the App Store review account.");
+  }
+}
+
+async function deleteUserRows(userId: string): Promise<void> {
+  const tables = [
+    "catches",
+    "session_rigs",
+    "fly_box_entries",
+    "fly_box_entries_v3",
+    "fishing_sessions",
+    "fly_boxes",
+    "gear_items",
+    "user_favorite_sections",
+    "user_favorites",
+  ];
+  for (const table of tables) {
+    try {
+      await rest(table, "DELETE", undefined, `?user_id=eq.${userId}`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes(" → 404") || msg.includes(" → 400") || msg.includes(" → 406")) {
+        continue;
+      }
+      // fly_box_entries may key on box owner, not user_id
+      if (table.startsWith("fly_box_entries")) continue;
+      throw err;
+    }
+  }
+}
+
+async function upsertProfile(
+  userId: string,
+  profile: Record<string, unknown>,
+): Promise<void> {
+  const existingProfile = (await rest(
+    "profiles",
+    "GET",
+    undefined,
+    `?user_id=eq.${userId}&select=user_id`,
+  )) as Array<{ user_id: string }>;
+  if (existingProfile?.[0]?.user_id) {
+    await rest("profiles", "PATCH", profile, `?user_id=eq.${userId}`);
+  } else {
+    await rest("profiles", "POST", profile);
+  }
 }
 
 async function upsertByUser(
@@ -188,20 +253,56 @@ async function upsertByUser(
   await rest(table, "POST", { user_id: userId, ...match, ...row });
 }
 
-async function main() {
-  console.log("=== Seed fixture account ===\n");
-  const userId = await findOrCreateUser();
-  if (!userId) throw new Error("No fixture user id");
+async function seedEmpty(): Promise<void> {
+  console.log("=== Seed empty fixture account ===\n");
+  const userId = await findOrCreateUser(
+    FIXTURE_EMPTY_EMAIL,
+    "Empty Fixture",
+    "first_run_empty_states",
+  );
+  await refuseIfReviewInbox(userId);
 
-  const qaCheck = (await (
-    await admin(`/auth/v1/admin/users/${userId}`)
-  ).json()) as { email?: string };
-  if (qaCheck.email === QA_REVIEW_EMAIL) {
-    throw new Error("Refusing to write the App Store review account.");
-  }
+  console.log("Clearing rows (must stay at zero)…");
+  await deleteUserRows(userId);
 
   console.log("Profiles…");
-  const profile = {
+  await upsertProfile(userId, {
+    user_id: userId,
+    display_name: "Empty Fixture",
+    username: "fixture_empty",
+    bio: "First-run empty fixture. Not a person. Zero rows.",
+    is_private: true,
+    searchable: false,
+    profile_visibility: "private",
+    founders_free_signup: false,
+    feed_display: "collage",
+  });
+
+  console.log("\n=== DONE (empty) ===");
+  console.log(`Email:    ${FIXTURE_EMPTY_EMAIL}`);
+  console.log("Password: (EA_FIXTURE_PASSWORD or the assembled fixture password)");
+  console.log(`User ID:  ${userId}`);
+  console.log("Zero journal / flybox / watch / gear rows.");
+  console.log("Never use the App Store review inbox for screenshots or seeded rows.");
+}
+
+async function main() {
+  if (EMPTY_MODE) {
+    await seedEmpty();
+    return;
+  }
+
+  console.log("=== Seed fixture account ===\n");
+  const userId = await findOrCreateUser(
+    FIXTURE_EMAIL,
+    "Fixture Angler",
+    "screenshots_and_workbench_demos",
+  );
+  if (!userId) throw new Error("No fixture user id");
+  await refuseIfReviewInbox(userId);
+
+  console.log("Profiles…");
+  await upsertProfile(userId, {
     user_id: userId,
     display_name: "Fixture Angler",
     username: "fixture_ea",
@@ -211,18 +312,7 @@ async function main() {
     profile_visibility: "private",
     founders_free_signup: false,
     feed_display: "collage",
-  };
-  const existingProfile = (await rest(
-    "profiles",
-    "GET",
-    undefined,
-    `?user_id=eq.${userId}&select=user_id`,
-  )) as Array<{ user_id: string }>;
-  if (existingProfile?.[0]?.user_id) {
-    await rest("profiles", "PATCH", profile, `?user_id=eq.${userId}`);
-  } else {
-    await rest("profiles", "POST", profile);
-  }
+  });
 
   console.log("Gear locker…");
   for (const item of GEAR) {

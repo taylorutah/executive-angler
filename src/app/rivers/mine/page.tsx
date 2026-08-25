@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { listMyFavoriteSections, listMyFavoritedRiversMissingSections } from "@/lib/db/favorite-sections";
 import MyRiversTable from "./MyRiversTable";
+import FirstRunEmpty from "@/app/today/FirstRunEmpty";
 
 export const dynamic = "force-dynamic";
 
@@ -37,17 +37,18 @@ export default async function MyRiversPage() {
         </p>
 
         {sections.length === 0 ? (
-          <p className="mt-10 text-[17px] text-[var(--text-body)]">
-            No rivers watched yet.{" "}
-            <Link href="/rivers" className="text-[var(--action)] hover:underline">
-              Open the river index
-            </Link>{" "}
-            and pin a section.
-          </p>
+          <FirstRunEmpty
+            surface="rivers-mine"
+            purpose="This list is the water you watch. Flow from here shows up on Today. Nothing here is public."
+            actionHref="/rivers"
+            actionLabel="Open the river index"
+            example="The Madison page lists Lyons Bridge FAS as public access. Pin a section there. Watching does not turn alerts on."
+          />
         ) : (
           <MyRiversTable
             sections={sections.map((s) => ({
               id: s.id,
+              river_id: s.river_id,
               river_slug: s.river_slug,
               river_name: s.river_name,
               section_name: s.section_name ?? null,
