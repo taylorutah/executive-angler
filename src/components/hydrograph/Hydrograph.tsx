@@ -41,6 +41,7 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
     <svg
       viewBox={`0 0 ${HYDRO.W} ${HYDRO.H}`}
       className="h-[9.5rem] w-full"
+      fill="none"
       role="img"
       aria-label={label ?? "Thirty-day discharge for this gauge"}
     >

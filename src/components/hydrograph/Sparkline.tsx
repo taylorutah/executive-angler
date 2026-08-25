@@ -28,6 +28,7 @@ export default function Sparkline({ values }: Props) {
       height={20}
       viewBox={`0 0 ${W} ${H}`}
       className="inline-block"
+      fill="none"
       aria-hidden
     >
       <path d={area} fill="var(--signal-live)" opacity="0.16" />
