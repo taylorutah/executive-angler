@@ -1,9 +1,13 @@
 /**
- * Homepage photograph identity.
+ * Page photograph identity.
  *
  * A source is the decoded `next/image` URL (or the raw `src` for unoptimized
  * `<img>`). The light/dark logo pair is allowed to repeat; every other
- * photograph on `/` must appear once.
+ * photograph on a checked page must appear once.
+ *
+ * Named for the homepage because that is where the rule started. It now also
+ * governs place pages, where the hero band and the river grid claim their
+ * photographs before the essay picks figures.
  */
 import { normalizeImageUrl } from "@/lib/media/image-url";
 
@@ -64,24 +68,28 @@ export type DuplicateReport = {
   duplicates: string[];
 };
 
-export function reportDuplicateImages(rawSrcs: string[]): DuplicateReport {
+/**
+ * `allowedRepeats` documents photographs a page may legitimately show twice —
+ * a river that genuinely appears in two roles, say. Anything not listed is a
+ * failure, so the allowance stays a deliberate entry rather than a silent one.
+ */
+export function reportDuplicateImages(
+  rawSrcs: string[],
+  allowedRepeats: readonly string[] = [],
+): DuplicateReport {
   const sources = collectCanonicalSources(rawSrcs);
   const contentSources = sources.filter((src) => !isLogoSrc(src));
+  const allowed = new Set(allowedRepeats);
   const seen = new Set<string>();
   const duplicates: string[] = [];
   for (const src of contentSources) {
     if (seen.has(src)) {
-      if (!duplicates.includes(src)) duplicates.push(src);
+      if (!allowed.has(src) && !duplicates.includes(src)) duplicates.push(src);
     } else {
       seen.add(src);
     }
   }
-  return {
-    ok: duplicates.length === 0 && new Set(contentSources).size === contentSources.length,
-    sources,
-    contentSources,
-    duplicates,
-  };
+  return { ok: duplicates.length === 0, sources, contentSources, duplicates };
 }
 
 /** Claim a URL so later homepage bands cannot reuse the photograph. */

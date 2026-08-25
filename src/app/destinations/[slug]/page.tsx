@@ -31,6 +31,7 @@ import SeasonalChart from "@/components/destinations/SeasonalChart";
 import PlaceEssay from "@/components/destinations/PlaceEssay";
 import PlaceRiverGrid from "@/components/destinations/PlaceRiverGrid";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { claimImageUrl } from "@/components/home/homepage-images";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
@@ -96,30 +97,21 @@ export default async function DestinationPage({ params }: Props) {
     getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
-  const essayImages = [
-    ...galleryPhotos
-      .filter((p) => isUsableImageUrl(p.photoUrl))
-      .map((p) => ({
-        src: p.photoUrl,
-        alt: p.caption || dest.name,
-        caption: p.caption,
-      })),
-    ...destRivers
-      .filter((r) => isUsableImageUrl(r.heroImageUrl))
-      .map((r) => ({
-        src: r.heroImageUrl as string,
-        alt: r.name,
-        caption: r.name,
-      })),
-  ].slice(0, 2);
+  // The hero band and the river grid speak for their photographs before the
+  // essay does. Claiming them first keeps every photograph on the page unique,
+  // so a river never reads as a figure above the card carrying the same frame.
+  const claimedImages = new Set<string>();
+  claimImageUrl(dest.heroImageUrl, claimedImages);
+  for (const river of destRivers) claimImageUrl(river.heroImageUrl, claimedImages);
 
-  if (essayImages.length === 0 && isUsableImageUrl(dest.heroImageUrl)) {
-    essayImages.push({
-      src: dest.heroImageUrl,
-      alt: dest.heroImageAlt || dest.name,
-      caption: dest.name,
-    });
-  }
+  const essayImages = galleryPhotos
+    .filter((p) => isUsableImageUrl(p.photoUrl) && claimImageUrl(p.photoUrl, claimedImages))
+    .map((p) => ({
+      src: p.photoUrl,
+      alt: p.caption || dest.name,
+      caption: p.caption,
+    }))
+    .slice(0, 2);
 
   const mapMarkers = [
     ...destRivers.map((r) => ({

@@ -53,6 +53,27 @@ describe("reportDuplicateImages", () => {
     ]);
   });
 
+  it("permits a documented repeat and still fails an undocumented one", () => {
+    const twice = [
+      "/images/rivers/madison-river-hero.jpg",
+      "/images/rivers/madison-river-hero.jpg",
+      "/images/rivers/gallatin-river-hero.jpg",
+      "/images/rivers/gallatin-river-hero.jpg",
+    ];
+    const documented = reportDuplicateImages(twice, [
+      "/images/rivers/madison-river-hero.jpg",
+    ]);
+    assert.equal(documented.ok, false);
+    assert.deepEqual(documented.duplicates, ["/images/rivers/gallatin-river-hero.jpg"]);
+
+    const bothDocumented = reportDuplicateImages(twice, [
+      "/images/rivers/madison-river-hero.jpg",
+      "/images/rivers/gallatin-river-hero.jpg",
+    ]);
+    assert.equal(bothDocumented.ok, true);
+    assert.deepEqual(bothDocumented.duplicates, []);
+  });
+
   it("passes when each content photograph is unique", () => {
     const report = reportDuplicateImages([
       "/images/logo-horizontal-white.svg",
