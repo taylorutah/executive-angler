@@ -866,8 +866,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 {usedFlies.length > 0 && (
                   <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-[var(--border-rule)] pt-3">
                     <span className={sectionLabel}>Flies</span>
-                    {usedFlies.map((f) => (
+                    {/* Two multi-word patterns side by side read as one name
+                        on whitespace alone — "Pheasant Tail Zebra Midge". */}
+                    {usedFlies.map((f, i) => (
                       <span key={f.name} className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
+                        {i > 0 && (
+                          <span aria-hidden className="text-[var(--text-meta)]">·</span>
+                        )}
                         {f.name}
                         {f.patternId && (
                           <FlyBoxAddButton fly={{ id: f.patternId, name: f.name, kind: "personal" }} variant="icon" />

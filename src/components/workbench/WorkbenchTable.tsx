@@ -252,7 +252,12 @@ export default function WorkbenchTable<T>({
           className="grid h-8 items-center border-b border-[var(--border-strong)] bg-[var(--surface-card)] text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]"
           style={{ gridTemplateColumns: gridTemplate }}
         >
-          {selectable && <span role="columnheader" className="sr-only">Selected</span>}
+          {/* Must occupy the 32px track, not be pulled out of flow: `sr-only`
+              is absolutely positioned, which dropped every following header
+              one column left and truncated "River" to "R…". */}
+          {selectable && (
+            <span role="columnheader" aria-label="Selected" className="block h-full" />
+          )}
           {columns.map((c) => (
             <span
               key={c.key}
