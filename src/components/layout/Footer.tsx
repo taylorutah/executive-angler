@@ -25,7 +25,6 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
       { label: "Gear Locker", href: "/account/gear" },
       { label: "Import & Export", href: "/journal/import" },
       { label: "Feed", href: "/feed" },
-      { label: "Mobile App", href: "/app" },
     ],
   },
   {
@@ -187,6 +186,16 @@ export default function Footer() {
                       </Link>
                     </li>
                   ))}
+                  {title === "Your Notebook" && (
+                    <li>
+                      <Link
+                        href="/app"
+                        className="ea-focus-ring text-[13.5px] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                      >
+                        Mobile App
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
