@@ -10,7 +10,7 @@ tags: [ea, brand, privacy, water-desk, design-system]
 ## The Water Desk edition
 
 **Status:** Current. Supersedes [[Brand-Bible-v3.1]] and [[Brand-Bible-v3]] — archive both.
-**Revised 2026-08-25 — §5.1 token table corrected to shipped values (five rows held pre-fix hexes); §5.6 added.**
+**Revised 2026-08-25 — §5.1 token table corrected to shipped values; §5.5 geometry; §5.7 how the registers meet.**
 **Companion specs:** [[Website-Design-Review-2026-08-23]] (design) · [[EA-Build-Brief-III-2026-08-24]] (build) · [[Workbench-Style-Guide]] (needs a token refresh)
 
 ---
@@ -156,9 +156,8 @@ The original budget — 120–180ms ease-out on hover and press, one 400ms cross
 2. **Ground wash.** `--surface-page-wash` — a ~1.5% lighter top falling to the base colour. Imperceptible as a gradient, perceptible as depth. `--surface-page` stays the solid darkest hex; that is what contrast is measured against.
 3. **Photograph treatment.** Hero and card scrims are gradients — transparent at the top, readable ground at the bottom where text sits. On a card or tile whose whole surface is a link, the image scales to `--photo-zoom-scale` (1.03) over `--photo-zoom-duration` (400ms) on `--ease-out-expo`. The container clips overflow.
 4. **Staged entrance.** Content blocks fade in and rise `--enter-rise` (12px), `--enter-stagger` (60ms) between siblings, `--enter-duration` (500ms), once on first intersection, never again on re-scroll. IntersectionObserver only. Entirely absent under `prefers-reduced-motion`.
-5. **Hero depth.** On the homepage and river hero photographs only: 2–4px of cursor-parallax on the image layer (`--hero-parallax`), never on the text layer. Disabled under `prefers-reduced-motion` and on touch.
 
-Hover and press remain 120–180ms ease-out (`--hover-duration` / `--hover-ease`). Live readings still crossfade once at `--crossfade-duration` (400ms).
+Hover and press remain 120–180ms ease-out (`--hover-duration` / `--hover-ease`). Live readings still crossfade once at `--crossfade-duration` (400ms). Cursor-parallax on the hero photograph was tried and cut — a portfolio flourish, not a field guide.
 
 **Never animates — this list is not permission to animate everything:**
 
@@ -170,13 +169,25 @@ Hover and press remain 120–180ms ease-out (`--hover-duration` / `--hover-ease`
 - Anything inside a data table
 - Page transitions
 
-`prefers-reduced-motion: reduce` fully disables items 3 (image scale), 4 (entrance), and 5 (hero parallax). Scrim gradients stay — they are not motion.
+`prefers-reduced-motion: reduce` fully disables items 3 (image scale) and 4 (entrance). Scrim gradients stay — they are not motion.
 
-### 5.5 Logo
+### 5.5 Geometry
+
+Three radius tokens. Not “round everything.”
+
+| Token | Value | Applies to |
+|---|---|---|
+| `--radius-control` | 9999px | Filter chips, category chips, tags, count badges |
+| `--radius-surface` | 12px | Cards, the Dusk instrument, images, modals |
+| `--radius-media` | 4px | Inline thumbnails and fly plates |
+
+Buttons, the search field, and the primary nav stay as they are. Pill-nav is a SaaS idiom; the masthead stays flat text with an underline.
+
+### 5.6 Logo
 
 Mark-only in app chrome and small headers. The full lockup is reserved for editorial contexts and the footer, so the word "Executive" is not the first thing on every screen.
 
-### 5.6 How the registers meet
+### 5.7 How the registers meet
 
 Dusk is an instrument, not a floor. Live data lives in a **contained dark panel** — inset from the page gutter, radiused, with a defined edge and its own shadow — sitting on the paper page the way an instrument sits on a desk. Dusk never full-bleeds across a public editorial page and never splits it in half. The paper register is the page; Dusk is an object on it.
 
@@ -268,6 +279,7 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-25** | Geometry tokens shipped narrow: `--radius-control` only on chips, tags, and count badges. Hero cursor-parallax cut. Homepage hero italic on the closing clause only, in white (AA on the scrim). Pill nav cancelled — masthead stays flat text. The production olive void was the forest scrim at 0.28 from the first pixel, not a missing JPEG.
 - **2026-08-25** | Ink/Graphite/Slate pulled into paper's warm family (hue ~50) after measuring runcabinet.com. Cabinet's ground is `#FAF6F1` and its display face is Fraunces — the same paper and the same type we already had. Their text is `#3B2F2F` (hue 18, warm). Ours was `#141814` at hue 145 (green) on a warm cream, 127° apart, and 16.66:1 — harsher, not better. Paper change to `#F8F6F4` cancelled. Ink is now `#2C211B` (14.55:1). `--elev-*` gained an inset top highlight.
 - **2026-08-25** | Motion budget widened because the original §5.4 rule — 120–180ms hover/press plus one 400ms live-reading crossfade — produced a flat, lifeless page. Depth scale, ground wash, photograph treatment, staged entrance, and 2–4px hero parallax are now in budget as tokens. The banned list (count-ups, text parallax, scroll-jacking, self-drawing charts, animated logo, table motion) stays explicit.
 - **2026-08-25** | Palette re-chromatised. Copper 700 / copper 400 / teal 300 / action-hover rewritten because AA compliance had been achieved at the cost of presence: the old copper (`#9E5615`, chroma 0.120, hue 56) sat 22° from paper and could not carry a composition. New copper is hue 40 / chroma 0.160; teal 300 pulled from neon cyan (hue 214) to water (hue 200). Paper stayed `#FAF6F0`.

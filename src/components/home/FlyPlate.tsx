@@ -49,7 +49,7 @@ export default function FlyPlate({ flies, flyCount }: Props) {
               return (
                 <li key={fly.id} className="border-b border-r border-[var(--rule)]">
                   <Link href={`/flies/${fly.slug}`} className="group block p-3 sm:p-5">
-                    <div className="photo-card relative aspect-square w-full overflow-hidden bg-[var(--vellum)]">
+                    <div className="photo-card relative aspect-square w-full overflow-hidden rounded-media bg-[var(--vellum)]">
                       <SafeEntityImage
                         src={fly.heroImageUrl}
                         alt=""

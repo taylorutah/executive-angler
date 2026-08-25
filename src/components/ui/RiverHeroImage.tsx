@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Images } from "lucide-react";
-import HeroParallax from "./HeroParallax";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
@@ -60,12 +59,9 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section
-        data-hero-parallax-host
-        className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]"
-      >
+      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
         {showPhoto ? (
-          <HeroParallax>
+          <div className="absolute inset-0">
             <Image
               src={heroImageUrl}
               alt={heroImageAlt}
@@ -78,7 +74,7 @@ export default function RiverHeroImage({
               onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
             />
-          </HeroParallax>
+          </div>
         ) : (
           <PlateFallback title="" meta={meta} />
         )}

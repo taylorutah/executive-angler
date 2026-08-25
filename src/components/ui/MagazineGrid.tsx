@@ -29,7 +29,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {badges.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-control"
                 >
                   {badge}
                 </span>
@@ -39,7 +39,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
         </div>
         <div className="p-8 md:p-10 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 bg-[var(--action)] text-white text-xs font-medium rounded-full uppercase">
+            <span className="px-2.5 py-0.5 bg-[var(--action)] text-white text-xs font-medium rounded-control uppercase">
               Featured
             </span>
             {meta && (
@@ -63,7 +63,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-control"
                 >
                   {badge}
                 </span>
@@ -71,7 +71,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-full border border-[var(--border-rule)]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-control border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>

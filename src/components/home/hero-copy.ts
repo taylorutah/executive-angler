@@ -3,8 +3,9 @@
  * read like something a person said about this water this week, not a slogan.
  * Do not invent a reading; the eyebrow CFS comes off the gauge.
  */
-export const HERO_HEADLINE =
-  "Late August on the Madison — the water is low and the hoppers are up.";
+export const HERO_HEADLINE_LEAD = "Late August on the Madison";
+export const HERO_HEADLINE_CLOSE = "the water is low and the hoppers are up.";
+export const HERO_HEADLINE = `${HERO_HEADLINE_LEAD} — ${HERO_HEADLINE_CLOSE}`;
 
 export const HERO_DEK =
   "The photograph is Three Dollar Bridge. The number in the eyebrow is the gauge, not a guess.";

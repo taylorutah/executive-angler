@@ -84,7 +84,7 @@ export default function EntityCard({
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-control"
                 >
                   {badge}
                 </span>
@@ -92,7 +92,7 @@ export default function EntityCard({
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-full border border-[var(--border-rule)]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-control border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>
@@ -127,7 +127,7 @@ export default function EntityCard({
             {badges.map((badge) => (
               <span
                 key={badge}
-                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full"
+                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-control"
               >
                 {badge}
               </span>

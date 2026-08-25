@@ -63,7 +63,7 @@ export default function ListCard({
           {badges && badges.length > 0 && badges.map((badge) => (
             <span
               key={badge}
-              className="px-2 py-0.5 text-xs font-medium bg-[var(--action)]/5 text-[var(--action)] rounded-full"
+              className="px-2 py-0.5 text-xs font-medium bg-[var(--action)]/5 text-[var(--action)] rounded-control"
             >
               {badge}
             </span>
@@ -71,7 +71,7 @@ export default function ListCard({
           {tags && tags.length > 0 && tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 text-xs bg-[var(--surface-card)] text-[var(--action)] rounded-full"
+              className="px-2 py-0.5 text-xs bg-[var(--surface-card)] text-[var(--action)] rounded-control"
             >
               {tag}
             </span>

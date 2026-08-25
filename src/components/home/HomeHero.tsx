@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
-import HeroParallax from "@/components/ui/HeroParallax";
 import {
-  HERO_HEADLINE,
+  HERO_HEADLINE_LEAD,
+  HERO_HEADLINE_CLOSE,
   HERO_IMAGE,
   SEARCH_PLACEHOLDER,
   formatHeroEyebrow,
@@ -24,6 +24,10 @@ interface Props {
  *
  * The 11px eyebrow sits on an opaque Vellum chip (slate on vellum is 5.03:1).
  * Small caps on a scrim cannot make 4.5.
+ *
+ * The photograph lives in an explicit `absolute inset-0` containing block.
+ * `next/image` `fill` needs that. The production olive void was the forest
+ * scrim starting at 0.28 opacity on pixel zero — the JPEG was always there.
  */
 const HERO_SCRIM =
   "linear-gradient(to bottom, rgba(15,43,31,0) 0%, rgba(15,43,31,0.45) 32%, rgba(15,43,31,0.86) 100%)";
@@ -34,10 +38,9 @@ export default function HomeHero({ riverCount, cfs }: Props) {
   return (
     <section
       data-lane="resource"
-      data-hero-parallax-host
       className="relative min-h-[70svh] w-full overflow-hidden sm:min-h-[85vh]"
     >
-      <HeroParallax>
+      <div className="absolute inset-0">
         <Image
           src={HERO_IMAGE.src}
           alt={HERO_IMAGE.alt}
@@ -47,7 +50,7 @@ export default function HomeHero({ riverCount, cfs }: Props) {
           sizes="100vw"
           className="object-cover"
         />
-      </HeroParallax>
+      </div>
       <div className="absolute inset-0" style={{ background: HERO_SCRIM }} aria-hidden />
 
       <div className="relative z-10 flex min-h-[70svh] flex-col justify-end sm:min-h-[85vh]">
@@ -61,7 +64,9 @@ export default function HomeHero({ riverCount, cfs }: Props) {
             className="max-w-5xl font-heading font-bold tracking-tight text-white drop-shadow-lg"
             style={{ fontSize: "clamp(3.5rem, 7vw, 7rem)", lineHeight: 0.95 }}
           >
-            {HERO_HEADLINE}
+            {HERO_HEADLINE_LEAD}
+            {" — "}
+            <em className="italic">{HERO_HEADLINE_CLOSE}</em>
           </h1>
 
           <p
