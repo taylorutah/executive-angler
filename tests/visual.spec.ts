@@ -13,7 +13,6 @@ const PUBLIC_ROUTES = [
   "/rivers/madison-river",
   "/flies/library",
   "/flies/pheasant-tail",
-  "/destinations",
   "/destinations/new-zealand",
   "/articles",
   "/learn",

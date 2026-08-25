@@ -6,6 +6,10 @@
 
 ## Decisions
 
+### `/destinations` index is not a baseline
+
+Card photographs on `/destinations` still race after #66 (0.15 / 0.08 pixel-diff on successive runs). A flaky baseline is worse than none. The index is asserted in `journeys.spec.ts` (heading + result count). `/destinations/new-zealand` stays as the destination template baseline.
+
 ### `/flies` vs `/flies/library`
 
 Logged-out `/flies` is a `permanentRedirect` to `/flies/library` (`src/app/flies/page.tsx`). Logged-in `/flies` goes to `/flybox`. They are not two catalog pages. One public baseline (`/flies/library`); the redirect is asserted in `tests/journeys.spec.ts`.
