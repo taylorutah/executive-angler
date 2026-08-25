@@ -119,7 +119,7 @@ export default function CategoryIndex({ rivers, flies, places, notes }: Category
       label: "Places",
       href: "/destinations",
       count: places,
-      noun: "destinations",
+      noun: "places",
       descriptor: "Where to go and when, and the rivers that make each one worth the flight.",
       mark: "valley",
     },
