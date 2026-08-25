@@ -418,6 +418,21 @@
   max-width: 100%;
 }
 
+/* A field note sets its stored body in .prose for the 19px / 1.7 / 68ch measure
+   while keeping the .article-body element rules that stored HTML depends on
+   (h2/h3/p/ul/table/figcaption). .article-body is declared later in this file,
+   so the shared properties have to be restated at two-class specificity. */
+.prose.article-body {
+  max-width: 68ch;
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.prose.article-body p {
+  font-size: inherit;
+  line-height: inherit;
+}
+
 .article-body > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-display);
@@ -427,6 +442,19 @@
   margin-top: 0.05em;
   color: var(--text-primary);
   font-weight: 700;
+}
+
+/* A field note's body is split into segments so a pull quote or stat block can
+   sit between them. Only the first segment opens the piece, so the drop cap
+   must not restart on every one. */
+.article-body--continued > p:first-of-type::first-letter {
+  float: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  color: inherit;
 }
 
 .article-body h2,

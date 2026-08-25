@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  EMAIL_VERIFIED_EXACT,
   EMAIL_VERIFIED_REQUIRED,
   POST_LOGIN_PATH,
   PROTECTED_EXACT,
@@ -26,6 +27,15 @@ describe("auth paths — the gate for /today", () => {
     assert.equal(signedInPathRedirect("/dashboard"), "/today");
     assert.equal(signedInPathRedirect("/"), null);
     assert.equal(pathMatches("/", PROTECTED_PATHS, PROTECTED_EXACT), false);
+  });
+
+  it("leaves the public trip brief ungated", () => {
+    assert.equal(pathMatches("/plan", PROTECTED_PATHS, PROTECTED_EXACT), false);
+    assert.equal(pathMatches("/plan/madison-river", PROTECTED_PATHS, PROTECTED_EXACT), false);
+    assert.equal(
+      pathMatches("/plan/madison-river", EMAIL_VERIFIED_REQUIRED, EMAIL_VERIFIED_EXACT),
+      false,
+    );
   });
 
   it("requires a verified email on /today and /rivers/mine", () => {

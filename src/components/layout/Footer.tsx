@@ -21,8 +21,8 @@ const footerColumns: Record<string, FooterLink[]> = {
     { label: "Fly Library", href: "/flies/library" },
     { label: "Green River", href: "/rivers/green-river" },
     { label: "Belize", href: "/destinations/belize" },
-    { label: "Destinations", href: "/destinations" },
-    { label: "Articles", href: "/articles" },
+    { label: "Places", href: "/destinations" },
+    { label: "Field Notes", href: "/articles" },
   ],
   "Find a guide": [
     { label: "Guides", href: "/guides" },

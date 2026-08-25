@@ -35,13 +35,13 @@ export const PUBLIC_NOUNS: NavItem[] = [
     descriptor: "Patterns, recipes, and materials",
   },
   {
-    label: "Destinations",
+    label: "Places",
     href: "/destinations",
     section: "/destinations",
     descriptor: "Where to go, month by month",
   },
   {
-    label: "Articles",
+    label: "Field Notes",
     href: "/articles",
     section: "/articles",
     descriptor: "Reading water, gear, and craft",
@@ -65,8 +65,8 @@ export const MEMBER_NOUNS: NavItem[] = [
 
 /** The one dropdown in the bar: utility routes for signed-in anglers. */
 export const EXPLORE_ITEMS: NavItem[] = [
-  { label: "Destinations", href: "/destinations", section: "/destinations" },
-  { label: "Articles", href: "/articles", section: "/articles" },
+  { label: "Places", href: "/destinations", section: "/destinations" },
+  { label: "Field Notes", href: "/articles", section: "/articles" },
   { label: "Learn", href: "/learn", section: "/learn" },
   { label: "Species", href: "/species", section: "/species" },
   { label: "Lodges", href: "/lodges", section: "/lodges" },

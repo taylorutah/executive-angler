@@ -96,30 +96,17 @@ export default async function DestinationPage({ params }: Props) {
     getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
-  const essayImages = [
-    ...galleryPhotos
-      .filter((p) => isUsableImageUrl(p.photoUrl))
-      .map((p) => ({
-        src: p.photoUrl,
-        alt: p.caption || dest.name,
-        caption: p.caption,
-      })),
-    ...destRivers
-      .filter((r) => isUsableImageUrl(r.heroImageUrl))
-      .map((r) => ({
-        src: r.heroImageUrl as string,
-        alt: r.name,
-        caption: r.name,
-      })),
-  ].slice(0, 2);
-
-  if (essayImages.length === 0 && isUsableImageUrl(dest.heroImageUrl)) {
-    essayImages.push({
-      src: dest.heroImageUrl,
-      alt: dest.heroImageAlt || dest.name,
-      caption: dest.name,
-    });
-  }
+  // River heroes belong to the river grid below. Reusing one as an essay plate
+  // printed the same photograph twice on the page, so the essay draws only on
+  // community photos of the place itself.
+  const essayImages = galleryPhotos
+    .filter((p) => isUsableImageUrl(p.photoUrl))
+    .map((p) => ({
+      src: p.photoUrl,
+      alt: p.caption || dest.name,
+      caption: p.caption,
+    }))
+    .slice(0, 2);
 
   const mapMarkers = [
     ...destRivers.map((r) => ({
