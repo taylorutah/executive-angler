@@ -31,6 +31,7 @@ import SeasonalChart from "@/components/destinations/SeasonalChart";
 import PlaceEssay from "@/components/destinations/PlaceEssay";
 import PlaceRiverGrid from "@/components/destinations/PlaceRiverGrid";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { claimImageUrl } from "@/components/home/homepage-images";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllDestinations,
@@ -96,11 +97,17 @@ export default async function DestinationPage({ params }: Props) {
     getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
-  // River heroes belong to the river grid below. Reusing one as an essay plate
-  // printed the same photograph twice on the page, so the essay draws only on
-  // community photos of the place itself.
+  // The 70vh hero and the river grid speak for their photographs before the
+  // essay does. Restricting the essay to community photos is not enough on its
+  // own — a community photo can point at the same asset as a hero — so claim
+  // every frame the page has already committed to and let the essay take what
+  // is left.
+  const claimed = new Set<string>();
+  claimImageUrl(dest.heroImageUrl, claimed);
+  for (const river of destRivers) claimImageUrl(river.heroImageUrl, claimed);
+
   const essayImages = galleryPhotos
-    .filter((p) => isUsableImageUrl(p.photoUrl))
+    .filter((p) => isUsableImageUrl(p.photoUrl) && claimImageUrl(p.photoUrl, claimed))
     .map((p) => ({
       src: p.photoUrl,
       alt: p.caption || dest.name,
