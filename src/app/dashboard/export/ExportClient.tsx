@@ -281,7 +281,7 @@ export default function ExportClient({
         <button
           onClick={handleExport}
           disabled={exporting || sessions.length === 0}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {exporting ? (
             <>

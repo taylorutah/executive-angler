@@ -40,6 +40,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import type { Personalizations } from "@/lib/flies/resolveFlyForViewer";
 import { suggestVariantLabel } from "@/lib/flies/variantLabel";
+import { COPPER_400 } from "@/lib/palette";
 
 // Standard tungsten/brass bead weight presets used in fly tying.
 const BEAD_WEIGHT_PRESETS = ["1.5", "2.0", "2.4", "2.8", "3.3", "3.8", "4.6"];
@@ -59,7 +60,7 @@ const TIER_LABELS: Record<string, string> = {
   custom: "Custom",
 };
 const TIER_ACCENT: Record<string, string> = {
-  kill: "#E8923A",
+  kill: COPPER_400,
   support: "#0BA5C7",
   archive: "#8957E5",
   custom: "#A8B2BD",

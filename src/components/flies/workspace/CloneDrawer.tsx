@@ -222,7 +222,7 @@ export default function CloneDrawer({
             type="button"
             onClick={handleSubmit}
             disabled={busy || loading || !source}
-            className="rounded-md bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
+            className="rounded-md bg-[var(--action)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--action-hover)] disabled:opacity-60"
           >
             {busy ? "Cloning…" : "Save clone"}
           </button>

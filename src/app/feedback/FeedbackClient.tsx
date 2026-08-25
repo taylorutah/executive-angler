@@ -109,7 +109,7 @@ export default function FeedbackClient({
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setSuccess(false)}
-                className="px-5 py-2.5 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
+                className="px-5 py-2.5 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--action-hover)] transition-colors"
               >
                 Submit Another
               </button>
@@ -197,7 +197,7 @@ export default function FeedbackClient({
                 <button
                   onClick={handleSubmit}
                   disabled={submitting || !title.trim()}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? (
                     <><Loader2 className="h-5 w-5 animate-spin" /> Submitting...</>

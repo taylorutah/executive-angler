@@ -1,4 +1,5 @@
 import type { UserAward } from "@/types/awards";
+import { COPPER_400 } from "@/lib/palette";
 
 // Map every award_key to its emoji
 export const AWARD_EMOJI_MAP: Record<string, string> = {
@@ -46,7 +47,7 @@ export function AwardBadge({
 
   const { cls, text } = sizeMap[size];
   const emoji = AWARD_EMOJI_MAP[award.award_key] || award.metadata.badge_icon || "🏆";
-  const borderColor = award.metadata.badge_color || "#E8923A";
+  const borderColor = award.metadata.badge_color || COPPER_400;
 
   const containerClasses = showDetails ? "flex items-start gap-3" : "inline-flex";
 

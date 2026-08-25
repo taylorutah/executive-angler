@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { COPPER_400 } from "@/lib/palette";
 
 interface SessionLocationPickerProps {
   initialLat?: number;
@@ -49,7 +50,7 @@ export default function SessionLocationPicker({
       });
 
       marker.current = new mapboxgl.Marker({
-        color: "#E8923A",
+        color: COPPER_400,
         draggable: true,
       })
         .setLngLat([coords.lng, coords.lat])
@@ -121,7 +122,7 @@ export default function SessionLocationPicker({
               onClick={() => setMapStyle(s)}
               className="px-2 py-1.5 text-[11px] font-semibold transition-colors"
               style={{
-                background: mapStyle === s ? "#E8923A" : "rgba(255,255,255,0.92)",
+                background: mapStyle === s ? COPPER_400 : "rgba(255,255,255,0.92)",
                 color: mapStyle === s ? "#fff" : "#161B22",
               }}
             >

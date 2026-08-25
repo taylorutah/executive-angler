@@ -271,7 +271,7 @@ export default function FilterDropdown({
             <button
               type="button"
               onClick={close}
-              className="text-[var(--action)] hover:text-[#F0A65A] font-medium transition-colors"
+              className="text-[var(--action)] hover:text-[var(--action-hover)] font-medium transition-colors"
             >
               Done
             </button>

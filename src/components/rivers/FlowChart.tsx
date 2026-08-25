@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Loader2, Droplets } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
+import { COPPER_400 } from "@/lib/palette";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -531,7 +532,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                 y1={sm.y}
                 x2={sm.x}
                 y2={PADDING.top + PLOT_H}
-                stroke="#E8923A"
+                stroke={COPPER_400}
                 strokeWidth={0.75}
                 strokeDasharray="2 2"
                 opacity={0.5}
@@ -541,9 +542,9 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                 cx={sm.x}
                 cy={sm.y}
                 r={Math.min(14, 6 + sm.fishCount)}
-                fill="#E8923A"
+                fill={COPPER_400}
                 fillOpacity={0.15}
-                stroke="#E8923A"
+                stroke={COPPER_400}
                 strokeWidth={1.5}
               />
               {/* Inner dot */}
@@ -551,7 +552,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                 cx={sm.x}
                 cy={sm.y}
                 r={4}
-                fill="#E8923A"
+                fill={COPPER_400}
               />
               {/* Fish count label */}
               {sm.fishCount > 0 && (
@@ -561,7 +562,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                   textAnchor="middle"
                   fontSize={9}
                   fontWeight="bold"
-                  fill="#E8923A"
+                  fill={COPPER_400}
                 >
                   {sm.fishCount}
                 </text>

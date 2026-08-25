@@ -12,6 +12,28 @@
  * on copper-400) are fill-on-fill, still 4.5.
  */
 
+import {
+  PAPER,
+  VELLUM,
+  CARD,
+  RIVERBED,
+  POOL,
+  SHELF,
+  INK,
+  GRAPHITE,
+  SLATE,
+  COPPER_700,
+  TEAL_700,
+  RISE_700,
+  CUT_700,
+  CHALK,
+  FOG,
+  COPPER_400,
+  TEAL_300,
+  RISE_400,
+  CUT_400,
+} from "../src/lib/palette";
+
 type Pair = {
   fg: string;
   bg: string;
@@ -21,28 +43,7 @@ type Pair = {
   role: string;
 };
 
-const PAPER = "#FAF6F0";
-const VELLUM = "#F2EDE4";
-const CARD = "#FFFFFF";
-const RIVERBED = "#0B1112";
-const POOL = "#131B1D";
-const SHELF = "#1C2629";
-
-const INK = "#141814";
-const GRAPHITE = "#3E4649";
-const SLATE = "#5E6669";
-const COPPER_700 = "#9E5615";
-const TEAL_700 = "#0C7286";
-const RISE_700 = "#1F7A3D";
-const CUT_700 = "#B3261E";
 const WHITE = "#FFFFFF";
-
-const CHALK = "#EEF2F1";
-const FOG = "#8B979A";
-const COPPER_400 = "#E8923A";
-const TEAL_300 = "#22C1DE";
-const RISE_400 = "#3FB863";
-const CUT_400 = "#F87171";
 
 const DAYLIGHT_GROUNDS: Array<{ name: string; hex: string }> = [
   { name: "paper", hex: PAPER },

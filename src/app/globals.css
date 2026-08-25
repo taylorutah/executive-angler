@@ -8,7 +8,7 @@
 
 :root {
   /* Primitive — Daylight */
-  --paper: #FAF6F0;
+  --paper: #F8F6F4;
   --vellum: #F2EDE4;
   --card: #FFFFFF;
   --rule: #E2DACD;
@@ -23,11 +23,13 @@
   --chalk: #EEF2F1;
   --fog: #8B979A;
 
-  /* Signal */
-  --copper-700: #9E5615;
-  --copper-400: #E8923A;
+  /* Signal — copper is hue 40; teal-300 is water (hue 200), not neon cyan */
+  --copper-700: #B4410D;
+  --copper-400: #FD8358;
+  --copper-hover-700: #9B3300;
+  --copper-hover-400: #FE9A77;
   --teal-700: #0C7286;
-  --teal-300: #22C1DE;
+  --teal-300: #00BCC5;
   --rise-700: #1F7A3D;
   --rise-400: #3FB863;
   --cut-700: #B3261E;
@@ -51,7 +53,7 @@
   --text-body: var(--graphite);
   --text-meta: var(--slate);
   --action: var(--copper-700);
-  --action-hover: #8A4A12;
+  --action-hover: var(--copper-hover-700);
   --on-action: #FFFFFF;
   --signal-live: var(--teal-700);
   --state-positive: var(--rise-700);
@@ -69,7 +71,7 @@
   --text-body: #C5CECF;
   --text-meta: var(--fog);
   --action: var(--copper-400);
-  --action-hover: #F0A65A;
+  --action-hover: var(--copper-hover-400);
   --on-action: var(--riverbed);
   --signal-live: var(--teal-300);
   --state-positive: var(--rise-400);
@@ -105,6 +107,7 @@
   --color-success: var(--state-positive);
   --color-danger: var(--state-negative);
   --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
   --color-on-action: var(--on-action);
 }
 

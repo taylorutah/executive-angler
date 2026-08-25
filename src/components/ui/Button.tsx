@@ -137,10 +137,10 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
       ].join(" ");
     case "brand":
       return [
-        "bg-gradient-to-b from-[#F5A65A] to-[var(--action)] text-white",
-        "border border-[#C97726] font-semibold",
+        "bg-gradient-to-b from-[color-mix(in_oklch,var(--action)_72%,white)] to-[var(--action)] text-[var(--on-action)]",
+        "border border-[var(--action)] font-semibold",
         "rounded shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_1px_2px_rgba(0,0,0,0.15)]",
-        "hover:from-[var(--action)] hover:to-[#C97726]",
+        "hover:from-[var(--action)] hover:to-[var(--action-hover)]",
         "hover:shadow-md hover:-translate-y-px active:translate-y-0",
       ].join(" ");
     case "ghost":
@@ -156,7 +156,7 @@ function variantClasses(variant: Variant, loud: boolean | undefined): string {
       ].join(" ");
     case "pill":
       return [
-        "bg-[var(--action)]/[0.16] text-[#F5A65A] border border-[var(--action)]/30 font-semibold",
+        "bg-[var(--action)]/[0.16] text-[var(--action)] border border-[var(--action)]/30 font-semibold",
         "rounded-full",
         "hover:bg-[var(--action)]/[0.24]",
       ].join(" ");
@@ -276,7 +276,7 @@ export function ButtonTile({
   href,
   onClick,
   icon: Icon,
-  iconColor = "#E8923A",
+  iconColor = "var(--action)",
   label,
   sub,
   badge,
@@ -414,11 +414,11 @@ export function SplitButton({
   const iconSize = ICON_SIZE[size];
 
   const wrap =
-    `inline-flex items-stretch rounded shadow-sm border border-[#C97726] overflow-hidden ${className}`;
+    `inline-flex items-stretch rounded shadow-sm border border-[var(--action)] overflow-hidden ${className}`;
   const primaryCls =
-    `${padding} ${iconSize ? "" : ""} bg-[var(--action)] text-white font-semibold inline-flex items-center gap-2 hover:bg-[#C97726] cursor-pointer transition-colors`;
+    `${padding} ${iconSize ? "" : ""} bg-[var(--action)] text-[var(--on-action)] font-semibold inline-flex items-center gap-2 hover:bg-[var(--action-hover)] cursor-pointer transition-colors`;
   const caretCls =
-    `${caretPadding} bg-[var(--action)] text-white border-l border-[#C97726] inline-flex items-center hover:bg-[#C97726] cursor-pointer transition-colors`;
+    `${caretPadding} bg-[var(--action)] text-[var(--on-action)] border-l border-[var(--action)] inline-flex items-center hover:bg-[var(--action-hover)] cursor-pointer transition-colors`;
 
   return (
     <div className={wrap}>

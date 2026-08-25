@@ -234,7 +234,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                     className={`border-r border-[var(--border-rule)] last:border-r-0 p-1.5 sm:p-2 min-h-[90px] text-left transition-all relative ${
                       hasSession ? "cursor-pointer hover:bg-[var(--surface-page)]" : "cursor-default"
                     } ${isToday(day) ? "ring-2 ring-inset ring-[var(--signal-live)]/40" : ""} ${
-                      isExpanded ? "bg-[var(--surface-page)] border-b-2 border-b-[#E8923A]" : ""
+                      isExpanded ? "bg-[var(--surface-page)] border-b-2 border-b-[var(--action)]" : ""
                     }`}
                     style={hasSession ? { backgroundColor: `rgba(11, 165, 199, ${intensity})` } : undefined}
                   >

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { MapPin, Store, Mountain, Home, Fish, Compass } from "lucide-react";
+import { COPPER_400 } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Contribute",
@@ -11,13 +12,13 @@ export const metadata: Metadata = {
 
 const ENTITY_TYPES = [
   { type: "river", label: "River or Stream", icon: "🏞️", description: "Trout streams, tailwaters, freestone rivers — big or small", color: "#0BA5C7" },
-  { type: "fly_shop", label: "Fly Shop", icon: "🏪", description: "Local fly shops and outfitters", color: "#E8923A" },
+  { type: "fly_shop", label: "Fly Shop", icon: "🏪", description: "Local fly shops and outfitters", color: COPPER_400 },
   { type: "guide", label: "Fishing Guide", icon: "🎣", description: "Independent guides and guide services", color: "#2EA44F" },
   { type: "lodge", label: "Lodge or Resort", icon: "🏡", description: "Fishing lodges, ranch stays, and resorts", color: "#9B59B6" },
   { type: "destination", label: "Destination", icon: "🗺️", description: "Fly fishing destinations and regions", color: "#E74C3C" },
   { type: "species", label: "Species", icon: "🐟", description: "Fish species with habitat and fly recommendations", color: "#F39C12" },
   { type: "fly_pattern", label: "Fly Pattern", icon: "🪰", description: "Share a pattern for the EA canonical fly library", color: "#6366f1" },
-  { type: "photo_update", label: "Update a Listing Photo", icon: "📷", description: "Submit a hero photo for an existing fly shop, lodge, guide, or river", color: "#E8923A" },
+  { type: "photo_update", label: "Update a Listing Photo", icon: "📷", description: "Submit a hero photo for an existing fly shop, lodge, guide, or river", color: COPPER_400 },
 ];
 
 export default async function ContributePage() {

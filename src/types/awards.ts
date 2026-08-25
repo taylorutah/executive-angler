@@ -1,3 +1,5 @@
+import { COPPER_400 } from "@/lib/palette";
+
 export interface UserAward {
   id: string;
   user_id: string;
@@ -62,7 +64,7 @@ export const RIVER_AWARDS: AwardDefinition[] = [
     display_name: 'Regular',
     description: '5 sessions on this river',
     icon: '🎣',
-    color: '#E8923A',
+    color: COPPER_400,
     threshold: 5,
     check: (stats) => stats.total_sessions >= 5,
   },
@@ -72,7 +74,7 @@ export const RIVER_AWARDS: AwardDefinition[] = [
     display_name: 'Veteran',
     description: '10 sessions on this river',
     icon: '🥾',
-    color: '#E8923A',
+    color: COPPER_400,
     threshold: 10,
     check: (stats) => stats.total_sessions >= 10,
   },
@@ -102,7 +104,7 @@ export const RIVER_AWARDS: AwardDefinition[] = [
     display_name: 'Master Angler',
     description: '500 fish caught on this river',
     icon: '🐋',
-    color: '#E8923A',
+    color: COPPER_400,
     threshold: 500,
     check: (stats) => stats.total_fish >= 500,
   },

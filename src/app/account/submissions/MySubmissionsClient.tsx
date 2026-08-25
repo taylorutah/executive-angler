@@ -82,7 +82,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
           </div>
           <Link
             href="/contribute"
-            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[#F0A65A] transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--action-hover)] transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Submission

@@ -88,7 +88,7 @@ export default function NewFlyPatternClient({ isAdminUser }: Props) {
     return (
       <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-[var(--text-meta)]">
-          <div className="h-8 w-8 rounded-full border-2 border-[var(--border-rule)] border-t-[#E8923A] animate-spin" />
+          <div className="h-8 w-8 rounded-full border-2 border-[var(--border-rule)] border-t-[var(--action)] animate-spin" />
           <p className="text-sm">Loading source fly…</p>
         </div>
       </div>

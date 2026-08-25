@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { COPPER_400 } from "@/lib/palette";
 
 interface Marker {
   latitude: number;
@@ -155,7 +156,7 @@ export default function MapView({
           const styles = getComputedStyle(document.documentElement);
           const deskMarker = styles.getPropertyValue("--teal-700").trim() || "#0C7286";
           new mapboxgl.Marker({
-            color: marker.color || (tone === "desk" ? deskMarker : "#E8923A"),
+            color: marker.color || (tone === "desk" ? deskMarker : COPPER_400),
           })
             .setLngLat([marker.longitude, marker.latitude])
             .setPopup(popup)

@@ -92,30 +92,34 @@ Unchanged from v3 §4: **the intentional angler**, defined by mindset rather tha
 
 ### 5.1 Colour
 
-| Token | Hex | Role |
-|---|---|---|
-| Paper | `#FAF6F0` | Daylight ground |
-| Vellum | `#F2EDE4` | raised, alternating bands |
-| Card | `#FFFFFF` | |
-| Rule | `#E2DACD` | borders |
-| Ink | `#141814` | headings — 16.7:1 on paper |
-| Graphite | `#3E4649` | body — 9.0:1 |
-| Slate | `#5E6669` | meta, labels — 5.45:1 paper, 5.03:1 vellum, **never running text** |
-| **Copper 700** | `#9E5615` | **action only, on light** — 5.14:1 paper, 4.74:1 vellum; white on it 5.53:1 |
-| Copper 400 | `#E8923A` | action on dark — 7.8:1 |
-| **Teal 700** | `#0C7286` | **live data only**, on light — 5.18:1 paper, 4.78:1 vellum |
-| Teal 300 | `#22C1DE` | live data on dark — 8.8:1 |
-| Riverbed | `#0B1112` | Dusk ground |
-| Pool | `#131B1D` | Dusk surface, zebra rows |
-| Shelf | `#1C2629` | Dusk raised, inputs |
-| Chalk | `#EEF2F1` | text on Dusk |
-| Fog | `#8B979A` | meta on Dusk — 6.3:1 |
-| Rise | `#1F7A3D` / `#3FB863` | positive delta |
-| Cutthroat | `#B3261E` / `#F87171` | error, destructive |
+Re-chromatised 2026-08-25. The previous copper sat 22° from paper and at chroma 0.120 — AA-legal and visually absent. Copper moved toward red-orange (hue 40) and chroma 0.160; paper's chroma dropped so the ground stops competing. Contrast improved; presence is the point.
 
-**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper.
+| Token | Hex | OKLCH | Role |
+|---|---|---|---|
+| Paper | `#F8F6F4` | 0.974 / 0.003 / 67.8 | Daylight ground — ink on it 16.64:1 |
+| Vellum | `#F2EDE4` | 0.948 / 0.013 / 82.4 | raised, alternating bands |
+| Card | `#FFFFFF` | — | |
+| Rule | `#E2DACD` | — | borders |
+| Ink | `#141814` | 0.203 / 0.010 / 145.2 | headings |
+| Graphite | `#3E4649` | 0.388 / 0.012 / 222.3 | body — 9.0:1 |
+| Slate | `#5E6669` | 0.504 / 0.011 / 222.2 | meta, labels — **never running text** |
+| **Copper 700** | `#B4410D` | **0.530 / 0.160 / 40.1** | **action only, on light** — 5.26:1 paper, 4.86:1 vellum; white on it 5.67:1 |
+| Copper 400 | `#FD8358` | 0.739 / 0.160 / 39.8 | action on dark — 7.76:1 riverbed, 7.12:1 pool, 6.30:1 shelf |
+| Copper hover 700 | `#9B3300` | 0.469 / 0.148 / 39.9 | `--action-hover` Daylight (target 0.47 / 0.16 / 40 clips; max in-gamut chroma) |
+| Copper hover 400 | `#FE9A77` | 0.782 / 0.130 / 40.0 | `--action-hover` Dusk |
+| **Teal 700** | `#0C7286` | 0.510 / 0.088 / 216.1 | **live data only**, on light — 5.17:1 paper, 4.78:1 vellum |
+| Teal 300 | `#00BCC5` | 0.723 / 0.123 / 200.9 | live data on dark — 8.16:1 riverbed, 7.49:1 pool, 6.62:1 shelf. Target was oklch(0.72 0.13 200); sRGB clips chroma slightly |
+| Riverbed | `#0B1112` | 0.172 / 0.010 / 208.8 | Dusk ground |
+| Pool | `#131B1D` | 0.215 / 0.012 / 214.7 | Dusk surface, zebra rows |
+| Shelf | `#1C2629` | 0.260 / 0.015 / 218.0 | Dusk raised, inputs |
+| Chalk | `#EEF2F1` | 0.958 / 0.004 / 179.7 | text on Dusk |
+| Fog | `#8B979A` | 0.668 / 0.015 / 214.4 | meta on Dusk — 6.3:1 |
+| Rise | `#1F7A3D` / `#3FB863` | — | positive delta |
+| Cutthroat | `#B3261E` / `#F87171` | — | error, destructive |
 
-**The rule that outranks the hexes:** copper is the action colour and nothing else. Headings are Ink. Links are Ink with a 1px underline that turns Copper on hover. Live readings are Teal. When everything is the accent, nothing is.
+**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper, Copper 700 `#9E5615`, Copper 400 `#E8923A`, Paper `#FAF6F0`, Teal 300 `#22C1DE` (neon cyan at hue 214), hover literals `#8A4A12` / `#F0A65A` / `#C97726`.
+
+**The rule that outranks the hexes:** copper is the action colour and nothing else. Headings are Ink. Links are Ink with a 1px underline that turns Copper on hover. Live readings are Teal. When everything is the accent, nothing is. AA compliance is not visual presence.
 
 ### 5.2 Type
 
@@ -244,5 +248,6 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-25** | Palette re-chromatised. Copper 700 / paper / copper 400 / teal 300 / action-hover rewritten because AA compliance had been achieved at the cost of presence: the old copper (`#9E5615`, chroma 0.120, hue 56) sat 22° from paper and could not carry a composition. New copper is hue 40 / chroma 0.160; paper chroma dropped to 0.003; teal 300 pulled from neon cyan (hue 214) to water (hue 200). Contrast improved on every legal pair.
 - **2026-08-25** | §5.1 token table corrected to shipped `globals.css` values (Paper, Ink, Slate, Copper 700, Teal 700). Copper 400 and Teal 300 unchanged. §5.6 added: Dusk is an instrument on the paper page, not a floor.
 - **2026-08-24** | v4 created. Reorganised around The Water Desk: the desk/notebook duality as the organising idea, the 78/14/8 ratio and Daylight/Dusk promoted into the identity, public angler profiles formally retired, the newcomer made a first-class design target, Inter added to the retired-type list, the domain move deferred pending organic recovery.

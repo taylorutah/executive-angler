@@ -139,7 +139,7 @@ export default function HeroImageEditor({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--action)] text-white rounded-lg text-xs font-semibold hover:bg-[#F0A65A] transition-colors shadow-lg"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--action)] text-white rounded-lg text-xs font-semibold hover:bg-[var(--action-hover)] transition-colors shadow-lg"
         title="Edit hero image (admin)"
       >
         <Pencil className="h-3 w-3" />
@@ -195,7 +195,7 @@ export default function HeroImageEditor({
           <button
             onClick={handleSave}
             disabled={saving || !imageUrl || !altText.trim()}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Hero Image

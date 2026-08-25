@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { TrendingUp, TrendingDown, Minus, Loader2 } from "lucide-react";
 import { fetchOnce } from "./fetch-once";
+import { COPPER_400 } from "@/lib/palette";
 
 interface DailyReading {
   date: string;
@@ -174,8 +175,8 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
           <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#E8923A" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#E8923A" stopOpacity={0.02} />
+                <stop offset="5%" stopColor={COPPER_400} stopOpacity={0.3} />
+                <stop offset="95%" stopColor={COPPER_400} stopOpacity={0.02} />
               </linearGradient>
             </defs>
             <XAxis
@@ -214,11 +215,11 @@ export default function WaterLevelChart({ riverId, siteId }: Props) {
             <Area
               type="monotone"
               dataKey="discharge"
-              stroke="#E8923A"
+              stroke={COPPER_400}
               strokeWidth={1.5}
               fill="url(#flowGradient)"
               dot={false}
-              activeDot={{ r: 3, fill: "#E8923A", stroke: "#0D1117", strokeWidth: 2 }}
+              activeDot={{ r: 3, fill: COPPER_400, stroke: "#0D1117", strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -43,7 +43,7 @@ export default function CollapsibleOverview({
       {needsTruncation && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] hover:text-[#F0A65A] transition-colors"
+          className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] hover:text-[var(--action-hover)] transition-colors"
         >
           <span>{expanded ? "Show less" : "Read more"}</span>
           <ChevronDown

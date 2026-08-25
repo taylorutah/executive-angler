@@ -259,7 +259,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
         {showPrefillBanner && (
           <div className="mb-4 px-4 py-3 bg-[var(--action)]/10 border border-[var(--action)]/30 rounded-lg flex items-center justify-between">
             <p className="text-sm text-[var(--action)]">Pre-filled from your fly box — review and complete the details below.</p>
-            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--action)] hover:text-[#F0A65A] text-lg leading-none ml-3">&times;</button>
+            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--action)] hover:text-[var(--action-hover)] text-lg leading-none ml-3">&times;</button>
           </div>
         )}
 
@@ -392,7 +392,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
           <button
             onClick={() => handleSave(true)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Submit for Review
