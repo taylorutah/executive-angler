@@ -47,16 +47,17 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
   const router = useRouter();
   const filterRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
-  const [rows, setRows] = useState(sections);
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => new Set());
 
   const q = query.trim().toLowerCase();
+  const source = sections.filter((s) => !hiddenIds.has(s.id));
   const visible = q
-    ? rows.filter(
+    ? source.filter(
         (s) =>
           s.river_name.toLowerCase().includes(q) ||
           (s.section_name ?? "").toLowerCase().includes(q),
       )
-    : rows;
+    : source;
 
   return (
     <div className="mt-10">
@@ -117,7 +118,7 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
             tone: "danger",
             onClick: async (selected) => {
               const ids = new Set(selected.map((s) => s.id));
-              setRows((prev) => prev.filter((s) => !ids.has(s.id)));
+              setHiddenIds((prev) => new Set([...prev, ...ids]));
               await Promise.all(selected.map((s) => unwatch(s).catch(() => null)));
               router.refresh();
             },
