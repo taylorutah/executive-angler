@@ -1,0 +1,194 @@
+{
+  "generatedAt": "2026-08-25T15:16:07.958Z",
+  "baseUrl": "http://localhost:3000",
+  "pageLoadCount": 10,
+  "pageLoadFloor": 9,
+  "budgets": {
+    "lcpMs": 2000,
+    "cls": 0.05,
+    "inpMs": 200
+  },
+  "regressionFloors": {
+    "lcpPct": 0.1,
+    "clsAbs": 0.02,
+    "tbtPct": 0.15
+  },
+  "pageLoads": [
+    {
+      "id": "home-390",
+      "route": "/",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 3484,
+      "cls": 0.0695,
+      "inpMs": 1143,
+      "tbtMs": 185,
+      "fcpMs": 1556,
+      "jsTransferredBytes": 491234,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    },
+    {
+      "id": "home-1440",
+      "route": "/",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 888,
+      "cls": 0.0014,
+      "inpMs": 3,
+      "tbtMs": 0,
+      "fcpMs": 888,
+      "jsTransferredBytes": 500551,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    },
+    {
+      "id": "rivers-390",
+      "route": "/rivers",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 1272,
+      "cls": 0.44,
+      "inpMs": 1078,
+      "tbtMs": 158,
+      "fcpMs": 1272,
+      "jsTransferredBytes": 302442,
+      "lcpElement": "P"
+    },
+    {
+      "id": "rivers-1440",
+      "route": "/rivers",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 488,
+      "cls": 0.5114,
+      "inpMs": 3,
+      "tbtMs": 3,
+      "fcpMs": 116,
+      "jsTransferredBytes": 498511,
+      "lcpElement": "IMG:Bristol Bay Rivers"
+    },
+    {
+      "id": "madison-390",
+      "route": "/rivers/madison-river",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 2968,
+      "cls": 0.1928,
+      "inpMs": 1466,
+      "tbtMs": 313,
+      "fcpMs": 1752,
+      "jsTransferredBytes": 462100,
+      "lcpElement": "IMG:River Madison — fly fishing"
+    },
+    {
+      "id": "madison-1440",
+      "route": "/rivers/madison-river",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 132,
+      "cls": 0.2886,
+      "inpMs": 62,
+      "tbtMs": 0,
+      "fcpMs": 132,
+      "jsTransferredBytes": 536240,
+      "lcpElement": "IMG:River Madison — fly fishing"
+    },
+    {
+      "id": "flies-390",
+      "route": "/flies/library",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 1248,
+      "cls": 0.4479,
+      "inpMs": 1072,
+      "tbtMs": 135,
+      "fcpMs": 1248,
+      "jsTransferredBytes": 492993,
+      "lcpElement": "P"
+    },
+    {
+      "id": "flies-1440",
+      "route": "/flies/library",
+      "viewport": 1440,
+      "throttled": false,
+      "register": "daylight",
+      "lcpMs": 312,
+      "cls": 0.5563,
+      "inpMs": 53,
+      "tbtMs": 0,
+      "fcpMs": 76,
+      "jsTransferredBytes": 315311,
+      "lcpElement": "IMG:Barr's Emerger fly pattern for trout fishing"
+    },
+    {
+      "id": "nz-390",
+      "route": "/destinations/new-zealand",
+      "viewport": 390,
+      "throttled": true,
+      "register": "daylight",
+      "lcpMs": 4736,
+      "cls": 0,
+      "inpMs": 1392,
+      "tbtMs": 194,
+      "fcpMs": 1616,
+      "jsTransferredBytes": 375318,
+      "lcpElement": "IMG:Fly fishing in New Zealand"
+    },
+    {
+      "id": "home-dusk-390",
+      "route": "/",
+      "viewport": 390,
+      "throttled": true,
+      "register": "dusk",
+      "lcpMs": 3424,
+      "cls": 0.0695,
+      "inpMs": 1514,
+      "tbtMs": 183,
+      "fcpMs": 2116,
+      "jsTransferredBytes": 491234,
+      "lcpElement": "IMG:The Madison River running low and clear below Th"
+    }
+  ],
+  "bundles": {
+    "_all-static-js": {
+      "firstLoadJsBytes": 4729351,
+      "chunkCount": 100
+    },
+    "/rivers": {
+      "firstLoadJsBytes": 1103472,
+      "chunkCount": 19
+    },
+    "/rivers/madison-river": {
+      "firstLoadJsBytes": 1527325,
+      "chunkCount": 20
+    },
+    "/flies/library": {
+      "firstLoadJsBytes": 1094064,
+      "chunkCount": 19
+    },
+    "/destinations/new-zealand": {
+      "firstLoadJsBytes": 1147590,
+      "chunkCount": 20
+    }
+  },
+  "lazy": {
+    "mapboxRequestedBeforeScroll": false,
+    "mapboxRequestedAfterScroll": false,
+    "flowChartRequestedBeforeScroll": true,
+    "flowChartRequestedAfterScroll": true,
+    "notes": "Mapbox never requested (token missing or chunk hashed). DOM map after scroll: false. /api/river-history requested before scroll — LazyFlowChart is in the first viewport margin."
+  },
+  "fonts": {
+    "frauncesBytes": 1211000,
+    "newsreaderBytes": 2795080,
+    "archivoBytes": 352400,
+    "ibmPlexMonoBytes": 207720,
+    "recommendation": "Newsreader transferred 2795080 bytes. Keep the face (census requires it on desk essays / prose). Prefer subset + display:swap; do not drop the family."
+  }
+}
