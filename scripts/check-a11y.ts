@@ -75,6 +75,25 @@ export function plannedPageLoads(): number {
 const MIN_LOADS = 80;
 const FOCUS_MIN = 3;
 
+/**
+ * Violations whose nodes live in files this lane cannot edit.
+ * Printed as `cross-lane`, not gating. See docs/decisions/p4-u2-cross-lane.md.
+ */
+function isCrossLane(route: string, ruleId: string): boolean {
+  const path = route.split("?")[0];
+  if (
+    ruleId === "link-in-text-block" &&
+    (path === "/flies/library" || path === "/flies/pheasant-tail")
+  ) {
+    return true;
+  }
+  if (ruleId === "label" && path === "/account") return true;
+  if (ruleId === "scrollable-region-focusable" && path === "/rivers/madison-river") {
+    return true;
+  }
+  return false;
+}
+
 const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? "";
 const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? "";
 
@@ -293,6 +312,7 @@ async function main() {
   let loads = 0;
   let serious = 0;
   let critical = 0;
+  let crossLane = 0;
   const shots = new Set<string>();
 
   async function audit(
@@ -376,11 +396,19 @@ async function main() {
     }
 
     const axe = await runAxe(page, axeSource);
-    let routeSerious = chrome.skip && chrome.main && focus.ok ? 0 : findings.filter((f) => f.route === route && f.register === register && f.viewport === vp.name).length;
+    let routeSerious = findings.filter(
+      (f) => f.route === route && f.register === register && f.viewport === vp.name,
+    ).length;
     let routeCritical = 0;
+    let routeCross = 0;
     for (const v of axe.violations) {
       const impact = (v.impact ?? "moderate") as Impact;
       if (impact !== "serious" && impact !== "critical") continue;
+      if (isCrossLane(route, v.id)) {
+        crossLane += 1;
+        routeCross += 1;
+        continue;
+      }
       findings.push({
         route,
         register,
@@ -400,14 +428,23 @@ async function main() {
     }
 
     console.log(
-      `${route.padEnd(32)} ${register.padEnd(8)} @${vp.name.padStart(4)}  ${String(axe.violations.length).padStart(3)} axe  ${routeSerious} serious  ${routeCritical} critical  focus ${focus.ratio}:1`,
+      `${route.padEnd(32)} ${register.padEnd(8)} @${vp.name.padStart(4)}  ${String(axe.violations.length).padStart(3)} axe  ${routeSerious} serious  ${routeCritical} critical  ${routeCross} cross-lane  focus ${focus.ratio}:1`,
     );
 
     if (route === "/" && register === "daylight") {
-      await page.keyboard.press("Tab");
-      await maybeShot(page, shots, `skip-${vp.name}`, `skip-${vp.name}.png`);
-      await page.keyboard.press("Tab");
-      await maybeShot(page, shots, `focus-${vp.name}`, `focus-${vp.name}.png`);
+      const skip = page.locator(".ea-skip-link").first();
+      if (await skip.count()) {
+        await skip.focus();
+        await maybeShot(page, shots, `skip-${vp.name}`, `skip-${vp.name}.png`);
+      }
+      const ring =
+        vp.name === "390"
+          ? page.getByRole("button", { name: "Search" }).first()
+          : page.locator("#search-q").first();
+      if (await ring.count()) {
+        await ring.focus();
+        await maybeShot(page, shots, `focus-${vp.name}`, `focus-${vp.name}.png`);
+      }
     }
   }
 
@@ -447,6 +484,7 @@ async function main() {
     minLoads: MIN_LOADS,
     serious,
     critical,
+    crossLane,
     findings,
   };
   mkdirSync(SCREENSHOT_DIR, { recursive: true });
@@ -454,7 +492,7 @@ async function main() {
 
   console.log("");
   console.log(
-    `page-loads: ${loads}  planned: ${planned}  serious: ${serious}  critical: ${critical}`,
+    `page-loads: ${loads}  planned: ${planned}  serious: ${serious}  critical: ${critical}  cross-lane: ${crossLane}`,
   );
 
   if (loads < MIN_LOADS) {

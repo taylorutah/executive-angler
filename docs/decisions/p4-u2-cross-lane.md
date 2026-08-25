@@ -80,6 +80,19 @@ section's flow and temp. U2 did not touch this file.
 Already has `role="status"` for result counts. Keep it. Header search has no
 type-ahead list, so U2 did not add a second live region there.
 
+## Remaining axe serious/critical (not owned — stubbed in the gate)
+
+Measured 2026-08-25. The gate prints these as `cross-lane` and does not fail
+on them. Each is one node, four page-loads (2 registers × 2 viewports)
+except the hatch scroller (390 only).
+
+| Rule | Route | File | Fix |
+|---|---|---|---|
+| `link-in-text-block` | `/flies/library` | `src/app/flies/library/FlyLibraryClient.tsx` | Always underline the "Sign in" link (not `hover:underline` only). Lane J / L. |
+| `link-in-text-block` | `/flies/pheasant-tail` | `src/components/fly-detail/FlyVariantTable.tsx` | Same: copper "Sign in" in the body needs a persistent underline. Lane J. |
+| `label` | `/account` | `src/app/account/AccountClient.tsx` ~682 | Password fields have a visual `<label>` with no `htmlFor`/`id`. Wire them. Account lane. |
+| `scrollable-region-focusable` | `/rivers/madison-river` @390 | `src/components/rivers/HatchSeasonGrid.tsx` | The `overflow-x-auto` hatch table is not a tab stop. `tabIndex={0}` + `aria-label="Hatch calendar"`. Lane I. |
+
 ## Pages / headings / alts — many lanes
 
 One `h1` per page and no skipped levels is a template concern (I / J / K / L /
