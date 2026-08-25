@@ -121,7 +121,6 @@ async function assertLive(sourceOk: string[]): Promise<string[]> {
     return sourceOk;
   }
 
-  const { createClient } = await import("@supabase/supabase-js");
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anon) {
@@ -129,45 +128,77 @@ async function assertLive(sourceOk: string[]): Promise<string[]> {
     return sourceOk;
   }
 
-  const supabase = createClient(url, anon);
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: EMPTY_EMAIL,
-    password: EMPTY_PASSWORD,
+  const grant = await fetch(`${url}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: {
+      apikey: anon,
+      Authorization: `Bearer ${anon}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: EMPTY_EMAIL, password: EMPTY_PASSWORD }),
   });
-  if (error || !data.session) {
-    console.error(`Live login failed: ${error?.message ?? "no session"}`);
+  if (!grant.ok) {
+    console.error(`Live login failed: grant HTTP ${grant.status}`);
     process.exit(1);
   }
+  const session = (await grant.json()) as {
+    access_token?: string;
+    refresh_token?: string;
+    expires_at?: number;
+    expires_in?: number;
+    token_type?: string;
+    user?: unknown;
+  };
+  const ref = new URL(url).hostname.split(".")[0];
 
-  const cookie = `sb-access-token=${data.session.access_token}; sb-refresh-token=${data.session.refresh_token}`;
+  // Gear and insights paint the empty state on the client. Playwright loads
+  // the session cookie the same way the visual harness does.
+  const { chromium } = await import("@playwright/test");
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  await context.addCookies([
+    {
+      name: `sb-${ref}-auth-token`,
+      value: JSON.stringify({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+        expires_at: session.expires_at,
+        expires_in: session.expires_in,
+        token_type: session.token_type ?? "bearer",
+        user: session.user,
+      }),
+      domain: new URL(BASE_URL).hostname,
+      path: "/",
+      httpOnly: false,
+      secure: false,
+      sameSite: "Lax",
+    },
+  ]);
+  const page = await context.newPage();
   const liveOk: string[] = [];
 
   for (const surface of SURFACES) {
     if (!sourceOk.includes(surface.id)) continue;
-    const res = await fetch(`${BASE_URL}${surface.path}`, {
-      headers: {
-        Cookie: cookie,
-        Authorization: `Bearer ${data.session.access_token}`,
-      },
-      redirect: "manual",
-    });
-    const html = await res.text();
-    const bounced = res.status === 307 || res.status === 302 || res.status === 303;
-    const hasMarker =
-      html.includes(`data-empty-state="${surface.id}"`) ||
-      html.includes(surface.action);
-    if (!hasMarker) {
-      console.error(
-        `  ${surface.id}: live ${res.status} at ${surface.path} missing empty state` +
-          (bounced ? " (redirect)" : ""),
-      );
+    await page.goto(`${BASE_URL}${surface.path}`, { waitUntil: "domcontentloaded" });
+    const marker = page.locator(`[data-empty-state="${surface.id}"]`);
+    const action = page.getByText(surface.action, { exact: false });
+    try {
+      await marker.waitFor({ timeout: 20_000 });
+      await action.waitFor({ timeout: 5_000 });
+    } catch {
+      console.error(`  ${surface.id}: live ${page.url()} missing empty state or action`);
       continue;
     }
     liveOk.push(surface.id);
   }
 
+  await browser.close();
   console.log(`Live surfaces: ${liveOk.length}`);
-  return liveOk.length >= 6 ? liveOk : sourceOk;
+  if (liveOk.length < 6) {
+    console.error("Live load ran and found fewer than 6 empty states.");
+    process.exit(1);
+  }
+  return liveOk;
 }
 
 async function main() {

@@ -13,7 +13,7 @@ npx tsx scripts/check-empty-states.ts
 
 Asserts six first-run surfaces (`today`, `journal`, `flybox`, `rivers-mine`, `gear`, `insights`). Prints the list. Exits 1 if the count is under 6.
 
-Source markers are always checked. Live load of the empty fixture runs when `EA_EMPTY_CHECK_URL` and `EA_FIXTURE_PASSWORD` are set (email defaults to `fixture-empty@executiveangler.com`, overridable with `EA_FIXTURE_EMPTY_EMAIL`).
+Source markers are always checked. Live load of the empty fixture runs when `EA_EMPTY_CHECK_URL` and `EA_FIXTURE_PASSWORD` are set (email defaults to `fixture-empty@executiveangler.com`, overridable with `EA_FIXTURE_EMPTY_EMAIL`). Live mode uses Playwright so client-painted surfaces (`/account/gear`, `/journal/insights`) are included.
 
 Seed that fixture:
 
