@@ -25,6 +25,7 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
       { label: "Gear Locker", href: "/account/gear" },
       { label: "Import & Export", href: "/journal/import" },
       { label: "Feed", href: "/feed" },
+      { label: "Mobile App", href: "/app" },
     ],
   },
   {
