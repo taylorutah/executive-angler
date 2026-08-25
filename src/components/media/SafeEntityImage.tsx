@@ -13,6 +13,7 @@ interface SafeEntityImageProps {
   meta?: string;
   className?: string;
   sizes?: string;
+  /** Only for blob:/data: previews or SVGs the optimizer cannot fetch. */
   unoptimized?: boolean;
   priority?: boolean;
   /** object-contain + padding for illustrations */

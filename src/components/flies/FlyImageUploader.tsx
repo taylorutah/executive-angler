@@ -86,6 +86,7 @@ export default function FlyImageUploader({
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 340px"
+              // blob: crop preview cannot be fetched by the next/image optimizer
               unoptimized={previewUrl.startsWith("blob:")}
             />
             <div className="absolute top-2 right-2 flex gap-1.5">

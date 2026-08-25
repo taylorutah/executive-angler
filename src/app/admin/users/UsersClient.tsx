@@ -250,7 +250,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                 <div className="px-5 py-3 flex items-center gap-3 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
                   <div className="w-10 h-10 rounded-full bg-[var(--action)]/15 flex items-center justify-center shrink-0 overflow-hidden">
                     {u.avatar_url ? (
-                      <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" unoptimized />
+                      <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
                     ) : (
                       <User className="h-5 w-5 text-[var(--action)]" />
                     )}
