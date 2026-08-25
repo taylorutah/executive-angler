@@ -210,7 +210,13 @@ export default async function RiverPage({ params }: Props) {
                   ))}
               </div>
             </div>
-            <div className="mt-0.5 flex shrink-0 items-center gap-2">
+            <div className="mt-0.5 flex shrink-0 items-center gap-3">
+              <Link
+                href={`/plan/${river.slug}`}
+                className="text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+              >
+                Trip brief →
+              </Link>
               <ReportButton entityType="river" entityId={river.id} />
               <FavoriteButton entityType="river" entityId={river.id} />
             </div>
