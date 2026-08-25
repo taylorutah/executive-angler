@@ -57,7 +57,7 @@ export default async function ArticlesPage() {
       <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Insights &amp; Stories
+            Field Notes
           </p>
           <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
             Stories from the Water

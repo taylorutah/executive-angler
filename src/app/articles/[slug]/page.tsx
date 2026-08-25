@@ -242,7 +242,7 @@ export default async function ArticlePage({ params }: Props) {
             <nav className="flex items-center gap-1.5 text-[13px] text-[var(--text-meta)]">
               <Link href="/" className="hover:text-[var(--action)] transition-colors">Home</Link>
               <span>/</span>
-              <Link href="/articles" className="hover:text-[var(--action)] transition-colors">Articles</Link>
+              <Link href="/articles" className="hover:text-[var(--action)] transition-colors">Field Notes</Link>
               <span>/</span>
               <span className="text-[var(--text-body)] truncate max-w-[200px] sm:max-w-none">{article.title}</span>
             </nav>
