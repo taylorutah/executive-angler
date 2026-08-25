@@ -20,7 +20,11 @@ import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
+import {
+  getFlagshipHistories,
+  getGaugeSnapshots,
+  selectFlagshipRivers,
+} from "@/components/home/conditions";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
@@ -125,7 +129,10 @@ export default async function HomePage() {
 
   const month = currentMonth();
   const flagshipRivers = selectFlagshipRivers(rivers);
-  const snapshots = await getGaugeSnapshots(flagshipRivers);
+  const [snapshots, histories] = await Promise.all([
+    getGaugeSnapshots(flagshipRivers),
+    getFlagshipHistories(flagshipRivers).catch(() => new Map()),
+  ]);
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
@@ -162,7 +169,12 @@ export default async function HomePage() {
       </ScrollAnimation>
 
       <ScrollAnimation index={1}>
-        <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
+        <OnTheWaterNow
+          rivers={waterRivers}
+          snapshots={snapshots}
+          histories={histories}
+          month={month}
+        />
       </ScrollAnimation>
 
       <ScrollAnimation index={2}>

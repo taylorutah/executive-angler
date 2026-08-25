@@ -4,7 +4,7 @@ import { itemMatchesFilters, parseRange, parseSizes, valueMatches } from "./matc
 import { speciesTokens } from "./species-tokens";
 import { seasonsFromBestMonths, tripLengthFromPlace } from "./place-filters";
 import { hatchTokens, flyHasSizeInRange } from "./fly-filters";
-import { classifyFlowState, median } from "./flow-state";
+import { classifyFlowState, iqr, median, medianBand, quantile } from "./flow-state";
 import type { FilterDimension } from "@/types/list-config";
 
 const dims = (match: FilterDimension["match"], key = "x"): FilterDimension[] => [
@@ -107,5 +107,13 @@ describe("flow state", () => {
     assert.equal(classifyFlowState(1000, 400), "blown");
     assert.equal(classifyFlowState(400, 0), null);
     assert.equal(median([10, 20, 30]), 20);
+    assert.equal(quantile([10, 20, 30, 40], 0.25), 17.5);
+    assert.equal(quantile([10, 20, 30, 40], 0.75), 32.5);
+    assert.equal(iqr([10, 20, 30, 40]), 15);
+    assert.deepEqual(medianBand([10, 20, 30, 40]), {
+      median: 25,
+      low: 10,
+      high: 40,
+    });
   });
 });
