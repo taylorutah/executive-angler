@@ -189,9 +189,9 @@ export default async function FlyDetail({ params }: Props) {
           </dl>
 
           {fly.description && (
-            <p className="mt-6 max-w-[68ch] text-[15px] leading-relaxed text-[var(--text-body)]">
-              {fly.description}
-            </p>
+            <div className="prose mt-6">
+              <p>{fly.description}</p>
+            </div>
           )}
         </div>
       </header>
