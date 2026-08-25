@@ -66,6 +66,7 @@ export const DEFAULT_ROUTES = [
   "/flies/materials",
   "/flies/hatch/caddis",
   "/flies/for/madison-river",
+  "/plan/madison-river",
   "/flies/category/nymph",
   "/authors",
   "/gear",
