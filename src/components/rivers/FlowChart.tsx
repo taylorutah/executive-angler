@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Droplets, ChevronDown } from "lucide-react";
+import { Loader2, Droplets } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 
@@ -114,7 +114,6 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredSession, setHoveredSession] = useState<SessionMarker | null>(null);
-  const [selectorOpen, setSelectorOpen] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
   // No gauges linked
@@ -425,44 +424,6 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           <span>latest daily mean</span>
         </div>
       </div>
-
-      {/* Gauge selector (if multiple gauges) */}
-      {gauges.length > 1 && (
-        <div className="relative mb-4">
-          <button
-            onClick={() => setSelectorOpen(!selectorOpen)}
-            className="flex items-center gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] rounded-lg px-3 py-2 border border-[var(--border-rule)] hover:border-[var(--action)]/40 transition-colors w-full"
-          >
-            <span className="truncate">
-              {activeGauge?.section || activeGauge?.name || activeSiteId}
-            </span>
-            <ChevronDown
-              className={`h-3.5 w-3.5 shrink-0 transition-transform ${selectorOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-          {selectorOpen && (
-            <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg shadow-xl overflow-hidden">
-              {gauges.map((g) => (
-                <button
-                  key={g.site_id}
-                  onClick={() => {
-                    setActiveSiteId(g.site_id);
-                    setSelectorOpen(false);
-                  }}
-                  className={`block w-full text-left px-3 py-2 text-xs transition-colors ${
-                    g.site_id === activeSiteId
-                      ? "text-[var(--action)] bg-[var(--action)]/5"
-                      : "text-[var(--text-body)] hover:bg-[var(--surface-raised)]"
-                  }`}
-                >
-                  <span className="font-medium">{g.section}</span>
-                  <span className="text-[var(--text-meta)] ml-2">{g.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {/* SVG Chart */}
       <div className="relative h-48 w-full">

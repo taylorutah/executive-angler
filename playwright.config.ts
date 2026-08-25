@@ -35,6 +35,8 @@ export default defineConfig({
     {
       name: "visual",
       testMatch: /.*\/visual\.spec\.ts/,
+      // Warm-up + settle + screenshot. 45s hid optimizer cache-miss stalls.
+      timeout: 120_000,
       use: { ...devices["Desktop Chrome"] },
     },
   ],
