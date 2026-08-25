@@ -122,12 +122,17 @@ export default function WorkbenchTable<T>({
     setCursor((c) => reconcileSelection(c, idsKey ? idsKey.split("\u0000") : []));
   }, [idsKey]);
 
-  // Move real DOM focus with the cursor. Guarded so a re-render does not yank
-  // focus away from, say, an open cell editor.
+  // Roving tabindex: the active row is the only tab stop (`tabIndex={0}`),
+  // and keyboard movement calls `.focus()` so `document.activeElement` is
+  // that row — a painted ring is not focus. scrollIntoView keeps a long
+  // list from leaving the cursor off-screen.
   useEffect(() => {
     if (!pullFocus.current) return;
     pullFocus.current = false;
-    if (cursor.active >= 0) rowRefs.current[cursor.active]?.focus();
+    if (cursor.active < 0) return;
+    const el = rowRefs.current[cursor.active];
+    el?.focus();
+    el?.scrollIntoView({ block: "nearest" });
   }, [cursor.active]);
 
   const commit = useCallback(

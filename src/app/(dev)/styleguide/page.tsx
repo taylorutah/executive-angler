@@ -73,7 +73,6 @@ const SPINE = [
   "Live conditions inset",
   "Filter bar",
   "Specimen plate",
-  "Workbench row",
   "Field-note dek",
   "Footer",
   "Signed-out state",
@@ -213,6 +212,51 @@ export default function StyleguidePage() {
               <p className="font-heading text-3xl">760 <span className="text-base" style={{ color: "var(--signal-live)" }}>cfs</span></p>
             </div>
             <p className="num text-sm" style={{ color: "var(--signal-live)" }}>live · USGS</p>
+          </div>
+        </section>
+
+        <section data-register="dusk" className="register-dusk rounded-2xl p-6" style={{ background: "var(--surface-page)" }}>
+          <h2 className="font-heading text-2xl mb-2">WorkbenchTable</h2>
+          <p className="mb-4 max-w-[68ch]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
+            The one instrument table. <code className="font-mono text-sm">src/components/data/DataTable</code> and{" "}
+            <code className="font-mono text-sm">src/components/ui/DataTable</code> are gone — they were never
+            imported, despite a comment that claimed four adopters.{" "}
+            <code className="font-mono text-sm">WorkbenchTable</code> is the primitive:{" "}
+            <code className="font-mono text-sm">/journal</code>,{" "}
+            <code className="font-mono text-sm">/flybox</code>,{" "}
+            <code className="font-mono text-sm">/rivers/mine</code>,{" "}
+            <code className="font-mono text-sm">/account/gear</code>.
+          </p>
+          <ul className="mb-4 space-y-1 text-sm" style={{ fontFamily: "var(--font-ui)", color: "var(--text-body)" }}>
+            <li>32px rows · zebra Pool / Riverbed · numerics in <code className="font-mono">.num</code>, right-aligned</li>
+            <li>Inline edit flashes green on save, red on error, then clears</li>
+            <li>Bulk toolbar appears only when a row is selected</li>
+            <li>
+              Keyboard: <code className="font-mono">↑↓</code> / <code className="font-mono">j k</code> move,{" "}
+              <code className="font-mono">Space</code> selects, <code className="font-mono">↵</code> activates,{" "}
+              <code className="font-mono">/</code> filter, <code className="font-mono">Esc</code> cancels,{" "}
+              <code className="font-mono">⌘K</code> site search
+            </li>
+            <li>
+              Focus is roving tabindex — the active row is <code className="font-mono">tabIndex=0</code>, the
+              others <code className="font-mono">-1</code>, and the cursor calls{" "}
+              <code className="font-mono">.focus()</code>. A painted ring is not a stop.
+            </li>
+          </ul>
+          <div className="grid h-8 items-center border-b text-[10px] font-bold uppercase tracking-widest" style={{ gridTemplateColumns: "32px 1fr 64px", borderColor: "var(--border-strong)", color: "var(--text-meta)", background: "var(--surface-card)" }}>
+            <span />
+            <span className="px-2">Session</span>
+            <span className="px-2 text-right">Fish</span>
+          </div>
+          <div className="ea-wb-row ea-focus-ring grid h-8 items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", background: "var(--surface-raised)", borderColor: "var(--border-rule)", color: "var(--text-primary)" }}>
+            <span />
+            <span className="truncate px-2 text-[13px]">Fixture — Madison table row</span>
+            <span className="num truncate px-2 text-right text-[13px]">0</span>
+          </div>
+          <div className="ea-wb-row grid h-8 items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", background: "var(--surface-page)", borderColor: "var(--border-rule)", color: "var(--text-primary)" }}>
+            <span />
+            <span className="truncate px-2 text-[13px]">Fixture — Gallatin table row</span>
+            <span className="num truncate px-2 text-right text-[13px]">0</span>
           </div>
         </section>
 

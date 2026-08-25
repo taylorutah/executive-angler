@@ -5,8 +5,9 @@
  *   npm run check:workbench
  *
  * Requires a running app at BASE_URL (default http://localhost:3000) and
- * Playwright Chromium. Signs in as the QA account, because every workbench
- * surface is authenticated.
+ * Playwright Chromium. Signs in as the fixture account (never the App
+ * Store review account). Rebuild rows with:
+ *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts
  *
  * Also writes 1440 and 390 screenshots to reports/workbench/.
  */
@@ -14,8 +15,8 @@ import { mkdirSync } from "node:fs";
 import { chromium, type Page } from "playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const QA_EMAIL = process.env.QA_EMAIL ?? "test@executiveangler.com";
-const QA_PASSWORD = process.env.QA_PASSWORD ?? "TestEA2026!";
+const FIXTURE_EMAIL = process.env.FIXTURE_EMAIL ?? "fixture@executiveangler.com";
+const FIXTURE_PASSWORD = process.env.FIXTURE_PASSWORD ?? "FixtureEA2026!";
 const OUT = "reports/workbench";
 
 interface Surface {
@@ -73,9 +74,9 @@ async function signIn(page: Page): Promise<void> {
       Authorization: `Bearer ${anonKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email: QA_EMAIL, password: QA_PASSWORD }),
+    body: JSON.stringify({ email: FIXTURE_EMAIL, password: FIXTURE_PASSWORD }),
   });
-  if (!res.ok) throw new Error(`QA sign-in failed: HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`Fixture sign-in failed: HTTP ${res.status}`);
   const session = (await res.json()) as Record<string, unknown>;
   const ref = new URL(supabaseUrl).hostname.split(".")[0];
   await page.context().addCookies([
@@ -156,11 +157,37 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   await rows.first().focus();
   check(`${surface.name}: row takes DOM focus`, (await focusedRow(page)) === 0);
 
+  // Three `j` presses: the review criterion. A painted ring can move without
+  // `document.activeElement` changing — this reads the actual focused node.
+  const tripleTarget = Math.min(3, rowCount - 1);
+  await page.keyboard.press("j");
+  await page.keyboard.press("j");
+  await page.keyboard.press("j");
+  const afterThreeJ = await page.evaluate(() => {
+    const el = document.activeElement as HTMLElement | null;
+    const row = el?.closest("[data-workbench-row]") as HTMLElement | null;
+    return {
+      tag: el?.tagName ?? "none",
+      role: el?.getAttribute("role") ?? "",
+      row: row ? Number(row.dataset.workbenchRow) : -1,
+      tabIndex: el?.tabIndex ?? null,
+    };
+  });
+  console.log(
+    `${surface.name}: after j×3  document.activeElement=${afterThreeJ.tag}[role=${afterThreeJ.role}] row=${afterThreeJ.row} tabIndex=${afterThreeJ.tabIndex}`,
+  );
+  check(
+    `${surface.name}: j×3 moves real DOM focus`,
+    afterThreeJ.row === tripleTarget && afterThreeJ.tag === "DIV",
+    `activeElement ${afterThreeJ.tag} row ${afterThreeJ.row}`,
+  );
+
   await page.keyboard.press("ArrowDown");
   const afterDown = await focusedRow(page);
+  const expectedDown = Math.min(tripleTarget + 1, rowCount - 1);
   check(
     `${surface.name}: ArrowDown moves focus`,
-    afterDown === Math.min(1, rowCount - 1),
+    afterDown === expectedDown,
     `row ${afterDown}`,
   );
   // Checked after a key press: :focus-visible only matches keyboard-driven
@@ -168,12 +195,19 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   check(`${surface.name}: visible focus ring on the row`, await focusRingVisible(page));
 
   await page.keyboard.press("k");
-  check(`${surface.name}: k moves focus up`, (await focusedRow(page)) === 0);
+  const afterK = await focusedRow(page);
+  check(
+    `${surface.name}: k moves focus up`,
+    afterK === tripleTarget,
+    `row ${afterK}`,
+  );
 
   await page.keyboard.press("j");
+  const afterJ = await focusedRow(page);
   check(
     `${surface.name}: j moves focus down`,
-    (await focusedRow(page)) === Math.min(1, rowCount - 1),
+    afterJ === expectedDown,
+    `row ${afterJ}`,
   );
 
   // Space selects and reveals the bulk bar.

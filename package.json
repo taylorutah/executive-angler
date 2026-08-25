@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "npx tsx scripts/seed-all.ts",
+    "seed:fixture": "npx tsx scripts/seed-fixture-account.ts",
     "seed:supabase": "npx tsx scripts/seed-supabase.ts",
     "fishing:migrate": "npx tsx scripts/migrate-fishing-log.ts",
     "fishing:import": "npx tsx scripts/import-notion-fishing.ts",
