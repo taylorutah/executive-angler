@@ -126,14 +126,19 @@ export default function WorkbenchTable<T>({
   // and keyboard movement calls `.focus()` so `document.activeElement` is
   // that row — a painted ring is not focus. scrollIntoView keeps a long
   // list from leaving the cursor off-screen.
+  //
+  // `editing` is a dependency because Esc-cancel leaves `active` unchanged.
+  // The cell input unmounts and focus would fall to body unless this effect
+  // runs after the row is a tab stop again.
   useEffect(() => {
     if (!pullFocus.current) return;
+    if (editing) return;
     pullFocus.current = false;
     if (cursor.active < 0) return;
     const el = rowRefs.current[cursor.active];
     el?.focus();
     el?.scrollIntoView({ block: "nearest" });
-  }, [cursor.active]);
+  }, [cursor.active, editing]);
 
   const commit = useCallback(
     async (row: T, col: WorkbenchColumn<T>, next: string) => {
@@ -201,9 +206,8 @@ export default function WorkbenchTable<T>({
         case "cancel": {
           e.preventDefault();
           if (editing) {
-            setEditing(null);
             pullFocus.current = true;
-            setCursor((c) => ({ ...c }));
+            setEditing(null);
             return;
           }
           setCursor(cancelCursor);

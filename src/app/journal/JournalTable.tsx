@@ -26,14 +26,15 @@ export function JournalTable({ sessions, fishBySession }: Props) {
   const router = useRouter();
   const filterRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
-  const [rows, setRows] = useState(sessions);
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(() => new Set());
 
   const q = query.trim().toLowerCase();
+  const source = sessions.filter((s) => !hiddenIds.has(s.id));
   const visible = q
-    ? rows.filter((s) =>
+    ? source.filter((s) =>
         `${sessionTitle(s)} ${s.river_name ?? ""} ${s.date}`.toLowerCase().includes(q),
       )
-    : rows;
+    : source;
 
   return (
     <div>
@@ -94,7 +95,7 @@ export function JournalTable({ sessions, fishBySession }: Props) {
             tone: "danger",
             onClick: async (selected) => {
               const ids = new Set(selected.map((s) => s.id));
-              setRows((prev) => prev.filter((s) => !ids.has(s.id)));
+              setHiddenIds((prev) => new Set([...prev, ...ids]));
               await Promise.all(
                 selected.map((s) =>
                   fetch(`/api/fishing/session?id=${s.id}`, { method: "DELETE" }).catch(() => null),

@@ -210,6 +210,29 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
     `row ${afterJ}`,
   );
 
+  const editOnRow = page.getByRole("button", {
+    name: new RegExp(`^Edit .+, row ${afterJ + 1}$`),
+  });
+  if ((await editOnRow.count()) > 0) {
+    await editOnRow.first().click();
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(80);
+    const afterEscEdit = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      const row = el?.closest("[data-workbench-row]") as HTMLElement | null;
+      return {
+        tag: el?.tagName ?? "none",
+        role: el?.getAttribute("role") ?? "",
+        row: row ? Number(row.dataset.workbenchRow) : -1,
+      };
+    });
+    check(
+      `${surface.name}: Esc from an edit returns DOM focus to the row`,
+      afterEscEdit.row === afterJ && afterEscEdit.tag === "DIV",
+      `activeElement ${afterEscEdit.tag}[role=${afterEscEdit.role}] row ${afterEscEdit.row}`,
+    );
+  }
+
   // Space selects and reveals the bulk bar.
   await page.keyboard.press(" ");
   await page.waitForTimeout(120);
