@@ -32,7 +32,8 @@
     "check:workbench": "npx tsx scripts/check-workbench-keys.ts",
     "check:no-review-account": "npx tsx scripts/check-no-review-account.ts",
     "check:baseline-quality": "npx tsx scripts/check-baseline-quality.ts",
-    "check:a11y": "npx tsx scripts/check-a11y.ts"
+    "check:a11y": "npx tsx scripts/check-a11y.ts",
+    "check:river-integrity": "npx tsx scripts/check-river-integrity.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

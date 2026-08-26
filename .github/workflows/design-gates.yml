@@ -24,6 +24,10 @@ jobs:
       - run: npm run check:hex
       - run: npm run check:stored-html
       - run: npm run check:image-hosts
+      - run: npm run check:river-integrity
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://qlasxtfbodyxbcuchvxz.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
       - run: npm test
       - run: npm run check:no-review-account
       - run: npm run check:baseline-quality
