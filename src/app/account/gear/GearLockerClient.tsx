@@ -387,10 +387,12 @@ export default function GearLockerClient() {
                       )}
                     </h2>
                     <button
+                      type="button"
                       onClick={() => openAdd(type)}
+                      aria-label={`Add ${label.toLowerCase()}`}
                       className="flex items-center gap-1 text-xs font-medium text-[var(--signal-live)] hover:text-[var(--signal-live)]/80 border border-[var(--signal-live)]/20 hover:border-[var(--signal-live)]/40 rounded-md px-2 py-1 transition-colors shrink-0"
                     >
-                      <Plus className="h-3 w-3" />
+                      <Plus className="h-3 w-3" aria-hidden />
                       <span className="hidden sm:inline">Add</span>
                     </button>
                   </div>
