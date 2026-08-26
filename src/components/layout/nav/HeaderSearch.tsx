@@ -87,7 +87,7 @@ export default function HeaderSearch() {
           setOverlayQuery(query);
           setOverlayOpen(true);
         }}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-2 rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-2 rounded-instrument border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]`}
       >
         <Search className="h-4 w-4" aria-hidden />
         Search

@@ -88,7 +88,7 @@ export default function RiverPhotoStrip({
               )}
               <Link
                 href={`/rivers/${riverSlug}/photos#submit`}
-                className="flex items-center gap-1 text-xs bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20 px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap"
+                className="flex items-center gap-1 rounded-instrument px-2.5 py-1.5 text-xs text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors whitespace-nowrap"
               >
                 <Plus className="h-3 w-3" /> Add yours
               </Link>

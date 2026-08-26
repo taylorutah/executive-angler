@@ -8,7 +8,6 @@ import {
 import { Fish } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
-import SignedOutInsight from "./SignedOutInsight";
 import { COPPER_400 } from "@/lib/palette";
 
 interface CatchPoint {
@@ -115,15 +114,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
     };
   }, [catchPoints]);
 
-  if (!user) {
-    return (
-      <SignedOutInsight
-        icon={<Fish className="h-4 w-4 text-[var(--action)]" />}
-        title="Your Catches vs. Flow"
-        description="Log a session and this chart plots every fish you have landed here on top of the twelve-month hydrograph, so you can see the flow band your best days sit in."
-      />
-    );
-  }
+  if (!user) return null;
 
   if (loading) return null;
 
@@ -164,7 +155,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
             <p className="text-[10px] text-[var(--text-meta)]">Sweet Spot (cfs)</p>
           </div>
           <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-green-400">
+            <p className="text-lg font-bold font-mono text-[var(--text-primary)]">
               {correlationStats.bestDayFish} fish
             </p>
             <p className="text-[10px] text-[var(--text-meta)]">

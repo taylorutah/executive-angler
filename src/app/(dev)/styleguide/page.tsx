@@ -228,7 +228,7 @@ export default function StyleguidePage() {
             A live-conditions panel goes dark inside a light page without a
             second component. This is <code className="font-mono text-sm">.register-dusk</code>.
           </p>
-          <div className="register-dusk rounded-xl p-4 flex items-baseline justify-between gap-4" style={{ background: "var(--surface-page)", color: "var(--text-primary)" }}>
+          <div className="register-dusk flex items-baseline justify-between gap-4 p-4 shadow-[var(--elev-1)]" style={{ background: "var(--surface-page)", color: "var(--text-primary)", borderRadius: "var(--radius-instrument)", border: "1px solid var(--border-rule)" }}>
             <div>
               <p className="text-xs uppercase tracking-widest" style={{ fontFamily: "var(--font-ui)", color: "var(--text-meta)" }}>Madison River</p>
               <p className="font-heading text-3xl">760 <span className="text-base" style={{ color: "var(--signal-live)" }}>cfs</span></p>

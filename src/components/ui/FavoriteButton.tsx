@@ -66,7 +66,7 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       type="button"
       onClick={toggleFavorite}
       disabled={loading}
-      className={`ea-focus-ring ${FOCUS_VISIBLE} p-2.5 rounded-full transition-all motion-reduce:transition-none ${
+      className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-instrument p-2.5 transition-all motion-reduce:transition-none ${
         isFavorite
           ? "bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20"
           : "bg-[var(--surface-raised)]/80 text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--surface-raised)]"

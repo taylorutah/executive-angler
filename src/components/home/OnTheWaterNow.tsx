@@ -1,4 +1,5 @@
 import Link from "next/link";
+import InstrumentWell from "@/components/desk/InstrumentWell";
 import HomeHydrograph from "./HomeHydrograph";
 import SectionMark from "./SectionMark";
 import Sparkline from "@/components/hydrograph/Sparkline";
@@ -77,9 +78,9 @@ export default function OnTheWaterNow({ rivers, snapshots, histories, month }: P
 
       <section data-lane="resource" className="bg-[var(--surface-page)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div
-            data-instrument
-            className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-5 py-6 shadow-[var(--elev-4)] sm:px-7 sm:py-7"
+          <InstrumentWell
+            label="River of the day"
+            className="px-5 py-6 sm:px-7 sm:py-7"
           >
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -131,7 +132,7 @@ export default function OnTheWaterNow({ rivers, snapshots, histories, month }: P
             <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
               Daily means · band is this river&apos;s 30-day median ± IQR · USGS NWIS
             </p>
-          </div>
+          </InstrumentWell>
         </div>
       </section>
     </>
