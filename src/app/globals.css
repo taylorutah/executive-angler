@@ -25,10 +25,10 @@
 
   /* Signal — copper is hue 40; teal-300 is water (hue 200), not neon cyan */
   --copper-700: #B4410D;
-  --copper-400: #FD8358;
+  --copper-400: #E97C48;
   --copper-hover-700: #9B3300;
   --copper-hover-400: #FE9A77;
-  --teal-700: #0C7286;
+  --teal-700: #086B6C;
   --teal-300: #00BCC5;
   --rise-700: #1F7A3D;
   --rise-400: #3FB863;
@@ -59,6 +59,29 @@
   --elev-glow: 0 0 30px color-mix(in srgb, var(--action) 35%, transparent);
   --elev-glow-strong: 0 0 40px color-mix(in srgb, var(--action) 50%, transparent);
   --signal-ring: 0 0 0 5px color-mix(in srgb, var(--signal-live) 30%, transparent);
+
+  /* Hero scrims — rgb(15 43 31) / rgba(15,43,31). Homepage uses --scrim-light.
+     River heroes keep the pre-token .hero-overlay stops this PR; binding
+     them to --scrim-standard would lighten those pages. --scrim-heavy
+     requires written justification before use. */
+  --scrim-light: linear-gradient(
+    to bottom,
+    rgb(15 43 31 / 0) 0%,
+    rgb(15 43 31 / 0.10) 50%,
+    rgb(15 43 31 / 0.45) 100%
+  );
+  --scrim-standard: linear-gradient(
+    to bottom,
+    rgb(15 43 31 / 0.10) 0%,
+    rgb(15 43 31 / 0.40) 60%,
+    rgb(15 43 31 / 0.70) 100%
+  );
+  --scrim-heavy: linear-gradient(
+    to bottom,
+    rgb(15 43 31 / 0.30) 0%,
+    rgb(15 43 31 / 0.50) 40%,
+    rgb(15 43 31 / 0.80) 100%
+  );
 }
 
 /* Default + daylight public pages */
@@ -333,8 +356,9 @@
 
 @layer components {
   .hero-overlay {
-    /* Transparent through the photograph; 0.82+ only in the text band
-       (items-end). Do not thin this stop — subtitle sits above the title. */
+    /* River heroes keep this pre-token weight. --scrim-standard is the
+       named next-pass wash (0.10 / 0.40@60% / 0.70) and is not bound
+       here — that would lighten these pages. Do not thin these stops. */
     background: linear-gradient(
       to bottom,
       rgb(15 43 31 / 0) 0%,
@@ -346,13 +370,7 @@
   }
 
   .hero-overlay-light {
-    background: linear-gradient(
-      to bottom,
-      rgb(15 43 31 / 0) 0%,
-      rgb(15 43 31 / 0) 52%,
-      rgb(15 43 31 / 0.40) 72%,
-      rgb(15 43 31 / 0.74) 100%
-    );
+    background: var(--scrim-light);
   }
 
   .card-hover {

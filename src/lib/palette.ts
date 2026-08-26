@@ -24,8 +24,8 @@ export const FOG = "#8B979A";
 
 /** oklch(0.53 0.16 40) — action on light */
 export const COPPER_700 = "#B4410D";
-/** oklch(0.74 0.16 40) — action on dusk */
-export const COPPER_400 = "#FD8358";
+/** oklch(0.700 0.150 45) — action on dusk; hue 40 at L 0.74 reads salmon */
+export const COPPER_400 = "#E97C48";
 /**
  * Daylight action-hover. Target oklch(0.47 0.16 40) clips in sRGB;
  * this is the max-chroma in-gamut neighbour at hue 40: oklch(0.47 0.148 40).
@@ -34,7 +34,8 @@ export const COPPER_HOVER_700 = "#9B3300";
 /** Dusk action-hover — oklch(0.782 0.13 40), same family as copper-400 */
 export const COPPER_HOVER_400 = "#FE9A77";
 
-export const TEAL_700 = "#0C7286";
+/** oklch(0.479 0.080 196) — same family as teal-300 (hue 201), not 216 */
+export const TEAL_700 = "#086B6C";
 /** Target oklch(0.72 0.13 200); sRGB rounds to this hex */
 export const TEAL_300 = "#00BCC5";
 

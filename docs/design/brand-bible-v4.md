@@ -104,10 +104,10 @@ Re-chromatised 2026-08-25, then corrected the same day. Paper stays `#FAF6F0` �
 | Graphite | `#4F4540` | 0.399 / 0.016 / 48.3 | body — target oklch(0.40 0.016 50); 8.64:1 paper, 7.98:1 vellum |
 | Slate | `#6D645F` | 0.510 / 0.014 / 51.1 | meta, labels — target oklch(0.51 0.014 50); 5.36:1 paper, 4.95:1 vellum — **never running text** |
 | **Copper 700** | `#B4410D` | **0.530 / 0.160 / 40.1** | **action only, on light** — 5.26:1 paper, 4.86:1 vellum; white on it 5.67:1 |
-| Copper 400 | `#FD8358` | 0.739 / 0.160 / 39.8 | action on dark — 7.76:1 riverbed, 7.12:1 pool, 6.30:1 shelf |
+| Copper 400 | `#E97C48` | 0.700 / 0.150 / 45.0 | action on dark — slightly darker and yellower than `#FD8358` so L 0.74 / hue 40 does not read salmon |
 | Copper hover 700 | `#9B3300` | 0.469 / 0.148 / 39.9 | `--action-hover` Daylight (target 0.47 / 0.16 / 40 clips; max in-gamut chroma) |
 | Copper hover 400 | `#FE9A77` | 0.782 / 0.130 / 40.0 | `--action-hover` Dusk |
-| **Teal 700** | `#0C7286` | 0.510 / 0.088 / 216.1 | **live data only**, on light — 5.17:1 paper, 4.78:1 vellum |
+| **Teal 700** | `#086B6C` | 0.479 / 0.080 / 196.0 | **live data only**, on light — same family as teal-300 (hue 201), not 15° off at 216 |
 | Teal 300 | `#00BCC5` | 0.723 / 0.123 / 200.9 | live data on dark — 8.16:1 riverbed, 7.49:1 pool, 6.62:1 shelf. Target was oklch(0.72 0.13 200); sRGB clips chroma slightly |
 | Riverbed | `#0B1112` | 0.172 / 0.010 / 208.8 | Dusk ground |
 | Pool | `#131B1D` | 0.215 / 0.012 / 214.7 | Dusk surface, zebra rows |
@@ -117,7 +117,7 @@ Re-chromatised 2026-08-25, then corrected the same day. Paper stays `#FAF6F0` �
 | Rise | `#1F7A3D` / `#3FB863` | — | positive delta |
 | Cutthroat | `#B3261E` / `#F87171` | — | error, destructive |
 
-**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper, Copper 700 `#9E5615`, Copper 400 `#E8923A`, Ink `#141814` (hue 145 green-black), Graphite `#3E4649` / Slate `#5E6669` (hue 222 blue), Teal 300 `#22C1DE` (neon cyan at hue 214), hover literals `#8A4A12` / `#F0A65A` / `#C97726`. Paper `#FAF6F0` is **not** retired — a same-day `#F8F6F4` experiment was cancelled; Cabinet's ground is the same colour.
+**Retired:** Abyss `#0D1117` (GitHub's background — the reason the workbench read as a dev tool), Depth `#161B22`, Stone `#1F2937` (Tailwind slate-800), the `#D4751F` light copper, Copper 700 `#9E5615`, Copper 400 `#E8923A`, Copper 400 `#FD8358` (hue 40 at L 0.74 reads salmon), Ink `#141814` (hue 145 green-black), Graphite `#3E4649` / Slate `#5E6669` (hue 222 blue), Teal 700 `#0C7286` (hue 216, 15° from teal-300), Teal 300 `#22C1DE` (neon cyan at hue 214), hover literals `#8A4A12` / `#F0A65A` / `#C97726`. Paper `#FAF6F0` is **not** retired — a same-day `#F8F6F4` experiment was cancelled; Cabinet's ground is the same colour.
 
 **The rule that outranks the hexes:** copper is the action colour and nothing else. Headings are Ink. Links are Ink with a 1px underline that turns Copper on hover. Live readings are Teal. When everything is the accent, nothing is. AA compliance is not visual presence.
 
@@ -140,7 +140,7 @@ Re-chromatised 2026-08-25, then corrected the same day. Paper stays `#FAF6F0` �
 
 **We host every image.** No hotlinking to third parties. Unsplash and Wikimedia files whose licence we can read are ingested into our storage (EXIF including GPS stripped, blur hash stored, credit on the row). A row without a readable licence does not publish. Gear-brand and lodge photography is not bulk-downloaded — ask, substitute, or ship the typographic plate. Google OAuth avatars are the one fetch exception; cache them to storage on first login.
 
-One hero per page **at full strength** — the image is the image, never faded to 12% behind a headline. Cool shadows, warm highlights, greens held down so copper reads. Water, light, structure; people only as distant silhouettes.
+One hero per page **at full strength** — the image is the image, never faded to 12% behind a headline. Homepage wash is `--scrim-light` (0 / 0.10@50% / 0.45 on `rgba(15,43,31)`). `--scrim-standard` is 0.10 / 0.40@60% / 0.70. `--scrim-heavy` (0.30 / 0.50@40% / 0.80) requires written justification. Protect headline text locally if the light wash cannot carry it — do not darken the photograph. Cool shadows, warm highlights, greens held down so copper reads. Water, light, structure; people only as distant silhouettes.
 
 **Fly macros** cut out on paper, 1:1, light from upper left, no drop shadow, scaled so a #20 midge reads smaller than a #4 streamer. This is the strongest asset the brand owns and it is why the fly plate works. **Species keep scientific illustration** — the most distinctive choice in the identity.
 
@@ -279,6 +279,7 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-26** | Copper 400 moved to `#E97C48` (oklch 0.700 / 0.150 / 45) so the light step stays copper, not salmon. Teal 700 moved to `#086B6C` (oklch 0.479 / 0.080 / 196) to sit with teal-300 at hue 201. Hero scrims tokenised: `--scrim-light` on the homepage (0 / 0.10@50% / 0.45); river pages keep the pre-token overlay; `--scrim-heavy` requires written justification.
 - **2026-08-25** | Geometry tokens shipped narrow: `--radius-control` only on chips, tags, and count badges. Hero cursor-parallax cut. Homepage hero italic on the closing clause only, in white (AA on the scrim). Pill nav cancelled — masthead stays flat text. The production olive void was the forest scrim at 0.28 from the first pixel, not a missing JPEG.
 - **2026-08-25** | Ink/Graphite/Slate pulled into paper's warm family (hue ~50) after measuring runcabinet.com. Cabinet's ground is `#FAF6F1` and its display face is Fraunces — the same paper and the same type we already had. Their text is `#3B2F2F` (hue 18, warm). Ours was `#141814` at hue 145 (green) on a warm cream, 127° apart, and 16.66:1 — harsher, not better. Paper change to `#F8F6F4` cancelled. Ink is now `#2C211B` (14.55:1). `--elev-*` gained an inset top highlight.
 - **2026-08-25** | Motion budget widened because the original §5.4 rule — 120–180ms hover/press plus one 400ms live-reading crossfade — produced a flat, lifeless page. Depth scale, ground wash, photograph treatment, staged entrance, and 2–4px hero parallax are now in budget as tokens. The banned list (count-ups, text parallax, scroll-jacking, self-drawing charts, animated logo, table motion) stays explicit.
