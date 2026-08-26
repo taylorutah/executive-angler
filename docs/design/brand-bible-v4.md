@@ -104,10 +104,10 @@ Re-chromatised 2026-08-25, then corrected the same day. Paper stays `#FAF6F0` �
 | Graphite | `#4F4540` | 0.399 / 0.016 / 48.3 | body — target oklch(0.40 0.016 50); 8.64:1 paper, 7.98:1 vellum |
 | Slate | `#6D645F` | 0.510 / 0.014 / 51.1 | meta, labels — target oklch(0.51 0.014 50); 5.36:1 paper, 4.95:1 vellum — **never running text** |
 | **Copper 700** | `#B4410D` | **0.530 / 0.160 / 40.1** | **action only, on light** — 5.26:1 paper, 4.86:1 vellum; white on it 5.67:1 |
-| Copper 400 | `#E97C48` | 0.700 / 0.150 / 45.0 | action on dark — slightly darker and yellower than `#FD8358` so L 0.74 / hue 40 does not read salmon |
+| Copper 400 | `#E97C48` | 0.700 / 0.150 / 45.0 | action on dark — 6.75:1 riverbed, 5.48:1 shelf; hue 45 so L 0.70 does not read salmon |
 | Copper hover 700 | `#9B3300` | 0.469 / 0.148 / 39.9 | `--action-hover` Daylight (target 0.47 / 0.16 / 40 clips; max in-gamut chroma) |
 | Copper hover 400 | `#FE9A77` | 0.782 / 0.130 / 40.0 | `--action-hover` Dusk |
-| **Teal 700** | `#086B6C` | 0.479 / 0.080 / 196.0 | **live data only**, on light — same family as teal-300 (hue 201), not 15° off at 216 |
+| **Teal 700** | `#086B6C` | 0.479 / 0.080 / 196.0 | **live data only**, on light — 5.86:1 paper, 5.41:1 vellum; hue 196 with teal-300 at 201 |
 | Teal 300 | `#00BCC5` | 0.723 / 0.123 / 200.9 | live data on dark — 8.16:1 riverbed, 7.49:1 pool, 6.62:1 shelf. Target was oklch(0.72 0.13 200); sRGB clips chroma slightly |
 | Riverbed | `#0B1112` | 0.172 / 0.010 / 208.8 | Dusk ground |
 | Pool | `#131B1D` | 0.215 / 0.012 / 214.7 | Dusk surface, zebra rows |
