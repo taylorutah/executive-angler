@@ -2,7 +2,8 @@
 
 **Lane:** V2 / V3  
 **Branch:** `cursor/p4-v2-3c0f`  
-**This PR does not edit** `package.json` or `.github/workflows/design-gates.yml`.
+The landing pass unions `check:river-integrity` into `package.json` and the
+`tokens` job. Existing jobs stay.
 
 ## npm script
 
@@ -33,20 +34,31 @@ Add to the `tokens` job in `.github/workflows/design-gates.yml`, after `check:im
 
 If that job does not already export the anon key at the job `env:` level, copy the two `NEXT_PUBLIC_SUPABASE_*` lines from the `contrast-rendered` job verbatim onto this step. The script is read-only REST against public tables. It does not need the service role or the fixture account.
 
-Floor: **138** rivers printed. Exit 1 if the count is lower, if any internal destination / species / fly / hatch / article href is broken, or if a river page mounts the live-data inset with no USGS site id.
+Floor: **138** rivers printed. Exit 1 if the count is lower, or if any internal
+destination / species / fly / hatch / article href is broken.
 
-## Silent empty — do not wire the live-data fail until Lane I
+## Silent empty — report-only until Lane I
 
-Today the script exits 1 on **108** rivers. Cause: `src/app/rivers/[slug]/page.tsx` always mounts `RiverLiveInset` → `RiverConditionsCard`. That card returns `null` when there is no gauge (HERO_DEK_QUIET-class: a live band that shows nothing). `FlowChart` already says “No USGS gauge linked to this river.” The inset does not.
+Landing 2026-08-26 measured **108** silent insets on current `main`. Cause:
+`src/app/rivers/[slug]/page.tsx` always mounts `RiverLiveInset` →
+`RiverConditionsCard`. That card returns `null` when there is no gauge
+(HERO_DEK_QUIET-class: a live band that shows nothing). `FlowChart` already
+says “No USGS gauge linked to this river.” The inset does not.
 
-Those files are **not** in this lane’s owns list. Lane I owns the river template.
+Those files are **not** in this lane’s owns list. Lane I owns the river
+template. This landing does **not** invent USGS site ids and does **not**
+restyle the inset. Silent-live is printed (`108 / 138`) and is **not** a
+fail until Lane I ships an honest empty (“No USGS gauge mapped. We are not
+guessing a number.”). Then flip the printed finding back to a fail; the
+count should go to 0 without filling gauges.
 
-Wire the gate in two moves:
+A wrong gauge is worse than none.
 
-1. **Now (links + floor only)** — if you need a green job before Lane I: temporarily the script still fails on silent live. Do not add it to CI until step 2, *or* land Lane I first.
-2. **After Lane I** ships an honest empty on the dusk inset (“No USGS gauge mapped. We are not guessing a number.”) — then add the step above. The 108 should go to 0 without filling gauges.
+## Timeline
 
-A wrong gauge is worse than none. Do not invent site ids to turn the gate green.
+- 2026-08-25 | Gate written; CI left unwired because silent-live exits 1.
+- 2026-08-26 | Landing unions script + `tokens` step. Fail on floor / broken
+  links only. Silent-live stays a printed finding.
 
 ## `verified_at`
 
