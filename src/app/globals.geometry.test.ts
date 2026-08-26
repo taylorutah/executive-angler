@@ -22,4 +22,11 @@ describe("v4.1 geometry tokens", () => {
   it("reports paper RGB on transparent structural boxes", () => {
     assert.match(css, /rgba\(250,\s*246,\s*240,\s*0\)/);
   });
+
+  it("squares Mapbox attribution to --radius-instrument", () => {
+    assert.match(
+      css,
+      /\.mapboxgl-ctrl-attrib[\s\S]*?\.mapboxgl-ctrl-attrib-button\s*\{[\s\S]*?border-radius:\s*var\(--radius-instrument\)/,
+    );
+  });
 });

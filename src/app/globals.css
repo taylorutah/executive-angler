@@ -456,6 +456,13 @@
     display: none !important;
   }
 
+  /* Mapbox attribution inside InstrumentWell — third-party chrome
+     still reads as ours at Mapbox's 12px. Radius only. */
+  .mapboxgl-ctrl-attrib,
+  .mapboxgl-ctrl-attrib-button {
+    border-radius: var(--radius-instrument);
+  }
+
   /* Hide scrollbar on filter pill rows */
   .scrollbar-hide {
     -ms-overflow-style: none;

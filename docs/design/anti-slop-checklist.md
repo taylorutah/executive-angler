@@ -115,27 +115,32 @@ Load the real page. Do not trust a build log, a Cursor claim, or a previous sess
 ```js
 // paste in the console on the page under test
 const A=()=>{const all=[...document.querySelectorAll('*')],imgs=[...document.querySelectorAll('img')],o={};
+ const skip=el=>{const c=typeof el.className==='string'?el.className:(el.className&&el.className.baseVal)||'';
+  if(!String(c).trim())return true;
+  return!!el.closest('#vercel-live-feedback,[data-vercel-toolbar],vercel-live-feedback,.vercel-toolbar');};
  o.lucide=document.querySelectorAll('svg[class*="lucide"]').length;
  o.imgs=imgs.length; o.unloaded=imgs.filter(i=>i.naturalWidth===0).length;
  o.upscaled=imgs.filter(i=>i.naturalWidth&&i.naturalWidth<i.getBoundingClientRect().width*0.9).length;
  o.noAlt=imgs.filter(i=>!i.alt).length;
  o.requests=performance.getEntriesByType('resource').filter(r=>r.name.includes('/_next/image')).length;
  const rad={};let glow=0,big=0;
- for(const el of all){const cs=getComputedStyle(el),q=el.getBoundingClientRect();if(q.width<4||q.height<4)continue;
+ for(const el of all){if(skip(el))continue;const cs=getComputedStyle(el),q=el.getBoundingClientRect();if(q.width<4||q.height<4)continue;
   if(cs.borderRadius!=='0px')rad[cs.borderRadius]=(rad[cs.borderRadius]||0)+1;
   const s=cs.boxShadow;if(s!=='none'){if(/0px 0px [23456789]\dpx/.test(s))glow++;if(/ [23456789]\dpx /.test(s))big++;}}
  o.radius=Object.entries(rad).sort((a,b)=>b[1]-a[1]).slice(0,6);o.glow=glow;o.bigShadow=big;
- let fb=0;for(const el of all){const m=getComputedStyle(el).backgroundColor.match(/rgba?\((\d+), (\d+), (\d+)/);if(!m)continue;
+ let fb=0;for(const el of all){if(skip(el))continue;const m=getComputedStyle(el).backgroundColor.match(/rgba?\((\d+), (\d+), (\d+)/);if(!m)continue;
   const[r,g,b]=[+m[1],+m[2],+m[3]];if(.2126*r+.7152*g+.0722*b>50)continue;const q=el.getBoundingClientRect();
   if(q.width>=innerWidth-2&&q.height>80)fb++;}
  o.duskFullBleed=fb;
  const t=document.body.innerText.toLowerCase();
  o.banned=['tight lines','definitive','finest waters','discerning','premier','elite','exclusive','serious anglers','intelligence platform','get started','learn more','unlock','upgrade','founders'].filter(b=>t.includes(b));
- const dup={};[...document.querySelectorAll('button,a')].forEach(e=>{const k=e.textContent.trim();if(k&&k.length<32)dup[k]=(dup[k]||0)+1});
+ const dup={};[...document.querySelectorAll('button,a')].forEach(e=>{if(skip(e))return;const k=e.textContent.trim();if(k&&k.length<32)dup[k]=(dup[k]||0)+1});
  o.dupControls=Object.entries(dup).filter(([,v])=>v>1);
  return o;};
 A();
 ```
+
+**Preview chrome is not ours.** On a Vercel preview the injected toolbar contributes a 14px-radius pill, two 8px buttons, an `rgba(217,119,87)` inset glow, and a `0px 40px 80px` shadow. The snippet skips elements whose `className` is empty and elements inside that toolbar (`#vercel-live-feedback`, `[data-vercel-toolbar]`, `vercel-live-feedback`, `.vercel-toolbar`). Do not treat those hits as a failed census.
 
 **Pass condition:** `lucide === 0` · `unloaded === 0` · `upscaled === 0` · `noAlt === 0` · `requests === imgs` · `glow === 0` · `bigShadow === 0` · `duskFullBleed === 0` · `banned` empty · `dupControls` contains only legitimate repeats (primary nav echoed in the footer). Radius census shows nothing ≥8px that is not a chip.
 
@@ -155,3 +160,4 @@ Scroll the whole page before measuring, then return to the top and wait for idle
 <!-- timeline -->
 
 - **2026-08-26** | Written as the one-page gate Cursor runs before claiming a page is done. §0 evidence table measured live on production the same day at four viewports; the console snippet in §2 is the exact instrument used.
+- **2026-08-26** | §2 snippet skips empty `className` and Vercel preview toolbar chrome (14px pill, 8px buttons, terracotta inset glow, 40px/80px shadow). Those are not ours.
