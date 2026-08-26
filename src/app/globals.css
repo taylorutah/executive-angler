@@ -33,6 +33,26 @@
   --cut-700: #B3261E;
   --cut-400: #F87171;
 
+  /* --scrim-heavy requires written justification to use; §5.3 forbids burying a photograph. */
+  --scrim-light: linear-gradient(
+    to bottom,
+    rgba(15, 43, 31, 0) 0%,
+    rgba(15, 43, 31, 0.1) 50%,
+    rgba(15, 43, 31, 0.45) 100%
+  );
+  --scrim-standard: linear-gradient(
+    to bottom,
+    rgba(15, 43, 31, 0.1) 0%,
+    rgba(15, 43, 31, 0.4) 60%,
+    rgba(15, 43, 31, 0.7) 100%
+  );
+  --scrim-heavy: linear-gradient(
+    to bottom,
+    rgba(15, 43, 31, 0.3) 0%,
+    rgba(15, 43, 31, 0.5) 40%,
+    rgba(15, 43, 31, 0.8) 100%
+  );
+
   --background: var(--surface-page);
   --foreground: var(--text-primary);
   --font-inter: var(--font-fraunces), "Fraunces", serif;
@@ -238,20 +258,24 @@
 
 @layer components {
   .hero-overlay {
-    background: linear-gradient(
-      to bottom,
-      rgba(15, 43, 31, 0.3) 0%,
-      rgba(15, 43, 31, 0.5) 40%,
-      rgba(15, 43, 31, 0.8) 100%
-    );
+    background: var(--scrim-heavy);
   }
 
   .hero-overlay-light {
+    background: var(--scrim-standard);
+  }
+
+  .hero-overlay-home {
+    background: var(--scrim-light);
+  }
+
+  /* Text-local only — never a full-frame wash. */
+  .hero-text-panel {
     background: linear-gradient(
       to bottom,
-      rgba(15, 43, 31, 0.1) 0%,
-      rgba(15, 43, 31, 0.4) 60%,
-      rgba(15, 43, 31, 0.7) 100%
+      rgba(15, 43, 31, 0.12) 0%,
+      rgba(15, 43, 31, 0.46) 28%,
+      rgba(15, 43, 31, 0.56) 100%
     );
   }
 

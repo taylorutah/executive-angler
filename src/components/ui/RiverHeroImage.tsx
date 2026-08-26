@@ -24,9 +24,10 @@ interface RiverHeroImageProps {
 }
 
 /**
- * Full-bleed river hero. The name sits in the 0.8-alpha band of `.hero-overlay`
- * (8.45:1 on Vellum if the photo never loads). Do not move the title up
- * into the thinner scrim, and do not repaint it dark.
+ * Full-bleed river hero. The name sits in the 0.8-alpha band of
+ * `--scrim-heavy` (`.hero-overlay`; 8.45:1 on Vellum if the photo never
+ * loads). Do not move the title up into the thinner scrim, do not
+ * repaint it dark, and do not lighten this page to --scrim-standard.
  */
 export default function RiverHeroImage({
   heroImageUrl,
