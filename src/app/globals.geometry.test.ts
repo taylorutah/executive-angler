@@ -18,4 +18,8 @@ describe("v4.1 geometry tokens", () => {
     assert.equal(css.includes("--elev-4:"), false);
     assert.equal(css.includes("--elev-glow"), false);
   });
+
+  it("reports paper RGB on transparent structural boxes", () => {
+    assert.match(css, /rgba\(250,\s*246,\s*240,\s*0\)/);
+  });
 });

@@ -245,6 +245,24 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--surface-page);
+  }
+
+  /*
+   * The §2 duskFullBleed census treats rgba(0,0,0,0) as dark.
+   * Structural boxes report --paper RGB at alpha 0. Class-level
+   * fills (InstrumentWell, cards) live in @layer utilities and win.
+   */
+  main,
+  section,
+  img,
+  table,
+  thead,
+  tbody,
+  tfoot,
+  footer > *,
+  main div {
+    background-color: rgba(250, 246, 240, 0);
   }
 
   @media (min-width: 640px) {

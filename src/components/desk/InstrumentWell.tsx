@@ -26,7 +26,10 @@ export default function InstrumentWell({ children, className, label }: Props) {
         "register-dusk border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-primary)] shadow-[var(--elev-1)]",
         className,
       )}
-      style={{ borderRadius: "var(--radius-instrument)" }}
+      style={{
+        borderRadius: "var(--radius-instrument)",
+        backgroundColor: "var(--surface-page)",
+      }}
     >
       {children}
     </div>
