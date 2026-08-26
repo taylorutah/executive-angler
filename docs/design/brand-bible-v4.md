@@ -1,17 +1,19 @@
 ---
 type: concept
-title: "Brand Bible v4 — The Water Desk"
+title: "Brand Bible v4.1 — The Water Desk, composition edition"
 project: executive-angler
-updated: 2026-08-25
+updated: 2026-08-26
 tags: [ea, brand, privacy, water-desk, design-system]
 ---
 
-# Executive Angler — Brand Bible v4
-## The Water Desk edition
+# Executive Angler — Brand Bible v4.1
+## The Water Desk — composition edition
 
 **Status:** Current. Supersedes [[Brand-Bible-v3.1]] and [[Brand-Bible-v3]] — archive both.
+**Revised 2026-08-26 — promoted to v4.1. Part II added: anti-slop, named widgets, density, iconography, footer, chrome, and the test for "perfect". §5.5 geometry corrected, §5.7 given measurable containment values, §5.4 motion corrected. Part I is unchanged v4 content.**
 **Revised 2026-08-25 — §5.1 token table corrected to shipped values; §5.5 geometry; §5.7 how the registers meet.**
-**Companion specs:** [[Website-Design-Review-2026-08-23]] (design) · [[EA-Build-Brief-III-2026-08-24]] (build) · [[Workbench-Style-Guide]] (needs a token refresh)
+**Companion specs:** [[Water-Desk-Spec-2026-08-26]] (the build source of truth for pages) · [[Anti-Slop-Checklist]] (the gate Cursor runs) · [[Workbench-Style-Guide]] (Dusk register) · [[EA-Build-Brief-III-2026-08-24]] (build)
+**Superseded as a build source:** [[Website-Design-Review-2026-08-23]] — kept for its findings and its reference list; the page specs in it are replaced by the Water Desk spec.
 
 ---
 
@@ -148,6 +150,8 @@ One hero per page **at full strength** — the image is the image, never faded t
 
 ### 5.4 Motion
 
+> **Corrected by §14 (v4.1, 2026-08-26).** Items 3 and 4 below — the 400ms photo zoom and the staged entrance — are retired, along with `--elev-3`, `--elev-4`, `--elev-glow` and `--elev-glow-strong`. Read §14 as the operative budget; this section is kept for the reasoning that produced it.
+
 The original budget — 120–180ms ease-out on hover and press, one 400ms crossfade when a live reading updates — stopped cheap animation and produced a flat, lifeless page. The budget is now the tokens in `globals.css`, not one-off classes.
 
 **Still in budget (tokens, both registers):**
@@ -171,17 +175,20 @@ Hover and press remain 120–180ms ease-out (`--hover-duration` / `--hover-ease`
 
 `prefers-reduced-motion: reduce` fully disables items 3 (image scale) and 4 (entrance). Scrim gradients stay — they are not motion.
 
-### 5.5 Geometry
+### 5.5 Geometry — corrected 2026-08-26
 
-Three radius tokens. Not “round everything.”
+Four radius tokens, each scoped. Not "round everything," and not a 12px default.
 
 | Token | Value | Applies to |
 |---|---|---|
-| `--radius-control` | 9999px | Filter chips, category chips, tags, count badges |
-| `--radius-surface` | 12px | Cards, the Dusk instrument, images, modals |
-| `--radius-media` | 4px | Inline thumbnails and fly plates |
+| `--radius-chip` | 9999px | Filter chips, category chips, tags, count badges — **and nothing else**. A pill is a chip; a card is not a chip. |
+| `--radius-surface` | **6px** | Cards, modals, images. Was 12px; 12px is the template tell named in §11.2. |
+| `--radius-instrument` | **4px** | The InstrumentWell and anything inside it. |
+| `--radius-media` | 4px | Inline thumbnails and fly plates. |
 
-Buttons, the search field, and the primary nav stay as they are. Pill-nav is a SaaS idiom; the masthead stays flat text with an underline.
+Buttons, the search field, and the primary nav stay flat at 4px. Pill-nav is a SaaS idiom; the masthead stays flat text with an underline.
+
+**Retired 2026-08-26:** `--radius-control` at 9999px applied to anything that is not a chip; `--radius-surface` at 12px.
 
 ### 5.6 Logo
 
@@ -202,6 +209,18 @@ Dusk is an instrument, not a floor. Live data lives in a **contained dark panel*
 **Where Dusk owns the whole ground.** On `/today`, `/journal`, `/flybox`, and `/rivers/mine` — the private notebook — the page *is* Dusk. There is no seam to manage.
 
 **The one exception.** A thin Dusk **rail** docked to the header (the ~40px sticky conditions ticker) is chrome, not content, and is exempt. The test is whether it sits against the header or interrupts the reading column: a rail is docked; a band interrupts.
+
+**Rule 5 — Measurable containment (added 2026-08-26).** "Inset and radiused" is not a vibe. A Dusk panel on a Daylight page must satisfy all five, and QA measures them:
+
+| Property | Value |
+|---|---|
+| Horizontal inset | `margin-inline: var(--gutter)` minimum, or a max-width instrument well. Never edge-to-edge. |
+| Vertical inset | ≥ 24px of paper above and below the panel. |
+| Radius | `--radius-instrument` (4px). Not 12. Not a pill. |
+| Edge | 1px `--border-rule`, always present. |
+| Shadow | `--elev-1` only — a whisper. Never `--elev-3`/`--elev-4`, never a glow. |
+
+If you are tempted to full-bleed a live-data band across a public page, that is the failure this rule exists to stop.
 
 ---
 
@@ -269,6 +288,206 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ---
 
+
+---
+
+# Part II — Composition law (added v4.1, 2026-08-26)
+
+Part I says what the brand *is*. Part II says what a page is allowed to *look like*. It exists because v4 specified tokens and voice and the site still shipped as a competent template: the tokens were obeyed and the composition was invented. Tokens without widget law is how this site became AI garbage.
+
+Everything in Part II is binding on Cursor prompts, on QA, and on this document's own future revisions.
+
+## 11. Anti-slop — if any of these ship, the design has failed
+
+Measured on production 2026-08-26; every entry below has evidence in [[Anti-Slop-Checklist]] §0.
+
+### 11.1 Type and chrome
+
+- Inter, Roboto, Open Sans, Lato, Poppins, Montserrat, Space Grotesk, Geist, Plus Jakarta, `system-ui` as a design face, DM Serif Display, DM Sans. All retired; the CI font census already asserts this and it stays.
+- **Lucide / Heroicons / Feather used raw as the icon language.** A generic 24px outline stroke on a Fraunces page is the cheapest tell on the site and it is currently the loudest: 35 Lucide glyphs of 49 SVGs on `/rivers/madison-river`, 29 of 35 on `/rivers/arkansas-river-colorado`.
+- Emoji as UI icons.
+- The full wordmark in chrome. §5.6 already says mark-only; the header currently paints `EXECUTIVE ANGLER` on every public page.
+
+### 11.2 Layout
+
+- Three-up equal feature cards with icon + heading + paragraph. Five such grids ≥700px wide currently render on `/`.
+- Bento grids used as decoration.
+- Glassmorphism, gradient orbs, mesh gradients, purple/teal marketing gradients.
+- **Card radius ≥ 12px.** 26 elements per index page currently sit at 12px.
+- **Heavy drop shadows.** 24 elements per index page currently carry ≥20px blur.
+- Floating pill navs, sticky glass headers.
+- Centred SaaS hero with two buttons.
+- Fake dashboard mockups, an app-store wall above the fold, testimonial sliders.
+- Horizontal mystery carousels of content cards on desktop.
+- SEO link strips under heroes.
+
+### 11.3 Motion
+
+- Bounce, spring, elastic, parallax.
+- **Scroll-reveal staggers on every block.** Retired in v4.1 — see §14.
+- Number count-ups on CFS. A count-up is a lie about how the data arrived.
+- Charts that draw themselves, page-transition theatre, looping decorative motion.
+
+### 11.4 Colour misuse
+
+- Copper on headings, copper as a large fill, copper as brand wash. Copper is the action colour and nothing else.
+- Teal as links or buttons. Teal is live data and nothing else.
+- Off-palette greens and ambers for "Normal" / "Good" / "Low".
+- Pure `#000` / `#fff` as a page ground. **The footer currently paints `#FFFFFF` as its ground** — Card is a card colour, not a page colour.
+- GitHub Abyss `#0D1117`, Tailwind slate-800 `#1F2937`.
+- **Copper glow.** `--elev-glow` / `--elev-glow-strong` (30–40px copper bloom) are retired in v4.1.
+
+### 11.5 Copy and product
+
+- Get started · Learn more · Unlock insights · Dashboard · Community · Feed · Gamify as chrome labels.
+- Grip-and-grin, lodge lifestyle, any held fish on a public surface.
+- Text whose legibility depends on a photo loading. Data overlaid on a photograph.
+- A card with no image and no typographic plate.
+- Counts that contradict each other. `/flies/library` currently titles itself "120+ Proven Patterns" over a library of 162.
+- The same control rendered twice. `/rivers/madison-river` currently renders "Create a free account" three times.
+
+---
+
+## 12. Named widgets
+
+This is the section that moves the UX needle. Cursor invents a generic card whenever a component is unnamed. Every widget below is a named component with a fixed anatomy and a fixed set of states.
+
+**Required states for every widget:** default · hover · active/pressed · live · stale · empty · error.
+
+**Interaction law, identical everywhere:**
+- Hover = the 1px rule darkens one step, 140ms ease-out. No glow. No scale. Lift ≤ 2px, and only where a surface genuinely sits above the page.
+- Keyboard focus = a visible Ink (Daylight) or Copper (Dusk) ring, never `outline: none`.
+- Stale = the freshness stamp changes wording ("gauge 3h ago"), never a colour change to the number.
+- Empty = a sentence that says what would be here and why it isn't. Never a grey box, never a dash alone, never invented data.
+
+| Widget | Anatomy | Hero number |
+|---|---|---|
+| **ConditionsBar** | Sticky rail docked to the header, 40px. Date · region · featured water · CFS in tabular figures · freshness stamp. A Dusk object on Daylight pages. Not a marketing ticker, not a band. | CFS |
+| **RiverChip** | Name, state, live CFS, 24h delta (Rise/Cutthroat + `+`/`−` + the word "rising" / "dropping" / "steady"), hatch pill. | CFS |
+| **Gauge** | Large tabular CFS, sparkline, source stamp (`USGS 06038500`, Plex Mono). Caption states that the number is the gauge, not a guess. Never a count-up. | CFS |
+| **InstrumentWell** | The contained Dusk panel. Inset on all four sides, `--radius-instrument`, 1px `--border-rule` edge, `--elev-1` only. Holds Gauge, hatch matrix, section tabs. **One well per page region.** | — |
+| **HatchCalendar** | Month matrix, current month marked, species and flies on hover/focus. Not a GitHub contribution graph — no colour-ramp heat cells. | — |
+| **FlyCard** | Pattern name, size range, type, 1:1 macro on paper, light from upper left, no drop shadow. A #20 midge renders optically smaller than a #4 streamer. | hook size |
+| **FlyPlate** | Twelve macros as a naturalist's specimen plate, ruled grid, no card chrome. The strongest asset the brand owns. **Must exist on `/`.** | — |
+| **RecipeStrip** | Hook / thread / bead / dubbing as a bill of materials, Plex Mono for sizes. | — |
+| **SessionRow** | Date, water, duration, lock glyph. Catch count renders **only to the owner**. | duration |
+| **DestinationPlate** | Place, best months, primary species. Not a booking widget. No lodge lifestyle photograph. | months |
+| **SpeciesDossier** | Common name + latin, conservation chip, scientific illustration. Keep the illustration — it is the most distinctive choice in the identity. | — |
+| **TypographicPlate** | The fallback when no licensed image exists: name set in Fraunces on Vellum with a ruled border. Never a grey box, never a Lucide placeholder. | — |
+| **YourRecord** | Client-rendered after auth, never in cached HTML. River: times fished / best month / top fly. Fly: in your box. Place: n of m rivers fished. | the count |
+| **SearchField** | Command quality. Scopes: Rivers, Flies, Hatches, Places, Notes, Species, Directory, and (signed in) Journal. All groups at once, three rows each, with a relevance floor so nonsense returns nothing. Empty state = six real example queries, not a magnifying glass. | — |
+
+**Every widget declares which number is the hero.** If everything is the accent, nothing is.
+
+---
+
+## 13. Density by page type
+
+| Type | Routes | Density | Dusk |
+|---|---|---|---|
+| **Editorial** | `/`, `/articles/*`, `/learn`, `/about` | Photography at full strength. Display 3× body. 11px small-caps Archivo eyebrows. 1.62 leading, 24px gutters, ~68ch measure. | Instruments inset only |
+| **Index** | `/rivers`, `/flies/library`, `/destinations`, `/species` | Scan-dense. Sticky filters. View-density toggles. **Not padded like a landing page** — an index is a list of instruments, not a marketed card gallery. | Live cells as chips or small wells |
+| **Dossier** | one river / fly / place / species | Magazine header + **one** InstrumentWell in the sidebar (map, Gauge, season, regs). Main column is prose. | Well, never floor |
+| **Notebook** | `/today`, `/journal`, `/flybox`, `/rivers/mine`, workbench | Whole-page Dusk. Tables at 32px rows, 1.35 leading, 12px gutters. Charts only on `/journal/insights`. | Floor allowed |
+
+The gear-shift between Daylight and Dusk is **density and ground**, not a second website: same type scale, same accent, same mark.
+
+---
+
+## 14. Motion — v4.1 correction
+
+v4 §5.4 expanded the budget to four token families after the two-item budget was judged "flat and lifeless". Two of those four are the scroll-reveal idiom this pass exists to remove. The budget is corrected, not re-litigated.
+
+**In budget:**
+
+1. **Hover and press** — 120–180ms ease-out (`--hover-duration` / `--hover-ease`). Expressed as a 1px rule darkening, never a glow or a scale.
+2. **Live crossfade** — one 400ms crossfade when a reading updates (`--crossfade-duration`).
+3. **Ground wash** — `--surface-page-wash`. Not motion; kept.
+4. **Photograph scrims** — gradients. Not motion; kept.
+5. **Depth scale** — `--elev-1` and `--elev-2` only: a hairline contact shadow and a 1px light ring. `--elev-3`, `--elev-4`, `--elev-glow` and `--elev-glow-strong` are **retired**.
+
+**Retired in v4.1:**
+
+- **Staged entrance** (`--enter-duration` / `--enter-rise` / `--enter-stagger`). This is the scroll-reveal stagger named in §11.3. A page that needs to animate itself into existence is admitting the composition does not hold still.
+- **Photo zoom on hover** (`--photo-zoom-scale` 1.03 over 400ms). Out of the hover budget and a portfolio flourish. Card hover is the rule darkening.
+
+**Never animates:** page transitions, scroll reveals, parallax, number count-ups, charts drawing themselves, the logo, anything inside a data table.
+
+`prefers-reduced-motion: reduce` is honoured on everything that remains.
+
+**If the page reads flat once these are removed, the fix is composition — scale contrast, rule weight, photography, density — not animation.**
+
+---
+
+## 15. Surfaces and light
+
+Depth comes from three things and no others: **paper grain** (faint, never a texture overlay that fights a photograph), **1px rules** at Rule / Ink 8–12% opacity, and **grouping**. Not elevation theatre.
+
+Almost square. Radius is scoped, not global — see §5.5 as corrected in v4.1.
+
+---
+
+## 16. Iconography
+
+The current set is generic and it is the loudest remaining tell. Replace it with **one** hostable set.
+
+- **Weight:** custom 1.5px stroke, slightly inked, optical sizes ~16 / 20 / 24. Not a 2px generic outline.
+- **Metaphors from the desk:** gauge, current seam, hackle, hook, vise, hatch, lock (privacy), paper map, rule, notebook. **Not:** rocket, sparkle, chart-up, users-three, glowing bolt, generic pin.
+- **Registers:** the same set in Daylight (Ink) and Dusk (Chalk / Fog). Active = Copper. Live = a single Teal dot, never a teal icon soup.
+- **Licence:** one we can host. No runtime CDN. No icon font.
+- **Fallback:** a missing icon renders a typographic mark — a small-caps abbreviation — never a broken square.
+- **Social glyphs are icons too.** Four generic marks in rounded grey squares in the footer are the same failure at the bottom of the page.
+
+---
+
+## 17. Footer as an object
+
+Not a junk drawer. Four deliberate groups, then a quiet ethic line.
+
+1. **The desk** — Rivers, Flies, Places, Field Notes, Learn
+2. **The notebook** — App, Journal (signed out: what it is, and that it is free), Today
+3. **Find** — Guides, Lodges, Shops. Contextual directories; never primary nav.
+4. **House** — About, Privacy, What we don't do, Contact
+
+The mark and the full lockup appear **only** here and in editorial. Two lines, said plainly once: *Every feature, free.* and *We never publish locations or fish counts.*
+
+**Ground is Paper or Vellum, never Card.** A white slab under a cream page is a seam, not a footer.
+
+**Kill:** vestigial `/pricing`, duplicate Discover / Directory labels, dead Pro links, an app-store badge wall (a single quiet App link is the whole app presence in the footer), and legal sludge sitting as a peer of Rivers.
+
+---
+
+## 18. Chrome
+
+- **Logged out, primary:** Rivers · Flies · Places · Field Notes, then a 1px `--border-rule`, then **Learn**. Learn is a door, not a fifth category.
+- **Logged in, primary:** Today · Journal · Rivers · Flies.
+- **Search always open**, ~280px.
+- **Mark only.** The word "Executive" is not the first thing on every screen.
+- **Mobile, logged out:** no bottom app bar. **Logged in:** 5-tab bar.
+- Commercial directories never appear in the primary bar.
+- The app CTA is not chrome. `Get the app` as a filled copper button on every public page is app marketing wearing navigation's clothes; it belongs in the journal band and the footer.
+
+---
+
+## 19. What "perfect" means — the test, not the vibe
+
+A page is done when all of the following are true, measured rather than asserted, at 1440 and 390, signed in and signed out:
+
+1. The register seam is an **object on paper**, not a cliff. No full-bleed Dusk on a public editorial page.
+2. Every control renders **once**.
+3. Zero raw Lucide/Heroicons/Feather glyphs.
+4. No three-up icon-and-paragraph grid.
+5. Copper appears **only** on actions; teal **only** on live data.
+6. No count-up, no scroll-reveal stagger, no glow.
+7. Every empty state is honest and worded.
+8. Every image either loads and is captioned, or renders a TypographicPlate.
+9. Every image is served at or above its rendered CSS width.
+10. Banned-copy grep is clean.
+11. Counts agree with the database everywhere they appear, including `<title>`.
+12. The page is recognisable as this brand with the photographs removed.
+
+Item 12 is the real test. If the page collapses into a template when the pictures are gone, the pictures were carrying a composition that does not exist.
+
 ## See Also
 - [[Website-Design-Review-2026-08-23]] — the design spec this identity is built on
 - [[EA-Build-Brief-III-2026-08-24]] — the build plan
@@ -279,6 +498,7 @@ Dormant: the `subscriptions` table and `profiles.is_premium` remain unused, with
 
 ## Timeline
 
+- **2026-08-26** | Promoted to **v4.1 — composition edition**. Part II added (§11 anti-slop with production evidence, §12 named widgets with required states, §13 density by page type, §14 motion correction, §15 surfaces, §16 iconography, §17 footer as an object, §18 chrome, §19 the test for "perfect"). §5.5 geometry corrected — `--radius-surface` 12px → 6px, `--radius-instrument` 4px added, `--radius-control` renamed `--radius-chip` and scoped to chips. §5.7 gained Rule 5, measurable containment. §5.4 motion corrected: staged entrance (`--enter-*`), 400ms photo zoom, `--elev-3`/`--elev-4` and `--elev-glow*` retired — the staged entrance was the scroll-reveal stagger this pass exists to remove. Written from a measured tour of production at 1114/1512/1800/500px: 35 Lucide glyphs on `/rivers/madison-river`, 24 elements per index page at ≥20px shadow blur, 26 at 12px radius, 74 pill-radius elements on `/rivers`, a `#FFFFFF` footer ground, a 557px hero source painted at 1114 CSS px, and "Create a free account" rendered three times on one page.
 - **2026-08-26** | Copper 400 moved to `#E97C48` (oklch 0.700 / 0.150 / 45) so the light step stays copper, not salmon. Teal 700 moved to `#086B6C` (oklch 0.479 / 0.080 / 196) to sit with teal-300 at hue 201. Hero scrims tokenised: `--scrim-light` on the homepage (0 / 0.10@50% / 0.45); river pages keep the pre-token overlay; `--scrim-heavy` requires written justification.
 - **2026-08-25** | Geometry tokens shipped narrow: `--radius-control` only on chips, tags, and count badges. Hero cursor-parallax cut. Homepage hero italic on the closing clause only, in white (AA on the scrim). Pill nav cancelled — masthead stays flat text. The production olive void was the forest scrim at 0.28 from the first pixel, not a missing JPEG.
 - **2026-08-25** | Ink/Graphite/Slate pulled into paper's warm family (hue ~50) after measuring runcabinet.com. Cabinet's ground is `#FAF6F1` and its display face is Fraunces — the same paper and the same type we already had. Their text is `#3B2F2F` (hue 18, warm). Ours was `#141814` at hue 145 (green) on a warm cream, 127° apart, and 16.66:1 — harsher, not better. Paper change to `#F8F6F4` cancelled. Ink is now `#2C211B` (14.55:1). `--elev-*` gained an inset top highlight.

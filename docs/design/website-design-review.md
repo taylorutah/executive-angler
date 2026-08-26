@@ -6,6 +6,9 @@ updated: 2026-08-23
 tags: [ea, brand, ia, design, website, review]
 ---
 
+> **SUPERSEDED as a build source, 2026-08-26.** The page specs in this document are replaced by [[Water-Desk-Spec-2026-08-26]] (repo: `docs/design/water-desk-spec.md`). Its findings, its IA verdict, and its reference list still stand and are still worth reading. Do not build pages from this file.
+
+
 # Website UX / Visual Design Review — 2026-08-23
 
 **Status:** Proposal. Reopens [[IA-Strategy-2026-05]].
@@ -189,5 +192,7 @@ Homepage · `/today` · **River** (most important — where strangers land) · P
 - [[Website/Strategy]] — 2026-03 doc; its public catch maps / leaderboards section is superseded by the 2026-05 privacy overhaul
 
 ## Timeline
+
+- **2026-08-26** | Superseded as a build source by the Water Desk page spec. Findings, IA verdict and references retained.
 
 - **2026-08-23** | Review produced from a live logged-out tour of `/`, `/about`, `/rivers`, `/rivers/madison-river`, `/flies`, `/flies/library`, `/articles`, `/destinations`, `/destinations/new-zealand`, `/search`, `/login`, `/pricing` at 1440 and mobile, plus the app route tree.
