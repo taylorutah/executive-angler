@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { Search, X } from "@/icons";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 interface Props {

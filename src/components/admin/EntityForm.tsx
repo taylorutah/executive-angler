@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2, ArrowLeft } from "lucide-react";
+import { Save, Loader2, ArrowLeft } from "@/icons";
 import type { FieldConfig } from "@/lib/admin/field-types";
 import FieldRenderer from "./FieldRenderer";
 

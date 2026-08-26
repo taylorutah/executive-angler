@@ -26,7 +26,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Plus, Check, Loader2 } from "lucide-react";
+import { Plus, Check, Loader2 } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import QuickAddToBoxSheet, { type QuickAddFly } from "./QuickAddToBoxSheet";
 import AddToBoxToast, { type ToastInfo } from "./AddToBoxToast";

@@ -6,7 +6,7 @@
  * State is owned by the parent (WorkspaceClient); FilterBar is purely
  * presentational so URL state can be the single source of truth.
  */
-import { Search, X } from "lucide-react";
+import { Search, X } from "@/icons";
 import FilterPill, { type FilterOption } from "./FilterPill";
 import type {
   WorkspaceFilter,

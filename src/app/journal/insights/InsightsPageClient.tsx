@@ -10,7 +10,7 @@ import {
   TrendingUp,
   Flame,
   AlertCircle,
-} from "lucide-react";
+} from "@/icons";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
 import PageHeader from "@/components/ui/PageHeader";
 import { COPPER_400 } from "@/lib/palette";

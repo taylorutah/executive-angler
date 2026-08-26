@@ -12,7 +12,7 @@ import {
   Check,
   Loader2,
   ExternalLink,
-} from "lucide-react";
+} from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import { SubmitMaterialForm } from "@/components/flies/SubmitMaterialForm";
 import { Button } from "@/components/ui/Button";

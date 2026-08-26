@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   ArrowLeft, Pencil, Fish, X, ChevronLeft, ChevronRight, Clock,
   MapPin, Check, RotateCcw, Camera, Loader2, Lock, Globe
-} from "lucide-react";
+} from "@/icons";
 import { KudosButton } from "@/components/social/KudosButton";
 import { compressImage } from "@/lib/image-compress";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";

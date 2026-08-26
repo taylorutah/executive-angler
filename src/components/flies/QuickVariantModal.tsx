@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, X, AlertCircle, Check, Copy, Package } from 'lucide-react';
+import { Plus, X, AlertCircle, Check, Copy, Package } from "@/icons";
 import type { TyingMaterial } from '@/types/materials';
 import { Button } from '@/components/ui/Button';
 

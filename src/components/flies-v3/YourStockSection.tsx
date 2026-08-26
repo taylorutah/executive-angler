@@ -13,7 +13,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Heart, Wrench, Pencil, Trash2, Plus, Box as BoxIcon, X } from "lucide-react";
+import { Heart, Wrench, Pencil, Trash2, Plus, Box as BoxIcon, X } from "@/icons";
 import { Button } from "@/components/ui/Button";
 import type { Fly, FlyConfigurationWithBoxes } from "@/types/flies";
 import ConfigureSheet from "./ConfigureSheet";

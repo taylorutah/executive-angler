@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/icons";
 
 const COLLAPSED_HEIGHT = 140; // ~4 lines of text
 

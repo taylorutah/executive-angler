@@ -2,7 +2,7 @@
 // Headline: "Relive the Day"
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
-import { ChevronLeft, Share2, Cloud, Fish } from "lucide-react";
+import { ChevronLeft, Share2, Cloud, Fish } from "@/icons";
 
 const CATCHES = [
   { species: "Rainbow Trout", length: '22.5"', fly: "Eggstasy Yellow #14", time: "10:08 AM" },

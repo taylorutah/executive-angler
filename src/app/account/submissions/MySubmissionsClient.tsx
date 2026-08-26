@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ChevronLeft, Plus, Clock, CheckCircle, XCircle, AlertCircle,
   Send, FileEdit, Eye, Trash2, Loader2, Shield
-} from "lucide-react";
+} from "@/icons";
 
 interface Submission {
   id: string;

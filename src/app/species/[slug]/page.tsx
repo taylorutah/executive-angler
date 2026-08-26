@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Fish, MapPin, Droplets, Leaf, Bug } from "lucide-react";
+import { Fish, MapPin, Droplets, Leaf, Bug } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
 import HeroCompact from "@/components/ui/HeroCompact";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin } from "lucide-react";
+import { MapPin } from "@/icons";
 import PlanFlowLine from "@/components/plan/PlanFlowLine";
 import { SITE_URL } from "@/lib/constants";
 import { getAllCanonicalFlies, getAllRivers, getRiverBySlug } from "@/lib/db";

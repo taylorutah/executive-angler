@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Heart } from "lucide-react";
+import { Heart } from "@/icons";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getSessionOwnerId(supabase: any, sessionId: string): Promise<string | null> {

@@ -21,7 +21,7 @@ import {
   Layers,
   ChevronRight,
   Feather,
-} from "lucide-react";
+} from "@/icons";
 import {
   rankSearch,
   GROUP_ORDER,

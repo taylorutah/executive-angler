@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, useCallback } from "react";
-import { Check, ChevronDown, Search, X } from "lucide-react";
+import { Check, ChevronDown, Search, X } from "@/icons";
 import { FOCUS_VISIBLE, MOTION_SAFE } from "@/components/layout/nav/links";
 import { useModalChrome } from "@/components/layout/nav/useModalChrome";
 

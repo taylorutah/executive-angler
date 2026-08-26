@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { X, Download, Copy, Share2, Printer, Loader2 } from "lucide-react";
+import { X, Download, Copy, Share2, Printer, Loader2 } from "@/icons";
 import { domToBlob } from "modern-screenshot";
 import { formatHookSizes } from "@/lib/flies/variant-format";
 

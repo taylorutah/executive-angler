@@ -5,7 +5,7 @@
 // Consumers provide the content between the status bar and the tab bar.
 
 import type { ReactNode } from "react";
-import { Home, BookOpen, Mountain, Bug, Fish } from "lucide-react";
+import { Home, BookOpen, Mountain, Bug, Fish } from "@/icons";
 import { COPPER_400 } from "@/lib/palette";
 
 // Brand palette — must match globals.css and native EAColors.

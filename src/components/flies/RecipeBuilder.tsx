@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MaterialAutocomplete } from './MaterialAutocomplete';
 import type { TyingMaterial, RecipeRole } from '@/types/materials';
-import { Plus, GripVertical, Trash2 } from 'lucide-react';
+import { Plus, GripVertical, Trash2 } from "@/icons";
 import {
   ROLE_FIELDS,
   RECIPE_ROLES,

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Star, Trash2, Edit3, User } from "lucide-react";
+import { Star, Trash2, Edit3, User } from "@/icons";
 import { createBrowserClient } from "@supabase/ssr";
 import { Button } from "@/components/ui/Button";
 

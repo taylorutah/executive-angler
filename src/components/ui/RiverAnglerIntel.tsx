@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TrendingUp, Feather, Lock } from "lucide-react";
+import { TrendingUp, Feather, Lock } from "@/icons";
 import type { RiverFlyPulse } from "@/app/api/intel/river/[riverId]/route";
 
 interface RiverAnglerIntelProps {

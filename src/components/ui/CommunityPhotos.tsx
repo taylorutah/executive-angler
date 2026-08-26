@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
-import { Camera, User } from "lucide-react";
+import { Camera, User } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 
 interface CommunityPhotosProps {

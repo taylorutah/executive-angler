@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Star } from "lucide-react";
+import { ChevronRight, Star } from "@/icons";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";

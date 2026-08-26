@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Target, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
+import { Target, TrendingUp, Thermometer, Waves, CloudSun } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 

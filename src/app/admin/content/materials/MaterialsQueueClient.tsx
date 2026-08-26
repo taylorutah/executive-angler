@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X, Loader2, Edit2, Save } from 'lucide-react';
+import { Check, X, Loader2, Edit2, Save } from "@/icons";
 import { Button } from '@/components/ui/Button';
 
 interface PendingMaterial {

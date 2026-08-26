@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Camera, Calendar, User } from "lucide-react";
+import { Camera, Calendar, User } from "@/icons";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
 import type { RiverPhoto } from "@/app/api/photos/river/[riverId]/route";

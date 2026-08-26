@@ -15,7 +15,7 @@ import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ListChecks, Wrench, CheckCircle2, ArrowRight, Undo2 } from "lucide-react";
+import { ListChecks, Wrench, CheckCircle2, ArrowRight, Undo2 } from "@/icons";
 import type { FlyConfigurationWithFly } from "@/lib/db/fly-model";
 import { summarizeVersion } from "./summarize-version";
 

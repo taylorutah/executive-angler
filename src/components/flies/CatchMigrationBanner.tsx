@@ -9,7 +9,7 @@
  * "migrate" or "skip" so it doesn't nag.
  */
 import { useEffect, useState } from "react";
-import { ArrowRightLeft, X } from "lucide-react";
+import { ArrowRightLeft, X } from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 interface Props {

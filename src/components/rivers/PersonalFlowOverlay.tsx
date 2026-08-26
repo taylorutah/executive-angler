@@ -5,7 +5,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
   ReferenceLine, Scatter, ScatterChart, ZAxis, ComposedChart,
 } from "recharts";
-import { Fish } from "lucide-react";
+import { Fish } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import { COPPER_400 } from "@/lib/palette";

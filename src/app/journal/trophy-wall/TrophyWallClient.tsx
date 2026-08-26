@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Trophy, Fish, Target, MapPin, Calendar, Star, Ruler, Camera, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trophy, Fish, Target, MapPin, Calendar, Star, Ruler, Camera, X, ChevronLeft, ChevronRight } from "@/icons";
 import Image from 'next/image';
 
 interface CatchRecord {

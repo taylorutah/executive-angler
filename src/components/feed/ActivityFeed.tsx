@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Fish, MapPin, Cloud } from "lucide-react";
+import { Fish, MapPin, Cloud } from "@/icons";
 import type { FeedSession } from "@/app/feed/page";
 import { KudosButton } from "@/components/social/KudosButton";
 

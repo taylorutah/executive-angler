@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
+import { Icon } from "@/components/ui/Icon";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -74,9 +74,10 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
       aria-pressed={isFavorite}
     >
-      <Heart
+      <Icon
+        name="heart"
         className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
-        aria-hidden
+        filled={isFavorite}
       />
     </button>
   );

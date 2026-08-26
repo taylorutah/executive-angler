@@ -8,7 +8,7 @@ import {
   ChevronLeft, Shield, Ban,
   Fish, Calendar, Feather, Users, Clock, StickyNote,
   AlertTriangle, UserX, UserCheck, Loader2, Trash2,
-} from "lucide-react";
+} from "@/icons";
 import DeleteUserModal from "@/components/admin/DeleteUserModal";
 import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
 import { Button } from "@/components/ui/Button";

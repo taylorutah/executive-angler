@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, ChevronUp, ChevronDown, Pencil, Trash2, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Search, ChevronUp, ChevronDown, Pencil, Trash2, ChevronLeft, ChevronRight, X } from "@/icons";
 
 interface Column {
   key: string;

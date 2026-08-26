@@ -9,7 +9,7 @@
  */
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Heart, Loader2 } from "lucide-react";
+import { Heart, Loader2 } from "@/icons";
 
 interface FlyFavoriteButtonProps {
   /** The fly's id in the `flies` table. */

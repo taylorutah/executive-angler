@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AwardBadge } from '@/components/ui/AwardBadge';
 import type { RiverStats } from '@/types/awards';
-import { TrendingUp, Loader2, ExternalLink } from 'lucide-react';
+import { TrendingUp, Loader2, ExternalLink } from "@/icons";
 import Link from 'next/link';
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';

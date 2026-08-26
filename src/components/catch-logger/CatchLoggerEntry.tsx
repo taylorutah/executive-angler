@@ -5,7 +5,7 @@
  * opening the CatchLogger sheet, and showing the Undo toast on success.
  */
 import { useState, useTransition } from "react";
-import { Box, Plus } from "lucide-react";
+import { Box, Plus } from "@/icons";
 import CatchLogger from "@/components/catch-logger/CatchLogger";
 import UndoToast, { type UndoToastInfo } from "@/components/catch-logger/UndoToast";
 import type { VariantRow } from "@/types/fly-v2";

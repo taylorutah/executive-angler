@@ -17,7 +17,7 @@ import {
   Loader2,
   ArrowLeft,
   ExternalLink,
-} from "lucide-react";
+} from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 type TabKey = "pending" | "approved" | "rejected";

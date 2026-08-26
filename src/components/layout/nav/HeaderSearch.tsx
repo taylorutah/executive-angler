@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Search, X } from "@/icons";
 import { FOCUS_VISIBLE, MOTION_SAFE, SEARCH_PLACEHOLDER, searchHref } from "./links";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";

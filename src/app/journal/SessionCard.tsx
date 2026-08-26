@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle, Lock } from "lucide-react";
+import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle, Lock } from "@/icons";
 import { parseLocalDate } from "@/lib/date";
 
 interface Catch {

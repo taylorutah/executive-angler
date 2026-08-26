@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search } from "@/icons";
 import {
   HERO_HEADLINE_LEAD,
   HERO_HEADLINE_CLOSE,

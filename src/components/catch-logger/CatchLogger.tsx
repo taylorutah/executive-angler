@@ -19,7 +19,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { ChevronLeft, Repeat, Search } from "lucide-react";
+import { ChevronLeft, Repeat, Search } from "@/icons";
 import type { VariantRow } from "@/types/fly-v2";
 import { logCatchAction } from "@/app/journal/[id]/actions";
 import { COMMON_SPECIES } from "@/lib/species-suggestions";

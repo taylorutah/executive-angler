@@ -9,7 +9,7 @@ import {
   ChevronDown, ChevronUp, User, Feather, LogIn, Mail,
   MapPin, Camera, MessageSquare, TicketPercent, Activity,
   Trash2, Lock, Globe,
-} from "lucide-react";
+} from "@/icons";
 import DeleteUserModal from "@/components/admin/DeleteUserModal";
 import AdminSessionDetailModal from "@/components/admin/AdminSessionDetailModal";
 import { Button } from "@/components/ui/Button";

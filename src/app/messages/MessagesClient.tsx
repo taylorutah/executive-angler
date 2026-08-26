@@ -11,7 +11,7 @@ import {
   Search,
   X,
   Loader2,
-} from "lucide-react";
+} from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import { MessageBubble } from "@/components/social/MessageBubble";
 import type { DMThread, DMMessage } from "@/types/fishing-log";

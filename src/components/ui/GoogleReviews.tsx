@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { Star } from "@/icons";
 import type { GoogleReview } from "@/types/entities";
 
 interface GoogleReviewsProps {

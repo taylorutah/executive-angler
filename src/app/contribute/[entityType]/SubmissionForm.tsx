@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ChevronLeft, Upload, Save, Send, MapPin, Globe,
   Phone, Mail, Image as ImageIcon, AlertCircle, CheckCircle, Loader2
-} from "lucide-react";
+} from "@/icons";
 
 interface Props {
   entityType: string;

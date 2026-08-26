@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ChevronLeft, Sparkles, TrendingUp, TrendingDown,
   Thermometer, Cloud, Droplets, Timer, MapPin, Bug,
-} from "lucide-react";
+} from "@/icons";
 import TipCard from "@/components/ui/TipCard";
 
 interface Session {

@@ -15,7 +15,7 @@ import {
   RotateCw,
   Undo2,
   X,
-} from "lucide-react";
+} from "@/icons";
 
 export interface ImageEditorProps {
   open: boolean;

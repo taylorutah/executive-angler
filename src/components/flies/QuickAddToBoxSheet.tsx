@@ -33,7 +33,7 @@ import {
   Sparkles,
   Star,
   AlertCircle,
-} from "lucide-react";
+} from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";

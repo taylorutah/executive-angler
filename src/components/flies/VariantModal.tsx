@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Loader2, Plus, Sparkles, Wand2, Trash2 } from "lucide-react";
+import { X, Loader2, Plus, Sparkles, Wand2, Trash2 } from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 export type VariantParentSpec = {

@@ -5,7 +5,7 @@ import ScreenShell, { Colors as C } from "./ScreenShell";
 import {
   BarChart3, Lightbulb, Bug, Droplets, Split, Share2,
   Medal, Leaf, Mountain, Wrench, Play
-} from "lucide-react";
+} from "@/icons";
 
 const STATS = [
   { label: "FISH YTD", value: "47" },

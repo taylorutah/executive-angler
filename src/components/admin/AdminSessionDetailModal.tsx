@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   X, Loader2, Fish, Thermometer, Droplets, Cloud,
   Calendar, MapPin, Feather, Lock, Globe, ExternalLink,
-} from "lucide-react";
+} from "@/icons";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
 interface Session {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Download } from 'lucide-react';
+import { Download } from "@/icons";
 
 interface RecipePdfButtonProps {
   flyId: string;

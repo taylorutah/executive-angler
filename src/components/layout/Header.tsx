@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, Plus, FishSymbol, Bug } from "lucide-react";
+import { Icon } from "@/components/ui/Icon";
 import { APP_STORE_URL } from "@/lib/constants";
 import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
@@ -163,7 +163,7 @@ export default function Header() {
                         plusOpen ? "rotate-45" : ""
                       }`}
                     >
-                      <Plus className="h-5 w-5" strokeWidth={2.5} />
+                      <Icon name="plus" className="h-5 w-5" />
                     </button>
 
                     {plusOpen && (
@@ -177,7 +177,7 @@ export default function Header() {
                           role="menuitem"
                           className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-page)]"
                         >
-                          <FishSymbol className="h-5 w-5 flex-shrink-0 text-[var(--action)]" aria-hidden />
+                          <Icon name="hook" className="h-5 w-5 flex-shrink-0 text-[var(--action)]" />
                           Log a session
                         </Link>
                         <div className="mx-4 h-px bg-[var(--border-rule)]" />
@@ -186,7 +186,7 @@ export default function Header() {
                           role="menuitem"
                           className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-page)]"
                         >
-                          <Bug className="h-5 w-5 flex-shrink-0 text-[var(--action)]" aria-hidden />
+                          <Icon name="hackle" className="h-5 w-5 flex-shrink-0 text-[var(--action)]" />
                           New fly recipe
                         </Link>
                       </div>
@@ -224,7 +224,7 @@ export default function Header() {
                 aria-haspopup="dialog"
                 className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-[var(--text-body)]`}
               >
-                <Menu className="h-5 w-5" aria-hidden />
+                <Icon name="menu" className="h-5 w-5" />
                 Menu
               </button>
             </div>

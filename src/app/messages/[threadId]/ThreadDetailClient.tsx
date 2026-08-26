@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, Send, Loader2 } from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import { MessageBubble } from "@/components/social/MessageBubble";
 import type { DMMessage } from "@/types/fishing-log";

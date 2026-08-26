@@ -7,7 +7,7 @@ import {
   Clock,
   UserX,
   Loader2,
-} from "lucide-react";
+} from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 
 /**

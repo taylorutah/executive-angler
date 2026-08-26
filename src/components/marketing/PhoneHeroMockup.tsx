@@ -1,4 +1,4 @@
-import { Home, BookOpen, Mountain, Bug, Fish } from "lucide-react";
+import { Home, BookOpen, Mountain, Bug, Fish } from "@/icons";
 
 const SESSIONS = [
   {

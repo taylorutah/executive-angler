@@ -6,7 +6,7 @@ import {
   Lightbulb, Bug, Sparkles, MessageSquarePlus, Send,
   Loader2, CheckCircle, ChevronDown, Clock, AlertCircle,
   ThumbsUp, Wrench
-} from "lucide-react";
+} from "@/icons";
 
 interface Feedback {
   id: string;

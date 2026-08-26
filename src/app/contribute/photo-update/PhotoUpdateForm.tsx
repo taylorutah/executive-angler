@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Upload, Send, Image as ImageIcon, AlertCircle, CheckCircle, Loader2, Search, X } from "lucide-react";
+import { ChevronLeft, Upload, Send, Image as ImageIcon, AlertCircle, CheckCircle, Loader2, Search, X } from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Camera, Upload, Loader2, Info,
   Image as ImageIcon, Type, User, Link as LinkIcon, Crop, X,
-} from "lucide-react";
+} from "@/icons";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 
 export interface ImageFieldPatch {

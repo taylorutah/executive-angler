@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ChevronLeft, ChevronRight, Eye, CheckCircle, XCircle, MessageCircle,
   Clock, Send, AlertCircle, Loader2, Shield
-} from "lucide-react";
+} from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 interface Submission {

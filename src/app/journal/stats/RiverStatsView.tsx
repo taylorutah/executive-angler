@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { RiverStats } from '@/types/awards';
-import { Loader2, TrendingUp, ChevronRight } from 'lucide-react';
+import { Loader2, TrendingUp, ChevronRight } from "@/icons";
 import PageHeader from '@/components/ui/PageHeader';
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';

@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChevronRight, ChevronDown, Wrench, Heart, Sparkles } from "lucide-react";
+import { ChevronRight, ChevronDown, Wrench, Heart, Sparkles } from "@/icons";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import FlyCard from "./FlyCard";
 import type { WorkspaceRow } from "@/lib/flies/workspace-shared";

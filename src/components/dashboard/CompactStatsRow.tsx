@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   Wrench, Lightbulb, Feather, Leaf, Package, BarChart3, BookOpen, Upload, Trophy, Flame,
-} from "lucide-react";
+} from "@/icons";
 import { ButtonTile } from "@/components/ui/Button";
 import { COPPER_400 } from "@/lib/palette";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, X } from "lucide-react";
+import { Sparkles, X } from "@/icons";
 import type { ReactNode } from "react";
 
 /**

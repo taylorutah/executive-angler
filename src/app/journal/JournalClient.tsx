@@ -7,7 +7,7 @@ import { SessionCard } from "./SessionCard";
 import { SidebarFilters } from "./SidebarFilters";
 import { CalendarView } from "./CalendarView";
 import { JournalTable } from "./JournalTable";
-import { ListIcon, CalendarIcon, TableIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles, Upload } from "lucide-react";
+import { ListIcon, CalendarIcon, TableIcon, FilterIcon, BookOpen, Feather, Package, TrendingUp, Download, Trophy, Sparkles, Upload } from "@/icons";
 import Link from "next/link";
 import TipCard from "@/components/ui/TipCard";
 import FilterDropdown from "@/components/ui/FilterDropdown";

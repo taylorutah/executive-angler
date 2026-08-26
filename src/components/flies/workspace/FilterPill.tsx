@@ -9,7 +9,7 @@
  * any options are selected.
  */
 import * as Popover from "@radix-ui/react-popover";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, X } from "@/icons";
 
 export interface FilterOption {
   value: string;

@@ -7,7 +7,7 @@
  */
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Star } from "lucide-react";
+import { Star } from "@/icons";
 import type { BoxStats, FlyBoxV2 } from "@/lib/db/fly-v2";
 import type { TierDefinition } from "@/lib/flies/tier-definitions";
 import WorkbenchTable from "@/components/workbench/WorkbenchTable";

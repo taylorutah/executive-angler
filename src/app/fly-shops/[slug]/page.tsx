@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExternalLink, Phone, MapPin, Clock, Waves, User, Fish } from "lucide-react";
+import { ExternalLink, Phone, MapPin, Clock, Waves, User, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";

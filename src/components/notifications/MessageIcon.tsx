@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 

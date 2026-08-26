@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Camera, Plus } from "lucide-react";
+import { Camera, Plus } from "@/icons";
 import type { RiverPhoto } from "@/app/api/photos/river/[riverId]/route";
 import { fetchOnce } from "@/components/rivers/fetch-once";
 

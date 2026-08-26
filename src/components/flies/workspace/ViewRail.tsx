@@ -21,7 +21,7 @@ import {
   X,
   Pencil,
   Trash2,
-} from "lucide-react";
+} from "@/icons";
 import * as Popover from "@radix-ui/react-popover";
 import type { FlyViewDescriptor } from "@/lib/flies/workspace-shared";
 

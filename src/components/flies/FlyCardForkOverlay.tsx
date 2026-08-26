@@ -9,7 +9,7 @@
  */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { GitFork, Loader2 } from "lucide-react";
+import { GitFork, Loader2 } from "@/icons";
 import { findOrForkPersonalPattern } from "@/lib/flies/forkCanonical";
 
 interface Props {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Flag, X, Send, CheckCircle } from "lucide-react";
+import { Flag, X, Send, CheckCircle } from "@/icons";
 import { Button } from "@/components/ui/Button";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 import { useModalChrome } from "@/components/layout/nav/useModalChrome";

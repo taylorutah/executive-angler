@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign, Fish } from "lucide-react";
+import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";

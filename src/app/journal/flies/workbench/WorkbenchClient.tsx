@@ -7,7 +7,7 @@ import {
   Package, Search, Plus, Trash2, ChevronDown, ChevronUp,
   Sparkles, AlertCircle, Check, X, Loader2, Wrench, Layers,
   ArrowRight, Target,
-} from 'lucide-react';
+} from "@/icons";
 import type { TyingMaterial, UserMaterialInventory, MaterialCategory } from '@/types/materials';
 import HelpHint from '@/components/ui/HelpHint';
 import TipCard from '@/components/ui/TipCard';

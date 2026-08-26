@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   X, Save, Loader2, CheckCircle, Pencil, Image as ImageIcon,
-} from "lucide-react";
+} from "@/icons";
 import ImageField, { type ImageFieldPatch } from "./ImageField";
 
 interface HeroImageEditorProps {

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Wrench, Heart, X, Feather } from "lucide-react";
+import { Wrench, Heart, X, Feather } from "@/icons";
 
 export interface MyFliesItem {
   key: string;

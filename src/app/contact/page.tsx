@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
-import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "@/icons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [

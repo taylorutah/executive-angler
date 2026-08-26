@@ -15,7 +15,7 @@ import {
   Gauge,
   User,
   Calendar,
-} from "lucide-react";
+} from "@/icons";
 
 interface PhotoLightboxProps {
   photos: Array<{

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, ChevronRight, GitBranch, Sparkles, Plus } from "lucide-react";
+import { ChevronDown, ChevronRight, GitBranch, Sparkles, Plus } from "@/icons";
 import RecipeDiff from "./RecipeDiff";
 import HelpHint from "@/components/ui/HelpHint";
 import type { FlyPattern } from "@/types/fishing-log";
