@@ -1,7 +1,8 @@
 # P4 / U2 — wire the a11y gate
 
-Lane U2 owns `scripts/check-a11y.ts` and cannot edit `package.json` or
-`.github/workflows/design-gates.yml`. Add the following after this PR merges.
+Lane U2 owns `scripts/check-a11y.ts`. The landing pass unions
+`check:a11y` into `package.json` and an `a11y` job into
+`.github/workflows/design-gates.yml` without replacing existing jobs.
 
 ## npm script
 
@@ -70,3 +71,4 @@ The script fails if page-loads < 80, or if axe reports any `serious` or
 ## Timeline
 
 - 2026-08-25 | Gate written; npm script + CI job left for a wiring PR.
+- 2026-08-26 | Landing pass unions `check:a11y` and the `a11y` job. Existing `tokens` / `contrast-rendered` / `harness` / `visual` jobs stay.
