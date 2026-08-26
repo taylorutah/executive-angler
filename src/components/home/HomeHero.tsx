@@ -23,8 +23,8 @@ interface Props {
  * `text-white`.
  *
  * The 11px eyebrow sits on an opaque Vellum chip (slate on vellum is 5.03:1).
- * Small caps on a scrim cannot make 4.5. The h1 gets a narrow local panel
- * behind the text block only; do not darken the full-bleed wash.
+ * Small caps on a scrim cannot make 4.5. The h1 and dek share a narrow local
+ * panel; the browse link has its own. Do not darken the full-bleed wash.
  *
  * The photograph lives in an explicit `absolute inset-0` containing block.
  * `next/image` `fill` needs that. The production olive void was the forest
@@ -69,7 +69,7 @@ export default function HomeHero({ riverCount, cfs }: Props) {
               className="pointer-events-none absolute -inset-x-4 -inset-y-3 sm:-inset-x-6"
               style={{
                 background:
-                  "linear-gradient(to bottom, rgb(15 43 31 / 0) 0%, rgb(15 43 31 / 0.42) 45%, rgb(15 43 31 / 0.58) 100%)",
+                  "linear-gradient(to bottom, rgb(15 43 31 / 0) 0%, rgb(15 43 31 / 0.42) 35%, rgb(15 43 31 / 0.70) 100%)",
               }}
             />
             <h1
@@ -80,14 +80,13 @@ export default function HomeHero({ riverCount, cfs }: Props) {
               {" — "}
               <em className="italic">{HERO_HEADLINE_CLOSE}</em>
             </h1>
+            <p
+              className="relative mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heroDek(cfs)}
+            </p>
           </div>
-
-          <p
-            className="mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            {heroDek(cfs)}
-          </p>
 
           <form
             action="/search"
@@ -117,7 +116,8 @@ export default function HomeHero({ riverCount, cfs }: Props) {
 
           <Link
             href="/rivers"
-            className="mt-4 inline-block text-[14px] text-white underline-offset-4 transition-colors hover:underline"
+            className="mt-4 inline-block px-2 py-1 text-[14px] text-white underline-offset-4 transition-colors hover:underline"
+            style={{ background: "rgb(15 43 31 / 0.72)" }}
           >
             {riverCount > 0 ? `Browse ${riverCount} rivers` : "Browse the rivers"} &rarr;
           </Link>
