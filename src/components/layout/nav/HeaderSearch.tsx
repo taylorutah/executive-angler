@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { FOCUS_VISIBLE, MOTION_SAFE, SEARCH_PLACEHOLDER, searchHref } from "./links";
-import SkipLink from "./SkipLink";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
@@ -38,7 +37,6 @@ export default function HeaderSearch() {
 
   return (
     <>
-      <SkipLink />
       {/* Desktop — always-visible field */}
       <form
         role="search"
