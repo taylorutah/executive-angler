@@ -48,7 +48,7 @@ export default function FilterPill({ label, options, selected, onChange }: Props
         <button
           type="button"
           className={[
-            "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors",
+            "inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-xs font-medium transition-colors",
             activeCount > 0
               ? "border-[var(--action)]/40 bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/15"
               : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-text-muted)]/40",
@@ -56,7 +56,7 @@ export default function FilterPill({ label, options, selected, onChange }: Props
         >
           {label}
           {activeCount > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[var(--action)] text-white text-[10px] font-semibold tabular-nums">
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-control bg-[var(--action)] text-white text-[10px] font-semibold tabular-nums">
               {activeCount}
             </span>
           )}

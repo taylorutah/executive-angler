@@ -244,7 +244,7 @@ export default function ListToolbar({
                     <button
                       type="button"
                       onClick={() => onFilterChange(dimension.key, null)}
-                      className={`whitespace-nowrap px-3 py-1.5 text-sm font-medium ${
+                      className={`whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
                         !activeFilters[dimension.key]
                           ? "bg-[var(--action)] text-[var(--on-action)]"
                           : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
@@ -262,7 +262,7 @@ export default function ListToolbar({
                             activeFilters[dimension.key] === opt.value ? null : opt.value,
                           )
                         }
-                        className={`whitespace-nowrap px-3 py-1.5 text-sm font-medium ${
+                        className={`whitespace-nowrap rounded-control px-3 py-1.5 text-sm font-medium ${
                           activeFilters[dimension.key] === opt.value
                             ? "bg-[var(--action)] text-[var(--on-action)]"
                             : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"

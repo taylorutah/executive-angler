@@ -23,7 +23,7 @@ export default function RiverLiveInset({
   return (
     <section className="bg-[var(--surface-page)]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-        <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-6 shadow-[0_12px_32px_rgba(11,17,18,0.22)] sm:p-8">
+        <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-6 shadow-[var(--elev-4)] sm:p-8">
           <RiverConditionsCard
             riverId={riverId}
             riverLatitude={riverLatitude}

@@ -6,13 +6,14 @@
 
 import type { ReactNode } from "react";
 import { Home, BookOpen, Mountain, Bug, Fish } from "lucide-react";
+import { COPPER_400 } from "@/lib/palette";
 
 // Brand palette — must match globals.css and native EAColors.
 const C = {
   bg: "#0D1117",
   bgMid: "#161B22",
   border: "#21262D",
-  copper: "#E8923A",
+  copper: COPPER_400,
   teal: "#0BA5C7",
   chalk: "#F0F6FC",
   slate: "#A8B2BD",

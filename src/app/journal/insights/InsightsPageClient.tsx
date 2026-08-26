@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
 import PageHeader from "@/components/ui/PageHeader";
+import { COPPER_400 } from "@/lib/palette";
 
 // =============================================
 // Types matching API response
@@ -82,7 +83,7 @@ interface InsightsPayload {
 // =============================================
 
 const SPECIES_COLORS = [
-  "#E8923A", "#00B4D8", "#22C55E", "#A855F7", "#EF4444",
+  COPPER_400, "#00B4D8", "#22C55E", "#A855F7", "#EF4444",
   "#F59E0B", "#EC4899", "#6366F1", "#14B8A6", "#8B5CF6",
 ];
 
@@ -432,7 +433,7 @@ function MonthlyChart({ trends }: { trends: MonthlyTrendPoint[] }) {
                 style={{
                   height: `${Math.max(heightPct, 2)}%`,
                   backgroundColor:
-                    t.fish > 0 ? "#E8923A" : "#21262D",
+                    t.fish > 0 ? COPPER_400 : "#21262D",
                   minHeight: "2px",
                 }}
               />

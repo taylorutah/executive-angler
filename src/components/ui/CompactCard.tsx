@@ -23,7 +23,7 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
         />
         {badges && badges.length > 0 && (
           <div className="absolute top-2 left-2">
-            <span className="px-2 py-0.5 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full">
+            <span className="px-2 py-0.5 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-control">
               {badges[0]}
             </span>
           </div>

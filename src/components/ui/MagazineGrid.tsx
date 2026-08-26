@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CardData } from "@/types/list-config";
 import EntityCard from "./EntityCard";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import ScrollAnimation from "./ScrollAnimation";
 
 interface MagazineGridProps {
   items: CardData[];
@@ -28,7 +29,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {badges.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-control"
                 >
                   {badge}
                 </span>
@@ -38,7 +39,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
         </div>
         <div className="p-8 md:p-10 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 bg-[var(--action)] text-white text-xs font-medium rounded-full uppercase">
+            <span className="px-2.5 py-0.5 bg-[var(--action)] text-white text-xs font-medium rounded-control uppercase">
               Featured
             </span>
             {meta && (
@@ -62,7 +63,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-control"
                 >
                   {badge}
                 </span>
@@ -70,7 +71,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-full border border-[var(--border-rule)]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-control border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>
@@ -100,8 +101,10 @@ export default function MagazineGrid({ items }: MagazineGridProps) {
       {/* Featured cards */}
       {displayFeatured.length > 0 && (
         <div className={`mb-8 ${displayFeatured.length > 1 ? "space-y-6" : ""}`}>
-          {displayFeatured.map((item) => (
-            <FeaturedCard key={item.href} {...item} />
+          {displayFeatured.map((item, i) => (
+            <ScrollAnimation key={item.href} index={i}>
+              <FeaturedCard {...item} />
+            </ScrollAnimation>
           ))}
         </div>
       )}
@@ -109,20 +112,21 @@ export default function MagazineGrid({ items }: MagazineGridProps) {
       {/* Rest in standard grid */}
       {displayRest.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayRest.map((item) => (
-            <EntityCard
-              key={item.href}
-              href={item.href}
-              imageUrl={item.imageUrl}
-              imageAlt={item.imageAlt}
-              title={item.title}
-              subtitle={item.subtitle}
-              meta={item.meta}
-              badges={item.badges}
-              tags={item.tags}
-              accent={item.accent}
-              description={item.description}
-            />
+          {displayRest.map((item, i) => (
+            <ScrollAnimation key={item.href} index={i}>
+              <EntityCard
+                href={item.href}
+                imageUrl={item.imageUrl}
+                imageAlt={item.imageAlt}
+                title={item.title}
+                subtitle={item.subtitle}
+                meta={item.meta}
+                badges={item.badges}
+                tags={item.tags}
+                accent={item.accent}
+                description={item.description}
+              />
+            </ScrollAnimation>
           ))}
         </div>
       )}

@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { COPPER_400 } from "@/lib/palette";
 
 interface Marker {
   latitude: number;
@@ -138,7 +139,7 @@ export default function MapView({
             paint: {
               "line-color":
                 routeStyles.getPropertyValue(tone === "desk" ? "--teal-700" : "--copper-400").trim() ||
-                "#0C7286",
+                "#086B6C",
               "line-width": 3,
             },
           });
@@ -153,9 +154,9 @@ export default function MapView({
           );
 
           const styles = getComputedStyle(document.documentElement);
-          const deskMarker = styles.getPropertyValue("--teal-700").trim() || "#0C7286";
+          const deskMarker = styles.getPropertyValue("--teal-700").trim() || "#086B6C";
           new mapboxgl.Marker({
-            color: marker.color || (tone === "desk" ? deskMarker : "#E8923A"),
+            color: marker.color || (tone === "desk" ? deskMarker : COPPER_400),
           })
             .setLngLat([marker.longitude, marker.latitude])
             .setPopup(popup)

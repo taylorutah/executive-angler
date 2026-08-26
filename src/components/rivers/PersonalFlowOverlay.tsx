@@ -9,6 +9,7 @@ import { Fish } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import SignedOutInsight from "./SignedOutInsight";
+import { COPPER_400 } from "@/lib/palette";
 
 interface CatchPoint {
   date: string;
@@ -185,8 +186,8 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
           <ComposedChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="flowGradientPersonal" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#E8923A" stopOpacity={0.2} />
-                <stop offset="95%" stopColor="#E8923A" stopOpacity={0.02} />
+                <stop offset="5%" stopColor={COPPER_400} stopOpacity={0.2} />
+                <stop offset="95%" stopColor={COPPER_400} stopOpacity={0.02} />
               </linearGradient>
             </defs>
             <XAxis
@@ -235,7 +236,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
               yAxisId="flow"
               type="monotone"
               dataKey="discharge"
-              stroke="#E8923A"
+              stroke={COPPER_400}
               strokeWidth={1.5}
               fill="url(#flowGradientPersonal)"
               dot={false}

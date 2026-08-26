@@ -1,5 +1,27 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import {
+  PAPER,
+  VELLUM,
+  CARD,
+  RULE,
+  INK,
+  GRAPHITE,
+  SLATE,
+  COPPER_700,
+  TEAL_700,
+  RISE_700,
+  CUT_700,
+  RIVERBED,
+  POOL,
+  SHELF,
+  CHALK,
+  FOG,
+  COPPER_400,
+  TEAL_300,
+  RISE_400,
+  CUT_400,
+} from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Styleguide",
@@ -41,29 +63,29 @@ function contrast(fg: string, bg: string): number {
 }
 
 const DAYLIGHT: Swatch[] = [
-  { name: "paper", hex: "#FAF6F0", role: "page", against: "ink", againstHex: "#141814", min: 4.5 },
-  { name: "vellum", hex: "#F2EDE4", role: "raised", against: "ink", againstHex: "#141814", min: 4.5 },
-  { name: "card", hex: "#FFFFFF", role: "card", against: "ink", againstHex: "#141814", min: 4.5 },
-  { name: "rule", hex: "#E2DACD", role: "border (non-text)", against: "paper", againstHex: "#FAF6F0", min: 3 },
-  { name: "ink", hex: "#141814", role: "headings", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
-  { name: "graphite", hex: "#3E4649", role: "body", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
-  { name: "slate", hex: "#5E6669", role: "meta / 13px captions", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
-  { name: "copper-700", hex: "#9E5615", role: "ACTION only", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
-  { name: "teal-700", hex: "#0C7286", role: "LIVE DATA only", against: "vellum", againstHex: "#F2EDE4", min: 4.5 },
-  { name: "rise-700", hex: "#1F7A3D", role: "positive", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
-  { name: "cut-700", hex: "#B3261E", role: "negative", against: "paper", againstHex: "#FAF6F0", min: 4.5 },
+  { name: "paper", hex: PAPER, role: "page", against: "ink", againstHex: INK, min: 4.5 },
+  { name: "vellum", hex: VELLUM, role: "raised", against: "ink", againstHex: INK, min: 4.5 },
+  { name: "card", hex: CARD, role: "card", against: "ink", againstHex: INK, min: 4.5 },
+  { name: "rule", hex: RULE, role: "border (non-text)", against: "paper", againstHex: PAPER, min: 3 },
+  { name: "ink", hex: INK, role: "headings", against: "paper", againstHex: PAPER, min: 4.5 },
+  { name: "graphite", hex: GRAPHITE, role: "body", against: "paper", againstHex: PAPER, min: 4.5 },
+  { name: "slate", hex: SLATE, role: "meta / 13px captions", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "copper-700", hex: COPPER_700, role: "ACTION only", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "teal-700", hex: TEAL_700, role: "LIVE DATA only", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "rise-700", hex: RISE_700, role: "positive", against: "paper", againstHex: PAPER, min: 4.5 },
+  { name: "cut-700", hex: CUT_700, role: "negative", against: "paper", againstHex: PAPER, min: 4.5 },
 ];
 
 const DUSK: Swatch[] = [
-  { name: "riverbed", hex: "#0B1112", role: "page", against: "chalk", againstHex: "#EEF2F1", min: 4.5 },
-  { name: "pool", hex: "#131B1D", role: "surface / zebra", against: "chalk", againstHex: "#EEF2F1", min: 4.5 },
-  { name: "shelf", hex: "#1C2629", role: "raised / inputs", against: "chalk", againstHex: "#EEF2F1", min: 4.5 },
-  { name: "chalk", hex: "#EEF2F1", role: "headings", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
-  { name: "fog", hex: "#8B979A", role: "meta", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
-  { name: "copper-400", hex: "#E8923A", role: "ACTION only", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
-  { name: "teal-300", hex: "#22C1DE", role: "LIVE DATA only", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
-  { name: "rise-400", hex: "#3FB863", role: "positive", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
-  { name: "cut-400", hex: "#F87171", role: "negative", against: "riverbed", againstHex: "#0B1112", min: 4.5 },
+  { name: "riverbed", hex: RIVERBED, role: "page", against: "chalk", againstHex: CHALK, min: 4.5 },
+  { name: "pool", hex: POOL, role: "surface / zebra", against: "chalk", againstHex: CHALK, min: 4.5 },
+  { name: "shelf", hex: SHELF, role: "raised / inputs", against: "chalk", againstHex: CHALK, min: 4.5 },
+  { name: "chalk", hex: CHALK, role: "headings", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
+  { name: "fog", hex: FOG, role: "meta", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
+  { name: "copper-400", hex: COPPER_400, role: "ACTION only", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
+  { name: "teal-300", hex: TEAL_300, role: "LIVE DATA only", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
+  { name: "rise-400", hex: RISE_400, role: "positive", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
+  { name: "cut-400", hex: CUT_400, role: "negative", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
 ];
 
 const SPINE = [
@@ -181,7 +203,7 @@ export default function StyleguidePage() {
 
         <section>
           <h2 className="font-heading text-2xl mb-4">Daylight</h2>
-          <SwatchGrid items={DAYLIGHT} ground="#FAF6F0" />
+          <SwatchGrid items={DAYLIGHT} ground={PAPER} />
         </section>
 
         <section data-register="dusk" className="register-dusk rounded-2xl p-6" style={{ background: "var(--surface-page)" }}>

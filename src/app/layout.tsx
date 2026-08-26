@@ -152,7 +152,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="antialiased min-h-screen flex flex-col bg-[var(--surface-page)] text-[var(--text-primary)]">
+      <body className="page-ground antialiased min-h-screen flex flex-col text-[var(--text-primary)]">
         <AuthProvider>
           <ThemeProvider>
             <RegisterBinder />

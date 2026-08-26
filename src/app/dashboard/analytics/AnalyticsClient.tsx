@@ -10,6 +10,7 @@ import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell
 } from "recharts";
+import { COPPER_400 } from "@/lib/palette";
 
 interface Session {
   id: string;
@@ -36,7 +37,7 @@ interface Catch {
 
 type TimeRange = "1M" | "3M" | "6M" | "1Y" | "ALL";
 
-const SPECIES_COLORS = ["#0BA5C7", "#E8923A", "#2EA44F", "#A855F7", "#F59E0B", "#EC4899", "#6366F1", "#14B8A6"];
+const SPECIES_COLORS = ["#0BA5C7", COPPER_400, "#2EA44F", "#A855F7", "#F59E0B", "#EC4899", "#6366F1", "#14B8A6"];
 
 export default function AnalyticsClient({
   sessions,
@@ -186,8 +187,8 @@ export default function AnalyticsClient({
                     <AreaChart data={catchRateData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
                       <defs>
                         <linearGradient id="catchGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#E8923A" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#E8923A" stopOpacity={0.02} />
+                          <stop offset="5%" stopColor={COPPER_400} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={COPPER_400} stopOpacity={0.02} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
@@ -201,7 +202,7 @@ export default function AnalyticsClient({
                           return [`${value} fish${river ? ` · ${river}` : ""}`, "Catch"];
                         }}
                       />
-                      <Area type="monotone" dataKey="fish" stroke="#E8923A" strokeWidth={2} fill="url(#catchGrad)" dot={false} activeDot={{ r: 4, fill: "#E8923A", stroke: "#0D1117", strokeWidth: 2 }} />
+                      <Area type="monotone" dataKey="fish" stroke={COPPER_400} strokeWidth={2} fill="url(#catchGrad)" dot={false} activeDot={{ r: 4, fill: COPPER_400, stroke: "#0D1117", strokeWidth: 2 }} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>

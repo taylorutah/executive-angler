@@ -159,7 +159,7 @@ export default function ViewRail({
                     type="button"
                     onClick={handleSave}
                     disabled={busy}
-                    className="rounded-md bg-[var(--action)] px-3 py-1 text-xs font-semibold text-white hover:bg-[#F0A65A] disabled:opacity-60"
+                    className="rounded-md bg-[var(--action)] px-3 py-1 text-xs font-semibold text-white hover:bg-[var(--action-hover)] disabled:opacity-60"
                   >
                     {busy ? "Saving…" : "Save"}
                   </button>

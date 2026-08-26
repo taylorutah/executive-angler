@@ -9,7 +9,7 @@ export default function JournalBand() {
       className="flex min-h-[56vh] items-center bg-[var(--surface-page)] py-20 sm:py-28"
     >
       <div className="mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-6 py-12 text-center shadow-[0_12px_32px_rgba(11,17,18,0.22)] sm:px-10 sm:py-16">
+        <div className="register-dusk rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] px-6 py-12 text-center shadow-[var(--elev-4)] sm:px-10 sm:py-16">
           <p className="flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
             <span aria-hidden className="h-px w-8 bg-[var(--action)]" />
             The journal

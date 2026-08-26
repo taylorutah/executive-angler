@@ -1,88 +1,6 @@
 {
   "generatedAt": "2026-08-24T01:58:08.580Z",
   "leftovers": {
-    "#F0A65A": [
-      {
-        "file": "src/app/account/submissions/MySubmissionsClient.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/anglers/[username]/flies/page.tsx",
-        "count": 2
-      },
-      {
-        "file": "src/app/contribute/[entityType]/SubmissionForm.tsx",
-        "count": 2
-      },
-      {
-        "file": "src/app/contribute/photo-update/PhotoUpdateForm.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/dashboard/DashboardClient.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/dashboard/export/ExportClient.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/error.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/feedback/FeedbackClient.tsx",
-        "count": 2
-      },
-      {
-        "file": "src/app/flies/_components/FliesShell.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/app/not-found.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/admin/EntityForm.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/admin/HeroImageEditor.tsx",
-        "count": 2
-      },
-      {
-        "file": "src/components/flies/UndoDeleteToast.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/flies/workspace/CloneDrawer.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/flies/workspace/ViewRail.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/layout/Header.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/rivers/CollapsibleOverview.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/rivers/RiverConditionsCard.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/ui/FilterDropdown.tsx",
-        "count": 1
-      },
-      {
-        "file": "src/components/ui/ImageEditor.tsx",
-        "count": 1
-      }
-    ],
     "#3A4150": [
       {
         "file": "src/app/journal/stats/RiverStatsView.tsx",
@@ -223,12 +141,6 @@
       {
         "file": "src/components/ui/ImageEditor.tsx",
         "count": 1
-      }
-    ],
-    "#C97726": [
-      {
-        "file": "src/components/ui/Button.tsx",
-        "count": 7
       }
     ],
     "#111827": [

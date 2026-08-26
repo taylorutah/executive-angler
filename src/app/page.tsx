@@ -19,7 +19,12 @@ import PullQuote, { pickQuote } from "@/components/home/PullQuote";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
-import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
+import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import {
+  getFlagshipHistories,
+  getGaugeSnapshots,
+  selectFlagshipRivers,
+} from "@/components/home/conditions";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
@@ -124,7 +129,10 @@ export default async function HomePage() {
 
   const month = currentMonth();
   const flagshipRivers = selectFlagshipRivers(rivers);
-  const snapshots = await getGaugeSnapshots(flagshipRivers);
+  const [snapshots, histories] = await Promise.all([
+    getGaugeSnapshots(flagshipRivers),
+    getFlagshipHistories(flagshipRivers).catch(() => new Map()),
+  ]);
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
@@ -151,26 +159,51 @@ export default async function HomePage() {
 
       <HomeHero riverCount={rivers.length} cfs={madisonCfs} />
 
-      <CategoryIndex
-        rivers={rivers.length}
-        flies={allFlies.length}
-        places={destinations.length}
-        notes={articles.length}
-      />
+      <ScrollAnimation index={0}>
+        <CategoryIndex
+          rivers={rivers.length}
+          flies={allFlies.length}
+          places={destinations.length}
+          notes={articles.length}
+        />
+      </ScrollAnimation>
 
-      <OnTheWaterNow rivers={waterRivers} snapshots={snapshots} month={month} />
+      <ScrollAnimation index={1}>
+        <OnTheWaterNow
+          rivers={waterRivers}
+          snapshots={snapshots}
+          histories={histories}
+          month={month}
+        />
+      </ScrollAnimation>
 
-      <FlyPlate flies={plate} flyCount={allFlies.length} />
+      <ScrollAnimation index={2}>
+        <FlyPlate flies={plate} flyCount={allFlies.length} />
+      </ScrollAnimation>
 
-      {quote && <PullQuote article={quote} />}
+      {quote && (
+        <ScrollAnimation index={3}>
+          <PullQuote article={quote} />
+        </ScrollAnimation>
+      )}
 
-      <WhereToGo destinations={places} month={month} />
+      <ScrollAnimation index={4}>
+        <WhereToGo destinations={places} month={month} />
+      </ScrollAnimation>
 
-      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
+      {read && (
+        <ScrollAnimation index={5}>
+          <ThisWeeksRead lead={read.lead} rest={read.rest} />
+        </ScrollAnimation>
+      )}
 
-      <JournalBand />
+      <ScrollAnimation index={0}>
+        <JournalBand />
+      </ScrollAnimation>
 
-      <WhatWeDontDo />
+      <ScrollAnimation index={1}>
+        <WhatWeDontDo />
+      </ScrollAnimation>
     </>
   );
 }

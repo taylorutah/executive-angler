@@ -3,6 +3,7 @@
 import { AwardBadge } from '@/components/ui/AwardBadge';
 import type { RiverStats } from '@/types/awards';
 import { Trophy, Fish, TrendingUp, Star, Target } from 'lucide-react';
+import { COPPER_400 } from "@/lib/palette";
 
 const AWARDS_VISIBLE = process.env.NEXT_PUBLIC_FEATURE_AWARDS_VISIBLE === 'true';
 
@@ -81,7 +82,7 @@ export function RiverStatsCard({ stats, compact = false }: RiverStatsCardProps) 
           icon={TrendingUp}
           label="Avg Per Session"
           value={stats.avg_fish_per_session.toFixed(1)}
-          color="#E8923A"
+          color={COPPER_400}
         />
         <StatBox
           icon={Trophy}

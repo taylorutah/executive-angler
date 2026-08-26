@@ -36,6 +36,7 @@ import {
   Anchor,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { COPPER_400 } from "@/lib/palette";
 
 interface UsageSession {
   id: string;
@@ -464,7 +465,7 @@ function ModeOption({
   destructive?: boolean;
   children?: React.ReactNode;
 }) {
-  const accent = destructive ? "#F87171" : "#E8923A";
+  const accent = destructive ? "#F87171" : COPPER_400;
   return (
     <div
       className={`rounded-lg border p-3 cursor-pointer transition-colors ${

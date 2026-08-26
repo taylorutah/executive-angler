@@ -92,7 +92,7 @@ export default async function ArticlesPage() {
                       priority
                       scrimClassName="bg-gradient-to-t from-black/40 to-transparent"
                     />
-                    <span className="absolute top-4 left-4 px-3 py-1 bg-[var(--action)] text-white text-xs font-semibold uppercase tracking-wide rounded-full">
+                    <span className="absolute top-4 left-4 px-3 py-1 bg-[var(--action)] text-white text-xs font-semibold uppercase tracking-wide rounded-control">
                       {heroArticle.category}
                     </span>
                   </div>
@@ -140,7 +140,7 @@ export default async function ArticlesPage() {
                           sizes="(max-width: 640px) 100vw, 50vw"
                           priority={i < 2}
                         />
-                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--action)] text-white text-[10px] font-semibold uppercase tracking-wide rounded-full">
+                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--action)] text-white text-[10px] font-semibold uppercase tracking-wide rounded-control">
                           {article.category}
                         </span>
                       </div>

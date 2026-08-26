@@ -2,6 +2,7 @@
 // before the Playwright capture run.
 
 import Link from "next/link";
+import { COPPER_400 } from "@/lib/palette";
 
 const SLOTS = [
   { id: "01-home",     title: "Every Fish. Every Fly. Every River.", source: "Home / Dashboard" },
@@ -41,7 +42,7 @@ export default function MockupsIndex() {
               textDecoration: "none",
             }}
           >
-            <div style={{ color: "#E8923A", fontSize: 14, letterSpacing: 1, marginBottom: 8 }}>
+            <div style={{ color: COPPER_400, fontSize: 14, letterSpacing: 1, marginBottom: 8 }}>
               {s.id.toUpperCase()}
             </div>
             <div style={{ fontSize: 22, fontWeight: 600, marginBottom: 6 }}>{s.title}</div>

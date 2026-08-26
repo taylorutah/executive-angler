@@ -61,18 +61,20 @@ export default function RiverHeroImage({
     <>
       <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
         {showPhoto ? (
-          <Image
-            src={heroImageUrl}
-            alt={heroImageAlt}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-            placeholder="blur"
-            blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
-            onLoad={() => setLoaded(true)}
-            onError={() => setFailed(true)}
-          />
+          <div className="absolute inset-0">
+            <Image
+              src={heroImageUrl}
+              alt={heroImageAlt}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+              onLoad={() => setLoaded(true)}
+              onError={() => setFailed(true)}
+            />
+          </div>
         ) : (
           <PlateFallback title="" meta={meta} />
         )}

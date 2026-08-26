@@ -330,7 +330,7 @@ export default function GearLockerClient() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-6 w-6 rounded-full border-2 border-[var(--action)]/30 border-t-[#E8923A] animate-spin" />
+            <div className="h-6 w-6 rounded-full border-2 border-[var(--action)]/30 border-t-[var(--action)] animate-spin" />
           </div>
         ) : layout === "table" ? (
           <GearLockerTable

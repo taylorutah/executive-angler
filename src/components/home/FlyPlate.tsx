@@ -49,12 +49,12 @@ export default function FlyPlate({ flies, flyCount }: Props) {
               return (
                 <li key={fly.id} className="border-b border-r border-[var(--rule)]">
                   <Link href={`/flies/${fly.slug}`} className="group block p-3 sm:p-5">
-                    <div className="relative aspect-square w-full overflow-hidden bg-[var(--vellum)]">
+                    <div className="photo-card relative aspect-square w-full overflow-hidden rounded-media bg-[var(--vellum)]">
                       <SafeEntityImage
                         src={fly.heroImageUrl}
                         alt=""
                         title={fly.name}
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="photo-zoom object-cover"
                         sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
                       />
                     </div>

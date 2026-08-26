@@ -195,7 +195,7 @@ export default function ImageEditor({
             showGrid
             style={{
               containerStyle: { background: "#000" },
-              cropAreaStyle: { border: "2px solid #E8923A" },
+              cropAreaStyle: { border: "2px solid var(--action)" },
             }}
           />
         </div>
@@ -274,7 +274,7 @@ export default function ImageEditor({
               type="button"
               onClick={apply}
               disabled={processing || !croppedArea}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[#F0A65A] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50"
             >
               {processing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

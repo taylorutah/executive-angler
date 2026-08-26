@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Droplets } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
+import Hydrograph from "@/components/hydrograph/Hydrograph";
+import { HYDRO, hydroScales, type HydroReading } from "@/components/hydrograph/geometry";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -73,14 +75,6 @@ function downsample(points: FlowPoint[], maxPoints: number): FlowPoint[] {
   return result;
 }
 
-/* ── SVG Chart Constants ───────────────────────────────── */
-
-const CHART_WIDTH = 800;
-const CHART_HEIGHT = 260;
-const PADDING = { top: 20, right: 16, bottom: 36, left: 56 };
-const PLOT_W = CHART_WIDTH - PADDING.left - PADDING.right;
-const PLOT_H = CHART_HEIGHT - PADDING.top - PADDING.bottom;
-
 /** Daily means from the history API, trimmed to the window this card claims. */
 const WINDOW_DAYS = 30;
 
@@ -112,9 +106,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const [sessions, setSessions] = useState<SessionMarker[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredSession, setHoveredSession] = useState<SessionMarker | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
 
   // No gauges linked
   if (gauges.length === 0) {
@@ -213,94 +205,20 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // Downsample for rendering
   const chartPoints = useMemo(() => downsample(flowData, 300), [flowData]);
 
-  // Compute scales
-  const { minVal, maxVal, xScale, yScale, yTicks, xTicks } = useMemo(() => {
-    if (chartPoints.length === 0) {
-      return {
-        minVal: 0,
-        maxVal: 100,
-        xScale: () => 0,
-        yScale: () => 0,
-        yTicks: [],
-        xTicks: [],
-      };
-    }
+  const hydroReadings: HydroReading[] = useMemo(
+    () =>
+      chartPoints.map((p) => ({
+        date: p.datetime.slice(0, 10),
+        discharge: p.value,
+      })),
+    [chartPoints],
+  );
 
-    const values = chartPoints.map((p) => p.value);
-    const rawMin = Math.min(...values);
-    const rawMax = Math.max(...values);
-    const padding = (rawMax - rawMin) * 0.1 || 10;
-    const mn = Math.max(0, rawMin - padding);
-    const mx = rawMax + padding;
-
-    const timestamps = chartPoints.map((p) => new Date(p.datetime).getTime());
-    const tMin = Math.min(...timestamps);
-    const tMax = Math.max(...timestamps);
-    const tRange = tMax - tMin || 1;
-
-    const xs = (datetime: string) => {
-      const t = new Date(datetime).getTime();
-      return PADDING.left + ((t - tMin) / tRange) * PLOT_W;
-    };
-    const ys = (val: number) => {
-      return PADDING.top + PLOT_H - ((val - mn) / (mx - mn || 1)) * PLOT_H;
-    };
-
-    // Y axis ticks (5 ticks)
-    const yTickCount = 5;
-    const yTickStep = (mx - mn) / (yTickCount - 1);
-    const yt = Array.from({ length: yTickCount }, (_, i) =>
-      Math.round(mn + i * yTickStep)
-    );
-
-    // X axis ticks — pick ~6 evenly spaced dates
-    const xTickCount = 6;
-    const xTickStep = Math.floor(chartPoints.length / (xTickCount - 1)) || 1;
-    const xt: string[] = [];
-    for (let i = 0; i < chartPoints.length; i += xTickStep) {
-      xt.push(chartPoints[i].datetime);
-    }
-    if (xt[xt.length - 1] !== chartPoints[chartPoints.length - 1].datetime) {
-      xt.push(chartPoints[chartPoints.length - 1].datetime);
-    }
-
-    return {
-      minVal: mn,
-      maxVal: mx,
-      xScale: xs,
-      yScale: ys,
-      yTicks: yt,
-      xTicks: xt,
-    };
-  }, [chartPoints]);
-
-  // Build SVG path
-  const linePath = useMemo(() => {
-    if (chartPoints.length === 0) return "";
-    return chartPoints
-      .map((p, i) => {
-        const x = xScale(p.datetime);
-        const y = yScale(p.value);
-        return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
-  }, [chartPoints, xScale, yScale]);
-
-  // Area path (fill under the line)
-  const areaPath = useMemo(() => {
-    if (chartPoints.length === 0) return "";
-    const baseline = PADDING.top + PLOT_H;
-    const firstX = xScale(chartPoints[0].datetime);
-    const lastX = xScale(chartPoints[chartPoints.length - 1].datetime);
-    return `${linePath} L ${lastX} ${baseline} L ${firstX} ${baseline} Z`;
-  }, [chartPoints, linePath, xScale]);
-
-  // Map sessions to x positions on the chart timeframe
   const sessionMarkers = useMemo(() => {
-    if (sessions.length === 0 || chartPoints.length === 0) return [];
-    const timestamps = chartPoints.map((p) => new Date(p.datetime).getTime());
-    const tMin = Math.min(...timestamps);
-    const tMax = Math.max(...timestamps);
+    if (sessions.length === 0 || hydroReadings.length < 2) return [];
+    const geo = hydroScales(hydroReadings);
+    const tMin = new Date(`${geo.series[0].date}T12:00:00`).getTime();
+    const tMax = new Date(`${geo.series[geo.series.length - 1].date}T12:00:00`).getTime();
 
     return sessions
       .filter((s) => {
@@ -309,68 +227,24 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
       })
       .map((s) => {
         const t = new Date(s.date + "T12:00:00").getTime();
-        const x =
-          PADDING.left + ((t - tMin) / (tMax - tMin || 1)) * PLOT_W;
-
-        // Find nearest flow value for y position
-        let nearestFlow = chartPoints[0].value;
+        let nearestFlow = hydroReadings[0].discharge;
         let nearestDist = Infinity;
-        for (const p of chartPoints) {
-          const pTime = new Date(p.datetime).getTime();
+        for (const p of hydroReadings) {
+          const pTime = new Date(`${p.date}T12:00:00`).getTime();
           const dist = Math.abs(pTime - t);
           if (dist < nearestDist) {
             nearestDist = dist;
-            nearestFlow = p.value;
+            nearestFlow = p.discharge;
           }
         }
-
         return {
           ...s,
-          x,
-          y: yScale(nearestFlow),
+          x: geo.xAtTime(s.date),
+          y: geo.yAt(nearestFlow),
           flow: nearestFlow,
         };
       });
-  }, [sessions, chartPoints, yScale]);
-
-  // Mean flow for reference line
-  const meanFlow = useMemo(() => {
-    if (chartPoints.length === 0) return 0;
-    const sum = chartPoints.reduce((s, p) => s + p.value, 0);
-    return Math.round(sum / chartPoints.length);
-  }, [chartPoints]);
-
-  // Hover handler
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<SVGSVGElement>) => {
-      if (chartPoints.length === 0 || !svgRef.current) return;
-      const rect = svgRef.current.getBoundingClientRect();
-      const mouseX =
-        ((e.clientX - rect.left) / rect.width) * CHART_WIDTH;
-
-      if (
-        mouseX < PADDING.left ||
-        mouseX > CHART_WIDTH - PADDING.right
-      ) {
-        setHoveredIndex(null);
-        return;
-      }
-
-      // Find nearest point
-      let closest = 0;
-      let closestDist = Infinity;
-      for (let i = 0; i < chartPoints.length; i++) {
-        const px = xScale(chartPoints[i].datetime);
-        const dist = Math.abs(px - mouseX);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closest = i;
-        }
-      }
-      setHoveredIndex(closest);
-    },
-    [chartPoints, xScale]
-  );
+  }, [sessions, hydroReadings]);
 
   /* eslint-enable react-hooks/rules-of-hooks */
 
@@ -408,222 +282,68 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const siteName = activeGauge?.name || "";
 
   return (
-    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <Droplets className="h-5 w-5 text-[var(--signal-live)]" />
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">
-            30-Day Flow
+    <div
+      data-instrument
+      className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] px-5 py-5"
+    >
+      <div className="mb-3 flex items-end justify-between gap-4">
+        <div>
+          <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+            30-day flow
           </h3>
+          {siteName ? (
+            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+              {siteName}
+            </p>
+          ) : null}
         </div>
-        <div className="flex items-center gap-3 text-xs text-[var(--text-meta)]">
-          <span className="font-mono text-[var(--action)] font-bold">
-            {currentFlow.value.toLocaleString()} cfs
+        <p className="text-right">
+          <span className="num text-3xl font-bold leading-none text-[var(--signal-live)]">
+            {currentFlow.value.toLocaleString("en-US")}
           </span>
-          <span>latest daily mean</span>
-        </div>
+          <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+            cfs
+          </span>
+        </p>
       </div>
 
-      {/* SVG Chart */}
-      <div className="relative h-48 w-full">
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-          className="h-48 w-full"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => {
-            setHoveredIndex(null);
-            setHoveredSession(null);
-          }}
+      <div className="relative">
+        <Hydrograph
+          readings={hydroReadings}
+          liveCfs={currentFlow.value}
+          label={`Thirty-day discharge for ${riverName}`}
         >
-          <defs>
-            <linearGradient id="flowAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#00B4D8" stopOpacity={0.15} />
-              <stop offset="100%" stopColor="#00B4D8" stopOpacity={0.01} />
-            </linearGradient>
-          </defs>
+          {() =>
+            sessionMarkers.map((sm, i) => (
+              <g
+                key={`session-${i}`}
+                onMouseEnter={() => setHoveredSession(sm)}
+                onMouseLeave={() => setHoveredSession(null)}
+                style={{ cursor: "pointer" }}
+              >
+                <circle
+                  cx={sm.x}
+                  cy={sm.y}
+                  r={Math.min(12, 5 + sm.fishCount)}
+                  fill="var(--action)"
+                  fillOpacity={0.16}
+                />
+                <circle cx={sm.x} cy={sm.y} r={3} fill="var(--action)" />
+              </g>
+            ))
+          }
+        </Hydrograph>
 
-          {/* Grid lines */}
-          {yTicks.map((tick) => (
-            <line
-              key={tick}
-              x1={PADDING.left}
-              y1={yScale(tick)}
-              x2={CHART_WIDTH - PADDING.right}
-              y2={yScale(tick)}
-              stroke="#21262D"
-              strokeWidth={0.5}
-            />
-          ))}
-
-          {/* Y axis labels */}
-          {yTicks.map((tick) => (
-            <text
-              key={`label-${tick}`}
-              x={PADDING.left - 8}
-              y={yScale(tick) + 3}
-              textAnchor="end"
-              fontSize={10}
-              fill="#6E7681"
-              fontFamily="monospace"
-            >
-              {tick >= 1000 ? `${(tick / 1000).toFixed(1)}k` : tick}
-            </text>
-          ))}
-
-          {/* X axis labels */}
-          {xTicks.map((dt) => (
-            <text
-              key={dt}
-              x={xScale(dt)}
-              y={CHART_HEIGHT - 6}
-              textAnchor="middle"
-              fontSize={10}
-              fill="#6E7681"
-            >
-              {formatShortDate(dt)}
-            </text>
-          ))}
-
-          {/* Mean reference line */}
-          <line
-            x1={PADDING.left}
-            y1={yScale(meanFlow)}
-            x2={CHART_WIDTH - PADDING.right}
-            y2={yScale(meanFlow)}
-            stroke="#6E7681"
-            strokeWidth={0.75}
-            strokeDasharray="4 4"
-          />
-          <text
-            x={CHART_WIDTH - PADDING.right + 4}
-            y={yScale(meanFlow) + 3}
-            fontSize={8}
-            fill="#6E7681"
-          >
-            avg
-          </text>
-
-          {/* Area fill */}
-          <path d={areaPath} fill="url(#flowAreaGrad)" />
-
-          {/* Flow line */}
-          <path
-            d={linePath}
-            fill="none"
-            stroke="#00B4D8"
-            strokeWidth={1.5}
-            strokeLinejoin="round"
-          />
-
-          {/* Session markers */}
-          {sessionMarkers.map((sm, i) => (
-            <g
-              key={`session-${i}`}
-              onMouseEnter={() => setHoveredSession(sm)}
-              onMouseLeave={() => setHoveredSession(null)}
-              style={{ cursor: "pointer" }}
-            >
-              {/* Vertical line from marker to x-axis */}
-              <line
-                x1={sm.x}
-                y1={sm.y}
-                x2={sm.x}
-                y2={PADDING.top + PLOT_H}
-                stroke="#E8923A"
-                strokeWidth={0.75}
-                strokeDasharray="2 2"
-                opacity={0.5}
-              />
-              {/* Outer glow */}
-              <circle
-                cx={sm.x}
-                cy={sm.y}
-                r={Math.min(14, 6 + sm.fishCount)}
-                fill="#E8923A"
-                fillOpacity={0.15}
-                stroke="#E8923A"
-                strokeWidth={1.5}
-              />
-              {/* Inner dot */}
-              <circle
-                cx={sm.x}
-                cy={sm.y}
-                r={4}
-                fill="#E8923A"
-              />
-              {/* Fish count label */}
-              {sm.fishCount > 0 && (
-                <text
-                  x={sm.x}
-                  y={sm.y - Math.min(14, 6 + sm.fishCount) - 5}
-                  textAnchor="middle"
-                  fontSize={9}
-                  fontWeight="bold"
-                  fill="#E8923A"
-                >
-                  {sm.fishCount}
-                </text>
-              )}
-            </g>
-          ))}
-
-          {/* Hover crosshair */}
-          {hoveredIndex !== null && chartPoints[hoveredIndex] && (
-            <>
-              <line
-                x1={xScale(chartPoints[hoveredIndex].datetime)}
-                y1={PADDING.top}
-                x2={xScale(chartPoints[hoveredIndex].datetime)}
-                y2={PADDING.top + PLOT_H}
-                stroke="#F0F6FC"
-                strokeWidth={0.5}
-                strokeDasharray="2 2"
-                opacity={0.4}
-              />
-              <circle
-                cx={xScale(chartPoints[hoveredIndex].datetime)}
-                cy={yScale(chartPoints[hoveredIndex].value)}
-                r={4}
-                fill="#00B4D8"
-                stroke="#0D1117"
-                strokeWidth={2}
-              />
-            </>
-          )}
-        </svg>
-
-        {/* Hover tooltip */}
-        {hoveredIndex !== null && chartPoints[hoveredIndex] && (
-          <div
-            className="absolute pointer-events-none bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-xs shadow-lg z-10"
-            style={{
-              left: `${(xScale(chartPoints[hoveredIndex].datetime) / CHART_WIDTH) * 100}%`,
-              top: `${(yScale(chartPoints[hoveredIndex].value) / CHART_HEIGHT) * 100 - 14}%`,
-              transform: "translateX(-50%)",
-            }}
-          >
-            <p className="text-[var(--text-primary)] font-mono font-bold">
-              {chartPoints[hoveredIndex].value.toLocaleString()} cfs
-            </p>
-            <p className="text-[var(--text-meta)]">
-              {formatShortDate(chartPoints[hoveredIndex].datetime)}
-            </p>
-          </div>
-        )}
-
-        {/* Session hover tooltip */}
         {hoveredSession && (
           <div
-            className="absolute pointer-events-none bg-[var(--surface-page)] border border-[var(--action)]/30 rounded-lg px-3 py-2 text-xs shadow-lg z-20"
+            className="absolute z-20 pointer-events-none rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-xs shadow-[var(--elev-2)]"
             style={{
-              left: `${(hoveredSession.x / CHART_WIDTH) * 100}%`,
-              top: `${(hoveredSession.y / CHART_HEIGHT) * 100 - 20}%`,
+              left: `${(hoveredSession.x / HYDRO.W) * 100}%`,
+              top: `${(hoveredSession.y / HYDRO.H) * 100 - 20}%`,
               transform: "translateX(-50%)",
             }}
           >
-            <p className="text-[var(--action)] font-bold">
+            <p className="font-bold text-[var(--action)]">
               {hoveredSession.fishCount} fish caught
             </p>
             <p className="text-[var(--text-primary)]">
@@ -637,30 +357,19 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                 {hoveredSession.species.join(", ")}
               </p>
             )}
-            <p className="text-[var(--text-meta)] font-mono">
-              {hoveredSession.flow.toLocaleString()} cfs
+            <p className="font-mono text-[var(--text-meta)]">
+              {hoveredSession.flow.toLocaleString("en-US")} cfs
             </p>
           </div>
         )}
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3">
-        <p className="text-[10px] text-[var(--text-meta)]">
-          {sessionMarkers.length > 0 && (
-            <span className="text-[var(--action)]">
-              {sessionMarkers.length} session{sessionMarkers.length !== 1 ? "s" : ""} overlaid
-              {" · "}
-            </span>
-          )}
-          Daily means · Dashed line = 30-day avg ({meanFlow.toLocaleString()} cfs) · Source: USGS NWIS
-        </p>
-        {siteName && (
-          <p className="text-[10px] text-[var(--text-meta)] truncate max-w-[200px]">
-            {siteName}
-          </p>
-        )}
-      </div>
+      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+        {sessionMarkers.length > 0
+          ? `${sessionMarkers.length} session${sessionMarkers.length !== 1 ? "s" : ""} overlaid · `
+          : ""}
+        Daily means · band is this gauge&apos;s 30-day median ± IQR · USGS NWIS
+      </p>
     </div>
   );
 }

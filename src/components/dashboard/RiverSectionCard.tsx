@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AreaChart, Area, YAxis, ResponsiveContainer, ReferenceLine, Tooltip } from "recharts";
 import { GripVertical, MoreHorizontal, Droplets, Thermometer, Wind, ChevronRight, AlertTriangle } from "lucide-react";
+import { COPPER_400 } from "@/lib/palette";
 
 export interface GaugeChoice {
   site_id: string;
@@ -268,7 +269,7 @@ export default function RiverSectionCard(props: Props) {
                 formatter={(v) => [`${Number(v).toLocaleString()} cfs`, "Flow"]}
               />
               {currentFlow != null && (
-                <ReferenceLine y={currentFlow} stroke="#E8923A" strokeDasharray="3 3" strokeWidth={1} />
+                <ReferenceLine y={currentFlow} stroke={COPPER_400} strokeDasharray="3 3" strokeWidth={1} />
               )}
               <Area
                 type="monotone"

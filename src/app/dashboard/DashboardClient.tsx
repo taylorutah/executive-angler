@@ -130,7 +130,7 @@ export default function DashboardClient({
                   <Fish className="h-10 w-10 text-[var(--text-meta)] mx-auto mb-3" />
                   <p className="text-[var(--text-body)] mb-3">No sessions logged yet.</p>
                   <p className="text-sm text-[var(--text-meta)] mb-4">Download the app to start logging sessions.</p>
-                  <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--action)] text-[var(--on-action)] text-sm font-medium rounded-lg hover:bg-[#F0A65A] transition-colors">
+                  <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--action)] text-[var(--on-action)] text-sm font-medium rounded-lg hover:bg-[var(--action-hover)] transition-colors">
                     Get the App
                   </Link>
                 </div>

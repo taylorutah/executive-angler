@@ -130,7 +130,7 @@ export default function CommunityPhotos({
         <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
           Community Photos
         </h2>
-        <span className="px-2.5 py-0.5 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-full">
+        <span className="px-2.5 py-0.5 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-control">
           {photos.length}
         </span>
       </div>

@@ -1,10 +1,12 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  applyDvHistory,
   applyDvSeries,
   applyIvSeries,
   instantaneousUrl,
   primaryGauge,
+  type DailyReading,
   type GaugeSnapshot,
 } from "./conditions";
 import { HERO_DEK, HERO_DEK_QUIET, formatHeroEyebrow, heroDek } from "./hero-copy";
@@ -104,6 +106,35 @@ describe("applyDvSeries", () => {
     );
     assert.equal(empty.get("river-madison")?.cfs, 740);
     assert.equal(empty.get("river-madison")?.stale, true);
+  });
+});
+
+describe("applyDvHistory", () => {
+  it("keeps the dated series for that site", () => {
+    const bySite = new Map([["06038500", ["river-madison"]]]);
+    const into = new Map<string, DailyReading[]>();
+    applyDvHistory(
+      [
+        {
+          sourceInfo: { siteCode: [{ value: "06038500" }] },
+          variable: { variableCode: [{ value: "00060" }] },
+          values: [
+            {
+              value: [
+                { value: "700", dateTime: "2026-08-01T00:00:00.000-06:00" },
+                { value: "760", dateTime: "2026-08-24T00:00:00.000-06:00" },
+              ],
+            },
+          ],
+        },
+      ],
+      bySite,
+      into,
+    );
+    assert.deepEqual(into.get("river-madison"), [
+      { date: "2026-08-01", discharge: 700 },
+      { date: "2026-08-24", discharge: 760 },
+    ]);
   });
 });
 

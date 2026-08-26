@@ -45,12 +45,12 @@ export default function WhereToGo({ destinations, month }: Props) {
             return (
               <li key={destination.id}>
                 <Link href={`/destinations/${destination.slug}`} className="group block">
-                  <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-rule)]">
+                  <div className="photo-card relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-rule)]">
                     <SafeEntityImage
                       src={destination.heroImageUrl}
                       alt={destination.heroImageAlt ?? ""}
                       title={destination.name}
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="photo-zoom object-cover"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                     />
                   </div>

@@ -41,6 +41,11 @@ export interface GaugeSnapshot {
   stale: boolean;
 }
 
+export interface DailyReading {
+  date: string;
+  discharge: number;
+}
+
 const PARAM_DISCHARGE = "00060";
 const PARAM_WATER_TEMP = "00010";
 const STALE_AFTER_MS = 2 * 60 * 60 * 1000;
@@ -220,6 +225,62 @@ async function readUsgs(url: string): Promise<USGSTimeSeries[]> {
   if (!res.ok) return [];
   const json = (await res.json()) as { value?: { timeSeries?: USGSTimeSeries[] } };
   return json?.value?.timeSeries ?? [];
+}
+
+export function applyDvHistory(
+  timeSeries: USGSTimeSeries[],
+  bySite: Map<string, string[]>,
+  into: Map<string, DailyReading[]>,
+): void {
+  for (const series of timeSeries) {
+    const siteId = series.sourceInfo?.siteCode?.[0]?.value;
+    const paramCode = series.variable?.variableCode?.[0]?.value;
+    const riverIds = siteId ? bySite.get(siteId) : undefined;
+    if (!riverIds || (paramCode && paramCode !== PARAM_DISCHARGE)) continue;
+    const points = usablePoints(series);
+    if (points.length === 0) continue;
+    const readings: DailyReading[] = points.map((p) => ({
+      date: p.dateTime.slice(0, 10),
+      discharge: parseFloat(p.value),
+    }));
+    for (const riverId of riverIds) into.set(riverId, readings);
+  }
+}
+
+/** Thirty daily means for the flagship gauges. Empty map if USGS is silent. */
+export async function getFlagshipHistories(
+  rivers: FlagshipRiver[],
+): Promise<Map<string, DailyReading[]>> {
+  noStore();
+  const bySite = new Map<string, string[]>();
+  for (const river of rivers) {
+    if (!river.gauge) continue;
+    const existing = bySite.get(river.gauge.siteId) ?? [];
+    existing.push(river.id);
+    bySite.set(river.gauge.siteId, existing);
+  }
+  const into = new Map<string, DailyReading[]>();
+  if (bySite.size === 0) return into;
+
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - 30);
+  try {
+    applyDvHistory(
+      await readUsgs(
+        dailyUrl(
+          [...bySite.keys()],
+          start.toISOString().slice(0, 10),
+          end.toISOString().slice(0, 10),
+        ),
+      ),
+      bySite,
+      into,
+    );
+  } catch {
+    // Roster sparks and the instrument fall back to a client fetch / empty cell.
+  }
+  return into;
 }
 
 /**
