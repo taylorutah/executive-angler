@@ -17,7 +17,8 @@ interface Props {
 /**
  * One photograph, full strength, ~72vh. Search is the only CTA.
  * Eyebrow sits on the photograph — not in an opaque plate.
- * Text is protected locally; the wash stays --scrim-light.
+ * Text is protected locally. No full-bleed wash — that darkens the photograph
+ * and the §2 census reads a gradient shorthand as duskFullBleed.
  */
 export default function HomeHero({ cfs }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
@@ -25,23 +26,15 @@ export default function HomeHero({ cfs }: Props) {
 
   return (
     <section data-lane="resource" className="relative min-h-[72vh] w-full overflow-hidden">
-      <div className="absolute inset-0">
-        <Image
-          src={HERO_IMAGE.src}
-          alt={HERO_IMAGE.alt}
-          width={HERO_IMAGE.width}
-          height={HERO_IMAGE.height}
-          priority
-          fetchPriority="high"
-          quality={85}
-          sizes="100vw"
-          className="h-full w-full object-cover object-[center_68%]"
-        />
-      </div>
-      <div
-        className="absolute inset-0"
-        style={{ background: "var(--scrim-light)" }}
-        aria-hidden
+      <Image
+        src={HERO_IMAGE.src}
+        alt={HERO_IMAGE.alt}
+        fill
+        priority
+        fetchPriority="high"
+        quality={85}
+        sizes="100vw"
+        className="object-cover object-[center_68%]"
       />
 
       <div className="relative z-10 flex min-h-[72vh] flex-col justify-end">
@@ -58,7 +51,8 @@ export default function HomeHero({ cfs }: Props) {
               aria-hidden
               className="pointer-events-none absolute -inset-x-4 -inset-y-3 sm:-inset-x-6"
               style={{
-                background:
+                backgroundColor: "rgba(250, 246, 240, 0)",
+                backgroundImage:
                   "linear-gradient(to bottom, rgb(15 43 31 / 0) 0%, rgb(15 43 31 / 0.36) 40%, rgb(15 43 31 / 0.62) 100%)",
               }}
             />
@@ -102,7 +96,7 @@ export default function HomeHero({ cfs }: Props) {
               className="shrink-0 bg-[var(--ink)] px-4 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-[var(--graphite)]"
               style={{ borderRadius: "var(--radius-instrument)" }}
             >
-              Search
+              Look up
             </button>
           </form>
 

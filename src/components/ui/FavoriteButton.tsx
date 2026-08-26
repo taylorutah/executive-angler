@@ -75,7 +75,7 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       aria-pressed={isFavorite}
     >
       <Icon
-        name="pin"
+        name="hook"
         className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
         filled={isFavorite}
       />

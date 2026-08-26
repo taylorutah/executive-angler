@@ -15,6 +15,7 @@ import MobileNavSheet from "./nav/MobileNavSheet";
 import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
+import { registerForPath } from "@/lib/register";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,6 +50,10 @@ export default function Header() {
   }, []);
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
+  const logoSrc =
+    registerForPath(pathname) === "dusk"
+      ? "/images/logo-horizontal-white.svg"
+      : "/images/logo-horizontal-forest.svg";
 
   return (
     <>
@@ -66,20 +71,11 @@ export default function Header() {
               aria-label="Executive Angler — home"
             >
               <Image
-                src="/images/logo-horizontal-white.svg"
+                src={logoSrc}
                 alt="Executive Angler"
                 width={160}
                 height={32}
-                className="h-7 w-auto block dark-logo pointer-events-none"
-                priority
-                draggable={false}
-              />
-              <Image
-                src="/images/logo-horizontal-forest.svg"
-                alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-7 w-auto hidden light-logo pointer-events-none"
+                className="h-7 w-auto pointer-events-none"
                 priority
                 draggable={false}
               />
@@ -138,7 +134,7 @@ export default function Header() {
                       {user.avatarUrl ? (
                         <Image
                           src={user.avatarUrl}
-                          alt=""
+                          alt={user.displayName || "Your account"}
                           width={32}
                           height={32}
                           className="h-full w-full object-cover"

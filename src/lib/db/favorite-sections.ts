@@ -96,7 +96,7 @@ export async function listMyFavoriteSections(): Promise<FavoriteSection[]> {
 }
 
 /**
- * Rivers the user asked to keep (heart / Learn "Keep this list") that are not
+ * Rivers the user asked to keep (hook / Learn "Keep this list") that are not
  * already a pinned section. `/favorites` permanently redirects to
  * `/rivers/mine`, so this list is the only surface those rows have.
  * Today still reads `listMyFavoriteSections` only — no gauge, no flow.

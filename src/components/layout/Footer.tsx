@@ -60,18 +60,11 @@ export default function Footer() {
           <div className="max-w-md">
             <Link href="/" className="ea-focus-ring inline-block" aria-label={SITE_NAME}>
               <Image
-                src="/images/logo-horizontal-white.svg"
-                alt="Executive Angler"
-                width={220}
-                height={42}
-                className="dark-logo block h-10 w-[220px] max-w-full"
-              />
-              <Image
                 src="/images/logo-horizontal-forest.svg"
                 alt="Executive Angler"
                 width={220}
                 height={42}
-                className="light-logo hidden h-10 w-[220px] max-w-full"
+                className="h-10 w-[220px] max-w-full"
               />
             </Link>
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-body)]">
