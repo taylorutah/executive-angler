@@ -4,6 +4,7 @@ import {
   canonicalImgSrc,
   claimImageUrl,
   imageAvailable,
+  photoAlt,
   reportDuplicateImages,
 } from "./homepage-images";
 
@@ -66,6 +67,14 @@ describe("reportDuplicateImages", () => {
     ]);
     assert.equal(report.ok, true);
     assert.equal(new Set(report.contentSources).size, report.contentSources.length);
+  });
+});
+
+describe("photoAlt", () => {
+  it("never returns an empty string", () => {
+    assert.equal(photoAlt("", "Madison River"), "Madison River");
+    assert.equal(photoAlt("  ", "Hare's Ear"), "Hare's Ear");
+    assert.equal(photoAlt("A brown trout stream", "Madison River"), "A brown trout stream");
   });
 });
 

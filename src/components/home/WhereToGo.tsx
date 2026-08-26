@@ -1,18 +1,14 @@
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import type { Destination } from "@/types/entities";
+import { photoAlt } from "./homepage-images";
 import SectionMark from "./SectionMark";
 
 interface Props {
   destinations: Destination[];
-  /** The month the seasonal line is written against. */
   month: string;
 }
 
-/**
- * Seasonal framing straight off `bestMonths` — if the destination's own data
- * doesn't claim the month, we quote the months it does claim instead.
- */
 export function seasonLine(bestMonths: string[], month: string): string | null {
   const months = bestMonths ?? [];
   if (months.length === 0) return null;
@@ -21,7 +17,7 @@ export function seasonLine(bestMonths: string[], month: string): string | null {
   return `Best ${months[0]}–${months[months.length - 1]}`;
 }
 
-/** Three places at magazine scale — photograph, then title and caption beneath. */
+/** Three seasonal DestinationPlates. Not a booking widget. */
 export default function WhereToGo({ destinations, month }: Props) {
   if (destinations.length === 0) return null;
 
@@ -42,19 +38,20 @@ export default function WhereToGo({ destinations, month }: Props) {
           {destinations.map((destination) => {
             const season = seasonLine(destination.bestMonths, month);
             const caption = destination.tagline ?? destination.region;
+            const fallback = [destination.name, destination.region].filter(Boolean).join(", ");
             return (
               <li key={destination.id}>
                 <Link href={`/destinations/${destination.slug}`} className="group block">
                   <div className="photo-card relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-rule)]">
                     <SafeEntityImage
                       src={destination.heroImageUrl}
-                      alt={destination.heroImageAlt ?? ""}
+                      alt={photoAlt(destination.heroImageAlt, fallback)}
                       title={destination.name}
-                      className="photo-zoom object-cover"
+                      className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                     />
                   </div>
-                  <h3 className="mt-5 font-heading text-3xl font-bold leading-tight text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                  <h3 className="mt-5 font-heading text-3xl font-bold leading-tight text-[var(--text-primary)]">
                     {destination.name}
                   </h3>
                   <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-body)]">{caption}</p>

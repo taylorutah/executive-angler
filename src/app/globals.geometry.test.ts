@@ -23,6 +23,16 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /rgba\(250,\s*246,\s*240,\s*0\)/);
   });
 
+  it("retires staged entrance and photo zoom", () => {
+    assert.equal(css.includes("--photo-zoom-scale"), false);
+    assert.equal(css.includes("--photo-zoom-duration"), false);
+    assert.equal(css.includes("--enter-duration"), false);
+    assert.equal(css.includes("--enter-rise"), false);
+    assert.equal(css.includes("--enter-stagger"), false);
+    assert.equal(css.includes("scale(var(--photo-zoom-scale))"), false);
+    assert.equal(css.includes("var(--enter-stagger)"), false);
+  });
+
   it("squares Mapbox attribution to --radius-instrument", () => {
     assert.match(
       css,

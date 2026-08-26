@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
-import { APP_STORE_URL } from "@/lib/constants";
 import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
@@ -202,16 +201,6 @@ export default function Header() {
                     className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
                   >
                     Sign in
-                  </Button>
-                  <Button
-                    href={APP_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="solid"
-                    size="sm"
-                    className={`ea-btn-solid ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
-                  >
-                    Get the app
                   </Button>
                 </div>
               )}

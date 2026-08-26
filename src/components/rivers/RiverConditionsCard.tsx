@@ -7,6 +7,7 @@ import {
   Wind, Droplets, Gauge
 } from "@/icons";
 import { fetchOnce } from "./fetch-once";
+import { missingInstantaneousCopy } from "@/lib/rivers/missing-gauge";
 
 // ── USGS types ──────────────────────────────────────────────────────────────
 
@@ -221,8 +222,8 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
           </h2>
           <p className="mt-3 max-w-[68ch] text-sm leading-relaxed text-[var(--text-body)]">
             {usgsSiteId
-              ? `USGS site ${usgsSiteId}${riverName ? ` on ${riverName}` : ""} did not return a reading. We do not guess a flow.`
-              : `No USGS reading is available${riverName ? ` for ${riverName}` : ""}. We do not guess a flow.`}
+              ? missingInstantaneousCopy(riverName ?? "this river", usgsSiteId)
+              : `No USGS instantaneous reading is available${riverName ? ` for ${riverName}` : ""}. Daily means, when present, are below. We do not guess a live flow.`}
           </p>
         </div>
       );

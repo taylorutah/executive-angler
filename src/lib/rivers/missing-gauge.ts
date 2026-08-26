@@ -13,6 +13,15 @@ export function missingGaugeCopy(
   return `USGS site ${trimmed} is not a valid gauge id for ${riverName}. We do not guess a flow.`;
 }
 
+/**
+ * Instantaneous (IV) is missing; daily means may still be on the page.
+ * Name the missing reading. Do not deny a chart that is already showing.
+ */
+export function missingInstantaneousCopy(riverName: string, siteId: string): string {
+  const id = siteId.trim();
+  return `USGS site ${id} on ${riverName} did not return an instantaneous reading. Daily means below are the last published values. We do not guess a live flow.`;
+}
+
 export type FlowTrend = "rising" | "dropping" | "steady";
 
 /** Last two comparable readings — a measurement, not a health score. */

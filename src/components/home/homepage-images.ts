@@ -105,6 +105,13 @@ export function imageAvailable(
   return !used.has(normalized);
 }
 
+/** Never ship an empty alt. Prefer the stored caption; otherwise name the subject. */
+export function photoAlt(alt: string | null | undefined, fallback: string): string {
+  const stored = (alt ?? "").trim();
+  const name = fallback.trim();
+  return stored || name || "Photograph";
+}
+
 function stripOrigin(src: string): string {
   try {
     const url = new URL(src, "https://www.executiveangler.com");

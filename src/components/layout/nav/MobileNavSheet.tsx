@@ -4,8 +4,6 @@ import { useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X, FishSymbol, Bug, Bell, MessageSquare, Heart, User, Package, Users } from "@/icons";
-import { APP_STORE_URL } from "@/lib/constants";
-import { Button } from "@/components/ui/Button";
 import type { AuthUser } from "@/lib/auth-context";
 import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MOTION_SAFE, PUBLIC_NOUNS, isSectionActive } from "./links";
 import { useModalChrome } from "./useModalChrome";
@@ -106,17 +104,6 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
               >
                 Sign in
               </Link>
-              <Button
-                href={APP_STORE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="solid"
-                size="md"
-                fullWidth
-                onClick={onClose}
-              >
-                Get the app
-              </Button>
             </div>
           </>
         )}

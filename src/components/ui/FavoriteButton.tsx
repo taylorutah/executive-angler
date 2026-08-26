@@ -71,11 +71,11 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
           ? "bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20"
           : "bg-[var(--surface-raised)]/80 text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--surface-raised)]"
       } shadow-sm backdrop-blur-sm`}
-      aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+      aria-label={isFavorite ? "Remove from saved" : "Keep this"}
       aria-pressed={isFavorite}
     >
       <Icon
-        name="heart"
+        name="pin"
         className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
         filled={isFavorite}
       />

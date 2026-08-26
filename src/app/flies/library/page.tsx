@@ -11,6 +11,7 @@ import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
 
 const FLY_CATEGORY_LABELS: Record<string, string> = {
@@ -24,20 +25,22 @@ const FLY_CATEGORY_LABELS: Record<string, string> = {
   midge: "Midge",
 };
 
-export const metadata: Metadata = {
-  title: "Trout Fly Library — 120+ Proven Patterns & Tying Guides",
-  description:
-    "Browse 120+ proven trout fly patterns with tying guides, materials, variations, and where to fish them. Dry flies, nymphs, streamers, emergers, and more.",
-  alternates: { canonical: `${SITE_URL}/flies/library` },
-  openGraph: {
-    title: "Trout Fly Library",
-    description:
-      "The complete trout fly reference — 120+ patterns with tying videos, materials lists, and fishing tips.",
-    images: [
-      "/api/og?title=Trout%20Fly%20Library&subtitle=120%2B%20Proven%20Patterns&type=fly",
-    ],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const flies = await getAllCanonicalFlies();
+  const n = flies.length;
+  return {
+    title: brandedTitle(`${n} Trout Fly Patterns — Recipes & Tying Guides`),
+    description: `Browse ${n} trout fly patterns with tying guides, materials, variations, and where to fish them. Dry flies, nymphs, streamers, emergers, and more.`,
+    alternates: { canonical: `${SITE_URL}/flies/library` },
+    openGraph: {
+      title: `${n} Trout Fly Patterns`,
+      description: `The trout fly reference — ${n} patterns with tying videos, materials lists, and fishing tips.`,
+      images: [
+        `/api/og?title=Trout%20Fly%20Library&subtitle=${encodeURIComponent(`${n} patterns`)}&type=fly`,
+      ],
+    },
+  };
+}
 
 export default async function FliesPage() {
   const allFlies = await getAllCanonicalFlies();

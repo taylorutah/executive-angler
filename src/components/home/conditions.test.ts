@@ -9,7 +9,13 @@ import {
   type DailyReading,
   type GaugeSnapshot,
 } from "./conditions";
-import { HERO_DEK, HERO_DEK_QUIET, formatHeroEyebrow, heroDek } from "./hero-copy";
+import {
+  HERO_DEK,
+  HERO_DEK_QUIET,
+  formatHeroCaption,
+  formatHeroEyebrow,
+  heroDek,
+} from "./hero-copy";
 
 describe("primaryGauge", () => {
   it("reads a bare site id", () => {
@@ -144,5 +150,13 @@ describe("hero copy follows the number", () => {
     assert.equal(heroDek(null), HERO_DEK_QUIET);
     assert.equal(formatHeroEyebrow(760, new Date("2026-08-24T18:00:00Z")).includes("760 CFS"), true);
     assert.equal(heroDek(760), HERO_DEK);
+    assert.equal(
+      formatHeroCaption(760, new Date("2026-08-26T18:00:00Z")).includes("760 CFS"),
+      true,
+    );
+    assert.equal(
+      formatHeroCaption(null, new Date("2026-08-26T18:00:00Z")).includes("CFS"),
+      false,
+    );
   });
 });
