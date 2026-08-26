@@ -4,10 +4,12 @@
  *
  *   npm run check:workbench
  *
- * Requires a running app at BASE_URL (default http://localhost:3000) and
- * Playwright Chromium. Signs in as the fixture account (never the App
- * Store review account). Rebuild rows with:
- *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts
+ * Requires a running app at BASE_URL (default http://localhost:3000),
+ * Playwright Chromium, and EA_FIXTURE_EMAIL / EA_FIXTURE_PASSWORD.
+ * Signs in as the fixture account (never the App Store review account).
+ * Rebuild rows with:
+ *   SUPABASE_SERVICE_ROLE_KEY=… EA_FIXTURE_EMAIL=… EA_FIXTURE_PASSWORD=… \\
+ *     npx tsx scripts/seed-fixture-account.ts
  *
  * Also writes 1440 and 390 screenshots to reports/workbench/.
  */
@@ -15,9 +17,16 @@ import { mkdirSync } from "node:fs";
 import { chromium, type Page } from "playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const FIXTURE_EMAIL = process.env.FIXTURE_EMAIL ?? "fixture@executiveangler.com";
-const FIXTURE_PASSWORD = process.env.FIXTURE_PASSWORD ?? "FixtureEA2026!";
+const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? "";
+const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? "";
 const OUT = "reports/workbench";
+
+if (!FIXTURE_EMAIL || !FIXTURE_PASSWORD) {
+  console.error(
+    "EA_FIXTURE_EMAIL and EA_FIXTURE_PASSWORD must be set. There is no default account or password.",
+  );
+  process.exit(1);
+}
 
 interface Surface {
   name: string;
