@@ -27,6 +27,7 @@ const TEXT_RE =
   /\.(ts|tsx|js|jsx|mjs|cjs|md|yml|yaml|json|css|html|txt|svg|sql|toml|sh|env|example)$/i;
 
 const REVIEW_EMAIL = ["test", "executiveangler.com"].join("@");
+const HARNESS_PASSWORD = ["Fixture", "EA", "2026!"].join("");
 const YAML_PASSWORD = /EA_(QA|FIXTURE)_PASSWORD:\s*(?!\$\{\{\s*secrets\.)(\S)/;
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -69,6 +70,9 @@ function main() {
     lines.forEach((line, i) => {
       if (line.includes(REVIEW_EMAIL)) {
         hits.push(`${rel}:${i + 1}  review-inbox literal`);
+      }
+      if (line.includes(HARNESS_PASSWORD)) {
+        hits.push(`${rel}:${i + 1}  fixture-password literal`);
       }
       if (YAML_PASSWORD.test(line)) {
         hits.push(`${rel}:${i + 1}  hardcoded EA_*_PASSWORD`);

@@ -1,8 +1,10 @@
 /**
  * Seed the screenshot / workbench fixture account.
  *
- *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts
- *   SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/seed-fixture-account.ts --empty
+ *   SUPABASE_SERVICE_ROLE_KEY=… EA_FIXTURE_EMAIL=… EA_FIXTURE_PASSWORD=… \\
+ *     npx tsx scripts/seed-fixture-account.ts
+ *   SUPABASE_SERVICE_ROLE_KEY=… EA_FIXTURE_EMAIL=… EA_FIXTURE_PASSWORD=… \\
+ *     npx tsx scripts/seed-fixture-account.ts --empty
  *
  * Idempotent. Never writes to the App Store review inbox.
  * Anyone can rebuild the fixture from this file.
@@ -17,9 +19,10 @@ const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qlasxtfbodyxbcuchvxz.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
-export const FIXTURE_EMAIL = "fixture@executiveangler.com";
-export const FIXTURE_EMPTY_EMAIL = "fixture-empty@executiveangler.com";
-export const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD || "FixtureEA2026!";
+export const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? "";
+export const FIXTURE_EMPTY_EMAIL =
+  process.env.EA_FIXTURE_EMPTY_EMAIL || "fixture-empty@executiveangler.com";
+export const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? "";
 export const QA_REVIEW_EMAIL = ["test", "executiveangler.com"].join("@");
 
 const EMPTY_MODE = process.argv.includes("--empty");
@@ -27,6 +30,12 @@ const EMPTY_MODE = process.argv.includes("--empty");
 if (!SERVICE_ROLE_KEY) {
   console.error("ERROR: SUPABASE_SERVICE_ROLE_KEY is required.");
   console.error("Usage: SUPABASE_SERVICE_ROLE_KEY=<key> npx tsx scripts/seed-fixture-account.ts");
+  process.exit(1);
+}
+
+if (!FIXTURE_EMAIL || !FIXTURE_PASSWORD) {
+  console.error("ERROR: EA_FIXTURE_EMAIL and EA_FIXTURE_PASSWORD must be set.");
+  console.error("There is no default account or password.");
   process.exit(1);
 }
 
@@ -280,7 +289,7 @@ async function seedEmpty(): Promise<void> {
 
   console.log("\n=== DONE (empty) ===");
   console.log(`Email:    ${FIXTURE_EMPTY_EMAIL}`);
-  console.log("Password: (EA_FIXTURE_PASSWORD or the assembled fixture password)");
+  console.log("Password: (from EA_FIXTURE_PASSWORD)");
   console.log(`User ID:  ${userId}`);
   console.log("Zero journal / flybox / watch / gear rows.");
   console.log("Never use the App Store review inbox for screenshots or seeded rows.");
@@ -358,7 +367,7 @@ async function main() {
 
   console.log("\n=== DONE ===");
   console.log(`Email:    ${FIXTURE_EMAIL}`);
-  console.log(`Password: ${FIXTURE_PASSWORD}`);
+  console.log("Password: (from EA_FIXTURE_PASSWORD)");
   console.log(`User ID:  ${userId}`);
   console.log("Never use the App Store review inbox for screenshots or seeded rows.");
 }

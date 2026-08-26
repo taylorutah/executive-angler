@@ -449,8 +449,8 @@ async function samplePage(page: Page): Promise<Sample[]> {
   return page.evaluate(SAMPLE_PAGE);
 }
 
-const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? process.env.QA_EMAIL ?? "";
-const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? process.env.QA_PASSWORD ?? "";
+const FIXTURE_EMAIL = process.env.EA_FIXTURE_EMAIL ?? "";
+const FIXTURE_PASSWORD = process.env.EA_FIXTURE_PASSWORD ?? "";
 
 async function hasAuthCookie(page: Page): Promise<boolean> {
   const cookies = await page.context().cookies();
