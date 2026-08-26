@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   Fish, MapPin, ChevronRight, BookOpen, Plus, Lightbulb,
-} from "lucide-react";
+} from "@/icons";
 import { Button } from "@/components/ui/Button";
 import type { RiverStats } from "@/types/awards";
 import MyFliesWidget, { type MyFliesItem } from "@/components/dashboard/MyFliesWidget";

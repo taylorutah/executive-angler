@@ -1,7 +1,7 @@
 "use client";
 
 import { FishingSession, SessionRig } from "@/types/fishing-log";
-import { ChevronLeftIcon, ChevronRightIcon, Fish, MapPin } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Fish, MapPin } from "@/icons";
 import { useState, useMemo, useCallback } from "react";
 import { parseLocalDate } from "@/lib/date";
 import { SessionCard } from "./SessionCard";

@@ -2,7 +2,7 @@
 // Headline: "Build Your Fly Box"
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search, Filter } from "@/icons";
 import { COPPER_400 } from "@/lib/palette";
 
 type Fly = {

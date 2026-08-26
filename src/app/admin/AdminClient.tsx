@@ -15,7 +15,7 @@ import {
   Database,
   Send,
   TicketPercent,
-} from "lucide-react";
+} from "@/icons";
 import { ReactNode } from "react";
 
 /* ── Types ── */

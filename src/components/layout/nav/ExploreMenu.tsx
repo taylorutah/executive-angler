@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/icons";
 import { EXPLORE_ITEMS, FOCUS_VISIBLE, MOTION_SAFE, isSectionActive } from "./links";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";

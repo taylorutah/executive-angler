@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X } from "@/icons";
 import { APP_STORE_URL } from "@/lib/constants";
 
 const BANNER_HEIGHT = 56; // px

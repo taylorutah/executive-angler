@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, ListChecks, Wrench, CheckCircle2, GripVertical } from "lucide-react";
+import { Check, ListChecks, Wrench, CheckCircle2, GripVertical } from "@/icons";
 import type { FlyPattern, TieNextStatus } from "@/types/fishing-log";
 import type { FlyBoxEntry } from "@/lib/db/fly-patterns";
 import type { VariantRow } from "@/types/fly-v2";

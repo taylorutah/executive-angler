@@ -11,7 +11,7 @@ import Link from "next/link";
 import BoxesTable from "./BoxesTable";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "lucide-react";
+import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "@/icons";
 import { Button } from "@/components/ui/Button";
 import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import {

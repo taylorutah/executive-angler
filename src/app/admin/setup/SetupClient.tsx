@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, CheckCircle, XCircle, Copy, ExternalLink } from "lucide-react";
+import { ChevronLeft, CheckCircle, XCircle, Copy, ExternalLink } from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 const MIGRATION_SQL = `-- Executive Angler Admin Schema Migration

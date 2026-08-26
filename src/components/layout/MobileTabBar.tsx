@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Sunrise, BookOpen, Waves, Leaf } from "lucide-react";
+import { Sunrise, BookOpen, Waves, Leaf } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { isSectionActive } from "./nav/links";
 

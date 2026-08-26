@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
-import { Lock, CheckCircle, Eye, EyeOff } from "lucide-react";
+import { Lock, CheckCircle, Eye, EyeOff } from "@/icons";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
 export default function ResetPasswordPage() {

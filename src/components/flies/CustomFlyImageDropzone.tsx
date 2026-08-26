@@ -12,7 +12,7 @@
  */
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, Loader2, Lock, X } from "lucide-react";
+import { Camera, Loader2, Lock, X } from "@/icons";
 
 interface Props {
   canonicalFlyId: string;

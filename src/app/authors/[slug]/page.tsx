@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Globe, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Icon } from "@/components/ui/Icon";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
@@ -129,7 +129,7 @@ export default async function AuthorPage({ params }: Props) {
                       className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
                       aria-label="Website"
                     >
-                      <Globe className="h-5 w-5" />
+                      <Icon name="map" className="h-5 w-5" />
                     </a>
                   )}
                   {socialLinks.instagram && (
@@ -140,7 +140,7 @@ export default async function AuthorPage({ params }: Props) {
                       className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
                       aria-label="Instagram"
                     >
-                      <Instagram className="h-5 w-5" />
+                      <Icon name="instagram" className="h-5 w-5" />
                     </a>
                   )}
                   {socialLinks.twitter && (
@@ -151,7 +151,7 @@ export default async function AuthorPage({ params }: Props) {
                       className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
                       aria-label="Twitter / X"
                     >
-                      <Twitter className="h-5 w-5" />
+                      <Icon name="social-x" className="h-5 w-5" />
                     </a>
                   )}
                   {socialLinks.linkedin && (
@@ -162,7 +162,7 @@ export default async function AuthorPage({ params }: Props) {
                       className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
                       aria-label="LinkedIn"
                     >
-                      <Linkedin className="h-5 w-5" />
+                      <Icon name="linkedin" className="h-5 w-5" />
                     </a>
                   )}
                   {socialLinks.youtube && (
@@ -173,7 +173,7 @@ export default async function AuthorPage({ params }: Props) {
                       className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
                       aria-label="YouTube"
                     >
-                      <Youtube className="h-5 w-5" />
+                      <Icon name="youtube" className="h-5 w-5" />
                     </a>
                   )}
                 </div>

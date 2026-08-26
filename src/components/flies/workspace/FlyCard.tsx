@@ -9,7 +9,7 @@
  */
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, Wrench, Heart } from "lucide-react";
+import { Sparkles, Wrench, Heart } from "@/icons";
 import type { WorkspaceRow } from "@/lib/flies/workspace-shared";
 
 const CATEGORY_LABELS: Record<string, string> = {

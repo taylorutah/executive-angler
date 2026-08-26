@@ -14,7 +14,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search } from "@/icons";
 import {
   GROUP_ORDER,
   rankSearch,

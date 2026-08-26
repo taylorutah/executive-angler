@@ -8,7 +8,7 @@ import {
   SortableContext, arrayMove, useSortable, rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Plus, MapPin } from "lucide-react";
+import { Plus, MapPin } from "@/icons";
 import RiverSectionCard, { type GaugeChoice } from "./RiverSectionCard";
 import AddSectionModal from "./AddSectionModal";
 

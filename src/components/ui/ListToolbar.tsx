@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useId, type ReactNode } from "react";
-import { LayoutGrid, Grid3X3, List, Newspaper, Search, SlidersHorizontal, X } from "lucide-react";
+import { LayoutGrid, Grid3X3, List, Newspaper, Search, SlidersHorizontal, X } from "@/icons";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 

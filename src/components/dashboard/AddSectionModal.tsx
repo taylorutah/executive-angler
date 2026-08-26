@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { X, Search, ChevronLeft } from "lucide-react";
+import { X, Search, ChevronLeft } from "@/icons";
 import type { GaugeChoice } from "./RiverSectionCard";
 
 interface RiverOpt {

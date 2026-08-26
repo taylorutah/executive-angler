@@ -2,7 +2,7 @@
 // Headline: "Patterns You Can't See"
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
-import { Sparkles, Clock, Leaf, Droplets, TrendingUp } from "lucide-react";
+import { Sparkles, Clock, Leaf, Droplets, TrendingUp } from "@/icons";
 
 type Insight = {
   icon: typeof Sparkles;

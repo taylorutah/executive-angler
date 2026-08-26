@@ -34,7 +34,7 @@ import {
   ArrowRight,
   Check,
   Anchor,
-} from "lucide-react";
+} from "@/icons";
 import { Button } from "@/components/ui/Button";
 import { COPPER_400 } from "@/lib/palette";
 

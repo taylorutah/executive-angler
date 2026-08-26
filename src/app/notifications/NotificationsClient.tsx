@@ -11,7 +11,7 @@ import {
   MessageCircle,
   AtSign,
   Check,
-} from "lucide-react";
+} from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import type { AppNotification, NotificationType } from "@/types/fishing-log";
 

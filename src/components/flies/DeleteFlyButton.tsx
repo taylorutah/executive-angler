@@ -16,7 +16,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Trash2, X } from "lucide-react";
+import { Trash2, X } from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 interface Props {

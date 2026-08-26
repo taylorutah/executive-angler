@@ -2,7 +2,7 @@
 
 import * as Popover from "@radix-ui/react-popover";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { HelpCircle, Info } from "lucide-react";
+import { HelpCircle, Info } from "@/icons";
 import type { ReactNode } from "react";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 

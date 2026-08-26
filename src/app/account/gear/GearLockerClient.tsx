@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Trash2, Star, Plus } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Star, Plus } from "@/icons";
 import type { GearItem, GearType } from "@/types/gear";
 import GearForm from "@/components/gear/GearForm";
 import GearLockerTable from "./GearLockerTable";

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/icons";
 
 type RecipeLike = {
   name?: string | null;

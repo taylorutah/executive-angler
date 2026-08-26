@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Bell, Check, CheckCheck, UserPlus, Heart, MessageCircle, AtSign } from "lucide-react";
+import { Bell, Check, CheckCheck, UserPlus, Heart, MessageCircle, AtSign } from "@/icons";
 import { useNotifications } from "@/hooks/useNotifications";
 import type { AppNotification, NotificationType } from "@/types/fishing-log";
 import { useAuth } from "@/lib/auth-context";

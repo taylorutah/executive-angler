@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { MapPin, Store, Mountain, Home, Fish, Compass } from "lucide-react";
+import { MapPin, Store, Mountain, Home, Fish, Compass } from "@/icons";
 import { COPPER_400 } from "@/lib/palette";
 
 export const metadata: Metadata = {

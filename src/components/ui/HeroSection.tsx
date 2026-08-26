@@ -1,4 +1,4 @@
-import { Camera } from "lucide-react";
+import { Camera } from "@/icons";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { isUsableImageUrl } from "@/lib/media/image-url";
 

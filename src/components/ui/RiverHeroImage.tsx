@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Images } from "lucide-react";
+import { Images } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";

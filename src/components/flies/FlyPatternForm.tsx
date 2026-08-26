@@ -13,7 +13,7 @@
 
 import { useState, useEffect, useRef, FormEvent, ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, Trash2, ExternalLink, BookOpen, User } from "lucide-react";
+import { ArrowLeft, Trash2, ExternalLink, BookOpen, User } from "@/icons";
 import { RecipeBuilder, type RecipeStep } from "@/components/flies/RecipeBuilder";
 import FlyImageUploader from "@/components/flies/FlyImageUploader";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";

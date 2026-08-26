@@ -10,7 +10,7 @@
  * still owns its own data fetching and inner UI.
  */
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus } from "@/icons";
 
 export type FliesSection =
   | "workspace"

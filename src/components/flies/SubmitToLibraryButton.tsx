@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, Clock, AlertTriangle, CheckCircle, X } from "lucide-react";
+import { Upload, Clock, AlertTriangle, CheckCircle, X } from "@/icons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";

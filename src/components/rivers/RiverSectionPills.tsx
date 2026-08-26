@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Radio } from "lucide-react";
+import { Radio } from "@/icons";
 import { fetchOnce } from "./fetch-once";
 
 /**

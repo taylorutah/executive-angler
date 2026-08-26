@@ -7,7 +7,7 @@
  */
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
-import { Library, User } from "lucide-react";
+import { Library, User } from "@/icons";
 
 interface Props {
   /** Current resolved view mode — "yours" | "library". */

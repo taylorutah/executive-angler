@@ -1,4 +1,4 @@
-import { Star, ExternalLink } from "lucide-react";
+import { Star, ExternalLink } from "@/icons";
 
 interface FeaturedReview {
   reviewer_name: string;

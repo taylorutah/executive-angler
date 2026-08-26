@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, Lock } from "lucide-react";
+import { X, Lock } from "@/icons";
 import type { GearItem, GearType, RodSpecs, ReelSpecs, LineSpecs, LeaderSpecs, TippetSpecs } from "@/types/gear";
 import EuroLeaderBuilder from "./EuroLeaderBuilder";
 import type { EuroLeaderSection } from "@/types/gear";

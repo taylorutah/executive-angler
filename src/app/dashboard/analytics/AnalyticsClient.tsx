@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   BarChart3, Fish, MapPin, TrendingUp, Calendar, ChevronLeft,
   Flame, Target, Feather
-} from "lucide-react";
+} from "@/icons";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell

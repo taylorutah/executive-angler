@@ -10,7 +10,7 @@ import {
   Loader2,
   ArrowLeft,
   AlertCircle,
-} from "lucide-react";
+} from "@/icons";
 import { Button } from "@/components/ui/Button";
 
 type Status = "pending" | "approved" | "rejected" | "needs_info";

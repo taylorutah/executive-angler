@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GripVertical, Trash2, Plus } from "lucide-react";
+import { GripVertical, Trash2, Plus } from "@/icons";
 import type { EuroLeaderSection } from "@/types/gear";
 
 interface Props {

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus } from "@/icons";
 import { addProductToLockerAction } from "@/app/gear/actions";
 
 interface Props {

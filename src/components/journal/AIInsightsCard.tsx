@@ -8,7 +8,7 @@ import {
   TrendingUp,
   Lightbulb,
   Trophy,
-} from "lucide-react";
+} from "@/icons";
 
 interface AIInsight {
   title: string;

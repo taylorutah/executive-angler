@@ -4,7 +4,7 @@
  * and a direction toggle. Compact by default; expands on click.
  */
 import * as Popover from "@radix-ui/react-popover";
-import { ArrowUpDown, Check } from "lucide-react";
+import { ArrowUpDown, Check } from "@/icons";
 import type {
   WorkspaceSort,
   WorkspaceSortField,

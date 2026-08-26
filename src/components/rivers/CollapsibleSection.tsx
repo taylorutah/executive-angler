@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/icons";
 
 interface Props {
   title: string;

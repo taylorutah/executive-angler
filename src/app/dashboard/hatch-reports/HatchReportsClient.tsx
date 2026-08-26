@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ChevronLeft, Bug, MapPin, Calendar, Thermometer } from "lucide-react";
+import { ChevronLeft, Bug, MapPin, Calendar, Thermometer } from "@/icons";
 import TipCard from "@/components/ui/TipCard";
 
 interface Session {

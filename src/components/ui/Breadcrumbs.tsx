@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "@/icons";
 import { SITE_URL } from "@/lib/constants";
 
 interface BreadcrumbItem {

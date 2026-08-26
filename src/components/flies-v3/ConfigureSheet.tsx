@@ -8,7 +8,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2 } from "@/icons";
 import type { Fly, FlyConfiguration, OptionEnvelope, SlotOverrides } from "@/types/flies";
 
 interface BoxOption { id: string; name: string; }

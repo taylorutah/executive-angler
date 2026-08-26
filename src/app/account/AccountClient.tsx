@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Database, Trash2 } from "lucide-react";
+import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Database, Trash2 } from "@/icons";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";

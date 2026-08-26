@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AreaChart, Area, YAxis, ResponsiveContainer, ReferenceLine, Tooltip } from "recharts";
-import { GripVertical, MoreHorizontal, Droplets, Thermometer, Wind, ChevronRight, AlertTriangle } from "lucide-react";
+import { GripVertical, MoreHorizontal, Droplets, Thermometer, Wind, ChevronRight, AlertTriangle } from "@/icons";
 import { COPPER_400 } from "@/lib/palette";
 
 export interface GaugeChoice {

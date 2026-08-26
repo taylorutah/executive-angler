@@ -23,7 +23,7 @@
 
 import Link from "next/link";
 import * as React from "react";
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "@/icons";
 
 type Size = "sm" | "md" | "lg";
 type Variant =
@@ -388,7 +388,7 @@ export function StatPill({
 
 /* ───────────────────────── SplitButton (variant 10) ─────────────────────── */
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/icons";
 
 interface SplitButtonProps {
   primaryHref?: string;

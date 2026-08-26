@@ -7,7 +7,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Check, Box as BoxIcon } from "lucide-react";
+import { Check, Box as BoxIcon } from "@/icons";
 
 export interface ToastInfo {
   flyName: string;

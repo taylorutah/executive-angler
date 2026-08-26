@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Waves, Thermometer, ArrowUpDown, Clock, AlertTriangle,
   Wind, Droplets, Gauge
-} from "lucide-react";
+} from "@/icons";
 import { fetchOnce } from "./fetch-once";
 
 // ── USGS types ──────────────────────────────────────────────────────────────

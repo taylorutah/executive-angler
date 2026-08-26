@@ -2,7 +2,7 @@
 // Headline: "Read the Water"
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
-import { ChevronLeft, Star, Droplets, Thermometer, Wind, MapPin } from "lucide-react";
+import { ChevronLeft, Star, Droplets, Thermometer, Wind, MapPin } from "@/icons";
 
 export default function RiverMockup() {
   return (

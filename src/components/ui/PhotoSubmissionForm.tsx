@@ -11,7 +11,7 @@ import {
   CheckCircle,
   AlertCircle,
   ImageIcon,
-} from "lucide-react";
+} from "@/icons";
 import Image from "next/image";
 import { compressImage } from "@/lib/image-compress";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";

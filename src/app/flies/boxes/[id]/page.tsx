@@ -6,7 +6,7 @@
  */
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Box, ChevronLeft, Star } from "lucide-react";
+import { Box, ChevronLeft, Star } from "@/icons";
 import { createClient } from "@/lib/supabase/server";
 import { getBoxById, listMyBoxes } from "@/lib/db/fly-v2";
 import BoxEntriesTable, { type BoxEntryRow } from "@/components/flies-v3/BoxEntriesTable";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { Search, Check, Feather, Loader2, X, ChevronLeft } from "lucide-react";
+import { Search, Check, Feather, Loader2, X, ChevronLeft } from "@/icons";
 import { useActiveBox } from "@/lib/flies/active-box";
 import { buildPickerRows, type PatternRow, type PickerSize } from "@/lib/flies/picker-rows";
 import type { PickerBundle } from "@/lib/db/fly-picker";

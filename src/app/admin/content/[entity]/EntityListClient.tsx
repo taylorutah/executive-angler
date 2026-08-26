@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "@/icons";
 import type { FieldConfig } from "@/lib/admin/field-types";
 import EntityTable from "@/components/admin/EntityTable";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";

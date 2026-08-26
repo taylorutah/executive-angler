@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Share2, Feather } from "lucide-react";
+import { Share2, Feather } from "@/icons";
 import type { FlyPattern } from "@/types/fishing-log";
 import { flyPermalink } from "@/lib/flies/permalink";
 

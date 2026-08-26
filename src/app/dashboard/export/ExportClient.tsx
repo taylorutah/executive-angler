@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Download, FileText, Table, CheckCircle } from "lucide-react";
+import { ChevronLeft, Download, FileText, Table, CheckCircle } from "@/icons";
 
 interface Session {
   id: string;

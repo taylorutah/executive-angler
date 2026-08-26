@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Loader2, X } from "lucide-react";
+import { AlertTriangle, Loader2, X } from "@/icons";
 
 interface Props {
   userId: string;

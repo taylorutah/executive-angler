@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Lock } from "lucide-react";
+import { Eye, Lock } from "@/icons";
 
 export type SessionPrivacy = "public" | "private";
 

@@ -14,7 +14,7 @@ import {
   Feather,
   ChevronRight,
   Images,
-} from "lucide-react";
+} from "@/icons";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {

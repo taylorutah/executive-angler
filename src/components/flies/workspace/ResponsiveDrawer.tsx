@@ -9,7 +9,7 @@
  */
 import * as Dialog from "@radix-ui/react-dialog";
 import { Drawer as Vaul } from "vaul";
-import { X } from "lucide-react";
+import { X } from "@/icons";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 

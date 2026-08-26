@@ -2,7 +2,7 @@
 // Headline: "Your Legacy Starts Here"
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
-import { Trophy, Ruler, Fish, Calendar, ArrowUpRight, Mountain } from "lucide-react";
+import { Trophy, Ruler, Fish, Calendar, ArrowUpRight, Mountain } from "@/icons";
 
 type Metric = {
   icon: typeof Trophy;

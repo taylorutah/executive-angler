@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, MapPin, Fish, Star } from "lucide-react";
+import { ExternalLink, Phone, Mail, Award, MapPin, Fish, Star } from "@/icons";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";

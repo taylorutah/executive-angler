@@ -7,7 +7,7 @@
  * (`is_active = false`), so a bulk delete is recoverable server-side.
  */
 import { useRef, useState } from "react";
-import { Star } from "lucide-react";
+import { Star } from "@/icons";
 import type { GearItem, GearType } from "@/types/gear";
 import WorkbenchTable from "@/components/workbench/WorkbenchTable";
 import WorkbenchFilter from "@/components/workbench/WorkbenchFilter";

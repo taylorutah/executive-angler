@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, Lock, Fish, Ruler, MapPin, Sunrise, Calendar, Wrench, Feather, TrendingUp } from "lucide-react";
+import { Sparkles, Lock, Fish, Ruler, MapPin, Sunrise, Calendar, Wrench, Feather, TrendingUp } from "@/icons";
 import type { PersonalRiverScorecard } from "@/app/api/insights/personal-river/[riverId]/route";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";

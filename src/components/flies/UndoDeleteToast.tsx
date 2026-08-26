@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Undo2, X } from "lucide-react";
+import { Undo2, X } from "@/icons";
 
 const AUTO_DISMISS_MS = 12_000;
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Camera, Crop, Upload, X } from "lucide-react";
+import { Camera, Crop, Upload, X } from "@/icons";
 import ImageEditor, { validateImageFile } from "@/components/ui/ImageEditor";
 
 interface FlyImageUploaderProps {

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "@/icons";
 import GearPicker from "@/components/gear/GearPicker";
 import FlyPicker from "@/components/flies/FlyPicker";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";

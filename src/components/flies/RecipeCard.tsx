@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { RecipeIngredient } from '@/types/materials';
-import { ArrowRightLeft } from 'lucide-react';
+import { ArrowRightLeft } from "@/icons";
 import type { ResolvedRecipeRow } from '@/lib/flies/resolveFlyForViewer';
 import ProvenanceBadge from './ProvenanceBadge';
 

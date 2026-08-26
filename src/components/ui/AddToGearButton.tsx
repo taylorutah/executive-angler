@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus } from "@/icons";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import GearForm, { type PresetProduct } from "@/components/gear/GearForm";

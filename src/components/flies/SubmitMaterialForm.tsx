@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { MaterialCategory } from '@/types/materials';
-import { Plus, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Plus, Check, AlertCircle, Loader2 } from "@/icons";
 
 const CATEGORIES: { value: MaterialCategory; label: string }[] = [
   { value: 'hook', label: 'Hook' },

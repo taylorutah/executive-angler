@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
-import { MapPin, Fish, Waves, AlertTriangle } from "lucide-react";
+import { Icon } from "@/components/ui/Icon";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -280,7 +280,7 @@ export default async function RiverPage({ params }: Props) {
                   );
                   const badge = (
                     <Badge key={speciesName} variant="river" size="md">
-                      <Fish className="mr-1.5 h-3.5 w-3.5" />
+                      <Icon name="hook" className="mr-1.5 h-3.5 w-3.5" />
                       {speciesName}
                     </Badge>
                   );
@@ -443,7 +443,7 @@ export default async function RiverPage({ params }: Props) {
                       )}
                       <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-body)]">
                         <span className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
+                          <Icon name="map" className="h-3 w-3" />
                           <span className="font-mono">
                             {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
                           </span>
@@ -508,7 +508,7 @@ export default async function RiverPage({ params }: Props) {
             <ScrollAnimation>
               <div className="border border-[var(--border-strong)] bg-[var(--surface-raised)] p-6">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--action)]" />
+                  <Icon name="warning" className="mt-0.5 h-5 w-5 shrink-0 text-[var(--action)]" />
                   <div>
                     <h2 className="mb-2 font-heading text-lg font-semibold text-[var(--text-primary)]">
                       Regulations
@@ -586,7 +586,7 @@ export default async function RiverPage({ params }: Props) {
                             href={`/fly-shops/${shop.slug}`}
                             className="flex items-center gap-4 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4"
                           >
-                            <Waves className="h-5 w-5 shrink-0 text-[var(--signal-live)]" />
+                            <Icon name="current" className="h-5 w-5 shrink-0 text-[var(--signal-live)]" />
                             <div>
                               <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
                                 {shop.name}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { Plus, X } from "@/icons";
 
 interface ArrayFieldProps {
   value: string[];

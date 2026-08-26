@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { BookOpen } from "lucide-react";
+import { BookOpen } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import type { PersonalRiverScorecard } from "@/app/api/insights/personal-river/[riverId]/route";

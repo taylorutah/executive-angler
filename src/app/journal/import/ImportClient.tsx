@@ -13,7 +13,7 @@ import {
   AlertTriangle,
   AlertCircle,
   ChevronRight,
-} from "lucide-react";
+} from "@/icons";
 import { HEADERS, WATER_CLARITY_VALUES, FLY_POSITION_VALUES } from "@/lib/import/csv-schema";
 import PageHeader from "@/components/ui/PageHeader";
 

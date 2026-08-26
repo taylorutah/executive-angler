@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { ArrowLeft, Loader2, CheckCircle } from "@/icons";
 import Link from "next/link";
 import type { FieldConfig } from "@/lib/admin/field-types";
 import EntityForm from "@/components/admin/EntityForm";

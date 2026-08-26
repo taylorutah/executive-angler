@@ -4,7 +4,7 @@
  * provides 5-second Undo button. Auto-dismisses after the timer.
  */
 import { useEffect, useState, useTransition } from "react";
-import { Check, Undo2 } from "lucide-react";
+import { Check, Undo2 } from "@/icons";
 import { deleteCatchAction } from "@/app/journal/[id]/actions";
 
 export interface UndoToastInfo {

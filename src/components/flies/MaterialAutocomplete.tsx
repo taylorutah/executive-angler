@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { TyingMaterial, MaterialCategory } from '@/types/materials';
-import { Search, X, Plus } from 'lucide-react';
+import { Search, X, Plus } from "@/icons";
 import { SubmitMaterialForm } from './SubmitMaterialForm';
 
 interface MaterialAutocompleteProps {

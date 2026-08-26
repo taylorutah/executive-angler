@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import Hydrograph from "@/components/hydrograph/Hydrograph";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { MapPin, ChevronRight, Star } from "lucide-react";
+import { MapPin, ChevronRight, Star } from "@/icons";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import SafeEntityImage from "@/components/media/SafeEntityImage";

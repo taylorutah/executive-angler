@@ -8,7 +8,7 @@
  * Each option is rendered with an icon + label on desktop, icon-only on
  * narrow screens.
  */
-import { LayoutGrid, Rows3, KanbanSquare, Boxes } from "lucide-react";
+import { LayoutGrid, Rows3, KanbanSquare, Boxes } from "@/icons";
 import type { WorkspaceViewType } from "@/lib/flies/workspace-shared";
 
 const OPTIONS: {

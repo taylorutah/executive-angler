@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
-import { TrendingUp, TrendingDown, Minus, Loader2 } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Loader2 } from "@/icons";
 import { fetchOnce } from "./fetch-once";
 import { COPPER_400 } from "@/lib/palette";
 

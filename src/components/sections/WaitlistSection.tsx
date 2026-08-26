@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "@/icons";
 
 type State = "idle" | "loading" | "success" | "error";
 

@@ -18,7 +18,7 @@ import {
   Feather,
   Wrench,
   Images,
-} from "lucide-react";
+} from "@/icons";
 import type { ReactNode } from "react";
 
 interface NavItem {

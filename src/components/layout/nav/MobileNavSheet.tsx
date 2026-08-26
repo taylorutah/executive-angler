@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, FishSymbol, Bug, Bell, MessageSquare, Heart, User, Package, Users } from "lucide-react";
+import { X, FishSymbol, Bug, Bell, MessageSquare, Heart, User, Package, Users } from "@/icons";
 import { APP_STORE_URL } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import type { AuthUser } from "@/lib/auth-context";

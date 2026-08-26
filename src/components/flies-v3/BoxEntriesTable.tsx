@@ -13,7 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Trash2, X } from "lucide-react";
+import { Trash2, X } from "@/icons";
 import { summarizeVersion } from "./summarize-version";
 import type { SlotOverrides } from "@/types/flies";
 

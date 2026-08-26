@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LayoutGrid, Rows3 } from "lucide-react";
+import { LayoutGrid, Rows3 } from "@/icons";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 export type ViewMode = "grid" | "table";

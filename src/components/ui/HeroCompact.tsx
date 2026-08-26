@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Images } from "lucide-react";
+import { Images } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
