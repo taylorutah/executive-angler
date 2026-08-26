@@ -3,7 +3,7 @@
 **Lane:** P4 / T4  
 **Branch:** `cursor/p4-t4-3c0f`  
 **Owns the script:** this lane  
-**Owns `package.json` and `.github/workflows/design-gates.yml`:** Lane 0
+**Owns `package.json` and `.github/workflows/design-gates.yml`:** unioned on landing (existing jobs stay).
 
 ## Script
 
@@ -42,3 +42,8 @@ Do not put the App Store review inbox in the workflow. The empty fixture is a di
 ## See Also
 
 - [[river-alerts]] — T1 contract this branch also lands
+
+## Timeline
+
+- 2026-08-25 | Gate written; npm script + CI left for wiring.
+- 2026-08-26 | Landing unions `check:empty-states` into `package.json` and the `tokens` job. `check:a11y` and `check:river-integrity` stay.
