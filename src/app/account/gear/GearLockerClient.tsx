@@ -6,6 +6,7 @@ import { ArrowLeft, Pencil, Trash2, Star, Plus } from "lucide-react";
 import type { GearItem, GearType } from "@/types/gear";
 import GearForm from "@/components/gear/GearForm";
 import GearLockerTable from "./GearLockerTable";
+import FirstRunEmpty from "@/app/today/FirstRunEmpty";
 
 const GEAR_TYPES: { type: GearType; label: string; emoji: string; desc: string }[] = [
   { type: "rod", label: "Rods", emoji: "🎣", desc: "Fly rods" },
@@ -332,6 +333,23 @@ export default function GearLockerClient() {
           <div className="flex items-center justify-center py-20">
             <div className="h-6 w-6 rounded-full border-2 border-[var(--action)]/30 border-t-[var(--action)] animate-spin" />
           </div>
+        ) : totalItems === 0 ? (
+          <FirstRunEmpty
+            surface="gear"
+            purpose="The locker holds the rods, reels, and lines that attach to a new session."
+            actionLabel="Add a rod"
+            example="Nothing is required to start. A session can carry a rod once one lives here."
+            action={
+              <button
+                type="button"
+                data-empty-action
+                onClick={() => openAdd("rod")}
+                className="font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--action)] hover:underline"
+              >
+                Add a rod
+              </button>
+            }
+          />
         ) : layout === "table" ? (
           <GearLockerTable
             items={items}

@@ -12,6 +12,7 @@ import { listMyBoxes, listBoxStats } from "@/lib/db/fly-v2";
 import { resolveTierDefinitions } from "@/lib/flies/tier-definitions";
 import BoxesManager from "@/components/flies-v2/BoxesManager";
 import FliesShell from "@/app/flies/_components/FliesShell";
+import FlyboxEmpty from "./FlyboxEmpty";
 
 export const metadata: Metadata = {
   title: "My Boxes",
@@ -47,11 +48,18 @@ export default async function FlyboxPage() {
       counts={{ boxes: boxes.length }}
       showWorkbench={tiesOwnFlies}
     >
-      <BoxesManager
-        initialBoxes={boxes}
-        initialStats={boxStats}
-        initialTierDefinitions={tierDefinitions}
-      />
+      {boxes.length === 0 ? (
+        <div className="px-4 py-8 sm:px-6">
+          <h1 className="font-heading text-4xl text-[var(--text-primary)]">Fly box</h1>
+          <FlyboxEmpty />
+        </div>
+      ) : (
+        <BoxesManager
+          initialBoxes={boxes}
+          initialStats={boxStats}
+          initialTierDefinitions={tierDefinitions}
+        />
+      )}
     </FliesShell>
   );
 }

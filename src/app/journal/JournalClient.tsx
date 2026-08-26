@@ -13,6 +13,7 @@ import TipCard from "@/components/ui/TipCard";
 import FilterDropdown from "@/components/ui/FilterDropdown";
 import FilterBar from "@/components/ui/FilterBar";
 import { Button } from "@/components/ui/Button";
+import FirstRunEmpty from "@/app/today/FirstRunEmpty";
 import dynamic from "next/dynamic";
 
 const JournalMapView = dynamic(
@@ -255,6 +256,26 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
 
   const hasActiveFilters =
     filterRivers.length > 0 || filterYears.length > 0 || filterLocations.length > 0;
+
+  if (sessions.length === 0) {
+    return (
+      <div className="min-h-screen bg-[var(--surface-page)]">
+        <div className="mx-auto max-w-[780px] px-4 py-12 sm:px-6 sm:py-16">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--action)]">
+            Journal
+          </p>
+          <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)]">Journal</h1>
+          <FirstRunEmpty
+            surface="journal"
+            purpose="The journal is a private record of your days on the water."
+            actionHref="/journal/new"
+            actionLabel="Log a session"
+            example="A first day can be a date and a river. The Madison is on the index if you want a name that already exists."
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--surface-page)]">
