@@ -1,0 +1,9 @@
+{
+  "pageLoads": 80,
+  "planned": 80,
+  "minLoads": 80,
+  "serious": 0,
+  "critical": 0,
+  "crossLane": 14,
+  "findings": []
+}

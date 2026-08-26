@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { FilterChip } from "./FilterDropdown";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 interface FilterBarProps {
   children: ReactNode;
@@ -50,7 +51,7 @@ export default function FilterBar({
               <button
                 type="button"
                 onClick={onClearAll}
-                className="text-xs text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors px-2 py-1"
+                className={`ea-focus-ring ${FOCUS_VISIBLE} text-xs text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors px-2 py-1`}
               >
                 Clear all
               </button>

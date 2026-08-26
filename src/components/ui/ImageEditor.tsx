@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
+import { useModalChrome } from "@/components/layout/nav/useModalChrome";
 import { createPortal } from "react-dom";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
@@ -53,6 +55,13 @@ export default function ImageEditor({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [naturalAspect, setNaturalAspect] = useState<number>(1);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useModalChrome({
+    open,
+    containerRef: dialogRef,
+    onClose: onCancel,
+  });
 
   // Reset state whenever a new image is loaded.
   useEffect(() => {
@@ -143,6 +152,7 @@ export default function ImageEditor({
 
   return createPortal(
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
@@ -161,10 +171,11 @@ export default function ImageEditor({
           <button
             type="button"
             onClick={onCancel}
-            className="text-[var(--text-meta)] hover:text-[var(--text-primary)] flex-shrink-0"
+            className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-meta)] hover:text-[var(--text-primary)] flex-shrink-0`}
             aria-label="Cancel"
+            data-autofocus
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden />
           </button>
         </div>
 

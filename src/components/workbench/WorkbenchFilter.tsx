@@ -49,7 +49,7 @@ export default function WorkbenchFilter({
         }}
         placeholder={placeholder}
         data-workbench-filter="true"
-        className={`ea-focus-ring w-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1.5 pr-7 text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] ${FOCUS_VISIBLE}`}
+        className={`ea-focus-ring w-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1.5 pr-7 text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] motion-reduce:transition-none ${FOCUS_VISIBLE}`}
       />
       <kbd
         aria-hidden

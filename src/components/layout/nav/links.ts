@@ -20,6 +20,10 @@ export const SEARCH_PLACEHOLDER = "River, fly, hatch, destination";
 export const FOCUS_VISIBLE =
   "focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px]";
 
+/** Drop transitions/transforms when the user asked for less motion. */
+export const MOTION_SAFE =
+  "motion-reduce:transition-none motion-reduce:transform-none";
+
 /** Logged-out primary row. Flies points at the public catalogue, not the workspace. */
 export const PUBLIC_NOUNS: NavItem[] = [
   {

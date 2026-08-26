@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import { EXPLORE_ITEMS, FOCUS_VISIBLE, isSectionActive } from "./links";
+import { EXPLORE_ITEMS, FOCUS_VISIBLE, MOTION_SAFE, isSectionActive } from "./links";
+import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
 /**
@@ -20,18 +21,20 @@ export default function ExploreMenu() {
 
   useRouteChangeReset(() => setOpen(false));
 
+  useModalChrome({
+    open,
+    containerRef: listRef,
+    onClose: () => setOpen(false),
+    returnFocusTo: triggerRef,
+    lockScroll: false,
+  });
+
   useEffect(() => {
     if (!open) return;
     function onPointerDown(e: MouseEvent) {
       if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
     }
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        setOpen(false);
-        triggerRef.current?.focus();
-        return;
-      }
       if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
       const items = Array.from(listRef.current?.querySelectorAll<HTMLElement>("a") ?? []);
       if (!items.length) return;
@@ -58,27 +61,30 @@ export default function ExploreMenu() {
         type="button"
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-controls={open ? "explore-menu" : undefined}
         onClick={() => setOpen((o) => !o)}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-[15px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:text-[var(--text-primary)]`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-[15px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:text-[var(--text-primary)]`}
       >
         Explore
-        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
+        <ChevronDown className={`h-4 w-4 transition-transform ${MOTION_SAFE} ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
 
       {open && (
         <div
           ref={listRef}
+          id="explore-menu"
           role="menu"
           aria-label="Explore"
           className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-1 shadow-xl"
         >
-          {EXPLORE_ITEMS.map((item) => (
+          {EXPLORE_ITEMS.map((item, i) => (
             <Link
               key={item.href}
               href={item.href}
               role="menuitem"
+              data-autofocus={i === 0 ? "" : undefined}
               aria-current={isSectionActive(pathname, item.section) ? "page" : undefined}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} block px-4 py-2.5 text-[14px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] aria-[current=page]:text-[var(--text-primary)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} block px-4 py-2.5 text-[14px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] aria-[current=page]:text-[var(--text-primary)]`}
               onClick={() => setOpen(false)}
             >
               {item.label}

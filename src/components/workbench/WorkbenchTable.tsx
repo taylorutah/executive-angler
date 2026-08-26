@@ -228,11 +228,18 @@ export default function WorkbenchTable<T>({
   const selectedRows = rows.filter((r) => cursor.selected.has(rowId(r)));
   const showBulk = !!bulkActions?.length && selectedRows.length > 0;
 
+  const flashEntry = Object.entries(edits.flash).find(([, tone]) => tone);
+  const flashMessage = flashEntry
+    ? flashEntry[1] === "saved"
+      ? "Saved"
+      : edits.errors[flashEntry[0]] || "Could not save"
+    : "";
+
   return (
     <div className={`relative w-full ${className}`}>
-      {/* Selection count is announced, not just drawn. */}
+      {/* Selection count and save/undo flashes are announced, not just drawn. */}
       <p id={statusId} role="status" aria-live="polite" className="sr-only">
-        {selectionLabel(cursor.selected.size)}
+        {flashMessage || selectionLabel(cursor.selected.size)}
       </p>
 
       {showBulk && (

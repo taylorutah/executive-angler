@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { FOCUS_VISIBLE, SEARCH_PLACEHOLDER, searchHref } from "./links";
+import { FOCUS_VISIBLE, MOTION_SAFE, SEARCH_PLACEHOLDER, searchHref } from "./links";
+import SkipLink from "./SkipLink";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
@@ -37,6 +38,7 @@ export default function HeaderSearch() {
 
   return (
     <>
+      <SkipLink />
       {/* Desktop — always-visible field */}
       <form
         role="search"
@@ -62,7 +64,7 @@ export default function HeaderSearch() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={SEARCH_PLACEHOLDER}
             aria-label="Search Executive Angler"
-            className={`ea-focus-ring ${FOCUS_VISIBLE} h-9 w-[280px] rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] pl-9 ${query ? "pr-9" : "pr-3"} text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
+            className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} h-9 w-[280px] rounded-md border border-[var(--border-rule)] bg-[var(--surface-raised)] pl-9 ${query ? "pr-9" : "pr-3"} text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none`}
           />
           {query ? (
             <button
@@ -109,7 +111,7 @@ export default function HeaderSearch() {
               aria-label="Close search"
               className={`ea-focus-ring ${FOCUS_VISIBLE} -mr-2 flex h-11 w-11 items-center justify-center rounded-md text-[var(--text-body)]`}
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5" aria-hidden />
             </button>
           </div>
 

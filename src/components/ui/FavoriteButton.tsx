@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
 interface FavoriteButtonProps {
   entityType: string;
@@ -62,17 +63,20 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
 
   return (
     <button
+      type="button"
       onClick={toggleFavorite}
       disabled={loading}
-      className={`p-2.5 rounded-full transition-all ${
+      className={`ea-focus-ring ${FOCUS_VISIBLE} p-2.5 rounded-full transition-all motion-reduce:transition-none ${
         isFavorite
           ? "bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20"
           : "bg-[var(--surface-raised)]/80 text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--surface-raised)]"
       } shadow-sm backdrop-blur-sm`}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+      aria-pressed={isFavorite}
     >
       <Heart
         className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
+        aria-hidden
       />
     </button>
   );

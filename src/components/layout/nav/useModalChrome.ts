@@ -12,13 +12,22 @@ type Options = {
   onClose: () => void;
   /** Control to focus when the overlay closes. Defaults to whatever was focused before. */
   returnFocusTo?: RefObject<HTMLElement | null>;
+  /** Full-screen overlays lock the page. Dropdowns leave scroll alone. */
+  lockScroll?: boolean;
 };
 
 /**
- * Escape-to-close, body scroll lock, and a Tab focus trap for the mobile
- * search overlay and the mobile nav sheet.
+ * Escape-to-close, optional body scroll lock, and a Tab focus trap.
+ * Shared by the mobile search overlay, the mobile nav sheet, Explore,
+ * FilterDropdown, and the UI modals (lightbox, report, image editor).
  */
-export function useModalChrome({ open, containerRef, onClose, returnFocusTo }: Options) {
+export function useModalChrome({
+  open,
+  containerRef,
+  onClose,
+  returnFocusTo,
+  lockScroll = true,
+}: Options) {
   useEffect(() => {
     if (!open) return;
 
@@ -26,7 +35,7 @@ export function useModalChrome({ open, containerRef, onClose, returnFocusTo }: O
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const returnTarget = returnFocusTo?.current ?? previouslyFocused;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (lockScroll) document.body.style.overflow = "hidden";
 
     const focusables = () =>
       Array.from(container?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []).filter(
@@ -66,8 +75,8 @@ export function useModalChrome({ open, containerRef, onClose, returnFocusTo }: O
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("keydown", onKeyDown, true);
-      document.body.style.overflow = previousOverflow;
+      if (lockScroll) document.body.style.overflow = previousOverflow;
       returnTarget?.focus?.();
     };
-  }, [open, containerRef, onClose, returnFocusTo]);
+  }, [open, containerRef, onClose, returnFocusTo, lockScroll]);
 }

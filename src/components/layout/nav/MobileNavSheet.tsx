@@ -7,7 +7,7 @@ import { X, FishSymbol, Bug, Bell, MessageSquare, Heart, User, Package, Users } 
 import { APP_STORE_URL } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import type { AuthUser } from "@/lib/auth-context";
-import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, PUBLIC_NOUNS, isSectionActive } from "./links";
+import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MOTION_SAFE, PUBLIC_NOUNS, isSectionActive } from "./links";
 import { useModalChrome } from "./useModalChrome";
 
 type Props = {
@@ -36,7 +36,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
   if (!open) return null;
 
   const rowClass = (active: boolean) =>
-    `ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center justify-between gap-4 px-5 text-[16px] transition-colors duration-[120ms] ease-out ${
+    `ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} flex h-14 items-center justify-between gap-4 px-5 text-[16px] transition-colors duration-[120ms] ease-out ${
       active ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"
     }`;
 
@@ -58,7 +58,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
           aria-label="Close menu"
           className={`ea-focus-ring ${FOCUS_VISIBLE} -mr-2 flex h-11 w-11 items-center justify-center rounded-md text-[var(--text-body)]`}
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5" aria-hidden />
         </button>
       </div>
 

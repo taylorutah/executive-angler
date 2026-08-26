@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { FOCUS_VISIBLE, MOTION_SAFE } from "@/components/layout/nav/links";
+import { useModalChrome } from "@/components/layout/nav/useModalChrome";
 import {
   X,
   ChevronLeft,
@@ -38,6 +40,14 @@ export default function PhotoLightbox({
 }: PhotoLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const photo = photos[currentIndex];
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  useModalChrome({
+    open: true,
+    containerRef: dialogRef,
+    onClose,
+  });
 
   const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % photos.length);
@@ -49,28 +59,15 @@ export default function PhotoLightbox({
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      switch (e.key) {
-        case "Escape":
-          onClose();
-          break;
-        case "ArrowRight":
-          goNext();
-          break;
-        case "ArrowLeft":
-          goPrev();
-          break;
-      }
+      if (e.key === "ArrowRight") goNext();
+      if (e.key === "ArrowLeft") goPrev();
     }
 
     document.addEventListener("keydown", handleKeyDown);
-    // Prevent body scroll while lightbox is open
-    document.body.style.overflow = "hidden";
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
     };
-  }, [onClose, goNext, goPrev]);
+  }, [goNext, goPrev]);
 
   const hasExifData =
     photo.cameraBody || photo.lens || photo.aperture || photo.shutterSpeed || photo.iso;
@@ -90,20 +87,25 @@ export default function PhotoLightbox({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={photo.caption || `Photo by ${photo.submitterName}`}
+        initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        exit={reduceMotion ? undefined : { opacity: 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.2 }}
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+          className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
+          data-autofocus
           aria-label="Close lightbox"
         >
-          <X className="h-6 w-6" />
+          <X className="h-6 w-6" aria-hidden />
         </button>
 
         {/* Photo Counter */}
@@ -121,20 +123,20 @@ export default function PhotoLightbox({
                 e.stopPropagation();
                 goPrev();
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
               aria-label="Previous photo"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-6 w-6" aria-hidden />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 goNext();
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
               aria-label="Next photo"
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-6 w-6" aria-hidden />
             </button>
           </>
         )}
@@ -142,10 +144,10 @@ export default function PhotoLightbox({
         {/* Main Content */}
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
+          exit={reduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
+          transition={{ duration: reduceMotion ? 0 : 0.2 }}
           className="relative flex flex-col items-center max-w-5xl w-full mx-4 max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
