@@ -43,3 +43,7 @@ Inspected `cursor/p4-u2-3c0f` @ `7db12ba`. Skip-link + focus-ring/ARIA on chrome
 ## Remaining budget misses
 
 See `remainingMisses` in `perf-after.json`. `scripts/check-perf.ts` exits 1 on them.
+
+## 2026-08-26 landing remasure (not a pass)
+
+Re-ran `--measure` on the rebased tree. LCP elements were `H1`/`P`, fonts transferred 0 bytes, CLS 0. That is not the hero-photograph LCP the budget is about. Kept `perf-after.json` (IMG LCP, real CLS). Thresholds not widened.

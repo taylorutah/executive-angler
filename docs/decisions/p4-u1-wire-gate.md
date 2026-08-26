@@ -2,7 +2,7 @@
 
 **Lane:** P4 / U1  
 **Branch:** `cursor/p4-u1-3c0f`  
-**This lane must not edit `package.json` or `.github/workflows/design-gates.yml`.**
+Landing unions `check:perf` and a `perf` job. Existing jobs stay.
 
 ## npm script (parent adds to `package.json`)
 
@@ -55,3 +55,8 @@ ANALYZE=1 npx --yes @next/bundle-analyzer
 ## Current after-report
 
 `docs/audits/perf-after.json` is a measured run after the U1 fixes. `check:perf` exits 1 on remaining mobile LCP/CLS/INP misses documented in that file's `remainingMisses`. Do not treat a silent skip as a pass.
+
+## Timeline
+
+- 2026-08-25 | Baseline + after-report measured. Gate exits 1 on remaining misses.
+- 2026-08-26 | Rebased onto `40d8ae0`. Unioned `check:perf` + `perf` job. Gate still exits 1 on Slow-4G hero LCP, card CLS, and chrome INP. Not merged. A remasure whose LCP element was `H1`/`P` (hero photograph not LCP) is not a pass.
