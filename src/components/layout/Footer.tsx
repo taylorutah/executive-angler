@@ -62,8 +62,9 @@ export default function Footer() {
               <Image
                 src="/images/logo-horizontal-forest.svg"
                 alt="Executive Angler"
-                width={220}
-                height={42}
+                width={384}
+                height={73}
+                sizes="384px"
                 className="h-10 w-[220px] max-w-full"
               />
             </Link>
