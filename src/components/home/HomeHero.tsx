@@ -53,7 +53,7 @@ export default function HomeHero({ cfs }: Props) {
               style={{
                 backgroundColor: "rgba(250, 246, 240, 0)",
                 backgroundImage:
-                  "linear-gradient(to bottom, rgb(15 43 31 / 0) 0%, rgb(15 43 31 / 0.36) 40%, rgb(15 43 31 / 0.62) 100%)",
+                  "linear-gradient(to bottom, rgb(15 43 31 / 0.22) 0%, rgb(15 43 31 / 0.72) 32%, rgb(15 43 31 / 0.84) 100%)",
               }}
             />
             <h1

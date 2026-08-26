@@ -84,12 +84,12 @@ export default function CategoryIndex({ rivers, flies, places, notes }: Category
                     {formatCount(door.count)}
                   </span>
                 </span>
-                <span
-                  className="mt-3 block max-w-[36ch] text-[15px] leading-relaxed text-[var(--text-body)]"
+                <p
+                  className="mt-3 max-w-[36ch] text-[15px] leading-relaxed text-[var(--text-body)]"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
                   {door.line}
-                </span>
+                </p>
               </span>
             </Link>
           ))}
