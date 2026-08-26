@@ -31,10 +31,8 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     ],
   };
 
-  // Mobile shows only "← <parent>" (the most recent ancestor with an href).
-  // If no item has an href, fall back to "← Home".
   const parent = [...items].reverse().find((it) => it.href);
-  const mobileBack = parent ?? { label: "Home", href: "/" };
+  const homeIsMobileBack = !parent;
 
   return (
     <>
@@ -43,43 +41,39 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Mobile: compact back link only */}
-      <nav aria-label="Breadcrumb" className="sm:hidden">
-        <Link
-          href={mobileBack.href ?? "/"}
-          className="inline-flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-accent transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          <span className="truncate max-w-[55vw]">{mobileBack.label}</span>
-        </Link>
-      </nav>
-
-      {/* Desktop: full chain */}
       <nav
         aria-label="Breadcrumb"
-        className="hidden sm:flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         <Link
           href="/"
-          className="shrink-0 text-text-secondary hover:text-accent transition-colors"
+          className={`${homeIsMobileBack ? "inline-flex items-center gap-1" : "hidden sm:inline"} shrink-0 text-text-secondary hover:text-accent transition-colors`}
         >
+          {homeIsMobileBack ? <ChevronLeft className="h-4 w-4 sm:hidden" aria-hidden="true" /> : null}
           Home
         </Link>
         {items.map((item, i) => {
           const isLast = i === items.length - 1;
+          const isMobileBack = Boolean(parent && item.href === parent.href && item.label === parent.label);
           return (
-            <span key={i} className="flex items-center gap-1.5 min-w-0">
-              <ChevronRight className="shrink-0 h-3.5 w-3.5 text-text-muted" aria-hidden="true" />
+            <span key={`${item.label}-${i}`} className="flex items-center gap-1.5 min-w-0">
+              <ChevronRight
+                className="hidden sm:block shrink-0 h-3.5 w-3.5 text-text-muted"
+                aria-hidden="true"
+              />
               {item.href ? (
                 <Link
                   href={item.href}
-                  className="shrink-0 text-text-secondary hover:text-accent transition-colors"
+                  className={`${isMobileBack ? "inline-flex items-center gap-1" : "hidden sm:inline"} shrink-0 text-text-secondary hover:text-accent transition-colors`}
                 >
+                  {isMobileBack ? (
+                    <ChevronLeft className="h-4 w-4 sm:hidden" aria-hidden="true" />
+                  ) : null}
                   {item.label}
                 </Link>
               ) : (
                 <span
-                  className={`text-text-primary ${isLast ? "truncate" : "shrink-0"}`}
+                  className={`hidden sm:inline text-text-primary ${isLast ? "truncate" : "shrink-0"}`}
                   aria-current="page"
                   title={item.label}
                 >

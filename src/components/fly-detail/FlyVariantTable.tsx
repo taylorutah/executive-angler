@@ -13,6 +13,7 @@ import {
   normalizeSizeKey,
   type PublicVariantRow,
 } from "@/lib/flies/variant-rows";
+import InstrumentWell, { InstrumentWellFrame } from "@/components/desk/InstrumentWell";
 
 type BoxOption = { id: string; name: string; tier: string; is_default?: boolean };
 
@@ -169,11 +170,8 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
   }
 
   return (
-    <section
-      className="register-dusk bg-[var(--surface-page)] text-[var(--text-primary)]"
-      aria-labelledby="fly-variants-heading"
-    >
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+    <InstrumentWellFrame>
+      <InstrumentWell label={`Variants — ${flyName}`} className="p-5 sm:p-6">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)]">
@@ -301,9 +299,10 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
             aria-labelledby="variant-box-picker"
             onClick={() => setPicker(null)}
           >
-            <div
-              className="register-dusk w-full max-w-md border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5 text-[var(--text-primary)]"
-              onClick={(e) => e.stopPropagation()}
+            <div onClick={(e) => e.stopPropagation()}>
+            <InstrumentWell
+              className="w-full max-w-md bg-[var(--surface-raised)] p-5"
+              label="Which box?"
             >
               <h3 id="variant-box-picker" className="font-heading text-lg">
                 Which box?
@@ -336,10 +335,11 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
               >
                 Cancel
               </button>
+            </InstrumentWell>
             </div>
           </div>
         )}
-      </div>
-    </section>
+      </InstrumentWell>
+    </InstrumentWellFrame>
   );
 }

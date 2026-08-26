@@ -109,7 +109,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
             <button
               type="submit"
               disabled={state === "loading"}
-              className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-white font-bold rounded-xl hover:bg-[#f09d47] active:bg-[#d17d28] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[var(--elev-glow)] hover:shadow-[var(--elev-glow-strong)] text-base tracking-wide"
+              className="w-full flex items-center justify-center gap-2 px-7 py-4 bg-[var(--action)] text-[var(--on-action)] font-bold rounded-surface hover:bg-[var(--action-hover)] disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[var(--elev-1)] text-base tracking-wide"
             >
               {state === "loading" ? (
                 <>

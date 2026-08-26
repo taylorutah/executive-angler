@@ -17,7 +17,7 @@ export default function ProvenanceBadge({
       : "text-[9.5px] px-1.5 py-0.5";
   return (
     <span
-      className={`inline-flex items-center font-bold uppercase tracking-[0.12em] rounded-control bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/30 ${cls}`}
+      className={`inline-flex items-center font-bold uppercase tracking-[0.12em] rounded-chip bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/30 ${cls}`}
     >
       {label}
     </span>

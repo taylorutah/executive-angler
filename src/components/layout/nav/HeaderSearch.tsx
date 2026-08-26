@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { FOCUS_VISIBLE, MOTION_SAFE, SEARCH_PLACEHOLDER, searchHref } from "./links";
-import SkipLink from "./SkipLink";
 import { useModalChrome } from "./useModalChrome";
 import { useRouteChangeReset } from "./useRouteChangeReset";
 
@@ -38,7 +37,6 @@ export default function HeaderSearch() {
 
   return (
     <>
-      <SkipLink />
       {/* Desktop — always-visible field */}
       <form
         role="search"
@@ -87,7 +85,7 @@ export default function HeaderSearch() {
           setOverlayQuery(query);
           setOverlayOpen(true);
         }}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-2 rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-2 rounded-instrument border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 text-[13px] text-[var(--text-body)]`}
       >
         <Search className="h-4 w-4" aria-hidden />
         Search

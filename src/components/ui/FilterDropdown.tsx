@@ -167,7 +167,7 @@ export default function FilterDropdown({
         aria-controls={open ? listboxId : undefined}
         aria-label={isEmpty ? `${label}: ${emptyMessage}` : `${label} filter, ${selected.length} selected`}
         title={isEmpty ? emptyMessage : undefined}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-sm font-medium transition-colors whitespace-nowrap border ${
+        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex items-center gap-1.5 px-3 py-1.5 rounded-chip text-sm font-medium transition-colors whitespace-nowrap border ${
           selected.length > 0
             ? "bg-[var(--action)]/10 border-[var(--action)]/40 text-[var(--action)]"
             : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/30 hover:text-[var(--text-primary)]"
@@ -175,7 +175,7 @@ export default function FilterDropdown({
       >
         <span className="truncate max-w-[140px]">{triggerLabel}</span>
         {selected.length > 0 && (
-          <span className="font-mono text-[10px] bg-[var(--action)] text-white rounded-control min-w-[16px] h-4 inline-flex items-center justify-center px-1">
+          <span className="font-mono text-[10px] bg-[var(--action)] text-white rounded-chip min-w-[16px] h-4 inline-flex items-center justify-center px-1">
             {selected.length}
           </span>
         )}
@@ -296,7 +296,7 @@ export function FilterChip({
   onRemove: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-[var(--action)]/10 border border-[var(--action)]/40 text-[var(--action)] text-xs">
+    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-chip bg-[var(--action)]/10 border border-[var(--action)]/40 text-[var(--action)] text-xs">
       <span className="truncate max-w-[180px]">{label}</span>
       <button
         type="button"

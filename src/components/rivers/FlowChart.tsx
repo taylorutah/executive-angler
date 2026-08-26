@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Droplets } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
 import Hydrograph from "@/components/hydrograph/Hydrograph";
 import { HYDRO, hydroScales, type HydroReading } from "@/components/hydrograph/geometry";
+import { flowTrend } from "@/lib/rivers/missing-gauge";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -108,22 +109,8 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [hoveredSession, setHoveredSession] = useState<SessionMarker | null>(null);
 
-  // No gauges linked
-  if (gauges.length === 0) {
-    return (
-      <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Droplets className="h-5 w-5 text-[var(--text-meta)]" />
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">
-            River Flow — {riverName}
-          </h3>
-        </div>
-        <p className="text-sm text-[var(--text-meta)]">
-          No USGS gauge linked to this river.
-        </p>
-      </div>
-    );
-  }
+  // Parent well owns the empty state when no site is linked.
+  if (gauges.length === 0) return null;
 
   /* eslint-disable react-hooks/rules-of-hooks */
 
@@ -248,13 +235,13 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   /* eslint-enable react-hooks/rules-of-hooks */
 
-  // Loading state
+  // Loading state — no second dusk slab; the well already has a border.
   if (loading) {
     return (
-      <div className="min-h-48 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
+      <div className="mt-6 min-h-48 border-t border-[var(--border-rule)] pt-5">
         <div className="flex items-center gap-2 text-[var(--text-meta)]">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-sm">Loading 30-day flow data...</span>
+          <span className="text-sm">Loading 30-day flow data…</span>
         </div>
       </div>
     );
@@ -263,29 +250,25 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // A failed request and an empty series are different facts — say which.
   if (error || chartPoints.length === 0) {
     return (
-      <div className="min-h-48 bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Droplets className="h-5 w-5 text-[var(--text-meta)]" />
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">
-            River Flow — {riverName}
-          </h3>
-        </div>
-        <p className="text-sm text-[var(--text-meta)]">
-          {error || "No flow data for this gauge."}
+      <div className="mt-6 border-t border-[var(--border-rule)] pt-5">
+        <h3 className="text-sm font-bold text-[var(--text-primary)]">
+          Thirty-day flow — {riverName}
+        </h3>
+        <p className="mt-2 text-sm text-[var(--text-body)]">
+          {error || "This gauge has no daily means for the last 30 days. We do not guess a flow."}
         </p>
       </div>
     );
   }
 
   const currentFlow = chartPoints[chartPoints.length - 1];
+  const previousFlow = chartPoints.length > 1 ? chartPoints[chartPoints.length - 2] : null;
+  const trend = flowTrend(previousFlow?.value, currentFlow.value);
   const activeGauge = gauges.find((g) => g.site_id === activeSiteId);
   const siteName = activeGauge?.name || "";
 
   return (
-    <div
-      data-instrument
-      className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] px-5 py-5"
-    >
+    <div className="mt-6 border-t border-[var(--border-rule)] pt-5">
       <div className="mb-3 flex items-end justify-between gap-4">
         <div>
           <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
@@ -304,6 +287,15 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
             cfs
           </span>
+          {trend ? (
+            <span
+              className={`mt-1 block text-[12px] text-[var(--text-primary)] ${
+                trend === "steady" ? "font-normal" : "font-semibold"
+              }`}
+            >
+              {trend}
+            </span>
+          ) : null}
         </p>
       </div>
 
@@ -336,8 +328,9 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
         {hoveredSession && (
           <div
-            className="absolute z-20 pointer-events-none rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-xs shadow-[var(--elev-2)]"
+            className="absolute z-20 pointer-events-none border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-xs shadow-[var(--elev-1)]"
             style={{
+              borderRadius: "var(--radius-instrument)",
               left: `${(hoveredSession.x / HYDRO.W) * 100}%`,
               top: `${(hoveredSession.y / HYDRO.H) * 100 - 20}%`,
               transform: "translateX(-50%)",

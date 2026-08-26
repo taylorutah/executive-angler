@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
+import SkipLink, { MAIN_CONTENT_ID } from "@/components/layout/nav/SkipLink";
 import CommandPalette from "@/components/CommandPalette";
 import RegisterBinder from "@/components/system/RegisterBinder";
 import { ThemeProvider } from "@/lib/theme-context";
@@ -153,11 +154,18 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="page-ground antialiased min-h-screen flex flex-col text-[var(--text-primary)]">
+        <SkipLink />
         <AuthProvider>
           <ThemeProvider>
             <RegisterBinder />
             <Header />
-            <main className="flex-1 pt-[56px] pb-14 lg:pb-0">{children}</main>
+            <main
+              id={MAIN_CONTENT_ID}
+              tabIndex={-1}
+              className="flex-1 pt-[56px] pb-14 lg:pb-0"
+            >
+              {children}
+            </main>
             <Footer />
             <MobileTabBar />
             <CommandPalette />

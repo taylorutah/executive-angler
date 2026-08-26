@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Target, TrendingUp, Thermometer, Waves, CloudSun } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
-import SignedOutInsight from "./SignedOutInsight";
 
 interface BestWindow {
   flow_min: number | null;
@@ -73,15 +72,7 @@ export default function BestWindowCalculator({ riverId }: Props) {
     load();
   }, [riverId, user, authLoading]);
 
-  if (!user) {
-    return (
-      <SignedOutInsight
-        icon={<Target className="h-4 w-4 text-[var(--action)]" />}
-        title="Your Best Window"
-        description="With an account, this card reads your logged sessions on this river and tells you the flow and water-temperature range you actually catch fish in — then compares it to the gauge reading right now."
-      />
-    );
-  }
+  if (!user) return null;
 
   if (loading) return null;
 
@@ -124,8 +115,8 @@ export default function BestWindowCalculator({ riverId }: Props) {
                 {bestWindow.flow_min}–{bestWindow.flow_max} cfs
               </p>
               {currentFlow !== null && (
-                <p className={`text-[10px] mt-0.5 ${flowInRange ? "text-green-400" : "text-amber-400"}`}>
-                  Now: {currentFlow} cfs {flowInRange ? "✓" : ""}
+                <p className={`text-[10px] mt-0.5 ${flowInRange ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-meta)]"}`}>
+                  Now: {currentFlow} cfs {flowInRange ? "in range" : "outside range"}
                 </p>
               )}
             </div>
@@ -134,15 +125,15 @@ export default function BestWindowCalculator({ riverId }: Props) {
           {bestWindow.temp_min !== null && bestWindow.temp_max !== null && (
             <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <Thermometer className="h-3.5 w-3.5 text-red-400" />
+                <Thermometer className="h-3.5 w-3.5 text-[var(--signal-live)]" />
                 <span className="text-[10px] text-[var(--text-meta)]">Optimal Temp</span>
               </div>
               <p className="text-sm font-bold text-[var(--text-primary)]">
                 {bestWindow.temp_min}–{bestWindow.temp_max}°F
               </p>
               {currentTemp !== null && (
-                <p className={`text-[10px] mt-0.5 ${tempInRange ? "text-green-400" : "text-amber-400"}`}>
-                  Now: {currentTemp}°F {tempInRange ? "✓" : ""}
+                <p className={`text-[10px] mt-0.5 ${tempInRange ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-meta)]"}`}>
+                  Now: {currentTemp}°F {tempInRange ? "in range" : "outside range"}
                 </p>
               )}
             </div>
@@ -162,7 +153,7 @@ export default function BestWindowCalculator({ riverId }: Props) {
           {bestWindow.best_species && (
             <div className="bg-[var(--surface-page)] rounded-lg p-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <CloudSun className="h-3.5 w-3.5 text-green-400" />
+                <CloudSun className="h-3.5 w-3.5 text-[var(--signal-live)]" />
                 <span className="text-[10px] text-[var(--text-meta)]">Primary Target</span>
               </div>
               <p className="text-sm font-bold text-[var(--text-primary)] truncate">{bestWindow.best_species}</p>
@@ -172,15 +163,15 @@ export default function BestWindowCalculator({ riverId }: Props) {
 
         {/* GO NOW signal */}
         {goSignal && (
-          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
-            <p className="text-sm font-bold text-green-400">
-              Conditions match your best sessions — GO NOW
+          <div className="border border-[var(--border-rule)] bg-[var(--surface-page)] p-3 text-center" style={{ borderRadius: "var(--radius-instrument)" }}>
+            <p className="text-sm font-semibold text-[var(--text-primary)]">
+              Conditions match your best sessions
             </p>
           </div>
         )}
         {partialSignal && (
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-center">
-            <p className="text-sm font-medium text-amber-400">
+          <div className="border border-[var(--border-rule)] bg-[var(--surface-page)] p-3 text-center" style={{ borderRadius: "var(--radius-instrument)" }}>
+            <p className="text-sm font-medium text-[var(--text-body)]">
               Partially within your optimal range
             </p>
           </div>

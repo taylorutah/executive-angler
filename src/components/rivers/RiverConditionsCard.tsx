@@ -95,16 +95,18 @@ function matchWeather(section: string, weatherSections: WeatherSection[]): Weath
 
 interface Props {
   riverId: string;
+  usgsSiteId?: string;
+  riverName?: string;
   riverLatitude?: number | null;
   riverLongitude?: number | null;
   onSectionChange?: (siteId: string, section: string) => void;
-  /** `band` = full-width dusk instrument. Default keeps the stacked card. */
+  /** `band` = instrument body inside InstrumentWell. Default keeps the stacked card. */
   layout?: "card" | "band";
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function RiverConditionsCard({ riverId, riverLatitude, riverLongitude, onSectionChange, layout = "card" }: Props) {
+export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, riverLatitude, riverLongitude, onSectionChange, layout = "card" }: Props) {
   const [gauges, setGauges] = useState<GaugeReading[]>([]);
   const [weatherSections, setWeatherSections] = useState<WeatherSection[]>([]);
   const [loadingConditions, setLoadingConditions] = useState(true);
@@ -210,7 +212,23 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
     );
   }
 
-  if (conditionsError || gauges.length === 0) return null;
+  if (conditionsError || gauges.length === 0) {
+    if (layout === "band") {
+      return (
+        <div>
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+            On the water
+          </h2>
+          <p className="mt-3 max-w-[68ch] text-sm leading-relaxed text-[var(--text-body)]">
+            {usgsSiteId
+              ? `USGS site ${usgsSiteId}${riverName ? ` on ${riverName}` : ""} did not return a reading. We do not guess a flow.`
+              : `No USGS reading is available${riverName ? ` for ${riverName}` : ""}. We do not guess a flow.`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  }
 
   const active = gauges[selectedIdx] ?? gauges[0];
   const flow = active.discharge ? getFlowLabel(active.discharge.value) : null;
@@ -229,6 +247,32 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             Live
           </span>
         </div>
+
+        {hasMultipleSections && (
+          <div
+            className="mb-4 flex gap-1.5 overflow-x-auto pb-1"
+            role="tablist"
+            aria-label="River section"
+          >
+            {gauges.map((g, idx) => (
+              <button
+                key={g.siteId}
+                type="button"
+                role="tab"
+                aria-selected={idx === selectedIdx}
+                onClick={() => setSection(g.siteId)}
+                className={`shrink-0 border px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                  idx === selectedIdx
+                    ? "border-[var(--action)] bg-[var(--action)] text-[var(--on-action)]"
+                    : "border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
+                }`}
+                style={{ borderRadius: "var(--radius-instrument)" }}
+              >
+                {g.section || g.siteName}
+              </button>
+            ))}
+          </div>
+        )}
 
         {active.stale && (
           <div className="mb-4 flex items-center gap-2 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-2 text-xs text-[var(--action)]">
@@ -258,7 +302,7 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
           )}
           {active.waterTemp && (
             <Metric
-              icon={<Thermometer className="h-4 w-4 text-[var(--state-positive)]" />}
+              icon={<Thermometer className="h-4 w-4 text-[var(--signal-live)]" />}
               label="Water temp"
               value={`${active.waterTemp.valueFahrenheit}`}
               unit="°F"
@@ -291,11 +335,11 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
     <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-heading text-lg font-semibold text-[var(--action)]">
+        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)]">
           River Conditions
         </h3>
-        <span className="flex items-center gap-1.5 text-[10px] text-[var(--signal-live)] bg-[var(--signal-live)]/10 px-2.5 py-1 rounded-full font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-live)] animate-pulse inline-block" />
+        <span className="flex items-center gap-1.5 rounded-chip bg-[var(--signal-live)]/10 px-2.5 py-1 text-[10px] font-medium text-[var(--signal-live)]">
+          <span className="inline-block h-1.5 w-1.5 rounded-chip bg-[var(--signal-live)]" />
           Live
         </span>
       </div>
@@ -368,8 +412,8 @@ export default function RiverConditionsCard({ riverId, riverLatitude, riverLongi
             {active.waterTemp && (
               <div className="flex items-center justify-between p-3 bg-[var(--surface-page)] rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[var(--state-positive)]/10 flex items-center justify-center">
-                    <Thermometer className="h-4 w-4 text-[var(--state-positive)]" />
+                  <div className="w-9 h-9 rounded-sm bg-[var(--signal-live)]/10 flex items-center justify-center">
+                    <Thermometer className="h-4 w-4 text-[var(--signal-live)]" />
                   </div>
                   <div>
                     <p className="text-[10px] text-[var(--text-meta)] font-medium uppercase tracking-wide">Water Temp</p>

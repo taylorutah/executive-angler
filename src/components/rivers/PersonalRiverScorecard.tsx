@@ -5,7 +5,6 @@ import { Sparkles, Lock, Fish, Ruler, MapPin, Sunrise, Calendar, Wrench, Feather
 import type { PersonalRiverScorecard } from "@/app/api/insights/personal-river/[riverId]/route";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
-import SignedOutInsight from "./SignedOutInsight";
 
 interface Props {
   riverId: string;
@@ -33,15 +32,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
     return () => { cancelled = true; };
   }, [riverId, user, authLoading]);
 
-  if (!user) {
-    return (
-      <SignedOutInsight
-        icon={<Sparkles className="h-4 w-4 text-[var(--action)]" />}
-        title="Your River Scorecard"
-        description={`Sign in and this card keeps your running record on ${riverName} — sessions fished, fish per trip, your biggest, your top fly, and the section and time of day that produce for you. It stays private to you.`}
-      />
-    );
-  }
+  if (!user) return null;
 
   if (loadState === "loading") return null;
 

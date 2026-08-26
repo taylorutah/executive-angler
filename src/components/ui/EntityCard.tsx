@@ -47,7 +47,7 @@ export default function EntityCard({
     return (
       <Link
         href={href}
-        className="group relative block rounded-xl overflow-hidden bg-[var(--surface-raised)] border-l-4 border-[var(--action)] shadow-md hover:bg-[#1C2128] hover:shadow-lg transition-all"
+        className="group relative block overflow-hidden rounded-surface bg-[var(--surface-raised)] border-l-4 border-[var(--action)] shadow-sm transition-shadow hover:shadow-md"
       >
         {actionSlot?.kind === "add-to-fly-box" && (
           <CardActionSlot
@@ -84,7 +84,7 @@ export default function EntityCard({
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-control"
+                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-chip"
                 >
                   {badge}
                 </span>
@@ -92,7 +92,7 @@ export default function EntityCard({
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-control border border-[var(--border-rule)]"
+                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-chip border border-[var(--border-rule)]"
                 >
                   {tag}
                 </span>
@@ -105,7 +105,7 @@ export default function EntityCard({
   }
 
   return (
-    <Link href={href} className="group relative block card-hover rounded-xl overflow-hidden bg-[var(--surface-raised)] shadow-md">
+    <Link href={href} className="group relative block card-hover overflow-hidden rounded-surface bg-[var(--surface-raised)] shadow-sm">
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
           canonicalFlyId={actionSlot.canonicalFlyId}
@@ -127,7 +127,7 @@ export default function EntityCard({
             {badges.map((badge) => (
               <span
                 key={badge}
-                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-control"
+                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-chip"
               >
                 {badge}
               </span>

@@ -16,9 +16,9 @@ import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
 import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
 import LazyFlowChart from "@/components/rivers/LazyFlowChart";
-import RiverSectionPills from "@/components/rivers/RiverSectionPills";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import RiverLiveInset from "@/components/rivers/RiverLiveInset";
+import SignedOutRiverInsights from "@/components/rivers/SignedOutRiverInsights";
 import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
@@ -225,12 +225,10 @@ export default async function RiverPage({ params }: Props) {
       </div>
 
       <Suspense fallback={null}>
-        <RiverSectionPills riverId={river.id} />
-      </Suspense>
-
-      <Suspense fallback={null}>
         <RiverLiveInset
           riverId={river.id}
+          riverName={river.name}
+          usgsGaugeId={river.usgsGaugeId ?? null}
           riverLatitude={river.latitude}
           riverLongitude={river.longitude}
         >
@@ -256,6 +254,7 @@ export default async function RiverPage({ params }: Props) {
       <section className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
+          <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
           <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
           <BestWindowCalculator riverId={river.id} />
@@ -434,7 +433,7 @@ export default async function RiverPage({ params }: Props) {
                     key={i}
                     className="flex items-start gap-3 border-b border-[var(--border-rule)] py-4"
                   >
-                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--border-rule)] bg-[var(--signal-live)] text-sm font-bold text-[var(--card)]">
+                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--border-rule)] bg-[var(--surface-raised)] text-sm font-bold text-[var(--text-primary)]">
                       {i + 1}
                     </div>
                     <div>
