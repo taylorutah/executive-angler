@@ -27,6 +27,7 @@ import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import { SITE_URL } from "@/lib/constants";
+import { formatHeroCaptionDate } from "@/components/home/hero-copy";
 import {
   getAllRivers,
   getRiverBySlug,
@@ -123,7 +124,19 @@ export default async function RiverPage({ params }: Props) {
     (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
   )?.hatches ?? [];
 
-  const heroSubtitle = [...new Set([dest?.state, dest?.name].filter(Boolean))].join(" · ");
+  const heroSubtitle =
+    river.slug === "madison-river"
+      ? "Montana  ·  Gallatin County"
+      : [...new Set([dest?.state, dest?.name].filter(Boolean))].join(" · ");
+  const heroMeta =
+    river.slug === "madison-river"
+      ? ["Hebgen to Ennis", formatHeroCaptionDate()].join(" · ")
+      : [
+          (river.flowType ?? "").replace(/-/g, " "),
+          dest?.state ?? dest?.name,
+        ]
+          .filter(Boolean)
+          .join(" · ");
 
   return (
     <>
@@ -176,12 +189,7 @@ export default async function RiverPage({ params }: Props) {
         galleryPhotos={galleryPhotos}
         title={river.name}
         subtitle={heroSubtitle || undefined}
-        meta={[
-          (river.flowType ?? "").replace(/-/g, " "),
-          dest?.state ?? dest?.name,
-        ]
-          .filter(Boolean)
-          .join(" · ")}
+        meta={heroMeta || undefined}
       >
         <AdminHeroEditor
           entityType="rivers"

@@ -261,7 +261,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     return (
       <div className="min-h-screen bg-[var(--surface-page)]">
         <div className="mx-auto max-w-[780px] px-4 py-12 sm:px-6 sm:py-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--action)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             Journal
           </p>
           <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)]">Journal</h1>
@@ -370,7 +370,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-heading text-xl font-semibold text-[var(--action)]">
+                <h2 className="font-heading text-xl font-semibold text-[var(--text-primary)]">
                   Filters
                 </h2>
                 <button

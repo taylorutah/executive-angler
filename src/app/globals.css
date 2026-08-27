@@ -373,6 +373,19 @@
     );
   }
 
+  /* 420px dossier hero (Figma 40:489). Same forest wash, earlier 0.8
+     band so kicker + name + meta sit in the dark stop, not the fade. */
+  .hero-overlay-desk {
+    background: linear-gradient(
+      to bottom,
+      rgb(15 43 31 / 0) 0%,
+      rgb(15 43 31 / 0.18) 32%,
+      rgb(15 43 31 / 0.72) 52%,
+      rgb(15 43 31 / 0.88) 72%,
+      rgb(15 43 31 / 0.92) 100%
+    );
+  }
+
   .hero-overlay-light {
     background: var(--scrim-light);
   }

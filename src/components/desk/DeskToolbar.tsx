@@ -82,7 +82,7 @@ export default function DeskToolbar({
             onClick={() => onViewChange("magazine")}
             className={`ea-focus-ring px-3.5 py-2 font-ui text-[12px] ${
               pictures
-                ? "bg-[var(--text-primary)] font-medium text-[var(--hero-type,#F4EFE6)]"
+                ? "bg-[var(--text-primary)] font-medium text-[var(--hero-type)]"
                 : "bg-[var(--surface-page)] text-[var(--text-body)]"
             }`}
           >
@@ -94,7 +94,7 @@ export default function DeskToolbar({
             onClick={() => onViewChange("list")}
             className={`ea-focus-ring px-3.5 py-2 font-ui text-[12px] ${
               !pictures
-                ? "bg-[var(--text-primary)] font-medium text-[var(--hero-type,#F4EFE6)]"
+                ? "bg-[var(--text-primary)] font-medium text-[var(--hero-type)]"
                 : "bg-[var(--surface-page)] text-[var(--text-body)]"
             }`}
           >

@@ -179,7 +179,7 @@ export default async function LodgePage({ params }: Props) {
       </div>
 
       <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full px-5 py-8 sm:px-8 xl:px-20">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -194,7 +194,7 @@ export default async function LodgePage({ params }: Props) {
       </div>
 
       <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">

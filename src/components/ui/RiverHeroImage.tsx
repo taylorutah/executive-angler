@@ -104,8 +104,8 @@ export default function RiverHeroImage({
           <PlateFallback title="" meta={meta} />
         )}
 
-        {/* Unconditional scrim — title is items-end in the 0.8 band. */}
-        <div className="hero-overlay absolute inset-0 pointer-events-none" />
+        {/* Unconditional scrim — type sits in the 0.8 band of the 420px desk wash. */}
+        <div className="hero-overlay-desk absolute inset-0 pointer-events-none" />
 
         <div className="absolute inset-0 flex items-end">
           <div className="w-full px-5 pb-7 sm:px-8 xl:px-20">

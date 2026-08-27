@@ -250,10 +250,10 @@ export default async function ArticlePage({ params }: Props) {
 
           <article className="pb-24">
             <header className="max-w-[68ch] pt-10 sm:pt-14">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+              <p className="font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
                 {categoryLabel}
               </p>
-              <h1 className="mt-3 font-heading font-bold text-[34px] sm:text-[44px] lg:text-[56px] leading-[1.05] text-[var(--text-primary)]">
+              <h1 className="mt-3 font-heading text-[34px] font-semibold leading-[1.05] text-[var(--text-primary)] sm:text-[44px] lg:text-[56px]">
                 {article.title}
               </h1>
               {article.subtitle && (
