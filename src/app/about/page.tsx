@@ -23,9 +23,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const counts = await catalogCounts();
   return (
-    <div className="bg-[var(--surface-page)] pt-8 pb-20">
+    <div className="bg-[var(--surface-page)] pb-20 pt-14">
       <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
-        <h1 className="mb-6 font-heading text-4xl font-semibold text-[var(--text-primary)]">
+        <p className="font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
+          House
+        </p>
+        <h1
+          className="mt-4 mb-6 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
           About {SITE_NAME}
         </h1>
 

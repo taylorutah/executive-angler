@@ -133,7 +133,7 @@ export default function DeskToolbar({
                 >
                   Refine
                 </h2>
-                <p className="mt-2 font-ui text-[14px] text-[var(--text-body)]">
+                <p className="mt-2 font-ui text-[13px] leading-5 text-[var(--text-body)]">
                   Map and filters live here. The index stays pictures.
                 </p>
               </div>

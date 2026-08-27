@@ -54,6 +54,8 @@ export default async function SpeciesListPage() {
       <DeskMast
         title="Species"
         lede={`${allSpecies.length} we actually keep. Habitat, flies, conservation. Pictures first. One Refine.`}
+        titleSize="word"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

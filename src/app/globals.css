@@ -45,8 +45,8 @@
 
   /* Motion budget — §5.4. Banned: count-ups, text parallax, scroll-jacking,
      self-drawing charts, animated logo, motion inside data tables. */
-  --hover-duration: 160ms;
-  --hover-ease: ease-out;
+  --hover-duration: 520ms;
+  --hover-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --crossfade-duration: 400ms;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: 1rem;
@@ -419,15 +419,30 @@
     box-shadow: 0 2px 4px rgb(44 33 27 / 0.08);
   }
 
-  /* Image cards: clip, 2–4px lift, ~1.04 ease. No bounce, glow, or Ken Burns. */
+  /* Name / copper live-hint — same long ease as the photograph. */
+  .hover-copper {
+    transition: color var(--hover-duration) var(--hover-ease);
+  }
+
+  /* Image cards: clip, 2–4px lift, ~1.04 scale. Long ease — not a snap.
+     No bounce, glow, or Ken Burns. */
   .photo-lift {
     overflow: hidden;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgb(44 33 27 / 0.08);
+    transition:
+      transform var(--hover-duration) var(--hover-ease),
+      box-shadow var(--hover-duration) var(--hover-ease);
   }
 
   .photo-lift img {
-    transition: transform 180ms ease-out;
+    transition: transform var(--hover-duration) var(--hover-ease);
+  }
+
+  .group:hover .photo-lift,
+  .photo-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgb(44 33 27 / 0.10);
   }
 
   .group:hover .photo-lift img,
@@ -435,17 +450,21 @@
     transform: scale(1.04);
   }
 
-  .group:hover .photo-lift {
-    box-shadow: 0 4px 8px rgb(44 33 27 / 0.10);
-  }
-
   @media (prefers-reduced-motion: reduce) {
+    .photo-lift,
     .photo-lift img {
       transition: none;
+    }
+    .group:hover .photo-lift,
+    .photo-lift:hover {
+      transform: none;
     }
     .group:hover .photo-lift img,
     .photo-lift:hover img {
       transform: none;
+    }
+    .hover-copper {
+      transition: none;
     }
   }
 
@@ -1038,7 +1057,7 @@ select:focus {
   font-size: 13px;
   line-height: 1;
   color: var(--text-body);
-  transition: color 120ms ease-out;
+  transition: color var(--hover-duration) var(--hover-ease);
   white-space: nowrap;
 }
 
@@ -1127,4 +1146,27 @@ input.ea-focus-ring:focus-visible,
 
 .ea-wb-row.ea-focus-ring:focus-visible {
   outline-offset: -2px !important;
+}
+
+/* Tailwind's default 150ms snap. Public chrome uses the long desk ease. */
+.transition-colors,
+.transition-transform,
+.transition-opacity,
+.transition-all,
+.transition-\[border-color\],
+.transition-\[color\] {
+  transition-duration: var(--hover-duration);
+  transition-timing-function: var(--hover-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-colors,
+  .transition-transform,
+  .transition-opacity,
+  .transition-all,
+  .transition-\[border-color\],
+  .transition-\[color\],
+  .hover-copper {
+    transition-duration: 0.01ms;
+  }
 }

@@ -110,12 +110,12 @@ export default function RiverHeroImage({
         <div className="absolute inset-0 flex items-end">
           <div className="w-full px-5 pb-7 sm:px-8 xl:px-20">
             {subtitle ? (
-              <p className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--hero-type)]">
+              <p className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--hero-type)]">
                 {subtitle}
               </p>
             ) : null}
             <h1
-              className="max-w-4xl font-heading text-[40px] font-semibold leading-none tracking-tight text-[var(--hero-type)] sm:text-[56px] sm:leading-[60px]"
+              className="max-w-4xl font-heading text-[32px] font-semibold leading-[36px] text-[var(--hero-type)] sm:text-[56px] sm:leading-[60px]"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {title}

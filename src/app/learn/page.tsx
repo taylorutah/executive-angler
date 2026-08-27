@@ -115,13 +115,16 @@ export default async function LearnPage() {
     <div className="bg-[var(--surface-page)]">
       <header className="mx-auto max-w-3xl px-5 pt-10 pb-16 sm:px-8 xl:px-20">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
-        <p className="mt-8 font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
+        <p className="mt-8 font-ui text-[11px] font-medium uppercase tracking-[1.8px] text-[var(--text-meta)]">
           The beginner path
         </p>
-        <h1 className="mt-4 font-heading text-4xl font-semibold leading-[1.15] text-[var(--text-primary)] sm:text-5xl">
+        <h1
+          className="mt-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
           Learn the water
         </h1>
-        <p className="prose mt-6">
+        <p className="prose mt-6 text-[16px] leading-6 sm:text-[18px] sm:leading-7">
           Fly fishing is smaller than the catalog makes it look. Gear that earns its
           pocket. Current that holds fish. Five flies that cover most days. Rivers that
           forgive a first cast. How to put a fish back. Then two lists — not a form.
@@ -138,7 +141,7 @@ export default async function LearnPage() {
           </p>
           <h2
             id="gear"
-            className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             What gear actually matters
           </h2>
@@ -179,7 +182,7 @@ export default async function LearnPage() {
           </p>
           <h2
             id="water"
-            className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             How to read water
           </h2>
@@ -225,7 +228,7 @@ export default async function LearnPage() {
             </p>
             <h2
               id="flies"
-              className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+              className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
             >
               Your first five flies
             </h2>
@@ -255,7 +258,7 @@ export default async function LearnPage() {
           </p>
           <h2
             id="rivers"
-            className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Rivers near you that forgive beginners
           </h2>
@@ -280,7 +283,7 @@ export default async function LearnPage() {
           </p>
           <h2
             id="release"
-            className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Catch-and-release etiquette
           </h2>
@@ -327,7 +330,7 @@ export default async function LearnPage() {
           </p>
           <h2
             id="keep"
-            className="mt-3 font-heading text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Two lists. That is the whole path.
           </h2>

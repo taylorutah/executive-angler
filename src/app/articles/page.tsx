@@ -61,6 +61,8 @@ export default async function ArticlesPage() {
       <DeskMast
         title="The archive"
         lede="What the gauge does not say. No comments. No feed. One Refine."
+        titleSize="phrase"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

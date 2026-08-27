@@ -52,7 +52,7 @@ export default function HomeHero({ cfs }: Props) {
 
       <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 pt-12 sm:px-8 sm:pb-10 xl:px-20 xl:pb-10">
         <div className="flex w-full max-w-[720px] flex-col gap-3.5">
-          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--hero-type)]">
+          <p className="font-ui text-[10px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)] sm:text-[11px]">
             {HERO_STRETCH.toUpperCase()}
             <span className="px-1.5 text-[var(--hero-type)]/70">·</span>
             {HERO_PLACE.toUpperCase()}
@@ -67,19 +67,15 @@ export default function HomeHero({ cfs }: Props) {
           </p>
 
           <h1
-            className="font-heading font-semibold text-[var(--hero-type)]"
-            style={{
-              fontSize: "clamp(2.25rem, 5vw, 4rem)",
-              lineHeight: 1.06,
-              fontVariationSettings: '"SOFT" 0, "WONK" 1',
-            }}
+            className="font-heading text-[32px] font-semibold leading-[36px] text-[var(--hero-type)] sm:text-[64px] sm:leading-[68px]"
+            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
           >
             {HERO_HEADLINE_LEAD}
             <br />
             {HERO_HEADLINE_CLOSE}
           </h1>
 
-          <p className="max-w-[40rem] font-ui text-[14px] leading-5 text-[var(--hero-type)] sm:text-[18px] sm:leading-7">
+          <p className="prose max-w-[720px] text-[14px] leading-5 text-[var(--hero-type)] sm:text-[18px] sm:leading-7">
             {heroDek(cfs)}
           </p>
 

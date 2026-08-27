@@ -72,6 +72,8 @@ export default async function DestinationsPage() {
       <DeskMast
         title="Every place we keep"
         lede="Lodges, shops, and water. Not a booking engine. Pictures first. One Refine."
+        titleSize="phrase"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

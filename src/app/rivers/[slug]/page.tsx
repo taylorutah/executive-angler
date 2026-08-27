@@ -291,13 +291,10 @@ export default async function RiverPage({ params }: Props) {
         <HomeGutter className="space-y-14">
           <ScrollAnimation>
             <div>
-              <p className="mb-3 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
+              <p className="mb-4 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
                 How it fishes
               </p>
-              <h2 className="mb-5 font-heading text-2xl font-semibold text-[var(--text-primary)]">
-                Overview
-              </h2>
-              <div className="prose">
+              <div className="prose text-[15px] leading-6 sm:text-[17px] sm:leading-7">
                 {river.description.split("\n\n").map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}

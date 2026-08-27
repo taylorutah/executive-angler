@@ -41,16 +41,16 @@ export default function ThisWeeksRead({ lead }: Props) {
             />
           </div>
           <div className="max-w-[454px] pt-0 lg:pt-1">
-            <p className="font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
+            <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--text-meta)]">
               Field note
             </p>
             <h2
-              className="mt-3 font-heading text-[36px] font-semibold leading-[1.16] text-[var(--text-primary)]"
+              className="hover-copper mt-3 font-heading text-[32px] font-semibold leading-[38px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {lead.title}
             </h2>
-            <p className="mt-3 font-ui text-[12px] text-[var(--text-meta)]">
+            <p className="mt-3 font-ui text-[13px] text-[var(--text-meta)]">
               {[line.date, line.author].filter(Boolean).join("  ·  ")}
             </p>
             {lead.excerpt && (

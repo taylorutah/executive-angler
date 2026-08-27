@@ -30,7 +30,7 @@ export default function DeskArchive({ items }: Props) {
             {lead.badges?.[0] ? lead.badges[0] : "Field note"}
           </p>
           <h2
-            className="font-heading text-[28px] font-semibold leading-[34px] text-[var(--text-primary)] sm:text-[32px] sm:leading-[38px]"
+            className="hover-copper font-heading text-[28px] font-semibold leading-[34px] text-[var(--text-primary)] group-hover:text-[var(--action)] sm:text-[32px] sm:leading-[38px]"
             style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
           >
             {lead.title}
@@ -78,7 +78,7 @@ export default function DeskArchive({ items }: Props) {
                       </p>
                     ) : null}
                     <h4
-                      className="mt-1.5 font-heading text-[22px] font-semibold leading-[26px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
+                      className="hover-copper mt-1.5 font-heading text-[22px] font-semibold leading-[26px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
                       style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
                     >
                       {item.title}

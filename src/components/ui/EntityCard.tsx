@@ -58,7 +58,7 @@ export default function EntityCard({
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+              <h3 className="hover-copper font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]">
                 {title}
               </h3>
               {subtitle && (
@@ -136,7 +136,7 @@ export default function EntityCard({
         )}
       </div>
       <div className="p-5">
-        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+        <h3 className="hover-copper font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]">
           {title}
         </h3>
         {subtitle && (

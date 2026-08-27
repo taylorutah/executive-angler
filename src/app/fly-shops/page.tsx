@@ -73,6 +73,8 @@ export default async function FlyShopsPage() {
       <DeskMast
         title="Shops"
         lede="Local counters near the water we keep. Hours and flies. Not a cart."
+        titleSize="word"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

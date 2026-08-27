@@ -38,7 +38,7 @@ export default function ListCard({
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-heading line-clamp-1 text-base font-semibold text-[var(--text-primary)] transition-colors group-hover:text-[var(--action)]">
+          <h3 className="hover-copper font-heading line-clamp-1 text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]">
             {title}
           </h3>
           <div className="flex shrink-0 items-center gap-3">

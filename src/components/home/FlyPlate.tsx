@@ -24,7 +24,7 @@ export default function FlyPlate({ flies, flyCount }: Props) {
     <section data-lane="resource" className="bg-[var(--surface-page)] pb-10 pt-12">
       <HomeGutter>
         <h2
-          className="font-heading text-[36px] font-semibold leading-none text-[var(--text-primary)]"
+          className="font-heading text-[28px] font-semibold leading-none text-[var(--text-primary)] sm:text-[36px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           The plate
@@ -54,7 +54,7 @@ export default function FlyPlate({ flies, flyCount }: Props) {
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />
                   </div>
-                  <h3 className="mt-1.5 font-ui text-[12px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                  <h3 className="hover-copper mt-1.5 font-ui text-[12px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
                     {fly.name}
                   </h3>
                   {size && (

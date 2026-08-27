@@ -15,7 +15,7 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
           flyName={actionSlot.flyName}
         />
       )}
-      <div className="relative h-36 overflow-hidden">
+      <div className="photo-lift relative h-36">
         <SafeEntityImage
           src={imageUrl}
           alt={imageAlt}
@@ -35,7 +35,7 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
         )}
       </div>
       <div className="p-3">
-        <h3 className="font-heading text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors line-clamp-1">
+        <h3 className="hover-copper font-heading text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] line-clamp-1">
           {title}
         </h3>
       </div>

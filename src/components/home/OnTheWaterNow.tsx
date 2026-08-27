@@ -61,7 +61,7 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
                   href={`/rivers/${river.slug}`}
                   className="group flex w-[150px] flex-col gap-1 rounded-[4px] border border-[rgb(44_33_27/0.18)] bg-[var(--surface-card)] px-3.5 py-3 sm:w-[204px]"
                 >
-                  <span className="font-ui text-[13px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                  <span className="hover-copper font-ui text-[13px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
                     {river.label}
                   </span>
                   {cfs != null ? (

@@ -54,6 +54,7 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
               imageAlt={item.imageAlt}
               title={item.title}
               meta={item.meta}
+              density="plate"
             />
           </li>
         ))}
@@ -86,7 +87,7 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
                           href={item.href}
                           className="ea-focus-ring group flex items-baseline justify-between gap-3"
                         >
-                          <span className="font-ui text-[14px] text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                          <span className="hover-copper font-ui text-[14px] text-[var(--text-primary)] group-hover:text-[var(--action)]">
                             {item.title}
                           </span>
                           {item.meta ? (

@@ -89,6 +89,8 @@ export default async function FliesPage() {
       <DeskMast
         title="Every fly we keep"
         lede="The plate is twelve this week. This is the bench — nymphs, dries, streamers. Pictures first. One Refine."
+        titleSize="phrase"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

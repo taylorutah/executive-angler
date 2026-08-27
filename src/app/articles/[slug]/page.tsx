@@ -306,7 +306,7 @@ export default async function ArticlePage({ params }: Props) {
                         <li key={river.id}>
                           <Link
                             href={`/rivers/${river.slug}`}
-                            className="font-heading text-lg font-bold text-[var(--text-primary)] hover:text-[var(--action)] transition-colors"
+                            className="hover-copper font-heading text-lg font-bold text-[var(--text-primary)] hover:text-[var(--action)]"
                           >
                             {river.name}
                           </Link>
@@ -331,7 +331,7 @@ export default async function ArticlePage({ params }: Props) {
                         <li key={fly.id}>
                           <Link
                             href={`/flies/${fly.slug}`}
-                            className="font-heading text-lg font-bold text-[var(--text-primary)] hover:text-[var(--action)] transition-colors"
+                            className="hover-copper font-heading text-lg font-bold text-[var(--text-primary)] hover:text-[var(--action)]"
                           >
                             {fly.name}
                           </Link>

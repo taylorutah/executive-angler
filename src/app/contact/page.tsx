@@ -75,12 +75,18 @@ function ContactPageInner() {
 
   return (
     <>
-      <div className="bg-[var(--surface-page)] pt-8 pb-20">
+      <div className="bg-[var(--surface-page)] pb-20 pt-14">
         <div className="mx-auto max-w-2xl px-5 sm:px-8 xl:px-20">
-          <h1 className="mb-4 font-heading text-4xl font-semibold text-[var(--text-primary)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
+            House
+          </p>
+          <h1
+            className="mb-4 mt-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+          >
             Contact
           </h1>
-          <p className="text-lg text-[var(--text-body)] mb-10">
+          <p className="prose mb-10 text-[16px] leading-6 text-[var(--text-body)] sm:text-[18px] sm:leading-7">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>

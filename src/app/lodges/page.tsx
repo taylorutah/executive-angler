@@ -87,6 +87,8 @@ export default async function LodgesPage() {
       <DeskMast
         title="Every lodge we keep"
         lede="Pictures first. One Refine. Not a booking engine. We name the house. Their site takes the bed."
+        titleSize="phrase"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

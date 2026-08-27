@@ -50,7 +50,7 @@ export default function WhereToGo({ places }: Props) {
                   />
                 </div>
                 <h3
-                  className="mt-2 font-heading text-[22px] font-semibold leading-none text-[var(--text-primary)] group-hover:text-[var(--action)]"
+                  className="hover-copper mt-2 font-heading text-[20px] font-semibold leading-[25px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
                   style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
                 >
                   {place.name}

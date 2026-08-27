@@ -53,15 +53,15 @@ export default function Footer() {
           >
             {SITE_NAME}
           </p>
-          <p className="mt-1 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
-            The water desk
+          <p className="mt-1 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
+            THE WATER DESK
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-y-7 py-7 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-4">
           {footerColumns.map(({ title, links }) => (
             <div key={title}>
-              <h3 className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--text-meta)]">
+              <h3 className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--text-meta)]">
                 {title}
               </h3>
               <ul className="space-y-2">
@@ -69,7 +69,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="ea-focus-ring font-ui text-[14px] text-[var(--text-primary)] transition-colors hover:text-[var(--action)]"
+                      className="hover-copper ea-focus-ring font-ui text-[14px] text-[var(--text-primary)] hover:text-[var(--action)]"
                     >
                       {link.label}
                     </Link>

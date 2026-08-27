@@ -32,6 +32,8 @@ export default async function GuidesPage() {
       <DeskMast
         title="Guides"
         lede={`${guides.length} people who know a river. Their site takes the day. We do not book it.`}
+        titleSize="word"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">
@@ -47,7 +49,7 @@ export default async function GuidesPage() {
                   >
                     <div className="min-w-0">
                       <h2
-                        className="font-heading text-[22px] font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]"
+                        className="hover-copper font-heading text-[22px] font-semibold leading-[26px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
                         style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
                       >
                         {guide.name}

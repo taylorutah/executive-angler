@@ -10,7 +10,10 @@ export default function PrivacyPage() {
   return (
     <div className="bg-[var(--surface-page)] pt-8 pb-20">
       <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
-        <h1 className="mb-2 font-heading text-4xl font-semibold text-[var(--text-primary)]">
+        <h1
+          className="mb-2 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
           Privacy Policy
         </h1>
         <p className="text-sm text-[var(--text-body)] mb-10">
