@@ -85,9 +85,9 @@ describe("photoAlt", () => {
 describe("HomeHero photograph", () => {
   it("serves public JPEGs with a mobile source, not the optimizer", () => {
     assert.equal(/import Image from "next\/image"/.test(homeHero), false);
-    assert.match(homeHero, /madison-river-three-dollar-bridge-640\.webp/);
-    assert.match(homeHero, /HERO_IMAGE\.src/);
+    assert.match(homeHero, /HERO_IMAGE\.mobileWebp/);
     assert.match(homeHero, /HERO_IMAGE\.mobileSrc/);
+    assert.match(homeHero, /HERO_IMAGE\.src/);
   });
 });
 
