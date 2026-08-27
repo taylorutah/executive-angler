@@ -103,7 +103,7 @@ export default function CommunityPhotos({
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="aspect-[4/3] bg-[var(--surface-card)] rounded-xl animate-pulse"
+              className="aspect-[4/3] bg-[var(--surface-card)] rounded-surface animate-pulse"
             />
           ))}
         </div>
@@ -141,7 +141,7 @@ export default function CommunityPhotos({
             key={photo.id}
             onClick={() => setLightboxIndex(index)}
             aria-label={`View photo${photo.caption ? `: ${photo.caption}` : ""} by ${photo.submitterName}`}
-            className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[var(--surface-card)] focus:outline-none focus:ring-2 focus:ring-[var(--action)] focus:ring-offset-2"
+            className="group relative aspect-[4/3] rounded-surface overflow-hidden bg-[var(--surface-card)] focus:outline-none focus:ring-2 focus:ring-[var(--action)] focus:ring-offset-2"
           >
             <Image
               src={photo.photoUrl}

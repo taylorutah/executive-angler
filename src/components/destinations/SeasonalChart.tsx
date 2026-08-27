@@ -55,7 +55,7 @@ export default function SeasonalChart({
                 <div
                   className={`w-full ${
                     best
-                      ? "h-full bg-[var(--action)]"
+                      ? "h-full bg-[var(--text-primary)]"
                       : "h-[18%] bg-[var(--border-rule)]"
                   }`}
                 />

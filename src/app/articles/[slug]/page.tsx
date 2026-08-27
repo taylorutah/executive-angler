@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Badge from "@/components/ui/Badge";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import PullQuote from "@/components/article/PullQuote";
@@ -194,11 +194,9 @@ export default async function ArticlePage({ params }: Props) {
         }} />
       )}
 
-      <div className="reading-progress-bar" aria-hidden="true" />
-
       <div className="bg-[var(--surface-page)]">
         {/* Bleed image — the photograph runs the full width, the title sits under it */}
-        <figure className="relative m-0">
+        <figure className="relative m-0 mx-auto w-full max-w-[900px]">
           <div className="relative h-[42vh] min-h-[280px] sm:h-[56vh] w-full overflow-hidden">
             <div className="absolute top-4 right-4 z-20">
               <AdminHeroEditor
@@ -217,7 +215,7 @@ export default async function ArticlePage({ params }: Props) {
               meta={article.category}
               className="object-cover"
               priority
-              sizes="100vw"
+              sizes="(max-width: 900px) 100vw, 900px"
             />
           </div>
           {article.heroImageCredit && (
@@ -241,20 +239,20 @@ export default async function ArticlePage({ params }: Props) {
         <div className="mx-auto max-w-5xl px-4 sm:px-8">
           {/* Breadcrumb + favorite */}
           <div className="flex items-center justify-between py-5 border-b border-[var(--border-rule)]">
-            <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)]">
-              <Link href="/" className="hover:text-[var(--action)] transition-colors">Home</Link>
-              <span>/</span>
-              <Link href="/articles" className="hover:text-[var(--action)] transition-colors">Field Notes</Link>
-              <span>/</span>
-              <span className="text-[var(--text-body)] truncate max-w-[180px] sm:max-w-none">{article.title}</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Field Notes", href: "/articles" },
+                { label: article.title },
+              ]}
+            />
             <FavoriteButton entityType="article" entityId={article.id} />
           </div>
 
           <article className="pb-24">
-            {/* Title, deck, byline */}
             <header className="max-w-[68ch] pt-10 sm:pt-14">
-              <Badge variant="forest" size="md">{article.category}</Badge>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                {categoryLabel}
+              </p>
               <h1 className="mt-3 font-heading font-bold text-[34px] sm:text-[44px] lg:text-[56px] leading-[1.05] text-[var(--text-primary)]">
                 {article.title}
               </h1>

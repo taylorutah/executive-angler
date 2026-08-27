@@ -1,9 +1,7 @@
 /**
- * /flies/[slug] — specimen-first fly pattern template (Lane J).
+ * /flies/[slug] — specimen-first fly pattern template (Water Desk §2.3).
  *
- * Order: macro on Paper → name + spec → Dusk variant table → recipe
- * (materials linked to the catalog) → tying video → fishing now on
- * (river names + sizes, no counts) → history in .prose below a hard rule.
+ * Order: macro on Paper → name + spec → RecipeStrip → InstrumentWell variant table.
  *
  * Public HTML stays cookie-free so the page remains CDN-cacheable.
  * Stock counts hydrate in the variant table after auth.
@@ -21,9 +19,10 @@ import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import FlyVariantTable from "@/components/fly-detail/FlyVariantTable";
+import RecipeStrip from "@/components/desk/RecipeStrip";
 import { toYouTubeEmbedUrl } from "@/lib/video-embed";
 import { getFishingNowRivers } from "@/lib/flies/fishing-now";
-import { linkRecipeMaterials, type LinkedMaterialSlot } from "@/lib/flies/link-materials";
+import { linkRecipeMaterials } from "@/lib/flies/link-materials";
 import { publicVariantRows } from "@/lib/flies/variant-rows";
 import { formatHookSize } from "@/lib/flies/variant-format";
 
@@ -56,16 +55,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: { canonical: `${SITE_URL}/flies/${fly.slug}` },
   };
-}
-
-function formatSlotLabel(slot: string): string {
-  return (
-    slot
-      .split(/[_\s]+/)
-      .filter(Boolean)
-      .map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase())
-      .join(" ") || "Material"
-  );
 }
 
 function sizeSpec(sizes: number[] | undefined): string | null {
@@ -196,6 +185,10 @@ export default async function FlyDetail({ params }: Props) {
         </div>
       </header>
 
+      <div className="pb-12">
+        <RecipeStrip materials={linkedMaterials} notes={fly.recipe_notes} />
+      </div>
+
       <FlyVariantTable
         flyId={fly.id}
         flySlug={fly.slug}
@@ -204,8 +197,6 @@ export default async function FlyDetail({ params }: Props) {
       />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <Recipe materials={linkedMaterials} notes={fly.recipe_notes} />
-
         {fly.tying_overview && (
           <section className="prose mt-12">
             <h2>At the vise</h2>
@@ -286,57 +277,5 @@ export default async function FlyDetail({ params }: Props) {
         </p>
       </div>
     </div>
-  );
-}
-
-function Recipe({
-  materials,
-  notes,
-}: {
-  materials: LinkedMaterialSlot[];
-  notes: string | null;
-}) {
-  const hasMaterials = materials.length > 0;
-  return (
-    <section aria-labelledby="recipe-heading">
-      <h2 id="recipe-heading" className="font-heading text-2xl text-[var(--text-primary)]">
-        Recipe
-      </h2>
-      {hasMaterials ? (
-        <ul className="mt-4 max-w-2xl divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
-          {materials.map((m, i) => {
-            const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
-            const detail = [m.material, m.brand].filter(Boolean).join(" · ");
-            return (
-              <li key={i} className="flex items-baseline gap-3 py-2.5 text-[14px]">
-                <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)]">
-                  {slotLabel}
-                </span>
-                {m.href ? (
-                  <Link
-                    href={m.href}
-                    className="text-[var(--text-primary)] underline-offset-4 hover:text-[var(--action)] hover:underline"
-                  >
-                    {detail || m.catalogName || "—"}
-                  </Link>
-                ) : (
-                  <span className="text-[var(--text-primary)]">{detail || "—"}</span>
-                )}
-                {m.description && (
-                  <span className="text-[13px] text-[var(--text-body)]">{m.description}</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="mt-3 text-[15px] text-[var(--text-body)]">Recipe not filled in yet.</p>
-      )}
-      {notes && (
-        <div className="prose mt-6">
-          <p className="whitespace-pre-line">{notes}</p>
-        </div>
-      )}
-    </section>
   );
 }
