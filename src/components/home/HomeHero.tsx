@@ -35,8 +35,7 @@ export default function HomeHero({ cfs }: Props) {
         origin without the preview SSO cookie and gets HTML, so the
         photograph vanishes on the protected deploy while localhost and
         a direct /images/... request in the browser stay fine.
-        quality={85} is also not in the Next 16 allowlist (default [75]);
-        a raw /_next/image?...&q=85 is 400.
+        A quality of 85 is not in the Next 16 allowlist (default [75]).
       */}
       <div className="relative col-start-1 row-start-1 min-h-[72vh]">
         <Image

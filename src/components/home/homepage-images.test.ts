@@ -85,7 +85,7 @@ describe("photoAlt", () => {
 describe("HomeHero photograph", () => {
   it("serves the public JPEG, not the optimizer", () => {
     assert.match(homeHero, /\bunoptimized\b/);
-    assert.equal(homeHero.includes("quality={85}"), false);
+    assert.equal(/quality\s*=/.test(homeHero), false);
     assert.match(homeHero, /src=\{HERO_IMAGE\.src\}/);
   });
 });
