@@ -26,7 +26,7 @@ test.describe("journey smoke", () => {
   test("destinations index renders the places desk, not a blank bounce", async ({ page }) => {
     await page.goto("/destinations", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/destinations\/?$/);
-    await expect(page.getByRole("heading", { name: /where the water is/i })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /\d+\s+destinations/i })).toBeVisible();
     await expect(page.locator("body")).toContainText(/\d+\s+results/i);
   });
 
