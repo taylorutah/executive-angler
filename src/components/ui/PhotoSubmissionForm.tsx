@@ -229,7 +229,7 @@ export default function PhotoSubmissionForm({
   if (isAuthenticated === null) return null;
 
   return (
-    <div className={hideHeader ? "" : "bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] shadow-sm overflow-hidden"}>
+    <div className={hideHeader ? "" : "bg-[var(--surface-raised)] rounded-surface border border-[var(--border-rule)] shadow-[var(--elev-1)] overflow-hidden"}>
       {/* Collapsible Header — hidden when parent provides its own */}
       {!hideHeader && (
         <button

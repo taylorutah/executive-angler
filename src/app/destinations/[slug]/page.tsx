@@ -1,35 +1,24 @@
 /**
- * /destinations/[slug] — place page: essay + river catalog.
+ * /destinations/[slug] — place template (Water Desk §2.4).
  *
- * Register: Daylight throughout. `registerForPath` (src/lib/register.ts)
- * only flips to Dusk for /app, /journal, /favorites, and other logged-in
- * product routes — /destinations is not one of them, and nothing on this
- * page asks for that treatment either.
- *
- * No Dusk switch here, on purpose: a place page is an essay and a catalog
- * of rivers, lodges, guides, and shops, not a workbench. There is no live
- * gauge, personal scorecard, or stock/variant tool the way /rivers/[slug]
- * and /flies/[slug] justify a dusk-styled module. The one piece of
- * per-user data on this page — which of these rivers you've fished — is a
- * plain client-fetched line in ordinary Daylight tokens (see
- * PlaceRiverGrid), not a register change.
+ * DestinationPlate header, rivers, season, species. Directories appear
+ * contextually per river, never as a browsable alphabetical wall.
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import HeroSection from "@/components/ui/HeroSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
 import CommunityPhotos from "@/components/ui/CommunityPhotos";
 import PhotoSubmissionForm from "@/components/ui/PhotoSubmissionForm";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
-import SafeEntityImage from "@/components/media/SafeEntityImage";
+import DestinationPlate from "@/components/destinations/DestinationPlate";
 import SeasonalChart from "@/components/destinations/SeasonalChart";
 import PlaceEssay from "@/components/destinations/PlaceEssay";
 import PlaceRiverGrid from "@/components/destinations/PlaceRiverGrid";
+import PlaceRiverDirectories from "@/components/destinations/PlaceRiverDirectories";
 import { isUsableImageUrl } from "@/lib/media/image-url";
 import { claimImageUrl } from "@/components/home/homepage-images";
 import { SITE_URL } from "@/lib/constants";
@@ -57,12 +46,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const bestMonths = (dest.bestMonths || []).slice(0, 3).join(", ");
   const geo = dest.state || dest.country || dest.region || "";
   const fallbackTitle = `${dest.name} Fly Fishing — ${geo} Guide to Rivers, Lodges & Hatches | Executive Angler`;
-  const fallbackDesc = `Plan your ${dest.name} fly fishing trip.${speciesCount > 0 ? ` Target ${speciesCount} species including ${speciesList}.` : ""}${bestMonths ? ` Best months: ${bestMonths}.` : ""} Rivers, lodges, guides & hatch charts. Plan your trip today.`;
+  const fallbackDesc = `Plan your ${dest.name} fly fishing trip.${speciesCount > 0 ? ` Target ${speciesCount} species including ${speciesList}.` : ""}${bestMonths ? ` Best months: ${bestMonths}.` : ""} Rivers, lodges, guides & hatch charts.`;
 
   return {
     title: { absolute: dest.metaTitle || fallbackTitle },
-    description:
-      dest.metaDescription || fallbackDesc,
+    description: dest.metaDescription || fallbackDesc,
     openGraph: {
       title: dest.metaTitle || `${dest.name} Fly Fishing`,
       description: dest.metaDescription || dest.tagline,
@@ -97,11 +85,6 @@ export default async function DestinationPage({ params }: Props) {
     getApprovedPhotosByEntity("destination", dest.id),
   ]);
 
-  // The 70vh hero and the river grid speak for their photographs before the
-  // essay does. Restricting the essay to community photos is not enough on its
-  // own — a community photo can point at the same asset as a hero — so claim
-  // every frame the page has already committed to and let the essay take what
-  // is left.
   const claimed = new Set<string>();
   claimImageUrl(dest.heroImageUrl, claimed);
   for (const river of destRivers) claimImageUrl(river.heroImageUrl, claimed);
@@ -129,6 +112,8 @@ export default async function DestinationPage({ params }: Props) {
       description: l.priceRange || "Lodge",
     })),
   ];
+
+  const regionLabel = [dest.state, dest.country].filter(Boolean).join(" · ") || dest.region;
 
   return (
     <>
@@ -158,15 +143,16 @@ export default async function DestinationPage({ params }: Props) {
       />
 
       <div className="relative">
-        <HeroSection
-          imageUrl={dest.heroImageUrl}
-          imageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
-          title={dest.name}
-          subtitle={dest.tagline}
-          height="h-[70vh]"
-          imageCredit={dest.heroImageCredit}
-          imageCreditUrl={dest.heroImageCreditUrl}
-          creditStyle="overlay"
+        <DestinationPlate
+          name={dest.name}
+          tagline={dest.tagline}
+          heroImageUrl={dest.heroImageUrl}
+          heroImageAlt={dest.heroImageAlt || `Fly fishing in ${dest.name}`}
+          heroImageCredit={dest.heroImageCredit}
+          heroImageCreditUrl={dest.heroImageCreditUrl}
+          bestMonths={dest.bestMonths || []}
+          primarySpecies={dest.primarySpecies || []}
+          region={regionLabel}
         />
         <div className="absolute top-4 right-4 z-20">
           <AdminHeroEditor
@@ -181,7 +167,7 @@ export default async function DestinationPage({ params }: Props) {
       </div>
 
       <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -193,6 +179,31 @@ export default async function DestinationPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {destRivers.length > 0 && (
+        <section className="bg-[var(--surface-page)] pb-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-3xl text-[var(--text-primary)]">
+              Rivers of this place
+            </h2>
+            <p className="mt-2 mb-8 text-sm text-[var(--text-body)]">
+              {destRivers.length} {destRivers.length === 1 ? "river" : "rivers"} documented here.
+            </p>
+            <PlaceRiverGrid
+              rivers={destRivers.map((river) => ({
+                id: river.id,
+                slug: river.slug,
+                name: river.name,
+                heroImageUrl: river.heroImageUrl,
+                primarySpecies: river.primarySpecies || [],
+                flowType: river.flowType,
+                difficulty: river.difficulty,
+                wadingType: river.wadingType,
+              }))}
+            />
+          </div>
+        </section>
+      )}
 
       <section className="bg-[var(--surface-page)] pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -208,7 +219,7 @@ export default async function DestinationPage({ params }: Props) {
             <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
               {dest.elevationRange ? (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
                     Elevation
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.elevationRange}</dd>
@@ -216,7 +227,7 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.licenseInfo ? (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
                     License
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.licenseInfo}</dd>
@@ -224,7 +235,7 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.climateNotes ? (
                 <div className="sm:col-span-2">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
                     Climate
                   </dt>
                   <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.climateNotes}</dd>
@@ -232,7 +243,7 @@ export default async function DestinationPage({ params }: Props) {
               ) : null}
               {dest.regulationsSummary ? (
                 <div className="sm:col-span-2">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
                     Regulations
                     <span className="ml-2 font-normal normal-case tracking-normal text-[var(--text-body)]">
                       check current rules before you go
@@ -249,8 +260,8 @@ export default async function DestinationPage({ params }: Props) {
       {dest.slug === "belize" && (
         <section className="bg-[var(--surface-page)] pb-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="prose">
-              <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+            <div className="prose max-w-[68ch]">
+              <h2 className="font-heading text-2xl text-[var(--text-primary)]">
                 Permit, bonefish, and tarpon
               </h2>
               <p>
@@ -277,175 +288,34 @@ export default async function DestinationPage({ params }: Props) {
         </section>
       )}
 
-      {destRivers.length > 0 && (
-        <section className="bg-[var(--surface-page)] pb-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <ScrollAnimation>
-              <h2 className="font-heading text-3xl font-bold text-[var(--text-primary)]">
-                Rivers of this place
-              </h2>
-              <p className="mt-2 mb-8 text-sm text-[var(--text-body)]">
-                {destRivers.length} {destRivers.length === 1 ? "river" : "rivers"} documented here.
-              </p>
-              <PlaceRiverGrid
-                rivers={destRivers.map((river) => ({
-                  id: river.id,
-                  slug: river.slug,
-                  name: river.name,
-                  heroImageUrl: river.heroImageUrl,
-                  primarySpecies: river.primarySpecies || [],
-                  flowType: river.flowType,
-                  difficulty: river.difficulty,
-                  wadingType: river.wadingType,
-                }))}
-              />
-            </ScrollAnimation>
-          </div>
-        </section>
-      )}
-
       {mapMarkers.length > 0 && (
         <section className="bg-[var(--surface-page)] pb-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <ScrollAnimation>
-              <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mb-4">
-                Map
-              </h2>
-              <p className="mb-3 text-sm text-[var(--text-body)]">
-                Rivers and lodges for this place. Vellum land and Teal water — a desk chart, not a satellite.
-              </p>
-              <LazyMapView
-                latitude={dest.latitude}
-                longitude={dest.longitude}
-                zoom={7}
-                markers={mapMarkers}
-                tone="desk"
-                className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
-              />
-            </ScrollAnimation>
+            <h2 className="mb-4 font-heading text-2xl text-[var(--text-primary)]">
+              Map
+            </h2>
+            <p className="mb-3 text-sm text-[var(--text-body)]">
+              Rivers and lodges for this place. Vellum land and Teal water — a desk chart, not a satellite.
+            </p>
+            <LazyMapView
+              latitude={dest.latitude}
+              longitude={dest.longitude}
+              zoom={7}
+              markers={mapMarkers}
+              tone="desk"
+              className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
+            />
           </div>
         </section>
       )}
 
-      {(destLodges.length > 0 || destGuides.length > 0 || destFlyShops.length > 0) && (
-        <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-14">
-            <div>
-              <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
-                On the ground
-              </h2>
-              <p className="mt-2 text-sm text-[var(--text-body)]">
-                Lodges, guides, and shops for this place — reached from the water, not as a directory.
-              </p>
-            </div>
-
-            {destLodges.length > 0 && (
-              <ScrollAnimation>
-                <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-6">
-                  Lodges
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {destLodges.map((lodge) => (
-                    <Link
-                      key={lodge.id}
-                      href={`/lodges/${lodge.slug}`}
-                      className="flex gap-4 border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
-                    >
-                      <div className="relative h-16 w-16 shrink-0 overflow-hidden bg-[var(--surface-card)]">
-                        <SafeEntityImage
-                          src={lodge.heroImageUrl}
-                          alt={lodge.name}
-                          title={lodge.name}
-                          className="object-cover"
-                          sizes="64px"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-                          {lodge.name}
-                        </h4>
-                        {lodge.priceRange && (
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
-                        )}
-                        {lodge.seasonStart && lodge.seasonEnd && (
-                          <p className="text-xs text-[var(--text-body)] mt-1">
-                            {lodge.seasonStart}–{lodge.seasonEnd}
-                          </p>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </ScrollAnimation>
-            )}
-
-            {destGuides.length > 0 && (
-              <ScrollAnimation>
-                <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-6">
-                  Guides
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {destGuides.map((guide) => (
-                    <Link
-                      key={guide.id}
-                      href={`/guides/${guide.slug}`}
-                      className="block border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
-                    >
-                      <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-                        {guide.name}
-                      </h4>
-                      <p className="text-sm text-[var(--text-body)] mt-0.5">
-                        {(guide.specialties || []).slice(0, 3).join(", ")}
-                      </p>
-                      {guide.dailyRate && (
-                        <p className="text-sm font-medium text-[var(--text-body)] mt-1">
-                          {guide.dailyRate}
-                        </p>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-              </ScrollAnimation>
-            )}
-
-            {destFlyShops.length > 0 && (
-              <ScrollAnimation>
-                <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] mb-6">
-                  Fly shops
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {destFlyShops.slice(0, 6).map((shop) => (
-                    <Link
-                      key={shop.id}
-                      href={`/fly-shops/${shop.slug}`}
-                      className="flex items-start gap-4 border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 transition-colors hover:bg-[var(--surface-card)]"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline justify-between gap-3">
-                          <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-                            {shop.name}
-                          </h4>
-                          {shop.googleRating && (
-                            <span className="shrink-0 text-xs text-[var(--text-body)]">
-                              {shop.googleRating} rating
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
-                        {(shop.services || []).length > 0 && (
-                          <p className="text-xs text-[var(--text-body)] mt-1">
-                            {(shop.services || []).slice(0, 3).join(" · ")}
-                          </p>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </ScrollAnimation>
-            )}
-          </div>
-        </section>
-      )}
+      <PlaceRiverDirectories
+        placeName={dest.name}
+        rivers={destRivers.map((r) => ({ id: r.id, slug: r.slug, name: r.name }))}
+        lodges={destLodges}
+        guides={destGuides}
+        flyShops={destFlyShops}
+      />
 
       <section className="bg-[var(--surface-page)] pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
