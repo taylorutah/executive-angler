@@ -330,7 +330,7 @@ export default function WorkbenchTable<T>({
                 onClick={() => setCursor((c) => ({ ...c, active: i }))}
                 onDoubleClick={() => onActivate?.(row)}
                 className={`ea-wb-row ea-focus-ring grid h-8 items-center border-b border-[var(--border-rule)] ${zebra} ${
-                  isActive ? "ring-1 ring-inset ring-[var(--signal-live)]" : ""
+                  isActive ? "border-l border-l-[var(--border-strong)]" : "border-l border-l-transparent"
                 }`}
                 style={{ gridTemplateColumns: gridTemplate }}
               >

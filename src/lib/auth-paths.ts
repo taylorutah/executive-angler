@@ -1,8 +1,10 @@
 /**
  * Auth landing and private-route lists.
  *
- * `/today` and `/rivers/mine` are in these lists before the pages exist so a
- * private surface cannot ship unprotected. Public `/` is never redirected.
+ * `/rivers/mine` is in these lists before the page exists so a private surface
+ * cannot ship unprotected. `/today` is reachable signed out with an honest
+ * empty state; signed-in content requires auth on the page. Public `/` is never
+ * redirected.
  */
 
 export const POST_LOGIN_PATH = "/today";
@@ -12,7 +14,6 @@ export const PROTECTED_PATHS = [
   "/account",
   "/journal",
   "/dashboard",
-  "/today",
   "/notifications",
   "/messages",
   "/admin",

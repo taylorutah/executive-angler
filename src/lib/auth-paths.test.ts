@@ -11,11 +11,10 @@ import {
 } from "./auth-paths.ts";
 
 describe("auth paths — the gate for /today", () => {
-  it("protects /today and /rivers/mine before they exist as product surfaces", () => {
-    assert.ok((PROTECTED_PATHS as readonly string[]).includes("/today"));
+  it("protects /rivers/mine and leaves /today reachable signed out", () => {
+    assert.ok(!(PROTECTED_PATHS as readonly string[]).includes("/today"));
     assert.ok((PROTECTED_EXACT as readonly string[]).includes("/rivers/mine"));
-    assert.equal(pathMatches("/today", PROTECTED_PATHS, PROTECTED_EXACT), true);
-    assert.equal(pathMatches("/today/x", PROTECTED_PATHS, PROTECTED_EXACT), true);
+    assert.equal(pathMatches("/today", PROTECTED_PATHS, PROTECTED_EXACT), false);
     assert.equal(pathMatches("/rivers/mine", PROTECTED_PATHS, PROTECTED_EXACT), true);
     assert.equal(pathMatches("/rivers/mine/edit", PROTECTED_PATHS, PROTECTED_EXACT), true);
     assert.equal(pathMatches("/rivers/minnesota", PROTECTED_PATHS, PROTECTED_EXACT), false);

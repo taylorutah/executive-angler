@@ -24,7 +24,7 @@ export default function FiveFlyPlate({ flies }: { flies: LearnFly[] }) {
               <div className="relative aspect-square w-full overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
                 <SafeEntityImage
                   src={fly.heroImageUrl}
-                  alt=""
+                  alt={fly.name}
                   title={fly.name}
                   className="object-cover"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"

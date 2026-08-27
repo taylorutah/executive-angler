@@ -97,7 +97,7 @@ export default function NearRivers({ rivers }: { rivers: LearnRiver[] }) {
               href={`/rivers/${river.slug}`}
               className="ea-focus-ring group flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:gap-6"
             >
-              <span className="num w-8 shrink-0 font-mono text-[12px] tabular-nums text-[var(--text-body)]">
+              <span className="num w-8 shrink-0 text-right text-[12px] text-[var(--text-body)]">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="min-w-0 flex-1">
