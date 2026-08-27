@@ -35,6 +35,9 @@
   --cut-700: #B3261E;
   --cut-400: #F87171;
 
+  /* Warm cream on the dusk hero photograph (Home / 1440 fold). */
+  --hero-type: #F4EFE6;
+
   --background: var(--surface-page);
   --foreground: var(--text-primary);
   --font-inter: var(--font-fraunces), "Fraunces", serif;

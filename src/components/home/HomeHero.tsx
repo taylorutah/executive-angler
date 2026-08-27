@@ -56,22 +56,22 @@ export default function HomeHero({ cfs }: Props) {
 
       <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 pt-12 sm:px-8 sm:pb-10 xl:px-20 xl:pb-10">
         <div className="flex w-full max-w-[720px] flex-col gap-3.5">
-          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[#f4efe6]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--hero-type)]">
             {HERO_STRETCH.toUpperCase()}
-            <span className="px-1.5 text-[#f4efe6]/70">·</span>
+            <span className="px-1.5 text-[var(--hero-type)]/70">·</span>
             {HERO_PLACE.toUpperCase()}
             {cfs != null && (
               <>
-                <span className="px-1.5 text-[#f4efe6]/70">·</span>
+                <span className="px-1.5 text-[var(--hero-type)]/70">·</span>
                 <span className="text-[var(--teal-300)]">{cfs.toLocaleString("en-US")} CFS</span>
               </>
             )}
-            <span className="px-1.5 text-[#f4efe6]/70">·</span>
+            <span className="px-1.5 text-[var(--hero-type)]/70">·</span>
             {date}
           </p>
 
           <h1
-            className="font-heading font-semibold text-[#f4efe6]"
+            className="font-heading font-semibold text-[var(--hero-type)]"
             style={{
               fontSize: "clamp(2.25rem, 5vw, 4rem)",
               lineHeight: 1.06,
@@ -83,7 +83,7 @@ export default function HomeHero({ cfs }: Props) {
             {HERO_HEADLINE_CLOSE}
           </h1>
 
-          <p className="max-w-[40rem] font-ui text-[14px] leading-5 text-[#f4efe6] sm:text-[18px] sm:leading-7">
+          <p className="max-w-[40rem] font-ui text-[14px] leading-5 text-[var(--hero-type)] sm:text-[18px] sm:leading-7">
             {heroDek(cfs)}
           </p>
 
@@ -91,7 +91,7 @@ export default function HomeHero({ cfs }: Props) {
             action="/search"
             method="get"
             role="search"
-            className="flex h-11 w-full max-w-[640px] items-center overflow-hidden rounded-[2px] border border-[#e2dacd] bg-[rgba(250,246,240,0.92)] px-4 sm:h-12"
+            className="flex h-11 w-full max-w-[640px] items-center overflow-hidden rounded-[2px] border border-[var(--border-rule)] bg-[color-mix(in_srgb,var(--paper)_92%,transparent)] px-4 sm:h-12"
           >
             <label htmlFor="home-search" className="sr-only">
               {SEARCH_PLACEHOLDER}
@@ -107,7 +107,7 @@ export default function HomeHero({ cfs }: Props) {
           </form>
         </div>
 
-        <p className="mt-7 max-w-[720px] font-ui text-[11px] text-[#f4efe6]">{caption}</p>
+        <p className="mt-7 max-w-[720px] font-ui text-[11px] text-[var(--hero-type)]">{caption}</p>
       </div>
     </section>
   );
