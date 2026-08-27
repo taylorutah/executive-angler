@@ -123,7 +123,7 @@ export default async function RiverPage({ params }: Props) {
     (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
   )?.hatches ?? [];
 
-  const heroSubtitle = [dest?.state, dest?.name].filter(Boolean).join(" · ");
+  const heroSubtitle = [...new Set([dest?.state, dest?.name].filter(Boolean))].join(" · ");
 
   return (
     <>

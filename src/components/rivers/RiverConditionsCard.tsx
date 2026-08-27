@@ -52,20 +52,20 @@ interface WeatherSection {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatTimestamp(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString("en-US", {
-      month: "short", day: "numeric",
-      hour: "numeric", minute: "2-digit", hour12: true,
-    });
-  } catch { return ""; }
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-US", {
+    month: "short", day: "numeric",
+    hour: "numeric", minute: "2-digit", hour12: true,
+  });
 }
 
 function formatTime(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString("en-US", {
-      hour: "numeric", minute: "2-digit", hour12: true,
-    });
-  } catch { return ""; }
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-US", {
+    hour: "numeric", minute: "2-digit", hour12: true,
+  });
 }
 
 function getFlowLabel(cfs: number): { label: string; color: string } {
