@@ -4,7 +4,7 @@
  */
 export const LOCAL_HERO_MOBILE: Record<string, string> = {
   "/images/madison-river-three-dollar-bridge.jpg":
-    "/images/madison-river-three-dollar-bridge-640.webp",
+    "/images/madison-river-three-dollar-bridge-828.jpg",
 };
 
 export function localHeroMobileSrc(src: string): string | undefined {

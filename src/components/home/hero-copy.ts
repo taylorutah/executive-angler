@@ -19,10 +19,10 @@ export const WATER_JUDGEMENT = "low and clear; fish early";
 
 export const HERO_IMAGE = {
   src: "/images/madison-river-three-dollar-bridge.jpg",
-  /** Same photograph, 640px wide — Slow-4G LCP on mobile without touching the master. */
-  mobileSrc: "/images/madison-river-three-dollar-bridge-640.webp",
+  /** Same photograph, 828px wide — Slow-4G LCP on mobile without touching the master. */
+  mobileSrc: "/images/madison-river-three-dollar-bridge-828.jpg",
   webp: "/images/madison-river-three-dollar-bridge.webp",
-  mobileWebp: "/images/madison-river-three-dollar-bridge-640.webp",
+  mobileWebp: "/images/madison-river-three-dollar-bridge-828.webp",
   alt: "The Madison River running low and clear below Three Dollar Bridge, Montana",
   width: 1920,
   height: 736,
