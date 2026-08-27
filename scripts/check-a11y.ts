@@ -453,10 +453,14 @@ async function main() {
       const publicCtx = await browser.newContext({
         viewport: { width: vp.width, height: vp.height },
       });
-      const publicPage = await publicCtx.newPage();
       for (const register of REGISTERS) {
         for (const route of PUBLIC_ROUTES) {
-          await audit(publicPage, route, register, vp);
+          const publicPage = await publicCtx.newPage();
+          try {
+            await audit(publicPage, route, register, vp);
+          } finally {
+            await publicPage.close();
+          }
         }
       }
       await publicCtx.close();
@@ -464,12 +468,18 @@ async function main() {
       const memberCtx = await browser.newContext({
         viewport: { width: vp.width, height: vp.height },
       });
-      const memberPage = await memberCtx.newPage();
-      await memberPage.goto(BASE, { waitUntil: "domcontentloaded", timeout: 45_000 });
-      await signIn(memberPage);
+      const seedPage = await memberCtx.newPage();
+      await seedPage.goto(BASE, { waitUntil: "domcontentloaded", timeout: 45_000 });
+      await signIn(seedPage);
+      await seedPage.close();
       for (const register of REGISTERS) {
         for (const route of SIGNED_IN_ROUTES) {
-          await audit(memberPage, route, register, vp);
+          const memberPage = await memberCtx.newPage();
+          try {
+            await audit(memberPage, route, register, vp);
+          } finally {
+            await memberPage.close();
+          }
         }
       }
       await memberCtx.close();
