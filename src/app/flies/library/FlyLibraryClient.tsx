@@ -60,6 +60,7 @@ export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
       items={items}
       config={flyListConfig}
       storageKey="flies"
+      deskLayout="flies"
       liveValues={liveValues}
       showOptionalFilters={!isLoading && Boolean(user)}
       toolbarExtra={

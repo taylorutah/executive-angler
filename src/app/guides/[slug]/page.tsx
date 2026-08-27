@@ -220,7 +220,7 @@ export default async function GuidePage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
@@ -231,7 +231,7 @@ export default async function GuidePage({ params }: Props) {
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -246,7 +246,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Rivers & Waters
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -274,7 +274,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Lodges in This Area */}
               {areaLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Lodges in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -307,7 +307,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {areaFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -332,7 +332,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">

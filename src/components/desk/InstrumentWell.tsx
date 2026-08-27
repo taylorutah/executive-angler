@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import HomeGutter from "@/components/home/HomeGutter";
 import { cn } from "@/lib/utils";
 
 /**
@@ -46,15 +47,7 @@ export function InstrumentWellFrame({
 }) {
   return (
     <section className={cn("bg-[var(--surface-page)]", className)}>
-      <div
-        className="mx-auto max-w-7xl"
-        style={{
-          paddingInline: "var(--gutter)",
-          paddingBlock: "max(1.5rem, var(--gutter))",
-        }}
-      >
-        {children}
-      </div>
+      <HomeGutter className="py-6 sm:py-8">{children}</HomeGutter>
     </section>
   );
 }

@@ -5,6 +5,8 @@
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import EntityListView from "@/components/ui/EntityListView";
 import { getAllDestinations } from "@/lib/db";
 import { destinationListConfig, destinationRegionGroups } from "@/lib/list-configs";
@@ -67,23 +69,13 @@ export default async function DestinationsPage() {
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
-            Places
-          </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {destinations.length} destinations
-          </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
-            {destinations.length} destinations. Filter by region, season, species, and
-            trip length.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Every place we keep"
+        lede="Lodges, shops, and water. Not a booking engine. Pictures first. One Refine."
+      />
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <Suspense>
             <EntityListView
               items={items}
@@ -91,7 +83,7 @@ export default async function DestinationsPage() {
               storageKey="destinations"
             />
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

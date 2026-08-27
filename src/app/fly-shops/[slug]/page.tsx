@@ -186,7 +186,7 @@ export default async function FlyShopPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   About
                 </h2>
                 {shop.description.split("\n\n").map((p, i) => (
@@ -197,7 +197,7 @@ export default async function FlyShopPage({ params }: Props) {
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -211,7 +211,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {(shop.brandsCarried || []).length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Brands Carried
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -227,7 +227,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Waters We Know */}
               {nearbyRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Waters We Know
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -253,7 +253,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Guides in This Area */}
               {areaGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Guides in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -287,7 +287,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {shopSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -305,7 +305,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {shopFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Featured Patterns
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -326,7 +326,7 @@ export default async function FlyShopPage({ params }: Props) {
               )}
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Location
                 </h2>
                 <MapView

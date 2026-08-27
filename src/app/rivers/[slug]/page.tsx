@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import HomeGutter from "@/components/home/HomeGutter";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -122,9 +123,7 @@ export default async function RiverPage({ params }: Props) {
     (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
   )?.hatches ?? [];
 
-  const heroSubtitle = [destinationLabel, (river.flowType ?? "").replace(/-/g, " ")]
-    .filter(Boolean)
-    .join(" · ");
+  const heroSubtitle = [dest?.state, dest?.name].filter(Boolean).join(" · ");
 
   return (
     <>
@@ -196,7 +195,7 @@ export default async function RiverPage({ params }: Props) {
       </RiverHeroImage>
 
       <div className="border-b border-[var(--border-rule)] bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <HomeGutter className="py-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <Breadcrumbs
@@ -235,7 +234,7 @@ export default async function RiverPage({ params }: Props) {
               <FavoriteButton entityType="river" entityId={river.id} />
             </div>
           </div>
-        </div>
+        </HomeGutter>
       </div>
 
       <div id="river-live-fallback">
@@ -271,20 +270,23 @@ export default async function RiverPage({ params }: Props) {
       </Suspense>
 
       <section className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+        <HomeGutter className="space-y-6 py-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
           <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
           <BestWindowCalculator riverId={river.id} />
-        </div>
+        </HomeGutter>
       </section>
 
       <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl space-y-14 px-4 sm:px-6 lg:px-8">
+        <HomeGutter className="space-y-14">
           <ScrollAnimation>
             <div>
-              <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+              <p className="mb-3 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                How it fishes
+              </p>
+              <h2 className="mb-5 font-heading text-2xl font-semibold text-[var(--text-primary)]">
                 Overview
               </h2>
               <div className="prose">
@@ -661,7 +663,7 @@ export default async function RiverPage({ params }: Props) {
               </Link>
             </div>
           </ScrollAnimation>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

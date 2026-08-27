@@ -5,6 +5,8 @@
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import BrowseIndexFallback from "@/components/ui/BrowseIndexFallback";
 import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import FlyLibraryClient from "./FlyLibraryClient";
@@ -84,23 +86,13 @@ export default async function FliesPage() {
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
-            The complete reference
-          </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {allFlies.length} trout fly patterns
-          </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
-            {allFlies.length} patterns. Filter by hatch, size, and — when you are signed
-            in — what you can tie from your own materials.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Every fly we keep"
+        lede="The plate is twelve this week. This is the bench — nymphs, dries, streamers. Pictures first. One Refine."
+      />
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <BrowseIndexFallback
             id="flies-browse-fallback"
             count={items.length > 24 ? 24 : items.length}
@@ -110,7 +102,7 @@ export default async function FliesPage() {
               <FlyLibraryClient items={items} />
             </DismissBrowseFallback>
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

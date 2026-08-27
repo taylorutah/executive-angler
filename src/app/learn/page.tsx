@@ -115,7 +115,7 @@ export default async function LearnPage() {
     <div className="bg-[var(--surface-page)]">
       <header className="mx-auto max-w-3xl px-4 pt-10 pb-16 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
-        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <p className="mt-8 font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
           The beginner path
         </p>
         <h1 className="mt-4 font-heading text-4xl font-bold leading-[1.15] text-[var(--text-primary)] sm:text-5xl">
@@ -133,7 +133,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             01
           </p>
           <h2
@@ -174,7 +174,7 @@ export default async function LearnPage() {
 
       <section aria-labelledby="water" className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             02
           </p>
           <h2
@@ -220,7 +220,7 @@ export default async function LearnPage() {
       >
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+            <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
               03
             </p>
             <h2
@@ -250,7 +250,7 @@ export default async function LearnPage() {
 
       <section aria-labelledby="rivers" className="bg-[var(--surface-page)]">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             04
           </p>
           <h2
@@ -275,7 +275,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             05
           </p>
           <h2
@@ -322,7 +322,7 @@ export default async function LearnPage() {
         className="border-t border-[var(--border-rule)] bg-[var(--surface-page)]"
       >
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             Take these with you
           </p>
           <h2

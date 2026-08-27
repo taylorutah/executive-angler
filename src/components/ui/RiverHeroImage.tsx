@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Images } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
@@ -64,7 +63,7 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
+      <section className="relative h-[420px] w-full overflow-hidden">
         {showPhoto && useNativeHero ? (
           <div className="absolute inset-0">
             <picture className="block h-full w-full">
@@ -109,21 +108,24 @@ export default function RiverHeroImage({
         <div className="hero-overlay absolute inset-0 pointer-events-none" />
 
         <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+          <div className="w-full px-5 pb-7 sm:px-8 xl:px-20">
             {subtitle ? (
-              <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-white">
+              <p className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--hero-type)]">
                 {subtitle}
               </p>
             ) : null}
             <h1
-              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white"
-              style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
+              className="max-w-4xl font-heading text-[40px] font-semibold leading-none tracking-tight text-[var(--hero-type)] sm:text-[56px] sm:leading-[60px]"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {title}
             </h1>
+            {meta ? (
+              <p className="mt-2 font-ui text-[14px] text-[var(--hero-type)]">{meta}</p>
+            ) : null}
             {heroImageCredit ? (
               <p
-                className={`mt-3 min-h-[1.125rem] text-[11px] tracking-wide text-white/80 transition-opacity ${loaded && showPhoto ? "opacity-100" : "opacity-0"}`}
+                className={`mt-3 min-h-[1.125rem] font-ui text-[11px] tracking-wide text-[var(--hero-type)]/80 transition-opacity ${loaded && showPhoto ? "opacity-100" : "opacity-0"}`}
               >
                 {heroImageCreditUrl ? (
                   <a
@@ -146,10 +148,9 @@ export default function RiverHeroImage({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 text-[11px] font-medium text-white/90 underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+            className="absolute bottom-3 left-3 z-10 font-ui text-[11px] font-medium text-[var(--hero-type)]/90 underline decoration-white/40 underline-offset-4 hover:text-[var(--hero-type)] hover:decoration-white"
             aria-label={`View ${totalCount} photos`}
           >
-            <Images className="h-3.5 w-3.5" />
             {totalCount} photographs
           </button>
         )}

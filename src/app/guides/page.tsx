@@ -1,24 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Star } from "@/icons";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 
 export const revalidate = 3600;
-
-const SPOTLIGHT_SLUGS = [
-  "domenick-swentosky-troutbitten",
-  "jackson-hole-anglers",
-  "paddy-mcdonnell-moy-ghillie",
-] as const;
-
-const GUIDE_HEADLINES: Record<string, string> = {
-  "domenick-swentosky-troutbitten": "Twenty-Five Years on Pennsylvania's Wild Limestone Streams",
-  "jackson-hole-anglers": "Wild Cutthroats in the Shadow of the Tetons",
-  "paddy-mcdonnell-moy-ghillie": "Third-Generation Ghillie on Ireland's River Moy",
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   const guides = await getAllGuides();
@@ -37,173 +25,48 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GuidesPage() {
   const [guides, destinations] = await Promise.all([getAllGuides(), getAllDestinations()]);
-
-  const spotlightGuides = SPOTLIGHT_SLUGS.map((s) =>
-    guides.find((g) => g.slug === s)
-  ).filter(Boolean);
-
-  // Sort all guides A-Z by name
   const sortedGuides = [...guides].sort((a, b) => a.name.localeCompare(b.name));
-
-  // Helper to truncate bio at word boundary
-  const truncateBio = (bio: string, maxLen = 100): string => {
-    if (bio.length <= maxLen) return bio;
-    const truncated = bio.slice(0, maxLen);
-    const lastSpace = truncated.lastIndexOf(" ");
-    return lastSpace > 60 ? truncated.slice(0, lastSpace) + "..." : truncated + "...";
-  };
 
   return (
     <>
-      {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Expert Voices
-          </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
-            Your Guide Makes the Trip
-          </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
-            {guides.length} certified professionals with decades of experience on the
-            world&apos;s most storied waters.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Guides"
+        lede={`${guides.length} people who know a river. Their site takes the day. We do not book it.`}
+      />
 
-      {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
-            Featured Guides
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {spotlightGuides.map((guide, i) => {
-              if (!guide) return null;
-              const dest = destinations.find((d) => d.id === guide.destinationId);
-              return (
-                <ScrollAnimation key={guide.id} delay={i * 0.1}>
-                  <Link
-                    href={`/guides/${guide.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-xl border-l-4 border-[var(--action)] shadow-lg hover:bg-[var(--surface-card)] transition-colors"
-                  >
-                    <div className="p-6">
-                      <h3 className="font-heading text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors leading-tight">
-                        {guide.name}
-                      </h3>
-                      <p className="mt-2 text-sm font-medium text-[var(--action)] italic">
-                        {GUIDE_HEADLINES[guide.slug]}
-                      </p>
-                      {dest && (
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)]">
-                          {dest.name}
-                        </p>
-                      )}
-                      <p className="mt-4 text-sm text-[var(--text-body)] leading-relaxed line-clamp-3">
-                        {guide.bio.substring(0, 150)}...
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {guide.specialties.slice(0, 3).map((sp) => (
-                          <span
-                            key={sp}
-                            className="px-2.5 py-1 bg-[var(--surface-page)] text-[var(--action)] text-xs font-medium rounded-full border border-[var(--border-rule)]"
-                          >
-                            {sp}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="mt-5 flex items-center justify-between border-t border-[var(--border-rule)] pt-4">
-                        <div className="flex items-center gap-4">
-                          {guide.googleRating && (
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
-                              <span className="text-sm text-[var(--text-body)]">
-                                {guide.googleRating}
-                              </span>
-                            </div>
-                          )}
-                          {guide.yearsExperience && (
-                            <span className="text-xs text-[var(--text-meta)]">
-                              {guide.yearsExperience}+ yrs
-                            </span>
-                          )}
-                        </div>
-                        {guide.dailyRate && (
-                          <span className="text-sm font-semibold text-[var(--action)]">
-                            {guide.dailyRate}
-                          </span>
-                        )}
-                      </div>
-                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
-                        View Profile <ChevronRight className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Guides</h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
-            {guides.length} guides sorted A–Z
-          </p>
-        </div>
-      </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ul className="divide-y divide-[#21262D]">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
+          <ul>
             {sortedGuides.map((guide) => {
               const dest = destinations.find((d) => d.id === guide.destinationId);
               return (
-                <li key={guide.id}>
+                <li key={guide.id} className="border-t border-[var(--border-rule)]">
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group flex items-start justify-between gap-4 py-5 px-2 -mx-2 rounded-lg hover:bg-[var(--surface-raised)]/50 transition-colors"
+                    className="group flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
                   >
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                    <div className="min-w-0">
+                      <h2
+                        className="font-heading text-[22px] font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]"
+                        style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+                      >
                         {guide.name}
-                      </h3>
-                      <p className="mt-0.5 text-sm text-[var(--text-body)]">
-                        {dest?.name}
-                        {guide.dailyRate && (
-                          <>
-                            <span className="mx-2 text-[var(--text-meta)]">·</span>
-                            <span className="font-semibold text-[var(--action)]">{guide.dailyRate}</span>
-                          </>
-                        )}
-                      </p>
-                      {guide.specialties.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-1.5">
-                          {guide.specialties.slice(0, 3).map((sp) => (
-                            <span
-                              key={sp}
-                              className="px-2 py-0.5 text-[10px] font-medium text-[var(--action)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-full"
-                            >
-                              {sp}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      <p className="mt-1 text-sm text-[var(--text-meta)] line-clamp-2">
-                        {truncateBio(guide.bio)}
+                      </h2>
+                      <p className="mt-1 font-ui text-[14px] text-[var(--text-body)]">
+                        {[dest?.name, guide.specialties.slice(0, 2).join(", ")]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </p>
                     </div>
-                    <span className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[var(--action)] pt-1 group-hover:underline">
-                      View Profile <ChevronRight className="h-4 w-4" />
+                    <span className="shrink-0 font-ui text-[13px] font-medium text-[var(--action)]">
+                      View →
                     </span>
                   </Link>
                 </li>
               );
             })}
           </ul>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

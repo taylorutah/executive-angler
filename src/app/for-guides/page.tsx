@@ -26,7 +26,7 @@ export default function ForGuidesPage() {
         </p>
 
         <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             Why we do this
           </h2>
           <p>
@@ -37,7 +37,7 @@ export default function ForGuidesPage() {
             the whole thing is free, for you and for everyone.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             What you get
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -46,7 +46,7 @@ export default function ForGuidesPage() {
             <li>Early access to new features before public launch.</li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             How to claim
           </h2>
           <ol className="list-decimal pl-6 space-y-2">

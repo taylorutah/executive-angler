@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
-import { Send, CheckCircle, AlertCircle } from "@/icons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
@@ -76,10 +75,10 @@ function ContactPageInner() {
 
   return (
     <>
-      <div className="pt-8 pb-20">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-4">
-            Contact Us
+      <div className="bg-[var(--surface-page)] pt-8 pb-20">
+        <div className="mx-auto max-w-2xl px-5 sm:px-8 xl:px-20">
+          <h1 className="mb-4 font-heading text-4xl font-semibold text-[var(--text-primary)]">
+            Contact
           </h1>
           <p className="text-lg text-[var(--text-body)] mb-10">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
@@ -87,10 +86,9 @@ function ContactPageInner() {
           </p>
 
           {submitted ? (
-            <div className="rounded-xl bg-[var(--action)]/5 border border-forest/20 p-8 text-center">
-              <CheckCircle className="h-12 w-12 text-[var(--action)] mx-auto mb-4" />
-              <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-2">
-                Message Sent
+            <div className="rounded-[4px] border border-[var(--border-rule)] bg-[var(--surface-raised)] p-8">
+              <h2 className="mb-2 font-heading text-2xl font-semibold text-[var(--text-primary)]">
+                Message sent
               </h2>
               <p className="text-[var(--text-body)]">
                 Thank you for reaching out. We&apos;ll get back to you as soon
@@ -111,7 +109,7 @@ function ContactPageInner() {
                   id="name"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20"
                   placeholder="Your name"
                 />
               </div>
@@ -128,7 +126,7 @@ function ContactPageInner() {
                   id="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20"
                   placeholder="you@example.com"
                 />
               </div>
@@ -145,7 +143,7 @@ function ContactPageInner() {
                   name="subject"
                   required
                   defaultValue={initialSubject}
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20"
                 >
                   <option value="">Select a topic</option>
                   {SUBJECT_OPTIONS.map((s) => (
@@ -168,7 +166,7 @@ function ContactPageInner() {
                   name="message"
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors resize-y"
+                  className="w-full resize-y rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20"
                   placeholder="How can we help?"
                 />
               </div>
@@ -184,9 +182,8 @@ function ContactPageInner() {
 
               {/* Error message */}
               {error && (
-                <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-                  <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700">{error}</p>
+                <div className="rounded-[2px] border border-[var(--border-rule)] px-4 py-3">
+                  <p className="font-ui text-sm text-[var(--text-primary)]">{error}</p>
                 </div>
               )}
 
@@ -194,10 +191,9 @@ function ContactPageInner() {
                 <button
                   type="submit"
                   disabled={sending || !captchaResolved}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--action)] px-6 py-3 text-base font-medium text-white hover:bg-[var(--action)]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center rounded-[2px] bg-[var(--action)] px-6 py-3 font-ui text-[14px] font-medium text-[var(--on-action)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Send className="h-4 w-4" />
-                  {sending ? "Sending..." : "Send Message"}
+                  {sending ? "Sending…" : "Send message"}
                 </button>
               </div>
             </form>

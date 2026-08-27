@@ -23,9 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const counts = await catalogCounts();
   return (
-    <div className="pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-6">
+    <div className="bg-[var(--surface-page)] pt-8 pb-20">
+      <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
+        <h1 className="mb-6 font-heading text-4xl font-semibold text-[var(--text-primary)]">
           About {SITE_NAME}
         </h1>
 
@@ -36,7 +36,7 @@ export default async function AboutPage() {
             instruction.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             Our Mission
           </h2>
           <p>
@@ -48,7 +48,7 @@ export default async function AboutPage() {
             unforgettable.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             What We Cover
           </h2>
           <p>
@@ -91,7 +91,7 @@ export default async function AboutPage() {
             </li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             No Middleman
           </h2>
           <p>
@@ -101,7 +101,7 @@ export default async function AboutPage() {
             contact information and website links go straight to them.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             Community
           </h2>
           <p>
@@ -111,7 +111,7 @@ export default async function AboutPage() {
             content after a brief review.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             A private journal
           </h2>
           <p>
@@ -128,7 +128,7 @@ export default async function AboutPage() {
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
             Conservation
           </h2>
           <p>

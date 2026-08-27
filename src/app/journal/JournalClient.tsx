@@ -281,7 +281,7 @@ export function JournalClient({ sessions, rigs, catches = [], feedDisplay = "col
     <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Mobile header */}
       <div className="lg:hidden border-b border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-4">
-        <h1 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">Journal</h1>
+        <h1 className="mb-3 font-heading text-2xl font-semibold text-[var(--text-primary)]">Journal</h1>
         <div className="flex gap-2">
           <Link
             href="/journal/stats"
