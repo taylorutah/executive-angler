@@ -1,44 +1,41 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Search } from "@/icons";
+import { Icon } from "@/components/ui/Icon";
 import {
   HERO_HEADLINE_LEAD,
   HERO_HEADLINE_CLOSE,
   HERO_IMAGE,
   SEARCH_PLACEHOLDER,
+  formatHeroCaption,
   formatHeroEyebrow,
   heroDek,
 } from "./hero-copy";
 
 interface Props {
-  riverCount: number;
-  /** Live Madison discharge. Null when the gauge is silent — never a guess. */
   cfs: number | null;
 }
 
 /**
- * Homepage wash is `--scrim-light` (0 / 0.10@50% / 0.45). The image stays
- * the image — brand bible §5.3. Display type is tall; content is in-flow.
- * Do not use `.prose` here — its unlayered `color: var(--text-body)` beats
- * `text-white`.
- *
- * The 11px eyebrow sits on an opaque Vellum chip (slate on vellum is 5.03:1).
- * Small caps on a scrim cannot make 4.5. The h1 and dek share a narrow local
- * panel; the browse link has its own. Do not darken the full-bleed wash.
- *
- * The photograph lives in an explicit `absolute inset-0` containing block.
- * `next/image` `fill` needs that. The production olive void was the forest
- * scrim starting at 0.28 opacity on pixel zero — the JPEG was always there.
+ * One photograph, full strength, ~72vh. Search is the only CTA.
+ * Eyebrow sits on the photograph — not in an opaque plate.
+ * Text is protected locally. No full-bleed wash — that darkens the photograph
+ * and the §2 census reads a gradient shorthand as duskFullBleed.
  */
-
-export default function HomeHero({ riverCount, cfs }: Props) {
+export default function HomeHero({ cfs }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
+  const caption = formatHeroCaption(cfs);
 
   return (
-    <section
-      data-lane="resource"
-      className="relative min-h-[70svh] w-full overflow-hidden sm:min-h-[85vh]"
-    >
+    <section data-lane="resource" className="relative min-h-[72vh] w-full overflow-hidden">
+      {/*
+        Public JPEG, not /_next/image. The file is already 1920px — at or
+        above rendered CSS width. Vercel Image Optimization fetches the
+        origin without the preview SSO cookie and gets HTML, so the
+        photograph vanishes on the protected deploy while localhost and
+        a direct /images/... request in the browser stay fine.
+        A quality of 85 is not in the Next 16 allowlist (default [75]).
+        The photograph stays an absolute layer so the contrast census can
+        see the raster (eyebrow = unverifiable, not white-on-paper).
+      */}
       <div className="absolute inset-0">
         <Image
           src={HERO_IMAGE.src}
@@ -46,20 +43,18 @@ export default function HomeHero({ riverCount, cfs }: Props) {
           fill
           priority
           fetchPriority="high"
+          unoptimized
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-[center_68%]"
         />
       </div>
-      <div
-        className="absolute inset-0"
-        style={{ background: "var(--scrim-light)" }}
-        aria-hidden
-      />
 
-      <div className="relative z-10 flex min-h-[70svh] flex-col justify-end sm:min-h-[85vh]">
-        <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-[22vh] sm:px-6 sm:pb-16 lg:px-8">
-          <p className="mb-5 inline-flex items-center gap-3 bg-[var(--vellum)] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
-            <span aria-hidden className="h-px w-6 bg-[var(--action)]" />
+      <div className="relative z-10 flex min-h-[72vh] flex-col justify-end">
+        <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-[18vh] sm:px-6 sm:pb-14 lg:px-8">
+          <p
+            className="mb-5 font-ui text-[11px] font-medium uppercase tracking-[0.2em] text-white"
+            style={{ textShadow: "0 1px 2px rgb(15 43 31 / 0.85)" }}
+          >
             {eyebrow}
           </p>
 
@@ -68,13 +63,14 @@ export default function HomeHero({ riverCount, cfs }: Props) {
               aria-hidden
               className="pointer-events-none absolute -inset-x-4 -inset-y-3 sm:-inset-x-6"
               style={{
-                background:
-                  "linear-gradient(to bottom, rgb(15 43 31 / 0) 0%, rgb(15 43 31 / 0.42) 35%, rgb(15 43 31 / 0.70) 100%)",
+                backgroundColor: "rgba(250, 246, 240, 0)",
+                backgroundImage:
+                  "linear-gradient(to bottom, rgb(15 43 31 / 0.22) 0%, rgb(15 43 31 / 0.72) 32%, rgb(15 43 31 / 0.84) 100%)",
               }}
             />
             <h1
               className="relative font-heading font-bold tracking-tight text-white"
-              style={{ fontSize: "clamp(3.5rem, 7vw, 7rem)", lineHeight: 0.95 }}
+              style={{ fontSize: "clamp(3rem, 6.4vw, 6.25rem)", lineHeight: 0.95 }}
             >
               {HERO_HEADLINE_LEAD}
               {" — "}
@@ -92,9 +88,10 @@ export default function HomeHero({ riverCount, cfs }: Props) {
             action="/search"
             method="get"
             role="search"
-            className="mt-8 flex w-full max-w-[640px] items-center gap-2 rounded-lg border border-[var(--rule)] bg-white px-4 py-3 focus-within:border-[var(--ink)]"
+            className="mt-8 flex w-full max-w-[640px] items-center gap-2 border border-[var(--rule)] bg-[var(--card)] px-4 py-3 focus-within:border-[var(--ink)]"
+            style={{ borderRadius: "var(--radius-instrument)" }}
           >
-            <Search className="h-5 w-5 shrink-0 text-[var(--text-meta)]" aria-hidden />
+            <Icon name="search" className="h-5 w-5 shrink-0 text-[var(--text-meta)]" />
             <label htmlFor="home-search" className="sr-only">
               {SEARCH_PLACEHOLDER}
             </label>
@@ -108,19 +105,16 @@ export default function HomeHero({ riverCount, cfs }: Props) {
             />
             <button
               type="submit"
-              className="shrink-0 rounded bg-[var(--ink)] px-4 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-[var(--graphite)]"
+              className="shrink-0 bg-[var(--ink)] px-4 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-[var(--graphite)]"
+              style={{ borderRadius: "var(--radius-instrument)" }}
             >
-              Search
+              Look up
             </button>
           </form>
 
-          <Link
-            href="/rivers"
-            className="mt-4 inline-block px-2 py-1 text-[14px] text-white underline-offset-4 transition-colors hover:underline"
-            style={{ background: "rgb(15 43 31 / 0.72)" }}
-          >
-            {riverCount > 0 ? `Browse ${riverCount} rivers` : "Browse the rivers"} &rarr;
-          </Link>
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/90">
+            {caption}
+          </p>
         </div>
       </div>
     </section>

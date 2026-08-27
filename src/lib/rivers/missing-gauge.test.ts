@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { flowTrend, missingGaugeCopy } from "./missing-gauge";
+import { flowTrend, missingGaugeCopy, missingInstantaneousCopy } from "./missing-gauge";
 
 describe("missingGaugeCopy", () => {
   it("names the river when no site is linked", () => {
@@ -18,6 +18,15 @@ describe("missingGaugeCopy", () => {
     assert.equal(
       missingGaugeCopy("Madison River", "not-a-site"),
       "USGS site not-a-site is not a valid gauge id for Madison River. We do not guess a flow.",
+    );
+  });
+});
+
+describe("missingInstantaneousCopy", () => {
+  it("names the instantaneous gap and leaves daily means intact", () => {
+    assert.equal(
+      missingInstantaneousCopy("Madison River", "06038500"),
+      "USGS site 06038500 on Madison River did not return an instantaneous reading. Daily means below are the last published values. We do not guess a live flow.",
     );
   });
 });

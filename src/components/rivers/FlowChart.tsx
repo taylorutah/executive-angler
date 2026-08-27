@@ -272,7 +272,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
       <div className="mb-3 flex items-end justify-between gap-4">
         <div>
           <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
-            30-day flow
+            30-day daily means
           </h3>
           {siteName ? (
             <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
@@ -281,11 +281,11 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
           ) : null}
         </div>
         <p className="text-right">
-          <span className="num text-3xl font-bold leading-none text-[var(--signal-live)]">
+          <span className="num text-3xl font-bold leading-none text-[var(--text-primary)]">
             {currentFlow.value.toLocaleString("en-US")}
           </span>
           <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
-            cfs
+            cfs daily mean
           </span>
           {trend ? (
             <span

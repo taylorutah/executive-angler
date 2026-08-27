@@ -20,6 +20,8 @@ export interface FlagshipRiver {
   slug: string;
   label: string;
   name: string;
+  destinationId: string;
+  state?: string;
   heroImageUrl?: string;
   hatchChart: River["hatchChart"];
   gauge: GaugeConfig | null;
@@ -100,6 +102,7 @@ export function selectFlagshipRivers(rivers: River[]): FlagshipRiver[] {
         slug: river.slug,
         label,
         name: river.name,
+        destinationId: river.destinationId,
         heroImageUrl: river.heroImageUrl,
         hatchChart: river.hatchChart,
         gauge: primaryGauge(river.usgsGaugeId, river.name),

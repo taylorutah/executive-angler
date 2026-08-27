@@ -64,7 +64,7 @@ export const metadata: Metadata = {
       {
         url: "/images/madison-river-three-dollar-bridge.jpg",
         width: 1920,
-        height: 1036,
+        height: 736,
         alt: "The Madison River in Montana — Executive Angler",
       },
     ],

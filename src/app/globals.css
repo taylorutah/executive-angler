@@ -45,12 +45,7 @@
   --hover-duration: 160ms;
   --hover-ease: ease-out;
   --crossfade-duration: 400ms;
-  --photo-zoom-scale: 1.03;
-  --photo-zoom-duration: 400ms;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-  --enter-duration: 500ms;
-  --enter-rise: 12px;
-  --enter-stagger: 60ms;
   --gutter: 1rem;
   --radius-chip: 9999px;
   --radius-surface: 6px;
@@ -390,36 +385,6 @@
 
   .photo-card {
     overflow: hidden;
-  }
-
-  .card-image-zoom,
-  .photo-zoom {
-    transition: transform var(--photo-zoom-duration) var(--ease-out-expo);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .card-hover:hover .card-image-zoom,
-    .card-hover:hover .photo-zoom,
-    .photo-card:hover .card-image-zoom,
-    .photo-card:hover .photo-zoom,
-    .group:hover > .photo-card .photo-zoom,
-    .group:hover > .photo-card img {
-      transform: scale(var(--photo-zoom-scale));
-    }
-  }
-
-  .enter-block.enter-pending:not(.is-entered) {
-    opacity: 0;
-    transform: translateY(var(--enter-rise));
-  }
-
-  .enter-block.is-entered {
-    opacity: 1;
-    transform: none;
-    transition:
-      opacity var(--enter-duration) var(--ease-out-expo),
-      transform var(--enter-duration) var(--ease-out-expo);
-    transition-delay: calc(var(--enter-i, 0) * var(--enter-stagger));
   }
 
   .animate-fade-in {
@@ -1095,28 +1060,7 @@ input.ea-focus-ring:focus-visible,
     animation-duration: 1ms;
   }
 
-  /* Items 3 and 4 of the motion budget — photo zoom and staged entrance —
-     are entirely absent. Scrim gradients stay (not motion). */
-  .enter-block,
-  .enter-block.enter-pending,
-  .enter-block.is-entered {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    transition-delay: 0ms !important;
-  }
-
-  .card-image-zoom,
-  .photo-zoom,
-  .card-hover:hover .card-image-zoom,
-  .card-hover:hover .photo-zoom,
-  .photo-card:hover .card-image-zoom,
-  .photo-card:hover .photo-zoom,
-  .group:hover > .photo-card .photo-zoom,
-  .group:hover > .photo-card img {
-    transition: none !important;
-    transform: none !important;
-  }
+  /* Photo zoom and staged entrance are retired (v4.1 §14). */
 }
 
 .ea-wb-row.ea-focus-ring:focus-visible {

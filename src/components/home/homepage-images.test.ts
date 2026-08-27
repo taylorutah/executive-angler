@@ -1,11 +1,16 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   canonicalImgSrc,
   claimImageUrl,
   imageAvailable,
+  photoAlt,
   reportDuplicateImages,
 } from "./homepage-images";
+
+const homeHero = readFileSync(join(process.cwd(), "src/components/home/HomeHero.tsx"), "utf8");
 
 describe("canonicalImgSrc", () => {
   it("decodes a next/image optimizer URL", () => {
@@ -66,6 +71,22 @@ describe("reportDuplicateImages", () => {
     ]);
     assert.equal(report.ok, true);
     assert.equal(new Set(report.contentSources).size, report.contentSources.length);
+  });
+});
+
+describe("photoAlt", () => {
+  it("never returns an empty string", () => {
+    assert.equal(photoAlt("", "Madison River"), "Madison River");
+    assert.equal(photoAlt("  ", "Hare's Ear"), "Hare's Ear");
+    assert.equal(photoAlt("A brown trout stream", "Madison River"), "A brown trout stream");
+  });
+});
+
+describe("HomeHero photograph", () => {
+  it("serves the public JPEG, not the optimizer", () => {
+    assert.match(homeHero, /\bunoptimized\b/);
+    assert.equal(/quality\s*=/.test(homeHero), false);
+    assert.match(homeHero, /src=\{HERO_IMAGE\.src\}/);
   });
 });
 

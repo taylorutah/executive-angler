@@ -20,6 +20,8 @@ export const WATER_JUDGEMENT = "low and clear; fish early";
 export const HERO_IMAGE = {
   src: "/images/madison-river-three-dollar-bridge.jpg",
   alt: "The Madison River running low and clear below Three Dollar Bridge, Montana",
+  width: 1920,
+  height: 736,
 } as const;
 
 export const SEARCH_PLACEHOLDER = "Search a river, a fly, a hatch, a destination.";
@@ -38,4 +40,15 @@ export function formatHeroEyebrow(cfs: number | null, now = new Date()): string 
 /** Never claim a number that is not on the page. */
 export function heroDek(cfs: number | null): string {
   return cfs == null ? HERO_DEK_QUIET : HERO_DEK;
+}
+
+/** Field-note caption: place · CFS · date. CFS only when the gauge answered. */
+export function formatHeroCaption(cfs: number | null, now = new Date()): string {
+  const date = now.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "America/Denver",
+  });
+  if (cfs == null) return `Three Dollar Bridge · ${date}`;
+  return `Three Dollar Bridge · ${cfs.toLocaleString("en-US")} CFS · ${date}`;
 }
