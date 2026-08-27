@@ -30,6 +30,7 @@ export default function ListCard({
           title={title}
           meta={subtitle || meta}
           loading="eager"
+          placeholderEmpty
           className="object-cover"
           sizes="96px"
         />

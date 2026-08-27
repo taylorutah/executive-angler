@@ -18,6 +18,9 @@ import PersonalRiverScorecard from "@/components/rivers/PersonalRiverScorecard";
 import LazyFlowChart from "@/components/rivers/LazyFlowChart";
 import BestWindowCalculator from "@/components/rivers/BestWindowCalculator";
 import RiverLiveInset from "@/components/rivers/RiverLiveInset";
+import { HERO_IMAGE } from "@/components/home/hero-copy";
+import RiverLiveInsetFallback from "@/components/rivers/RiverLiveInsetFallback";
+import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import SignedOutRiverInsights from "@/components/rivers/SignedOutRiverInsights";
 import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
@@ -155,6 +158,17 @@ export default async function RiverPage({ params }: Props) {
         }}
       />
 
+      {river.heroImageUrl === HERO_IMAGE.src ? (
+        <link
+          rel="preload"
+          as="image"
+          href={HERO_IMAGE.mobileWebp}
+          type="image/webp"
+          media="(max-width: 1024px)"
+          fetchPriority="high"
+        />
+      ) : null}
+
       <RiverHeroImage
         heroImageUrl={river.heroImageUrl}
         heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
@@ -224,31 +238,36 @@ export default async function RiverPage({ params }: Props) {
         </div>
       </div>
 
+      <div id="river-live-fallback">
+        <RiverLiveInsetFallback riverName={river.name} />
+      </div>
       <Suspense fallback={null}>
-        <RiverLiveInset
-          riverId={river.id}
-          riverName={river.name}
-          usgsGaugeId={river.usgsGaugeId ?? null}
-          riverLatitude={river.latitude}
-          riverLongitude={river.longitude}
-        >
-          <div className="mt-6">
-            <LazyFlowChart
-              usgsGaugeId={river.usgsGaugeId ?? null}
-              riverName={river.name}
-              riverId={river.id}
-            />
-            {river.usgsGaugeId ? (
-              <p className="mt-3 text-sm text-[var(--text-body)]">
-                New to hydrographs?{" "}
-                <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--action)] underline-offset-4 hover:underline">
-                  How to read a USGS gauge for fly fishing
-                </Link>
-                .
-              </p>
-            ) : null}
-          </div>
-        </RiverLiveInset>
+        <DismissBrowseFallback fallbackId="river-live-fallback">
+          <RiverLiveInset
+            riverId={river.id}
+            riverName={river.name}
+            usgsGaugeId={river.usgsGaugeId ?? null}
+            riverLatitude={river.latitude}
+            riverLongitude={river.longitude}
+          >
+            <div className="mt-6">
+              <LazyFlowChart
+                usgsGaugeId={river.usgsGaugeId ?? null}
+                riverName={river.name}
+                riverId={river.id}
+              />
+              {river.usgsGaugeId ? (
+                <p className="mt-3 text-sm text-[var(--text-body)]">
+                  New to hydrographs?{" "}
+                  <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--action)] underline-offset-4 hover:underline">
+                    How to read a USGS gauge for fly fishing
+                  </Link>
+                  .
+                </p>
+              ) : null}
+            </div>
+          </RiverLiveInset>
+        </DismissBrowseFallback>
       </Suspense>
 
       <section className="bg-[var(--surface-page)]">

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import {
   HERO_HEADLINE_LEAD,
@@ -37,16 +36,19 @@ export default function HomeHero({ cfs }: Props) {
         see the raster (eyebrow = unverifiable, not white-on-paper).
       */}
       <div className="absolute inset-0">
-        <Image
-          src={HERO_IMAGE.src}
-          alt={HERO_IMAGE.alt}
-          fill
-          priority
-          fetchPriority="high"
-          unoptimized
-          sizes="100vw"
-          className="object-cover object-[center_68%]"
-        />
+        <picture className="block h-full w-full">
+          <source type="image/webp" srcSet={HERO_IMAGE.mobileWebp} media="(max-width: 1024px)" />
+          <source srcSet={HERO_IMAGE.mobileSrc} media="(max-width: 1024px)" />
+          <img
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            width={HERO_IMAGE.width}
+            height={HERO_IMAGE.height}
+            decoding="async"
+            fetchPriority="high"
+            className="h-full w-full object-cover object-[center_68%]"
+          />
+        </picture>
       </div>
 
       <div className="relative z-10 flex min-h-[72vh] flex-col justify-end">

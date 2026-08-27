@@ -8,6 +8,7 @@ import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
 import { isUsableImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
+import { localHeroMobileSrc, localHeroWebpSrc } from "@/lib/media/local-hero";
 
 interface RiverHeroImageProps {
   heroImageUrl?: string;
@@ -43,6 +44,10 @@ export default function RiverHeroImage({
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
+  const mobileSrc = heroImageUrl ? localHeroMobileSrc(heroImageUrl) : undefined;
+  const webpSrc = heroImageUrl ? localHeroWebpSrc(heroImageUrl) : undefined;
+  const mobileWebp = mobileSrc ? localHeroWebpSrc(mobileSrc) : undefined;
+  const useNativeHero = Boolean(mobileSrc && heroImageUrl);
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
     ? {
@@ -60,7 +65,27 @@ export default function RiverHeroImage({
   return (
     <>
       <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
-        {showPhoto ? (
+        {showPhoto && useNativeHero ? (
+          <div className="absolute inset-0">
+            <picture className="block h-full w-full">
+          {mobileWebp ? (
+            <source type="image/webp" srcSet={mobileWebp} media="(max-width: 1024px)" />
+          ) : null}
+          {mobileSrc ? (
+            <source srcSet={mobileSrc} media="(max-width: 1024px)" />
+          ) : null}
+          <img
+                src={heroImageUrl}
+                alt={heroImageAlt}
+                decoding="async"
+                fetchPriority="high"
+                className="h-full w-full object-cover"
+                onLoad={() => setLoaded(true)}
+                onError={() => setFailed(true)}
+              />
+            </picture>
+          </div>
+        ) : showPhoto ? (
           <div className="absolute inset-0">
             <Image
               src={heroImageUrl}
@@ -68,6 +93,7 @@ export default function RiverHeroImage({
               fill
               className="object-cover"
               priority
+              fetchPriority="high"
               sizes="100vw"
               placeholder="blur"
               blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
@@ -95,8 +121,10 @@ export default function RiverHeroImage({
             >
               {title}
             </h1>
-            {loaded && showPhoto && heroImageCredit ? (
-              <p className="mt-3 text-[11px] tracking-wide text-white/80">
+            {heroImageCredit ? (
+              <p
+                className={`mt-3 min-h-[1.125rem] text-[11px] tracking-wide text-white/80 transition-opacity ${loaded && showPhoto ? "opacity-100" : "opacity-0"}`}
+              >
                 {heroImageCreditUrl ? (
                   <a
                     href={heroImageCreditUrl}

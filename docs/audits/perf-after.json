@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T15:25:33.841Z",
+  "generatedAt": "2026-08-27T14:28:02.783Z",
   "baseUrl": "http://localhost:3000",
   "pageLoadCount": 10,
   "pageLoadFloor": 9,
@@ -20,12 +20,12 @@
       "viewport": 390,
       "throttled": true,
       "register": "daylight",
-      "lcpMs": 2324,
-      "cls": 0.0695,
-      "inpMs": 1023,
-      "tbtMs": 226,
-      "fcpMs": 1444,
-      "jsTransferredBytes": 489073,
+      "lcpMs": 1560,
+      "cls": 0.0026,
+      "inpMs": 5,
+      "tbtMs": 11,
+      "fcpMs": 1472,
+      "jsTransferredBytes": 440657,
       "lcpElement": "IMG:The Madison River running low and clear below Th"
     },
     {
@@ -34,12 +34,12 @@
       "viewport": 1440,
       "throttled": false,
       "register": "daylight",
-      "lcpMs": 756,
-      "cls": 0.0015,
+      "lcpMs": 744,
+      "cls": 0.0014,
       "inpMs": 2,
-      "tbtMs": 10,
-      "fcpMs": 756,
-      "jsTransferredBytes": 498335,
+      "tbtMs": 0,
+      "fcpMs": 744,
+      "jsTransferredBytes": 448212,
       "lcpElement": "IMG:The Madison River running low and clear below Th"
     },
     {
@@ -48,12 +48,12 @@
       "viewport": 390,
       "throttled": true,
       "register": "daylight",
-      "lcpMs": 1016,
-      "cls": 0.44,
-      "inpMs": 823,
-      "tbtMs": 183,
-      "fcpMs": 1016,
-      "jsTransferredBytes": 301952,
+      "lcpMs": 1144,
+      "cls": 0,
+      "inpMs": 4,
+      "tbtMs": 8,
+      "fcpMs": 1144,
+      "jsTransferredBytes": 262050,
       "lcpElement": "P"
     },
     {
@@ -62,12 +62,12 @@
       "viewport": 1440,
       "throttled": false,
       "register": "daylight",
-      "lcpMs": 404,
-      "cls": 0.5115,
-      "inpMs": 1,
+      "lcpMs": 104,
+      "cls": 0.0002,
+      "inpMs": 2,
       "tbtMs": 0,
-      "fcpMs": 136,
-      "jsTransferredBytes": 496282,
+      "fcpMs": 40,
+      "jsTransferredBytes": 446799,
       "lcpElement": "IMG:Bristol Bay Rivers"
     },
     {
@@ -76,12 +76,12 @@
       "viewport": 390,
       "throttled": true,
       "register": "daylight",
-      "lcpMs": 2128,
-      "cls": 0.1991,
-      "inpMs": 936,
-      "tbtMs": 243,
-      "fcpMs": 1200,
-      "jsTransferredBytes": 454530,
+      "lcpMs": 1468,
+      "cls": 0,
+      "inpMs": 4,
+      "tbtMs": 11,
+      "fcpMs": 1364,
+      "jsTransferredBytes": 436663,
       "lcpElement": "IMG:River Madison — fly fishing"
     },
     {
@@ -90,12 +90,12 @@
       "viewport": 1440,
       "throttled": false,
       "register": "daylight",
-      "lcpMs": 120,
-      "cls": 0.1406,
-      "inpMs": 5,
-      "tbtMs": 5,
-      "fcpMs": 120,
-      "jsTransferredBytes": 528494,
+      "lcpMs": 44,
+      "cls": 0.0002,
+      "inpMs": 2,
+      "tbtMs": 0,
+      "fcpMs": 44,
+      "jsTransferredBytes": 464003,
       "lcpElement": "IMG:River Madison — fly fishing"
     },
     {
@@ -104,12 +104,12 @@
       "viewport": 390,
       "throttled": true,
       "register": "daylight",
-      "lcpMs": 1004,
-      "cls": 0.4479,
-      "inpMs": 822,
-      "tbtMs": 155,
-      "fcpMs": 1004,
-      "jsTransferredBytes": 305694,
+      "lcpMs": 1140,
+      "cls": 0.0373,
+      "inpMs": 4,
+      "tbtMs": 9,
+      "fcpMs": 1140,
+      "jsTransferredBytes": 262521,
       "lcpElement": "P"
     },
     {
@@ -118,12 +118,12 @@
       "viewport": 1440,
       "throttled": false,
       "register": "daylight",
-      "lcpMs": 248,
-      "cls": 0.5564,
+      "lcpMs": 88,
+      "cls": 0.0005,
       "inpMs": 2,
       "tbtMs": 0,
-      "fcpMs": 72,
-      "jsTransferredBytes": 314777,
+      "fcpMs": 40,
+      "jsTransferredBytes": 275366,
       "lcpElement": "IMG:Barr's Emerger fly pattern for trout fishing"
     },
     {
@@ -132,12 +132,12 @@
       "viewport": 390,
       "throttled": true,
       "register": "daylight",
-      "lcpMs": 3864,
+      "lcpMs": 1276,
       "cls": 0,
-      "inpMs": 943,
-      "tbtMs": 181,
-      "fcpMs": 1176,
-      "jsTransferredBytes": 373222,
+      "inpMs": 4,
+      "tbtMs": 12,
+      "fcpMs": 1256,
+      "jsTransferredBytes": 324197,
       "lcpElement": "IMG:Fly fishing in New Zealand"
     },
     {
@@ -146,34 +146,34 @@
       "viewport": 390,
       "throttled": true,
       "register": "dusk",
-      "lcpMs": 2540,
-      "cls": 0.0695,
-      "inpMs": 973,
-      "tbtMs": 177,
-      "fcpMs": 1592,
-      "jsTransferredBytes": 489073,
+      "lcpMs": 1860,
+      "cls": 0.0026,
+      "inpMs": 4,
+      "tbtMs": 9,
+      "fcpMs": 1708,
+      "jsTransferredBytes": 440657,
       "lcpElement": "IMG:The Madison River running low and clear below Th"
     }
   ],
   "bundles": {
     "_all-static-js": {
-      "firstLoadJsBytes": 4732693,
+      "firstLoadJsBytes": 4444971,
       "chunkCount": 101
     },
     "/rivers": {
-      "firstLoadJsBytes": 1103488,
+      "firstLoadJsBytes": 992232,
       "chunkCount": 19
     },
     "/rivers/madison-river": {
-      "firstLoadJsBytes": 1523767,
-      "chunkCount": 20
+      "firstLoadJsBytes": 1525507,
+      "chunkCount": 21
     },
     "/flies/library": {
-      "firstLoadJsBytes": 1094080,
+      "firstLoadJsBytes": 983029,
       "chunkCount": 19
     },
     "/destinations/new-zealand": {
-      "firstLoadJsBytes": 1144537,
+      "firstLoadJsBytes": 1150106,
       "chunkCount": 20
     }
   },
@@ -189,14 +189,6 @@
     "newsreaderBytes": 792888,
     "archivoBytes": 352400,
     "ibmPlexMonoBytes": 176460,
-    "recommendation": "Newsreader transferred 792888 bytes across 10 loads (was 2795080). Keep the face (census requires it on desk essays / prose). preload:false + display:swap; do not drop the family."
-  },
-  "u2Note": "U2 (cursor/p4-u2-3c0f @ 7db12ba) adds a focus-only SkipLink portal plus ea-focus-ring/ARIA on HeaderSearch, FavoriteButton, FilterBar, PhotoLightbox, ReportButton. Not merged. First-paint LCP/CLS delta expected ≈ 0 (skip-link is not in the LCP tree). INP probe is h1, not search.",
-  "remainingMisses": [
-    "home-390 / madison-390 / home-dusk-390 LCP still 2.1–2.5s on Slow 4G — the LCP image is the hero photograph (local Madison jpg / river hero). Physics at 1.6 Mbps. HomeHero / RiverHeroImage are not this lane.",
-    "home-390 CLS 0.0695 and index CLS 0.44–0.56 are card/image layout on /rivers and /flies/library (not owned). Madison CLS 0.20 is leftover hero/font swap.",
-    "INP 800–1000ms on 4x CPU is main-thread hydration of layout chrome (AuthProvider / Header / CommandPalette). Not owned. Probe is an h1 tap, not search.",
-    "TBT home-390 226 vs 185 and rivers-390 183 vs 158 sit just over +15% — 4x-CPU noise, not a new long task.",
-    "Mapbox tiles never requested (no NEXT_PUBLIC_MAPBOX_TOKEN). LazyMapView now imports the GL module only after intersection."
-  ]
+    "recommendation": "Newsreader transferred 792888 bytes. Keep the face (census requires it on desk essays / prose). Prefer subset + display:swap; do not drop the family."
+  }
 }

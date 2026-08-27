@@ -5,6 +5,8 @@
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import BrowseIndexFallback from "@/components/ui/BrowseIndexFallback";
+import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import FlyLibraryClient from "./FlyLibraryClient";
 import { formatHookSize } from "@/lib/flies/variant-format";
 import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
@@ -99,8 +101,14 @@ export default async function FliesPage() {
 
       <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-          <Suspense>
-            <FlyLibraryClient items={items} />
+          <BrowseIndexFallback
+            id="flies-browse-fallback"
+            count={items.length > 24 ? 24 : items.length}
+          />
+          <Suspense fallback={null}>
+            <DismissBrowseFallback fallbackId="flies-browse-fallback">
+              <FlyLibraryClient items={items} />
+            </DismissBrowseFallback>
           </Suspense>
         </div>
       </section>

@@ -22,6 +22,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
             title={title}
             meta={meta}
             loading="eager"
+            placeholderEmpty
             className="object-cover card-image-zoom"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
