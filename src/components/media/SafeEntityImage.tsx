@@ -16,6 +16,7 @@ interface SafeEntityImageProps {
   /** Only for blob:/data: previews or SVGs the optimizer cannot fetch. */
   unoptimized?: boolean;
   priority?: boolean;
+  loading?: "lazy" | "eager";
   /** object-contain + padding for illustrations */
   contain?: boolean;
   /** Overlay painted only after the photo has loaded. */
@@ -35,6 +36,7 @@ export default function SafeEntityImage({
   sizes,
   unoptimized,
   priority,
+  loading,
   contain,
   scrimClassName,
 }: SafeEntityImageProps) {
@@ -53,6 +55,7 @@ export default function SafeEntityImage({
         fill
         unoptimized={unoptimized}
         priority={priority}
+        loading={loading}
         sizes={sizes}
         placeholder="blur"
         blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}

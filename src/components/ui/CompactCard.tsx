@@ -5,7 +5,10 @@ import SafeEntityImage from "@/components/media/SafeEntityImage";
 
 export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle, badges, actionSlot }: CardData) {
   return (
-    <Link href={href} className="group relative block card-hover rounded-lg overflow-hidden bg-[var(--surface-raised)] shadow-sm">
+    <Link
+      href={href}
+      className="group relative block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
+    >
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
           canonicalFlyId={actionSlot.canonicalFlyId}
@@ -18,12 +21,13 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
           alt={imageAlt}
           title={title}
           meta={subtitle}
+          loading="eager"
           className="object-cover card-image-zoom"
-          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
         />
         {badges && badges.length > 0 && (
           <div className="absolute top-2 left-2">
-            <span className="px-2 py-0.5 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-chip">
+            <span className="rounded-chip bg-[var(--surface-raised)] px-2 py-0.5 text-xs font-medium text-[var(--action)]">
               {badges[0]}
             </span>
           </div>
