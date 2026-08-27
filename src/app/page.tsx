@@ -8,21 +8,15 @@ import {
 } from "@/lib/db";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
-import type { Article, CanonicalFly, Destination } from "@/types/entities";
-import ConditionsRail from "@/components/home/ConditionsRail";
-import CategoryIndex from "@/components/home/CategoryIndex";
+import type { Article, CanonicalFly, Destination, River } from "@/types/entities";
 import FlyPlate from "@/components/home/FlyPlate";
 import HomeHero from "@/components/home/HomeHero";
 import JournalBand from "@/components/home/JournalBand";
 import OnTheWaterNow from "@/components/home/OnTheWaterNow";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
-import WhereToGo from "@/components/home/WhereToGo";
-import {
-  getFlagshipHistories,
-  getGaugeSnapshots,
-  selectFlagshipRivers,
-} from "@/components/home/conditions";
+import WhereToGo, { type PlaceCard } from "@/components/home/WhereToGo";
+import { getGaugeSnapshots, selectFlagshipRivers } from "@/components/home/conditions";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
@@ -54,22 +48,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 3600;
 
-/** The month the seasonal copy is written against, in the register's home time zone. */
-function currentMonth(): string {
-  return new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" });
-}
-
 const BANNED_EXCERPT =
   /river intelligence|intelligence platform|fly fishing intelligence|upgrade to|founders|premium tier/i;
+
+const WHERE_SLUGS = ["green-river", "arkansas-river-colorado", "bighorn-river"] as const;
 
 function isPublicRead(article: Article): boolean {
   return !BANNED_EXCERPT.test(article.excerpt ?? "");
 }
 
-function pickRead(
-  articles: Article[],
-  used: Set<string>,
-): { lead: Article; rest: Article[] } | null {
+function pickRead(articles: Article[], used: Set<string>): Article | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
@@ -79,10 +67,7 @@ function pickRead(
   const lead = ordered.find((article) => imageAvailable(article.heroImageUrl, used));
   if (!lead) return null;
   claimImageUrl(lead.heroImageUrl, used);
-  return {
-    lead,
-    rest: ordered.filter((article) => article.id !== lead.id).slice(0, 3),
-  };
+  return lead;
 }
 
 function pickPlate(
@@ -103,24 +88,53 @@ function pickPlate(
   return plate;
 }
 
-function pickPlaces(
-  destinations: Destination[],
-  month: string,
+function placeFromRiver(
+  river: River,
+  destById: Map<string, Destination>,
   used: Set<string>,
-): Destination[] {
-  const withImage = destinations.filter((d) => imageAvailable(d.heroImageUrl, used));
-  const featured = withImage.filter((d) => d.featured);
-  const inSeason = featured.filter((d) => d.bestMonths?.includes(month));
-  const ordered = [
-    ...inSeason,
-    ...featured.filter((d) => !inSeason.includes(d)),
-    ...withImage.filter((d) => !d.featured),
-  ];
-  const picked = ordered.slice(0, 3);
-  for (const destination of picked) {
-    claimImageUrl(destination.heroImageUrl, used);
+): PlaceCard | null {
+  if (!imageAvailable(river.heroImageUrl, used)) return null;
+  claimImageUrl(river.heroImageUrl, used);
+  const dest = destById.get(river.destinationId);
+  const caption = dest?.state || dest?.region || dest?.name || river.name;
+  return {
+    href: `/rivers/${river.slug}`,
+    name: river.name,
+    imageUrl: river.heroImageUrl,
+    imageAlt: river.heroImageAlt,
+    caption,
+  };
+}
+
+function pickPlaces(
+  rivers: River[],
+  destinations: Destination[],
+  destById: Map<string, Destination>,
+  used: Set<string>,
+): PlaceCard[] {
+  const bySlug = new Map(rivers.map((r) => [r.slug, r]));
+  const cards: PlaceCard[] = [];
+  for (const slug of WHERE_SLUGS) {
+    const river = bySlug.get(slug);
+    if (!river) continue;
+    const card = placeFromRiver(river, destById, used);
+    if (card) cards.push(card);
   }
-  return picked;
+  if (cards.length >= 3) return cards.slice(0, 3);
+
+  const leftover = destinations.filter((d) => imageAvailable(d.heroImageUrl, used));
+  for (const destination of leftover) {
+    if (cards.length === 3) break;
+    claimImageUrl(destination.heroImageUrl, used);
+    cards.push({
+      href: `/destinations/${destination.slug}`,
+      name: destination.name,
+      imageUrl: destination.heroImageUrl,
+      imageAlt: destination.heroImageAlt,
+      caption: destination.tagline ?? destination.region ?? destination.name,
+    });
+  }
+  return cards.slice(0, 3);
 }
 
 export default async function HomePage() {
@@ -132,16 +146,12 @@ export default async function HomePage() {
     getAllArticles().catch(() => []),
   ]);
 
-  const month = currentMonth();
   const destById = new Map(destinations.map((d) => [d.id, d]));
   const flagshipRivers = selectFlagshipRivers(rivers).map((river) => ({
     ...river,
     state: destById.get(river.destinationId)?.state ?? destById.get(river.destinationId)?.name,
   }));
-  const [snapshots, histories] = await Promise.all([
-    getGaugeSnapshots(flagshipRivers),
-    getFlagshipHistories(flagshipRivers).catch(() => new Map()),
-  ]);
+  const snapshots = await getGaugeSnapshots(flagshipRivers);
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
 
@@ -149,7 +159,7 @@ export default async function HomePage() {
   claimImageUrl(HERO_IMAGE.src, usedImages);
 
   const plate = pickPlate(featuredFlies, allFlies, usedImages);
-  const places = pickPlaces(destinations, month, usedImages);
+  const places = pickPlaces(rivers, destinations, destById, usedImages);
   const read = pickRead(articles, usedImages);
 
   return (
@@ -165,29 +175,17 @@ export default async function HomePage() {
 
       <HomeHero cfs={madisonCfs} />
 
-      <div data-lane="resource">
-        <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
-      </div>
-
-      <CategoryIndex
-        rivers={rivers.length}
-        flies={allFlies.length}
-        places={destinations.length}
-        notes={articles.length}
-      />
-
       <OnTheWaterNow
         rivers={flagshipRivers}
         snapshots={snapshots}
-        histories={histories}
-        month={month}
+        month={new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" })}
       />
-
-      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
 
       <FlyPlate flies={plate} flyCount={allFlies.length} />
 
-      <WhereToGo destinations={places} month={month} />
+      <WhereToGo places={places} />
+
+      {read && <ThisWeeksRead lead={read} />}
 
       <JournalBand />
 

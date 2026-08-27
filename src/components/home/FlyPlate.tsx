@@ -1,8 +1,8 @@
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import type { CanonicalFly } from "@/types/entities";
-import { flyPlateAlt, specimenScale } from "./fly-plate";
-import SectionMark from "./SectionMark";
+import { flyPlateAlt } from "./fly-plate";
+import HomeGutter from "./HomeGutter";
 
 interface Props {
   flies: CanonicalFly[];
@@ -16,69 +16,62 @@ function sizeLabel(sizes: CanonicalFly["sizes"]): string | null {
   return `#${values[0]}–${values[values.length - 1]}`;
 }
 
-/** Twelve macros as a specimen plate. Ruled grid, no card chrome, no shadows. */
+/** Twelve patterns. Clip the photo, keep the name, copper on hover. */
 export default function FlyPlate({ flies, flyCount }: Props) {
   if (flies.length === 0) return null;
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-24">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-baseline justify-between gap-4">
-          <SectionMark n="02" label="The plate" />
-          <Link
-            href="/flies/library"
-            className="shrink-0 text-[14px] text-[var(--action)] underline-offset-4 hover:underline"
-          >
-            {flyCount > 0 ? `All ${flyCount} patterns` : "All patterns"}{" "}
-            <span aria-hidden>&rarr;</span>
-          </Link>
-        </div>
+    <section data-lane="resource" className="bg-[var(--surface-page)] pb-10 pt-12">
+      <HomeGutter>
+        <h2
+          className="font-heading text-[36px] font-semibold leading-none text-[var(--text-primary)]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
+          The plate
+        </h2>
+        <p className="mt-4 font-ui text-[14px] text-[var(--text-body)]">
+          <span className="sm:hidden">On the water this week.</span>
+          <span className="hidden sm:inline">
+            {flyCount > 0
+              ? "Twelve patterns on the water this week."
+              : "Patterns from the library."}
+          </span>
+        </p>
 
-        <div className="lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-10">
-          <p className="mb-8 max-w-[20ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.16em] text-[var(--text-meta)] lg:mb-0 lg:pt-2">
-            Plate I
-            <br />
-            Twelve patterns from the library, as specified.
-            <br />
-            Size and imitation from the record.
-          </p>
-
-          <ul className="grid grid-cols-3 border-t border-l border-[var(--border-rule)] sm:grid-cols-4 lg:grid-cols-6">
-            {flies.map((fly) => {
-              const size = sizeLabel(fly.sizes);
-              const imitates = fly.imitates?.[0];
-              const scale = specimenScale(fly.sizes);
-              return (
-                <li key={fly.id} className="border-b border-r border-[var(--border-rule)]">
-                  <Link href={`/flies/${fly.slug}`} className="group block p-3 sm:p-4">
-                    <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--surface-raised)]">
-                      <div
-                        className="relative"
-                        style={{ width: `${scale * 100}%`, height: `${scale * 100}%` }}
-                      >
-                        <SafeEntityImage
-                          src={fly.heroImageUrl}
-                          alt={flyPlateAlt(fly.name, size, imitates)}
-                          title={fly.name}
-                          contain
-                          className="object-contain"
-                          sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
-                        />
-                      </div>
-                    </div>
-                    <h3 className="mt-3 font-heading text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] text-[var(--text-primary)]">
-                      {fly.name}
-                    </h3>
-                    <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
-                      {[size, imitates].filter(Boolean).join(" · ")}
-                    </p>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+        <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {flies.map((fly) => {
+            const size = sizeLabel(fly.sizes);
+            const imitates = fly.imitates?.[0];
+            return (
+              <li key={fly.id}>
+                <Link href={`/flies/${fly.slug}`} className="group block">
+                  <div className="photo-lift relative aspect-square w-full border border-[var(--border-rule)]">
+                    <SafeEntityImage
+                      src={fly.heroImageUrl}
+                      alt={flyPlateAlt(fly.name, size, imitates)}
+                      title={fly.name}
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                    />
+                  </div>
+                  <h3 className="mt-1.5 font-ui text-[12px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                    {fly.name}
+                  </h3>
+                  {size && (
+                    <p className="mt-0.5 font-ui text-[11px] text-[var(--text-meta)]">{size}</p>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <Link
+          href="/flies/library"
+          className="mt-4 inline-block font-ui text-[13px] font-medium text-[var(--action)] hover:text-[var(--action-hover)] lg:hidden"
+        >
+          All flies →
+        </Link>
+      </HomeGutter>
     </section>
   );
 }
