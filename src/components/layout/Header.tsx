@@ -14,6 +14,7 @@ import MobileNavSheet from "./nav/MobileNavSheet";
 import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
+import { registerForPath } from "@/lib/register";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,6 +50,10 @@ export default function Header() {
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
   const onHome = pathname === "/";
+  const logoSrc =
+    registerForPath(pathname) === "dusk"
+      ? "/images/logo-horizontal-white.svg"
+      : "/images/logo-horizontal-forest.svg";
 
   return (
     <>
@@ -64,12 +69,14 @@ export default function Header() {
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >
-              <span
-                className="font-heading text-[20px] font-semibold leading-none text-[var(--text-primary)] lg:text-[22px]"
-                style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-              >
-                EA
-              </span>
+              <Image
+                src={logoSrc}
+                alt="Executive Angler"
+                width={160}
+                height={32}
+                className="h-7 w-auto pointer-events-none"
+                priority
+              />
             </Link>
 
             <button
