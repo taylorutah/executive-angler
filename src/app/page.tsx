@@ -154,11 +154,20 @@ export default async function HomePage() {
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href={HERO_IMAGE.mobileWebp}
+        type="image/webp"
+        media="(max-width: 1024px)"
+        fetchPriority="high"
+      />
+
+      <HomeHero cfs={madisonCfs} />
+
       <div data-lane="resource">
         <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
       </div>
-
-      <HomeHero cfs={madisonCfs} />
 
       <CategoryIndex
         rivers={rivers.length}

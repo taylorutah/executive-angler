@@ -17,6 +17,8 @@ interface SafeEntityImageProps {
   unoptimized?: boolean;
   priority?: boolean;
   loading?: "lazy" | "eager";
+  /** Skip blur placeholder on list thumbnails — avoids CLS on index grids. */
+  placeholderEmpty?: boolean;
   /** object-contain + padding for illustrations */
   contain?: boolean;
   /** Overlay painted only after the photo has loaded. */
@@ -37,6 +39,7 @@ export default function SafeEntityImage({
   unoptimized,
   priority,
   loading,
+  placeholderEmpty,
   contain,
   scrimClassName,
 }: SafeEntityImageProps) {
@@ -56,9 +59,10 @@ export default function SafeEntityImage({
         unoptimized={unoptimized}
         priority={priority}
         loading={loading}
+        fetchPriority={priority ? "high" : undefined}
         sizes={sizes}
-        placeholder="blur"
-        blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+        placeholder={placeholderEmpty ? "empty" : "blur"}
+        blurDataURL={placeholderEmpty ? undefined : SURFACE_RAISED_BLUR_DATA_URL}
         className={
           className ??
           (contain ? "object-contain p-3" : "object-cover")

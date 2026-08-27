@@ -1,23 +1,41 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { useEffect, useState, type ComponentType } from "react";
 import LazyHydrate from "@/components/ui/LazyHydrate";
 
-const FlowChart = dynamic(() => import("./FlowChart"), {
-  ssr: false,
-  loading: () => (
-    <div className="mt-6 h-[200px] border-t border-[var(--border-rule)] pt-5" aria-hidden>
-      <div className="h-8 w-40 bg-[var(--border-rule)]" />
-    </div>
-  ),
-});
+type FlowChartProps = {
+  usgsGaugeId: string | null;
+  riverName: string;
+  riverId: string;
+};
 
-type Props = React.ComponentProps<typeof FlowChart>;
-
-export default function LazyFlowChart(props: Props) {
+/**
+ * Chart JS + /api/river-history stay off the first paint. next/dynamic at
+ * module scope still preloads the chunk; import only after LazyHydrate.
+ */
+export default function LazyFlowChart(props: FlowChartProps) {
   return (
-    <LazyHydrate minHeight={200}>
-      <FlowChart {...props} />
+    <LazyHydrate minHeight={280} rootMargin="80px">
+      <DeferredFlowChart {...props} />
     </LazyHydrate>
   );
+}
+
+function DeferredFlowChart(props: FlowChartProps) {
+  const [Chart, setChart] = useState<ComponentType<FlowChartProps> | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    import("./FlowChart").then((mod) => {
+      if (!cancelled) setChart(() => mod.default);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!Chart) {
+    return <div className="h-[280px] rounded-xl bg-[var(--surface-card)]" aria-hidden />;
+  }
+  return <Chart {...props} />;
 }

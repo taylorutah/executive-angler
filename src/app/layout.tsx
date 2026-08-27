@@ -14,6 +14,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import { organizationJsonLd } from "@/lib/seo";
 import { REGISTER_BOOTSTRAP } from "@/lib/register";
+import { HERO_IMAGE } from "@/components/home/hero-copy";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -26,6 +27,7 @@ const fraunces = Fraunces({
 const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   variable: "--font-newsreader",
   style: ["normal", "italic"],
   axes: ["opsz"],
@@ -42,6 +44,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["400", "600"],
   variable: "--font-ibm-plex-mono",
   display: "swap",
+  preload: false,
 });
 
 const GA_MEASUREMENT_ID = "G-RY19PKC2WQ";
@@ -132,6 +135,22 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.mapbox.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link
+          rel="preload"
+          as="image"
+          href={HERO_IMAGE.mobileWebp}
+          type="image/webp"
+          media="(max-width: 1024px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href={HERO_IMAGE.webp}
+          type="image/webp"
+          media="(min-width: 1025px)"
+          fetchPriority="high"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}

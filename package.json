@@ -34,7 +34,8 @@
     "check:baseline-quality": "npx tsx scripts/check-baseline-quality.ts",
     "check:a11y": "npx tsx scripts/check-a11y.ts",
     "check:river-integrity": "npx tsx scripts/check-river-integrity.ts",
-    "check:empty-states": "npx tsx scripts/check-empty-states.ts"
+    "check:empty-states": "npx tsx scripts/check-empty-states.ts",
+    "check:perf": "npx tsx scripts/check-perf.ts docs/audits/perf-after.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

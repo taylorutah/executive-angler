@@ -103,14 +103,16 @@ interface Props {
   onSectionChange?: (siteId: string, section: string) => void;
   /** `band` = instrument body inside InstrumentWell. Default keeps the stacked card. */
   layout?: "card" | "band";
+  /** Server-rendered readings already in hand — paint numbers, not greys. */
+  initialGauges?: GaugeReading[];
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, riverLatitude, riverLongitude, onSectionChange, layout = "card" }: Props) {
-  const [gauges, setGauges] = useState<GaugeReading[]>([]);
+export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, riverLatitude, riverLongitude, onSectionChange, layout = "card", initialGauges }: Props) {
+  const [gauges, setGauges] = useState<GaugeReading[]>(initialGauges ?? []);
   const [weatherSections, setWeatherSections] = useState<WeatherSection[]>([]);
-  const [loadingConditions, setLoadingConditions] = useState(true);
+  const [loadingConditions, setLoadingConditions] = useState(!initialGauges?.length);
   const [loadingWeather, setLoadingWeather] = useState(true);
   const [conditionsError, setConditionsError] = useState(false);
 
@@ -186,9 +188,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
     return () => { cancelled = true; clearInterval(interval); };
   }, [riverId, riverLatitude, riverLongitude]);
 
-  const loading = loadingConditions || loadingWeather;
-
-  if (loading) {
+  if (loadingConditions && gauges.length === 0) {
     if (layout === "band") {
       return (
         <div aria-hidden>

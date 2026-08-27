@@ -7,6 +7,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllRivers } from "@/lib/db";
+import BrowseIndexFallback from "@/components/ui/BrowseIndexFallback";
+import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import RiversPageClient from "./RiversPageClient";
 import { toRiverBrowseItem, statesForRiver } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
@@ -54,8 +56,11 @@ export default async function RiversPage() {
 
       <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16 sm:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <Suspense>
-            <RiversPageClient items={items} stateOptions={stateOptions} />
+          <BrowseIndexFallback id="rivers-browse-fallback" count={items.length} />
+          <Suspense fallback={null}>
+            <DismissBrowseFallback fallbackId="rivers-browse-fallback">
+              <RiversPageClient items={items} stateOptions={stateOptions} />
+            </DismissBrowseFallback>
           </Suspense>
         </div>
       </section>

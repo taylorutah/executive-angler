@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DynamicRiversMapView from "@/components/maps/DynamicRiversMapView";
 import EntityListView from "@/components/ui/EntityListView";
-import { FLOW_STATE_LABEL, type FlowState } from "@/lib/browse/flow-state";
+import { type FlowState } from "@/lib/browse/flow-state";
 import { haversineKm, NEAR_ME_KM } from "@/lib/browse/geo";
 import type { RiverBrowseItem } from "@/lib/browse/river-items";
 import { riverListConfig } from "@/lib/list-configs";
@@ -144,6 +144,8 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
     }
   };
 
+  // Flow badges are filter-only until we can SSR them — painting badges after
+  // fetch was shifting the index grid (CLS ~0.4 on /rivers at 390).
   const decoratedItems = useMemo(() => {
     return items.map((item) => {
       const flow = flows[item.riverId];
@@ -151,11 +153,8 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
         userLocation && item.latitude && item.longitude
           ? haversineKm(userLocation.lat, userLocation.lng, item.latitude, item.longitude)
           : undefined;
-      const flowLabel = flow ? FLOW_STATE_LABEL[flow.state] : undefined;
       return {
         ...item,
-        badges: flowLabel ? [flowLabel] : undefined,
-        meta: [item.meta, flowLabel].filter(Boolean).join(" · "),
         _filterValues: {
           ...(item._filterValues ?? {}),
           flow: flow?.state ?? "",

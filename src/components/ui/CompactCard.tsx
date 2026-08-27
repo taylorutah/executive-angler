@@ -22,6 +22,7 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
           title={title}
           meta={subtitle}
           loading="eager"
+          placeholderEmpty
           className="object-cover card-image-zoom"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
         />
