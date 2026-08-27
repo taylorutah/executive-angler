@@ -2,94 +2,68 @@ import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import type { Article } from "@/types/entities";
 import { photoAlt } from "./homepage-images";
+import HomeGutter from "./HomeGutter";
 
 interface Props {
   lead: Article;
-  rest: Article[];
 }
 
 function byline(article: Article): { author: string; date: string | null } {
   const date = new Date(article.publishedAt);
   const formatted = Number.isNaN(date.getTime())
     ? null
-    : date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    : date.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        timeZone: "America/Denver",
+      });
   return { author: article.author, date: formatted };
 }
 
-/** One feature at magazine scale plus three smaller. Byline on each. Not four equal tiles. */
-export default function ThisWeeksRead({ lead, rest }: Props) {
-  const leadBy = byline(lead);
+/** One field note. Split: photograph left, copy right. Copper is the action. */
+export default function ThisWeeksRead({ lead }: Props) {
+  const line = byline(lead);
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
-          Field note
-        </p>
-        <h2 className="mb-8 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl">
-          This week&apos;s read
-        </h2>
-
+    <section data-lane="resource" className="bg-[var(--surface-page)] pb-12 pt-2">
+      <HomeGutter>
         <Link
           href={`/articles/${lead.slug}`}
-          className="group grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
+          className="group grid items-start gap-8 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]"
         >
-          <div className="photo-card relative aspect-[16/10] w-full overflow-hidden border border-[var(--border-rule)]">
+          <div className="photo-lift relative aspect-[794/420] w-full">
             <SafeEntityImage
               src={lead.heroImageUrl}
               alt={photoAlt(lead.heroImageAlt, lead.title)}
               title={lead.title}
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 55vw"
+              sizes="(max-width: 1024px) 100vw, 62vw"
             />
           </div>
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
-              {lead.category}
+          <div className="max-w-[454px] pt-0 lg:pt-1">
+            <p className="font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
+              Field note
             </p>
-            <h3 className="mt-2 font-heading text-3xl font-bold leading-tight text-[var(--text-primary)] sm:text-[2.25rem]">
-              {lead.title}
-            </h3>
-            <p
-              className="prose mt-4 text-[var(--text-body)]"
-              style={{ fontFamily: "var(--font-body)" }}
+            <h2
+              className="mt-3 font-heading text-[36px] font-semibold leading-[1.16] text-[var(--text-primary)]"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
-              {lead.excerpt}
+              {lead.title}
+            </h2>
+            <p className="mt-3 font-ui text-[12px] text-[var(--text-meta)]">
+              {[line.date, line.author].filter(Boolean).join("  ·  ")}
             </p>
-            <p className="mt-5 font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--text-primary)]">
-              By {leadBy.author}
-              {leadBy.date ? ` · ${leadBy.date}` : ""}
+            {lead.excerpt && (
+              <p className="prose mt-3 text-[16px] leading-[26px] text-[var(--text-body)]">
+                {lead.excerpt}
+              </p>
+            )}
+            <p className="mt-3 font-ui text-[13px] font-medium text-[var(--action)]">
+              Read the note →
             </p>
           </div>
         </Link>
-
-        {rest.length > 0 && (
-          <ul className="mt-10 border-t border-[var(--border-rule)] pt-6">
-            {rest.map((article) => {
-              const line = byline(article);
-              return (
-                <li
-                  key={article.id}
-                  className="border-b border-[var(--border-rule)] py-4 first:pt-0 last:border-b-0"
-                >
-                  <Link
-                    href={`/articles/${article.slug}`}
-                    className="group flex flex-wrap items-baseline justify-between gap-3"
-                  >
-                    <h3 className="font-heading text-xl font-bold text-[var(--text-primary)]">
-                      {article.title}
-                    </h3>
-                    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
-                      By {line.author}
-                      {line.date ? ` · ${line.date}` : ""}
-                    </p>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+      </HomeGutter>
     </section>
   );
 }

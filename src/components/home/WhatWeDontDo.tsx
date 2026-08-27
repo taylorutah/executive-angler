@@ -1,32 +1,24 @@
-const LINES = [
-  "we never publish your spots",
-  "we never publish your counts",
-  "there is no leaderboard here",
-];
+import HomeGutter from "./HomeGutter";
 
-/** Typographic only. Three lines, no icons. */
+/** Typographic ethic. Two lines. */
 export default function WhatWeDontDo() {
   return (
     <section
       id="what-we-dont-do"
       data-lane="ethic"
-      className="flex min-h-[36vh] items-center bg-[var(--surface-page)]"
+      className="bg-[var(--surface-page)] pb-10 pt-14"
     >
-      <div className="mx-auto w-full max-w-7xl border-y border-[var(--border-rule)] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
-          What we don&apos;t do
+      <HomeGutter>
+        <h2
+          className="font-heading text-[28px] font-semibold text-[var(--text-primary)]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
+          What we don&apos;t publish
         </h2>
-        <ul className="mt-8 space-y-4">
-          {LINES.map((line) => (
-            <li
-              key={line}
-              className="font-heading text-3xl leading-[1.15] text-[var(--text-primary)] sm:text-5xl"
-            >
-              {line}
-            </li>
-          ))}
-        </ul>
-      </div>
+        <p className="mt-2.5 font-ui text-[18px] leading-7 text-[var(--text-body)]">
+          Named spots. Fish counts. Your water.
+        </p>
+      </HomeGutter>
     </section>
   );
 }

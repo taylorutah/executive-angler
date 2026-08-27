@@ -8,14 +8,12 @@ import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
-import { Button } from "@/components/ui/Button";
 import HeaderSearch from "./nav/HeaderSearch";
 import ExploreMenu from "./nav/ExploreMenu";
 import MobileNavSheet from "./nav/MobileNavSheet";
 import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
-import { registerForPath } from "@/lib/register";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -50,10 +48,7 @@ export default function Header() {
   }, []);
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
-  const logoSrc =
-    registerForPath(pathname) === "dusk"
-      ? "/images/logo-horizontal-white.svg"
-      : "/images/logo-horizontal-forest.svg";
+  const onHome = pathname === "/";
 
   return (
     <>
@@ -62,27 +57,32 @@ export default function Header() {
           scrolled ? "ea-header-scrolled" : "ea-header-flat"
         }`}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-14 items-center gap-4">
-            {/* Mark */}
+        <div className="w-full px-5 sm:px-8 xl:px-20">
+          <div className="flex h-14 items-center gap-7">
             <Link
               href={user ? POST_LOGIN_PATH : "/"}
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >
-              <Image
-                src={logoSrc}
-                alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-7 w-auto pointer-events-none"
-                priority
-                draggable={false}
-              />
+              <span
+                className="font-heading text-[20px] font-semibold leading-none text-[var(--text-primary)] lg:text-[22px]"
+                style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+              >
+                EA
+              </span>
             </Link>
 
-            {/* ── Primary nouns ── */}
-            <nav aria-label="Primary" className="hidden lg:flex h-14 items-stretch">
+            <button
+              ref={menuButtonRef}
+              onClick={() => setMobileOpen(true)}
+              aria-expanded={mobileOpen}
+              aria-haspopup="dialog"
+              className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden font-ui text-[12px] text-[var(--text-body)]`}
+            >
+              Menu
+            </button>
+
+            <nav aria-label="Primary" className="hidden lg:flex h-14 items-stretch gap-7">
               {nouns.map((item) => {
                 const active = isSectionActive(pathname, item.section);
                 return (
@@ -99,7 +99,7 @@ export default function Header() {
 
               {!user && (
                 <>
-                  <span className="ea-nav-divider self-center" aria-hidden />
+                  <span className="ea-nav-divider self-center mx-0" aria-hidden />
                   <Link
                     href={LEARN_LINK.href}
                     aria-current={isSectionActive(pathname, LEARN_LINK.section) ? "page" : undefined}
@@ -114,7 +114,7 @@ export default function Header() {
             {/* ── Utility zone ── */}
             <div className="ml-auto flex items-center gap-2">
               {user && <span className="ea-nav-divider hidden lg:block" aria-hidden />}
-              <HeaderSearch />
+              {!onHome && <HeaderSearch />}
 
               {isLoading ? (
                 <div className="hidden lg:flex items-center">
@@ -189,29 +189,10 @@ export default function Header() {
                   </div>
                 </div>
               ) : (
-                <div className="hidden lg:flex items-center gap-2">
-                  <Button
-                    href="/login"
-                    variant="ghost"
-                    size="sm"
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
-                  >
-                    Sign in
-                  </Button>
-                </div>
+                <Link href="/login" className="ea-nav-link ea-focus-ring">
+                  Sign in
+                </Link>
               )}
-
-              {/* Mobile menu */}
-              <button
-                ref={menuButtonRef}
-                onClick={() => setMobileOpen(true)}
-                aria-expanded={mobileOpen}
-                aria-haspopup="dialog"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-[var(--text-body)]`}
-              >
-                <Icon name="menu" className="h-5 w-5" />
-                Menu
-              </button>
             </div>
           </div>
         </div>

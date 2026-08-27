@@ -65,10 +65,10 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/images/madison-river-three-dollar-bridge.jpg",
-        width: 1920,
-        height: 736,
-        alt: "The Madison River in Montana — Executive Angler",
+        url: "/images/home/madison-three-dollar-bridge.jpg",
+        width: 1792,
+        height: 1008,
+        alt: "The Madison River at Three Dollar Bridge, Montana",
       },
     ],
   },
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} — Premium Fly Fishing Resource`,
     description: SITE_DESCRIPTION,
-    images: ["/images/madison-river-three-dollar-bridge.jpg"],
+    images: ["/images/home/madison-three-dollar-bridge.jpg"],
   },
   robots: {
     index: true,

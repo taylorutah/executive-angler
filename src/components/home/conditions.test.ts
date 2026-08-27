@@ -151,7 +151,7 @@ describe("hero copy follows the number", () => {
     assert.equal(formatHeroEyebrow(760, new Date("2026-08-24T18:00:00Z")).includes("760 CFS"), true);
     assert.equal(heroDek(760), HERO_DEK);
     assert.equal(
-      formatHeroCaption(760, new Date("2026-08-26T18:00:00Z")).includes("760 CFS"),
+      formatHeroCaption(760, new Date("2026-08-26T18:00:00Z")).includes("760 cfs"),
       true,
     );
     assert.equal(

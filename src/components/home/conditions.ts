@@ -9,10 +9,10 @@ import type { River } from "@/types/entities";
 export const FLAGSHIP_RIVERS: { slug: string; label: string }[] = [
   { slug: "madison-river", label: "Madison" },
   { slug: "green-river", label: "Green" },
+  { slug: "arkansas-river-colorado", label: "Arkansas" },
+  { slug: "bighorn-river", label: "Bighorn" },
   { slug: "henrys-fork", label: "Henry's Fork" },
-  { slug: "yellowstone-river", label: "Yellowstone" },
-  { slug: "snake-river-wyoming", label: "Snake" },
-  { slug: "missouri-river", label: "Missouri" },
+  { slug: "south-platte-river", label: "South Platte" },
 ];
 
 export interface FlagshipRiver {
