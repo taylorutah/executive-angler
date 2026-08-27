@@ -75,7 +75,7 @@ export default function HomeHero({ cfs }: Props) {
             {HERO_HEADLINE_CLOSE}
           </h1>
 
-          <p className="prose max-w-[720px] text-[14px] leading-5 text-[var(--hero-type)] sm:text-[18px] sm:leading-7">
+          <p className="prose hero-dek max-w-[720px] text-[14px] leading-5 sm:text-[18px] sm:leading-7">
             {heroDek(cfs)}
           </p>
 

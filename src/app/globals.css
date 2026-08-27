@@ -610,6 +610,12 @@
   color: var(--text-body);
 }
 
+/* Home fold dek sits on the photograph. Unlayered .prose color would
+   paint graphite on the wash (1.5:1). Hero type is cream. */
+.prose.hero-dek {
+  color: var(--hero-type);
+}
+
 .article-body,
 .destination-body,
 .river-body {
