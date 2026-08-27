@@ -25,10 +25,7 @@ export default function HomeHero({ cfs }: Props) {
   const caption = formatHeroCaption(cfs);
 
   return (
-    <section
-      data-lane="resource"
-      className="relative isolate grid min-h-[72vh] w-full overflow-hidden"
-    >
+    <section data-lane="resource" className="relative min-h-[72vh] w-full overflow-hidden">
       {/*
         Public JPEG, not /_next/image. The file is already 1920px — at or
         above rendered CSS width. Vercel Image Optimization fetches the
@@ -36,8 +33,10 @@ export default function HomeHero({ cfs }: Props) {
         photograph vanishes on the protected deploy while localhost and
         a direct /images/... request in the browser stay fine.
         A quality of 85 is not in the Next 16 allowlist (default [75]).
+        The photograph stays an absolute layer so the contrast census can
+        see the raster (eyebrow = unverifiable, not white-on-paper).
       */}
-      <div className="relative col-start-1 row-start-1 min-h-[72vh]">
+      <div className="absolute inset-0">
         <Image
           src={HERO_IMAGE.src}
           alt={HERO_IMAGE.alt}
@@ -50,7 +49,7 @@ export default function HomeHero({ cfs }: Props) {
         />
       </div>
 
-      <div className="relative z-10 col-start-1 row-start-1 flex min-h-[72vh] flex-col justify-end">
+      <div className="relative z-10 flex min-h-[72vh] flex-col justify-end">
         <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-[18vh] sm:px-6 sm:pb-14 lg:px-8">
           <p
             className="mb-5 font-ui text-[11px] font-medium uppercase tracking-[0.2em] text-white"
