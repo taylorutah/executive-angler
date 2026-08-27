@@ -230,15 +230,21 @@ const FOCUS_SAMPLE = `(() => {
   return { ok: ratio + 1e-9 >= 3, reason: "", ratio: Math.round(ratio * 100) / 100, fg: style.outlineColor };
 })()`;
 
-async function applyRegister(page: Page, register: "daylight" | "dusk") {
+async function pinRegister(page: Page, register: "daylight" | "dusk") {
   await page.evaluate((reg) => {
     document.documentElement.setAttribute("data-register", reg);
   }, register);
-  await page.waitForFunction(
-    (reg) => document.documentElement.getAttribute("data-register") === reg,
-    register,
-    { timeout: 5_000 },
-  );
+}
+
+async function applyRegister(page: Page, register: "daylight" | "dusk") {
+  // Route bootstrap + RegisterBinder set the path default first. Pin after hydration,
+  // then once more — waitForFunction raced RegisterBinder and flaked on fresh pages.
+  await page
+    .waitForSelector("main, #main-content, [role='main']", { timeout: 8_000 })
+    .catch(() => undefined);
+  await pinRegister(page, register);
+  await page.waitForTimeout(100);
+  await pinRegister(page, register);
 }
 
 async function runAxe(page: Page, axeSource: string) {
@@ -322,6 +328,9 @@ async function main() {
     vp: (typeof VIEWPORTS)[number],
   ) {
     const url = `${BASE}${route}`;
+    await page.addInitScript((reg) => {
+      document.documentElement.setAttribute("data-register", reg);
+    }, register);
     let res: import("playwright").Response | null = null;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
@@ -381,6 +390,7 @@ async function main() {
       });
     }
 
+    await pinRegister(page, register);
     const focus = await focusRatio(page);
     if (!focus.ok) {
       serious += 1;
@@ -395,6 +405,7 @@ async function main() {
       });
     }
 
+    await pinRegister(page, register);
     const axe = await runAxe(page, axeSource);
     let routeSerious = findings.filter(
       (f) => f.route === route && f.register === register && f.viewport === vp.name,
