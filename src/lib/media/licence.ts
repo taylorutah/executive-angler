@@ -97,5 +97,7 @@ export function attributionHref(input: {
   const licenceUrl = input.licenceUrl?.trim() || undefined;
   const creditUrl = input.creditUrl?.trim() || undefined;
   if ((kind === "cc-by" || kind === "cc-by-sa") && licenceUrl) return licenceUrl;
-  return creditUrl || licenceUrl;
+  // PD / Unsplash / unknown: the File page or photographer, never a
+  // licence-mark fallback. Wikimedia ingest must write credit_url.
+  return creditUrl;
 }

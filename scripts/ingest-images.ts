@@ -280,6 +280,7 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
       continue;
     }
     const { licence, licenceUrl, artist } = meta;
+    const filePage = commonsFilePageUrl(raw);
     if (!licence) {
       flagged++;
       await write.from("media_assets").upsert(
@@ -305,6 +306,7 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
           column_name: "image_url",
           source_url: raw,
           credit_name: artist || "Wikimedia Commons",
+          credit_url: filePage ?? null,
           licence,
           licence_url: licenceUrl || null,
           status: "pending",
@@ -333,6 +335,7 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
         storage_path: path,
         source_url: raw,
         credit_name: artist || "Wikimedia Commons",
+        credit_url: filePage ?? null,
         licence,
         licence_url: licenceUrl || null,
         acquired_at: new Date().toISOString(),
@@ -348,7 +351,7 @@ async function ingestWikimedia(sb: SupabaseClient, write: SupabaseClient) {
       licence,
     });
     const creditHref = attributionHref({
-      creditUrl: commonsFilePageUrl(raw),
+      creditUrl: filePage,
       licenceUrl: licenceUrl || null,
       licence,
     });
