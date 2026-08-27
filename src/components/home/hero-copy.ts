@@ -41,12 +41,10 @@ export function formatHeroDay(now = new Date()): string {
 }
 
 export function formatHeroCaptionDate(now = new Date()): string {
-  return now.toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "America/Denver",
-  });
+  const day = now.toLocaleString("en-US", { day: "numeric", timeZone: "America/Denver" });
+  const month = now.toLocaleString("en-US", { month: "short", timeZone: "America/Denver" });
+  const year = now.toLocaleString("en-US", { year: "numeric", timeZone: "America/Denver" });
+  return `${day} ${month} ${year}`;
 }
 
 /** Eyebrow without the live number — CFS is rendered in teal by the hero. */

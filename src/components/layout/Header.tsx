@@ -58,7 +58,7 @@ export default function Header() {
         }`}
       >
         <div className="w-full px-5 sm:px-8 xl:px-20">
-          <div className="flex h-14 items-center gap-7">
+          <div className="flex h-14 items-center gap-4 lg:gap-7">
             <Link
               href={user ? POST_LOGIN_PATH : "/"}
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"

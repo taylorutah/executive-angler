@@ -67,7 +67,7 @@ export default function FlyPlate({ flies, flyCount }: Props) {
         </ul>
         <Link
           href="/flies/library"
-          className="mt-4 inline-block font-ui text-[13px] font-medium text-[var(--action)] hover:text-[var(--action-hover)]"
+          className="mt-4 inline-block font-ui text-[13px] font-medium text-[var(--action)] hover:text-[var(--action-hover)] lg:hidden"
         >
           All flies →
         </Link>

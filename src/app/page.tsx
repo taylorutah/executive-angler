@@ -96,13 +96,13 @@ function placeFromRiver(
   if (!imageAvailable(river.heroImageUrl, used)) return null;
   claimImageUrl(river.heroImageUrl, used);
   const dest = destById.get(river.destinationId);
-  const caption = [dest?.state, dest?.name].filter(Boolean).join(" · ");
+  const caption = dest?.state || dest?.region || dest?.name || river.name;
   return {
     href: `/rivers/${river.slug}`,
     name: river.name,
     imageUrl: river.heroImageUrl,
     imageAlt: river.heroImageAlt,
-    caption: caption || dest?.region || river.name,
+    caption,
   };
 }
 

@@ -91,24 +91,41 @@ export function primaryGauge(raw: unknown, riverName: string): GaugeConfig | nul
   }
 }
 
+const FLAGSHIP_FALLBACK: { slug: string; label: string }[] = [
+  { slug: "yellowstone-river", label: "Yellowstone" },
+  { slug: "snake-river-wyoming", label: "Snake" },
+  { slug: "missouri-river", label: "Missouri" },
+  { slug: "gallatin-river", label: "Gallatin" },
+];
+
+function toFlagship(
+  river: River,
+  label: string,
+): FlagshipRiver {
+  return {
+    id: river.id,
+    slug: river.slug,
+    label,
+    name: river.name,
+    destinationId: river.destinationId,
+    heroImageUrl: river.heroImageUrl,
+    hatchChart: river.hatchChart,
+    gauge: primaryGauge(river.usgsGaugeId, river.name),
+  };
+}
+
 export function selectFlagshipRivers(rivers: River[]): FlagshipRiver[] {
   const bySlug = new Map(rivers.map((r) => [r.slug, r]));
-  return FLAGSHIP_RIVERS.flatMap(({ slug, label }) => {
+  const picked: FlagshipRiver[] = [];
+  const used = new Set<string>();
+  for (const { slug, label } of [...FLAGSHIP_RIVERS, ...FLAGSHIP_FALLBACK]) {
+    if (picked.length === 6) break;
     const river = bySlug.get(slug);
-    if (!river) return [];
-    return [
-      {
-        id: river.id,
-        slug: river.slug,
-        label,
-        name: river.name,
-        destinationId: river.destinationId,
-        heroImageUrl: river.heroImageUrl,
-        hatchChart: river.hatchChart,
-        gauge: primaryGauge(river.usgsGaugeId, river.name),
-      },
-    ];
-  });
+    if (!river || used.has(river.slug)) continue;
+    used.add(river.slug);
+    picked.push(toFlagship(river, label));
+  }
+  return picked;
 }
 
 interface USGSPoint {
