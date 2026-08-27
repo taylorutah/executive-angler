@@ -1037,8 +1037,8 @@ select:focus {
 .ea-nav-divider {
   display: block;
   width: 1px;
-  height: 20px;
-  margin: 0 10px;
+  height: 16px;
+  margin: 0;
   background: var(--border-rule);
 }
 

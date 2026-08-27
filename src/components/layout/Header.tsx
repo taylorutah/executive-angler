@@ -99,7 +99,7 @@ export default function Header() {
 
               {!user && (
                 <>
-                  <span className="ea-nav-divider self-center mx-0" aria-hidden />
+                  <span className="ea-nav-divider self-center" aria-hidden />
                   <Link
                     href={LEARN_LINK.href}
                     aria-current={isSectionActive(pathname, LEARN_LINK.section) ? "page" : undefined}
