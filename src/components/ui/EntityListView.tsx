@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import type { CardData, EntityListConfig, ViewMode } from "@/types/list-config";
 import ListToolbar from "./ListToolbar";
 import EntityCard from "./EntityCard";
@@ -251,17 +250,10 @@ export default function EntityListView({
         onFiltersOpenChange={onFiltersOpenChange}
       />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`${displayView}-${JSON.stringify(activeFilters)}-${activeSort}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {resultsOverride ? (
-            resultsOverride
-          ) : sortedItems.length === 0 ? (
+      <div>
+        {resultsOverride ? (
+          resultsOverride
+        ) : sortedItems.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-[var(--text-body)] text-lg">
                 {searchQuery ? "No results match your search." : "No results match your filters."}
@@ -317,8 +309,7 @@ export default function EntityListView({
               ))}
             </div>
           )}
-        </motion.div>
-      </AnimatePresence>
+      </div>
 
       {canLoadMore && (
         <div className="mt-10 flex justify-center">

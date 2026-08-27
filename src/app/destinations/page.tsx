@@ -12,6 +12,7 @@ import { seasonsFromBestMonths, tripLengthFromPlace } from "@/lib/browse/place-f
 import { speciesTokens } from "@/lib/browse/species-tokens";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
 
 function getRegionGroup(region: string): string {
@@ -21,17 +22,22 @@ function getRegionGroup(region: string): string {
   return "north-america";
 }
 
-export const metadata: Metadata = {
-  title: "30+ Fly Fishing Destinations Worldwide — Plan Your Trip",
-  description:
-    "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Maps, best months, species, and local intel to plan your next adventure.",
-  alternates: { canonical: `${SITE_URL}/destinations` },
-  openGraph: {
-    title: "30+ Fly Fishing Destinations Worldwide",
-    description: "Explore 30 fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Plan your next adventure.",
-    images: ["/api/og?title=Fly%20Fishing%20Destinations&subtitle=30%20World-Class%20Waters&type=destination"],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const destinations = await getAllDestinations();
+  const n = destinations.length;
+  return {
+    title: brandedTitle(`${n} Fly Fishing Destinations`),
+    description: `Browse ${n} fly fishing destinations across the Rockies, Patagonia, New Zealand, Iceland, and beyond. Maps, best months, species, and local intel.`,
+    alternates: { canonical: `${SITE_URL}/destinations` },
+    openGraph: {
+      title: `${n} Fly Fishing Destinations`,
+      description: `Browse ${n} fly fishing destinations. Maps, best months, species, and local intel to plan your next trip.`,
+      images: [
+        `/api/og?title=Fly%20Fishing%20Destinations&subtitle=${encodeURIComponent(`${n} places`)}&type=destination`,
+      ],
+    },
+  };
+}
 
 export default async function DestinationsPage() {
   const destinations = await getAllDestinations();
@@ -67,7 +73,7 @@ export default async function DestinationsPage() {
             Places
           </p>
           <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            Where the water is
+            {destinations.length} destinations
           </h1>
           <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
             {destinations.length} destinations. Filter by region, season, species, and

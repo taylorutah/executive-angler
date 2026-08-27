@@ -154,9 +154,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
       const flowLabel = flow ? FLOW_STATE_LABEL[flow.state] : undefined;
       return {
         ...item,
-        badges: [item.badges?.[0], item.badges?.[1], flowLabel].filter(
-          (v, i, arr): v is string => Boolean(v) && arr.indexOf(v) === i,
-        ),
+        badges: flowLabel ? [flowLabel] : undefined,
         meta: [item.meta, flowLabel].filter(Boolean).join(" · "),
         _filterValues: {
           ...(item._filterValues ?? {}),

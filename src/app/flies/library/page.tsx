@@ -56,7 +56,10 @@ export default async function FliesPage() {
       badges: [FLY_CATEGORY_LABELS[fly.category] || fly.category],
       featured: fly.featured,
       description: fly.description?.substring(0, 150),
-      iconOnly: !fly.heroImageUrl,
+      iconOnly:
+        !fly.heroImageUrl ||
+        fly.heroImageUrl.includes("/fly-icons/") ||
+        fly.heroImageUrl.includes("/community-images/submissions/"),
       actionSlot: {
         kind: "add-to-fly-box" as const,
         canonicalFlyId: fly.id,
@@ -85,7 +88,7 @@ export default async function FliesPage() {
             The complete reference
           </p>
           <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            Trout fly library
+            {allFlies.length} trout fly patterns
           </h1>
           <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
             {allFlies.length} patterns. Filter by hatch, size, and — when you are signed

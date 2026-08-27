@@ -5,6 +5,8 @@ const BASE = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "tests",
+  // Baselines are committed as *-visual-linux.png only; CI and local runs share one file.
+  snapshotPathTemplate: "{testDir}/{testFileName}-snapshots/{arg}-{projectName}-linux{ext}",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

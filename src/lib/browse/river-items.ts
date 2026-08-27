@@ -56,10 +56,10 @@ export function toRiverBrowseItem(river: RiverBrowseSource): RiverBrowseItem {
     ]
       .filter(Boolean)
       .join(" · "),
-    badges: [river.difficulty, river.flowType].filter(Boolean),
+    badges: undefined,
     featured: river.featured,
     description: river.description?.slice(0, 150),
-    tags: (river.primarySpecies ?? []).slice(0, 3),
+    tags: undefined,
     latitude: Number(river.latitude) || 0,
     longitude: Number(river.longitude) || 0,
     usgsGaugeId: river.usgsGaugeId,

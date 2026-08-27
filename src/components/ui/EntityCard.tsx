@@ -47,7 +47,7 @@ export default function EntityCard({
     return (
       <Link
         href={href}
-        className="group relative block overflow-hidden rounded-surface bg-[var(--surface-raised)] border-l-4 border-[var(--action)] shadow-sm transition-shadow hover:shadow-md"
+        className="group relative block overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)] border-l-4 border-l-[var(--action)]"
       >
         {actionSlot?.kind === "add-to-fly-box" && (
           <CardActionSlot
@@ -105,7 +105,10 @@ export default function EntityCard({
   }
 
   return (
-    <Link href={href} className="group relative block card-hover overflow-hidden rounded-surface bg-[var(--surface-raised)] shadow-sm">
+    <Link
+      href={href}
+      className="group relative block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
+    >
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
           canonicalFlyId={actionSlot.canonicalFlyId}
@@ -119,19 +122,15 @@ export default function EntityCard({
           title={title}
           meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
           contain={imageContain}
+          loading="eager"
           className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         />
         {badges && badges.length > 0 && (
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-            {badges.map((badge) => (
-              <span
-                key={badge}
-                className="px-2.5 py-1 text-xs font-medium bg-[var(--surface-raised)]/90 backdrop-blur-sm text-[var(--action)] rounded-chip"
-              >
-                {badge}
-              </span>
-            ))}
+          <div className="absolute top-3 left-3">
+            <span className="rounded-chip bg-[var(--surface-raised)] px-2.5 py-1 text-xs font-medium text-[var(--action)]">
+              {badges[0]}
+            </span>
           </div>
         )}
       </div>
