@@ -26,24 +26,31 @@ import {
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
-export const metadata: Metadata = {
-  title: brandedTitle("Rivers, Flies, and Hatches"),
-  description: SITE_DESCRIPTION,
-  openGraph: {
-    title: `${SITE_NAME} — Rivers, Flies, and Hatches`,
+export async function generateMetadata(): Promise<Metadata> {
+  const [rivers, allFlies] = await Promise.all([
+    getAllRivers().catch(() => []),
+    getAllCanonicalFlies().catch(() => []),
+  ]);
+  const titlePart = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
+  return {
+    title: brandedTitle(titlePart),
     description: SITE_DESCRIPTION,
-    url: SITE_URL,
-    images: [
-      {
-        url: HERO_IMAGE.src,
-        width: HERO_IMAGE.width,
-        height: HERO_IMAGE.height,
-        alt: HERO_IMAGE.alt,
-      },
-    ],
-  },
-  alternates: { canonical: SITE_URL },
-};
+    openGraph: {
+      title: `${SITE_NAME} — ${titlePart}`,
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      images: [
+        {
+          url: HERO_IMAGE.src,
+          width: HERO_IMAGE.width,
+          height: HERO_IMAGE.height,
+          alt: HERO_IMAGE.alt,
+        },
+      ],
+    },
+    alternates: { canonical: SITE_URL },
+  };
+}
 
 export const revalidate = 3600;
 
