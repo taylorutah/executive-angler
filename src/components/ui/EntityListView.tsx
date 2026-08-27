@@ -76,10 +76,10 @@ export default function EntityListView({
     if (stored && (allowed as string[]).includes(stored)) {
       setViewMode(stored as ViewMode);
     } else if (stored && !(allowed as string[]).includes(stored)) {
-      // Stored view not allowed — reset to default
-      setViewMode(config.defaultView);
+      setViewMode(deskDefault);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, deskDefault);
     }
-  }, [storageKey, config.availableViews, config.defaultView, chrome]);
+  }, [storageKey, config.availableViews, config.defaultView, chrome, deskDefault]);
 
   const handleViewChange = useCallback(
     (mode: ViewMode) => {
@@ -142,6 +142,14 @@ export default function EntityListView({
     },
     [updateParams, config.defaultSort]
   );
+
+  const handleClearAll = useCallback(() => {
+    const updates: Record<string, string | null> = { q: null };
+    for (const dim of config.filters) {
+      updates[dim.key] = null;
+    }
+    updateParams(updates);
+  }, [config.filters, updateParams]);
 
   const [visibleCount, setVisibleCount] = useState(config.pageSize ?? items.length);
 
@@ -266,6 +274,7 @@ export default function EntityListView({
           toolbarExtra={toolbarExtra}
           refineOpen={filtersOpen ?? deskRefine}
           onRefineOpenChange={onFiltersOpenChange ?? setDeskRefine}
+          onClearAll={handleClearAll}
         />
       ) : (
         <ListToolbar
@@ -300,10 +309,7 @@ export default function EntityListView({
               </p>
               <button
                 type="button"
-                onClick={() => {
-                  config.filters.forEach((f) => handleFilterChange(f.key, null));
-                  handleSearchChange("");
-                }}
+                onClick={handleClearAll}
                 className="mt-4 inline-block text-[var(--action)] font-medium hover:underline"
               >
                 Clear all filters

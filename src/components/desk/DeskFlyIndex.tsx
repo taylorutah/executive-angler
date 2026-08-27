@@ -13,9 +13,21 @@ function categoryKey(item: CardData): string {
     (item as CardData & { _filterValues?: Record<string, string | number> })._filterValues
       ?.category ?? "",
   ).toLowerCase();
-  if (raw === "emerger" || raw === "midge") return "nymph";
+  if (raw === "emerger" || raw === "midge" || raw === "egg") return "nymph";
   if (raw === "terrestrial" || raw === "wet") return "dry";
-  return raw;
+  if (raw === "nymph" || raw === "dry" || raw === "streamer") return raw;
+  return raw || "other";
+}
+
+function benchColumns(rest: CardData[]): { key: string; label: string }[] {
+  const known = new Set(COLUMNS.map((c) => c.key));
+  const extra = new Map<string, string>();
+  for (const item of rest) {
+    const key = categoryKey(item);
+    if (known.has(key) || extra.has(key)) continue;
+    extra.set(key, key === "other" ? "Other" : key.replace(/^\w/, (c) => c.toUpperCase()));
+  }
+  return [...COLUMNS, ...[...extra].map(([key, label]) => ({ key, label }))];
 }
 
 /** Flies Index 81:17 — plate of twelve, then the rest of the bench. */
@@ -59,7 +71,7 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
             Patterns we actually keep. Sizes we fish. Not a catalog dump.
           </p>
           <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {COLUMNS.map((col) => {
+            {benchColumns(rest).map((col) => {
               const rows = rest.filter((item) => categoryKey(item) === col.key);
               if (rows.length === 0) return null;
               return (

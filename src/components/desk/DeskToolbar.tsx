@@ -20,6 +20,7 @@ interface Props {
   toolbarExtra?: ReactNode;
   refineOpen: boolean;
   onRefineOpenChange: (open: boolean) => void;
+  onClearAll?: () => void;
 }
 
 function dimensionUi(dimension: FilterDimension): "chips" | "select" | "hidden" {
@@ -44,6 +45,7 @@ export default function DeskToolbar({
   toolbarExtra,
   refineOpen,
   onRefineOpenChange,
+  onClearAll,
 }: Props) {
   const pictures = viewMode !== "list";
   const searchId = useId();
@@ -243,8 +245,12 @@ export default function DeskToolbar({
               <button
                 type="button"
                 onClick={() => {
-                  visibleFilters.forEach((f) => onFilterChange(f.key, null));
-                  onSearchChange?.("");
+                  if (onClearAll) {
+                    onClearAll();
+                  } else {
+                    visibleFilters.forEach((f) => onFilterChange(f.key, null));
+                    onSearchChange?.("");
+                  }
                   setLocalSearch("");
                 }}
                 className="mt-2 font-ui text-[13px] font-medium text-[var(--action)]"
