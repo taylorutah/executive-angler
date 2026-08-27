@@ -47,11 +47,7 @@ export default function HomeHero({ cfs }: Props) {
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to top, rgb(11 17 18 / 0.58) 0%, rgb(11 17 18 / 0.22) 42%, rgb(11 17 18 / 0) 100%)",
-        }}
+        className="hero-overlay-home pointer-events-none absolute inset-0"
       />
 
       <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 pt-12 sm:px-8 sm:pb-10 xl:px-20 xl:pb-10">

@@ -59,7 +59,6 @@ export default async function FlyShopsPage() {
         imageAlt: shop.name,
         title: shop.name,
         subtitle: dest?.name,
-        meta: dest?.name,
         description: shop.description.substring(0, 120),
         featured: false,
         _filterValues: {

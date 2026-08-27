@@ -386,6 +386,20 @@
     );
   }
 
+  /* Full-viewport Home hero (1440×844). Chalk + teal-300 sit in the
+     bottom ~400px; keep that band at ≥0.82 riverbed so the rendered
+     contrast gate clears over a light photograph (teal needs ~0.80). */
+  .hero-overlay-home {
+    background: linear-gradient(
+      to top,
+      rgb(11 17 18 / 0.90) 0%,
+      rgb(11 17 18 / 0.86) 36%,
+      rgb(11 17 18 / 0.82) 58%,
+      rgb(11 17 18 / 0.28) 78%,
+      rgb(11 17 18 / 0) 100%
+    );
+  }
+
   .hero-overlay-light {
     background: var(--scrim-light);
   }
