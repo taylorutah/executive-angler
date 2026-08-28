@@ -6,14 +6,14 @@
 
 import type { ReactNode } from "react";
 import { Home, BookOpen, Mountain, Bug, Fish } from "@/icons";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 // Brand palette — must match globals.css and native EAColors.
 const C = {
   bg: "#0D1117",
   bgMid: "#161B22",
   border: "#21262D",
-  copper: COPPER_400,
+  copper: COPPER_700,
   teal: "#0BA5C7",
   chalk: "#F0F6FC",
   slate: "#A8B2BD",

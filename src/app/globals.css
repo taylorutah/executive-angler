@@ -83,19 +83,6 @@
   --graphite: var(--text-2);
   --slate: var(--text-3);
 
-  /* Dusk register primitives — retained while the route-determined
-     dusk register exists (see DESIGN.md § Open conflicts). */
-  --riverbed: #0B1112;
-  --pool: #131B1D;
-  --shelf: #1C2629;
-  --chalk: #EEF2F1;
-  --fog: #8B979A;
-  --copper-400: #E97C48;
-  --copper-hover-400: #FE9A77;
-  --teal-300: #00BCC5;
-  --rise-400: #3FB863;
-  --cut-400: #F87171;
-
   /* Retired font families alias onto the two lawful faces so legacy
      class names keep compiling. Inter for UI/body/data, Fraunces for
      display. */
@@ -149,9 +136,8 @@
   );
 }
 
-/* ── Semantic layer: daylight (the only lawful register going forward) ── */
-:root,
-[data-register="daylight"] {
+/* ── Semantic layer: daylight is the only register (DESIGN.md §1.2) ── */
+:root {
   --surface-page: var(--paper);
   --surface-raised: var(--paper-deep);
   --surface-card: var(--surface);
@@ -165,27 +151,6 @@
   --signal-live: var(--accent);
   --state-positive: var(--success);
   --state-negative: var(--danger);
-}
-
-/* Dusk register — route-determined dark theme for the logged-in product.
-   CONFLICT with the brief's light-only rule; machinery kept intact so the
-   member product keeps working until the client rules. See DESIGN.md. */
-[data-register="dusk"],
-.register-dusk {
-  --surface-page: var(--riverbed);
-  --surface-raised: var(--pool);
-  --surface-card: var(--shelf);
-  --border-rule: #243033;
-  --border-strong: #3A474A;
-  --text-primary: var(--chalk);
-  --text-body: #C5CECF;
-  --text-meta: var(--fog);
-  --action: var(--copper-400);
-  --action-hover: var(--copper-hover-400);
-  --on-action: var(--riverbed);
-  --signal-live: var(--teal-300);
-  --state-positive: var(--rise-400);
-  --state-negative: var(--cut-400);
 }
 
 @theme inline {
@@ -222,7 +187,6 @@
   --color-surface-raised: var(--surface-card);
   --color-surface-page: var(--surface-page);
   --color-surface-card: var(--surface-card);
-  --color-dusk: var(--ink);
   --color-signal: var(--signal-live);
   --color-signal-pip: var(--signal-live);
   --color-text-primary: var(--text-primary);
@@ -1078,12 +1042,6 @@
   }
 }
 
-/* Register-driven logo swap */
-[data-register="daylight"] .dark-logo { display: none !important; }
-[data-register="daylight"] .light-logo { display: block !important; }
-[data-register="dusk"] .dark-logo { display: block; }
-[data-register="dusk"] .light-logo { display: none; }
-
 /* Solid CTA — unlayered so the fill cannot lose to Button utilities. */
 .ea-btn-solid {
   background: var(--action) !important;
@@ -1150,16 +1108,12 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23969E97' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23525B55' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 12px 12px;
   padding-right: 2.25rem;
   cursor: pointer;
-}
-
-[data-register="daylight"] select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23525B55' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
 }
 
 select:focus {
@@ -1197,11 +1151,9 @@ select:focus {
   color: var(--text-primary);
 }
 
-/* Current page: 2px accent underline on the bar's bottom rule.
-   --signal-live === --accent in daylight; the alias keeps the state
-   legible where the bar renders on dusk routes. */
+/* Current page: 2px accent underline on the bar's bottom rule. */
 .ea-nav-link[aria-current="page"] {
-  color: var(--signal-live);
+  color: var(--accent);
 }
 
 .ea-nav-link[aria-current="page"]::after {
@@ -1211,7 +1163,7 @@ select:focus {
   right: var(--space-3);
   bottom: -1px;
   height: 2px;
-  background: var(--signal-live);
+  background: var(--accent);
 }
 
 .ea-nav-divider {

@@ -78,7 +78,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
                 )}
               </span>
               {active && (
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--action)]" aria-hidden />
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" aria-hidden />
               )}
             </Link>
           );
@@ -116,7 +116,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
               onClick={onClose}
               className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-4 sm:px-6 text-[16px] font-medium text-[var(--text-primary)]`}
             >
-              <FishSymbol className="h-5 w-5 text-[var(--action)]" aria-hidden />
+              <FishSymbol className="h-5 w-5 text-[var(--accent)]" aria-hidden />
               Log a session
             </Link>
             <Link
@@ -124,7 +124,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
               onClick={onClose}
               className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-4 sm:px-6 text-[16px] text-[var(--text-body)]`}
             >
-              <Bug className="h-5 w-5 text-[var(--action)]" aria-hidden />
+              <Bug className="h-5 w-5 text-[var(--accent)]" aria-hidden />
               New fly recipe
             </Link>
             <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />

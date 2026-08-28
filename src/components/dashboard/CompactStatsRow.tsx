@@ -5,7 +5,7 @@ import {
   Wrench, Lightbulb, Feather, Leaf, Package, BarChart3, BookOpen, Upload, Trophy, Flame,
 } from "@/icons";
 import { ButtonTile } from "@/components/ui/Button";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 interface Stats {
   totalFish: number;
@@ -86,7 +86,7 @@ export default function CompactStatsRow({ stats, flyCount, gearCount, tieNextCou
 
       {/* Quick-launch tiles */}
       <div className="flex items-stretch gap-2 overflow-x-auto -mx-1 px-1 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
-        <ButtonTile href="/flies?tab=workbench" icon={Wrench} iconColor={COPPER_400} label="Workbench" badge={tieNextCount} size="sm" />
+        <ButtonTile href="/flies?tab=workbench" icon={Wrench} iconColor={COPPER_700} label="Workbench" badge={tieNextCount} size="sm" />
         <ButtonTile href="/dashboard/insights" icon={Lightbulb} iconColor="#C4B5FD" label="Insights" size="sm" />
         <ButtonTile href="/flies" icon={Feather} iconColor="#7BD9C2" label="Fly Box" badge={flyCount} size="sm" />
         <ButtonTile href="/dashboard/hatch-reports" icon={Leaf} iconColor="#90EE90" label="Hatches" size="sm" />

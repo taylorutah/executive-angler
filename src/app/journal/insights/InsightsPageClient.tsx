@@ -13,7 +13,7 @@ import {
 } from "@/icons";
 import AIInsightsCard from "@/components/journal/AIInsightsCard";
 import PageHeader from "@/components/ui/PageHeader";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 import FirstRunEmpty, { INSIGHTS_SESSION_FLOOR } from "@/app/today/FirstRunEmpty";
 
 // =============================================
@@ -82,7 +82,7 @@ interface InsightsPayload {
 // =============================================
 
 const SPECIES_COLORS = [
-  COPPER_400, "#00B4D8", "#22C55E", "#A855F7", "#EF4444",
+  COPPER_700, "#00B4D8", "#22C55E", "#A855F7", "#EF4444",
   "#F59E0B", "#EC4899", "#6366F1", "#14B8A6", "#8B5CF6",
 ];
 
@@ -430,7 +430,7 @@ function MonthlyChart({ trends }: { trends: MonthlyTrendPoint[] }) {
                 style={{
                   height: `${Math.max(heightPct, 2)}%`,
                   backgroundColor:
-                    t.fish > 0 ? COPPER_400 : "#21262D",
+                    t.fish > 0 ? COPPER_700 : "#21262D",
                   minHeight: "2px",
                 }}
               />

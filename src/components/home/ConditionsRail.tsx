@@ -31,7 +31,7 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
   return (
     <div
       data-home-rail
-      className="register-dusk sticky top-[56px] z-40 h-10 bg-[var(--surface-page)] border-b border-[var(--border-rule)]"
+      className="sticky top-[56px] z-40 h-10 bg-[var(--surface-page)] border-b border-[var(--border-rule)]"
     >
       <div className="mx-auto flex h-full max-w-7xl items-center gap-5 overflow-x-auto px-4 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <span className="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)] lg:inline">

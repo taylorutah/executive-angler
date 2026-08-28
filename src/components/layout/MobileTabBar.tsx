@@ -41,7 +41,7 @@ export default function MobileTabBar() {
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-1 text-[12px] font-medium transition-colors duration-150 ease-standard ${
-                  active ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
+                  active ? "text-[var(--accent)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden />
@@ -55,15 +55,15 @@ export default function MobileTabBar() {
             href="/account"
             aria-current={accountActive ? "page" : undefined}
             className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-1 text-[12px] font-medium transition-colors duration-150 ease-standard ${
-              accountActive ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
+              accountActive ? "text-[var(--accent)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
             }`}
           >
             {user.avatarUrl ? (
-              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-[var(--border)]"}`}>
+              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[var(--accent)]" : "ring-[var(--border)]"}`}>
                 <Image src={user.avatarUrl} alt={user.displayName || "Your account"} width={24} height={24} className="object-cover w-full h-full" />
               </div>
             ) : (
-              <div className={`h-6 w-6 rounded-full bg-[var(--surface)] flex items-center justify-center ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-[var(--border)]"}`}>
+              <div className={`h-6 w-6 rounded-full bg-[var(--surface)] flex items-center justify-center ring-2 ${accountActive ? "ring-[var(--accent)]" : "ring-[var(--border)]"}`}>
                 <span className="text-[12px] font-semibold text-[var(--text-body)]">{avatarInitial}</span>
               </div>
             )}

@@ -12,15 +12,6 @@ import {
   TEAL_700,
   RISE_700,
   CUT_700,
-  RIVERBED,
-  POOL,
-  SHELF,
-  CHALK,
-  FOG,
-  COPPER_400,
-  TEAL_300,
-  RISE_400,
-  CUT_400,
 } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -74,18 +65,6 @@ const DAYLIGHT: Swatch[] = [
   { name: "teal-700", hex: TEAL_700, role: "LIVE DATA only", against: "vellum", againstHex: VELLUM, min: 4.5 },
   { name: "rise-700", hex: RISE_700, role: "positive", against: "paper", againstHex: PAPER, min: 4.5 },
   { name: "cut-700", hex: CUT_700, role: "negative", against: "paper", againstHex: PAPER, min: 4.5 },
-];
-
-const DUSK: Swatch[] = [
-  { name: "riverbed", hex: RIVERBED, role: "page", against: "chalk", againstHex: CHALK, min: 4.5 },
-  { name: "pool", hex: POOL, role: "surface / zebra", against: "chalk", againstHex: CHALK, min: 4.5 },
-  { name: "shelf", hex: SHELF, role: "raised / inputs", against: "chalk", againstHex: CHALK, min: 4.5 },
-  { name: "chalk", hex: CHALK, role: "headings", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
-  { name: "fog", hex: FOG, role: "meta", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
-  { name: "copper-400", hex: COPPER_400, role: "ACTION only", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
-  { name: "teal-300", hex: TEAL_300, role: "LIVE DATA only", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
-  { name: "rise-400", hex: RISE_400, role: "positive", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
-  { name: "cut-400", hex: CUT_400, role: "negative", against: "riverbed", againstHex: RIVERBED, min: 4.5 },
 ];
 
 const SPINE = [
@@ -160,9 +139,9 @@ function TypeSpecimen() {
           Body — Fraunces (text optical size)
         </p>
         <p className="max-w-[68ch] text-[19px] leading-[1.7]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
-          A river page is a document, not a dashboard. The live inset sits in
-          the dusk register because that is the one job dusk has: readings that
-          change while you look at them. Everything around it stays daylight.
+          A river page is a document, not a dashboard. Live readings sit in a
+          bordered daylight panel — light theme only, the dusk register is
+          deleted machinery.
         </p>
       </div>
       <div>
@@ -196,8 +175,8 @@ export default function StyleguidePage() {
           </p>
           <h1 className="font-heading text-4xl mt-2">Styleguide</h1>
           <p className="mt-2 max-w-[68ch]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
-            Tokens, type, both registers, and a dusk inset inside daylight.
-            Copper is the action colour and nothing else.
+            Tokens, type, and components. Daylight is the only register;
+            deep river green is the action colour and nothing else.
           </p>
         </header>
 
@@ -206,29 +185,20 @@ export default function StyleguidePage() {
           <SwatchGrid items={DAYLIGHT} ground={PAPER} />
         </section>
 
-        <section data-register="dusk" className="register-dusk rounded-2xl p-6" style={{ background: "var(--surface-page)" }}>
-          <h2 className="font-heading text-2xl mb-4">Dusk</h2>
-          <SwatchGrid items={DUSK} ground="#0B1112" />
-        </section>
-
-        <section className="grid md:grid-cols-2 gap-8">
+        <section>
           <div className="rounded-2xl p-6 border" style={{ borderColor: "var(--border-rule)", background: "var(--surface-card)" }}>
             <h2 className="font-heading text-2xl mb-4">Type · daylight</h2>
-            <TypeSpecimen />
-          </div>
-          <div className="register-dusk rounded-2xl p-6" style={{ background: "var(--surface-page)", color: "var(--text-primary)" }}>
-            <h2 className="font-heading text-2xl mb-4">Type · dusk</h2>
             <TypeSpecimen />
           </div>
         </section>
 
         <section className="rounded-2xl p-6 border" style={{ borderColor: "var(--border-rule)", background: "var(--paper)" }}>
-          <h2 className="font-heading text-2xl mb-2">Inset proof</h2>
+          <h2 className="font-heading text-2xl mb-2">Instrument panel</h2>
           <p className="mb-4 max-w-[68ch]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
-            A live-conditions panel goes dark inside a light page without a
-            second component. This is <code className="font-mono text-sm">.register-dusk</code>.
+            A live-conditions panel is a bordered daylight inset — hairline,
+            instrument radius, no shadow.
           </p>
-          <div className="register-dusk flex items-baseline justify-between gap-4 p-4 shadow-[var(--elev-1)]" style={{ background: "var(--surface-page)", color: "var(--text-primary)", borderRadius: "var(--radius-instrument)", border: "1px solid var(--border-rule)" }}>
+          <div className="flex items-baseline justify-between gap-4 p-4" style={{ background: "var(--surface-page)", color: "var(--text-primary)", borderRadius: "var(--radius-instrument)", border: "1px solid var(--border-rule)" }}>
             <div>
               <p className="text-xs uppercase tracking-widest" style={{ fontFamily: "var(--font-ui)", color: "var(--text-meta)" }}>Madison River</p>
               <p className="font-heading text-3xl">760 <span className="text-base" style={{ color: "var(--signal-live)" }}>cfs</span></p>
@@ -237,7 +207,7 @@ export default function StyleguidePage() {
           </div>
         </section>
 
-        <section data-register="dusk" className="register-dusk rounded-2xl p-6" style={{ background: "var(--surface-page)" }}>
+        <section className="rounded-2xl p-6 border" style={{ borderColor: "var(--border-rule)", background: "var(--surface-page)" }}>
           <h2 className="font-heading text-2xl mb-2">WorkbenchTable</h2>
           <p className="mb-4 max-w-[68ch]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
             The one instrument table. <code className="font-mono text-sm">src/components/data/DataTable</code> and{" "}
@@ -250,7 +220,7 @@ export default function StyleguidePage() {
             <code className="font-mono text-sm">/account/gear</code>.
           </p>
           <ul className="mb-4 space-y-1 text-sm" style={{ fontFamily: "var(--font-ui)", color: "var(--text-body)" }}>
-            <li>32px rows · zebra Pool / Riverbed · numerics in <code className="font-mono">.num</code>, right-aligned</li>
+            <li>32px rows · zebra paper-deep / paper · numerics in <code className="font-mono">.num</code>, right-aligned</li>
             <li>Inline edit flashes green on save, red on error, then clears</li>
             <li>Bulk toolbar appears only when a row is selected</li>
             <li>

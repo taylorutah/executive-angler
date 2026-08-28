@@ -2,12 +2,12 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Contained Dusk instrument on a Daylight page.
+ * Contained instrument panel on a daylight page.
  *
- * Contract — Brand Bible v4.1 §5.7 Rule 5 / §12:
- * inset from the page gutter on all four sides; ≥24px paper above and below;
- * --radius-instrument (4px); 1px --border-rule; --elev-1 only.
- * `.register-dusk` lives on this panel, never on the section that contains it.
+ * Inset from the page gutter on all four sides; ≥24px paper above and below;
+ * --radius-instrument (4px); 1px --border-rule. Panels are bordered, never
+ * shadowed (DESIGN.md § Elevation). Light theme only — the dusk register is
+ * deleted machinery.
  */
 interface Props {
   children: ReactNode;
@@ -23,7 +23,7 @@ export default function InstrumentWell({ children, className, label }: Props) {
       role="region"
       aria-label={label}
       className={cn(
-        "register-dusk border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-primary)] shadow-[var(--elev-1)]",
+        "border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-primary)]",
         className,
       )}
       style={{

@@ -3,13 +3,10 @@
 /**
  * Lane N — /search, the Water Desk's finding tool.
  *
- * Registers: Daylight throughout, no exceptions. The rest of the site keeps
- * live data (river flow, gauge readouts) in a Dusk inset even on light pages
- * — see ConditionsRail — but a search result is a pointer to a page, not an
- * instrument reading. Switching registers mid-row would tell a stranger this
- * is a workbench when it is a lookup. `SearchResultRow`'s live-flow chip
- * renders in Daylight tokens (teal-700, already AA on vellum/card) instead
- * of borrowing `.register-dusk`.
+ * Daylight throughout — the dusk register is deleted machinery. A search
+ * result is a pointer to a page, not an instrument reading.
+ * `SearchResultRow`'s live-flow chip renders in daylight tokens
+ * (teal-700 = --accent, already AA on vellum/card).
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

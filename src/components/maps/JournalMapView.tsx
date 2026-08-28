@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { parseLocalDate } from "@/lib/date";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 interface FishingSession {
   id: string;
@@ -87,11 +87,11 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
             </div>
             ${
               session.total_fish
-                ? `<div style="font-size: 13px; color: ${COPPER_400}; margin-bottom: 8px;">🐟 ${session.total_fish}</div>`
+                ? `<div style="font-size: 13px; color: ${COPPER_700}; margin-bottom: 8px;">🐟 ${session.total_fish}</div>`
                 : ""
             }
             <a href="/journal/${session.id}"
-               style="display: inline-block; font-size: 12px; color: ${COPPER_400}; font-weight: 500; text-decoration: none; border-bottom: 1px solid ${COPPER_400};">
+               style="display: inline-block; font-size: 12px; color: ${COPPER_700}; font-weight: 500; text-decoration: none; border-bottom: 1px solid ${COPPER_700};">
               View →
             </a>
           </div>
@@ -103,7 +103,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
         }).setHTML(popupHTML);
 
         const markerEl = new mapboxgl.Marker({
-          color: COPPER_400,
+          color: COPPER_700,
         })
           .setLngLat([longitude, latitude])
           .setPopup(popup)

@@ -36,7 +36,7 @@ import {
   Anchor,
 } from "@/icons";
 import { Button } from "@/components/ui/Button";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700, CUT_700 } from "@/lib/palette";
 
 interface UsageSession {
   id: string;
@@ -465,7 +465,7 @@ function ModeOption({
   destructive?: boolean;
   children?: React.ReactNode;
 }) {
-  const accent = destructive ? "#F87171" : COPPER_400;
+  const accent = destructive ? CUT_700 : COPPER_700;
   return (
     <div
       className={`rounded-lg border p-3 cursor-pointer transition-colors ${

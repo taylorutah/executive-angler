@@ -3,7 +3,7 @@
 
 import ScreenShell, { Colors as C } from "./ScreenShell";
 import { Plus, Search, Filter } from "@/icons";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 type Fly = {
   name: string;
@@ -23,7 +23,7 @@ const NYMPHS: Fly[] = [
 const DRIES: Fly[] = [
   { name: "Elk Hair Caddis", sizes: "#12, #14, #16", count: 16, color: "#A67C52", notes: "Evening riffles" },
   { name: "Parachute Adams", sizes: "#14, #16, #18", count: 22, color: "#4B5563", notes: "All-purpose mayfly" },
-  { name: "Stimulator", sizes: "#10, #12, #14", count: 9, color: COPPER_400, notes: "Hopper-dropper rig" },
+  { name: "Stimulator", sizes: "#10, #12, #14", count: 9, color: COPPER_700, notes: "Hopper-dropper rig" },
 ];
 
 export default function FlyBoxMockup() {

@@ -11,8 +11,8 @@
  *   want real subject-color LQIPs. Not required to kill the empty-card flash.
  *
  * The card frame is already `bg-[var(--surface-raised)]`, so the placeholder
- * matches the designed empty state on daylight. Dusk pages keep the frame
- * token; the PNG is only on-screen for a few hundred ms.
+ * matches the designed empty state. The PNG is only on-screen for a few
+ * hundred ms.
  */
 export const SURFACE_RAISED_BLUR_DATA_URL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVR4nGP49PYJVsQwtCQAE1OwwVUvm0AAAAAASUVORK5CYII=";

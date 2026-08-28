@@ -8,12 +8,9 @@ import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/layout/nav/SkipLink";
 import CommandPalette from "@/components/CommandPalette";
-import RegisterBinder from "@/components/system/RegisterBinder";
-import { ThemeProvider } from "@/lib/theme-context";
 import { AuthProvider } from "@/lib/auth-context";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import { organizationJsonLd } from "@/lib/seo";
-import { REGISTER_BOOTSTRAP } from "@/lib/register";
 import "./globals.css";
 
 /* Two faces only (DESIGN.md): Fraunces 500/600 for display, Inter 400/500/600 for UI.
@@ -109,12 +106,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-register="daylight"
       suppressHydrationWarning
       className={`${fraunces.variable} ${inter.variable}`}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: REGISTER_BOOTSTRAP }} />
         <meta name="apple-itunes-app" content="app-id=6760311036" />
         <link rel="preconnect" href="https://qlasxtfbodyxbcuchvxz.supabase.co" />
         <link rel="preconnect" href="https://api.mapbox.com" />
@@ -144,20 +139,17 @@ export default function RootLayout({
       <body className="page-ground antialiased min-h-screen flex flex-col text-[var(--text-primary)]">
         <SkipLink />
         <AuthProvider>
-          <ThemeProvider>
-            <RegisterBinder />
-            <Header />
-            <main
-              id={MAIN_CONTENT_ID}
-              tabIndex={-1}
-              className="flex-1 pt-[var(--header-h)] pb-14 lg:pb-0"
-            >
-              {children}
-            </main>
-            <Footer />
-            <MobileTabBar />
-            <CommandPalette />
-          </ThemeProvider>
+          <Header />
+          <main
+            id={MAIN_CONTENT_ID}
+            tabIndex={-1}
+            className="flex-1 pt-[var(--header-h)] pb-14 lg:pb-0"
+          >
+            {children}
+          </main>
+          <Footer />
+          <MobileTabBar />
+          <CommandPalette />
         </AuthProvider>
         <Analytics />
         <SpeedInsights />

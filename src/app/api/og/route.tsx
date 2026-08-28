@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 export const runtime = "edge";
 
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
             left: 0,
             right: 0,
             height: "6px",
-            background: `linear-gradient(90deg, ${COPPER_400} 0%, #0BA5C7 100%)`,
+            background: COPPER_700,
           }}
         />
 
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
             style={{
               fontSize: "18px",
               fontWeight: 600,
-              color: COPPER_400,
+              color: COPPER_700,
               textTransform: "uppercase",
               letterSpacing: "3px",
             }}
@@ -135,7 +135,7 @@ export async function GET(req: NextRequest) {
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                backgroundColor: COPPER_400,
+                backgroundColor: COPPER_700,
               }}
             />
             <span style={{ fontSize: "14px", color: "#6E7681" }}>

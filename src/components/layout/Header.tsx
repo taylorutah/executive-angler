@@ -14,7 +14,6 @@ import MobileNavSheet from "./nav/MobileNavSheet";
 import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive } from "./nav/links";
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
-import { registerForPath } from "@/lib/register";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,10 +37,7 @@ export default function Header() {
   }, []);
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
-  const logoSrc =
-    registerForPath(pathname) === "dusk"
-      ? "/images/logo-horizontal-white.svg"
-      : "/images/logo-horizontal-forest.svg";
+  const logoSrc = "/images/logo-horizontal-forest.svg";
 
   return (
     <>
@@ -138,7 +134,7 @@ export default function Header() {
                       aria-label="Quick actions"
                       aria-expanded={plusOpen}
                       aria-haspopup="menu"
-                      className={`ea-focus-ring flex h-8 w-8 items-center justify-center rounded-md bg-[var(--action)] text-[var(--on-action)] transition-transform duration-200 ease-standard ${
+                      className={`ea-focus-ring flex h-8 w-8 items-center justify-center rounded-md bg-[var(--accent)] text-white transition-transform duration-200 ease-standard ${
                         plusOpen ? "rotate-45" : ""
                       }`}
                     >

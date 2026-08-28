@@ -148,9 +148,8 @@ function WorthChoosing({
 }
 
 /**
- * Daylight, deliberately — no `.register-dusk` here. Every other live-data
- * inset on the site (ConditionsRail, the river page) goes dark on purpose;
- * this one stays in the page's own register because a search row is a
+ * Daylight, like everything else — the dusk register is deleted machinery.
+ * A search row is a
  * pointer to read, not a gauge to watch. teal-700 (`--signal-live` in
  * Daylight) clears 4.5:1 on vellum and card without it. `--text-body`
  * carries the unit/status label instead of `--text-meta` — it is read as

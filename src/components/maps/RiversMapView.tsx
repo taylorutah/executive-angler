@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { River } from "@/types/entities";
-import { COPPER_400 } from "@/lib/palette";
+import { COPPER_700 } from "@/lib/palette";
 
 interface SelectedState {
   center: [number, number];
@@ -144,7 +144,7 @@ export default function RiversMapView({
         width: ${dotSize}px;
         height: ${dotSize}px;
         border-radius: 50%;
-        background-color: ${COPPER_400};
+        background-color: ${COPPER_700};
         display: flex;
         align-items: center;
         justify-content: center;
