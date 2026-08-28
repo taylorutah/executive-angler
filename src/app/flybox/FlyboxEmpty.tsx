@@ -43,7 +43,7 @@ export default function FlyboxEmpty() {
           data-empty-action
           onClick={createBox}
           disabled={busy}
-          className="font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--action)] hover:underline disabled:opacity-60"
+          className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--accent)] hover:underline disabled:opacity-60"
         >
           {busy ? "Creating…" : "Create a box"}
         </button>
@@ -52,7 +52,7 @@ export default function FlyboxEmpty() {
       <p className="mt-4">
         <a
           href="/flies/pheasant-tail"
-          className="text-[15px] text-[var(--text-body)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]"
+          className="text-[14px] text-[var(--text-2)] underline decoration-[var(--border)] hover:text-[var(--accent)]"
         >
           Pheasant Tail
         </a>

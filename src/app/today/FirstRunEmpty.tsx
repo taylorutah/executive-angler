@@ -39,24 +39,24 @@ export default function FirstRunEmpty({
   return (
     <section
       data-empty-state={surface}
-      className="mt-10 max-w-xl border-t border-[var(--border-rule)] pt-8"
+      className="mt-8 max-w-xl border-t border-[var(--border)] pt-8"
     >
-      <p data-empty-purpose className="text-[17px] leading-relaxed text-[var(--text-body)]">
+      <p data-empty-purpose className="text-[16px] text-[var(--text-2)]">
         {purpose}
       </p>
-      <p className="mt-5">
+      <p className="mt-4">
         {action ?? (
           <Link
             data-empty-action
             href={actionHref ?? "/"}
-            className="font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--action)] hover:underline"
+            className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--accent)] hover:underline"
           >
             {actionLabel}
           </Link>
         )}
       </p>
       {example ? (
-        <p data-empty-example className="mt-4 text-[15px] leading-relaxed text-[var(--text-meta)]">
+        <p data-empty-example className="mt-4 text-[13px] text-[var(--text-3)]">
           {example}
         </p>
       ) : null}

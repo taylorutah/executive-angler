@@ -344,7 +344,7 @@ export default function GearLockerClient() {
                 type="button"
                 data-empty-action
                 onClick={() => openAdd("rod")}
-                className="font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--action)] hover:underline"
+                className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--accent)] hover:underline"
               >
                 Add a rod
               </button>
