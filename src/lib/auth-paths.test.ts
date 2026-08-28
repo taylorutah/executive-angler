@@ -41,6 +41,7 @@ describe("auth paths — the gate for /today", () => {
   it("rejects protocol-relative and backslash open redirects", () => {
     assert.equal(safeInternalPath("/journal"), "/journal");
     assert.equal(safeInternalPath("/flies/pheasant-tail?from=home"), "/flies/pheasant-tail?from=home");
+    assert.equal(safeInternalPath("/today#notes"), "/today#notes");
     assert.equal(safeInternalPath("//evil.com"), null);
     assert.equal(safeInternalPath("/\\evil.com"), null);
     assert.equal(safeInternalPath("/%5C%5Cevil.com"), null);
@@ -49,6 +50,16 @@ describe("auth paths — the gate for /today", () => {
     assert.equal(safeInternalPath("journal"), null);
     assert.equal(safeInternalPath(""), null);
     assert.equal(safeInternalPath(null), null);
+  });
+
+  it("rejects C0-prefixed protocol-relative redirects", () => {
+    assert.equal(safeInternalPath("/%09//evil.com"), null);
+    assert.equal(safeInternalPath("/%0A//evil.com"), null);
+    assert.equal(safeInternalPath("/%0D//evil.com"), null);
+    assert.equal(safeInternalPath("/\t//evil.com"), null);
+    assert.equal(safeInternalPath("/\n//evil.com"), null);
+    assert.equal(safeInternalPath("/\r//evil.com"), null);
+    assert.equal(safeInternalPath("/%09%2F%2Fevil.com"), null);
   });
 
   it("requires a verified email on /today and /rivers/mine", () => {

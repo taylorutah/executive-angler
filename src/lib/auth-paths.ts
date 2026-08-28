@@ -59,8 +59,9 @@ export function signedInPathRedirect(pathname: string): string | null {
 }
 
 /**
- * Same-origin path only. Rejects protocol-relative (`//`, `/\\`) and
- * encoded backslash tricks (`/%5C%5Cevil.com`) that browsers treat as hosts.
+ * Same-origin path only. Rejects protocol-relative (`//`, `/\\`), encoded
+ * backslash (`/%5C%5Cevil.com`), and C0-prefixed tricks (`/%09//evil.com`)
+ * that WHATWG URL parsing strips into an off-site host.
  */
 export function safeInternalPath(raw: string | null | undefined): string | null {
   if (typeof raw !== "string") return null;
@@ -74,9 +75,19 @@ export function safeInternalPath(raw: string | null | undefined): string | null 
     return null;
   }
 
-  if (value.includes("\\") || value.includes("\0")) return null;
+  // Tab / LF / CR / other C0 / DEL / backslash — browsers strip these
+  // before locating the host, so `/\t//evil.com` becomes `//evil.com`.
+  if (/[\u0000-\u001F\u007F\\]/.test(value)) return null;
   if (!value.startsWith("/")) return null;
   if (value.startsWith("//")) return null;
   if (value.includes("://")) return null;
-  return value;
+
+  try {
+    const url = new URL(value, "https://executiveangler.invalid");
+    if (url.origin !== "https://executiveangler.invalid") return null;
+    if (url.username || url.password) return null;
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return null;
+  }
 }

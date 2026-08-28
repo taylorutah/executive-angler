@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
+import { safeInternalPath } from "@/lib/auth-paths";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -21,7 +22,7 @@ interface Props {
 
 export default function SignupForm({ next }: Props) {
   const router = useRouter();
-  const postSignupRedirect = next || "/journal";
+  const postSignupRedirect = safeInternalPath(next) || "/journal";
 
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
