@@ -111,31 +111,31 @@ export default async function GearCatalogPage({ searchParams }: Props) {
     : products.filter((p) => p.category === activeCategory);
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
-      <header className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
-          <h1 className="font-heading text-3xl text-[var(--text-primary)] tracking-tight">
+    <main className="min-h-screen bg-[var(--paper)]">
+      <header className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] lg:text-3xl">
             Gear
           </h1>
-          <p className="mt-1 text-sm text-[var(--text-body)]">
-            {products.length} products · click <span className="text-[var(--text-primary)]">Add</span> on any row to drop it into your{" "}
-            <a href="/account/gear" className="text-[var(--signal-live)] hover:text-[var(--action)]">locker</a>.
+          <p className="mt-1 text-sm text-[var(--text-2)]">
+            {products.length} products · click <span className="text-[var(--text-1)]">Add</span> on any row to drop it into your{" "}
+            <a href="/account/gear" className="text-[var(--accent)] hover:underline">locker</a>.
           </p>
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+      <section className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6">
         <GearCategoryTabs categories={tabs} />
 
-        <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] overflow-hidden">
+        <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           {visible.length === 0 ? (
-            <div className="px-4 py-12 text-center text-sm text-[var(--text-meta)]">
+            <div className="px-4 py-12 text-center text-sm text-[var(--text-3)]">
               No products in this category yet.
             </div>
           ) : (
-            <div className="divide-y divide-[#21262D]">
+            <div className="divide-y divide-[var(--border)]">
               {/* Header row */}
-              <div className="hidden sm:grid grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 bg-[var(--surface-raised)] px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
+              <div className="hidden sm:grid grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 bg-[var(--paper-deep)] px-3 py-3 text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">
                 <span></span>
                 <span>Product</span>
                 <span>Spec</span>
@@ -148,35 +148,35 @@ export default async function GearCatalogPage({ searchParams }: Props) {
                 return (
                   <div
                     key={p.id}
-                    className="grid grid-cols-[40px_1fr] sm:grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 px-3 py-2 hover:bg-[var(--surface-raised)] transition-colors"
+                    className="grid grid-cols-[40px_1fr] sm:grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 px-3 py-2 hover:bg-[var(--paper-deep)] transition-colors"
                   >
-                    <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded bg-[var(--surface-raised)]">
+                    <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded-[var(--radius-sm)] bg-[var(--paper-deep)]">
                       {p.heroImageUrl ? (
                         // next/image throws on hosts not in next.config. Do not
                         // add hosts there from this lane; 36px thumbs use img.
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={p.heroImageUrl} alt="" className="h-full w-full object-cover" />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)] text-[10px]">
+                        <div className="absolute inset-0 flex items-center justify-center text-[var(--text-3)] text-xs">
                           —
                         </div>
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[var(--text-primary)] text-sm font-medium truncate">
+                      <p className="text-[var(--text-1)] text-sm font-medium truncate">
                         {p.name}
                       </p>
-                      <p className="text-[var(--text-meta)] text-[11px] truncate">
+                      <p className="text-[var(--text-3)] text-xs truncate">
                         {brand?.name ?? "—"}
                       </p>
                     </div>
-                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[var(--text-body)] text-[12px] truncate">
+                    <p className="hidden sm:block num text-[var(--text-2)] text-xs truncate">
                       {specSummary(p.category, p.specs as Record<string, unknown>) || "—"}
                     </p>
-                    <span className="hidden sm:inline-block rounded bg-[var(--surface-card)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)] w-fit">
+                    <span className="hidden sm:inline-block ea-chip w-fit">
                       {CATEGORY_LABELS[p.category] ?? p.category}
                     </span>
-                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[var(--text-body)] text-[12px] text-right">
+                    <p className="hidden sm:block num text-[var(--text-2)] text-xs text-right">
                       {p.msrpUsd ? `$${p.msrpUsd}` : "—"}
                     </p>
                     <div className="col-start-2 sm:col-auto justify-self-start sm:justify-self-end">

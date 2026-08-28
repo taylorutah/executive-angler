@@ -20,7 +20,7 @@ export default function GearCategoryTabs({ categories }: Props) {
   const tabs = [{ slug: "all", label: "All", count: total }, ...categories];
 
   return (
-    <div className="flex flex-wrap gap-1 border-b border-[var(--border-rule)] mb-4 -mx-1">
+    <div className="flex flex-wrap gap-1 border-b border-[var(--border)] mb-4 -mx-1">
       {tabs.map((t) => {
         const isActive = active === t.slug;
         const href = t.slug === "all" ? "/gear" : `/gear?category=${t.slug}`;
@@ -29,14 +29,15 @@ export default function GearCategoryTabs({ categories }: Props) {
             key={t.slug}
             href={href}
             scroll={false}
-            className={`px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
+            aria-current={isActive ? "page" : undefined}
+            className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
               isActive
-                ? "bg-[var(--surface-raised)] text-[var(--text-primary)] border-x border-t border-[var(--border-rule)] -mb-px"
-                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]/50"
+                ? "border-[var(--accent)] text-[var(--accent)]"
+                : "border-transparent text-[var(--text-2)] hover:text-[var(--text-1)]"
             }`}
           >
             {t.label}{" "}
-            <span className="font-['IBM_Plex_Mono'] text-[var(--text-meta)]">{t.count}</span>
+            <span className="num text-[var(--text-3)]">{t.count}</span>
           </Link>
         );
       })}

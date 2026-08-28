@@ -30,8 +30,8 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
 
   if (inLocker) {
     return (
-      <span className="inline-flex items-center gap-1 rounded bg-[var(--signal-live)]/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
-        <Check className="h-3 w-3" /> In locker
+      <span className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-xs font-medium text-[var(--accent)]">
+        <Check className="h-3.5 w-3.5" /> In locker
       </span>
     );
   }
@@ -42,12 +42,12 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
         type="button"
         onClick={click}
         disabled={pending}
-        className="inline-flex items-center gap-1 rounded-md bg-[var(--surface-card)] border border-[var(--border-strong)] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--text-primary)] hover:bg-[var(--action)] hover:border-[var(--action)] hover:text-white transition-colors disabled:opacity-60"
+        className="ea-btn ea-btn-secondary ea-btn-sm"
       >
-        <Plus className="h-3 w-3" /> {pending ? "Adding…" : "Add"}
+        <Plus className="h-3.5 w-3.5" /> {pending ? "Adding…" : "Add"}
       </button>
       {error && (
-        <span className="absolute right-0 top-full mt-1 z-10 whitespace-nowrap rounded bg-[#7F1D1D] px-1.5 py-0.5 text-[10px] text-white shadow-lg">
+        <span className="absolute right-0 top-full mt-1 z-10 whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--danger)] px-2 py-1 text-xs text-white shadow-[var(--shadow-float)]">
           {error}
         </span>
       )}
