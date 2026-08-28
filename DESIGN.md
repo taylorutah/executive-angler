@@ -102,7 +102,7 @@ Implemented as `.ea-*` classes in `src/app/globals.css` (`@layer components`). S
 
 ## 5. Icons
 
-Inline SVG only, via the repo's desk icon set (`src/icons/` — Lucide-geometry glyphs at 16/20/24 optical sizes; `lucide-react` is banned by test gate). 16px in buttons/inputs, 20px standalone, optically aligned to text baseline. NEVER emojis — including fishing/tackle emojis — and never clip-art fish, cartoon lures, or novelty tackle graphics.
+Inline SVG only, via the repo's desk icon set (`src/icons/` — Lucide-geometry glyphs at 16/20/24 optical sizes; `lucide-react` is banned by test gate). 16px in buttons/inputs, 20px standalone, optically aligned to text baseline. Stroke-width is 1.75 at every optical size, hardcoded in `src/icons/Icon.tsx`; the prop is not overridable (client ruling 2026-08-28). NEVER emojis — including fishing/tackle emojis — and never clip-art fish, cartoon lures, or novelty tackle graphics.
 
 ## 6. Imagery
 
@@ -111,10 +111,11 @@ Inline SVG only, via the repo's desk icon set (`src/icons/` — Lucide-geometry 
 - Explicit width/height or CSS aspect-ratio on every image — zero layout shift.
 - Radius matches tokens. Lazy-load below the fold. Descriptive alt text ("Evening rise on the Madison," never "image1").
 - Missing photo asset: solid `--paper-deep` block at the correct aspect-ratio with descriptive alt text. Never hotlink stock URLs.
+- Heroes are flat (client ruling 2026-08-28): no scrims, no gradient overlays, no text over the photograph. The image stands in its own band; headline, overline, and metadata sit on paper below. The only sanctioned on-photo affordance is the solid `--ink` chip (photo credit, gallery count).
 
 ## 7. Responsive & accessibility
 
-- Mobile-first. Breakpoints 640 / 768 / 1024 / 1280. Nav collapses to a menu below 768px (repo ships the collapse at 1024 — see §9). Grids step 3→2→1. Touch targets ≥44px. Strong contrast over delicate grays — the app is used streamside, one-handed, in sunlight. 320px wide with zero horizontal scroll.
+- Mobile-first. Breakpoints 640 / 768 / 1024 / 1280. Nav collapses to a menu below 768px (shipped at 768 per client ruling 2026-08-28; in the 768–1024 band nav links tighten to `--space-2` and header search keeps its pill). Grids step 3→2→1. Touch targets ≥44px. Strong contrast over delicate grays — the app is used streamside, one-handed, in sunlight. 320px wide with zero horizontal scroll.
 - WCAG AA minimum: 4.5:1 body text, 3:1 large text and UI. Semantic landmarks, one h1 per page. Visible focus-visible ring (2px `--accent`, 2px offset) on every interactive element. Every input labeled. Real alt text. Full keyboard operability, correct aria on menus and modals.
 
 ## 8. BANNED — ship none of it
@@ -144,10 +145,12 @@ A seasoned guide, not a marketer. Short declarative sentences. Concrete nouns: p
 
 The repo's earlier semantic layer (`--surface-page`, `--text-body`, `--action`, `--border-rule`, `--signal-live`, `--state-positive/negative`, `--font-archivo/newsreader/ibm-plex-mono`, `--radius-surface/instrument/chip`, `--elev-*`) is rebound to the tokens above in `globals.css`. Existing components keep compiling; new work uses the §2 tokens directly. `src/lib/palette.ts` mirrors the hexes for Mapbox/OG/Recharts with its historical export names.
 
-## Open conflicts (awaiting client ruling)
+## Resolved conflicts — client rulings (2026-08-28)
 
-1. **Dusk register.** `src/lib/register.ts` + `RegisterBinder` route the logged-in product (`/today`, `/journal`, `/account`, `/dashboard`, `/feed`, `/admin`, …) to a dark `data-register="dusk"` theme. The brief bans dark mode. Machinery kept intact for now (it is load-bearing: logo swap, map chrome, InstrumentWell). Recommended: rebind dusk values to the daylight tokens, then delete the register.
-2. **Hero scrims.** `--scrim-*` / `.hero-overlay` gradients keep white text legible over hero photography. The brief bans gradients; these survive pending a ruling (flat `--ink` band or tokenized scrim are the options).
-3. **`--text-3` contrast.** `#969E97` on `--paper` measures ~2.4:1, below AA for small text. It is reserved for non-essential overlines/metadata; anything meaningful uses `--text-2`. Recommend darkening `--text-3` (≈ `#6B736D` passes 4.5:1) or accepting the exception.
-4. **Nav collapse breakpoint.** Brief says below 768px; the repo's mobile sheet/tab bar engage below 1024px (`lg`), which also satisfies the ≥44px touch-target rule on tablets. Kept at 1024 pending ruling.
-5. **Icon stroke.** The desk icon set draws at stroke-width 1.5 (hardcoded in `src/icons/Icon.tsx`); the brief asks 1.75. Kept 1.5 for sitewide consistency pending ruling.
+All five open conflicts are ruled. These are permanent law.
+
+1. **Dusk register — REMOVED.** Light theme only; theme variants are banned machinery. `src/lib/register.ts`, `RegisterBinder`, `ThemeProvider`/`ThemeToggle`, the `data-register` attribute, the dusk token block, and the dusk palette hexes in `palette.ts` are deleted. Chrome accents use `--accent` directly; `--signal-live`/`--action` survive only as migration aliases for un-migrated content surfaces — never for new work.
+2. **Hero scrims — REMOVED.** Gradients are banned, including photo-legibility scrims. Heroes follow §6: graded photography in its own band, text on paper. `--scrim-*` tokens and `.hero-overlay*` classes are deleted.
+3. **`--text-3` amended.** `#969E97` → `#6E746F`, the lightest value in the same hue family passing WCAG AA on `--paper` (4.54:1; one step lighter, `#6F7570`, fails at 4.48:1). Client-approved token amendment; the §2 table is the canonical record.
+4. **Nav collapse at 768px.** The primary bar expands at `md` (768px); the mobile sheet and tab bar engage below it. See §7 for the 768–1024 density rules.
+5. **Icon stroke 1.75.** `src/icons/Icon.tsx` draws at stroke-width 1.75; the dead `strokeWidth` prop is removed from `IconProps` and every call site.
