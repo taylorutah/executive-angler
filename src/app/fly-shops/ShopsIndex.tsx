@@ -1,0 +1,69 @@
+import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
+import EntityListView from "@/components/ui/EntityListView";
+import { getAllDestinations, getAllFlyShops } from "@/lib/db";
+import { flyShopListConfig } from "@/lib/list-configs";
+import type { CardData, EntityListConfig } from "@/types/list-config";
+import { hostedStillUrl } from "@/lib/media/image-url";
+
+/** Every shop — magazine + Refine. Same index as Lodges 84:95. */
+export default async function ShopsIndex() {
+  const [flyShops, destinations] = await Promise.all([getAllFlyShops(), getAllDestinations()]);
+
+  const destCounts = new Map<string, { name: string; count: number }>();
+  flyShops.forEach((shop) => {
+    const dest = destinations.find((d) => d.id === shop.destinationId);
+    if (!dest) return;
+    const existing = destCounts.get(shop.destinationId);
+    if (existing) existing.count++;
+    else destCounts.set(shop.destinationId, { name: dest.name, count: 1 });
+  });
+  const destOptions = Array.from(destCounts.entries())
+    .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
+    .map(([id, { name }]) => ({ value: id, label: name }));
+
+  const config: EntityListConfig = {
+    ...flyShopListConfig,
+    filters: [{ ...flyShopListConfig.filters[0], options: destOptions }],
+  };
+
+  const items: (CardData & { _filterValues: Record<string, string> })[] = flyShops.map((shop) => {
+    const dest = destinations.find((d) => d.id === shop.destinationId);
+    return {
+      href: `/fly-shops/${shop.slug}`,
+      imageUrl: hostedStillUrl(shop.heroImageUrl),
+      imageAlt: shop.name,
+      title: shop.name,
+      subtitle: dest?.name,
+      kicker: dest?.state || dest?.name,
+      group: dest?.state || dest?.name || dest?.country,
+      meta: dest?.name,
+      description: shop.description.substring(0, 120),
+      featured: false,
+      _filterValues: {
+        destination: shop.destinationId,
+      },
+    };
+  });
+
+  return (
+    <>
+      <DeskMast
+        kicker="FIND"
+        title="Every shop we keep"
+        lede="Pictures first. One Refine. Hours and flies. Not a cart."
+        titleSize="phrase"
+        ledeFace="ui"
+      />
+
+      <section className="bg-[var(--paper)] pb-16">
+        <HomeGutter>
+          <Suspense>
+            <EntityListView items={items} config={config} storageKey="fly-shops" />
+          </Suspense>
+        </HomeGutter>
+      </section>
+    </>
+  );
+}

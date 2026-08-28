@@ -1,15 +1,11 @@
 /**
- * Gear catalog — dense single-list view with inline "Add to Locker".
- *
- * Replaces the legacy multi-page browse (deep brand and product pages
- * collected SEO impressions but didn't drive product value). Now: pick a
- * category tab, scan a row, click "Add" — done. Manufacturer detail lives
- * on the brand's own site, one Google away.
- *
- * Deep paths (/gear/[brand], /gear/[brand]/[product], /gear/category/[slug])
- * 308-redirect to this page (with category query when applicable).
+ * Gear catalog — FIND list on cream paper.
+ * Deep paths still 308 here.
  */
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import { getAllGearProducts } from "@/lib/db/gear-products";
 import { getAllGearBrands } from "@/lib/db/gear-brands";
 import { createClient } from "@/lib/supabase/server";
@@ -18,7 +14,7 @@ import GearCategoryTabs from "@/components/gear-v2/GearCategoryTabs";
 
 export const metadata: Metadata = {
   title: "Gear",
-  description: "Fly fishing gear catalog: rods, reels, waders, lines, leaders, tippet, packs. Add to your locker in one click.",
+  description: "Rods, reels, waders, lines. Add a piece to your locker. Not a cart.",
 };
 
 export const revalidate = 3600;
@@ -74,15 +70,13 @@ export default async function GearCatalogPage({ searchParams }: Props) {
   const sp = await searchParams;
   const activeCategory = sp.category ?? "all";
 
-  const [products, brands] = await Promise.all([
-    getAllGearProducts(),
-    getAllGearBrands(),
-  ]);
+  const [products, brands] = await Promise.all([getAllGearProducts(), getAllGearBrands()]);
   const brandById = new Map(brands.map((b) => [b.id, b]));
 
-  // Which products are already in this user's locker?
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   let inLockerIds = new Set<string>();
   if (user) {
     const { data: items } = await supabase
@@ -94,104 +88,100 @@ export default async function GearCatalogPage({ searchParams }: Props) {
     inLockerIds = new Set(
       (items ?? [])
         .map((i: { gear_product_id: string | null }) => i.gear_product_id)
-        .filter((v): v is string => !!v)
+        .filter((v): v is string => !!v),
     );
   }
 
-  // Tab counts
   const counts = new Map<string, number>();
   for (const p of products) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
   const tabs = Object.keys(CATEGORY_LABELS)
     .filter((c) => (counts.get(c) ?? 0) > 0)
     .map((c) => ({ slug: c, label: CATEGORY_LABELS[c], count: counts.get(c) ?? 0 }));
 
-  // Filter
-  const visible = activeCategory === "all"
-    ? products
-    : products.filter((p) => p.category === activeCategory);
+  const visible =
+    activeCategory === "all" ? products : products.filter((p) => p.category === activeCategory);
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
-      <header className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
-          <h1 className="font-heading text-3xl text-[var(--text-primary)] tracking-tight">
-            Gear
-          </h1>
-          <p className="mt-1 text-sm text-[var(--text-body)]">
-            {products.length} products · click <span className="text-[var(--text-primary)]">Add</span> on any row to drop it into your{" "}
-            <a href="/account/gear" className="text-[var(--signal-live)] hover:text-[var(--action)]">locker</a>.
+    <div className="bg-[var(--paper)]">
+      <DeskMast
+        kicker="FIND"
+        title="Gear"
+        lede="Rods, reels, waders, lines. Add a piece to your locker. Not a cart."
+        titleSize="word"
+        ledeFace="ui"
+      />
+
+      <section className="bg-[var(--paper)] pb-16">
+        <HomeGutter>
+          <Suspense>
+            <GearCategoryTabs categories={tabs} />
+          </Suspense>
+
+          <p className="mb-2 font-ui text-[12px] text-[var(--text-meta)] lg:hidden">
+            Swipe to see spec and Add.
           </p>
-        </div>
-      </header>
-
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-        <GearCategoryTabs categories={tabs} />
-
-        <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] overflow-hidden">
-          {visible.length === 0 ? (
-            <div className="px-4 py-12 text-center text-sm text-[var(--text-meta)]">
-              No products in this category yet.
-            </div>
-          ) : (
-            <div className="divide-y divide-[#21262D]">
-              {/* Header row */}
-              <div className="hidden sm:grid grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 bg-[var(--surface-raised)] px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
-                <span></span>
-                <span>Product</span>
-                <span>Spec</span>
-                <span>Category</span>
-                <span className="text-right">MSRP</span>
-                <span></span>
-              </div>
-              {visible.map((p) => {
-                const brand = brandById.get(p.brandId);
-                return (
-                  <div
-                    key={p.id}
-                    className="grid grid-cols-[40px_1fr] sm:grid-cols-[40px_minmax(0,2fr)_minmax(0,1fr)_120px_80px_90px] items-center gap-3 px-3 py-2 hover:bg-[var(--surface-raised)] transition-colors"
-                  >
-                    <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden rounded bg-[var(--surface-raised)]">
-                      {p.heroImageUrl ? (
-                        // next/image throws on hosts not in next.config. Do not
-                        // add hosts there from this lane; 36px thumbs use img.
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.heroImageUrl} alt="" className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)] text-[10px]">
-                          —
-                        </div>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[var(--text-primary)] text-sm font-medium truncate">
-                        {p.name}
-                      </p>
-                      <p className="text-[var(--text-meta)] text-[11px] truncate">
-                        {brand?.name ?? "—"}
-                      </p>
-                    </div>
-                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[var(--text-body)] text-[12px] truncate">
-                      {specSummary(p.category, p.specs as Record<string, unknown>) || "—"}
-                    </p>
-                    <span className="hidden sm:inline-block rounded bg-[var(--surface-card)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)] w-fit">
-                      {CATEGORY_LABELS[p.category] ?? p.category}
-                    </span>
-                    <p className="hidden sm:block font-['IBM_Plex_Mono'] text-[var(--text-body)] text-[12px] text-right">
-                      {p.msrpUsd ? `$${p.msrpUsd}` : "—"}
-                    </p>
-                    <div className="col-start-2 sm:col-auto justify-self-start sm:justify-self-end">
-                      <AddToLockerButton
-                        productId={p.id}
-                        initiallyInLocker={inLockerIds.has(p.id)}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+          <div
+            className="desk-table-wrap border border-[var(--border-rule)] bg-[var(--vellum)]"
+            tabIndex={0}
+            role="region"
+            aria-label="Gear catalog"
+          >
+            {visible.length === 0 ? (
+              <p className="px-4 py-12 font-ui text-[15px] text-[var(--graphite)]">
+                Nothing in this drawer yet.
+              </p>
+            ) : (
+              <table className="desk-table text-[13px] leading-[1.35]">
+                <thead>
+                  <tr className="border-b border-[var(--border-rule)] bg-[var(--vellum)]">
+                    <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--slate)]">
+                      Product
+                    </th>
+                    <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--slate)]">
+                      Spec
+                    </th>
+                    <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--slate)]">
+                      Drawer
+                    </th>
+                    <th className="px-3 py-2 text-right font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--slate)]">
+                      Add
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((p, i) => {
+                    const brand = brandById.get(p.brandId);
+                    const zebra =
+                      i % 2 === 0 ? "bg-[var(--paper)]" : "bg-[var(--vellum)]";
+                    return (
+                      <tr key={p.id} className={`${zebra} h-10`}>
+                        <td className="px-3">
+                          <p className="font-ui text-[14px] text-[var(--ink)]">{p.name}</p>
+                          <p className="font-ui text-[11px] text-[var(--slate)]">
+                            {brand?.name ?? "—"}
+                          </p>
+                        </td>
+                        <td className="px-3 font-mono text-[12px] text-[var(--graphite)]">
+                          {specSummary(p.category, p.specs as Record<string, unknown>) || "—"}
+                        </td>
+                        <td className="px-3 font-ui text-[12px] text-[var(--graphite)]">
+                          {CATEGORY_LABELS[p.category] ?? p.category}
+                        </td>
+                        <td className="px-3 text-right">
+                          <AddToLockerButton
+                            productId={p.id}
+                            initiallyInLocker={inLockerIds.has(p.id)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </HomeGutter>
       </section>
-    </main>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Icon } from "@/components/ui/Icon";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
@@ -86,14 +85,15 @@ export default async function AuthorPage({ params }: Props) {
         }}
       />
 
-      <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
-            <Link href="/" className="hover:text-[var(--action)] transition-colors">
+      <div className="bg-[var(--paper)]">
+        <div className="desk-sheet">
+          <div className="house-measure">
+          <nav className="mb-8 flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)]">
+            <Link href="/" className="hover-copper hover:text-[var(--action)]">
               Home
             </Link>
             <span>/</span>
-            <Link href="/authors" className="hover:text-[var(--action)] transition-colors">
+            <Link href="/authors" className="hover-copper hover:text-[var(--action)]">
               Authors
             </Link>
             <span>/</span>
@@ -120,16 +120,15 @@ export default async function AuthorPage({ params }: Props) {
               )}
 
               {sameAsLinks.length > 0 && (
-                <div className="mt-4 flex items-center gap-3">
+                <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-ui text-[13px]">
                   {socialLinks.website && (
                     <a
                       href={socialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                      aria-label="Website"
+                      className="hover-copper text-[var(--copper)]"
                     >
-                      <Icon name="map" className="h-5 w-5" />
+                      Site →
                     </a>
                   )}
                   {socialLinks.instagram && (
@@ -137,10 +136,9 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                      aria-label="Instagram"
+                      className="hover-copper text-[var(--copper)]"
                     >
-                      <Icon name="instagram" className="h-5 w-5" />
+                      Instagram →
                     </a>
                   )}
                   {socialLinks.twitter && (
@@ -148,10 +146,9 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                      aria-label="Twitter / X"
+                      className="hover-copper text-[var(--copper)]"
                     >
-                      <Icon name="social-x" className="h-5 w-5" />
+                      X →
                     </a>
                   )}
                   {socialLinks.linkedin && (
@@ -159,10 +156,9 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                      aria-label="LinkedIn"
+                      className="hover-copper text-[var(--copper)]"
                     >
-                      <Icon name="linkedin" className="h-5 w-5" />
+                      LinkedIn →
                     </a>
                   )}
                   {socialLinks.youtube && (
@@ -170,13 +166,12 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
-                      aria-label="YouTube"
+                      className="hover-copper text-[var(--copper)]"
                     >
-                      <Icon name="youtube" className="h-5 w-5" />
+                      YouTube →
                     </a>
                   )}
-                </div>
+                </p>
               )}
             </div>
           </div>
@@ -228,7 +223,7 @@ export default async function AuthorPage({ params }: Props) {
                       <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
                         {article.category}
                       </p>
-                      <h3 className="mt-1 font-heading text-xl font-bold leading-snug text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                      <h3 className="hover-copper mt-1 font-heading text-xl font-bold leading-snug text-[var(--text-primary)] group-hover:text-[var(--action)]">
                         {article.title}
                       </h3>
                       {article.subtitle && (
@@ -244,6 +239,7 @@ export default async function AuthorPage({ params }: Props) {
                 ))}
               </ul>
             )}
+          </div>
           </div>
         </div>
       </div>

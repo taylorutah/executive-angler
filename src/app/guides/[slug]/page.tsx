@@ -1,26 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, MapPin, Fish, Star } from "@/icons";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import QuickFacts from "@/components/ui/QuickFacts";
-import Badge from "@/components/ui/Badge";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import { Button } from "@/components/ui/Button";
 import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
 import UserReviews from "@/components/ui/UserReviews";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { SITE_URL } from "@/lib/constants";
+import { hostedStillUrl } from "@/lib/media/image-url";
 import {
   getAllGuides,
   getGuideBySlug,
   getDestinationById,
   getRiversByIds,
-  getLodgesByDestination,
-  getFlyShopsByDestination,
   getArticlesByDestination,
-  getSpeciesByCommonNames,
 } from "@/lib/db";
 
 interface Props {
@@ -43,13 +37,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: { absolute: guide.metaTitle || fallbackTitle },
-    description:
-      guide.metaDescription || fallbackDesc,
+    description: guide.metaDescription || fallbackDesc,
     openGraph: {
       title: guide.metaTitle || guide.name,
       description: guide.metaDescription || fallbackDesc,
       images: [
-        guide.photoUrl ||
+        hostedStillUrl(guide.photoUrl) ||
           `${SITE_URL}/api/og?title=${encodeURIComponent(guide.name)}&subtitle=${encodeURIComponent(`Fly Fishing Guide${guide.dailyRate ? ` — ${guide.dailyRate}` : ""}`)}&type=guide`,
       ],
     },
@@ -69,32 +62,17 @@ export default async function GuidePage({ params }: Props) {
   const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
 
-  const [dest, guideRivers, areaLodges, areaFlyShops] = await Promise.all([
+  const [dest, guideRivers, guideArticles] = await Promise.all([
     guide.destinationId ? getDestinationById(guide.destinationId) : Promise.resolve(undefined),
     (guide.riverIds || []).length > 0 ? getRiversByIds(guide.riverIds) : Promise.resolve([]),
-    guide.destinationId ? getLodgesByDestination(guide.destinationId) : Promise.resolve([]),
-    guide.destinationId ? getFlyShopsByDestination(guide.destinationId) : Promise.resolve([]),
-  ]);
-
-  const [guideArticles, guideSpecies] = await Promise.all([
     guide.destinationId ? getArticlesByDestination(guide.destinationId) : Promise.resolve([]),
-    dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
   ]);
 
-  const quickFacts = [
-    ...(dest ? [{ label: "Location", value: dest.name }] : []),
-    ...(guide.yearsExperience
-      ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
-      : []),
-    ...(guide.dailyRate ? [{ label: "Daily Rate", value: guide.dailyRate }] : []),
-    {
-      label: "Specialties",
-      value: (guide.specialties || []).join(", "),
-    },
-  ];
+  const still = hostedStillUrl(guide.photoUrl);
+  const specialties = (guide.specialties || []).filter(Boolean).join(" · ");
 
   return (
-    <>
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -103,56 +81,24 @@ export default async function GuidePage({ params }: Props) {
           description: guide.bio,
           url: `${SITE_URL}/guides/${slug}`,
           ...(guide.websiteUrl ? { sameAs: guide.websiteUrl } : {}),
-          ...(guide.photoUrl ? { image: guide.photoUrl } : {}),
+          ...(still ? { image: still } : {}),
           ...(guide.phone ? { telephone: guide.phone } : {}),
           ...(guide.email ? { email: guide.email } : {}),
           ...(guide.dailyRate ? { priceRange: guide.dailyRate } : {}),
-          ...(dest ? {
-            areaServed: {
-              "@type": "Place",
-              name: dest.name,
-              url: `${SITE_URL}/destinations/${dest.slug}`,
-            },
-          } : {}),
-          employee: {
-            "@type": "Person",
-            name: guide.name,
-            ...(guide.photoUrl ? { image: guide.photoUrl } : {}),
-            ...(guide.yearsExperience ? { description: `Professional fly fishing guide with ${guide.yearsExperience}+ years of experience` } : {}),
-            ...(guide.specialties && guide.specialties.length > 0
-              ? { knowsAbout: guide.specialties }
-              : {}),
-          },
-          ...(guide.googleRating && guide.googleReviewCount ? {
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: guide.googleRating,
-              reviewCount: guide.googleReviewCount,
-              bestRating: 5,
-              worstRating: 1,
-            },
-          } : {}),
-          ...(guide.featuredReviews && guide.featuredReviews.length > 0
+          ...(dest
             ? {
-                review: guide.featuredReviews.map((r) => ({
-                  "@type": "Review",
-                  author: { "@type": "Person", name: r.authorName },
-                  reviewRating: {
-                    "@type": "Rating",
-                    ratingValue: r.rating,
-                    bestRating: 5,
-                    worstRating: 1,
-                  },
-                  reviewBody: r.text,
-                })),
+                areaServed: {
+                  "@type": "Place",
+                  name: dest.name,
+                  url: `${SITE_URL}/destinations/${dest.slug}`,
+                },
               }
             : {}),
         }}
       />
 
-      {/* Text Hero */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10">
-        <div className="w-full px-5 sm:px-8 xl:px-20">
+      <article className="desk-sheet">
+        <div className="flex items-start justify-between gap-4">
           <Breadcrumbs
             items={[
               { label: "Guides", href: "/guides" },
@@ -160,285 +106,148 @@ export default async function GuidePage({ params }: Props) {
               { label: guide.name },
             ]}
           />
+          <FavoriteButton entityType="guide" entityId={guide.id} />
+        </div>
 
-          <div className="mt-6 flex items-start gap-4">
-            <h1 className="flex-1 font-heading text-4xl font-semibold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
+        <header className="desk-sheet-grid mt-6">
+          <div className="desk-sheet-photo">
+            <SafeEntityImage
+              src={still}
+              alt={guide.name}
+              title={guide.name}
+              meta={[dest?.name, specialties].filter(Boolean).join(" · ") || undefined}
+              fallback="quiet"
+              priority
+              sizes="(max-width: 1023px) 100vw, 42vw"
+            />
+          </div>
+          <div className="desk-sheet-name">
+            <p className="desk-eyebrow">Find</p>
+            <h1
+              className="font-heading mt-1 text-4xl leading-[1.05] text-[var(--ink)] sm:text-5xl"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+            >
               {guide.name}
             </h1>
-            <div className="mt-2 shrink-0">
-              <FavoriteButton entityType="guide" entityId={guide.id} />
-            </div>
+            <dl className="desk-spec mt-6">
+              {dest ? (
+                <>
+                  <dt>Water</dt>
+                  <dd>{dest.name}</dd>
+                </>
+              ) : null}
+              {specialties ? (
+                <>
+                  <dt>Knows</dt>
+                  <dd>{specialties}</dd>
+                </>
+              ) : null}
+              {guide.yearsExperience ? (
+                <>
+                  <dt>Years</dt>
+                  <dd className="num">{guide.yearsExperience}+</dd>
+                </>
+              ) : null}
+              {guide.dailyRate ? (
+                <>
+                  <dt>Day</dt>
+                  <dd>{guide.dailyRate}</dd>
+                </>
+              ) : null}
+            </dl>
+            <p className="desk-dek-ui mt-6">We do not book the day.</p>
+            {guide.websiteUrl ? (
+              <p className="mt-4">
+                <a
+                  href={guide.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover-copper font-ui text-[14px] font-medium text-[var(--copper)]"
+                >
+                  Their site →
+                </a>
+              </p>
+            ) : null}
           </div>
+        </header>
 
-          {/* Badge Row: Destination, Experience, Rate */}
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            {dest && (
-              <span className="inline-flex items-center px-3 py-1.5 font-ui text-sm text-[var(--text-body)]">
-                {dest.name}
-              </span>
-            )}
-            {guide.yearsExperience && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--surface-raised)] text-[var(--text-body)] text-sm font-medium rounded-full border border-[var(--border-rule)]">
-                {guide.yearsExperience}+ years experience
-              </span>
-            )}
-            {guide.dailyRate && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--action)]/10 text-[var(--action)] text-sm font-semibold rounded-full border border-[var(--action)]/30">
-                {guide.dailyRate}
-              </span>
-            )}
-          </div>
-
-          {/* Specialty Pills */}
-          <div className="mt-5 flex flex-wrap gap-2">
-            {(guide.specialties || []).map((s) => (
-              <span
-                key={s}
-                className="px-3 py-1 bg-[var(--surface-page)] text-[var(--action)] text-sm font-medium rounded-full border border-[var(--border-rule)]"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-
-          {/* Rating */}
-          {guide.googleRating && (
-            <div className="mt-6 flex items-center gap-1.5">
-              <Star className="h-5 w-5 fill-[var(--action)] text-[var(--action)]" />
-              <span className="text-[var(--text-primary)] font-semibold">{guide.googleRating}</span>
-              {guide.googleReviewCount && (
-                <span className="text-[var(--text-meta)] text-sm">({guide.googleReviewCount} reviews)</span>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="w-full px-5 sm:px-8 xl:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-2 space-y-10">
-              <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
-                  About
-                </h2>
-                {guide.bio.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[var(--text-body)] leading-relaxed mb-4">
-                    {p}
-                  </p>
-                ))}
-              </ScrollAnimation>
-
-              <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
-                  Specialties
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {(guide.specialties || []).map((s) => (
-                    <Badge key={s} variant="forest" size="md">
-                      <Award className="h-3.5 w-3.5 mr-1.5" />
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
-              </ScrollAnimation>
-
-              {guideRivers.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
-                    Rivers & Waters
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {guideRivers.map((river) => (
-                      <Link
-                        key={river.id}
-                        href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-3 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
-                      >
-                        <MapPin className="h-5 w-5 shrink-0 text-[var(--text-meta)]" />
-                        <div>
-                          <h3 className="font-medium text-[var(--action)]">
-                            {river.name}
-                          </h3>
-                          <p className="text-xs text-[var(--text-body)]">
-                            {(river.primarySpecies || []).join(", ")}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Lodges in This Area */}
-              {areaLodges.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
-                    Lodges in This Area
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {areaLodges.slice(0, 4).map((lodge) => (
-                      <Link
-                        key={lodge.id}
-                        href={`/lodges/${lodge.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
-                      >
-                        <div className="w-12 h-12 rounded-lg bg-[var(--action)]/10 flex items-center justify-center shrink-0 text-lg">
-                          🏕
-                        </div>
-                        <div>
-                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
-                            {lodge.name}
-                          </h3>
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
-                          {lodge.seasonStart && (
-                            <p className="text-xs text-[var(--text-meta)] mt-0.5">
-                              {lodge.seasonStart}–{lodge.seasonEnd}
-                            </p>
-                          )}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Fly Shops Nearby */}
-              {areaFlyShops.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
-                    Fly Shops Nearby
-                  </h2>
-                  <div className="space-y-3">
-                    {areaFlyShops.slice(0, 4).map((shop) => (
-                      <Link
-                        key={shop.id}
-                        href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
-                      >
-                        <MapPin className="h-5 w-5 text-[var(--action)] shrink-0" />
-                        <div>
-                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
-                            {shop.name}
-                          </h3>
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {guideSpecies.length > 0 && (
-                <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
-                    Species in This Area
-                  </h2>
-                  <div className="flex flex-wrap gap-2">
-                    {guideSpecies.map((sp) => (
-                      <Link key={sp.id} href={`/species/${sp.slug}`}>
-                        <Badge variant="forest" size="md">
-                          <Fish className="h-3.5 w-3.5 mr-1.5" />
-                          {sp.commonName}
-                        </Badge>
-                      </Link>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              )}
-
-              {/* Google Reviews */}
-              <GoogleReviews
-                googleRating={guide.googleRating ?? null}
-                googleReviewCount={guide.googleReviewCount ?? null}
-                googleReviewsUrl={guide.googleReviewsUrl ?? null}
-                featuredReviews={
-                  guide.featuredReviews?.map((r) => ({
-                    reviewer_name: r.authorName,
-                    rating: r.rating,
-                    text: r.text,
-                  })) ?? null
-                }
-              />
-
-              {/* User Reviews */}
-              <ScrollAnimation>
-                <UserReviews entityType="guide" entityId={guide.id} />
-              </ScrollAnimation>
-            </div>
-
-            <div className="space-y-6">
-              <QuickFacts facts={quickFacts} />
-
-              <div className="bg-[var(--action)] rounded-xl p-6 text-[var(--on-action)] shadow-lg">
-                <h3 className="font-heading text-xl font-bold mb-3">
-                  Book a Trip
-                </h3>
-                <p className="text-sm text-[var(--on-action)]/80 mb-6">
-                  Contact {guide.name} directly to book your guided trip.
+        <div className="desk-sheet-stack">
+          {guide.bio ? (
+            <section className="prose mt-12">
+              <h2>About</h2>
+              {guide.bio.split("\n\n").map((p, i) => (
+                <p key={i} className="whitespace-pre-line">
+                  {p}
                 </p>
-                {guide.websiteUrl && (
-                  <Button
-                    href={guide.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="solid"
-                    size="md"
-                    icon={ExternalLink}
-                    fullWidth
-                  >
-                    Visit Website
-                  </Button>
-                )}
-                <div className="mt-4 space-y-2 text-sm">
-                  {guide.phone && (
-                    <a
-                      href={`tel:${guide.phone}`}
-                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
-                    >
-                      <Phone className="h-4 w-4" />
-                      {guide.phone}
-                    </a>
-                  )}
-                  {guide.email && (
-                    <a
-                      href={`mailto:${guide.email}`}
-                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
-                    >
-                      <Mail className="h-4 w-4" />
-                      {guide.email}
-                    </a>
-                  )}
-                </div>
-              </div>
+              ))}
+            </section>
+          ) : null}
 
-              {guideArticles.length > 0 && (
-                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
-                    Related Articles
-                  </h3>
-                  <div className="space-y-3">
-                    {guideArticles.slice(0, 3).map((article) => (
-                      <Link
-                        key={article.id}
-                        href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors"
-                      >
-                        <p className="text-sm font-medium text-[var(--action)]">
-                          {article.title}
-                        </p>
-                        <p className="text-xs text-[var(--text-body)] mt-1">
-                          {article.readingTimeMinutes} min read
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+          {guideRivers.length > 0 ? (
+            <section className="mt-12" aria-labelledby="guide-rivers-heading">
+              <h2 id="guide-rivers-heading" className="font-heading text-2xl text-[var(--ink)]">
+                Rivers
+              </h2>
+              <ul className="desk-rule-list mt-4">
+                {guideRivers.map((river) => (
+                  <li key={river.id}>
+                    <Link
+                      href={`/rivers/${river.slug}`}
+                      className="hover-copper text-[15px] text-[var(--ink)] underline-offset-4 hover:text-[var(--action)] hover:underline"
+                    >
+                      {river.name}
+                    </Link>
+                    <span className="shrink-0 text-[13px] text-[var(--graphite)]">
+                      {(river.primarySpecies || []).slice(0, 2).join(" · ") || "—"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {guideArticles.length > 0 ? (
+            <section className="mt-12" aria-labelledby="guide-notes-heading">
+              <h2 id="guide-notes-heading" className="font-heading text-2xl text-[var(--ink)]">
+                Field notes
+              </h2>
+              <ul className="desk-rule-list mt-4">
+                {guideArticles.slice(0, 3).map((article) => (
+                  <li key={article.id}>
+                    <Link
+                      href={`/articles/${article.slug}`}
+                      className="hover-copper text-[15px] text-[var(--ink)] underline-offset-4 hover:text-[var(--action)] hover:underline"
+                    >
+                      {article.title}
+                    </Link>
+                    <span className="num shrink-0 text-[13px] text-[var(--graphite)]">
+                      {article.readingTimeMinutes} min
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          <div className="mt-12">
+            <GoogleReviews
+              googleRating={guide.googleRating ?? null}
+              googleReviewCount={guide.googleReviewCount ?? null}
+              googleReviewsUrl={guide.googleReviewsUrl ?? null}
+              featuredReviews={
+                guide.featuredReviews?.map((r) => ({
+                  reviewer_name: r.authorName,
+                  rating: r.rating,
+                  text: r.text,
+                })) ?? null
+              }
+            />
+          </div>
+          <div className="mt-8">
+            <UserReviews entityType="guide" entityId={guide.id} />
           </div>
         </div>
-      </section>
-    </>
+      </article>
+    </div>
   );
 }

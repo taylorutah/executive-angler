@@ -1377,6 +1377,21 @@ input.ea-focus-ring:focus-visible,
   --on-action: #ffffff;
 }
 
+/* Disabled is vellum, not faded copper (salmon). */
+.desk-form button:disabled,
+.desk-form .ea-btn-solid:disabled {
+  background: var(--vellum);
+  color: var(--slate);
+  opacity: 1;
+  border: 1px solid var(--rule);
+  box-shadow: none;
+  transform: none;
+}
+
+.desk-sheet-stack {
+  width: 100%;
+}
+
 /* Public routes pack the footer under the sheet. Dusk apps keep a full-height main. */
 [data-register="daylight"] main {
   flex: 0 0 auto;
@@ -1500,5 +1515,9 @@ input.ea-focus-ring:focus-visible,
 @media (max-width: 1023px) {
   .desk-table {
     min-width: 32rem;
+  }
+
+  .desk-table-wrap {
+    mask-image: linear-gradient(to right, #000 82%, transparent);
   }
 }

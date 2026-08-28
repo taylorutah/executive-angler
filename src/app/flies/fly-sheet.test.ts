@@ -22,6 +22,7 @@ describe("fly Water Desk sheet", () => {
     assert.match(flyPage, /desk-sheet-photo/);
     assert.match(flyPage, /desk-sheet-name/);
     assert.match(flyPage, /desk-spec/);
+    assert.match(flyPage, /desk-sheet-stack/);
     assert.match(flyPage, /desk-rule-list/);
     assert.equal(flyPage.includes("50vw"), false);
     assert.equal(flyPage.includes("max-w-7xl"), false);
