@@ -136,6 +136,14 @@ async function capture(page: Page, route: string, vp: Viewport) {
   }
   await page.goto(route, { waitUntil: "domcontentloaded" });
   const settled = await settle(page, route, vp);
+  // Browse indexes paint a skeleton first. Do not baseline the fallback —
+  // Soft Hackle Carrot on the plate is the flies still Nick walks.
+  if (route.startsWith("/flies/library")) {
+    await page.getByRole("heading", { name: "On the water this week" }).waitFor({
+      timeout: 15_000,
+    });
+    await page.getByText("Soft Hackle Carrot").waitFor({ timeout: 15_000 });
+  }
   console.log(
     `[visual] ${route} @${vp.name} warmup ${warm.needed ? "needed" : "not-needed"} ${warm.durationMs}ms idle=${warm.idle} images=${warm.census.loaded}/${warm.census.visible}; settle ${settled.durationMs}ms images=${settled.census.loaded}/${settled.census.visible}`,
   );
