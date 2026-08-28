@@ -89,6 +89,12 @@ describe("leftover public templates inherit Water Desk", () => {
     assert.equal(hatch.includes("text-[var(--action)]"), false);
   });
 
+  it("keeps the gear chip count on the parent ink, not slate-on-ink", () => {
+    const tabs = read("src/components/gear-v2/GearCategoryTabs.tsx");
+    assert.match(tabs, /bg-\[var\(--ink\)\] text-\[var\(--hero-type\)\]/);
+    assert.equal(tabs.includes("text-[var(--text-meta)]"), false);
+  });
+
   it("keeps leftover stills on hostedStillUrl", () => {
     for (const rel of [
       "src/app/guides/GuidesIndex.tsx",

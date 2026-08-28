@@ -36,7 +36,7 @@ export default function GearCategoryTabs({ categories }: Props) {
             }`}
           >
             {t.label}{" "}
-            <span className="font-['IBM_Plex_Mono'] text-[var(--text-meta)]">{t.count}</span>
+            <span className="font-mono">{t.count}</span>
           </Link>
         );
       })}
