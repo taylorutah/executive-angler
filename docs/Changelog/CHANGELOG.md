@@ -1,4 +1,21 @@
 
+## 2026-08-28 — Phase 3 refinements: the four client rulings
+
+All four open questions from Phase 3 ruled by the client; executed and recorded as permanent law in DESIGN.md ("Phase 3 refinements — client rulings"). Functionality frozen throughout — presentation only.
+
+### Ruled and shipped
+- **WorkbenchTable → `.ea-table` spec.** Header 10px/0.1em/bold → 12px/0.06em/500 in `--text-3`; fixed 32px rows retired for 12px vertical cell padding; zebra retired for row hover `--paper-deep` (new `.ea-wb-row:hover` rule in globals.css); header fill and `--border-strong` header rule dropped to match `.ea-table`. Keyboard map, roving tabindex, inline edit, and bulk bar untouched. One table language app-wide — journal, flybox, rivers/mine, gear, and the fly workbench (`BoxesTable`) all inherit it; no markup changes needed at any call site. Dev-styleguide mock updated to teach the new language.
+- **FirstRunEmpty on tokens.** `mt-10` (40px, off-scale) → `mt-8` (32px); purpose 17px → 16px body; action wrapper `mt-5` (20px, off-scale) → `mt-4`; action link on the overline spec (12px uppercase, 0.06em — was 0.14em — 500 weight, `--accent`); example 15px → 13px metadata. Same action-class fix at the two surfaces that render their own action button (`FlyboxEmpty`, `GearLockerClient`); one off-scale 15px link in the flybox empty state → 14px. Copy, markers, and the `check-empty-states` gate behavior unchanged.
+- **FilterDropdown triggers: pill → 6px.** Triggers are buttons (they open menus), not tags — `rounded-chip` → `rounded-md`. The selected-count inside the trigger stays pill (it is a badge); `FilterChip` stays pill (it is a tag). Popover behavior untouched.
+- **Touch targets resolved.** 32/40/48 heights govern desktop/pointer; below 768px every interactive element enforces a 44px minimum — one non-layered `@media (max-width: 767px)` `min-height` floor in globals.css (checkboxes/radios excepted; their rows/labels carry the target). The 40px bulk bar grows to the floor via `height: auto`.
+
+### Gate alignment
+- `scripts/check-workbench-keys.ts`: the two presentation assertions updated to the new spec — "32px rows" → 12px vertical cell padding, "zebra striping" → row hover is `rgb(242,239,232)`. Every keyboard-map assertion byte-identical.
+
+### Flagged, not touched (out of scope)
+- `src/components/fly-detail/FlyVariantTable.tsx` still runs the pre-spec language (zebra, 32px rows) on fly detail pages — a candidate for the next shared-components pass.
+- `GearLockerClient.tsx` `GEAR_TYPES` carries emoji glyphs — BANNED per DESIGN.md §8, pre-existing, functionality frozen here.
+
 ## 2026-08-28 — Design Phase 3: Journal feed, the reference page
 
 ### Rebuilt (journal scope only)

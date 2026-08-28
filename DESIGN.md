@@ -63,7 +63,7 @@ Scale (px): `12 / 13 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 48 / 60` (`--text-12` 
 
 ### Radius — one language
 
-`--radius-sm: 4px` (small elements) · `--radius-md: 6px` (default: buttons, inputs) · `--radius-card: 10px` (cards, modals, map panels) · `--radius-pill: 999px` (condition chips and tags only).
+`--radius-sm: 4px` (small elements) · `--radius-md: 6px` (default: buttons, inputs) · `--radius-card: 10px` (cards, modals, map panels) · `--radius-pill: 999px` (condition chips and tags only). Menu/dropdown triggers are buttons, not tags — radius 6, never pill (client ruling 2026-08-28).
 
 ### Elevation — borders, not shadows
 
@@ -85,14 +85,14 @@ Cards/panels: 1px solid `--border`, no shadow. One shadow exists, for floating l
 
 Implemented as `.ea-*` classes in `src/app/globals.css` (`@layer components`). Spec every state: default, hover, focus-visible, active, disabled, loading.
 
-- **Buttons** (`.ea-btn` + `-sm/-lg`, `-primary/-secondary/-ghost/-danger/-on-ink`): heights 32/40/48; padding-x 14/18/22; radius 6; Inter 14–15px/500. Primary = solid `--accent`. Secondary = 1px `--border-strong`, transparent. On `--ink` bands, primary flips to `--paper` bg / `--ink` text (`.ea-btn-on-ink`). No gradients, no shadows.
+- **Buttons** (`.ea-btn` + `-sm/-lg`, `-primary/-secondary/-ghost/-danger/-on-ink`): heights 32/40/48; padding-x 14/18/22; radius 6; Inter 14–15px/500. Primary = solid `--accent`. Secondary = 1px `--border-strong`, transparent. On `--ink` bands, primary flips to `--paper` bg / `--ink` text (`.ea-btn-on-ink`). No gradients, no shadows. Heights govern desktop/pointer contexts; below 768px the 44px touch floor applies (§7).
 - **Inputs** (`.ea-label`, `.ea-input`, `.ea-field-error`, `.ea-field-helper`): 44px tall, 1px `--border`, radius 6, padding-x 12, `--surface` bg. Label 13px/500 above. Focus: `--accent` border + 3px ring rgba(30,77,59,0.15) (`--signal-ring`). Error: `--danger` border + 13px message. Helper 13px `--text-3`.
 - **Cards** (`.ea-card`): 1px `--border`, radius 10, padding 24, `--surface`, no shadow. No nested cards.
 - **Journal entry card**: date as 12px overline; water/location name Fraunces 20px; conditions as chips; notes excerpt clamped to 2 lines; optional 4:3 photo thumb.
 - **Condition chips** (`.ea-chip`): pill, 12px, `--paper-deep` bg, `--text-2`, optional 14px icon (thermometer, droplets, wind, sun metaphors).
 - **Nav**: 68px, sticky, 1px bottom border, `--paper` bg. Wordmark left in Fraunces 600. Links Inter 14px/500; active = `--accent` text. Primary CTA right. No blur, no transparency tricks.
 - **Footer**: `--ink` bg, `--paper` text at 80%, organized link columns, hairline separators rgba(255,255,255,0.12).
-- **Tables** (`.ea-table`): header 12px uppercase 0.06em `--text-3`; 1px row borders; 12px vertical cell padding; row hover `--paper-deep`; tabular numerals.
+- **Tables** (`.ea-table`): header 12px uppercase 0.06em `--text-3`; 1px row borders; 12px vertical cell padding; row hover `--paper-deep`; tabular numerals. One table language app-wide: `WorkbenchTable` (journal, flybox, rivers/mine, gear, fly workbench) renders this spec — no zebra, no fixed-height rows (client ruling 2026-08-28).
 - **Map panels**: radius 10, 1px `--border`; muted default map chrome where the API allows; minimal consistent controls.
 - **Stats** (`.ea-stat-value` / `.ea-stat-label`): numeral Fraunces 30px/600 `--text-1`, label 12px uppercase `--text-3`.
 - **Modals** (`.ea-modal-overlay` / `.ea-modal`): overlay rgba(19,24,21,0.5), radius 10, max-width 520px, padding 32, the one allowed shadow.
@@ -115,7 +115,7 @@ Inline SVG only, via the repo's desk icon set (`src/icons/` — Lucide-geometry 
 
 ## 7. Responsive & accessibility
 
-- Mobile-first. Breakpoints 640 / 768 / 1024 / 1280. Nav collapses to a menu below 768px (shipped at 768 per client ruling 2026-08-28; in the 768–1024 band nav links tighten to `--space-2` and header search keeps its pill). Grids step 3→2→1. Touch targets ≥44px. Strong contrast over delicate grays — the app is used streamside, one-handed, in sunlight. 320px wide with zero horizontal scroll.
+- Mobile-first. Breakpoints 640 / 768 / 1024 / 1280. Nav collapses to a menu below 768px (shipped at 768 per client ruling 2026-08-28; in the 768–1024 band nav links tighten to `--space-2` and header search keeps its pill). Grids step 3→2→1. Touch targets: the 32/40/48 height scale governs desktop/pointer contexts; below 768px (touch) every interactive element enforces a 44px minimum — implemented once as a `min-height` floor in `globals.css` (`@media (max-width: 767px)`), not per-component rewrites. Streamside one-handed use is a product requirement. Strong contrast over delicate grays — the app is used streamside, one-handed, in sunlight. 320px wide with zero horizontal scroll.
 - WCAG AA minimum: 4.5:1 body text, 3:1 large text and UI. Semantic landmarks, one h1 per page. Visible focus-visible ring (2px `--accent`, 2px offset) on every interactive element. Every input labeled. Real alt text. Full keyboard operability, correct aria on menus and modals.
 
 ## 8. BANNED — ship none of it
@@ -154,3 +154,12 @@ All five open conflicts are ruled. These are permanent law.
 3. **`--text-3` amended.** `#969E97` → `#6E746F`, the lightest value in the same hue family passing WCAG AA on `--paper` (4.54:1; one step lighter, `#6F7570`, fails at 4.48:1). Client-approved token amendment; the §2 table is the canonical record.
 4. **Nav collapse at 768px.** The primary bar expands at `md` (768px); the mobile sheet and tab bar engage below it. See §7 for the 768–1024 density rules.
 5. **Icon stroke 1.75.** `src/icons/Icon.tsx` draws at stroke-width 1.75; the dead `strokeWidth` prop is removed from `IconProps` and every call site.
+
+## Phase 3 refinements — client rulings (2026-08-28)
+
+All four Phase 3 open questions are ruled. These are permanent law.
+
+1. **WorkbenchTable adopts the §4 table spec.** One table language app-wide (journal, flybox, rivers/mine, gear, and the fly workbench): header 12px uppercase 0.06em `--text-3` at 500 weight, 1px `--border` row borders, 12px vertical cell padding, row hover `--paper-deep`, tabular numerals. The fixed 32px row and zebra striping are retired — density comes from the spec padding, not a fixed height. The tested keyboard map is unchanged; presentation only.
+2. **FirstRunEmpty is token-compliant.** All six first-run surfaces live on the 8pt and type scales: purpose at body size (16px), the primary action on the overline spec (12px uppercase, 0.06em — never 0.14em), the example at metadata size (13px). One concrete sentence + one primary action, per §4 Empty states.
+3. **Dropdown triggers are buttons, not tags.** FilterDropdown triggers — and any future menu trigger — use `--radius-md` (6px). `--radius-pill` stays reserved for condition chips and tags; the selected-count inside the trigger is a badge and keeps the pill.
+4. **Touch targets resolved.** The 32/40/48 height scale governs desktop/pointer contexts. Below 768px (touch), interactive elements enforce a 44px minimum — a single `min-height` floor in `globals.css`, not per-component rewrites. Streamside one-handed use is a product requirement.
