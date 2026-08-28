@@ -83,6 +83,130 @@ export function isSectionActive(pathname: string, section: string): boolean {
   return pathname === section || pathname.startsWith(`${section}/`);
 }
 
+/* ── Explore mega menu (client ruling 2026-08-28) ────────────────────
+   The canonical directory navigation pattern: a solid full-width panel,
+   link columns left, a photo tile right that crossfades to the image
+   mapped to the hovered link. Tiles are imagery the site already serves
+   (public/images + the fly-pattern bucket) — never download, hotlink,
+   or invent photos for this panel. */
+
+export type MenuTileKey =
+  | "default"
+  | "rivers"
+  | "destinations"
+  | "species"
+  | "directory"
+  | "flies"
+  | "craft";
+
+/** key → src of an existing site photograph. Decorative: rendered aria-hidden. */
+export const MENU_TILES: Record<MenuTileKey, string> = {
+  default: "/images/henrys-fork.jpg",
+  rivers: "/images/rivers/gallatin-river-hero.jpg",
+  destinations: "/images/destinations/montana-hero.jpg",
+  species: "/images/articles/euro-nymphing-rainbow-trout-catch-fly-fishing.jpg",
+  directory: "/images/guides/bud-lillys-guide-service.jpg",
+  flies: "/images/articles/essential-fly-box-20-patterns-hero.jpg",
+  craft: "/images/articles/dry-fly-anglers-guide-matching-the-hatch-hero.jpg",
+};
+
+export type MegaMenuLink = NavItem & { tile: MenuTileKey };
+
+export type MegaMenuColumn = { title: string; links: MegaMenuLink[] };
+
+export const MEGA_MENU_COLUMNS: MegaMenuColumn[] = [
+  {
+    title: "Explore",
+    links: [
+      {
+        label: "Rivers",
+        href: "/rivers",
+        section: "/rivers",
+        tile: "rivers",
+        descriptor: "Live water and hatches",
+      },
+      {
+        label: "Destinations",
+        href: "/destinations",
+        section: "/destinations",
+        tile: "destinations",
+        descriptor: "Where to go, month by month",
+      },
+      {
+        label: "Species",
+        href: "/species",
+        section: "/species",
+        tile: "species",
+        descriptor: "Trout to tarpon, by family",
+      },
+    ],
+  },
+  {
+    title: "Directory",
+    links: [
+      {
+        label: "Fly Shops",
+        href: "/fly-shops",
+        section: "/fly-shops",
+        tile: "directory",
+        descriptor: "Hours, services, local patterns",
+      },
+      {
+        label: "Guides",
+        href: "/guides",
+        section: "/guides",
+        tile: "directory",
+        descriptor: "Guides who row these rivers",
+      },
+      {
+        label: "Lodges",
+        href: "/lodges",
+        section: "/lodges",
+        tile: "directory",
+        descriptor: "Stay close to the water",
+      },
+    ],
+  },
+  {
+    title: "Learn",
+    links: [
+      {
+        label: "Flies",
+        href: "/flies/library",
+        section: "/flies",
+        tile: "flies",
+        descriptor: "Patterns, recipes, and materials",
+      },
+      {
+        label: "Gear",
+        href: "/gear",
+        section: "/gear",
+        tile: "craft",
+        descriptor: "Rods, reels, and lines",
+      },
+      {
+        label: "Field Notes",
+        href: "/articles",
+        section: "/articles",
+        tile: "craft",
+        descriptor: "Reading water, gear, and craft",
+      },
+      {
+        label: "Learn",
+        href: "/learn",
+        section: "/learn",
+        tile: "craft",
+        descriptor: "Start here if you are new",
+      },
+    ],
+  },
+];
+
+/** Flat list of every directory link, column order. */
+export const MEGA_MENU_LINKS: MegaMenuLink[] = MEGA_MENU_COLUMNS.flatMap(
+  (column) => column.links,
+);
+
 export function searchHref(query: string): string {
   const q = query.trim();
   return q ? `/search?q=${encodeURIComponent(q)}` : "/search";

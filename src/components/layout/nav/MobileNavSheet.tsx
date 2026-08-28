@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, FishSymbol, Bug, Bell, MessageSquare, Anchor, User, Package, Users } from "@/icons";
+import { X, FishSymbol, Bug, Bell, MessageSquare, Anchor, User, Package, Users, ChevronDown } from "@/icons";
 import type { AuthUser } from "@/lib/auth-context";
-import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MOTION_SAFE, PUBLIC_NOUNS, isSectionActive } from "./links";
+import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MEGA_MENU_LINKS, MOTION_SAFE, PUBLIC_NOUNS, isSectionActive } from "./links";
 import { useModalChrome } from "./useModalChrome";
 
 type Props = {
@@ -28,6 +28,7 @@ const MEMBER_UTILITIES = [
 export default function MobileNavSheet({ open, onClose, user, triggerRef }: Props) {
   const pathname = usePathname();
   const sheetRef = useRef<HTMLDivElement>(null);
+  const [directoryOpen, setDirectoryOpen] = useState(false);
 
   useModalChrome({ open, containerRef: sheetRef, onClose, returnFocusTo: triggerRef });
 
@@ -35,6 +36,18 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
 
   const rowClass = (active: boolean) =>
     `ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} flex h-14 items-center justify-between gap-4 px-4 sm:px-6 text-[16px] transition-colors duration-150 ease-standard ${
+      active ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"
+    }`;
+
+  // Directory links the sheet's main list doesn't already carry (mega-menu
+  // vocabulary, accordion pattern per the 2026-08-28 chrome ruling).
+  const listed = new Set((user ? EXPLORE_ITEMS : PUBLIC_NOUNS).map((item) => item.href));
+  if (!user) listed.add(LEARN_LINK.href);
+  const directoryLinks = MEGA_MENU_LINKS.filter((item) => !listed.has(item.href));
+
+  // Accordion child rows indent one step past the sheet's px-4/sm:px-6 rows.
+  const subRowClass = (active: boolean) =>
+    `ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} flex h-14 items-center justify-between gap-4 pl-8 pr-4 sm:pr-6 text-[16px] transition-colors duration-150 ease-standard ${
       active ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"
     }`;
 
@@ -83,6 +96,53 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
             </Link>
           );
         })}
+
+        {directoryLinks.length > 0 && (
+          <>
+            <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
+            <button
+              type="button"
+              aria-expanded={directoryOpen}
+              aria-controls="mobile-directory-links"
+              onClick={() => setDirectoryOpen((value) => !value)}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 w-full items-center justify-between gap-4 px-4 sm:px-6 text-[16px] font-medium text-[var(--text-body)]`}
+            >
+              Directory
+              <ChevronDown
+                className={`h-5 w-5 transition-transform duration-150 ease-standard ${MOTION_SAFE} ${directoryOpen ? "rotate-180" : ""}`}
+                aria-hidden
+              />
+            </button>
+            {directoryOpen && (
+              <div id="mobile-directory-links">
+                {directoryLinks.map((item) => {
+                  const active = isSectionActive(pathname, item.section);
+                  const href =
+                    user && item.href === "/flies/library" ? "/flies" : item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={onClose}
+                      className={subRowClass(active)}
+                    >
+                      <span className="flex flex-col">
+                        <span className="font-medium">{item.label}</span>
+                        {item.descriptor && (
+                          <span className="text-[13px] text-[var(--text-meta)]">{item.descriptor}</span>
+                        )}
+                      </span>
+                      {active && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" aria-hidden />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
 
         {!user && (
           <>

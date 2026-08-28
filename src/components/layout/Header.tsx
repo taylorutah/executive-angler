@@ -170,6 +170,7 @@ export default function Header() {
                 </div>
               ) : (
                 <div className="hidden md:flex items-center gap-2">
+                  <ExploreMenu />
                   <Link href="/login" className="ea-btn ea-btn-ghost ea-btn-sm ea-focus-ring">
                     Sign in
                   </Link>
