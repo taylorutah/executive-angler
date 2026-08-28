@@ -167,7 +167,7 @@ export default function FilterDropdown({
         aria-controls={open ? listboxId : undefined}
         aria-label={isEmpty ? `${label}: ${emptyMessage}` : `${label} filter, ${selected.length} selected`}
         title={isEmpty ? emptyMessage : undefined}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex items-center gap-1.5 px-3 py-1.5 rounded-chip text-sm font-medium transition-colors whitespace-nowrap border ${
+        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap border ${
           selected.length > 0
             ? "bg-[var(--action)]/10 border-[var(--action)]/40 text-[var(--action)]"
             : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/30 hover:text-[var(--text-primary)]"
