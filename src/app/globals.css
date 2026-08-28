@@ -388,7 +388,9 @@
 
   /* Full-viewport Home hero (1440×844). Chalk + teal-300 sit in the
      bottom ~400px; keep that band at ≥0.82 riverbed so the rendered
-     contrast gate clears over a light photograph (teal needs ~0.80). */
+     contrast gate clears over a light photograph (teal needs ~0.80).
+     390 uses the unlayered override below — the mobile crop is a
+     darker river and the dek sat in a thinner stop. */
   .hero-overlay-home {
     background: linear-gradient(
       to top,
@@ -610,10 +612,40 @@
   color: var(--text-body);
 }
 
-/* Home fold dek sits on the photograph. Unlayered .prose color would
-   paint graphite on the wash (1.5:1). Hero type is cream. */
+/* Home fold dek sits on the photograph. Never pair this with .prose —
+   unlayered .prose { color: graphite } painted the PMD line dark-on-dark
+   at 390 (1.5:1). Size lives here too so utilities cannot lose to .prose. */
+.hero-dek,
 .prose.hero-dek {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--hero-type);
+  max-width: 720px;
+}
+
+@media (min-width: 640px) {
+  .hero-dek,
+  .prose.hero-dek {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
+/* 390 fold: keep chalk / dek / teal CFS in a ≥0.86 riverbed band.
+   Unlayered so it beats the @layer components 1440 wash. */
+@media (max-width: 639px) {
+  .hero-overlay-home {
+    background: linear-gradient(
+      to top,
+      rgb(11 17 18 / 0.94) 0%,
+      rgb(11 17 18 / 0.90) 50%,
+      rgb(11 17 18 / 0.86) 70%,
+      rgb(11 17 18 / 0.45) 84%,
+      rgb(11 17 18 / 0) 100%
+    );
+  }
 }
 
 .article-body,

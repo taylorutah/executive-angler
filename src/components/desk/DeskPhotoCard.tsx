@@ -36,6 +36,8 @@ export default function DeskPhotoCard({
           src={imageUrl}
           alt={imageAlt}
           title={title}
+          meta={meta}
+          fallback={plate ? "quiet" : "named"}
           className="object-cover"
           sizes={featured ? "(max-width: 1024px) 100vw, 65vw" : "(max-width: 1024px) 100vw, 33vw"}
         />

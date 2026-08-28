@@ -23,6 +23,8 @@ interface SafeEntityImageProps {
   contain?: boolean;
   /** Overlay painted only after the photo has loaded. */
   scrimClassName?: string;
+  /** quiet = vellum field, no inner title (the card names the fly below). */
+  fallback?: "named" | "quiet";
 }
 
 /**
@@ -42,12 +44,13 @@ export default function SafeEntityImage({
   placeholderEmpty,
   contain,
   scrimClassName,
+  fallback = "named",
 }: SafeEntityImageProps) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   if (!isUsableImageUrl(src) || failed) {
-    return <PlateFallback title={title} meta={meta} />;
+    return <PlateFallback title={title} meta={meta} quiet={fallback === "quiet"} />;
   }
 
   return (

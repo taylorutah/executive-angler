@@ -8,6 +8,27 @@ const COLUMNS: { key: string; label: string }[] = [
   { key: "streamer", label: "Streamers" },
 ];
 
+/** Catalog slugs that must sit on the plate when the row is in `items`. */
+export const PLATE_PIN_HREFS = ["/flies/soft-hackle-carrot"] as const;
+
+export function arrangeFlyIndex(items: CardData[]): {
+  plate: CardData[];
+  rest: CardData[];
+} {
+  const pinned: CardData[] = [];
+  const used = new Set<string>();
+  for (const href of PLATE_PIN_HREFS) {
+    const hit = items.find((item) => item.href === href);
+    if (!hit || used.has(hit.href)) continue;
+    pinned.push(hit);
+    used.add(hit.href);
+  }
+  const remainder = items.filter((item) => !used.has(item.href));
+  const plate = [...pinned, ...remainder].slice(0, 12);
+  const onPlate = new Set(plate.map((item) => item.href));
+  return { plate, rest: items.filter((item) => !onPlate.has(item.href)) };
+}
+
 function categoryKey(item: CardData): string {
   const raw = String(
     (item as CardData & { _filterValues?: Record<string, string | number> })._filterValues
@@ -34,8 +55,7 @@ function benchColumns(rest: CardData[]): { key: string; label: string }[] {
 export default function DeskFlyIndex({ items }: { items: CardData[] }) {
   if (items.length === 0) return null;
 
-  const plate = items.slice(0, 12);
-  const rest = items.slice(12);
+  const { plate, rest } = arrangeFlyIndex(items);
 
   return (
     <div>

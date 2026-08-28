@@ -84,7 +84,7 @@ export default function Header() {
               onClick={() => setMobileOpen(true)}
               aria-expanded={mobileOpen}
               aria-haspopup="dialog"
-              className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden font-ui text-[12px] text-[var(--text-body)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden ea-nav-link`}
             >
               Menu
             </button>
