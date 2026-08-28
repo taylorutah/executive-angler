@@ -68,8 +68,8 @@ export default async function MaterialsPage() {
   const totalCount = allCategories?.length || 0;
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 lg:px-8">
         <Breadcrumbs
           items={[
             { label: "Fly Library", href: "/flies" },
@@ -78,10 +78,10 @@ export default async function MaterialsPage() {
         />
 
         <div className="mt-6 mb-10">
-          <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl">
+          <h1 className="text-[var(--text-1)]">
             Fly Tying Materials
           </h1>
-          <p className="mt-2 text-lg text-[var(--text-body)]">
+          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             Browse {totalCount > 0 ? `${totalCount}+` : ""} verified materials
             from top brands. Search, filter by category, and build your
             inventory.

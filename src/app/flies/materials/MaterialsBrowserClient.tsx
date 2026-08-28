@@ -244,8 +244,8 @@ export default function MaterialsBrowserClient({
     <div className="flex flex-col gap-6 lg:flex-row">
       {/* ── Sidebar: Categories ─────────────────────────────────────────── */}
       <aside className="w-full shrink-0 lg:w-64">
-        <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
+        <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4">
+          <h2 className="ea-overline mb-3">
             Categories
           </h2>
 
@@ -255,14 +255,15 @@ export default function MaterialsBrowserClient({
               setActiveCategory(null);
               setExpandedId(null);
             }}
-            className={`mb-1 flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            aria-pressed={activeCategory === null}
+            className={`mb-1 flex w-full items-center justify-between rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium transition-colors ${
               activeCategory === null
-                ? "bg-[var(--action)]/15 text-[var(--action)]"
-                : "text-[var(--text-body)] hover:bg-[var(--border-rule)] hover:text-[var(--text-primary)]"
+                ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                : "text-[var(--text-2)] hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
             }`}
           >
             <span>All Materials</span>
-            <span className="text-xs tabular-nums opacity-70">
+            <span className="text-xs num text-[var(--text-3)]">
               {totalCount}
             </span>
           </button>
@@ -271,14 +272,15 @@ export default function MaterialsBrowserClient({
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
-              className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              aria-pressed={activeCategory === category}
+              className={`flex w-full items-center justify-between rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium transition-colors ${
                 activeCategory === category
-                  ? "bg-[var(--action)]/15 text-[var(--action)]"
-                  : "text-[var(--text-body)] hover:bg-[var(--border-rule)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "text-[var(--text-2)] hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
               }`}
             >
               <span>{CATEGORY_LABELS[category] || category}</span>
-              <span className="text-xs tabular-nums opacity-70">{count}</span>
+              <span className="text-xs num text-[var(--text-3)]">{count}</span>
             </button>
           ))}
         </div>
@@ -308,7 +310,7 @@ export default function MaterialsBrowserClient({
 
         {/* Search bar */}
         <div className="relative mb-6">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-meta)]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-3)]" />
           <input
             ref={searchInputRef}
             type="text"
@@ -320,15 +322,15 @@ export default function MaterialsBrowserClient({
             placeholder="Search by name, brand, or color — results appear as you type"
             autoComplete="off"
             spellCheck={false}
-            className="w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-3 pl-11 pr-10 text-[var(--text-primary)] placeholder-[#6E7681] outline-none transition-colors focus:border-[var(--action)]/50 focus:ring-1 focus:ring-[var(--action)]/30"
+            className="ea-input pl-11 pr-10"
           />
           {/* Right side: spinner while searching, X when idle with a query */}
           {loading && (searchQuery || activeCategory) ? (
-            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[var(--action)]" />
+            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[var(--accent)]" />
           ) : searchQuery ? (
             <button
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-meta)] hover:text-[var(--text-primary)]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors"
               title="Clear (Esc)"
             >
               <X className="h-4 w-4" />
@@ -338,21 +340,21 @@ export default function MaterialsBrowserClient({
 
         {/* Active filter + result count (grid stays visible; spinner lives in search input) */}
         <div className="mb-4 flex items-center gap-3">
-          <p className="text-sm text-[var(--text-meta)]">
+          <p className="text-sm text-[var(--text-3)]">
             Showing{" "}
-            <span className="text-[var(--text-body)]">{materials.length}</span>
-            {visibleCount > materials.length && <> of {visibleCount}</>}{" "}
+            <span className="text-[var(--text-2)] num">{materials.length}</span>
+            {visibleCount > materials.length && <> of <span className="num">{visibleCount}</span></>}{" "}
             materials
             {searchQuery && (
               <>
-                {" "}for <span className="text-[var(--text-primary)]">“{searchQuery}”</span>
+                {" "}for <span className="text-[var(--text-1)]">“{searchQuery}”</span>
               </>
             )}
           </p>
           {activeCategory && (
             <button
               onClick={() => setActiveCategory(null)}
-              className="inline-flex items-center gap-1 rounded-full bg-[var(--action)]/15 px-2.5 py-0.5 text-xs font-medium text-[var(--action)] transition-colors hover:bg-[var(--action)]/25"
+              className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[12px] font-medium text-[var(--accent)] transition-colors hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--surface))]"
             >
               {CATEGORY_LABELS[activeCategory] || activeCategory}
               <X className="h-3 w-3" />
@@ -362,12 +364,12 @@ export default function MaterialsBrowserClient({
 
         {/* Empty state — only when we finished loading AND have no results */}
         {!loading && materials.length === 0 && (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-20">
-            <Package className="mb-4 h-12 w-12 text-[var(--text-meta)]" />
-            <p className="text-lg font-medium text-[var(--text-body)]">
+          <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+            <Package className="h-6 w-6 text-[var(--text-3)]" />
+            <p className="font-display text-xl font-semibold text-[var(--text-1)]">
               No materials found
             </p>
-            <p className="mt-1 text-sm text-[var(--text-meta)]">
+            <p className="text-sm text-[var(--text-3)]">
               Try adjusting your search or filters.
             </p>
             <button
@@ -375,7 +377,7 @@ export default function MaterialsBrowserClient({
                 setSearchQuery("");
                 setActiveCategory(null);
               }}
-              className="mt-4 text-sm font-medium text-[var(--action)] hover:underline"
+              className="ea-btn ea-btn-secondary"
             >
               Clear all filters
             </button>
@@ -419,26 +421,26 @@ export default function MaterialsBrowserClient({
       {/* Submit Material modal */}
       {submitModalOpen && isAuthenticated && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16 sm:pt-24"
+          className="ea-modal-overlay z-50 flex items-start justify-center overflow-y-auto p-4 pt-16 sm:pt-24"
           onClick={() => setSubmitModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-lg rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6 shadow-2xl"
+            className="ea-modal relative max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSubmitModalOpen(false)}
-              className="absolute right-4 top-4 text-[var(--text-meta)] hover:text-[var(--text-primary)]"
+              className="absolute right-4 top-4 text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="mb-4">
-              <h2 className="font-heading text-xl font-semibold text-[var(--text-primary)]">
+              <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">
                 Submit a New Material
               </h2>
-              <p className="mt-1 text-sm text-[var(--text-body)]">
+              <p className="mt-1 text-sm text-[var(--text-2)]">
                 Add a material that&apos;s missing from the catalog. Submissions are
                 reviewed before appearing in search.
               </p>
@@ -488,10 +490,10 @@ function MaterialCard({
 
   return (
     <div
-      className={`group rounded-lg border transition-colors ${
+      className={`group rounded-[var(--radius-card)] border transition-colors ${
         isExpanded
-          ? "border-[var(--action)]/30 bg-[var(--surface-card)]"
-          : "border-[var(--border-rule)] bg-[var(--surface-raised)] hover:border-[var(--border-strong)]"
+          ? "border-[var(--accent)] bg-[var(--surface)]"
+          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-strong)]"
       }`}
     >
       {/* Card header — always visible */}
@@ -502,20 +504,18 @@ function MaterialCard({
         <div className="min-w-0 flex-1">
           {/* Category badge + brand */}
           <div className="mb-1.5 flex items-center gap-2">
-            <span
-              className="inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--border-rule)]"
-            >
+            <span className="ea-badge">
               {CATEGORY_LABELS[material.category] || material.category}
             </span>
             {material.brand && (
-              <span className="truncate text-xs text-[var(--text-meta)]">
+              <span className="truncate text-xs text-[var(--text-3)]">
                 {material.brand}
               </span>
             )}
           </div>
 
           {/* Name */}
-          <h3 className="text-sm font-semibold leading-tight text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+          <h3 className="text-sm font-semibold leading-tight text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors">
             {material.name}
           </h3>
 
@@ -525,13 +525,13 @@ function MaterialCard({
               {previewSizes.map((size) => (
                 <span
                   key={size}
-                  className="rounded bg-[var(--border-rule)] px-1.5 py-0.5 text-[11px] text-[var(--text-body)]"
+                  className="ea-chip num"
                 >
                   {size}
                 </span>
               ))}
               {hasMoreSizes && (
-                <span className="px-1 text-[11px] text-[var(--text-meta)]">
+                <span className="px-1 text-xs text-[var(--text-3)]">
                   +{sizes.length - 4}
                 </span>
               )}
@@ -544,13 +544,13 @@ function MaterialCard({
               {previewColors.map((color) => (
                 <span
                   key={color}
-                  className="rounded bg-[var(--surface-page)] px-1.5 py-0.5 text-[11px] text-[var(--text-meta)]"
+                  className="ea-chip"
                 >
                   {color}
                 </span>
               ))}
               {hasMoreColors && (
-                <span className="px-1 text-[11px] text-[var(--text-meta)]">
+                <span className="px-1 text-xs text-[var(--text-3)]">
                   +{colors.length - 4}
                 </span>
               )}
@@ -559,7 +559,7 @@ function MaterialCard({
         </div>
 
         {/* Expand chevron */}
-        <div className="mt-1 shrink-0 text-[var(--text-meta)]">
+        <div className="mt-1 shrink-0 text-[var(--text-3)]">
           {isExpanded ? (
             <ChevronUp className="h-4 w-4" />
           ) : (
@@ -570,10 +570,10 @@ function MaterialCard({
 
       {/* Expanded details */}
       {isExpanded && (
-        <div className="border-t border-[var(--border-rule)] px-4 pb-4 pt-3">
+        <div className="border-t border-[var(--border)] px-4 pb-4 pt-3">
           {/* Description */}
           {material.description && (
-            <p className="mb-3 text-sm leading-relaxed text-[var(--text-body)]">
+            <p className="mb-3 text-sm leading-relaxed text-[var(--text-2)]">
               {material.description}
             </p>
           )}
@@ -582,26 +582,26 @@ function MaterialCard({
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
             {material.material_type && (
               <div>
-                <span className="text-[var(--text-meta)]">Type</span>
-                <p className="text-[var(--text-primary)]">{material.material_type}</p>
+                <span className="text-xs text-[var(--text-3)]">Type</span>
+                <p className="text-[var(--text-1)]">{material.material_type}</p>
               </div>
             )}
             {material.weight && (
               <div>
-                <span className="text-[var(--text-meta)]">Weight</span>
-                <p className="text-[var(--text-primary)]">{material.weight}</p>
+                <span className="text-xs text-[var(--text-3)]">Weight</span>
+                <p className="text-[var(--text-1)]">{material.weight}</p>
               </div>
             )}
             {material.finish && (
               <div>
-                <span className="text-[var(--text-meta)]">Finish</span>
-                <p className="text-[var(--text-primary)]">{material.finish}</p>
+                <span className="text-xs text-[var(--text-3)]">Finish</span>
+                <p className="text-[var(--text-1)]">{material.finish}</p>
               </div>
             )}
             {material.subcategory && (
               <div>
-                <span className="text-[var(--text-meta)]">Subcategory</span>
-                <p className="text-[var(--text-primary)]">{material.subcategory}</p>
+                <span className="text-xs text-[var(--text-3)]">Subcategory</span>
+                <p className="text-[var(--text-1)]">{material.subcategory}</p>
               </div>
             )}
           </div>
@@ -609,14 +609,14 @@ function MaterialCard({
           {/* All sizes */}
           {sizes.length > 4 && (
             <div className="mt-3">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-meta)]">
+              <span className="ea-overline mb-1 block">
                 All Sizes ({sizes.length})
               </span>
               <div className="flex flex-wrap gap-1">
                 {sizes.map((size) => (
                   <span
                     key={size}
-                    className="rounded bg-[var(--border-rule)] px-1.5 py-0.5 text-[11px] text-[var(--text-body)]"
+                    className="ea-chip num"
                   >
                     {size}
                   </span>
@@ -628,14 +628,14 @@ function MaterialCard({
           {/* All colors */}
           {colors.length > 4 && (
             <div className="mt-3">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-meta)]">
+              <span className="ea-overline mb-1 block">
                 All Colors ({colors.length})
               </span>
               <div className="flex flex-wrap gap-1">
                 {colors.map((color) => (
                   <span
                     key={color}
-                    className="rounded bg-[var(--surface-page)] px-1.5 py-0.5 text-[11px] text-[var(--text-meta)]"
+                    className="ea-chip"
                   >
                     {color}
                   </span>
@@ -653,11 +653,11 @@ function MaterialCard({
                   if (!isInInventory) onAddToInventory();
                 }}
                 disabled={isInInventory || isAdding}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-[var(--radius-md)] h-8 px-3 text-[13px] font-medium transition-colors ${
                   isInInventory
-                    ? "bg-emerald-900/30 text-emerald-400 cursor-default"
-                    : "bg-[var(--action)]/15 text-[var(--action)] hover:bg-[var(--action)]/25"
-                } disabled:opacity-60`}
+                    ? "bg-[var(--success)]/10 text-[var(--success)] cursor-default"
+                    : "bg-[var(--accent-soft)] text-[var(--accent)] hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--surface))]"
+                } disabled:opacity-50`}
               >
                 {isAdding ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -675,7 +675,7 @@ function MaterialCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                className="inline-flex items-center gap-1 text-xs text-[var(--text-3)] hover:text-[var(--accent)] transition-colors"
               >
                 View at vendor
                 <ExternalLink className="h-3 w-3" />

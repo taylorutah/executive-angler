@@ -90,15 +90,15 @@ export function SubmitMaterialForm({
 
   if (status === 'success') {
     return (
-      <div className="rounded-lg border border-[var(--state-positive)]/30 bg-[var(--state-positive)]/10 p-4 text-center">
-        <Check className="w-6 h-6 text-[var(--state-positive)] mx-auto mb-2" />
-        <p className="text-sm text-[var(--text-primary)] font-medium">Material submitted for review</p>
-        <p className="text-xs text-[var(--text-body)] mt-1">It will appear in search once approved.</p>
+      <div className="rounded-[var(--radius-card)] border border-[var(--success)]/30 bg-[var(--success)]/10 p-4 text-center">
+        <Check className="w-6 h-6 text-[var(--success)] mx-auto mb-2" />
+        <p className="text-sm text-[var(--text-1)] font-medium">Material submitted for review</p>
+        <p className="text-xs text-[var(--text-2)] mt-1">It will appear in search once approved.</p>
         {onCancel && (
           <button
             type="button"
             onClick={onCancel}
-            className="mt-3 text-xs text-[var(--action)] hover:underline"
+            className="mt-3 text-xs text-[var(--accent)] hover:underline"
           >
             Close
           </button>
@@ -111,7 +111,7 @@ export function SubmitMaterialForm({
     <form onSubmit={handleSubmit} className="space-y-3">
       {/* Name (required) */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">
+        <label className="ea-label">
           Material Name <span className="text-[var(--state-negative)]">*</span>
         </label>
         <input
@@ -120,32 +120,32 @@ export function SubmitMaterialForm({
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Semperfli Nano Silk 18/0"
           required
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         />
       </div>
 
       {/* Brand */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Brand</label>
+        <label className="ea-label">Brand</label>
         <input
           type="text"
           value={brand}
           onChange={(e) => setBrand(e.target.value)}
           placeholder="e.g. Semperfli, Hareline, TMC"
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         />
       </div>
 
       {/* Category (required) */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">
+        <label className="ea-label">
           Category <span className="text-[var(--state-negative)]">*</span>
         </label>
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value as MaterialCategory)}
           required
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         >
           <option value="">Select category...</option>
           {CATEGORIES.map((c) => (
@@ -156,19 +156,19 @@ export function SubmitMaterialForm({
 
       {/* Subcategory */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Subcategory</label>
+        <label className="ea-label">Subcategory</label>
         <input
           type="text"
           value={subcategory}
           onChange={(e) => setSubcategory(e.target.value)}
           placeholder="e.g. dry fly hook, CDC, marabou"
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         />
       </div>
 
       {/* Sizes (comma-separated) */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">
+        <label className="ea-label">
           Sizes <span className="text-xs text-[var(--text-meta)]">(comma-separated)</span>
         </label>
         <input
@@ -176,13 +176,13 @@ export function SubmitMaterialForm({
           value={sizes}
           onChange={(e) => setSizes(e.target.value)}
           placeholder="e.g. 12, 14, 16, 18, 20"
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         />
       </div>
 
       {/* Colors (comma-separated) */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">
+        <label className="ea-label">
           Colors <span className="text-xs text-[var(--text-meta)]">(comma-separated)</span>
         </label>
         <input
@@ -190,27 +190,27 @@ export function SubmitMaterialForm({
           value={colors}
           onChange={(e) => setColors(e.target.value)}
           placeholder="e.g. olive, tan, black, brown"
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none"
+          className="ea-input"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Description</label>
+        <label className="ea-label">Description</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Brief description of the material..."
           rows={2}
-          className="w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:border-[var(--action)] focus:outline-none resize-none"
+          className="ea-input resize-none"
         />
       </div>
 
       {/* Error */}
       {status === 'error' && (
-        <div className="flex items-start gap-2 rounded-lg border border-[var(--state-negative)]/30 bg-[var(--state-negative)]/10 p-3">
-          <AlertCircle className="w-4 h-4 text-[var(--state-negative)] shrink-0 mt-0.5" />
-          <p className="text-xs text-[var(--state-negative)]">{errorMsg}</p>
+        <div className="flex items-start gap-2 rounded-[var(--radius-md)] border border-[var(--danger)]/30 bg-[var(--danger)]/10 p-3">
+          <AlertCircle className="w-4 h-4 text-[var(--danger)] shrink-0 mt-0.5" />
+          <p className="text-xs text-[var(--danger)]">{errorMsg}</p>
         </div>
       )}
 
@@ -219,7 +219,7 @@ export function SubmitMaterialForm({
         <button
           type="submit"
           disabled={status === 'submitting' || !name.trim() || !category}
-          className="flex items-center gap-1.5 bg-[var(--action)] hover:bg-[#d17d28] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="ea-btn ea-btn-primary"
         >
           {status === 'submitting' ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -232,7 +232,7 @@ export function SubmitMaterialForm({
           <button
             type="button"
             onClick={onCancel}
-            className="text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] px-3 py-2 transition-colors"
+            className="ea-btn ea-btn-ghost"
           >
             Cancel
           </button>

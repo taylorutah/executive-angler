@@ -183,17 +183,17 @@ export function MaterialAutocomplete({
               width: Math.max(dropdownRect.width, 280),
               zIndex: 9999,
             }}
-            className="bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-md shadow-2xl max-h-64 overflow-y-auto"
+            className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-float)] max-h-64 overflow-y-auto"
           >
             {results.map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => handleSelect(m)}
-                className="w-full text-left px-3 py-2 hover:bg-[var(--border-rule)] transition-colors border-b border-[var(--border-rule)] last:border-0"
+                className="w-full text-left px-3 py-2 hover:bg-[var(--paper-deep)] transition-colors border-b border-[var(--border)] last:border-0"
               >
-                <div className="text-sm text-[var(--text-primary)] font-medium">{m.name}</div>
-                <div className="text-xs text-[var(--text-meta)]">
+                <div className="text-sm text-[var(--text-1)] font-medium">{m.name}</div>
+                <div className="text-xs text-[var(--text-3)]">
                   {m.brand && <span>{m.brand} — </span>}
                   <span className="capitalize">{m.category}</span>
                   {m.subcategory && <span> / {m.subcategory}</span>}
@@ -203,7 +203,7 @@ export function MaterialAutocomplete({
             <button
               type="button"
               onClick={handleFreeTextToggle}
-              className="w-full text-left px-3 py-2 text-xs text-[var(--action)] hover:bg-[var(--border-rule)]"
+              className="w-full text-left px-3 py-2 text-xs text-[var(--accent)] hover:bg-[var(--paper-deep)]"
             >
               Can&apos;t find it? Type it in as free text
             </button>
@@ -219,25 +219,25 @@ export function MaterialAutocomplete({
               width: Math.max(dropdownRect.width, 280),
               zIndex: 9999,
             }}
-            className="bg-[var(--surface-raised)] border border-[var(--border-strong)] rounded-md shadow-2xl p-3"
+            className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-float)] p-3"
           >
-            <div className="text-sm text-[var(--text-meta)]">No materials found</div>
+            <div className="text-sm text-[var(--text-3)]">No materials found</div>
             <div className="flex items-center gap-3 mt-2">
               <button
                 type="button"
                 onClick={handleFreeTextToggle}
-                className="text-xs text-[var(--action)] hover:underline"
+                className="text-xs text-[var(--accent)] hover:underline"
               >
                 Use free text instead
               </button>
-              <span className="text-xs text-[#484F58]">or</span>
+              <span className="text-xs text-[var(--text-3)]">or</span>
               <button
                 type="button"
                 onClick={() => {
                   setIsOpen(false);
                   setShowSubmitForm(true);
                 }}
-                className="flex items-center gap-1 text-xs text-[var(--signal-live)] hover:underline"
+                className="flex items-center gap-1 text-xs text-[var(--accent)] hover:underline"
               >
                 <Plus className="w-3 h-3" />
                 Submit a new material
@@ -254,15 +254,15 @@ export function MaterialAutocomplete({
         ref={inputBoxRef}
         className={
           compact
-            ? 'flex items-center gap-1.5 bg-[var(--surface-page)] border border-[var(--border-strong)] rounded-md px-2 h-8 focus-within:border-[var(--action)]'
-            : 'flex items-center gap-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 focus-within:border-[var(--action)]'
+            ? 'flex items-center gap-1.5 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-2 h-8 focus-within:border-[var(--accent)]'
+            : 'flex items-center gap-2 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 focus-within:border-[var(--accent)]'
         }
       >
         <Search
           className={
             compact
-              ? 'w-3 h-3 text-[var(--text-meta)] shrink-0'
-              : 'w-4 h-4 text-[var(--text-meta)] shrink-0'
+              ? 'w-3 h-3 text-[var(--text-3)] shrink-0'
+              : 'w-4 h-4 text-[var(--text-3)] shrink-0'
           }
         />
         <input
@@ -273,18 +273,18 @@ export function MaterialAutocomplete({
           placeholder={placeholder}
           className={
             compact
-              ? 'flex-1 bg-transparent text-[13px] text-[var(--text-primary)] placeholder-[#6E7681] outline-none min-w-0'
-              : 'flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder-[#6E7681] outline-none min-w-0'
+              ? 'flex-1 bg-transparent text-[13px] text-[var(--text-1)] placeholder:text-[var(--text-3)] outline-none min-w-0'
+              : 'flex-1 bg-transparent text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] outline-none min-w-0'
           }
         />
         {loading && (
-          <div className="w-3 h-3 border-2 border-[var(--action)] border-t-transparent rounded-full animate-spin" />
+          <div className="w-3 h-3 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
         )}
         {query && (
           <button
             type="button"
             onClick={handleClear}
-            className="text-[var(--text-meta)] hover:text-[var(--text-primary)]"
+            className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors"
           >
             <X className={compact ? 'w-3 h-3' : 'w-4 h-4'} />
           </button>
@@ -292,7 +292,7 @@ export function MaterialAutocomplete({
       </div>
 
       {useFreeText && (
-        <div className="mt-1 text-[10px] text-[var(--action)]">
+        <div className="mt-1 text-xs text-[var(--accent)]">
           Free text —{' '}
           <button
             type="button"
@@ -300,7 +300,7 @@ export function MaterialAutocomplete({
               setUseFreeText(false);
               setIsOpen(true);
             }}
-            className="underline hover:text-[var(--text-primary)]"
+            className="underline hover:text-[var(--text-1)]"
           >
             search db
           </button>
@@ -312,8 +312,8 @@ export function MaterialAutocomplete({
       {dropdown && createPortal(dropdown, document.body)}
 
       {showSubmitForm && (
-        <div className="mt-2 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4">
-          <h4 className="text-sm font-medium text-[var(--text-primary)] mb-3">Submit a New Material</h4>
+        <div className="mt-2 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4">
+          <h4 className="text-sm font-medium text-[var(--text-1)] mb-3">Submit a New Material</h4>
           <SubmitMaterialForm
             initialName={query}
             initialCategory={category}
