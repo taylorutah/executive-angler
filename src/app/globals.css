@@ -1226,6 +1226,39 @@ input.ea-focus-ring:focus-visible,
 }
 
 /* =================================================================
+   TOUCH TARGETS — 44px floor below 768px (client ruling 2026-08-28)
+   The 32/40/48 height scale governs desktop/pointer contexts. Below
+   768px every interactive element enforces a 44px minimum — streamside
+   one-handed use is a product requirement. `min-height`, never `height`,
+   so taller components keep their size; inline elements (text links in
+   prose) are unaffected. Widths come from layout. Checkboxes and radios
+   are excepted — their rows and labels carry the target. Non-layered so
+   the floor beats @layer components and utilities without !important.
+   ================================================================= */
+@media (max-width: 767px) {
+  a,
+  button,
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  [role="button"],
+  [role="link"],
+  [role="menuitem"],
+  [role="option"],
+  [role="tab"],
+  [role="switch"],
+  summary {
+    min-height: 44px;
+  }
+
+  /* The one fixed-height bar that holds buttons grows to the floor. */
+  [data-workbench-bulkbar] {
+    height: auto;
+    min-height: 44px;
+  }
+}
+
+/* =================================================================
    WORKBENCH TABLES
    The save flash is an animation, not a static colour: WorkbenchTable
    clears the flash state on animationend, so the keyframes must exist.
