@@ -9,12 +9,11 @@ export const metadata: Metadata = {
 
 export default function ForGuidesPage() {
   return (
-    <div className="pt-8 pb-20 bg-[var(--surface-page)] min-h-screen">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
         <div className="inline-flex items-center gap-2 mb-6">
-          <span className="font-mono text-[var(--action)] text-xs uppercase tracking-[0.2em]">
-            For Professional Guides
-          </span>
+          <span className="desk-eyebrow">House</span>
         </div>
         <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
           Claim your guide profile.
@@ -94,6 +93,7 @@ export default function ForGuidesPage() {
               Submit your claim
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>

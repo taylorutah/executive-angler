@@ -59,7 +59,8 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
             const cfs = snapshot?.cfs ?? null;
             const state = stateLabel(river.state);
             const hatch = hatchLabel(river, month);
-            const meta = [state, hatch].filter(Boolean).join("  ·  ");
+            const metaDesktop = [state, hatch].filter(Boolean).join("  ·  ");
+            const metaMobile = hatch;
 
             return (
               <li key={river.id} className="shrink-0">
@@ -83,8 +84,11 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
                       no reading
                     </span>
                   )}
-                  {meta ? (
-                    <span className="font-ui text-[11px] text-[var(--slate)]">{meta}</span>
+                  {metaMobile ? (
+                    <span className="font-ui text-[11px] text-[var(--slate)] sm:hidden">{metaMobile}</span>
+                  ) : null}
+                  {metaDesktop ? (
+                    <span className="hidden font-ui text-[11px] text-[var(--slate)] sm:inline">{metaDesktop}</span>
                   ) : null}
                 </Link>
               </li>

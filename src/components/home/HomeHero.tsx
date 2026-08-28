@@ -25,8 +25,7 @@ export default function HomeHero({ cfs }: Props) {
   return (
     <section
       data-lane="resource"
-      className="relative w-full overflow-hidden"
-      style={{ height: "calc(100dvh - 56px - var(--app-banner-height, 0px))" }}
+      className="home-hero-fold relative w-full overflow-hidden"
     >
       <div className="absolute inset-0">
         <picture className="block h-full w-full">
@@ -75,7 +74,7 @@ export default function HomeHero({ cfs }: Props) {
             {HERO_HEADLINE_CLOSE}
           </h1>
 
-          <p className="prose hero-dek">
+          <p className="hero-dek">
             {heroDek(cfs)}
           </p>
 

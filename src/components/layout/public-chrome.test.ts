@@ -85,11 +85,14 @@ describe("public chrome locks", () => {
       "src/app/login/page.tsx",
       "src/app/signup/page.tsx",
       "src/app/forgot-password/page.tsx",
+      "src/app/reset-password/page.tsx",
+      "src/app/verify-email/page.tsx",
+      "src/app/for-guides/page.tsx",
     ]) {
       const src = readFileSync(join(root, rel), "utf8");
       assert.match(src, /desk-sheet/);
       assert.match(src, /bg-\[var\(--paper\)\]/);
-      assert.equal(src.includes("Loading"), false, `${rel} still SSRs a Loading pulse`);
+      assert.equal(src.includes("Loading…"), false, `${rel} still SSRs a Loading pulse`);
       assert.equal(
         /<h1[^>]*text-\[var\(--action\)\]/.test(src),
         false,

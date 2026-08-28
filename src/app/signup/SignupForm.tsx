@@ -80,7 +80,19 @@ export default function SignupForm({ next }: Props) {
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit) {
+      if (!fullName.trim()) setError("Enter your name.");
+      else if (!email.trim()) setError("Enter your email.");
+      else if (password.length < 8) setError("Password must be at least 8 characters.");
+      else if (username.trim() !== "" && usernameStatus === "checking") {
+        setError("Checking that username…");
+      } else if (username.trim() !== "" && usernameStatus !== "available") {
+        setError(usernameMessage || "Choose a different username.");
+      } else if (!captchaResolved) {
+        setError("Wait a moment for verification, then try again.");
+      }
+      return;
+    }
     setError("");
     setLoading(true);
     const supabase = createClient();

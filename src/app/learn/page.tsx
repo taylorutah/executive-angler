@@ -221,7 +221,7 @@ export default async function LearnPage() {
         aria-labelledby="flies"
         className="border-y border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+        <div className="desk-sheet py-16 sm:py-20">
           <div className="mx-auto max-w-3xl">
             <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
               03

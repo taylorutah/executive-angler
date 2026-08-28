@@ -631,22 +631,42 @@
   color: var(--text-body);
 }
 
-/* Home / 1440 fold 40:2: Newsreader 18/28 cream on the plate.
-   .prose keeps the face legal. Color stays --hero-type so unlayered
-   .prose { graphite } cannot paint the line. */
+.home-hero-fold {
+  height: calc(100dvh - 56px - var(--app-banner-height, 0px));
+}
+
+/* Home fold: Archivo cream dek (Taylor lock). 1440 is 18/28; 390 is 14/20. */
 .hero-dek,
 .prose.hero-dek {
-  font-family: var(--font-body);
-  font-optical-sizing: auto;
+  font-family: var(--font-ui);
   font-size: 18px;
   line-height: 28px;
   color: var(--hero-type);
   max-width: 720px;
+  text-wrap: pretty;
+}
+
+/* Daylight public heads inherit ink Fraunces — leftover copper utilities lose. */
+[data-register="daylight"] main h1,
+[data-register="daylight"] main h2 {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
 }
 
 /* 390 fold: keep chalk / dek / teal CFS in a ≥0.86 riverbed band.
    Unlayered so it beats the @layer components 1440 wash. */
 @media (max-width: 639px) {
+  .home-hero-fold {
+    height: 664px;
+  }
+
+  .hero-dek,
+  .prose.hero-dek {
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 350px;
+  }
+
   .hero-overlay-home {
     background: linear-gradient(
       to top,

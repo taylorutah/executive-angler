@@ -24,15 +24,20 @@ export default function FlyPlate({ flies, flyCount }: Props) {
     <section data-lane="resource" className="bg-[var(--paper)] pb-10 pt-12">
       <HomeGutter>
         <h2
-          className="font-heading text-[36px] font-semibold leading-none text-[var(--ink)]"
+          className="font-heading text-[28px] font-semibold leading-none text-[var(--ink)] sm:text-[36px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           The plate
         </h2>
         <p className="mt-4 font-ui text-[14px] text-[var(--graphite)]">
-          {flyCount > 0
-            ? "Twelve patterns on the water this week."
-            : "Patterns from the library."}
+          {flyCount > 0 ? (
+            <>
+              <span className="sm:hidden">On the water this week.</span>
+              <span className="hidden sm:inline">Twelve patterns on the water this week.</span>
+            </>
+          ) : (
+            "Patterns from the library."
+          )}
         </p>
 
         <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">

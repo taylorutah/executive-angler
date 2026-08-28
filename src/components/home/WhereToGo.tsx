@@ -31,7 +31,7 @@ export default function WhereToGo({ places }: Props) {
     <section data-lane="resource" className="bg-[var(--paper)] pb-12 pt-4">
       <HomeGutter>
         <h2
-          className="font-heading text-[36px] font-semibold leading-none text-[var(--ink)]"
+          className="font-heading text-[28px] font-semibold leading-none text-[var(--ink)] sm:text-[36px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           Where to go

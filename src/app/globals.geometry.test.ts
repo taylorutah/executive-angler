@@ -62,11 +62,13 @@ describe("v4.1 geometry tokens", () => {
     assert.equal(css.includes("var(--enter-stagger)"), false);
   });
 
-  it("keeps the home fold dek cream Newsreader on the plate", () => {
+  it("keeps the home fold dek cream Archivo on the plate", () => {
     const dek = css.match(/\.hero-dek,\s*\n\.prose\.hero-dek \{[\s\S]*?\n\}/);
     assert.ok(dek, "hero-dek rule missing");
-    assert.match(dek[0], /font-family:\s*var\(--font-body\)/);
+    assert.match(dek[0], /font-family:\s*var\(--font-ui\)/);
     assert.match(dek[0], /color:\s*var\(--hero-type\)/);
+    assert.match(css, /\.home-hero-fold \{\n  height: calc\(100dvh - 56px/);
+    assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.home-hero-fold \{\n    height: 664px;/);
     assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.hero-overlay-home/);
     assert.equal(css.includes("--hover-duration: 600ms"), true);
     assert.match(css, /\.photo-lift[\s\S]*?var\(--hover-duration\)/);
